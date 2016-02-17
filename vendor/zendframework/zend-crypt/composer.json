@@ -1,0 +1,41 @@
+{
+    "name": "zendframework/zend-crypt",
+    "description": " ",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "crypt"
+    ],
+    "homepage": "https://github.com/zendframework/zend-crypt",
+    "autoload": {
+        "psr-4": {
+            "Zend\\Crypt\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.23",
+        "zendframework/zend-math": "~2.4.0",
+        "zendframework/zend-stdlib": "~2.4.0",
+        "zendframework/zend-servicemanager": "~2.4.0"
+    },
+    "suggest": {
+        "ext-mcrypt": "Required for most features of Zend\\Crypt"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4-dev",
+            "dev-develop": "2.5-dev"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\Crypt\\": "test/"
+        }
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer": "1.7.*",
+        "satooshi/php-coveralls": "dev-master",
+        "phpunit/PHPUnit": "~4.0",
+        "zendframework/zend-config": "~2.4.0"
+    }
+}

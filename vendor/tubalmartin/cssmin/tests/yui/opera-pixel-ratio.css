@@ -1,0 +1,14 @@
+@media
+	(-o-min-device-pixel-ratio:10/4),
+	(-o-max-device-pixel-ratio:  5/4),
+	(-o-device-pixel-ratio:  1/1),
+  (-o-device-pixel-ratio:  1/10),
+	(-o-device-pixel-ratio:  1.25),
+	(device-pixel-ratio:1.5)  {  
+		/* some:prop; */
+		/* An empty property with a fraction in query would break previously */
+ }
+ 
+ .something {
+	 foo: bar;
+ }

@@ -1,0 +1,33 @@
+{
+    "name": "symfony/stopwatch",
+    "type": "library",
+    "description": "Symfony Stopwatch Component",
+    "keywords": [],
+    "homepage": "https://symfony.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fabien Potencier",
+            "email": "fabien@symfony.com"
+        },
+        {
+            "name": "Symfony Community",
+            "homepage": "https://symfony.com/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9"
+    },
+    "autoload": {
+        "psr-4": { "Symfony\\Component\\Stopwatch\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "3.0-dev"
+        }
+    }
+}

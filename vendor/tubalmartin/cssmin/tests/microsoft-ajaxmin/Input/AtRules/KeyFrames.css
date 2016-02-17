@@ -1,0 +1,49 @@
+﻿@keyframes  bounce 
+{
+    from {
+      top: 100px;
+      animation-timing-function: ease-out;
+    }
+
+    25% {
+      top: 50px;
+      animation-timing-function: ease-in;
+    }
+
+    50% {
+      top: 100px;
+      animation-timing-function: ease-out;
+    }
+
+    75% {
+      top: 75px;
+      animation-timing-function: ease-in;
+    }
+
+    to {
+      top: 100px;
+    }
+
+}
+
+
+div {
+    animation-name:             'diagonal-slide';
+    animation-duration:         5s;
+    animation-iteration-count:  10;
+}
+
+@keyframes 'diagonal-slide' 
+{
+    from 
+    {
+        left: 0;
+        top: 0;
+    }
+
+    to 
+    {
+        left: 100px;
+        top: 100px;
+    }
+}

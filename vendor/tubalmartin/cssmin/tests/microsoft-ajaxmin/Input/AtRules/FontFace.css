@@ -1,0 +1,29 @@
+@font-face 
+{
+  font-family: "Robson Celtic";
+  src: url("http://site/fonts/rob-celt");
+  font-weight: 100, 200, 300, 400, 500; 
+  widths: U+4E00-004E1F 1736 1874 1692;
+  widths: U+001A?? 1490, 
+    U+215? 1473 1838 1927 1684 1356 1792 1815 1848 
+           1870 1492 1715 1745 1584 1992 1978 1770;
+  unicode-range: U+001234; /* one to six character is okay, so crunch out the leading zeros */
+}
+
+@font-face {
+  src: local("Helvetica Oblique"),
+       url("http://www.fonts.org/sans/Helvetica_family") format("truedoc");
+  font-family: "Helvetica";
+  font-style: oblique;
+  unicode-range: U+0-00000; /* make sure one or more zeros gets crunched to 0 */
+  slope: -18
+}
+
+@font-face 
+{
+  font-family: Excelsior;
+  src: local("Excelsior EastA Roman"), url("http://site/ear") format("intellifont");
+  unicode-range: U+000000-00220;
+}
+
+h1 { font-family: "Robson Celtic", serif; }

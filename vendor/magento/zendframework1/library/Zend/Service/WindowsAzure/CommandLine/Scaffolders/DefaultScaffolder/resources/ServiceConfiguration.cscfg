@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ServiceConfiguration serviceName="PhpOnAzure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="2" osVersion="*">
+  <Role name="PhpOnAzure.Web">
+    <Instances count="1" />
+    <ConfigurationSettings>
+      <Setting name="zend.service.windowsazure.Plugins.Diagnostics.ConnectionString" value="$DiagnosticsConnectionString$"/>
+    </ConfigurationSettings>
+  </Role>
+</ServiceConfiguration>

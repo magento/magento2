@@ -1,0 +1,13 @@
+@import "bar2.css" print and (orientation: landscape) and (color);
+.foo
+{
+    background: #fff
+}
+.bar
+{
+    background: #000
+}
+.baz
+{
+    background: #000
+}

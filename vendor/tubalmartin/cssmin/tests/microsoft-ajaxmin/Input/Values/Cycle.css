@@ -1,0 +1,20 @@
+﻿/* make em elements italic, but make them normal if they're inside
+     something that's italic */
+em 
+{ 
+    font-style: cycle(italic, normal); 
+}
+ 
+ 
+/* cycle between markers for nested lists, so that the top level has
+     disk markers, but nested lists use circle, square, box, and then
+     (for the 5th list deep) repeat */
+ul 
+{ 
+    list-style-type: disk; 
+}
+li > ul 
+{ 
+    list-style-type: cycle(disk, circle, square, box); 
+}
+ 

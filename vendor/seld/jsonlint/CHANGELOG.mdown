@@ -1,0 +1,41 @@
+### 1.4.0 (2015-11-21)
+
+  * Added a DuplicateKeyException allowing for more specific error detection and handling
+
+### 1.3.1 (2015-01-04)
+
+  * Fixed segfault when parsing large JSON strings
+
+### 1.3.0 (2014-09-05)
+
+  * Added parsing to an associative array via JsonParser::PARSE_TO_ASSOC
+  * Fixed a warning when rendering parse errors on empty lines
+
+### 1.2.0 (2014-07-20)
+
+  * Added support for linting multiple files at once in bin/jsonlint
+  * Added a -q/--quiet flag to suppress the output
+  * Fixed error output being on STDOUT instead of STDERR
+  * Fixed parameter parsing
+
+### 1.1.2 (2013-11-04)
+
+  * Fixed handling of Unicode BOMs to give a better failure hint
+
+### 1.1.1 (2013-02-12)
+
+  * Fixed handling of empty keys in objects in certain cases
+
+### 1.1.0 (2012-12-13)
+
+  * Added optional parsing of duplicate keys into key.2, key.3, etc via JsonParser::ALLOW_DUPLICATE_KEYS
+  * Improved error reporting for common mistakes
+
+### 1.0.1 (2012-04-03)
+
+  * Added optional detection and error reporting for duplicate keys via JsonParser::DETECT_KEY_CONFLICTS
+  * Added ability to pipe content through stdin into bin/jsonlint
+
+### 1.0.0 (2012-03-12)
+
+  * Initial release

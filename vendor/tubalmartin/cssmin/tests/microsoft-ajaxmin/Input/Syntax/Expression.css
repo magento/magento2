@@ -1,0 +1,10 @@
+a
+{
+  /* most terms separated by space, but one with a slash, one with a comma */
+  font: italic 12pt / 1.4em Arial , SanSerif;
+  font: italic 12pt/1.4em Arial, SanSerif;
+  weight: foo(22/7, 14em, "args");
+  margin: U+98; /* should be a Unicode range single code-point */
+  foo: u+98??-123456; /* unicode range stops at the question marks, so the '-123456' should be another term */
+}
+

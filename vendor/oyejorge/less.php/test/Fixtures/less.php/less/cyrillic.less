@@ -1,0 +1,20 @@
+@var: #fcfcfc; // var
+
+// цвет текста - not work
+// لون النص - not work
+// rəng mətni - not work
+//
+// text color - work
+.color(@color) {
+    color: @color;
+    background-color: darken(@color, 50%);
+    /* цвет текста - not work*/
+    /* لون النص - not work*/
+    /* rəng mətni - not work */
+
+    /* text color - work*/
+}
+
+body {
+    .color(@var);
+}

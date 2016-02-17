@@ -1,0 +1,13 @@
+
+@asset_path1: 'assets/';
+@url1: '/assets/@{asset_path1}/images/logo.png';
+.test{ background:url(@url1); }
+
+
+@asset_path2: 'assets';
+@url2: '/assets/@{asset_path2}/images/logo.png';
+.test{ background:url(@url2); }
+
+
+.test{ background:url('http://domain/@{asset_path2}/images/logo.png'); }
+

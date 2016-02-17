@@ -1,0 +1,70 @@
+div
+{
+  /* numbers */
+  font-size: 10.0;
+  font-size: +2;
+  margin-top: -100;
+  
+  /* percentages */
+  font-size: 100%;
+  font-size: +20%;
+  font-size: -10%;
+  
+  /* odd dimensions */
+  padding-top: 100foo;
+  padding-bottom: 200smoots;
+  
+  /* lengths */
+  margin-left: 40px;
+  margin-left: 40pt;
+  margin-left: 40pc;
+  margin-left: 40mm;
+  margin-left: 40cm;
+  margin-left: 40in;
+  margin-left: -40px;
+  margin-left: +4in;
+  
+  /* EMS */
+  margin-bottom: 4em;
+  margin-bottom: +4em;
+  margin-bottom: -4em;
+  
+  /* EXS */
+  padding-bottom: 4ex;
+  padding-bottom: +4ex;
+  padding-bottom: -4ex;
+  
+  /* angles */
+  rotate: 200deg;
+  rotate: +90deg;
+  rotate: -90deg;
+  rotate: 1.414rad;
+  rotate: 0.2grad;
+  
+  /* time */
+  delay: 2000ms;
+  delay: 5s;
+  later: -60s;
+  now: +6ms;
+  
+  /* frequency */
+  cycle: 107.7khz;
+  frequency: 200hz;
+  frequency: -10hz;
+  frequency: +5khz;
+  
+  /* function */
+  font-size: sin(3.1415929);
+  font-size: -cos(1.414);
+  font-size: +rnd(200);
+  
+  /* string, ident, uri, rgb, unicode range, hexcolor */
+  foo: "now is the time";
+  bar: toledo;
+  ack: url(http://msn.com/icon.ico);
+  color: rgb(255,204,102);
+  chars: U+11E00-121FF;
+  color: #123456;
+  
+  font: normal 14px/18px Segoe UI Regular; /* the UI string should be an identifier, NOT a Unicode Range */
+}

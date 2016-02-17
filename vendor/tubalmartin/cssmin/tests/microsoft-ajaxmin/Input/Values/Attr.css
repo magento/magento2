@@ -1,0 +1,4 @@
+﻿img {
+    height: attr(height, px, auto);
+    width: attr(width, px, auto);
+}

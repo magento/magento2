@@ -1,0 +1,478 @@
+phpmd-2.3.1 (2015/09/22)
+========================
+
+Bugfix release for issue #311 introduced with the 2.3.0 release.
+
+- Fixed #311: Property "allow-underscore-test" does not exist. Fixed 
+  in commit #0db4a3e.
+
+phpmd-2.3.0 (2015/09/22)
+========================
+
+This new release contains several contributed bugfixes and additions 
+to PHPMD. Beside that we now have better support for language 
+constructs in the upcoming PHP 7.
+
+- Fixed #272: Improve type hint. Fixed in commit #724bf76.
+- Fixed #293: Declared missing method in abstract class Fixed in 
+  commit #9b806f6.
+- Fixed #297: Complete fix for timezone warning. Fixed in commit 
+  #227d469.
+- Fixed #301: Fix mixed up links in documentation. Fixed in commit 
+  #4bc4eeb.
+- Fixed #304: Fix #303, change if condition order. Fixed in commit 
+  #3376c73.
+- Implemented #232: Three new features about references, includes and 
+  include-paths Implemented in commit #180848f.
+- Implemented #241: Fix of UnusedPrivateMethod chained method calls. 
+  Implemented in commit #7e02f38.
+- Implemented #257: Add option to allow having an undercore in test 
+  methods. Implemented in commit #3cbe76d.
+- Implemented #265: Search for development code Implemented in commit 
+  #dfa6872.
+- Implemented #273: Add TooManyPublicMethods rule. Implemented in 
+  commit #b862f1f.
+- Implemented #291: Define the version constraints of deps in Composer 
+  using the caret operator. Implemented in commit #586ccfc.
+- Implemented #306: Use new Travis infrastructure. Implemented in 
+  commit #cd1308e.
+
+phpmd-2.2.3 (2015/05/27)
+========================
+
+Bugfix release that closes issues and adds some improvements to phpmd.
+
+- Fixed #285: Corrected HTML TR closing tag Fixed in commit #df6280f.
+- Fixed link to rules documentation Fixed in commit #20a0142.
+- Implemented #281: Code cleanup Implemented in commit #5e94a65.
+- Underlying PDepend version bumped. Implemented in commit #f4ddb8a.
+
+phpmd-2.2.2 (2015/03/26)
+========================
+
+Bugfix release that closes some issues in phpmd's core and in the 
+project documentation.
+
+- Fixed #271: Fix cp error in doc Fixed in commit #b73dd32.
+- Fixed #270: Fixing namespace issue for OutOfBoundsException Fixed in 
+  commit #0d4bed1.
+- Fixed #80: Out ot the box usage in combination with composer of all 
+  rules failes throws error Property $exceptions does not exist. Fixed 
+  in commit #0d4bed1.
+
+phpmd-2.2.1 (2015/03/01)
+========================
+
+This release integration several pull requests and closes and handful 
+of issues.
+
+- Fixed #237: Display type correctly for constructors Fixed in commit 
+  #49f19d8.
+- Fixed #238: Fix link to rulesets Fixed in commit #829d110.
+- Fixed #244: Fix typos in type hints Fixed in commit #b5a04ce.
+- Fixed #245: Fix CamelCase vs camelCase issue in the docs Fixed in 
+  commit #6cd03ce.
+- Implemented #210: Added editorconfig Implemented in commit #22a73a7.
+- Implemented #211: Added phpcs as development dependency Implemented 
+  in commit #441398d.
+- Implemented #214: Short method name exceptions Implemented in commit 
+  #55b799b.
+- Implemented #225: Refactor - remove right side whitespaces 
+  Implemented in commit #c12fffa.
+- Implemented #242: Unused "use" statement removed from RuleViolation 
+  class Implemented in commit #966ce38.
+- Implemented #243: Unused private property removed. Implemented in 
+  commit #121d43b.
+- Implemented #246: Improve WMC documentation Implemented in commit 
+  #b1e9be9.
+- Implemented #249: Remove redundant line Implemented in commit 
+  #a9bd6cb.
+
+phpmd-2.2.0 (2015/01/25)
+========================
+
+Closes an issue with recent symfony versions
+
+- Fixed #226: Fixed error message for StaticAccess Fixed in commit 
+  #efa1dcd.
+- Fixed #216: Refactor - removed right side spaces Fixed in commit 
+  #422345e.
+- Implemented #221: Ignore php4 style ctor in interfaces and 
+  namespaces Implemented in commit #b248315.
+- Implemented #220: Skip check for ConstructorWithNameAsEnclosingClass 
+  when in an interface or namespace Implemented in commit #b248315.
+- Implemented #219: Do not trigger UnusedFormalParameter with some 
+  magic methods. Implemented in commit #4d3b154.
+- Implemented #218: Allow any future minor version of Symfony2 2.5 
+  components. Implemented in commit #6317043.
+- Implemented #215: Improved composer.json Implemented in commit 
+  #6da3358.
+- Implemented #196: Composer Compatible for symfony >= 2.5 and < 
+  master/dev. Implemented in commit #6317043.
+- Implemented #208: Appveyor CI for Windows Implemented in commit 
+  #05210b6.
+- Implemented #207: Added a contribution guide Implemented in commit 
+  #d6de6a5.
+- Implemented #205: Removed all @version annotations Implemented in 
+  commit #5b1fcef.
+- Implemented #204: Removed all traces of "PHP Version 5" in the file 
+  header DocBlock Implemented in commit #c36897b.
+- Implemented #203: Some improvements to the README Implemented in 
+  commit #cc354ed.
+- Implemented #201: Added the missing cleancode section to the 
+  website. Implemented in commit #ead3368.
+- Implemented #200: StaticAccess - ability to add exceptions for 
+  specific class names Implemented in commit #b428516.
+- Implemented #199: Changed the OutOfBounds exceptions when getting a 
+  property Implemented in commit #0dad28d.
+- Implemented #198: Allow unused foreach variables Implemented in 
+  commit #98bed5a.
+- Implemented #197: Allow underscore camelcase property name 
+  Implemented in commit #6eb7dcd.
+- Implemented #152: Update DepthOfInheritance.php: Using the right 
+  condition and naming of property. Implemented in commit #e59053c.
+- Implemented #97: Fixed typo in rule ElseExpression CDATA Implemented 
+  in commit #7593f17.
+
+phpmd-2.1.3 (2014/09/25)
+========================
+
+Bug fix release.
+
+- Fixed #195: Missing version number in composer.json file replaced 
+  with build.properties version number. Fixed in commit #7b8d13f.
+
+phpmd-2.1.2 (2014/09/25)
+========================
+
+This release closes several minor issues and integrates some 
+outstanding pull requests.
+
+- Fixed #164: Fixed IRC link Fixed in commit #84f2d8a.
+- Fixed #165: Removed lie regarding PEAR Fixed in commit #74b9f84.
+- Fixed #85: Documentation changes, fixed typo in PHPMD's online 
+  documentation. Fixed in commit #f954dcf.
+- Fixed #190: Updating composer.json Fixed in commit #45c55d8.
+- Fixed #191: Superglobals are not named in CamelCase Fixed in commit 
+  #b18ffbb.
+- Fixed #192: Fix a typo. These are the 'design rules' not the 'code 
+  size rules Fixed in commit #1eb321d.
+- Implemented #182: Tweak with CamelCase matching inheritDoc 
+  Implemented in commit #9271fc6.
+- Implemented #189: Missing composer install documentation Implemented 
+  in commit #450f91c.
+
+phpmd-2.1.1 (2014/09/09)
+========================
+
+
+
+- Fixed #181: 404 error on your website release area
+- Fixed #168: --version argument doesn't return version Fixed in 
+  commit #3f56c37.
+- Implemented #183: exceptions for CamelCaseVariableName and 
+  UnusedLocalVariable Implemented in commit #5f9e8a2.
+
+phpmd-2.1.0 (2014/09/08)
+========================
+
+This integrates several outstanding pull requests.
+
+- Fixed #118: Fix [Naming]: Trait can have method same as trait's name 
+  Fixed in commit #f93be40.
+- Fixed #177: Get XML contents before parsing Fixed in commit 
+  #e081088.
+- Implemented #150: Fix for unused variables rules when handling 
+  namespace compact() Implemented in commit #ffab9fc.
+- Implemented #154: Added PHP 5.6 and HHVM to travis.yml Implemented 
+  in commit #b5cdc74.
+- Implemented #159: Allow a single underscore at the beginning 
+  Implemented in commit #d0779c2.
+- Implemented #100: Quick change to add support for exclude-pattern in 
+  a ruleset Implemented in commit #6257a83.
+- Implemented #117: --exclude not working Implemented in commit 
+  #6257a83.
+
+phpmd-2.0.0 (2014/05/21)
+========================
+
+This is major release of PHPMD which utilizes 2.0 engine of PDepend.
+
+- Fixed #111: Changelog with old releases and invalid dates removed. 
+  Fixed in commit #cdfbb8f.
+- Implemented #40: Allow multiple report files Now it is possible to 
+  render multiple report files during a single PHPMD run, just add: 
+  --reportfile-xml report.xml --reportfile-html report.html 
+  --reportfile-text report.txt to the PHP command line call. 
+  Implemented in commit #e16c38c.
+- Implemented #61: UnusedLocalVariable fix for compact handling in 
+  Symfony2 Implemented in commit #a1dc403.
+- Implemented #119: PDepend 2.0 support Implemented in commit 
+  #8c3ebe1.
+- Implemented #122: Add: New parameter 'ignore-whitespace' to 
+  LongClass and LongMethod rules Implemented in commit #19c4da8.
+
+phpmd-1.5.0 (2013/07/26)
+========================
+
+This release closes some PHP 5.4 related issues.
+
+- Fixed #87: Fix: PHP Fatal error: Call to a member function 
+  isInstanceOf() on a non-object Fixed in commit #9ab3b6d.
+- Fixed #81: Fix error when using entire ruleset "Naming" Fixed in 
+  commit #a473345.
+- Fixed #91: (tiny) documentation typo fix Fixed in commit #2a3d304.
+- Implemented #66: Added support for short variable name exceptions 
+  Implemented in commit #1484e22.
+- Implemented #73: Show available formats and rulesets Implemented in 
+  commit #86560ce.
+
+phpmd-1.4.1 (2012/12/14)
+========================
+
+This release integrates several pull requests.
+
+- Fixed #56: package.xml date invalid: 2011/02/12. Fixed in commit 
+  #575fe7b.
+- Implemented #10: Fix UnusedLocalVariable to recognize compact 
+  function. Implemented in commit #e478912.
+- Implemented #58: Skip "unused formal parameter" checking when method 
+  signature has been annotated as inherited using @inheritdoc. 
+  Implemented in commit #158e1f5.
+
+phpmd-1.4.0 (2012/09/07)
+========================
+
+This release integrates some longer pending pull requests and smaller 
+bugfixes. One major addition is support for Composer as distribution 
+channel.
+
+- Fixed #51: Fixed handling of traits. Fixed in commit #22b523c.
+- Implemented #11: Add getStringProperty($name) to AbstractRule.php. 
+  Implemented in commit #b7d659f.
+- Implemented #12: Update README.rst on cmd line arguments. 
+  Implemented in commit #458d566.
+- Implemented #53: Added getStringProperty and rule-setting to change 
+  TooManyMethods ignore Regexp. Implemented in commit #bc795b6.
+- Implemented #10: Provide PHPMD as composer dependency on 
+  packagist.org. Implemented in commit #3622bb8.
+
+phpmd-1.3.3 (2012/02/29)
+========================
+
+This release closes an issue introduced with the last release. It 
+closes one more regression related to PHP's memory_limit and the 
+Suhosin patch.
+
+- Fixed fatal error due to bug in memory_limit modification code. 
+  Fixed in commit #e8b546d.
+
+phpmd-1.3.2 (2012/02/25)
+========================
+
+This release closes a minor issue in PHP_PMD's memory handling when it 
+is run in a PHP environment that uses the Suhosin patch and the 
+suhosin.memory_limit setting.
+
+- Fixed #25450811: Alert disable memory_limit Fixed in commit 
+  #19e4fc5.
+
+phpmd-1.3.1 (2012/02/16)
+========================
+
+The 1.3.1 release of PHPMD closes one critical bug in PHPMD, that 
+causes a fatal error due to the xdebug max_nesting_level setting for 
+very deep self calls on methods.
+
+- Fixed #24975295: Fatal: Maximum function nesting level reached in 
+  ASTNode.php:425 Fixed in commit #f6550df.
+
+phpmd-1.3.0 (2012/02/04)
+========================
+
+Version 1.3.0 now depends on PHP_Depend 1.0.0 which has support for 
+all the new language constructs introduced with PHP 5.4. Additionally 
+this release contains some minor fixes for PHPMD's rule violation 
+messages.
+
+phpmd-1.2.1 (2011/10/04)
+========================
+
+The 1.2.1 release of PHPMD closes several minor issues and bugs. 
+Beside that we have added a contribution by Francis Besset with 
+additions rules for PHPMD. Finally we have updated the utilized 
+PHP_Depend version to a newer release.
+
+- Fixed #14990109: False detection of unused variable Fixed in commit 
+  #183fbd5.
+- Fixed #23278127: PHPMD should exclude unused parameters from 
+  inherited methods Fixed in commit #d162b21.
+- Fixed #9355859: PHP_Depend exceptions are silently ignored Fixed in 
+  commit #d3d553f.
+- Implemented #11055167: Move PHPUnit annotations from method doc 
+  block to class doc block Implemented in commit #7bcddde.
+- Added Superglobals rule in Controversial Implemented in commit 
+  #7176e74.
+- Added rules to check CamelCase Implemented in commit #1c3c260.
+
+phpmd-1.2.0 (2011/09/27)
+========================
+
+Version 1.2.0 is a small feature release of PHPMD that introduces the 
+new command line option --strict. This options forces PHPMD to apply 
+all rules, even if a source node contains the @SuppressWarnings 
+annotation.
+
+- Controverial PHPMD rule that checks if the project under test does 
+  not utilize PHP's super globals. Implemented in commit #0e60fb9.
+- Implemented #18462127: PHPMD needs a *strict* mode. Implemented in 
+  commit #b066b44.
+
+phpmd-1.1.1 (2011/06/30)
+========================
+
+Version 1.1.1 of PHPMD is a pure Bugfix release that fixes an issue in 
+PHPMD's package manifest. This bug prevents Pyrus the PEAR2 installer 
+from installing PHPMD.
+
+- Fixed #10096717: Bug in PHPMD's package manifest file. Fixed in 
+  commit #f063bc9.
+
+phpmd-1.1.0 (2011/03/20)
+========================
+
+Version 1.1.0 of PHPMD was released on March the 20th 2011. The key 
+features for this release were two new rules. The first one utilizes 
+the Coupling Between Objects (CBO) metric to detect strongly coupled 
+classes. The second one detects the usage of PHP's questionable 'goto' 
+statement. Beside that we have closed a minor bug in the LongVariable 
+rule, where also private properties with descriptive names were 
+reported. And finally we have replaced deprecated PHPUnit features in 
+the PHPMD's test suite, so that PHPMD's tests should now work with 
+PHPUnit 3.4.x and 3.5.x without deprecated warnings.
+
+- Fixed #10096717: LongVariable rule should not apply on private 
+  properties. Fixed in commit #f063bc9.
+- Implemented #10474873: Add rule for PHP's goto statement. 
+  Implemented in commit #2745a20.
+- Implemented #10474987: Implement rule for CBO metric. Implemented in 
+  commit #14277b4.
+- Implemented #11012465: Replace deprecated PHPUnit features in test 
+  suite. Implemented in commit #4adb88d.
+
+phpmd-1.0.1 (2011/02/12)
+========================
+
+- Fixed #9930643: The include_path does not match with PHP_Depend's 
+  new directory layout. Fixed in commit #531be78.
+- Fixed #9626017: Clear temporary resources after a test has finished. 
+  Fixed in commit #b385f15.
+
+phpmd-1.0.0 (2011/02/05)
+========================
+
+- Fixed #9626017: Clear temporary resources after a test has finished. 
+  Fixed in commit #b385f15.
+- New source layout that follows maven's conventions for the directory 
+  structure of a product.
+- Switched to PHPUnit 3.5.x as testing framework
+
+phpmd-0.2.8 (2010/11/25)
+========================
+
+- Improved help text for the PHPMD command line. Thanks to Volker 
+  Dusch for this contribution. https://github.com/edorian/phpmd
+- PHPMD is now compatible with next PHP_Depend release 0.10.0
+
+phpmd-0.2.7 (2010/09/01)
+========================
+
+- Fixed #36: @SupressWarnings annotation does not work for 
+  UnusedPrivateMethod rule. Fixed in commit #284.
+- Fixed #35: Stream Writer closes STDOUT. Fixed in commit #286.
+- Fixed #33: PEAR package.xml does not @php_bin@ and @bin_dir@ on 
+  phpmd.bat. Fixed in commit #264.
+
+phpmd-0.2.6 (2010/07/03)
+========================
+
+- Fixed #28: Unused local variable and unused parameter rule produces 
+  false positives. Fixed in commit #245.
+- Implemented #24: Implement Depth Of Inheritance Rule. Implemented in 
+  commit #253.
+- Implemented #25: Implement Number of Children Rule. Implemented in 
+  commit #252.
+- Implemented #26: Implement Rule that detects the usage of PHP's 
+  eval() function. Implemented in commit #251.
+- Implemented #27: Implement Rule that detects the usage of PHP's 
+  exit() expression. Implemented in commit #250.
+- Implemented #30: New option --version added to PHPMD's command line 
+  interface. Implemented in commit #246.
+- Names of several command line options unified with PHPUnit and 
+  PHPCPD. The --ignore option is now --exclude and --extensions is now 
+  --suffixes.
+
+phpmd-0.2.5 (2010/04/03)
+========================
+
+- Fixed #17: Do not return success exit code when PHPMD detects rule 
+  violations in analyzed source code. Fixed in commit #226.
+- Fixed #19: Super globals were detected as unused variables. Fixed in 
+  commit #218.
+- Fixed #20: Local static variables were treated as unused variables. 
+  Fixed in commit #219.
+- Implemented #12: Add rule for the Weighted Methods Per Class Metric. 
+  Implemented in commit #228.
+- Implemented #16: Alternative syntax for properties in rule set files 
+  implemented. Implemented in commit #220.
+
+phpmd-0.2.4 (2010/03/08)
+========================
+
+- E_NOTICE bug fix in naming rule.
+
+phpmd-0.2.3 (2010/03/04)
+========================
+
+- Fixed #6: PHP Tokenizer required but no error when installing.
+- Fixed #7: UnusedLocalVariable ruleset incorrectly flags variables as 
+  unused when used inside double quoted string. Fixed in commit #187.
+- Fixed #14: ExcessivePublicCount rule should utilize PHP_Depend's cis 
+  metric. Fixed in commit #203.
+- Fixed #15: ExcessivePublicCount rule is never used. Fixed in commit 
+  #202.
+- Implemented #9: Add support for "Suppress warnings" annotations. 
+  Implemented in commit #200.
+- Implemented #10: Support for exclude element in rule-set files 
+  added. Implemented in commit #189.
+- Implemented #13: Implement naming rules, e.g. short variables, 
+  parameter etc.
+
+phpmd-0.2.2 (2010/01/20)
+========================
+
+- Small change to the command line interface, which did not return an 
+  exit code != 0 when an exception occured.
+
+phpmd-0.2.1 (2010/01/05)
+========================
+
+- Implemented #5: Allow multiple input files/directories. Implemented 
+  in commit #158.
+- Additional unit tests for multiple components added.
+
+phpmd-0.2.0 (2009/12/30)
+========================
+
+- Implemented #2: Support for unused code fules completed. Implemented 
+  in commit #134.
+- Implemented #3: Text renderer implemented.
+- Implemented #4: Implement a html renderer. Implemented in commit 
+  #139.
+- Several performance improvements.
+
+phpmd-0.1.0 (2009/12/20)
+========================
+
+Initial release
+

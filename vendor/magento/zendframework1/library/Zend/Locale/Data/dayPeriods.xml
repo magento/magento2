@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE supplementalData SYSTEM "../../common/dtd/ldmlSupplemental.dtd">
+<!--
+Copyright © 1991-2013 Unicode, Inc.
+CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+For terms of use, see http://www.unicode.org/copyright.html
+-->
+<supplementalData>
+	<version number="$Revision: 8242 $" />
+	<generation date="$Date: 2013-02-24 21:06:02 -0600 (Sun, 24 Feb 2013) $" />
+	<dayPeriodRuleSet>
+		<dayPeriodRules locales="root">  <!--  default for any locales not listed under other dayPeriods -->
+			<dayPeriodRule type="am" from="0:00" before="12:00" />
+			<dayPeriodRule type="pm" from="12:00" before="24:00" />
+		</dayPeriodRules>
+		<dayPeriodRules locales="en chr">
+			<dayPeriodRule type="am" from="0:00" before="12:00" />
+			<dayPeriodRule type="noon" at="12:00" />
+			<dayPeriodRule type="pm" after="12:00" before="24:00" />
+		</dayPeriodRules>
+		<dayPeriodRules locales="de nl hr da"> <!-- hr #2489, da #2474 -->
+			<dayPeriodRule type="earlyMorning" from="0:00" before="9:00" />
+			<dayPeriodRule type="morning" from="9:00" before="12:00" />
+			<dayPeriodRule type="noon" at="12:00" />
+			<dayPeriodRule type="afternoon" after="12:00" before="17:00" />
+			<dayPeriodRule type="evening" from="17:00" before="21:00" />
+			<dayPeriodRule type="night" from="21:00" before="24:00" />
+		</dayPeriodRules>
+		<dayPeriodRules locales="zh">
+			<dayPeriodRule type="weeHours" from="00:00" before="4:00" />
+			<dayPeriodRule type="earlyMorning" from="4:00" before="6:00" />
+			<dayPeriodRule type="morning" from="6:00" before="12:00" />
+			<dayPeriodRule type="midDay" from="12:00" before="13:00" />
+			<dayPeriodRule type="afternoon" from="13:00" before="18:00" />
+			<dayPeriodRule type="night" from="18:00" before="24:00" />
+		</dayPeriodRules>
+		<dayPeriodRules locales="pt fr"> <!-- 2465 -->
+			<dayPeriodRule type="morning" from="00:00" before="12:00" />
+			<dayPeriodRule type="noon" at="12:00" />
+			<dayPeriodRule type="afternoon" after="12:00" before="19:00" />
+			<dayPeriodRule type="night" from="19:00" before="24:00" />
+		</dayPeriodRules>
+		<dayPeriodRules locales="pl">
+			<dayPeriodRule type="earlyMorning" from="3:00" before="5:00" />
+			<dayPeriodRule type="morning" from="5:00" before="10:00" />
+			<dayPeriodRule type="lateMorning" from="10:00" before="12:00" />
+			<dayPeriodRule type="noon" at="12:00" />
+			<dayPeriodRule type="afternoon" after="12:00" before="16:00" />
+			<dayPeriodRule type="evening" from="16:00" before="22:00" />
+			<dayPeriodRule type="night" from="22:00" before="3:00" />
+		</dayPeriodRules>
+		<!--
+			#2468 22:00 ≤ w nocy < 03:00 ≤ nad ranem < 05:00 ≤ rano ≤ 10:00 <
+			przed południem < 12:00 = w południe < 12:00 ≤ po południu < 16:00 <
+			wieczorem
+		-->
+		<dayPeriodRules locales="te">
+			<dayPeriodRule type="earlyMorning" from="3:00" before="6:00" />
+			<dayPeriodRule type="morning" from="6:00" before="12:00" />
+			<dayPeriodRule type="noon" at="12:00" />
+			<dayPeriodRule type="afternoon" after="12:00" before="15:00" />
+			<dayPeriodRule type="evening" from="15:00" before="18:00" />
+			<dayPeriodRule type="night" from="18:00" before="3:00" />
+		</dayPeriodRules>
+		<!--
+			te 2463 3-6 earlyMorning తెల్లవారుఝాము 6-12 morning ఉదయం 12-3
+			afternoon మధ్యాహ్నం 3-6 evening సాయంకాలం 6-12 night రాత్రి 12-3
+			mid-night అర్ధరాత్రి
+		-->
+		<dayPeriodRules locales="ta">
+			<dayPeriodRule type="earlyMorning" from="2:00" before="6:00" />
+			<dayPeriodRule type="morning" from="6:00" before="10:00" />
+			<dayPeriodRule type="lateMorning" from="10:00" before="14:00" />
+			<dayPeriodRule type="afternoon" from="14:00" before="18:00" />
+			<dayPeriodRule type="evening" from="18:00" before="22:00" />
+			<dayPeriodRule type="night" from="22:00" before="2:00" />
+		</dayPeriodRules>
+		<!--
+			ta #2485 (2 am to 6 am) - அதிகாலை Morning (6 am to 10 am) - காலை Noon
+			(10 am to 2 pm) - நண்பகல் Evening (2 pm to 6 pm) - மாலை Night (6 pm
+			to 10 pm) - இரவு Midnight(10 pm to 2 am) - நள்ளிரவு
+		-->
+		<dayPeriodRules locales="bg">
+			<dayPeriodRule type="weeHours" from="00:00" before="5:00" />
+			<dayPeriodRule type="earlyMorning" from="5:00" before="6:00" />
+			<dayPeriodRule type="morning" from="6:00" before="10:00" />
+			<dayPeriodRule type="lateMorning" from="10:00" before="12:00" />
+			<dayPeriodRule type="noon" at="12:00" />
+			<dayPeriodRule type="midDay" after="12:00" before="15:00" />
+			<dayPeriodRule type="afternoon" from="15:00" before="18:00" />
+			<dayPeriodRule type="evening" from="18:00" before="20:00" />
+			<dayPeriodRule type="lateEvening" from="20:00" before="22:00" />
+			<dayPeriodRule type="night" from="22:00" before="24:00" />
+		</dayPeriodRules>
+		<!--
+			#2482 00:00 = полунощ < 05:00 ≤ нощ < 06:00 ≤ разсъмване < 10:00 ≤
+			утро < 12:00 ≤ ден = 12:00 = обяд < 15:00 ≤ ранен следобяд < 18:00 ≤
+			късен следобяд < 20:00 ≤ вечер < 22:00 ≤ късна вечер < 24:00 ≤ нощ
+		-->
+		<dayPeriodRules locales="id">
+			<dayPeriodRule type="earlyMorning" from="3:00" before="5:00" />
+			<dayPeriodRule type="morning" from="5:00" before="10:00" />
+			<dayPeriodRule type="midDay" from="10:00" before="15:00" />
+			<dayPeriodRule type="afternoon" from="15:00" before="18:00" />
+			<dayPeriodRule type="night" from="18:00" before="3:00" />
+		</dayPeriodRules>
+		<!--
+			id #2475
+			03:00 ≤ earlyMorning < 05:00 ≤ morning < 10:00 ≤ earlyafternoon ≤
+			15:00 < lateAfternoon < 18:00 ≤ night < 03:00
+		-->
+		<dayPeriodRules locales="uk">
+			<dayPeriodRule type="night" from="00:00" before="3:00" />
+			<dayPeriodRule type="morning" from="3:00" before="12:00" />
+			<dayPeriodRule type="afternoon" from="12:00" before="17:00" />
+			<dayPeriodRule type="evening" from="17:00" before="24:00" />
+		</dayPeriodRules>
+		<!--
+			uk # 2479
+			00:00 ≤ night
+			< 3:00 ≤ morning
+			< 12:00 ≤ afternoon
+			< 17:00 ≤ evening
+			< 24:00
+		-->
+		<dayPeriodRules locales="ee">
+			<dayPeriodRule type="weeHours" from="04:00" before="05:00"/><!-- fɔŋli -->
+			<dayPeriodRule type="morning" from="05:00" before="12:00"/><!-- ŋdi -->
+			<dayPeriodRule type="earlyAfternoon" from="12:00" before="14:00"/><!-- ŋdɔ -->
+			<dayPeriodRule type="afternoon" from="14:00" before="18:00"/><!-- ɣetrɔ -->
+			<dayPeriodRule type="evening" from="18:00" before="21:00"/><!-- fiẽ -->
+			<dayPeriodRule type="night" from="21:00" before="4:00"/><!-- zã -->
+		</dayPeriodRules>
+		<dayPeriodRules locales="fa">
+			<dayPeriodRule type="weeHours" from="00:00" before="01:00" /><!-- نیمه‌شب -->
+			<dayPeriodRule type="earlyMorning" from="01:00" before="06:00" /><!-- بامداد -->
+			<dayPeriodRule type="morning" from="06:00" before="12:00" /><!-- صبح -->
+			<dayPeriodRule type="noon" at="12:00" /><!-- ظهر -->
+			<dayPeriodRule type="midDay" after="12:00" before="16:00" /><!-- بعدازظهر -->
+			<dayPeriodRule type="afternoon" from="16:00" before="19:00" /><!-- عصر -->
+			<dayPeriodRule type="night" from="19:00" before="24:00" /><!-- شب -->
+		</dayPeriodRules>
+	</dayPeriodRuleSet>
+</supplementalData>

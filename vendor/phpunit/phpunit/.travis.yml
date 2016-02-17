@@ -1,0 +1,31 @@
+language: php
+
+php:
+    - 5.3.3
+    - 5.3
+    - 5.4
+    - 5.5
+    - 5.6
+    - hhvm
+
+env:
+    - INSTALL_PHP_INVOKER=0
+    - INSTALL_PHP_INVOKER=1
+
+before_script:
+    - sh -c "if [ '$INSTALL_PHP_INVOKER' = '1' ]; then composer require --dev --prefer-source phpunit/php-invoker:~1.1; else composer install --dev --prefer-source; fi"
+
+script: ./phpunit --configuration ./build/travis-ci.xml
+
+notifications:
+  email: false
+  irc:
+    channels:
+      - "irc.freenode.org#phpunit"
+    use_notice: true
+  webhooks:
+    urls:
+      - https://webhooks.gitter.im/e/6668f52f3dd4e3f81960
+    on_success: always
+    on_failure: always
+    on_start: false

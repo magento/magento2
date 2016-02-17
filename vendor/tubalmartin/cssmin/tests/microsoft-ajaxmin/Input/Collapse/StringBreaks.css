@@ -1,0 +1,10 @@
+P[example="public class foo\
+{\
+    private int x;\
+\
+    foo(int x) {\
+        this.x = x;\
+    }\
+\
+}"] { color: red }
+

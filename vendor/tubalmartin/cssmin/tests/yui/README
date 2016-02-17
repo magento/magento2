@@ -1,0 +1,6 @@
+To add a test:
+
+1. Create a "blah.css" or "blah.js" file.
+2. Create a "blah.css.min" or "blah.js.min" file, containing the expected minified output.
+
+That's all!

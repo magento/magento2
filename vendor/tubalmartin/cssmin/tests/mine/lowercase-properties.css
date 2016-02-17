@@ -1,0 +1,9 @@
+a{
+	HEIGHT : 100px;
+	WIDTH: 200px;
+	COLOR : red;
+	-OUTLINE-COLOR: blue
+}
+p{
+	MARGIN-TOP : 20%;
+}

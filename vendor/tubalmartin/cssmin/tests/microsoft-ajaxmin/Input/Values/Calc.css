@@ -1,0 +1,16 @@
+﻿.foo
+{
+    width: calc(100%/3 - 2*1em - 2*1px + 10 mod 2);
+    margin: calc(1rem - 2px) calc(1rem + 1px);
+}
+
+p { font-size: min(10px, 3em) }
+blockquote { font-size: max(30px, 3em) }
+
+.box { width: min(10% - 20px, 300px) }
+
+.bar
+{
+    margin: calc(5 * min( 10px , 2em ) ) calc(10 + max( 5px, min(10 - 3em, 2in)) );
+    padding-top: calc( 5 * (2em + -1px));
+}

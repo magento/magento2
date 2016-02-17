@@ -1,0 +1,36 @@
+.row-fluid > .span12 {
+  width: 940px;
+}
+.row-fluid > .span11 {
+  width: 860px;
+}
+.row-fluid > .span10 {
+  width: 780px;
+}
+.row-fluid > .span9 {
+  width: 700px;
+}
+.row-fluid > .span8 {
+  width: 620px;
+}
+.row-fluid > .span7 {
+  width: 540px;
+}
+.row-fluid > .span6 {
+  width: 460px;
+}
+.row-fluid > .span5 {
+  width: 380px;
+}
+.row-fluid > .span4 {
+  width: 300px;
+}
+.row-fluid > .span3 {
+  width: 220px;
+}
+.row-fluid > .span2 {
+  width: 140px;
+}
+.row-fluid > .span1 {
+  width: 60px;
+}

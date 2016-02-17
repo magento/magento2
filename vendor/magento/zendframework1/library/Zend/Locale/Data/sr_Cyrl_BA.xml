@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "../../common/dtd/ldml.dtd">
+<!-- Copyright © 1991-2013 Unicode, Inc.
+CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+For terms of use, see http://www.unicode.org/copyright.html
+-->
+<ldml>
+	<identity>
+		<version number="$Revision: 9061 $"/>
+		<generation date="$Date: 2013-07-20 12:27:45 -0500 (Sat, 20 Jul 2013) $"/>
+		<language type="sr"/>
+		<script type="Cyrl"/>
+		<territory type="BA"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="sr" draft="unconfirmed">српски</language>
+		</languages>
+	</localeDisplayNames>
+	<dates>
+		<calendars>
+			<calendar type="generic">
+				<dateFormats>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>G y-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>GGGGG yy-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<dateTimeFormats>
+					<intervalFormats>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d" draft="unconfirmed">MM-dd - MM-dd</greatestDifference>
+							<greatestDifference id="M" draft="unconfirmed">MM-dd - MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d" draft="unconfirmed">E, MM-dd - E, MM-dd</greatestDifference>
+							<greatestDifference id="M" draft="unconfirmed">E, MM-dd - E, MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M" draft="unconfirmed">y-MM - y-MM</greatestDifference>
+							<greatestDifference id="y" draft="unconfirmed">y-MM - y-MM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d" draft="unconfirmed">y-MM-dd - y-MM-dd</greatestDifference>
+							<greatestDifference id="M" draft="unconfirmed">y-MM-dd - y-MM-dd</greatestDifference>
+							<greatestDifference id="y" draft="unconfirmed">y-MM-dd - y-MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d" draft="unconfirmed">E, y-MM-dd - E, y-MM-dd</greatestDifference>
+							<greatestDifference id="M" draft="unconfirmed">E, y-MM-dd - E, y-MM-dd</greatestDifference>
+							<greatestDifference id="y" draft="unconfirmed">E, y-MM-dd - E, y-MM-dd</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="gregorian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="wide">
+							<month type="6">јуни</month>
+							<month type="7">јули</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="wed">сри</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="wed">сриједа</day>
+						</dayWidth>
+					</dayContext>
+				</days>
+				<dateFormats>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>y-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>yy-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<timeFormatLength type="full">
+						<timeFormat>
+							<pattern>HH 'часова', mm 'минута', ss 'секунди' zzzz</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="medium">
+						<timeFormat>
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="short">
+						<timeFormat>
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength>
+				</timeFormats>
+				<dateTimeFormats>
+					<intervalFormats>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d" draft="unconfirmed">MM-dd - MM-dd</greatestDifference>
+							<greatestDifference id="M" draft="unconfirmed">MM-dd - MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d" draft="unconfirmed">E, MM-dd - E, MM-dd</greatestDifference>
+							<greatestDifference id="M" draft="unconfirmed">E, MM-dd - E, MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M" draft="unconfirmed">y-MM - y-MM</greatestDifference>
+							<greatestDifference id="y" draft="unconfirmed">y-MM - y-MM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d" draft="unconfirmed">y-MM-dd - y-MM-dd</greatestDifference>
+							<greatestDifference id="M" draft="unconfirmed">y-MM-dd - y-MM-dd</greatestDifference>
+							<greatestDifference id="y" draft="unconfirmed">y-MM-dd - y-MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d" draft="unconfirmed">E, y-MM-dd - E, y-MM-dd</greatestDifference>
+							<greatestDifference id="M" draft="unconfirmed">E, y-MM-dd - E, y-MM-dd</greatestDifference>
+							<greatestDifference id="y" draft="unconfirmed">E, y-MM-dd - E, y-MM-dd</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+	</dates>
+	<numbers>
+		<currencies>
+			<currency type="BAM">
+				<displayName>Конвертибилна Марка</displayName>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>

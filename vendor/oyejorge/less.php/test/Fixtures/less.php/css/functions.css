@@ -1,0 +1,17 @@
+#built-in {
+  mix: #800080;
+  mix: #4000bf;
+  mix: rgba(64, 0, 191, 0.75);
+  fade: rgba(0, 255, 0, 0.1);
+  fade: rgba(0, 0, 17, 0.2);
+  fade: #00ff00;
+  fadein: rgba(0, 0, 0, 0.6);
+  fadein: #000011;
+  fadein: rgba(0, 0, 0, 0.8);
+  fadein: #000012;
+  fadeout: rgba(0, 0, 0, 0.4);
+  fadeout: rgba(0, 0, 17, 0.2);
+  escape: %3F%26%3D%26%25%21%23%24;
+  javascript: /* Sorry, can not do JavaScript evaluation in PHP... :( */;
+  darken: #090909;
+}

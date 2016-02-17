@@ -1,0 +1,68 @@
+
+/* space (descendant) combinator with varying amount of whitespace */
+body div
+{
+  color: #543210;
+}
+body
+div
+{
+  color: #543210;
+}
+
+/* child selector with varying amount of whitespace between operators */
+body > div
+{
+  color: #f00;
+}
+body>div
+{
+  color: #0f0;
+}
+body >div
+{
+  color: #00f;
+}
+body> 
+div
+{
+  color: #fff;
+}
+
+/* adjacent sibling selector with varying amount of whitespace between operators */
+ul + div
+{
+  color: #f00;
+}
+ul+div
+{
+  color: #0f0;
+}
+ul +div
+{
+  color: #00f;
+}
+ul+          
+div
+{
+  color: #fff;
+}
+
+/* general sibling selector with varying amount of whitespace between operators */
+ul ~ div
+{
+  color: #f00;
+}
+ul~div
+{
+  color: #0f0;
+}
+ul ~div
+{
+  color: #00f;
+}
+ul~          
+div
+{
+  color: #fff;
+}

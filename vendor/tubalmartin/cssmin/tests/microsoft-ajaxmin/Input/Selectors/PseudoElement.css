@@ -1,0 +1,38 @@
+/* IE6 has a bug that ignores first-line and first-letter pseudo-element
+   selectors if there is no space after them. SO, if first-line or first-letter
+   are the last simple selecors in the list, then there better be an extra space
+   between it and the opening curly-brace. But there better not be any other
+   extra spaces when the curly-brace isn't the nxt character. */
+
+/* extra space should be between first-line and the opening curly-brace */
+P:first-line 
+{ 
+  text-transform: uppercase;
+}
+
+/* extra space should be between first-letter and the opening curly-brace */
+P:first-letter 
+{ 
+  font-size: 200%; 
+  font-style: italic;
+  font-weight: bold; 
+  float: left;
+}
+
+/* only ONE space after first-line and first-letter 
+  (to make sure the above rules don't add too much space) */
+p:first-line  
+p:first-letter  p
+{
+  color: red;
+}
+                    
+H1:before 
+{
+  content: counter(chapno, upper-roman) ". ";
+}
+
+P.special:after 
+{
+  content: "Special! ";
+}

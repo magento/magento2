@@ -1,0 +1,4967 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "../../common/dtd/ldml.dtd">
+<!-- Copyright © 1991-2013 Unicode, Inc.
+CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+For terms of use, see http://www.unicode.org/copyright.html
+-->
+<ldml>
+	<identity>
+		<version number="$Revision: 9852 $"/>
+		<generation date="$Date: 2014-02-28 23:57:43 -0600 (Fri, 28 Feb 2014) $"/>
+		<language type="pa"/>
+	</identity>
+	<localeDisplayNames>
+		<localeDisplayPattern>
+			<localePattern>{0} ({1})</localePattern>
+			<localeSeparator>{0}, {1}</localeSeparator>
+			<localeKeyTypePattern>{0}: {1}</localeKeyTypePattern>
+		</localeDisplayPattern>
+		<languages>
+			<language type="ab">ਅਬਖਾਜ਼ੀਅਨ</language>
+			<language type="ace" draft="contributed">ਅਚੀਨੀ</language>
+			<language type="ach" draft="contributed">ਅਕੋਲੀ</language>
+			<language type="af">ਅਫ਼ਰੀਕੀ</language>
+			<language type="am">ਅਮਹਾਰਿਕ</language>
+			<language type="ar">ਅਰਬੀ</language>
+			<language type="ar_001">ਆਧੁਨਿਕ ਸਟੈਂਡਰਡ ਅਰਬੀ</language>
+			<language type="as">ਅਸਾਮੀ</language>
+			<language type="az">ਅਜ਼ਰਬੈਜਾਨੀ</language>
+			<language type="be">ਬੇਲਾਰੂਸੀ</language>
+			<language type="bg">ਬੁਲਗਾਰੀਅਨ</language>
+			<language type="bn">ਬੰਗਾਲੀ</language>
+			<language type="bo">ਤਿੱਬਤੀ</language>
+			<language type="bs">ਬੋਸਨੀਅਨ</language>
+			<language type="ca">ਕੈਟਾਲਾਨ</language>
+			<language type="cs">ਚੈਕ</language>
+			<language type="cy">ਵੈਲਸ਼</language>
+			<language type="da">ਡੈਨਿਸ਼</language>
+			<language type="de">ਜਰਮਨ</language>
+			<language type="de_AT">ਔਸਟ੍ਰੀਅਨ ਜਰਮਨ</language>
+			<language type="de_CH">ਸਵਿਸ</language>
+			<language type="el">ਗ੍ਰੀਕ</language>
+			<language type="en">ਅੰਗਰੇਜ਼ੀ</language>
+			<language type="en_AU">ਆਸਟ੍ਰੇਲੀਆਈ ਅੰਗਰੇਜ਼ੀ</language>
+			<language type="en_CA">ਕਨੈਡੀਅਨ ਅੰਗਰੇਜ਼ੀ</language>
+			<language type="en_GB">ਬ੍ਰਿਟਿਸ਼ ਅੰਗਰੇਜ਼ੀ</language>
+			<language type="en_GB" alt="short">ਯੂ.ਕੇ ਅੰਗਰੇਜ਼ੀ</language>
+			<language type="en_US">ਅਮਰੀਕੀ ਅੰਗਰੇਜ਼ੀ</language>
+			<language type="en_US" alt="short">ਯੂ.ਐਸ. ਅੰਗਰੇਜ਼ੀ</language>
+			<language type="eo">ਇਸਪੇਰਾਂਟੋ</language>
+			<language type="es">ਸਪੈਨਿਸ਼</language>
+			<language type="es_419">ਲੈਟਿਨ ਅਮਰੀਕੀ ਸਪੈਨਿਸ਼</language>
+			<language type="es_ES">ਯੂਰੋਪੀਅਨ ਸਪੈਨਿਸ਼</language>
+			<language type="es_MX">ਮੈਕਸੀਕਨ ਸਪੈਨਿਸ਼</language>
+			<language type="et">ਇਸਟੋਨੀਅਨ</language>
+			<language type="eu">ਬਾਸਕੀ</language>
+			<language type="fa">ਫ਼ਾਰਸੀ</language>
+			<language type="fi">ਫਿਨਿਸ਼</language>
+			<language type="fil">ਫਿਲੀਪਿਨੋ</language>
+			<language type="fj">ਫਿਜੀਅਨ</language>
+			<language type="fo">ਫ਼ੇਰੋਸੇ</language>
+			<language type="fr">ਫ੍ਰੈਂਚ</language>
+			<language type="fr_CA">ਕਨੈਡੀਅਨ ਫ੍ਰੈਂਚ</language>
+			<language type="fr_CH">ਸਵਿਸ ਫ੍ਰੈਂਚ</language>
+			<language type="fy">ਪਛਮੀ ਫ੍ਰਿਸ਼ੀਅਨ</language>
+			<language type="ga">ਆਇਰਿਸ਼</language>
+			<language type="gl">ਗੈਲਿਸ਼ਿਅਨ</language>
+			<language type="gn">ਗੁਆਰਾਨੀ</language>
+			<language type="gsw">ਸਵਿਸ ਜਰਮਨ</language>
+			<language type="gu">ਗੁਜਰਾਤੀ</language>
+			<language type="ha">ਹੌਸਾ</language>
+			<language type="haw">ਹਵਾਈਅਨ</language>
+			<language type="he">ਯਹੂਦੀ</language>
+			<language type="hi">ਹਿੰਦੀ</language>
+			<language type="hr">ਕ੍ਰੋਏਸ਼ਿਆਈ</language>
+			<language type="ht">ਹਾਈਟਿਅਨ</language>
+			<language type="hu">ਹੰਗੇਰੀਅਨ</language>
+			<language type="hy">ਆਰਮੀਨੀਅਨ</language>
+			<language type="id">ਇੰਡੋਨੇਸ਼ੀਆਈ</language>
+			<language type="ig">ਇਗਬੋ</language>
+			<language type="is">ਆਈਸਲੈਂਡਿਕ</language>
+			<language type="it">ਇਤਾਲਵੀ</language>
+			<language type="ja">ਜਾਪਾਨੀ</language>
+			<language type="jv">ਜਾਵਾਨੀਜ਼</language>
+			<language type="ka">ਜਾਰਜੀਅਨ</language>
+			<language type="kk">ਕਜ਼ਾਖ਼</language>
+			<language type="km">ਖਮੇਰ</language>
+			<language type="kn">ਕੰਨੜ</language>
+			<language type="ko">ਕੋਰੀਆਈ</language>
+			<language type="ks">ਕਸ਼ਮੀਰੀ</language>
+			<language type="ku">ਕੁਰਦਿਸ਼</language>
+			<language type="ky">ਕਿਰਗੀਜ਼</language>
+			<language type="la">ਲੈਟਿਨ</language>
+			<language type="lb">ਲਕਜ਼ਮਬਰਗਿਸ਼</language>
+			<language type="lo">ਲਾਓ</language>
+			<language type="lt">ਲਿਥੁਆਨੀਅਨ</language>
+			<language type="lv">ਲਾਟਵਿਅਨ</language>
+			<language type="mg">ਮਾਲਾਗੈਸੀ</language>
+			<language type="mi">ਮਾਉਰੀ</language>
+			<language type="mk">ਮੈਕਡੋਨੀਅਨ</language>
+			<language type="ml">ਮਲਿਆਲਮ</language>
+			<language type="mr">ਮਰਾਠੀ</language>
+			<language type="ms">ਮਲਯ</language>
+			<language type="mt">ਮਾਲਟੀਜ਼</language>
+			<language type="my">ਬਰਮੀ</language>
+			<language type="nb">ਨੌਰਵੇਜਿਅਨ ਬੋਕਮਲ</language>
+			<language type="ne">ਨੇਪਾਲੀ</language>
+			<language type="nl">ਡੱਚ</language>
+			<language type="nl_BE">ਫਲੈਮਿਸ਼</language>
+			<language type="nn">ਨੌਰਵੇਜਿਅਨ ਨਿਨੋਰਸ੍ਕ</language>
+			<language type="no" draft="contributed">ਨਾਰਵੇਜੀਅਨ</language>
+			<language type="or">ਉੜੀਆ</language>
+			<language type="pa">ਪੰਜਾਬੀ</language>
+			<language type="pl">ਪੋਲਿਸ਼</language>
+			<language type="ps">ਪਸ਼ਤੋ</language>
+			<language type="pt">ਪੁਰਤਗਾਲੀ</language>
+			<language type="pt_BR">ਬ੍ਰਾਜ਼ਿਲੀਅਨ ਪੁਰਤਗਾਲੀ</language>
+			<language type="pt_PT">ਯੂਰੋਪੀਅਨ ਪੁਰਤਗਾਲੀ</language>
+			<language type="qu">ਕਿਊਚੁਆ</language>
+			<language type="rm">ਰੋਮਾਂਸ਼</language>
+			<language type="ro">ਰੋਮਾਨੀਆਈ</language>
+			<language type="ru">ਰੂਸੀ</language>
+			<language type="sa">ਸੰਸਕ੍ਰਿਤ</language>
+			<language type="sd">ਸਿੰਧੀ</language>
+			<language type="si">ਸਿੰਹਾਲਾ</language>
+			<language type="sk">ਸਲੋਵਾਕ</language>
+			<language type="sl">ਸਲੋਵੇਨੀਅਨ</language>
+			<language type="so">ਸੋਮਾਲੀ</language>
+			<language type="sq">ਅਲਬਾਨੀਅਨ</language>
+			<language type="sr">ਸਰਬਿਆਈ</language>
+			<language type="su">ਸੂਡਾਨੀ</language>
+			<language type="sv">ਸਵੀਡਿਸ਼</language>
+			<language type="sw">ਸਵਾਹਿਲੀ</language>
+			<language type="ta">ਤਮਿਲ</language>
+			<language type="te">ਤੇਲਗੂ</language>
+			<language type="tg">ਤਾਜਿਕ</language>
+			<language type="th">ਥਾਈ</language>
+			<language type="ti">ਟਿਗਰੀਨਿਆ</language>
+			<language type="tk">ਤੁਰਕਮੇਨ</language>
+			<language type="to">ਟੌਂਗਨ</language>
+			<language type="tr">ਤੁਰਕਿਸ਼</language>
+			<language type="tt">ਤਤਾਰ</language>
+			<language type="tw" draft="contributed">ਤ੍ਵਿ</language>
+			<language type="ug">ਉਇਗੁਰ</language>
+			<language type="uk">ਯੂਕਰੇਨੀਅਨ</language>
+			<language type="und">ਅਗਿਆਤ ਭਾਸ਼ਾ</language>
+			<language type="ur">ਉਰਦੂ</language>
+			<language type="uz">ਉਜ਼ਬੇਕ</language>
+			<language type="vi">ਵਿਯਤਨਾਮੀ</language>
+			<language type="wo">ਵੋਲੋਫ</language>
+			<language type="xh">ਖੋਸਾ</language>
+			<language type="yo">ਯੋਰੂਬਾ</language>
+			<language type="zgh">ਸਟੈਂਡਰਡ ਮੋਰੋਕੈਨ ਟੈਮਾਜ਼ਾਈਟ</language>
+			<language type="zh">ਚੀਨੀ</language>
+			<language type="zh_Hans">ਸਰਲ ਕੀਤੀ ਚੀਨੀ</language>
+			<language type="zh_Hant">ਰਵਾਇਤੀ ਚੀਨੀ</language>
+			<language type="zu">ਜ਼ੁਲੂ</language>
+			<language type="zxx">ਕੋਈ ਭਾਸ਼ਾ-ਵਿਗਿਆਨਿਕ ਸਮੱਗਰੀ ਨਹੀਂ</language>
+		</languages>
+		<scripts>
+			<script type="Arab">ਅਰਬੀ</script>
+			<script type="Armn">ਆਰਮੀਨੀਅਨ</script>
+			<script type="Beng">ਬੰਗਾਲੀ</script>
+			<script type="Bopo">ਬੋਪੋਮੋਫੋ</script>
+			<script type="Brai">ਬ੍ਰੇਲ</script>
+			<script type="Cyrl">ਸਿਰੀਲਿਕ</script>
+			<script type="Deva">ਦੇਵਨਾਗਰੀ</script>
+			<script type="Ethi">ਐਥਿਓਪਿਕ</script>
+			<script type="Geor">ਜਾਰਜੀਅਨ</script>
+			<script type="Grek">ਗ੍ਰੀਕ</script>
+			<script type="Gujr">ਗੁਜਰਾਤੀ</script>
+			<script type="Guru">ਗੁਰਮੁਖੀ</script>
+			<script type="Hang">ਹੰਗੁਲ</script>
+			<script type="Hani">ਹਾਨ</script>
+			<script type="Hans">ਸਰਲ ਕੀਤੀ</script>
+			<script type="Hans" alt="stand-alone">ਸਰਲ ਕੀਤੀ ਹਾਨ</script>
+			<script type="Hant">ਰਵਾਇਤੀ</script>
+			<script type="Hant" alt="stand-alone">ਰਵਾਇਤੀ ਹਾਨ</script>
+			<script type="Hebr">ਹਿਬਰੂ</script>
+			<script type="Hira">ਹਿਰਾਗਾਨਾ</script>
+			<script type="Jpan">ਜਾਪਾਨੀ</script>
+			<script type="Kana">ਕਾਟਾਕਾਨਾ</script>
+			<script type="Khmr">ਖਮੇਰ</script>
+			<script type="Knda">ਕੰਨੜ</script>
+			<script type="Kore">ਕੋਰੀਆਈ</script>
+			<script type="Laoo">ਲਾਓ</script>
+			<script type="Latn">ਲੈਟਿਨ</script>
+			<script type="Mlym">ਮਲਿਆਲਮ</script>
+			<script type="Mong">ਮੰਗੋਲੀਅਨ</script>
+			<script type="Mymr">ਮਿਆਂਮਾਰ</script>
+			<script type="Orya">ਉੜੀਆ</script>
+			<script type="Sinh">ਸਿੰਹਾਲਾ</script>
+			<script type="Taml">ਤਮਿਲ</script>
+			<script type="Telu">ਤੇਲਗੂ</script>
+			<script type="Thaa">ਥਾਨਾ</script>
+			<script type="Thai">ਥਾਈ</script>
+			<script type="Tibt">ਤਿੱਬਤੀ</script>
+			<script type="Zsym">ਪ੍ਰਤੀਕ ਲਿਪੀ</script>
+			<script type="Zxxx">ਅਲਿਖਤ</script>
+			<script type="Zyyy">ਸਧਾਰਨ</script>
+			<script type="Zzzz">ਅਗਿਆਤ ਲਿਪੀ</script>
+		</scripts>
+		<territories>
+			<territory type="001">ਵਿਸ਼ਵ</territory>
+			<territory type="002">ਅਫ਼ਰੀਕਾ</territory>
+			<territory type="003">ਉੱਤਰ ਅਮਰੀਕਾ</territory>
+			<territory type="005">ਦੱਖਣ ਅਮਰੀਕਾ</territory>
+			<territory type="009">ਓਸ਼ਨਿਆ</territory>
+			<territory type="011">ਪੱਛਮੀ ਅਫ਼ਰੀਕਾ</territory>
+			<territory type="013">ਕੇਂਦਰੀ ਅਮਰੀਕਾ</territory>
+			<territory type="014">ਪੂਰਬੀ ਅਫ਼ਰੀਕਾ</territory>
+			<territory type="015">ਉੱਤਰੀ ਅਫ਼ਰੀਕਾ</territory>
+			<territory type="017">ਮੱਧਮ ਅਫ਼ਰੀਕਾ</territory>
+			<territory type="018">ਦੱਖਣੀ ਅਫ਼ਰੀਕਾ</territory>
+			<territory type="019">ਅਮਰੀਕਾ</territory>
+			<territory type="021">ਉੱਤਰੀ ਅਮਰੀਕਾ</territory>
+			<territory type="029">ਕੈਰੇਬੀਅਨ</territory>
+			<territory type="030">ਪੂਰਬੀ ਏਸ਼ੀਆ</territory>
+			<territory type="034">ਦੱਖਣੀ ਏਸ਼ੀਆ</territory>
+			<territory type="035">ਦੱਖਣ-ਪੂਰਬੀ ਏਸ਼ੀਆ</territory>
+			<territory type="039">ਦੱਖਣੀ ਯੂਰਪ</territory>
+			<territory type="053">ਔਸਟ੍ਰਾਲੇਸ਼ੀਆ</territory>
+			<territory type="054">ਮੈਲਾਨੇਸ਼ੀਆ</territory>
+			<territory type="057">ਮਾਇਕ੍ਰੋਨੇਸ਼ੀਆਈ ਖੇਤਰ</territory>
+			<territory type="061">ਪੋਲਿਨੇਸ਼ੀਆ</territory>
+			<territory type="142">ਏਸ਼ੀਆ</territory>
+			<territory type="143">ਕੇਂਦਰੀ ਏਸ਼ੀਆ</territory>
+			<territory type="145">ਪੱਛਮੀ ਏਸ਼ੀਆ</territory>
+			<territory type="150">ਯੂਰਪ</territory>
+			<territory type="151">ਪੂਰਬੀ ਯੂਰਪ</territory>
+			<territory type="154">ਉੱਤਰੀ ਯੂਰਪ</territory>
+			<territory type="155">ਪੱਛਮੀ ਯੂਰਪ</territory>
+			<territory type="419">ਲੈਟਿਨ ਅਮਰੀਕਾ</territory>
+			<territory type="AC">ਅਸੈਂਸ਼ਨ ਆਈਲੈਂਡ</territory>
+			<territory type="AD">ਅੰਡੋਰਾ</territory>
+			<territory type="AE">ਸੰਯੁਕਤ ਅਰਬ ਅਮੀਰਾਤ</territory>
+			<territory type="AF">ਅਫ਼ਗਾਨਿਸਤਾਨ</territory>
+			<territory type="AG">ਐਂਟੀਗੁਆ ਅਤੇ ਬਾਰਬੁਡਾ</territory>
+			<territory type="AI">ਅੰਗੁਇਲਾ</territory>
+			<territory type="AL">ਅਲਬਾਨੀਆ</territory>
+			<territory type="AM">ਆਰਮੀਨਿਆ</territory>
+			<territory type="AO">ਅੰਗੋਲਾ</territory>
+			<territory type="AQ">ਅੰਟਾਰਕਟਿਕਾ</territory>
+			<territory type="AR">ਅਰਜਨਟੀਨਾ</territory>
+			<territory type="AS">ਅਮੈਰੀਕਨ ਸਮੋਆ</territory>
+			<territory type="AT">ਆਸਟਰੀਆ</territory>
+			<territory type="AU">ਆਸਟ੍ਰੇਲੀਆ</territory>
+			<territory type="AW">ਅਰੂਬਾ</territory>
+			<territory type="AX">ਅਲੈਂਡ ਆਈਲੈਂਡਸ</territory>
+			<territory type="AZ">ਅਜ਼ਰਬੈਜਾਨ</territory>
+			<territory type="BA">ਬੋਸਨੀਆ ਅਤੇ ਹਰਜ਼ੇਗੋਵੀਨਾ</territory>
+			<territory type="BB">ਬਾਰਬਾਡੋਸ</territory>
+			<territory type="BD">ਬੰਗਲਾਦੇਸ਼</territory>
+			<territory type="BE">ਬੈਲਜੀਅਮ</territory>
+			<territory type="BF">ਬੁਰਕੀਨਾ ਫ਼ਾਸੋ</territory>
+			<territory type="BG">ਬੁਲਗਾਰਿਆ</territory>
+			<territory type="BH">ਬਹਿਰੀਨ</territory>
+			<territory type="BI">ਬੁਰੁੰਡੀ</territory>
+			<territory type="BJ">ਬੇਨਿਨ</territory>
+			<territory type="BL">ਸੇਂਟ ਬਾਰਥੇਲੇਮੀ</territory>
+			<territory type="BM">ਬਰਮੂਡਾ</territory>
+			<territory type="BN">ਬਰੂਨੇਈ</territory>
+			<territory type="BO">ਬੋਲੀਵੀਆ</territory>
+			<territory type="BQ">ਕੈਰੇਬੀਅਨ ਨੀਦਰਲੈਂਡ</territory>
+			<territory type="BR">ਬ੍ਰਾਜ਼ੀਲ</territory>
+			<territory type="BS">ਬਹਾਮਾਸ</territory>
+			<territory type="BT">ਭੂਟਾਨ</territory>
+			<territory type="BV">ਬੌਵੇਟ ਆਈਲੈਂਡ</territory>
+			<territory type="BW">ਬੋਟਸਵਾਨਾ</territory>
+			<territory type="BY">ਬੇਲਾਰੂਸ</territory>
+			<territory type="BZ">ਬੇਲੀਜ਼</territory>
+			<territory type="CA">ਕੈਨੇਡਾ</territory>
+			<territory type="CC">ਕੋਕੋਜ਼ (ਕੀਲਿੰਗ) ਆਈਲੈਂਡਸ</territory>
+			<territory type="CD">ਕਾਂਗੋ - ਕਿਂਸ਼ਾਸਾ</territory>
+			<territory type="CD" alt="variant">ਕਾਂਗੋ ਲੋਕਤੰਤਰੀ ਗਣਰਾਜ</territory>
+			<territory type="CF">ਕੇਂਦਰੀ ਅਫਰੀਕੀ ਗਣਰਾਜ</territory>
+			<territory type="CG">ਕਾਂਗੋ - ਬ੍ਰਾਜ਼ਾਵਿਲੇ</territory>
+			<territory type="CG" alt="variant">ਕਾਂਗੋ ਗਣਰਾਜ</territory>
+			<territory type="CH">ਸਵਿਟਜ਼ਰਲੈਂਡ</territory>
+			<territory type="CI">ਕੋਟ ਡੀਵੋਆਰ</territory>
+			<territory type="CI" alt="variant">ਆਇਵਰੀ ਕੋਸਟ</territory>
+			<territory type="CK">ਕੁਕ ਆਈਲੈਂਡਸ</territory>
+			<territory type="CL">ਚਿਲੀ</territory>
+			<territory type="CM">ਕੈਮਰੂਨ</territory>
+			<territory type="CN">ਚੀਨ</territory>
+			<territory type="CO">ਕੋਲੰਬੀਆ</territory>
+			<territory type="CP">ਕਲਿਪਰਟਨ ਆਈਲੈਂਡ</territory>
+			<territory type="CR">ਕੋਸਟਾ ਰੀਕਾ</territory>
+			<territory type="CU">ਕਿਊਬਾ</territory>
+			<territory type="CV">ਕੇਪ ਵਰਡ</territory>
+			<territory type="CW">ਕੁਰਾਕਾਓ</territory>
+			<territory type="CX">ਕ੍ਰਿਸਮਸ ਆਈਲੈਂਡ</territory>
+			<territory type="CY">ਸਾਇਪਰਸ</territory>
+			<territory type="CZ">ਚੈਕ ਗਣਰਾਜ</territory>
+			<territory type="DE">ਜਰਮਨੀ</territory>
+			<territory type="DG">ਡੀਗੋ ਗਾਰਸ਼ੀਆ</territory>
+			<territory type="DJ">ਜ਼ੀਬੂਤੀ</territory>
+			<territory type="DK">ਡੈਨਮਾਰਕ</territory>
+			<territory type="DM">ਡੋਮੀਨਿਕਾ</territory>
+			<territory type="DO">ਡੌਮਿਨਿਕਨ ਗਣਰਾਜ</territory>
+			<territory type="DZ">ਅਲਜੀਰੀਆ</territory>
+			<territory type="EA">ਸਿਓਟਾ ਅਤੇ ਮੇਲਿੱਲਾ</territory>
+			<territory type="EC">ਇਕਵੇਡੋਰ</territory>
+			<territory type="EE">ਇਸਟੋਨੀਆ</territory>
+			<territory type="EG">ਮਿਸਰ</territory>
+			<territory type="EH">ਪੱਛਮੀ ਸਹਾਰਾ</territory>
+			<territory type="ER">ਇਰੀਟ੍ਰਿਆ</territory>
+			<territory type="ES">ਸਪੇਨ</territory>
+			<territory type="ET">ਇਥੋਪੀਆ</territory>
+			<territory type="EU">ਯੂਰੋਪੀਅਨ ਯੂਨਿਅਨ</territory>
+			<territory type="FI">ਫਿਨਲੈਂਡ</territory>
+			<territory type="FJ">ਫ਼ਿਜੀ</territory>
+			<territory type="FK">ਫ਼ਾਕਲੈਂਡ ਆਈਲੈਂਡਸ</territory>
+			<territory type="FK" alt="variant">ਫ਼ਾਕਲੈਂਡ ਆਈਲੈਂਡਸ (ਆਈਲਾਸ ਮਾਲਵਿਨਾਸ)</territory>
+			<territory type="FM">ਮਾਇਕ੍ਰੋਨੇਸ਼ੀਆ</territory>
+			<territory type="FO">ਫੈਰੋ ਆਇਲੈਂਡਸ</territory>
+			<territory type="FR">ਫ੍ਰਾਂਸ</territory>
+			<territory type="GA">ਗਾਬੋਨ</territory>
+			<territory type="GB">ਯੁਨਾਇਟੇਡ ਕਿੰਗਡਮ</territory>
+			<territory type="GB" alt="short">ਯੂ.ਕੇ.</territory>
+			<territory type="GD">ਗ੍ਰੇਨਾਡਾ</territory>
+			<territory type="GE">ਜਾਰਜਿਆ</territory>
+			<territory type="GF">ਫ੍ਰੈਂਚ ਗੁਏਨਾ</territory>
+			<territory type="GG">ਗਰਨਸੀ</territory>
+			<territory type="GH">ਘਾਨਾ</territory>
+			<territory type="GI">ਜਿਬਰਾਲਟਰ</territory>
+			<territory type="GL">ਗ੍ਰੀਨਲੈਂਡ</territory>
+			<territory type="GM">ਗਾਂਬੀਆ</territory>
+			<territory type="GN">ਗਿਨੀ</territory>
+			<territory type="GP">ਗੁਆਡੇਲੋਪ</territory>
+			<territory type="GQ">ਭੂ-ਖੰਡੀ ਗਿਨੀ</territory>
+			<territory type="GR">ਗ੍ਰੀਸ</territory>
+			<territory type="GS">ਦੱਖਣੀ ਜਾਰਜਿਆ ਅਤੇ ਦੱਖਣੀ ਸੈਂਡਵਿਚ ਆਇਲੈਂਡਸ</territory>
+			<territory type="GT">ਗੁਆਟੇਮਾਲਾ</territory>
+			<territory type="GU">ਗੁਆਮ</territory>
+			<territory type="GW">ਗਿਨੀ-ਬਿਸਾਉ</territory>
+			<territory type="GY">ਗੁਯਾਨਾ</territory>
+			<territory type="HK">ਹਾਂਗ ਕਾਂਗ ਐਸਏਆਰ ਚੀਨ</territory>
+			<territory type="HK" alt="short">ਹਾਂਗ ਕਾਂਗ</territory>
+			<territory type="HM">ਹਰਡ ਆਈਲੈਂਡ ਅਤੇ ਮੈਕਡੋਨਾਲਡ ਆਈਲੈਂਡਸ</territory>
+			<territory type="HN">ਹਾਨਡੂਰਸ</territory>
+			<territory type="HR">ਕਰੋਏਸ਼ੀਆ</territory>
+			<territory type="HT">ਹਾਈਟੀ</territory>
+			<territory type="HU">ਹੰਗਰੀ</territory>
+			<territory type="IC">ਕੇਨੇਰੀ ਆਈਲੈਂਡਜ਼</territory>
+			<territory type="ID">ਇੰਡੋਨੇਸ਼ੀਆ</territory>
+			<territory type="IE">ਆਇਰਲੈਂਡ</territory>
+			<territory type="IL">ਇਜ਼ਰਾਈਲ</territory>
+			<territory type="IM">ਆਇਲ ਆਫ ਮੈਨ</territory>
+			<territory type="IN">ਭਾਰਤ</territory>
+			<territory type="IO">ਬ੍ਰਿਟਿਸ਼ ਹਿੰਦ ਮਹਾਂਸਾਗਰ ਟੈਰਿਟਰੀ</territory>
+			<territory type="IQ">ਇਰਾਕ</territory>
+			<territory type="IR">ਈਰਾਨ</territory>
+			<territory type="IS">ਆਈਸਲੈਂਡ</territory>
+			<territory type="IT">ਇਟਲੀ</territory>
+			<territory type="JE">ਜਰਸੀ</territory>
+			<territory type="JM">ਜਮਾਇਕਾ</territory>
+			<territory type="JO">ਜੌਰਡਨ</territory>
+			<territory type="JP">ਜਾਪਾਨ</territory>
+			<territory type="KE">ਕੀਨੀਆ</territory>
+			<territory type="KG">ਕਿਰਗਿਜ਼ਸਤਾਨ</territory>
+			<territory type="KH">ਕੰਬੋਡੀਆ</territory>
+			<territory type="KI">ਕੀਰੀਬਾਟੀ</territory>
+			<territory type="KM">ਕੋਮੋਰੋਸ</territory>
+			<territory type="KN">ਸੈਂਟ ਕਿਟਸ ਐਂਡ ਨੇਵਿਸ</territory>
+			<territory type="KP">ਉੱਤਰੀ ਕੋਰੀਆ</territory>
+			<territory type="KR">ਦੱਖਣੀ ਕੋਰੀਆ</territory>
+			<territory type="KW">ਕੁਵੈਤ</territory>
+			<territory type="KY">ਕੇਮੈਨ ਆਈਲੈਂਡਸ</territory>
+			<territory type="KZ">ਕਜ਼ਾਕਸਤਾਨ</territory>
+			<territory type="LA">ਲਾਓਸ</territory>
+			<territory type="LB">ਲੈਬਨਾਨ</territory>
+			<territory type="LC">ਸੇਂਟ ਲੂਸੀਆ</territory>
+			<territory type="LI">ਲਿਕਟਨਸਟਾਇਨ</territory>
+			<territory type="LK">ਸ੍ਰੀ ਲੰਕਾ</territory>
+			<territory type="LR">ਲਾਈਬੀਰੀਆ</territory>
+			<territory type="LS">ਲੇਸੋਥੋ</territory>
+			<territory type="LT">ਲਿਥੁਆਨੀਆ</territory>
+			<territory type="LU">ਲਕਜ਼ਮਬਰਗ</territory>
+			<territory type="LV">ਲਾਟਵਿਆ</territory>
+			<territory type="LY">ਲੀਬੀਆ</territory>
+			<territory type="MA">ਮੋਰੱਕੋ</territory>
+			<territory type="MC">ਮੋਨਾਕੋ</territory>
+			<territory type="MD">ਮੋਲਡੋਵਾ</territory>
+			<territory type="ME">ਮੋਨਟੇਨੇਗਰੋ</territory>
+			<territory type="MF">ਸੇਂਟ ਮਾਰਟਿਨ</territory>
+			<territory type="MG">ਮੈਡਾਗਾਸਕਰ</territory>
+			<territory type="MH">ਮਾਰਸ਼ਲ ਆਈਲੈਂਡਸ</territory>
+			<territory type="MK">ਮੈਕਡੋਨੀਆ</territory>
+			<territory type="MK" alt="variant">ਮੈਕਡੋਨੀਆ (ਪੂਰਵ ਯੁਗੋਸਲਾਵ ਮੈਕਡੋਨੀਆਈ ਗਣਰਾਜ)</territory>
+			<territory type="ML">ਮਾਲੀ</territory>
+			<territory type="MM">ਮਿਆਂਮਾਰ</territory>
+			<territory type="MN">ਮੰਗੋਲੀਆ</territory>
+			<territory type="MO">ਮਕਾਉ ਐਸਏਆਰ ਚੀਨ</territory>
+			<territory type="MO" alt="short">ਮਕਾਉ</territory>
+			<territory type="MP">ਉੱਤਰੀ ਮਰੀਆਨਾ ਆਈਲੈਂਡ</territory>
+			<territory type="MQ">ਮਾਰਟੀਨਿਕ</territory>
+			<territory type="MR">ਮੋਰਿਟਾਨੀਆ</territory>
+			<territory type="MS">ਮੋਂਟਸੇਰਾਤ</territory>
+			<territory type="MT">ਮਾਲਟਾ</territory>
+			<territory type="MU">ਮੌਰਿਸ਼ਸ</territory>
+			<territory type="MV">ਮਾਲਦੀਵ</territory>
+			<territory type="MW">ਮਾਲਾਵੀ</territory>
+			<territory type="MX">ਮੈਕਸਿਕੋ</territory>
+			<territory type="MY">ਮਲੇਸ਼ੀਆ</territory>
+			<territory type="MZ">ਮੋਜ਼ਾਮਬੀਕ</territory>
+			<territory type="NA">ਨਾਮੀਬੀਆ</territory>
+			<territory type="NC">ਨਿਊ ਕੈਲੇਡੋਨਿਆ</territory>
+			<territory type="NE">ਨਾਇਜਰ</territory>
+			<territory type="NF">ਨੋਰਫੌਕ ਆਈਲੈਂਡ</territory>
+			<territory type="NG">ਨਾਇਜੀਰੀਆ</territory>
+			<territory type="NI">ਨਿਕਾਰਾਗੁਆ</territory>
+			<territory type="NL">ਨੀਦਰਲੈਂਡਸ</territory>
+			<territory type="NO">ਨਾਰਵੇ</territory>
+			<territory type="NP">ਨੇਪਾਲ</territory>
+			<territory type="NR">ਨਾਉਰੂ</territory>
+			<territory type="NU">ਨਿਯੂ</territory>
+			<territory type="NZ">ਨਿਊਜ਼ੀਲੈਂਡ</territory>
+			<territory type="OM">ਓਮਾਨ</territory>
+			<territory type="PA">ਪਨਾਮਾ</territory>
+			<territory type="PE">ਪੇਰੂ</territory>
+			<territory type="PF">ਫ੍ਰੈਂਚ ਪੋਲਿਨੇਸ਼ੀਆ</territory>
+			<territory type="PG">ਪਾਪੂਆ ਨਿਊ ਗਿਨੀ</territory>
+			<territory type="PH">ਫਿਲਿਪੀਨੀਜ਼</territory>
+			<territory type="PK">ਪਾਕਿਸਤਾਨ</territory>
+			<territory type="PL">ਪੋਲੈਂਡ</territory>
+			<territory type="PM">ਸੈਂਟ ਪੀਅਰੇ ਐਂਡ ਮਿਕੇਲਨ</territory>
+			<territory type="PN">ਪਿਟਕੈਰਨ ਆਈਲੈਂਡਸ</territory>
+			<territory type="PR">ਪਿਊਰਟੋ ਰਿਕੋ</territory>
+			<territory type="PS">ਪਲੈਸਟਿਨੀ ਪ੍ਰਦੇਸ਼</territory>
+			<territory type="PS" alt="short">ਪਲੈਸਟੀਨ</territory>
+			<territory type="PT">ਪੁਰਤਗਾਲ</territory>
+			<territory type="PW">ਪਲਾਉ</territory>
+			<territory type="PY">ਪੈਰਾਗਵੇ</territory>
+			<territory type="QA">ਕਤਰ</territory>
+			<territory type="QO">ਆਊਟਲਾਇੰਗ ਓਸ਼ਨੀਆ</territory>
+			<territory type="RE">ਰਿਯੂਨਿਅਨ</territory>
+			<territory type="RO">ਰੋਮਾਨੀਆ</territory>
+			<territory type="RS">ਸਰਬੀਆ</territory>
+			<territory type="RU">ਰੂਸ</territory>
+			<territory type="RW">ਰਵਾਂਡਾ</territory>
+			<territory type="SA">ਸਾਉਦੀ ਅਰਬ</territory>
+			<territory type="SB">ਸੋਲੋਮਨ ਆਈਲੈਂਡਸ</territory>
+			<territory type="SC">ਸੇਸ਼ਲਸ</territory>
+			<territory type="SD">ਸੁਡਾਨ</territory>
+			<territory type="SE">ਸਵੀਡਨ</territory>
+			<territory type="SG">ਸਿੰਗਾਪੁਰ</territory>
+			<territory type="SH">ਸੇਂਟ ਹੇਲੇਨਾ</territory>
+			<territory type="SI">ਸਲੋਵੇਨੀਆ</territory>
+			<territory type="SJ">ਸਵਾਲਬਰਡ ਅਤੇ ਜਾਨ ਮਾਯੇਨ</territory>
+			<territory type="SK">ਸਲੋਵਾਕੀਆ</territory>
+			<territory type="SL">ਸਿਏਰਾ ਲਿਓਨ</territory>
+			<territory type="SM">ਸੈਨ ਮਰੀਨੋ</territory>
+			<territory type="SN">ਸੇਨੇਗਲ</territory>
+			<territory type="SO">ਸੋਮਾਲੀਆ</territory>
+			<territory type="SR">ਸੂਰੀਨਾਮ</territory>
+			<territory type="SS">ਦੱਖਣੀ ਸੁਡਾਨ</territory>
+			<territory type="ST">ਸਾਉ ਟੋਮੀ ਐਂਡ ਪ੍ਰਿੰਸਪੀ</territory>
+			<territory type="SV">ਅਲ ਸਲਵਾਡੋਰ</territory>
+			<territory type="SX">ਸਿੰਟ ਮਾਰਟੀਨ</territory>
+			<territory type="SY">ਸੀਰੀਆ</territory>
+			<territory type="SZ">ਸਵਾਜ਼ੀਲੈਂਡ</territory>
+			<territory type="TA">ਤ੍ਰਿਸਟਾਨ ਡਾ ਕੁਨਾ</territory>
+			<territory type="TC">ਤੁਰਕਸ ਐਂਡ ਕੇਕੋਸ ਆਈਲੈਂਡਸ</territory>
+			<territory type="TD">ਚਾਡ</territory>
+			<territory type="TF">ਫ੍ਰੈਂਚ ਸਾਉਦਰਨ ਟੈਰੀਟਰੀਜ਼</territory>
+			<territory type="TG">ਟੋਗੋ</territory>
+			<territory type="TH">ਥਾਈਲੈਂਡ</territory>
+			<territory type="TJ">ਤਾਜਿਕਿਸਤਾਨ</territory>
+			<territory type="TK">ਟੋਕੇਲਾਉ</territory>
+			<territory type="TL">ਟੀਮੁਰ-ਲੀਸਟੀ</territory>
+			<territory type="TL" alt="variant">ਪੂਰਬੀ ਟੀਮੁਰ</territory>
+			<territory type="TM">ਤੁਰਕਮੇਨਿਸਤਾਨ</territory>
+			<territory type="TN">ਟਿਉਨੀਸ਼ੀਆ</territory>
+			<territory type="TO">ਟੌਂਗਾ</territory>
+			<territory type="TR">ਤੁਰਕੀ</territory>
+			<territory type="TT">ਟ੍ਰਿਨੀਡਾਡ ਅਤੇ ਟੋਬਾਗੋ</territory>
+			<territory type="TV">ਟੁਵਾਲੂ</territory>
+			<territory type="TW">ਤਾਇਵਾਨ</territory>
+			<territory type="TZ">ਤਨਜ਼ਾਨੀਆ</territory>
+			<territory type="UA">ਯੂਕਰੇਨ</territory>
+			<territory type="UG">ਯੂਗਾਂਡਾ</territory>
+			<territory type="UM">ਯੂ.ਐਸ. ਆਊਟਲਾਇੰਗ ਆਈਲੈਂਡਸ</territory>
+			<territory type="US">ਯੂਨਾਇਟੇਡ ਸਟੇਟਸ</territory>
+			<territory type="US" alt="short">ਯੂ.ਐਸ.</territory>
+			<territory type="UY">ਉਰੂਗਵੇ</territory>
+			<territory type="UZ">ਉਜ਼ਬੇਕਿਸਤਾਨ</territory>
+			<territory type="VA">ਵੈਟਿਕਨ ਸਿਟੀ</territory>
+			<territory type="VC">ਸੇਂਟ ਵਿਨਸੈਂਟ ਐਂਡ ਗ੍ਰੇਨਾਡੀਨਸ</territory>
+			<territory type="VE">ਵੇਨੇਜ਼ੂਏਲਾ</territory>
+			<territory type="VG">ਬ੍ਰਿਟਿਸ਼ ਵਰਜਿਨ ਆਈਲੈਂਡਸ</territory>
+			<territory type="VI">ਯੂ ਐਸ ਵਰਜਿਨ ਆਈਲੈਂਡਸ</territory>
+			<territory type="VN">ਵਿਯਤਨਾਮ</territory>
+			<territory type="VU">ਵਾਨੂਆਟੂ</territory>
+			<territory type="WF">ਵਾਲਿਸ ਐਂਡ ਫਯੁਚੁਨਾ</territory>
+			<territory type="WS">ਸਾਮੋਆ</territory>
+			<territory type="XK">ਕੋਸੋਵੋ</territory>
+			<territory type="YE">ਯਮਨ</territory>
+			<territory type="YT">ਮਾਯੋਟੀ</territory>
+			<territory type="ZA">ਦੱਖਣੀ ਅਫਰੀਕਾ</territory>
+			<territory type="ZM">ਜ਼ਾਮਬੀਆ</territory>
+			<territory type="ZW">ਜ਼ਿੰਬਾਬਵੇ</territory>
+			<territory type="ZZ">ਅਗਿਆਤ ਖੇਤਰ</territory>
+		</territories>
+		<keys>
+			<key type="calendar">ਕੈਲੰਡਰ</key>
+			<key type="collation">ਸੌਰਟ ਓਰਡਰ</key>
+			<key type="currency">ਮੁਦਰਾ</key>
+			<key type="numbers">ਸੰਖਿਆ</key>
+		</keys>
+		<types>
+			<type type="arab" key="numbers">ਅਰਬੀ-ਇੰਡਿਕ ਅੰਕ</type>
+			<type type="arabext" key="numbers">ਵਿਸਤਰਿਤ ਅਰਬੀ-ਇੰਡਿਕ ਅੰਕ</type>
+			<type type="armn" key="numbers">ਆਰਮੀਨੀਅਨ ਸੰਖਿਆਵਾਂ</type>
+			<type type="armnlow" key="numbers">ਆਰਮੀਨੀਅਨ ਲੋਅਰਕੇਸ ਸੰਖਿਆਵਾਂ</type>
+			<type type="beng" key="numbers">ਬੰਗਾਲੀ ਅੰਕ</type>
+			<type type="deva" key="numbers">ਦੇਵਨਾਗਰੀ ਅੰਕ</type>
+			<type type="ducet" key="collation">ਡਿਫੌਲਟ ਯੂਨੀਕੋਡ ਸੌਰਟ ਓਰਡਰ</type>
+			<type type="ethi" key="numbers">ਐਥਿਓਪਿਕ ਸੰਖਿਆਵਾਂ</type>
+			<type type="fullwide" key="numbers">ਪੂਰਨ ਵਿਸਤਾਰ ਅੰਕ</type>
+			<type type="geor" key="numbers">ਜਾਰਜੀਅਨ ਸੰਖਿਆਵਾਂ</type>
+			<type type="gregorian" key="calendar">ਗਰੀਜੋਰੀਅਨ ਕੈਲੰਡਰ</type>
+			<type type="grek" key="numbers">ਗ੍ਰੀਕ ਸੰਖਿਆਵਾਂ</type>
+			<type type="greklow" key="numbers">ਗ੍ਰੀਕ ਲੋਅਰਕੇਸ ਸੰਖਿਆਵਾਂ</type>
+			<type type="gujr" key="numbers">ਗੁਜਰਾਤੀ ਅੰਕ</type>
+			<type type="guru" key="numbers">ਗੁਰਮੁਖੀ ਅੰਕ</type>
+			<type type="hanidec" key="numbers">ਚੀਨੀ ਦਸ਼ਮਲਵ ਸੰਖਿਆਵਾਂ</type>
+			<type type="hans" key="numbers">ਸਰਲ ਕੀਤੀ ਚੀਨੀ ਸੰਖਿਆਵਾਂ</type>
+			<type type="hansfin" key="numbers">ਸਰਲ ਕੀਤੀ ਚੀਨੀ ਵਿੱਤੀ ਸੰਖਿਆਵਾਂ</type>
+			<type type="hant" key="numbers">ਰਵਾਇਤੀ ਚੀਨੀ ਸੰਖਿਆਵਾਂ</type>
+			<type type="hantfin" key="numbers">ਰਵਾਇਤੀ ਚੀਨੀ ਵਿੱਤੀ ਸੰਖਿਆਵਾਂ</type>
+			<type type="hebr" key="numbers">ਹਿਬਰੂ ਸੰਖਿਆਵਾਂ</type>
+			<type type="jpan" key="numbers">ਜਾਪਾਨੀ ਸੰਖਿਆਵਾਂ</type>
+			<type type="jpanfin" key="numbers">ਜਾਪਾਨੀ ਵਿੱਤੀ ਸੰਖਿਆਵਾਂ</type>
+			<type type="khmr" key="numbers">ਖਮੇਰ ਅੰਕ</type>
+			<type type="knda" key="numbers">ਕੰਨੜ ਅੰਕ</type>
+			<type type="laoo" key="numbers">ਲਾਓ ਅੰਕ</type>
+			<type type="latn" key="numbers">ਪੱਛਮੀ ਅੰਕ</type>
+			<type type="mlym" key="numbers">ਮਲਿਆਲਮ ਅੰਕ</type>
+			<type type="mymr" key="numbers">ਮਿਆਂਮਾਰ ਅੰਕ</type>
+			<type type="orya" key="numbers">ਉੜੀਆ ਅੰਕ</type>
+			<type type="roman" key="numbers">ਰੋਮਨ ਸੰਖਿਆਵਾਂ</type>
+			<type type="romanlow" key="numbers">ਰੋਮਨ ਲੋਅਰਕੇਸ ਸੰਖਿਆਵਾਂ</type>
+			<type type="search" key="collation">ਆਮ-ਮੰਤਵ ਖੋਜ</type>
+			<type type="standard" key="collation">ਸਟੈਂਡਰਡ ਸੌਰਟ ਓਰਡਰ</type>
+			<type type="taml" key="numbers">ਰਵਾਇਤੀ ਤਮਿਲ ਸੰਖਿਆਵਾਂ</type>
+			<type type="tamldec" key="numbers">ਤਮਿਲ ਅੰਕ</type>
+			<type type="telu" key="numbers">ਤੇਲਗੂ ਅੰਕ</type>
+			<type type="thai" key="numbers">ਥਾਈ ਅੰਕ</type>
+			<type type="tibt" key="numbers">ਤਿੱਬਤੀ ਅੰਕ</type>
+		</types>
+		<measurementSystemNames>
+			<measurementSystemName type="metric">ਮੈਟਰਿਕ</measurementSystemName>
+			<measurementSystemName type="UK">ਯੂ. ਕੇ.</measurementSystemName>
+			<measurementSystemName type="US">ਯੂ. ਐਸ.</measurementSystemName>
+		</measurementSystemNames>
+		<codePatterns>
+			<codePattern type="language">ਪੰਜਾਬੀ: {0}</codePattern>
+			<codePattern type="script">ਲਿਪੀ: {0}</codePattern>
+			<codePattern type="territory">ਖੇਤਰ: {0}</codePattern>
+		</codePatterns>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[\u0A71 \u0A70 \u0A3C ੦ ੧ ੨ ੩ ੪ ੫ ੬ ੭ ੮ ੯ ੴ ੳ ਉ ਊ ਓ ਅ ਆ ਐ ਔ ੲ ਇ ਈ ਏ ਸ {ਸ\u0A3C} ਹ ਕ ਖ {ਖ\u0A3C} ਗ {ਗ\u0A3C} ਘ ਙ ਚ ਛ ਜ {ਜ\u0A3C} ਝ ਞ ਟ ਠ ਡ ਢ ਣ ਤ ਥ ਦ ਧ ਨ ਪ ਫ {ਫ\u0A3C} ਬ ਭ ਮ ਯ ਰ ਲ ਵ ੜ \u0A4D ਾ ਿ ੀ \u0A41 \u0A42 \u0A47 \u0A48 \u0A4B \u0A4C]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[\u200C\u200D ਃ \u0A02 \u0A01 {ਲ\u0A3C}]</exemplarCharacters>
+		<exemplarCharacters type="index" draft="unconfirmed">[ੴ ੳ ਉ ਊ ਓ ਅ ਆ ਐ ਔ ੲ ਇ ਈ ਏ ਸ ਹ ਕ ਖ ਗ ਘ ਙ ਚ ਛ ਜ ਝ ਞ ਟ ਠ ਡ ਢ ਣ ਤ ਥ ਦ ਧ ਨ ਪ ਫ ਬ ਭ ਮ ਯ ਰ ਲ ਵ ੜ]</exemplarCharacters>
+		<exemplarCharacters type="punctuation">[\- ‐ – — , ; \: ! ? . ' ‘ ’ &quot; “ ” ( ) \[ \] / \&amp; ′ ″]</exemplarCharacters>
+		<ellipsis type="final">{0}…</ellipsis>
+		<ellipsis type="initial">…{0}</ellipsis>
+		<ellipsis type="medial">{0}…{1}</ellipsis>
+		<ellipsis type="word-final">{0} …</ellipsis>
+		<ellipsis type="word-initial">… {0}</ellipsis>
+		<ellipsis type="word-medial">{0} … {1}</ellipsis>
+		<moreInformation>?</moreInformation>
+	</characters>
+	<delimiters>
+		<quotationStart>'</quotationStart>
+		<quotationEnd>'</quotationEnd>
+		<alternateQuotationStart>&quot;</alternateQuotationStart>
+		<alternateQuotationEnd>&quot;</alternateQuotationEnd>
+	</delimiters>
+	<dates>
+		<calendars>
+			<calendar type="generic">
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE, dd MMMM G y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>d MMMM G y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>d MMM G y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>dd/MM/GGGGG y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength type="full">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="long">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="medium">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="short">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<availableFormats>
+						<dateFormatItem id="d">d</dateFormatItem>
+						<dateFormatItem id="Ed">E, d</dateFormatItem>
+						<dateFormatItem id="Gy">G y</dateFormatItem>
+						<dateFormatItem id="GyMMM">MMM G y</dateFormatItem>
+						<dateFormatItem id="GyMMMd">d MMM, G y</dateFormatItem>
+						<dateFormatItem id="GyMMMEd">E, d MMM G y</dateFormatItem>
+						<dateFormatItem id="HHmmss">HH:mm:ss</dateFormatItem>
+						<dateFormatItem id="M">L</dateFormatItem>
+						<dateFormatItem id="Md">d/M</dateFormatItem>
+						<dateFormatItem id="MEd">E, d/M</dateFormatItem>
+						<dateFormatItem id="MMM">LLL</dateFormatItem>
+						<dateFormatItem id="MMMd">d MMM</dateFormatItem>
+						<dateFormatItem id="MMMEd">E, d MMM</dateFormatItem>
+						<dateFormatItem id="mmss">mm:ss</dateFormatItem>
+						<dateFormatItem id="y">G y</dateFormatItem>
+						<dateFormatItem id="yMMM">MMM G y</dateFormatItem>
+						<dateFormatItem id="yQQQ">QQQ G y</dateFormatItem>
+						<dateFormatItem id="yyyy">G y</dateFormatItem>
+						<dateFormatItem id="yyyyM">M/GGGGG y</dateFormatItem>
+						<dateFormatItem id="yyyyMd">d/M/GGGGG y</dateFormatItem>
+						<dateFormatItem id="yyyyMEd">E, d/M/GGGGG y</dateFormatItem>
+						<dateFormatItem id="yyyyMMM">MMM G y</dateFormatItem>
+						<dateFormatItem id="yyyyMMMd">d MMM, G y</dateFormatItem>
+						<dateFormatItem id="yyyyMMMEd">E, d MMM, G y</dateFormatItem>
+						<dateFormatItem id="yyyyQQQ">QQQ G y</dateFormatItem>
+						<dateFormatItem id="yyyyQQQQ">QQQQ G y</dateFormatItem>
+					</availableFormats>
+					<intervalFormats>
+						<intervalFormatFallback>{0} – {1}</intervalFormatFallback>
+						<intervalFormatItem id="d">
+							<greatestDifference id="d">d–d</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="M">
+							<greatestDifference id="M">MM–MM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d">d/M – d/M</greatestDifference>
+							<greatestDifference id="M">d/M – d/M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d">E, d/M – E, d/M</greatestDifference>
+							<greatestDifference id="M">E, d/M – E, d/M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMM">
+							<greatestDifference id="M">MMM–MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMd">
+							<greatestDifference id="d">d–d MMM</greatestDifference>
+							<greatestDifference id="M">d MMM – d MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMEd">
+							<greatestDifference id="d">E, d MMM – E, d MMM</greatestDifference>
+							<greatestDifference id="M">E, d MMM – E, d MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="y">
+							<greatestDifference id="y">G y–y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M">M/y – M/y</greatestDifference>
+							<greatestDifference id="y">M/y – M/y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d">d/M/y – d/M/y</greatestDifference>
+							<greatestDifference id="M">d/M/y – d/M/y</greatestDifference>
+							<greatestDifference id="y">d/M/y – d/M/y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d">E, d/M/y – E, d/M/y</greatestDifference>
+							<greatestDifference id="M">E, d/M/y – E, d/M/y</greatestDifference>
+							<greatestDifference id="y">E, d/M/y – E, d/M/y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMM">
+							<greatestDifference id="M">MMM-MMM y</greatestDifference>
+							<greatestDifference id="y">MMM y-MMM y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMd">
+							<greatestDifference id="d">d-d, MMM y</greatestDifference>
+							<greatestDifference id="M">d MMM – d MMM y</greatestDifference>
+							<greatestDifference id="y">d, MMM – d, MMM y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMEd">
+							<greatestDifference id="d">E, d MMM – E, d MMM y</greatestDifference>
+							<greatestDifference id="M">E, d MMM – E, d MMM y</greatestDifference>
+							<greatestDifference id="y">E, d MMM – E, d MMM y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMM">
+							<greatestDifference id="M">MMMM–MMMM y</greatestDifference>
+							<greatestDifference id="y">MMMM y – MMMM y</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="gregorian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">ਜਨਵਰੀ</month>
+							<month type="2">ਫ਼ਰਵਰੀ</month>
+							<month type="3">ਮਾਰਚ</month>
+							<month type="4">ਅਪ੍ਰੈਲ</month>
+							<month type="5">ਮਈ</month>
+							<month type="6">ਜੂਨ</month>
+							<month type="7">ਜੁਲਾਈ</month>
+							<month type="8">ਅਗਸਤ</month>
+							<month type="9">ਸਤੰਬਰ</month>
+							<month type="10">ਅਕਤੂਬਰ</month>
+							<month type="11">ਨਵੰਬਰ</month>
+							<month type="12">ਦਸੰਬਰ</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">ਜ</month>
+							<month type="2">ਫ਼</month>
+							<month type="3">ਮਾ</month>
+							<month type="4">ਅ</month>
+							<month type="5">ਮ</month>
+							<month type="6">ਜੂ</month>
+							<month type="7">ਜੁ</month>
+							<month type="8">ਅ</month>
+							<month type="9">ਸ</month>
+							<month type="10">ਅ</month>
+							<month type="11">ਨ</month>
+							<month type="12">ਦ</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">ਜਨਵਰੀ</month>
+							<month type="2">ਫ਼ਰਵਰੀ</month>
+							<month type="3">ਮਾਰਚ</month>
+							<month type="4">ਅਪ੍ਰੈਲ</month>
+							<month type="5">ਮਈ</month>
+							<month type="6">ਜੂਨ</month>
+							<month type="7">ਜੁਲਾਈ</month>
+							<month type="8">ਅਗਸਤ</month>
+							<month type="9">ਸਤੰਬਰ</month>
+							<month type="10">ਅਕਤੂਬਰ</month>
+							<month type="11">ਨਵੰਬਰ</month>
+							<month type="12">ਦਸੰਬਰ</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<month type="1">ਜਨਵਰੀ</month>
+							<month type="2">ਫ਼ਰਵਰੀ</month>
+							<month type="3">ਮਾਰਚ</month>
+							<month type="4">ਅਪ੍ਰੈਲ</month>
+							<month type="5">ਮਈ</month>
+							<month type="6">ਜੂਨ</month>
+							<month type="7">ਜੁਲਾਈ</month>
+							<month type="8">ਅਗਸਤ</month>
+							<month type="9">ਸਤੰਬਰ</month>
+							<month type="10">ਅਕਤੂਬਰ</month>
+							<month type="11">ਨਵੰਬਰ</month>
+							<month type="12">ਦਸੰਬਰ</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">ਜ</month>
+							<month type="2">ਫ਼</month>
+							<month type="3">ਮਾ</month>
+							<month type="4">ਅ</month>
+							<month type="5">ਮ</month>
+							<month type="6">ਜੂ</month>
+							<month type="7">ਜੁ</month>
+							<month type="8">ਅ</month>
+							<month type="9">ਸ</month>
+							<month type="10">ਅ</month>
+							<month type="11">ਨ</month>
+							<month type="12">ਦ</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">ਜਨਵਰੀ</month>
+							<month type="2">ਫ਼ਰਵਰੀ</month>
+							<month type="3">ਮਾਰਚ</month>
+							<month type="4">ਅਪ੍ਰੈਲ</month>
+							<month type="5">ਮਈ</month>
+							<month type="6">ਜੂਨ</month>
+							<month type="7">ਜੁਲਾਈ</month>
+							<month type="8">ਅਗਸਤ</month>
+							<month type="9">ਸਤੰਬਰ</month>
+							<month type="10">ਅਕਤੂਬਰ</month>
+							<month type="11">ਨਵੰਬਰ</month>
+							<month type="12">ਦਸੰਬਰ</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">ਐਤ.</day>
+							<day type="mon">ਸੋਮ.</day>
+							<day type="tue">ਮੰਗਲ.</day>
+							<day type="wed">ਬੁਧ.</day>
+							<day type="thu">ਵੀਰ.</day>
+							<day type="fri">ਸ਼ੁੱਕਰ.</day>
+							<day type="sat">ਸ਼ਨੀ.</day>
+						</dayWidth>
+						<dayWidth type="narrow">
+							<day type="sun">ਐ</day>
+							<day type="mon">ਸੋ</day>
+							<day type="tue">ਮੰ</day>
+							<day type="wed">ਬੁੱ</day>
+							<day type="thu">ਵੀ</day>
+							<day type="fri">ਸ਼ੁੱ</day>
+							<day type="sat">ਸ਼</day>
+						</dayWidth>
+						<dayWidth type="short">
+							<day type="sun">ਐਤ.</day>
+							<day type="mon">ਸੋਮ.</day>
+							<day type="tue">ਮੰਗਲ.</day>
+							<day type="wed">ਬੁਧ.</day>
+							<day type="thu">ਵੀਰ.</day>
+							<day type="fri">ਸ਼ੁੱਕਰ.</day>
+							<day type="sat">ਸ਼ਨੀ.</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">ਐਤਵਾਰ</day>
+							<day type="mon">ਸੋਮਵਾਰ</day>
+							<day type="tue">ਮੰਗਲਵਾਰ</day>
+							<day type="wed">ਬੁਧਵਾਰ</day>
+							<day type="thu">ਵੀਰਵਾਰ</day>
+							<day type="fri">ਸ਼ੁੱਕਰਵਾਰ</day>
+							<day type="sat">ਸ਼ਨੀਵਾਰ</day>
+						</dayWidth>
+					</dayContext>
+					<dayContext type="stand-alone">
+						<dayWidth type="abbreviated">
+							<day type="sun">ਐਤ.</day>
+							<day type="mon">ਸੋਮ.</day>
+							<day type="tue">ਮੰਗਲ.</day>
+							<day type="wed">ਬੁਧ.</day>
+							<day type="thu">ਵੀਰ.</day>
+							<day type="fri">ਸ਼ੁੱਕਰ.</day>
+							<day type="sat">ਸ਼ਨੀ.</day>
+						</dayWidth>
+						<dayWidth type="narrow">
+							<day type="sun">ਐ</day>
+							<day type="mon">ਸੋ</day>
+							<day type="tue">ਮੰ</day>
+							<day type="wed">ਬੁੱ</day>
+							<day type="thu">ਵੀ</day>
+							<day type="fri">ਸ਼ੁੱ</day>
+							<day type="sat">ਸ਼</day>
+						</dayWidth>
+						<dayWidth type="short">
+							<day type="sun">ਐਤ.</day>
+							<day type="mon">ਸੋਮ.</day>
+							<day type="tue">ਮੰਗਲ.</day>
+							<day type="wed">ਬੁਧ.</day>
+							<day type="thu">ਵੀਰ.</day>
+							<day type="fri">ਸ਼ੁੱਕਰ.</day>
+							<day type="sat">ਸ਼ਨੀ.</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">ਐਤਵਾਰ</day>
+							<day type="mon">ਸੋਮਵਾਰ</day>
+							<day type="tue">ਮੰਗਲਵਾਰ</day>
+							<day type="wed">ਬੁਧਵਾਰ</day>
+							<day type="thu">ਵੀਰਵਾਰ</day>
+							<day type="fri">ਸ਼ੁੱਕਰਵਾਰ</day>
+							<day type="sat">ਸ਼ਨੀਵਾਰ</day>
+						</dayWidth>
+					</dayContext>
+				</days>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1">ਪਊਆ</quarter>
+							<quarter type="2">ਅੱਧਾ</quarter>
+							<quarter type="3">ਪੌਣਾ</quarter>
+							<quarter type="4">ਪੂਰਾ</quarter>
+						</quarterWidth>
+						<quarterWidth type="narrow">
+							<quarter type="1">੧</quarter>
+							<quarter type="2">੨</quarter>
+							<quarter type="3">੩</quarter>
+							<quarter type="4">੪</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">ਪਊਆ</quarter>
+							<quarter type="2">ਅੱਧਾ</quarter>
+							<quarter type="3">ਪੌਣਾ</quarter>
+							<quarter type="4">ਪੂਰਾ</quarter>
+						</quarterWidth>
+					</quarterContext>
+					<quarterContext type="stand-alone">
+						<quarterWidth type="abbreviated">
+							<quarter type="1">ਪਊਆ</quarter>
+							<quarter type="2">ਅੱਧਾ</quarter>
+							<quarter type="3">ਪੌਣਾ</quarter>
+							<quarter type="4">ਪੂਰਾ</quarter>
+						</quarterWidth>
+						<quarterWidth type="narrow">
+							<quarter type="1">੧</quarter>
+							<quarter type="2">੨</quarter>
+							<quarter type="3">੩</quarter>
+							<quarter type="4">੪</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">ਪਊਆ</quarter>
+							<quarter type="2">ਅੱਧਾ</quarter>
+							<quarter type="3">ਪੌਣਾ</quarter>
+							<quarter type="4">ਪੂਰਾ</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
+				<dayPeriods>
+					<dayPeriodContext type="format">
+						<dayPeriodWidth type="wide">
+							<dayPeriod type="am">AM</dayPeriod>
+							<dayPeriod type="pm">PM</dayPeriod>
+						</dayPeriodWidth>
+					</dayPeriodContext>
+				</dayPeriods>
+				<eras>
+					<eraAbbr>
+						<era type="0">ਈ. ਪੂ.</era>
+						<era type="0" alt="variant">ਈ. ਪੂ. ਯੁ.</era>
+						<era type="1">ਸੰਨ</era>
+						<era type="1" alt="variant">ਈ.ਯੁ.</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE, d MMMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>d MMMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>d MMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>d/M/yy</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<timeFormatLength type="full">
+						<timeFormat>
+							<pattern>h:mm:ss a zzzz</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="long">
+						<timeFormat>
+							<pattern>h:mm:ss a z</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="medium">
+						<timeFormat>
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="short">
+						<timeFormat>
+							<pattern>h:mm a</pattern>
+						</timeFormat>
+					</timeFormatLength>
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength type="full">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="long">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="medium">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="short">
+						<dateTimeFormat>
+							<pattern>{1}, {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<availableFormats>
+						<dateFormatItem id="d">d</dateFormatItem>
+						<dateFormatItem id="Ed">d, E</dateFormatItem>
+						<dateFormatItem id="Ehm">E h:mm a</dateFormatItem>
+						<dateFormatItem id="EHm">E HH:mm</dateFormatItem>
+						<dateFormatItem id="Ehms">E h:mm:ss a</dateFormatItem>
+						<dateFormatItem id="EHms">E HH:mm:ss</dateFormatItem>
+						<dateFormatItem id="Gy">G y</dateFormatItem>
+						<dateFormatItem id="GyMMM">MMM, G y</dateFormatItem>
+						<dateFormatItem id="GyMMMd">d MMM y</dateFormatItem>
+						<dateFormatItem id="GyMMMEd">E d MMM, G y</dateFormatItem>
+						<dateFormatItem id="h">h a</dateFormatItem>
+						<dateFormatItem id="H">HH</dateFormatItem>
+						<dateFormatItem id="HHmmss">HH:mm:ss</dateFormatItem>
+						<dateFormatItem id="hm">h:mm a</dateFormatItem>
+						<dateFormatItem id="Hm">HH:mm</dateFormatItem>
+						<dateFormatItem id="hms">h:mm:ss a</dateFormatItem>
+						<dateFormatItem id="Hms">HH:mm:ss</dateFormatItem>
+						<dateFormatItem id="M">L</dateFormatItem>
+						<dateFormatItem id="Md">d/M</dateFormatItem>
+						<dateFormatItem id="MEd">E, dd-MM.</dateFormatItem>
+						<dateFormatItem id="MMM">LLL</dateFormatItem>
+						<dateFormatItem id="MMMd">d MMM</dateFormatItem>
+						<dateFormatItem id="MMMEd">E, d MMM</dateFormatItem>
+						<dateFormatItem id="mmss">mm:ss</dateFormatItem>
+						<dateFormatItem id="ms">mm:ss</dateFormatItem>
+						<dateFormatItem id="y">y</dateFormatItem>
+						<dateFormatItem id="yM">M-y</dateFormatItem>
+						<dateFormatItem id="yMd">d/M/y</dateFormatItem>
+						<dateFormatItem id="yMEd">E, d/M/y</dateFormatItem>
+						<dateFormatItem id="yMMM">MMM y</dateFormatItem>
+						<dateFormatItem id="yMMMd">d MMM y</dateFormatItem>
+						<dateFormatItem id="yMMMEd">E, d MMM y</dateFormatItem>
+						<dateFormatItem id="yQQQ">QQQ y</dateFormatItem>
+						<dateFormatItem id="yQQQQ">QQQQ y</dateFormatItem>
+					</availableFormats>
+					<appendItems>
+						<appendItem request="Timezone">{0} {1}</appendItem>
+					</appendItems>
+					<intervalFormats>
+						<intervalFormatFallback>{0} – {1}</intervalFormatFallback>
+						<intervalFormatItem id="d">
+							<greatestDifference id="d">d–d</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="h">
+							<greatestDifference id="a">h a – h a</greatestDifference>
+							<greatestDifference id="h">h–h a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="H">
+							<greatestDifference id="H">HH–HH</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hm">
+							<greatestDifference id="a">h:mm a – h:mm a</greatestDifference>
+							<greatestDifference id="h">h:mm–h:mm a</greatestDifference>
+							<greatestDifference id="m">h:mm–h:mm a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hm">
+							<greatestDifference id="H">HH:mm–HH:mm</greatestDifference>
+							<greatestDifference id="m">HH:mm–HH:mm</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hmv">
+							<greatestDifference id="a">h:mm a – h:mm a v</greatestDifference>
+							<greatestDifference id="h">h:mm–h:mm a v</greatestDifference>
+							<greatestDifference id="m">h:mm–h:mm a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hmv">
+							<greatestDifference id="H">HH:mm–HH:mm v</greatestDifference>
+							<greatestDifference id="m">HH:mm–HH:mm v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hv">
+							<greatestDifference id="a">h a – h a v</greatestDifference>
+							<greatestDifference id="h">h–h a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hv">
+							<greatestDifference id="H">HH–HH v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="M">
+							<greatestDifference id="M">M–M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d">d/M – d/M</greatestDifference>
+							<greatestDifference id="M">d/M – d/M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d">E, dd-MM – E, dd-MM</greatestDifference>
+							<greatestDifference id="M">E, dd-MM – E, dd-MM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMM">
+							<greatestDifference id="M">MMM–MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMd">
+							<greatestDifference id="d">d–d MMM</greatestDifference>
+							<greatestDifference id="M">d MMM – d MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMEd">
+							<greatestDifference id="d">E, d MMM – E, d MMM</greatestDifference>
+							<greatestDifference id="M">E, d MMM – E, d MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="y">
+							<greatestDifference id="y">y–y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M">M/y – M/y</greatestDifference>
+							<greatestDifference id="y">M/y – M/y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d">d/M/y – d/M/y</greatestDifference>
+							<greatestDifference id="M">d/M/y – d/M/y</greatestDifference>
+							<greatestDifference id="y">d/M/y – d/M/y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d">E, d/M/y – E, d/M/y</greatestDifference>
+							<greatestDifference id="M">E, d/M/y – E, d/M/y</greatestDifference>
+							<greatestDifference id="y">E, d/M/y – E, d/M/y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMM">
+							<greatestDifference id="M">MMM–MMM y</greatestDifference>
+							<greatestDifference id="y">MMM y – MMM y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMd">
+							<greatestDifference id="d">d–d MMM y</greatestDifference>
+							<greatestDifference id="M">d MMM – d MMM y</greatestDifference>
+							<greatestDifference id="y">d MMM y – d MMM y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMEd">
+							<greatestDifference id="d">E, d MMM – E, d MMM y</greatestDifference>
+							<greatestDifference id="M">E, d MMM – E, d MMM y</greatestDifference>
+							<greatestDifference id="y">E, d MMM y – E, d MMM y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMM">
+							<greatestDifference id="M">MMMM–MMMM y</greatestDifference>
+							<greatestDifference id="y">MMMM y – MMMM y</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<fields>
+			<field type="era">
+				<displayName>ਯੁੱਗ</displayName>
+			</field>
+			<field type="year">
+				<displayName>ਸਾਲ</displayName>
+				<relative type="-1">ਪਿਛਲਾ ਸਾਲ</relative>
+				<relative type="0">ਇਹ ਸਾਲ</relative>
+				<relative type="1">ਅਗਲਾ ਸਾਲ</relative>
+				<relativeTime type="future">
+					<relativeTimePattern count="one">{0} ਸਾਲ ਵਿਚ</relativeTimePattern>
+					<relativeTimePattern count="other">{0} ਸਾਲ ਵਿਚ</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="one">{0} ਸਾਲ ਪਹਿਲਾਂ</relativeTimePattern>
+					<relativeTimePattern count="other">{0} ਸਾਲ ਪਹਿਲਾਂ</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="month">
+				<displayName>ਮਹੀਨਾ</displayName>
+				<relative type="-1">ਪਿਛਲਾ ਮਹੀਨਾ</relative>
+				<relative type="0">ਇਹ ਮਹੀਨਾ</relative>
+				<relative type="1">ਅਗਲਾ ਮਹੀਨਾ</relative>
+				<relativeTime type="future">
+					<relativeTimePattern count="one">{0} ਮਹੀਨੇ ਵਿਚ</relativeTimePattern>
+					<relativeTimePattern count="other">{0} ਮਹੀਨੇ ਵਿਚ</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="one">{0} ਮਹੀਨੇ ਪਹਿਲਾਂ</relativeTimePattern>
+					<relativeTimePattern count="other">{0} ਮਹੀਨੇ ਪਹਿਲਾਂ</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="week">
+				<displayName>ਹਫ਼ਤਾ</displayName>
+				<relative type="-1">ਪਿਛਲਾ ਹਫ਼ਤਾ</relative>
+				<relative type="0">ਇਹ ਹਫ਼ਤਾ</relative>
+				<relative type="1">ਅਗਲਾ ਹਫ਼ਤਾ</relative>
+				<relativeTime type="future">
+					<relativeTimePattern count="one">{0} ਹਫ਼ਤੇ ਵਿਚ</relativeTimePattern>
+					<relativeTimePattern count="other">{0} ਹਫ਼ਤੇ ਵਿਚ</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="one">{0} ਹਫ਼ਤਾ ਪਹਿਲਾਂ</relativeTimePattern>
+					<relativeTimePattern count="other">{0} ਹਫ਼ਤੇ ਪਹਿਲਾਂ</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="day">
+				<displayName>ਦਿਨ</displayName>
+				<relative type="-1">ਲੰਘਿਆ ਕੱਲ</relative>
+				<relative type="0">ਅੱਜ</relative>
+				<relative type="1">ਭਲਕੇ</relative>
+				<relativeTime type="future">
+					<relativeTimePattern count="one">{0} ਦਿਨ ਵਿਚ</relativeTimePattern>
+					<relativeTimePattern count="other">{0} ਦਿਨਾਂ ਵਿਚ</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="one">{0} ਦਿਨ ਪਹਿਲਾਂ</relativeTimePattern>
+					<relativeTimePattern count="other">{0} ਦਿਨ ਪਹਿਲਾਂ</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="weekday">
+				<displayName>ਹਫ਼ਤੇ ਦਾ ਦਿਨ</displayName>
+			</field>
+			<field type="sun">
+				<relative type="-1">ਪਿਛਲਾ ਐਤਵਾਰ</relative>
+				<relative type="0">ਇਹ ਐਤਵਾਰ</relative>
+				<relative type="1">ਅਗਲਾ ਐਤਵਾਰ</relative>
+			</field>
+			<field type="mon">
+				<relative type="-1">ਪਿਛਲਾ ਸੋਮਵਾਰ</relative>
+				<relative type="0">ਇਹ ਸੋਮਵਾਰ</relative>
+				<relative type="1">ਅਗਲਾ ਸੋਮਵਾਰ</relative>
+			</field>
+			<field type="tue">
+				<relative type="-1">ਪਿਛਲਾ ਮੰਗਲਵਾਰ</relative>
+				<relative type="0">ਇਹ ਮੰਗਲਵਾਰ</relative>
+				<relative type="1">ਅਗਲਾ ਮੰਗਲਵਾਰ</relative>
+			</field>
+			<field type="wed">
+				<relative type="-1">ਪਿਛਲਾ ਬੁੱਧਵਾਰ</relative>
+				<relative type="0">ਇਹ ਬੁੱਧਵਾਰ</relative>
+				<relative type="1">ਅਗਲਾ ਬੁੱਧਵਾਰ</relative>
+			</field>
+			<field type="thu">
+				<relative type="-1">ਪਿਛਲਾ ਵੀਰਵਾਰ</relative>
+				<relative type="0">ਇਹ ਵੀਰਵਾਰ</relative>
+				<relative type="1">ਅਗਲਾ ਵੀਰਵਾਰ</relative>
+			</field>
+			<field type="fri">
+				<relative type="-1">ਪਿਛਲਾ ਸ਼ੁੱਕਰਵਾਰ</relative>
+				<relative type="0">ਇਹ ਸ਼ੁੱਕਰਵਾਰ</relative>
+				<relative type="1">ਅਗਲਾ ਸ਼ੁੱਕਰਵਾਰ</relative>
+			</field>
+			<field type="sat">
+				<relative type="-1">ਪਿਛਲਾ ਸ਼ਨਿੱਚਰਵਾਰ</relative>
+				<relative type="0">ਇਹ ਸ਼ਨਿੱਚਰਵਾਰ</relative>
+				<relative type="1">ਅਗਲਾ ਸ਼ਨਿੱਚਰਵਾਰ</relative>
+			</field>
+			<field type="dayperiod">
+				<displayName>AM/PM</displayName>
+			</field>
+			<field type="hour">
+				<displayName>ਘੰਟਾ</displayName>
+				<relativeTime type="future">
+					<relativeTimePattern count="one">{0} ਘੰਟੇ ਵਿਚ</relativeTimePattern>
+					<relativeTimePattern count="other">{0} ਘੰਟੇ ਵਿਚ</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="one">{0} ਘੰਟਾ ਪਹਿਲਾਂ</relativeTimePattern>
+					<relativeTimePattern count="other">{0} ਘੰਟੇ ਪਹਿਲਾਂ</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="minute">
+				<displayName>ਮਿੰਟ</displayName>
+				<relativeTime type="future">
+					<relativeTimePattern count="one">{0} ਮਿੰਟ ਵਿਚ</relativeTimePattern>
+					<relativeTimePattern count="other">{0} ਮਿੰਟ ਵਿਚ</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="one">{0} ਮਿੰਟ ਪਹਿਲਾਂ</relativeTimePattern>
+					<relativeTimePattern count="other">{0} ਮਿੰਟ ਪਹਿਲਾਂ</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="second">
+				<displayName>ਸਕਿੰਟ</displayName>
+				<relative type="0">ਹੁਣ</relative>
+				<relativeTime type="future">
+					<relativeTimePattern count="one">{0} ਸਕਿੰਟ ਵਿਚ</relativeTimePattern>
+					<relativeTimePattern count="other">{0} ਸਕਿੰਟ ਵਿਚ</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="one">{0} ਸਕਿੰਟ ਪਹਿਲਾਂ</relativeTimePattern>
+					<relativeTimePattern count="other">{0} ਸਕਿੰਟ ਪਹਿਲਾਂ</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="zone">
+				<displayName>ਖੇਤਰ</displayName>
+			</field>
+		</fields>
+		<timeZoneNames>
+			<hourFormat>+HH:mm;-HH:mm</hourFormat>
+			<gmtFormat>GMT{0}</gmtFormat>
+			<gmtZeroFormat>GMT</gmtZeroFormat>
+			<regionFormat>{0} ਸਮਾਂ</regionFormat>
+			<regionFormat type="daylight">{0} ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</regionFormat>
+			<regionFormat type="standard">{0} ਮਿਆਰੀ ਸਮਾਂ</regionFormat>
+			<fallbackFormat>{1} ({0})</fallbackFormat>
+			<zone type="Etc/Unknown">
+				<exemplarCity>ਅਗਿਆਤ ਸ਼ਹਿਰ</exemplarCity>
+			</zone>
+			<zone type="Europe/Andorra">
+				<exemplarCity>ਅੰਡੋਰਾ</exemplarCity>
+			</zone>
+			<zone type="Asia/Dubai">
+				<exemplarCity>ਦੁਬਈ</exemplarCity>
+			</zone>
+			<zone type="Asia/Kabul">
+				<exemplarCity>ਕਾਬੁਲ</exemplarCity>
+			</zone>
+			<zone type="America/Antigua">
+				<exemplarCity>ਐਂਟੀਗੁਆ</exemplarCity>
+			</zone>
+			<zone type="America/Anguilla">
+				<exemplarCity>ਅੰਗੁਇਲਾ</exemplarCity>
+			</zone>
+			<zone type="Europe/Tirane">
+				<exemplarCity>ਤਿਰਾਨੇ</exemplarCity>
+			</zone>
+			<zone type="Asia/Yerevan">
+				<exemplarCity>ਯੇਰੇਵਨ</exemplarCity>
+			</zone>
+			<zone type="Africa/Luanda">
+				<exemplarCity>ਲੁਆਂਡਾ</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Rothera">
+				<exemplarCity>ਰੋਥੇਰਾ</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Palmer">
+				<exemplarCity>ਪਾਮਰ</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Syowa">
+				<exemplarCity>ਸਵੋਯਾ</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Mawson">
+				<exemplarCity>ਮੌਸਨ</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Davis">
+				<exemplarCity>ਡੇਵਿਸ</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Vostok">
+				<exemplarCity>ਵੋਸਟੋਕ</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Casey">
+				<exemplarCity>ਕਾਸੇ</exemplarCity>
+			</zone>
+			<zone type="Antarctica/DumontDUrville">
+				<exemplarCity>ਡਿਉਮੋਂਟ ਡਿਉਰਵਿਲੇ</exemplarCity>
+			</zone>
+			<zone type="Antarctica/McMurdo">
+				<exemplarCity>ਮੈਕਮੁਰਡੋ</exemplarCity>
+			</zone>
+			<zone type="America/Argentina/Rio_Gallegos">
+				<exemplarCity>ਰਿਓ ਗੈਲੇਗੋਸ</exemplarCity>
+			</zone>
+			<zone type="America/Mendoza">
+				<exemplarCity>ਮੈਂਡੋਜ਼ਾ</exemplarCity>
+			</zone>
+			<zone type="America/Argentina/San_Juan">
+				<exemplarCity>ਸੇਨ ਜੁਆਨ</exemplarCity>
+			</zone>
+			<zone type="America/Argentina/Ushuaia">
+				<exemplarCity>ਉਸ਼ਵਾਇਆ</exemplarCity>
+			</zone>
+			<zone type="America/Argentina/La_Rioja">
+				<exemplarCity>ਲਾ ਰਿਉਜਾ</exemplarCity>
+			</zone>
+			<zone type="America/Argentina/San_Luis">
+				<exemplarCity>ਸੇਨ ਲੂਈਸ</exemplarCity>
+			</zone>
+			<zone type="America/Catamarca">
+				<exemplarCity>ਕੈਟਾਮਾਰਕਾ</exemplarCity>
+			</zone>
+			<zone type="America/Argentina/Salta">
+				<exemplarCity>ਸਾਲਟਾ</exemplarCity>
+			</zone>
+			<zone type="America/Jujuy">
+				<exemplarCity>ਜੂਜੁਏ</exemplarCity>
+			</zone>
+			<zone type="America/Argentina/Tucuman">
+				<exemplarCity>ਟੁਕੁਮਨ</exemplarCity>
+			</zone>
+			<zone type="America/Cordoba">
+				<exemplarCity>ਕੋਰਡੋਬਾ</exemplarCity>
+			</zone>
+			<zone type="America/Buenos_Aires">
+				<exemplarCity>ਬਿਉਨੋ ਆਇਰਸ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Pago_Pago">
+				<exemplarCity>ਪਾਗੋ ਪਾਗੋ</exemplarCity>
+			</zone>
+			<zone type="Europe/Vienna">
+				<exemplarCity>ਵਿਏਨਾ</exemplarCity>
+			</zone>
+			<zone type="Australia/Perth">
+				<exemplarCity>ਪਰਥ</exemplarCity>
+			</zone>
+			<zone type="Australia/Eucla">
+				<exemplarCity>ਯੂਕਲਾ</exemplarCity>
+			</zone>
+			<zone type="Australia/Darwin">
+				<exemplarCity>ਡਾਰਵਿਨ</exemplarCity>
+			</zone>
+			<zone type="Australia/Adelaide">
+				<exemplarCity>ਏਡੀਲੇਡ</exemplarCity>
+			</zone>
+			<zone type="Australia/Broken_Hill">
+				<exemplarCity>ਬ੍ਰੋਕਨ ਹਿਲ</exemplarCity>
+			</zone>
+			<zone type="Australia/Currie">
+				<exemplarCity>ਕਰੀ</exemplarCity>
+			</zone>
+			<zone type="Australia/Melbourne">
+				<exemplarCity>ਮੈਲਬੋਰਨ</exemplarCity>
+			</zone>
+			<zone type="Australia/Hobart">
+				<exemplarCity>ਹੋਬਾਰਟ</exemplarCity>
+			</zone>
+			<zone type="Australia/Lindeman">
+				<exemplarCity>ਲਿੰਡੇਮਨ</exemplarCity>
+			</zone>
+			<zone type="Australia/Sydney">
+				<exemplarCity>ਸਿਡਨੀ</exemplarCity>
+			</zone>
+			<zone type="Australia/Brisbane">
+				<exemplarCity>ਬ੍ਰਿਸਬੇਨ</exemplarCity>
+			</zone>
+			<zone type="Antarctica/Macquarie">
+				<exemplarCity>ਮੈਕਕਵੈਰੀ</exemplarCity>
+			</zone>
+			<zone type="Australia/Lord_Howe">
+				<exemplarCity>ਲੌਰਡ ਹੋਵੇ</exemplarCity>
+			</zone>
+			<zone type="America/Aruba">
+				<exemplarCity>ਅਰੂਬਾ</exemplarCity>
+			</zone>
+			<zone type="Europe/Mariehamn">
+				<exemplarCity>ਮਾਰੀਏਹਾਮੇਨ</exemplarCity>
+			</zone>
+			<zone type="Asia/Baku">
+				<exemplarCity>ਬਾਕੂ</exemplarCity>
+			</zone>
+			<zone type="Europe/Sarajevo">
+				<exemplarCity>ਸਾਰਾਜੇਵੋ</exemplarCity>
+			</zone>
+			<zone type="America/Barbados">
+				<exemplarCity>ਬਾਰਬਾਡੋਸ</exemplarCity>
+			</zone>
+			<zone type="Asia/Dhaka">
+				<exemplarCity>ਢਾਕਾ</exemplarCity>
+			</zone>
+			<zone type="Europe/Brussels">
+				<exemplarCity>ਬਰੂਸੇਲਸ</exemplarCity>
+			</zone>
+			<zone type="Africa/Ouagadougou">
+				<exemplarCity>ਉਆਗਾਡੂਗੂ</exemplarCity>
+			</zone>
+			<zone type="Europe/Sofia">
+				<exemplarCity>ਸੋਫੀਆ</exemplarCity>
+			</zone>
+			<zone type="Asia/Bahrain">
+				<exemplarCity>ਬਹਿਰੀਨ</exemplarCity>
+			</zone>
+			<zone type="Africa/Bujumbura">
+				<exemplarCity>ਬੁਜੁੰਬੁਰਾ</exemplarCity>
+			</zone>
+			<zone type="Africa/Porto-Novo">
+				<exemplarCity>ਪੋਰਟੋ-ਨੋਵੋ</exemplarCity>
+			</zone>
+			<zone type="America/St_Barthelemy">
+				<exemplarCity>ਸੇਂਟ ਬਾਰਥੇਲੇਮੀ</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Bermuda">
+				<exemplarCity>ਬਰਮੂਡਾ</exemplarCity>
+			</zone>
+			<zone type="Asia/Brunei">
+				<exemplarCity>ਬਰੂਨੇਈ</exemplarCity>
+			</zone>
+			<zone type="America/La_Paz">
+				<exemplarCity>ਲਾ ਪਾਜ਼</exemplarCity>
+			</zone>
+			<zone type="America/Kralendijk">
+				<exemplarCity>ਕ੍ਰਾਲੇਂਦਿਜਕ</exemplarCity>
+			</zone>
+			<zone type="America/Eirunepe">
+				<exemplarCity>ਯੁਰੂਨੀਪੇ</exemplarCity>
+			</zone>
+			<zone type="America/Rio_Branco">
+				<exemplarCity>ਰਿਓ ਬ੍ਰਾਂਕੋ</exemplarCity>
+			</zone>
+			<zone type="America/Porto_Velho">
+				<exemplarCity>ਪੋਰਟੋ ਵੇਲ੍ਹੋ</exemplarCity>
+			</zone>
+			<zone type="America/Boa_Vista">
+				<exemplarCity>ਬੋਆ ਵਿਸਟਾ</exemplarCity>
+			</zone>
+			<zone type="America/Manaus">
+				<exemplarCity>ਮਨੌਸ</exemplarCity>
+			</zone>
+			<zone type="America/Cuiaba">
+				<exemplarCity>ਕਯੁਏਬਾ</exemplarCity>
+			</zone>
+			<zone type="America/Santarem">
+				<exemplarCity>ਸੇਂਟਾਰਮ</exemplarCity>
+			</zone>
+			<zone type="America/Campo_Grande">
+				<exemplarCity>ਕੈਂਪੋ ਗ੍ਰਾਂਡੇ</exemplarCity>
+			</zone>
+			<zone type="America/Belem">
+				<exemplarCity>ਬੇਲੇਮ</exemplarCity>
+			</zone>
+			<zone type="America/Araguaina">
+				<exemplarCity>ਆਰਗੁਆਇਨਾ</exemplarCity>
+			</zone>
+			<zone type="America/Sao_Paulo">
+				<exemplarCity>ਸਾਓ ਪੌਲੋ</exemplarCity>
+			</zone>
+			<zone type="America/Bahia">
+				<exemplarCity>ਬਾਹੀਆ</exemplarCity>
+			</zone>
+			<zone type="America/Fortaleza">
+				<exemplarCity>ਫੋਰਟਾਲੇਜ਼ਾ</exemplarCity>
+			</zone>
+			<zone type="America/Maceio">
+				<exemplarCity>ਮੈਸੀਓ</exemplarCity>
+			</zone>
+			<zone type="America/Recife">
+				<exemplarCity>ਰੇਸੀਫੇ</exemplarCity>
+			</zone>
+			<zone type="America/Noronha">
+				<exemplarCity>ਨੌਰੋਨਹਾ</exemplarCity>
+			</zone>
+			<zone type="America/Nassau">
+				<exemplarCity>ਨਾਸਾਓ</exemplarCity>
+			</zone>
+			<zone type="Asia/Thimphu">
+				<exemplarCity>ਥਿੰਫੂ</exemplarCity>
+			</zone>
+			<zone type="Africa/Gaborone">
+				<exemplarCity>ਗਾਬੋਰੋਨ</exemplarCity>
+			</zone>
+			<zone type="Europe/Minsk">
+				<exemplarCity>ਮਿੰਸਕ</exemplarCity>
+			</zone>
+			<zone type="America/Belize">
+				<exemplarCity>ਬੇਲੀਜ਼</exemplarCity>
+			</zone>
+			<zone type="America/Dawson">
+				<exemplarCity>ਡੌਅਸਨ</exemplarCity>
+			</zone>
+			<zone type="America/Whitehorse">
+				<exemplarCity>ਵਾਈਟਹੌਰਸ</exemplarCity>
+			</zone>
+			<zone type="America/Inuvik">
+				<exemplarCity>ਇਨੁਵਿਕ</exemplarCity>
+			</zone>
+			<zone type="America/Vancouver">
+				<exemplarCity>ਵੈਨਕੂਵਰ</exemplarCity>
+			</zone>
+			<zone type="America/Dawson_Creek">
+				<exemplarCity>ਡੌਅਸਨ ਕ੍ਰੀਕ</exemplarCity>
+			</zone>
+			<zone type="America/Creston">
+				<exemplarCity>ਕ੍ਰੈਸਟਨ</exemplarCity>
+			</zone>
+			<zone type="America/Yellowknife">
+				<exemplarCity>ਯੈਲੋਨਾਈਫ</exemplarCity>
+			</zone>
+			<zone type="America/Edmonton">
+				<exemplarCity>ਐਡਮੋਂਟਨ</exemplarCity>
+			</zone>
+			<zone type="America/Swift_Current">
+				<exemplarCity>ਸਵਿਫਟ ਕਰੈਂਟ</exemplarCity>
+			</zone>
+			<zone type="America/Cambridge_Bay">
+				<exemplarCity>ਕੈਮਬ੍ਰਿਜ ਬੇ</exemplarCity>
+			</zone>
+			<zone type="America/Regina">
+				<exemplarCity>ਰੈਜੀਨਾ</exemplarCity>
+			</zone>
+			<zone type="America/Winnipeg">
+				<exemplarCity>ਵਿਨੀਪੇਗ</exemplarCity>
+			</zone>
+			<zone type="America/Resolute">
+				<exemplarCity>ਰੈਜ਼ੋਲਿਊਟ</exemplarCity>
+			</zone>
+			<zone type="America/Rainy_River">
+				<exemplarCity>ਰੇਨੀ ਰਿਵਰ</exemplarCity>
+			</zone>
+			<zone type="America/Rankin_Inlet">
+				<exemplarCity>ਰੈਂਕਿਨ ਇਨਲੈਟ</exemplarCity>
+			</zone>
+			<zone type="America/Coral_Harbour">
+				<exemplarCity>ਐਟੀਕੋਕਨ</exemplarCity>
+			</zone>
+			<zone type="America/Thunder_Bay">
+				<exemplarCity>ਥੰਡਰ ਬੇ</exemplarCity>
+			</zone>
+			<zone type="America/Nipigon">
+				<exemplarCity>ਨਿਪਿਗੌਨ</exemplarCity>
+			</zone>
+			<zone type="America/Toronto">
+				<exemplarCity>ਟੋਰੰਟੋ</exemplarCity>
+			</zone>
+			<zone type="America/Iqaluit">
+				<exemplarCity>ਇਕਾਲੁਈਟ</exemplarCity>
+			</zone>
+			<zone type="America/Pangnirtung">
+				<exemplarCity>ਪੈਂਗਨਿਰਟੰਗ</exemplarCity>
+			</zone>
+			<zone type="America/Moncton">
+				<exemplarCity>ਮੋਂਕਟਨ</exemplarCity>
+			</zone>
+			<zone type="America/Halifax">
+				<exemplarCity>ਹੈਲੀਫੈਕਸ</exemplarCity>
+			</zone>
+			<zone type="America/Goose_Bay">
+				<exemplarCity>ਗੂਜ਼ ਬੇ</exemplarCity>
+			</zone>
+			<zone type="America/Glace_Bay">
+				<exemplarCity>ਗਲੇਸ ਬੇ</exemplarCity>
+			</zone>
+			<zone type="America/Blanc-Sablon">
+				<exemplarCity>ਬਲੈਂਕ-ਸੈਬਲਾਨ</exemplarCity>
+			</zone>
+			<zone type="America/St_Johns">
+				<exemplarCity>ਸੇਂਟ ਜੌਨਸ</exemplarCity>
+			</zone>
+			<zone type="Indian/Cocos">
+				<exemplarCity>ਕੋਕੋਜ਼</exemplarCity>
+			</zone>
+			<zone type="Africa/Kinshasa">
+				<exemplarCity>ਕਿੰਸ਼ਾਸਾ</exemplarCity>
+			</zone>
+			<zone type="Africa/Lubumbashi">
+				<exemplarCity>ਲੁਬੁਮਬਾਸ਼ੀ</exemplarCity>
+			</zone>
+			<zone type="Africa/Bangui">
+				<exemplarCity>ਬਾਂਗੁਈ</exemplarCity>
+			</zone>
+			<zone type="Africa/Brazzaville">
+				<exemplarCity>ਬ੍ਰਾਜ਼ਾਵਿਲੇ</exemplarCity>
+			</zone>
+			<zone type="Europe/Zurich">
+				<exemplarCity>ਜਿਊਰਿਖ</exemplarCity>
+			</zone>
+			<zone type="Africa/Abidjan">
+				<exemplarCity>ਐਬੀਡਜਾਨ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Rarotonga">
+				<exemplarCity>ਰਾਰੋਟੋਂਗਾ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Easter">
+				<exemplarCity>ਈਸਟਰ</exemplarCity>
+			</zone>
+			<zone type="America/Santiago">
+				<exemplarCity>ਸੇਂਟੀਆਗੋ</exemplarCity>
+			</zone>
+			<zone type="Africa/Douala">
+				<exemplarCity>ਡੌਆਲਾ</exemplarCity>
+			</zone>
+			<zone type="Asia/Kashgar">
+				<exemplarCity>ਕੈਸ਼ਗਰ</exemplarCity>
+			</zone>
+			<zone type="Asia/Urumqi">
+				<exemplarCity>ਊਰੂਮਕੀ</exemplarCity>
+			</zone>
+			<zone type="Asia/Chongqing">
+				<exemplarCity>ਚੋਂਗਿੰਗ</exemplarCity>
+			</zone>
+			<zone type="Asia/Shanghai">
+				<exemplarCity>ਸ਼ੰਘਾਈ</exemplarCity>
+			</zone>
+			<zone type="Asia/Harbin">
+				<exemplarCity>ਹਾਰਬਿਨ</exemplarCity>
+			</zone>
+			<zone type="America/Bogota">
+				<exemplarCity>ਬੋਗੋਟਾ</exemplarCity>
+			</zone>
+			<zone type="America/Costa_Rica">
+				<exemplarCity>ਕੋਸਟਾ ਰੀਕਾ</exemplarCity>
+			</zone>
+			<zone type="America/Havana">
+				<exemplarCity>ਹਵਾਨਾ</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Cape_Verde">
+				<exemplarCity>ਕੇਪ ਵਰਡ</exemplarCity>
+			</zone>
+			<zone type="America/Curacao">
+				<exemplarCity>ਕੁਰਾਕਾਓ</exemplarCity>
+			</zone>
+			<zone type="Indian/Christmas">
+				<exemplarCity>ਕ੍ਰਿਸਮਸ</exemplarCity>
+			</zone>
+			<zone type="Asia/Nicosia">
+				<exemplarCity>ਨਿਕੋਸੀਆ</exemplarCity>
+			</zone>
+			<zone type="Europe/Prague">
+				<exemplarCity>ਪ੍ਰਾਗ</exemplarCity>
+			</zone>
+			<zone type="Europe/Busingen">
+				<exemplarCity>ਬੁਸਿਂਜੇਨ</exemplarCity>
+			</zone>
+			<zone type="Europe/Berlin">
+				<exemplarCity>ਬਰਲਿਨ</exemplarCity>
+			</zone>
+			<zone type="Africa/Djibouti">
+				<exemplarCity>ਜ਼ੀਬੂਤੀ</exemplarCity>
+			</zone>
+			<zone type="Europe/Copenhagen">
+				<exemplarCity>ਕੋਪੇਨਹੇਗਨ</exemplarCity>
+			</zone>
+			<zone type="America/Dominica">
+				<exemplarCity>ਡੋਮੀਨਿਕਾ</exemplarCity>
+			</zone>
+			<zone type="America/Santo_Domingo">
+				<exemplarCity>ਸੇਂਟੋ ਡੋਮਿੰਗੋ</exemplarCity>
+			</zone>
+			<zone type="Africa/Algiers">
+				<exemplarCity>ਅਲਜੀਅਰਸ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Galapagos">
+				<exemplarCity>ਗਲਪੇਗੋਸ</exemplarCity>
+			</zone>
+			<zone type="America/Guayaquil">
+				<exemplarCity>ਗੁਆਇਕਵਿਲ</exemplarCity>
+			</zone>
+			<zone type="Europe/Tallinn">
+				<exemplarCity>ਟੱਲਿਨ</exemplarCity>
+			</zone>
+			<zone type="Africa/Cairo">
+				<exemplarCity>ਕੈਰੋ</exemplarCity>
+			</zone>
+			<zone type="Africa/El_Aaiun">
+				<exemplarCity>ਅਲ ਅਯੂਨ</exemplarCity>
+			</zone>
+			<zone type="Africa/Asmera">
+				<exemplarCity>ਅਸਮਾਰਾ</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Canary">
+				<exemplarCity>ਕੇਨੇਰੀ</exemplarCity>
+			</zone>
+			<zone type="Africa/Ceuta">
+				<exemplarCity>ਸੀਊਟਾ</exemplarCity>
+			</zone>
+			<zone type="Europe/Madrid">
+				<exemplarCity>ਮੈਡ੍ਰਿਡ</exemplarCity>
+			</zone>
+			<zone type="Africa/Addis_Ababa">
+				<exemplarCity>ਐਡਿਸ ਅਬਾਬਾ</exemplarCity>
+			</zone>
+			<zone type="Europe/Helsinki">
+				<exemplarCity>ਹੇਲਸਿੰਕੀ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Fiji">
+				<exemplarCity>ਫ਼ਿਜੀ</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Stanley">
+				<exemplarCity>ਸਟੇਨਲੀ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Truk">
+				<exemplarCity>ਚੂਕ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Ponape">
+				<exemplarCity>ਪੋਹਨਪੇਈ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Kosrae">
+				<exemplarCity>ਕੋਸ੍ਰਾਏ</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Faeroe">
+				<exemplarCity>ਫੈਰੋ</exemplarCity>
+			</zone>
+			<zone type="Europe/Paris">
+				<exemplarCity>ਪੈਰਿਸ</exemplarCity>
+			</zone>
+			<zone type="Africa/Libreville">
+				<exemplarCity>ਲਿਬਰਵਿਲੇ</exemplarCity>
+			</zone>
+			<zone type="Europe/London">
+				<long>
+					<daylight>ਬ੍ਰਿਟਿਸ਼ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+				<exemplarCity>ਲੰਡਨ</exemplarCity>
+			</zone>
+			<zone type="America/Grenada">
+				<exemplarCity>ਗ੍ਰੇਨਾਡਾ</exemplarCity>
+			</zone>
+			<zone type="Asia/Tbilisi">
+				<exemplarCity>ਟਬਿਲਿਸੀ</exemplarCity>
+			</zone>
+			<zone type="America/Cayenne">
+				<exemplarCity>ਕੇਯੇਨੇ</exemplarCity>
+			</zone>
+			<zone type="Europe/Guernsey">
+				<exemplarCity>ਗਰਨਸੀ</exemplarCity>
+			</zone>
+			<zone type="Africa/Accra">
+				<exemplarCity>ਅੱਕਰਾ</exemplarCity>
+			</zone>
+			<zone type="Europe/Gibraltar">
+				<exemplarCity>ਜਿਬਰਾਲਟਰ</exemplarCity>
+			</zone>
+			<zone type="America/Thule">
+				<exemplarCity>ਥੁਲੇ</exemplarCity>
+			</zone>
+			<zone type="America/Godthab">
+				<exemplarCity>ਨੂਕ</exemplarCity>
+			</zone>
+			<zone type="America/Scoresbysund">
+				<exemplarCity>ਇੱਟੋਕੋਰਟੂਰਮੀਟ</exemplarCity>
+			</zone>
+			<zone type="America/Danmarkshavn">
+				<exemplarCity>ਡੈਨਮਾਰਕਸ਼ੌਨ</exemplarCity>
+			</zone>
+			<zone type="Africa/Banjul">
+				<exemplarCity>ਬਾਂਜੁਲ</exemplarCity>
+			</zone>
+			<zone type="Africa/Conakry">
+				<exemplarCity>ਕੋਨੇਕਰੀ</exemplarCity>
+			</zone>
+			<zone type="America/Guadeloupe">
+				<exemplarCity>ਗੁਆਡੇਲੋਪ</exemplarCity>
+			</zone>
+			<zone type="Africa/Malabo">
+				<exemplarCity>ਮਾਲਾਬੋ</exemplarCity>
+			</zone>
+			<zone type="Europe/Athens">
+				<exemplarCity>ਏਥਨਸ</exemplarCity>
+			</zone>
+			<zone type="Atlantic/South_Georgia">
+				<exemplarCity>ਦੱਖਣੀ ਜਾਰਜਿਆ</exemplarCity>
+			</zone>
+			<zone type="America/Guatemala">
+				<exemplarCity>ਗੁਆਟੇਮਾਲਾ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Guam">
+				<exemplarCity>ਗੁਆਮ</exemplarCity>
+			</zone>
+			<zone type="Africa/Bissau">
+				<exemplarCity>ਬਿਸਾਉ</exemplarCity>
+			</zone>
+			<zone type="America/Guyana">
+				<exemplarCity>ਗੁਯਾਨਾ</exemplarCity>
+			</zone>
+			<zone type="Asia/Hong_Kong">
+				<exemplarCity>ਹਾਂਗ ਕਾਂਗ</exemplarCity>
+			</zone>
+			<zone type="America/Tegucigalpa">
+				<exemplarCity>ਟੇਗੁਸੀਗਲਪਾ</exemplarCity>
+			</zone>
+			<zone type="Europe/Zagreb">
+				<exemplarCity>ਜ਼ਗਰੇਬ</exemplarCity>
+			</zone>
+			<zone type="America/Port-au-Prince">
+				<exemplarCity>ਪੋਰਟ-ਔ-ਪ੍ਰਿੰਸ</exemplarCity>
+			</zone>
+			<zone type="Europe/Budapest">
+				<exemplarCity>ਬੁਡਾਪੇਸਟ</exemplarCity>
+			</zone>
+			<zone type="Asia/Jakarta">
+				<exemplarCity>ਜਕਾਰਤਾ</exemplarCity>
+			</zone>
+			<zone type="Asia/Pontianak">
+				<exemplarCity>ਪੌਂਟੀਆਨਾਕ</exemplarCity>
+			</zone>
+			<zone type="Asia/Makassar">
+				<exemplarCity>ਮਕਸਾਰ</exemplarCity>
+			</zone>
+			<zone type="Asia/Jayapura">
+				<exemplarCity>ਜਯਾਪੁਰਾ</exemplarCity>
+			</zone>
+			<zone type="Europe/Dublin">
+				<long>
+					<daylight>ਆਇਰਿਸ਼ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+				<exemplarCity>ਡਬਲਿਨ</exemplarCity>
+			</zone>
+			<zone type="Asia/Jerusalem">
+				<exemplarCity>ਜੇਰੂਸਲਮ</exemplarCity>
+			</zone>
+			<zone type="Europe/Isle_of_Man">
+				<exemplarCity>ਆਇਲ ਆਫ ਮੈਨ</exemplarCity>
+			</zone>
+			<zone type="Asia/Calcutta">
+				<exemplarCity>ਕੋਲਕਾਤਾ</exemplarCity>
+			</zone>
+			<zone type="Indian/Chagos">
+				<exemplarCity>ਚਾਗੋਸ</exemplarCity>
+			</zone>
+			<zone type="Asia/Baghdad">
+				<exemplarCity>ਬਗਦਾਦ</exemplarCity>
+			</zone>
+			<zone type="Asia/Tehran">
+				<exemplarCity>ਤੇਹਰਾਨ</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Reykjavik">
+				<exemplarCity>ਰੇਕਜਾਵਿਕ</exemplarCity>
+			</zone>
+			<zone type="Europe/Rome">
+				<exemplarCity>ਰੋਮ</exemplarCity>
+			</zone>
+			<zone type="Europe/Jersey">
+				<exemplarCity>ਜਰਸੀ</exemplarCity>
+			</zone>
+			<zone type="America/Jamaica">
+				<exemplarCity>ਜਮਾਇਕਾ</exemplarCity>
+			</zone>
+			<zone type="Asia/Amman">
+				<exemplarCity>ਅੰਮਾਨ</exemplarCity>
+			</zone>
+			<zone type="Asia/Tokyo">
+				<exemplarCity>ਟੋਕਯੋ</exemplarCity>
+			</zone>
+			<zone type="Africa/Nairobi">
+				<exemplarCity>ਨੈਰੋਬੀ</exemplarCity>
+			</zone>
+			<zone type="Asia/Bishkek">
+				<exemplarCity>ਬਿਸ਼ਕੇਕ</exemplarCity>
+			</zone>
+			<zone type="Asia/Phnom_Penh">
+				<exemplarCity>ਫਨੋਮ ਪੇਨਹ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Enderbury">
+				<exemplarCity>ਏੰਡਰਬਰੀ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Kiritimati">
+				<exemplarCity>ਕਿਰਿਤਿਮਤੀ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Tarawa">
+				<exemplarCity>ਟਾਰਾਵਾ</exemplarCity>
+			</zone>
+			<zone type="Indian/Comoro">
+				<exemplarCity>ਕੋਮੋਰੋ</exemplarCity>
+			</zone>
+			<zone type="America/St_Kitts">
+				<exemplarCity>ਸੇਂਟ ਕਿਟਸ</exemplarCity>
+			</zone>
+			<zone type="Asia/Pyongyang">
+				<exemplarCity>ਪਯੋਂਗਯਾਂਗ</exemplarCity>
+			</zone>
+			<zone type="Asia/Seoul">
+				<exemplarCity>ਸਿਉਲ</exemplarCity>
+			</zone>
+			<zone type="Asia/Kuwait">
+				<exemplarCity>ਕੁਵੈਤ</exemplarCity>
+			</zone>
+			<zone type="America/Cayman">
+				<exemplarCity>ਕੇਮੈਨ</exemplarCity>
+			</zone>
+			<zone type="Asia/Aqtau">
+				<exemplarCity>ਅਕਤੌ</exemplarCity>
+			</zone>
+			<zone type="Asia/Oral">
+				<exemplarCity>ਓਰਲ</exemplarCity>
+			</zone>
+			<zone type="Asia/Aqtobe">
+				<exemplarCity>ਅਕਤੋਬੇ</exemplarCity>
+			</zone>
+			<zone type="Asia/Qyzylorda">
+				<exemplarCity>ਕਿਜ਼ੀਲੋਰਡਾ</exemplarCity>
+			</zone>
+			<zone type="Asia/Almaty">
+				<exemplarCity>ਅਲਮੇਟੀ</exemplarCity>
+			</zone>
+			<zone type="Asia/Vientiane">
+				<exemplarCity>ਵਾਏਨਟਿਆਨੇ</exemplarCity>
+			</zone>
+			<zone type="Asia/Beirut">
+				<exemplarCity>ਬੈਰੂਤ</exemplarCity>
+			</zone>
+			<zone type="America/St_Lucia">
+				<exemplarCity>ਸੇਂਟ ਲੁਸੀਆ</exemplarCity>
+			</zone>
+			<zone type="Europe/Vaduz">
+				<exemplarCity>ਵਾਡੁਜ਼</exemplarCity>
+			</zone>
+			<zone type="Asia/Colombo">
+				<exemplarCity>ਕੋਲੰਬੋ</exemplarCity>
+			</zone>
+			<zone type="Africa/Monrovia">
+				<exemplarCity>ਮੋਨਰੋਵੀਆ</exemplarCity>
+			</zone>
+			<zone type="Africa/Maseru">
+				<exemplarCity>ਮਸੇਰੂ</exemplarCity>
+			</zone>
+			<zone type="Europe/Vilnius">
+				<exemplarCity>ਵਿਲਨਿਅਸ</exemplarCity>
+			</zone>
+			<zone type="Europe/Luxembourg">
+				<exemplarCity>ਲਕਜ਼ਮਬਰਗ</exemplarCity>
+			</zone>
+			<zone type="Europe/Riga">
+				<exemplarCity>ਰਿਗਾ</exemplarCity>
+			</zone>
+			<zone type="Africa/Tripoli">
+				<exemplarCity>ਟ੍ਰਿਪੋਲੀ</exemplarCity>
+			</zone>
+			<zone type="Africa/Casablanca">
+				<exemplarCity>ਕਾਸਬਲੈਂਕਾ</exemplarCity>
+			</zone>
+			<zone type="Europe/Monaco">
+				<exemplarCity>ਮੋਨਾਕੋ</exemplarCity>
+			</zone>
+			<zone type="Europe/Chisinau">
+				<exemplarCity>ਚਿਸਿਨੌ</exemplarCity>
+			</zone>
+			<zone type="Europe/Podgorica">
+				<exemplarCity>ਪੋਡਗੋਰੀਕਾ</exemplarCity>
+			</zone>
+			<zone type="America/Marigot">
+				<exemplarCity>ਮੈਰੀਗੋਟ</exemplarCity>
+			</zone>
+			<zone type="Indian/Antananarivo">
+				<exemplarCity>ਅੰਟਾਨਨੇਰਿਵੋ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Kwajalein">
+				<exemplarCity>ਕਵਾਜਾਲੀਨ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Majuro">
+				<exemplarCity>ਮੇਜੁਰੋ</exemplarCity>
+			</zone>
+			<zone type="Europe/Skopje">
+				<exemplarCity>ਸਕੋਪਜੇ</exemplarCity>
+			</zone>
+			<zone type="Africa/Bamako">
+				<exemplarCity>ਬਮੇਕੋ</exemplarCity>
+			</zone>
+			<zone type="Asia/Rangoon">
+				<exemplarCity>ਰੰਗੂਨ</exemplarCity>
+			</zone>
+			<zone type="Asia/Hovd">
+				<exemplarCity>ਹੋਵਡ</exemplarCity>
+			</zone>
+			<zone type="Asia/Ulaanbaatar">
+				<exemplarCity>ਉਲਾਨਬਾਤਰ</exemplarCity>
+			</zone>
+			<zone type="Asia/Choibalsan">
+				<exemplarCity>ਚੋਇਲਬਾਲਸਨ</exemplarCity>
+			</zone>
+			<zone type="Asia/Macau">
+				<exemplarCity>ਮਕਾਉ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Saipan">
+				<exemplarCity>ਸੈਪਾਨ</exemplarCity>
+			</zone>
+			<zone type="America/Martinique">
+				<exemplarCity>ਮਾਰਟੀਨਿਕ</exemplarCity>
+			</zone>
+			<zone type="Africa/Nouakchott">
+				<exemplarCity>ਨੌਆਕਸ਼ਾਟ</exemplarCity>
+			</zone>
+			<zone type="America/Montserrat">
+				<exemplarCity>ਮੋਂਟਸੇਰਾਤ</exemplarCity>
+			</zone>
+			<zone type="Europe/Malta">
+				<exemplarCity>ਮਾਲਟਾ</exemplarCity>
+			</zone>
+			<zone type="Indian/Mauritius">
+				<exemplarCity>ਮੌਰਿਸ਼ਸ</exemplarCity>
+			</zone>
+			<zone type="Indian/Maldives">
+				<exemplarCity>ਮਾਲਦੀਵ</exemplarCity>
+			</zone>
+			<zone type="Africa/Blantyre">
+				<exemplarCity>ਬਲੰਟਾਇਰ</exemplarCity>
+			</zone>
+			<zone type="America/Tijuana">
+				<exemplarCity>ਟਿਜੂਆਨਾ</exemplarCity>
+			</zone>
+			<zone type="America/Santa_Isabel">
+				<exemplarCity>ਸੈਂਟਾ ਇਸਾਬੇਲ</exemplarCity>
+			</zone>
+			<zone type="America/Hermosillo">
+				<exemplarCity>ਹਰਮੋਸਿੱਲੋ</exemplarCity>
+			</zone>
+			<zone type="America/Mazatlan">
+				<exemplarCity>ਮਜ਼ੇਤਲਾਨ</exemplarCity>
+			</zone>
+			<zone type="America/Chihuahua">
+				<exemplarCity>ਚਿਹੁਆਹੁਆ</exemplarCity>
+			</zone>
+			<zone type="America/Bahia_Banderas">
+				<exemplarCity>ਬਾਹੀਆ ਬਾਂਦੇਰਸ</exemplarCity>
+			</zone>
+			<zone type="America/Ojinaga">
+				<exemplarCity>ਓਜੀਨਾਗਾ</exemplarCity>
+			</zone>
+			<zone type="America/Monterrey">
+				<exemplarCity>ਮੋਨਟੇਰੀ</exemplarCity>
+			</zone>
+			<zone type="America/Mexico_City">
+				<exemplarCity>ਮੈਕਸੀਕੋ ਸਿਟੀ</exemplarCity>
+			</zone>
+			<zone type="America/Matamoros">
+				<exemplarCity>ਮਾਟਾਮੋਰਸ</exemplarCity>
+			</zone>
+			<zone type="America/Merida">
+				<exemplarCity>ਮੇਰਿਡਾ</exemplarCity>
+			</zone>
+			<zone type="America/Cancun">
+				<exemplarCity>ਕੈਨਕੁਨ</exemplarCity>
+			</zone>
+			<zone type="Asia/Kuala_Lumpur">
+				<exemplarCity>ਕੌਲਾ ਲੁੰਪੁਰ</exemplarCity>
+			</zone>
+			<zone type="Asia/Kuching">
+				<exemplarCity>ਕੁਚਿੰਗ</exemplarCity>
+			</zone>
+			<zone type="Africa/Maputo">
+				<exemplarCity>ਮਾਪੁਟੋ</exemplarCity>
+			</zone>
+			<zone type="Africa/Windhoek">
+				<exemplarCity>ਵਿੰਡਹੋਇਕ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Noumea">
+				<exemplarCity>ਨਾਉਮੇ</exemplarCity>
+			</zone>
+			<zone type="Africa/Niamey">
+				<exemplarCity>ਨਿਆਮੇ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Norfolk">
+				<exemplarCity>ਨੋਰਫੌਕ</exemplarCity>
+			</zone>
+			<zone type="Africa/Lagos">
+				<exemplarCity>ਲਾਗੋਸ</exemplarCity>
+			</zone>
+			<zone type="America/Managua">
+				<exemplarCity>ਮਨਾਗੁਆ</exemplarCity>
+			</zone>
+			<zone type="Europe/Amsterdam">
+				<exemplarCity>ਐਮਸਟਰਡਮ</exemplarCity>
+			</zone>
+			<zone type="Europe/Oslo">
+				<exemplarCity>ਓਸਲੋ</exemplarCity>
+			</zone>
+			<zone type="Asia/Katmandu">
+				<exemplarCity>ਕਾਠਮਾਂਡੂ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Nauru">
+				<exemplarCity>ਨਾਉਰੂ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Niue">
+				<exemplarCity>ਨਿਯੂ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Chatham">
+				<exemplarCity>ਚੈਤਹੈਮ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Auckland">
+				<exemplarCity>ਔਕਲੈਂਡ</exemplarCity>
+			</zone>
+			<zone type="Asia/Muscat">
+				<exemplarCity>ਮਸਕਟ</exemplarCity>
+			</zone>
+			<zone type="America/Panama">
+				<exemplarCity>ਪਨਾਮਾ</exemplarCity>
+			</zone>
+			<zone type="America/Lima">
+				<exemplarCity>ਲੀਮਾ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Tahiti">
+				<exemplarCity>ਤਹਿਤੀ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Marquesas">
+				<exemplarCity>ਮਾਰਕਿਸਾਸ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Gambier">
+				<exemplarCity>ਗੈਂਬੀਅਰ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Port_Moresby">
+				<exemplarCity>ਪੋਰਟ ਮੋਰੇਸਬੀ</exemplarCity>
+			</zone>
+			<zone type="Asia/Manila">
+				<exemplarCity>ਮਨੀਲਾ</exemplarCity>
+			</zone>
+			<zone type="Asia/Karachi">
+				<exemplarCity>ਕਰਾਚੀ</exemplarCity>
+			</zone>
+			<zone type="Europe/Warsaw">
+				<exemplarCity>ਵਾਰਸਾਅ</exemplarCity>
+			</zone>
+			<zone type="America/Miquelon">
+				<exemplarCity>ਮਿਕੇਲਨ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Pitcairn">
+				<exemplarCity>ਪਿਟਕੈਰਨ</exemplarCity>
+			</zone>
+			<zone type="America/Puerto_Rico">
+				<exemplarCity>ਪਿਊਰਟੋ ਰੀਕੋ</exemplarCity>
+			</zone>
+			<zone type="Asia/Gaza">
+				<exemplarCity>ਗਾਜਾ</exemplarCity>
+			</zone>
+			<zone type="Asia/Hebron">
+				<exemplarCity>ਹੇਬਰਾਨ</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Azores">
+				<exemplarCity>ਅਜੋਰੇਸ</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Madeira">
+				<exemplarCity>ਮਡੀਅਰਾ</exemplarCity>
+			</zone>
+			<zone type="Europe/Lisbon">
+				<exemplarCity>ਲਿਸਬਨ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Palau">
+				<exemplarCity>ਪਲਾਉ</exemplarCity>
+			</zone>
+			<zone type="America/Asuncion">
+				<exemplarCity>ਐਸੁਂਕੀਅਨ</exemplarCity>
+			</zone>
+			<zone type="Asia/Qatar">
+				<exemplarCity>ਕਤਰ</exemplarCity>
+			</zone>
+			<zone type="Indian/Reunion">
+				<exemplarCity>ਰਿਯੂਨੀਅਨ</exemplarCity>
+			</zone>
+			<zone type="Europe/Bucharest">
+				<exemplarCity>ਬੁਚਾਰੇਸਟ</exemplarCity>
+			</zone>
+			<zone type="Europe/Belgrade">
+				<exemplarCity>ਬੈਲਗ੍ਰੇਡ</exemplarCity>
+			</zone>
+			<zone type="Europe/Kaliningrad">
+				<exemplarCity>ਕਾਲੀਨਿੰਗ੍ਰੇਡ</exemplarCity>
+			</zone>
+			<zone type="Europe/Moscow">
+				<exemplarCity>ਮਾਸਕੋ</exemplarCity>
+			</zone>
+			<zone type="Europe/Volgograd">
+				<exemplarCity>ਵੋਲਗੋਗ੍ਰੇਡ</exemplarCity>
+			</zone>
+			<zone type="Europe/Samara">
+				<exemplarCity>ਸਮਾਰਾ</exemplarCity>
+			</zone>
+			<zone type="Asia/Yekaterinburg">
+				<exemplarCity>ਯਕੇਤਰਿਨਬਰਗ</exemplarCity>
+			</zone>
+			<zone type="Asia/Omsk">
+				<exemplarCity>ਓਮਸਕ</exemplarCity>
+			</zone>
+			<zone type="Asia/Novosibirsk">
+				<exemplarCity>ਨੋਵੋਸਿਬੀਰਸਕ</exemplarCity>
+			</zone>
+			<zone type="Asia/Novokuznetsk">
+				<exemplarCity>ਨੋਵੋਕੁਜ਼ਨੇਟਸਕ</exemplarCity>
+			</zone>
+			<zone type="Asia/Krasnoyarsk">
+				<exemplarCity>ਕਰੈਸਨੇਜਰਸ</exemplarCity>
+			</zone>
+			<zone type="Asia/Irkutsk">
+				<exemplarCity>ਇਰਕੁਤਸਕ</exemplarCity>
+			</zone>
+			<zone type="Asia/Yakutsk">
+				<exemplarCity>ਯਕੁਤਸਕ</exemplarCity>
+			</zone>
+			<zone type="Asia/Vladivostok">
+				<exemplarCity>ਵਲਾਦੀਵੋਸਤਕ</exemplarCity>
+			</zone>
+			<zone type="Asia/Khandyga">
+				<exemplarCity>ਖਾਨਡਿਗਾ</exemplarCity>
+			</zone>
+			<zone type="Asia/Sakhalin">
+				<exemplarCity>ਸਖਲੀਨ</exemplarCity>
+			</zone>
+			<zone type="Asia/Ust-Nera">
+				<exemplarCity>ਉਸਤ-ਨੇਰਾ</exemplarCity>
+			</zone>
+			<zone type="Asia/Magadan">
+				<exemplarCity>ਮੈਗੇਡਨ</exemplarCity>
+			</zone>
+			<zone type="Asia/Kamchatka">
+				<exemplarCity>ਕਮਚਟਕਾ</exemplarCity>
+			</zone>
+			<zone type="Asia/Anadyr">
+				<exemplarCity>ਇਨਾਡਾਇਰ</exemplarCity>
+			</zone>
+			<zone type="Africa/Kigali">
+				<exemplarCity>ਕਿਗਾਲੀ</exemplarCity>
+			</zone>
+			<zone type="Asia/Riyadh">
+				<exemplarCity>ਰਿਯਾਧ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Guadalcanal">
+				<exemplarCity>ਗੁਆਡਾਕੇਨਲ</exemplarCity>
+			</zone>
+			<zone type="Indian/Mahe">
+				<exemplarCity>ਮਾਹੇ</exemplarCity>
+			</zone>
+			<zone type="Africa/Khartoum">
+				<exemplarCity>ਖਾਰਟੌਮ</exemplarCity>
+			</zone>
+			<zone type="Europe/Stockholm">
+				<exemplarCity>ਸਟਾਕਹੋਮ</exemplarCity>
+			</zone>
+			<zone type="Asia/Singapore">
+				<exemplarCity>ਸਿੰਗਾਪੁਰ</exemplarCity>
+			</zone>
+			<zone type="Atlantic/St_Helena">
+				<exemplarCity>ਸੇਂਟ ਹੇਲੇਨਾ</exemplarCity>
+			</zone>
+			<zone type="Europe/Ljubljana">
+				<exemplarCity>ਲਜੁਬਲਜਾਨਾ</exemplarCity>
+			</zone>
+			<zone type="Arctic/Longyearbyen">
+				<exemplarCity>ਲੋਂਗਈਅਰਬਾਇਨ</exemplarCity>
+			</zone>
+			<zone type="Europe/Bratislava">
+				<exemplarCity>ਬ੍ਰਟਿਸਲਾਵਾ</exemplarCity>
+			</zone>
+			<zone type="Africa/Freetown">
+				<exemplarCity>ਫਰੀਟਾਉਨ</exemplarCity>
+			</zone>
+			<zone type="Europe/San_Marino">
+				<exemplarCity>ਸੈਨ ਮਰੀਨੋ</exemplarCity>
+			</zone>
+			<zone type="Africa/Dakar">
+				<exemplarCity>ਡਕਾਰ</exemplarCity>
+			</zone>
+			<zone type="Africa/Mogadishu">
+				<exemplarCity>ਮੋਗਾਦਿਸ਼ੂ</exemplarCity>
+			</zone>
+			<zone type="America/Paramaribo">
+				<exemplarCity>ਪੈਰਾਮਰੀਬੋ</exemplarCity>
+			</zone>
+			<zone type="Africa/Juba">
+				<exemplarCity>ਜੂਬਾ</exemplarCity>
+			</zone>
+			<zone type="Africa/Sao_Tome">
+				<exemplarCity>ਸਾਓ ਟੋਮ</exemplarCity>
+			</zone>
+			<zone type="America/El_Salvador">
+				<exemplarCity>ਅਲ ਸਲਵਾਡੋਰ</exemplarCity>
+			</zone>
+			<zone type="America/Lower_Princes">
+				<exemplarCity>ਲੋਅਰ ਪ੍ਰਿੰਸ'ਸ ਕਵਾਰਟਰ</exemplarCity>
+			</zone>
+			<zone type="Asia/Damascus">
+				<exemplarCity>ਡੈਮਸਕਸ</exemplarCity>
+			</zone>
+			<zone type="Africa/Mbabane">
+				<exemplarCity>ਏਮਬਾਬਾਨੇ</exemplarCity>
+			</zone>
+			<zone type="America/Grand_Turk">
+				<exemplarCity>ਗਰਾਂਡ ਤੁਰਕ</exemplarCity>
+			</zone>
+			<zone type="Africa/Ndjamena">
+				<exemplarCity>ਐੰਜਾਮੀਨਾ</exemplarCity>
+			</zone>
+			<zone type="Indian/Kerguelen">
+				<exemplarCity>ਕਰਗਯੂਲੇਨ</exemplarCity>
+			</zone>
+			<zone type="Africa/Lome">
+				<exemplarCity>ਲੋਮ</exemplarCity>
+			</zone>
+			<zone type="Asia/Bangkok">
+				<exemplarCity>ਬੈਂਗਕਾਕ</exemplarCity>
+			</zone>
+			<zone type="Asia/Dushanbe">
+				<exemplarCity>ਦੁਸ਼ਾਂਬੇ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Fakaofo">
+				<exemplarCity>ਫਕਾਉਫੋ</exemplarCity>
+			</zone>
+			<zone type="Asia/Dili">
+				<exemplarCity>ਡਿਲੀ</exemplarCity>
+			</zone>
+			<zone type="Asia/Ashgabat">
+				<exemplarCity>ਅਸ਼ਗਾਬਾਟ</exemplarCity>
+			</zone>
+			<zone type="Africa/Tunis">
+				<exemplarCity>ਟਿਉਨੀਸ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Tongatapu">
+				<exemplarCity>ਟੋਂਗਾਟਾਪੂ</exemplarCity>
+			</zone>
+			<zone type="Europe/Istanbul">
+				<exemplarCity>ਇਸਤਨਾਬੁਲ</exemplarCity>
+			</zone>
+			<zone type="America/Port_of_Spain">
+				<exemplarCity>ਪੋਰਟ ਔਫ ਸਪੇਨ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Funafuti">
+				<exemplarCity>ਫੁਨਾਫੁਟੀ</exemplarCity>
+			</zone>
+			<zone type="Asia/Taipei">
+				<exemplarCity>ਤੈਪਈ</exemplarCity>
+			</zone>
+			<zone type="Africa/Dar_es_Salaam">
+				<exemplarCity>ਦਾਰ ਏਸ ਸਲਾਮ</exemplarCity>
+			</zone>
+			<zone type="Europe/Uzhgorod">
+				<exemplarCity>ਉਝਗੋਰੋਡ</exemplarCity>
+			</zone>
+			<zone type="Europe/Kiev">
+				<exemplarCity>ਕੀਵ</exemplarCity>
+			</zone>
+			<zone type="Europe/Simferopol">
+				<exemplarCity>ਸਿਮਫਰੋਪੋਲ</exemplarCity>
+			</zone>
+			<zone type="Europe/Zaporozhye">
+				<exemplarCity>ਜਪੋਰੋਜ਼ਾਏ</exemplarCity>
+			</zone>
+			<zone type="Africa/Kampala">
+				<exemplarCity>ਕੰਪਾਲਾ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Midway">
+				<exemplarCity>ਮਿਡਵੇ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Johnston">
+				<exemplarCity>ਜੋਨਸਟਨ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Wake">
+				<exemplarCity>ਵੇਕ</exemplarCity>
+			</zone>
+			<zone type="America/Adak">
+				<exemplarCity>ਏਡਕ</exemplarCity>
+			</zone>
+			<zone type="America/Nome">
+				<exemplarCity>ਨੋਮ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Honolulu">
+				<exemplarCity>ਹੋਨੋਲੁਲੂ</exemplarCity>
+			</zone>
+			<zone type="America/Anchorage">
+				<exemplarCity>ਐਂਕਰੇਜ</exemplarCity>
+			</zone>
+			<zone type="America/Yakutat">
+				<exemplarCity>ਯਕੁਤਤ</exemplarCity>
+			</zone>
+			<zone type="America/Sitka">
+				<exemplarCity>ਸਿਟਕਾ</exemplarCity>
+			</zone>
+			<zone type="America/Juneau">
+				<exemplarCity>ਜਯੂਨੋ</exemplarCity>
+			</zone>
+			<zone type="America/Metlakatla">
+				<exemplarCity>ਮੇਟਲਾਕਾਟਲਾ</exemplarCity>
+			</zone>
+			<zone type="America/Los_Angeles">
+				<exemplarCity>ਲਾਸ ਐਂਜਲਸ</exemplarCity>
+			</zone>
+			<zone type="America/Boise">
+				<exemplarCity>ਬੋਇਸ</exemplarCity>
+			</zone>
+			<zone type="America/Phoenix">
+				<exemplarCity>ਫੋਨਿਕਸ</exemplarCity>
+			</zone>
+			<zone type="America/Denver">
+				<exemplarCity>ਡੇਨਵਰ</exemplarCity>
+			</zone>
+			<zone type="America/North_Dakota/Beulah">
+				<exemplarCity>ਬਿਉਲਾ, ਉੱਤਰੀ ਡਕੋਟਾ</exemplarCity>
+			</zone>
+			<zone type="America/North_Dakota/New_Salem">
+				<exemplarCity>ਨਿਊ ਸਲੇਮ, ਉੱਤਰੀ ਡਕੋਟਾ</exemplarCity>
+			</zone>
+			<zone type="America/North_Dakota/Center">
+				<exemplarCity>ਸੇਂਟਰ, ਉੱਤਰੀ ਡਕੋਟਾ</exemplarCity>
+			</zone>
+			<zone type="America/Chicago">
+				<exemplarCity>ਸ਼ਿਕਾਗੋ</exemplarCity>
+			</zone>
+			<zone type="America/Menominee">
+				<exemplarCity>ਮੈਨੋਮਿਨੀ</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Vincennes">
+				<exemplarCity>ਵਿੰਸੇਨੇਸ, ਇੰਡੀਆਨਾ</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Petersburg">
+				<exemplarCity>ਪੀਟਰਸਬਰਗ, ਇੰਡੀਆਨਾ</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Tell_City">
+				<exemplarCity>ਟੈਲ ਸਿਟੀ, ਇੰਡੀਆਨਾ</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Knox">
+				<exemplarCity>ਨੋਕਸ, ਇੰਡੀਆਨਾ</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Winamac">
+				<exemplarCity>ਵਿਨਮੈਕ, ਇੰਡੀਆਨਾ</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Marengo">
+				<exemplarCity>ਮਾਰੇਂਗੋ, ਇੰਡੀਆਨਾ</exemplarCity>
+			</zone>
+			<zone type="America/Indianapolis">
+				<exemplarCity>ਇੰਡੀਆਨਾਪੋਲਿਸ</exemplarCity>
+			</zone>
+			<zone type="America/Louisville">
+				<exemplarCity>ਲੁਈਸਵਿਲੇ</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Vevay">
+				<exemplarCity>ਵੇਵੇ</exemplarCity>
+			</zone>
+			<zone type="America/Kentucky/Monticello">
+				<exemplarCity>ਮੋੰਟੀਸੈਲੋ, ਕੈਂਟਕੀ</exemplarCity>
+			</zone>
+			<zone type="America/Detroit">
+				<exemplarCity>ਡਿਟਰੋਇਟ</exemplarCity>
+			</zone>
+			<zone type="America/New_York">
+				<exemplarCity>ਨਿਊ ਯਾਰਕ</exemplarCity>
+			</zone>
+			<zone type="America/Montevideo">
+				<exemplarCity>ਮੋਂਟੇਵੀਡੀਓ</exemplarCity>
+			</zone>
+			<zone type="Asia/Samarkand">
+				<exemplarCity>ਸਮਰਕਂਡ</exemplarCity>
+			</zone>
+			<zone type="Asia/Tashkent">
+				<exemplarCity>ਤਾਸ਼ਕੈਂਟ</exemplarCity>
+			</zone>
+			<zone type="Europe/Vatican">
+				<exemplarCity>ਵੈਟਿਕਨ</exemplarCity>
+			</zone>
+			<zone type="America/St_Vincent">
+				<exemplarCity>ਸੇਂਟ ਵਿਨਸੇਂਟ</exemplarCity>
+			</zone>
+			<zone type="America/Caracas">
+				<exemplarCity>ਕੈਰਾਕਾਸ</exemplarCity>
+			</zone>
+			<zone type="America/Tortola">
+				<exemplarCity>ਟੋਰਟੋਲਾ</exemplarCity>
+			</zone>
+			<zone type="America/St_Thomas">
+				<exemplarCity>ਸੇਂਟ ਥੋਮਸ</exemplarCity>
+			</zone>
+			<zone type="Asia/Saigon">
+				<exemplarCity>ਹੋ ਚਾਈ ਮਿਨ੍ਹ ਸਿਟੀ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Efate">
+				<exemplarCity>ਇਫੇਟ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Wallis">
+				<exemplarCity>ਵਾਲਿਸ</exemplarCity>
+			</zone>
+			<zone type="Pacific/Apia">
+				<exemplarCity>ਐਪਿਆ</exemplarCity>
+			</zone>
+			<zone type="Asia/Aden">
+				<exemplarCity>ਅਡੇਨ</exemplarCity>
+			</zone>
+			<zone type="Indian/Mayotte">
+				<exemplarCity>ਮਾਯੋਟੀ</exemplarCity>
+			</zone>
+			<zone type="Africa/Johannesburg">
+				<exemplarCity>ਜੋਹਨਸਬਰਗ</exemplarCity>
+			</zone>
+			<zone type="Africa/Lusaka">
+				<exemplarCity>ਲੁਸਾਕਾ</exemplarCity>
+			</zone>
+			<zone type="Africa/Harare">
+				<exemplarCity>ਹਰਾਰੇ</exemplarCity>
+			</zone>
+			<metazone type="Afghanistan">
+				<long>
+					<standard>ਅਫ਼ਗਾਨਿਸਤਾਨ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Africa_Central">
+				<long>
+					<standard>ਕੇਂਦਰੀ ਅਫਰੀਕਾ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Africa_Eastern">
+				<long>
+					<standard>ਪੂਰਬੀ ਅਫਰੀਕਾ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Africa_Southern">
+				<long>
+					<standard>ਦੱਖਣੀ ਅਫਰੀਕਾ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Africa_Western">
+				<long>
+					<generic>ਪੱਛਮੀ ਅਫਰੀਕਾ ਸਮਾਂ</generic>
+					<standard>ਪੱਛਮੀ ਅਫਰੀਕਾ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਪੱਛਮੀ ਅਫਰੀਕਾ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Alaska">
+				<long>
+					<generic>ਅਲਾਸਕਾ ਸਮਾਂ</generic>
+					<standard>ਅਲਾਸਕਾ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਅਲਾਸਕਾ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Amazon">
+				<long>
+					<generic>ਅਮੇਜ਼ਨ ਸਮਾਂ</generic>
+					<standard>ਅਮੇਜ਼ਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਅਮੇਜ਼ਨ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="America_Central">
+				<long>
+					<generic>ਉੱਤਰੀ ਅਮੇਰਿਕਨ ਕੇਂਦਰੀ ਸਮਾਂ</generic>
+					<standard>ਉੱਤਰੀ ਅਮੇਰਿਕਨ ਕੇਂਦਰੀ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਉੱਤਰੀ ਅਮੇਰਿਕਨ ਕੇਂਦਰੀ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="America_Eastern">
+				<long>
+					<generic>ਉੱਤਰੀ ਅਮੇਰਿਕਨ ਪੂਰਬੀ ਸਮਾਂ</generic>
+					<standard>ਉੱਤਰੀ ਅਮੇਰਿਕਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਉੱਤਰੀ ਅਮੇਰਿਕਨ ਪੂਰਬੀ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="America_Mountain">
+				<long>
+					<generic>ਉੱਤਰੀ ਅਮੇਰਿਕਨ ਮਾਉਂਟੇਨ ਸਮਾਂ</generic>
+					<standard>ਉੱਤਰੀ ਅਮੇਰਿਕਨ ਮਾਉਂਟੇਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਉੱਤਰੀ ਅਮੇਰਿਕਨ ਮਾਉਂਟੇਨ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="America_Pacific">
+				<long>
+					<generic>ਉੱਤਰੀ ਅਮੇਰਿਕਨ ਪੈਸਿਫਿਕ ਸਮਾਂ</generic>
+					<standard>ਉੱਤਰੀ ਅਮੇਰਿਕਨ ਪੈਸਿਫਿਕ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਉੱਤਰੀ ਅਮੇਰਿਕਨ ਪੈਸਿਫਿਕ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Arabian">
+				<long>
+					<generic>ਅਰੇਬੀਅਨ ਸਮਾਂ</generic>
+					<standard>ਅਰੇਬੀਅਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਅਰੇਬੀਅਨ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Argentina">
+				<long>
+					<generic>ਅਰਜਨਟੀਨਾ ਸਮਾਂ</generic>
+					<standard>ਅਰਜਨਟੀਨਾ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਅਰਜਨਟੀਨਾ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Argentina_Western">
+				<long>
+					<generic>ਪੱਛਮੀ ਅਰਜਨਟੀਨਾ ਸਮਾਂ</generic>
+					<standard>ਪੱਛਮੀ ਅਰਜਨਟੀਨਾ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਪੱਛਮੀ ਅਰਜਨਟੀਨਾ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Armenia">
+				<long>
+					<generic>ਆਰਮੀਨਿਆ ਸਮਾਂ</generic>
+					<standard>ਆਰਮੀਨਿਆ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਆਰਮੀਨਿਆ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Atlantic">
+				<long>
+					<generic>ਅਟਲਾਂਟਿਕ ਸਮਾਂ</generic>
+					<standard>ਅਟਲਾਂਟਿਕ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਅਟਲਾਂਟਿਕ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Australia_Central">
+				<long>
+					<generic>ਕੇਂਦਰੀ ਆਸਟ੍ਰੇਲੀਅਨ ਸਮਾਂ</generic>
+					<standard>ਆਸਟ੍ਰੇਲੀਅਨ ਕੇਂਦਰੀ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਆਸਟ੍ਰੇਲੀਅਨ ਕੇਂਦਰੀ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Australia_CentralWestern">
+				<long>
+					<generic>ਆਸਟ੍ਰੇਲੀਅਨ ਕੇਂਦਰੀ ਪੱਛਮੀ ਸਮਾਂ</generic>
+					<standard>ਆਸਟ੍ਰੇਲੀਅਨ ਕੇਂਦਰੀ ਪੱਛਮੀ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਆਸਟ੍ਰੇਲੀਅਨ ਕੇਂਦਰੀ ਪੱਛਮੀ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Australia_Eastern">
+				<long>
+					<generic>ਪੂਰਬੀ ਆਸਟ੍ਰੇਲੀਅਨ ਸਮਾਂ</generic>
+					<standard>ਆਸਟ੍ਰੇਲੀਅਨ ਪੂਰਬੀ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਆਸਟ੍ਰੇਲੀਅਨ ਪੂਰਬੀ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Australia_Western">
+				<long>
+					<generic>ਪੱਛਮੀ ਆਸਟ੍ਰੇਲੀਅਨ ਸਮਾਂ</generic>
+					<standard>ਆਸਟ੍ਰੇਲੀਅਨ ਪੱਛਮੀ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਆਸਟ੍ਰੇਲੀਅਨ ਪੱਛਮੀ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Azerbaijan">
+				<long>
+					<generic>ਅਜ਼ਰਬੈਜਾਨ ਸਮਾਂ</generic>
+					<standard>ਅਜ਼ਰਬੈਜਾਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਅਜ਼ਰਬੈਜਾਨ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Azores">
+				<long>
+					<generic>ਅਜੋਰੇਸ ਸਮਾਂ</generic>
+					<standard>ਅਜੋਰੇਸ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਅਜੋਰੇਸ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Bangladesh">
+				<long>
+					<generic>ਬੰਗਲਾਦੇਸ਼ ਸਮਾਂ</generic>
+					<standard>ਬੰਗਲਾਦੇਸ਼ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਬੰਗਲਾਦੇਸ਼ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Bhutan">
+				<long>
+					<standard>ਭੂਟਾਨ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Bolivia">
+				<long>
+					<standard>ਬੋਲੀਵੀਆ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Brasilia">
+				<long>
+					<generic>ਬ੍ਰਾਜ਼ੀਲੀਆਂ ਸਮਾਂ</generic>
+					<standard>ਬ੍ਰਾਜ਼ੀਲੀਆਂ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਬ੍ਰਾਜ਼ੀਲੀਆਂ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Brunei">
+				<long>
+					<standard>ਬਰੂਨੇਈ ਦਾਰੂਸਲਾਮ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Cape_Verde">
+				<long>
+					<generic>ਕੇਪ ਵਰਡ ਸਮਾਂ</generic>
+					<standard>ਕੇਪ ਵਰਡ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਕੇਪ ਵਰਡ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Chamorro">
+				<long>
+					<standard>ਚਾਮੋਰੋ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Chatham">
+				<long>
+					<generic>ਚੈਟਹੇਮ ਸਮਾਂ</generic>
+					<standard>ਚੈਟਹੇਮ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਚੈਟਹੇਮ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Chile">
+				<long>
+					<generic>ਚਿਲੀ ਸਮਾਂ</generic>
+					<standard>ਚਿਲੀ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਚਿਲੀ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="China">
+				<long>
+					<generic>ਚੀਨ ਸਮਾਂ</generic>
+					<standard>ਚੀਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਚੀਨ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Choibalsan">
+				<long>
+					<generic>ਚੌਇਬਾਲਸਨ ਸਮਾਂ</generic>
+					<standard>ਚੌਇਬਾਲਸਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਚੌਇਬਾਲਸਨ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Christmas">
+				<long>
+					<standard>ਕ੍ਰਿਸਮਸ ਆਈਲੈਂਡ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Cocos">
+				<long>
+					<standard>ਕੋਕੋਜ਼ ਆਈਲੈਂਡ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Colombia">
+				<long>
+					<generic>ਕੋਲੰਬੀਆ ਸਮਾਂ</generic>
+					<standard>ਕੋਲੰਬੀਆ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਕੋਲੰਬੀਆ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Cook">
+				<long>
+					<generic>ਕੁੱਕ ਆਈਲੈਂਡ ਸਮਾਂ</generic>
+					<standard>ਕੁੱਕ ਆਈਲੈਂਡ ਅੱਧਾ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਕੁੱਕ ਆਈਲੈਂਡ ਅੱਧਾ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Cuba">
+				<long>
+					<generic>ਕਿਊਬਾ ਸਮਾਂ</generic>
+					<standard>ਕਿਊਬਾ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਕਿਊਬਾ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Davis">
+				<long>
+					<standard>ਡੇਵਿਸ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="DumontDUrville">
+				<long>
+					<standard>ਡਿਉਮੋਂਟ ਡਿਉਰਵਿਲੇ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="East_Timor">
+				<long>
+					<standard>ਪੂਰਬੀ ਟੀਮੁਰ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Easter">
+				<long>
+					<generic>ਈਸਟਰ ਆਈਲੈਂਡ ਸਮਾਂ</generic>
+					<standard>ਈਸਟਰ ਆਈਲੈਂਡ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਈਸਟਰ ਆਈਲੈਂਡ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Ecuador">
+				<long>
+					<standard>ਇਕਵੇਡੋਰ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Europe_Central">
+				<long>
+					<generic>ਕੇਂਦਰੀ ਯੂਰੋਪੀਅਨ ਸਮਾਂ</generic>
+					<standard>ਕੇਂਦਰੀ ਯੂਰੋਪੀਅਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਕੇਂਦਰੀ ਯੂਰੋਪੀਅਨ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Europe_Eastern">
+				<long>
+					<generic>ਪੂਰਬੀ ਯੂਰੋਪੀਅਨ ਸਮਾਂ</generic>
+					<standard>ਪੂਰਬੀ ਯੂਰੋਪੀਅਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਪੂਰਬੀ ਯੂਰੋਪੀਅਨ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Europe_Western">
+				<long>
+					<generic>ਪੱਛਮੀ ਯੂਰੋਪੀਅਨ ਸਮਾਂ</generic>
+					<standard>ਪੱਛਮੀ ਯੂਰੋਪੀਅਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਪੱਛਮੀ ਯੂਰੋਪੀਅਨ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Falkland">
+				<long>
+					<generic>ਫ਼ਾਕਲੈਂਡ ਆਈਲੈਂਡਸ ਸਮਾਂ</generic>
+					<standard>ਫ਼ਾਕਲੈਂਡ ਆਈਲੈਂਡਸ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਫ਼ਾਕਲੈਂਡ ਆਈਲੈਂਡਸ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Fiji">
+				<long>
+					<generic>ਫ਼ਿਜ਼ੀ ਸਮਾਂ</generic>
+					<standard>ਫ਼ਿਜ਼ੀ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਫ਼ਿਜ਼ੀ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="French_Guiana">
+				<long>
+					<standard>ਫ੍ਰੈਂਚ ਗੁਏਨਾ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="French_Southern">
+				<long>
+					<standard>ਫ੍ਰੈਂਚ ਦੱਖਣੀ ਅਤੇ ਐਂਟਾਰਟਿਕ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Galapagos">
+				<long>
+					<standard>ਗਲਾਪਾਗੋਸ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Gambier">
+				<long>
+					<standard>ਗੈਂਬੀਅਰ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Georgia">
+				<long>
+					<generic>ਜਾਰਜਿਆ ਸਮਾਂ</generic>
+					<standard>ਜਾਰਜਿਆ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਜਾਰਜਿਆ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Gilbert_Islands">
+				<long>
+					<standard>ਗਿਲਬਰਟ ਆਈਲੈਂਡ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="GMT">
+				<long>
+					<standard>ਗ੍ਰੀਨਵਿਚ ਮੀਨ ਟਾਈਮ</standard>
+				</long>
+			</metazone>
+			<metazone type="Greenland_Eastern">
+				<long>
+					<generic>ਪੂਰਬੀ ਗ੍ਰੀਨਲੈਂਡ ਸਮਾਂ</generic>
+					<standard>ਪੂਰਬੀ ਗ੍ਰੀਨਲੈਂਡ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਪੂਰਬੀ ਗ੍ਰੀਨਲੈਂਡ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Greenland_Western">
+				<long>
+					<generic>ਪੱਛਮੀ ਗ੍ਰੀਨਲੈਂਡ ਸਮਾਂ</generic>
+					<standard>ਪੱਛਮੀ ਗ੍ਰੀਨਲੈਂਡ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਪੱਛਮੀ ਗ੍ਰੀਨਲੈਂਡ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Gulf">
+				<long>
+					<standard>ਖਾੜੀ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Guyana">
+				<long>
+					<standard>ਗੁਯਾਨਾ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Hawaii_Aleutian">
+				<long>
+					<generic>ਹਵਾਈ-ਅਲੇਯੂਸ਼ਿਅਨ ਸਮਾਂ</generic>
+					<standard>ਹਵਾਈ-ਅਲੇਯੂਸ਼ਿਅਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਹਵਾਈ-ਅਲੇਯੂਸ਼ਿਅਨ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Hong_Kong">
+				<long>
+					<generic>ਹਾਂਗ ਕਾਂਗ ਸਮਾਂ</generic>
+					<standard>ਹਾਂਗ ਕਾਂਗ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਹਾਂਗ ਕਾਂਗ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Hovd">
+				<long>
+					<generic>ਹੋਵਡ ਸਮਾਂ</generic>
+					<standard>ਹੋਵਡ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਹੋਵਡ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="India">
+				<long>
+					<standard>ਭਾਰਤ ਸਮਾਂ</standard>
+				</long>
+				<short>
+					<standard>IST</standard>
+				</short>
+			</metazone>
+			<metazone type="Indian_Ocean">
+				<long>
+					<standard>ਭਾਰਤੀ ਓਸ਼ਨ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Indochina">
+				<long>
+					<standard>ਇੰਡੋਚਾਈਨਾ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Indonesia_Central">
+				<long>
+					<standard>ਕੇਂਦਰੀ ਇੰਡੋਨੇਸ਼ੀਆ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Indonesia_Eastern">
+				<long>
+					<standard>ਪੂਰਬੀ ਇੰਡੋਨੇਸ਼ੀਆ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Indonesia_Western">
+				<long>
+					<standard>ਪੱਛਮੀ ਇੰਡੋਨੇਸ਼ੀਆ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Iran">
+				<long>
+					<generic>ਈਰਾਨ ਸਮਾਂ</generic>
+					<standard>ਈਰਾਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਈਰਾਨ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Irkutsk">
+				<long>
+					<generic>ਇਰਕੁਤਸਕ ਸਮਾਂ</generic>
+					<standard>ਇਰਕੁਤਸਕ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਇਰਕੁਤਸਕ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Israel">
+				<long>
+					<generic>ਇਜ਼ਰਾਈਲ ਸਮਾਂ</generic>
+					<standard>ਇਜ਼ਰਾਈਲ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਇਜ਼ਰਾਈਲ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Japan">
+				<long>
+					<generic>ਜਾਪਾਨ ਸਮਾਂ</generic>
+					<standard>ਜਾਪਾਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਜਾਪਾਨ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Kazakhstan_Eastern">
+				<long>
+					<standard>ਪੂਰਬੀ ਕਜ਼ਾਕਸਤਾਨ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Kazakhstan_Western">
+				<long>
+					<standard>ਪੱਛਮੀ ਕਜ਼ਾਕਸਤਾਨ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Korea">
+				<long>
+					<generic>ਕੋਰੀਆਈ ਸਮਾਂ</generic>
+					<standard>ਕੋਰੀਆਈ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਕੋਰੀਆਈ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Kosrae">
+				<long>
+					<standard>ਕੋਸ੍ਰਾਏ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Krasnoyarsk">
+				<long>
+					<generic>ਕ੍ਰਾਸਨੋਯਾਰਕਸ ਸਮਾਂ</generic>
+					<standard>ਕ੍ਰਾਸਨੋਯਾਰਕਸ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਕ੍ਰਾਸਨੋਯਾਰਕਸ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Kyrgystan">
+				<long>
+					<standard>ਕਿਰਗਿਸਤਾਨ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Line_Islands">
+				<long>
+					<standard>ਲਾਈਨ ਆਈਲੈਂਡ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Lord_Howe">
+				<long>
+					<generic>ਲੌਰਡ ਹੋਵੇ ਸਮਾਂ</generic>
+					<standard>ਲੌਰਡ ਹੋਵੇ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਲੌਰਡ ਹੋਵੇ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Macquarie">
+				<long>
+					<standard>ਮੈਕਕਵੇਰੀ ਆਈਲੈਂਡ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Magadan">
+				<long>
+					<generic>ਮੈਗੇਡਨ ਸਮਾਂ</generic>
+					<standard>ਮੈਗੇਡਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਮੈਗੇਡਨ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Malaysia">
+				<long>
+					<standard>ਮਲੇਸ਼ੀਆ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Maldives">
+				<long>
+					<standard>ਮਾਲਦੀਵ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Marquesas">
+				<long>
+					<standard>ਮਾਰਕਿਸਾਸ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Marshall_Islands">
+				<long>
+					<standard>ਮਾਰਸ਼ਲ ਆਈਲੈਂਡ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Mauritius">
+				<long>
+					<generic>ਮੌਰਿਸ਼ਸ ਸਮਾਂ</generic>
+					<standard>ਮੌਰਿਸ਼ਸ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਮੌਰਿਸ਼ਸ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Mawson">
+				<long>
+					<standard>ਮੌਸਨ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Mongolia">
+				<long>
+					<generic>ਉਲਨ ਬਟੋਰ ਸਮਾਂ</generic>
+					<standard>ਉਲਨ ਬਟੋਰ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਉਲਨ ਬਟੋਰ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Moscow">
+				<long>
+					<generic>ਮਾਸਕੋ ਸਮਾਂ</generic>
+					<standard>ਮਾਸਕੋ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਮਾਸਕੋ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Myanmar">
+				<long>
+					<standard>ਮਿਆਂਮਾਰ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Nauru">
+				<long>
+					<standard>ਨਾਉਰੂ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Nepal">
+				<long>
+					<standard>ਨੇਪਾਲ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="New_Caledonia">
+				<long>
+					<generic>ਨਿਊ ਕੈਲੇਡੋਨਿਆ ਸਮਾਂ</generic>
+					<standard>ਨਿਊ ਕੈਲੇਡੋਨਿਆ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਨਿਊ ਕੈਲੇਡੋਨਿਆ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="New_Zealand">
+				<long>
+					<generic>ਨਿਊਜ਼ੀਲੈਂਡ ਸਮਾਂ</generic>
+					<standard>ਨਿਊਜ਼ੀਲੈਂਡ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਨਿਊਜ਼ੀਲੈਂਡ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Newfoundland">
+				<long>
+					<generic>ਨਿਊਫਾਉਂਡਲੈਂਡ ਸਮਾਂ</generic>
+					<standard>ਨਿਊਫਾਉਂਡਲੈਂਡ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਨਿਊਫਾਉਂਡਲੈਂਡ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Niue">
+				<long>
+					<standard>ਨਿਊ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Norfolk">
+				<long>
+					<standard>ਨੋਰਫੌਕ ਆਈਲੈਂਡ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Noronha">
+				<long>
+					<generic>ਫਰਨਾਂਡੋ ਡੇ ਨੋਰੋਨਹਾ ਸਮਾਂ</generic>
+					<standard>ਫਰਨਾਂਡੋ ਡੇ ਨੋਰੋਨਹਾ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਫਰਨਾਂਡੋ ਡੇ ਨੋਰੋਨਹਾ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Novosibirsk">
+				<long>
+					<generic>ਨੌਵੋਸਿਬੀਰਕਸ ਸਮਾਂ</generic>
+					<standard>ਨੌਵੋਸਿਬੀਰਕਸ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਨੌਵੋਸਿਬੀਰਕਸ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Omsk">
+				<long>
+					<generic>ਓਮਸਕ ਸਮਾਂ</generic>
+					<standard>ਓਮਸਕ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਓਮਸਕ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Pakistan">
+				<long>
+					<generic>ਪਾਕਿਸਤਾਨ ਸਮਾਂ</generic>
+					<standard>ਪਾਕਿਸਤਾਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਪਾਕਿਸਤਾਨ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Palau">
+				<long>
+					<standard>ਪਲਾਉ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Papua_New_Guinea">
+				<long>
+					<standard>ਪਾਪੂਆ ਨਿਊ ਗਿਨੀ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Paraguay">
+				<long>
+					<generic>ਪੈਰਾਗਵੇ ਸਮਾਂ</generic>
+					<standard>ਪੈਰਾਗਵੇ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਪੈਰਾਗਵੇ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Peru">
+				<long>
+					<generic>ਪੇਰੂ ਸਮਾਂ</generic>
+					<standard>ਪੇਰੂ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਪੇਰੂ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Philippines">
+				<long>
+					<generic>ਫਿਲਿਪਾਈਨ ਸਮਾਂ</generic>
+					<standard>ਫਿਲਿਪਾਈਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਫਿਲਿਪਾਈਨ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Phoenix_Islands">
+				<long>
+					<standard>ਫੋਨਿਕਸ ਆਈਲੈਂਡ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Pierre_Miquelon">
+				<long>
+					<generic>ਸੈਂਟ ਪੀਅਰੇ ਅਤੇ ਮਿਕੇਲਨ ਸਮਾਂ</generic>
+					<standard>ਸੈਂਟ ਪੀਅਰੇ ਅਤੇ ਮਿਕੇਲਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਸੈਂਟ ਪੀਅਰੇ ਅਤੇ ਮਿਕੇਲਨ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Pitcairn">
+				<long>
+					<standard>ਪਿਟਕੈਰਨ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Ponape">
+				<long>
+					<standard>ਪੋਹਨਪੇਈ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Reunion">
+				<long>
+					<standard>ਰਿਯੂਨੀਅਨ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Rothera">
+				<long>
+					<standard>ਰੋਥੇਰਾ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Sakhalin">
+				<long>
+					<generic>ਸਖਲੀਨ ਸਮਾਂ</generic>
+					<standard>ਸਖਲੀਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਸਖਲੀਨ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Samoa">
+				<long>
+					<generic>ਸਾਮੋਆ ਸਮਾਂ</generic>
+					<standard>ਸਾਮੋਆ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਸਾਮੋਆ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Seychelles">
+				<long>
+					<standard>ਸੇਸ਼ਲਸ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Singapore">
+				<long>
+					<standard>ਸਿੰਗਾਪੁਰ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Solomon">
+				<long>
+					<standard>ਸੋਲੋਮਨ ਆਈਲੈਂਡਸ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="South_Georgia">
+				<long>
+					<standard>ਦੱਖਣੀ ਜਾਰਜਿਆ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Suriname">
+				<long>
+					<standard>ਸੂਰੀਨਾਮ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Syowa">
+				<long>
+					<standard>ਸਵੋਯਾ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Tahiti">
+				<long>
+					<standard>ਤਹਿਤੀ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Taipei">
+				<long>
+					<generic>ਤੈਪਈ ਸਮਾਂ</generic>
+					<standard>ਤੈਪਈ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਤੈਪਈ ਪ੍ਰਕਾਸ਼ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Tajikistan">
+				<long>
+					<standard>ਤਾਜਿਕਿਸਤਾਨ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Tokelau">
+				<long>
+					<standard>ਟੋਕੇਲਾਉ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Tonga">
+				<long>
+					<generic>ਟੋਂਗਾ ਸਮਾਂ</generic>
+					<standard>ਟੋਂਗਾ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਟੋਂਗਾ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Truk">
+				<long>
+					<standard>ਚੂਕ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Turkmenistan">
+				<long>
+					<generic>ਤੁਰਕਮੇਨਿਸਤਾਨ ਸਮਾਂ</generic>
+					<standard>ਤੁਰਕਮੇਨਿਸਤਾਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਤੁਰਕਮੇਨਿਸਤਾਨ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Tuvalu">
+				<long>
+					<standard>ਟੁਵਾਲੂ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Uruguay">
+				<long>
+					<generic>ਉਰੂਗਵੇ ਸਮਾਂ</generic>
+					<standard>ਉਰੂਗਵੇ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਉਰੂਗਵੇ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Uzbekistan">
+				<long>
+					<generic>ਉਜ਼ਬੇਕਿਸਤਾਨ ਸਮਾਂ</generic>
+					<standard>ਉਜ਼ਬੇਕਿਸਤਾਨ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਉਜ਼ਬੇਕਿਸਤਾਨ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Vanuatu">
+				<long>
+					<generic>ਵਾਨੂਆਟੂ ਸਮਾਂ</generic>
+					<standard>ਵਾਨੂਆਟੂ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਵਾਨੂਆਟੂ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Venezuela">
+				<long>
+					<standard>ਵੈਨੇਜ਼ੂਏਲਾ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Vladivostok">
+				<long>
+					<generic>ਵਲਾਦੀਵੋਸਤਕ ਸਮਾਂ</generic>
+					<standard>ਵਲਾਦੀਵੋਸਤਕ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਵਲਾਦੀਵੋਸਤਕ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Volgograd">
+				<long>
+					<generic>ਵੋਲਵੋਗ੍ਰੇਡ ਸਮਾਂ</generic>
+					<standard>ਵੋਲਵੋਗ੍ਰੇਡ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਵੋਲਵੋਗ੍ਰੇਡ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Vostok">
+				<long>
+					<standard>ਵੋਸਟੋਕ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Wake">
+				<long>
+					<standard>ਵੇਕ ਆਈਲੈਂਡ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Wallis">
+				<long>
+					<standard>ਵਾਲਿਸ ਅਤੇ ਫਯੁਚੁਨਾ ਸਮਾਂ</standard>
+				</long>
+			</metazone>
+			<metazone type="Yakutsk">
+				<long>
+					<generic>ਯਕੁਤਸਕ ਸਮਾਂ</generic>
+					<standard>ਯਕੁਤਸਕ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਯਕੁਤਸਕ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+			<metazone type="Yekaterinburg">
+				<long>
+					<generic>ਯਕੇਤਰਿਨਬਰਗ ਸਮਾਂ</generic>
+					<standard>ਯਕੇਤਰਿਨਬਰਗ ਮਿਆਰੀ ਸਮਾਂ</standard>
+					<daylight>ਯਕੇਤਰਿਨਬਰਗ ਗਰਮੀ-ਰੁੱਤ ਸਮਾਂ</daylight>
+				</long>
+			</metazone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<defaultNumberingSystem>latn</defaultNumberingSystem>
+		<otherNumberingSystems>
+			<native>guru</native>
+		</otherNumberingSystems>
+		<symbols numberSystem="arabext">
+			<decimal>٫</decimal>
+			<group>,</group>
+			<percentSign>%</percentSign>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>×۱۰^</exponential>
+			<superscriptingExponent>×</superscriptingExponent>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>NaN</nan>
+		</symbols>
+		<symbols numberSystem="latn">
+			<decimal>.</decimal>
+			<group>,</group>
+			<percentSign>%</percentSign>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<superscriptingExponent>×</superscriptingExponent>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>NaN</nan>
+		</symbols>
+		<decimalFormats numberSystem="arabext">
+			<decimalFormatLength>
+				<decimalFormat>
+					<pattern>#,##,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength>
+		</decimalFormats>
+		<decimalFormats numberSystem="latn">
+			<decimalFormatLength>
+				<decimalFormat>
+					<pattern>#,##,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength>
+			<decimalFormatLength type="long">
+				<decimalFormat>
+					<pattern type="1000" count="one">0 ਹਜ਼ਾਰ</pattern>
+					<pattern type="1000" count="other">0 ਹਜ਼ਾਰ</pattern>
+					<pattern type="10000" count="one">00 ਹਜ਼ਾਰ</pattern>
+					<pattern type="10000" count="other">00 ਹਜ਼ਾਰ</pattern>
+					<pattern type="100000" count="one">0 ਲੱਖ</pattern>
+					<pattern type="100000" count="other">0 ਲੱਖ</pattern>
+					<pattern type="1000000" count="one">00 ਲੱਖ</pattern>
+					<pattern type="1000000" count="other">00 ਲੱਖ</pattern>
+					<pattern type="10000000" count="one">0 ਕਰੋੜ</pattern>
+					<pattern type="10000000" count="other">0 ਕਰੋੜ</pattern>
+					<pattern type="100000000" count="one">00 ਕਰੋੜ</pattern>
+					<pattern type="100000000" count="other">00 ਕਰੋੜ</pattern>
+					<pattern type="1000000000" count="one">0 ਅਰਬ</pattern>
+					<pattern type="1000000000" count="other">0 ਅਰਬ</pattern>
+					<pattern type="10000000000" count="one">00 ਅਰਬ</pattern>
+					<pattern type="10000000000" count="other">00 ਅਰਬ</pattern>
+					<pattern type="100000000000" count="one">0 ਖਰਬ</pattern>
+					<pattern type="100000000000" count="other">0 ਖਰਬ</pattern>
+					<pattern type="1000000000000" count="one">00 ਖਰਬ</pattern>
+					<pattern type="1000000000000" count="other">00 ਖਰਬ</pattern>
+					<pattern type="10000000000000" count="one">0 ਨੀਲ</pattern>
+					<pattern type="10000000000000" count="other">0 ਨੀਲ</pattern>
+					<pattern type="100000000000000" count="one">00 ਨੀਲ</pattern>
+					<pattern type="100000000000000" count="other">00 ਨੀਲ</pattern>
+				</decimalFormat>
+			</decimalFormatLength>
+			<decimalFormatLength type="short">
+				<decimalFormat>
+					<pattern type="1000" count="one">0 ਹਜ਼ਾਰ</pattern>
+					<pattern type="1000" count="other">0 ਹਜ਼ਾਰ</pattern>
+					<pattern type="10000" count="one">00 ਹਜ਼ਾਰ</pattern>
+					<pattern type="10000" count="other">00 ਹਜ਼ਾਰ</pattern>
+					<pattern type="100000" count="one">0 ਲੱਖ</pattern>
+					<pattern type="100000" count="other">0 ਲੱਖ</pattern>
+					<pattern type="1000000" count="one">00 ਲੱਖ</pattern>
+					<pattern type="1000000" count="other">00 ਲੱਖ</pattern>
+					<pattern type="10000000" count="one">0 ਕਰੋੜ</pattern>
+					<pattern type="10000000" count="other">0 ਕਰੋੜ</pattern>
+					<pattern type="100000000" count="one">00 ਕਰੋੜ</pattern>
+					<pattern type="100000000" count="other">00 ਕਰੋੜ</pattern>
+					<pattern type="1000000000" count="one">0 ਅਰਬ</pattern>
+					<pattern type="1000000000" count="other">0 ਅਰਬ</pattern>
+					<pattern type="10000000000" count="one">00 ਅਰਬ</pattern>
+					<pattern type="10000000000" count="other">00 ਅਰਬ</pattern>
+					<pattern type="100000000000" count="one">0 ਖਰਬ</pattern>
+					<pattern type="100000000000" count="other">0 ਖਰਬ</pattern>
+					<pattern type="1000000000000" count="one">00 ਖਰਬ</pattern>
+					<pattern type="1000000000000" count="other">00 ਖਰਬ</pattern>
+					<pattern type="10000000000000" count="one">0 ਨੀਲ</pattern>
+					<pattern type="10000000000000" count="other">0 ਨੀਲ</pattern>
+					<pattern type="100000000000000" count="one">00 ਨੀਲ</pattern>
+					<pattern type="100000000000000" count="other">00 ਨੀਲ</pattern>
+				</decimalFormat>
+			</decimalFormatLength>
+		</decimalFormats>
+		<scientificFormats numberSystem="arabext">
+			<scientificFormatLength>
+				<scientificFormat>
+					<pattern>#E0</pattern>
+				</scientificFormat>
+			</scientificFormatLength>
+		</scientificFormats>
+		<scientificFormats numberSystem="latn">
+			<scientificFormatLength>
+				<scientificFormat>
+					<pattern>#E0</pattern>
+				</scientificFormat>
+			</scientificFormatLength>
+		</scientificFormats>
+		<percentFormats numberSystem="arabext">
+			<percentFormatLength>
+				<percentFormat>
+					<pattern>#,##,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength>
+		</percentFormats>
+		<percentFormats numberSystem="latn">
+			<percentFormatLength>
+				<percentFormat>
+					<pattern>#,##,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength>
+		</percentFormats>
+		<currencyFormats numberSystem="arabext">
+			<currencyFormatLength>
+				<currencyFormat type="standard">
+					<pattern>¤#,##,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength>
+		</currencyFormats>
+		<currencyFormats numberSystem="latn">
+			<currencyFormatLength>
+				<currencyFormat type="standard">
+					<pattern>¤ #,##,##0.00</pattern>
+				</currencyFormat>
+				<currencyFormat type="accounting">
+					<pattern>¤ #,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength>
+			<unitPattern count="one">{0} {1}</unitPattern>
+			<unitPattern count="other">{0} {1}</unitPattern>
+		</currencyFormats>
+		<currencies>
+			<currency type="AED">
+				<displayName>ਸੰਯੁਕਤ ਅਰਬ ਅਮੀਰਾਤ ਦਿਰਹਾਮ</displayName>
+				<displayName count="one">ਸੰਯੁਕਤ ਅਰਬ ਅਮੀਰਾਤ ਦਿਰਹਾਮ</displayName>
+				<displayName count="other">ਸੰਯੁਕਤ ਅਰਬ ਅਮੀਰਾਤ ਦਿਰਹਾਮ</displayName>
+			</currency>
+			<currency type="AFN">
+				<displayName>ਅਫ਼ਗਾਨ ਅਫ਼ਗਾਨੀ</displayName>
+				<displayName count="one">ਅਫ਼ਗਾਨ ਅਫ਼ਗਾਨੀ</displayName>
+				<displayName count="other">ਅਫ਼ਗਾਨ ਅਫ਼ਗਾਨੀ</displayName>
+			</currency>
+			<currency type="ALL">
+				<displayName>ਅਲਬਾਨੀਆਈ ਲੇਕ</displayName>
+				<displayName count="one">ਅਲਬਾਨੀਆਈ ਲੇਕ</displayName>
+				<displayName count="other">ਅਲਬਾਨੀਆਈ ਲੇਕ</displayName>
+			</currency>
+			<currency type="AMD">
+				<displayName>ਆਰਮੀਨਿਆਈ ਦਰਮ</displayName>
+				<displayName count="one">ਆਰਮੀਨਿਆਈ ਦਰਮ</displayName>
+				<displayName count="other">ਆਰਮੀਨਿਆਈ ਦਰਮ</displayName>
+			</currency>
+			<currency type="ANG">
+				<displayName>ਨੀਦਰਲੈਂਡਸ ਐਂਟੀਲੀਅਨ ਗਿਲਡਰ</displayName>
+				<displayName count="one">ਨੀਦਰਲੈਂਡਸ ਐਂਟੀਲੀਅਨ ਗਿਲਡਰ</displayName>
+				<displayName count="other">ਨੀਦਰਲੈਂਡਸ ਐਂਟੀਲੀਅਨ ਗਿਲਡਰ</displayName>
+			</currency>
+			<currency type="AOA">
+				<displayName>ਅੰਗੋਲਾ ਕਵਾਂਜਾ</displayName>
+				<displayName count="one">ਅੰਗੋਲਾ ਕਵਾਂਜਾ</displayName>
+				<displayName count="other">ਅੰਗੋਲਾ ਕਵਾਂਜਾ</displayName>
+			</currency>
+			<currency type="ARS">
+				<displayName>ਅਰਜਨਟਾਈਨ ਪੈਸੋ</displayName>
+				<displayName count="one">ਅਰਜਨਟਾਈਨ ਪੈਸੋ</displayName>
+				<displayName count="other">ਅਰਜਨਟਾਈਨ ਪੈਸੋ</displayName>
+			</currency>
+			<currency type="AUD">
+				<displayName>ਆਸਟ੍ਰੇਲੀਆਈ ਡਾਲਰ</displayName>
+				<displayName count="one">ਆਸਟ੍ਰੇਲੀਆਈ ਡਾਲਰ</displayName>
+				<displayName count="other">ਆਸਟ੍ਰੇਲੀਆਈ ਡਾਲਰ</displayName>
+				<symbol>A$</symbol>
+			</currency>
+			<currency type="AWG">
+				<displayName>ਅਰੂਬਨ ਫਲੋਰਿਨ</displayName>
+				<displayName count="one">ਅਰੂਬਨ ਫਲੋਰਿਨ</displayName>
+				<displayName count="other">ਅਰੂਬਨ ਫਲੋਰਿਨ</displayName>
+			</currency>
+			<currency type="AZN">
+				<displayName>ਅਜ਼ਰਬੈਜਾਨੀ ਮਾਨਤ</displayName>
+				<displayName count="one">ਅਜ਼ਰਬੈਜਾਨੀ ਮਾਨਤ</displayName>
+				<displayName count="other">ਅਜ਼ਰਬੈਜਾਨੀ ਮਾਨਤ</displayName>
+			</currency>
+			<currency type="BAM">
+				<displayName>ਬੋਸਨੀਆ-ਹਰਜ਼ੇਗੋਵੀਨਾ ਬਦਲਣ੍ਯੋਗ ਮਾਰਕ</displayName>
+				<displayName count="one">ਬੋਸਨੀਆ-ਹਰਜ਼ੇਗੋਵੀਨਾ ਬਦਲਣ੍ਯੋਗ ਮਾਰਕ</displayName>
+				<displayName count="other">ਬੋਸਨੀਆ-ਹਰਜ਼ੇਗੋਵੀਨਾ ਬਦਲਣ੍ਯੋਗ ਮਾਰਕ</displayName>
+			</currency>
+			<currency type="BBD">
+				<displayName>ਬਾਰਬਾਡੀਅਨ ਡਾਲਰ</displayName>
+				<displayName count="one">ਬਾਰਬਾਡੀਅਨ ਡਾਲਰ</displayName>
+				<displayName count="other">ਬਾਰਬਾਡੀਅਨ ਡਾਲਰ</displayName>
+			</currency>
+			<currency type="BDT">
+				<displayName>ਬੰਗਲਾਦੇਸ਼ੀ ਟਕਾ</displayName>
+				<displayName count="one">ਬੰਗਲਾਦੇਸ਼ੀ ਟਕਾ</displayName>
+				<displayName count="other">ਬੰਗਲਾਦੇਸ਼ੀ ਟਕਾ</displayName>
+			</currency>
+			<currency type="BGN">
+				<displayName>ਬੁਲਗਾਰਿਆਈ ਲੇਵ</displayName>
+				<displayName count="one">ਬੁਲਗਾਰਿਆਈ ਲੇਵ</displayName>
+				<displayName count="other">ਬੁਲਗਾਰਿਆਈ ਲੇਵ</displayName>
+			</currency>
+			<currency type="BHD">
+				<displayName>ਬਹਿਰੀਨੀ ਦਿਨਾਰ</displayName>
+				<displayName count="one">ਬਹਿਰੀਨੀ ਦਿਨਾਰ</displayName>
+				<displayName count="other">ਬਹਿਰੀਨੀ ਦਿਨਾਰ</displayName>
+			</currency>
+			<currency type="BIF">
+				<displayName>ਬੁਰੁੰਡੀਆਈ ਫ੍ਰੈਂਕ</displayName>
+				<displayName count="one">ਬੁਰੁੰਡੀਆਈ ਫ੍ਰੈਂਕ</displayName>
+				<displayName count="other">ਬੁਰੁੰਡੀਆਈ ਫ੍ਰੈਂਕ</displayName>
+			</currency>
+			<currency type="BMD">
+				<displayName>ਬਰਮੂਡਾ ਡਾਲਰ</displayName>
+				<displayName count="one">ਬਰਮੂਡਾ ਡਾਲਰ</displayName>
+				<displayName count="other">ਬਰਮੂਡਾ ਡਾਲਰ</displayName>
+			</currency>
+			<currency type="BND">
+				<displayName>ਬਰੂਨੇਈ ਡਾਲਰ</displayName>
+				<displayName count="one">ਬਰੂਨੇਈ ਡਾਲਰ</displayName>
+				<displayName count="other">ਬਰੂਨੇਈ ਡਾਲਰ</displayName>
+			</currency>
+			<currency type="BOB">
+				<displayName>ਬੋਲੀਵੀਅਨ ਬੋਲੀਵੀਅਨੋ</displayName>
+				<displayName count="one">ਬੋਲੀਵੀਅਨ ਬੋਲੀਵੀਅਨੋ</displayName>
+				<displayName count="other">ਬੋਲੀਵੀਅਨ ਬੋਲੀਵੀਅਨੋ</displayName>
+			</currency>
+			<currency type="BRL">
+				<displayName>ਬ੍ਰਾਜ਼ਿਲਿਆਈ ਰੀਅਲ</displayName>
+				<displayName count="one">ਬ੍ਰਾਜ਼ਿਲਿਆਈ ਰੀਅਲ</displayName>
+				<displayName count="other">ਬ੍ਰਾਜ਼ਿਲਿਆਈ ਰੀਅਲ</displayName>
+				<symbol>R$</symbol>
+			</currency>
+			<currency type="BSD">
+				<displayName>ਬਾਹਾਮੀਅਨ ਡਾਲਰ</displayName>
+				<displayName count="one">ਬਾਹਾਮੀਅਨ ਡਾਲਰ</displayName>
+				<displayName count="other">ਬਾਹਾਮੀਅਨ ਡਾਲਰ</displayName>
+			</currency>
+			<currency type="BTN">
+				<displayName>ਭੂਟਾਨੀ ਐਂਗਲਟ੍ਰਮ</displayName>
+				<displayName count="one">ਭੂਟਾਨੀ ਐਂਗਲਟ੍ਰਮ</displayName>
+				<displayName count="other">ਭੂਟਾਨੀ ਐਂਗਲਟ੍ਰਮ</displayName>
+			</currency>
+			<currency type="BWP">
+				<displayName>ਬੋਟਸਵਾਨਾ ਪੁਲਾ</displayName>
+				<displayName count="one">ਬੋਟਸਵਾਨਾ ਪੁਲਾ</displayName>
+				<displayName count="other">ਬੋਟਸਵਾਨਾ ਪੁਲਾ</displayName>
+			</currency>
+			<currency type="BYR">
+				<displayName>ਬੇਲਾਰੂਸੀ ਰੂਬਲ</displayName>
+				<displayName count="one">ਬੇਲਾਰੂਸੀ ਰੂਬਲ</displayName>
+				<displayName count="other">ਬੇਲਾਰੂਸੀ ਰੂਬਲ</displayName>
+			</currency>
+			<currency type="BZD">
+				<displayName>ਬੇਲੀਜ਼ ਡਾਲਰ</displayName>
+				<displayName count="one">ਬੇਲੀਜ਼ ਡਾਲਰ</displayName>
+				<displayName count="other">ਬੇਲੀਜ਼ ਡਾਲਰ</displayName>
+			</currency>
+			<currency type="CAD">
+				<displayName>ਕੇਨੇਡਿਆਈ ਡਾਲਰ</displayName>
+				<displayName count="one">ਕੇਨੇਡਿਆਈ ਡਾਲਰ</displayName>
+				<displayName count="other">ਕੇਨੇਡਿਆਈ ਡਾਲਰ</displayName>
+				<symbol>CA$</symbol>
+			</currency>
+			<currency type="CDF">
+				<displayName>ਕਾਂਗੋਲੀਜ਼ ਫ੍ਰੈਂਕ</displayName>
+				<displayName count="one">ਕਾਂਗੋਲੀਜ਼ ਫ੍ਰੈਂਕ</displayName>
+				<displayName count="other">ਕਾਂਗੋਲੀਜ਼ ਫ੍ਰੈਂਕ</displayName>
+			</currency>
+			<currency type="CHF">
+				<displayName>ਸਵਿਸ ਫ੍ਰੈਂਕ</displayName>
+				<displayName count="one">ਸਵਿਸ ਫ੍ਰੈਂਕ</displayName>
+				<displayName count="other">ਸਵਿਸ ਫ੍ਰੈਂਕ</displayName>
+			</currency>
+			<currency type="CLP">
+				<displayName>ਚਿਲੀਅਨ ਪੈਸੋ</displayName>
+				<displayName count="one">ਚਿਲੀਅਨ ਪੈਸੋ</displayName>
+				<displayName count="other">ਚਿਲੀਅਨ ਪੈਸੋ</displayName>
+			</currency>
+			<currency type="CNY">
+				<displayName>ਚੀਨੀ ਯੁਆਨ</displayName>
+				<displayName count="one">ਚੀਨੀ ਯੁਆਨ</displayName>
+				<displayName count="other">ਚੀਨੀ ਯੁਆਨ</displayName>
+				<symbol>CN¥</symbol>
+			</currency>
+			<currency type="COP">
+				<displayName>ਕੋਲੰਬੀਅਨ ਪੈਸੋ</displayName>
+				<displayName count="one">ਕੋਲੰਬੀਅਨ ਪੈਸੋ</displayName>
+				<displayName count="other">ਕੋਲੰਬੀਅਨ ਪੈਸੋ</displayName>
+			</currency>
+			<currency type="CRC">
+				<displayName>ਕੋਸਟਾ ਰੀਕਨ ਕੋਲਨ</displayName>
+				<displayName count="one">ਕੋਸਟਾ ਰੀਕਨ ਕੋਲਨ</displayName>
+				<displayName count="other">ਕੋਸਟਾ ਰੀਕਨ ਕੋਲਨ</displayName>
+			</currency>
+			<currency type="CUC">
+				<displayName>ਕਿਊਬਨ ਬਦਲਣ੍ਯੋਗ ਪੈਸੋ</displayName>
+				<displayName count="one">ਕਿਊਬਨ ਬਦਲਣ੍ਯੋਗ ਪੈਸੋ</displayName>
+				<displayName count="other">ਕਿਊਬਨ ਬਦਲਣ੍ਯੋਗ ਪੈਸੋ</displayName>
+			</currency>
+			<currency type="CUP">
+				<displayName>ਕਿਊਬਨ ਪੈਸੋ</displayName>
+				<displayName count="one">ਕਿਊਬਨ ਪੈਸੋ</displayName>
+				<displayName count="other">ਕਿਊਬਨ ਪੈਸੋ</displayName>
+			</currency>
+			<currency type="CVE">
+				<displayName>ਕੇਪ ਵਰਡੀਅਨ ਸ਼ਿਊਡੋ</displayName>
+				<displayName count="one">ਕੇਪ ਵਰਡੀਅਨ ਸ਼ਿਊਡੋ</displayName>
+				<displayName count="other">ਕੇਪ ਵਰਡੀਅਨ ਸ਼ਿਊਡੋ</displayName>
+			</currency>
+			<currency type="CZK">
+				<displayName>ਚੈਕ ਗਣਰਾਜ ਕੋਰੁਨਾ</displayName>
+				<displayName count="one">ਚੈਕ ਗਣਰਾਜ ਕੋਰੁਨਾ</displayName>
+				<displayName count="other">ਚੈਕ ਗਣਰਾਜ ਕੋਰੁਨਾ</displayName>
+			</currency>
+			<currency type="DJF">
+				<displayName>ਜ਼ੀਬੂਤੀਅਨ ਫ੍ਰੈਂਕ</displayName>
+				<displayName count="one">ਜ਼ੀਬੂਤੀਅਨ ਫ੍ਰੈਂਕ</displayName>
+				<displayName count="other">ਜ਼ੀਬੂਤੀਅਨ ਫ੍ਰੈਂਕ</displayName>
+			</currency>
+			<currency type="DKK">
+				<displayName>ਦਾਨਿਸ਼ ਕਰੌਨ</displayName>
+				<displayName count="one">ਦਾਨਿਸ਼ ਕਰੌਨ</displayName>
+				<displayName count="other">ਦਾਨਿਸ਼ ਕਰੌਨ</displayName>
+			</currency>
+			<currency type="DOP">
+				<displayName>ਡੌਮਿਨਿਕਨ ਪੈਸੋ</displayName>
+				<displayName count="one">ਡੌਮਿਨਿਕਨ ਪੈਸੋ</displayName>
+				<displayName count="other">ਡੌਮਿਨਿਕਨ ਪੈਸੋ</displayName>
+			</currency>
+			<currency type="DZD">
+				<displayName>ਅਲਜੀਰਿਆਈ ਦਿਨਾਰ</displayName>
+				<displayName count="one">ਅਲਜੀਰਿਆਈ ਦਿਨਾਰ</displayName>
+				<displayName count="other">ਅਲਜੀਰਿਆਈ ਦਿਨਾਰ</displayName>
+			</currency>
+			<currency type="EGP">
+				<displayName>ਮਿਸਰੀ ਪਾਉਂਡ</displayName>
+				<displayName count="one">ਮਿਸਰੀ ਪਾਉਂਡ</displayName>
+				<displayName count="other">ਮਿਸਰੀ ਪਾਉਂਡ</displayName>
+			</currency>
+			<currency type="ERN">
+				<displayName>ਇਰੀਟ੍ਰਿਆਈ ਨਾਕਫਾ</displayName>
+				<displayName count="one">ਇਰੀਟ੍ਰਿਆਈ ਨਾਕਫਾ</displayName>
+				<displayName count="other">ਇਰੀਟ੍ਰਿਆਈ ਨਾਕਫਾ</displayName>
+			</currency>
+			<currency type="ETB">
+				<displayName>ਇਥੋਪੀਆਈ ਬਿਰ</displayName>
+				<displayName count="one">ਇਥੋਪੀਆਈ ਬਿਰ</displayName>
+				<displayName count="other">ਇਥੋਪੀਆਈ ਬਿਰ</displayName>
+			</currency>
+			<currency type="EUR">
+				<displayName>ਯੂਰੋ</displayName>
+				<displayName count="one">ਯੂਰੋ</displayName>
+				<displayName count="other">ਯੂਰੋ</displayName>
+				<symbol>€</symbol>
+			</currency>
+			<currency type="FJD">
+				<displayName>ਫ਼ਿਜੀਆਈ ਡਾਲਰ</displayName>
+				<displayName count="one">ਫ਼ਿਜੀਆਈ ਡਾਲਰ</displayName>
+				<displayName count="other">ਫ਼ਿਜੀਆਈ ਡਾਲਰ</displayName>
+			</currency>
+			<currency type="FKP">
+				<displayName>ਫ਼ਾਕਲੈਂਡ ਆਈਲੈਂਡਸ ਪਾਉਂਡ</displayName>
+				<displayName count="one">ਫ਼ਾਕਲੈਂਡ ਆਈਲੈਂਡਸ ਪਾਉਂਡ</displayName>
+				<displayName count="other">ਫ਼ਾਕਲੈਂਡ ਆਈਲੈਂਡਸ ਪਾਉਂਡ</displayName>
+			</currency>
+			<currency type="GBP">
+				<displayName>ਬ੍ਰਿਟਿਸ਼ ਪਾਉਂਡ ਸਟਰਲਿੰਗ</displayName>
+				<displayName count="one">ਬ੍ਰਿਟਿਸ਼ ਪਾਉਂਡ ਸਟਰਲਿੰਗ</displayName>
+				<displayName count="other">ਬ੍ਰਿਟਿਸ਼ ਪਾਉਂਡ ਸਟਰਲਿੰਗ</displayName>
+				<symbol>£</symbol>
+			</currency>
+			<currency type="GEL">
+				<displayName>ਜਾਰਜਿਆਈ ਲਾਰੀ</displayName>
+				<displayName count="one">ਜਾਰਜਿਆਈ ਲਾਰੀ</displayName>
+				<displayName count="other">ਜਾਰਜਿਆਈ ਲਾਰੀ</displayName>
+			</currency>
+			<currency type="GHS">
+				<displayName>ਘਾਨਾਈ ਸੇਡੀ</displayName>
+				<displayName count="one">ਘਾਨਾਈ ਸੇਡੀ</displayName>
+				<displayName count="other">ਘਾਨਾਈ ਸੇਡੀ</displayName>
+			</currency>
+			<currency type="GIP">
+				<displayName>ਜਿਬਰਾਲਟਰ ਪਾਉਂਡ</displayName>
+				<displayName count="one">ਜਿਬਰਾਲਟਰ ਪਾਉਂਡ</displayName>
+				<displayName count="other">ਜਿਬਰਾਲਟਰ ਪਾਉਂਡ</displayName>
+			</currency>
+			<currency type="GMD">
+				<displayName>ਗਾਂਬੀਆਈ ਦਲਾਸੀ</displayName>
+				<displayName count="one">ਗਾਂਬੀਆਈ ਦਲਾਸੀ</displayName>
+				<displayName count="other">ਗਾਂਬੀਆਈ ਦਲਾਸੀ</displayName>
+			</currency>
+			<currency type="GNF">
+				<displayName>ਗਿਨੀਅਨ ਫ੍ਰੈਂਕ</displayName>
+				<displayName count="one">ਗਿਨੀਅਨ ਫ੍ਰੈਂਕ</displayName>
+				<displayName count="other">ਗਿਨੀਅਨ ਫ੍ਰੈਂਕ</displayName>
+			</currency>
+			<currency type="GTQ">
+				<displayName>ਗੁਆਟੇਮਾਲਾ ਕੁਏਟਜ਼ਲ</displayName>
+				<displayName count="one">ਗੁਆਟੇਮਾਲਾ ਕੁਏਟਜ਼ਲ</displayName>
+				<displayName count="other">ਗੁਆਟੇਮਾਲਾ ਕੁਏਟਜ਼ਲ</displayName>
+			</currency>
+			<currency type="GYD">
+				<displayName>ਗੁਯਾਨਾਈਜ਼ ਡਾਲਰ</displayName>
+				<displayName count="one">ਗੁਯਾਨਾਈਜ਼ ਡਾਲਰ</displayName>
+				<displayName count="other">ਗੁਯਾਨਾਈਜ਼ ਡਾਲਰ</displayName>
+			</currency>
+			<currency type="HKD">
+				<displayName>ਹਾਂਗ ਕਾਂਗ ਡਾਲਰ</displayName>
+				<displayName count="one">ਹਾਂਗ ਕਾਂਗ ਡਾਲਰ</displayName>
+				<displayName count="other">ਹਾਂਗ ਕਾਂਗ ਡਾਲਰ</displayName>
+				<symbol>HK$</symbol>
+			</currency>
+			<currency type="HNL">
+				<displayName>ਹਾਨਡੂਰਨ ਲੇਮਪਿਰਾ</displayName>
+				<displayName count="one">ਹਾਨਡੂਰਨ ਲੇਮਪਿਰਾ</displayName>
+				<displayName count="other">ਹਾਨਡੂਰਨ ਲੇਮਪਿਰਾ</displayName>
+			</currency>
+			<currency type="HRK">
+				<displayName>ਕਰੋਏਸ਼ੀਆਈ ਕੁਨਾ</displayName>
+				<displayName count="one">ਕਰੋਏਸ਼ੀਆਈ ਕੁਨਾ</displayName>
+				<displayName count="other">ਕਰੋਏਸ਼ੀਆਈ ਕੁਨਾ</displayName>
+			</currency>
+			<currency type="HTG">
+				<displayName>ਹਾਈਟੀਅਨ ਗੌਰਡੇ</displayName>
+				<displayName count="one">ਹਾਈਟੀਅਨ ਗੌਰਡੇ</displayName>
+				<displayName count="other">ਹਾਈਟੀਅਨ ਗੌਰਡੇ</displayName>
+			</currency>
+			<currency type="HUF">
+				<displayName>ਹੰਗਰਾਈ ਫੋਰਿੰਟ</displayName>
+				<displayName count="one">ਹੰਗਰਾਈ ਫੋਰਿੰਟ</displayName>
+				<displayName count="other">ਹੰਗਰਾਈ ਫੋਰਿੰਟ</displayName>
+			</currency>
+			<currency type="IDR">
+				<displayName>ਇੰਡੋਨੇਸ਼ੀਆਈ ਰੁਪਿਆਹ</displayName>
+				<displayName count="one">ਇੰਡੋਨੇਸ਼ੀਆਈ ਰੁਪਿਆਹ</displayName>
+				<displayName count="other">ਇੰਡੋਨੇਸ਼ੀਆਈ ਰੁਪਿਆਹ</displayName>
+			</currency>
+			<currency type="ILS">
+				<displayName>ਇਜ਼ਰਾਈਲੀ ਨਵੀਂ ਸ਼ੇਕੇਲ</displayName>
+				<displayName count="one">ਇਜ਼ਰਾਈਲੀ ਨਵੀਂ ਸ਼ੇਕੇਲ</displayName>
+				<displayName count="other">ਇਜ਼ਰਾਈਲੀ ਨਵੀਂ ਸ਼ੇਕੇਲ</displayName>
+				<symbol>₪</symbol>
+			</currency>
+			<currency type="INR">
+				<displayName>ਭਾਰਤੀ ਰੁਪਏ</displayName>
+				<displayName count="one">ਭਾਰਤੀ ਰੁਪਏ</displayName>
+				<displayName count="other">ਭਾਰਤੀ ਰੁਪਏ</displayName>
+				<symbol>₹</symbol>
+			</currency>
+			<currency type="IQD">
+				<displayName>ਇਰਾਕੀ ਦਿਨਾਰ</displayName>
+				<displayName count="one">ਇਰਾਕੀ ਦਿਨਾਰ</displayName>
+				<displayName count="other">ਇਰਾਕੀ ਦਿਨਾਰ</displayName>
+			</currency>
+			<currency type="IRR">
+				<displayName>ਈਰਾਨੀ ਰਿਆਲ</displayName>
+				<displayName count="one">ਈਰਾਨੀ ਰਿਆਲ</displayName>
+				<displayName count="other">ਈਰਾਨੀ ਰਿਆਲ</displayName>
+			</currency>
+			<currency type="ISK">
+				<displayName>ਆਈਸਲੈਂਡਿਕ ਕਰੌਨ</displayName>
+				<displayName count="one">ਆਈਸਲੈਂਡਿਕ ਕਰੌਨ</displayName>
+				<displayName count="other">ਆਈਸਲੈਂਡਿਕ ਕਰੌਨ</displayName>
+			</currency>
+			<currency type="JMD">
+				<displayName>ਜਮਾਇਕਨ ਡਾਲਰ</displayName>
+				<displayName count="one">ਜਮਾਇਕਨ ਡਾਲਰ</displayName>
+				<displayName count="other">ਜਮਾਇਕਨ ਡਾਲਰ</displayName>
+			</currency>
+			<currency type="JOD">
+				<displayName>ਜੌਰਡਨੀਆਈ ਦਿਨਾਰ</displayName>
+				<displayName count="one">ਜੌਰਡਨੀਆਈ ਦਿਨਾਰ</displayName>
+				<displayName count="other">ਜੌਰਡਨੀਆਈ ਦਿਨਾਰ</displayName>
+			</currency>
+			<currency type="JPY">
+				<displayName>ਜਾਪਾਨੀ ਯੇਨ</displayName>
+				<displayName count="one">ਜਾਪਾਨੀ ਯੇਨ</displayName>
+				<displayName count="other">ਜਾਪਾਨੀ ਯੇਨ</displayName>
+				<symbol>JP¥</symbol>
+			</currency>
+			<currency type="KES">
+				<displayName>ਕੀਨੀਆਈ ਸ਼ਿਲਿੰਗ</displayName>
+				<displayName count="one">ਕੀਨੀਆਈ ਸ਼ਿਲਿੰਗ</displayName>
+				<displayName count="other">ਕੀਨੀਆਈ ਸ਼ਿਲਿੰਗ</displayName>
+			</currency>
+			<currency type="KGS">
+				<displayName>ਕਿਰਗਿਸਤਾਨੀ ਸੋਮ</displayName>
+				<displayName count="one">ਕਿਰਗਿਸਤਾਨੀ ਸੋਮ</displayName>
+				<displayName count="other">ਕਿਰਗਿਸਤਾਨੀ ਸੋਮ</displayName>
+			</currency>
+			<currency type="KHR">
+				<displayName>ਕੰਬੋਡੀਆਈ ਰੀਅਲ</displayName>
+				<displayName count="one">ਕੰਬੋਡੀਆਈ ਰੀਅਲ</displayName>
+				<displayName count="other">ਕੰਬੋਡੀਆਈ ਰੀਅਲ</displayName>
+			</currency>
+			<currency type="KMF">
+				<displayName>ਕੋਮੋਰੀਅਨ ਫੈਂਕ</displayName>
+				<displayName count="one">ਕੋਮੋਰੀਅਨ ਫੈਂਕ</displayName>
+				<displayName count="other">ਕੋਮੋਰੀਅਨ ਫੈਂਕ</displayName>
+			</currency>
+			<currency type="KPW">
+				<displayName>ਉੱਤਰੀ ਕੋਰੀਆਈ ਵੋਨ</displayName>
+				<displayName count="one">ਉੱਤਰੀ ਕੋਰੀਆਈ ਵੋਨ</displayName>
+				<displayName count="other">ਉੱਤਰੀ ਕੋਰੀਆਈ ਵੋਨ</displayName>
+			</currency>
+			<currency type="KRW">
+				<displayName>ਦੱਖਣੀ ਕੋਰੀਆਈ ਵੋਨ</displayName>
+				<displayName count="one">ਦੱਖਣੀ ਕੋਰੀਆਈ ਵੋਨ</displayName>
+				<displayName count="other">ਦੱਖਣੀ ਕੋਰੀਆਈ ਵੋਨ</displayName>
+				<symbol>₩</symbol>
+			</currency>
+			<currency type="KWD">
+				<displayName>ਕੁਵੈਤੀ ਦਿਨਾਰ</displayName>
+				<displayName count="one">ਕੁਵੈਤੀ ਦਿਨਾਰ</displayName>
+				<displayName count="other">ਕੁਵੈਤੀ ਦਿਨਾਰ</displayName>
+			</currency>
+			<currency type="KYD">
+				<displayName>ਕੇਮੈਨ ਆਈਲੈਂਡਸ ਡਾਲਰ</displayName>
+				<displayName count="one">ਕੇਮੈਨ ਆਈਲੈਂਡਸ ਡਾਲਰ</displayName>
+				<displayName count="other">ਕੇਮੈਨ ਆਈਲੈਂਡਸ ਡਾਲਰ</displayName>
+			</currency>
+			<currency type="KZT">
+				<displayName>ਕਜ਼ਾਕਸਤਾਨੀ ਤੇਂਗੇ</displayName>
+				<displayName count="one">ਕਜ਼ਾਕਸਤਾਨੀ ਤੇਂਗੇ</displayName>
+				<displayName count="other">ਕਜ਼ਾਕਸਤਾਨੀ ਤੇਂਗੇ</displayName>
+			</currency>
+			<currency type="LAK">
+				<displayName>ਲਾਓਟਿਆਈ ਕਿਪ</displayName>
+				<displayName count="one">ਲਾਓਟਿਆਈ ਕਿਪ</displayName>
+				<displayName count="other">ਲਾਓਟਿਆਈ ਕਿਪ</displayName>
+			</currency>
+			<currency type="LBP">
+				<displayName>ਲੈਬਨਾਨੀ ਪਾਉਂਡ</displayName>
+				<displayName count="one">ਲੈਬਨਾਨੀ ਪਾਉਂਡ</displayName>
+				<displayName count="other">ਲੈਬਨਾਨੀ ਪਾਉਂਡ</displayName>
+			</currency>
+			<currency type="LKR">
+				<displayName>ਸ੍ਰੀ ਲੰਕਾਈ ਰੁਪਏ</displayName>
+				<displayName count="one">ਸ੍ਰੀ ਲੰਕਾਈ ਰੁਪਏ</displayName>
+				<displayName count="other">ਸ੍ਰੀ ਲੰਕਾਈ ਰੁਪਏ</displayName>
+			</currency>
+			<currency type="LRD">
+				<displayName>ਲਾਈਬੀਰੀਆਈ ਡਾਲਰ</displayName>
+				<displayName count="one">ਲਾਈਬੀਰੀਆਈ ਡਾਲਰ</displayName>
+				<displayName count="other">ਲਾਈਬੀਰੀਆਈ ਡਾਲਰ</displayName>
+			</currency>
+			<currency type="LTL">
+				<displayName>ਲਿਥੁਆਨੀਆਈ ਲਿਤਾਸ</displayName>
+				<displayName count="one">ਲਿਥੁਆਨੀਆਈ ਲਿਤਾਸ</displayName>
+				<displayName count="other">ਲਿਥੁਆਨੀਆਈ ਲਿਤਾਸ</displayName>
+			</currency>
+			<currency type="LVL">
+				<displayName>ਲਾਟਵਿਆਈ ਲਾਟਸ</displayName>
+				<displayName count="one">ਲਾਟਵਿਆਈ ਲਾਟਸ</displayName>
+				<displayName count="other">ਲਾਟਵਿਆਈ ਲਾਟਸ</displayName>
+			</currency>
+			<currency type="LYD">
+				<displayName>ਲੀਬੀਅਨ ਦਿਨਾਰ</displayName>
+				<displayName count="one">ਲੀਬੀਅਨ ਦਿਨਾਰ</displayName>
+				<displayName count="other">ਲੀਬੀਅਨ ਦਿਨਾਰ</displayName>
+			</currency>
+			<currency type="MAD">
+				<displayName>ਮੋਰੱਕਨ ਦਿਰਹਾਮ</displayName>
+				<displayName count="one">ਮੋਰੱਕਨ ਦਿਰਹਾਮ</displayName>
+				<displayName count="other">ਮੋਰੱਕਨ ਦਿਰਹਾਮ</displayName>
+			</currency>
+			<currency type="MDL">
+				<displayName>ਮੋਲਡੋਵਨ ਲਿਯੂ</displayName>
+				<displayName count="one">ਮੋਲਡੋਵਨ ਲਿਯੂ</displayName>
+				<displayName count="other">ਮੋਲਡੋਵਨ ਲਿਯੂ</displayName>
+			</currency>
+			<currency type="MGA">
+				<displayName>ਮਾਲਾਗਾਸੀ ਅਰਾਇਰੀ</displayName>
+				<displayName count="one">ਮਾਲਾਗਾਸੀ ਅਰਾਇਰੀ</displayName>
+				<displayName count="other">ਮਾਲਾਗਾਸੀ ਅਰਾਇਰੀ</displayName>
+			</currency>
+			<currency type="MKD">
+				<displayName>ਮੈਕਡੋਨੀਆਈ ਡੇਨਾਰ</displayName>
+				<displayName count="one">ਮੈਕਡੋਨੀਆਈ ਡੇਨਾਰ</displayName>
+				<displayName count="other">ਮੈਕਡੋਨੀਆਈ ਡੇਨਾਰ</displayName>
+			</currency>
+			<currency type="MMK">
+				<displayName>ਮਿਆਂਮਾ ਕ੍ਯਾਤ</displayName>
+				<displayName count="one">ਮਿਆਂਮਾ ਕ੍ਯਾਤ</displayName>
+				<displayName count="other">ਮਿਆਂਮਾ ਕ੍ਯਾਤ</displayName>
+			</currency>
+			<currency type="MNT">
+				<displayName>ਮੰਗੋਲੀਆਈ ਤੁਗਰਿਕ</displayName>
+				<displayName count="one">ਮੰਗੋਲੀਆਈ ਤੁਗਰਿਕ</displayName>
+				<displayName count="other">ਮੰਗੋਲੀਆਈ ਤੁਗਰਿਕ</displayName>
+			</currency>
+			<currency type="MOP">
+				<displayName>ਮੇਕਾਨੀ ਪਟਾਕਾ</displayName>
+				<displayName count="one">ਮੇਕਾਨੀ ਪਟਾਕਾ</displayName>
+				<displayName count="other">ਮੇਕਾਨੀ ਪਟਾਕਾ</displayName>
+			</currency>
+			<currency type="MRO">
+				<displayName>ਮੋਰਿਟਾਨੀਆਈ ਊਗੀਆ</displayName>
+				<displayName count="one">ਮੋਰਿਟਾਨੀਆਈ ਊਗੀਆ</displayName>
+				<displayName count="other">ਮੋਰਿਟਾਨੀਆਈ ਊਗੀਆ</displayName>
+			</currency>
+			<currency type="MUR">
+				<displayName>ਮੌਰਿਸ਼ੀਆਈ ਰੁਪਏ</displayName>
+				<displayName count="one">ਮੌਰਿਸ਼ੀਆਈ ਰੁਪਏ</displayName>
+				<displayName count="other">ਮੌਰਿਸ਼ੀਆਈ ਰੁਪਏ</displayName>
+			</currency>
+			<currency type="MVR">
+				<displayName>ਮਾਲਦੀਵੀ ਰੁਫੀਆ</displayName>
+				<displayName count="one">ਮਾਲਦੀਵੀ ਰੁਫੀਆ</displayName>
+				<displayName count="other">ਮਾਲਦੀਵੀ ਰੁਫੀਆ</displayName>
+			</currency>
+			<currency type="MWK">
+				<displayName>ਮਾਲਾਵੀਆਈ ਕਵਾਚਾ</displayName>
+				<displayName count="one">ਮਾਲਾਵੀਆਈ ਕਵਾਚਾ</displayName>
+				<displayName count="other">ਮਾਲਾਵੀਆਈ ਕਵਾਚਾ</displayName>
+			</currency>
+			<currency type="MXN">
+				<displayName>ਮੈਕਸਿਕਨ ਪੈਸੋ</displayName>
+				<displayName count="one">ਮੈਕਸਿਕਨ ਪੈਸੋ</displayName>
+				<displayName count="other">ਮੈਕਸਿਕਨ ਪੈਸੋ</displayName>
+				<symbol>MX$</symbol>
+			</currency>
+			<currency type="MYR">
+				<displayName>ਮੇਲੇਸ਼ਿਆਈ ਰਿਨਗਿੱਟ</displayName>
+				<displayName count="one">ਮੇਲੇਸ਼ਿਆਈ ਰਿਨਗਿੱਟ</displayName>
+				<displayName count="other">ਮੇਲੇਸ਼ਿਆਈ ਰਿਨਗਿੱਟ</displayName>
+			</currency>
+			<currency type="MZN">
+				<displayName>ਮੋਜ਼ਾਮਬੀਕਨ ਮੈਟੀਕਲ</displayName>
+				<displayName count="one">ਮੋਜ਼ਾਮਬੀਕਨ ਮੈਟੀਕਲ</displayName>
+				<displayName count="other">ਮੋਜ਼ਾਮਬੀਕਨ ਮੈਟੀਕਲ</displayName>
+			</currency>
+			<currency type="NAD">
+				<displayName>ਨਾਮੀਬੀਆਈ ਡਾਲਰ</displayName>
+				<displayName count="one">ਨਾਮੀਬੀਆਈ ਡਾਲਰ</displayName>
+				<displayName count="other">ਨਾਮੀਬੀਆਈ ਡਾਲਰ</displayName>
+			</currency>
+			<currency type="NGN">
+				<displayName>ਨਾਇਜੀਰੀਆਈ ਨਾਇਰਾ</displayName>
+				<displayName count="one">ਨਾਇਜੀਰੀਆਈ ਨਾਇਰਾ</displayName>
+				<displayName count="other">ਨਾਇਜੀਰੀਆਈ ਨਾਇਰਾ</displayName>
+			</currency>
+			<currency type="NIO">
+				<displayName>ਨਿਕਾਰਾਗੁਆਨ ਕੋਰਡੋਬਾ</displayName>
+				<displayName count="one">ਨਿਕਾਰਾਗੁਆਨ ਕੋਰਡੋਬਾ</displayName>
+				<displayName count="other">ਨਿਕਾਰਾਗੁਆਨ ਕੋਰਡੋਬਾ</displayName>
+			</currency>
+			<currency type="NOK">
+				<displayName>ਨੌਰਵੇਜਿਅਨ ਕਰੌਨ</displayName>
+				<displayName count="one">ਨੌਰਵੇਜਿਅਨ ਕਰੌਨ</displayName>
+				<displayName count="other">ਨੌਰਵੇਜਿਅਨ ਕਰੌਨ</displayName>
+			</currency>
+			<currency type="NPR">
+				<displayName>ਨੇਪਾਲੀ ਰੁਪਏ</displayName>
+				<displayName count="one">ਨੇਪਾਲੀ ਰੁਪਏ</displayName>
+				<displayName count="other">ਨੇਪਾਲੀ ਰੁਪਏ</displayName>
+			</currency>
+			<currency type="NZD">
+				<displayName>ਨਿਊਜ਼ੀਲੈਂਡ ਡਾਲਰ</displayName>
+				<displayName count="one">ਨਿਊਜ਼ੀਲੈਂਡ ਡਾਲਰ</displayName>
+				<displayName count="other">ਨਿਊਜ਼ੀਲੈਂਡ ਡਾਲਰ</displayName>
+				<symbol>NZ$</symbol>
+			</currency>
+			<currency type="OMR">
+				<displayName>ਓਮਾਨੀ ਰਿਆਲ</displayName>
+				<displayName count="one">ਓਮਾਨੀ ਰਿਆਲ</displayName>
+				<displayName count="other">ਓਮਾਨੀ ਰਿਆਲ</displayName>
+			</currency>
+			<currency type="PAB">
+				<displayName>ਪਨਾਮੇਨੀਅਨ ਬਾਲਬੋਆ</displayName>
+				<displayName count="one">ਪਨਾਮੇਨੀਅਨ ਬਾਲਬੋਆ</displayName>
+				<displayName count="other">ਪਨਾਮੇਨੀਅਨ ਬਾਲਬੋਆ</displayName>
+			</currency>
+			<currency type="PEN">
+				<displayName>ਪੇਰੂਵੀਅਨ ਨਿਊਵੋ ਸੋਲ</displayName>
+				<displayName count="one">ਪੇਰੂਵੀਅਨ ਨਿਊਵੋ ਸੋਲ</displayName>
+				<displayName count="other">ਪੇਰੂਵੀਅਨ ਨਿਊਵੋ ਸੋਲ</displayName>
+			</currency>
+			<currency type="PGK">
+				<displayName>ਪਾਪੂਆ ਨਿਊ ਗਿਨੀਆਈ ਕਿਨਾ</displayName>
+				<displayName count="one">ਪਾਪੂਆ ਨਿਊ ਗਿਨੀਆਈ ਕਿਨਾ</displayName>
+				<displayName count="other">ਪਾਪੂਆ ਨਿਊ ਗਿਨੀਆਈ ਕਿਨਾ</displayName>
+			</currency>
+			<currency type="PHP">
+				<displayName>ਫਿਲਿਪੀਨੀ ਪੈਸੋ</displayName>
+				<displayName count="one">ਫਿਲਿਪੀਨੀ ਪੈਸੋ</displayName>
+				<displayName count="other">ਫਿਲਿਪੀਨੀ ਪੈਸੋ</displayName>
+			</currency>
+			<currency type="PKR">
+				<displayName>ਪਾਕਿਸਤਾਨੀ ਰੁਪਏ</displayName>
+				<displayName count="one">ਪਾਕਿਸਤਾਨੀ ਰੁਪਏ</displayName>
+				<displayName count="other">ਪਾਕਿਸਤਾਨੀ ਰੁਪਏ</displayName>
+			</currency>
+			<currency type="PLN">
+				<displayName>ਪੋਲਿਸ਼ ਜ਼ਲੌਟੀ</displayName>
+				<displayName count="one">ਪੋਲਿਸ਼ ਜ਼ਲੌਟੀ</displayName>
+				<displayName count="other">ਪੋਲਿਸ਼ ਜ਼ਲੌਟੀ</displayName>
+			</currency>
+			<currency type="PYG">
+				<displayName>ਪੈਰਾਗੁਵਾਇਨ ਗੁਆਰਾਨੀ</displayName>
+				<displayName count="one">ਪੈਰਾਗੁਵਾਇਨ ਗੁਆਰਾਨੀ</displayName>
+				<displayName count="other">ਪੈਰਾਗੁਵਾਇਨ ਗੁਆਰਾਨੀ</displayName>
+			</currency>
+			<currency type="QAR">
+				<displayName>ਕਤਰੀ ਰਿਆਲ</displayName>
+				<displayName count="one">ਕਤਰੀ ਰਿਆਲ</displayName>
+				<displayName count="other">ਕਤਰੀ ਰਿਆਲ</displayName>
+			</currency>
+			<currency type="RON">
+				<displayName>ਰੋਮਾਨੀਆਈ ਲਿਯੂ</displayName>
+				<displayName count="one">ਰੋਮਾਨੀਆਈ ਲਿਯੂ</displayName>
+				<displayName count="other">ਰੋਮਾਨੀਆਈ ਲਿਯੂ</displayName>
+			</currency>
+			<currency type="RSD">
+				<displayName>ਸਰਬੀਆਈ ਦਿਨਾਰ</displayName>
+				<displayName count="one">ਸਰਬੀਆਈ ਦਿਨਾਰ</displayName>
+				<displayName count="other">ਸਰਬੀਆਈ ਦਿਨਾਰ</displayName>
+			</currency>
+			<currency type="RUB">
+				<displayName>ਰੂਸੀ ਰੂਬਲ</displayName>
+				<displayName count="one">ਰੂਸੀ ਰੂਬਲ</displayName>
+				<displayName count="other">ਰੂਸੀ ਰੂਬਲ</displayName>
+			</currency>
+			<currency type="RWF">
+				<displayName>ਰਵਾਂਡਨ ਫ੍ਰੈਂਕ</displayName>
+				<displayName count="one">ਰਵਾਂਡਨ ਫ੍ਰੈਂਕ</displayName>
+				<displayName count="other">ਰਵਾਂਡਨ ਫ੍ਰੈਂਕ</displayName>
+			</currency>
+			<currency type="SAR">
+				<displayName>ਸਾਉਦੀ ਰਿਆਲ</displayName>
+				<displayName count="one">ਸਾਉਦੀ ਰਿਆਲ</displayName>
+				<displayName count="other">ਸਾਉਦੀ ਰਿਆਲ</displayName>
+			</currency>
+			<currency type="SBD">
+				<displayName>ਸੋਲੋਮਨ ਆਈਲੈਂਡਸ ਡਾਲਰ</displayName>
+				<displayName count="one">ਸੋਲੋਮਨ ਆਈਲੈਂਡਸ ਡਾਲਰ</displayName>
+				<displayName count="other">ਸੋਲੋਮਨ ਆਈਲੈਂਡਸ ਡਾਲਰ</displayName>
+			</currency>
+			<currency type="SCR">
+				<displayName>ਸੇਸ਼ਲਸ ਰੁਪਏ</displayName>
+				<displayName count="one">ਸੇਸ਼ਲਸ ਰੁਪਏ</displayName>
+				<displayName count="other">ਸੇਸ਼ਲਸ ਰੁਪਏ</displayName>
+			</currency>
+			<currency type="SDG">
+				<displayName>ਸੁਡਾਨੀਜ਼ ਪਾਉਂਡ</displayName>
+				<displayName count="one">ਸੁਡਾਨੀਜ਼ ਪਾਉਂਡ</displayName>
+				<displayName count="other">ਸੁਡਾਨੀਜ਼ ਪਾਉਂਡ</displayName>
+			</currency>
+			<currency type="SEK">
+				<displayName>ਸਵੀਡਿਸ਼ ਕਰੋਨਾ</displayName>
+				<displayName count="one">ਸਵੀਡਿਸ਼ ਕਰੋਨਾ</displayName>
+				<displayName count="other">ਸਵੀਡਿਸ਼ ਕਰੋਨਾ</displayName>
+			</currency>
+			<currency type="SGD">
+				<displayName>ਸਿੰਗਾਪੁਰ ਡਾਲਰ</displayName>
+				<displayName count="one">ਸਿੰਗਾਪੁਰ ਡਾਲਰ</displayName>
+				<displayName count="other">ਸਿੰਗਾਪੁਰ ਡਾਲਰ</displayName>
+			</currency>
+			<currency type="SHP">
+				<displayName>ਸੇਂਟ ਹੇਲੇਨਾ ਪਾਉਂਡ</displayName>
+				<displayName count="one">ਸੇਂਟ ਹੇਲੇਨਾ ਪਾਉਂਡ</displayName>
+				<displayName count="other">ਸੇਂਟ ਹੇਲੇਨਾ ਪਾਉਂਡ</displayName>
+			</currency>
+			<currency type="SLL">
+				<displayName>ਸਿਏਰਾ ਲਿਓਨੀਅਨ ਲਿਓਨ</displayName>
+				<displayName count="one">ਸਿਏਰਾ ਲਿਓਨੀਅਨ ਲਿਓਨ</displayName>
+				<displayName count="other">ਸਿਏਰਾ ਲਿਓਨੀਅਨ ਲਿਓਨ</displayName>
+			</currency>
+			<currency type="SOS">
+				<displayName>ਸੋਮਾਲੀ ਸ਼ਿਲਿੰਗ</displayName>
+				<displayName count="one">ਸੋਮਾਲੀ ਸ਼ਿਲਿੰਗ</displayName>
+				<displayName count="other">ਸੋਮਾਲੀ ਸ਼ਿਲਿੰਗ</displayName>
+			</currency>
+			<currency type="SRD">
+				<displayName>ਸੂਰੀਨਾਮੀਜ਼ ਡਾਲਰ</displayName>
+				<displayName count="one">ਸੂਰੀਨਾਮੀਜ਼ ਡਾਲਰ</displayName>
+				<displayName count="other">ਸੂਰੀਨਾਮੀਜ਼ ਡਾਲਰ</displayName>
+			</currency>
+			<currency type="SSP">
+				<displayName>ਦੱਖਣੀ ਸੁਡਾਨੀਜ਼ ਪਾਉਂਡ</displayName>
+				<displayName count="one">ਦੱਖਣੀ ਸੁਡਾਨੀਜ਼ ਪਾਉਂਡ</displayName>
+				<displayName count="other">ਦੱਖਣੀ ਸੁਡਾਨੀਜ਼ ਪਾਉਂਡ</displayName>
+			</currency>
+			<currency type="STD">
+				<displayName>ਸਾਉ ਟੋਮੀ ਐਂਡ ਪ੍ਰਿੰਸਪੀ ਡੋਬਰਾ</displayName>
+				<displayName count="one">ਸਾਉ ਟੋਮੀ ਐਂਡ ਪ੍ਰਿੰਸਪੀ ਡੋਬਰਾ</displayName>
+				<displayName count="other">ਸਾਉ ਟੋਮੀ ਐਂਡ ਪ੍ਰਿੰਸਪੀ ਡੋਬਰਾ</displayName>
+			</currency>
+			<currency type="SYP">
+				<displayName>ਸੀਰੀਆਈ ਪਾਉਂਡ</displayName>
+				<displayName count="one">ਸੀਰੀਆਈ ਪਾਉਂਡ</displayName>
+				<displayName count="other">ਸੀਰੀਆਈ ਪਾਉਂਡ</displayName>
+			</currency>
+			<currency type="SZL">
+				<displayName>ਸਵਾਜ਼ੀ ਲਾਇਲੈਂਗਨੀ</displayName>
+				<displayName count="one">ਸਵਾਜ਼ੀ ਲਾਇਲੈਂਗਨੀ</displayName>
+				<displayName count="other">ਸਵਾਜ਼ੀ ਲਾਇਲੈਂਗਨੀ</displayName>
+			</currency>
+			<currency type="THB">
+				<displayName>ਥਾਈ ਬਾਹਤ</displayName>
+				<displayName count="one">ਥਾਈ ਬਾਹਤ</displayName>
+				<displayName count="other">ਥਾਈ ਬਾਹਤ</displayName>
+				<symbol>฿</symbol>
+			</currency>
+			<currency type="TJS">
+				<displayName>ਤਾਜਿਕਿਸਤਾਨੀ ਸੋਮੋਨੀ</displayName>
+				<displayName count="one">ਤਾਜਿਕਿਸਤਾਨੀ ਸੋਮੋਨੀ</displayName>
+				<displayName count="other">ਤਾਜਿਕਿਸਤਾਨੀ ਸੋਮੋਨੀ</displayName>
+			</currency>
+			<currency type="TMT">
+				<displayName>ਤੁਰਕਮੇਨਿਸਤਾਨੀ ਮਾਨਤ</displayName>
+				<displayName count="one">ਤੁਰਕਮੇਨਿਸਤਾਨੀ ਮਾਨਤ</displayName>
+				<displayName count="other">ਤੁਰਕਮੇਨਿਸਤਾਨੀ ਮਾਨਤ</displayName>
+			</currency>
+			<currency type="TND">
+				<displayName>ਟਿਉਨੀਸ਼ੀਆਈ ਦਿਨਾਰ</displayName>
+				<displayName count="one">ਟਿਉਨੀਸ਼ੀਆਈ ਦਿਨਾਰ</displayName>
+				<displayName count="other">ਟਿਉਨੀਸ਼ੀਆਈ ਦਿਨਾਰ</displayName>
+			</currency>
+			<currency type="TOP">
+				<displayName>ਟੌਂਗਨ ਪੈਂਗਾ</displayName>
+				<displayName count="one">ਟੌਂਗਨ ਪੈਂਗਾ</displayName>
+				<displayName count="other">ਟੌਂਗਨ ਪੈਂਗਾ</displayName>
+			</currency>
+			<currency type="TRY">
+				<displayName>ਤੁਰਕਿਸ਼ ਲਿਰਾ</displayName>
+				<displayName count="one">ਤੁਰਕਿਸ਼ ਲਿਰਾ</displayName>
+				<displayName count="other">ਤੁਰਕਿਸ਼ ਲਿਰਾ</displayName>
+			</currency>
+			<currency type="TTD">
+				<displayName>ਟ੍ਰਿਨੀਡਾਡ ਅਤੇ ਟੋਬਾਗੋ ਡਾਲਰ</displayName>
+				<displayName count="one">ਟ੍ਰਿਨੀਡਾਡ ਅਤੇ ਟੋਬਾਗੋ ਡਾਲਰ</displayName>
+				<displayName count="other">ਟ੍ਰਿਨੀਡਾਡ ਅਤੇ ਟੋਬਾਗੋ ਡਾਲਰ</displayName>
+			</currency>
+			<currency type="TWD">
+				<displayName>ਨਵਾਂ ਤਾਇਵਾਨ ਡਾਲਰ</displayName>
+				<displayName count="one">ਨਵਾਂ ਤਾਇਵਾਨ ਡਾਲਰ</displayName>
+				<displayName count="other">ਨਵਾਂ ਤਾਇਵਾਨ ਡਾਲਰ</displayName>
+				<symbol>NT$</symbol>
+			</currency>
+			<currency type="TZS">
+				<displayName>ਤਨਜ਼ਾਨੀਆਈ ਸ਼ਿਲਿੰਗ</displayName>
+				<displayName count="one">ਤਨਜ਼ਾਨੀਆਈ ਸ਼ਿਲਿੰਗ</displayName>
+				<displayName count="other">ਤਨਜ਼ਾਨੀਆਈ ਸ਼ਿਲਿੰਗ</displayName>
+			</currency>
+			<currency type="UAH">
+				<displayName>ਯੂਕਰੇਨੀਆਈ ਰਿਵਨਿਆ</displayName>
+				<displayName count="one">ਯੂਕਰੇਨੀਆਈ ਰਿਵਨਿਆ</displayName>
+				<displayName count="other">ਯੂਕਰੇਨੀਆਈ ਰਿਵਨਿਆ</displayName>
+			</currency>
+			<currency type="UGX">
+				<displayName>ਯੂਗਾਂਡਨ ਸ਼ਿਲਿੰਗ</displayName>
+				<displayName count="one">ਯੂਗਾਂਡਨ ਸ਼ਿਲਿੰਗ</displayName>
+				<displayName count="other">ਯੂਗਾਂਡਨ ਸ਼ਿਲਿੰਗ</displayName>
+			</currency>
+			<currency type="USD">
+				<displayName>ਯੂ.ਐਸ. ਡਾਲਰ</displayName>
+				<displayName count="one">ਯੂ.ਐਸ. ਡਾਲਰ</displayName>
+				<displayName count="other">ਯੂ.ਐਸ. ਡਾਲਰ</displayName>
+				<symbol>US$</symbol>
+			</currency>
+			<currency type="UYU">
+				<displayName>ਉਰੂਗੁਵਾਇਨ ਪੈਸੋ</displayName>
+				<displayName count="one">ਉਰੂਗੁਵਾਇਨ ਪੈਸੋ</displayName>
+				<displayName count="other">ਉਰੂਗੁਵਾਇਨ ਪੈਸੋ</displayName>
+			</currency>
+			<currency type="UZS">
+				<displayName>ਉਜ਼ਬੇਕਿਸਤਾਨ ਸੋਮ</displayName>
+				<displayName count="one">ਉਜ਼ਬੇਕਿਸਤਾਨ ਸੋਮ</displayName>
+				<displayName count="other">ਉਜ਼ਬੇਕਿਸਤਾਨ ਸੋਮ</displayName>
+			</currency>
+			<currency type="VEF">
+				<displayName>ਵੇਨੇਜ਼ੂਏਲਨ ਬੋਲੀਵਰ</displayName>
+				<displayName count="one">ਵੇਨੇਜ਼ੂਏਲਨ ਬੋਲੀਵਰ</displayName>
+				<displayName count="other">ਵੇਨੇਜ਼ੂਏਲਨ ਬੋਲੀਵਰ</displayName>
+			</currency>
+			<currency type="VND">
+				<displayName>ਵਿਯਤਨਾਮੀ ਡੋਂਗ</displayName>
+				<displayName count="one">ਵਿਯਤਨਾਮੀ ਡੋਂਗ</displayName>
+				<displayName count="other">ਵਿਯਤਨਾਮੀ ਡੋਂਗ</displayName>
+				<symbol>₫</symbol>
+			</currency>
+			<currency type="VUV">
+				<displayName>ਵਾਨੂਆਟੂ ਵਾਟੂ</displayName>
+				<displayName count="one">ਵਾਨੂਆਟੂ ਵਾਟੂ</displayName>
+				<displayName count="other">ਵਾਨੂਆਟੂ ਵਾਟੂ</displayName>
+			</currency>
+			<currency type="WST">
+				<displayName>ਸਾਮੋਆਈ ਤਾਲਾ</displayName>
+				<displayName count="one">ਸਾਮੋਆਈ ਤਾਲਾ</displayName>
+				<displayName count="other">ਸਾਮੋਆਈ ਤਾਲਾ</displayName>
+			</currency>
+			<currency type="XAF">
+				<displayName>ਫ੍ਰੈਂਕ (CFA BEAC)</displayName>
+				<displayName count="one">ਫ੍ਰੈਂਕ (CFA BEAC)</displayName>
+				<displayName count="other">ਫ੍ਰੈਂਕ (CFA BEAC)</displayName>
+				<symbol>FCFA</symbol>
+			</currency>
+			<currency type="XCD">
+				<displayName>ਪੂਰਬੀ ਕੈਰੇਬੀਅਨ ਡਾਲਰ</displayName>
+				<displayName count="one">ਪੂਰਬੀ ਕੈਰੇਬੀਅਨ ਡਾਲਰ</displayName>
+				<displayName count="other">ਪੂਰਬੀ ਕੈਰੇਬੀਅਨ ਡਾਲਰ</displayName>
+				<symbol>EC$</symbol>
+			</currency>
+			<currency type="XOF">
+				<displayName>ਫ੍ਰੈਂਕ (CFA BCEAO)</displayName>
+				<displayName count="one">ਫ੍ਰੈਂਕ (CFA BCEAO)</displayName>
+				<displayName count="other">ਫ੍ਰੈਂਕ (CFA BCEAO)</displayName>
+				<symbol>CFA</symbol>
+			</currency>
+			<currency type="XPF">
+				<displayName>ਫ੍ਰੈਂਕ (CFP)</displayName>
+				<displayName count="one">ਫ੍ਰੈਂਕ (CFP)</displayName>
+				<displayName count="other">ਫ੍ਰੈਂਕ (CFP)</displayName>
+				<symbol>CFPF</symbol>
+			</currency>
+			<currency type="XXX">
+				<displayName>ਅਗਿਆਤ ਮੁਦਰਾ</displayName>
+				<displayName count="one">(ਮੁਦਰਾ ਦੀ ਅਗਿਆਤ ਇਕਾਈ)</displayName>
+				<displayName count="other">(ਅਗਿਆਤ ਮੁਦਰਾ)</displayName>
+			</currency>
+			<currency type="YER">
+				<displayName>ਯਮਨੀ ਰਿਆਲ</displayName>
+				<displayName count="one">ਯਮਨੀ ਰਿਆਲ</displayName>
+				<displayName count="other">ਯਮਨੀ ਰਿਆਲ</displayName>
+			</currency>
+			<currency type="ZAR">
+				<displayName>ਦੱਖਣੀ ਅਫਰੀਕੀ ਰੈਂਡ</displayName>
+				<displayName count="one">ਦੱਖਣੀ ਅਫਰੀਕੀ ਰੈਂਡ</displayName>
+				<displayName count="other">ਦੱਖਣੀ ਅਫਰੀਕੀ ਰੈਂਡ</displayName>
+			</currency>
+			<currency type="ZMW">
+				<displayName>ਜ਼ਾਮਬੀਆਈ ਕਵਾਚਾ</displayName>
+				<displayName count="one">ਜ਼ਾਮਬੀਆਈ ਕਵਾਚਾ</displayName>
+				<displayName count="other">ਜ਼ਾਮਬੀਆਈ ਕਵਾਚਾ</displayName>
+			</currency>
+		</currencies>
+		<miscPatterns numberSystem="latn">
+			<pattern type="atLeast">{0}+</pattern>
+			<pattern type="range">{0}–{1}</pattern>
+		</miscPatterns>
+	</numbers>
+	<units>
+		<unitLength type="long">
+			<compoundUnit type="per">
+				<compoundUnitPattern>{0} ਪ੍ਰਤੀ {1}</compoundUnitPattern>
+			</compoundUnit>
+			<unit type="acceleration-g-force">
+				<unitPattern count="one">{0} ਗੁਰੂਤੱਵ ਆਕਰਸ਼ਨ ਸ਼ਕਤੀ</unitPattern>
+				<unitPattern count="other">{0} ਗੁਰੂਤੱਵ ਆਕਰਸ਼ਨ ਸ਼ਕਤੀ</unitPattern>
+			</unit>
+			<unit type="angle-arc-minute">
+				<unitPattern count="one">{0} ਮਿਨਟ</unitPattern>
+				<unitPattern count="other">{0} ਮਿਨਟ</unitPattern>
+			</unit>
+			<unit type="angle-arc-second">
+				<unitPattern count="one">{0} ਸੈਕੇਂਡ</unitPattern>
+				<unitPattern count="other">{0} ਸੈਕੇਂਡ</unitPattern>
+			</unit>
+			<unit type="angle-degree">
+				<unitPattern count="one">{0} ਡਿਗਰੀ</unitPattern>
+				<unitPattern count="other">{0} ਡਿਗਰੀ</unitPattern>
+			</unit>
+			<unit type="area-acre">
+				<unitPattern count="one">{0} ਏਕੜ</unitPattern>
+				<unitPattern count="other">{0} ਏਕੜ</unitPattern>
+			</unit>
+			<unit type="area-hectare">
+				<unitPattern count="one">{0} ਹੈਕਟੇਅਰ</unitPattern>
+				<unitPattern count="other">{0} ਹੈਕਟੇਅਰ</unitPattern>
+			</unit>
+			<unit type="area-square-foot">
+				<unitPattern count="one">{0} ਵਰਗ ਫੁੱਟ</unitPattern>
+				<unitPattern count="other">{0} ਵਰਗ ਫੁੱਟ</unitPattern>
+			</unit>
+			<unit type="area-square-kilometer">
+				<unitPattern count="one">{0} ਵਰਗ ਕਿਲੋਮੀਟਰ</unitPattern>
+				<unitPattern count="other">{0} ਵਰਗ ਕਿਲੋਮੀਟਰ</unitPattern>
+			</unit>
+			<unit type="area-square-meter">
+				<unitPattern count="one">{0} ਵਰਗ ਮੀਟਰ</unitPattern>
+				<unitPattern count="other">{0} ਵਰਗ ਮੀਟਰ</unitPattern>
+			</unit>
+			<unit type="area-square-mile">
+				<unitPattern count="one">{0} ਵਰਗ ਮੀਲ</unitPattern>
+				<unitPattern count="other">{0} ਵਰਗ ਮੀਲ</unitPattern>
+			</unit>
+			<unit type="duration-day">
+				<unitPattern count="one">{0} ਦਿਨ</unitPattern>
+				<unitPattern count="other">{0} ਦਿਨ</unitPattern>
+			</unit>
+			<unit type="duration-hour">
+				<unitPattern count="one">{0} ਘੰਟਾ</unitPattern>
+				<unitPattern count="other">{0} ਘੰਟੇ</unitPattern>
+			</unit>
+			<unit type="duration-millisecond">
+				<unitPattern count="one">{0} ਮਿਲੀ ਸਕਿੰਟ</unitPattern>
+				<unitPattern count="other">{0} ਮਿਲੀ ਸਕਿੰਟ</unitPattern>
+			</unit>
+			<unit type="duration-minute">
+				<unitPattern count="one">{0} ਮਿੰਟ</unitPattern>
+				<unitPattern count="other">{0} ਮਿੰਟ</unitPattern>
+			</unit>
+			<unit type="duration-month">
+				<unitPattern count="one">{0} ਮਹੀਨਾ</unitPattern>
+				<unitPattern count="other">{0} ਮਹੀਨੇ</unitPattern>
+			</unit>
+			<unit type="duration-second">
+				<unitPattern count="one">{0} ਸਕਿੰਟ</unitPattern>
+				<unitPattern count="other">{0} ਸਕਿੰਟ</unitPattern>
+			</unit>
+			<unit type="duration-week">
+				<unitPattern count="one">{0} ਹਫ਼ਤਾ</unitPattern>
+				<unitPattern count="other">{0} ਹਫ਼ਤੇ</unitPattern>
+			</unit>
+			<unit type="duration-year">
+				<unitPattern count="one">{0} ਸਾਲ</unitPattern>
+				<unitPattern count="other">{0} ਸਾਲ</unitPattern>
+			</unit>
+			<unit type="length-centimeter">
+				<unitPattern count="one">{0} ਸੈਂਟੀਮੀਟਰ</unitPattern>
+				<unitPattern count="other">{0} ਸੈਂਟੀਮੀਟਰ</unitPattern>
+			</unit>
+			<unit type="length-foot">
+				<unitPattern count="one">{0} ਫੁੱਟ</unitPattern>
+				<unitPattern count="other">{0} ਫੁੱਟ</unitPattern>
+			</unit>
+			<unit type="length-inch">
+				<unitPattern count="one">{0} ਇੰਚ</unitPattern>
+				<unitPattern count="other">{0} ਇੰਚ</unitPattern>
+			</unit>
+			<unit type="length-kilometer">
+				<unitPattern count="one">{0} ਕਿਲੋਮੀਟਰ</unitPattern>
+				<unitPattern count="other">{0} ਕਿਲੋਮੀਟਰ</unitPattern>
+			</unit>
+			<unit type="length-light-year">
+				<unitPattern count="one">{0} ਪ੍ਰਕਾਸ਼ ਸਾਲ</unitPattern>
+				<unitPattern count="other">{0} ਪ੍ਰਕਾਸ਼ ਸਾਲ</unitPattern>
+			</unit>
+			<unit type="length-meter">
+				<unitPattern count="one">{0} ਮੀਟਰ</unitPattern>
+				<unitPattern count="other">{0} ਮੀਟਰ</unitPattern>
+			</unit>
+			<unit type="length-mile">
+				<unitPattern count="one">{0} ਮੀਲ</unitPattern>
+				<unitPattern count="other">{0} ਮੀਲ</unitPattern>
+			</unit>
+			<unit type="length-millimeter">
+				<unitPattern count="one">{0} ਮਿਲੀਮੀਟਰ</unitPattern>
+				<unitPattern count="other">{0} ਮਿਲੀਮੀਟਰ</unitPattern>
+			</unit>
+			<unit type="length-picometer">
+				<unitPattern count="one">{0} ਪਿਕੋਮੀਟਰ</unitPattern>
+				<unitPattern count="other">{0} ਪਿਕੋਮੀਟਰ</unitPattern>
+			</unit>
+			<unit type="length-yard">
+				<unitPattern count="one">{0} ਯਾਰਡ</unitPattern>
+				<unitPattern count="other">{0} ਯਾਰਡ</unitPattern>
+			</unit>
+			<unit type="mass-gram">
+				<unitPattern count="one">{0} ਗ੍ਰਾਮ</unitPattern>
+				<unitPattern count="other">{0} ਗ੍ਰਾਮ</unitPattern>
+			</unit>
+			<unit type="mass-kilogram">
+				<unitPattern count="one">{0} ਕਿਲੋਗ੍ਰਾਮ</unitPattern>
+				<unitPattern count="other">{0} ਕਿਲੋਗ੍ਰਾਮ</unitPattern>
+			</unit>
+			<unit type="mass-ounce">
+				<unitPattern count="one">{0} ਆਉਂਸ</unitPattern>
+				<unitPattern count="other">{0} ਆਉਂਸ</unitPattern>
+			</unit>
+			<unit type="mass-pound">
+				<unitPattern count="one">{0} ਪਾਉਂਡ</unitPattern>
+				<unitPattern count="other">{0} ਪਾਉਂਡ</unitPattern>
+			</unit>
+			<unit type="power-horsepower">
+				<unitPattern count="one">{0} ਹੌਰਸਪਾਵਰ</unitPattern>
+				<unitPattern count="other">{0} ਹੌਰਸਪਾਵਰ</unitPattern>
+			</unit>
+			<unit type="power-kilowatt">
+				<unitPattern count="one">{0} ਕਿਲੋਵਾਟ</unitPattern>
+				<unitPattern count="other">{0} ਕਿਲੋਵਾਟ</unitPattern>
+			</unit>
+			<unit type="power-watt">
+				<unitPattern count="one">{0} ਵਾਟ</unitPattern>
+				<unitPattern count="other">{0} ਵਾਟ</unitPattern>
+			</unit>
+			<unit type="pressure-hectopascal">
+				<unitPattern count="one">{0} ਹੈਕਟੋਪਾਸਕਲ</unitPattern>
+				<unitPattern count="other">{0} ਹੈਕਟੋਪਾਸਕਲ</unitPattern>
+			</unit>
+			<unit type="pressure-inch-hg">
+				<unitPattern count="one">{0} ਪਾਰੇ ਦਾ ਇੰਚ</unitPattern>
+				<unitPattern count="other">{0} ਪਾਰੇ ਦਾ ਇੰਚ</unitPattern>
+			</unit>
+			<unit type="pressure-millibar">
+				<unitPattern count="one">{0} ਮਿਲੀਬਾਰ</unitPattern>
+				<unitPattern count="other">{0} ਮਿਲੀਬਾਰ</unitPattern>
+			</unit>
+			<unit type="speed-kilometer-per-hour">
+				<unitPattern count="one">{0} ਕਿਲੋਮੀਟਰ ਪ੍ਰਤੀ ਘੰਟਾ</unitPattern>
+				<unitPattern count="other">{0} ਕਿਲੋਮੀਟਰ ਪ੍ਰਤੀ ਘੰਟਾ</unitPattern>
+			</unit>
+			<unit type="speed-meter-per-second">
+				<unitPattern count="one">{0} ਮੀਟਰ ਪ੍ਰਤੀ ਸਕਿੰਟ</unitPattern>
+				<unitPattern count="other">{0} ਮੀਟਰ ਪ੍ਰਤੀ ਸਕਿੰਟ</unitPattern>
+			</unit>
+			<unit type="speed-mile-per-hour">
+				<unitPattern count="one">{0} ਮੀਲ ਪ੍ਰਤੀ ਘੰਟਾ</unitPattern>
+				<unitPattern count="other">{0} ਮੀਲ ਪ੍ਰਤੀ ਘੰਟਾ</unitPattern>
+			</unit>
+			<unit type="temperature-celsius">
+				<unitPattern count="one">{0} ਡਿਗਰੀ ਸੈਲਸੀਅਸ</unitPattern>
+				<unitPattern count="other">{0} ਡਿਗਰੀ ਸੈਲਸੀਅਸ</unitPattern>
+			</unit>
+			<unit type="temperature-fahrenheit">
+				<unitPattern count="one">{0} ਡਿਗਰੀ ਫਾਰੇਨਹਾਈਟ</unitPattern>
+				<unitPattern count="other">{0} ਡਿਗਰੀ ਫਾਰੇਨਹਾਈਟ</unitPattern>
+			</unit>
+			<unit type="volume-cubic-kilometer">
+				<unitPattern count="one">{0} ਘਣ ਕਿਲੋਮੀਟਰ</unitPattern>
+				<unitPattern count="other">{0} ਘਣ ਕਿਲੋਮੀਟਰ</unitPattern>
+			</unit>
+			<unit type="volume-cubic-mile">
+				<unitPattern count="one">{0} ਘਣ ਮੀਲ</unitPattern>
+				<unitPattern count="other">{0} ਘਣ ਮੀਲ</unitPattern>
+			</unit>
+			<unit type="volume-liter">
+				<unitPattern count="one">{0} ਲੀਟਰ</unitPattern>
+				<unitPattern count="other">{0} ਲੀਟਰ</unitPattern>
+			</unit>
+		</unitLength>
+		<unitLength type="short">
+			<compoundUnit type="per">
+				<compoundUnitPattern>{0}/{1}</compoundUnitPattern>
+			</compoundUnit>
+			<unit type="acceleration-g-force">
+				<unitPattern count="one">{0} ਗੁ-ਸ਼ਕਤੀ</unitPattern>
+				<unitPattern count="other">{0} ਗੁ-ਸ਼ਕਤੀ</unitPattern>
+			</unit>
+			<unit type="angle-arc-minute">
+				<unitPattern count="one">{0} ਮਿਨਟ</unitPattern>
+				<unitPattern count="other">{0} ਮਿਨਟ</unitPattern>
+			</unit>
+			<unit type="angle-arc-second">
+				<unitPattern count="one">{0} ਸੈਕੇਂਡ</unitPattern>
+				<unitPattern count="other">{0} ਸੈਕੇਂਡ</unitPattern>
+			</unit>
+			<unit type="angle-degree">
+				<unitPattern count="one">{0} ਡਿ.</unitPattern>
+				<unitPattern count="other">{0} ਡਿ.</unitPattern>
+			</unit>
+			<unit type="area-acre">
+				<unitPattern count="one">{0} ਏਕੜ</unitPattern>
+				<unitPattern count="other">{0} ਏਕੜ</unitPattern>
+			</unit>
+			<unit type="area-hectare">
+				<unitPattern count="one">{0} ਹੈਕਟੇਅਰ</unitPattern>
+				<unitPattern count="other">{0} ਹੈਕਟੇਅਰ</unitPattern>
+			</unit>
+			<unit type="area-square-foot">
+				<unitPattern count="one">{0} ਵ.ਫੁੱ.</unitPattern>
+				<unitPattern count="other">{0} ਵ.ਫੁੱ.</unitPattern>
+			</unit>
+			<unit type="area-square-kilometer">
+				<unitPattern count="one">{0} ਵ.ਕਿ.ਮੀ.</unitPattern>
+				<unitPattern count="other">{0} ਵ.ਕਿ.ਮੀ.</unitPattern>
+			</unit>
+			<unit type="area-square-meter">
+				<unitPattern count="one">{0} ਵ.ਮੀ.</unitPattern>
+				<unitPattern count="other">{0} ਵ.ਮੀ.</unitPattern>
+			</unit>
+			<unit type="area-square-mile">
+				<unitPattern count="one">{0} ਵ. ਮੀਲ</unitPattern>
+				<unitPattern count="other">{0} ਵ. ਮੀਲ</unitPattern>
+			</unit>
+			<unit type="duration-day">
+				<unitPattern count="one">{0} ਦਿਨ</unitPattern>
+				<unitPattern count="other">{0} ਦਿਨ</unitPattern>
+			</unit>
+			<unit type="duration-hour">
+				<unitPattern count="one">{0} ਘੰਟਾ</unitPattern>
+				<unitPattern count="other">{0} ਘੰਟੇ</unitPattern>
+			</unit>
+			<unit type="duration-millisecond">
+				<unitPattern count="one">{0} ਮਿਲੀ ਸਕਿੰਟ</unitPattern>
+				<unitPattern count="other">{0} ਮਿਲੀ ਸਕਿੰਟ</unitPattern>
+			</unit>
+			<unit type="duration-minute">
+				<unitPattern count="one">{0} ਮਿੰਟ</unitPattern>
+				<unitPattern count="other">{0} ਮਿੰਟ</unitPattern>
+			</unit>
+			<unit type="duration-month">
+				<unitPattern count="one">{0} ਮਹੀਨਾ</unitPattern>
+				<unitPattern count="other">{0} ਮਹੀਨੇ</unitPattern>
+			</unit>
+			<unit type="duration-second">
+				<unitPattern count="one">{0} ਸਕਿੰਟ</unitPattern>
+				<unitPattern count="other">{0} ਸਕਿੰਟ</unitPattern>
+			</unit>
+			<unit type="duration-week">
+				<unitPattern count="one">{0} ਹਫ਼ਤਾ</unitPattern>
+				<unitPattern count="other">{0} ਹਫ਼ਤੇ</unitPattern>
+			</unit>
+			<unit type="duration-year">
+				<unitPattern count="one">{0} ਸਾਲ</unitPattern>
+				<unitPattern count="other">{0} ਸਾਲ</unitPattern>
+			</unit>
+			<unit type="length-centimeter">
+				<unitPattern count="one">{0} ਸੈਂਟੀਮੀਟਰ</unitPattern>
+				<unitPattern count="other">{0} ਸੈਂਟੀਮੀਟਰ</unitPattern>
+			</unit>
+			<unit type="length-foot">
+				<unitPattern count="one">{0} ਫੁੱ.</unitPattern>
+				<unitPattern count="other">{0} ਫੁੱ.</unitPattern>
+			</unit>
+			<unit type="length-inch">
+				<unitPattern count="one">{0} ਇੰਚ</unitPattern>
+				<unitPattern count="other">{0} ਇੰਚ</unitPattern>
+			</unit>
+			<unit type="length-kilometer">
+				<unitPattern count="one">{0} ਕਿ.ਮੀ.</unitPattern>
+				<unitPattern count="other">{0} ਕਿ.ਮੀ.</unitPattern>
+			</unit>
+			<unit type="length-light-year">
+				<unitPattern count="one">{0} ਪ੍ਰਕਾਸ਼ ਸਾਲ</unitPattern>
+				<unitPattern count="other">{0} ਪ੍ਰਕਾਸ਼ ਸਾਲ</unitPattern>
+			</unit>
+			<unit type="length-meter">
+				<unitPattern count="one">{0} ਮੀ.</unitPattern>
+				<unitPattern count="other">{0} ਮੀ.</unitPattern>
+			</unit>
+			<unit type="length-mile">
+				<unitPattern count="one">{0} ਮੀਲ</unitPattern>
+				<unitPattern count="other">{0} ਮੀਲ</unitPattern>
+			</unit>
+			<unit type="length-millimeter">
+				<unitPattern count="one">{0} ਮਿ.ਮੀ.</unitPattern>
+				<unitPattern count="other">{0} ਮਿ.ਮੀ.</unitPattern>
+			</unit>
+			<unit type="length-picometer">
+				<unitPattern count="one">{0} ਪਿਕੋਮੀਟਰ</unitPattern>
+				<unitPattern count="other">{0} ਪਿਕੋਮੀਟਰ</unitPattern>
+			</unit>
+			<unit type="length-yard">
+				<unitPattern count="one">{0} ਯਾਰਡ</unitPattern>
+				<unitPattern count="other">{0} ਯਾਰਡ</unitPattern>
+			</unit>
+			<unit type="mass-gram">
+				<unitPattern count="one">{0} ਗ੍ਰਾ.</unitPattern>
+				<unitPattern count="other">{0} ਗ੍ਰਾ.</unitPattern>
+			</unit>
+			<unit type="mass-kilogram">
+				<unitPattern count="one">{0} ਕਿ.ਗ੍ਰਾ.</unitPattern>
+				<unitPattern count="other">{0} ਕਿ.ਗ੍ਰਾ.</unitPattern>
+			</unit>
+			<unit type="mass-ounce">
+				<unitPattern count="one">{0} ਆਉਂਸ</unitPattern>
+				<unitPattern count="other">{0} ਆਉਂਸ</unitPattern>
+			</unit>
+			<unit type="mass-pound">
+				<unitPattern count="one">{0} ਪਾਉਂਡ</unitPattern>
+				<unitPattern count="other">{0} ਪਾਉਂਡ</unitPattern>
+			</unit>
+			<unit type="power-horsepower">
+				<unitPattern count="one">{0} ਹੌਰਸਪਾਵਰ</unitPattern>
+				<unitPattern count="other">{0} ਹੌਰਸਪਾਵਰ</unitPattern>
+			</unit>
+			<unit type="power-kilowatt">
+				<unitPattern count="one">{0} ਕਿ. ਵਾਟ</unitPattern>
+				<unitPattern count="other">{0} ਕਿ. ਵਾਟ</unitPattern>
+			</unit>
+			<unit type="power-watt">
+				<unitPattern count="one">{0} ਵਾਟ</unitPattern>
+				<unitPattern count="other">{0} ਵਾਟ</unitPattern>
+			</unit>
+			<unit type="pressure-hectopascal">
+				<unitPattern count="one">{0} ਹੈਕਟੋਪਾਸਕਲ</unitPattern>
+				<unitPattern count="other">{0} ਹੈਕਟੋਪਾਸਕਲ</unitPattern>
+			</unit>
+			<unit type="pressure-inch-hg">
+				<unitPattern count="one">{0} ਪਾਰੇ ਦਾ ਇੰਚ</unitPattern>
+				<unitPattern count="other">{0} ਪਾਰੇ ਦਾ ਇੰਚ</unitPattern>
+			</unit>
+			<unit type="pressure-millibar">
+				<unitPattern count="one">{0} ਮਿਲੀਬਾਰ</unitPattern>
+				<unitPattern count="other">{0} ਮਿਲੀਬਾਰ</unitPattern>
+			</unit>
+			<unit type="speed-kilometer-per-hour">
+				<unitPattern count="one">{0} ਕਿ.ਮੀ./ਘੰਟਾ</unitPattern>
+				<unitPattern count="other">{0} ਕਿ.ਮੀ./ਘੰਟਾ</unitPattern>
+			</unit>
+			<unit type="speed-meter-per-second">
+				<unitPattern count="one">{0} ਮੀ./ਸਕਿੰਟ</unitPattern>
+				<unitPattern count="other">{0} ਮੀ./ਸਕਿੰਟ</unitPattern>
+			</unit>
+			<unit type="speed-mile-per-hour">
+				<unitPattern count="one">{0} ਮੀਲ/ਘੰਟਾ</unitPattern>
+				<unitPattern count="other">{0} ਮੀਲ/ਘੰਟਾ</unitPattern>
+			</unit>
+			<unit type="temperature-celsius">
+				<unitPattern count="one">{0} ਡਿਗਰੀ ਸੈਲਸੀਅਸ</unitPattern>
+				<unitPattern count="other">{0} ਡਿਗਰੀ ਸੈਲਸੀਅਸ</unitPattern>
+			</unit>
+			<unit type="temperature-fahrenheit">
+				<unitPattern count="one">{0} ਡਿਗਰੀ ਫਾਰੇਨਹਾਈਟ</unitPattern>
+				<unitPattern count="other">{0} ਡਿਗਰੀ ਫਾਰੇਨਹਾਈਟ</unitPattern>
+			</unit>
+			<unit type="volume-cubic-kilometer">
+				<unitPattern count="one">{0} ਘਣ ਕਿ.ਮੀ.</unitPattern>
+				<unitPattern count="other">{0} ਘਣ ਕਿ.ਮੀ.</unitPattern>
+			</unit>
+			<unit type="volume-cubic-mile">
+				<unitPattern count="one">{0} ਘਣ ਮੀਲ</unitPattern>
+				<unitPattern count="other">{0} ਘਣ ਮੀਲ</unitPattern>
+			</unit>
+			<unit type="volume-liter">
+				<unitPattern count="one">{0} ਲੀ.</unitPattern>
+				<unitPattern count="other">{0} ਲੀ.</unitPattern>
+			</unit>
+		</unitLength>
+		<unitLength type="narrow">
+			<compoundUnit type="per">
+				<compoundUnitPattern>{0} ਪ੍ਰਤੀ {1}</compoundUnitPattern>
+			</compoundUnit>
+			<unit type="acceleration-g-force">
+				<unitPattern count="one">{0} G</unitPattern>
+				<unitPattern count="other">{0} G</unitPattern>
+			</unit>
+			<unit type="angle-arc-minute">
+				<unitPattern count="one">{0}′</unitPattern>
+				<unitPattern count="other">{0}′</unitPattern>
+			</unit>
+			<unit type="angle-arc-second">
+				<unitPattern count="one">{0}″</unitPattern>
+				<unitPattern count="other">{0}″</unitPattern>
+			</unit>
+			<unit type="angle-degree">
+				<unitPattern count="one">{0}°</unitPattern>
+				<unitPattern count="other">{0}°</unitPattern>
+			</unit>
+			<unit type="area-acre">
+				<unitPattern count="one">{0} ਏਕੜ</unitPattern>
+				<unitPattern count="other">{0} ਏਕੜ</unitPattern>
+			</unit>
+			<unit type="area-hectare">
+				<unitPattern count="one">{0} ਹੈਕਟੇਅਰ</unitPattern>
+				<unitPattern count="other">{0} ਹੈਕਟੇਅਰ</unitPattern>
+			</unit>
+			<unit type="area-square-foot">
+				<unitPattern count="one">{0} ਵ.ਫੁੱ.</unitPattern>
+				<unitPattern count="other">{0} ਵ.ਫੁੱ.</unitPattern>
+			</unit>
+			<unit type="area-square-kilometer">
+				<unitPattern count="one">{0} ਵ.ਕਿਮੀ</unitPattern>
+				<unitPattern count="other">{0} ਵ.ਕਿਮੀ</unitPattern>
+			</unit>
+			<unit type="area-square-meter">
+				<unitPattern count="one">{0} ਵ.ਮੀ.</unitPattern>
+				<unitPattern count="other">{0} ਵ.ਮੀ.</unitPattern>
+			</unit>
+			<unit type="area-square-mile">
+				<unitPattern count="one">{0} ਵ. ਮੀਲ</unitPattern>
+				<unitPattern count="other">{0} ਵ. ਮੀਲ</unitPattern>
+			</unit>
+			<unit type="duration-day">
+				<unitPattern count="one">{0} ਦਿਨ</unitPattern>
+				<unitPattern count="other">{0} ਦਿਨ</unitPattern>
+			</unit>
+			<unit type="duration-hour">
+				<unitPattern count="one">{0} ਘੰਟੇ</unitPattern>
+				<unitPattern count="other">{0} ਘੰਟੇ</unitPattern>
+			</unit>
+			<unit type="duration-millisecond">
+				<unitPattern count="one">{0} ms</unitPattern>
+				<unitPattern count="other">{0} ms</unitPattern>
+			</unit>
+			<unit type="duration-minute">
+				<unitPattern count="one">{0} ਮਿੰਟ</unitPattern>
+				<unitPattern count="other">{0} ਮਿੰਟ</unitPattern>
+			</unit>
+			<unit type="duration-month">
+				<unitPattern count="one">{0} ਮਹੀਨਾ</unitPattern>
+				<unitPattern count="other">{0} ਮਹੀਨੇ</unitPattern>
+			</unit>
+			<unit type="duration-second">
+				<unitPattern count="one">{0} ਸਕਿੰਟ</unitPattern>
+				<unitPattern count="other">{0} ਸਕਿੰਟ</unitPattern>
+			</unit>
+			<unit type="duration-week">
+				<unitPattern count="one">{0} ਹਫ਼ਤਾ</unitPattern>
+				<unitPattern count="other">{0} ਹਫ਼ਤੇ</unitPattern>
+			</unit>
+			<unit type="duration-year">
+				<unitPattern count="one">{0} ਸਾਲ</unitPattern>
+				<unitPattern count="other">{0} ਸਾਲ</unitPattern>
+			</unit>
+			<unit type="length-centimeter">
+				<unitPattern count="one">{0} ਸੈਂਟੀਮੀਟਰ</unitPattern>
+				<unitPattern count="other">{0} ਸੈਂਟੀਮੀਟਰ</unitPattern>
+			</unit>
+			<unit type="length-foot">
+				<unitPattern count="one">{0}'</unitPattern>
+				<unitPattern count="other">{0}'</unitPattern>
+			</unit>
+			<unit type="length-inch">
+				<unitPattern count="one">{0}&quot;</unitPattern>
+				<unitPattern count="other">{0}&quot;</unitPattern>
+			</unit>
+			<unit type="length-kilometer">
+				<unitPattern count="one">{0} ਕਿਮੀ</unitPattern>
+				<unitPattern count="other">{0} ਕਿਮੀ</unitPattern>
+			</unit>
+			<unit type="length-light-year">
+				<unitPattern count="one">{0} ਪ੍ਰਕਾਸ਼ ਸਾਲ</unitPattern>
+				<unitPattern count="other">{0} ਪ੍ਰਕਾਸ਼ ਸਾਲ</unitPattern>
+			</unit>
+			<unit type="length-meter">
+				<unitPattern count="one">{0} ਮੀ</unitPattern>
+				<unitPattern count="other">{0} ਮੀ</unitPattern>
+			</unit>
+			<unit type="length-mile">
+				<unitPattern count="one">{0} ਮੀਲ</unitPattern>
+				<unitPattern count="other">{0} ਮੀਲ</unitPattern>
+			</unit>
+			<unit type="length-millimeter">
+				<unitPattern count="one">{0} ਮਿਮੀ</unitPattern>
+				<unitPattern count="other">{0} ਮਿਮੀ</unitPattern>
+			</unit>
+			<unit type="length-picometer">
+				<unitPattern count="one">{0} ਪਿਕੋਮੀਟਰ</unitPattern>
+				<unitPattern count="other">{0} ਪਿਕੋਮੀਟਰ</unitPattern>
+			</unit>
+			<unit type="length-yard">
+				<unitPattern count="one">{0} ਯਾਰਡ</unitPattern>
+				<unitPattern count="other">{0} ਯਾਰਡ</unitPattern>
+			</unit>
+			<unit type="mass-gram">
+				<unitPattern count="one">{0} ਗ੍ਰਾ.</unitPattern>
+				<unitPattern count="other">{0} ਗ੍ਰਾ.</unitPattern>
+			</unit>
+			<unit type="mass-kilogram">
+				<unitPattern count="one">{0} ਕਿ.ਗ੍ਰਾ.</unitPattern>
+				<unitPattern count="other">{0} ਕਿ.ਗ੍ਰਾ.</unitPattern>
+			</unit>
+			<unit type="mass-ounce">
+				<unitPattern count="one">{0} ਆਉਂਸ</unitPattern>
+				<unitPattern count="other">{0} ਆਉਂਸ</unitPattern>
+			</unit>
+			<unit type="mass-pound">
+				<unitPattern count="one">{0} ਪਾਉਂਡ</unitPattern>
+				<unitPattern count="other">{0} ਪਾਉਂਡ</unitPattern>
+			</unit>
+			<unit type="power-horsepower">
+				<unitPattern count="one">{0} hp</unitPattern>
+				<unitPattern count="other">{0} hp</unitPattern>
+			</unit>
+			<unit type="power-kilowatt">
+				<unitPattern count="one">{0}kW</unitPattern>
+				<unitPattern count="other">{0}kW</unitPattern>
+			</unit>
+			<unit type="power-watt">
+				<unitPattern count="one">{0}W</unitPattern>
+				<unitPattern count="other">{0}W</unitPattern>
+			</unit>
+			<unit type="pressure-hectopascal">
+				<unitPattern count="one">{0} hPa</unitPattern>
+				<unitPattern count="other">{0} hPa</unitPattern>
+			</unit>
+			<unit type="pressure-inch-hg">
+				<unitPattern count="one">{0} ਪਾਰੇ ਦਾ ਇੰਚ</unitPattern>
+				<unitPattern count="other">{0} ਪਾਰੇ ਦਾ ਇੰਚ</unitPattern>
+			</unit>
+			<unit type="pressure-millibar">
+				<unitPattern count="one">{0} ਮਿਲੀਬਾਰ</unitPattern>
+				<unitPattern count="other">{0} ਮਿਲੀਬਾਰ</unitPattern>
+			</unit>
+			<unit type="speed-kilometer-per-hour">
+				<unitPattern count="one">{0} km/h</unitPattern>
+				<unitPattern count="other">{0} km/h</unitPattern>
+			</unit>
+			<unit type="speed-meter-per-second">
+				<unitPattern count="one">{0} m/s</unitPattern>
+				<unitPattern count="other">{0} m/s</unitPattern>
+			</unit>
+			<unit type="speed-mile-per-hour">
+				<unitPattern count="one">{0}mph</unitPattern>
+				<unitPattern count="other">{0}mph</unitPattern>
+			</unit>
+			<unit type="temperature-celsius">
+				<unitPattern count="one">{0}°</unitPattern>
+				<unitPattern count="other">{0}°</unitPattern>
+			</unit>
+			<unit type="temperature-fahrenheit">
+				<unitPattern count="one">{0}°F</unitPattern>
+				<unitPattern count="other">{0}°F</unitPattern>
+			</unit>
+			<unit type="volume-cubic-kilometer">
+				<unitPattern count="one">{0} ਘਣ ਕਿਮੀ</unitPattern>
+				<unitPattern count="other">{0} ਘਣ ਕਿਮੀ</unitPattern>
+			</unit>
+			<unit type="volume-cubic-mile">
+				<unitPattern count="one">{0} ਘਣ ਮੀਲ</unitPattern>
+				<unitPattern count="other">{0} ਘਣ ਮੀਲ</unitPattern>
+			</unit>
+			<unit type="volume-liter">
+				<unitPattern count="one">{0} ਲੀ.</unitPattern>
+				<unitPattern count="other">{0} ਲੀ.</unitPattern>
+			</unit>
+		</unitLength>
+		<durationUnit type="hm">
+			<durationUnitPattern>h:mm</durationUnitPattern>
+		</durationUnit>
+		<durationUnit type="hms">
+			<durationUnitPattern>h:mm:ss</durationUnitPattern>
+		</durationUnit>
+		<durationUnit type="ms">
+			<durationUnitPattern>m:ss</durationUnitPattern>
+		</durationUnit>
+	</units>
+	<listPatterns>
+		<listPattern>
+			<listPatternPart type="start">{0}, {1}</listPatternPart>
+			<listPatternPart type="middle">{0}, {1}</listPatternPart>
+			<listPatternPart type="end">{0} ਅਤੇ {1}</listPatternPart>
+			<listPatternPart type="2">{0} ਅਤੇ {1}</listPatternPart>
+		</listPattern>
+		<listPattern type="unit">
+			<listPatternPart type="start">{0}, {1}</listPatternPart>
+			<listPatternPart type="middle">{0}, {1}</listPatternPart>
+			<listPatternPart type="end">{0} ਅਤੇ {1}</listPatternPart>
+			<listPatternPart type="2">{0} ਅਤੇ {1}</listPatternPart>
+		</listPattern>
+		<listPattern type="unit-short">
+			<listPatternPart type="start">{0}, {1}</listPatternPart>
+			<listPatternPart type="middle">{0}, {1}</listPatternPart>
+			<listPatternPart type="end">{0}, {1}</listPatternPart>
+			<listPatternPart type="2">{0}, {1}</listPatternPart>
+		</listPattern>
+	</listPatterns>
+	<posix>
+		<messages>
+			<yesstr>ਹਾਂ</yesstr>
+			<nostr>ਨਹੀਂ</nostr>
+		</messages>
+	</posix>
+</ldml>
+

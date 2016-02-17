@@ -1,0 +1,1 @@
+body{background:url("http://www.msn.com/foo.gif")}div{background:url(http://www.msn.com/foo.gif)}span b{background:url(yellow.gif)}span em{background:url("yellow.gif")}ul{background:url("/foo/bar/ack.gif")}ul li{background:url(/foo/bar/gag.gif)}ol{background:url("foo/bar/ack.gif")}ol li{background:url(foo/bar/gag.gif)}

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="./tests/bootstrap.php" colors="true">
+    <testsuites>
+        <testsuite name="JShrink Test Suite">
+            <directory suffix="Test.php">./tests/JShrink/</directory>
+        </testsuite>
+    </testsuites>
+    <groups>
+        <exclude>
+            <group>requests</group>
+            <group>development</group>
+        </exclude>
+    </groups>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./src/JShrink/</directory>
+        </whitelist>
+    </filter>
+    <logging>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
+    </logging>
+</phpunit>

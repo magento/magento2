@@ -1,0 +1,2 @@
+/* Before import */@import/* inside import */"bar2.css"print and (orientation:landscape)and (color);/* After import */.foo{background:#fff}/* Between selector 
+blocks */.bar{background:#000}.baz{/* Inside selector block */background:#000}

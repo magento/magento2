@@ -1,0 +1,8 @@
+a[title="foo"], a[title='bar'], a[title="f\"oo\""], a[title='f\'oo\'']
+{
+  color: #fff;
+}
+a[title="f\22oo\22"], a[title='f\27oo\27']
+{
+  color: red;
+}

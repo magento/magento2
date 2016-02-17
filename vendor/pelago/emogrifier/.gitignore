@@ -1,0 +1,24 @@
+#########################
+# global ignore file
+########################
+# ignoring temporary files (left by e.g. vim)
+# ignoring by common IDE's used directories/files
+# dont ignore .rej and .orig as we want to see/clean files after conflict resolution
+#
+# for local exclude patterns please edit .git/info/exclude
+#
+*~
+*.bak
+*.idea
+*.project
+*.swp
+.buildpath
+.cache
+.project
+.session
+.settings
+.TemporaryItems
+.webprj
+nbproject
+/vendor/
+composer.lock

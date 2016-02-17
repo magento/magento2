@@ -1,0 +1,36 @@
+{
+    "name": "zendframework/zend-uri",
+    "description": "a component that aids in manipulating and validating \u00bb Uniform Resource Identifiers (URIs)",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "uri"
+    ],
+    "homepage": "https://github.com/zendframework/zend-uri",
+    "autoload": {
+        "psr-4": {
+            "Zend\\Uri\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.23",
+        "zendframework/zend-escaper": "~2.4.0",
+        "zendframework/zend-validator": "~2.4.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4-dev",
+            "dev-develop": "2.5-dev"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\Uri\\": "test/"
+        }
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer": "1.7.*",
+        "satooshi/php-coveralls": "dev-master",
+        "phpunit/PHPUnit": "~4.0"
+    }
+}

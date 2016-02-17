@@ -1,0 +1,23 @@
+﻿/* all browsers other than the ones listed will ignore these rules because they are INVALID CSS */
+.iehacks1 { _property: value; } /* IE6 and below processes as property:value */
+.iehacks2 { -property: value; } /* IE6 and below processes as property:value */
+.iehacks3 { *property: value; } /* IE7 and below processes as property:value */
+.iehacks4 { .property: value; } /* IE7 and below processes as property:value */
+.iehacks5 { property: value !ie; } /* IE7 and below will still apply this rule */
+.iehacks6 { property: value !important!; } /* IE7 and below will still apply this rule, WITH the important attribute */
+
+html* {color: black;} /* IE7 and below treats this as "html *" */
+** {margin: 0;} /* IE7 and below treats this as "* *" */
+           
+>div {margin: 1px;} /* IE7-only treats this as "*>div" */
++div {margin: 2px;} /* IE7-only treats this as "*+div" */
+~div {margin: 3px;} /* IE7-only treats this as "*~div" */
+
+/* adding a \0 before the media type apparently still works for ie8 */
+@media \0screen 
+{
+    .ie8only
+    {
+        background: tomato;
+    }
+}

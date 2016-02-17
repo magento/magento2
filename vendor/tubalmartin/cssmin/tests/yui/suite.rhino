@@ -1,0 +1,3 @@
+input = readFile(arguments[0]);
+load("../ports/js/cssmin.js");
+print(YAHOO.compressor.cssmin(input));

@@ -1,0 +1,10 @@
+a{
+  background: none repeat scroll 0 0 rgb(255, 0,0);
+  alpha: rgba(1, 2, 3, 4);
+  background-image: linear-gradient(to bottom, rgb(255,0,0)10%, rgb(255,0,0)90%);
+  background-image: linear-gradient(to bottom, rgb(255, 0,  0) 10%, rgb(255  ,0,0) 90%);
+  background: linear-gradient(to bottom, rgb(100%, 0%,  0%), rgb(100%  ,0%,0%));
+  color: rgb(90%, 80.1%, 76%);
+  color: rgb(256,-1,0);
+  color: rgb(101%,-1%,0%)
+}

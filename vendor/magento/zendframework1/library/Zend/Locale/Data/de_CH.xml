@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "../../common/dtd/ldml.dtd">
+<!-- Copyright © 1991-2013 Unicode, Inc.
+CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+For terms of use, see http://www.unicode.org/copyright.html
+-->
+<ldml>
+	<identity>
+		<version number="$Revision: 9287 $"/>
+		<generation date="$Date: 2013-08-28 21:32:04 -0500 (Wed, 28 Aug 2013) $"/>
+		<language type="de"/>
+		<territory type="CH"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="be">Weissrussisch</language>
+		</languages>
+		<territories>
+			<territory type="BD">Bangladesh</territory>
+			<territory type="BN">Brunei</territory>
+			<territory type="BW">Botswana</territory>
+			<territory type="BY">Weissrussland</territory>
+			<territory type="CV">Kapverden</territory>
+			<territory type="DJ">Djibouti</territory>
+			<territory type="GB">Grossbritannien</territory>
+			<territory type="MH">Marshall-Inseln</territory>
+			<territory type="QO">Äusseres Ozeanien</territory>
+			<territory type="RW">Rwanda</territory>
+			<territory type="SB">Salomon-Inseln</territory>
+			<territory type="ST">Sao Tomé und Principe</territory>
+			<territory type="ZW">Zimbabwe</territory>
+		</territories>
+	</localeDisplayNames>
+	<delimiters>
+		<quotationStart>«</quotationStart>
+		<quotationEnd>»</quotationEnd>
+		<alternateQuotationStart>‹</alternateQuotationStart>
+		<alternateQuotationEnd>›</alternateQuotationEnd>
+	</delimiters>
+	<numbers>
+		<symbols numberSystem="latn">
+			<decimal>.</decimal>
+			<group>'</group>
+		</symbols>
+		<currencyFormats numberSystem="latn">
+			<currencyFormatLength>
+				<currencyFormat type="standard">
+					<pattern>¤ #,##0.00;¤-#,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength>
+		</currencyFormats>
+		<currencies>
+			<currency type="CHF">
+				<symbol>CHF</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>
+

@@ -1,0 +1,21 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Define global constant that marks this as PHPMD phar release.
+ */
+define('PHP_PMD_RELEASE', 'phar');
+
+Phar::mapPhar( '${archive.alias}' );
+
+// Configure include path to use this phar
+set_include_path('phar://${archive.alias}/' . PATH_SEPARATOR . get_include_path());
+
+if (isset($argv) && realpath($argv[0]) === __FILE__) {
+
+    // Load command line utility
+    include_once 'phar://${archive.alias}/vendor/autoload.php';
+
+    // Run command line interface
+    exit(\PHPMD\TextUI\Command::main($argv));
+}
+__HALT_COMPILER();

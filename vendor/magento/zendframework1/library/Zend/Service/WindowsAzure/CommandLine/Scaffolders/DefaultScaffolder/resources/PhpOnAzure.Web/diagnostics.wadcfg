@@ -1,0 +1,35 @@
+<DiagnosticMonitorConfiguration xmlns="http://schemas.microsoft.com/ServiceHosting/2010/10/DiagnosticsConfiguration" configurationChangePollInterval="PT1M" overallQuotaInMB="4096">
+   <DiagnosticInfrastructureLogs bufferQuotaInMB="10"
+      scheduledTransferLogLevelFilter="Error"
+      scheduledTransferPeriod="PT1M" />
+
+   <Logs bufferQuotaInMB="0"
+      scheduledTransferLogLevelFilter="Verbose"
+      scheduledTransferPeriod="PT1M" />
+
+   <Directories bufferQuotaInMB="0" 
+      scheduledTransferPeriod="PT5M">
+   
+      <!-- These three elements specify the special directories 
+           that are set up for the log types -->
+      <CrashDumps container="wad-crash-dumps" directoryQuotaInMB="256" />
+      <FailedRequestLogs container="wad-frq" directoryQuotaInMB="256" />
+      <IISLogs container="wad-iis" directoryQuotaInMB="256" />
+   </Directories>
+
+   <PerformanceCounters bufferQuotaInMB="0" scheduledTransferPeriod="PT1M">
+      <!-- The counter specifier is in the same format as the imperative 
+           diagnostics configuration API -->
+      <PerformanceCounterConfiguration 
+         counterSpecifier="\Processor(_Total)\% Processor Time" sampleRate="PT5M" />
+      <PerformanceCounterConfiguration 
+         counterSpecifier="\Memory\Available Mbytes" sampleRate="PT5M" />
+   </PerformanceCounters>
+   <WindowsEventLog bufferQuotaInMB="0"
+      scheduledTransferLogLevelFilter="Verbose"
+      scheduledTransferPeriod="PT5M">
+      <!-- The event log name is in the same format as the imperative 
+           diagnostics configuration API -->
+      <DataSource name="System!*" />
+   </WindowsEventLog>
+</DiagnosticMonitorConfiguration>

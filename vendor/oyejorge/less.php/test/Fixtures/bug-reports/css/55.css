@@ -1,0 +1,4 @@
+.test {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAZCAYAAAAxFw7TAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2hJREFUeNqUlWtIk2EUx/+7pDln5syy4WWhiIWYdpEluuyCFSntQ1qZSlSUFEVFGITfoigI0k9RnypYSQWapsyM0iGZsnLTZaQGKnlrplvO1mVtnXfv6zbnFu7Af+d9n/d5fjvnOc8F8Lbqvo1nLlY1O9an1ZIKSSEIwIResBz6fTa9VPyR/E7SPpKFoDXkH5Je8vQ626KAFd2T5YlhQVdfjM8KYZjXR0wq4WQk+GMO3k5whzeQx0VWki8NvVeXLeUzr8bps-15xxxxxxxxxxxxx);
+  background: url(/astring\'withbac\"kslash\chara\cters);
+}

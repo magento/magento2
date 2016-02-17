@@ -1,0 +1,34 @@
+{
+    "name": "symfony/config",
+    "type": "library",
+    "description": "Symfony Config Component",
+    "keywords": [],
+    "homepage": "https://symfony.com",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Fabien Potencier",
+            "email": "fabien@symfony.com"
+        },
+        {
+            "name": "Symfony Community",
+            "homepage": "https://symfony.com/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.9",
+        "symfony/filesystem": "~2.3|~3.0.0"
+    },
+    "autoload": {
+        "psr-4": { "Symfony\\Component\\Config\\": "" },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "minimum-stability": "dev",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.8-dev"
+        }
+    }
+}

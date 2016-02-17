@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+	<targets>
+		<target name="magelocal" label="Magento Local module file" uri="./app/code/local" />
+		<target name="magecommunity" label="Magento Community module file" uri="./app/code/community" />
+		<target name="magecore" label="Magento Core team module file" uri="./app/code/core" />
+		<target name="magedesign" label="Magento User Interface (layouts, templates)" uri="./app/design" />
+		<target name="mageetc" label="Magento Global Configuration" uri="./app/etc" />
+		<target name="magelib" label="Magento PHP Library file" uri="./lib" />
+		<target name="magelocale" label="Magento Locale language file" uri="./app/locale" />
+		<target name="magemedia" label="Magento Media library" uri="./media" />
+		<target name="mageskin" label="Magento Theme Skin (Images, CSS, JS)" uri="./skin" />
+		<target name="mageweb" label="Magento Other web accessible file" uri="." />
+		<target name="magetest" label="Magento PHPUnit test" uri="./tests" />
+		<target name="mage" label="Magento other" uri="." />
+	</targets>

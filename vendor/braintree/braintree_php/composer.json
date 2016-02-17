@@ -1,0 +1,29 @@
+{
+    "name": "braintree/braintree_php",
+    "type": "library",
+    "description": "Braintree PHP Client Library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Braintree",
+            "homepage": "http://www.braintreepayments.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.2.1",
+        "ext-curl": "*",
+        "ext-dom": "*",
+        "ext-hash": "*",
+        "ext-openssl": "*",
+        "ext-simplexml": "*",
+        "ext-xmlwriter": "*"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "3.7.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Braintree": "lib"
+        }
+    }
+}

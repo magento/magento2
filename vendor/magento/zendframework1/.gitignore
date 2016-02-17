@@ -1,0 +1,13 @@
+tests/Zend/Db/Table/_files/cachefiles/*
+tests/Zend/Auth/Adapter/OpenId/_files/*
+tests/Zend/Filter/_files/Compress/*
+tests/Zend/Filter/_files/Users/*
+tests/Zend/OpenId/Provider/Storage/_files/*
+tests/Zend/OpenId/_files/*
+tests/Zend/Translate/Adapter/_files/zend_cache---internal-metadatas---testid
+tests/Zend/Translate/Adapter/_files/zend_cache---testid
+tests/TestConfiguration.php
+vendor/*
+composer.lock
+bin/dbunit
+bin/phpunit

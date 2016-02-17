@@ -1,0 +1,61 @@
+{
+    "name": "sjparkinson/static-review",
+
+    "description": "An extendable framework for version control hooks.",
+
+    "license": "MIT",
+
+    "authors": [
+        {
+            "name": "Samuel Parkinson",
+            "email": "sam.james.parkinson@gmail.com",
+            "homepage": "http://samp.im"
+        }
+    ],
+
+    "support": {
+        "source": "https://github.com/sjparkinson/static-review",
+        "issues": "https://github.com/sjparkinson/static-review/issues"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "StaticReview\\": "src/"
+        }
+    },
+
+    "autoload-dev": {
+        "psr-4": {
+            "StaticReview\\Test\\Unit\\": "tests/unit/",
+            "StaticReview\\Test\\Functional\\": "tests/functional/"
+        }
+    },
+
+    "bin": [
+        "bin/static-review.php"
+    ],
+
+    "require": {
+        "php": ">=5.4.0",
+        "symfony/process": "~2.0",
+        "symfony/console": "~2.0",
+        "league/climate": "~2.0"
+    },
+
+    "require-dev": {
+        "mockery/mockery": "~0.9",
+        "phpunit/phpunit": "~4.0",
+        "sensiolabs/security-checker": "~2.0",
+        "squizlabs/php_codesniffer": "~1.0"
+    },
+
+    "suggest": {
+        "sensiolabs/security-checker": "Required for ComposerSecurityReview.",
+        "squizlabs/php_codesniffer":   "Required for PhpCodeSnifferReview."
+    },
+
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist"
+    }
+}

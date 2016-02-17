@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+
+<ruleset name="Unused Code Rules"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+    <description>
+The Unused Code Ruleset contains a collection of rules that find unused code.
+    </description>
+
+    <rule name="UnusedPrivateField"
+          since="0.2"
+          message="Avoid unused private fields such as '{0}'."
+          class="PHPMD\Rule\UnusedPrivateField"
+          externalInfoUrl="http://phpmd.org/rules/unusedcode.html#unusedprivatefield">
+        <description>
+Detects when a private field is declared and/or assigned a value, but not used.
+        </description>
+        <priority>3</priority>
+        <example>
+<![CDATA[
+class Something
+{
+    private static $FOO = 2; // Unused
+    private $i = 5; // Unused
+    private $j = 6;
+    public function addOne()
+    {
+        return $this->j++;
+    }
+}
+]]>
+        </example>
+    </rule>
+
+    <rule name="UnusedLocalVariable"
+          since="0.2"
+          message="Avoid unused local variables such as '{0}'."
+          class="PHPMD\Rule\UnusedLocalVariable"
+          externalInfoUrl="http://phpmd.org/rules/unusedcode.html#unusedlocalvariable">
+        <description>
+Detects when a local variable is declared and/or assigned, but not used.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property
+                    name="allow-unused-foreach-variables"
+                    description="Allow unused variables in foreach language constructs."
+                    value="false" />
+        </properties>
+        <example>
+<![CDATA[
+class Foo {
+    public function doSomething()
+    {
+        $i = 5; // Unused
+    }
+}
+]]>
+        </example>
+    </rule>
+
+    <rule name="UnusedPrivateMethod"
+          since="0.2"
+          message="Avoid unused private methods such as '{0}'."
+          class="PHPMD\Rule\UnusedPrivateMethod"
+          externalInfoUrl="http://phpmd.org/rules/unusedcode.html#unusedprivatemethod">
+        <description>
+Unused Private Method detects when a private method is declared but is unused.
+        </description>
+        <priority>3</priority>
+        <example>
+<![CDATA[
+class Something
+{
+    private function foo() {} // unused
+}
+]]>
+        </example>
+    </rule>
+
+    <rule name="UnusedFormalParameter"
+          since="0.2"
+          message="Avoid unused parameters such as '{0}'."
+          class="PHPMD\Rule\UnusedFormalParameter"
+          externalInfoUrl="http://phpmd.org/rules/unusedcode.html#unusedformalparameter">
+        <description>
+Avoid passing parameters to methods or constructors and then not using those parameters.
+        </description>
+        <priority>3</priority>
+        <example>
+<![CDATA[
+class Foo
+{
+    private function bar($howdy)
+    {
+        // $howdy is not used
+    }
+}
+]]>
+        </example>
+    </rule>
+
+</ruleset>

@@ -1,0 +1,14 @@
+﻿/* regular comment should be stripped */
+body
+{
+    background-color: #fff;
+}
+
+/*! this is an important comment */
+/*! this is another
+    important comment */
+
+a
+{
+    color: #abcdef;
+}

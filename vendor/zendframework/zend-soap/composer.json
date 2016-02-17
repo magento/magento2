@@ -1,0 +1,41 @@
+{
+    "name": "zendframework/zend-soap",
+    "description": " ",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "soap"
+    ],
+    "homepage": "https://github.com/zendframework/zend-soap",
+    "autoload": {
+        "psr-4": {
+            "Zend\\Soap\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.23",
+        "zendframework/zend-server": "self.version",
+        "zendframework/zend-stdlib": "self.version",
+        "zendframework/zend-uri": "self.version"
+    },
+    "require-dev": {
+        "zendframework/zend-http": "self.version",
+        "fabpot/php-cs-fixer": "1.7.*",
+        "satooshi/php-coveralls": "dev-master",
+        "phpunit/PHPUnit": "~4.0"
+    },
+    "suggest": {
+        "zendframework/zend-http": "Zend\\Http component"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4-dev",
+            "dev-develop": "2.5-dev"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\Soap\\": "test/"
+        }
+    }
+}

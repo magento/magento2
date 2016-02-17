@@ -1,0 +1,53 @@
+{
+    "name": "zendframework/zend-i18n",
+    "description": " ",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "i18n"
+    ],
+    "homepage": "https://github.com/zendframework/zend-i18n",
+    "autoload": {
+        "psr-4": {
+            "Zend\\I18n\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.23",
+        "zendframework/zend-stdlib": "self.version"
+    },
+    "require-dev": {
+        "zendframework/zend-cache": "self.version",
+        "zendframework/zend-config": "self.version",
+        "zendframework/zend-eventmanager": "self.version",
+        "zendframework/zend-filter": "self.version",
+        "zendframework/zend-servicemanager": "self.version",
+        "zendframework/zend-validator": "self.version",
+        "zendframework/zend-view": "self.version",
+        "fabpot/php-cs-fixer": "1.7.*",
+        "satooshi/php-coveralls": "dev-master",
+        "phpunit/PHPUnit": "~4.0"
+    },
+    "suggest": {
+        "ext-intl": "Required for most features of Zend\\I18n; included in default builds of PHP",
+        "zendframework/zend-cache": "Zend\\Cache component",
+        "zendframework/zend-config": "Zend\\Config component",
+        "zendframework/zend-eventmanager": "You should install this package to use the events in the translator",
+        "zendframework/zend-filter": "You should install this package to use the provided filters",
+        "zendframework/zend-servicemanager": "Zend\\ServiceManager component",
+        "zendframework/zend-validator": "You should install this package to use the provided validators",
+        "zendframework/zend-view": "You should install this package to use the provided view helpers",
+        "zendframework/zend-resources": "Translation resources"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4-dev",
+            "dev-develop": "2.5-dev"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\I18n\\": "test/"
+        }
+    }
+}

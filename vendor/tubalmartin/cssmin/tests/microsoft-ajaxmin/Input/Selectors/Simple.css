@@ -1,0 +1,45 @@
+/* starting with an element selector */
+h1
+{
+  background-color: #fff;
+}
+h1#foo
+{
+  font-size: 50pt;
+}
+h1.bar
+{
+  border: none;
+}
+h1#foo.exp
+{
+  position: absolute;
+}
+h1#foo.exp.bar
+{
+  position: relative;
+}
+
+/* start with an id */
+#someid
+{
+  color: red;
+}
+#bar.class
+{
+  right: 0px;
+}
+#bar.class.ack
+{
+  right: 10px;
+}
+
+/* start with a class */
+.someclass
+{
+  color: Red;
+}
+.oneclass.twoclass
+{
+  color: #fff;
+}

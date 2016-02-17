@@ -1,0 +1,13 @@
+.mixin {
+  width: 10;
+  height: 20;
+  color: red !important;
+  background: #000;
+}
+.test {
+  width: 10;
+  height: 20;
+  color: red !important;
+  background: #000;
+  color: blue;
+}

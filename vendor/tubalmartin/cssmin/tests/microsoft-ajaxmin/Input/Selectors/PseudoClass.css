@@ -1,0 +1,16 @@
+﻿DIV > P:first-child { text-indent: 0 }
+
+A:link    { color: red }    /* unvisited links */
+A:visited { color: blue }   /* visited links   */
+A:hover   { color: yellow } /* user hovers     */
+A:active  { color: lime }   /* active links    */
+
+
+A:focus { background: yellow }
+A:focus:hover { background: white }
+
+HTML:lang(fr) { quotes: '« ' ' »' }
+HTML:lang(de) { quotes: '»' '«' '\2039' '\203A' }
+:lang(fr) > Q { quotes: '« ' ' »' }
+:lang(de) > Q { quotes: '»' '«' '\2039' '\203A' }
+

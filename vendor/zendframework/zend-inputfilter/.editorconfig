@@ -1,0 +1,24 @@
+root = true
+
+[*]
+indent_style = space
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+
+[**.php]
+indent_size = 4
+continuation_indent_size = 4
+insert_final_newline = true
+
+[**.xml]
+indent_size = 4
+
+[**.yml]
+indent_size = 2
+
+[composer.json]
+indent_size = 4
+
+[package.json]
+indent_size = 2

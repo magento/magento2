@@ -1,0 +1,68 @@
+/* LESS error report styles */
+.less-error-message {
+    font-family: Arial, sans-serif;
+    border: 1px solid #e00;
+    border: 1px solid rgba(238,0,0, 0.5);
+    background-color: whiteSmoke;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0, 0.05);
+    -moz-box-shadow: inset 0 1px 1px rgba(0,0,0, 0.05);
+    box-shadow: inset 0 1px 1px rgba(0,0,0, 0.05);
+    color: #e00;
+    padding: 18px;
+    margin-bottom: 18px;
+    display:none;
+}
+.less-error-message ul, .less-error-message li {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+.less-error-message label {
+    font-size: 12px;
+    margin-right: 15px;
+    padding: 4px 0;
+    color: #cc7777;
+    display: inline;
+}
+.less-error-message pre {
+    color: #dd6666;
+    padding: 4px 0;
+    margin: 0;
+    display: inline-block;
+}
+.less-error-message pre.line {
+    color: red;
+}
+.less-error-message h3 {
+    font-size: 20px;
+    font-weight: bold;
+    padding: 0 0 5px 0;
+    margin: 0;
+}
+.less-error-message a {
+    color: #10a;
+}
+.less-error-message .error {
+    color: red;
+    font-weight: bold;
+    padding-bottom: 2px;
+    border-bottom: 1px dashed red;
+}
+
+pre {
+    white-space: pre-wrap; /* css-3 */
+    white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
+    white-space: -pre-wrap; /* Opera 4-6 */
+    white-space: -o-pre-wrap; /* Opera 7 */
+    word-wrap: break-word; /* Internet Explorer 5.5+ */
+}
+
+/* APP styles */
+.version{font-size:10px;font-style: italic;letter-spacing: 2px}
+
+legend{font-size: 15px; line-height: 20px; margin-bottom:0}
+.control-group{margin-bottom:12px;}
+#output-container{margin-top:18px}

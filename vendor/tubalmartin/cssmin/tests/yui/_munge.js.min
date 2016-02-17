@@ -1,0 +1,1 @@
+(function(){var a=window;a.hello=function(a,b){a.alert("Hello, "+a)}})();

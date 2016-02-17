@@ -1,0 +1,1 @@
+P:first-line {text-transform:uppercase}P:first-letter {font-size:200%;font-style:italic;font-weight:bold;float:left}p:first-line p:first-letter p{color:red}H1:before{content:counter(chapno,upper-roman) ". "}P.special:after{content:"Special! "}

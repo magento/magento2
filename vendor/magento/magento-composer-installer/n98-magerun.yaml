@@ -1,0 +1,6 @@
+autoloaders:
+  MagentoHackathon: %module%/src
+
+commands:
+   customCommands:
+       - MagentoHackathon\Composer\Magerun\DeployCommand

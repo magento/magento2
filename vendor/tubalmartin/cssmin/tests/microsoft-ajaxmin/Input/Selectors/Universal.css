@@ -1,0 +1,16 @@
+* html div
+{
+  color: #f0f;
+}
+*
+{
+  color: Blue;
+}
+div *>li
+{
+  list-style: none;
+}
+li+*
+{
+  list-style-position: inside;
+}

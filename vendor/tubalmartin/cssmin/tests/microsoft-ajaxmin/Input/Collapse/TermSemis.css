@@ -1,0 +1,13 @@
+body
+{
+  font-size: 11px;
+}
+div
+{
+  color: #fff; /* comment at end */
+}
+a
+{
+  background-color: #cba;
+  color: #abc/* comment before end */;
+}

@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+
+<ruleset name="Controversial Rules"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+
+    <description>
+This ruleset contains a collection of controversial rules.
+    </description>
+
+    <rule name="Superglobals"
+          since="0.2"
+          message = "{0} accesses the super-global variable {1}."
+          class="PHPMD\Rule\Controversial\Superglobals"
+          externalInfoUrl="#">
+        <description>
+            <![CDATA[
+Accessing a super-global variable directly is considered a bad practice.
+These variables should be encapsulated in objects that are provided by a framework, for instance.
+            ]]>
+        </description>
+        <priority>1</priority>
+        <properties />
+        <example>
+            <![CDATA[
+class Foo {
+    public function bar() {
+        $name = $_POST['foo'];
+    }
+}
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="CamelCaseClassName"
+          since="0.2"
+          message = "The class {0} is not named in CamelCase."
+          class="PHPMD\Rule\Controversial\CamelCaseClassName"
+          externalInfoUrl="#">
+        <description>
+            <![CDATA[
+It is considered best practice to use the CamelCase notation to name classes.
+            ]]>
+        </description>
+        <priority>1</priority>
+        <properties />
+        <example>
+            <![CDATA[
+class class_name {
+}
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="CamelCasePropertyName"
+          since="0.2"
+          message = "The property {0} is not named in camelCase."
+          class="PHPMD\Rule\Controversial\CamelCasePropertyName"
+          externalInfoUrl="#">
+        <description>
+            <![CDATA[
+It is considered best practice to use the camelCase notation to name attributes.
+            ]]>
+        </description>
+        <priority>1</priority>
+        <properties>
+            <property name="allow-underscore"
+                      description="Allow an optional, single underscore at the beginning."
+                      value="false" />
+            <property name="allow-underscore-test"
+                      description="Is it allowed to have underscores in test method names."
+                      value="false" />
+        </properties>
+        <example>
+            <![CDATA[
+class ClassName {
+    protected $property_name;
+}
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="CamelCaseMethodName"
+          since="0.2"
+          message = "The method {0} is not named in camelCase."
+          class="PHPMD\Rule\Controversial\CamelCaseMethodName"
+          externalInfoUrl="#">
+        <description>
+            <![CDATA[
+It is considered best practice to use the camelCase notation to name methods.
+            ]]>
+        </description>
+        <priority>1</priority>
+        <properties>
+            <property name="allow-underscore"
+                      description="Allow an optional, single underscore at the beginning."
+                      value="false" />
+            <property name="allow-underscore-test"
+                      description="Is it allowed to have underscores in test method names."
+                      value="false" />
+        </properties>
+        <example>
+            <![CDATA[
+class ClassName {
+    public function get_name() {
+    }
+}
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="CamelCaseParameterName"
+          since="0.2"
+          message = "The parameter {0} is not named in camelCase."
+          class="PHPMD\Rule\Controversial\CamelCaseParameterName"
+          externalInfoUrl="#">
+        <description>
+            <![CDATA[
+It is considered best practice to use the camelCase notation to name parameters.
+            ]]>
+        </description>
+        <priority>1</priority>
+        <properties />
+        <example>
+            <![CDATA[
+class ClassName {
+    public function doSomething($user_name) {
+    }
+}
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="CamelCaseVariableName"
+          since="0.2"
+          message = "The variable {0} is not named in camelCase."
+          class="PHPMD\Rule\Controversial\CamelCaseVariableName"
+          externalInfoUrl="#">
+        <description>
+            <![CDATA[
+It is considered best practice to use the camelCase notation to name variables.
+            ]]>
+        </description>
+        <priority>1</priority>
+        <properties />
+        <example>
+            <![CDATA[
+class ClassName {
+    public function doSomething() {
+        $data_module = new DataModule();
+    }
+}
+            ]]>
+        </example>
+    </rule>
+</ruleset>

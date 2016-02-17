@@ -1,0 +1,22 @@
+/* h1 that has a title attribute */
+H1[title] { color: blue; }
+
+/* SPAN that has class attribute with value "example" */
+SPAN[class=example] { color: blue; }
+
+/* SPAN that has hello attribute with value "Clevland" AND a goodbye attribute with value "Columbus" */
+SPAN[hello="Cleveland"][goodbye="Columbus"] { color: blue; }
+
+/* A elements with rel attributes that is a space-separated list of words, one of which is "copyright" */
+A[rel~="copyright"] { color: #f00; }
+
+/* DIV elements with a LANG attribute that is a hyphen-separated list of words STARTING with "en" */
+DIV[LANG|="en"] { color : red }
+
+/* match A elements with rel attributes that start with "http://" */
+A[rel^="http://"] { color : #ff0; }
+
+
+/* match A elements with title attributes that end with "foo" */
+A[title $= foo] { color : #ff0; }
+

@@ -1,0 +1,26 @@
+﻿body
+{
+	unicode-range: U+416; /* single code point */
+	unicode-range: U+400-f44; /* interval range */
+	unicode-range: U+4??; /* range */
+}
+
+foo
+{
+	unicode-range: u+???; /* as if prefixed with a zero */
+	unicode-range: u+0???; /* don't need the prefixed zero */
+	unicode-range: u+??????; /* still valid */
+	unicode-range: u+a5; /* single code point for yen/yuan symbol */
+	unicode-range: u+0000-7f; /* code range for basic ASCII characters */
+	unicode-range: u+590-5ff; /* code range for hebrew characters */
+	unicode-range: u+a5, U+4e00-9fff, U+30??, U+ff00-ff9f; /* code range for Japanese kanji, hiragana and katakana characters plus yen/yuan symbol */
+}
+
+.errors
+{
+  /* all should throw an error, but still output */
+  first: U+11????; /* first number is invalid (over 10ffff) */
+  second: U+1234-110000; /* second number is invalid */
+  order: u+4321-1234; /* second number less than the first (out of order) */
+  another: u+0??????; /* too many digits with the prefixed zero, so althogh technically invalid, get rid of the zero to make it valid */
+}

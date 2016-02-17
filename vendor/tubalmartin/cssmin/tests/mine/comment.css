@@ -1,0 +1,5 @@
+html >/**/ body p {
+    color: blue;
+	/*a comment right before the IE star hack*/*width:auto;
+	height:2%;
+}

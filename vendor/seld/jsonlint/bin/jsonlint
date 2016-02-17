@@ -1,0 +1,103 @@
+#!/usr/bin/env php
+<?php
+
+/*
+ * This file is part of the JSON Lint package.
+ *
+ * (c) Jordi Boggiano <j.boggiano@seld.be>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+function includeIfExists($file)
+{
+    if (file_exists($file)) {
+        return include $file;
+    }
+}
+
+if ((!$loader = includeIfExists(__DIR__.'/../vendor/autoload.php')) && (!$loader = includeIfExists(__DIR__.'/../../../autoload.php'))) {
+    $msg = 'You must set up the project dependencies, run the following commands:'.PHP_EOL.
+           'curl -sS https://getcomposer.org/installer | php'.PHP_EOL.
+           'php composer.phar install'.PHP_EOL;
+    fwrite(STDERR, $msg);
+    exit(1);
+}
+
+use Seld\JsonLint\JsonParser;
+
+$file = null;
+$quiet = false;
+
+if (isset($_SERVER['argc']) && $_SERVER['argc'] > 1) {
+    for ($i = 1; $i < $_SERVER['argc']; $i++) {
+        $arg = $_SERVER['argv'][$i];
+        if ($arg == '-q' || $arg == '--quiet') {
+            $quiet = true;
+        } else if ($arg == '-h' || $arg == '--help') {
+            showUsage();
+        } else {
+            $file = $arg;
+        }
+    }
+}
+
+if (!$file) {
+    if ($contents = file_get_contents('php://stdin')) {
+        lint($contents);
+    } else {
+        fwrite(STDERR, 'No file name or json input given'.PHP_EOL);
+        exit(1);
+    }
+} else {
+    if (!preg_match('{^https?://}i', $file)) {
+        if (!file_exists($file)) {
+            fwrite(STDERR, 'File not found: '.$file.PHP_EOL);
+            exit(1);
+        }
+        if (!is_readable($file)) {
+            fwrite(STDERR, 'File not readable: '.$file.PHP_EOL);
+            exit(1);
+        }
+    }
+}
+
+lintFile($file, $quiet);
+
+function lint($content, $quiet = false)
+{
+    $parser = new JsonParser();
+    if ($err = $parser->lint($content)) {
+        fwrite(STDERR, $err->getMessage().PHP_EOL);
+        exit(1);
+    }
+    if (!$quiet) {
+        echo 'Valid JSON'.PHP_EOL;
+    }
+    exit(0);
+}
+
+function lintFile($file, $quiet = false)
+{
+    $content = file_get_contents($file);
+    $parser = new JsonParser();
+    if ($err = $parser->lint($content)) {
+        fwrite(STDERR, $file.': '.$err->getMessage().PHP_EOL);
+        exit(1);
+    }
+    if (!$quiet) {
+        echo 'Valid JSON'.PHP_EOL;
+    }
+    exit(0);
+}
+
+function showUsage()
+{
+    echo 'Usage: jsonlint file [options]'.PHP_EOL;
+    echo PHP_EOL;
+    echo 'Options:'.PHP_EOL;
+    echo '-q, --quiet     Cause jsonlint to be quiet when no errors are found'.PHP_EOL;
+    echo '-h, --help      Show this message'.PHP_EOL;
+    exit(0);
+}

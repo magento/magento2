@@ -1,0 +1,11 @@
+#weather
+{
+	position:absolute;
+	left:expression(555-180+40); /* real-world scenario: previous version was dropping the closing paren */
+	height:40px;
+	width:138px;
+	overflow:hidden;
+	color:blue;
+	padding:0px 0px 4px 0px;
+	width:expression( document.body.clientWidth > 800 ? "800px" : "auto" );
+}

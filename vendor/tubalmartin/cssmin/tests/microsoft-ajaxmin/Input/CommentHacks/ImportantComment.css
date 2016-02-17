@@ -1,0 +1,6 @@
+﻿/*! 
+ * this is an important comment that we want to keep in the output
+ */
+body{background:white;}
+/* but we want this one to go away */
+div{color:black;}

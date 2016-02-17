@@ -1,0 +1,54 @@
+{
+    "name": "phpmd/phpmd",
+    "description": "PHPMD is a spin-off project of PHP Depend and aims to be a PHP equivalent of the well known Java tool PMD.",
+    "keywords": [
+        "phpmd",
+        "pdepend",
+        "pmd",
+        "mess detection",
+        "mess detector"
+    ],
+    "type": "project",
+    "license": "BSD-3-Clause",
+    "homepage": "http://phpmd.org/",
+    "authors": [
+        {
+            "name": "Manuel Pichler",
+            "homepage": "https://github.com/manuelpichler",
+            "email": "github@manuel-pichler.de",
+            "role": "Project Founder"
+        },
+        {
+            "name": "Marc Würth",
+            "homepage": "https://github.com/ravage84",
+            "email": "ravage@bluewin.ch",
+            "role": "Project Maintainer"
+        },
+        {
+            "name": "Other contributors",
+            "homepage": "https://github.com/phpmd/phpmd/graphs/contributors",
+            "role": "Contributors"
+        }
+    ],
+    "support": {
+        "irc": "irc://irc.freenode.org/phpmd"
+    },
+    "minimum-stability" : "stable",
+    "require": {
+        "php": ">=5.3.0",
+        "pdepend/pdepend": "~2.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.0",
+        "squizlabs/php_codesniffer": "^2.0"
+    },
+    "autoload": {
+        "psr-0": {
+            "PHPMD\\": "src/main/php"
+        }
+    },
+    "bin": ["src/bin/phpmd"],
+    "scripts": {
+        "test": "phpunit"
+    }
+}

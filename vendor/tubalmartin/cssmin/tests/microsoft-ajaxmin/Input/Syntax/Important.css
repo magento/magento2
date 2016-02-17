@@ -1,0 +1,14 @@
+body div
+{
+  color: Red;
+}
+ul div
+{
+  color: #f0f !     important;
+}
+
+tr div
+{
+  font-weight: bold !important;
+  background: #0ff;
+}

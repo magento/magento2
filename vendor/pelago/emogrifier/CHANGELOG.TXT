@@ -1,0 +1,73 @@
+2012-05-01
+Made removal of invisible nodes operate in a case-insensitive manner... Thanks Juha P.!
+
+2012-02-07
+Fixed some recent code introductions to use class constants rather than global constants.
+Fixed some recent code introductions to make it cleaner to read.
+
+2012-01-31
+Fixed a bug that was introduced with the 2011-12-22 revision... Thanks Sagi L. and M. Bąkowski!
+Added extraction of <style> blocks within the HTML due to popular demand.
+Added several new pseudo-selectors (first-child, last-child, nth-child, and nth-of-type).
+
+2011-12-22
+Fixed a bug that was overwriting existing inline styles from the original HTML... Thanks Sagi L.!
+
+2011-10-26
+Added an option to allow you to output emogrified code without extended characters being turned into HTML entities.
+Moved static references to class attributes so they can be manipulated.
+Added the ability to clear out the (formerly) static cache when CSS is reloaded.
+
+2011-10-13
+Fully fixed a bug introduced in 2011-06-08 where selectors at the beginning of the CSS would be parsed incorrectly... Thanks Thomas A.!
+
+2011-08-03
+Fixed an error where an empty selector at the beginning of the CSS would cause a parse error on the next selector... Thanks Alexei T.!
+
+2011-06-08
+Fixed an error where CSS @media types weren't being parsed correctly... Thanks Will W.!
+
+2011-04-08
+Fixed errors in CSS->XPath conversion for adjacent sibling selectors and id/class combinations... Thanks Bob V.!
+
+2010-09-03
+Added checks to invisible node removal to ensure that we don't try to remove non-existent child nodes of parents that have already been deleted
+
+2010-07-26
+Fixed bug where '0' values were getting discarded because of php's empty() function... Thanks Scott!
+
+2010-06-16
+Added static caching for less processing overhead in situations where multiple emogrification takes place
+
+2010-05-18
+Fixed bug where full url filenames with protocols wouldn't get split improperly when we explode on ':'... Thanks Mark!
+Added two new attribute selectors
+
+2009-11-04
+Explicitly declared static functions static to get rid of E_STRICT notices.
+
+2009-10-29
+Fixed so that selectors appearing later in the CSS will have precedence over identical selectors appearing earlier.
+
+2009-08-17
+Fixed CSS selector processing so that selectors are processed by precedence/specificity, and not just in order.
+
+2009-08-13
+Added support for subset class values (e.g. "p.class1.class2"). Added better protection for bad css attributes.
+Fixed support for HTML entities.
+
+2009-06-03
+Normalize existing CSS (style) attributes in the HTML before we process the CSS.
+Made it so that the display:none stripper doesn't require a trailing semi-colon.
+
+2008-03-02
+Added licensing terms under the MIT License; Only remove unprocessable HTML tags if they exist in the array
+
+2008-10-20
+Fixed bug with bad variable name... Thanks Thomas!
+
+2008-08-18
+Added lines instructing DOMDocument to attempt to normalize HTML before processing
+
+2008-08-10
+Fixed CSS comment stripping regex to add PCRE_DOTALL (changed from '/\/\*.*\*\//U' to '/\/\*.*\*\//sU')

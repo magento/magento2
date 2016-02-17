@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<ruleset name="Code Size Rules"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+
+    <description>
+The Code Size Ruleset contains a collection of rules that find code size related problems.
+    </description>
+
+    <rule name="CyclomaticComplexity"
+          since="0.1"
+          message = "The {0} {1}() has a Cyclomatic Complexity of {2}. The configured cyclomatic complexity threshold is {3}."
+          class="PHPMD\Rule\CyclomaticComplexity"
+          externalInfoUrl="http://phpmd.org/rules/codesize.html#cyclomaticcomplexity">
+        <description>
+            <![CDATA[
+Complexity is determined by the number of decision points in a method plus one for the
+method entry.  The decision points are 'if', 'while', 'for', and 'case labels'.  Generally,
+1-4 is low complexity, 5-7 indicates moderate complexity, 8-10 is high complexity,
+ and 11+ is very high complexity.
+            ]]>
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="reportLevel" description="The Cyclomatic Complexity reporting threshold"  value="10"/>
+            <property name="showClassesComplexity"
+                      description="Indicate if class average violation should be added to the report"
+                      value="true"/>
+            <property name="showMethodsComplexity"
+                      description="Indicate if class average violation should be added to the report"
+                      value="true"/>
+        </properties>
+        <example>
+            <![CDATA[
+// Cyclomatic Complexity = 12
+class Foo {
+1   public function example()  {
+2       if ($a == $b)  {
+3           if ($a1 == $b1) {
+                fiddle();
+4           } else if ($a2 == $b2) {
+                fiddle();
+            }  else {
+                fiddle();
+            }
+5       } else if ($c == $d) {
+6           while ($c == $d) {
+                fiddle();
+            }
+7        } else if ($e == $f) {
+8           for ($n = 0; $n < $h; $n++) {
+                fiddle();
+            }
+        } else{
+            switch ($z) {
+9               case 1:
+                    fiddle();
+                    break;
+10              case 2:
+                    fiddle();
+                    break;
+11              case 3:
+                    fiddle();
+                    break;
+12              default:
+                    fiddle();
+                    break;
+            }
+        }
+    }
+}
+            ]]>
+        </example>
+    </rule>
+
+
+    <rule name="NPathComplexity"
+          since="0.1"
+          message="The {0} {1}() has an NPath complexity of {2}. The configured NPath complexity threshold is {3}."
+          class="PHPMD\Rule\Design\NpathComplexity"
+          externalInfoUrl="http://phpmd.org/rules/codesize.html#npathcomplexity">
+        <description>
+The NPath complexity of a method is the number of acyclic execution paths through that method.
+A threshold of 200 is generally considered the point where measures should be taken to reduce complexity.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="minimum" description="The npath reporting threshold" value="200"/>
+        </properties>
+        <example>
+            <![CDATA[
+class Foo {
+    function bar() {
+        // lots of complicated code
+    }
+}
+            ]]>
+        </example>
+    </rule>
+
+
+    <rule name="ExcessiveMethodLength"
+          since="0.1"
+          message="The {0} {1}() has {2} lines of code. Current threshold is set to {3}. Avoid really long methods."
+          class="PHPMD\Rule\Design\LongMethod"
+          externalInfoUrl="http://phpmd.org/rules/codesize.html#excessivemethodlength">
+        <description>
+Violations of this rule usually indicate that the method is doing
+too much.  Try to reduce the method size by creating helper methods and removing any copy/pasted code.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="minimum" description="The method size reporting threshold" value="100"/>
+            <property name="ignore-whitespace" description="Count whitespace in reporting threshold" value="false"/>
+        </properties>
+        <example>
+            <![CDATA[
+class Foo {
+    public function doSomething() {
+        print("Hello world!" . PHP_EOL);
+        print("Hello world!" . PHP_EOL);
+        // 98 copies omitted for brevity.
+    }
+}
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="ExcessiveClassLength"
+ 	  since="0.1"
+          message="The class {0} has {1} lines of code. Current threshold is {2}. Avoid really long classes."
+          class="PHPMD\Rule\Design\LongClass"
+          externalInfoUrl="http://phpmd.org/rules/codesize.html#excessiveclasslength">
+        <description>
+Long Class files are indications that the class may be trying to
+do too much.  Try to break it down, and reduce the size to something
+manageable.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="minimum" description="The class size reporting threshold"  value="1000"/>
+            <property name="ignore-whitespace" description="Count whitespace in reporting threshold" value="false"/>
+        </properties>
+        <example>
+            <![CDATA[
+class Foo {
+  public function bar() {
+    // 1000 lines of code
+  }
+}
+            ]]>
+        </example>
+    </rule>
+
+
+    <rule name="ExcessiveParameterList"
+          since="0.1"
+          message="The {0} {1} has {2} parameters. Consider to reduce parameter number under {3}."
+          class="PHPMD\Rule\Design\LongParameterList"
+          externalInfoUrl="http://phpmd.org/rules/codesize.html#excessiveparameterlist">
+        <description>
+Long parameter lists can indicate that a new object should be created to
+wrap the numerous parameters.  Basically, try to group the parameters together.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="minimum" description="The parameter count reporting threshold" value="10"/>
+        </properties>
+        <example>
+            <![CDATA[
+class Foo {
+    public function addData(
+        $p0, $p1, $p2, $p3, $p4, $p5,
+        $p5, $p6, $p7, $p8, $p9, $p10) {
+    }
+}
+            ]]>
+        </example>
+
+    </rule>
+
+    <rule name="ExcessivePublicCount"
+          since="0.1"
+          message="The {0} {1} has {2} public methods and attributes. Consider to reduce the number of public items under {3}."
+          class="PHPMD\Rule\ExcessivePublicCount"
+          externalInfoUrl="http://phpmd.org/rules/codesize.html#excessivepubliccount">
+        <description>
+A large number of public methods and attributes declared in a class can indicate
+the class may need to be broken up as increased effort will be required to
+thoroughly test it.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="minimum" description="The public item reporting threshold" value="45"/>
+        </properties>
+        <example>
+            <![CDATA[
+public class Foo {
+    public $value;
+    public $something;
+    public $var;
+    // [... more more public attributes ...]
+
+    public function doWork() {}
+    public function doMoreWork() {}
+    public function doWorkAgain() {}
+    // [... more more public methods ...]
+}
+    ]]>
+        </example>
+    </rule>
+
+    <rule name="TooManyFields"
+          since="0.1"
+          message="The {0} {1} has {2} fields. Consider to redesign {1} to keep the number of fields under {3}."
+          class="PHPMD\Rule\Design\TooManyFields"
+          externalInfoUrl="http://phpmd.org/rules/codesize.html#toomanyfields">
+        <description>
+Classes that have too many fields could be redesigned to have fewer fields,
+possibly through some nested object grouping of some of the information. For
+example, a class with city/state/zip fields could instead have one Address
+field.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="maxfields" description="The field count reporting threshold " value="15"/>
+        </properties>
+        <example>
+            <![CDATA[
+class Person {
+   protected $one;
+   private $two;
+   private $three;
+   [... many more fields ...]
+}
+            ]]>
+        </example>
+    </rule>
+<!--
+<rule name="NcssMethodCount" message="The method {0}() has an NCSS line count of {1}"
+   since="3.9"
+   class="net.sourceforge.pmd.rules.codesize.NcssMethodCount"
+   externalInfoUrl="http://pmd.sourceforge.net/rules/codesize.html#NcssMethodCount">
+    <description>
+This rule uses the NCSS (Non Commenting Source Statements) algorithm to determine the number of lines
+of code for a given method. NCSS ignores comments, and counts actual statements. Using this algorithm,
+lines of code that are split are counted as one.
+    </description>
+    <priority>3</priority>
+    <properties>
+        <property name="minimum" description="The method NCSS count reporting threshold" value="100"/>
+    </properties>
+   <example>
+<![CDATA[
+public class Foo extends Bar {
+ public int methd() {
+     super.methd();
+
+
+
+
+
+ //this method only has 1 NCSS lines
+      return 1;
+ }
+}
+]]>
+   </example>
+   </rule>
+
+<rule name="NcssTypeCount" message="The type has an NCSS line count of {0}"
+   since="3.9"
+   class="net.sourceforge.pmd.rules.codesize.NcssTypeCount"
+   externalInfoUrl="http://pmd.sourceforge.net/rules/codesize.html#NcssTypeCount">
+    <description>
+This rule uses the NCSS (Non Commenting Source Statements) algorithm to determine the number of lines
+of code for a given type. NCSS ignores comments, and counts actual statements. Using this algorithm,
+lines of code that are split are counted as one.
+    </description>
+    <priority>3</priority>
+    <properties>
+        <property name="minimum" description="The type NCSS count reporting threshold" value="1500"/>
+    </properties>
+   <example>
+<![CDATA[
+public class Foo extends Bar {
+ public Foo() {
+ //this class only has 6 NCSS lines
+     super();
+
+
+
+
+
+      super.foo();
+ }
+}
+]]>
+   </example></rule>
+
+<rule name="NcssConstructorCount" message="The constructor with {0} parameters has an NCSS line count of {1}"
+   since="3.9"
+   class="net.sourceforge.pmd.rules.codesize.NcssConstructorCount"
+   externalInfoUrl="http://pmd.sourceforge.net/rules/codesize.html#NcssConstructorCount">
+    <description>
+This rule uses the NCSS (Non Commenting Source Statements) algorithm to determine the number of lines
+of code for a given constructor. NCSS ignores comments, and counts actual statements. Using this algorithm,
+lines of code that are split are counted as one.
+    </description>
+    <priority>3</priority>
+    <properties>
+        <property name="minimum" description="The constructor NCSS count reporting threshold" value="100"/>
+    </properties>
+   <example>
+<![CDATA[
+public class Foo extends Bar {
+ public Foo() {
+     super();
+
+
+
+
+
+ //this constructor only has 1 NCSS lines
+      super.foo();
+ }
+}
+]]>
+   </example>
+</rule>
+ -->
+
+    <rule name="TooManyMethods"
+          since="0.1"
+          class="PHPMD\Rule\Design\TooManyMethods"
+          message="The {0} {1} has {2} none getter- and setter-methods. Consider refactoring {1} to keep number of methods under {3}."
+          externalInfoUrl="http://phpmd.org/rules/codesize.html#toomanymethods">
+        <description>
+            <![CDATA[
+A class with too many methods is probably a good suspect for refactoring, in
+order to reduce its complexity and find a way to have more fine grained objects.
+
+By default it ignores methods starting with 'get' or 'set'.
+
+The default was changed from 10 to 25 in PHPMD 2.3.
+            ]]>
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="maxmethods" description="The method count reporting threshold" value="25"/>
+            <property name="ignorepattern" description="Ignore methods matching this regex" value="(^(set|get))i"/>
+        </properties>
+    </rule>
+
+    <rule name="TooManyPublicMethods"
+          since="0.1"
+          class="PHPMD\Rule\Design\TooManyPublicMethods"
+          message="The {0} {1} has {2} public methods. Consider refactoring {1} to keep number of public methods under {3}."
+          externalInfoUrl="http://phpmd.org/rules/codesize.html#toomanypublicmethods">
+        <description>
+            <![CDATA[
+A class with too many public methods is probably a good suspect for refactoring, in
+order to reduce its complexity and find a way to have more fine grained objects.
+
+By default it ignores methods starting with 'get' or 'set'.
+            ]]>
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="maxmethods" description="The method count reporting threshold" value="10"/>
+            <property name="ignorepattern" description="Ignore methods matching this regex" value="(^(set|get))i"/>
+        </properties>
+    </rule>
+
+    <rule name="ExcessiveClassComplexity"
+          since="0.2.5"
+          class="PHPMD\Rule\Design\WeightedMethodCount"
+          message="The class {0} has an overall complexity of {1} which is very high. The configured complexity threshold is {2}."
+          externalInfoUrl="http://phpmd.org/rules/codesize.html#excessiveclasscomplexity">
+        <description>
+            <![CDATA[
+The Weighted Method Count (WMC) of a class is a good indicator of how much time
+and effort is required to modify and maintain this class. The WMC metric is defined
+as the sum of complexities of all methods declared in a class. A large number of
+methods also means that this class has a greater potential impact on derived classes.
+            ]]>
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="maximum" description="The maximum WMC tolerable for a class." value="50"/>
+        </properties>
+        <example>
+            <![CDATA[
+class Foo {
+    public function bar()  {
+        if ($a == $b)  {
+            if ($a1 == $b1) {
+                fiddle();
+            } else if ($a2 == $b2) {
+                fiddle();
+            }  else {
+            }
+        }
+    }
+    public function baz()  {
+        if ($a == $b)  {
+            if ($a1 == $b1) {
+                fiddle();
+            } else if ($a2 == $b2) {
+                fiddle();
+            }  else {
+            }
+        }
+    }
+    // Several other complex methods
+}
+            ]]>
+        </example>
+    </rule>
+</ruleset>

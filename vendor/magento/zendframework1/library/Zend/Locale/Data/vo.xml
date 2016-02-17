@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "../../common/dtd/ldml.dtd">
+<!-- Copyright © 1991-2013 Unicode, Inc.
+CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+For terms of use, see http://www.unicode.org/copyright.html
+-->
+<ldml>
+	<identity>
+		<version number="$Revision: 9061 $"/>
+		<generation date="$Date: 2013-07-20 12:27:45 -0500 (Sat, 20 Jul 2013) $"/>
+		<language type="vo"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="vo" draft="unconfirmed">Volapük</language>
+		</languages>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a ä b c d e f g h i j k l m n o ö p q r s š t u ü v x y z]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[q w]</exemplarCharacters>
+		<exemplarCharacters type="index">[A Ä B C D E F G H I J K L M N O Ö P R S T U Ü V X Y Z]</exemplarCharacters>
+		<exemplarCharacters type="punctuation">[\- ‐ – — , ; \: ! ? . … ' ‘ ’ &quot; “ ” « » ( ) \[ \] \{ \} § @ * / \&amp; #]</exemplarCharacters>
+		<ellipsis type="final" draft="unconfirmed">{0}…</ellipsis>
+		<ellipsis type="initial" draft="unconfirmed">… {0}</ellipsis>
+		<ellipsis type="medial" draft="unconfirmed">{0} … {1}</ellipsis>
+	</characters>
+	<delimiters>
+		<quotationStart draft="unconfirmed">“</quotationStart>
+		<quotationEnd draft="unconfirmed">”</quotationEnd>
+		<alternateQuotationStart draft="unconfirmed">‘</alternateQuotationStart>
+		<alternateQuotationEnd draft="unconfirmed">’</alternateQuotationEnd>
+	</delimiters>
+	<dates>
+		<calendars>
+			<calendar type="generic">
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern draft="unconfirmed">G y MMMMa 'd'. d'id'</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern draft="unconfirmed">G y MMMM d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern draft="unconfirmed">G y MMM. d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern draft="unconfirmed">GGGGG y-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+			</calendar>
+			<calendar type="gregorian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1" draft="unconfirmed">jan</month>
+							<month type="2" draft="unconfirmed">feb</month>
+							<month type="3" draft="unconfirmed">mäz</month>
+							<month type="4" draft="unconfirmed">prl</month>
+							<month type="5" draft="unconfirmed">may</month>
+							<month type="6" draft="unconfirmed">yun</month>
+							<month type="7" draft="unconfirmed">yul</month>
+							<month type="8" draft="unconfirmed">gst</month>
+							<month type="9" draft="unconfirmed">set</month>
+							<month type="10" draft="unconfirmed">ton</month>
+							<month type="11" draft="unconfirmed">nov</month>
+							<month type="12" draft="unconfirmed">dek</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1" draft="unconfirmed">janul</month>
+							<month type="2" draft="unconfirmed">febul</month>
+							<month type="3" draft="unconfirmed">mäzil</month>
+							<month type="4" draft="unconfirmed">prilul</month>
+							<month type="5" draft="unconfirmed">mayul</month>
+							<month type="6" draft="unconfirmed">yunul</month>
+							<month type="7" draft="unconfirmed">yulul</month>
+							<month type="8" draft="unconfirmed">gustul</month>
+							<month type="9" draft="unconfirmed">setul</month>
+							<month type="10" draft="unconfirmed">tobul</month>
+							<month type="11" draft="unconfirmed">novul</month>
+							<month type="12" draft="unconfirmed">dekul</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<month type="1" draft="unconfirmed">jan</month>
+							<month type="2" draft="unconfirmed">feb</month>
+							<month type="3" draft="unconfirmed">mäz</month>
+							<month type="4" draft="unconfirmed">prl</month>
+							<month type="5" draft="unconfirmed">may</month>
+							<month type="6" draft="unconfirmed">yun</month>
+							<month type="7" draft="unconfirmed">yul</month>
+							<month type="8" draft="unconfirmed">gst</month>
+							<month type="9" draft="unconfirmed">set</month>
+							<month type="10" draft="unconfirmed">tob</month>
+							<month type="11" draft="unconfirmed">nov</month>
+							<month type="12" draft="unconfirmed">Dek</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1" draft="unconfirmed">J</month>
+							<month type="2" draft="unconfirmed">F</month>
+							<month type="3" draft="unconfirmed">M</month>
+							<month type="4" draft="unconfirmed">P</month>
+							<month type="5" draft="unconfirmed">M</month>
+							<month type="6" draft="unconfirmed">Y</month>
+							<month type="7" draft="unconfirmed">Y</month>
+							<month type="8" draft="unconfirmed">G</month>
+							<month type="9" draft="unconfirmed">S</month>
+							<month type="10" draft="unconfirmed">T</month>
+							<month type="11" draft="unconfirmed">N</month>
+							<month type="12" draft="unconfirmed">D</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun" draft="unconfirmed">su.</day>
+							<day type="mon" draft="unconfirmed">mu.</day>
+							<day type="tue" draft="unconfirmed">tu.</day>
+							<day type="wed" draft="unconfirmed">ve.</day>
+							<day type="thu" draft="unconfirmed">dö.</day>
+							<day type="fri" draft="unconfirmed">fr.</day>
+							<day type="sat" draft="unconfirmed">zä.</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun" draft="unconfirmed">sudel</day>
+							<day type="mon" draft="unconfirmed">mudel</day>
+							<day type="tue" draft="unconfirmed">tudel</day>
+							<day type="wed" draft="unconfirmed">vedel</day>
+							<day type="thu" draft="unconfirmed">dödel</day>
+							<day type="fri" draft="unconfirmed">fridel</day>
+							<day type="sat" draft="unconfirmed">zädel</day>
+						</dayWidth>
+					</dayContext>
+					<dayContext type="stand-alone">
+						<dayWidth type="abbreviated">
+							<day type="sun" draft="unconfirmed">Su</day>
+							<day type="mon" draft="unconfirmed">Mu</day>
+							<day type="tue" draft="unconfirmed">Tu</day>
+							<day type="wed" draft="unconfirmed">Ve</day>
+							<day type="thu" draft="unconfirmed">Dö</day>
+							<day type="fri" draft="unconfirmed">Fr</day>
+							<day type="sat" draft="unconfirmed">Zä</day>
+						</dayWidth>
+						<dayWidth type="narrow">
+							<day type="sun" draft="unconfirmed">S</day>
+							<day type="mon" draft="unconfirmed">M</day>
+							<day type="tue" draft="unconfirmed">T</day>
+							<day type="wed" draft="unconfirmed">V</day>
+							<day type="thu" draft="unconfirmed">D</day>
+							<day type="fri" draft="unconfirmed">F</day>
+							<day type="sat" draft="unconfirmed">Z</day>
+						</dayWidth>
+					</dayContext>
+				</days>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1" draft="unconfirmed">Yf1</quarter>
+							<quarter type="2" draft="unconfirmed">Yf2</quarter>
+							<quarter type="3" draft="unconfirmed">Yf3</quarter>
+							<quarter type="4" draft="unconfirmed">Yf4</quarter>
+						</quarterWidth>
+						<quarterWidth type="narrow">
+							<quarter type="1" draft="unconfirmed">1</quarter>
+							<quarter type="2" draft="unconfirmed">2</quarter>
+							<quarter type="3" draft="unconfirmed">3</quarter>
+							<quarter type="4" draft="unconfirmed">4</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1" draft="unconfirmed">1id yelafoldil</quarter>
+							<quarter type="2" draft="unconfirmed">2id yelafoldil</quarter>
+							<quarter type="3" draft="unconfirmed">3id yelafoldil</quarter>
+							<quarter type="4" draft="unconfirmed">4id yelafoldil</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
+				<dayPeriods>
+					<dayPeriodContext type="format">
+						<dayPeriodWidth type="wide">
+							<dayPeriod type="afternoon" draft="unconfirmed">poszedelo</dayPeriod>
+							<dayPeriod type="am" draft="unconfirmed">posz.</dayPeriod>
+							<dayPeriod type="earlyMorning" draft="unconfirmed">gödo</dayPeriod>
+							<dayPeriod type="evening" draft="unconfirmed">soaro</dayPeriod>
+							<dayPeriod type="morning" draft="unconfirmed">büzedelo</dayPeriod>
+							<dayPeriod type="night" draft="unconfirmed">neito</dayPeriod>
+							<dayPeriod type="noon" draft="unconfirmed">zedelo</dayPeriod>
+							<dayPeriod type="pm" draft="unconfirmed">büz.</dayPeriod>
+						</dayPeriodWidth>
+					</dayPeriodContext>
+				</dayPeriods>
+				<eras>
+					<eraNames>
+						<era type="0" draft="unconfirmed">b. t. kr.</era>
+						<era type="1" draft="unconfirmed">p. t. kr.</era>
+					</eraNames>
+					<eraAbbr>
+						<era type="0" draft="unconfirmed">b. t. kr.</era>
+						<era type="1" draft="unconfirmed">p. t. kr.</era>
+					</eraAbbr>
+				</eras>
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern draft="unconfirmed">y MMMMa 'd'. d'id'</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern draft="unconfirmed">y MMMM d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern draft="unconfirmed">y MMM. d</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern draft="unconfirmed">y-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<timeFormatLength type="full">
+						<timeFormat>
+							<pattern draft="unconfirmed">HH:mm:ss zzzz</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="long">
+						<timeFormat>
+							<pattern draft="unconfirmed">HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="medium">
+						<timeFormat>
+							<pattern draft="unconfirmed">HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="short">
+						<timeFormat>
+							<pattern draft="unconfirmed">HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength>
+				</timeFormats>
+			</calendar>
+		</calendars>
+		<fields>
+			<field type="era">
+				<displayName draft="unconfirmed">Epoche</displayName>
+			</field>
+			<field type="year">
+				<displayName draft="unconfirmed">yel</displayName>
+				<relative type="-1" draft="unconfirmed">äyelo</relative>
+				<relative type="0" draft="unconfirmed">ayelo</relative>
+				<relative type="1" draft="unconfirmed">oyelo</relative>
+			</field>
+			<field type="month">
+				<displayName draft="unconfirmed">mul</displayName>
+				<relative type="-1" draft="unconfirmed">ämulo</relative>
+				<relative type="0" draft="unconfirmed">amulo</relative>
+				<relative type="1" draft="unconfirmed">omulo</relative>
+			</field>
+			<field type="week">
+				<displayName draft="unconfirmed">vig</displayName>
+				<relative type="-1" draft="unconfirmed">ävigo</relative>
+				<relative type="0" draft="unconfirmed">avigo</relative>
+				<relative type="1" draft="unconfirmed">ovigo</relative>
+			</field>
+			<field type="day">
+				<displayName draft="unconfirmed">Tag</displayName>
+				<relative type="-2" draft="unconfirmed">edelo</relative>
+				<relative type="-1" draft="unconfirmed">ädelo</relative>
+				<relative type="0" draft="unconfirmed">adelo</relative>
+				<relative type="1" draft="unconfirmed">odelo</relative>
+				<relative type="2" draft="unconfirmed">udelo</relative>
+			</field>
+			<field type="weekday">
+				<displayName draft="unconfirmed">vodabel</displayName>
+			</field>
+			<field type="dayperiod">
+				<displayName draft="unconfirmed">delalaf</displayName>
+			</field>
+			<field type="hour">
+				<displayName draft="unconfirmed">düp</displayName>
+			</field>
+			<field type="minute">
+				<displayName draft="unconfirmed">minut</displayName>
+			</field>
+			<field type="second">
+				<displayName draft="unconfirmed">sekun</displayName>
+			</field>
+			<field type="zone">
+				<displayName draft="unconfirmed">zon</displayName>
+			</field>
+		</fields>
+	</dates>
+	<posix>
+		<messages>
+			<yesstr draft="unconfirmed">si:s</yesstr>
+			<nostr draft="unconfirmed">no:n</nostr>
+		</messages>
+	</posix>
+</ldml>

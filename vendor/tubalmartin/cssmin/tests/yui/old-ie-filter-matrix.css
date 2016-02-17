@@ -1,0 +1,8 @@
+.a {
+filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.9914448613738104, M12=-0.13052619222005157, M21=0.13052619222005157, M22=0.9914448613738104, sizingMethod='auto expand');
+}
+.b {
+    display: none;
+    filter: progid:DXImageTransform.Microsoft.Matrix(M11=0.9914448613738104, M12=-0.13052619222005157, M21=0.13052619222005157, M22=0.9914448613738104, sizingMethod='auto expand');
+    vertical-align: bottom;
+}

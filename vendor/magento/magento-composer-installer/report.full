@@ -1,0 +1,617 @@
+FILE: ...staller/src/MagentoHackathon/Composer/Magento/Command/DeployCommand.php
+--------------------------------------------------------------------------------
+FOUND 12 ERROR(S) AND 3 WARNING(S) AFFECTING 9 LINE(S)
+--------------------------------------------------------------------------------
+  5 | WARNING | PHP version not specified
+  5 | ERROR   | Missing @category tag in class comment
+  5 | ERROR   | Missing @package tag in class comment
+  5 | ERROR   | Missing @author tag in class comment
+  5 | ERROR   | Missing @license tag in class comment
+ 18 | ERROR   | There must be exactly one blank line before the tags in class
+    |         | comments
+ 18 | ERROR   | @author must be "FireGento Team <team@firegento.com>"
+ 19 | ERROR   | @author must be "FireGento Team <team@firegento.com>"
+ 20 | ERROR   | Missing @category tag in class comment
+ 20 | ERROR   | Missing @package tag in class comment
+ 23 | ERROR   | Missing function doc comment
+ 30 | WARNING | Line exceeds 120 characters; contains 136 characters
+ 40 | ERROR   | You must use "/**" style comments for a function comment
+ 58 | WARNING | Line exceeds 120 characters; contains 123 characters
+ 73 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+--------------------------------------------------------------------------------
+
+
+FILE: ...nstaller/src/MagentoHackathon/Composer/Magento/Deploy/Manager/Entry.php
+--------------------------------------------------------------------------------
+FOUND 11 ERROR(S) AFFECTING 8 LINE(S)
+--------------------------------------------------------------------------------
+  2 | ERROR | File doc comment is empty
+ 12 | ERROR | Missing class doc comment
+ 12 | ERROR | Opening brace of a class must be on the line after the definition
+ 14 | ERROR | Protected member variable "packageName" must contain a leading
+    |       | underscore
+ 19 | ERROR | Protected member variable "deployStrategy" must contain a leading
+    |       | underscore
+ 22 | ERROR | Missing comment for param "$packageName" at position 1
+ 22 | ERROR | There must be exactly one blank line before the tags in function
+    |       | comment
+ 30 | ERROR | There must be exactly one blank line before the tags in function
+    |       | comment
+ 38 | ERROR | Missing comment for param "$deployStrategy" at position 1
+ 38 | ERROR | There must be exactly one blank line before the tags in function
+    |       | comment
+ 46 | ERROR | There must be exactly one blank line before the tags in function
+    |       | comment
+--------------------------------------------------------------------------------
+
+
+FILE: ...poser-installer/src/MagentoHackathon/Composer/Magento/DeployManager.php
+--------------------------------------------------------------------------------
+FOUND 22 ERROR(S) AFFECTING 17 LINE(S)
+--------------------------------------------------------------------------------
+  2 | ERROR | File doc comment is empty
+ 16 | ERROR | Missing class doc comment
+ 16 | ERROR | Opening brace of a class must be on the line after the definition
+ 21 | ERROR | Protected member variable "packages" must contain a leading
+    |       | underscore
+ 26 | ERROR | Protected member variable "io" must contain a leading underscore
+ 33 | ERROR | Protected member variable "sortPriority" must contain a leading
+    |       | underscore
+ 36 | ERROR | Missing function doc comment
+ 42 | ERROR | Missing function doc comment
+ 47 | ERROR | Missing function doc comment
+ 61 | ERROR | Expected 1 space after FUNCTION keyword; 0 found
+ 61 | ERROR | Expected 1 space before opening brace; found 0
+ 63 | ERROR | Expected "if (...) {\n"; found "if(...){\n"
+ 65 | ERROR | Expected "} elseif (...) {\n"; found "}elseif(...){\n"
+ 70 | ERROR | Whitespace found at end of line
+ 71 | ERROR | Whitespace found at end of line
+ 72 | ERROR | Expected 1 space after FUNCTION keyword; 0 found
+ 72 | ERROR | Expected 1 space after closing parenthesis; found 0
+ 72 | ERROR | Expected 1 space after USE keyword; found 0
+ 72 | ERROR | Expected 1 space before USE keyword; found 0
+ 86 | ERROR | Missing function doc comment
+ 90 | ERROR | Expected "foreach (...) {\n"; found "foreach(...){\n"
+ 91 | ERROR | Expected "if (...) {\n"; found "if(...){\n"
+--------------------------------------------------------------------------------
+
+
+FILE: ...installer/src/MagentoHackathon/Composer/Magento/Deploystrategy/Copy.php
+--------------------------------------------------------------------------------
+FOUND 11 ERROR(S) AND 1 WARNING(S) AFFECTING 4 LINE(S)
+--------------------------------------------------------------------------------
+  4 | WARNING | PHP version not specified
+  4 | ERROR   | Missing @category tag in class comment
+  4 | ERROR   | Missing @package tag in class comment
+  4 | ERROR   | Missing @author tag in class comment
+  4 | ERROR   | Missing @license tag in class comment
+ 10 | ERROR   | Missing @category tag in class comment
+ 10 | ERROR   | Missing @package tag in class comment
+ 10 | ERROR   | Missing @author tag in class comment
+ 16 | ERROR   | Expected 2 space(s) before variable type
+ 16 | ERROR   | Missing comment for param "$source" at position 1
+ 17 | ERROR   | Expected 2 space(s) before variable type
+ 17 | ERROR   | Missing comment for param "$dest" at position 2
+--------------------------------------------------------------------------------
+
+
+FILE: ...ntoHackathon/Composer/Magento/Deploystrategy/DeploystrategyAbstract.php
+--------------------------------------------------------------------------------
+FOUND 51 ERROR(S) AND 2 WARNING(S) AFFECTING 35 LINE(S)
+--------------------------------------------------------------------------------
+   4 | WARNING | PHP version not specified
+   4 | ERROR   | Missing @category tag in class comment
+   4 | ERROR   | Missing @package tag in class comment
+   4 | ERROR   | Missing @author tag in class comment
+   4 | ERROR   | Missing @license tag in class comment
+  10 | ERROR   | Missing @category tag in class comment
+  10 | ERROR   | Missing @package tag in class comment
+  10 | ERROR   | Missing @author tag in class comment
+  18 | ERROR   | Protected member variable "mappings" must contain a leading
+     |         | underscore
+  25 | ERROR   | Protected member variable "currentMapping" must contain a
+     |         | leading underscore
+  32 | ERROR   | Protected member variable "ignoredMappings" must contain a
+     |         | leading underscore
+  40 | ERROR   | Protected member variable "destDir" must contain a leading
+     |         | underscore
+  47 | ERROR   | Protected member variable "sourceDir" must contain a leading
+     |         | underscore
+  54 | ERROR   | Protected member variable "isForced" must contain a leading
+     |         | underscore
+  59 | ERROR   | Missing comment for param "$sourceDir" at position 1
+  60 | ERROR   | Missing comment for param "$destDir" at position 2
+ 131 | ERROR   | Missing comment for param "$forced" at position 1
+ 151 | ERROR   | Missing comment for param "$mappings" at position 1
+ 171 | ERROR   | Missing comment for param "$mapping" at position 1
+ 182 | ERROR   | Doc comment for var [ UNKNOWN ] does not match actual variable
+     |         | name $ignoredMappings at position 1
+ 182 | ERROR   | Missing parameter name at position 1
+ 182 | ERROR   | Missing comment for param "[ UNKNOWN ]" at position 1
+ 201 | ERROR   | Expected 2 space(s) before variable type
+ 201 | ERROR   | Missing comment for param "$destination" at position 1
+ 201 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+ 208 | ERROR   | No space found after comma in function call
+ 209 | ERROR   | No space found after comma in function call
+ 210 | ERROR   | Expected "foreach (...) {\n"; found "foreach(...){\n"
+ 211 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 211 | ERROR   | No space found after comma in function call
+ 218 | ERROR   | Doc comment for "$key" missing
+ 218 | ERROR   | Doc comment for "$value" missing
+ 226 | ERROR   | Missing function doc comment
+ 228 | ERROR   | Line indented incorrectly; expected at least 8 spaces, found 7
+ 236 | ERROR   | Expected 2 space(s) before variable type
+ 236 | ERROR   | Missing comment for param "$source" at position 1
+ 237 | ERROR   | Expected 2 space(s) before variable type
+ 237 | ERROR   | Missing comment for param "$dest" at position 2
+ 243 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 300 | ERROR   | Missing comment for param "$source" at position 1
+ 301 | ERROR   | Missing comment for param "$dest" at position 2
+ 327 | WARNING | Line exceeds 120 characters; contains 145 characters
+ 337 | ERROR   | Missing comment for param "$dir" at position 1
+ 338 | ERROR   | Missing comment for param "$stopDir" at position 2
+ 376 | ERROR   | Doc comment for var [ UNKNOWN ] does not match actual variable
+     |         | name $dir at position 1
+ 376 | ERROR   | Missing parameter name at position 1
+ 376 | ERROR   | Missing comment for param "[ UNKNOWN ]" at position 1
+ 381 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 383 | ERROR   | Expected "} else {\n"; found "}else{\n"
+ 396 | ERROR   | Expected 2 space(s) before variable type
+ 396 | ERROR   | Missing comment for param "$source" at position 1
+ 397 | ERROR   | Expected 2 space(s) before variable type
+ 397 | ERROR   | Missing comment for param "$dest" at position 2
+--------------------------------------------------------------------------------
+
+
+FILE: ...installer/src/MagentoHackathon/Composer/Magento/Deploystrategy/Link.php
+--------------------------------------------------------------------------------
+FOUND 11 ERROR(S) AND 1 WARNING(S) AFFECTING 4 LINE(S)
+--------------------------------------------------------------------------------
+  4 | WARNING | PHP version not specified
+  4 | ERROR   | Missing @category tag in class comment
+  4 | ERROR   | Missing @package tag in class comment
+  4 | ERROR   | Missing @author tag in class comment
+  4 | ERROR   | Missing @license tag in class comment
+ 10 | ERROR   | Missing @category tag in class comment
+ 10 | ERROR   | Missing @package tag in class comment
+ 10 | ERROR   | Missing @author tag in class comment
+ 16 | ERROR   | Expected 2 space(s) before variable type
+ 16 | ERROR   | Missing comment for param "$source" at position 1
+ 17 | ERROR   | Expected 2 space(s) before variable type
+ 17 | ERROR   | Missing comment for param "$dest" at position 2
+--------------------------------------------------------------------------------
+
+
+FILE: ...installer/src/MagentoHackathon/Composer/Magento/Deploystrategy/None.php
+--------------------------------------------------------------------------------
+FOUND 15 ERROR(S) AND 1 WARNING(S) AFFECTING 6 LINE(S)
+--------------------------------------------------------------------------------
+  4 | WARNING | PHP version not specified
+  4 | ERROR   | Missing @category tag in class comment
+  4 | ERROR   | Missing @package tag in class comment
+  4 | ERROR   | Missing @author tag in class comment
+  4 | ERROR   | Missing @license tag in class comment
+ 10 | ERROR   | Missing @category tag in class comment
+ 10 | ERROR   | Missing @package tag in class comment
+ 10 | ERROR   | Missing @author tag in class comment
+ 16 | ERROR   | Expected 2 space(s) before variable type
+ 16 | ERROR   | Missing comment for param "$source" at position 1
+ 17 | ERROR   | Expected 2 space(s) before variable type
+ 17 | ERROR   | Missing comment for param "$dest" at position 2
+ 28 | ERROR   | Expected 2 space(s) before variable type
+ 28 | ERROR   | Missing comment for param "$source" at position 1
+ 29 | ERROR   | Expected 2 space(s) before variable type
+ 29 | ERROR   | Missing comment for param "$dest" at position 2
+--------------------------------------------------------------------------------
+
+
+FILE: ...taller/src/MagentoHackathon/Composer/Magento/Deploystrategy/Symlink.php
+--------------------------------------------------------------------------------
+FOUND 15 ERROR(S) AND 2 WARNING(S) AFFECTING 8 LINE(S)
+--------------------------------------------------------------------------------
+   4 | WARNING | PHP version not specified
+   4 | ERROR   | Missing @category tag in class comment
+   4 | ERROR   | Missing @package tag in class comment
+   4 | ERROR   | Missing @author tag in class comment
+   4 | ERROR   | Missing @license tag in class comment
+  10 | ERROR   | Missing @category tag in class comment
+  10 | ERROR   | Missing @package tag in class comment
+  10 | ERROR   | Missing @author tag in class comment
+  16 | ERROR   | Expected 2 space(s) before variable type
+  16 | ERROR   | Missing comment for param "$source" at position 1
+  17 | ERROR   | Expected 2 space(s) before variable type
+  17 | ERROR   | Missing comment for param "$dest" at position 2
+  93 | WARNING | Line exceeds 120 characters; contains 132 characters
+ 103 | ERROR   | Expected "if (...) {\n"; found "if(...) {\n"
+ 108 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 115 | ERROR   | Doc comment for "$from" missing
+ 115 | ERROR   | Doc comment for "$to" missing
+--------------------------------------------------------------------------------
+
+
+FILE: ...-composer-installer/src/MagentoHackathon/Composer/Magento/Installer.php
+--------------------------------------------------------------------------------
+FOUND 110 ERROR(S) AND 12 WARNING(S) AFFECTING 88 LINE(S)
+--------------------------------------------------------------------------------
+   4 | WARNING | PHP version not specified
+   4 | ERROR   | Missing @category tag in class comment
+   4 | ERROR   | Missing @package tag in class comment
+   4 | ERROR   | Missing @author tag in class comment
+   4 | ERROR   | Missing @license tag in class comment
+  21 | ERROR   | Missing @category tag in class comment
+  21 | ERROR   | Missing @package tag in class comment
+  21 | ERROR   | Missing @author tag in class comment
+  29 | ERROR   | Protected member variable "magentoRootDir" must contain a
+     |         | leading underscore
+  36 | ERROR   | Protected member variable "defaultMagentoRootDir" must contain
+     |         | a leading underscore
+  43 | ERROR   | Protected member variable "modmanRootDir" must contain a
+     |         | leading underscore
+  50 | ERROR   | Protected member variable "isForced" must contain a leading
+     |         | underscore
+  57 | ERROR   | Variable "_source_dir" is not in valid camel caps format
+  71 | ERROR   | Protected member variable "noMaintenanceMode" must contain a
+     |         | leading underscore
+  72 | ERROR   | Protected member variable "originalMagentoRootDir" must
+     |         | contain a leading underscore
+  73 | ERROR   | Protected member variable "backupMagentoRootDir" must contain
+     |         | a leading underscore
+  74 | ERROR   | Protected member variable "removeMagentoDev" must contain a
+     |         | leading underscore
+  75 | ERROR   | Protected member variable "keepMagentoCache" must contain a
+     |         | leading underscore
+  90 | ERROR   | Protected member variable "deployManager" must contain a
+     |         | leading underscore
+  95 | ERROR   | Protected member variable "config" must contain a leading
+     |         | underscore
+ 102 | ERROR   | Protected member variable "appendGitIgnore" must contain a
+     |         | leading underscore
+ 113 | ERROR   | Missing comment for param "$io" at position 1
+ 114 | ERROR   | The variable names for parameters $io (1) and $composer (2) do
+     |         | not align
+ 114 | ERROR   | Missing comment for param "$composer" at position 2
+ 115 | ERROR   | The variable names for parameters $composer (2) and $type (3)
+     |         | do not align
+ 115 | ERROR   | Missing comment for param "$type" at position 3
+ 127 | WARNING | Line exceeds 120 characters; contains 237 characters
+ 168 | WARNING | Line exceeds 120 characters; contains 129 characters
+ 169 | WARNING | Line exceeds 120 characters; contains 141 characters
+ 193 | ERROR   | Missing comment for param "$deployManager" at position 1
+ 193 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+ 201 | ERROR   | Missing function doc comment
+ 207 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+ 217 | ERROR   | Opening brace should be on a new line
+ 236 | ERROR   | Extra newline(s) found before function comment short
+     |         | description
+ 237 | ERROR   | Expected 2 space(s) before variable type
+ 237 | ERROR   | Missing comment for param "$extra" at position 1
+ 237 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+ 238 | ERROR   | Expected 2 space(s) before variable type
+ 238 | ERROR   | The variable names for parameters $extra (1) and $io (2) do
+     |         | not align
+ 238 | ERROR   | Missing comment for param "$io" at position 2
+ 241 | ERROR   | Opening brace should be on a new line
+ 277 | ERROR   | Missing function doc comment
+ 277 | ERROR   | Opening brace should be on a new line
+ 294 | ERROR   | Missing comment for param "$strategy" at position 1
+ 294 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+ 304 | ERROR   | Expected 2 space(s) before variable type
+ 304 | ERROR   | Missing comment for param "$package" at position 1
+ 305 | ERROR   | Expected 2 space(s) before variable type
+ 305 | ERROR   | The variable names for parameters $package (1) and $strategy
+     |         | (2) do not align
+ 305 | ERROR   | Missing comment for param "$strategy" at position 2
+ 314 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 315 | WARNING | Line exceeds 120 characters; contains 126 characters
+ 316 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 321 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 323 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 326 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 328 | ERROR   | Whitespace found at end of line
+ 333 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 361 | ERROR   | Missing comment for param "$packageType" at position 1
+ 372 | ERROR   | Expected 2 space(s) before variable type
+ 372 | ERROR   | Missing comment for param "$package" at position 1
+ 437 | ERROR   | Missing comment for param "$package" at position 1
+ 438 | ERROR   | The variable names for parameters $package (1) and $ignoreFile
+     |         | (2) do not align
+ 438 | ERROR   | Missing comment for param "$ignoreFile" at position 2
+ 443 | ERROR   | Expected "if (...) {\n"; found "if(...) {\n"
+ 448 | ERROR   | Expected "foreach (...) {\n"; found "foreach(...) {\n"
+ 451 | ERROR   | No space found after comma in function call
+ 452 | ERROR   | No space found after comma in function call
+ 453 | ERROR   | No space found after comma in function call
+ 454 | ERROR   | Expected "if (...) {\n"; found "if(...) {\n"
+ 456 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 464 | ERROR   | Expected "if (...) {\n"; found "if(...) {\n"
+ 476 | ERROR   | Expected 6 space(s) before asterisk; 5 found
+ 477 | ERROR   | Expected 6 space(s) before asterisk; 5 found
+ 478 | ERROR   | Expected 6 space(s) before asterisk; 5 found
+ 478 | ERROR   | Superfluous doc comment at position 1
+ 479 | ERROR   | Expected 6 space(s) before asterisk; 5 found
+ 479 | ERROR   | The variable names for parameters $repo (1) and $package (2)
+     |         | do not align
+ 479 | ERROR   | The comments for parameters $repo (1) and $package (2) do not
+     |         | align
+ 479 | ERROR   | Superfluous doc comment at position 2
+ 480 | ERROR   | Expected 6 space(s) before asterisk; 5 found
+ 481 | ERROR   | Opening brace should be on a new line
+ 482 | WARNING | Line exceeds 120 characters; contains 220 characters
+ 490 | ERROR   | Missing function doc comment
+ 490 | ERROR   | Opening brace should be on a new line
+ 495 | ERROR   | Missing function doc comment
+ 495 | ERROR   | Opening brace should be on a new line
+ 503 | ERROR   | Opening brace should be on a new line
+ 516 | ERROR   | The variable names for parameters $path (1) and $dirmode (2)
+     |         | do not align
+ 516 | ERROR   | The comments for parameters $path (1) and $dirmode (2) do not
+     |         | align
+ 517 | ERROR   | The comments for parameters $dirmode (2) and $filemode (3) do
+     |         | not align
+ 519 | ERROR   | Opening brace should be on a new line
+ 543 | ERROR   | You must use "/**" style comments for a function comment
+ 543 | ERROR   | Opening brace should be on a new line
+ 561 | ERROR   | Line indented incorrectly; expected at least 16 spaces, found
+     |         | 12
+ 573 | ERROR   | Line indented incorrectly; expected at least 16 spaces, found
+     |         | 12
+ 613 | ERROR   | Expected "if (...) {\n"; found "if(...) {\n"
+ 623 | ERROR   | Missing function doc comment
+ 623 | ERROR   | Opening brace should be on a new line
+ 624 | WARNING | Line exceeds 120 characters; contains 157 characters
+ 635 | ERROR   | Missing function doc comment
+ 635 | ERROR   | Opening brace should be on a new line
+ 649 | ERROR   | Missing function doc comment
+ 649 | ERROR   | Opening brace should be on a new line
+ 653 | WARNING | Line exceeds 120 characters; contains 139 characters
+ 656 | WARNING | Line exceeds 120 characters; contains 124 characters
+ 667 | ERROR   | Missing function doc comment
+ 667 | ERROR   | Opening brace should be on a new line
+ 680 | ERROR   | Missing function doc comment
+ 680 | ERROR   | Opening brace should be on a new line
+ 707 | ERROR   | Expected 2 space(s) before variable type
+ 707 | ERROR   | Missing comment for param "$package" at position 1
+ 715 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 717 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 729 | WARNING | Line exceeds 120 characters; contains 130 characters
+ 740 | ERROR   | Doc comment for "$package" missing
+ 764 | ERROR   | You must use "/**" style comments for a function comment
+ 767 | ERROR   | Expected "foreach (...) {\n"; found "foreach(...){\n"
+ 778 | ERROR   | Missing comment for param "$io" at position 1
+ 788 | WARNING | Line exceeds 120 characters; contains 157 characters
+ 789 | WARNING | Line exceeds 120 characters; contains 149 characters
+--------------------------------------------------------------------------------
+
+
+FILE: ...-composer-installer/src/MagentoHackathon/Composer/Magento/MapParser.php
+--------------------------------------------------------------------------------
+FOUND 10 ERROR(S) AND 1 WARNING(S) AFFECTING 5 LINE(S)
+--------------------------------------------------------------------------------
+  4 | WARNING | PHP version not specified
+  4 | ERROR   | Missing @category tag in class comment
+  4 | ERROR   | Missing @package tag in class comment
+  4 | ERROR   | Missing @author tag in class comment
+  4 | ERROR   | Missing @license tag in class comment
+  8 | ERROR   | Missing class doc comment
+  8 | ERROR   | Opening brace of a class must be on the line after the
+    |         | definition
+ 12 | ERROR   | Missing function doc comment
+ 12 | ERROR   | Visibility must be declared on method "__construct"
+ 19 | ERROR   | Missing function doc comment
+ 24 | ERROR   | Missing function doc comment
+--------------------------------------------------------------------------------
+
+
+FILE: ...mposer-installer/src/MagentoHackathon/Composer/Magento/ModmanParser.php
+--------------------------------------------------------------------------------
+FOUND 19 ERROR(S) AND 2 WARNING(S) AFFECTING 11 LINE(S)
+--------------------------------------------------------------------------------
+   4 | WARNING | PHP version not specified
+   4 | ERROR   | Missing @category tag in class comment
+   4 | ERROR   | Missing @package tag in class comment
+   4 | ERROR   | Missing @author tag in class comment
+   4 | ERROR   | Missing @license tag in class comment
+  10 | ERROR   | Missing @category tag in class comment
+  10 | ERROR   | Missing @package tag in class comment
+  10 | ERROR   | Missing @author tag in class comment
+  26 | ERROR   | Missing comment for param "$moduleDir" at position 1
+  26 | ERROR   | Doc comment for "$translations" missing
+  39 | ERROR   | Expected 2 space(s) before variable type
+  39 | ERROR   | Missing comment for param "$moduleDir" at position 1
+  54 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+  62 | ERROR   | Expected 2 space(s) before variable type
+  62 | ERROR   | Missing comment for param "$file" at position 1
+  62 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+  75 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+  83 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+  95 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+ 112 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+ 128 | WARNING | Line exceeds 120 characters; contains 122 characters
+--------------------------------------------------------------------------------
+
+
+FILE: ...er-installer/src/MagentoHackathon/Composer/Magento/PackageXmlParser.php
+--------------------------------------------------------------------------------
+FOUND 30 ERROR(S) AND 1 WARNING(S) AFFECTING 16 LINE(S)
+--------------------------------------------------------------------------------
+   4 | WARNING | PHP version not specified
+   4 | ERROR   | Missing @category tag in class comment
+   4 | ERROR   | Missing @package tag in class comment
+   4 | ERROR   | Missing @author tag in class comment
+   4 | ERROR   | Missing @license tag in class comment
+  10 | ERROR   | Missing @category tag in class comment
+  10 | ERROR   | Missing @package tag in class comment
+  10 | ERROR   | Missing @author tag in class comment
+  31 | ERROR   | Missing comment for param "$moduleDir" at position 1
+  32 | ERROR   | Missing comment for param "$packageXmlFile" at position 2
+  33 | ERROR   | Missing comment for param "$translations" at position 3
+  46 | ERROR   | Expected 2 space(s) before variable type
+  46 | ERROR   | Missing comment for param "$moduleDir" at position 1
+  61 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+  69 | ERROR   | Expected 2 space(s) before variable type
+  69 | ERROR   | Missing comment for param "$file" at position 1
+  69 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+  82 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+  90 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+ 107 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+ 140 | ERROR   | Expected 2 space(s) before variable type
+ 140 | ERROR   | Missing comment for param "$target" at position 1
+ 140 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+ 155 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+ 171 | ERROR   | Expected 2 space(s) before variable type
+ 171 | ERROR   | Missing comment for param "$element" at position 1
+ 171 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+ 175 | ERROR   | Opening brace should be on a new line
+ 205 | ERROR   | Expected 2 space(s) before variable type
+ 205 | ERROR   | Missing comment for param "$element" at position 1
+ 205 | ERROR   | There must be exactly one blank line before the tags in
+     |         | function comment
+--------------------------------------------------------------------------------
+
+
+FILE: ...nto-composer-installer/src/MagentoHackathon/Composer/Magento/Parser.php
+--------------------------------------------------------------------------------
+FOUND 2 ERROR(S) AFFECTING 2 LINE(S)
+--------------------------------------------------------------------------------
+ 2 | ERROR | Missing file doc comment
+ 5 | ERROR | Missing interface doc comment
+--------------------------------------------------------------------------------
+
+
+FILE: ...staller/src/MagentoHackathon/Composer/Magento/PathTranslationParser.php
+--------------------------------------------------------------------------------
+FOUND 17 ERROR(S) AFFECTING 11 LINE(S)
+--------------------------------------------------------------------------------
+  2 | ERROR | Missing file doc comment
+  8 | ERROR | Missing @category tag in class comment
+  8 | ERROR | Missing @package tag in class comment
+  8 | ERROR | Missing @author tag in class comment
+ 15 | ERROR | Protected member variable "pathPrefixVariants" must contain a
+    |       | leading underscore
+ 21 | ERROR | Protected member variable "pathPrefixTranslations" must contain a
+    |       | leading underscore
+ 38 | ERROR | Expected 2 space(s) before variable type
+ 38 | ERROR | Doc comment for var [ UNKNOWN ] does not match actual variable
+    |       | name $translations at position 1
+ 38 | ERROR | Missing parameter name at position 1
+ 38 | ERROR | Missing comment for param "[ UNKNOWN ]" at position 1
+ 44 | ERROR | Expected "foreach (...) {\n"; found "foreach(...) {\n"
+ 45 | ERROR | Expected "foreach (...) {\n"; found "foreach(...) {\n"
+ 62 | ERROR | Expected 2 space(s) before variable type
+ 62 | ERROR | Doc comment for var Array does not match actual variable name
+    |       | $mappings at position 1
+ 69 | ERROR | Expected "foreach (...) {\n"; found "foreach(...) {\n"
+ 70 | ERROR | Expected "foreach (...) {\n"; found "foreach(...) {\n"
+ 71 | ERROR | Expected "if (...) {\n"; found "if(...) {\n"
+--------------------------------------------------------------------------------
+
+
+FILE: ...nto-composer-installer/src/MagentoHackathon/Composer/Magento/Plugin.php
+--------------------------------------------------------------------------------
+FOUND 32 ERROR(S) AND 3 WARNING(S) AFFECTING 34 LINE(S)
+--------------------------------------------------------------------------------
+   2 | ERROR   | File doc comment is empty
+  26 | ERROR   | Missing class doc comment
+  26 | ERROR   | Opening brace of a class must be on the line after the
+     |         | definition
+  31 | ERROR   | Protected member variable "io" must contain a leading
+     |         | underscore
+  37 | ERROR   | Protected member variable "config" must contain a leading
+     |         | underscore
+  43 | ERROR   | Protected member variable "deployManager" must contain a
+     |         | leading underscore
+  49 | ERROR   | Protected member variable "composer" must contain a leading
+     |         | underscore
+  55 | ERROR   | Protected member variable "filesystem" must contain a leading
+     |         | underscore
+  58 | ERROR   | Missing function doc comment
+  63 | WARNING | Line exceeds 120 characters; contains 123 characters
+  69 | ERROR   | Missing function doc comment
+  79 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+  85 | ERROR   | Missing function doc comment
+ 104 | ERROR   | Missing comment for param "$event" at position 1
+ 114 | ERROR   | Missing comment for param "$event" at position 1
+ 118 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 127 | ERROR   | Missing function doc comment
+ 133 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 134 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 147 | ERROR   | Expected "foreach (...) {\n"; found "foreach(...){\n"
+ 150 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 153 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 156 | ERROR   | Expected "foreach (...) {\n"; found "foreach(...){\n"
+ 159 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 169 | ERROR   | No space found after comma in function call
+ 172 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 173 | WARNING | Line exceeds 120 characters; contains 122 characters
+ 175 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 176 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 179 | ERROR   | No space found after comma in function call
+ 181 | ERROR   | Expected "} else {\n"; found "}else{\n"
+ 182 | ERROR   | Expected "if (...) {\n"; found "if(...){\n"
+ 183 | WARNING | Line exceeds 120 characters; contains 132 characters
+ 202 | ERROR   | Missing comment for param "$source" at position 1
+ 203 | ERROR   | Missing comment for param "$target" at position 2
+--------------------------------------------------------------------------------
+
+
+FILE: ...poser-installer/src/MagentoHackathon/Composer/Magento/ProjectConfig.php
+--------------------------------------------------------------------------------
+FOUND 14 ERROR(S) AFFECTING 12 LINE(S)
+--------------------------------------------------------------------------------
+  2 | ERROR | File doc comment is empty
+ 12 | ERROR | Missing class doc comment
+ 12 | ERROR | Opening brace of a class must be on the line after the definition
+ 14 | ERROR | Protected member variable "libraryPath" must contain a leading
+    |       | underscore
+ 15 | ERROR | Protected member variable "libraryPackages" must contain a
+    |       | leading underscore
+ 17 | ERROR | Missing function doc comment
+ 20 | ERROR | Expected "if (...) {\n"; found "if(...){\n"
+ 25 | ERROR | Missing function doc comment
+ 25 | ERROR | Opening brace should be on a new line
+ 27 | ERROR | Expected "if (...) {\n"; found "if(...){\n"
+ 33 | ERROR | Missing function doc comment
+ 38 | ERROR | Missing function doc comment
+ 45 | ERROR | Missing function doc comment
+ 50 | ERROR | Missing function doc comment
+--------------------------------------------------------------------------------
+
+
+FILE: ...poser-installer/src/MagentoHackathon/Composer/Magerun/DeployCommand.php
+--------------------------------------------------------------------------------
+FOUND 12 ERROR(S) AFFECTING 8 LINE(S)
+--------------------------------------------------------------------------------
+  2 | ERROR | Missing file doc comment
+  9 | ERROR | Missing class doc comment
+ 11 | ERROR | Missing function doc comment
+ 13 | ERROR | Line indented incorrectly; expected at least 8 spaces, found 6
+ 16 | ERROR | Line indented incorrectly; expected at least 8 spaces, found 6
+ 19 | ERROR | Line indented incorrectly; expected at least 4 spaces, found 3
+ 20 | ERROR | Expected 2 space(s) before variable type
+ 20 | ERROR | Missing comment for param "$input" at position 1
+ 20 | ERROR | There must be exactly one blank line before the tags in function
+    |       | comment
+ 21 | ERROR | Expected 2 space(s) before variable type
+ 21 | ERROR | The variable names for parameters $input (1) and $output (2) do
+    |       | not align
+ 21 | ERROR | Missing comment for param "$output" at position 2
+--------------------------------------------------------------------------------

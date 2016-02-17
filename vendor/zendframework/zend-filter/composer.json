@@ -1,0 +1,44 @@
+{
+    "name": "zendframework/zend-filter",
+    "description": "provides a set of commonly needed data filters",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "filter"
+    ],
+    "homepage": "https://github.com/zendframework/zend-filter",
+    "autoload": {
+        "psr-4": {
+            "Zend\\Filter\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.23",
+        "zendframework/zend-stdlib": "self.version"
+    },
+    "require-dev": {
+        "zendframework/zend-crypt": "self.version",
+        "zendframework/zend-servicemanager": "self.version",
+        "zendframework/zend-uri": "self.version",
+        "fabpot/php-cs-fixer": "1.7.*",
+        "satooshi/php-coveralls": "dev-master",
+        "phpunit/PHPUnit": "~4.0"
+    },
+    "suggest": {
+        "zendframework/zend-crypt": "Zend\\Crypt component",
+        "zendframework/zend-i18n": "Zend\\I18n component",
+        "zendframework/zend-servicemanager": "Zend\\ServiceManager component",
+        "zendframework/zend-uri": "Zend\\Uri component for UriNormalize filter"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4-dev",
+            "dev-develop": "2.5-dev"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\Filter\\": "test/"
+        }
+    }
+}

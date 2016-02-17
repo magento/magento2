@@ -1,0 +1,40 @@
+{
+    "name": "zendframework/zend-math",
+    "description": " ",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "math"
+    ],
+    "homepage": "https://github.com/zendframework/zend-math",
+    "autoload": {
+        "psr-4": {
+            "Zend\\Math\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.23"
+    },
+    "suggest": {
+        "ext-bcmath": "If using the bcmath functionality",
+        "ext-gmp": "If using the gmp functionality",
+        "ircmaxell/random-lib": "Fallback random byte generator for Zend\\Math\\Rand if OpenSSL/Mcrypt extensions are unavailable",
+        "zendframework/zend-servicemanager": ">= current version, if using the BigInteger::factory functionality"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4-dev",
+            "dev-develop": "2.5-dev"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\Math\\": "test/"
+        }
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer": "1.7.*",
+        "satooshi/php-coveralls": "dev-master",
+        "phpunit/PHPUnit": "~4.0"
+    }
+}

@@ -1,0 +1,37 @@
+before_commands:
+    - "composer install --dev --prefer-source"
+
+tools:
+    php_code_coverage:
+        enabled: true
+        test_command: phpunit -c phpunit.xml.dist
+        filter:
+            paths: ["src/*"]
+    php_code_sniffer:
+        enabled: true
+        config:
+            standard: PSR2
+        filter:
+            paths: ["src/*"]
+    php_cpd:
+        enabled: true
+        excluded_dirs: ["examples", "tests", "vendor"]
+    php_cs_fixer:
+        enabled: true
+        config:
+            level: all
+        filter:
+            paths: ["src/*", "tests/*"]
+    php_loc:
+        enabled: true
+    php_mess_detector:
+        enabled: true
+        filter:
+            paths: ["src/*"]
+    php_pdepend:
+        enabled: true
+        excluded_dirs: ["tests", "examples", "vendor"]
+    php_analyzer:
+        filter:
+            paths: ["src/*", "tests/*"]
+    sensiolabs_security_checker: true

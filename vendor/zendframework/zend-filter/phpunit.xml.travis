@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="./test/bootstrap.php"
+         colors="true">
+    <testsuites>
+        <testsuite name="zend-filter Test Suite">
+            <directory>./test/</directory>
+        </testsuite>
+    </testsuites>
+
+    <groups>
+        <exclude>
+            <group>disable</group>
+        </exclude>
+    </groups>
+
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+
+    <php>
+        <ini name="date.timezone" value="UTC"/>
+
+        <!-- OB_ENABLED should be enabled for some tests to check if all
+             functionality works as expected. Such tests include those for
+             Zend\Soap and Zend\Session, which require that headers not be sent
+             in order to work. -->
+        <const name="TESTS_ZEND_OB_ENABLED" value="false" />
+
+        <!-- Zend\Filter tests
+
+             Some tests are problematic, largely due to environment.
+             Specifically, the Zip compression filter has this issue. These
+             tests are enabled by default; set them to false to disable them. -->
+        <const name="TESTS_ZEND_FILTER_COMPRESS_ZIP_ENABLED" value="true" />
+
+    </php>
+</phpunit>

@@ -1,0 +1,1 @@
+﻿body{background-image:url("../images/<%= Request("bgimg") %>.gif")}

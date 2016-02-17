@@ -1,0 +1,11 @@
+﻿/*
+TECHNICALLY this selector is okay -- scanning-wise it's three tokens: IDENT (body), CHARACTER (*), IDENT (h2).
+Parsing this as three elements names, where the first two don't have any of the optional trailing space.
+However, most browsers (non-IE) don't recognize this as valid CSS and ignores the rule.
+SO... we parse it properly. We just need to make sure that we don't add spaces where there aren't in the source.
+*/
+body*h2
+{
+    color:white;
+    background-color:tomato;
+}

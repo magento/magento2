@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "../../common/dtd/ldml.dtd">
+<!-- Copyright © 1991-2013 Unicode, Inc.
+CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+For terms of use, see http://www.unicode.org/copyright.html
+-->
+<ldml>
+	<identity>
+		<version number="$Revision: 9229 $"/>
+		<generation date="$Date: 2013-08-18 23:26:52 -0500 (Sun, 18 Aug 2013) $"/>
+		<language type="en"/>
+		<territory type="MO"/>
+	</identity>
+	<dates>
+		<timeZoneNames>
+			<zone type="Europe/London">
+				<short>
+					<daylight>∅∅∅</daylight>
+				</short>
+			</zone>
+			<metazone type="Europe_Central">
+				<short>
+					<generic>∅∅∅</generic>
+					<standard>∅∅∅</standard>
+					<daylight>∅∅∅</daylight>
+				</short>
+			</metazone>
+			<metazone type="Europe_Eastern">
+				<short>
+					<generic>∅∅∅</generic>
+					<standard>∅∅∅</standard>
+					<daylight>∅∅∅</daylight>
+				</short>
+			</metazone>
+			<metazone type="Europe_Western">
+				<short>
+					<generic>∅∅∅</generic>
+					<standard>∅∅∅</standard>
+					<daylight>∅∅∅</daylight>
+				</short>
+			</metazone>
+			<metazone type="Hong_Kong">
+				<short>
+					<generic>HKT</generic>
+					<standard>HKT</standard>
+					<daylight>HKST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Macau">
+				<short>
+					<generic>MST</generic>
+					<standard>MST</standard>
+					<daylight>MDT</daylight>
+				</short>
+			</metazone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<currencies>
+			<currency type="MOP">
+				<symbol>MOP$</symbol>
+			</currency>
+			<currency type="USD">
+				<symbol>US$</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>

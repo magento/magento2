@@ -1,0 +1,62 @@
+
+/* this is an unknown at-rule. Because we don't know what the heck
+   it contains, we are going to do VERY LITTLE crunching. Whitespace
+   will be reduced to a single space -- but not eliminated
+   (except AFTER opening and closing braces). But before braces
+   or extra semicolons -- not removed because we just don't know
+   what's going on */
+
+/* this one contains another at-rule, and a regular rule */
+@three-dee 
+{
+  /* this one contains a declaration block */
+  @background-lighting 
+  {
+    azimuth: 30deg;
+    elevation: 190deg;
+  }
+  H1 { color: red }
+}
+
+/* this one is just a declaration block */
+@background-lighting bright 
+{
+  azimuth: 30deg;
+  elevation: 190deg;
+}
+
+/* this one just contains a rule block */
+@whoknows foo, bar :active, ack
+{
+  a:link
+  {
+    text-decoration: underline;
+  }
+  body 
+  {
+    color: #fff;
+  }
+}
+
+/* this one just has a few identifiers before the semicolon */
+@anotherone foo, bar;
+
+/* way minimum one */
+@foobar;
+
+/* a non-sense vendor-specific at-rule */
+@-moz-something url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAABnRSTlMAAAAAAABupgeRAAAABmJLR0QA%2FwD%2FAP%2BgvaeTAAAAEUlEQVR42mP4%2F58BCv7%2FZwAAHfAD%2FabwPj4AAAAASUVORK5CYII%3D)
+{
+    1 { foobar: 20hz; }
+    2 { whack: a-mole; scooby: doo; }
+}
+
+/* a vendor-specific at-rule (Safari animation) */
+@-webkit-keyframes bounce {
+ from {
+   left: 0px;
+ }
+ to {
+   left: 200px;
+ }
+}

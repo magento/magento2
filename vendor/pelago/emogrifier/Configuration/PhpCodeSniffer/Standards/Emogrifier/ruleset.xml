@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="PPW Coding Standard">
+    <description>This is the coding standard user for the Emogrifier code (without the unit tests).
+        This standard has been tested with to work with PHP_CodeSniffer >= 1.4.5.
+    </description>
+
+    <rule ref="PSR2"/>
+
+    <rule ref="Generic.Classes.DuplicateClassName"/>
+    <rule ref="Generic.CodeAnalysis.EmptyStatement"/>
+    <rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop"/>
+    <rule ref="Generic.CodeAnalysis.ForLoopWithTestFunctionCall"/>
+    <rule ref="Generic.CodeAnalysis.JumbledIncrementer"/>
+    <rule ref="Generic.CodeAnalysis.UnconditionalIfStatement"/>
+    <rule ref="Generic.CodeAnalysis.UnnecessaryFinalModifier"/>
+    <rule ref="Generic.CodeAnalysis.UnusedFunctionParameter"/>
+    <rule ref="Generic.CodeAnalysis.UselessOverridingMethod"/>
+    <rule ref="Generic.Commenting.Fixme"/>
+    <rule ref="Generic.Commenting.Todo"/>
+    <rule ref="Generic.Debug.ClosureLinter"/>
+    <rule ref="Generic.Files.OneClassPerFile"/>
+    <rule ref="Generic.Files.OneInterfacePerFile"/>
+    <rule ref="Generic.Formatting.SpaceAfterCast"/>
+    <rule ref="Generic.Functions.CallTimePassByReference"/>
+    <!-- Enable this rule when the cyclomatic complexity of all methods is sufficiently low. -->
+    <!--<rule ref="Generic.Metrics.CyclomaticComplexity"/>-->
+    <rule ref="Generic.Metrics.NestingLevel"/>
+    <rule ref="Generic.NamingConventions.ConstructorName"/>
+    <rule ref="Generic.PHP.CharacterBeforePHPOpeningTag"/>
+    <rule ref="Generic.PHP.DeprecatedFunctions"/>
+    <rule ref="Generic.PHP.DisallowShortOpenTag"/>
+    <rule ref="Generic.PHP.ForbiddenFunctions"/>
+    <rule ref="Generic.PHP.NoSilencedErrors"/>
+
+    <rule ref="PEAR.Commenting.InlineComment"/>
+    <rule ref="PEAR.ControlStructures.ControlSignature"/>
+    <rule ref="PEAR.Formatting.MultiLineAssignment"/>
+    <rule ref="PEAR.NamingConventions.ValidClassName"/>
+    <rule ref="PEAR.WhiteSpace.ObjectOperatorIndent"/>
+    <rule ref="PEAR.WhiteSpace.ScopeClosingBrace"/>
+
+    <rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
+    <rule ref="Squiz.Classes.ClassFileName"/>
+    <rule ref="Squiz.Classes.DuplicateProperty"/>
+    <rule ref="Squiz.Classes.LowercaseClassKeywords"/>
+    <rule ref="Squiz.Classes.SelfMemberReference"/>
+    <rule ref="Squiz.Commenting.DocCommentAlignment"/>
+    <rule ref="Squiz.Commenting.EmptyCatchComment"/>
+    <rule ref="Squiz.Commenting.FunctionCommentThrowTag"/>
+    <rule ref="Squiz.Commenting.PostStatementComment"/>
+    <rule ref="Squiz.Functions.FunctionDuplicateArgument"/>
+    <rule ref="Squiz.Functions.GlobalFunction"/>
+    <rule ref="Squiz.Objects.ObjectMemberComma"/>
+    <rule ref="Squiz.Operators.IncrementDecrementUsage"/>
+    <rule ref="Squiz.Operators.ValidLogicalOperators"/>
+    <rule ref="Squiz.PHP.CommentedOutCode">
+        <properties>
+            <property name="maxPercentage" value="70"/>
+        </properties>
+    </rule>
+    <rule ref="Squiz.PHP.DisallowMultipleAssignments"/>
+    <rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops"/>
+    <rule ref="Squiz.PHP.DiscouragedFunctions"/>
+    <rule ref="Squiz.PHP.Eval"/>
+    <rule ref="Squiz.PHP.ForbiddenFunctions"/>
+    <rule ref="Squiz.PHP.GlobalKeyword"/>
+    <rule ref="Squiz.PHP.Heredoc"/>
+    <rule ref="Squiz.PHP.InnerFunctions"/>
+    <rule ref="Squiz.PHP.LowercasePHPFunctions"/>
+    <rule ref="Squiz.PHP.NonExecutableCode"/>
+    <rule ref="Squiz.Scope.MemberVarScope"/>
+    <rule ref="Squiz.Scope.StaticThisUsage"/>
+    <rule ref="Squiz.Strings.DoubleQuoteUsage"/>
+    <rule ref="Squiz.WhiteSpace.CastSpacing"/>
+    <rule ref="Squiz.WhiteSpace.LogicalOperatorSpacing"/>
+    <rule ref="Squiz.WhiteSpace.OperatorSpacing"/>
+    <rule ref="Squiz.WhiteSpace.PropertyLabelSpacing"/>
+    <rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
+
+    <rule ref="Zend.Files.ClosingTag"/>
+</ruleset>

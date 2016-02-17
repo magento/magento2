@@ -1,0 +1,1 @@
+@import"mystyle.css";@import url("mystyle.css");@import url("fineprint.css")print;@import url("bluish.css")projection,tv;@import url(color.css)screen and (color);@import url(example.css)screen and (color),projection and (color);@import"color.css"screen and (orientation:portrait);

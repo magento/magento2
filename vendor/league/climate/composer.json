@@ -1,0 +1,26 @@
+{
+    "name": "league/climate",
+    "description": "PHP's best friend for the terminal. CLImate allows you to easily output colored text, special formats, and more.",
+    "keywords": ["cli","php", "terminal", "command", "colors"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Joe Tannenbaum",
+            "email": "hey@joe.codes",
+            "homepage": "http://joe.codes/",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.1.*",
+        "mockery/mockery": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "League\\CLImate\\": "src/"
+        }
+    }
+}

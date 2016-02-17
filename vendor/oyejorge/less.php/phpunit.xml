@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    processIsolation = "false"
+    stopOnFailure = "false"
+    stopOnError = "false"
+    stopOnIncomplete="false"
+    stopOnSkipped="false"
+    bootstrap = "test/phpunit/bootstrap.php"
+    >
+
+    <testsuites>
+        <testsuite name="Less.php Test Suite">
+            <directory>./test/phpunit</directory>
+        </testsuite>
+    </testsuites>
+
+</phpunit>
+

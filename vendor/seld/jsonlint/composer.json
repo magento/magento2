@@ -1,0 +1,21 @@
+{
+    "name": "seld/jsonlint",
+    "description": "JSON Linter",
+    "keywords": ["json", "parser", "linter", "validator"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jordi Boggiano",
+            "email": "j.boggiano@seld.be",
+            "homepage": "http://seld.be"
+        }
+    ],
+    "require": {
+        "php": "^5.3 || ^7.0"
+    },
+    "autoload": {
+        "psr-4": { "Seld\\JsonLint\\": "src/Seld/JsonLint/" }
+    },
+    "bin": ["bin/jsonlint"]
+}

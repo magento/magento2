@@ -1,0 +1,6 @@
+﻿body
+{
+    /* the url string contains an ASP.NET block that contains delimiter characters */
+    background-image: url("../images/<%= Request("bgimg") %>.gif");
+}
+

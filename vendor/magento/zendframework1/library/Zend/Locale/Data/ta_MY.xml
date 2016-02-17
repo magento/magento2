@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "../../common/dtd/ldml.dtd">
+<!-- Copyright © 1991-2013 Unicode, Inc.
+CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+For terms of use, see http://www.unicode.org/copyright.html
+-->
+<ldml>
+	<identity>
+		<version number="$Revision: 9287 $"/>
+		<generation date="$Date: 2013-08-28 21:32:04 -0500 (Wed, 28 Aug 2013) $"/>
+		<language type="ta"/>
+		<territory type="MY"/>
+	</identity>
+	<dates>
+		<timeZoneNames>
+			<metazone type="Brunei">
+				<long>
+					<standard>புருணை டாரு சலாம் நேரம்</standard>
+				</long>
+			</metazone>
+			<metazone type="India">
+				<short>
+					<standard>∅∅∅</standard>
+				</short>
+			</metazone>
+			<metazone type="Indonesia_Central">
+				<long>
+					<standard>மத்திய இந்தோனேசிய நேரம்</standard>
+				</long>
+			</metazone>
+			<metazone type="Indonesia_Eastern">
+				<long>
+					<standard>கிழக்கத்திய இந்தோனேசிய நேரம்</standard>
+				</long>
+			</metazone>
+			<metazone type="Indonesia_Western">
+				<long>
+					<standard>மேற்கத்திய இந்தோனேசிய நேரம்</standard>
+				</long>
+			</metazone>
+			<metazone type="Malaysia">
+				<long>
+					<standard>மலேசிய நேரம்</standard>
+				</long>
+				<short>
+					<standard>MYT</standard>
+				</short>
+			</metazone>
+			<metazone type="Singapore">
+				<long>
+					<standard>சிங்கப்பூர் நேரம்</standard>
+				</long>
+				<short>
+					<standard>SGT</standard>
+				</short>
+			</metazone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<decimalFormats numberSystem="latn">
+			<decimalFormatLength>
+				<decimalFormat>
+					<pattern>#,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength>
+		</decimalFormats>
+		<percentFormats numberSystem="latn">
+			<percentFormatLength>
+				<percentFormat>
+					<pattern>#,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength>
+		</percentFormats>
+		<currencyFormats numberSystem="latn">
+			<currencyFormatLength>
+				<currencyFormat type="standard">
+					<pattern>¤ #,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength>
+		</currencyFormats>
+		<currencies>
+			<currency type="MYR">
+				<displayName>மலேசிய ரிங்கிட்</displayName>
+				<symbol>RM</symbol>
+			</currency>
+			<currency type="SGD">
+				<symbol>S$</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>
+

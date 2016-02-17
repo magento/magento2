@@ -1,0 +1,50 @@
+{
+    "name": "zendframework/zend-log",
+    "description": "component for general purpose logging",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "log",
+        "logging"
+    ],
+    "homepage": "https://github.com/zendframework/zend-log",
+    "autoload": {
+        "psr-4": {
+            "Zend\\Log\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.23",
+        "zendframework/zend-servicemanager": "self.version",
+        "zendframework/zend-stdlib": "self.version"
+    },
+    "require-dev": {
+        "zendframework/zend-console": "self.version",
+        "zendframework/zend-db": "self.version",
+        "zendframework/zend-escaper": "self.version",
+        "zendframework/zend-mail": "self.version",
+        "zendframework/zend-validator": "self.version",
+        "fabpot/php-cs-fixer": "1.7.*",
+        "satooshi/php-coveralls": "dev-master",
+        "phpunit/PHPUnit": "~4.0"
+    },
+    "suggest": {
+        "ext-mongo": "*",
+        "zendframework/zend-console": "Zend\\Console component",
+        "zendframework/zend-db": "Zend\\Db component",
+        "zendframework/zend-escaper": "Zend\\Escaper component, for use in the XML formatter",
+        "zendframework/zend-mail": "Zend\\Mail component",
+        "zendframework/zend-validator": "Zend\\Validator component"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4-dev",
+            "dev-develop": "2.5-dev"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\Log\\": "test/"
+        }
+    }
+}

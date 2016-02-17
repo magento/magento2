@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "../../common/dtd/ldml.dtd">
+<!-- Copyright © 1991-2013 Unicode, Inc.
+CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+For terms of use, see http://www.unicode.org/copyright.html
+-->
+<ldml>
+	<identity>
+		<version number="$Revision: 9814 $"/>
+		<generation date="$Date: 2014-02-26 15:19:38 -0600 (Wed, 26 Feb 2014) $"/>
+		<language type="sv"/>
+		<territory type="FI"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="az" alt="short" draft="contributed">azerbajdzjanska</language>
+			<language type="chm" draft="contributed">mari</language>
+			<language type="fj" draft="contributed">fiji</language>
+			<language type="ha" draft="contributed">hausa</language>
+			<language type="ig" draft="contributed">igbo</language>
+			<language type="km" draft="contributed">khmer</language>
+			<language type="ks" draft="contributed">kashmiri</language>
+			<language type="ky" draft="contributed">kirgiziska</language>
+			<language type="lo" draft="contributed">lao</language>
+			<language type="nb" draft="contributed">bokmål</language>
+			<language type="pa" draft="contributed">panjabi</language>
+			<language type="ps" draft="contributed">pashto</language>
+			<language type="te" draft="contributed">telugu</language>
+			<language type="th" draft="contributed">thai</language>
+			<language type="ti" draft="contributed">tigrinska</language>
+			<language type="und" draft="contributed">okänt språk</language>
+		</languages>
+		<scripts>
+			<script type="Arab" alt="variant" draft="contributed">persisk-arabiska</script>
+			<script type="Hrkt" draft="contributed">kana</script>
+			<script type="Mero" draft="contributed">meroitiska</script>
+		</scripts>
+		<territories>
+			<territory type="035" draft="contributed">Sydöstasien</territory>
+			<territory type="BL" draft="contributed">Saint-Barthélemy</territory>
+			<territory type="BQ" draft="contributed">Bonaire, S:t Eustatius och Saba</territory>
+			<territory type="CD" draft="contributed">Demokratiska republiken Kongo</territory>
+			<territory type="CG" draft="contributed">Kongo</territory>
+			<territory type="GB" draft="contributed">Förenade kungariket</territory>
+			<territory type="KN" draft="contributed">Saint Kitts och Nevis</territory>
+			<territory type="LC" draft="contributed">Saint Lucia</territory>
+			<territory type="MF" draft="contributed">S:t Martin (franska delen)</territory>
+			<territory type="MM" draft="contributed">Burma</territory>
+			<territory type="PM" draft="contributed">Saint Pierre och Miquelon</territory>
+			<territory type="PN" draft="contributed">Pitcairn</territory>
+			<territory type="PS" draft="contributed">Palestinska området</territory>
+			<territory type="SD" draft="contributed">Nordsudan</territory>
+			<territory type="SH" draft="contributed">Saint Helena</territory>
+			<territory type="SX" draft="contributed">Sint Martin</territory>
+			<territory type="TK" draft="contributed">Tokelauöarna</territory>
+			<territory type="US" draft="contributed">Förenta staterna</territory>
+			<territory type="VA" draft="contributed">Vatikanen</territory>
+			<territory type="VC" draft="contributed">Saint Vincent och Grenadinerna</territory>
+			<territory type="WF" draft="contributed">Wallis- och Futuna</territory>
+		</territories>
+		<variants>
+			<variant type="1996">1996 års stavning</variant>
+		</variants>
+		<keys>
+			<key type="timezone" draft="contributed">tidszon</key>
+		</keys>
+		<types>
+			<type type="big5han" key="collation" draft="unconfirmed">kinesiska i big5-sorteringsordning</type>
+			<type type="buddhist" key="calendar" draft="contributed">buddhistisk kalender</type>
+			<type type="gb2312han" key="collation" draft="unconfirmed">kinesiska i gb2312-sorteringsordning</type>
+			<type type="pinyin" key="collation" draft="unconfirmed">kinesiska i pinyin-sorteringsordning</type>
+			<type type="stroke" key="collation" draft="unconfirmed">kinesiska i strecksorteringsordning</type>
+			<type type="traditional" key="collation" draft="unconfirmed">traditionell sorteringsordning</type>
+		</types>
+		<measurementSystemNames>
+			<measurementSystemName type="UK" draft="contributed">engelska enheter (UK)</measurementSystemName>
+			<measurementSystemName type="US" draft="contributed">engelska enheter (USA)</measurementSystemName>
+		</measurementSystemNames>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters draft="unconfirmed">[a à b c d e é f g h i j k l m n o p q r s t u v x y z å ä ö]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[ã ç ë í ñ ó š ÿ ü ž]</exemplarCharacters>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="gregorian">
+				<eras>
+					<eraNames>
+						<era type="0" draft="contributed">före Kristus</era>
+						<era type="0" alt="variant" draft="contributed">före vår tideräkning</era>
+						<era type="1" draft="contributed">efter Kristus</era>
+						<era type="1" alt="variant" draft="contributed">vår tideräkning</era>
+					</eraNames>
+				</eras>
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern draft="contributed">EEEE'en' 'den' d:'e' MMMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern draft="contributed">d MMMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern draft="contributed">d MMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern draft="contributed">dd-MM-y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+			</calendar>
+		</calendars>
+		<fields>
+			<field type="era">
+				<displayName draft="contributed">era</displayName>
+			</field>
+			<field type="year">
+				<displayName draft="contributed">år</displayName>
+			</field>
+			<field type="month">
+				<displayName draft="contributed">månad</displayName>
+			</field>
+			<field type="week">
+				<displayName draft="contributed">vecka</displayName>
+			</field>
+			<field type="day">
+				<displayName draft="contributed">dag</displayName>
+			</field>
+			<field type="weekday">
+				<displayName draft="contributed">veckodag</displayName>
+			</field>
+			<field type="dayperiod">
+				<displayName>dagsperiod</displayName>
+			</field>
+			<field type="minute">
+				<displayName draft="contributed">minut</displayName>
+			</field>
+			<field type="second">
+				<displayName draft="contributed">sekund</displayName>
+			</field>
+			<field type="zone">
+				<displayName draft="contributed">tidszon</displayName>
+			</field>
+		</fields>
+		<timeZoneNames>
+			<hourFormat draft="contributed">+H:mm;−H:mm</hourFormat>
+			<regionFormat draft="contributed">tidszon: {0}</regionFormat>
+			<zone type="Etc/Unknown">
+				<exemplarCity draft="contributed">(okänd tidszon)</exemplarCity>
+			</zone>
+		</timeZoneNames>
+	</dates>
+	<units>
+		<unitLength type="long">
+			<unit type="temperature-celsius">
+				<unitPattern count="one" draft="contributed">{0} grad Celsius</unitPattern>
+				<unitPattern count="other" draft="contributed">{0} grader Celsius</unitPattern>
+			</unit>
+		</unitLength>
+		<unitLength type="narrow">
+			<unit type="speed-kilometer-per-hour">
+				<unitPattern count="one" draft="contributed">{0} km/h</unitPattern>
+				<unitPattern count="other" draft="contributed">{0} km/h</unitPattern>
+			</unit>
+		</unitLength>
+	</units>
+	<listPatterns>
+		<listPattern type="unit">
+			<listPatternPart type="start" draft="contributed">{0}, {1}</listPatternPart>
+			<listPatternPart type="middle" draft="contributed">{0}, {1}</listPatternPart>
+			<listPatternPart type="end" draft="contributed">{0} och {1}</listPatternPart>
+			<listPatternPart type="2" draft="contributed">{0} och {1}</listPatternPart>
+		</listPattern>
+		<listPattern type="unit-short">
+			<listPatternPart type="start" draft="contributed">{0}, {1}</listPatternPart>
+			<listPatternPart type="middle" draft="contributed">{0}, {1}</listPatternPart>
+			<listPatternPart type="end" draft="contributed">{0} och {1}</listPatternPart>
+			<listPatternPart type="2" draft="contributed">{0} och {1}</listPatternPart>
+		</listPattern>
+	</listPatterns>
+</ldml>
+

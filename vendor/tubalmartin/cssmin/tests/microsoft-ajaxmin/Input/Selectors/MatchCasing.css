@@ -1,0 +1,10 @@
+﻿
+/* the casing of this selector needs to remain the same. */
+/* there was a bug wherein the "ur" started matching "URL", but didn't finish, so it changed the
+   case of the first "u" to "U" -- that shouldn't happen */
+   
+.ursuper {color:Aqua} /* partial match, but more non-matching characters after */
+.ur {cursor:hand} /* partial match, but identifier ends before the match completes */
+.urlinator {text-decoration:underline} /* full match, but the identifier keeps going */
+
+

@@ -1,0 +1,39 @@
+{
+    "name": "zendframework/zend-servicemanager",
+    "description": " ",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "servicemanager"
+    ],
+    "homepage": "https://github.com/zendframework/zend-service-manager",
+    "autoload": {
+        "psr-4": {
+            "Zend\\ServiceManager\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.23"
+    },
+    "require-dev": {
+        "zendframework/zend-di": "self.version",
+        "fabpot/php-cs-fixer": "1.7.*",
+        "satooshi/php-coveralls": "dev-master",
+        "phpunit/PHPUnit": "~4.0"
+    },
+    "suggest": {
+        "ocramius/proxy-manager": "ProxyManager 0.5.* to handle lazy initialization of services",
+        "zendframework/zend-di": "Zend\\Di component"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4-dev",
+            "dev-develop": "2.5-dev"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\ServiceManager\\": "test/"
+        }
+    }
+}

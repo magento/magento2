@@ -1,0 +1,45 @@
+@media print {
+  body { font-size: 10pt }
+}
+@media screen 
+{
+  body 
+  { 
+    font-size: 12pt; 
+  }
+}
+@media screen, print {
+  body { line-height: 1.2; }
+  div { background-color: #ddccaa; }
+  em { font-style: italic; }
+}
+
+/* CSS3 Media Queries */
+
+/* just a single expression */
+@media (orientation: portrait) { div {font-size: 1pt;} }
+
+/* just two expressions (not media type)*/
+@media (orientation:portrait) and (color) { div {font-size: 2pt;} }
+
+/* media type and single expression */
+@media print and (orientation: portrait) and (color) { div {font-size: 3pt;} }
+
+/* media type and multiple expressions */
+/* AND and opening paren has no space between so it gets parsed as a function, not an identifier */
+@media screen AND(orientation: portrait) and (color) { div {font-size: 4pt;} }
+
+/* multiple media queries */
+/* AND and opening paren has no space between so it gets parsed as a function, not an identifier */
+@media screen and ( orientation : portrait ) and ( color ), print and(color) { div {font-size: 5pt;} }
+
+/* multiple media queries, one with NOT */
+@media screen and (orientation: portrait) and (color), not print    and ( color ) { div {font-size: 6pt;} }
+
+/* multiple media queries, one with ONLY */
+/* AND and opening paren has no space between so it gets parsed as a function, not an identifier */
+@media only screen and (orientation  :  portrait) and(color)  ,  print AND (color) { div {font-size: 7pt;} }
+
+/* single expression (no media type) and a NOT */
+@media not (color) { div {font-size:8pt;} }
+

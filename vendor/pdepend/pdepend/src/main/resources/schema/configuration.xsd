@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<xsd:schema targetNamespace="http://pdepend.org/schema/configuration"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns="http://pdepend.org/schema/configuration">
+
+    <xsd:element name="configuration">
+        <xsd:complexType>
+            <xsd:choice minOccurs="0" maxOccurs="unbounded" >
+                <xsd:element ref="imageConvert" minOccurs="0" maxOccurs="1" />
+                <xsd:element ref="cache" minOccurs="0" maxOccurs="1" />
+            </xsd:choice>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="cache">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="driver" />
+                <xsd:element ref="location" minOccurs="0" maxOccurs="1" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="driver">
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="file" />
+                <xsd:enumeration value="memory" />
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+
+    <xsd:element name="location" type="xsd:anyURI" />
+
+    <xsd:element name="imageConvert">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="fontFamily" minOccurs="0" maxOccurs="1" />
+                <xsd:element ref="fontSize" minOccurs="0" maxOccurs="1" />
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="fontFamily" type="xsd:string" />
+    <xsd:element name="fontSize" type="xsd:int" />
+</xsd:schema>

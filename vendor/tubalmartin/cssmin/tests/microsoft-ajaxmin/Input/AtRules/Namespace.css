@@ -1,0 +1,21 @@
+/* default namespace */
+@namespace "http://www.w3.org/1999/xhtml";
+
+/* definition of "foo" namespace */
+@namespace foo "http://www.msn.com/foo";
+/* should generate an error for the same namespace being declared twice */
+@namespace foo "http://www.contoso.com";
+
+/* ELEMENT namespaces */
+
+foo|bar{ color: #abc; } /* bar element in namespace foo */
+|bar{ color: #fff; } /* bar element belonging to no namespace */
+*|bar{ color: #000; } /* bar element belonging to any namespace (including none) */
+bar{ color: #f0f; } /* bar element belonging to the default namespace */
+*|* {color:#eee; } /* all namespaces and all elements */
+
+/* ATTRIBUTE namespaces */
+bar[foo|ed] {color:#111;} /* ed attribute in namespace foo */
+bar[|ed] {color:#222;} /* ed attribute belonging to no namespace */
+bar[*|ed] {color:#333;} /* ed attribute belonging to any namespace (including none) */
+bar[ed] {color:#444;} /* ed attribute belonging to the default namespace */

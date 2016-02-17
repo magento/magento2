@@ -1,0 +1,41 @@
+{
+    "name": "zendframework/zend-serializer",
+    "description": "provides an adapter based interface to simply generate storable representation of PHP types by different facilities, and recover",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "serializer"
+    ],
+    "homepage": "https://github.com/zendframework/zend-serializer",
+    "autoload": {
+        "psr-4": {
+            "Zend\\Serializer\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.23",
+        "zendframework/zend-stdlib": "self.version",
+        "zendframework/zend-json": "self.version",
+        "zendframework/zend-math": "self.version"
+    },
+    "require-dev": {
+        "zendframework/zend-servicemanager": "self.version",
+        "fabpot/php-cs-fixer": "1.7.*",
+        "satooshi/php-coveralls": "dev-master",
+        "phpunit/PHPUnit": "~4.0"
+    },
+    "suggest": {
+        "zendframework/zend-servicemanager": "To support plugin manager support"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4-dev",
+            "dev-develop": "2.5-dev"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\Serializer\\": "test/"
+        }
+    }
+}

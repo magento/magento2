@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit backupGlobals="true"
+         backupStaticAttributes="false"
+         bootstrap="tests/bootstrap.php"
+         colors="false"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         forceCoversAnnotation="false"
+         mapTestClassNameToCoveredClassName="false"
+         processIsolation="false"
+         stopOnError="false"
+         stopOnFailure="false"
+         stopOnIncomplete="false"
+         stopOnSkipped="false"
+         testSuiteLoaderClass="PHPUnit_Runner_StandardTestSuiteLoader"
+         strict="false"
+         verbose="false">
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src/</directory>
+            <exclude>
+                <file>src/OAuth/bootstrap.php</file>
+                <file>src/OAuth/Common/Exception/Exception.php</file>
+                <file>src/OAuth/Common/Http/Exception/TokenResponseException.php</file>
+                <file>src/OAuth/Common/Storage/Exception/StorageException.php</file>
+                <file>src/OAuth/Common/Storage/Exception/TokenNotFoundException.php</file>
+                <file>src/OAuth/Common/Token/Exception/ExpiredTokenException.php</file>
+                <file>src/OAuth/OAuth1/Signature/Exception/UnsupportedHashAlgorithmException.php</file>
+                <file>src/OAuth/OAuth2/Service/Exception/InvalidScopeException.php</file>
+                <file>src/OAuth/OAuth2/Service/Exception/MissingRefreshTokenException.php</file>
+                <file>src/OAuth/OAuth2/Token/StdOAuth2Token.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
+    <php>
+        <env name="redis_host" value="127.0.0.1"/>
+        <env name="redis_port" value="6379"/>
+    </php>
+</phpunit>

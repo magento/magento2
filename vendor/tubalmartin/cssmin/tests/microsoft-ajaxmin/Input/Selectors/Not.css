@@ -1,0 +1,4 @@
+html:not([dummy]) #msve_ScratchPad .collectionList ul li .toolReorderUp:hover 
+{
+  background-image: url("../../../../i/bin/##version##/icn_reorderup_hover.gif"); 
+}

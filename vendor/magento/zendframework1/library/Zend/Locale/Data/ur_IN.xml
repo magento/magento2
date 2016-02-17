@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "../../common/dtd/ldml.dtd">
+<!-- Copyright © 1991-2013 Unicode, Inc.
+CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+For terms of use, see http://www.unicode.org/copyright.html
+-->
+<ldml>
+	<identity>
+		<version number="$Revision: 9287 $"/>
+		<generation date="$Date: 2013-08-28 21:32:04 -0500 (Wed, 28 Aug 2013) $"/>
+		<language type="ur"/>
+		<territory type="IN"/>
+	</identity>
+	<dates>
+		<calendars>
+			<calendar type="generic">
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE، d MMMM، y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>d MMMM، y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>d MMM، y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>d/M/yy GGGGG</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+			</calendar>
+			<calendar type="gregorian">
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">اتوار</day>
+							<day type="mon">پیر</day>
+							<day type="tue">منگل</day>
+							<day type="wed">بدھ</day>
+							<day type="thu">جمعرات</day>
+							<day type="fri">جمعہ</day>
+							<day type="sat">ہفتہ</day>
+						</dayWidth>
+						<dayWidth type="short">
+							<day type="sun">اتوار</day>
+							<day type="mon">سوموار</day>
+							<day type="tue">منگل</day>
+							<day type="wed">بدھ</day>
+							<day type="thu">جمعرات</day>
+							<day type="fri">جمعہ</day>
+							<day type="sat">ہفتہ</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">اتوار</day>
+							<day type="mon">پیر</day>
+							<day type="tue">منگل</day>
+							<day type="wed">بدھ</day>
+							<day type="thu">جمعرات</day>
+							<day type="fri">جمعہ</day>
+							<day type="sat">ہفتہ</day>
+						</dayWidth>
+					</dayContext>
+					<dayContext type="stand-alone">
+						<dayWidth type="abbreviated">
+							<day type="sun">اتوار</day>
+							<day type="mon">پیر</day>
+							<day type="tue">منگل</day>
+							<day type="wed">بدھ</day>
+							<day type="thu">جمعرات</day>
+							<day type="fri">جمعہ</day>
+							<day type="sat">ہفتہ</day>
+						</dayWidth>
+						<dayWidth type="short">
+							<day type="sun">اتوار</day>
+							<day type="mon">پیر</day>
+							<day type="tue">منگل</day>
+							<day type="wed">بدھ</day>
+							<day type="thu">جمعرات</day>
+							<day type="fri">جمعہ</day>
+							<day type="sat">ہفتہ</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">اتوار</day>
+							<day type="mon">پیر</day>
+							<day type="tue">منگل</day>
+							<day type="wed">بدھ</day>
+							<day type="thu">جمعرات</day>
+							<day type="fri">جمعہ</day>
+							<day type="sat">ہفتہ</day>
+						</dayWidth>
+					</dayContext>
+				</days>
+			</calendar>
+		</calendars>
+		<fields>
+			<field type="sun">
+				<relative type="-1">پچھلے اتوار</relative>
+				<relative type="0">اس اتوار</relative>
+				<relative type="1">اگلے اتوار</relative>
+			</field>
+			<field type="mon">
+				<relative type="-1">پچھلے پیر</relative>
+				<relative type="0">اس پیر</relative>
+				<relative type="1">اگلے پیر</relative>
+			</field>
+			<field type="tue">
+				<relative type="-1">پچھلے منگل</relative>
+				<relative type="0">اس منگل</relative>
+				<relative type="1">اگلے منگل</relative>
+			</field>
+			<field type="wed">
+				<relative type="-1">پچھلے بدھ</relative>
+				<relative type="0">اس بدھ</relative>
+				<relative type="1">اگلے بدھ</relative>
+			</field>
+			<field type="thu">
+				<relative type="-1">پچھلے جمعرات</relative>
+				<relative type="0">اس جمعرات</relative>
+				<relative type="1">اگلے جمعرات</relative>
+			</field>
+			<field type="fri">
+				<relative type="-1">پچھلے جمعہ</relative>
+				<relative type="0">اس جمعہ</relative>
+				<relative type="1">اگلے جمعہ</relative>
+			</field>
+			<field type="sat">
+				<relative type="-1">پچھلے ہفتہ</relative>
+				<relative type="0">اس ہفتہ</relative>
+				<relative type="1">اگلے ہفتہ</relative>
+			</field>
+			<field type="dayperiod">
+				<displayName>قبل دوپہر/بعد دوپہر</displayName>
+			</field>
+			<field type="zone">
+				<displayName>منطقۂ وقت</displayName>
+			</field>
+		</fields>
+		<timeZoneNames>
+			<zone type="America/Kralendijk">
+				<exemplarCity>کرالینڈیک</exemplarCity>
+			</zone>
+			<zone type="America/Matamoros">
+				<exemplarCity>میٹا موروس</exemplarCity>
+			</zone>
+			<zone type="Asia/Novokuznetsk">
+				<exemplarCity>نوووکیوزنیسک</exemplarCity>
+			</zone>
+			<zone type="Asia/Ust-Nera">
+				<exemplarCity>Ust-Nera</exemplarCity>
+			</zone>
+			<zone type="America/Sitka">
+				<exemplarCity>Sitka</exemplarCity>
+			</zone>
+			<zone type="America/Metlakatla">
+				<exemplarCity>میٹلاکاٹلا</exemplarCity>
+			</zone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<defaultNumberingSystem>arabext</defaultNumberingSystem>
+		<decimalFormats numberSystem="latn">
+			<decimalFormatLength>
+				<decimalFormat>
+					<pattern>#,##,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength>
+		</decimalFormats>
+		<percentFormats numberSystem="latn">
+			<percentFormatLength>
+				<percentFormat>
+					<pattern>#,##,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength>
+		</percentFormats>
+		<currencyFormats numberSystem="latn">
+			<currencyFormatLength>
+				<currencyFormat type="standard">
+					<pattern>¤ #,##,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength>
+		</currencyFormats>
+	</numbers>
+</ldml>
+

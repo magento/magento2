@@ -1,0 +1,25 @@
+build: false
+shallow_clone: false
+platform: 'x86'
+clone_folder: C:\projects\phpmd
+branches:
+  except:
+    - gh-pages
+
+install:
+  - cinst -y OpenSSL.Light
+  - SET PATH=C:\Program Files\OpenSSL;%PATH%
+  - cinst -y php
+  - cd c:\tools\php
+  - copy php.ini-production php.ini
+  - echo date.timezone="UTC" >> php.ini
+  - echo extension_dir=ext >> php.ini
+  - echo extension=php_openssl.dll >> php.ini
+  - SET PATH=C:\tools\php;%PATH%
+  - cd C:\projects\phpmd
+  - php -r "readfile('http://getcomposer.org/installer');" | php
+  - php composer.phar install --prefer-source --no-interaction
+
+test_script:
+  - cd C:\projects\phpmd
+  - vendor\bin\phpunit.bat

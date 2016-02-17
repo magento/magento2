@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ServiceDefinition name="PhpOnAzure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
+  <WebRole name="PhpOnAzure.Web" enableNativeCodeExecution="true">
+    <Sites>
+      <Site name="Web" physicalDirectory="./PhpOnAzure.Web">
+        <Bindings>
+          <Binding name="Endpoint1" endpointName="HttpEndpoint" />
+        </Bindings>
+      </Site>
+    </Sites>
+    <Startup>
+      <Task commandLine="add-environment-variables.cmd" executionContext="elevated" taskType="simple" />
+      <Task commandLine="install-php.cmd" executionContext="elevated" taskType="simple" />
+    </Startup>
+    <Endpoints>
+      <InputEndpoint name="HttpEndpoint" protocol="http" port="80" />
+    </Endpoints>
+    <Imports>
+      <Import moduleName="Diagnostics"/>
+    </Imports>
+    <ConfigurationSettings>
+    </ConfigurationSettings>
+  </WebRole>
+</ServiceDefinition>

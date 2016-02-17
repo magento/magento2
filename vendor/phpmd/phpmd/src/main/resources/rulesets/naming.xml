@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Naming Rules"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+    <description>
+The Naming Ruleset contains a collection of rules about names - too long, too short, and so forth.
+    </description>
+
+    <rule name="ShortVariable"
+          since="0.2"
+          message="Avoid variables with short names like {0}. Configured minimum length is {1}."
+          class="PHPMD\Rule\Naming\ShortVariable"
+          externalInfoUrl="http://phpmd.org/rules/naming.html#shortvariable">
+        <description>
+Detects when a field, local, or parameter has a very short name.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="minimum" description="Minimum length for a variable, property or parameter name" value="3"/>
+            <property name="exceptions" description="Comma-separated list of exceptions" value=""/>
+        </properties>
+        <example>
+            <![CDATA[
+class Something {
+    private $q = 15; // VIOLATION - Field
+    public static function main( array $as ) {  // VIOLATION - Formal
+        $r = 20 + $this->q; // VIOLATION - Local
+        for (int $i = 0; $i < 10; $i++) { // Not a Violation (inside FOR)
+            $r += $this->q;
+        }
+    }
+}
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="LongVariable"
+          since="0.2"
+          message="Avoid excessively long variable names like {0}. Keep variable name length under {1}."
+          class="PHPMD\Rule\Naming\LongVariable"
+          externalInfoUrl="http://phpmd.org/rules/naming.html#longvariable">
+        <description>
+Detects when a field, formal or local variable is declared with a long name.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="maximum" description="The variable length reporting threshold" value="20"/>
+        </properties>
+        <example>
+            <![CDATA[
+class Something {
+    protected $reallyLongIntName = -3;  // VIOLATION - Field
+    public static function main( array $argumentsList[] ) { // VIOLATION - Formal
+        $otherReallyLongName = -5; // VIOLATION - Local
+        for ($interestingIntIndex = 0;  // VIOLATION - For
+             $interestingIntIndex < 10;
+             $interestingIntIndex++ ) {
+        }
+    }
+}
+]]>
+        </example>
+    </rule>
+
+    <rule name="ShortMethodName"
+          since="0.2"
+          message="Avoid using short method names like {0}::{1}(). The configured minimum method name length is {2}."
+          class="PHPMD\Rule\Naming\ShortMethodName"
+          externalInfoUrl="http://phpmd.org/rules/naming.html#shortmethodname">
+        <description>
+Detects when very short method names are used.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="minimum" description="Minimum length for a method or function name" value="3"/>
+            <property name="exceptions" description="Comma-separated list of exceptions" value=""/>
+        </properties>
+        <example>
+            <![CDATA[
+class ShortMethod {
+    public function a( $index ) { // Violation
+    }
+}
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="ConstructorWithNameAsEnclosingClass"
+          since="0.2"
+          message="Classes should not have a constructor method with the same name as the class"
+          class="PHPMD\Rule\Naming\ConstructorWithNameAsEnclosingClass"
+          externalInfoUrl="http://phpmd.org/rules/naming.html#constructorwithnameasenclosingclass">
+        <description>
+A constructor method should not have the same name as the enclosing class, consider
+to use the PHP 5 __construct method.
+        </description>
+        <priority>3</priority>
+        <example>
+            <![CDATA[
+class MyClass {
+     // this is bad because it is PHP 4 style
+    public function MyClass() {}
+    // this is good because it is a PHP 5 constructor
+    public function __construct() {}
+}
+    ]]>
+        </example>
+    </rule>
+
+    <rule name="ConstantNamingConventions"
+          since="0.2"
+          message="Constant {0} should be defined in uppercase"
+          class="PHPMD\Rule\Naming\ConstantNamingConventions"
+          externalInfoUrl="http://phpmd.org/rules/naming.html#constantnamingconventions">
+        <description>
+Class/Interface constant nanmes should always be defined in uppercase.
+        </description>
+        <priority>4</priority>
+        <properties />
+        <example>
+            <![CDATA[
+class Foo {
+    const MY_NUM = 0; // ok
+    const myTest = ""; // fail
+}
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="BooleanGetMethodName"
+          since="0.2"
+          message="The '{0}()' method which returns a boolean should be named 'is...()' or 'has...()'"
+          class="PHPMD\Rule\Naming\BooleanGetMethodName"
+          externalInfoUrl="http://phpmd.org/rules/naming.html#booleangetmethodname">
+        <description>
+Looks for methods named 'getX()' with 'boolean' as the return type. The convention
+is to name these methods 'isX()' or 'hasX()'.
+        </description>
+        <priority>4</priority>
+        <properties>
+            <property name="checkParameterizedMethods" value="false" description="Applies only to methods without parameter when set to true" />
+        </properties>
+        <example>
+            <![CDATA[
+class Foo {
+    /**
+     * @return boolean
+     */
+    public function getFoo() {} // bad
+    /**
+     * @return bool
+     */
+    public function isFoo(); // ok
+    /**
+     * @return boolean
+     */
+    public function getFoo($bar); // ok, unless checkParameterizedMethods=true
+}
+            ]]>
+        </example>
+    </rule>
+
+<!--
+
+    <rule name="VariableNamingConventions"
+    since="1.2"
+    message="{0} variable {1} should begin with {2}"
+    class="net.sourceforge.pmd.rules.VariableNamingConventions"
+          externalInfoUrl="http://pmd.sourceforge.net/rules/naming.html#VariableNamingConventions">
+        <description>
+A variable naming conventions rule - customize this to your liking.  Currently, it
+ checks for final variables that should be fully capitalized and non-final variables
+ that should not include underscores.
+        </description>
+        <priority>1</priority>
+        <properties>
+            <property name="staticPrefix" description="A prefix for static variables" value=""/>
+            <property name="staticSuffix" description="A suffix for static variables" value=""/>
+            <property name="memberPrefix" description="A prefix for member variables" value=""/>
+            <property name="memberSuffix" description="A suffix for member variables" value=""/>
+        </properties>
+        <example>
+<![CDATA[
+public class Foo {
+ public static final int MY_NUM = 0;
+ public String myTest = "";
+ DataModule dmTest = new DataModule();
+}
+]]>
+        </example>
+    </rule>
+
+    <rule name="MethodNamingConventions"
+    			  since="1.2"
+              message="Method name does not begin with a lower case character."
+              class="net.sourceforge.pmd.rules.MethodNamingConventions"
+          externalInfoUrl="http://pmd.sourceforge.net/rules/naming.html#MethodNamingConventions">
+          <description>
+Method names should always begin with a lower case character, and should not contain underscores.
+          </description>
+          <priority>1</priority>
+          <example>
+<![CDATA[
+public class Foo {
+ public void fooStuff() {
+ }
+}
+]]>
+          </example>
+        </rule>
+
+    <rule name="ClassNamingConventions"
+    		 since="1.2"
+          message="Class names should begin with an uppercase character"
+          class="net.sourceforge.pmd.rules.ClassNamingConventions"
+          externalInfoUrl="http://pmd.sourceforge.net/rules/naming.html#ClassNamingConventions">
+      <description>
+Class names should always begin with an upper case character.
+      </description>
+      <priority>1</priority>
+      <example>
+<![CDATA[
+public class Foo {}
+]]>
+      </example>
+    </rule>
+
+    <rule name="AbstractNaming"
+    		 since="1.4"
+          message="Abstract classes should be named 'AbstractXXX'"
+          class="net.sourceforge.pmd.rules.XPathRule"
+          externalInfoUrl="http://pmd.sourceforge.net/rules/naming.html#AbstractNaming">
+       <description>
+Abstract classes should be named 'AbstractXXX'.
+       </description>
+        <priority>3</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+//ClassOrInterfaceDeclaration
+ [@Abstract='true' and @Interface='false']
+ [not (starts-with(@Image,'Abstract'))]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+       <example>
+<![CDATA[
+public abstract class Foo { // should be AbstractFoo
+}
+]]>
+       </example>
+    </rule>
+
+    <rule name="AvoidFieldNameMatchingTypeName"
+    		 since="3.0"
+          message="It is somewhat confusing to have a field name matching the declaring class name"
+          class="net.sourceforge.pmd.rules.AvoidFieldNameMatchingTypeName"
+          externalInfoUrl="http://pmd.sourceforge.net/rules/naming.html#AvoidFieldNameMatchingTypeName">
+      <description>
+It is somewhat confusing to have a field name matching the declaring class name.
+This probably means that type and or field names could be more precise.
+      </description>
+        <priority>3</priority>
+      <example>
+<![CDATA[
+public class Foo extends Bar {
+ // There's probably a better name for foo
+ int foo;
+}
+]]>
+      </example>
+    </rule>
+
+    <rule name="AvoidFieldNameMatchingMethodName"
+    		 since="3.0"
+          message="It is somewhat confusing to have a field name with the same name as a method"
+          class="net.sourceforge.pmd.rules.AvoidFieldNameMatchingMethodName"
+          externalInfoUrl="http://pmd.sourceforge.net/rules/naming.html#AvoidFieldNameMatchingMethodName">
+      <description>
+It is somewhat confusing to have a field name with the same name as a method.
+While this is totally legal, having information (field) and actions (method) is
+not clear naming.
+      </description>
+        <priority>3</priority>
+      <example>
+<![CDATA[
+public class Foo {
+	Object bar;
+	// bar is data or an action or both?
+	void bar() {
+	}
+}
+]]>
+      </example>
+    </rule>
+
+    <rule name="NoPackage"
+        since="3.3"
+        message="All classes and interfaces must belong to a named package"
+        class="net.sourceforge.pmd.rules.XPathRule"
+          externalInfoUrl="http://pmd.sourceforge.net/rules/naming.html#NoPackage">
+    <description>
+Detects when a class or interface does not have a package definition.
+    </description>
+    <priority>3</priority>
+      <properties>
+          <property name="xpath" pluginname="true">
+              <value>
+                  <![CDATA[
+//ClassOrInterfaceDeclaration[count(preceding::PackageDeclaration) = 0]
+                  ]]>
+              </value>
+          </property>
+      </properties>
+    <example>
+<![CDATA[
+// no package declaration
+public class ClassInDefaultPackage {
+}
+]]>
+    </example>
+  </rule>
+
+    <rule name="MisleadingVariableName"
+          since="3.4"
+          message="Avoid naming non-fields with the prefix 'm_'"
+          class="net.sourceforge.pmd.rules.XPathRule"
+          externalInfoUrl="http://pmd.sourceforge.net/rules/naming.html#MisleadingVariableName">
+      <description>
+Detects when a non-field has a name starting with 'm_'.  This usually
+indicates a field and thus is confusing.
+      </description>
+      <priority>3</priority>
+        <properties>
+            <property name="xpath" pluginname="true">
+                <value>
+                    <![CDATA[
+//VariableDeclaratorId
+[starts-with(@Image, 'm_')]
+[not (../../../FieldDeclaration)]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+      <example>
+  <![CDATA[
+  public class Foo {
+    private int m_foo; // OK
+    public void bar(String m_baz) {  // Bad
+      int m_boz = 42; // Bad
+    }
+  }
+  ]]>
+      </example>
+    </rule>
+
+-->
+
+</ruleset>

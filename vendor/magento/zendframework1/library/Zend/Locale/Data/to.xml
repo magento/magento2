@@ -1,0 +1,2943 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "../../common/dtd/ldml.dtd">
+<!-- Copyright © 1991-2013 Unicode, Inc.
+CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+For terms of use, see http://www.unicode.org/copyright.html
+-->
+<ldml>
+	<identity>
+		<version number="$Revision: 9852 $"/>
+		<generation date="$Date: 2014-02-28 23:57:43 -0600 (Fri, 28 Feb 2014) $"/>
+		<language type="to"/>
+	</identity>
+	<localeDisplayNames>
+		<localeDisplayPattern>
+			<localePattern draft="unconfirmed">{0} ({1})</localePattern>
+			<localeSeparator draft="unconfirmed">{0}, {1}</localeSeparator>
+			<localeKeyTypePattern draft="unconfirmed">{0}: {1}</localeKeyTypePattern>
+		</localeDisplayPattern>
+		<languages>
+			<language type="aa" draft="unconfirmed">lea fakaʻafāla</language>
+			<language type="ab">lea fakaʻapakasia</language>
+			<language type="ace" draft="unconfirmed">lea fakaʻatisē</language>
+			<language type="ach" draft="unconfirmed">lea fakaʻakoli</language>
+			<language type="ada" draft="unconfirmed">lea fakaʻatangimē</language>
+			<language type="ady" draft="unconfirmed">lea fakaʻatikē</language>
+			<language type="ae" draft="unconfirmed">lea fakaʻavesitani</language>
+			<language type="af">lea fakaʻafilikana</language>
+			<language type="agq" draft="unconfirmed">lea fakaʻakihemi</language>
+			<language type="ain" draft="unconfirmed">lea fakaʻainu</language>
+			<language type="ak" draft="unconfirmed">lea fakaʻakani</language>
+			<language type="akk" draft="unconfirmed">lea fakaʻakatia</language>
+			<language type="ale" draft="unconfirmed">lea fakaʻaleuti</language>
+			<language type="alt" draft="unconfirmed">lea fakaʻalitai-tonga</language>
+			<language type="am">lea fakaʻameliki</language>
+			<language type="an" draft="unconfirmed">lea fakaʻalakoni</language>
+			<language type="anp" draft="unconfirmed">lea fakaʻangika</language>
+			<language type="ar">lea fakaʻalepea</language>
+			<language type="ar_001">lea fakaʻalepea (māmani)</language>
+			<language type="arc" draft="unconfirmed">lea fakaʻalāmiti</language>
+			<language type="arn" draft="unconfirmed">lea fakamapuse</language>
+			<language type="arp" draft="unconfirmed">lea fakaʻalapaho</language>
+			<language type="arw" draft="unconfirmed">lea fakaʻalauaki</language>
+			<language type="as">lea fakaʻasamia</language>
+			<language type="asa" draft="unconfirmed">lea fakaʻasu</language>
+			<language type="ast" draft="unconfirmed">lea fakaʻasitūlia</language>
+			<language type="av" draft="unconfirmed">lea fakaʻavaliki</language>
+			<language type="awa" draft="unconfirmed">lea fakaʻauati</language>
+			<language type="ay">lea ʻaimala</language>
+			<language type="az">lea fakaʻasapaisani</language>
+			<language type="ba" draft="unconfirmed">lea fakapasikili</language>
+			<language type="bal" draft="unconfirmed">lea fakapalusi</language>
+			<language type="ban" draft="unconfirmed">lea fakapali</language>
+			<language type="bas" draft="unconfirmed">lea fakapasaʻa</language>
+			<language type="bax" draft="unconfirmed">lea fakapamuni</language>
+			<language type="bbj" draft="unconfirmed">lea fakakomala</language>
+			<language type="be">lea fakapelalusi</language>
+			<language type="bej" draft="unconfirmed">lea fakapesa</language>
+			<language type="bem" draft="unconfirmed">lea fakapēmipa</language>
+			<language type="bez" draft="unconfirmed">lea fakapena</language>
+			<language type="bfd" draft="unconfirmed">lea fakapafuti</language>
+			<language type="bg">lea fakapulukalia</language>
+			<language type="bho" draft="unconfirmed">lea fakaposipuli</language>
+			<language type="bi" draft="unconfirmed">lea fakapisilama</language>
+			<language type="bik" draft="unconfirmed">lea fakapikoli</language>
+			<language type="bin" draft="unconfirmed">lea fakapini</language>
+			<language type="bkm" draft="unconfirmed">lea fakakome</language>
+			<language type="bla" draft="unconfirmed">lea fakasikesikā</language>
+			<language type="bm" draft="unconfirmed">lea fakapamipala</language>
+			<language type="bn">lea fakapengikali</language>
+			<language type="bo">lea fakatipeti</language>
+			<language type="br" draft="unconfirmed">lea fakapeletoni</language>
+			<language type="bra" draft="unconfirmed">lea fakapalai</language>
+			<language type="brx" draft="unconfirmed">lea fakapōto</language>
+			<language type="bs">lea fakaposinia</language>
+			<language type="bss" draft="unconfirmed">lea fakaʻakōse</language>
+			<language type="bua" draft="unconfirmed">lea puliati</language>
+			<language type="bug" draft="unconfirmed">lea fakapukisi</language>
+			<language type="bum" draft="unconfirmed">lea fakapulu</language>
+			<language type="byn" draft="unconfirmed">lea fakapilini</language>
+			<language type="byv" draft="unconfirmed">lea fakametūmipa</language>
+			<language type="ca">lea fakakatalani</language>
+			<language type="cad" draft="unconfirmed">lea fakakato</language>
+			<language type="car" draft="unconfirmed">lea fakakalipa</language>
+			<language type="cay" draft="unconfirmed">lea fakakaiuka</language>
+			<language type="cch" draft="unconfirmed">lea fakaʻatisami</language>
+			<language type="ce" draft="unconfirmed">lea fakasese</language>
+			<language type="ceb" draft="unconfirmed">lea fakasepuano</language>
+			<language type="cgg" draft="unconfirmed">lea fakakika</language>
+			<language type="ch" draft="unconfirmed">lea fakakamolo</language>
+			<language type="chk" draft="unconfirmed">lea fakatūke</language>
+			<language type="chm" draft="unconfirmed">lea fakamalī</language>
+			<language type="chn" draft="unconfirmed">lea fakasinuki-takote</language>
+			<language type="cho" draft="unconfirmed">lea fakasokitau</language>
+			<language type="chp" draft="unconfirmed">lea fakasipeuiani</language>
+			<language type="chr" draft="unconfirmed">lea fakaselokī</language>
+			<language type="chy" draft="unconfirmed">lea fakaseiene</language>
+			<language type="ckb" draft="unconfirmed">lea fakakūtisi-solani</language>
+			<language type="co" draft="unconfirmed">lea fakakōsika</language>
+			<language type="cop" draft="unconfirmed">lea fakakopitika</language>
+			<language type="cr" draft="unconfirmed">lea fakakelī</language>
+			<language type="crh" draft="unconfirmed">lea fakatoake-kilimea</language>
+			<language type="cs">lea fakaseki</language>
+			<language type="csb" draft="unconfirmed">lea fakakasiupia</language>
+			<language type="cu" draft="unconfirmed">lea fakasilavia fakasiasi</language>
+			<language type="cv" draft="unconfirmed">lea fakasuvasa</language>
+			<language type="cy">lea fakauēlesi</language>
+			<language type="da">lea fakatenimaʻake</language>
+			<language type="dak" draft="unconfirmed">lea fakatakota</language>
+			<language type="dar" draft="unconfirmed">lea fakatalakuā</language>
+			<language type="dav" draft="unconfirmed">lea fakataita</language>
+			<language type="de">lea fakasiamane</language>
+			<language type="de_AT">lea fakasiamane-ʻaositulia</language>
+			<language type="de_CH">lea fakasiamane-suisisālani ma'olunga</language>
+			<language type="del" draft="unconfirmed">lea fakatelauale</language>
+			<language type="den" draft="unconfirmed">lea fakasilave</language>
+			<language type="dgr" draft="unconfirmed">lea fakatōkelipi</language>
+			<language type="din" draft="unconfirmed">lea fakatingikā</language>
+			<language type="dje" draft="unconfirmed">lea fakatisāma</language>
+			<language type="doi" draft="unconfirmed">lea fakatokili</language>
+			<language type="dsb" draft="unconfirmed">lea fakasōpia-hifo</language>
+			<language type="dua" draft="unconfirmed">lea fakatuala</language>
+			<language type="dv">lea tivehi</language>
+			<language type="dyo" draft="unconfirmed">lea fakaiola-fonī</language>
+			<language type="dyu" draft="unconfirmed">lea fakatiula</language>
+			<language type="dz">lea fakaputeni</language>
+			<language type="ebu" draft="unconfirmed">lea fakaʻemipū</language>
+			<language type="ee" draft="unconfirmed">lea fakaʻeue</language>
+			<language type="efi">lea ʻefiki</language>
+			<language type="egy" draft="unconfirmed">lea fakaʻisipitemuʻa</language>
+			<language type="eka" draft="unconfirmed">lea fakaʻekaiuki</language>
+			<language type="el">lea fakakalisi</language>
+			<language type="en">lea fakapālangi</language>
+			<language type="en_AU">lea fakapālangi-ʻaositelēlia</language>
+			<language type="en_CA">lea fakapālangi-kānata</language>
+			<language type="en_GB">lea fakapilitānia</language>
+			<language type="en_GB" alt="short">lea fakapilitānia</language>
+			<language type="en_US">lea fakapālangi-ʻamelika</language>
+			<language type="eo">lea fakaʻesipulanito</language>
+			<language type="es">lea fakasīpenisi</language>
+			<language type="es_419">lea fakasipēnisi lātini-ʻamelika</language>
+			<language type="es_ES">lea fakasipēnisi-'iulope</language>
+			<language type="es_MX">lea fakasipēnisi-mekisikou</language>
+			<language type="et">lea fakaʻesitōnia</language>
+			<language type="eu">lea fakapāsiki</language>
+			<language type="ewo" draft="unconfirmed">lea fakaʻeuōnito</language>
+			<language type="fa">lea fakapēsia</language>
+			<language type="fan" draft="unconfirmed">lea fakafangi</language>
+			<language type="ff" draft="unconfirmed">lea fakafulā</language>
+			<language type="fi">lea fakafinilani</language>
+			<language type="fil">lea fakafilipaini</language>
+			<language type="fj">lea fakafisi</language>
+			<language type="fo">lea fakafaloe</language>
+			<language type="fon" draft="unconfirmed">lea fakafōngi</language>
+			<language type="fr">lea fakafalanisē</language>
+			<language type="fr_CA">lea fakafalanisē-kānata</language>
+			<language type="fr_CH">lea fakafalanisē-suisisālani</language>
+			<language type="frr" draft="unconfirmed">lea fakafilisia tokelau</language>
+			<language type="frs" draft="unconfirmed">lea fakafilisia hahake</language>
+			<language type="fur" draft="unconfirmed">lea fakafulilāni</language>
+			<language type="fy">lea fakafilisia hihifo</language>
+			<language type="ga">lea fakaʻaelani</language>
+			<language type="gaa" draft="unconfirmed">lea fakakā</language>
+			<language type="gay" draft="unconfirmed">lea fakakaio</language>
+			<language type="gba" draft="unconfirmed">lea fakakapaia</language>
+			<language type="gd" draft="unconfirmed">lea fakakaeliki</language>
+			<language type="gez" draft="unconfirmed">lea fakasiʻisi</language>
+			<language type="gil">lea fakakilipasi</language>
+			<language type="gl">lea fakakalisia</language>
+			<language type="gn">lea fakakualani</language>
+			<language type="gon" draft="unconfirmed">lea fakakonitī</language>
+			<language type="gor" draft="unconfirmed">lea fakakolonitalo</language>
+			<language type="got" draft="unconfirmed">lea fakakotika</language>
+			<language type="grb" draft="unconfirmed">lea fakakēpo</language>
+			<language type="grc">lea fakakalisimuʻa</language>
+			<language type="gsw">lea fakasiamane-suisisālani</language>
+			<language type="gu">lea fakakutalati</language>
+			<language type="guz" draft="unconfirmed">lea fakakusī</language>
+			<language type="gv" draft="unconfirmed">lea fakamangikī</language>
+			<language type="gwi" draft="unconfirmed">lea fakaʻuīsini</language>
+			<language type="ha">lea fakahausa</language>
+			<language type="hai" draft="unconfirmed">lea fakahaita</language>
+			<language type="haw">lea fakahauaiʻi</language>
+			<language type="he">lea fakahepelū</language>
+			<language type="hi">lea fakahinitī</language>
+			<language type="hil" draft="unconfirmed">lea fakahilikainoni</language>
+			<language type="hit" draft="unconfirmed">lea fakahitite</language>
+			<language type="hmn" draft="unconfirmed">lea fakamōngi</language>
+			<language type="ho" draft="unconfirmed">lea fakahili-motu</language>
+			<language type="hr">lea fakakuloisia</language>
+			<language type="hsb" draft="unconfirmed">lea fakasōpia-hake</language>
+			<language type="ht">lea fakahaiti</language>
+			<language type="hu">lea fakahungakalia</language>
+			<language type="hup" draft="unconfirmed">lea fakahupa</language>
+			<language type="hy">lea fakaʻāmenia</language>
+			<language type="hz" draft="unconfirmed">lea fakahelelo</language>
+			<language type="ia" draft="unconfirmed">lea fakavahaʻalea</language>
+			<language type="iba" draft="unconfirmed">lea fakaʻipani</language>
+			<language type="ibb" draft="unconfirmed">lea fakaʻipipio</language>
+			<language type="id">lea fakaʻinitōnesia</language>
+			<language type="ig">lea fakaʻikipō</language>
+			<language type="ii" draft="unconfirmed">lea fakasisiuani-ī</language>
+			<language type="ik" draft="unconfirmed">lea fakaʻinupiaki</language>
+			<language type="ilo" draft="unconfirmed">lea fakaʻiloko</language>
+			<language type="inh" draft="unconfirmed">lea fakaʻingusi</language>
+			<language type="is">lea fakaʻaisilani</language>
+			<language type="it">lea fakaʻītali</language>
+			<language type="iu" draft="unconfirmed">lea fakaʻinuketituti</language>
+			<language type="ja">lea fakasiapani</language>
+			<language type="jgo" draft="unconfirmed">lea fakanikōmipa</language>
+			<language type="jmc" draft="unconfirmed">lea fakamasame</language>
+			<language type="jpr" draft="unconfirmed">lea fakaʻiuteo-pēsia</language>
+			<language type="jrb" draft="unconfirmed">lea fakaʻiuteo-ʻalepea</language>
+			<language type="jv">lea fakasava</language>
+			<language type="ka">lea fakaseōsia</language>
+			<language type="kaa" draft="unconfirmed">lea fakakala-kalipaki</language>
+			<language type="kab" draft="unconfirmed">lea fakakapile</language>
+			<language type="kac" draft="unconfirmed">lea fakakasini</language>
+			<language type="kaj" draft="unconfirmed">lea fakasisū</language>
+			<language type="kam" draft="unconfirmed">lea fakakamipa</language>
+			<language type="kbd" draft="unconfirmed">lea fakakapālitia</language>
+			<language type="kcg" draft="unconfirmed">lea fakatiapi</language>
+			<language type="kde" draft="unconfirmed">lea fakamakōnite</language>
+			<language type="kea" draft="unconfirmed">lea fakakapuvelitianu</language>
+			<language type="kfo" draft="unconfirmed">lea fakakolo</language>
+			<language type="kg" draft="unconfirmed">lea fakakongikō</language>
+			<language type="kha" draft="unconfirmed">lea fakakāsi</language>
+			<language type="khq" draft="unconfirmed">lea fakakoila-sīni</language>
+			<language type="ki" draft="unconfirmed">lea fakakikuiu</language>
+			<language type="kj" draft="unconfirmed">lea fakakuaniama</language>
+			<language type="kk">lea fakakasaki</language>
+			<language type="kkj" draft="unconfirmed">lea fakakako</language>
+			<language type="kl" draft="unconfirmed">lea fakakalaʻalisuti</language>
+			<language type="kln" draft="unconfirmed">lea fakakalenisini</language>
+			<language type="km">lea fakakemipōtia</language>
+			<language type="kmb" draft="unconfirmed">lea fakakimipūnitu</language>
+			<language type="kn">lea fakakanata</language>
+			<language type="ko">lea fakakōlea</language>
+			<language type="kok" draft="unconfirmed">lea fakakonikanī</language>
+			<language type="kos" draft="unconfirmed">lea fakakosilae</language>
+			<language type="kpe" draft="unconfirmed">lea fakakepele</language>
+			<language type="kr" draft="unconfirmed">lea fakakanuli</language>
+			<language type="krc" draft="unconfirmed">lea fakakalate-palakili</language>
+			<language type="krl" draft="unconfirmed">lea fakakalelia</language>
+			<language type="kru" draft="unconfirmed">lea fakakuluki</language>
+			<language type="ks">lea fakakesimia</language>
+			<language type="ksb" draft="unconfirmed">lea fakasiamipala</language>
+			<language type="ksf" draft="unconfirmed">lea fakapafia</language>
+			<language type="ksh" draft="unconfirmed">lea fakakolongia</language>
+			<language type="ku">lea fakakētisi</language>
+			<language type="kum" draft="unconfirmed">lea fakakumiki</language>
+			<language type="kut" draft="unconfirmed">lea fakakutenai</language>
+			<language type="kv" draft="unconfirmed">lea fakakomi</language>
+			<language type="kw" draft="unconfirmed">lea fakakoniuali</language>
+			<language type="ky">lea fakakiataisi</language>
+			<language type="la">lea fakalatina</language>
+			<language type="lad" draft="unconfirmed">lea fakalatino</language>
+			<language type="lag" draft="unconfirmed">lea fakalangi</language>
+			<language type="lah">lea lanita</language>
+			<language type="lam" draft="unconfirmed">lea fakalamipā</language>
+			<language type="lb">lea fakalakisimipeki</language>
+			<language type="lez" draft="unconfirmed">lea fakalesikia</language>
+			<language type="lg" draft="unconfirmed">lea fakakanita</language>
+			<language type="li" draft="unconfirmed">lea fakalimipūliki</language>
+			<language type="ln">lea lingikala</language>
+			<language type="lo">lea fakalau</language>
+			<language type="lol" draft="unconfirmed">lea fakamongikō</language>
+			<language type="loz" draft="unconfirmed">lea fakalosi</language>
+			<language type="lt">lea fakalituania</language>
+			<language type="lu" draft="unconfirmed">lea fakalupa-katanga</language>
+			<language type="lua" draft="unconfirmed">lea fakalupa-lulua</language>
+			<language type="lui" draft="unconfirmed">lea fakaluiseno</language>
+			<language type="lun" draft="unconfirmed">lea fakalunitā</language>
+			<language type="luo" draft="unconfirmed">lea fakaluo</language>
+			<language type="lus" draft="unconfirmed">lea fakamiso</language>
+			<language type="luy" draft="unconfirmed">lea fakaluīa</language>
+			<language type="lv">lea fakalativia</language>
+			<language type="mad" draft="unconfirmed">lea fakamatula</language>
+			<language type="maf" draft="unconfirmed">lea fakamafa</language>
+			<language type="mag" draft="unconfirmed">lea fakamakahi</language>
+			<language type="mai" draft="unconfirmed">lea fakamaitili</language>
+			<language type="mak" draft="unconfirmed">lea fakamakasali</language>
+			<language type="man" draft="unconfirmed">lea fakamanitīngiko</language>
+			<language type="mas" draft="unconfirmed">lea fakamasai</language>
+			<language type="mdf" draft="unconfirmed">lea fakamokisiā</language>
+			<language type="mdr" draft="unconfirmed">lea fakamanetali</language>
+			<language type="men" draft="unconfirmed">lea fakamenetī</language>
+			<language type="mer" draft="unconfirmed">lea fakamelu</language>
+			<language type="mfe" draft="unconfirmed">lea fakamolisieni</language>
+			<language type="mg">lea fakamalakasi</language>
+			<language type="mgh" draft="unconfirmed">lea fakamakūa-meʻeto</language>
+			<language type="mgo" draft="unconfirmed">lea fakameta</language>
+			<language type="mh">lea fakamāsolo</language>
+			<language type="mi">lea fakamauli</language>
+			<language type="mic" draft="unconfirmed">lea fakamikemaki</language>
+			<language type="min" draft="unconfirmed">lea fakaminangikapau</language>
+			<language type="mk">lea fakamasitōnia</language>
+			<language type="ml">lea fakaʻinitia-malāialami</language>
+			<language type="mn">lea fakamongokōlia</language>
+			<language type="mnc" draft="unconfirmed">lea fakamanisū</language>
+			<language type="mni" draft="unconfirmed">lea fakamanipuli</language>
+			<language type="moh" draft="unconfirmed">lea fakamohauki</language>
+			<language type="mos" draft="unconfirmed">lea fakamosi</language>
+			<language type="mr">lea fakamalati</language>
+			<language type="ms">lea fakamalei</language>
+			<language type="mt">lea fakamolota</language>
+			<language type="mua" draft="unconfirmed">lea fakamunitangi</language>
+			<language type="mul">lea tuifio</language>
+			<language type="mus" draft="unconfirmed">lea fakakileki</language>
+			<language type="mwl" draft="unconfirmed">lea fakamilanitēsi</language>
+			<language type="mwr" draft="unconfirmed">lea fakamaliwali</language>
+			<language type="my">lea fakapema</language>
+			<language type="mye" draft="unconfirmed">lea fakamiene</language>
+			<language type="myv" draft="unconfirmed">lea fakaʻelisia</language>
+			<language type="na">lea fakanaulu</language>
+			<language type="nap" draft="unconfirmed">lea fakanapoletano</language>
+			<language type="naq" draft="unconfirmed">lea fakanama</language>
+			<language type="nb">lea fakanouaē-pokimali</language>
+			<language type="nd">lea netepele fakatokelau</language>
+			<language type="nds" draft="unconfirmed">lea fakasiamane-hifo</language>
+			<language type="ne">lea fakanepali</language>
+			<language type="new" draft="unconfirmed">lea fakanewali</language>
+			<language type="ng" draft="unconfirmed">lea fakanetongikā</language>
+			<language type="nia" draft="unconfirmed">lea fakaniasi</language>
+			<language type="niu">lea fakaniuē</language>
+			<language type="nl">lea fakahōlani</language>
+			<language type="nl_BE">lea fakahōlani-pelesiume</language>
+			<language type="nmg" draft="unconfirmed">lea fakakuasio</language>
+			<language type="nn">lea fakanoauē-ninosiki</language>
+			<language type="nnh" draft="unconfirmed">lea fakangiemipōni</language>
+			<language type="no">lea fakanouē</language>
+			<language type="nog" draft="unconfirmed">lea fakanokai</language>
+			<language type="nqo" draft="unconfirmed">lea fakanikō</language>
+			<language type="nr" draft="unconfirmed">lea fakanetepele-tonga</language>
+			<language type="nso">lea sofo fakatokelau</language>
+			<language type="nus" draft="unconfirmed">lea fakanueli</language>
+			<language type="nv" draft="unconfirmed">lea fakanavaho</language>
+			<language type="ny">lea sua</language>
+			<language type="nym" draft="unconfirmed">lea fakaniamiuesi</language>
+			<language type="nyn" draft="unconfirmed">lea fakanianikole</language>
+			<language type="nyo" draft="unconfirmed">lea fakaniolo</language>
+			<language type="nzi" draft="unconfirmed">lea fakanesima</language>
+			<language type="oc" draft="unconfirmed">lea fakaʻokitane</language>
+			<language type="oj" draft="unconfirmed">lea fakaʻosipiuā</language>
+			<language type="om" draft="unconfirmed">lea fakaʻolomo</language>
+			<language type="or">lea fakaʻinitia-ʻolāea</language>
+			<language type="os">lea ʻosetiki</language>
+			<language type="osa" draft="unconfirmed">lea fakaʻosēse</language>
+			<language type="pa">lea fakapūnusapi</language>
+			<language type="pag" draft="unconfirmed">lea fakapangasina</language>
+			<language type="pal" draft="unconfirmed">lea fakapālavi</language>
+			<language type="pam" draft="unconfirmed">lea fakapamipanga</language>
+			<language type="pap" draft="unconfirmed">lea fakapapiamēnito</language>
+			<language type="pau" draft="unconfirmed">lea fakapalau</language>
+			<language type="peo" draft="unconfirmed">lea fakapēsia motuʻa</language>
+			<language type="phn" draft="unconfirmed">lea fakafoinikia</language>
+			<language type="pi" draft="unconfirmed">lea fakapāli</language>
+			<language type="pl">lea fakapōlani</language>
+			<language type="pon" draft="unconfirmed">lea fakaponapē</language>
+			<language type="ps">lea fakapasitō</language>
+			<language type="pt">lea fakapotukali</language>
+			<language type="pt_BR">lea fakapotukali-palāsili</language>
+			<language type="pt_PT">lea fakapotukali-ʻeulope</language>
+			<language type="qu">lea fakakuetisa</language>
+			<language type="raj" draft="unconfirmed">lea fakalasasitani</language>
+			<language type="rap">lea fakalapanui</language>
+			<language type="rar">lea fakalalotonga</language>
+			<language type="rm">lea fakalaito-lomēnia</language>
+			<language type="rn">lea luaniti</language>
+			<language type="ro">lea fakalōmenia</language>
+			<language type="ro_MD">lea fakamolitāvia</language>
+			<language type="rof" draft="unconfirmed">lea fakalomipō</language>
+			<language type="rom" draft="unconfirmed">lea fakalomani</language>
+			<language type="ru">lea fakalūsia</language>
+			<language type="rup" draft="unconfirmed">lea fakaʻalomania</language>
+			<language type="rw">lea fakaluanita</language>
+			<language type="rwk" draft="unconfirmed">lea fakaluā</language>
+			<language type="sa">lea fakasanisukuliti</language>
+			<language type="sad" draft="unconfirmed">lea fakasanitaue</language>
+			<language type="sah" draft="unconfirmed">lea fakasaka</language>
+			<language type="sam" draft="unconfirmed">lea fakasamalitani-ʻalāmiti</language>
+			<language type="saq" draft="unconfirmed">lea fakasamipulu</language>
+			<language type="sas" draft="unconfirmed">lea fakasasaki</language>
+			<language type="sat" draft="unconfirmed">lea fakasanitali</language>
+			<language type="sbp" draft="unconfirmed">lea fakasangu</language>
+			<language type="sc" draft="unconfirmed">lea fakasaletīnia</language>
+			<language type="scn" draft="unconfirmed">lea fakasisīlia</language>
+			<language type="sco">lea fakasikotilani</language>
+			<language type="sd">lea fakasīniti</language>
+			<language type="se">lea sami fakatokelau</language>
+			<language type="see" draft="unconfirmed">lea fakaseneka</language>
+			<language type="seh" draft="unconfirmed">lea fakasena</language>
+			<language type="sel" draft="unconfirmed">lea fakaselikupi</language>
+			<language type="ses" draft="unconfirmed">lea fakakoilapolo-seni</language>
+			<language type="sg">lea sango</language>
+			<language type="sga" draft="unconfirmed">lea fakaʻaelani-motuʻa</language>
+			<language type="sh">lea sēpia-kuloisia</language>
+			<language type="shi" draft="unconfirmed">lea fakataselihiti</language>
+			<language type="shn" draft="unconfirmed">lea fakasiani</language>
+			<language type="si">lea fakasingihala</language>
+			<language type="sid" draft="unconfirmed">lea fakasitamo</language>
+			<language type="sk">lea fakasolāvaki</language>
+			<language type="sl">lea fakasolovenia</language>
+			<language type="sm">lea fakahaʻamoa</language>
+			<language type="sma" draft="unconfirmed">lea fakasami-tonga</language>
+			<language type="smj" draft="unconfirmed">lea fakasami-lule</language>
+			<language type="smn" draft="unconfirmed">lea fakasami-ʻinali</language>
+			<language type="sms" draft="unconfirmed">lea fakasami-sikolita</language>
+			<language type="sn">lea sona</language>
+			<language type="snk" draft="unconfirmed">lea fakasoninekē</language>
+			<language type="so">lea fakasomali</language>
+			<language type="sq">lea fakaʻalapēnia</language>
+			<language type="sr">lea fakasēpia</language>
+			<language type="srn" draft="unconfirmed">lea fakasuranane-tongikō</language>
+			<language type="srr" draft="unconfirmed">lea fakasēlēle</language>
+			<language type="ss">lea fakasuasilani</language>
+			<language type="ssy" draft="unconfirmed">lea fakasaho</language>
+			<language type="st">lea sofo fakatonga</language>
+			<language type="su">lea fakasunitā</language>
+			<language type="suk" draft="unconfirmed">lea fakasukuma</language>
+			<language type="sus" draft="unconfirmed">lea fakasusū</language>
+			<language type="sv">lea fakasuēteni</language>
+			<language type="sw">lea fakasuahili</language>
+			<language type="swb">lea fakakomolo</language>
+			<language type="swc" draft="unconfirmed">lea fakakongo suahilī</language>
+			<language type="syc" draft="unconfirmed">lea fakasailiakimuʻa</language>
+			<language type="syr" draft="unconfirmed">lea fakasuliāiā</language>
+			<language type="ta">lea fakatamili</language>
+			<language type="te">lea fakaʻinitia-teluku</language>
+			<language type="tem" draft="unconfirmed">lea fakatimenē</language>
+			<language type="teo" draft="unconfirmed">lea fakateso</language>
+			<language type="ter" draft="unconfirmed">lea fakateleno</language>
+			<language type="tet">lea fakatētamu</language>
+			<language type="tg">lea fakatāsiki</language>
+			<language type="th">lea fakataileni</language>
+			<language type="ti">lea fakatikilinia</language>
+			<language type="tig" draft="unconfirmed">lea fakatikilīnia</language>
+			<language type="tiv" draft="unconfirmed">lea fakativi</language>
+			<language type="tk">lea fakatēkimeni</language>
+			<language type="tkl">lea fakatokelau</language>
+			<language type="tl">lea fakatekaloka</language>
+			<language type="tlh" draft="unconfirmed">lea fakatilingoni</language>
+			<language type="tli" draft="unconfirmed">lea fakalingikīte</language>
+			<language type="tmh" draft="unconfirmed">lea fakatamasieki</language>
+			<language type="tn">lea suana</language>
+			<language type="to">lea fakatonga</language>
+			<language type="tog" draft="unconfirmed">lea fakaniasa-tonga</language>
+			<language type="tpi">lea toki pisini</language>
+			<language type="tr">lea fakatoake</language>
+			<language type="trv" draft="unconfirmed">lea fakataloko</language>
+			<language type="ts">lea songa</language>
+			<language type="tsi" draft="unconfirmed">lea fakatisīmisiani</language>
+			<language type="tt">lea fakatatale</language>
+			<language type="tum" draft="unconfirmed">lea fakatumepuka</language>
+			<language type="tvl">lea fakatūvalu</language>
+			<language type="twq" draft="unconfirmed">lea fakatasauaki</language>
+			<language type="ty">lea fakatahiti</language>
+			<language type="tyv" draft="unconfirmed">lea fakatuvīnia</language>
+			<language type="tzm" draft="unconfirmed">lea fakatamasaiti ʻatilasi-loloto</language>
+			<language type="udm" draft="unconfirmed">lea fakaʻutimuliti</language>
+			<language type="ug">lea fakaʻuikūli</language>
+			<language type="uga" draft="unconfirmed">lea fakaʻūkaliti</language>
+			<language type="uk">lea fakaʻiukālia</language>
+			<language type="umb" draft="unconfirmed">lea fakaʻumipūnitu</language>
+			<language type="und">lea taʻeʻiloa</language>
+			<language type="ur">lea fakaʻetiu</language>
+			<language type="uz">lea fakaʻusipeki</language>
+			<language type="vai" draft="unconfirmed">lea fakavai</language>
+			<language type="ve">lea fakavenitā</language>
+			<language type="vi">lea fakavietinemi</language>
+			<language type="vo" draft="unconfirmed">lea fakavolapiki</language>
+			<language type="vot" draft="unconfirmed">lea fakavotiki</language>
+			<language type="vun" draft="unconfirmed">lea fakavūniso</language>
+			<language type="wa" draft="unconfirmed">lea fakaʻualonia</language>
+			<language type="wae" draft="unconfirmed">lea fakaʻualiseli</language>
+			<language type="wal" draft="unconfirmed">lea fakaʻuolaita</language>
+			<language type="war" draft="unconfirmed">lea fakaʻualai</language>
+			<language type="was" draft="unconfirmed">lea fakaʻuasiō</language>
+			<language type="wo">lea fakaʻuolofo</language>
+			<language type="xal" draft="unconfirmed">lea fakakalimiki</language>
+			<language type="xh">lea fakatōsa</language>
+			<language type="xog" draft="unconfirmed">lea fakasoka</language>
+			<language type="yao" draft="unconfirmed">lea fakaʻiao</language>
+			<language type="yap" draft="unconfirmed">lea fakaʻiapi</language>
+			<language type="yav" draft="unconfirmed">lea fakaʻiangipeni</language>
+			<language type="ybb" draft="unconfirmed">lea fakaʻiēmipa</language>
+			<language type="yi" draft="unconfirmed">lea fakaītisi</language>
+			<language type="yo">lea fakaʻiōlupa</language>
+			<language type="yue">lea kenitēnisi</language>
+			<language type="za" draft="unconfirmed">lea fakasuangi</language>
+			<language type="zap" draft="unconfirmed">lea fakasapoteki</language>
+			<language type="zen" draft="unconfirmed">lea fakasenaka</language>
+			<language type="zgh">lea fakatamasaiti moloko</language>
+			<language type="zh">lea fakasiaina</language>
+			<language type="zh_Hans">lea fakasiaina-fakafaingofua</language>
+			<language type="zh_Hant">lea fakasiaina-tukufakaholo</language>
+			<language type="zu">lea fakasulu</language>
+			<language type="zun" draft="unconfirmed">lea fakasuni</language>
+			<language type="zxx">ʻikai ha lea</language>
+			<language type="zza" draft="unconfirmed">lea fakasāsā</language>
+		</languages>
+		<scripts>
+			<script type="Arab">tohinima fakaʻalepea</script>
+			<script type="Armi" draft="unconfirmed">tohinima fakaʻalāmiti-ʻemipaea</script>
+			<script type="Armn">tohinima fakaʻāmenia</script>
+			<script type="Bali" draft="unconfirmed">tohinima fakapali</script>
+			<script type="Bamu" draft="unconfirmed">tohinima fakapamumi</script>
+			<script type="Batk" draft="unconfirmed">tohinima fakapātaki</script>
+			<script type="Beng">tohinima fakapengikali</script>
+			<script type="Bopo">tohinima fakapopomofo</script>
+			<script type="Brai">tohinima laukonga ki he kui</script>
+			<script type="Bugi" draft="unconfirmed">tohinima fakapukisi</script>
+			<script type="Cakm" draft="unconfirmed">tohinima fakasakimā</script>
+			<script type="Cans" draft="unconfirmed">tohinima fakatupuʻi-kānata fakatahataha</script>
+			<script type="Cham" draft="unconfirmed">tohinima fakasami</script>
+			<script type="Cher" draft="unconfirmed">tohinima fakaselokī</script>
+			<script type="Copt" draft="unconfirmed">tohinima fakakopitika</script>
+			<script type="Cyrl">tohinima fakalūsia</script>
+			<script type="Deva">tohinima fakaʻinitia-tevanākalī</script>
+			<script type="Egyp" draft="unconfirmed">tohinima tongitapu fakaʻisipite</script>
+			<script type="Ethi">tohinima fakaʻītiōpia</script>
+			<script type="Geor">tohinima fakaseōsia</script>
+			<script type="Goth" draft="unconfirmed">tohinima fakakotika</script>
+			<script type="Grek">tohinima fakakalisi</script>
+			<script type="Gujr">tohinima fakaʻinitia-kutalati</script>
+			<script type="Guru">tohinima fakakūmuki</script>
+			<script type="Hang">tohinima fakakōlea-hāngūlu</script>
+			<script type="Hani">tohinima fakasiaina</script>
+			<script type="Hans">tohinima fakasiaina-fakafaingofua</script>
+			<script type="Hans" alt="stand-alone">tohinima fakasiaina-fakafaingofua</script>
+			<script type="Hant">tohinima fakasiaina-tukufakaholo</script>
+			<script type="Hant" alt="stand-alone">tohinima fakasiaina-tukufakaholo</script>
+			<script type="Hebr">tohinima fakahepelū</script>
+			<script type="Hira">tohinima fakasiapani hilakana</script>
+			<script type="Java" draft="unconfirmed">tohinima fakasava</script>
+			<script type="Jpan">tohinima fakasiapani</script>
+			<script type="Kali" draft="unconfirmed">tohinima fakakaialī</script>
+			<script type="Kana">tohinima fakasiapani katakana</script>
+			<script type="Khmr">tohinima fakakemipōtia</script>
+			<script type="Knda">tohinima fakaʻinitia-kanata</script>
+			<script type="Kore">tohinima fakakōlea</script>
+			<script type="Lana" draft="unconfirmed">tohinima fakalana</script>
+			<script type="Laoo">tohinima fakalau</script>
+			<script type="Latn">tohinima fakalatina</script>
+			<script type="Lepc" draft="unconfirmed">tohinima fakalepasā</script>
+			<script type="Limb" draft="unconfirmed">tohinima fakalimipū</script>
+			<script type="Lisu" draft="unconfirmed">tohinima fakafalāse</script>
+			<script type="Mand" draft="unconfirmed">tohinima fakamanitaea</script>
+			<script type="Maya" draft="unconfirmed">tohinima tongitapu fakamaia</script>
+			<script type="Mlym">tohinima fakaʻinitia-malāialami</script>
+			<script type="Mong">tohinima fakamongokōlia</script>
+			<script type="Mtei" draft="unconfirmed">tohinima fakametei-maieki</script>
+			<script type="Mymr">tohinima fakapema</script>
+			<script type="Nkoo" draft="unconfirmed">tohinima fakanikō</script>
+			<script type="Olck" draft="unconfirmed">tohinima fakaʻolisiki</script>
+			<script type="Orya">tohinima fakaʻinitia-ʻolāea</script>
+			<script type="Phnx" draft="unconfirmed">tohinima fakafoinikia</script>
+			<script type="Plrd" draft="unconfirmed">tohinima fakafonētiki-polāti</script>
+			<script type="Roro" draft="unconfirmed">tohinima fakalongolongo</script>
+			<script type="Saur" draft="unconfirmed">tohinima fakasaulasitā</script>
+			<script type="Sinh">tohinima fakasingihala</script>
+			<script type="Sund" draft="unconfirmed">tohinima fakasunitā</script>
+			<script type="Sylo" draft="unconfirmed">tohinima fakasailoti-nakili</script>
+			<script type="Syrc" draft="unconfirmed">tohinima fakasuliāiā</script>
+			<script type="Syre" draft="unconfirmed">tohinima fakasuliāiā-ʻesitelangelo</script>
+			<script type="Syrj" draft="unconfirmed">tohinima fakasuliāiā-hihifo</script>
+			<script type="Syrn" draft="unconfirmed">tohinima fakasuliāiā-hahake</script>
+			<script type="Tale" draft="unconfirmed">tohinima fakatai-lue</script>
+			<script type="Talu" draft="unconfirmed">tohinima fakatai-lue foʻou</script>
+			<script type="Taml">tohinima fakatamili</script>
+			<script type="Tavt" draft="unconfirmed">tohinima fakatai-vieti</script>
+			<script type="Telu">tohinima fakaʻinitia-teluku</script>
+			<script type="Tfng" draft="unconfirmed">tohinima fakatifināki</script>
+			<script type="Tglg" draft="unconfirmed">tohinima fakatakaloka</script>
+			<script type="Thaa">tohinima fakatāna</script>
+			<script type="Thai">tohinima fakataileni</script>
+			<script type="Tibt">tohinima fakataipeti</script>
+			<script type="Ugar" draft="unconfirmed">lea fakaʻūkaliti</script>
+			<script type="Vaii" draft="unconfirmed">tohinima fakavai</script>
+			<script type="Wole" draft="unconfirmed">tohinima fakauoleai</script>
+			<script type="Xpeo" draft="unconfirmed">tohinima fakapēsiamuʻa</script>
+			<script type="Yiii" draft="unconfirmed">tohinima fakaīī</script>
+			<script type="Zmth" draft="unconfirmed">tohinima fakamatematika</script>
+			<script type="Zsym">tohinima fakaʻilonga</script>
+			<script type="Zxxx">tohinima taʻetohitohiʻi</script>
+			<script type="Zyyy">tohinima fakatatau</script>
+			<script type="Zzzz">tohinima taʻeʻiloa</script>
+		</scripts>
+		<territories>
+			<territory type="001">Māmani</territory>
+			<territory type="002">ʻAfilika</territory>
+			<territory type="003">ʻAmelika tokelau</territory>
+			<territory type="005">ʻAmelika tonga</territory>
+			<territory type="009">ʻOsēnia</territory>
+			<territory type="011">ʻAfilika fakahihifo</territory>
+			<territory type="013">ʻAmelika lotoloto</territory>
+			<territory type="014">ʻAfilika fakahahake</territory>
+			<territory type="015">ʻAfilika fakatokelau</territory>
+			<territory type="017">ʻAfilika lotoloto</territory>
+			<territory type="018">ʻAfilika fakatonga</territory>
+			<territory type="019">Ongo ʻAmelika</territory>
+			<territory type="021">ʻAmelika fakatokelau</territory>
+			<territory type="029">Kalipiane</territory>
+			<territory type="030">ʻĒsia fakahahake</territory>
+			<territory type="034">ʻĒsia fakatonga</territory>
+			<territory type="035">ʻĒsia fakatongahahake</territory>
+			<territory type="039">ʻIulope fakatonga</territory>
+			<territory type="053">ʻAositelēlēsia</territory>
+			<territory type="054">Melanisia</territory>
+			<territory type="057">Potu fonua Mikolonisia</territory>
+			<territory type="061">Polinīsia</territory>
+			<territory type="142">ʻĒsia</territory>
+			<territory type="143">ʻĒsia lotoloto</territory>
+			<territory type="145">ʻĒsia fakahihifo</territory>
+			<territory type="150">ʻIulope</territory>
+			<territory type="151">ʻIulope fakahahake</territory>
+			<territory type="154">ʻIulope fakatokelau</territory>
+			<territory type="155">ʻIulope fakahihifo</territory>
+			<territory type="419">ʻAmelika fakalatina</territory>
+			<territory type="AC">Motu ʻAsenisini</territory>
+			<territory type="AD">ʻEnitola</territory>
+			<territory type="AE">ʻAlepea Fakatahataha</territory>
+			<territory type="AF">ʻAfikānisitani</territory>
+			<territory type="AG">Anitikua mo Palaputa</territory>
+			<territory type="AI">Anikuila</territory>
+			<territory type="AL">ʻAlipania</territory>
+			<territory type="AM">ʻĀminia</territory>
+			<territory type="AN">Netaleni ʻEnitilisi</territory>
+			<territory type="AO">ʻEngikola</territory>
+			<territory type="AQ">ʻAnitātika</territory>
+			<territory type="AR">ʻAsenitina</territory>
+			<territory type="AS">Haʻamoa ʻAmelika</territory>
+			<territory type="AT">ʻAositulia</territory>
+			<territory type="AU">ʻAositelēlia</territory>
+			<territory type="AW">ʻAlupa</territory>
+			<territory type="AX">ʻOtumotu ʻAlani</territory>
+			<territory type="AZ">ʻAsapaisani</territory>
+			<territory type="BA">Posinia mo Hesikōvina</territory>
+			<territory type="BB">Pāpeitosi</territory>
+			<territory type="BD">Pengilātesi</territory>
+			<territory type="BE">Pelesiume</territory>
+			<territory type="BF">Pekano Faso</territory>
+			<territory type="BG">Pulukalia</territory>
+			<territory type="BH">Paleini</territory>
+			<territory type="BI">Puluniti</territory>
+			<territory type="BJ">Penini</territory>
+			<territory type="BL">Sā Patēlemi</territory>
+			<territory type="BM">Pēmuta</territory>
+			<territory type="BN">Pulunei</territory>
+			<territory type="BO">Polīvia</territory>
+			<territory type="BQ">Kalipiane fakahōlani</territory>
+			<territory type="BR">Palāsili</territory>
+			<territory type="BS">Pahama</territory>
+			<territory type="BT">Pūtani</territory>
+			<territory type="BV">Motu Puveti</territory>
+			<territory type="BW">Potisiuana</territory>
+			<territory type="BY">Pelalusi</territory>
+			<territory type="BZ">Pelise</territory>
+			<territory type="CA">Kānata</territory>
+			<territory type="CC">ʻOtumotu Koko</territory>
+			<territory type="CD">Kongo - Kinisasa</territory>
+			<territory type="CD" alt="variant">Kongo (LTK)</territory>
+			<territory type="CF">Lipapilika ʻAfilika Lotoloto</territory>
+			<territory type="CG">Kongo - Palasavila</territory>
+			<territory type="CG" alt="variant">Lipapilika Kongo</territory>
+			<territory type="CH">Suisilani</territory>
+			<territory type="CI">Matāfonua ʻAivili</territory>
+			<territory type="CK">ʻOtumotu Kuki</territory>
+			<territory type="CL">Sili</territory>
+			<territory type="CM">Kemaluni</territory>
+			<territory type="CN">Siaina</territory>
+			<territory type="CO">Kolomipia</territory>
+			<territory type="CP">Motu Kilipatoni</territory>
+			<territory type="CR">Kosita Lika</territory>
+			<territory type="CU">Kiupa</territory>
+			<territory type="CV">Muiʻi Vete</territory>
+			<territory type="CW">Kulasao</territory>
+			<territory type="CX">Motu Kilisimasi</territory>
+			<territory type="CY">Saipalesi</territory>
+			<territory type="CZ">Lipapilika Seki</territory>
+			<territory type="DE">Siamane</territory>
+			<territory type="DG">Tieko Kāsia</territory>
+			<territory type="DJ">Siputi</territory>
+			<territory type="DK">Tenimaʻake</territory>
+			<territory type="DM">Tominika</territory>
+			<territory type="DO">Lipapilika Tominika</territory>
+			<territory type="DZ">ʻAisilia</territory>
+			<territory type="EA">Siuta mo Melila</territory>
+			<territory type="EC">ʻEkuetoa</territory>
+			<territory type="EE">ʻEsitōnia</territory>
+			<territory type="EG">ʻIsipite</territory>
+			<territory type="EH">Sahala fakahihifo</territory>
+			<territory type="ER">ʻElitulia</territory>
+			<territory type="ES">Sipeini</territory>
+			<territory type="ET">ʻĪtiōpia</territory>
+			<territory type="EU">ʻIulope fakatahataha</territory>
+			<territory type="FI">Finilani</territory>
+			<territory type="FJ">Fisi</territory>
+			<territory type="FK">ʻOtumotu Fokulani</territory>
+			<territory type="FM">Mikolonisia</territory>
+			<territory type="FO">ʻOtumotu Faloe</territory>
+			<territory type="FR">Falanisē</territory>
+			<territory type="GA">Kaponi</territory>
+			<territory type="GB">Pilitānia</territory>
+			<territory type="GB" alt="short">Pilitānia</territory>
+			<territory type="GD">Kelenatā</territory>
+			<territory type="GE">Seōsia</territory>
+			<territory type="GF">Kuiana fakafalanisē</territory>
+			<territory type="GG">Kuenisī</territory>
+			<territory type="GH">Kana</territory>
+			<territory type="GI">Sipalālitā</territory>
+			<territory type="GL">Kulinilani</territory>
+			<territory type="GM">Kamipia</territory>
+			<territory type="GN">Kini</territory>
+			<territory type="GP">Kuatalupe</territory>
+			<territory type="GQ">ʻEkueta Kini</territory>
+			<territory type="GR">Kalisi</territory>
+			<territory type="GS">ʻOtumotu Seōsia-tonga mo Saniuisi-tonga</territory>
+			<territory type="GT">Kuatamala</territory>
+			<territory type="GU">Kuamu</territory>
+			<territory type="GW">Kini-Pisau</territory>
+			<territory type="GY">Kuiana</territory>
+			<territory type="HK">Hongi Kongi SAR Siaina</territory>
+			<territory type="HK" alt="short">Hongi Kongi</territory>
+			<territory type="HM">ʻOtumotu Heati mo Makitonali</territory>
+			<territory type="HN">Honitulasi</territory>
+			<territory type="HR">Kuloisia</territory>
+			<territory type="HT">Haiti</territory>
+			<territory type="HU">Hungakalia</territory>
+			<territory type="IC">ʻOtumotu Kaneli</territory>
+			<territory type="ID">ʻInitonēsia</territory>
+			<territory type="IE">ʻAealani</territory>
+			<territory type="IL">ʻIsileli</territory>
+			<territory type="IM">Motu Mani</territory>
+			<territory type="IN">ʻInitia</territory>
+			<territory type="IO">Potu fonua moana ʻInitia fakapilitānia</territory>
+			<territory type="IQ">ʻIulaaki</territory>
+			<territory type="IR">ʻIulaani</territory>
+			<territory type="IS">ʻAisilani</territory>
+			<territory type="IT">ʻĪtali</territory>
+			<territory type="JE">Selusī</territory>
+			<territory type="JM">Samaika</territory>
+			<territory type="JO">Soatane</territory>
+			<territory type="JP">Siapani</territory>
+			<territory type="KE">Keniā</territory>
+			<territory type="KG">Kīkisitani</territory>
+			<territory type="KH">Kemipōtia</territory>
+			<territory type="KI">Kilipasi</territory>
+			<territory type="KM">Komolosi</territory>
+			<territory type="KN">Sā Kitisi mo Nevisi</territory>
+			<territory type="KP">Kōlea tokelau</territory>
+			<territory type="KR">Kōlea tonga</territory>
+			<territory type="KW">Kueiti</territory>
+			<territory type="KY">ʻOtumotu Keimeni</territory>
+			<territory type="KZ">Kasakitani</territory>
+			<territory type="LA">Lau</territory>
+			<territory type="LB">Lepanoni</territory>
+			<territory type="LC">Sā Lūsia</territory>
+			<territory type="LI">Lekitenisaini</territory>
+			<territory type="LK">Sīlangikā</territory>
+			<territory type="LR">Laipelia</territory>
+			<territory type="LS">Lesoto</territory>
+			<territory type="LT">Lifiuania</territory>
+			<territory type="LU">Lakisimipeki</territory>
+			<territory type="LV">Lativia</territory>
+			<territory type="LY">Lipia</territory>
+			<territory type="MA">Moloko</territory>
+			<territory type="MC">Monako</territory>
+			<territory type="MD">Molotova</territory>
+			<territory type="ME">Monitenikalo</territory>
+			<territory type="MF">Sā Mātini (fakafalanisē)</territory>
+			<territory type="MG">Matakasika</territory>
+			<territory type="MH">ʻOtumotu Māsolo</territory>
+			<territory type="MK">Masetōnia</territory>
+			<territory type="MK" alt="variant">Masetōnia (FYROM)</territory>
+			<territory type="ML">Māli</territory>
+			<territory type="MM">Pema</territory>
+			<territory type="MN">Mongokōlia</territory>
+			<territory type="MO">Makau SAR Siaina</territory>
+			<territory type="MO" alt="short">Makau</territory>
+			<territory type="MP">ʻOtumotu Maliana tokelau</territory>
+			<territory type="MQ">Mateniki</territory>
+			<territory type="MR">Maulitenia</territory>
+			<territory type="MS">Moʻungaselati</territory>
+			<territory type="MT">Malita</territory>
+			<territory type="MU">Maulitiusi</territory>
+			<territory type="MV">Malativisi</territory>
+			<territory type="MW">Malaui</territory>
+			<territory type="MX">Mekisikou</territory>
+			<territory type="MY">Malēsia</territory>
+			<territory type="MZ">Mosēmipiki</territory>
+			<territory type="NA">Namipia</territory>
+			<territory type="NC">Niu Kaletōnia</territory>
+			<territory type="NE">Nisia</territory>
+			<territory type="NF">Motu Nōfoliki</territory>
+			<territory type="NG">Naisilia</territory>
+			<territory type="NI">Nikalakua</territory>
+			<territory type="NL">Hōlani</territory>
+			<territory type="NO">Noauē</territory>
+			<territory type="NP">Nepali</territory>
+			<territory type="NR">Naulu</territory>
+			<territory type="NU">Niuē</territory>
+			<territory type="NZ">Nuʻusila</territory>
+			<territory type="OM">ʻOmani</territory>
+			<territory type="PA">Panamā</territory>
+			<territory type="PE">Pelū</territory>
+			<territory type="PF">Polinisia fakafalanisē</territory>
+			<territory type="PG">Papuaniukini</territory>
+			<territory type="PH">Filipaini</territory>
+			<territory type="PK">Pākisitani</territory>
+			<territory type="PL">Polani</territory>
+			<territory type="PM">Sā Piea mo Mikeloni</territory>
+			<territory type="PN">ʻOtumotu Pitikeni</territory>
+			<territory type="PR">Pueto Liko</territory>
+			<territory type="PS">Potu Palesitaine</territory>
+			<territory type="PS" alt="short">Palesitaine</territory>
+			<territory type="PT">Potukali</territory>
+			<territory type="PW">Palau</territory>
+			<territory type="PY">Palakuei</territory>
+			<territory type="QA">Katā</territory>
+			<territory type="QO">ʻOsēnia mamaʻo</territory>
+			<territory type="RE">Liʻiunioni</territory>
+			<territory type="RO">Lomēnia</territory>
+			<territory type="RS">Sēpia</territory>
+			<territory type="RU">Lūsia</territory>
+			<territory type="RW">Luanitā</territory>
+			<territory type="SA">Saute ʻAlepea</territory>
+			<territory type="SB">ʻOtumotu Solomone</territory>
+			<territory type="SC">ʻOtumotu Seiseli</territory>
+			<territory type="SD">Sūteni</territory>
+			<territory type="SE">Suēteni</territory>
+			<territory type="SG">Singapoa</territory>
+			<territory type="SH">Sā Helena</territory>
+			<territory type="SI">Silōvenia</territory>
+			<territory type="SJ">Sivolopāti mo Sani Maieni</territory>
+			<territory type="SK">Silōvakia</territory>
+			<territory type="SL">Siela Leone</territory>
+			<territory type="SM">Sā Malino</territory>
+			<territory type="SN">Senekalo</territory>
+			<territory type="SO">Sōmalia</territory>
+			<territory type="SR">Sulinami</territory>
+			<territory type="SS">Sūtani fakatonga</territory>
+			<territory type="ST">Sao Tomē mo Pilinisipe</territory>
+			<territory type="SV">ʻEle Salavatoa</territory>
+			<territory type="SX">Sā Mātini (fakahōlani)</territory>
+			<territory type="SY">Sīlia</territory>
+			<territory type="SZ">Suasilani</territory>
+			<territory type="TA">Tulisiteni ta Kunuha</territory>
+			<territory type="TC">ʻOtumotu Tuki mo Kaikosi</territory>
+			<territory type="TD">Sāti</territory>
+			<territory type="TF">Potu fonua tonga fakafalanisē</territory>
+			<territory type="TG">Toko</territory>
+			<territory type="TH">Taileni</territory>
+			<territory type="TJ">Tasikitani</territory>
+			<territory type="TK">Tokelau</territory>
+			<territory type="TL">Timoa Hahake</territory>
+			<territory type="TM">Tekimenisitani</territory>
+			<territory type="TN">Tunīsia</territory>
+			<territory type="TO">Tonga</territory>
+			<territory type="TR">Toake</territory>
+			<territory type="TT">Tilinitati mo Topako</territory>
+			<territory type="TV">Tūvalu</territory>
+			<territory type="TW">Taiuani</territory>
+			<territory type="TZ">Tenisānia</territory>
+			<territory type="UA">ʻIukuleini</territory>
+			<territory type="UG">ʻIukanitā</territory>
+			<territory type="UM">ʻOtumotu siʻi ʻo ʻAmelika</territory>
+			<territory type="US">Puleʻanga fakatahataha ʻAmelika</territory>
+			<territory type="US" alt="short">ʻAmelika</territory>
+			<territory type="UY">ʻUlukuei</territory>
+			<territory type="UZ">ʻUsipekitani</territory>
+			<territory type="VA">Kolo Vatikani</territory>
+			<territory type="VC">Sā Viniseni mo Kulenatini</territory>
+			<territory type="VE">Venesuela</territory>
+			<territory type="VG">ʻOtumotu Vilikini fakapilitānia</territory>
+			<territory type="VI">ʻOtumotu Vilikini fakaʻamelika</territory>
+			<territory type="VN">Vietinemi</territory>
+			<territory type="VU">Vanuatu</territory>
+			<territory type="WF">ʻUvea mo Futuna</territory>
+			<territory type="WS">Haʻamoa</territory>
+			<territory type="XK">Kōsovo</territory>
+			<territory type="YE">Iemeni</territory>
+			<territory type="YT">Meioti</territory>
+			<territory type="ZA">ʻAfilika tonga</territory>
+			<territory type="ZM">Semipia</territory>
+			<territory type="ZW">Simipapuei</territory>
+			<territory type="ZZ">Potu fonua taʻeʻiloa pe hala</territory>
+		</territories>
+		<keys>
+			<key type="calendar">tohi māhina</key>
+			<key type="collation">tohi hokohoko</key>
+			<key type="currency">paʻanga</key>
+			<key type="numbers">fika</key>
+		</keys>
+		<types>
+			<type type="arab" key="numbers">fika fakaʻalepea</type>
+			<type type="arabext" key="numbers">fika fakaʻalepea fakalahi</type>
+			<type type="armn" key="numbers">fika fakaʻāmenia</type>
+			<type type="armnlow" key="numbers">fika fakaʻāmenia fakalalo</type>
+			<type type="bali" key="numbers" draft="unconfirmed">fika fakapali</type>
+			<type type="beng" key="numbers">fika fakapengikali</type>
+			<type type="big5han" key="collation" draft="unconfirmed">haninimalahi</type>
+			<type type="brah" key="numbers" draft="unconfirmed">fika fakapalami</type>
+			<type type="buddhist" key="calendar">fakaputa</type>
+			<type type="cakm" key="numbers" draft="unconfirmed">fika fakakakema</type>
+			<type type="cham" key="numbers" draft="unconfirmed">fika fakakami</type>
+			<type type="chinese" key="calendar">fakasiaina</type>
+			<type type="coptic" key="calendar" draft="unconfirmed">fakakopitika</type>
+			<type type="dangi" key="calendar" draft="unconfirmed">fakataniki</type>
+			<type type="deva" key="numbers">fika fakatevanākalī</type>
+			<type type="dictionary" key="collation" draft="unconfirmed">tikisinale</type>
+			<type type="ducet" key="collation">ʻunikōti</type>
+			<type type="eor" key="collation" draft="unconfirmed">fakaʻeulope</type>
+			<type type="ethi" key="numbers">fika fakaʻītiōpia</type>
+			<type type="ethiopic" key="calendar" draft="unconfirmed">fakaʻītiōpia</type>
+			<type type="ethiopic-amete-alem" key="calendar" draft="unconfirmed">fakaʻītiōpia-ʻamete-ʻalemi</type>
+			<type type="fullwide" key="numbers">fika laulahi</type>
+			<type type="gb2312han" key="collation" draft="unconfirmed">siaine fakafaingofua</type>
+			<type type="geor" key="numbers">fika fakaseōsia</type>
+			<type type="gregorian" key="calendar">fakakelekolia</type>
+			<type type="grek" key="numbers">fika fakakalisi</type>
+			<type type="greklow" key="numbers">fika fakakalisi fakalalo</type>
+			<type type="gujr" key="numbers">fika fakakutalati</type>
+			<type type="guru" key="numbers">fika fakakūmuki</type>
+			<type type="hanidec" key="numbers">fika fakasiaina</type>
+			<type type="hans" key="numbers">fika fakasiaina fakafaingofua</type>
+			<type type="hansfin" key="numbers">fika fakasiaina fakafaingofua fakapaʻanga</type>
+			<type type="hant" key="numbers">fika fakasiaina tukufakaholo</type>
+			<type type="hantfin" key="numbers">fika fakasiaina tukufakaholo fakapaʻanga</type>
+			<type type="hebr" key="numbers">fika fakahepelū</type>
+			<type type="hebrew" key="calendar">fakahepelū</type>
+			<type type="indian" key="calendar">fakaʻinitia</type>
+			<type type="islamic" key="calendar">fakamohameti</type>
+			<type type="islamic-civil" key="calendar">fakamohameti-sivile</type>
+			<type type="islamic-rgsa" key="calendar" draft="unconfirmed">fakamohameti-ʻasimāhina</type>
+			<type type="islamic-tbla" key="calendar" draft="unconfirmed">fakamohameti -fakatēpile</type>
+			<type type="islamic-umalqura" key="calendar" draft="unconfirmed">fakamohameti-ʻumalakula</type>
+			<type type="iso8601" key="calendar" draft="unconfirmed">faka-iso8601</type>
+			<type type="japanese" key="calendar">fakasiapani</type>
+			<type type="java" key="numbers" draft="unconfirmed">fika fakasava</type>
+			<type type="jpan" key="numbers">fika fakasiapani</type>
+			<type type="jpanfin" key="numbers">fika fakasiapani fakapaʻanga</type>
+			<type type="kali" key="numbers" draft="unconfirmed">fika fakakaialī</type>
+			<type type="khmr" key="numbers">fika fakakamipōtia</type>
+			<type type="knda" key="numbers">fika fakakanata</type>
+			<type type="lana" key="numbers" draft="unconfirmed">fika fakatai-tami-hola</type>
+			<type type="lanatham" key="numbers" draft="unconfirmed">fika fakatai-tami-tami</type>
+			<type type="laoo" key="numbers">fika fakalau</type>
+			<type type="latn" key="numbers">fika fakalatina</type>
+			<type type="lepc" key="numbers" draft="unconfirmed">fika fakalepasā</type>
+			<type type="limb" key="numbers" draft="unconfirmed">fika fakalimipū</type>
+			<type type="mlym" key="numbers">fika fakamalāialami</type>
+			<type type="mong" key="numbers" draft="unconfirmed">fika fakamongokōlia</type>
+			<type type="mtei" key="numbers" draft="unconfirmed">fika fakametei-maieki</type>
+			<type type="mymr" key="numbers">fika fakapema</type>
+			<type type="mymrshan" key="numbers" draft="unconfirmed">fika fakapema-siani</type>
+			<type type="nkoo" key="numbers" draft="unconfirmed">fika fakanikō</type>
+			<type type="olck" key="numbers" draft="unconfirmed">fika fakaʻolisiki</type>
+			<type type="orya" key="numbers">fika fakaʻolia</type>
+			<type type="osma" key="numbers" draft="unconfirmed">fika fakaʻosimania</type>
+			<type type="persian" key="calendar" draft="unconfirmed">fakapēsia</type>
+			<type type="phonebook" key="collation">fika telefoni</type>
+			<type type="pinyin" key="collation" draft="unconfirmed">piniini</type>
+			<type type="reformed" key="collation" draft="unconfirmed">fakafoʻou</type>
+			<type type="roc" key="calendar" draft="unconfirmed">fakalēpupelika siaina</type>
+			<type type="roman" key="numbers">fika fakaloma</type>
+			<type type="romanlow" key="numbers">fika fakaloma fakalalo</type>
+			<type type="saur" key="numbers" draft="unconfirmed">fika fakasaulasitā</type>
+			<type type="search" key="collation">fakakumi ʻi hono anga lahi</type>
+			<type type="searchjl" key="collation" draft="unconfirmed">konisinanite ʻuluaki</type>
+			<type type="shrd" key="numbers" draft="unconfirmed">fika fakasalata</type>
+			<type type="sora" key="numbers" draft="unconfirmed">fika fakasola-somipenga</type>
+			<type type="standard" key="collation">fakasīpinga</type>
+			<type type="stroke" key="collation" draft="unconfirmed">tongi</type>
+			<type type="sund" key="numbers" draft="unconfirmed">fika fakasunitā</type>
+			<type type="takr" key="numbers" draft="unconfirmed">fika fakatakili</type>
+			<type type="talu" key="numbers" draft="unconfirmed">fika fakatai-lue foʻou</type>
+			<type type="taml" key="numbers">fika fakatamila tukufakaholo</type>
+			<type type="tamldec" key="numbers">fika fakatamila</type>
+			<type type="telu" key="numbers">fika fakateluku</type>
+			<type type="thai" key="numbers">fika fakatailani</type>
+			<type type="tibt" key="numbers">fika fakatipeti</type>
+			<type type="traditional" key="collation">tukufakaholo</type>
+			<type type="unihan" key="collation" draft="unconfirmed">tongi tefitoʻi</type>
+			<type type="vaii" key="numbers" draft="unconfirmed">fika fakavai</type>
+			<type type="zhuyin" key="collation" draft="unconfirmed">sūini</type>
+		</types>
+		<measurementSystemNames>
+			<measurementSystemName type="metric">fakamita</measurementSystemName>
+			<measurementSystemName type="UK">fakapilitānia</measurementSystemName>
+			<measurementSystemName type="US">fakaʻamelika</measurementSystemName>
+		</measurementSystemNames>
+		<codePatterns>
+			<codePattern type="language">Lea: {0}</codePattern>
+			<codePattern type="script">Tohinima Fakaha: {0}</codePattern>
+			<codePattern type="territory">Feituʻu: {0}</codePattern>
+		</codePatterns>
+	</localeDisplayNames>
+	<characters>
+		<exemplarCharacters>[a á ā e é ē f h i í ī k l m n {ng} o ó ō p s t u ú ū v ʻ]</exemplarCharacters>
+		<exemplarCharacters type="auxiliary">[à ă â å ä æ b c ç d è ĕ ê ë g ì ĭ î ï j ñ ò ŏ ô ö ø œ q r ù ŭ û ü w x y ÿ z]</exemplarCharacters>
+		<exemplarCharacters type="index">[A E F H I K L M N {NG} O P S T U V ʻ]</exemplarCharacters>
+		<exemplarCharacters type="punctuation">[\- ‐ – — , ; \: ! ? . … ' ‘ ’ &quot; “ ” ( ) \[ \] § @ * / \&amp; # † ‡ ′ ″]</exemplarCharacters>
+		<ellipsis type="final">{0}…</ellipsis>
+		<ellipsis type="initial">…{0}</ellipsis>
+		<ellipsis type="medial">{0}…{1}</ellipsis>
+		<ellipsis type="word-final">{0} …</ellipsis>
+		<ellipsis type="word-initial">… {0}</ellipsis>
+		<ellipsis type="word-medial">{0} … {1}</ellipsis>
+		<moreInformation>?</moreInformation>
+	</characters>
+	<delimiters>
+		<quotationStart>“</quotationStart>
+		<quotationEnd>”</quotationEnd>
+		<alternateQuotationStart>‘</alternateQuotationStart>
+		<alternateQuotationEnd>’</alternateQuotationEnd>
+	</delimiters>
+	<dates>
+		<calendars>
+			<calendar type="generic">
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE d MMMM y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>d MMMM y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>d MMM y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>d/M/yy GGGGG</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength type="full">
+						<dateTimeFormat>
+							<pattern>{1}, {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="long">
+						<dateTimeFormat>
+							<pattern>{1}, {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="medium">
+						<dateTimeFormat>
+							<pattern>{1}, {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="short">
+						<dateTimeFormat>
+							<pattern>{1}, {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<availableFormats>
+						<dateFormatItem id="d">d</dateFormatItem>
+						<dateFormatItem id="Ed">d E</dateFormatItem>
+						<dateFormatItem id="Gy">y G</dateFormatItem>
+						<dateFormatItem id="GyMMM">MMM y G</dateFormatItem>
+						<dateFormatItem id="GyMMMd">d MMM y G</dateFormatItem>
+						<dateFormatItem id="GyMMMEd">E d MMM y G</dateFormatItem>
+						<dateFormatItem id="h" draft="unconfirmed">h a</dateFormatItem>
+						<dateFormatItem id="H" draft="unconfirmed">HH</dateFormatItem>
+						<dateFormatItem id="hm">h:mm a</dateFormatItem>
+						<dateFormatItem id="Hm">H:mm</dateFormatItem>
+						<dateFormatItem id="hms">h:mm:ss a</dateFormatItem>
+						<dateFormatItem id="Hms">H:mm:ss</dateFormatItem>
+						<dateFormatItem id="M">L</dateFormatItem>
+						<dateFormatItem id="Md">d/M</dateFormatItem>
+						<dateFormatItem id="MEd">E, d/M</dateFormatItem>
+						<dateFormatItem id="MMM">LLL</dateFormatItem>
+						<dateFormatItem id="MMMd">d MMM</dateFormatItem>
+						<dateFormatItem id="MMMEd">E d MMM</dateFormatItem>
+						<dateFormatItem id="MMMMd">d MMMM</dateFormatItem>
+						<dateFormatItem id="MMMMEd">E d MMMM</dateFormatItem>
+						<dateFormatItem id="ms">mm:ss</dateFormatItem>
+						<dateFormatItem id="y">y G</dateFormatItem>
+						<dateFormatItem id="yM">M-y</dateFormatItem>
+						<dateFormatItem id="yMd">d-M-y</dateFormatItem>
+						<dateFormatItem id="yMEd">E d/M/y</dateFormatItem>
+						<dateFormatItem id="yMM">MM-y</dateFormatItem>
+						<dateFormatItem id="yMMM">MMM y</dateFormatItem>
+						<dateFormatItem id="yMMMd">d MMM y</dateFormatItem>
+						<dateFormatItem id="yMMMEd">E d MMM y</dateFormatItem>
+						<dateFormatItem id="yMMMM">MMMM y</dateFormatItem>
+						<dateFormatItem id="yQQQ">y QQQ</dateFormatItem>
+						<dateFormatItem id="yQQQQ">y QQQQ</dateFormatItem>
+						<dateFormatItem id="yyyy">y G</dateFormatItem>
+						<dateFormatItem id="yyyyM">y/MM GGGGG</dateFormatItem>
+						<dateFormatItem id="yyyyMd">dd/MM/y GGGGG</dateFormatItem>
+						<dateFormatItem id="yyyyMEd">E dd-MM-y GGGGG</dateFormatItem>
+						<dateFormatItem id="yyyyMMM">MMM y G</dateFormatItem>
+						<dateFormatItem id="yyyyMMMd">d MMM y G</dateFormatItem>
+						<dateFormatItem id="yyyyMMMEd">E d MMM y G</dateFormatItem>
+						<dateFormatItem id="yyyyQQQ">y QQQ G</dateFormatItem>
+						<dateFormatItem id="yyyyQQQQ">y QQQQ G</dateFormatItem>
+					</availableFormats>
+					<intervalFormats>
+						<intervalFormatFallback>{0} – {1}</intervalFormatFallback>
+						<intervalFormatItem id="d">
+							<greatestDifference id="d">d–d</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="h">
+							<greatestDifference id="a">h a – h a</greatestDifference>
+							<greatestDifference id="h">h–h a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="H">
+							<greatestDifference id="H" draft="unconfirmed">HH–HH</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hm">
+							<greatestDifference id="a">h:mm a – h:mm a</greatestDifference>
+							<greatestDifference id="h">h:mm–h:mm a</greatestDifference>
+							<greatestDifference id="m">h:mm–h:mm a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hm">
+							<greatestDifference id="H" draft="unconfirmed">HH:mm–HH:mm</greatestDifference>
+							<greatestDifference id="m" draft="unconfirmed">HH:mm–HH:mm</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hmv">
+							<greatestDifference id="a">h:mm a – h:mm a v</greatestDifference>
+							<greatestDifference id="h">h:mm–h:mm a v</greatestDifference>
+							<greatestDifference id="m">h:mm–h:mm a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hmv">
+							<greatestDifference id="H" draft="unconfirmed">HH:mm–HH:mm v</greatestDifference>
+							<greatestDifference id="m" draft="unconfirmed">HH:mm–HH:mm v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hv">
+							<greatestDifference id="a">h a – h a v</greatestDifference>
+							<greatestDifference id="h">h–h a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hv">
+							<greatestDifference id="H" draft="unconfirmed">HH–HH v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="M">
+							<greatestDifference id="M">M–M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d">d/M - d/M</greatestDifference>
+							<greatestDifference id="M">d/M - d/M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d">E d/M - E d/M</greatestDifference>
+							<greatestDifference id="M">E d/M - E d/M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMM">
+							<greatestDifference id="M">LLL–LLL</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMd">
+							<greatestDifference id="d">d-d MMM</greatestDifference>
+							<greatestDifference id="M">d MMM - d MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMEd">
+							<greatestDifference id="d">E d MMM - E d MMM</greatestDifference>
+							<greatestDifference id="M">E d MMM - E d MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="y">
+							<greatestDifference id="y">y–y G</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M">M/y - M/y GGGGG</greatestDifference>
+							<greatestDifference id="y">M/y - M/y GGGGG</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d">d/M/y - d/M/y GGGGG</greatestDifference>
+							<greatestDifference id="M">d/M/y - d/M/y GGGGG</greatestDifference>
+							<greatestDifference id="y">d/M/y - d/M/y GGGGG</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d">E d/M/y - E d/M/y GGGGG</greatestDifference>
+							<greatestDifference id="M">E d/M/y - E d/M/y GGGGG</greatestDifference>
+							<greatestDifference id="y">E d/M/y - E d/M/y GGGGG</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMM">
+							<greatestDifference id="M">MMM-MMM y G</greatestDifference>
+							<greatestDifference id="y">MMM y - MMM y G</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMd">
+							<greatestDifference id="d">d-d MMM y G</greatestDifference>
+							<greatestDifference id="M">d MMM - d MMM y G</greatestDifference>
+							<greatestDifference id="y">d MMM y - d MMM y G</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMEd">
+							<greatestDifference id="d">E d MMM - E d MMM y G</greatestDifference>
+							<greatestDifference id="M">E d MMM - E d MMM y G</greatestDifference>
+							<greatestDifference id="y">E d MMM y - E d MMM y G</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMM">
+							<greatestDifference id="M">MMMM - MMMM y G</greatestDifference>
+							<greatestDifference id="y">MMMM y - MMMM y G</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="gregorian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Sān</month>
+							<month type="2">Fēp</month>
+							<month type="3">Maʻa</month>
+							<month type="4">ʻEpe</month>
+							<month type="5">Mē</month>
+							<month type="6">Sun</month>
+							<month type="7">Siu</month>
+							<month type="8">ʻAok</month>
+							<month type="9">Sep</month>
+							<month type="10">ʻOka</month>
+							<month type="11">Nōv</month>
+							<month type="12">Tīs</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">S</month>
+							<month type="2">F</month>
+							<month type="3">M</month>
+							<month type="4">E</month>
+							<month type="5">M</month>
+							<month type="6">S</month>
+							<month type="7">S</month>
+							<month type="8">A</month>
+							<month type="9">S</month>
+							<month type="10">O</month>
+							<month type="11">N</month>
+							<month type="12">T</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Sānuali</month>
+							<month type="2">Fēpueli</month>
+							<month type="3">Maʻasi</month>
+							<month type="4">ʻEpeleli</month>
+							<month type="5">Mē</month>
+							<month type="6">Sune</month>
+							<month type="7">Siulai</month>
+							<month type="8">ʻAokosi</month>
+							<month type="9">Sepitema</month>
+							<month type="10">ʻOkatopa</month>
+							<month type="11">Nōvema</month>
+							<month type="12">Tīsema</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<month type="1">Sān</month>
+							<month type="2">Fēp</month>
+							<month type="3">Maʻa</month>
+							<month type="4">ʻEpe</month>
+							<month type="5">Mē</month>
+							<month type="6">Sun</month>
+							<month type="7">Siu</month>
+							<month type="8">ʻAok</month>
+							<month type="9">Sep</month>
+							<month type="10">ʻOka</month>
+							<month type="11">Nōv</month>
+							<month type="12">Tīs</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">S</month>
+							<month type="2">F</month>
+							<month type="3">M</month>
+							<month type="4">E</month>
+							<month type="5">M</month>
+							<month type="6">S</month>
+							<month type="7">S</month>
+							<month type="8">A</month>
+							<month type="9">S</month>
+							<month type="10">O</month>
+							<month type="11">N</month>
+							<month type="12">T</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Sānuali</month>
+							<month type="2">Fēpueli</month>
+							<month type="3">Maʻasi</month>
+							<month type="4">ʻEpeleli</month>
+							<month type="5">Mē</month>
+							<month type="6">Sune</month>
+							<month type="7">Siulai</month>
+							<month type="8">ʻAokosi</month>
+							<month type="9">Sepitema</month>
+							<month type="10">ʻOkatopa</month>
+							<month type="11">Nōvema</month>
+							<month type="12">Tīsema</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<days>
+					<dayContext type="format">
+						<dayWidth type="abbreviated">
+							<day type="sun">Sāp</day>
+							<day type="mon">Mōn</day>
+							<day type="tue">Tūs</day>
+							<day type="wed">Pul</day>
+							<day type="thu">Tuʻa</day>
+							<day type="fri">Fal</day>
+							<day type="sat">Tok</day>
+						</dayWidth>
+						<dayWidth type="narrow">
+							<day type="sun">S</day>
+							<day type="mon">M</day>
+							<day type="tue">T</day>
+							<day type="wed">P</day>
+							<day type="thu">T</day>
+							<day type="fri">F</day>
+							<day type="sat">T</day>
+						</dayWidth>
+						<dayWidth type="short">
+							<day type="sun">Sāp</day>
+							<day type="mon">Mōn</day>
+							<day type="tue">Tus</day>
+							<day type="wed">Pul</day>
+							<day type="thu">Tuʻa</day>
+							<day type="fri">Fal</day>
+							<day type="sat">Tok</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">Sāpate</day>
+							<day type="mon">Mōnite</day>
+							<day type="tue">Tūsite</day>
+							<day type="wed">Pulelulu</day>
+							<day type="thu">Tuʻapulelulu</day>
+							<day type="fri">Falaite</day>
+							<day type="sat">Tokonaki</day>
+						</dayWidth>
+					</dayContext>
+					<dayContext type="stand-alone">
+						<dayWidth type="abbreviated">
+							<day type="sun">Sāp</day>
+							<day type="mon">Mōn</day>
+							<day type="tue">Tūs</day>
+							<day type="wed">Pul</day>
+							<day type="thu">Tuʻa</day>
+							<day type="fri">Fal</day>
+							<day type="sat">Tok</day>
+						</dayWidth>
+						<dayWidth type="narrow">
+							<day type="sun">S</day>
+							<day type="mon">M</day>
+							<day type="tue">T</day>
+							<day type="wed">P</day>
+							<day type="thu">T</day>
+							<day type="fri">F</day>
+							<day type="sat">T</day>
+						</dayWidth>
+						<dayWidth type="short">
+							<day type="sun">Sāp</day>
+							<day type="mon">Mōn</day>
+							<day type="tue">Tus</day>
+							<day type="wed">Pul</day>
+							<day type="thu">Tuʻa</day>
+							<day type="fri">Fal</day>
+							<day type="sat">Tok</day>
+						</dayWidth>
+						<dayWidth type="wide">
+							<day type="sun">Sāpate</day>
+							<day type="mon">Mōnite</day>
+							<day type="tue">Tūsite</day>
+							<day type="wed">Pulelulu</day>
+							<day type="thu">Tuʻapulelulu</day>
+							<day type="fri">Falaite</day>
+							<day type="sat">Tokonaki</day>
+						</dayWidth>
+					</dayContext>
+				</days>
+				<quarters>
+					<quarterContext type="format">
+						<quarterWidth type="abbreviated">
+							<quarter type="1">K1</quarter>
+							<quarter type="2">K2</quarter>
+							<quarter type="3">K3</quarter>
+							<quarter type="4">K4</quarter>
+						</quarterWidth>
+						<quarterWidth type="narrow">
+							<quarter type="1">1</quarter>
+							<quarter type="2">2</quarter>
+							<quarter type="3">3</quarter>
+							<quarter type="4">4</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">kuata ʻuluaki</quarter>
+							<quarter type="2">kuata ua</quarter>
+							<quarter type="3">kuata tolu</quarter>
+							<quarter type="4">kuata fā</quarter>
+						</quarterWidth>
+					</quarterContext>
+					<quarterContext type="stand-alone">
+						<quarterWidth type="abbreviated">
+							<quarter type="1">K1</quarter>
+							<quarter type="2">K2</quarter>
+							<quarter type="3">K3</quarter>
+							<quarter type="4">K4</quarter>
+						</quarterWidth>
+						<quarterWidth type="narrow">
+							<quarter type="1">1</quarter>
+							<quarter type="2">2</quarter>
+							<quarter type="3">3</quarter>
+							<quarter type="4">4</quarter>
+						</quarterWidth>
+						<quarterWidth type="wide">
+							<quarter type="1">kuata 1</quarter>
+							<quarter type="2">kuata 2</quarter>
+							<quarter type="3">kuata 3</quarter>
+							<quarter type="4">kuata 4</quarter>
+						</quarterWidth>
+					</quarterContext>
+				</quarters>
+				<dayPeriods>
+					<dayPeriodContext type="format">
+						<dayPeriodWidth type="narrow">
+							<dayPeriod type="am">AM</dayPeriod>
+							<dayPeriod type="pm">PM</dayPeriod>
+						</dayPeriodWidth>
+						<dayPeriodWidth type="wide">
+							<dayPeriod type="am">AM</dayPeriod>
+							<dayPeriod type="pm">PM</dayPeriod>
+						</dayPeriodWidth>
+					</dayPeriodContext>
+				</dayPeriods>
+				<eras>
+					<eraNames>
+						<era type="0">ki muʻa</era>
+						<era type="0" alt="variant" draft="unconfirmed">KM</era>
+						<era type="1">taʻu ʻo Sīsū</era>
+						<era type="1" alt="variant" draft="unconfirmed">TS</era>
+					</eraNames>
+					<eraAbbr>
+						<era type="0">KM</era>
+						<era type="1">TS</era>
+					</eraAbbr>
+					<eraNarrow>
+						<era type="0">KāMā</era>
+						<era type="0" alt="variant" draft="unconfirmed">KM</era>
+						<era type="1">TāSā</era>
+						<era type="1" alt="variant" draft="unconfirmed">TS</era>
+					</eraNarrow>
+				</eras>
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE d MMMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>d MMMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>d MMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>d/M/yy</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<timeFormatLength type="full">
+						<timeFormat>
+							<pattern>h:mm:ss a zzzz</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="long">
+						<timeFormat>
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="medium">
+						<timeFormat>
+							<pattern>h:mm:ss a</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="short">
+						<timeFormat>
+							<pattern>h:mm a</pattern>
+						</timeFormat>
+					</timeFormatLength>
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength type="full">
+						<dateTimeFormat>
+							<pattern>{1}, {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="long">
+						<dateTimeFormat>
+							<pattern>{1}, {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="medium">
+						<dateTimeFormat>
+							<pattern>{1}, {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="short">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<availableFormats>
+						<dateFormatItem id="d">d</dateFormatItem>
+						<dateFormatItem id="Ed">d E</dateFormatItem>
+						<dateFormatItem id="Ehm">E h:mm a</dateFormatItem>
+						<dateFormatItem id="EHm">E HH:mm</dateFormatItem>
+						<dateFormatItem id="Ehms">E h:mm:ss a</dateFormatItem>
+						<dateFormatItem id="EHms">E HH:mm:ss</dateFormatItem>
+						<dateFormatItem id="Gy">y G</dateFormatItem>
+						<dateFormatItem id="GyMMM">MMM y G</dateFormatItem>
+						<dateFormatItem id="GyMMMd">d MMM y G</dateFormatItem>
+						<dateFormatItem id="GyMMMEd">E d MMM y G</dateFormatItem>
+						<dateFormatItem id="h">h a</dateFormatItem>
+						<dateFormatItem id="H">HH</dateFormatItem>
+						<dateFormatItem id="hm">h:mm a</dateFormatItem>
+						<dateFormatItem id="Hm">HH:mm</dateFormatItem>
+						<dateFormatItem id="hms">h:mm:ss a</dateFormatItem>
+						<dateFormatItem id="Hms">HH:mm:ss</dateFormatItem>
+						<dateFormatItem id="M">L</dateFormatItem>
+						<dateFormatItem id="Md">d/M</dateFormatItem>
+						<dateFormatItem id="MEd">E d/M</dateFormatItem>
+						<dateFormatItem id="MMM">LLL</dateFormatItem>
+						<dateFormatItem id="MMMd">d MMM</dateFormatItem>
+						<dateFormatItem id="MMMEd">E d MMM</dateFormatItem>
+						<dateFormatItem id="MMMMd">d MMMM</dateFormatItem>
+						<dateFormatItem id="MMMMEd">E d MMMM</dateFormatItem>
+						<dateFormatItem id="ms">mm:ss</dateFormatItem>
+						<dateFormatItem id="y">y</dateFormatItem>
+						<dateFormatItem id="yM">M/y</dateFormatItem>
+						<dateFormatItem id="yMd">d/M/y</dateFormatItem>
+						<dateFormatItem id="yMEd">E d/M/y</dateFormatItem>
+						<dateFormatItem id="yMM">MM-y</dateFormatItem>
+						<dateFormatItem id="yMMM">MMM y</dateFormatItem>
+						<dateFormatItem id="yMMMd">d MMM y</dateFormatItem>
+						<dateFormatItem id="yMMMEd">E d MMM y</dateFormatItem>
+						<dateFormatItem id="yMMMM">MMMM y</dateFormatItem>
+						<dateFormatItem id="yQQQ">y QQQ</dateFormatItem>
+						<dateFormatItem id="yQQQQ">y QQQQ</dateFormatItem>
+					</availableFormats>
+					<appendItems>
+						<appendItem request="Timezone">{0} {1}</appendItem>
+					</appendItems>
+					<intervalFormats>
+						<intervalFormatFallback>{0} – {1}</intervalFormatFallback>
+						<intervalFormatItem id="d">
+							<greatestDifference id="d">d–d</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="h">
+							<greatestDifference id="a">h a – h a</greatestDifference>
+							<greatestDifference id="h">h–h a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="H">
+							<greatestDifference id="H">HH–HH</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hm">
+							<greatestDifference id="a">h:mm a – h:mm a</greatestDifference>
+							<greatestDifference id="h">h:mm–h:mm a</greatestDifference>
+							<greatestDifference id="m">h:mm–h:mm a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hm">
+							<greatestDifference id="H">HH:mm–HH:mm</greatestDifference>
+							<greatestDifference id="m">HH:mm–HH:mm</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hmv">
+							<greatestDifference id="a">h:mm a – h:mm a v</greatestDifference>
+							<greatestDifference id="h">h:mm–h:mm a v</greatestDifference>
+							<greatestDifference id="m">h:mm–h:mm a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hmv">
+							<greatestDifference id="H">HH:mm–HH:mm v</greatestDifference>
+							<greatestDifference id="m">HH:mm–HH:mm v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hv">
+							<greatestDifference id="a">h a – h a v</greatestDifference>
+							<greatestDifference id="h">h–h a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hv">
+							<greatestDifference id="H">HH–HH v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="M">
+							<greatestDifference id="M">M–M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d">d/M - d/M</greatestDifference>
+							<greatestDifference id="M">d/M - d/M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d">E d/M - E d/M</greatestDifference>
+							<greatestDifference id="M">E d/M - E d/M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMM">
+							<greatestDifference id="M">LLL–LLL</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMd">
+							<greatestDifference id="d">d-d MMM</greatestDifference>
+							<greatestDifference id="M">d MMM - d MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMEd">
+							<greatestDifference id="d">E d MMM - E d MMM</greatestDifference>
+							<greatestDifference id="M">E d MMM - E d MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="y">
+							<greatestDifference id="y">y–y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M">M/y - M/y</greatestDifference>
+							<greatestDifference id="y">M/y - M/y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d">d/M/y - d/M/y</greatestDifference>
+							<greatestDifference id="M">d/M/y - d/M/y</greatestDifference>
+							<greatestDifference id="y">d/M/y - d/M/y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d">E d/M/y - E d/M/y</greatestDifference>
+							<greatestDifference id="M">E d/M/y - E d/M/y</greatestDifference>
+							<greatestDifference id="y">E d/M/y - E d/M/y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMM">
+							<greatestDifference id="M">MMM-MMM y</greatestDifference>
+							<greatestDifference id="y">MMM y - MMM y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMd">
+							<greatestDifference id="d">d-d MMM y</greatestDifference>
+							<greatestDifference id="M">d MMM - d MMM y</greatestDifference>
+							<greatestDifference id="y">d MMM y - d MMM y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMEd">
+							<greatestDifference id="d">E d MMM - E d MMM y</greatestDifference>
+							<greatestDifference id="M">E d MMM - E d MMM y</greatestDifference>
+							<greatestDifference id="y">E d MMM y - E d MMM y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMM">
+							<greatestDifference id="M">MMMM - MMMM y</greatestDifference>
+							<greatestDifference id="y">MMMM y - MMMM y</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<fields>
+			<field type="era">
+				<displayName>kuonga</displayName>
+			</field>
+			<field type="year">
+				<displayName>taʻu</displayName>
+				<relative type="-1">taʻu kuoʻosi</relative>
+				<relative type="0">taʻu⸍ni</relative>
+				<relative type="1">taʻu kahaʻu</relative>
+				<relativeTime type="future">
+					<relativeTimePattern count="other">ʻi he taʻu ʻe {0}</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="other">taʻu ʻe {0} kuo hili</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="month">
+				<displayName>māhina</displayName>
+				<relative type="-1">māhina kuoʻosi</relative>
+				<relative type="0">māhina⸍ni</relative>
+				<relative type="1">māhina kahaʻu</relative>
+				<relativeTime type="future">
+					<relativeTimePattern count="other">ʻi he māhina ʻe {0}</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="other">māhina ʻe {0} kuoʻosi</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="week">
+				<displayName>uike</displayName>
+				<relative type="-1">uike kuoʻosi</relative>
+				<relative type="0">uike⸍ni</relative>
+				<relative type="1">uike kahaʻu</relative>
+				<relativeTime type="future">
+					<relativeTimePattern count="other">ʻi he uike ʻe {0}</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="other">uike ʻe {0} kuoʻosi</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="day">
+				<displayName>ʻaho</displayName>
+				<relative type="-2">ʻaneheafi</relative>
+				<relative type="-1">ʻaneafi</relative>
+				<relative type="0">ʻaho⸍ni</relative>
+				<relative type="1">ʻapongipongi</relative>
+				<relative type="2">ʻahepongipongi</relative>
+				<relativeTime type="future">
+					<relativeTimePattern count="other">ʻi he ʻaho ʻe {0}</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="other">ʻaho ʻe {0} kuoʻosi</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="weekday">
+				<displayName>ʻaho ʻo e uike</displayName>
+			</field>
+			<field type="sun">
+				<relative type="-1">Sāpate kuoʻosi</relative>
+				<relative type="0">Sāpate⸍ni</relative>
+				<relative type="1">Sāpate kahaʻu</relative>
+			</field>
+			<field type="mon">
+				<relative type="-1">Mōnite kuoʻosi</relative>
+				<relative type="0">Mōnite⸍ni</relative>
+				<relative type="1">Mōnite kahaʻu</relative>
+			</field>
+			<field type="tue">
+				<relative type="-1">Tūsite kuoʻosi</relative>
+				<relative type="0">Tūsite⸍ni</relative>
+				<relative type="1">Tūsite kahaʻu</relative>
+			</field>
+			<field type="wed">
+				<relative type="-1">Pulelulu kuoʻosi</relative>
+				<relative type="0">Pulelulu⸍ni</relative>
+				<relative type="1">Pulelulu kahaʻu</relative>
+			</field>
+			<field type="thu">
+				<relative type="-1">Tuʻapulelulu kuoʻosi</relative>
+				<relative type="0">Tuʻapulelulu⸍ni</relative>
+				<relative type="1">Tuʻapulelulu kahaʻu</relative>
+			</field>
+			<field type="fri">
+				<relative type="-1">Falaite kuoʻosi</relative>
+				<relative type="0">Falaite⸍ni</relative>
+				<relative type="1">Falaite kahaʻu</relative>
+			</field>
+			<field type="sat">
+				<relative type="-1">Tokonaki kuoʻosi</relative>
+				<relative type="0">Tokonaki⸍ni</relative>
+				<relative type="1">Tokonaki kahaʻu</relative>
+			</field>
+			<field type="dayperiod">
+				<displayName>AM/PM</displayName>
+			</field>
+			<field type="hour">
+				<displayName>houa</displayName>
+				<relativeTime type="future">
+					<relativeTimePattern count="other">ʻi he houa ʻe {0}</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="other">houa ʻe {0} kuoʻosi</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="minute">
+				<displayName>miniti</displayName>
+				<relativeTime type="future">
+					<relativeTimePattern count="other">ʻi he miniti ʻe {0}</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="other">miniti ʻe {0} kuoʻosi</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="second">
+				<displayName>sekoni</displayName>
+				<relative type="0">taimiʻni</relative>
+				<relativeTime type="future">
+					<relativeTimePattern count="other">ʻi he sekoni ʻe {0}</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="other">sekoni ʻe {0} kuoʻosi</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="zone">
+				<displayName>taimi fakavahe</displayName>
+			</field>
+		</fields>
+		<timeZoneNames>
+			<hourFormat>+HH:mm;-HH:mm</hourFormat>
+			<gmtFormat>GMT{0}</gmtFormat>
+			<gmtZeroFormat>GMT</gmtZeroFormat>
+			<regionFormat>Taimi {0}</regionFormat>
+			<regionFormat type="daylight">{0} (+1)</regionFormat>
+			<regionFormat type="standard">{0} (+0)</regionFormat>
+			<fallbackFormat>{1} ({0})</fallbackFormat>
+			<zone type="Etc/Unknown">
+				<exemplarCity>Halaʻata</exemplarCity>
+			</zone>
+			<zone type="Antarctica/DumontDUrville">
+				<exemplarCity draft="unconfirmed">Dumont d’Urville</exemplarCity>
+			</zone>
+			<zone type="Pacific/Pago_Pago">
+				<exemplarCity draft="unconfirmed">Pangopango</exemplarCity>
+			</zone>
+			<zone type="Australia/Adelaide">
+				<exemplarCity>Atelaite</exemplarCity>
+			</zone>
+			<zone type="Australia/Melbourne">
+				<exemplarCity draft="unconfirmed">Melipoane</exemplarCity>
+			</zone>
+			<zone type="Australia/Sydney">
+				<exemplarCity draft="unconfirmed">Senē</exemplarCity>
+			</zone>
+			<zone type="Australia/Brisbane">
+				<exemplarCity>Pelisipane</exemplarCity>
+			</zone>
+			<zone type="America/St_Barthelemy">
+				<exemplarCity draft="unconfirmed">St. Barthelemy</exemplarCity>
+			</zone>
+			<zone type="America/Rio_Branco">
+				<exemplarCity>Houa Palāsili (Rio Branco)</exemplarCity>
+			</zone>
+			<zone type="America/Campo_Grande">
+				<exemplarCity>Houa Palāsili (Campo Grande)</exemplarCity>
+			</zone>
+			<zone type="America/Sao_Paulo">
+				<exemplarCity>Houa Palāsili (Sao Paulo)</exemplarCity>
+			</zone>
+			<zone type="America/Coral_Harbour">
+				<exemplarCity draft="unconfirmed">Atikokan</exemplarCity>
+			</zone>
+			<zone type="America/St_Johns">
+				<exemplarCity draft="unconfirmed">St. John’s</exemplarCity>
+			</zone>
+			<zone type="Pacific/Rarotonga">
+				<exemplarCity draft="unconfirmed">Lalotonga</exemplarCity>
+			</zone>
+			<zone type="Pacific/Easter">
+				<exemplarCity>Lapanui</exemplarCity>
+			</zone>
+			<zone type="Africa/Asmera">
+				<exemplarCity draft="unconfirmed">Asmara</exemplarCity>
+			</zone>
+			<zone type="Pacific/Fiji">
+				<exemplarCity draft="unconfirmed">Fisi</exemplarCity>
+			</zone>
+			<zone type="Pacific/Truk">
+				<exemplarCity draft="unconfirmed">Tūke</exemplarCity>
+			</zone>
+			<zone type="Pacific/Ponape">
+				<exemplarCity draft="unconfirmed">Ponapē</exemplarCity>
+			</zone>
+			<zone type="Pacific/Kosrae">
+				<exemplarCity draft="unconfirmed">Kosilae</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Faeroe">
+				<exemplarCity draft="unconfirmed">Faroe</exemplarCity>
+			</zone>
+			<zone type="Europe/Paris">
+				<exemplarCity draft="unconfirmed">Palesi</exemplarCity>
+			</zone>
+			<zone type="Europe/London">
+				<exemplarCity draft="unconfirmed">Lonitoni</exemplarCity>
+			</zone>
+			<zone type="Europe/Athens">
+				<exemplarCity draft="unconfirmed">ʻAtenisi</exemplarCity>
+			</zone>
+			<zone type="Pacific/Guam">
+				<exemplarCity draft="unconfirmed">Kuami</exemplarCity>
+			</zone>
+			<zone type="Asia/Jerusalem">
+				<exemplarCity draft="unconfirmed">Selūsalema</exemplarCity>
+			</zone>
+			<zone type="Asia/Calcutta">
+				<exemplarCity draft="unconfirmed">Kolkata</exemplarCity>
+			</zone>
+			<zone type="Europe/Rome">
+				<exemplarCity draft="unconfirmed">Loma</exemplarCity>
+			</zone>
+			<zone type="Pacific/Tarawa">
+				<exemplarCity draft="unconfirmed">Talava</exemplarCity>
+			</zone>
+			<zone type="America/St_Kitts">
+				<exemplarCity draft="unconfirmed">St. Kitts</exemplarCity>
+			</zone>
+			<zone type="America/St_Lucia">
+				<exemplarCity draft="unconfirmed">St. Lucia</exemplarCity>
+			</zone>
+			<zone type="Asia/Katmandu">
+				<exemplarCity draft="unconfirmed">Kathmandu</exemplarCity>
+			</zone>
+			<zone type="Pacific/Nauru">
+				<exemplarCity draft="unconfirmed">Naulu</exemplarCity>
+			</zone>
+			<zone type="Pacific/Niue">
+				<exemplarCity draft="unconfirmed">Niuē</exemplarCity>
+			</zone>
+			<zone type="Pacific/Auckland">
+				<exemplarCity draft="unconfirmed">ʻAokalani</exemplarCity>
+			</zone>
+			<zone type="Pacific/Tahiti">
+				<exemplarCity draft="unconfirmed">Tahisi</exemplarCity>
+			</zone>
+			<zone type="Atlantic/St_Helena">
+				<exemplarCity draft="unconfirmed">St. Helena</exemplarCity>
+			</zone>
+			<zone type="America/Lower_Princes">
+				<exemplarCity draft="unconfirmed">Lower Prince's Quarter</exemplarCity>
+			</zone>
+			<zone type="Pacific/Honolulu">
+				<exemplarCity>Houa Puleʻanga fakataha ʻAmelika (Honolulu)</exemplarCity>
+			</zone>
+			<zone type="America/Anchorage">
+				<exemplarCity>Houa Puleʻanga fakataha ʻAmelika (Anchorage)</exemplarCity>
+			</zone>
+			<zone type="America/Los_Angeles">
+				<exemplarCity>Houa Puleʻanga fakataha ʻAmelika (Los Angeles)</exemplarCity>
+			</zone>
+			<zone type="America/Phoenix">
+				<exemplarCity>Houa Puleʻanga fakataha ʻAmelika (Phoenix)</exemplarCity>
+			</zone>
+			<zone type="America/Denver">
+				<exemplarCity>Houa Puleʻanga fakataha ʻAmelika (Denver)</exemplarCity>
+			</zone>
+			<zone type="America/North_Dakota/Beulah">
+				<exemplarCity draft="unconfirmed">Beulah, North Dakota</exemplarCity>
+			</zone>
+			<zone type="America/North_Dakota/New_Salem">
+				<exemplarCity draft="unconfirmed">New Salem, North Dakota</exemplarCity>
+			</zone>
+			<zone type="America/North_Dakota/Center">
+				<exemplarCity draft="unconfirmed">Center, North Dakota</exemplarCity>
+			</zone>
+			<zone type="America/Chicago">
+				<exemplarCity>Houa Puleʻanga fakataha ʻAmelika (Chicago)</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Vincennes">
+				<exemplarCity draft="unconfirmed">Vincennes, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Petersburg">
+				<exemplarCity draft="unconfirmed">Petersburg, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Tell_City">
+				<exemplarCity draft="unconfirmed">Tell City, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Knox">
+				<exemplarCity draft="unconfirmed">Knox, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Winamac">
+				<exemplarCity draft="unconfirmed">Winamac, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Marengo">
+				<exemplarCity draft="unconfirmed">Marengo, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Indianapolis">
+				<exemplarCity>Houa Puleʻanga fakataha ʻAmelika (Indianapolis)</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Vevay">
+				<exemplarCity draft="unconfirmed">Vevay, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Kentucky/Monticello">
+				<exemplarCity draft="unconfirmed">Monticello, Kentucky</exemplarCity>
+			</zone>
+			<zone type="America/New_York">
+				<exemplarCity>Houa Puleʻanga fakataha ʻAmelika (New York)</exemplarCity>
+			</zone>
+			<zone type="Europe/Vatican">
+				<exemplarCity draft="unconfirmed">Vatikani</exemplarCity>
+			</zone>
+			<zone type="America/St_Vincent">
+				<exemplarCity draft="unconfirmed">St. Vincent</exemplarCity>
+			</zone>
+			<zone type="America/St_Thomas">
+				<exemplarCity draft="unconfirmed">St. Thomas</exemplarCity>
+			</zone>
+			<zone type="Asia/Saigon">
+				<exemplarCity draft="unconfirmed">Ho Chi Minh</exemplarCity>
+			</zone>
+			<zone type="Pacific/Wallis">
+				<exemplarCity draft="unconfirmed">ʻUvea</exemplarCity>
+			</zone>
+			<metazone type="Africa_Central">
+				<long>
+					<standard draft="unconfirmed">houa fakaʻafelika-loto</standard>
+				</long>
+			</metazone>
+			<metazone type="Africa_Eastern">
+				<long>
+					<standard draft="unconfirmed">houa fakaʻafelika-hahake</standard>
+				</long>
+			</metazone>
+			<metazone type="Africa_Southern">
+				<long>
+					<standard draft="unconfirmed">houa fakaʻafelika-tonga</standard>
+				</long>
+			</metazone>
+			<metazone type="Africa_Western">
+				<long>
+					<generic draft="unconfirmed">houa fakaʻafelika-hihifo</generic>
+					<standard draft="unconfirmed">houa fakaʻafelika-hihifo fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakaʻafelika-hihifo fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="America_Central">
+				<long>
+					<generic draft="unconfirmed">houa fakaʻamelika-tokelau loto</generic>
+					<standard draft="unconfirmed">houa fakaʻamelika-tokelau loto fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakaʻamelika-tokelau loto fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="America_Eastern">
+				<long>
+					<generic draft="unconfirmed">houa fakaʻamelika-tokelau hahake</generic>
+					<standard draft="unconfirmed">houa fakaʻamelika-tokelau hahake fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakaʻamelika-tokelau hahake fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="America_Mountain">
+				<long>
+					<generic draft="unconfirmed">houa fakaʻamelika-tokelau moʻunga</generic>
+					<standard draft="unconfirmed">houa fakaʻamelika-tokelau moʻunga fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakaʻamelika-tokelau moʻunga fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="America_Pacific">
+				<long>
+					<generic draft="unconfirmed">houa fakaʻamelika-tokelau pasifika</generic>
+					<standard draft="unconfirmed">houa fakaʻamelika-tokelau pasifika fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakaʻamelika-tokelau pasifika fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Arabian">
+				<long>
+					<generic draft="unconfirmed">houa fakaʻalepea</generic>
+					<standard draft="unconfirmed">houa fakaʻalepea fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakaʻalepea fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Atlantic">
+				<long>
+					<generic draft="unconfirmed">houa fakaʻamelika-tokelau ʻatalanitiki</generic>
+					<standard draft="unconfirmed">houa fakaʻamelika-tokelau ʻatalanitiki fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakaʻamelika-tokelau ʻatalanitiki fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Australia_Central">
+				<long>
+					<generic draft="unconfirmed">houa fakaʻaositelēlia-loto</generic>
+					<standard draft="unconfirmed">houa fakaʻaositelēlia-loto fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakaʻaositelēlia-loto fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Australia_CentralWestern">
+				<long>
+					<generic draft="unconfirmed">houa fakaʻaositelēlia-loto-hihifo</generic>
+					<standard draft="unconfirmed">houa fakaʻaositelēlia-loto-hihifo fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakaʻaositelēlia-loto-hihifo fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Australia_Eastern">
+				<long>
+					<generic draft="unconfirmed">houa fakaʻaositelēlia-hahake</generic>
+					<standard draft="unconfirmed">houa fakaʻaositelēlia-hahake fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakaʻaositelēlia-hahake fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Australia_Western">
+				<long>
+					<generic draft="unconfirmed">houa fakaʻaositelēlia-hihifo</generic>
+					<standard draft="unconfirmed">houa fakaʻaositelēlia-hihifo fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakaʻaositelēlia-hihifo fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Chamorro">
+				<long>
+					<standard draft="unconfirmed">houa fakakamolo</standard>
+				</long>
+			</metazone>
+			<metazone type="Chatham">
+				<long>
+					<generic draft="unconfirmed">houa fakasatihami</generic>
+					<standard draft="unconfirmed">houa fakasatihami fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakasatihami fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="China">
+				<long>
+					<generic draft="unconfirmed">houa fakasiaina</generic>
+					<standard draft="unconfirmed">houa fakasiaina fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakasiaina fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Christmas">
+				<long>
+					<standard draft="unconfirmed">houa fakamotukilisimasi</standard>
+				</long>
+			</metazone>
+			<metazone type="Cocos">
+				<long>
+					<standard draft="unconfirmed">houa fakamotukokosi</standard>
+				</long>
+			</metazone>
+			<metazone type="Cook">
+				<long>
+					<generic draft="unconfirmed">houa fakaʻotumotukuki</generic>
+					<standard draft="unconfirmed">houa fakaʻotumotukuki fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakaʻotumotukuki fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Easter">
+				<long>
+					<generic draft="unconfirmed">houa fakalapanui</generic>
+					<standard draft="unconfirmed">houa fakalapanui fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakalapanui fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Europe_Central">
+				<long>
+					<generic draft="unconfirmed">houa fakaʻeulope-loto</generic>
+					<standard draft="unconfirmed">houa fakaʻeulope-loto fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakaʻeulope-loto fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Europe_Eastern">
+				<long>
+					<generic draft="unconfirmed">houa fakaʻeulope-hahake</generic>
+					<standard draft="unconfirmed">houa fakaʻeulope-hahake fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakaʻeulope-hahake fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Europe_Western">
+				<long>
+					<generic draft="unconfirmed">houa fakaʻeulope-hihifo</generic>
+					<standard draft="unconfirmed">houa fakaʻeulope-hihifo fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakaʻeulope-hihifo fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Fiji">
+				<long>
+					<generic>houa fakafisi</generic>
+					<standard>houa fakafisi fakasīpinga</standard>
+					<daylight>houa fakafisi fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="French_Southern">
+				<long>
+					<standard draft="unconfirmed">houa fakaʻanetātikafalanisē</standard>
+				</long>
+			</metazone>
+			<metazone type="Galapagos">
+				<long>
+					<standard draft="unconfirmed">houa fakakalapakosi</standard>
+				</long>
+			</metazone>
+			<metazone type="Gambier">
+				<long>
+					<standard draft="unconfirmed">houa fakakamipiē</standard>
+				</long>
+			</metazone>
+			<metazone type="Gilbert_Islands">
+				<long>
+					<standard draft="unconfirmed">houa fakakilipasi</standard>
+				</long>
+			</metazone>
+			<metazone type="GMT">
+				<long>
+					<standard draft="unconfirmed">houa fakakiliniuisi mālie</standard>
+				</long>
+			</metazone>
+			<metazone type="Guam">
+				<long>
+					<standard draft="unconfirmed">houa fakakuami</standard>
+				</long>
+			</metazone>
+			<metazone type="Hawaii_Aleutian">
+				<long>
+					<generic>houa fakahauaʻi</generic>
+					<standard>houa fakahauaʻi fakasīpinga</standard>
+					<daylight>houa fakahauaʻi fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="India">
+				<long>
+					<standard draft="unconfirmed">houa fakaʻinitia</standard>
+				</long>
+			</metazone>
+			<metazone type="Indian_Ocean">
+				<long>
+					<standard draft="unconfirmed">houa fakamoanaʻinitia</standard>
+				</long>
+			</metazone>
+			<metazone type="Indochina">
+				<long>
+					<standard draft="unconfirmed">houa fakaʻinitosiaina</standard>
+				</long>
+			</metazone>
+			<metazone type="Indonesia_Central">
+				<long>
+					<standard draft="unconfirmed">houa fakaʻinitonisia-loto</standard>
+				</long>
+			</metazone>
+			<metazone type="Indonesia_Eastern">
+				<long>
+					<standard draft="unconfirmed">houa fakaʻinitonisia-hahake</standard>
+				</long>
+			</metazone>
+			<metazone type="Indonesia_Western">
+				<long>
+					<standard draft="unconfirmed">houa fakaʻinitonisia-hihifo</standard>
+				</long>
+			</metazone>
+			<metazone type="Israel">
+				<long>
+					<generic draft="unconfirmed">houa fakaʻisileli</generic>
+					<standard draft="unconfirmed">houa fakaʻisileli fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakaʻisileli fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Japan">
+				<long>
+					<generic draft="unconfirmed">houa fakasiapani</generic>
+					<standard draft="unconfirmed">houa fakasiapani fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakasiapani fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Korea">
+				<long>
+					<generic draft="unconfirmed">houa fakakolea</generic>
+					<standard draft="unconfirmed">houa fakakolea fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakakolea fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Kosrae">
+				<long>
+					<standard draft="unconfirmed">houa fakakosilae</standard>
+				</long>
+			</metazone>
+			<metazone type="Line_Islands">
+				<long>
+					<standard draft="unconfirmed">houa fakaʻotumotulaine</standard>
+				</long>
+			</metazone>
+			<metazone type="Lord_Howe">
+				<long>
+					<generic draft="unconfirmed">houa fakamotuʻeikihoue</generic>
+					<standard draft="unconfirmed">houa fakamotuʻeikihoue fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakamotuʻeikihoue fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Macquarie">
+				<long>
+					<standard draft="unconfirmed">houa fakamotumakuali</standard>
+				</long>
+			</metazone>
+			<metazone type="Marquesas">
+				<long>
+					<standard draft="unconfirmed">houa fakamākesasi</standard>
+				</long>
+			</metazone>
+			<metazone type="Marshall_Islands">
+				<long>
+					<standard draft="unconfirmed">houa fakaʻotumotumasolo</standard>
+				</long>
+			</metazone>
+			<metazone type="Moscow">
+				<long>
+					<generic draft="unconfirmed">houa fakamosikou</generic>
+					<standard draft="unconfirmed">houa fakamosikou fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakamosikou fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Nauru">
+				<long>
+					<standard draft="unconfirmed">houa fakanaulu</standard>
+				</long>
+			</metazone>
+			<metazone type="New_Caledonia">
+				<long>
+					<generic draft="unconfirmed">houa fakakaletōniafoʻou</generic>
+					<standard draft="unconfirmed">houa fakakaletōniafoʻou fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakakaletōniafoʻou fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="New_Zealand">
+				<long>
+					<generic>houa fakanuʻusila</generic>
+					<standard>houa fakanuʻusila fakasīpinga</standard>
+					<daylight>houa fakanuʻusila fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Niue">
+				<long>
+					<standard>houa fakaniuē</standard>
+				</long>
+			</metazone>
+			<metazone type="Norfolk">
+				<long>
+					<standard draft="unconfirmed">houa fakanōfōki</standard>
+				</long>
+			</metazone>
+			<metazone type="North_Mariana">
+				<long>
+					<standard draft="unconfirmed">houa fakamalianatokelau</standard>
+				</long>
+			</metazone>
+			<metazone type="Palau">
+				<long>
+					<standard draft="unconfirmed">houa fakapalau</standard>
+				</long>
+			</metazone>
+			<metazone type="Papua_New_Guinea">
+				<long>
+					<standard draft="unconfirmed">houa fakapapuaniukini</standard>
+				</long>
+			</metazone>
+			<metazone type="Phoenix_Islands">
+				<long>
+					<standard draft="unconfirmed">houa fakaʻotumotufoinikisi</standard>
+				</long>
+			</metazone>
+			<metazone type="Pitcairn">
+				<long>
+					<standard draft="unconfirmed">houa fakapitikani</standard>
+				</long>
+			</metazone>
+			<metazone type="Ponape">
+				<long>
+					<standard draft="unconfirmed">houa fakapōnapē</standard>
+				</long>
+			</metazone>
+			<metazone type="Samoa">
+				<long>
+					<generic>houa fakahaʻamoa</generic>
+					<standard>houa fakahaʻamoa fakasīpinga</standard>
+					<daylight>houa fakahaʻamoa fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Solomon">
+				<long>
+					<standard draft="unconfirmed">houa fakaʻotumotusolomone</standard>
+				</long>
+			</metazone>
+			<metazone type="South_Georgia">
+				<long>
+					<standard draft="unconfirmed">houa fakasiosiatonga</standard>
+				</long>
+			</metazone>
+			<metazone type="Tahiti">
+				<long>
+					<standard>houa fakatahisi</standard>
+				</long>
+			</metazone>
+			<metazone type="Tokelau">
+				<long>
+					<standard>houa fakatokelau</standard>
+				</long>
+			</metazone>
+			<metazone type="Tonga">
+				<long>
+					<generic>houa fakatonga</generic>
+					<standard>houa fakatonga fakasīpinga</standard>
+					<daylight>houa fakatonga lotohē</daylight>
+				</long>
+			</metazone>
+			<metazone type="Truk">
+				<long>
+					<standard draft="unconfirmed">houa fakatūke</standard>
+				</long>
+			</metazone>
+			<metazone type="Tuvalu">
+				<long>
+					<standard>houa fakatūvalu</standard>
+				</long>
+			</metazone>
+			<metazone type="Vanuatu">
+				<long>
+					<generic draft="unconfirmed">houa fakavanuatu</generic>
+					<standard draft="unconfirmed">houa fakavanuatu fakasīpinga</standard>
+					<daylight draft="unconfirmed">houa fakavanuatu fakamaama</daylight>
+				</long>
+			</metazone>
+			<metazone type="Wake">
+				<long>
+					<standard draft="unconfirmed">houa fakamotuueke</standard>
+				</long>
+			</metazone>
+			<metazone type="Wallis">
+				<long>
+					<standard>houa fakaʻuvea mo futuna</standard>
+				</long>
+			</metazone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<symbols numberSystem="latn">
+			<decimal>.</decimal>
+			<group>,</group>
+			<list draft="unconfirmed">;</list>
+			<percentSign>%</percentSign>
+			<plusSign>+</plusSign>
+			<minusSign>-</minusSign>
+			<exponential>E</exponential>
+			<superscriptingExponent>×</superscriptingExponent>
+			<perMille>‰</perMille>
+			<infinity>∞</infinity>
+			<nan>TF</nan>
+		</symbols>
+		<decimalFormats numberSystem="latn">
+			<decimalFormatLength>
+				<decimalFormat>
+					<pattern>#,##0.###</pattern>
+				</decimalFormat>
+			</decimalFormatLength>
+			<decimalFormatLength type="long">
+				<decimalFormat>
+					<pattern type="1000" count="other">0 afe</pattern>
+					<pattern type="10000" count="other">0 mano</pattern>
+					<pattern type="100000" count="other">0 kilu</pattern>
+					<pattern type="1000000" count="other">0 miliona</pattern>
+					<pattern type="10000000" count="other">00 miliona</pattern>
+					<pattern type="100000000" count="other">000 miliona</pattern>
+					<pattern type="1000000000" count="other">0 piliona</pattern>
+					<pattern type="10000000000" count="other">00 piliona</pattern>
+					<pattern type="100000000000" count="other">000 piliona</pattern>
+					<pattern type="1000000000000" count="other">0 tiliona</pattern>
+					<pattern type="10000000000000" count="other">00 tiliona</pattern>
+					<pattern type="100000000000000" count="other">000 tiliona</pattern>
+				</decimalFormat>
+			</decimalFormatLength>
+			<decimalFormatLength type="short">
+				<decimalFormat>
+					<pattern type="1000" count="other" draft="unconfirmed">0k</pattern>
+					<pattern type="10000" count="other" draft="unconfirmed">00k</pattern>
+					<pattern type="100000" count="other" draft="unconfirmed">000k</pattern>
+					<pattern type="1000000" count="other" draft="unconfirmed">0M</pattern>
+					<pattern type="10000000" count="other" draft="unconfirmed">00M</pattern>
+					<pattern type="100000000" count="other" draft="unconfirmed">000M</pattern>
+					<pattern type="1000000000" count="other" draft="unconfirmed">0Ki</pattern>
+					<pattern type="10000000000" count="other" draft="unconfirmed">00Ki</pattern>
+					<pattern type="100000000000" count="other" draft="unconfirmed">000Ki</pattern>
+					<pattern type="1000000000000" count="other" draft="unconfirmed">0T</pattern>
+					<pattern type="10000000000000" count="other" draft="unconfirmed">00T</pattern>
+					<pattern type="100000000000000" count="other" draft="unconfirmed">000T</pattern>
+				</decimalFormat>
+			</decimalFormatLength>
+		</decimalFormats>
+		<scientificFormats numberSystem="latn">
+			<scientificFormatLength>
+				<scientificFormat>
+					<pattern>#E0</pattern>
+				</scientificFormat>
+			</scientificFormatLength>
+		</scientificFormats>
+		<percentFormats numberSystem="latn">
+			<percentFormatLength>
+				<percentFormat>
+					<pattern>#,##0%</pattern>
+				</percentFormat>
+			</percentFormatLength>
+		</percentFormats>
+		<currencyFormats numberSystem="latn">
+			<currencyFormatLength>
+				<currencyFormat type="standard">
+					<pattern>¤ #,##0.00</pattern>
+				</currencyFormat>
+				<currencyFormat type="accounting">
+					<pattern>¤ #,##0.00</pattern>
+				</currencyFormat>
+			</currencyFormatLength>
+			<unitPattern count="other">{1} {0}</unitPattern>
+		</currencyFormats>
+		<currencies>
+			<currency type="TOP">
+				<displayName>Tongan Pa'anga</displayName>
+				<symbol>T$</symbol>
+			</currency>
+		</currencies>
+		<miscPatterns numberSystem="latn">
+			<pattern type="atLeast">{0}+</pattern>
+			<pattern type="range">{0}—{1}</pattern>
+		</miscPatterns>
+	</numbers>
+	<units>
+		<unitLength type="long">
+			<compoundUnit type="per">
+				<compoundUnitPattern>{0} ʻi he {1}</compoundUnitPattern>
+			</compoundUnit>
+			<unit type="acceleration-g-force">
+				<unitPattern count="other">{0} g-force</unitPattern>
+			</unit>
+			<unit type="angle-arc-minute">
+				<unitPattern count="other">miniti seakale ʻe {0}</unitPattern>
+			</unit>
+			<unit type="angle-arc-second">
+				<unitPattern count="other">sekoni siakale ʻe {0}</unitPattern>
+			</unit>
+			<unit type="angle-degree">
+				<unitPattern count="other">tikili seakale ʻe {0}</unitPattern>
+			</unit>
+			<unit type="area-acre">
+				<unitPattern count="other">ʻeka ʻe {0}</unitPattern>
+			</unit>
+			<unit type="area-hectare">
+				<unitPattern count="other">hekitale ʻe {0}</unitPattern>
+			</unit>
+			<unit type="area-square-foot">
+				<unitPattern count="other">fute sikuea ʻe {0}</unitPattern>
+			</unit>
+			<unit type="area-square-kilometer">
+				<unitPattern count="other">kilomita sikuea ʻe {0}</unitPattern>
+			</unit>
+			<unit type="area-square-meter">
+				<unitPattern count="other">mita sikuea ʻe {0}</unitPattern>
+			</unit>
+			<unit type="area-square-mile">
+				<unitPattern count="other">maile sikuea ʻe {0}</unitPattern>
+			</unit>
+			<unit type="duration-day">
+				<unitPattern count="other">ʻaho ʻe {0}</unitPattern>
+			</unit>
+			<unit type="duration-hour">
+				<unitPattern count="other">houa ʻe {0}</unitPattern>
+			</unit>
+			<unit type="duration-millisecond">
+				<unitPattern count="other">milisekoni ʻe {0}</unitPattern>
+			</unit>
+			<unit type="duration-minute">
+				<unitPattern count="other">miniti ʻe {0}</unitPattern>
+			</unit>
+			<unit type="duration-month">
+				<unitPattern count="other">māhina ʻe {0}</unitPattern>
+			</unit>
+			<unit type="duration-second">
+				<unitPattern count="other">sekoni ʻe {0}</unitPattern>
+			</unit>
+			<unit type="duration-week">
+				<unitPattern count="other">uike ʻe {0}</unitPattern>
+			</unit>
+			<unit type="duration-year">
+				<unitPattern count="other">taʻu ʻe {0}</unitPattern>
+			</unit>
+			<unit type="length-centimeter">
+				<unitPattern count="other">senitimita ʻe {0}</unitPattern>
+			</unit>
+			<unit type="length-foot">
+				<unitPattern count="other">fute ʻe {0}</unitPattern>
+			</unit>
+			<unit type="length-inch">
+				<unitPattern count="other">ʻinisi ʻe {0}</unitPattern>
+			</unit>
+			<unit type="length-kilometer">
+				<unitPattern count="other">kilomita ʻe {0}</unitPattern>
+			</unit>
+			<unit type="length-light-year">
+				<unitPattern count="other">taʻumaama ʻe {0}</unitPattern>
+			</unit>
+			<unit type="length-meter">
+				<unitPattern count="other">mita ʻe {0}</unitPattern>
+			</unit>
+			<unit type="length-mile">
+				<unitPattern count="other">maile ʻe {0}</unitPattern>
+			</unit>
+			<unit type="length-millimeter">
+				<unitPattern count="other">milimita ʻe {0}</unitPattern>
+			</unit>
+			<unit type="length-picometer">
+				<unitPattern count="other">pikomita ʻe {0}</unitPattern>
+			</unit>
+			<unit type="length-yard">
+				<unitPattern count="other">iate ʻe {0}</unitPattern>
+			</unit>
+			<unit type="mass-gram">
+				<unitPattern count="other">kalami ʻe {0}</unitPattern>
+			</unit>
+			<unit type="mass-kilogram">
+				<unitPattern count="other">kilokalami ʻe {0}</unitPattern>
+			</unit>
+			<unit type="mass-ounce">
+				<unitPattern count="other">ʻaunisi ʻe {0}</unitPattern>
+			</unit>
+			<unit type="mass-pound">
+				<unitPattern count="other">pāuni ʻe {0}</unitPattern>
+			</unit>
+			<unit type="power-horsepower">
+				<unitPattern count="other">hoosipaoa ʻe {0}</unitPattern>
+			</unit>
+			<unit type="power-kilowatt">
+				<unitPattern count="other">kilouate ʻe {0}</unitPattern>
+			</unit>
+			<unit type="power-watt">
+				<unitPattern count="other">uate ʻe {0}</unitPattern>
+			</unit>
+			<unit type="pressure-hectopascal">
+				<unitPattern count="other">{0} hPa</unitPattern>
+			</unit>
+			<unit type="pressure-inch-hg">
+				<unitPattern count="other">ʻinisi ʻe {0} mēkuli</unitPattern>
+			</unit>
+			<unit type="pressure-millibar">
+				<unitPattern count="other">milipā ʻe {0}</unitPattern>
+			</unit>
+			<unit type="speed-kilometer-per-hour">
+				<unitPattern count="other">kilomita he houa ʻe {0}</unitPattern>
+			</unit>
+			<unit type="speed-meter-per-second">
+				<unitPattern count="other">mita he sekoni ʻe {0}</unitPattern>
+			</unit>
+			<unit type="speed-mile-per-hour">
+				<unitPattern count="other">maile he houa ʻe {0}</unitPattern>
+			</unit>
+			<unit type="temperature-celsius">
+				<unitPattern count="other">tikili selisiasi ʻe {0}</unitPattern>
+			</unit>
+			<unit type="temperature-fahrenheit">
+				<unitPattern count="other">tikili felenihaiti ʻe {0}</unitPattern>
+			</unit>
+			<unit type="volume-cubic-kilometer">
+				<unitPattern count="other">kilomita kiupiki ʻe {0}</unitPattern>
+			</unit>
+			<unit type="volume-cubic-mile">
+				<unitPattern count="other">maile kiupiki ʻe {0}</unitPattern>
+			</unit>
+			<unit type="volume-liter">
+				<unitPattern count="other">lita ʻe {0}</unitPattern>
+			</unit>
+		</unitLength>
+		<unitLength type="short">
+			<compoundUnit type="per">
+				<compoundUnitPattern>{0}/{1}</compoundUnitPattern>
+			</compoundUnit>
+			<unit type="acceleration-g-force">
+				<unitPattern count="other">{0} G</unitPattern>
+			</unit>
+			<unit type="angle-arc-minute">
+				<unitPattern count="other">{0}′</unitPattern>
+			</unit>
+			<unit type="angle-arc-second">
+				<unitPattern count="other">{0}″</unitPattern>
+			</unit>
+			<unit type="angle-degree">
+				<unitPattern count="other">{0}°</unitPattern>
+			</unit>
+			<unit type="area-acre">
+				<unitPattern count="other">{0} ac</unitPattern>
+			</unit>
+			<unit type="area-hectare">
+				<unitPattern count="other">{0} ha</unitPattern>
+			</unit>
+			<unit type="area-square-foot">
+				<unitPattern count="other">{0} ft²</unitPattern>
+			</unit>
+			<unit type="area-square-kilometer">
+				<unitPattern count="other">{0} km²</unitPattern>
+			</unit>
+			<unit type="area-square-meter">
+				<unitPattern count="other">{0} m²</unitPattern>
+			</unit>
+			<unit type="area-square-mile">
+				<unitPattern count="other">{0} mi²</unitPattern>
+			</unit>
+			<unit type="duration-day">
+				<unitPattern count="other">ʻaho ʻe {0}</unitPattern>
+			</unit>
+			<unit type="duration-hour">
+				<unitPattern count="other">{0} h</unitPattern>
+			</unit>
+			<unit type="duration-millisecond">
+				<unitPattern count="other">{0} ms</unitPattern>
+			</unit>
+			<unit type="duration-minute">
+				<unitPattern count="other">{0} m</unitPattern>
+			</unit>
+			<unit type="duration-month">
+				<unitPattern count="other">māhina ʻe {0}</unitPattern>
+			</unit>
+			<unit type="duration-second">
+				<unitPattern count="other">{0} s</unitPattern>
+			</unit>
+			<unit type="duration-week">
+				<unitPattern count="other">uike ʻe {0}</unitPattern>
+			</unit>
+			<unit type="duration-year">
+				<unitPattern count="other">{0} t</unitPattern>
+			</unit>
+			<unit type="length-centimeter">
+				<unitPattern count="other">{0} cm</unitPattern>
+			</unit>
+			<unit type="length-foot">
+				<unitPattern count="other">{0} ft</unitPattern>
+			</unit>
+			<unit type="length-inch">
+				<unitPattern count="other">{0} in</unitPattern>
+			</unit>
+			<unit type="length-kilometer">
+				<unitPattern count="other">{0} km</unitPattern>
+			</unit>
+			<unit type="length-light-year">
+				<unitPattern count="other">{0} tm</unitPattern>
+			</unit>
+			<unit type="length-meter">
+				<unitPattern count="other">{0} m</unitPattern>
+			</unit>
+			<unit type="length-mile">
+				<unitPattern count="other">{0} mi</unitPattern>
+			</unit>
+			<unit type="length-millimeter">
+				<unitPattern count="other">{0} mm</unitPattern>
+			</unit>
+			<unit type="length-picometer">
+				<unitPattern count="other">{0} pm</unitPattern>
+			</unit>
+			<unit type="length-yard">
+				<unitPattern count="other">{0} yd</unitPattern>
+			</unit>
+			<unit type="mass-gram">
+				<unitPattern count="other">{0} g</unitPattern>
+			</unit>
+			<unit type="mass-kilogram">
+				<unitPattern count="other">{0} kg</unitPattern>
+			</unit>
+			<unit type="mass-ounce">
+				<unitPattern count="other">{0} oz</unitPattern>
+			</unit>
+			<unit type="mass-pound">
+				<unitPattern count="other">{0} lb</unitPattern>
+			</unit>
+			<unit type="power-horsepower">
+				<unitPattern count="other">{0} hp</unitPattern>
+			</unit>
+			<unit type="power-kilowatt">
+				<unitPattern count="other">{0} kW</unitPattern>
+			</unit>
+			<unit type="power-watt">
+				<unitPattern count="other">{0} W</unitPattern>
+			</unit>
+			<unit type="pressure-hectopascal">
+				<unitPattern count="other">{0} hPa</unitPattern>
+			</unit>
+			<unit type="pressure-inch-hg">
+				<unitPattern count="other">{0} inHg</unitPattern>
+			</unit>
+			<unit type="pressure-millibar">
+				<unitPattern count="other">{0} mbar</unitPattern>
+			</unit>
+			<unit type="speed-kilometer-per-hour">
+				<unitPattern count="other">{0} km/h</unitPattern>
+			</unit>
+			<unit type="speed-meter-per-second">
+				<unitPattern count="other">{0} m/s</unitPattern>
+			</unit>
+			<unit type="speed-mile-per-hour">
+				<unitPattern count="other">{0} mi/h</unitPattern>
+			</unit>
+			<unit type="temperature-celsius">
+				<unitPattern count="other">{0}°C</unitPattern>
+			</unit>
+			<unit type="temperature-fahrenheit">
+				<unitPattern count="other">{0}°F</unitPattern>
+			</unit>
+			<unit type="volume-cubic-kilometer">
+				<unitPattern count="other">{0} km³</unitPattern>
+			</unit>
+			<unit type="volume-cubic-mile">
+				<unitPattern count="other">{0} mi³</unitPattern>
+			</unit>
+			<unit type="volume-liter">
+				<unitPattern count="other">{0} l</unitPattern>
+			</unit>
+		</unitLength>
+		<unitLength type="narrow">
+			<compoundUnit type="per">
+				<compoundUnitPattern>{0}/{1}</compoundUnitPattern>
+			</compoundUnit>
+			<unit type="acceleration-g-force">
+				<unitPattern count="other">{0} G</unitPattern>
+			</unit>
+			<unit type="angle-arc-minute">
+				<unitPattern count="other">{0}′</unitPattern>
+			</unit>
+			<unit type="angle-arc-second">
+				<unitPattern count="other">{0}″</unitPattern>
+			</unit>
+			<unit type="angle-degree">
+				<unitPattern count="other">{0}°</unitPattern>
+			</unit>
+			<unit type="area-acre">
+				<unitPattern count="other">{0} ac</unitPattern>
+			</unit>
+			<unit type="area-hectare">
+				<unitPattern count="other">{0}ha</unitPattern>
+			</unit>
+			<unit type="area-square-foot">
+				<unitPattern count="other">{0}ft²</unitPattern>
+			</unit>
+			<unit type="area-square-kilometer">
+				<unitPattern count="other">{0}km²</unitPattern>
+			</unit>
+			<unit type="area-square-meter">
+				<unitPattern count="other">{0}m²</unitPattern>
+			</unit>
+			<unit type="area-square-mile">
+				<unitPattern count="other">{0} mi²</unitPattern>
+			</unit>
+			<unit type="duration-day">
+				<unitPattern count="other">ʻaho ʻe {0}</unitPattern>
+			</unit>
+			<unit type="duration-hour">
+				<unitPattern count="other">{0}h</unitPattern>
+			</unit>
+			<unit type="duration-millisecond">
+				<unitPattern count="other">{0}ms</unitPattern>
+			</unit>
+			<unit type="duration-minute">
+				<unitPattern count="other">{0}m</unitPattern>
+			</unit>
+			<unit type="duration-month">
+				<unitPattern count="other">{0}m</unitPattern>
+			</unit>
+			<unit type="duration-second">
+				<unitPattern count="other">{0}s</unitPattern>
+			</unit>
+			<unit type="duration-week">
+				<unitPattern count="other">uike ʻe {0}</unitPattern>
+			</unit>
+			<unit type="duration-year">
+				<unitPattern count="other">{0}t</unitPattern>
+			</unit>
+			<unit type="length-centimeter">
+				<unitPattern count="other">{0} cm</unitPattern>
+			</unit>
+			<unit type="length-foot">
+				<unitPattern count="other">{0}ft</unitPattern>
+			</unit>
+			<unit type="length-inch">
+				<unitPattern count="other">{0} in</unitPattern>
+			</unit>
+			<unit type="length-kilometer">
+				<unitPattern count="other">{0}km</unitPattern>
+			</unit>
+			<unit type="length-light-year">
+				<unitPattern count="other">{0}tm</unitPattern>
+			</unit>
+			<unit type="length-meter">
+				<unitPattern count="other">{0}m</unitPattern>
+			</unit>
+			<unit type="length-mile">
+				<unitPattern count="other">{0} mi</unitPattern>
+			</unit>
+			<unit type="length-millimeter">
+				<unitPattern count="other">{0}mm</unitPattern>
+			</unit>
+			<unit type="length-picometer">
+				<unitPattern count="other">{0}pm</unitPattern>
+			</unit>
+			<unit type="length-yard">
+				<unitPattern count="other">{0} yd</unitPattern>
+			</unit>
+			<unit type="mass-gram">
+				<unitPattern count="other">{0} g</unitPattern>
+			</unit>
+			<unit type="mass-kilogram">
+				<unitPattern count="other">{0} kg</unitPattern>
+			</unit>
+			<unit type="mass-ounce">
+				<unitPattern count="other">{0} oz</unitPattern>
+			</unit>
+			<unit type="mass-pound">
+				<unitPattern count="other">{0} lb</unitPattern>
+			</unit>
+			<unit type="power-horsepower">
+				<unitPattern count="other">{0}hp</unitPattern>
+			</unit>
+			<unit type="power-kilowatt">
+				<unitPattern count="other">{0}kW</unitPattern>
+			</unit>
+			<unit type="power-watt">
+				<unitPattern count="other">{0}W</unitPattern>
+			</unit>
+			<unit type="pressure-hectopascal">
+				<unitPattern count="other">{0} hPa</unitPattern>
+			</unit>
+			<unit type="pressure-inch-hg">
+				<unitPattern count="other">{0} inHg</unitPattern>
+			</unit>
+			<unit type="pressure-millibar">
+				<unitPattern count="other">{0} mbar</unitPattern>
+			</unit>
+			<unit type="speed-kilometer-per-hour">
+				<unitPattern count="other">{0}km/h</unitPattern>
+			</unit>
+			<unit type="speed-meter-per-second">
+				<unitPattern count="other">{0}m/s</unitPattern>
+			</unit>
+			<unit type="speed-mile-per-hour">
+				<unitPattern count="other">{0} mi/h</unitPattern>
+			</unit>
+			<unit type="temperature-celsius">
+				<unitPattern count="other">{0}°</unitPattern>
+			</unit>
+			<unit type="temperature-fahrenheit">
+				<unitPattern count="other">{0}°F</unitPattern>
+			</unit>
+			<unit type="volume-cubic-kilometer">
+				<unitPattern count="other">{0}km³</unitPattern>
+			</unit>
+			<unit type="volume-cubic-mile">
+				<unitPattern count="other">{0}ma³</unitPattern>
+			</unit>
+			<unit type="volume-liter">
+				<unitPattern count="other">{0}l</unitPattern>
+			</unit>
+		</unitLength>
+		<durationUnit type="hm">
+			<durationUnitPattern>h:mm</durationUnitPattern>
+		</durationUnit>
+		<durationUnit type="hms">
+			<durationUnitPattern>h:mm:ss</durationUnitPattern>
+		</durationUnit>
+		<durationUnit type="ms">
+			<durationUnitPattern>m:ss</durationUnitPattern>
+		</durationUnit>
+	</units>
+	<listPatterns>
+		<listPattern>
+			<listPatternPart type="start">{0}, {1}</listPatternPart>
+			<listPatternPart type="middle">{0}, {1}</listPatternPart>
+			<listPatternPart type="end">{0} mo {1}</listPatternPart>
+			<listPatternPart type="2">{0} mo {1}</listPatternPart>
+		</listPattern>
+		<listPattern type="unit">
+			<listPatternPart type="start">{0} {1}</listPatternPart>
+			<listPatternPart type="middle">{0} {1}</listPatternPart>
+			<listPatternPart type="end">{0} mo e {1}</listPatternPart>
+			<listPatternPart type="2">{0} mo e {1}</listPatternPart>
+		</listPattern>
+		<listPattern type="unit-narrow">
+			<listPatternPart type="start">{0} {1}</listPatternPart>
+			<listPatternPart type="middle">{0} {1}</listPatternPart>
+			<listPatternPart type="end">{0} mo e {1}</listPatternPart>
+			<listPatternPart type="2">{0} mo e {1}</listPatternPart>
+		</listPattern>
+		<listPattern type="unit-short">
+			<listPatternPart type="start">{0} {1}</listPatternPart>
+			<listPatternPart type="middle">{0} {1}</listPatternPart>
+			<listPatternPart type="end">{0} mo e {1}</listPatternPart>
+			<listPatternPart type="2">{0} mo e {1}</listPatternPart>
+		</listPattern>
+	</listPatterns>
+	<posix>
+		<messages>
+			<yesstr>ʻio</yesstr>
+			<nostr>ʻikai</nostr>
+		</messages>
+	</posix>
+</ldml>
+

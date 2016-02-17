@@ -1,0 +1,21 @@
+/* this comment should be stripped */
+
+/* this rule is for everyone */
+div
+{
+  background: url(ns4.gif);
+}
+
+/*/*/
+div
+{
+  background: url(all.gif);
+}
+/* end hide from NS4 */
+
+body
+{
+  margin:0;
+  /*/*/margin: 10px;/* end hide */
+  padding: 0;
+}

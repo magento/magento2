@@ -1,0 +1,4 @@
+﻿foo|h1 { color: blue }  /* first rule */
+foo|* { color: yellow } /* second rule */
+|h1 { color: red }      /* ...*/
+*|h1 { color: green }

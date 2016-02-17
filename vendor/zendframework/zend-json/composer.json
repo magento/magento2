@@ -1,0 +1,42 @@
+{
+    "name": "zendframework/zend-json",
+    "description": "provides convenience methods for serializing native PHP to JSON and decoding JSON to native PHP",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "json"
+    ],
+    "homepage": "https://github.com/zendframework/zend-json",
+    "autoload": {
+        "psr-4": {
+            "Zend\\Json\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.23",
+        "zendframework/zend-stdlib": "self.version"
+    },
+    "require-dev": {
+        "zendframework/zend-http": "self.version",
+        "zendframework/zend-server": "self.version",
+        "fabpot/php-cs-fixer": "1.7.*",
+        "satooshi/php-coveralls": "dev-master",
+        "phpunit/PHPUnit": "~4.0"
+    },
+    "suggest": {
+        "zendframework/zend-http": "Zend\\Http component",
+        "zendframework/zend-server": "Zend\\Server component",
+        "zendframework/zendxml": "To support Zend\\Json\\Json::fromXml() usage"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4-dev",
+            "dev-develop": "2.5-dev"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\Json\\": "test/"
+        }
+    }
+}

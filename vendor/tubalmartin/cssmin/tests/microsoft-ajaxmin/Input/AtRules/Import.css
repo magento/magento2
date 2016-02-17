@@ -1,0 +1,11 @@
+@import "mystyle.css";
+@import url("mystyle.css");
+
+@import url("fineprint.css") print;
+@import url("bluish.css") projection, tv;
+
+/* CSS3 has optional media query rules after the url */
+@import url(color.css) screen and( color );
+@import url(example.css) screen and (color), projection and (color);
+@import "color.css" screen and( orientation : portrait );
+

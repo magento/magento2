@@ -1,0 +1,41 @@
+{
+    "name": "zendframework/zend-code",
+    "description": "provides facilities to generate arbitrary code using an object oriented interface",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "code"
+    ],
+    "homepage": "https://github.com/zendframework/zend-code",
+    "autoload": {
+        "psr-4": {
+            "Zend\\Code\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.23",
+        "zendframework/zend-eventmanager": "self.version"
+    },
+    "require-dev": {
+        "doctrine/common": ">=2.1",
+        "zendframework/zend-stdlib": "self.version",
+        "fabpot/php-cs-fixer": "1.7.*",
+        "satooshi/php-coveralls": "dev-master",
+        "phpunit/PHPUnit": "~4.0"
+    },
+    "suggest": {
+        "doctrine/common": "Doctrine\\Common >=2.1 for annotation features",
+        "zendframework/zend-stdlib": "Zend\\Stdlib component"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4-dev",
+            "dev-develop": "2.5-dev"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\Code\\": "test/"
+        }
+    }
+}

@@ -1,0 +1,39 @@
+{
+    "name": "zendframework/zend-console",
+    "description": " ",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "console"
+    ],
+    "homepage": "https://github.com/zendframework/zend-console",
+    "autoload": {
+        "psr-4": {
+            "Zend\\Console\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.23",
+        "zendframework/zend-stdlib": "self.version"
+    },
+    "suggest": {
+        "zendframework/zend-validator": "To support DefaultRouteMatcher usage",
+        "zendframework/zend-filter": "To support DefaultRouteMatcher usage"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4-dev",
+            "dev-develop": "2.5-dev"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\Console\\": "test/"
+        }
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer": "1.7.*",
+        "satooshi/php-coveralls": "dev-master",
+        "phpunit/PHPUnit": "~4.0"
+    }
+}

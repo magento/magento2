@@ -1,0 +1,53 @@
+{
+    "name": "zendframework/zend-validator",
+    "description": "provides a set of commonly needed validators",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "validator"
+    ],
+    "homepage": "https://github.com/zendframework/zend-validator",
+    "autoload": {
+        "psr-4": {
+            "Zend\\Validator\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.23",
+        "zendframework/zend-stdlib": "~2.4.0"
+    },
+    "require-dev": {
+        "zendframework/zend-config": "~2.4.0",
+        "zendframework/zend-db": "~2.4.0",
+        "zendframework/zend-filter": "~2.4.0",
+        "zendframework/zend-i18n": "~2.4.0",
+        "zendframework/zend-math": "~2.4.0",
+        "zendframework/zend-servicemanager": "~2.4.0",
+        "zendframework/zend-session": "~2.4.0",
+        "zendframework/zend-uri": "~2.4.0",
+        "fabpot/php-cs-fixer": "1.7.*",
+        "satooshi/php-coveralls": "dev-master",
+        "phpunit/PHPUnit": "~4.0"
+    },
+    "suggest": {
+        "zendframework/zend-db": "Zend\\Db component",
+        "zendframework/zend-filter": "Zend\\Filter component, required by the Digits validator",
+        "zendframework/zend-i18n": "Zend\\I18n component to allow translation of validation error messages as well as to use the various Date validators",
+        "zendframework/zend-math": "Zend\\Math component",
+        "zendframework/zend-resources": "Translations of validator messages",
+        "zendframework/zend-servicemanager": "Zend\\ServiceManager component to allow using the ValidatorPluginManager and validator chains",
+        "zendframework/zend-session": "Zend\\Session component",
+        "zendframework/zend-uri": "Zend\\Uri component, required by the Uri and Sitemap\\Loc validators"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4-dev",
+            "dev-develop": "2.5-dev"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\Validator\\": "test/"
+        }
+    }
+}

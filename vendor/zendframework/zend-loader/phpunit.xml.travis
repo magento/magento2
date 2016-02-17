@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="./test/bootstrap.php"
+         colors="true">
+    <testsuites>
+        <testsuite name="zend-json Test Suite">
+            <directory>./test/</directory>
+        </testsuite>
+    </testsuites>
+
+    <groups>
+        <exclude>
+            <group>disable</group>
+        </exclude>
+    </groups>
+
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+
+    <php>
+        <ini name="date.timezone" value="UTC"/>
+
+        <!-- OB_ENABLED should be enabled for some tests to check if all
+             functionality works as expected. Such tests include those for
+             Zend\Soap and Zend\Session, which require that headers not be sent
+             in order to work. -->
+        <const name="TESTS_ZEND_OB_ENABLED" value="false" />
+
+        <!-- Zend\Loader\Autoloader multi-version support tests
+
+             ENABLED:      whether or not to run the multi-version tests
+             PATH:         path to a directory containing multiple ZF version
+                           installs
+             LATEST:       most recent ZF version in the PATH e.g., "1.9.2"
+             LATEST_MAJOR: most recent ZF major version in the PATH to test
+                           against e.g., "1.9.2"
+             LATEST_MINOR: most recent ZF minor version in the PATH to test
+                           against e.g., "1.8.4PL1"
+             SPECIFIC:     specific ZF version in the PATH to test against
+                           e.g., "1.7.6"
+
+             As an example, consider the following tree:
+                 ZendFramework/
+                 |-- 1.9.2
+                 |-- ZendFramework-1.9.1-minimal
+                 |-- 1.8.4PL1
+                 |-- 1.8.4
+                 |-- ZendFramework-1.8.3
+                 |-- 1.7.8
+                 |-- 1.7.7
+                 |-- 1.7.6
+
+             You would then set the value of "LATEST" and "LATEST_MAJOR" to
+             "1.9.2", and could choose between "1.9.2", "1.8.4PL1", and "1.7.8"
+             for "LATEST_MINOR", and any version number for "SPECIFIC". "PATH"
+            would point to the parent "ZendFramework" directory. -->
+        <const name="TESTS_ZEND_LOADER_AUTOLOADER_MULTIVERSION_ENABLED" value="false" />
+        <const name="TESTS_ZEND_LOADER_AUTOLOADER_MULTIVERSION_PATH" value="false" />
+        <const name="TESTS_ZEND_LOADER_AUTOLOADER_MULTIVERSION_LATEST" value="false" />
+        <const name="TESTS_ZEND_LOADER_AUTOLOADER_MULTIVERSION_LATEST_MAJOR" value="false" />
+        <const name="TESTS_ZEND_LOADER_AUTOLOADER_MULTIVERSION_LATEST_MINOR" value="false" />
+        <const name="TESTS_ZEND_LOADER_AUTOLOADER_MULTIVERSION_SPECIFIC" value="false" />
+    </php>
+</phpunit>

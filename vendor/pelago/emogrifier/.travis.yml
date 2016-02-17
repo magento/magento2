@@ -1,0 +1,25 @@
+sudo: false
+
+language: php
+
+cache:
+  directories:
+  - vendor
+
+php:
+  - 5.4
+  - 5.5
+  - 5.6
+  - hhvm
+
+before_script:
+  - composer install
+  - vendor/bin/phpcs --config-set encoding utf-8
+
+script:
+  # Run PHP lint on all PHP files.
+  - find Classes/ Tests/ -name '*.php' -print0 | xargs -0 -n 1 -P 4 php -l
+  # Check the coding style.
+  - vendor/bin/phpcs --standard=Configuration/PhpCodeSniffer/Standards/Emogrifier/ Classes/ Tests/
+  # Run the unit tests.
+  - vendor/bin/phpunit Tests/

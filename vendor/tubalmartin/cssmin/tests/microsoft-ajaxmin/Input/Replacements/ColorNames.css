@@ -1,0 +1,18 @@
+﻿body
+{
+       
+    /* NAME to HEX */
+    color: Red;   /* changed to #f00 when Hex, NOT Strict or Major */
+    color: Sienna; /* always gets changed to #A0522D unless Major */
+    color: LIME;    /* doesn't get changed to #0f0 unless CssColor.Hex */
+    color: Teal;    /* changes to #008080 when Hex, not Strict or Major */
+    color: Fuchsia; /* always changes to #f0f */
+    color: chocolate; /* always changes to #d2691e */
+    
+    /* HEX to NAME */
+    color: #A0522D; /* changes to sienna if Major, not Strict or Hex */
+    color: #808080; /* changes to gray if Strict or Major, not Hex */
+    color: #F00;  /* changes to red when Strict or Major, not Hex */
+    color: #f0f; /* NEVER gets changed to fuchsia because #f0f is smaller */
+
+}

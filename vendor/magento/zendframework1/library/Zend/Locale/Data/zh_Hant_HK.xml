@@ -1,0 +1,938 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "../../common/dtd/ldml.dtd">
+<!-- Copyright © 1991-2013 Unicode, Inc.
+CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+For terms of use, see http://www.unicode.org/copyright.html
+-->
+<ldml>
+	<identity>
+		<version number="$Revision: 9287 $"/>
+		<generation date="$Date: 2013-08-28 21:32:04 -0500 (Wed, 28 Aug 2013) $"/>
+		<language type="zh"/>
+		<script type="Hant"/>
+		<territory type="HK"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="az" alt="short" draft="contributed">阿澤里</language>
+			<language type="de_CH" draft="contributed">瑞士德語</language>
+			<language type="eo" draft="contributed">世界語</language>
+			<language type="fr_CA" draft="contributed">法文 (加拿大)</language>
+			<language type="gsw" draft="contributed">德文 (瑞士)</language>
+			<language type="it" draft="contributed">意大利文</language>
+			<language type="lol" draft="contributed">蒙古語</language>
+			<language type="ps" alt="variant" draft="contributed">普什圖語</language>
+			<language type="pt_BR" draft="contributed">巴西葡萄牙語</language>
+			<language type="ug" alt="variant" draft="contributed">維吾爾語</language>
+			<language type="zgh" draft="contributed">摩洛哥標準塔馬齊格特文</language>
+		</languages>
+		<scripts>
+			<script type="Arab" alt="variant" draft="contributed">波斯阿拉伯語</script>
+			<script type="Cyrl" draft="contributed">西里爾語字母</script>
+			<script type="Deva" draft="contributed">梵文</script>
+			<script type="Hang">韓文字母</script>
+			<script type="Hant" alt="stand-alone" draft="contributed">繁體漢字</script>
+		</scripts>
+		<territories>
+			<territory type="013" draft="contributed">中美洲</territory>
+			<territory type="019" draft="contributed">美洲地區</territory>
+			<territory type="029" draft="contributed">加勒比</territory>
+			<territory type="AE" draft="contributed">阿拉伯聯合酋長國</territory>
+			<territory type="AG">安提瓜及巴布達</territory>
+			<territory type="AW">阿魯巴</territory>
+			<territory type="AZ" draft="contributed">阿塞拜疆</territory>
+			<territory type="BA" draft="contributed">波斯尼亞和黑塞哥維那</territory>
+			<territory type="BB">巴巴多斯</territory>
+			<territory type="BL">聖巴泰勒米</territory>
+			<territory type="BW" draft="contributed">博茨瓦納</territory>
+			<territory type="CD" draft="contributed">剛果 - 金夏沙</territory>
+			<territory type="CG" draft="contributed">剛果 - 布拉薩</territory>
+			<territory type="CN" draft="contributed">中國</territory>
+			<territory type="CR">哥斯達黎加</territory>
+			<territory type="CV" draft="contributed">佛得角</territory>
+			<territory type="CY" draft="contributed">塞浦路斯</territory>
+			<territory type="EA" draft="contributed">瑟塔與梅利拉</territory>
+			<territory type="ER" draft="contributed">厄立特里亞</territory>
+			<territory type="ET" draft="contributed">埃塞俄比亞</territory>
+			<territory type="GA" draft="contributed">加蓬</territory>
+			<territory type="GD">格林納達</territory>
+			<territory type="GE" draft="contributed">格魯吉亞</territory>
+			<territory type="GG" draft="contributed">格恩西島</territory>
+			<territory type="GM" draft="contributed">岡比亞</territory>
+			<territory type="GP" draft="contributed">瓜德羅普島</territory>
+			<territory type="GS" draft="contributed">南佐治亞島與南桑威奇群島</territory>
+			<territory type="GT">危地馬拉</territory>
+			<territory type="GY" draft="contributed">蓋亞那</territory>
+			<territory type="HM" draft="contributed">赫德與麥當勞群島</territory>
+			<territory type="HN">洪都拉斯</territory>
+			<territory type="IM" draft="contributed">英屬地曼島</territory>
+			<territory type="IT" draft="contributed">意大利</territory>
+			<territory type="KE" draft="contributed">肯雅</territory>
+			<territory type="KM" draft="contributed">科摩羅</territory>
+			<territory type="KN" draft="contributed">聖基茨和尼維斯</territory>
+			<territory type="LC" draft="contributed">聖盧西亞</territory>
+			<territory type="LR" draft="contributed">利比里亞</territory>
+			<territory type="LS" draft="contributed">萊索托</territory>
+			<territory type="ME" draft="contributed">黑山</territory>
+			<territory type="ML" draft="contributed">馬里</territory>
+			<territory type="MR" draft="contributed">毛里塔尼亞</territory>
+			<territory type="MS" draft="contributed">蒙塞拉特</territory>
+			<territory type="MU" draft="contributed">毛里裘斯</territory>
+			<territory type="MV" draft="contributed">馬爾代夫</territory>
+			<territory type="MZ" draft="contributed">莫桑比克</territory>
+			<territory type="NC" draft="contributed">新喀里多尼亞</territory>
+			<territory type="NE" draft="contributed">尼日爾</territory>
+			<territory type="NG" draft="contributed">尼日利亞</territory>
+			<territory type="OM" draft="contributed">阿曼</territory>
+			<territory type="PG" draft="contributed">巴布亞新幾內亞</territory>
+			<territory type="PM" draft="contributed">聖皮埃爾島及密克隆島</territory>
+			<territory type="PN" draft="contributed">皮特凱恩島</territory>
+			<territory type="QA" draft="contributed">卡塔爾</territory>
+			<territory type="RW" draft="contributed">盧旺達</territory>
+			<territory type="SA" draft="contributed">沙特阿拉伯</territory>
+			<territory type="SB" draft="contributed">所羅門群島</territory>
+			<territory type="SC" draft="contributed">塞舌爾</territory>
+			<territory type="SI" draft="contributed">斯洛文尼亞</territory>
+			<territory type="SJ" draft="contributed">斯瓦爾巴群島及揚馬延島</territory>
+			<territory type="SL">塞拉利昂</territory>
+			<territory type="SO" draft="contributed">索馬里</territory>
+			<territory type="SR" draft="contributed">蘇里南</territory>
+			<territory type="ST" draft="contributed">聖多美普林西比</territory>
+			<territory type="SZ" draft="contributed">斯威士蘭</territory>
+			<territory type="TC" draft="contributed">特克斯和凱科斯群島</territory>
+			<territory type="TD" draft="contributed">乍得</territory>
+			<territory type="TF" draft="contributed">法屬南部地區</territory>
+			<territory type="TK" draft="contributed">托克勞</territory>
+			<territory type="TO" draft="contributed">湯加</territory>
+			<territory type="TT" draft="contributed">千里達和多巴哥</territory>
+			<territory type="TV" draft="contributed">圖瓦盧</territory>
+			<territory type="TZ" draft="contributed">坦桑尼亞</territory>
+			<territory type="VA" draft="contributed">梵蒂岡宮城</territory>
+			<territory type="VC" draft="contributed">聖文森特和格林納丁斯</territory>
+			<territory type="VU" draft="contributed">瓦努阿圖</territory>
+			<territory type="ZM" draft="contributed">贊比亞</territory>
+		</territories>
+		<variants>
+			<variant type="1901" draft="contributed">傳統德國拼字法</variant>
+			<variant type="1996" draft="contributed">1996 德國拼字法</variant>
+			<variant type="BISKE" draft="contributed">San Giorgio/Bila 方言</variant>
+			<variant type="REVISED" draft="contributed">已修訂拼字法</variant>
+			<variant type="SCOTLAND" draft="contributed">蘇格蘭標準英語</variant>
+		</variants>
+		<keys>
+			<key type="x" draft="contributed">專用區</key>
+		</keys>
+		<types>
+			<type type="arab" key="numbers" draft="contributed">阿拉伯印度語位數</type>
+			<type type="arabext" key="numbers" draft="contributed">擴展阿拉伯語印度語位數</type>
+			<type type="armnlow" key="numbers" draft="contributed">亞美尼亞小寫數字</type>
+			<type type="beng" key="numbers" draft="contributed">孟加拉語位數</type>
+			<type type="big5han" key="collation">繁體中文順序 (Big5)</type>
+			<type type="deva" key="numbers" draft="contributed">梵文位數</type>
+			<type type="dictionary" key="collation" draft="contributed">詞典排序</type>
+			<type type="ducet" key="collation" draft="contributed">預設統一碼排序</type>
+			<type type="ethi" key="numbers" draft="contributed">埃塞俄比亞數詞</type>
+			<type type="ethiopic" key="calendar" draft="contributed">埃及曆</type>
+			<type type="ethiopic-amete-alem" key="calendar" draft="contributed">埃塞俄比亞阿美德阿萊姆曆</type>
+			<type type="fullwide" key="numbers" draft="contributed">全寬位數</type>
+			<type type="gb2312han" key="collation">簡體中文順序 (GB2312)</type>
+			<type type="geor" key="numbers" draft="contributed">格魯吉亞數字</type>
+			<type type="grek" key="numbers" draft="contributed">希臘語數字</type>
+			<type type="greklow" key="numbers" draft="contributed">希臘小寫數字</type>
+			<type type="gujr" key="numbers" draft="contributed">古加拉特語位數</type>
+			<type type="guru" key="numbers" draft="contributed">果魯穆奇語位數</type>
+			<type type="hanidec" key="numbers" draft="contributed">中文小數位</type>
+			<type type="hans" key="numbers" draft="contributed">簡體中文數字</type>
+			<type type="hansfin" key="numbers" draft="contributed">簡體中文金融數字</type>
+			<type type="hant" key="numbers" draft="contributed">繁體中文數字</type>
+			<type type="hantfin" key="numbers" draft="contributed">繁體中文金融數字</type>
+			<type type="hebr" key="numbers" draft="contributed">希伯萊語數字</type>
+			<type type="jpan" key="numbers" draft="contributed">日本數字</type>
+			<type type="jpanfin" key="numbers" draft="contributed">日本金融數字</type>
+			<type type="khmr" key="numbers" draft="contributed">高棉位數</type>
+			<type type="knda" key="numbers" draft="contributed">卡納達語位數</type>
+			<type type="laoo" key="numbers" draft="contributed">老撾文位數</type>
+			<type type="latn" key="numbers" draft="contributed">西方位數</type>
+			<type type="mlym" key="numbers" draft="contributed">馬來亞位數</type>
+			<type type="mong" key="numbers" draft="contributed">蒙古文位數</type>
+			<type type="mymr" key="numbers" draft="contributed">緬甸語位數</type>
+			<type type="orya" key="numbers" draft="contributed">奧里亞語位數</type>
+			<type type="reformed" key="collation" draft="contributed">改革版排序</type>
+			<type type="romanlow" key="numbers" draft="contributed">羅馬小寫數字</type>
+			<type type="search" key="collation" draft="contributed">一般用途搜索</type>
+			<type type="taml" key="numbers" draft="contributed">泰米爾語數字</type>
+			<type type="telu" key="numbers" draft="contributed">泰盧固語位數</type>
+			<type type="thai" key="numbers" draft="contributed">泰文位數</type>
+			<type type="tibt" key="numbers" draft="contributed">藏文位數</type>
+			<type type="unihan" key="collation" draft="contributed">筆劃排序</type>
+		</types>
+		<transformNames>
+			<transformName type="Numeric" draft="contributed">數值</transformName>
+			<transformName type="x-Accents" draft="contributed">重音</transformName>
+			<transformName type="x-Jamo" draft="contributed">韓文</transformName>
+		</transformNames>
+		<measurementSystemNames>
+			<measurementSystemName type="metric" draft="contributed">十進制</measurementSystemName>
+			<measurementSystemName type="UK" draft="contributed">英國</measurementSystemName>
+			<measurementSystemName type="US" draft="contributed">美國</measurementSystemName>
+		</measurementSystemNames>
+	</localeDisplayNames>
+	<dates>
+		<calendars>
+			<calendar type="buddhist">
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="Md" draft="contributed">M-d</dateFormatItem>
+						<dateFormatItem id="MEd" draft="contributed">M-d（E）</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="chinese">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1" draft="contributed">一月</month>
+							<month type="2" draft="contributed">二月</month>
+							<month type="3" draft="contributed">三月</month>
+							<month type="4" draft="contributed">四月</month>
+							<month type="5" draft="contributed">五月</month>
+							<month type="6" draft="contributed">六月</month>
+							<month type="7" draft="contributed">七月</month>
+							<month type="8" draft="contributed">八月</month>
+							<month type="9" draft="contributed">九月</month>
+							<month type="10" draft="contributed">十月</month>
+							<month type="11" draft="contributed">十一月</month>
+							<month type="12" draft="contributed">十二月</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1" draft="contributed">一</month>
+							<month type="2" draft="contributed">二</month>
+							<month type="3" draft="contributed">三</month>
+							<month type="4" draft="contributed">四</month>
+							<month type="5" draft="contributed">五</month>
+							<month type="6" draft="contributed">六</month>
+							<month type="7" draft="contributed">七</month>
+							<month type="8" draft="contributed">八</month>
+							<month type="9" draft="contributed">九</month>
+							<month type="10" draft="contributed">十</month>
+							<month type="11" draft="contributed">十一</month>
+							<month type="12" draft="contributed">十二</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1" draft="contributed">一月</month>
+							<month type="2" draft="contributed">二月</month>
+							<month type="3" draft="contributed">三月</month>
+							<month type="4" draft="contributed">四月</month>
+							<month type="5" draft="contributed">五月</month>
+							<month type="6" draft="contributed">六月</month>
+							<month type="7" draft="contributed">七月</month>
+							<month type="8" draft="contributed">八月</month>
+							<month type="9" draft="contributed">九月</month>
+							<month type="10" draft="contributed">十月</month>
+							<month type="11" draft="contributed">十一月</month>
+							<month type="12" draft="contributed">十二月</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<month type="1" draft="contributed">一月</month>
+							<month type="2" draft="contributed">二月</month>
+							<month type="3" draft="contributed">三月</month>
+							<month type="4" draft="contributed">四月</month>
+							<month type="5" draft="contributed">五月</month>
+							<month type="6" draft="contributed">六月</month>
+							<month type="7" draft="contributed">七月</month>
+							<month type="8" draft="contributed">八月</month>
+							<month type="9" draft="contributed">九月</month>
+							<month type="10" draft="contributed">十月</month>
+							<month type="11" draft="contributed">十一月</month>
+							<month type="12" draft="contributed">十二月</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1" draft="contributed">一</month>
+							<month type="2" draft="contributed">二</month>
+							<month type="3" draft="contributed">三</month>
+							<month type="4" draft="contributed">四</month>
+							<month type="5" draft="contributed">五</month>
+							<month type="6" draft="contributed">六</month>
+							<month type="7" draft="contributed">七</month>
+							<month type="8" draft="contributed">八</month>
+							<month type="9" draft="contributed">九</month>
+							<month type="10" draft="contributed">十</month>
+							<month type="11" draft="contributed">十一</month>
+							<month type="12" draft="contributed">十二</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1" draft="contributed">一月</month>
+							<month type="2" draft="contributed">二月</month>
+							<month type="3" draft="contributed">三月</month>
+							<month type="4" draft="contributed">四月</month>
+							<month type="5" draft="contributed">五月</month>
+							<month type="6" draft="contributed">六月</month>
+							<month type="7" draft="contributed">七月</month>
+							<month type="8" draft="contributed">八月</month>
+							<month type="9" draft="contributed">九月</month>
+							<month type="10" draft="contributed">十月</month>
+							<month type="11" draft="contributed">十一月</month>
+							<month type="12" draft="contributed">十二月</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+			</calendar>
+			<calendar type="generic">
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>Gy年M月d日EEEE</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>Gy年M月d日</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>Gy年M月d日</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>d/M/yGGGGG</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength type="full">
+						<dateTimeFormat>
+							<pattern draft="contributed">{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="long">
+						<dateTimeFormat>
+							<pattern draft="contributed">{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="medium">
+						<dateTimeFormat>
+							<pattern>{1}{0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="short">
+						<dateTimeFormat>
+							<pattern>{1}{0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<availableFormats>
+						<dateFormatItem id="Ed" draft="contributed">d E</dateFormatItem>
+						<dateFormatItem id="GyMMM" draft="contributed">G y 年 M 月</dateFormatItem>
+						<dateFormatItem id="GyMMMEd" draft="contributed">G y 年 M 月 d 日 (E)</dateFormatItem>
+						<dateFormatItem id="Md" draft="contributed">d/M</dateFormatItem>
+						<dateFormatItem id="MEd" draft="contributed">E, d/M</dateFormatItem>
+						<dateFormatItem id="MMMd" draft="contributed">M 月 d 日</dateFormatItem>
+						<dateFormatItem id="MMMEd" draft="contributed">M 月 d 日 (E)</dateFormatItem>
+						<dateFormatItem id="yyyyM" draft="contributed">M/yGGGGG</dateFormatItem>
+						<dateFormatItem id="yyyyMd" draft="contributed">d/M/yGGGGG</dateFormatItem>
+						<dateFormatItem id="yyyyMEd" draft="contributed">E, d/M/yGGGGG</dateFormatItem>
+						<dateFormatItem id="yyyyMMMEd" draft="contributed">G y 年 M 月 d 日 (E)</dateFormatItem>
+						<dateFormatItem id="yyyyQQQ" draft="contributed">G y 年第QQQ</dateFormatItem>
+						<dateFormatItem id="yyyyQQQQ" draft="contributed">G y 年QQQQ</dateFormatItem>
+					</availableFormats>
+					<intervalFormats>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d" draft="contributed">d/M 至 d/M</greatestDifference>
+							<greatestDifference id="M" draft="contributed">d/M 至 d/M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d" draft="contributed">d/M (E) 至 d/M (E)</greatestDifference>
+							<greatestDifference id="M" draft="contributed">d/M (E) 至 d/M (E)</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMd">
+							<greatestDifference id="d" draft="contributed">M 月 d 日至 d 日</greatestDifference>
+							<greatestDifference id="M" draft="contributed">M 月 d 日至 M 月 d 日</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMEd">
+							<greatestDifference id="d" draft="contributed">M 月 d 日 (E) 至 d 日 (E)</greatestDifference>
+							<greatestDifference id="M" draft="contributed">M 月 d 日 (E) 至 M 月 d 日 (E)</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="y">
+							<greatestDifference id="y" draft="contributed">G y 年至 y 年</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M" draft="contributed">G M/y 至 M/y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d" draft="contributed">G d/M/y 至 d/M/y</greatestDifference>
+							<greatestDifference id="M" draft="contributed">G d/M/y 至 d/M/y</greatestDifference>
+							<greatestDifference id="y" draft="contributed">G d/M/y 至 d/M/y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d" draft="contributed">G d/M/y (E) 至 d/M/y (E)</greatestDifference>
+							<greatestDifference id="M" draft="contributed">G d/M/y (E) 至 d/M/y (E)</greatestDifference>
+							<greatestDifference id="y" draft="contributed">G d/M/y (E) 至 d/M/y (E)</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMM">
+							<greatestDifference id="y" draft="contributed">G y 年 M 月至 y 年 M 月</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMEd">
+							<greatestDifference id="d" draft="contributed">G y 年 M 月 d 日 (E) 至 d 日 (E)</greatestDifference>
+							<greatestDifference id="M" draft="contributed">G y 年 M 月 d 日 (E) 至 M 月 d 日 (E)</greatestDifference>
+							<greatestDifference id="y" draft="contributed">G y 年 M 月 d 日 (E) 至 y 年 M 月 d 日 (E)</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="gregorian">
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>y年M月d日EEEE</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>y年M月d日</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>y年M月d日</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>d/M/yy</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<timeFormatLength type="full">
+						<timeFormat>
+							<pattern draft="contributed">ah:mm:ss [zzzz]</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="long">
+						<timeFormat>
+							<pattern draft="contributed">ah:mm:ss [z]</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="medium">
+						<timeFormat>
+							<pattern>ah:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="short">
+						<timeFormat>
+							<pattern draft="contributed">ah:mm</pattern>
+						</timeFormat>
+					</timeFormatLength>
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength type="full">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="long">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="medium">
+						<dateTimeFormat>
+							<pattern>{1}{0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="short">
+						<dateTimeFormat>
+							<pattern>{1}{0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<availableFormats>
+						<dateFormatItem id="Ed" draft="contributed">d E</dateFormatItem>
+						<dateFormatItem id="GyMMMEd" draft="contributed">G y 年 M 月 d 日 (E)</dateFormatItem>
+						<dateFormatItem id="Md" draft="contributed">d/M</dateFormatItem>
+						<dateFormatItem id="MEd" draft="contributed">E, d/M</dateFormatItem>
+						<dateFormatItem id="MMdd" draft="contributed">dd/MM</dateFormatItem>
+						<dateFormatItem id="MMMEd" draft="contributed">M月d日 (E)</dateFormatItem>
+						<dateFormatItem id="yM" draft="contributed">M/y</dateFormatItem>
+						<dateFormatItem id="yMd" draft="contributed">d/M/y</dateFormatItem>
+						<dateFormatItem id="yMEd" draft="contributed">d/M/y（E）</dateFormatItem>
+						<dateFormatItem id="yMM" draft="contributed">MM/y</dateFormatItem>
+						<dateFormatItem id="yMMM" draft="contributed">y 年 M 月</dateFormatItem>
+						<dateFormatItem id="yMMMd" draft="contributed">y 年 M 月 d 日</dateFormatItem>
+						<dateFormatItem id="yMMMEd" draft="contributed">y 年 M 月 d 日 (E)</dateFormatItem>
+						<dateFormatItem id="yMMMM" draft="contributed">y 年 M 月</dateFormatItem>
+					</availableFormats>
+					<intervalFormats>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d" draft="contributed">d/M 至 d/M</greatestDifference>
+							<greatestDifference id="M" draft="contributed">d/M 至 d/M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d" draft="contributed">d/M (E) 至 d/M (E)</greatestDifference>
+							<greatestDifference id="M" draft="contributed">d/M (E) 至 d/M (E)</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMd">
+							<greatestDifference id="d" draft="contributed">M 月 d 日至 d 日</greatestDifference>
+							<greatestDifference id="M" draft="contributed">M 月 d 日至 M 月 d 日</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMEd">
+							<greatestDifference id="d" draft="contributed">M 月 d 日 (E) 至 d 日 (E)</greatestDifference>
+							<greatestDifference id="M" draft="contributed">M 月 d 日 (E) 至 M 月 d 日 (E)</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M" draft="contributed">M/y 至 M/y</greatestDifference>
+							<greatestDifference id="y" draft="contributed">M/y 至 M/y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d" draft="contributed">d/M/y 至 d/M/y</greatestDifference>
+							<greatestDifference id="M" draft="contributed">d/M/y 至 d/M/y</greatestDifference>
+							<greatestDifference id="y" draft="contributed">d/M/y 至 d/M/y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d" draft="contributed">d/M/y (E) 至 d/M/y (E)</greatestDifference>
+							<greatestDifference id="M" draft="contributed">d/M/y (E) 至 d/M/y (E)</greatestDifference>
+							<greatestDifference id="y" draft="contributed">d/M/y (E) 至 d/M/y (E)</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMM">
+							<greatestDifference id="M" draft="contributed">y 年 M 月至 M 月</greatestDifference>
+							<greatestDifference id="y" draft="contributed">y 年 M 月至 y 年 M 月</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMd">
+							<greatestDifference id="d" draft="contributed">y 年 M 月 d 日至 d 日</greatestDifference>
+							<greatestDifference id="M" draft="contributed">y 年 M 月 d 日至 M 月 d 日</greatestDifference>
+							<greatestDifference id="y" draft="contributed">y 年 M 月 d 日至 y 年 M 月 d 日</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMEd">
+							<greatestDifference id="d" draft="contributed">y 年 M 月 d 日 (E) 至 M 月 d 日 (E)</greatestDifference>
+							<greatestDifference id="M" draft="contributed">y 年 M 月 d 日 (E) 至 M 月 d 日 (E)</greatestDifference>
+							<greatestDifference id="y" draft="contributed">y 年 M 月 d 日 (E) 至 y 年 M 月 d日 (E)</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMM">
+							<greatestDifference id="M" draft="contributed">y 年 M 月 至 M 月</greatestDifference>
+							<greatestDifference id="y" draft="contributed">y 年 M 月至 y 年 M 月</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="roc">
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>Gy年M月d日EEEE</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>Gy年M月d日</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>Gy年M月d日</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>d/M/yGGGGG</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="Gy" draft="contributed">G y 年</dateFormatItem>
+						<dateFormatItem id="GyMMM" draft="contributed">G y 年 M 月</dateFormatItem>
+						<dateFormatItem id="GyMMMd" draft="contributed">G y 年 M 月 d 日</dateFormatItem>
+						<dateFormatItem id="GyMMMEd" draft="contributed">G y 年 M 月 d 日 (E)</dateFormatItem>
+						<dateFormatItem id="Md" draft="contributed">d-M</dateFormatItem>
+						<dateFormatItem id="MEd" draft="contributed">d-M（E）</dateFormatItem>
+						<dateFormatItem id="MMMd" draft="contributed">M 月 d 日</dateFormatItem>
+						<dateFormatItem id="MMMEd" draft="contributed">M 月 d 日 (E)</dateFormatItem>
+						<dateFormatItem id="y" draft="contributed">G y 年</dateFormatItem>
+						<dateFormatItem id="yyyy" draft="contributed">G y 年</dateFormatItem>
+						<dateFormatItem id="yyyyM" draft="contributed">M/yGGGGG</dateFormatItem>
+						<dateFormatItem id="yyyyMd" draft="contributed">d/M/yGGGGG</dateFormatItem>
+						<dateFormatItem id="yyyyMEd" draft="contributed">E, d/M/yGGGGG</dateFormatItem>
+						<dateFormatItem id="yyyyMMM" draft="contributed">G y 年 M 月</dateFormatItem>
+						<dateFormatItem id="yyyyMMMd" draft="contributed">G y 年 M 月 d 日</dateFormatItem>
+						<dateFormatItem id="yyyyMMMEd" draft="contributed">G y 年 M 月 d 日 (E)</dateFormatItem>
+						<dateFormatItem id="yyyyQQQ" draft="contributed">G y 年第QQQ</dateFormatItem>
+						<dateFormatItem id="yyyyQQQQ" draft="contributed">G y 年QQQQ</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<fields>
+			<field type="year">
+				<relative type="-1" draft="contributed">上年</relative>
+				<relative type="0" draft="contributed">本年</relative>
+				<relative type="1" draft="contributed">下年</relative>
+			</field>
+			<field type="month">
+				<relative type="-1" draft="contributed">上月</relative>
+				<relative type="1" draft="contributed">下月</relative>
+				<relativeTime type="past">
+					<relativeTimePattern count="other">{0} 月前</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="day">
+				<relativeTime type="future">
+					<relativeTimePattern count="other">{0} 日後</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="other">{0} 日前</relativeTimePattern>
+				</relativeTime>
+			</field>
+		</fields>
+		<timeZoneNames>
+			<zone type="Asia/Yerevan">
+				<exemplarCity draft="contributed">耶烈萬</exemplarCity>
+			</zone>
+			<zone type="Africa/Luanda">
+				<exemplarCity draft="contributed">盧安達</exemplarCity>
+			</zone>
+			<zone type="Europe/Mariehamn">
+				<exemplarCity draft="contributed">馬里漢姆</exemplarCity>
+			</zone>
+			<zone type="Europe/Sarajevo">
+				<exemplarCity draft="contributed">薩拉熱窩</exemplarCity>
+			</zone>
+			<zone type="Europe/Sofia">
+				<exemplarCity draft="contributed">索非亞</exemplarCity>
+			</zone>
+			<zone type="America/St_Barthelemy">
+				<exemplarCity draft="contributed">聖巴夫林米</exemplarCity>
+			</zone>
+			<zone type="Africa/Abidjan">
+				<exemplarCity draft="contributed">阿比贊</exemplarCity>
+			</zone>
+			<zone type="America/Costa_Rica">
+				<exemplarCity draft="contributed">哥斯達黎加</exemplarCity>
+			</zone>
+			<zone type="Asia/Nicosia">
+				<exemplarCity draft="contributed">尼科西亞</exemplarCity>
+			</zone>
+			<zone type="Africa/Asmera">
+				<exemplarCity draft="contributed">阿斯馬拉</exemplarCity>
+			</zone>
+			<zone type="Africa/Addis_Ababa">
+				<exemplarCity draft="contributed">亞的斯亞貝巴</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Stanley">
+				<exemplarCity draft="contributed">史坦雷</exemplarCity>
+			</zone>
+			<zone type="Africa/Libreville">
+				<exemplarCity draft="contributed">利布維</exemplarCity>
+			</zone>
+			<zone type="America/Cayenne">
+				<exemplarCity draft="contributed">法屬蓋亞那</exemplarCity>
+			</zone>
+			<zone type="Africa/Malabo">
+				<exemplarCity draft="contributed">馬拉波</exemplarCity>
+			</zone>
+			<zone type="Europe/Jersey">
+				<exemplarCity draft="contributed">澤西</exemplarCity>
+			</zone>
+			<zone type="Asia/Bishkek">
+				<exemplarCity draft="contributed">比斯凱克</exemplarCity>
+			</zone>
+			<zone type="Indian/Comoro">
+				<exemplarCity draft="contributed">科摩羅</exemplarCity>
+			</zone>
+			<zone type="Africa/Maseru">
+				<exemplarCity draft="contributed">馬塞魯</exemplarCity>
+			</zone>
+			<zone type="Europe/Chisinau">
+				<exemplarCity draft="contributed">基希訥烏</exemplarCity>
+			</zone>
+			<zone type="Europe/Podgorica">
+				<exemplarCity draft="contributed">波德戈里察</exemplarCity>
+			</zone>
+			<zone type="Europe/Skopje">
+				<exemplarCity draft="contributed">斯科普里</exemplarCity>
+			</zone>
+			<zone type="Africa/Windhoek">
+				<exemplarCity draft="contributed">溫特和克</exemplarCity>
+			</zone>
+			<zone type="Africa/Lagos">
+				<exemplarCity draft="contributed">拉各斯</exemplarCity>
+			</zone>
+			<zone type="Asia/Muscat">
+				<exemplarCity draft="contributed">馬斯喀特</exemplarCity>
+			</zone>
+			<zone type="Pacific/Port_Moresby">
+				<exemplarCity draft="contributed">莫爾斯比港</exemplarCity>
+			</zone>
+			<zone type="Asia/Karachi">
+				<exemplarCity draft="contributed">卡拉奇</exemplarCity>
+			</zone>
+			<zone type="Europe/Belgrade">
+				<exemplarCity draft="contributed">貝爾格萊德</exemplarCity>
+			</zone>
+			<zone type="Pacific/Guadalcanal">
+				<exemplarCity draft="contributed">瓜達爾卡納爾</exemplarCity>
+			</zone>
+			<zone type="Indian/Mahe">
+				<exemplarCity draft="contributed">馬希</exemplarCity>
+			</zone>
+			<zone type="Africa/Khartoum">
+				<exemplarCity draft="contributed">喀土木</exemplarCity>
+			</zone>
+			<zone type="Europe/Ljubljana">
+				<exemplarCity draft="contributed">盧布爾雅那</exemplarCity>
+			</zone>
+			<zone type="Europe/Bratislava">
+				<exemplarCity draft="contributed">伯拉第斯拉瓦</exemplarCity>
+			</zone>
+			<zone type="Africa/Mogadishu">
+				<exemplarCity draft="contributed">摩加迪沙</exemplarCity>
+			</zone>
+			<zone type="Indian/Kerguelen">
+				<exemplarCity draft="contributed">凱爾蓋朗</exemplarCity>
+			</zone>
+			<zone type="Asia/Dushanbe">
+				<exemplarCity draft="contributed">杜尚別</exemplarCity>
+			</zone>
+			<zone type="Pacific/Tongatapu">
+				<exemplarCity draft="contributed">湯加塔布</exemplarCity>
+			</zone>
+			<zone type="Africa/Dar_es_Salaam">
+				<exemplarCity draft="contributed">達累斯薩拉姆</exemplarCity>
+			</zone>
+			<zone type="America/North_Dakota/Beulah">
+				<exemplarCity draft="contributed">比尤拉，北達科他州</exemplarCity>
+			</zone>
+			<zone type="America/North_Dakota/Center">
+				<exemplarCity draft="contributed">北達科他州申特城</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Petersburg">
+				<exemplarCity draft="contributed">印第安那州彼得堡</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Winamac">
+				<exemplarCity draft="contributed">印第安那州威納馬克</exemplarCity>
+			</zone>
+			<zone type="America/St_Vincent">
+				<exemplarCity draft="contributed">聖文森特</exemplarCity>
+			</zone>
+			<zone type="Africa/Lusaka">
+				<exemplarCity draft="contributed">盧薩卡</exemplarCity>
+			</zone>
+			<metazone type="Azerbaijan">
+				<long>
+					<generic draft="contributed">亞塞拜疆時間</generic>
+					<standard draft="contributed">亞塞拜疆標準時間</standard>
+					<daylight draft="contributed">亞塞拜疆夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Georgia">
+				<long>
+					<generic draft="contributed">格魯吉亞時間</generic>
+					<standard draft="contributed">格魯吉亞標準時間</standard>
+					<daylight draft="contributed">格魯吉亞夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Maldives">
+				<long>
+					<standard draft="contributed">馬爾代夫時間</standard>
+				</long>
+			</metazone>
+			<metazone type="Mauritius">
+				<long>
+					<generic draft="contributed">毛里求斯時間</generic>
+					<standard draft="contributed">毛里求斯標準時間</standard>
+					<daylight draft="contributed">毛里求斯夏令時間</daylight>
+				</long>
+			</metazone>
+			<metazone type="Solomon">
+				<long>
+					<standard draft="contributed">所羅門群島時間</standard>
+				</long>
+			</metazone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<currencyFormats numberSystem="latn">
+			<currencyFormatLength>
+				<currencyFormat type="standard">
+					<pattern>¤#,##0.00</pattern>
+				</currencyFormat>
+				<currencyFormat type="accounting">
+					<pattern>¤#,##0.00;(¤#,##0.00)</pattern>
+				</currencyFormat>
+			</currencyFormatLength>
+		</currencyFormats>
+		<currencies>
+			<currency type="AED">
+				<displayName draft="contributed">阿拉伯聯合酋長國迪爾汗</displayName>
+				<displayName count="other" draft="contributed">阿拉伯聯合酋長國迪爾汗</displayName>
+			</currency>
+			<currency type="AUD">
+				<displayName draft="contributed">澳元</displayName>
+			</currency>
+			<currency type="AZN">
+				<displayName draft="contributed">亞塞拜疆馬納特</displayName>
+				<displayName count="other" draft="contributed">亞塞拜疆馬納特</displayName>
+			</currency>
+			<currency type="BAD">
+				<displayName draft="contributed">波斯尼亞-黑塞哥維那第納爾</displayName>
+			</currency>
+			<currency type="BAM">
+				<displayName draft="contributed">波斯尼亞-黑塞哥維那可轉換馬克</displayName>
+			</currency>
+			<currency type="CAD">
+				<displayName draft="contributed">加元</displayName>
+			</currency>
+			<currency type="CRC">
+				<displayName draft="contributed">哥斯達黎加科郎</displayName>
+				<displayName count="other" draft="contributed">哥斯達黎加科郎</displayName>
+			</currency>
+			<currency type="ETB">
+				<displayName draft="contributed">埃塞俄比亞比爾</displayName>
+				<displayName count="other" draft="contributed">埃塞俄比亞比爾</displayName>
+			</currency>
+			<currency type="GEL">
+				<displayName draft="contributed">格魯吉亞拉里</displayName>
+				<displayName count="other" draft="contributed">格魯吉亞拉里</displayName>
+			</currency>
+			<currency type="HKD">
+				<displayName draft="contributed">港元</displayName>
+				<symbol>$</symbol>
+			</currency>
+			<currency type="ITL">
+				<displayName draft="contributed">意大利里拉</displayName>
+			</currency>
+			<currency type="LRD">
+				<displayName draft="contributed">利比利亞元</displayName>
+				<displayName count="other" draft="contributed">利比利亞元</displayName>
+			</currency>
+			<currency type="MUR">
+				<displayName draft="contributed">毛里求斯盧布</displayName>
+				<displayName count="other" draft="contributed">毛里求斯盧布</displayName>
+			</currency>
+			<currency type="MZN">
+				<displayName draft="contributed">莫桑比克美提卡</displayName>
+				<displayName count="other" draft="contributed">莫桑比克美提卡</displayName>
+			</currency>
+			<currency type="NGN">
+				<displayName draft="contributed">尼日利亞奈拉</displayName>
+				<displayName count="other" draft="contributed">尼日利亞奈拉</displayName>
+			</currency>
+			<currency type="NZD">
+				<displayName draft="contributed">紐西蘭元</displayName>
+			</currency>
+			<currency type="RSD">
+				<displayName draft="contributed">塞爾維亞第納爾</displayName>
+			</currency>
+			<currency type="RWF">
+				<displayName draft="contributed">盧旺達法郎</displayName>
+				<displayName count="other" draft="contributed">盧旺達法郎</displayName>
+			</currency>
+			<currency type="SGD">
+				<displayName draft="contributed">新加坡元</displayName>
+			</currency>
+			<currency type="TWD">
+				<displayName draft="contributed">新台幣</displayName>
+			</currency>
+			<currency type="USD">
+				<symbol>US$</symbol>
+			</currency>
+			<currency type="XAF">
+				<displayName draft="contributed">中非法郎</displayName>
+			</currency>
+			<currency type="XOF">
+				<displayName draft="contributed">多哥非洲共同體法郎</displayName>
+			</currency>
+			<currency type="XPF">
+				<displayName draft="contributed">太平洋法郎</displayName>
+			</currency>
+		</currencies>
+	</numbers>
+	<units>
+		<unitLength type="long">
+			<unit type="area-square-meter">
+				<unitPattern count="other" draft="contributed">{0} 平方米</unitPattern>
+			</unit>
+			<unit type="duration-week">
+				<unitPattern count="other">{0}星期</unitPattern>
+			</unit>
+			<unit type="length-centimeter">
+				<unitPattern count="other" draft="contributed">{0} 厘米</unitPattern>
+			</unit>
+			<unit type="length-millimeter">
+				<unitPattern count="other" draft="contributed">{0} 毫米</unitPattern>
+			</unit>
+			<unit type="mass-ounce">
+				<unitPattern count="other" draft="contributed">{0} 安士</unitPattern>
+			</unit>
+			<unit type="speed-meter-per-second">
+				<unitPattern count="other" draft="contributed">{0} 米/小時</unitPattern>
+			</unit>
+			<unit type="temperature-celsius">
+				<unitPattern count="other" draft="contributed">攝氏{0}度</unitPattern>
+			</unit>
+			<unit type="temperature-fahrenheit">
+				<unitPattern count="other" draft="contributed">華氏{0}度</unitPattern>
+			</unit>
+		</unitLength>
+		<unitLength type="short">
+			<unit type="area-square-meter">
+				<unitPattern count="other" draft="contributed">{0} 平方米</unitPattern>
+			</unit>
+			<unit type="length-centimeter">
+				<unitPattern count="other" draft="contributed">{0} 厘米</unitPattern>
+			</unit>
+			<unit type="length-millimeter">
+				<unitPattern count="other" draft="contributed">{0} 毫米</unitPattern>
+			</unit>
+			<unit type="mass-ounce">
+				<unitPattern count="other" draft="contributed">{0} 安士</unitPattern>
+			</unit>
+			<unit type="speed-meter-per-second">
+				<unitPattern count="other" draft="contributed">{0} 米 / 小時</unitPattern>
+			</unit>
+		</unitLength>
+		<unitLength type="narrow">
+			<unit type="area-square-foot">
+				<unitPattern count="other" draft="contributed">{0} ft²</unitPattern>
+			</unit>
+			<unit type="area-square-mile">
+				<unitPattern count="other" draft="contributed">{0}mi²</unitPattern>
+			</unit>
+			<unit type="length-centimeter">
+				<unitPattern count="other" draft="contributed">{0} 厘米</unitPattern>
+			</unit>
+			<unit type="length-millimeter">
+				<unitPattern count="other" draft="contributed">{0} 毫米</unitPattern>
+			</unit>
+			<unit type="mass-ounce">
+				<unitPattern count="other" draft="contributed">{0} 安士</unitPattern>
+			</unit>
+			<unit type="pressure-inch-hg">
+				<unitPattern count="other" draft="contributed">{0}&quot; Hg</unitPattern>
+			</unit>
+			<unit type="speed-kilometer-per-hour">
+				<unitPattern count="other" draft="contributed">{0}kph</unitPattern>
+			</unit>
+			<unit type="speed-meter-per-second">
+				<unitPattern count="other" draft="contributed">{0}m/s</unitPattern>
+			</unit>
+			<unit type="speed-mile-per-hour">
+				<unitPattern count="other" draft="contributed">{0}mph</unitPattern>
+			</unit>
+			<unit type="volume-cubic-kilometer">
+				<unitPattern count="other" draft="contributed">{0}km³</unitPattern>
+			</unit>
+			<unit type="volume-cubic-mile">
+				<unitPattern count="other" draft="contributed">{0}mi³</unitPattern>
+			</unit>
+		</unitLength>
+	</units>
+	<posix>
+		<messages>
+			<yesstr draft="contributed">是</yesstr>
+			<nostr draft="contributed">否</nostr>
+		</messages>
+	</posix>
+</ldml>
+

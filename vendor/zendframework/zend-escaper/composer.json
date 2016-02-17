@@ -1,0 +1,34 @@
+{
+    "name": "zendframework/zend-escaper",
+    "description": " ",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "escaper"
+    ],
+    "homepage": "https://github.com/zendframework/zend-escaper",
+    "autoload": {
+        "psr-4": {
+            "Zend\\Escaper\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.23"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4-dev",
+            "dev-develop": "2.5-dev"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\Escaper\\": "test/"
+        }
+    },
+    "require-dev": {
+        "fabpot/php-cs-fixer": "1.7.*",
+        "satooshi/php-coveralls": "dev-master",
+        "phpunit/PHPUnit": "~4.0"
+    }
+}

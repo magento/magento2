@@ -1,0 +1,58 @@
+{
+    "name": "justinrainbow/json-schema",
+    "description": "A library to validate a json schema.",
+    "keywords": ["json", "schema"],
+    "homepage": "https://github.com/justinrainbow/json-schema",
+    "type": "library",
+    "license": "BSD-3-Clause",
+    "authors": [
+        {
+            "name": "Bruno Prieto Reis",
+            "email": "bruno.p.reis@gmail.com"
+        },
+        {
+            "name": "Justin Rainbow",
+            "email": "justin.rainbow@gmail.com"
+        },
+        {
+            "name": "Igor Wiedler",
+            "email": "igor@wiedler.ch"
+        },
+        {
+            "name": "Robert Schönthal",
+            "email": "seroscho@googlemail.com"
+        }
+    ],
+    "repositories": [{
+        "type": "package",
+        "package": {
+            "name": "json-schema/JSON-Schema-Test-Suite",
+            "version": "1.1.0",
+            "source": {
+                "url": "https://github.com/json-schema/JSON-Schema-Test-Suite",
+                "type": "git",
+                "reference": "1.1.0"
+            }
+        }
+    }],
+    "require": {
+        "php": ">=5.3.29"
+    },
+    "require-dev": {
+        "json-schema/JSON-Schema-Test-Suite": "1.1.0",
+        "phpunit/phpunit": "~3.7",
+        "phpdocumentor/phpdocumentor": "~2"
+    },
+    "autoload": {
+        "psr-4": { "JsonSchema\\": "src/JsonSchema/" }
+    },
+    "autoload-dev": {
+        "psr-4": { "JsonSchema\\Tests\\": "tests/JsonSchema/Tests/" }
+    },
+    "bin": ["bin/validate-json"],
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.6.x-dev"
+        }
+    }
+}

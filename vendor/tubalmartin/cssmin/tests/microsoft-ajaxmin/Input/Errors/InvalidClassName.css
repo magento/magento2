@@ -1,0 +1,42 @@
+﻿
+/* starts with number, but has characters after (parsed as dimension) */
+div.900west 
+{
+	background: red;
+}
+
+/* starts with number that ends with a zero, but has characters after (parsed as dimension) */
+div.00bars 
+{
+	background: green;
+}
+
+/* class name starts with number followed by hyphen */
+div.10-foo 
+{
+	background: blue;
+}
+
+/* class name all numbers (parsed as number) */
+div.1234 
+{
+	background: red;
+}
+
+/* class name all numbers ending in zero (parsed as number) */
+div.0000
+{
+	background: green;
+}
+
+/* class name starts with number ending in zero followed by hyphen */
+div.00-foo 
+{
+	background: blue;
+}
+
+/* starts with number followed by underscore identifier */
+div.30_ 
+{
+	background: black;
+}

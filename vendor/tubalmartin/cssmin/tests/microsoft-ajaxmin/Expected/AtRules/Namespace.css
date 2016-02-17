@@ -1,0 +1,1 @@
+@namespace "http://www.w3.org/1999/xhtml";@namespace foo "http://www.msn.com/foo";@namespace foo "http://www.contoso.com";foo|bar{color:#abc}|bar{color:#fff}*|bar{color:#000}bar{color:#f0f}*|*{color:#eee}bar[foo|ed]{color:#111}bar[|ed]{color:#222}bar[*|ed]{color:#333}bar[ed]{color:#444}

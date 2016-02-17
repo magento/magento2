@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:pdepend="http://pdepend.org/schema/dic/pdepend"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="pdepend.textui.runner" class="PDepend\TextUI\Runner">
+            <argument type="service" id="pdepend.report_generator_factory" />
+            <argument type="service" id="pdepend.engine" />
+
+            <call method="addProcessListener">
+                <argument type="service" id="pdepend.textui.result_printer" />
+            </call>
+        </service>
+
+        <service id="pdepend.util.cache_factory" class="PDepend\Util\Cache\CacheFactory">
+            <argument type="service" id="pdepend.configuration" />
+        </service>
+
+        <service id="pdepend.engine" class="PDepend\Engine">
+            <argument type="service" id="pdepend.configuration" />
+            <argument type="service" id="pdepend.util.cache_factory" />
+            <argument type="service" id="pdepend.analyzer_factory" />
+        </service>
+
+        <service id="pdepend.analyzer_factory" class="PDepend\Metrics\AnalyzerFactory">
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="pdepend.configuration" class="PDepend\Util\Configuration">
+        </service>
+
+        <service id="pdepend.textui.result_printer" class="PDepend\TextUI\ResultPrinter" />
+
+        <service id="pdepend.report.summary.xml" class="PDepend\Report\Summary\Xml">
+            <tag name="pdepend.logger" option="--summary-xml" message="Generates a xml log with all metrics." />
+        </service>
+
+        <service id="pdepend.report.dependencies.xml" class="PDepend\Report\Dependencies\Xml">
+            <tag name="pdepend.logger" option="--dependency-xml" message="Generates a xml log with all dependencies." />
+        </service>
+
+        <service id="pdepend.report.jdepend.xml" class="PDepend\Report\Jdepend\Xml">
+            <tag name="pdepend.logger" option="--jdepend-xml" message="Generates the package dependency log." />
+        </service>
+
+        <service id="pdepend.report.jdepend.chart" class="PDepend\Report\Jdepend\Chart">
+            <tag name="pdepend.logger" option="--jdepend-chart" message="Generates a diagram of the analyzed packages." />
+        </service>
+
+        <service id="pdepend.report.overview.pyramid" class="PDepend\Report\Overview\Pyramid">
+            <tag name="pdepend.logger" option="--overview-pyramid" message="Generates a chart with an Overview Pyramid for the analyzed project." />
+        </service>
+
+        <service id="pdepend.report_generator_factory" class="PDepend\Report\ReportGeneratorFactory">
+            <argument type="service" id="service_container" />
+        </service>
+
+        <service id="pdepend.analyzer.class_level" class="PDepend\Metrics\Analyzer\ClassLevelAnalyzer">
+            <tag name="pdepend.analyzer" />
+
+            <call method="addAnalyzer">
+                <argument type="service" id="pdepend.analyzer.cyclomatic_complexity" />
+            </call>
+        </service>
+
+        <service id="pdepend.analyzer.code_rank" class="PDepend\Metrics\Analyzer\CodeRankAnalyzer">
+            <tag name="pdepend.analyzer" option="--coderank-mode" message="Used CodeRank strategies. Comma separated list of 'inheritance'(default), 'property' and 'method'." value="*[,...]" />
+        </service>
+
+        <service id="pdepend.analyzer.cohesion" class="PDepend\Metrics\Analyzer\CohesionAnalyzer">
+            <tag name="pdepend.analyzer" />
+        </service>
+
+        <service id="pdepend.analyzer.coupling" class="PDepend\Metrics\Analyzer\CouplingAnalyzer">
+            <tag name="pdepend.analyzer" />
+        </service>
+
+        <service id="pdepend.analyzer.crap_index" class="PDepend\Metrics\Analyzer\CrapIndexAnalyzer">
+            <tag name="pdepend.analyzer" option="--coverage-report" message="Clover style CodeCoverage report, as produced by PHPUnit's --coverage-clover option." />
+            <call method="addAnalyzer">
+                <argument type="service" id="pdepend.analyzer.cyclomatic_complexity" />
+            </call>
+        </service>
+
+        <service id="pdepend.analyzer.cyclomatic_complexity" class="PDepend\Metrics\Analyzer\CyclomaticComplexityAnalyzer">
+            <tag name="pdepend.analyzer" />
+        </service>
+
+        <service id="pdepend.analyzer.dependency" class="PDepend\Metrics\Analyzer\DependencyAnalyzer">
+            <tag name="pdepend.analyzer" />
+        </service>
+
+        <service id="pdepend.analyzer.class_dependency" class="PDepend\Metrics\Analyzer\ClassDependencyAnalyzer">
+            <tag name="pdepend.analyzer" />
+        </service>
+
+        <service id="pdepend.analyzer.hierarchy" class="PDepend\Metrics\Analyzer\HierarchyAnalyzer">
+            <tag name="pdepend.analyzer" />
+        </service>
+
+        <service id="pdepend.analyzer.inheritance" class="PDepend\Metrics\Analyzer\InheritanceAnalyzer">
+            <tag name="pdepend.analyzer" />
+        </service>
+
+        <service id="pdepend.analyzer.npath_complexity" class="PDepend\Metrics\Analyzer\NPathComplexityAnalyzer">
+            <tag name="pdepend.analyzer" />
+        </service>
+
+        <service id="pdepend.analyzer.node_count" class="PDepend\Metrics\Analyzer\NodeCountAnalyzer">
+            <tag name="pdepend.analyzer" />
+        </service>
+
+        <service id="pdepend.analyzer.node_loc" class="PDepend\Metrics\Analyzer\NodeLocAnalyzer">
+            <tag name="pdepend.analyzer" />
+        </service>
+
+        <service id="pdepend.analyzer.halstead" class="PDepend\Metrics\Analyzer\HalsteadAnalyzer">
+            <tag name="pdepend.analyzer" />
+        </service>
+
+        <service id="pdepend.analyzer.maintainability" class="PDepend\Metrics\Analyzer\MaintainabilityIndexAnalyzer">
+            <tag name="pdepend.analyzer" />
+        </service>
+    </services>
+</container>

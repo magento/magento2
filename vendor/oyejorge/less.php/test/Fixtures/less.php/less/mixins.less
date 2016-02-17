@@ -1,0 +1,23 @@
+@gridColumns: 12;
+
+// The Grid
+#grid {
+
+  .core (@gridColumnWidth, @gridGutterWidth) {
+
+    .spanX (@index) when (@index > 0) {
+      (~".span@{index}") { .span(@index); }
+      .spanX(@index - 1);
+    }
+    .spanX (0) { }
+
+    .span (@columns) {
+      width: (@gridColumnWidth * @columns) + (@gridGutterWidth * (@columns - 1));
+    }
+
+    // generate .spanX and .offsetX
+    .spanX (@gridColumns);
+  }
+}
+
+#grid > .core(60px, 20px);

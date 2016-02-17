@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="./test/bootstrap.php"
+         colors="true">
+    <testsuites>
+        <testsuite name="zend-soap Test Suite">
+            <directory>./test/</directory>
+        </testsuite>
+    </testsuites>
+
+    <groups>
+        <exclude>
+            <group>disable</group>
+        </exclude>
+    </groups>
+
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+
+    <php>
+        <ini name="date.timezone" value="UTC"/>
+
+        <!-- OB_ENABLED should be enabled for some tests to check if all
+             functionality works as expected. Such tests include those for
+             Zend\Soap and Zend\Session, which require that headers not be sent
+             in order to work. -->
+        <const name="TESTS_ZEND_OB_ENABLED" value="false" />
+
+        <!-- Zend\Soap\AutoDiscover scenario tests for complex objects and wsdl
+             generation
+
+             Copy all the files of test/_files/fulltests into a directory that
+             can be reached by webserver and enter the base uri to this
+             directory into the variable. The test "ZendTest\Soap\AutoDiscover\OnlineTest"
+             makes use of the servers and AutoDiscover feature.
+
+             NOTE: Make sure the servers are using the correct Zend Framework
+             copy, when having more than one version installed and include
+             paths are changing. -->
+        <const name="TESTS_ZEND_SOAP_AUTODISCOVER_ONLINE_SERVER_BASEURI" value="false" />
+    </php>
+</phpunit>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="./vendor/phpunit/phpunit/phpunit.xsd"
+         bootstrap="./test/bootstrap.php"
+         colors="true">
+    <testsuites>
+        <testsuite name="zend-http Test Suite">
+            <directory>./test/</directory>
+        </testsuite>
+    </testsuites>
+
+    <groups>
+        <exclude>
+            <group>disable</group>
+        </exclude>
+    </groups>
+
+    <filter>
+        <whitelist addUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">./src</directory>
+        </whitelist>
+    </filter>
+
+    <php>
+        <ini name="date.timezone" value="UTC"/>
+
+        <!-- OB_ENABLED should be enabled for some tests to check if all
+             functionality works as expected. Such tests include those for
+             Zend\Soap and Zend\Session, which require that headers not be sent
+             in order to work. -->
+        <const name="TESTS_ZEND_OB_ENABLED" value="false" />
+
+        <!-- Enable this if you have installed Doctrine\Common on the
+             include_path or via composer. -->
+        <const name="TESTS_ZEND_FORM_ANNOTATION_SUPPORT" value="false" />
+
+        <!-- Zend\Http\Client tests
+
+             To enable the dynamic Zend\Http\Client tests, you will need to
+             symbolically link or copy the files in test/Client/_files to a
+             directory under your web server(s) document root and set this
+             constant to point to the URL of this directory. -->
+        <const name="TESTS_ZEND_HTTP_CLIENT_BASEURI" value="false" />
+        <const name="TESTS_ZEND_HTTP_CLIENT_ONLINE" value="false" />
+
+        <!-- Zend\Http\Client\Proxy tests
+
+             HTTP proxy to be used for testing the Proxy adapter. Set to a
+             string of the form 'host:port'. Set to null to skip HTTP proxy
+             tests. -->
+        <const name="TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY" value="false" />
+        <const name="TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_USER" value="" />
+        <const name="TESTS_ZEND_HTTP_CLIENT_HTTP_PROXY_PASS" value="" />
+
+    </php>
+</phpunit>

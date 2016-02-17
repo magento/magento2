@@ -1,0 +1,43 @@
+language: php
+
+sudo: false
+
+php:
+  - 5.2
+  - 5.3
+  - 5.4
+  - 5.5
+  - 5.6
+  - 7
+  - hhvm
+
+env: TMPDIR=/tmp
+
+install:
+ - if [[ "$TRAVIS_PHP_VERSION" == "5.2" ]]; then sh ./tests/php52_install_dependencies.sh; fi
+ - phpenv rehash
+
+services:
+  - memcached
+
+before_script:
+  - if [[ "$TRAVIS_PHP_VERSION" != "5.2" ]]; then travis_retry composer self-update; fi
+  - if [[ "$TRAVIS_PHP_VERSION" != "5.2" ]]; then travis_retry composer install --no-interaction --prefer-source --dev; fi
+  
+  - mysql -e 'create database zftest;'
+  - psql -c 'create database zftest;' -U postgres
+
+  - if [[ "$TRAVIS_PHP_VERSION" != "5.2" ]] && [[ "$TRAVIS_PHP_VERSION" != "hhvm" ]] && [[ "$TRAVIS_PHP_VERSION" != "7" ]]; then phpenv config-add tests/config.ini; fi
+  - if [[ "$TRAVIS_PHP_VERSION" == "5.2" ]]; then phpenv config-add tests/php52_config.ini; fi
+  - if [[ "$TRAVIS_PHP_VERSION" == "7" ]]; then phpenv config-add tests/php7_config.ini; fi
+
+  - cp ./tests/TestConfiguration.travis.php ./tests/TestConfiguration.php
+
+script:
+ - cd tests/
+ - php runalltests.php
+ 
+matrix:
+  allow_failures:
+   - php: 7
+   - php: hhvm

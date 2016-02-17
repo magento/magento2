@@ -1,0 +1,559 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "../../common/dtd/ldml.dtd">
+<!-- Copyright © 1991-2013 Unicode, Inc.
+CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+For terms of use, see http://www.unicode.org/copyright.html
+-->
+<ldml>
+	<identity>
+		<version number="$Revision: 9280 $"/>
+		<generation date="$Date: 2013-08-27 13:07:13 -0500 (Tue, 27 Aug 2013) $"/>
+		<language type="fr"/>
+		<territory type="CA"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="en_GB" alt="short" draft="contributed">anglais (GB)</language>
+			<language type="es_ES" draft="contributed">espagnol ibérique</language>
+			<language type="fy" draft="contributed">frison</language>
+			<language type="gu" draft="contributed">goudjarâtî</language>
+			<language type="ps" alt="variant" draft="contributed">ps</language>
+			<language type="pt_PT" draft="contributed">portugais ibérique</language>
+			<language type="si" draft="contributed">singhalais</language>
+			<language type="to" draft="contributed">tongan</language>
+			<language type="ug" draft="contributed">ouïgour</language>
+			<language type="ug" alt="variant" draft="contributed">ouïghour</language>
+			<language type="und" draft="contributed">indéterminé</language>
+			<language type="ybb" draft="contributed">yémba</language>
+		</languages>
+		<scripts>
+			<script type="Arab" alt="variant" draft="contributed">Perso-arabe</script>
+			<script type="Beng" draft="contributed">bengâglî</script>
+			<script type="Hans" draft="contributed">idéogrammes han simplifiés</script>
+			<script type="Hans" alt="stand-alone" draft="contributed">chinois simplifié</script>
+			<script type="Hant" draft="contributed">idéogrammes han traditionnels</script>
+			<script type="Hant" alt="stand-alone" draft="contributed">chinois traditionnel</script>
+			<script type="Mlym" draft="contributed">malayâlam</script>
+			<script type="Orya" draft="contributed">oriyâ</script>
+			<script type="Sinh" draft="contributed">cingalais</script>
+		</scripts>
+		<territories>
+			<territory type="053" draft="contributed">Australie et Nouvelle-Zélande</territory>
+			<territory type="AC" draft="contributed">Île de l'Ascension</territory>
+			<territory type="BL" draft="contributed">Saint-Barthélémy</territory>
+			<territory type="BY" draft="contributed">Bélarus</territory>
+			<territory type="FM" draft="contributed">Micronésie</territory>
+			<territory type="GB" alt="short" draft="contributed">GB</territory>
+			<territory type="GS" draft="contributed">Géorgie du Sud et les îles Sandwich du Sud</territory>
+			<territory type="IO" draft="contributed">Territoire britannique de l'océan Indien</territory>
+			<territory type="MF" draft="contributed">Saint-Martin</territory>
+			<territory type="PS" draft="contributed">Territoire palestinien</territory>
+			<territory type="RE" draft="contributed">Réunion</territory>
+			<territory type="TC" draft="contributed">Îles Turks et Caïques</territory>
+			<territory type="UM" draft="contributed">Îles éloignées des États-Unis</territory>
+		</territories>
+		<keys>
+			<key type="calendar" draft="contributed">Calendrier</key>
+			<key type="collation" draft="contributed">ordonnancement</key>
+			<key type="currency" draft="contributed">Devise</key>
+			<key type="numbers" draft="contributed">Chiffres</key>
+		</keys>
+		<types>
+			<type type="arab" key="numbers" draft="contributed">Chiffres indo-arabes</type>
+			<type type="arabext" key="numbers" draft="contributed">Chiffres indo-arabes étendus</type>
+			<type type="armn" key="numbers" draft="contributed">Chiffres arméniens</type>
+			<type type="armnlow" key="numbers" draft="contributed">Chiffres minuscules arméniens</type>
+			<type type="beng" key="numbers" draft="contributed">Chiffres bengali</type>
+			<type type="deva" key="numbers" draft="contributed">Chiffres devanagari</type>
+			<type type="dictionary" key="collation" draft="contributed">Ordre de tri du dictionnaire</type>
+			<type type="ducet" key="collation" draft="contributed">Ordre de tri Unicode par défaut</type>
+			<type type="ethi" key="numbers" draft="contributed">Chiffre éthiopiens</type>
+			<type type="ethiopic-amete-alem" key="calendar" draft="contributed">Calendrier éthiopien de l'An de grâce</type>
+			<type type="fullwide" key="numbers" draft="contributed">Chiffre pleine largeur</type>
+			<type type="geor" key="numbers" draft="contributed">Chiffres géorgiens</type>
+			<type type="gregorian" key="calendar" draft="contributed">Calendrier grégorien</type>
+			<type type="grek" key="numbers" draft="contributed">Chiffres grecs</type>
+			<type type="greklow" key="numbers" draft="contributed">Chiffres minuscules grecs</type>
+			<type type="gujr" key="numbers" draft="contributed">Chiffres gujarati</type>
+			<type type="guru" key="numbers" draft="contributed">Chiffres gurmukhī</type>
+			<type type="hanidec" key="numbers" draft="contributed">Chiffres numériques chinois</type>
+			<type type="hans" key="numbers" draft="contributed">Chiffres chinois simplifiés</type>
+			<type type="hansfin" key="numbers" draft="contributed">Chiffres monétaires chinois simplifiés</type>
+			<type type="hant" key="numbers" draft="contributed">Chiffres chinois traditionnels</type>
+			<type type="hantfin" key="numbers" draft="contributed">Chiffres financiers en chinois traditionnel</type>
+			<type type="hebr" key="numbers" draft="contributed">Chiffre hébreux</type>
+			<type type="islamic" key="calendar" draft="contributed">Calendrier musulman</type>
+			<type type="islamic-civil" key="calendar" draft="contributed">Calendrier civil musulman</type>
+			<type type="islamic-tbla" key="calendar" draft="contributed">calendrier religieux musulman</type>
+			<type type="jpan" key="numbers" draft="contributed">Chiffres japonais</type>
+			<type type="jpanfin" key="numbers" draft="contributed">Chiffres monétaires japonais</type>
+			<type type="khmr" key="numbers" draft="contributed">Chiffres khmer</type>
+			<type type="knda" key="numbers" draft="contributed">Chiffres canara</type>
+			<type type="laoo" key="numbers" draft="contributed">Chiffres laotiens</type>
+			<type type="latn" key="numbers" draft="contributed">Chiffres occidentaux</type>
+			<type type="mlym" key="numbers" draft="contributed">Chiffres malayâlam</type>
+			<type type="mong" key="numbers" draft="contributed">Chiffres mongols</type>
+			<type type="mymr" key="numbers" draft="contributed">Chiffres birmans</type>
+			<type type="orya" key="numbers" draft="contributed">Chiffres oriya</type>
+			<type type="persian" key="calendar" draft="contributed">Calendrier perse</type>
+			<type type="reformed" key="collation" draft="contributed">Ordre de tri réformé</type>
+			<type type="roman" key="numbers" draft="contributed">Chiffres romains</type>
+			<type type="romanlow" key="numbers" draft="contributed">Chiffres minuscules romains</type>
+			<type type="search" key="collation" draft="contributed">Recherche générale</type>
+			<type type="taml" key="numbers" draft="contributed">Chiffres tamoul</type>
+			<type type="telu" key="numbers" draft="contributed">Chiffres telugu</type>
+			<type type="thai" key="numbers" draft="contributed">Chiffres thaïlandais</type>
+			<type type="tibt" key="numbers" draft="contributed">Chiffres tibétains</type>
+			<type type="unihan" key="collation" draft="contributed">Ordre de tri radical et trait</type>
+		</types>
+		<transformNames>
+			<transformName type="Numeric" draft="contributed">Chiffres</transformName>
+			<transformName type="x-Fullwidth" draft="contributed">Pleine largeur</transformName>
+			<transformName type="x-Halfwidth" draft="contributed">Demie largeur</transformName>
+			<transformName type="x-Publishing" draft="contributed">Édition</transformName>
+		</transformNames>
+		<measurementSystemNames>
+			<measurementSystemName type="UK" draft="contributed">R-U</measurementSystemName>
+		</measurementSystemNames>
+	</localeDisplayNames>
+	<delimiters>
+		<alternateQuotationStart>‹</alternateQuotationStart>
+		<alternateQuotationEnd>›</alternateQuotationEnd>
+	</delimiters>
+	<dates>
+		<calendars>
+			<calendar type="generic">
+				<dateFormats>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>G y-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>GGGGG yy-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="Md">M-d</dateFormatItem>
+						<dateFormatItem id="MEd">E M-d</dateFormatItem>
+						<dateFormatItem id="MMd">MM-d</dateFormatItem>
+						<dateFormatItem id="MMdd">MM-dd</dateFormatItem>
+						<dateFormatItem id="yyyyM">G y-MM</dateFormatItem>
+						<dateFormatItem id="yyyyMd">G y-MM-dd</dateFormatItem>
+						<dateFormatItem id="yyyyMEd">E G y-MM-dd</dateFormatItem>
+						<dateFormatItem id="yyyyMM">G y-MM</dateFormatItem>
+					</availableFormats>
+					<intervalFormats>
+						<intervalFormatItem id="d">
+							<greatestDifference id="d">d–d</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="h">
+							<greatestDifference id="h">h–h a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="H">
+							<greatestDifference id="H">HH–HH</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hm">
+							<greatestDifference id="h">h:mm–h:mm a</greatestDifference>
+							<greatestDifference id="m">h:mm–h:mm a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hm">
+							<greatestDifference id="H">HH:mm–HH:mm</greatestDifference>
+							<greatestDifference id="m">HH:mm–HH:mm</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hmv">
+							<greatestDifference id="h">h:mm–h:mm a v</greatestDifference>
+							<greatestDifference id="m">h:mm–h:mm a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hmv">
+							<greatestDifference id="H">HH:mm–HH:mm v</greatestDifference>
+							<greatestDifference id="m">HH:mm–HH:mm v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hv">
+							<greatestDifference id="h">h–h a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hv">
+							<greatestDifference id="H">HH–HH v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d">MM-dd – MM-dd</greatestDifference>
+							<greatestDifference id="M">MM-dd – MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d">E MM-dd – E MM-dd</greatestDifference>
+							<greatestDifference id="M">E MM-dd – E MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="y">
+							<greatestDifference id="y">G y–y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M">G y-MM – y-MM</greatestDifference>
+							<greatestDifference id="y">G y-MM – y-MM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d">G y-MM-dd – y-MM-dd</greatestDifference>
+							<greatestDifference id="M">G y-MM-dd – y-MM-dd</greatestDifference>
+							<greatestDifference id="y">G y-MM-dd – y-MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d">'du' E y-MM-dd 'au' E y-MM-dd G</greatestDifference>
+							<greatestDifference id="M">'du' E y-MM-dd 'au' E y-MM-dd G</greatestDifference>
+							<greatestDifference id="y">'du' E y-MM-dd 'au' E y-MM-dd G</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMM">
+							<greatestDifference id="y">'de' MMM y 'à' MMM y G</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMd">
+							<greatestDifference id="M">'du' d MMM 'au' d MMM y G</greatestDifference>
+							<greatestDifference id="y">'du' d MMM y 'au' d MMM y G</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMEd">
+							<greatestDifference id="d">'du' E d 'au' E d MMM y G</greatestDifference>
+							<greatestDifference id="M">'du' E d MMM 'au' E d MMM y G</greatestDifference>
+							<greatestDifference id="y">'du' E d MMM y 'au' E d MMM y G</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMM">
+							<greatestDifference id="M">MMMM – MMMM y G</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="gregorian">
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern draft="contributed">EEEE d MMMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern draft="contributed">d MMMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>y-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>yy-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<timeFormatLength type="full">
+						<timeFormat>
+							<pattern>HH 'h' mm 'min' ss 's' zzzz</pattern>
+						</timeFormat>
+					</timeFormatLength>
+				</timeFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="Md">M-d</dateFormatItem>
+						<dateFormatItem id="MEd">E M-d</dateFormatItem>
+						<dateFormatItem id="MMd">MM-d</dateFormatItem>
+						<dateFormatItem id="MMdd">MM-dd</dateFormatItem>
+						<dateFormatItem id="yM">y-MM</dateFormatItem>
+						<dateFormatItem id="yMd">y-MM-dd</dateFormatItem>
+						<dateFormatItem id="yMEd">E y-MM-dd</dateFormatItem>
+						<dateFormatItem id="yMM">y-MM</dateFormatItem>
+					</availableFormats>
+					<intervalFormats>
+						<intervalFormatItem id="d">
+							<greatestDifference id="d">d–d</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="h">
+							<greatestDifference id="h">h–h a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="H">
+							<greatestDifference id="H">HH–HH</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hm">
+							<greatestDifference id="h">h:mm–h:mm a</greatestDifference>
+							<greatestDifference id="m">h:mm–h:mm a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hm">
+							<greatestDifference id="H">HH:mm–HH:mm</greatestDifference>
+							<greatestDifference id="m">HH:mm–HH:mm</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hmv">
+							<greatestDifference id="h">h:mm–h:mm a v</greatestDifference>
+							<greatestDifference id="m">h:mm–h:mm a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hmv">
+							<greatestDifference id="H">HH:mm–HH:mm v</greatestDifference>
+							<greatestDifference id="m">HH:mm–HH:mm v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hv">
+							<greatestDifference id="h">h–h a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hv">
+							<greatestDifference id="H">HH–HH v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d">MM-dd – MM-dd</greatestDifference>
+							<greatestDifference id="M">MM-dd – MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d">E MM-dd – E MM-dd</greatestDifference>
+							<greatestDifference id="M">E MM-dd – E MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M">y-MM – y-MM</greatestDifference>
+							<greatestDifference id="y">y-MM – y-MM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d">y-MM-dd – y-MM-dd</greatestDifference>
+							<greatestDifference id="M">y-MM-dd – y-MM-dd</greatestDifference>
+							<greatestDifference id="y">y-MM-dd – y-MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d">'du' E y-MM-dd 'au' E y-MM-dd</greatestDifference>
+							<greatestDifference id="M">'du' E y-MM-dd 'au' E y-MM-dd</greatestDifference>
+							<greatestDifference id="y">'du' E y-MM-dd 'au' E y-MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMM">
+							<greatestDifference id="y">'de' MMM y 'à' MMM y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMd">
+							<greatestDifference id="M">'du' d MMM 'au' d MMM y</greatestDifference>
+							<greatestDifference id="y">'du' d MMM y 'au' d MMM y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMEd">
+							<greatestDifference id="d">'du' E d 'au' E d MMM y</greatestDifference>
+							<greatestDifference id="M">'du' E d MMM 'au' E d MMM y</greatestDifference>
+							<greatestDifference id="y">'du' E d MMM y 'au' E d MMM y</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<fields>
+			<field type="year">
+				<relative type="-1" draft="contributed">L'année dernière</relative>
+				<relative type="0" draft="contributed">Cette année</relative>
+				<relative type="1" draft="contributed">L'année prochaine</relative>
+				<relativeTime type="future">
+					<relativeTimePattern count="one">Dans {0} an</relativeTimePattern>
+					<relativeTimePattern count="other">Dans {0} ans</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="one">Il y a {0} an</relativeTimePattern>
+					<relativeTimePattern count="other">Il y a {0} ans</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="month">
+				<relative type="-1" draft="contributed">Le mois dernier</relative>
+				<relative type="0" draft="contributed">Ce mois-ci</relative>
+				<relative type="1" draft="contributed">Le mois prochain</relative>
+				<relativeTime type="future">
+					<relativeTimePattern count="one">Dans {0} mois</relativeTimePattern>
+					<relativeTimePattern count="other">Dans {0} mois</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="one">Il y a {0} mois</relativeTimePattern>
+					<relativeTimePattern count="other">Il y a {0} mois</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="week">
+				<relative type="-1" draft="contributed">La semaine dernière</relative>
+				<relative type="0" draft="contributed">Cette semaine</relative>
+				<relative type="1" draft="contributed">La semaine prochaine</relative>
+				<relativeTime type="future">
+					<relativeTimePattern count="one">Dans {0} semaine</relativeTimePattern>
+					<relativeTimePattern count="other">Dans {0} semaines</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="one">Il y a {0} semaine</relativeTimePattern>
+					<relativeTimePattern count="other">Il y a {0} semaines</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="day">
+				<relativeTime type="future">
+					<relativeTimePattern count="one">Dans {0} jour</relativeTimePattern>
+					<relativeTimePattern count="other">Dans {0} jours</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="one">Il y a {0} jour</relativeTimePattern>
+					<relativeTimePattern count="other">Il y a {0} jours</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="hour">
+				<relativeTime type="future">
+					<relativeTimePattern count="one">Dans {0} heure</relativeTimePattern>
+					<relativeTimePattern count="other">Dans {0} heures</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="one">Il y a {0} heure</relativeTimePattern>
+					<relativeTimePattern count="other">Il y a {0} heures</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="minute">
+				<relativeTime type="future">
+					<relativeTimePattern count="one">Dans {0} minute</relativeTimePattern>
+					<relativeTimePattern count="other">Dans {0} minutes</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="one">Il y a {0} minute</relativeTimePattern>
+					<relativeTimePattern count="other">Il y a {0} minutes</relativeTimePattern>
+				</relativeTime>
+			</field>
+			<field type="second">
+				<relativeTime type="future">
+					<relativeTimePattern count="one">Dans {0} seconde</relativeTimePattern>
+					<relativeTimePattern count="other">Dans {0} secondes</relativeTimePattern>
+				</relativeTime>
+				<relativeTime type="past">
+					<relativeTimePattern count="one">Il y a {0} seconde</relativeTimePattern>
+					<relativeTimePattern count="other">Il y a {0} secondes</relativeTimePattern>
+				</relativeTime>
+			</field>
+		</fields>
+		<timeZoneNames>
+			<regionFormat draft="contributed">Heure de {0}</regionFormat>
+			<zone type="America/Barbados">
+				<exemplarCity draft="contributed">Barbade (La)</exemplarCity>
+			</zone>
+			<zone type="Asia/Dhaka">
+				<exemplarCity draft="contributed">Dacca</exemplarCity>
+			</zone>
+			<zone type="Indian/Cocos">
+				<exemplarCity draft="contributed">Îles Cocos</exemplarCity>
+			</zone>
+			<zone type="Indian/Christmas">
+				<exemplarCity draft="contributed">Île Christmas</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Faeroe">
+				<exemplarCity draft="contributed">Îles Féroé</exemplarCity>
+			</zone>
+			<zone type="Indian/Chagos">
+				<exemplarCity draft="contributed">Archipel des Chagos</exemplarCity>
+			</zone>
+			<zone type="Asia/Baghdad">
+				<exemplarCity draft="contributed">Baghdad</exemplarCity>
+			</zone>
+			<zone type="Indian/Comoro">
+				<exemplarCity draft="contributed">Union des Comores</exemplarCity>
+			</zone>
+			<zone type="America/St_Kitts">
+				<exemplarCity draft="contributed">Saint-Christophe-et-Niévès</exemplarCity>
+			</zone>
+			<zone type="America/Cayman">
+				<exemplarCity draft="contributed">Îles Caïmans</exemplarCity>
+			</zone>
+			<zone type="Pacific/Pitcairn">
+				<exemplarCity draft="contributed">Île Pitcairn</exemplarCity>
+			</zone>
+			<zone type="Africa/Ndjamena">
+				<exemplarCity draft="contributed">Ndjamena</exemplarCity>
+			</zone>
+			<zone type="Indian/Kerguelen">
+				<exemplarCity draft="contributed">Îles Kerguelen</exemplarCity>
+			</zone>
+			<zone type="America/Port_of_Spain">
+				<exemplarCity draft="contributed">Port-d'Espagne</exemplarCity>
+			</zone>
+			<zone type="America/North_Dakota/New_Salem">
+				<exemplarCity draft="contributed">New Salem, Dakota du Nord</exemplarCity>
+			</zone>
+			<zone type="Europe/Vatican">
+				<exemplarCity draft="contributed">Vatican</exemplarCity>
+			</zone>
+			<zone type="America/St_Thomas">
+				<exemplarCity draft="contributed">Saint Thomas</exemplarCity>
+			</zone>
+			<zone type="Pacific/Wallis">
+				<exemplarCity draft="contributed">Uvéa</exemplarCity>
+			</zone>
+			<metazone type="America_Central">
+				<long>
+					<generic draft="contributed">heure du Centre</generic>
+					<standard draft="contributed">heure normale du Centre</standard>
+					<daylight draft="contributed">heure avancée du Centre</daylight>
+				</long>
+				<short>
+					<generic>HC</generic>
+					<standard>HNC</standard>
+					<daylight>HAC</daylight>
+				</short>
+			</metazone>
+			<metazone type="America_Eastern">
+				<long>
+					<generic draft="contributed">heure de l’Est</generic>
+					<standard draft="contributed">heure normale de l’Est</standard>
+					<daylight draft="contributed">heure avancée de l’Est</daylight>
+				</long>
+				<short>
+					<generic>HE</generic>
+					<standard>HNE</standard>
+					<daylight>HAE</daylight>
+				</short>
+			</metazone>
+			<metazone type="America_Mountain">
+				<short>
+					<generic>HR</generic>
+					<standard>HNR</standard>
+					<daylight>HAR</daylight>
+				</short>
+			</metazone>
+			<metazone type="America_Pacific">
+				<long>
+					<generic draft="contributed">heure du Pacifique</generic>
+					<standard draft="contributed">heure normale du Pacifique</standard>
+					<daylight draft="contributed">heure avancée du Pacifique</daylight>
+				</long>
+				<short>
+					<generic>HP</generic>
+					<standard>HNP</standard>
+					<daylight>HAP</daylight>
+				</short>
+			</metazone>
+			<metazone type="Ecuador">
+				<long>
+					<standard draft="contributed">heure normale d’Équateur</standard>
+				</long>
+			</metazone>
+			<metazone type="French_Guiana">
+				<long>
+					<standard draft="contributed">heure de Guyane française</standard>
+				</long>
+			</metazone>
+			<metazone type="Newfoundland">
+				<short>
+					<generic>HT</generic>
+					<standard>HNT</standard>
+					<daylight>HAT</daylight>
+				</short>
+			</metazone>
+			<metazone type="Uruguay">
+				<long>
+					<generic draft="contributed">heure de l'Uruguay</generic>
+					<standard draft="contributed">heure normale de l'Uruguay</standard>
+					<daylight draft="contributed">heure avancée de l'Uruguay</daylight>
+				</long>
+			</metazone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<currencies>
+			<currency type="CAD">
+				<symbol>$</symbol>
+			</currency>
+			<currency type="CNY">
+				<symbol draft="contributed">CN¥</symbol>
+			</currency>
+			<currency type="GYD">
+				<displayName count="one" draft="contributed">dollar guyanien</displayName>
+				<displayName count="other" draft="contributed">dollars guyaniens</displayName>
+			</currency>
+			<currency type="WST">
+				<symbol draft="contributed">WST</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>
+

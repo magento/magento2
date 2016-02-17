@@ -1,0 +1,14 @@
+body
+{
+  color: rgb(/* red */255, /* green */255, /* blue */255); /* #fff */
+  color: rgb(/* */42, 169, 255); /* #2aa9ff - SIGNIFICANT COMMENT, won't crunch if -h otion used */
+  color: rgb(100%/* */, 100%, 100%); /* #fff - SIGNIFICANT COMMENT, won't crunch if -h otion used */
+  color: rgb(42%, 33%, 12%/* */); /* #fff - SIGNIFICANT COMMENT, won't crunch if -h otion used */
+  color: rgb(66.7%, /* GREEN */ 73.3%, 80%); /* #abc */
+}
+/* RGB values must between 0 and 255 if numbers, or 0 and 100 if percentages. */
+/* values are clipped if outside that range! */
+em { color: rgb(300,0,0) }       /* clipped to rgb(255,0,0), #f00, red */
+em { color: rgb(-10, 0,255) }     /* clipped to rgb(0,0,255), #00f */
+em { color: rgb(0%, 110%, 0%) }  /* clipped to rgb(0%,100%,0%), #0f0 */
+em { color: rgb(100%, -67%, 110%) }  /* clipped to rgb(100%,0%,100%), #f0f */

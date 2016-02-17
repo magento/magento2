@@ -1,0 +1,6 @@
+﻿body 
+{
+	/* technically the specs say that font names containing whitespace should be quoted, 
+       but AjaxMin should still handle these without breaking */
+	font-family: Arial (Hebrew), Arial (Cyrillic), Times New Roman, Arial, Helvetica, Sans-Serif;
+}

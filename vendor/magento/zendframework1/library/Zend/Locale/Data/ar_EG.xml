@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "../../common/dtd/ldml.dtd">
+<!-- Copyright © 1991-2013 Unicode, Inc.
+CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+For terms of use, see http://www.unicode.org/copyright.html
+-->
+<ldml>
+	<identity>
+		<version number="$Revision: 9791 $"/>
+		<generation date="$Date: 2014-02-25 15:16:49 -0600 (Tue, 25 Feb 2014) $"/>
+		<language type="ar"/>
+		<territory type="EG"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="ady" draft="contributed">الأديغة</language>
+			<language type="ae" draft="contributed">الأفستانية</language>
+			<language type="af" draft="contributed">الأفريقانية</language>
+			<language type="agq" draft="contributed">الأغيمية</language>
+			<language type="alt" draft="contributed">الألطية الجنوبية</language>
+			<language type="an" draft="contributed">الأرغونية</language>
+			<language type="arn" draft="contributed">المابوتشية</language>
+			<language type="as" draft="contributed">الأساميزية</language>
+			<language type="asa" draft="contributed">الآسو</language>
+			<language type="av" draft="contributed">الآفارية</language>
+			<language type="az" draft="contributed">الأذربيجانية</language>
+			<language type="ban" draft="contributed">اللغة البالينية</language>
+			<language type="bbj" draft="contributed">لغة الغومالا</language>
+			<language type="be" draft="contributed">البيلاروسية</language>
+			<language type="bfd" draft="contributed">لغة البافوت</language>
+			<language type="bho" draft="contributed">البهوجبورية</language>
+			<language type="bkm" draft="contributed">لغة الكوم</language>
+			<language type="bss" draft="contributed">الأكوسية</language>
+			<language type="bum" draft="contributed">لغة البولو</language>
+			<language type="byv" draft="contributed">لغة الميدومبا</language>
+			<language type="cad" draft="contributed">الكادوية</language>
+			<language type="cay" draft="contributed">الكايوجية</language>
+			<language type="cch" draft="contributed">الأتسامية</language>
+			<language type="ceb" draft="contributed">السيبيونية</language>
+			<language type="chr" draft="contributed">الشيروكية</language>
+			<language type="ckb" draft="contributed">السورانية الكردية</language>
+			<language type="crh" draft="contributed">التركية الكريمانية</language>
+			<language type="cv" draft="contributed">التشوفاشي</language>
+			<language type="cy" draft="contributed">الولشية</language>
+			<language type="da" draft="contributed">الدنماركية</language>
+			<language type="doi" draft="contributed">الدوجرية</language>
+			<language type="es_419" draft="contributed">الإسبانية أمريكا اللاتينية</language>
+			<language type="es_MX" draft="contributed">الإسبانية المكسيكية</language>
+			<language type="gba" draft="contributed">الجبايا</language>
+			<language type="gez" draft="contributed">الجعزية</language>
+			<language type="ibb" draft="contributed">الإيبيبيوية</language>
+			<language type="jmc" draft="contributed">الماتشامية</language>
+			<language type="jpr" draft="contributed">الفارسية العبرية</language>
+			<language type="jrb" draft="contributed">العربية العبرية</language>
+			<language type="kcg" draft="contributed">التايابية</language>
+			<language type="kde" draft="contributed">الماكوندية</language>
+			<language type="kea" draft="contributed">الكابوفيرديانيوية</language>
+			<language type="khq" draft="contributed">الكورية التشينية</language>
+			<language type="kkj" draft="contributed">الكاكوية</language>
+			<language type="kln" draft="contributed">الكالينجينية</language>
+			<language type="kn" draft="contributed">الكانادية</language>
+			<language type="krl" draft="contributed">الكاريلية</language>
+			<language type="kru" draft="contributed">الكيورك</language>
+			<language type="ksb" draft="contributed">الشمبالاية</language>
+			<language type="ksf" draft="contributed">لغة البافيا</language>
+			<language type="ksh" draft="contributed">لغة الكولونيان</language>
+			<language type="kum" draft="contributed">الكوميك</language>
+			<language type="ky" draft="contributed">الكيرغزستانية</language>
+			<language type="lad" draft="contributed">اللادينو</language>
+			<language type="lag" draft="contributed">اللانغية</language>
+			<language type="lez" draft="contributed">الليزجية</language>
+			<language type="lus" draft="contributed">الميزو</language>
+			<language type="luy" draft="contributed">لغة اللويا</language>
+			<language type="mag" draft="contributed">المغهية</language>
+			<language type="mai" draft="contributed">المايثلية</language>
+			<language type="mer" draft="contributed">الميرو</language>
+			<language type="mgh" draft="contributed">لغة ماكوا ميتو</language>
+			<language type="mni" draft="contributed">المانيبورية</language>
+			<language type="mr" draft="contributed">الماراثية</language>
+			<language type="mwr" draft="contributed">الماروارية</language>
+			<language type="naq" draft="contributed">لغة الناما</language>
+			<language type="new" draft="contributed">النوارية</language>
+			<language type="nl_BE" draft="contributed">الفلمنكية</language>
+			<language type="nmg" draft="contributed">لغة الكواسيو</language>
+			<language type="nnh" draft="contributed">لغة النجيمبون</language>
+			<language type="nus" draft="contributed">النوير</language>
+			<language type="rof" draft="contributed">الرومبو</language>
+			<language type="rom" draft="contributed">الغجرية</language>
+			<language type="rwk" draft="contributed">الروا</language>
+			<language type="sam" draft="contributed">الآرامية السامرية</language>
+			<language type="saq" draft="contributed">السامبورو</language>
+			<language type="sbp" draft="contributed">السانغو</language>
+			<language type="see" draft="contributed">السينيكا</language>
+			<language type="seh" draft="contributed">السينا</language>
+			<language type="ses" draft="contributed">لغة الكوري ابروسيني</language>
+			<language type="sh" draft="contributed">صربية-كرواتية</language>
+			<language type="shi" draft="contributed">التاشلحيت</language>
+			<language type="ssy" draft="contributed">لغة الساهو</language>
+			<language type="swb" draft="contributed">لغة جزر القمر</language>
+			<language type="swc" draft="contributed">لغة الكونغو السواحلية</language>
+			<language type="teo" draft="contributed">التيزو</language>
+			<language type="ti" draft="contributed">التيغرينية</language>
+			<language type="tig" draft="contributed">التيغرية</language>
+			<language type="trv" draft="contributed">لغة التاروكو</language>
+			<language type="twq" draft="contributed">لغة التاساواك</language>
+			<language type="tyv" draft="contributed">التوفية</language>
+			<language type="tzm" draft="contributed">التمازيغية الأوسط أطلسية</language>
+			<language type="udm" draft="contributed">الأدمرتية</language>
+			<language type="ug" draft="contributed">الأويغورية</language>
+			<language type="uz" draft="contributed">الأوزبكية</language>
+			<language type="vo" draft="contributed">لغة الفولابوك</language>
+			<language type="vun" draft="contributed">الفونجو</language>
+			<language type="wae" draft="contributed">الوالسر</language>
+			<language type="wal" draft="contributed">الولاياتا</language>
+			<language type="xog" draft="contributed">السوغا</language>
+			<language type="yav" draft="contributed">اليانغبين</language>
+			<language type="ybb" draft="contributed">يمبا</language>
+		</languages>
+	</localeDisplayNames>
+	<dates>
+		<calendars>
+			<calendar type="islamic">
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern draft="contributed">EEEE‏، ‎‏d ‏MMMM‏، y‏ G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern draft="contributed">d‏ MMMM‏، y ‏G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern draft="contributed">d‏ MMM‏، y ‏G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern draft="contributed">d‏/M‏/y‏ GGGGG</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="Ed" draft="contributed">d‏ E</dateFormatItem>
+						<dateFormatItem id="Gy" draft="contributed">y ‏G</dateFormatItem>
+						<dateFormatItem id="GyMMM" draft="contributed">MMM‏ y‏ G</dateFormatItem>
+						<dateFormatItem id="GyMMMd" draft="contributed">d ‏MMM‏، y‏ G</dateFormatItem>
+						<dateFormatItem id="GyMMMEd" draft="contributed">E‏، d‏ MMM‏، y ‏G</dateFormatItem>
+						<dateFormatItem id="Md" draft="contributed">d‏/M</dateFormatItem>
+						<dateFormatItem id="MEd" draft="contributed">E‏، d‏/M</dateFormatItem>
+						<dateFormatItem id="MMMd" draft="contributed">d ‏MMM</dateFormatItem>
+						<dateFormatItem id="MMMEd" draft="contributed">E‏، d ‏MMM</dateFormatItem>
+						<dateFormatItem id="y" draft="contributed">y ‏G</dateFormatItem>
+						<dateFormatItem id="yyyy" draft="contributed">y ‏G</dateFormatItem>
+						<dateFormatItem id="yyyyM" draft="contributed">M‏/y ‏GGGGG</dateFormatItem>
+						<dateFormatItem id="yyyyMd" draft="contributed">d‏/M‏/y ‏GGGGG</dateFormatItem>
+						<dateFormatItem id="yyyyMEd" draft="contributed">E‏، d‏/M‏/y ‏GGGGG</dateFormatItem>
+						<dateFormatItem id="yyyyMMM" draft="contributed">MMM‏ y ‏G</dateFormatItem>
+						<dateFormatItem id="yyyyMMMd" draft="contributed">d‏ MMM‏، y‏ G</dateFormatItem>
+						<dateFormatItem id="yyyyMMMEd" draft="contributed">E‏، d‏ MMM‏، y‏ G</dateFormatItem>
+						<dateFormatItem id="yyyyMMMM" draft="contributed">MMM‏ y‏ G</dateFormatItem>
+						<dateFormatItem id="yyyyQQQ" draft="contributed">QQQ‏ y‏ G</dateFormatItem>
+						<dateFormatItem id="yyyyQQQQ" draft="contributed">QQQQ‏ y‏ G</dateFormatItem>
+					</availableFormats>
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<regionFormat type="daylight" draft="contributed">التوقيت الصيفي {0}</regionFormat>
+			<regionFormat type="standard" draft="contributed">التوقيت الرسمي {0}</regionFormat>
+			<zone type="America/Matamoros">
+				<exemplarCity draft="contributed">ماتامروس</exemplarCity>
+			</zone>
+			<zone type="Asia/Hebron">
+				<exemplarCity draft="contributed">هبرون</exemplarCity>
+			</zone>
+			<metazone type="America_Central">
+				<long>
+					<generic draft="contributed">التوقيت المركزي لأمريكا الشمالية</generic>
+					<standard draft="contributed">التوقيت الرسمي المركزي لأمريكا الشمالية</standard>
+					<daylight draft="contributed">التوقيت الصيفي المركزي لأمريكا الشمالية</daylight>
+				</long>
+			</metazone>
+			<metazone type="America_Eastern">
+				<long>
+					<generic draft="contributed">التوقيت الشرقي لأمريكا الشمالية</generic>
+					<standard draft="contributed">التوقيت الرسمي الشرقي لأمريكا الشمالية</standard>
+					<daylight draft="contributed">التوقيت الصيفي الشرقي لأمريكا الشمالية</daylight>
+				</long>
+			</metazone>
+			<metazone type="America_Mountain">
+				<long>
+					<generic draft="contributed">التوقيت الجبلي لأمريكا الشمالية</generic>
+					<standard draft="contributed">التوقيت الجبلي الرسمي لأمريكا الشمالية</standard>
+					<daylight draft="contributed">التوقيت الجبلي الصيفي لأمريكا الشمالية</daylight>
+				</long>
+			</metazone>
+			<metazone type="America_Pacific">
+				<long>
+					<generic draft="contributed">توقيت المحيط الهادي لأمريكا الشمالية</generic>
+					<standard draft="contributed">توقيت المحيط الهادي الرسمي لأمريكا الشمالية</standard>
+					<daylight draft="contributed">توقيت المحيط الهادي الصيفي لأمريكا الشمالية</daylight>
+				</long>
+			</metazone>
+			<metazone type="Pierre_Miquelon">
+				<long>
+					<generic draft="contributed">توقيت سانت بيير وميكولون</generic>
+					<standard draft="contributed">توقيت سانت بيير وميكولون الرسمي</standard>
+					<daylight draft="contributed">توقيت سانت بيير وميكولون الصيفي</daylight>
+				</long>
+			</metazone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<symbols numberSystem="arab">
+			<nan draft="contributed">NaN</nan>
+		</symbols>
+	</numbers>
+	<listPatterns>
+		<listPattern>
+			<listPatternPart type="2" draft="contributed">{0} و{1}</listPatternPart>
+		</listPattern>
+	</listPatterns>
+</ldml>
+

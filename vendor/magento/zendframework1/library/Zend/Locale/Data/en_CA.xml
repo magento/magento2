@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "../../common/dtd/ldml.dtd">
+<!-- Copyright © 1991-2013 Unicode, Inc.
+CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+For terms of use, see http://www.unicode.org/copyright.html
+-->
+<ldml>
+	<identity>
+		<version number="$Revision: 9526 $"/>
+		<generation date="$Date: 2013-11-22 17:21:44 -0600 (Fri, 22 Nov 2013) $"/>
+		<language type="en"/>
+		<territory type="CA"/>
+	</identity>
+	<dates>
+		<calendars>
+			<calendar type="generic">
+				<dateFormats>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>GGGGG y-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="Md">MM-dd</dateFormatItem>
+						<dateFormatItem id="MEd">E, MM-dd</dateFormatItem>
+						<dateFormatItem id="yyyyM">GGGGG y-MM</dateFormatItem>
+						<dateFormatItem id="yyyyMd">GGGGG y-MM-dd</dateFormatItem>
+						<dateFormatItem id="yyyyMEd">E, GGGGG y-MM-dd</dateFormatItem>
+					</availableFormats>
+					<intervalFormats>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d">MM-dd – MM-dd</greatestDifference>
+							<greatestDifference id="M">MM-dd – MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d">E, MM-dd – E, MM-dd</greatestDifference>
+							<greatestDifference id="M">E, MM-dd – E, MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M">GGGGG y-MM – y-MM</greatestDifference>
+							<greatestDifference id="y">GGGGG y-MM – y-MM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d">GGGGG y-MM-dd – y-MM-dd</greatestDifference>
+							<greatestDifference id="M">GGGGG y-MM-dd – y-MM-dd</greatestDifference>
+							<greatestDifference id="y">GGGGG y-MM-dd – y-MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d">E, y-MM-dd – E, y-MM-dd</greatestDifference>
+							<greatestDifference id="M">E, y-MM-dd – E, y-MM-dd</greatestDifference>
+							<greatestDifference id="y">E, y-MM-dd – E, y-MM-dd</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="gregorian">
+				<dateFormats>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>y-MM-dd</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<dateTimeFormats>
+					<availableFormats>
+						<dateFormatItem id="Md">MM-dd</dateFormatItem>
+						<dateFormatItem id="MEd">E, MM-dd</dateFormatItem>
+						<dateFormatItem id="yM">y-MM</dateFormatItem>
+						<dateFormatItem id="yMd">y-MM-dd</dateFormatItem>
+						<dateFormatItem id="yMEd">E, y-MM-dd</dateFormatItem>
+					</availableFormats>
+					<intervalFormats>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d">MM-dd – MM-dd</greatestDifference>
+							<greatestDifference id="M">MM-dd – MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d">E, MM-dd – E, MM-dd</greatestDifference>
+							<greatestDifference id="M">E, MM-dd – E, MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M">y-MM – y-MM</greatestDifference>
+							<greatestDifference id="y">y-MM – y-MM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d">y-MM-dd – y-MM-dd</greatestDifference>
+							<greatestDifference id="M">y-MM-dd – y-MM-dd</greatestDifference>
+							<greatestDifference id="y">y-MM-dd – y-MM-dd</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d">E, y-MM-dd – E, y-MM-dd</greatestDifference>
+							<greatestDifference id="M">E, y-MM-dd – E, y-MM-dd</greatestDifference>
+							<greatestDifference id="y">E, y-MM-dd – E, y-MM-dd</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+		</calendars>
+		<timeZoneNames>
+			<metazone type="Newfoundland">
+				<short>
+					<generic>NT</generic>
+					<standard>NST</standard>
+					<daylight>NDT</daylight>
+				</short>
+			</metazone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<currencies>
+			<currency type="CAD">
+				<symbol>$</symbol>
+			</currency>
+			<currency type="USD">
+				<symbol>US$</symbol>
+			</currency>
+		</currencies>
+	</numbers>
+</ldml>

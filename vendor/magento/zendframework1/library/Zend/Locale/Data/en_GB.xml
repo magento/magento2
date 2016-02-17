@@ -1,0 +1,1257 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ldml SYSTEM "../../common/dtd/ldml.dtd">
+<!-- Copyright © 1991-2013 Unicode, Inc.
+CLDR data files are interpreted according to the LDML specification (http://unicode.org/reports/tr35/)
+For terms of use, see http://www.unicode.org/copyright.html
+-->
+<ldml>
+	<identity>
+		<version number="$Revision: 9876 $"/>
+		<generation date="$Date: 2014-03-05 23:14:25 -0600 (Wed, 05 Mar 2014) $"/>
+		<language type="en"/>
+		<territory type="GB"/>
+	</identity>
+	<localeDisplayNames>
+		<languages>
+			<language type="arn">Araucanian</language>
+			<language type="bax">Bamum</language>
+			<language type="en_GB" alt="short">UK English</language>
+			<language type="en_US" alt="short">US English</language>
+			<language type="tzm">Central Morocco Tamazight</language>
+			<language type="wal">Walamo</language>
+		</languages>
+		<scripts>
+			<script type="Thai">Thai</script>
+		</scripts>
+		<territories>
+			<territory type="GB">United Kingdom</territory>
+			<territory type="GB" alt="short">UK</territory>
+			<territory type="GS">South Georgia and the South Sandwich Islands</territory>
+			<territory type="HM">Heard Island and McDonald Islands</territory>
+			<territory type="UM">U.S. Minor Outlying Islands</territory>
+			<territory type="US">United States</territory>
+			<territory type="US" alt="short">US</territory>
+			<territory type="VC">Saint Vincent and the Grenadines</territory>
+		</territories>
+		<keys>
+			<key type="colCaseLevel">Case-Sensitive Sorting</key>
+			<key type="colNormalization">Normalised Sorting</key>
+		</keys>
+		<types>
+			<type type="fullwide" key="numbers">Full-Width Digits</type>
+			<type type="no" key="colNormalization">Sort Without Normalisation</type>
+			<type type="yes" key="colNormalization">Sort Unicode Normalised</type>
+		</types>
+	</localeDisplayNames>
+	<characters>
+		<ellipsis type="final">{0}…</ellipsis>
+		<ellipsis type="initial">…{0}</ellipsis>
+		<ellipsis type="medial">{0}… {1}</ellipsis>
+		<ellipsis type="word-final">{0} …</ellipsis>
+		<ellipsis type="word-initial">… {0}</ellipsis>
+		<ellipsis type="word-medial">{0} … {1}</ellipsis>
+		<moreInformation>?</moreInformation>
+	</characters>
+	<dates>
+		<calendars>
+			<calendar type="chinese">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE, d MMMM U</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>d MMMM U</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>d MMM U</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>dd/MM/yy</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength type="full">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="long">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="medium">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="short">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<availableFormats>
+						<dateFormatItem id="Ed">E d</dateFormatItem>
+						<dateFormatItem id="GyMMMd">d MMM U</dateFormatItem>
+						<dateFormatItem id="GyMMMEd">E, d MMM U</dateFormatItem>
+						<dateFormatItem id="M">LL</dateFormatItem>
+						<dateFormatItem id="Md">dd/MM</dateFormatItem>
+						<dateFormatItem id="MEd">E dd/MM</dateFormatItem>
+						<dateFormatItem id="MMMd">d MMM</dateFormatItem>
+						<dateFormatItem id="MMMEd">E d MMM</dateFormatItem>
+						<dateFormatItem id="MMMMd">d MMMM</dateFormatItem>
+						<dateFormatItem id="yMd">dd/MM/y</dateFormatItem>
+						<dateFormatItem id="yyyyM">MM/y</dateFormatItem>
+						<dateFormatItem id="yyyyMd">dd/MM/y</dateFormatItem>
+						<dateFormatItem id="yyyyMEd">E, dd/MM/y</dateFormatItem>
+						<dateFormatItem id="yyyyMMMd">d MMM U</dateFormatItem>
+						<dateFormatItem id="yyyyMMMEd">E, d MMM U</dateFormatItem>
+						<dateFormatItem id="yyyyMMMM">MMMM U</dateFormatItem>
+					</availableFormats>
+					<intervalFormats>
+						<intervalFormatItem id="d">
+							<greatestDifference id="d">d–d</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="h">
+							<greatestDifference id="h">h–h a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="H">
+							<greatestDifference id="H">HH–HH</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hm">
+							<greatestDifference id="h">h:mm–h:mm a</greatestDifference>
+							<greatestDifference id="m">h:mm–h:mm a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hm">
+							<greatestDifference id="H">HH:mm–HH:mm</greatestDifference>
+							<greatestDifference id="m">HH:mm–HH:mm</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hmv">
+							<greatestDifference id="h">h:mm–h:mm a v</greatestDifference>
+							<greatestDifference id="m">h:mm–h:mm a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hmv">
+							<greatestDifference id="H">HH:mm–HH:mm v</greatestDifference>
+							<greatestDifference id="m">HH:mm–HH:mm v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hv">
+							<greatestDifference id="h">h–h a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hv">
+							<greatestDifference id="H">HH–HH v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="M">
+							<greatestDifference id="M">M–M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d">dd/MM – dd/MM</greatestDifference>
+							<greatestDifference id="M">dd/MM – dd/MM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d">E dd/MM – E dd/MM</greatestDifference>
+							<greatestDifference id="M">E dd/MM – E dd/MM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMM">
+							<greatestDifference id="M">MMM–MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMd">
+							<greatestDifference id="d">d–d MMM</greatestDifference>
+							<greatestDifference id="M">d MMM – d MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMEd">
+							<greatestDifference id="d">E d – E d MMM</greatestDifference>
+							<greatestDifference id="M">E d MMM – E d MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="y">
+							<greatestDifference id="y">U-U</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M">MM/y – MM/y</greatestDifference>
+							<greatestDifference id="y">MM/y – MM/y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d">dd/MM/y – dd/MM/y</greatestDifference>
+							<greatestDifference id="M">dd/MM/y – dd/MM/y</greatestDifference>
+							<greatestDifference id="y">dd/MM/y – dd/MM/y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d">E, dd/MM/y – E, dd/MM/y</greatestDifference>
+							<greatestDifference id="M">E, dd/MM/y – E, dd/MM/y</greatestDifference>
+							<greatestDifference id="y">E, dd/MM/y – E, dd/MM/y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMM">
+							<greatestDifference id="M">MMM–MMM U</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMd">
+							<greatestDifference id="d">d–d MMM U</greatestDifference>
+							<greatestDifference id="M">d MMM – d MMM U</greatestDifference>
+							<greatestDifference id="y">d MMM U – d MMM U</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMEd">
+							<greatestDifference id="d">E, d – E, d MMM U</greatestDifference>
+							<greatestDifference id="M">E, d MMM – E, d MMM U</greatestDifference>
+							<greatestDifference id="y">E, d MMM U – E, d MMM U</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMM">
+							<greatestDifference id="M">MMMM–MMMM U</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="generic">
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE, d MMMM y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>d MMMM y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>d MMM y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>dd/MM/y GGGGG</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength type="full">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="long">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="medium">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="short">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<availableFormats>
+						<dateFormatItem id="Ed">E d</dateFormatItem>
+						<dateFormatItem id="GyMMMd">d MMM y G</dateFormatItem>
+						<dateFormatItem id="GyMMMEd">E, d MMM y G</dateFormatItem>
+						<dateFormatItem id="M">LL</dateFormatItem>
+						<dateFormatItem id="Md">dd/MM</dateFormatItem>
+						<dateFormatItem id="MEd">E dd/MM</dateFormatItem>
+						<dateFormatItem id="MMMd">d MMM</dateFormatItem>
+						<dateFormatItem id="MMMEd">E d MMM</dateFormatItem>
+						<dateFormatItem id="MMMMd">d MMMM</dateFormatItem>
+						<dateFormatItem id="yyyyM">MM/y GGGGG</dateFormatItem>
+						<dateFormatItem id="yyyyMd">dd/MM/y GGGGG</dateFormatItem>
+						<dateFormatItem id="yyyyMEd">E, dd/MM/y GGGGG</dateFormatItem>
+						<dateFormatItem id="yyyyMMMd">d MMM y G</dateFormatItem>
+						<dateFormatItem id="yyyyMMMEd">E, d MMM y G</dateFormatItem>
+						<dateFormatItem id="yyyyMMMM">MMMM y G</dateFormatItem>
+					</availableFormats>
+					<intervalFormats>
+						<intervalFormatItem id="d">
+							<greatestDifference id="d">d–d</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="h">
+							<greatestDifference id="h">h–h a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="H">
+							<greatestDifference id="H">HH–HH</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hm">
+							<greatestDifference id="h">h:mm–h:mm a</greatestDifference>
+							<greatestDifference id="m">h:mm–h:mm a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hm">
+							<greatestDifference id="H">HH:mm–HH:mm</greatestDifference>
+							<greatestDifference id="m">HH:mm–HH:mm</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hmv">
+							<greatestDifference id="h">h:mm–h:mm a v</greatestDifference>
+							<greatestDifference id="m">h:mm–h:mm a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hmv">
+							<greatestDifference id="H">HH:mm–HH:mm v</greatestDifference>
+							<greatestDifference id="m">HH:mm–HH:mm v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hv">
+							<greatestDifference id="h">h–h a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hv">
+							<greatestDifference id="H">HH–HH v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="M">
+							<greatestDifference id="M">M–M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d">dd/MM – dd/MM</greatestDifference>
+							<greatestDifference id="M">dd/MM – dd/MM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d">E dd/MM – E dd/MM</greatestDifference>
+							<greatestDifference id="M">E dd/MM – E dd/MM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMM">
+							<greatestDifference id="M">MMM–MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMd">
+							<greatestDifference id="d">d–d MMM</greatestDifference>
+							<greatestDifference id="M">d MMM – d MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMEd">
+							<greatestDifference id="d">E d – E d MMM</greatestDifference>
+							<greatestDifference id="M">E d MMM – E d MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="y">
+							<greatestDifference id="y">y-y G</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M">MM/y – MM/y GGGGG</greatestDifference>
+							<greatestDifference id="y">MM/y – MM/y GGGGG</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d">dd/MM/y – dd/MM/y GGGGG</greatestDifference>
+							<greatestDifference id="M">dd/MM/y – dd/MM/y GGGGG</greatestDifference>
+							<greatestDifference id="y">dd/MM/y – dd/MM/y GGGGG</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d">E, dd/MM/y – E, dd/MM/y GGGGG</greatestDifference>
+							<greatestDifference id="M">E, dd/MM/y – E, dd/MM/y GGGGG</greatestDifference>
+							<greatestDifference id="y">E, dd/MM/y – E, dd/MM/y GGGGG</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMM">
+							<greatestDifference id="M">MMM–MMM y G</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMd">
+							<greatestDifference id="d">d–d MMM y G</greatestDifference>
+							<greatestDifference id="M">d MMM – d MMM y G</greatestDifference>
+							<greatestDifference id="y">d MMM y – d MMM y G</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMEd">
+							<greatestDifference id="d">E, d – E, d MMM y G</greatestDifference>
+							<greatestDifference id="M">E, d MMM – E, d MMM y G</greatestDifference>
+							<greatestDifference id="y">E, d MMM y – E, d MMM y G</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMM">
+							<greatestDifference id="M">MMMM–MMMM y G</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="gregorian">
+				<dayPeriods>
+					<dayPeriodContext type="format">
+						<dayPeriodWidth type="wide">
+							<dayPeriod type="am">am</dayPeriod>
+							<dayPeriod type="pm">pm</dayPeriod>
+						</dayPeriodWidth>
+					</dayPeriodContext>
+				</dayPeriods>
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE, d MMMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>d MMMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>d MMM y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>dd/MM/y</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+				<timeFormats>
+					<timeFormatLength type="full">
+						<timeFormat>
+							<pattern>HH:mm:ss zzzz</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="long">
+						<timeFormat>
+							<pattern>HH:mm:ss z</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="medium">
+						<timeFormat>
+							<pattern>HH:mm:ss</pattern>
+						</timeFormat>
+					</timeFormatLength>
+					<timeFormatLength type="short">
+						<timeFormat>
+							<pattern>HH:mm</pattern>
+						</timeFormat>
+					</timeFormatLength>
+				</timeFormats>
+				<dateTimeFormats>
+					<dateTimeFormatLength type="full">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="long">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="medium">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<dateTimeFormatLength type="short">
+						<dateTimeFormat>
+							<pattern>{1} {0}</pattern>
+						</dateTimeFormat>
+					</dateTimeFormatLength>
+					<availableFormats>
+						<dateFormatItem id="Ed">E d</dateFormatItem>
+						<dateFormatItem id="GyMMMd">d MMM y G</dateFormatItem>
+						<dateFormatItem id="GyMMMEd">E, d MMM y G</dateFormatItem>
+						<dateFormatItem id="M">LL</dateFormatItem>
+						<dateFormatItem id="Md">dd/MM</dateFormatItem>
+						<dateFormatItem id="MEd">E dd/MM</dateFormatItem>
+						<dateFormatItem id="MMdd">dd/MM</dateFormatItem>
+						<dateFormatItem id="MMMd">d MMM</dateFormatItem>
+						<dateFormatItem id="MMMEd">E d MMM</dateFormatItem>
+						<dateFormatItem id="MMMMd">d MMMM</dateFormatItem>
+						<dateFormatItem id="yM">MM/y</dateFormatItem>
+						<dateFormatItem id="yMd">dd/MM/y</dateFormatItem>
+						<dateFormatItem id="yMEd">E, dd/MM/y</dateFormatItem>
+						<dateFormatItem id="yMMMd">d MMM y</dateFormatItem>
+						<dateFormatItem id="yMMMEd">E, d MMM y</dateFormatItem>
+						<dateFormatItem id="yMMMM">MMMM y</dateFormatItem>
+					</availableFormats>
+					<intervalFormats>
+						<intervalFormatItem id="d">
+							<greatestDifference id="d">d–d</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="h">
+							<greatestDifference id="h">h–h a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="H">
+							<greatestDifference id="H">HH–HH</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hm">
+							<greatestDifference id="h">h:mm–h:mm a</greatestDifference>
+							<greatestDifference id="m">h:mm–h:mm a</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hm">
+							<greatestDifference id="H">HH:mm–HH:mm</greatestDifference>
+							<greatestDifference id="m">HH:mm–HH:mm</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hmv">
+							<greatestDifference id="h">h:mm–h:mm a v</greatestDifference>
+							<greatestDifference id="m">h:mm–h:mm a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hmv">
+							<greatestDifference id="H">HH:mm–HH:mm v</greatestDifference>
+							<greatestDifference id="m">HH:mm–HH:mm v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="hv">
+							<greatestDifference id="h">h–h a v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Hv">
+							<greatestDifference id="H">HH–HH v</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="M">
+							<greatestDifference id="M">M–M</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="Md">
+							<greatestDifference id="d">dd/MM – dd/MM</greatestDifference>
+							<greatestDifference id="M">dd/MM – dd/MM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MEd">
+							<greatestDifference id="d">E dd/MM – E dd/MM</greatestDifference>
+							<greatestDifference id="M">E dd/MM – E dd/MM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMM">
+							<greatestDifference id="M">MMM–MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMd">
+							<greatestDifference id="d">d–d MMM</greatestDifference>
+							<greatestDifference id="M">d MMM – d MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="MMMEd">
+							<greatestDifference id="d">E d – E d MMM</greatestDifference>
+							<greatestDifference id="M">E d MMM – E d MMM</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="y">
+							<greatestDifference id="y">y-y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yM">
+							<greatestDifference id="M">MM/y – MM/y</greatestDifference>
+							<greatestDifference id="y">MM/y – MM/y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMd">
+							<greatestDifference id="d">dd/MM/y – dd/MM/y</greatestDifference>
+							<greatestDifference id="M">dd/MM/y – dd/MM/y</greatestDifference>
+							<greatestDifference id="y">dd/MM/y – dd/MM/y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMEd">
+							<greatestDifference id="d">E, dd/MM/y – E, dd/MM/y</greatestDifference>
+							<greatestDifference id="M">E, dd/MM/y – E, dd/MM/y</greatestDifference>
+							<greatestDifference id="y">E, dd/MM/y – E, dd/MM/y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMM">
+							<greatestDifference id="M">MMM–MMM y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMd">
+							<greatestDifference id="d">d–d MMM y</greatestDifference>
+							<greatestDifference id="M">d MMM – d MMM y</greatestDifference>
+							<greatestDifference id="y">d MMM y – d MMM y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMEd">
+							<greatestDifference id="d">E, d – E, d MMM y</greatestDifference>
+							<greatestDifference id="M">E, d MMM – E, d MMM y</greatestDifference>
+							<greatestDifference id="y">E, d MMM y – E, d MMM y</greatestDifference>
+						</intervalFormatItem>
+						<intervalFormatItem id="yMMMM">
+							<greatestDifference id="M">MMMM–MMMM y</greatestDifference>
+						</intervalFormatItem>
+					</intervalFormats>
+				</dateTimeFormats>
+			</calendar>
+			<calendar type="indian">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Chaitra</month>
+							<month type="2">Vaisakha</month>
+							<month type="3">Jyaistha</month>
+							<month type="4">Asadha</month>
+							<month type="5">Sravana</month>
+							<month type="6">Bhadra</month>
+							<month type="7">Asvina</month>
+							<month type="8">Kartika</month>
+							<month type="9">Agrahayana</month>
+							<month type="10">Pausa</month>
+							<month type="11">Magha</month>
+							<month type="12">Phalguna</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Chaitra</month>
+							<month type="2">Vaisakha</month>
+							<month type="3">Jyaistha</month>
+							<month type="4">Asadha</month>
+							<month type="5">Sravana</month>
+							<month type="6">Bhadra</month>
+							<month type="7">Asvina</month>
+							<month type="8">Kartika</month>
+							<month type="9">Agrahayana</month>
+							<month type="10">Pausa</month>
+							<month type="11">Magha</month>
+							<month type="12">Phalguna</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<month type="1">Chaitra</month>
+							<month type="2">Vaisakha</month>
+							<month type="3">Jyaistha</month>
+							<month type="4">Asadha</month>
+							<month type="5">Sravana</month>
+							<month type="6">Bhadra</month>
+							<month type="7">Asvina</month>
+							<month type="8">Kartika</month>
+							<month type="9">Agrahayana</month>
+							<month type="10">Pausa</month>
+							<month type="11">Magha</month>
+							<month type="12">Phalguna</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Chaitra</month>
+							<month type="2">Vaisakha</month>
+							<month type="3">Jyaistha</month>
+							<month type="4">Asadha</month>
+							<month type="5">Sravana</month>
+							<month type="6">Bhadra</month>
+							<month type="7">Asvina</month>
+							<month type="8">Kartika</month>
+							<month type="9">Agrahayana</month>
+							<month type="10">Pausa</month>
+							<month type="11">Magha</month>
+							<month type="12">Phalguna</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+				<eras>
+					<eraAbbr>
+						<era type="0">SAKA</era>
+					</eraAbbr>
+				</eras>
+			</calendar>
+			<calendar type="islamic">
+				<months>
+					<monthContext type="format">
+						<monthWidth type="abbreviated">
+							<month type="1">Muh.</month>
+							<month type="2">Saf.</month>
+							<month type="3">Rab. I</month>
+							<month type="4">Rab. II</month>
+							<month type="5">Jum. I</month>
+							<month type="6">Jum. II</month>
+							<month type="7">Raj.</month>
+							<month type="8">Sha.</month>
+							<month type="9">Ram.</month>
+							<month type="10">Shaw.</month>
+							<month type="11">Dhuʻl-Q.</month>
+							<month type="12">Dhuʻl-H.</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Muharram</month>
+							<month type="2">Safar</month>
+							<month type="3">Rabiʻ I</month>
+							<month type="4">Rabiʻ II</month>
+							<month type="5">Jumada I</month>
+							<month type="6">Jumada II</month>
+							<month type="7">Rajab</month>
+							<month type="8">Shaʻban</month>
+							<month type="9">Ramadan</month>
+							<month type="10">Shawwal</month>
+							<month type="11">Dhuʻl-Qiʻdah</month>
+							<month type="12">Dhuʻl-Hijjah</month>
+						</monthWidth>
+					</monthContext>
+					<monthContext type="stand-alone">
+						<monthWidth type="abbreviated">
+							<month type="1">Muh.</month>
+							<month type="2">Saf.</month>
+							<month type="3">Rab. I</month>
+							<month type="4">Rab. II</month>
+							<month type="5">Jum. I</month>
+							<month type="6">Jum. II</month>
+							<month type="7">Raj.</month>
+							<month type="8">Sha.</month>
+							<month type="9">Ram.</month>
+							<month type="10">Shaw.</month>
+							<month type="11">Dhuʻl-Q.</month>
+							<month type="12">Dhuʻl-H.</month>
+						</monthWidth>
+						<monthWidth type="narrow">
+							<month type="1">1</month>
+							<month type="2">2</month>
+							<month type="3">3</month>
+							<month type="4">4</month>
+							<month type="5">5</month>
+							<month type="6">6</month>
+							<month type="7">7</month>
+							<month type="8">8</month>
+							<month type="9">9</month>
+							<month type="10">10</month>
+							<month type="11">11</month>
+							<month type="12">12</month>
+						</monthWidth>
+						<monthWidth type="wide">
+							<month type="1">Muharram</month>
+							<month type="2">Safar</month>
+							<month type="3">Rabiʻ I</month>
+							<month type="4">Rabiʻ II</month>
+							<month type="5">Jumada I</month>
+							<month type="6">Jumada II</month>
+							<month type="7">Rajab</month>
+							<month type="8">Shaʻban</month>
+							<month type="9">Ramadan</month>
+							<month type="10">Shawwal</month>
+							<month type="11">Dhuʻl-Qiʻdah</month>
+							<month type="12">Dhuʻl-Hijjah</month>
+						</monthWidth>
+					</monthContext>
+				</months>
+			</calendar>
+			<calendar type="japanese">
+				<!-- need some non-empty element here to make inheritance work,
+					 this copy of generic dateFormats above is smaller than root japanese eras
+				-->
+				<dateFormats>
+					<dateFormatLength type="full">
+						<dateFormat>
+							<pattern>EEEE, d MMMM y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="long">
+						<dateFormat>
+							<pattern>d MMMM y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="medium">
+						<dateFormat>
+							<pattern>d MMM y G</pattern>
+						</dateFormat>
+					</dateFormatLength>
+					<dateFormatLength type="short">
+						<dateFormat>
+							<pattern>dd/MM/y GGGGG</pattern>
+						</dateFormat>
+					</dateFormatLength>
+				</dateFormats>
+			</calendar>
+		</calendars>
+		<fields>
+			<field type="dayperiod">
+				<displayName>am/pm</displayName>
+			</field>
+		</fields>
+		<timeZoneNames>
+			<gmtZeroFormat>GMT</gmtZeroFormat>
+			<zone type="America/Coral_Harbour">
+				<exemplarCity>Atikokan</exemplarCity>
+			</zone>
+			<zone type="America/St_Johns">
+				<exemplarCity>St. John’s</exemplarCity>
+			</zone>
+			<zone type="Africa/Asmera">
+				<exemplarCity>Asmara</exemplarCity>
+			</zone>
+			<zone type="Pacific/Truk">
+				<exemplarCity>Chuuk</exemplarCity>
+			</zone>
+			<zone type="Pacific/Ponape">
+				<exemplarCity>Pohnpei</exemplarCity>
+			</zone>
+			<zone type="Atlantic/Faeroe">
+				<exemplarCity>Faroe</exemplarCity>
+			</zone>
+			<zone type="Europe/London">
+				<short>
+					<daylight>BST</daylight>
+				</short>
+			</zone>
+			<zone type="America/Godthab">
+				<exemplarCity>Nuuk</exemplarCity>
+			</zone>
+			<zone type="America/Scoresbysund">
+				<exemplarCity>Ittoqqortoormiit</exemplarCity>
+			</zone>
+			<zone type="Asia/Calcutta">
+				<exemplarCity>Kolkata</exemplarCity>
+			</zone>
+			<zone type="America/St_Kitts">
+				<exemplarCity>St. Kitts</exemplarCity>
+			</zone>
+			<zone type="America/St_Lucia">
+				<exemplarCity>St. Lucia</exemplarCity>
+			</zone>
+			<zone type="Asia/Katmandu">
+				<exemplarCity>Kathmandu</exemplarCity>
+			</zone>
+			<zone type="Atlantic/St_Helena">
+				<exemplarCity>St. Helena</exemplarCity>
+			</zone>
+			<zone type="America/Lower_Princes">
+				<exemplarCity>Lower Prince's Quarter</exemplarCity>
+			</zone>
+			<zone type="America/North_Dakota/Beulah">
+				<exemplarCity>Beulah, North Dakota</exemplarCity>
+			</zone>
+			<zone type="America/North_Dakota/New_Salem">
+				<exemplarCity>New Salem, North Dakota</exemplarCity>
+			</zone>
+			<zone type="America/North_Dakota/Center">
+				<exemplarCity>Center, North Dakota</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Vincennes">
+				<exemplarCity>Vincennes, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Petersburg">
+				<exemplarCity>Petersburg, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Tell_City">
+				<exemplarCity>Tell City, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Knox">
+				<exemplarCity>Knox, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Winamac">
+				<exemplarCity>Winamac, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Marengo">
+				<exemplarCity>Marengo, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Indiana/Vevay">
+				<exemplarCity>Vevay, Indiana</exemplarCity>
+			</zone>
+			<zone type="America/Kentucky/Monticello">
+				<exemplarCity>Monticello, Kentucky</exemplarCity>
+			</zone>
+			<zone type="America/St_Vincent">
+				<exemplarCity>St. Vincent</exemplarCity>
+			</zone>
+			<zone type="America/St_Thomas">
+				<exemplarCity>St. Thomas</exemplarCity>
+			</zone>
+			<metazone type="Arabian">
+				<long>
+					<generic>Arabian Time</generic>
+					<standard>Arabian Standard Time</standard>
+					<daylight>Arabian Summer Time</daylight>
+				</long>
+			</metazone>
+			<metazone type="China">
+				<long>
+					<generic>China Time</generic>
+					<standard>China Standard Time</standard>
+					<daylight>China Summer Time</daylight>
+				</long>
+			</metazone>
+			<metazone type="Europe_Central">
+				<short>
+					<generic>CET</generic>
+					<standard>CET</standard>
+					<daylight>CEST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Europe_Eastern">
+				<short>
+					<generic>EET</generic>
+					<standard>EET</standard>
+					<daylight>EEST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Europe_Western">
+				<short>
+					<generic>WET</generic>
+					<standard>WET</standard>
+					<daylight>WEST</daylight>
+				</short>
+			</metazone>
+			<metazone type="Iran">
+				<long>
+					<generic>Iran Time</generic>
+					<standard>Iran Standard Time</standard>
+					<daylight>Iran Summer Time</daylight>
+				</long>
+			</metazone>
+			<metazone type="Israel">
+				<long>
+					<generic>Israel Time</generic>
+					<standard>Israel Standard Time</standard>
+					<daylight>Israel Summer Time</daylight>
+				</long>
+			</metazone>
+			<metazone type="Japan">
+				<long>
+					<generic>Japan Time</generic>
+					<standard>Japan Standard Time</standard>
+					<daylight>Japan Summer Time</daylight>
+				</long>
+			</metazone>
+			<metazone type="Korea">
+				<long>
+					<generic>Korean Time</generic>
+					<standard>Korean Standard Time</standard>
+					<daylight>Korean Summer Time</daylight>
+				</long>
+			</metazone>
+			<metazone type="Taipei">
+				<long>
+					<generic>Taipei Time</generic>
+					<standard>Taipei Standard Time</standard>
+					<daylight>Taipei Summer Time</daylight>
+				</long>
+			</metazone>
+		</timeZoneNames>
+	</dates>
+	<numbers>
+		<currencies>
+			<currency type="AUD">
+				<symbol>AU$</symbol>
+			</currency>
+			<currency type="BRL">
+				<symbol>R$</symbol>
+			</currency>
+			<currency type="BYB">
+				<displayName>Belarusian New Rouble (1994–1999)</displayName>
+				<displayName count="one">Belarusian new rouble (1994–1999)</displayName>
+				<displayName count="other">Belarusian new roubles (1994–1999)</displayName>
+			</currency>
+			<currency type="BYR">
+				<displayName>Belarusian Rouble</displayName>
+				<displayName count="one">Belarusian rouble</displayName>
+				<displayName count="other">Belarusian roubles</displayName>
+			</currency>
+			<currency type="CAD">
+				<symbol>CA$</symbol>
+			</currency>
+			<currency type="CNY">
+				<symbol>CN¥</symbol>
+			</currency>
+			<currency type="EUR">
+				<symbol>€</symbol>
+			</currency>
+			<currency type="GBP">
+				<displayName>British Pound</displayName>
+				<displayName count="one">British pound</displayName>
+				<displayName count="other">British pounds</displayName>
+				<symbol>£</symbol>
+			</currency>
+			<currency type="HKD">
+				<symbol>HK$</symbol>
+			</currency>
+			<currency type="ILR">
+				<displayName>Israeli Shekel (1980–1985)</displayName>
+				<displayName count="one">Israeli shekel (1980–1985)</displayName>
+				<displayName count="other">Israeli shekels (1980–1985)</displayName>
+			</currency>
+			<currency type="ILS">
+				<displayName>Israeli New Shekel</displayName>
+				<displayName count="one">Israeli new shekel</displayName>
+				<displayName count="other">Israeli new shekels</displayName>
+				<symbol>₪</symbol>
+			</currency>
+			<currency type="INR">
+				<symbol>₹</symbol>
+			</currency>
+			<currency type="KRW">
+				<symbol>₩</symbol>
+			</currency>
+			<currency type="LVR">
+				<displayName>Latvian Rouble</displayName>
+				<displayName count="one">Latvian rouble</displayName>
+				<displayName count="other">Latvian roubles</displayName>
+			</currency>
+			<currency type="MGA">
+				<displayName>Malagasy Ariary</displayName>
+				<displayName count="one">Malagasy ariary</displayName>
+				<displayName count="other">Malagasy ariarys</displayName>
+			</currency>
+			<currency type="MWK">
+				<displayName>Malawian Kwacha</displayName>
+				<displayName count="one">Malawian kwacha</displayName>
+				<displayName count="other">Malawian kwachas</displayName>
+			</currency>
+			<currency type="MXN">
+				<symbol>MX$</symbol>
+			</currency>
+			<currency type="NZD">
+				<symbol>NZ$</symbol>
+			</currency>
+			<currency type="RUB">
+				<displayName>Russian Rouble</displayName>
+				<displayName count="one">Russian rouble</displayName>
+				<displayName count="other">Russian roubles</displayName>
+			</currency>
+			<currency type="RUR">
+				<displayName>Russian Rouble (1991–1998)</displayName>
+				<displayName count="one">Russian rouble (1991–1998)</displayName>
+				<displayName count="other">Russian roubles (1991–1998)</displayName>
+			</currency>
+			<currency type="SCR">
+				<displayName>Seychelles Rupee</displayName>
+				<displayName count="one">Seychelles rupee</displayName>
+				<displayName count="other">Seychelles rupees</displayName>
+			</currency>
+			<currency type="THB">
+				<symbol>฿</symbol>
+			</currency>
+			<currency type="TJR">
+				<displayName>Tajikistani Rouble</displayName>
+				<displayName count="one">Tajikistani rouble</displayName>
+				<displayName count="other">Tajikistani roubles</displayName>
+			</currency>
+			<currency type="TWD">
+				<symbol>NT$</symbol>
+			</currency>
+			<currency type="USD">
+				<symbol>$</symbol>
+			</currency>
+			<currency type="UZS">
+				<displayName>Uzbekistani Som</displayName>
+				<displayName count="one">Uzbekistani som</displayName>
+				<displayName count="other">Uzbekistani som</displayName>
+			</currency>
+			<currency type="VND">
+				<symbol>₫</symbol>
+			</currency>
+			<currency type="XAF">
+				<displayName>Central African CFA Franc</displayName>
+				<displayName count="one">Central African CFA franc</displayName>
+				<displayName count="other">Central African CFA francs</displayName>
+				<symbol>FCFA</symbol>
+			</currency>
+			<currency type="XCD">
+				<symbol>EC$</symbol>
+			</currency>
+			<currency type="XOF">
+				<displayName>West African CFA Franc</displayName>
+				<displayName count="one">West African CFA franc</displayName>
+				<displayName count="other">West African CFA francs</displayName>
+				<symbol>CFA</symbol>
+			</currency>
+			<currency type="XPF">
+				<symbol>CFPF</symbol>
+			</currency>
+			<currency type="XXX">
+				<displayName>Unknown Currency</displayName>
+				<displayName count="one">(unknown currency)</displayName>
+				<displayName count="other">(unknown currency)</displayName>
+			</currency>
+		</currencies>
+		<miscPatterns numberSystem="latn">
+			<pattern type="range">{0}–{1}</pattern>
+		</miscPatterns>
+	</numbers>
+	<units>
+		<unitLength type="long">
+			<unit type="angle-arc-minute">
+				<unitPattern count="one">{0} minute</unitPattern>
+				<unitPattern count="other">{0} minutes</unitPattern>
+			</unit>
+			<unit type="angle-arc-second">
+				<unitPattern count="one">{0} second</unitPattern>
+				<unitPattern count="other">{0} seconds</unitPattern>
+			</unit>
+			<unit type="area-square-kilometer">
+				<unitPattern count="one">{0} square kilometre</unitPattern>
+				<unitPattern count="other">{0} square kilometres</unitPattern>
+			</unit>
+			<unit type="area-square-meter">
+				<unitPattern count="one">{0} square metre</unitPattern>
+				<unitPattern count="other">{0} square metres</unitPattern>
+			</unit>
+			<unit type="length-centimeter">
+				<unitPattern count="one">{0} centimetre</unitPattern>
+				<unitPattern count="other">{0} centimetres</unitPattern>
+			</unit>
+			<unit type="length-kilometer">
+				<unitPattern count="one">{0} kilometre</unitPattern>
+				<unitPattern count="other">{0} kilometres</unitPattern>
+			</unit>
+			<unit type="length-meter">
+				<unitPattern count="one">{0} metre</unitPattern>
+				<unitPattern count="other">{0} metres</unitPattern>
+			</unit>
+			<unit type="length-millimeter">
+				<unitPattern count="one">{0} millimetre</unitPattern>
+				<unitPattern count="other">{0} millimetres</unitPattern>
+			</unit>
+			<unit type="length-picometer">
+				<unitPattern count="one">{0} picometre</unitPattern>
+				<unitPattern count="other">{0} picometres</unitPattern>
+			</unit>
+			<unit type="speed-kilometer-per-hour">
+				<unitPattern count="one">{0} kilometre per hour</unitPattern>
+				<unitPattern count="other">{0} kilometres per hour</unitPattern>
+			</unit>
+			<unit type="speed-meter-per-second">
+				<unitPattern count="one">{0} metre per second</unitPattern>
+				<unitPattern count="other">{0} metres per second</unitPattern>
+			</unit>
+			<unit type="volume-cubic-kilometer">
+				<unitPattern count="one">{0} cubic kilometre</unitPattern>
+				<unitPattern count="other">{0} cubic kilometres</unitPattern>
+			</unit>
+			<unit type="volume-liter">
+				<unitPattern count="one">{0} litre</unitPattern>
+				<unitPattern count="other">{0} litres</unitPattern>
+			</unit>
+		</unitLength>
+		<unitLength type="short">
+			<unit type="angle-arc-minute">
+				<unitPattern count="one">{0} min</unitPattern>
+				<unitPattern count="other">{0} min</unitPattern>
+			</unit>
+			<unit type="angle-arc-second">
+				<unitPattern count="one">{0} sec</unitPattern>
+				<unitPattern count="other">{0} secs</unitPattern>
+			</unit>
+		</unitLength>
+		<unitLength type="narrow">
+			<unit type="acceleration-g-force">
+				<unitPattern count="one">{0}G</unitPattern>
+				<unitPattern count="other">{0}G</unitPattern>
+			</unit>
+			<unit type="duration-millisecond">
+				<unitPattern count="one">{0} ms</unitPattern>
+				<unitPattern count="other">{0} ms</unitPattern>
+			</unit>
+			<unit type="mass-pound">
+				<unitPattern count="one">{0}lb</unitPattern>
+				<unitPattern count="other">{0}lb</unitPattern>
+			</unit>
+		</unitLength>
+		<durationUnit type="hm">
+			<durationUnitPattern>h:mm</durationUnitPattern>
+		</durationUnit>
+		<durationUnit type="hms">
+			<durationUnitPattern>h:mm:ss</durationUnitPattern>
+		</durationUnit>
+		<durationUnit type="ms">
+			<durationUnitPattern>m:ss</durationUnitPattern>
+		</durationUnit>
+	</units>
+	<listPatterns>
+		<listPattern>
+			<listPatternPart type="start">{0}, {1}</listPatternPart>
+			<listPatternPart type="middle">{0}, {1}</listPatternPart>
+			<listPatternPart type="end">{0} and {1}</listPatternPart>
+			<listPatternPart type="2">{0} and {1}</listPatternPart>
+		</listPattern>
+		<listPattern type="unit">
+			<listPatternPart type="start">{0}, {1}</listPatternPart>
+			<listPatternPart type="middle">{0}, {1}</listPatternPart>
+			<listPatternPart type="end">{0} and {1}</listPatternPart>
+			<listPatternPart type="2">{0} and {1}</listPatternPart>
+		</listPattern>
+	</listPatterns>
+</ldml>
+

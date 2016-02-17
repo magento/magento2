@@ -1,0 +1,57 @@
+@page 
+{ 
+  size: 8.5in 11in; 
+  margin: 2cm 
+}
+
+@page :left 
+{
+  margin-left: 4cm;
+  margin-right: 3cm;
+}
+
+@page facsimile:right 
+{
+  margin-left: 3cm;
+  margin-right: 4cm;
+}
+
+@page:first 
+{
+  margin-top: 10cm    /* Top margin on first page 10cm */
+}
+
+@page rotated 
+{ 
+  size: landscape; 
+}
+
+/* CSS3 margin declarations */
+@page 
+{
+   @top-left { color: #cccccc; }
+   color: green;
+   @bottom-center { color: #eee; }
+}
+
+@page :left { @left-middle { font-size: 1pt; }}
+@page :right{ @right-middle { font-size: 2pt;}}
+
+@page :left { @bottom-left-corner { font-size: 3pt; }}
+@page :right { @bottom-right-corner { font-size: 4pt; }}
+@page :first { @bottom-left-corner { font-size: 5pt; }
+               @bottom-right-corner { font-size: 6pt; } }
+
+/* style sheet for "A4" printing */ 
+@media print and (width: 21cm) and (height: 29.7cm) {
+    @page {
+        margin: 3cm;
+    }
+}
+ 
+/* style sheet for "letter" printing */
+@media print and (width: 8.5in) and (height: 11in) {
+    @page {
+        margin: 0.750in;
+    }
+}

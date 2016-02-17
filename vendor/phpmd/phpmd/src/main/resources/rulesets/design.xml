@@ -1,0 +1,228 @@
+<?xml version="1.0"?>
+
+<ruleset name="Design Rules"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+
+    <description>
+The Code Size Ruleset contains a collection of rules that find software design related problems.
+    </description>
+
+    <rule name="ExitExpression"
+          since="0.2"
+          message = "The {0} {1}() contains an exit expression."
+          class="PHPMD\Rule\Design\ExitExpression"
+          externalInfoUrl="http://phpmd.org/rules/design.html#exitexpression">
+        <description>
+            <![CDATA[
+An exit-expression within regular code is untestable and therefore it should
+be avoided. Consider to move the exit-expression into some kind of startup
+script where an error/exception code is returned to the calling environment.
+            ]]>
+        </description>
+        <priority>1</priority>
+        <properties />
+        <example>
+            <![CDATA[
+class Foo {
+    public function bar($param)  {
+        if ($param === 42) {
+            exit(23);
+        }
+    }
+}
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="EvalExpression"
+          since="0.2"
+          message = "The {0} {1}() contains an eval expression."
+          class="PHPMD\Rule\Design\EvalExpression"
+          externalInfoUrl="http://phpmd.org/rules/design.html#evalexpression">
+        <description>
+            <![CDATA[
+An eval-expression is untestable, a security risk and bad practice. Therefore
+it should be avoided. Consider to replace the eval-expression with regular
+code.
+            ]]>
+        </description>
+        <priority>1</priority>
+        <properties />
+        <example>
+            <![CDATA[
+class Foo {
+    public function bar($param)  {
+        if ($param === 42) {
+            eval('$param = 23;');
+        }
+    }
+}
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="GotoStatement"
+          since="1.1.0"
+          message="The {0} {1}() utilizes a goto statement."
+          class="PHPMD\Rule\Design\GotoStatement"
+          externalInfoUrl="http://phpmd.org/rules/design.html#gotostatement">
+        <description>
+            <![CDATA[
+Goto makes code harder to read and it is nearly impossible to understand the
+control flow of an application that uses this language construct. Therefore it
+should be avoided. Consider to replace Goto with regular control structures and
+separate methods/function, which are easier to read.
+            ]]>
+        </description>
+        <priority>1</priority>
+        <properties />
+        <example>
+            <![CDATA[
+class Foo {
+    public function bar($param)  {
+        A:
+        if ($param === 42) {
+            goto X;
+        }
+        Y:
+        if (time() % 42 === 23) {
+            goto Z;
+        }
+        X:
+        if (time() % 23 === 42) {
+            goto Y;
+        }
+        Z:
+        return 42;
+    }
+}
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="NumberOfChildren"
+          since="0.2"
+          message = "The {0} {1} has {2} children. Consider to rebalance this class hierarchy to keep number of children under {3}."
+          class="PHPMD\Rule\Design\NumberOfChildren"
+          externalInfoUrl="http://phpmd.org/rules/design.html#numberofchildren">
+        <description>
+            <![CDATA[
+A class with an excessive number of children is an indicator for an unbalanced
+class hierarchy. You should consider to refactor this class hierarchy.
+            ]]>
+        </description>
+        <priority>2</priority>
+        <properties>
+            <property name="minimum" value="15" description="Maximum number of acceptable child classes." />
+        </properties>
+        <example />
+    </rule>
+
+    <rule name="DepthOfInheritance"
+          since="0.2"
+          message = "The {0} {1} has {2} parents. Consider to reduce the depth of this class hierarchy to under {3}."
+          class="PHPMD\Rule\Design\DepthOfInheritance"
+          externalInfoUrl="http://phpmd.org/rules/design.html#depthofinheritance">
+        <description>
+            <![CDATA[
+A class with many parents is an indicator for an unbalanced and wrong class
+hierarchy. You should consider to refactor this class hierarchy.
+            ]]>
+        </description>
+        <priority>2</priority>
+        <properties>
+            <property name="minimum" value="6" description="Maximum number of acceptable parent classes." />
+        </properties>
+        <example />
+    </rule>
+
+    <rule name="CouplingBetweenObjects"
+          since="1.1.0"
+          message="The class {0} has a coupling between objects value of {1}. Consider to reduce the number of dependencies under {2}."
+          class="PHPMD\Rule\Design\CouplingBetweenObjects"
+          externalInfoUrl="http://phpmd.org/rules/design.html#couplingbetweenobjects">
+        <description>
+            <![CDATA[
+A class with too many dependencies has negative impacts on several quality
+aspects of a class. This includes quality criteria like stability,
+maintainability and understandability
+            ]]>
+        </description>
+        <priority>2</priority>
+        <properties>
+            <property name="minimum" value="13" description="Maximum number of acceptable dependencies." />
+        </properties>
+        <example>
+            <![CDATA[
+class Foo {
+    /**
+     * @var \foo\bar\X
+     */
+    private $x = null;
+
+    /**
+     * @var \foo\bar\Y
+     */
+    private $y = null;
+
+    /**
+     * @var \foo\bar\Z
+     */
+    private $z = null;
+
+    public function setFoo(\Foo $foo) {}
+    public function setBar(\Bar $bar) {}
+    public function setBaz(\Baz $baz) {}
+
+    /**
+     * @return \SplObjectStorage
+     * @throws \OutOfRangeException
+     * @throws \InvalidArgumentException
+     * @throws \ErrorException
+     */
+    public function process(\Iterator $it) {}
+
+    // ...
+}
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="DevelopmentCodeFragment"
+          since="2.3.0"
+          message="The {0} {1}() calls the typical debug function {2}() which is mostly only used during development."
+          class="PHPMD\Rule\Design\DevelopmentCodeFragment"
+          externalInfoUrl="http://phpmd.org/rules/design.html#developmentcodefragment">
+        <description>
+            <![CDATA[
+Functions like var_dump(), print_r() etc. are normally only used during development
+and therefore such calls in production code are a good indicator that they were
+just forgotten.
+            ]]>
+        </description>
+        <priority>2</priority>
+        <properties>
+            <property name="unwanted-functions" value="var_dump,print_r,debug_zval_dump,debug_print_backtrace" description="Comma separated list of suspect function images." />
+        </properties>
+        <example>
+            <![CDATA[
+class SuspectCode {
+
+    public function doSomething(array $items)
+    {
+        foreach ($items as $i => $item) {
+            // …
+
+            if ('qafoo' == $item) var_dump($i);
+
+            // …
+        }
+    }
+}
+            ]]>
+        </example>
+    </rule>
+</ruleset>

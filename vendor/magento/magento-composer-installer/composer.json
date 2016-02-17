@@ -1,0 +1,69 @@
+{
+    "name":"magento/magento-composer-installer",
+    "description":"Composer installer for Magento modules",
+    "keywords":[ "composer-installer", "magento"],
+    "minimum-stability":"stable",
+    "type":"composer-plugin",
+    "license":"OSL-3.0",
+    "homepage":"https://github.com/magento/magento-composer-installer",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@github.com:Flyingmana/phpcs.git"
+        }
+    ],
+    "authors":[
+        {
+            "name":"Daniel Fahlke aka Flyingmana",
+            "email":"flyingmana@googlemail.com"
+        },
+        {
+            "name":"Jörg Weller",
+            "email":"weller@flagbit.de"
+        },
+        {
+            "name":"Karl Spies",
+            "email":"karl.spies@gmx.net"
+        },
+        {
+            "name":"Tobias Vogt",
+            "email":"tobi@webguys.de"
+        },
+        {
+            "name":"David Fuhr",
+            "email":"fuhr@flagbit.de"
+        },
+        {
+            "name":"Vinai Kopp",
+            "email":"vinai@netzarbeiter.com"
+        }
+    ],
+    "require":{
+        "composer-plugin-api": "^1.0"
+    },
+    "require-dev":{
+        "phpunit/phpunit":"*",
+        "phpunit/phpunit-mock-objects": "dev-master",
+        "squizlabs/php_codesniffer": "1.4.7",
+        "firegento/phpcs": "dev-patch-1",
+        "composer/composer":"*@dev",
+        "symfony/process":"*",
+        "mikey179/vfsStream":"*"
+    },
+    "autoload":{
+        "psr-0":{
+            "MagentoHackathon\\Composer\\Magento":"src/"
+        }
+    },
+    "archive": {
+        "exclude": [
+            "vendor",
+            "/tests/FullStackTest/"
+        ]
+    },
+    "test_version":"999.0.0",
+    "extra":{
+        "composer-command-registry": [ "MagentoHackathon\\Composer\\Magento\\Command\\DeployCommand" ],
+        "class":"MagentoHackathon\\Composer\\Magento\\Plugin"
+    }
+}

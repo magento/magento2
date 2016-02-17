@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+
+<ruleset name="Clean Code Rules"
+         xmlns="http://pmd.sf.net/ruleset/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0 http://pmd.sf.net/ruleset_xml_schema.xsd"
+         xsi:noNamespaceSchemaLocation="http://pmd.sf.net/ruleset_xml_schema.xsd">
+
+    <description>
+The Clean Code ruleset contains rules that enforce a clean code base. This includes rules from SOLID and object calisthenics.
+    </description>
+
+    <rule name="BooleanArgumentFlag"
+          since="1.4.0"
+          message="The method {0} has a boolean flag argument {1}, which is a certain sign of a Single Responsibility Principle violation."
+          class="PHPMD\Rule\CleanCode\BooleanArgumentFlag"
+          externalInfoUrl="http://phpmd.org/rules/cleancode.html#booleanargumentflag">
+        <description>
+            <![CDATA[
+A boolean flag argument is a reliable indicator for a violation of
+the Single Responsibility Principle (SRP). You can fix this problem
+by extracting the logic in the boolean flag into its own class
+or method.
+            ]]>
+        </description>
+        <priority>1</priority>
+        <properties />
+        <example>
+            <![CDATA[
+class Foo {
+    public function bar($flag = true) {
+    }
+}
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="ElseExpression"
+          since="1.4.0"
+          message="The method {0} uses an else expression. Else is never necessary and you can simplify the code to work without else."
+          class="PHPMD\Rule\CleanCode\ElseExpression"
+          externalInfoUrl="http://phpmd.org/rules/cleancode.html#eleseexpression">
+        <description>
+            <![CDATA[
+An if expression with an else branch is never necessary. You can rewrite the
+conditions in a way that the else is not necessary and the code becomes simpler
+to read.  To achieve this use early return statements. To achieve this you may
+need to split the code it several smaller methods. For very simple assignments
+you could also use the ternary operations.
+            ]]>
+        </description>
+        <priority>1</priority>
+        <properties></properties>
+        <example>
+            <![CDATA[
+class Foo
+{
+    public function bar($flag)
+    {
+        if ($flag) {
+            // one branch
+        } else {
+            // another branch
+        }
+    }
+}
+            ]]>
+        </example>
+    </rule>
+
+    <rule name="StaticAccess"
+          since="1.4.0"
+          message="Avoid using static access to class '{0}' in method '{1}'."
+          class="PHPMD\Rule\CleanCode\StaticAccess"
+          externalInfoUrl="http://phpmd.org/rules/cleancode.html#staticaccess">
+        <description>
+            <![CDATA[
+Static acccess causes inexchangable dependencies to other classes and leads to hard to test code. Avoid
+using static access at all costs and instead inject dependencies through the constructor. The only
+case when static access is acceptable is when used for factory methods.
+            ]]>
+        </description>
+        <priority>1</priority>
+        <properties>
+            <property name="exceptions" description="Comma-separated class name list of exceptions" value=""/>
+        </properties>
+        <example>
+            <![CDATA[
+class Foo
+{
+    public function bar()
+    {
+        Bar::baz();
+    }
+}
+            ]]>
+        </example>
+    </rule>
+</ruleset>

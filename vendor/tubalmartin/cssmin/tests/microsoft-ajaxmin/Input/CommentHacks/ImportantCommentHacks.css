@@ -1,0 +1,20 @@
+﻿/* 
+ * we're going to implement our comment hacks using important comments 
+ * and we WON'T have to use the -comments:hacks switch
+ *
+ * BUT if we do this, we have to be careful not to put text inside the important
+ * comment hacks, because text within the important comments get sent to the output.
+ * If we use the -comments:hacks switch, we would strip the non-significant text
+ * from within the comment hacks.
+ */
+
+body
+{ 
+    /*! \*/background-color: black;/*!*/ /* hide from mac ie */
+    /*!/*//*!/background-color: red;/**/ /* NS4 and Opera5 only */
+    /*!/*/background-color: blue; /*!*/ /* hide from NS4, Opera5 */
+    background-color /*!*/: yellow; /* hide for IE6 (keep the space between the property and the comment */
+    background-color:/*!*/silver; /* hide from IE5.5 */
+    background-color/*!*/:Fuchsia; /* doesn't REALLY hide from IE6 (no WS before), but people tend to do this anyway */
+    /*!*/color: red; /* we want to keep empty comments, just in case */
+}

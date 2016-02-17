@@ -1,0 +1,40 @@
+{
+    "name": "zendframework/zend-di",
+    "description": " ",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "di"
+    ],
+    "homepage": "https://github.com/zendframework/zend-di",
+    "autoload": {
+        "psr-4": {
+            "Zend\\Di\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.23",
+        "zendframework/zend-code": "self.version",
+        "zendframework/zend-stdlib": "self.version"
+    },
+    "require-dev": {
+        "zendframework/zend-servicemanager": "self.version",
+        "fabpot/php-cs-fixer": "1.7.*",
+        "satooshi/php-coveralls": "dev-master",
+        "phpunit/PHPUnit": "~4.0"
+    },
+    "suggest": {
+        "zendframework/zend-servicemanager": "Zend\\ServiceManager component"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4-dev",
+            "dev-develop": "2.5-dev"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\Di\\": "test/"
+        }
+    }
+}

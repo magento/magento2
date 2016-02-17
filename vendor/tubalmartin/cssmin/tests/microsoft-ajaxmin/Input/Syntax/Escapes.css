@@ -1,0 +1,112 @@
+﻿body
+{
+	/* hack to ignore the units for browsers that correctly parse the \9 as a part of the units?  */
+	margin: 0 0 0 10px\9;
+	
+	/* the IE-hack of adding the \9 at the end also needs to work for percentages */
+	width: 100%\9;
+	
+	/* variation of above -- because the four values need to be separated by a space character, the 
+       escaped number needs to have TWO spaces after it because the first one will be considered part
+       of the escape sequence */
+	padding: 0 10px\9  0 0;
+	
+	/* same as above, but we shouldn't strip the dimension for zeros.
+       and there will need to be two spaces preserved between the escape and the solid because we need
+       a space to separate them, and there needs to be a space to terminate the escape. */
+	border: 0\9  solid;
+	
+	/* the space should be escaped, since it's part of the property name but not a valid identifier character,
+       and the space is part of the escape, since the "f" in "foo" is a valid hex character */
+	\20 foo: "e\73 caped";
+}
+
+/* the first character of the class name is an escaped '{' character, which should remain escaped 
+   because { is not a valid identifier character */
+.\7bxxx 
+{
+	margin: 0;
+}
+
+/* an nmchar character of the class name is an escaped '{' character, which should remain escaped 
+   because { is not a valid identifier character */
+.xx\7bx 
+{
+	margin: 1;
+}
+
+/* first nmchar character */
+x\7bxx 
+{
+	margin: 2;
+}
+
+/* last nmchar character */
+xxx\7b 
+{
+	margin: 3;
+}
+
+/* nmstart and first nmchar character */
+\7b\7bxxx 
+{
+	margin: 4;
+}
+
+/* nmstart and not-first nmchar character */
+\7bxx\7bx 
+{
+	margin: 5;
+}
+
+/* two adjacent nmchar characters */
+xx\7b\7bx 
+{
+	margin: 6;
+}
+
+/* two adjacent nmchar characters at the end */
+xxx\7b\7b 
+{
+	margin: 7;
+}
+
+/* two adjacent nmchar characters at the beginning */
+x\7b\7bxx 
+{
+	margin: 8;
+}
+
+/* only escaped characters */
+\31\7b\20\23\21\26
+{
+	margin: 9;
+}
+
+/* need to keep the space because the following character is a valid hex digit */
+xx\7b foo
+{
+	margin: 10;
+}
+
+/* the "i" and the "v" are escaped - normally evaluates as "div"
+   the backslashes MUST not be escaped to \5c, but we should leave them
+   in in case the dev intentionally wanted to escape them for some sort
+   of browser-hack type of thing. */
+d\i\v 
+{
+    font: 20pt Arial, Helvetica, Sans-serif;
+}
+
+/* the backslash in the identifier is escaped as hex -- it should remain so */
+do\5cit
+{
+    color: blue;
+}
+
+/* a mix of the previous two, plus we need to keep the space after the \5c so
+   it doesn't become \5cb */
+how\now\5c brown\\cow
+{
+    color: red;
+}

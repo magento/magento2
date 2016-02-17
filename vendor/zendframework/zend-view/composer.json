@@ -1,0 +1,65 @@
+{
+    "name": "zendframework/zend-view",
+    "description": "provides a system of helpers, output filters, and variable escaping",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "view"
+    ],
+    "homepage": "https://github.com/zendframework/zend-view",
+    "autoload": {
+        "psr-4": {
+            "Zend\\View\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.23",
+        "zendframework/zend-eventmanager": "self.version",
+        "zendframework/zend-loader": "self.version",
+        "zendframework/zend-stdlib": "self.version"
+    },
+    "require-dev": {
+        "zendframework/zend-authentication": "self.version",
+        "zendframework/zend-escaper": "self.version",
+        "zendframework/zend-feed": "self.version",
+        "zendframework/zend-filter": "self.version",
+        "zendframework/zend-http": "self.version",
+        "zendframework/zend-i18n": "self.version",
+        "zendframework/zend-json": "self.version",
+        "zendframework/zend-mvc": "self.version",
+        "zendframework/zend-navigation": "self.version",
+        "zendframework/zend-paginator": "self.version",
+        "zendframework/zend-permissions-acl": "self.version",
+        "zendframework/zend-servicemanager": "self.version",
+        "zendframework/zend-uri": "self.version",
+        "fabpot/php-cs-fixer": "1.7.*",
+        "satooshi/php-coveralls": "dev-master",
+        "phpunit/PHPUnit": "~4.0"
+    },
+    "suggest": {
+        "zendframework/zend-authentication": "Zend\\Authentication component",
+        "zendframework/zend-escaper": "Zend\\Escaper component",
+        "zendframework/zend-feed": "Zend\\Feed component",
+        "zendframework/zend-filter": "Zend\\Filter component",
+        "zendframework/zend-http": "Zend\\Http component",
+        "zendframework/zend-i18n": "Zend\\I18n component",
+        "zendframework/zend-json": "Zend\\Json component",
+        "zendframework/zend-mvc": "Zend\\Mvc component",
+        "zendframework/zend-navigation": "Zend\\Navigation component",
+        "zendframework/zend-paginator": "Zend\\Paginator component",
+        "zendframework/zend-permissions-acl": "Zend\\Permissions\\Acl component",
+        "zendframework/zend-servicemanager": "Zend\\ServiceManager component",
+        "zendframework/zend-uri": "Zend\\Uri component"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4-dev",
+            "dev-develop": "2.5-dev"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\View\\": "test/"
+        }
+    }
+}

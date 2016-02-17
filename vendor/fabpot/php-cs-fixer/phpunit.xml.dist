@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         syntaxCheck="false"
+         bootstrap="./vendor/autoload.php"
+>
+    <testsuites>
+        <testsuite name="general">
+            <directory>./Symfony/CS/Tests/</directory>
+            <exclude>
+                <directory>./Symfony/CS/Tests/Fixer/</directory>
+                <directory>./Symfony/CS/Tests/Fixtures/</directory>
+                <directory>./Symfony/CS/Tests/Tokenizer/</directory>
+            </exclude>
+        </testsuite>
+        <testsuite name="fixer">
+            <directory>./Symfony/CS/Tests/Fixer/</directory>
+        </testsuite>
+        <testsuite name="tokenizer">
+            <directory>./Symfony/CS/Tests/Tokenizer/</directory>
+        </testsuite>
+        <testsuite name="docblock">
+            <directory>./Symfony/CS/Tests/DocBlock/</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>./Symfony/CS</directory>
+            <exclude>
+                <directory>./Symfony/CS/Resources</directory>
+                <directory>./Symfony/CS/Tests</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
+    <php>
+        <ini name="zend.enable_gc" value="0"/>
+    </php>
+</phpunit>

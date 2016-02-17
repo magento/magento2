@@ -1,0 +1,5 @@
+﻿\4f60\597d\3e4e4 /* escaped unicode characters */
+{
+  b\000061ckgr\006fund: url(你好.g\69 f); /* unicode characters */
+  foo: \d8b9\dce4; /* unicode surrogate pair! */
+}

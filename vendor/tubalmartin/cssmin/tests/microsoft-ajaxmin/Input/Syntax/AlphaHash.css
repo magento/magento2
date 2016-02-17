@@ -1,0 +1,5 @@
+﻿button
+{
+    /* be sure NOT to crunch #000000 to #000 */
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#30ffffff,endColorstr=#10000000) progid:DXImageTransform.Microsoft.Shadow(color=#000000,direction=135,strength=2);
+}

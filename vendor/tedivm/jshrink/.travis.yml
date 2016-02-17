@@ -1,0 +1,15 @@
+language: php
+
+php:
+    - 5.3
+    - 5.4
+    - 5.5
+    - hhvm
+
+before_script:
+    - composer self-update && composer install --dev
+
+script: ./tests/runTests.sh
+
+after_script:
+    - php vendor/bin/coveralls -v

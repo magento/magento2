@@ -1,0 +1,39 @@
+/* fully-qualified URLs, both quoted and non-quoted */
+body
+{
+  background: url("http://www.msn.com/foo.gif");
+}
+div
+{
+  background: url(http://www.msn.com/foo.gif);
+}
+
+/* simple file name, both quoted and non-quoted */
+span b 
+{
+  background: url(yellow.gif);
+}
+span em 
+{
+  background: url("yellow.gif");
+}
+
+/* relative rooted paths, both quoted and non-quoted */
+ul
+{
+  background: url("/foo/bar/ack.gif");
+}
+ul li
+{
+  background: url(/foo/bar/gag.gif);
+}
+
+/* reltive paths, both quoted and non-quoted */
+ol
+{
+  background: url("foo/bar/ack.gif");
+}
+ol li
+{
+  background: url(foo/bar/gag.gif);
+}

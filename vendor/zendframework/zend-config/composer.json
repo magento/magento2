@@ -1,0 +1,45 @@
+{
+    "name": "zendframework/zend-config",
+    "description": "provides a nested object property based user interface for accessing this configuration data within application code",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "config"
+    ],
+    "homepage": "https://github.com/zendframework/zend-config",
+    "autoload": {
+        "psr-4": {
+            "Zend\\Config\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.23",
+        "zendframework/zend-stdlib": "self.version"
+    },
+    "require-dev": {
+        "zendframework/zend-filter": "self.version",
+        "zendframework/zend-i18n": "self.version",
+        "zendframework/zend-json": "self.version",
+        "zendframework/zend-servicemanager": "self.version",
+        "fabpot/php-cs-fixer": "1.7.*",
+        "satooshi/php-coveralls": "dev-master",
+        "phpunit/PHPUnit": "~4.0"
+    },
+    "suggest": {
+        "zendframework/zend-filter": "Zend\\Filter component",
+        "zendframework/zend-i18n": "Zend\\I18n component",
+        "zendframework/zend-json": "Zend\\Json to use the Json reader or writer classes",
+        "zendframework/zend-servicemanager": "Zend\\ServiceManager for use with the Config Factory to retrieve reader and writer instances"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4-dev",
+            "dev-develop": "2.5-dev"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\Config\\": "test/"
+        }
+    }
+}

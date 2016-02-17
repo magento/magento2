@@ -1,0 +1,22 @@
+﻿/*!
+ *  start off with an important comment that we want to keep.
+ *  the next statement should start on a new line if this is expanded mode.
+ */
+body
+{
+	background: white;
+}
+
+/*!
+ *  another important comment -- this should always start on a new line,
+ *  but the next statement should not if this is single-line mode
+ */
+a:hover
+{
+	color: Red;
+}
+
+a:active
+{
+	/*! this is an important comment */ color: blue;
+}

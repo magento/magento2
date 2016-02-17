@@ -1,0 +1,458 @@
+pdepend-2.2.2 (2015/10/16)
+==========================
+
+This release adds a new analyzer that can be used to visualize 
+namespace dependencies.
+
+- Implemented #221: Added line numbers to summary log. Implemented in 
+  commit #a975553.
+- Implemented #222: Calculate type dependencies. Implemented in commit 
+  #8a924f6.
+
+pdepend-2.2.1 (2015/09/24)
+==========================
+
+With this release we made a dependency downgrade, so that we can 
+support more environments.
+
+- Implemented #223: Minimum Symfony version downgraded to 2.3. 
+  Implemented in commit #8601cc3.
+
+pdepend-2.2.0 (2015/09/19)
+==========================
+
+This release contains beside several contributed additions and 
+bugfixes better support for PHP 7 language constructs.
+
+- Fixed #119: PDepend doesn't follow any symlinks to directories. 
+  Fixed in commit #b80ae7e.
+- Fixed #143: Truncated summary when analyzing ISO-8859-1 input. Fixed 
+  in commit #d979462.
+- Fixed #193: Cache conflict when executing pdepend in parallel. Fixed 
+  in commit #a4e20ff.
+- Fixed #197: Warning: DOMNode::cloneNode(): ID <id> already defined 
+  in phar. Fixed in commit #2221f74.
+- Fixed #201: ShellCheck warnings in scripts/compare.sh Fixed in 
+  commit #.
+- Fixed #209: PHP 5.6 constant syntax not supported. Fixed in commit 
+  #1209b0e.
+- Fixed #213: PHP 7: T_CHARACTER and T_BAD_CHARACTER are no longer 
+  defined. Fixed in commit #1f5b051.
+- Fixed #214: PHP 7: Return types not supported. Fixed in commit 
+  #249932b.
+
+pdepend-2.1.0 (2015/05/21)
+==========================
+
+This release introduces an analyzer for the Halstead metrics and the 
+maintainability index, contributed by Matthias Mullie. Beside that we 
+have closed several issues and bugs in PDepend's source code.
+
+- Fixed #196: Fix Typo in phpDoc Fixed in commit #2b51fed.
+- Fixed #200: Fix annotation-typo in AbstractPHPParser.php Fixed in 
+  commit #776529d.
+- Fixed #202: Support for variable arg list implemented Fixed in 
+  commit #dff2547.
+- Implemented #177: HHVM support Implemented in commit #48ee5d9.
+- Implemented #185: Remove unused imports and order alphabetically 
+  Implemented in commit #46d5fb.
+- Implemented #198: Add analyzers for Halstead measures & 
+  maintainability index Implemented in commit #3497862.
+
+pdepend-2.0.6 (2015/03/02)
+==========================
+
+Concurrency issue in the file cache garbage collector fixed.
+
+- Suppress exceptions when there are concurrency issues within the 
+  garbage collector. Fixed in commit #3e31cc7.
+
+pdepend-2.0.5 (2015/02/27)
+==========================
+
+This release just adds a simple garbage collector for PDepend's file 
+cache
+
+- Garbage collector for old cache files added. Implemented in commit 
+  #56712b1.
+
+pdepend-2.0.4 (2014/12/04)
+==========================
+
+This release closes some minor issues and incorporates several 
+outstanding pull requests.
+
+- Fixed #187: Unexpected token :?> with broken up switch statement 
+  Fixed in commit #c12ee0e.
+- Fixed #180: Unexpected token: <<, line: 5, col: 27 Fixed in commit 
+  #4df5b9d.
+- Fixed #179: Fixed display of duration longer than one hour Fixed in 
+  commit #1288292.
+- Fixed #176: Typo on website fixed. Fixed in commit #6a8e542.
+- Fixed #175: Inconsistent indention in phpunit.dist.xml file fixed. 
+  Fixed in commit #bc758e4.
+- Fixed #174: Fix conflicting import: "Extension" is already in use in 
+  the "PDepend\DependencyInjection" namespace. Fixed in commit 
+  #e3e672b.
+- Fixed #173: Fixing parsing True/False keywords in namespaces: Usage 
+  of true and false keywords are allowed in namespace declarations in 
+  PHP. Fixed in commit #d96e4e7.
+- Fixed #170: invalid xml-report after parsing traits Fixed in commit 
+  #1d1bec0.
+- Fixed #167: Fix Invalid argument supplied for foreach() in 
+  FileCacheDriver.php Fixed in commit #73d32f3.
+- Fixed #165: Fix FileUtil::getUserHomeDir on Mac Fixed in commit 
+  #4826c3f.
+- Fixed #164: Empty yields raise Fatal error: When using empty yields 
+  yield; the parser raises an fatal error. Fixed in commit #7ab0736.
+- Fixed #163: File cache concurrency fix: Fixes concurrent run of 
+  pdepend and phpmd. Fixed in commit #3955c07.
+- Fixed #154: Invalid trait conflict errors: t is completely valid to 
+  mix traits in PHP that have the same methods declared, as long as 
+  only one of them is concrete (all the others must be abstract). 
+  Fixed in commit #45ab1d3.
+- Fixed #128: Problem when I use parent:: in trait Fixed in commit 
+  #a73e6de.
+- Implemented #177: HHVM support Implemented in commit #17da34b.
+
+pdepend-2.0.3 (2014/10/08)
+==========================
+
+This is a bugfix release which closes some minor issues.
+
+- Fixed #129: Windows+Composer install fails due to "path too long" 
+  Fixed in commit #64f95c1.
+- Fixed #172: Outdated news on the website
+- Fixed #166: Added support for foreach with list statement (PHP 5.5) 
+  Fixed in commit #a744af1.
+- Fixed #171: The list usage in foreach loops reports an invalid token 
+  Fixed in commit #a744af1.
+
+pdepend-2.0.2 (2014/09/16)
+==========================
+
+
+
+- Fixed #160: include_once PDepend/Util/Coverage/CloverReport.php: 
+  failed to open stream Fixed in commit #4dca605.
+- Implemented #105: Support Java style array notations in doc comments 
+  Implemented in commit #2ec5166.
+
+pdepend-2.0.1 (2014/09/09)
+==========================
+
+Bug fix release which closes a issue within PDepend's C.R.A.P. index 
+calculation.
+
+- Handle code surrounded by @codeCoverageIgnore annotations correct. 
+  Fixed in commit #3e67aa2.
+
+pdepend-2.0.0 (2014/05/21)
+==========================
+
+New mayor release of PDepend.
+
+- Fixed #126: Allow closure as array element Fixed in commit #b9775ac.
+- Fixed #153: Support for new finally keyword implemented. Fixed in 
+  commit #e536e7a.
+- Fixed #144: pdepend --version gives me a wrong message.. Fixed in 
+  commit #f6acea9.
+- Implemented #113: Specify license, BSD license was missing in 
+  composer.json file. Implemented in commit #3ba9c9e.
+- Implemented #117: Adds composer autoload info Implemented in commit 
+  #e624f8e.
+
+pdepend-1.1.1 (2013/07/25)
+==========================
+
+Closes several PHP 5.4 issues.
+
+- Fixed #116: Adding a fix for PHP 5.4 style arrays. Fixed in commit 
+  #cbfddaa.
+- Fixed #95: PHP 5.4 array syntax is not supported in property 
+  initialization. Fixed in commit #f6ee217.
+- Fixed #97: protected property PHP_Depend_Code_Method::$parent Fixed 
+  in commit #87a1b5e.
+- Fixed #104: Syntax errors reported when PHP 5.4 short array syntax 
+  is used in method signatures or class variable definitions. Fixed in 
+  commit #d731fa6.
+- Fixed #103: Fix syntax error in composer.json example Fixed in 
+  commit #e897a66.
+- Implemented #101: Package name for chart svg Implemented in commit 
+  #479aaa5.
+
+pdepend-1.1.0 (2012/09/12)
+==========================
+
+This release closes a critical issue in the context of traits 
+handling.
+
+- Changed type of Node/Trait Fixed in commit #806eaab.
+- Changed to PSR1 coding standard. Implemented in commit #.
+
+pdepend-1.0.7 (2012/04/29)
+==========================
+
+This release closes a minor bug within the parsing code for doc 
+comments..
+
+- Fixed: DocComment is sometimes incorrectly set for functions Fixed 
+  in commit #ac71753.
+
+pdepend-1.0.6 (2012/04/22)
+==========================
+
+This release closes a bug with traits that were introduced with PHP 
+5.4. This bug results in an E_FATAL when PHP_Depend performs coupling 
+analysis on a trait.
+
+- Fixed: E_FATAL when the coupling analyzer processes a trait. Fixed 
+  in commit #ac71753.
+- Added: Composer support Implemented in commit #3d98f02.
+
+pdepend-1.0.5 (2012/04/05)
+==========================
+
+This release closes a bug introduced with the last release, which 
+causes PHP_Depend not to flush it's metric cache when a file has 
+changed.
+
+- Fixed #27588643: PHP_Depend doesn't invalidate the cache. Fixed in 
+  commit #99d5c13.
+
+pdepend-1.0.4 (2012/02/25)
+==========================
+
+This release closes an issue introduced with the last release. It 
+closes one more regression related to PHP's memory_limit and the 
+Suhosin patch.
+
+- Fixed fatal error due to bug in memory_limit modification code. 
+  Fixed in commit #b869eff.
+
+pdepend-1.0.3 (2012/02/25)
+==========================
+
+This release closes a minor issue in PHP_Depend's memory handling when 
+it is run in a PHP environment that uses the Suhosin patch and the 
+suhosin.memory_limit setting.
+
+- Fixed #25450915: Alert disable memory_limit Fixed in commit 
+  #0628e7d.
+
+pdepend-1.0.2 (2012/02/15)
+==========================
+
+This release contains a huge improvement in PHP_Depend's memory usage. 
+Due to some changes in the caching behavior we got a memory reduction 
+of ~ 90%, measured against medium sized code bases like Symfony2 or 
+FLOW3.
+
+- Fixed #24732243: pdepend fails on 'const' Fixed in commit #4d6a687.
+- Fixed #24975343: PHP_Depend doesn't handle nested list expressions. 
+  Fixed in commit #d124ef0.
+- Implemented #24702477: Huge memory footprint Implemented in commit 
+  #75c9755.
+
+pdepend-1.0.1 (2012/02/08)
+==========================
+
+This release fixes two bugs in PHP_Depend's parser, which resulted in 
+uncatchable errors.
+
+- Fixed #24635313: _parseOptionalExpression() returning null causes 
+  exception Fixed in commit #97189b0.
+- Fixed #24638569: pdepend crashes on vanilia drupal site Fixed in 
+  commit #f20f40a.
+
+pdepend-1.0.0 (2012/02/04)
+==========================
+
+Now that we have completed support for all the new language features 
+introduced with PHP 5.4, we are ready to release version 1.0.0 of 
+PHP_Depend. PHP_Depend can now handle traits, static closures, binary 
+numbers, the callable type hint and the new short array syntax. Beside 
+that, we have spent much effort in improving PHP_Depend's overall 
+performance and we got an average speed gain of ~ 15% for processing 
+major frameworks like Symfony2 or FLOW3, when PHP_Depend's file cache 
+(default setup) is used. Additionally this release closes several 
+minor issues in PHP_Depend.
+
+- Fixed #18976391: PHP_Depend's file cache implementation does not 
+  work with PHP 5.4. Fixed in commit #06ce51a.
+- Fixed #18459091: PDepend task never ends, if there is an incorrect 
+  inheritance Fixed in commit #13b5d12.
+- Fixed #19875155: Implement static closures Fixed in commit #1e24a34.
+- Implemented #8927307: Add support for traits Implemented in commit 
+  #84f612e.
+- Implemented #19874825: Implement the short array syntax introduced 
+  with PHP 5.4 Implemented in commit #338bca2.
+- Implemented #9069837: Implement expression lists. Implemented in 
+  commit #bbb06c7.
+- Implemented #21435399: Implement PHP 5.4 variable method names 
+  Implemented in commit #911b6ec.
+- Implemented #21408469: Implement PHP 5.4 binary number format 
+  Implemented in commit #e3bccf1.
+- Implemented #21339411: Implement PHP 5.4 callable type hint 
+  Implemented in commit #ee5caa6.
+- Implemented #21271399: Deprecate the --phpunit-xml log option 
+  Implemented in commit #658c25c.
+- Implemented #19817309: Implement PHP 5.4 array dereferencing 
+  Implemented in commit #6dba831.
+
+pdepend-0.10.9 (2012/01/25)
+===========================
+
+This release fixes a small issue in PHP_Depend's parser, which results 
+in an exception when heredoc was used as property or constant 
+initializer.
+
+- Fixed #23951621: PHP_Depend fails on Heredocs and Nowdocs in 
+  property declaration. Fixed in commit #373c478.
+
+pdepend-0.10.8 (2012/01/24)
+===========================
+
+This release closes an issue in PHP_Depend's parser that produces 
+invalid package names when the source file contains a statement before 
+the class or interface doc comment.
+
+- Fixed #23905939: Package gets lost when prefixed with control 
+  structure Fixed in commit #b62bed7.
+
+pdepend-0.10.7 (2011/12/06)
+===========================
+
+This release closes a critical bug in PHP_Depend's parser which 
+results in an E_FATAL. This can happen when a control structure does 
+not contain a body or termination token.
+
+- E_FATAL when a control structure like if, for or foreach does not 
+  contain a body or a termination symbol. Fixed in commit #b367a41.
+
+pdepend-0.10.6 (2011/08/21)
+===========================
+
+This release closes a critical bug in PHP_Depend's parser that 
+produced false positiv error messages for classes named like 'True', 
+'False' or 'Null'
+
+- Fixed #17264279: Unexpected token: True, line: 348, col: 49, 
+  file:... Fixed in commit #5ac3e55.
+
+pdepend-0.10.5 (2011/05/20)
+===========================
+
+This release closes two minor bugs in PHP_Depend. One incompatibility 
+with PHP 5.2.x versions and one bug related to PHP_Depend's log 
+behavior when PHP_Depend analyzes unstructured source code. This 
+release was published on May the 20th 2011.
+
+- Fixed #13255437: PHP 5.2 Compatibility Issues. Fixed in commit 
+  #8d4a095.
+- Fixed #13405179: PHP Depend report is not generated if all files do 
+  not contain a class nor a function. Fixed in commit #554ade1.
+
+pdepend-0.10.4 (2011/04/09)
+===========================
+
+This release contains an improvement in PHP_Depend's memory 
+consumption. We have optimized the internal data structures in such a 
+way that the memory footprint was reduced by ~30%. These values were 
+measured for currently popular frameworks with a medium to large sized 
+code base. The tests were run under ubuntu with PHP 5.2.17 and PHP 
+5.3.6.
+
+pdepend-0.10.3 (2011/03/02)
+===========================
+
+This release closes a critial bug in PHP_Depend's analyzer locator 
+code that prevents PHP_Depend from running on windows. This release 
+was published on March the 02th 2011.
+
+- Fixed #10659085: Analyzer locator code does not work on windows. 
+  Fixed in commit #0101798.
+
+pdepend-0.10.2 (2011/02/28)
+===========================
+
+This release of PHP_Depend closes two bugs. One related to the start 
+and end line properties of object property nodes in the syntax tree. 
+The second fix closes a bug in PHP_Depend's implementation of the WMCi 
+metric. Beside these two fixes this release implements three minor 
+features, one design issue in the syntax tree api and the other two 
+other features are related to the new metrics CE, CA, CBO and NPM. 
+Additionally we have restructured PHP_Depend's directory structure 
+from a custom, freestyle format to a directory layout that is similar 
+to maven's convention. With this change we have fixed several issues 
+and workarounds in PHP_Depend's build process.
+
+- Fixed #9936901: WMCi calculation is incorrect for overwritten 
+  methods. Fixed in commit #69d079a.
+- Fixed #8927377: Invalid Start/End Line/Column for object property 
+  access. Fixed in commit #fc57264.
+- Implemented #9069393: Replace optional NULL argument of setPackage() 
+  with separate method. Implemented in commit #1282cdb.
+- Implemented #9069871: Implement efferent- and afferent-coupling for 
+  classes. Implemented in commit #07537c2.
+- Implemented #9997915: Implement Number of Public Methods metric. 
+  Implemented in commit #2dd3ebf.
+
+pdepend-0.10.1 (2011/02/06)
+===========================
+
+- Fixed #9634613: Notice: Undefined property $___temp___. Fixed in 
+  commit #5fb6900.
+
+pdepend-0.10.0 (2011/02/05)
+===========================
+
+This version only contains a small bugfix compared to the last release 
+canditate. Version 0.10.0 of PHP_Depend was released on February the 
+05th 2011. The key feature for this release is the overall performance 
+of PHP_Depend. Therefore we have implemented a new caching layer that 
+reuses already calculated analyzes-results much more efficient than 
+older versions of PHP_Depend. With these modifications we have 
+achieved a performance gain of 100% and more for consecutive 
+analysis-runs. This final release only fixes a small bug in 
+PHP_Depend's analyzer class locator that has caused some issues when 
+PHP_Depend was executed as an external dependency that uses a \*.phar 
+archive as distribution format.
+
+- Fixed #9623949: Also find analyzers in phar archives in the current 
+  include_path. Fixed in commit #f53dca9.
+- Fixed #113: PHP fatal error when an unserialized object graph none 
+  NodeI instances. Fixed in commit #c0f4384.
+- Fixed #164: Faulty implementation of the --ignore path filter fixed. 
+  Now this filter only works on the local part of a file or directory 
+  name and not on the complete path. Fixed in commit #f75275e.
+- Fixed #176: Calculation of CIS metric is incorrect. Fixed in commit 
+  #1193f4a.
+- Fixed #182: Clone is a valid function, method and type name in older 
+  php versions. Fixed with git commit Fixed in commit #b18bf37.
+- Fixed #189: Invalid Start/End Line/Column for object method 
+  invocation. Fixed in commit #c6cc9dd.
+- Fixed #191: New implementation of --ignore only accepts relative 
+  paths. Fixed in commit #38e6b52.
+- Fixed #163: Alternative syntax end tokens can terminate with closing 
+  PHP-tag.
+- Fixed #181: No log generated when parsing Typo3 extension 
+  "t3extplorer" (Unexpected token ASCII 39). Indirectly fixed in this 
+  release.
+- Implemented #130: Simplify PHP_Depend's ASTCompoundVariable and skip 
+  nested ASTCompoundExpression node instance.
+- Implemented #131: Add new method isThis() to PHP_Depend's 
+  ASTVariable class.
+- Implemented #132: Housekeeping: Cleanup the PHP_Depend_Input package 
+  test code.
+- Implemented #139: Implement Post-/Pre- Increment/Decrement.
+- Implemented #143: Support PHP's alternative control structure 
+  syntax.
+- Implemented #146: Implement PHP's declare-statement.
+- Implemented #148: Implement cast expressions.
+- Implemented #170: Rename FunctionNameParserImpl into 
+  FunctionNameParserAllVersions. Task scope changed and complete 
+  refactoring done. Parser moved into a version specific parser class.
+- Implemented #178: Provide configuration option for the cache 
+  directory. Implemented in commit #00ed8ec.
+

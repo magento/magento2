@@ -1,0 +1,24 @@
+/* this comment should be stripped */
+
+/********************* 
+  this rule is for everyone 
+***********************/
+div
+{
+  background: url(macie.gif);
+}
+
+/* hide this rule from MacIE \*/
+div
+{
+  background: url(all.gif);
+}
+/****************************end hide from MacIE***************************/
+
+/*************************************************************************/
+body
+{
+  margin:0;
+  /* hide from macie \*/margin: 10px;/* end hide */
+  padding: 0;
+}

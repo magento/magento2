@@ -1,0 +1,60 @@
+{
+    "name": "zendframework/zend-form",
+    "description": " ",
+    "license": "BSD-3-Clause",
+    "keywords": [
+        "zf2",
+        "form"
+    ],
+    "homepage": "https://github.com/zendframework/zend-form",
+    "autoload": {
+        "psr-4": {
+            "Zend\\Form\\": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.3.23",
+        "zendframework/zend-inputfilter": "~2.4.0",
+        "zendframework/zend-stdlib": "~2.4.0"
+    },
+    "require-dev": {
+        "zendframework/zend-captcha": "~2.4.0",
+        "zendframework/zend-code": "~2.4.0",
+        "zendframework/zend-eventmanager": "~2.4.0",
+        "zendframework/zend-filter": "~2.4.0",
+        "zendframework/zend-i18n": "~2.4.0",
+        "zendframework/zend-servicemanager": "~2.4.0",
+        "zendframework/zend-validator": "~2.4.0",
+        "zendframework/zend-view": "~2.4.0",
+        "zendframework/zendservice-recaptcha": "~2.0",
+        "fabpot/php-cs-fixer": "1.7.*",
+        "satooshi/php-coveralls": "dev-master",
+        "phpunit/PHPUnit": "~4.0",
+        "zendframework/zend-text": "~2.4.0",
+        "zendframework/zend-cache": "~2.4.0",
+        "ircmaxell/random-lib": "^1.1",
+        "zendframework/zend-session": "~2.4.0"
+    },
+    "suggest": {
+        "zendframework/zend-captcha": "Zend\\Captcha component",
+        "zendframework/zend-code": "Zend\\Code component",
+        "zendframework/zend-eventmanager": "Zend\\EventManager component",
+        "zendframework/zend-filter": "Zend\\Filter component",
+        "zendframework/zend-i18n": "Zend\\I18n component",
+        "zendframework/zend-servicemanager": "Zend\\ServiceManager component",
+        "zendframework/zend-validator": "Zend\\Validator component",
+        "zendframework/zend-view": "Zend\\View component",
+        "zendframework/zendservice-recaptcha": "ZendService\\ReCaptcha component"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.4-dev",
+            "dev-develop": "2.5-dev"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ZendTest\\Form\\": "test/"
+        }
+    }
+}
