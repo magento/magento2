@@ -345,4 +345,32 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->helper->checkIfLocked($customerMock);
     }
+
+    /**
+     * Test get minimum password length
+     * @return void
+     */
+    public function testGetMinimumPasswordLength()
+    {
+        $minimumPasswordLength = '8';
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(\Magento\Customer\Helper\AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH)
+            ->willReturn($minimumPasswordLength);
+        $this->assertEquals($minimumPasswordLength, $this->helper->getMinimumPasswordLength());
+    }
+
+    /**
+     * Test get required character classes number
+     * @return void
+     */
+    public function testGetRequiredCharacterClassesNumber()
+    {
+        $requiredCharacterClassesNumber = '4';
+        $this->scopeConfigMock->expects($this->once())
+            ->method('getValue')
+            ->with(\Magento\Customer\Helper\AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER)
+            ->willReturn($requiredCharacterClassesNumber);
+        $this->assertEquals($requiredCharacterClassesNumber, $this->helper->getRequiredCharacterClassesNumber());
+    }
 }

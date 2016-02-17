@@ -11,9 +11,9 @@ namespace Magento\Customer\Test\Unit\Block\Account;
 class ResetpasswordTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Customer\Helper\Config
+     * @var \Magento\Customer\Helper\AccountManagement
      */
-    protected $customerConfigHelperMock;
+    protected $accountManagementHelperMock;
 
     /**
      * @var \Magento\Customer\Block\Account\Resetpassword
@@ -26,8 +26,8 @@ class ResetpasswordTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->customerConfigHelperMock =  $this->getMock(
-            '\Magento\Customer\Helper\Config',
+        $this->accountManagementHelperMock =  $this->getMock(
+            '\Magento\Customer\Helper\AccountManagement',
             [],
             [],
             '',
@@ -38,7 +38,7 @@ class ResetpasswordTest extends \PHPUnit_Framework_TestCase
 
         $this->block = $objectManager->getObject(
             '\Magento\Customer\Block\Account\Resetpassword',
-            ['customerConfigHelper' => $this->customerConfigHelperMock]
+            ['AccountManagementHelper' => $this->accountManagementHelperMock]
         );
     }
 
@@ -49,7 +49,7 @@ class ResetpasswordTest extends \PHPUnit_Framework_TestCase
     {
         $minimumPasswordLength = '8';
 
-        $this->customerConfigHelperMock->expects($this->once())
+        $this->accountManagementHelperMock->expects($this->once())
             ->method('getMinimumPasswordLength')
             ->willReturn($minimumPasswordLength);
 
@@ -63,7 +63,7 @@ class ResetpasswordTest extends \PHPUnit_Framework_TestCase
     {
         $requiredCharacterClassesNumber = '4';
 
-        $this->customerConfigHelperMock->expects($this->once())
+        $this->accountManagementHelperMock->expects($this->once())
             ->method('getRequiredCharacterClassesNumber')
             ->willReturn($requiredCharacterClassesNumber);
 
