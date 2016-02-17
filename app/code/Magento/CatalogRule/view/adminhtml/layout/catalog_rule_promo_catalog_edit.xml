@@ -15,7 +15,7 @@
                         <item name="label" xsi:type="string" translate="true">Conditions</item>
                         <item name="collapsible" xsi:type="boolean">true</item>
                         <item name="opened" xsi:type="boolean">false</item>
-                        <item name="sortOrder" xsi:type="string">1</item>
+                        <item name="sortOrder" xsi:type="number">20</item>
                         <item name="canShow" xsi:type="boolean">true</item>
                         <item name="componentType" xsi:type="string">fieldset</item>
                     </argument>
