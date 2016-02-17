@@ -75,7 +75,7 @@ class AddCatalogToTopmenuItemsObserver implements ObserverInterface
             $categoryNode = new \Magento\Framework\Data\Tree\Node($categoryData, 'id', $tree, $parentCategoryNode);
             $parentCategoryNode->addChild($categoryNode);
 
-            if ($this->categoryFlatState->isFlatEnabled() && $category->getUseFlatResource()) {
+            if ($this->categoryFlatState->isAvailable() && $category->getUseFlatResource()) {
                 $subcategories = (array)$category->getChildrenNodes();
             } else {
                 $subcategories = $category->getChildren();

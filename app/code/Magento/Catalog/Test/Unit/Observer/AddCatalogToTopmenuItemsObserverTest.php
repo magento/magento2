@@ -54,7 +54,7 @@ class AddCatalogToTopmenuItemsObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->_categoryFlatState = $this->getMock(
             '\Magento\Catalog\Model\Indexer\Category\Flat\State',
-            ['isFlatEnabled'],
+            ['isAvailable'],
             [],
             '',
             false
@@ -168,7 +168,7 @@ class AddCatalogToTopmenuItemsObserverTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
 
         $this->_categoryFlatState->expects($this->once())
-            ->method('isFlatEnabled')
+            ->method('isAvailable')
             ->will($this->returnValue(true));
 
         $this->_observer->execute($observer);
