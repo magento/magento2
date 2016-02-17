@@ -234,8 +234,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     {
         if (!isset($_FILES) || (isset($_FILES['image']) && $_FILES['image']['name'] === '' )) {
             unset($data['general']['image']);
-            if (
-                isset($data['general']['savedImage']['delete']) &&
+            if (isset($data['general']['savedImage']['delete']) &&
                 $data['general']['savedImage']['delete']
             ) {
                 $data['general']['image']['delete'] = $data['general']['savedImage']['delete'];
