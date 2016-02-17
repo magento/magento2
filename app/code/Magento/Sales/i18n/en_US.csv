@@ -615,7 +615,7 @@ Comma-separated,Comma-separated
 "We'll use the default description above if you leave this empty.","We'll use the default description above if you leave this empty."
 "Multi-address Error to Show in Shopping Cart","Multi-address Error to Show in Shopping Cart"
 "We'll use the default error above if you leave this empty.","We'll use the default error above if you leave this empty."
-"Use Aggregated Data (beta)","Use Aggregated Data (beta)"
+"Use Aggregated Data","Use Aggregated Data"
 "Sales Emails","Sales Emails"
 "New Order Confirmation Email Sender","New Order Confirmation Email Sender"
 "New Order Confirmation Template","New Order Confirmation Template"
