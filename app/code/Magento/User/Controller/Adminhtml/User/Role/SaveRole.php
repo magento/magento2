@@ -94,8 +94,6 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
         parse_str($roleUsers, $roleUsers);
         $roleUsers = array_keys($roleUsers);
 
-
-
         $isAll = $this->getRequest()->getParam('all');
         if ($isAll) {
             $resource = [$this->_objectManager->get('Magento\Framework\Acl\RootResource')->getId()];

@@ -5,7 +5,6 @@
  */
 namespace Magento\Customer\Block\Account;
 
-use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 use Magento\Customer\Model\AccountManagement;
 
 /**

@@ -43,6 +43,7 @@ class Unlock extends \Magento\Backend\App\Action
         $this->accountManagementHelper = $accountManagementHelper;
         $this->customerRepository = $customerRepository;
     }
+
     /**
      * Unlock specified customer
      *

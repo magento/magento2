@@ -104,7 +104,6 @@ class EmailNotification extends \Magento\Framework\App\Helper\AbstractHelper
         return $this;
     }
 
-
     /**
      * Send email to customer when his email and password is changed
      *

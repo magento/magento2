@@ -104,7 +104,6 @@ class LockAdminUserWhenCreatingNewIntegrationTest extends Injectable
         )->run();
         $customAdmin->persist();
 
-
         $this->adminAuthLogin->open();
         $this->adminAuthLogin->getLoginBlock()->fill($customAdmin);
         $this->adminAuthLogin->getLoginBlock()->submit();

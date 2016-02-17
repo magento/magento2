@@ -94,7 +94,6 @@ class UnlockButtonTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
     /**
      * @param array $result
      * @param bool $expectedValue

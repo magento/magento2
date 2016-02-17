@@ -106,6 +106,12 @@ class AccountManagement implements AccountManagementInterface
      */
     const XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER = 'customer/password/required_character_classes_number';
 
+    /** @deprecated */
+    const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
+
+    /** @deprecated */
+    const MIN_PASSWORD_LENGTH = 6;
+
     /**
      * @var CustomerFactory
      */
@@ -175,10 +181,12 @@ class AccountManagement implements AccountManagementInterface
      * @var CustomerRepositoryInterface
      */
     private $customerRepository;
+
     /**
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
+
     /**
      * @var TransportBuilder
      */
@@ -918,6 +926,18 @@ class AccountManagement implements AccountManagementInterface
         );
 
         return $this;
+    }
+
+    /**
+     * Send email to customer when his password is reset
+     *
+     * @param CustomerInterface $customer
+     * @return $this
+     * @deprecated
+     */
+    protected function sendPasswordResetNotificationEmail($customer)
+    {
+        return $this->sendPasswordResetConfirmationEmail($customer);
     }
 
     /**
