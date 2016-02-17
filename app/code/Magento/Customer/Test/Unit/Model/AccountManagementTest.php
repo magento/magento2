@@ -59,6 +59,9 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Model\Config\Share|\PHPUnit_Framework_MockObject_MockObject */
     protected $share;
 
+    /** @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject */
+    protected $string;
+
     /** @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerRepository;
 
@@ -100,11 +103,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     protected $customerSecure;
 
     /**
-     * @var \Magento\Customer\Api\PasswordStrengthInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $passwordStrength;
-
-    /**
      * @var \Magento\Customer\Helper\AccountManagement|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $accountManagementHelper;
@@ -135,7 +133,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->logger = $this->getMock('Psr\Log\LoggerInterface');
         $this->encryptor = $this->getMock('Magento\Framework\Encryption\EncryptorInterface');
         $this->share = $this->getMock('Magento\Customer\Model\Config\Share', [], [], '', false);
-        $this->passwordStrength = $this->getMock('Magento\Customer\Api\PasswordStrengthInterface');
+        $this->string = $this->getMock('Magento\Framework\Stdlib\StringUtils');
         $this->customerRepository = $this->getMock('Magento\Customer\Api\CustomerRepositoryInterface');
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->transportBuilder = $this->getMock(
@@ -192,6 +190,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
                 'logger' => $this->logger,
                 'encryptor' => $this->encryptor,
                 'configShare' => $this->share,
+                'stringHelper' => $this->string,
                 'customerRepository' => $this->customerRepository,
                 'scopeConfig' => $this->scopeConfig,
                 'transportBuilder' => $this->transportBuilder,
@@ -202,7 +201,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
                 'customerModel' => $this->customer,
                 'objectFactory' => $this->objectFactory,
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverter,
-                'passwordStrength' => $this->passwordStrength,
                 'accountManagementHelper' => $this->accountManagementHelper
             ]
         );
@@ -682,6 +680,75 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Data provider for testCreateAccountWithPasswordInputException test
+     *
+     * @return array
+     */
+    public function dataProviderCheckPasswordStrength()
+    {
+        return [
+            [
+                'testNumber' => 1,
+                'password' => 'qwer',
+                'minPasswordLength' => 5,
+                'minCharacterSetsNum' => 1
+            ],
+            [
+                'testNumber' => 2,
+                'password' => 'wrfewqedf1',
+                'minPasswordLength' => 5,
+                'minCharacterSetsNum' => 3
+            ]
+        ];
+    }
+
+    /**
+     * @param int $testNumber
+     * @param string $password
+     * @param int $minPasswordLength
+     * @param int $minCharacterSetsNum
+     * @dataProvider dataProviderCheckPasswordStrength
+     */
+    public function testCreateAccountWithPasswordInputException(
+        $testNumber,
+        $password,
+        $minPasswordLength,
+        $minCharacterSetsNum
+    ) {
+        $this->accountManagementHelper->expects($this->once())
+            ->method('getMinimumPasswordLength')
+            ->willReturn($minPasswordLength);
+        $this->string->expects($this->any())
+            ->method('strlen')
+            ->with($password)
+            ->willReturn(iconv_strlen($password, 'UTF-8'));
+
+        if ($testNumber == 1) {
+            $this->setExpectedException(
+                '\Magento\Framework\Exception\InputException',
+                __('Please enter a password with at least %1 characters.', $minPasswordLength)
+            );
+        }
+
+        if ($testNumber == 2) {
+            $this->accountManagementHelper->expects($this->once())
+                ->method('getRequiredCharacterClassesNumber')
+                ->willReturn($minCharacterSetsNum);
+            $this->setExpectedException(
+                '\Magento\Framework\Exception\InputException',
+                __(
+                    'Minimum different classes of characters in password are %1.' .
+                    ' Classes of characters: Lower Case, Upper Case, Digits, Special Characters.',
+                    $minCharacterSetsNum
+                )
+            );
+        }
+
+        $customer = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')->getMock();
+        $this->accountManagement->createAccount($customer, $password);
+    }
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCreateAccountWithPassword()
@@ -691,15 +758,24 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $defaultStoreId = 1;
         $customerId = 1;
         $customerEmail = 'email@email.com';
-        $password = 'wrfewqedf1';
         $hash = '4nj54lkj5jfi03j49f8bgujfgsd';
         $newLinkToken = '2jh43j5h2345jh23lh452h345hfuzasd96ofu';
         $templateIdentifier = 'Template Identifier';
         $sender = 'Sender';
+        $password = 'wrfewqedf1';
+        $minPasswordLength = 5;
+        $minCharacterSetsNum = 2;
 
-        $this->passwordStrength->expects($this->any())
-            ->method('checkPasswordStrength')
-            ->with($password);
+        $this->accountManagementHelper->expects($this->once())
+            ->method('getMinimumPasswordLength')
+            ->willReturn($minPasswordLength);
+        $this->string->expects($this->any())
+            ->method('strlen')
+            ->with($password)
+            ->willReturn(iconv_strlen($password, 'UTF-8'));
+        $this->accountManagementHelper->expects($this->once())
+            ->method('getRequiredCharacterClassesNumber')
+            ->willReturn($minCharacterSetsNum);
         $this->encryptor->expects($this->once())
             ->method('getHash')
             ->with($password, true)
@@ -1287,9 +1363,16 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->with($newPassword, true)
             ->willReturn($passwordHash);
 
-        $this->passwordStrength->expects($this->any())
-            ->method('checkPasswordStrength')
-            ->with($newPassword);
+        $this->accountManagementHelper->expects($this->once())
+            ->method('getMinimumPasswordLength')
+            ->willReturn(7);
+        $this->string->expects($this->any())
+            ->method('strlen')
+            ->with($newPassword)
+            ->willReturn(7);
+        $this->accountManagementHelper->expects($this->once())
+            ->method('getRequiredCharacterClassesNumber')
+            ->willReturn(1);
 
         $this->customerRepository
             ->expects($this->once())
@@ -1332,10 +1415,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     {
         $username = 'login';
         $password = '1234567';
-
-        $this->passwordStrength->expects($this->once())
-            ->method('checkLoginPasswordStrength')
-            ->with($password);
 
         $customerData = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
             ->getMock();
