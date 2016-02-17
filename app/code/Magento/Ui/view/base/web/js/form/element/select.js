@@ -51,7 +51,7 @@ define([
 
         return {
             options: _.compact(nodes),
-            caption: caption || false
+            caption: _.isString(caption) ? caption : false
         };
     }
 
@@ -228,7 +228,7 @@ define([
             field = field || this.filterBy.field;
 
             result = _.filter(source, function (item) {
-                return item[field] === value;
+                return item[field] === value || item.value === '';
             });
 
             this.setOptions(result);
@@ -288,6 +288,19 @@ define([
 
         getOption: function (value) {
             return this.indexedOptions[value];
+        },
+
+        /**
+         * Select first available option
+         *
+         * @returns {Object} Chainable.
+         */
+        clear: function () {
+            var value = this.caption ? '' : findFirst(this.options);
+
+            this.value(value);
+
+            return this;
         }
     });
 });

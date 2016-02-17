@@ -106,7 +106,7 @@ define([
 
             _.bindAll($collapsible, 'open', 'close', 'toggle');
 
-            $collapsible.opened = ko.observable(false);
+            $collapsible.opened = ko.observable(!!config.opened);
 
             bindingCtx[config.as] = $collapsible;
 

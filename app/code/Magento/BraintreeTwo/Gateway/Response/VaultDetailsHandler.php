@@ -8,14 +8,12 @@ namespace Magento\BraintreeTwo\Gateway\Response;
 use Braintree\Transaction;
 use Magento\BraintreeTwo\Gateway\Config\Config;
 use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
-use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
-use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
  * Vault Details Handler
@@ -34,11 +32,6 @@ class VaultDetailsHandler implements HandlerInterface
     protected $paymentExtensionFactory;
 
     /**
-     * @var VaultPaymentInterface
-     */
-    protected $vaultPayment;
-
-    /**
      * @var SubjectReader
      */
     protected $subjectReader;
@@ -51,20 +44,17 @@ class VaultDetailsHandler implements HandlerInterface
     /**
      * Constructor
      *
-     * @param VaultPaymentInterface $vaultPayment
      * @param PaymentTokenInterfaceFactory $paymentTokenFactory
      * @param OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory
      * @param Config $config
      * @param SubjectReader $subjectReader
      */
     public function __construct(
-        VaultPaymentInterface $vaultPayment,
         PaymentTokenInterfaceFactory $paymentTokenFactory,
         OrderPaymentExtensionInterfaceFactory $paymentExtensionFactory,
         Config $config,
         SubjectReader $subjectReader
     ) {
-        $this->vaultPayment = $vaultPayment;
         $this->paymentTokenFactory = $paymentTokenFactory;
         $this->paymentExtensionFactory = $paymentExtensionFactory;
         $this->config = $config;
@@ -76,11 +66,6 @@ class VaultDetailsHandler implements HandlerInterface
      */
     public function handle(array $handlingSubject, array $response)
     {
-        $isActiveVaultModule = $this->vaultPayment->isActiveForPayment(ConfigProvider::CODE);
-        if (!$isActiveVaultModule) {
-            return;
-        }
-
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
         $transaction = $this->subjectReader->readTransaction($response);
         $payment = $paymentDO->getPayment();
@@ -110,6 +95,7 @@ class VaultDetailsHandler implements HandlerInterface
         /** @var PaymentTokenInterface $paymentToken */
         $paymentToken = $this->paymentTokenFactory->create();
         $paymentToken->setGatewayToken($token);
+        $paymentToken->setExpiresAt($this->getExpirationDate($transaction));
 
         $paymentToken->setTokenDetails($this->convertDetailsToJSON([
             'type' => $this->getCreditCardType($transaction->creditCardDetails->cardType),
@@ -118,6 +104,26 @@ class VaultDetailsHandler implements HandlerInterface
         ]));
 
         return $paymentToken;
+    }
+
+    /**
+     * @param Transaction $transaction
+     * @return string
+     */
+    private function getExpirationDate(Transaction $transaction)
+    {
+        $expDate = new \DateTime(
+            $transaction->creditCardDetails->expirationYear
+            . '-'
+            . $transaction->creditCardDetails->expirationMonth
+            . '-'
+            . '01'
+            . ' '
+            . '00:00:00',
+            new \DateTimeZone('UTC')
+        );
+        $expDate->add(new \DateInterval('P1M'));
+        return $expDate->format('Y-m-d 00:00:00');
     }
 
     /**

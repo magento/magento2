@@ -1,0 +1,30 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<fieldset class="admin__field" visible="visible" css="_required: required">
+    <legend class="admin__field-label">
+        <span text="label"/>
+    </legend>
+
+    <div class="admin__field-control">
+        <div class="admin__field admin__field-option" outereach="options">
+            <input 
+                ko-checked="$parent.value" 
+                css="
+                    'admin__control-radio': !$parent.isMultiselect,
+                    'admin__control-checkbox': $parent.isMultiselect"
+                attr="
+                    id: ++ko.uid, 
+                    value: value,
+                    type: $parent.isMultiselect ? 'checkbox' : 'radio'"/>
+
+            <label class="admin__field-label" text="label" attr="for: ko.uid"/>
+        </div>
+
+        <label class="admin__field-error" if="error" text="error"/>
+    </div>
+</fieldset>
