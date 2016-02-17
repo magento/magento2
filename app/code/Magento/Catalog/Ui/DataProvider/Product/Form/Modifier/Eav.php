@@ -293,15 +293,16 @@ class Eav extends AbstractModifier
      * @param ProductAttributeInterface $attribute
      * @param array $data
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function mapValidations(ProductAttributeInterface $attribute, array $data)
     {
         $rules = isset($data['arguments']['data']['config']['validation'])
             ? $data['arguments']['data']['config']['validation'] : [];
 
-        $validationClass = explode(' ', $attribute->getFrontendClass());
+        $validationClasses = explode(' ', $attribute->getFrontendClass());
 
-        foreach ($validationClass as $class) {
+        foreach ($validationClasses as $class) {
             if (preg_match('/^maximum-length-(\d+)$/', $class, $matches)) {
                 $rules = array_merge($rules, ['max_text_length' => $matches[1]]);
                 continue;
