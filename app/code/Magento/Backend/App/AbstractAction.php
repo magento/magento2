@@ -102,7 +102,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed(self::ADMIN_RESOURCE);
+        return $this->_authorization->isAllowed(static::ADMIN_RESOURCE);
     }
 
     /**
