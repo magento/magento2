@@ -10,7 +10,6 @@ use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\ConfigurableProduct\Api\OptionRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as ResourceModelConfigurable;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory;
 
 /**
  * Class SaveHandler
@@ -21,11 +20,6 @@ class SaveHandler
      * @var OptionRepositoryInterface
      */
     private $optionRepository;
-
-    /**
-     * @var ConfigurableFactory
-     */
-    private $configurableFactory;
 
     /**
      * @var ProductAttributeRepositoryInterface
@@ -42,17 +36,14 @@ class SaveHandler
      *
      * @param ResourceModelConfigurable $resourceModel
      * @param OptionRepositoryInterface $optionRepository
-     * @param ConfigurableFactory $configurableFactory
      * @param ProductAttributeRepositoryInterface $productAttributeRepository
      */
     public function __construct(
         ResourceModelConfigurable $resourceModel,
         OptionRepositoryInterface $optionRepository,
-        ConfigurableFactory $configurableFactory,
         ProductAttributeRepositoryInterface $productAttributeRepository
     ) {
         $this->optionRepository = $optionRepository;
-        $this->configurableFactory = $configurableFactory;
         $this->productAttributeRepository = $productAttributeRepository;
         $this->resourceModel = $resourceModel;
     }
@@ -76,7 +67,7 @@ class SaveHandler
         }
 
         $ids = [];
-        $configurableOptions = $extensionAttributes->getConfigurableProductOptions();
+        $configurableOptions = (array) $extensionAttributes->getConfigurableProductOptions();
         if (!empty($configurableOptions)) {
             $ids = $this->saveConfigurableProductAttributes($entity, $configurableOptions);
         }
@@ -84,7 +75,6 @@ class SaveHandler
         $this->deleteConfigurableProductAttributes($entity, $ids);
 
         $configurableLinks = (array) $extensionAttributes->getConfigurableProductLinks();
-
         $this->resourceModel->saveProducts($entity, $configurableLinks);
 
         return $entity;
