@@ -142,20 +142,30 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     ];
 
     /**
+     * @var int
+     */
+    private $productEntityLinkField;
+
+    /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param array $params
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
         \Magento\Framework\App\ResourceConnection $resource,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         array $params
     ) {
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
         $this->_resource = $resource;
         $this->connection = $resource->getConnection(\Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION);
+        /** @var \Magento\Framework\Model\Entity\EntityMetadata $productMetadata */
+        $productMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $this->productEntityLinkField = $productMetadata->getLinkField();
     }
 
     /**
@@ -322,7 +332,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         $this->_cachedSkuToProducts = $this->connection->fetchPairs(
             $this->connection->select()->from(
                 $this->_resource->getTableName('catalog_product_entity'),
-                ['sku', 'entity_id']
+                ['sku', $this->productEntityLinkField]
             )->where(
                 'sku IN (?)',
                 $this->_cachedSkus
@@ -344,7 +354,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             while ($bunch = $this->_entityModel->getNextBunch()) {
                 foreach ($bunch as $rowNum => $rowData) {
                     $productData = $newSku[$rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU]];
-                    $productIds[] = $productData['entity_id'];
+                    $productIds[] = $productData[$this->productEntityLinkField];
                 }
                 $this->deleteOptionsAndSelections($productIds);
             }
@@ -359,7 +369,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     if ($this->_type != $productData['type_id']) {
                         continue;
                     }
-                    $this->parseSelections($rowData, $productData['entity_id']);
+                    $this->parseSelections($rowData, $productData[$this->productEntityLinkField]);
                 }
                 if (!empty($this->_cachedOptions)) {
                     $this->retrieveProducsByCachedSkus();
