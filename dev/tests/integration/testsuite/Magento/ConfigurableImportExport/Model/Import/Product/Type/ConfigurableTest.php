@@ -97,19 +97,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         sort($childProductSkuList);
         $this->assertEquals($childProductSkuList, ['Configurable 1-Option 1', 'Configurable 1-Option 2']);
 
-        $childrenIdList = $product->getTypeInstance()->getChildrenIds($product->getId());
-        $childProductIdList  = [];
-        foreach ($childrenIdList as $childIdList) {
-            foreach ($childIdList as $childId) {
-                $childProductIdList[] = $childId;
-            }
-        }
-        sort($childProductIdList);
-        $this->assertEquals(
-            $childProductIdList,
-            array_values($product->getExtensionAttributes()->getConfigurableProductLinks())
-        );
-
         $configurableOptionCollection = $product->getExtensionAttributes()->getConfigurableProductOptions();
         $this->assertEquals(1, count($configurableOptionCollection));
         foreach ($configurableOptionCollection as $option) {
