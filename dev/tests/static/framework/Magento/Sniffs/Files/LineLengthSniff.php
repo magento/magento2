@@ -8,7 +8,7 @@ namespace Magento\Sniffs\Files;
 /**
  * Line length sniff which ignores long lines in case they contain strings intended for translation.
  */
-class LineLengthSniff extends Generic_Sniffs_Files_LineLengthSniff
+class LineLengthSniff extends \Generic_Sniffs_Files_LineLengthSniff
 {
     /**
      * Having previous line content allows to ignore long lines in case of multi-line declaration.
@@ -20,7 +20,7 @@ class LineLengthSniff extends Generic_Sniffs_Files_LineLengthSniff
     /**
      * {@inheritdoc}
      */
-    protected function checkLineLength(PHP_CodeSniffer_File $phpcsFile, $stackPtr, $lineContent)
+    protected function checkLineLength(\PHP_CodeSniffer_File $phpcsFile, $stackPtr, $lineContent)
     {
         $previousLineRegexp = '~__\($|Phrase\($~';
         $currentLineRegexp = '~__\(.+\)|Phrase\(.+\)~';
