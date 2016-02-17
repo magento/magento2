@@ -115,7 +115,7 @@ define([
          */
         initObservable: function () {
             this._super();
-            this.observe('state');
+            this.observe(['state', 'focused']);
 
             return this;
         },
