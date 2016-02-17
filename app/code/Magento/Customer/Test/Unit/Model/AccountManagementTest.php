@@ -135,7 +135,9 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->share = $this->getMock('Magento\Customer\Model\Config\Share', [], [], '', false);
         $this->string = $this->getMock('Magento\Framework\Stdlib\StringUtils');
         $this->customerRepository = $this->getMock('Magento\Customer\Api\CustomerRepositoryInterface');
-        $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
+        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->transportBuilder = $this->getMock(
             'Magento\Framework\Mail\Template\TransportBuilder',
             [],
@@ -201,9 +203,9 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
                 'customerModel' => $this->customer,
                 'objectFactory' => $this->objectFactory,
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverter,
-                'accountManagementHelper' => $this->accountManagementHelper
             ]
         );
+        $this->accountManagement->setAccountManagementHelper($this->accountManagementHelper);
     }
 
     /**
@@ -715,9 +717,26 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $minPasswordLength,
         $minCharacterSetsNum
     ) {
-        $this->accountManagementHelper->expects($this->once())
-            ->method('getMinimumPasswordLength')
-            ->willReturn($minPasswordLength);
+        $this->scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        [
+                            AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH,
+                            'default',
+                            null,
+                            $minPasswordLength,
+                        ],
+                        [
+                            AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER,
+                            'default',
+                            null,
+                            $minCharacterSetsNum],
+                    ]
+                )
+            );
+
         $this->string->expects($this->any())
             ->method('strlen')
             ->with($password)
@@ -731,9 +750,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         }
 
         if ($testNumber == 2) {
-            $this->accountManagementHelper->expects($this->once())
-                ->method('getRequiredCharacterClassesNumber')
-                ->willReturn($minCharacterSetsNum);
             $this->setExpectedException(
                 '\Magento\Framework\Exception\InputException',
                 __(
@@ -766,16 +782,39 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $minPasswordLength = 5;
         $minCharacterSetsNum = 2;
 
-        $this->accountManagementHelper->expects($this->once())
-            ->method('getMinimumPasswordLength')
-            ->willReturn($minPasswordLength);
+        $this->scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->willReturnMap(
+                [
+                    [
+                        AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH,
+                        'default',
+                        null,
+                        $minPasswordLength,
+                    ],
+                    [
+                        AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER,
+                        'default',
+                        null,
+                        $minCharacterSetsNum],
+                    [
+                        AccountManagement::XML_PATH_REGISTER_EMAIL_TEMPLATE,
+                        ScopeInterface::SCOPE_STORE,
+                        $defaultStoreId,
+                        $templateIdentifier,
+                    ],
+                    [
+                        AccountManagement::XML_PATH_REGISTER_EMAIL_IDENTITY,
+                        ScopeInterface::SCOPE_STORE,
+                        1,
+                        $sender
+                    ]
+                ]
+            );
         $this->string->expects($this->any())
             ->method('strlen')
             ->with($password)
             ->willReturn(iconv_strlen($password, 'UTF-8'));
-        $this->accountManagementHelper->expects($this->once())
-            ->method('getRequiredCharacterClassesNumber')
-            ->willReturn($minCharacterSetsNum);
         $this->encryptor->expects($this->once())
             ->method('getHash')
             ->with($password, true)
@@ -862,17 +901,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->dataObjectProcessor->expects($this->once())
             ->method('buildOutputDataArray')
             ->willReturn([]);
-        $this->scopeConfig->expects($this->at(1))
-            ->method('getValue')
-            ->with(
-                AccountManagement::XML_PATH_REGISTER_EMAIL_TEMPLATE,
-                ScopeInterface::SCOPE_STORE,
-                $defaultStoreId
-            )
-            ->willReturn($templateIdentifier);
-        $this->scopeConfig->expects($this->at(2))
-            ->method('getValue')
-            ->willReturn($sender);
         $transport = $this->getMockBuilder('Magento\Framework\Mail\TransportInterface')->getMock();
         $this->transportBuilder->expects($this->once())
             ->method('setTemplateIdentifier')
@@ -1363,16 +1391,28 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->with($newPassword, true)
             ->willReturn($passwordHash);
 
-        $this->accountManagementHelper->expects($this->once())
-            ->method('getMinimumPasswordLength')
-            ->willReturn(7);
+        $this->scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->willReturnMap(
+                [
+                    [
+                        AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH,
+                        'default',
+                        null,
+                        7,
+                    ],
+                    [
+                        AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER,
+                        'default',
+                        null,
+                        1
+                    ],
+                ]
+            );
         $this->string->expects($this->any())
             ->method('strlen')
             ->with($newPassword)
             ->willReturn(7);
-        $this->accountManagementHelper->expects($this->once())
-            ->method('getRequiredCharacterClassesNumber')
-            ->willReturn(1);
 
         $this->customerRepository
             ->expects($this->once())

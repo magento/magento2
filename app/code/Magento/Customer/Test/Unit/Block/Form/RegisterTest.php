@@ -6,6 +6,7 @@
 namespace Magento\Customer\Test\Unit\Block\Form;
 
 use Magento\Customer\Block\Form\Register;
+use Magento\Customer\Model\AccountManagement;
 
 /**
  * Test class for \Magento\Customer\Block\Form\Register.
@@ -42,9 +43,6 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Url */
     private $_customerUrl;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Helper\AccountManagement */
-    protected $accountManagementHelperMock;
-
     /** @var Register */
     private $_block;
 
@@ -57,13 +55,6 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
         $this->_customerSession = $this->getMock(
             'Magento\Customer\Model\Session',
             ['getCustomerFormData'],
-            [],
-            '',
-            false
-        );
-        $this->accountManagementHelperMock =  $this->getMock(
-            '\Magento\Customer\Helper\AccountManagement',
-            [],
             [],
             '',
             false
@@ -82,7 +73,6 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
             $this->_customerSession,
             $this->_customerUrl
         );
-        $this->_block->setAccountManagementHelper($this->accountManagementHelperMock);
     }
 
     /**
@@ -364,10 +354,12 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMinimumPasswordLength()
     {
-        $this->accountManagementHelperMock->expects(
+        $this->_scopeConfig->expects(
             $this->once()
         )->method(
-            'getMinimumPasswordLength'
+            'getValue'
+        )->with(
+            AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH
         )->will(
             $this->returnValue(6)
         );
@@ -379,10 +371,12 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRequiredCharacterClassesNumber()
     {
-        $this->accountManagementHelperMock->expects(
+        $this->_scopeConfig->expects(
             $this->once()
         )->method(
-            'getRequiredCharacterClassesNumber'
+            'getValue'
+        )->with(
+            AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER
         )->will(
             $this->returnValue(3)
         );

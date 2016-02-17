@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Block\Form;
 
-use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
+use Magento\Customer\Model\AccountManagement;
 
 /**
  * Customer register form block
@@ -28,11 +28,6 @@ class Register extends \Magento\Directory\Block\Data
      * @var \Magento\Customer\Model\Url
      */
     protected $_customerUrl;
-
-    /**
-     * @var AccountManagementHelper
-     */
-    protected $accountManagementHelper;
 
     /**
      * Constructor
@@ -75,35 +70,6 @@ class Register extends \Magento\Directory\Block\Data
             $data
         );
         $this->_isScopePrivate = false;
-    }
-
-    /**
-     * Set account management helper
-     *
-     * @param AccountManagementHelper $customerConfigHelper
-     * @return void
-     * @deprecated
-     */
-    public function setAccountManagementHelper(AccountManagementHelper $customerConfigHelper)
-    {
-
-        $this->accountManagementHelper = $customerConfigHelper;
-    }
-
-    /**
-     * Get account management helper
-     *
-     * @return AccountManagementHelper
-     * @deprecated
-     */
-    public function getAccountManagementHelper()
-    {
-
-        if (!($this->accountManagementHelper instanceof \Magento\Customer\Helper\AccountManagement)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Customer\Helper\AccountManagement');
-        } else {
-            return $this->accountManagementHelper;
-        }
     }
 
     /**
@@ -238,7 +204,7 @@ class Register extends \Magento\Directory\Block\Data
      */
     public function getMinimumPasswordLength()
     {
-        return $this->getAccountManagementHelper()->getMinimumPasswordLength();
+        return $this->_scopeConfig->getValue(AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH);
     }
 
     /**
@@ -248,6 +214,6 @@ class Register extends \Magento\Directory\Block\Data
      */
     public function getRequiredCharacterClassesNumber()
     {
-        return $this->getAccountManagementHelper()->getRequiredCharacterClassesNumber();
+        return $this->_scopeConfig->getValue(AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER);
     }
 }
