@@ -1260,6 +1260,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Set parent category ID
      *
