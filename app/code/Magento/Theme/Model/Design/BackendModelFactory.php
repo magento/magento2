@@ -53,16 +53,15 @@ class BackendModelFactory extends ValueFactory
      */
     public function create(array $data = [])
     {
-        $backendModelData = [
-            'path' => $data['config']['path'],
-            'scope' => $data['scope'],
-            'scope_id' => $data['scopeId'],
-            'field_config' => $data['config'],
-        ];
-        $configId = $this->getConfigId($data['scope'], $data['scopeId'], $data['config']['path']);
-        if ($configId) {
-            $backendModelData['config_id'] = $configId;
-        }
+        $backendModelData = array_replace_recursive(
+            $this->getStoredData($data['scope'], $data['scopeId'], $data['config']['path']),
+            [
+                'path' => $data['config']['path'],
+                'scope' => $data['scope'],
+                'scope_id' => $data['scopeId'],
+                'field_config' => $data['config'],
+            ]
+        );
 
         $backendType = isset($data['config']['backend_model'])
             ? $data['config']['backend_model']
@@ -117,21 +116,18 @@ class BackendModelFactory extends ValueFactory
     }
 
     /**
-     * Get config id for path
+     * Get config data for path
      *
      * @param string $scope
      * @param string $scopeId
      * @param string $path
-     * @return mixed
+     * @return array
      */
-    protected function getConfigId($scope, $scopeId, $path)
+    protected function getStoredData($scope, $scopeId, $path)
     {
-        $storedData = $this->getStoredData($scope, $scopeId);
+        $storedData = $this->getScopeData($scope, $scopeId);
         $dataKey = array_search($path, array_column($storedData, 'path'));
-        return $dataKey !== false
-            && isset($storedData[$dataKey]['config_id'])
-                ? $storedData[$dataKey]['config_id']
-                : null;
+        return $dataKey !== false ? $storedData[$dataKey] : [];
     }
 
     /**
@@ -141,7 +137,7 @@ class BackendModelFactory extends ValueFactory
      * @param string $scopeId
      * @return array
      */
-    protected function getStoredData($scope, $scopeId)
+    protected function getScopeData($scope, $scopeId)
     {
         if (!isset($this->storedData[$scope][$scopeId])) {
             $collection = $this->collectionFactory->create();
