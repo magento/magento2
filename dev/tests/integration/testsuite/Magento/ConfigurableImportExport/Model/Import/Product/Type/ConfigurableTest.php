@@ -45,8 +45,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /**
      * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_attribute.php
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
      */
     public function testConfigurableImport()
     {
@@ -88,10 +86,33 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($product->isObjectNew());
         $this->assertEquals(self::TEST_PRODUCT_NAME, $product->getName());
         $this->assertEquals(self::TEST_PRODUCT_TYPE, $product->getTypeId());
-        $this->assertEquals([1 => '1', 2 => '2'], $product->getExtensionAttributes()->getConfigurableProductLinks());
-        $configurableOptions = $product->getExtensionAttributes()->getConfigurableProductOptions();
-        $this->assertEquals(1, count($configurableOptions));
-        foreach ($configurableOptions as $option) {
+
+        $childProductSkuList = [];
+        $options = $product->getTypeInstance()->getConfigurableOptions($product);
+        foreach ($options as $option) {
+            foreach ($option as $optionData) {
+                $childProductSkuList[] = $optionData['sku'];
+            }
+        }
+        sort($childProductSkuList);
+        $this->assertEquals($childProductSkuList, ['Configurable 1-Option 1', 'Configurable 1-Option 2']);
+
+        $childrenIdList = $product->getTypeInstance()->getChildrenIds($product->getId());
+        $childProductIdList  = [];
+        foreach ($childrenIdList as $childIdList) {
+            foreach ($childIdList as $childId) {
+                $childProductIdList[] = $childId;
+            }
+        }
+        sort($childProductIdList);
+        $this->assertEquals(
+            $childProductIdList,
+            array_values($product->getExtensionAttributes()->getConfigurableProductLinks())
+        );
+
+        $configurableOptionCollection = $product->getExtensionAttributes()->getConfigurableProductOptions();
+        $this->assertEquals(1, count($configurableOptionCollection));
+        foreach ($configurableOptionCollection as $option) {
             $optionData = $option->getData();
             $this->assertArrayHasKey('product_super_attribute_id', $optionData);
             $this->assertArrayHasKey('product_id', $optionData);
