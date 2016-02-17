@@ -93,15 +93,12 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $bundleOptions = $product->getExtensionAttributes()->getBundleProductOptions();
         $this->assertEquals(2, count($bundleOptions));
         foreach ($bundleOptions as $optionKey => $option) {
-            $this->assertEquals($optionKey + 1, $option->getData('option_id'));
             $this->assertEquals('checkbox', $option->getData('type'));
             $this->assertEquals('Option ' . ($optionKey + 1), $option->getData('title'));
             $this->assertEquals(self::TEST_PRODUCT_NAME, $option->getData('sku'));
             $this->assertEquals($optionKey + 1, count($option->getData('product_links')));
             foreach ($option->getData('product_links') as $linkKey => $productLink) {
-                $this->assertEquals($optionKey + 1 + $linkKey, $productLink->getData('entity_id'));
                 $this->assertEquals('Simple ' . ($optionKey + 1 + $linkKey), $productLink->getData('sku'));
-                $this->assertEquals($optionKey + 1, $productLink->getData('option_id'));
             }
         }
     }
