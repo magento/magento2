@@ -6,10 +6,8 @@
 namespace Magento\ConfigurableProduct\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\ConfigurableProduct\Api\Data\OptionInterface;
-use Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory;
+use Magento\ConfigurableProduct\Helper\Product\Options\Loader;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
  * Class ReadHandler
@@ -17,24 +15,18 @@ use Magento\Framework\Model\Entity\MetadataPool;
 class ReadHandler
 {
     /**
-     * @var OptionValueInterfaceFactory
+     * @var Loader
      */
-    private $optionValueFactory;
-
-    /**
-     * @var MetadataPool
-     */
-    private $metadataPool;
+    private $optionLoader;
 
     /**
      * ReadHandler constructor
-     * @param OptionValueInterfaceFactory $optionValueFactory
-     * @param MetadataPool $metadataPool
+     *
+     * @param Loader $optionLoader
      */
-    public function __construct(OptionValueInterfaceFactory $optionValueFactory, MetadataPool $metadataPool)
+    public function __construct(Loader $optionLoader)
     {
-        $this->optionValueFactory = $optionValueFactory;
-        $this->metadataPool = $metadataPool;
+        $this->optionLoader = $optionLoader;
     }
 
     /**
@@ -50,40 +42,13 @@ class ReadHandler
         }
 
         $extensionAttributes = $entity->getExtensionAttributes();
-        $extensionAttributes->setConfigurableProductOptions($this->getOptions($entity));
+
         $extensionAttributes->setConfigurableProductLinks($this->getLinkedProducts($entity));
+        $extensionAttributes->setConfigurableProductOptions($this->optionLoader->load($entity));
+
         $entity->setExtensionAttributes($extensionAttributes);
+
         return $entity;
-    }
-
-    /**
-     * Get configurable options
-     *
-     * @param ProductInterface $product
-     * @return OptionInterface[]
-     */
-    private function getOptions(ProductInterface $product)
-    {
-        $options = [];
-        /** @var Configurable $typeInstance */
-        $typeInstance = $product->getTypeInstance();
-        $attributeCollection = $typeInstance->getConfigurableAttributes($product);
-
-        foreach ($attributeCollection as $attribute) {
-            $values = [];
-            $attributeOptions = $attribute->getOptions();
-            if (is_array($attributeOptions)) {
-                foreach ($attributeOptions as $option) {
-                    /** @var \Magento\ConfigurableProduct\Api\Data\OptionValueInterface $value */
-                    $value = $this->optionValueFactory->create();
-                    $value->setValueIndex($option['value_index']);
-                    $values[] = $value;
-                }
-            }
-            $attribute->setValues($values);
-            $options[] = $attribute;
-        }
-        return $options;
     }
 
     /**
@@ -94,7 +59,6 @@ class ReadHandler
      */
     private function getLinkedProducts(ProductInterface $product)
     {
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         /** @var Configurable $typeInstance */
         $typeInstance = $product->getTypeInstance();
         $childrenIds = $typeInstance->getChildrenIds($product->getId());

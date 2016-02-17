@@ -9,6 +9,7 @@ namespace Magento\ConfigurableProduct\Model;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
+use Magento\ConfigurableProduct\Helper\Product\Options\Loader;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\InputException;
@@ -62,10 +63,16 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
      */
     private $configurableTypeResource;
+
     /**
      * @var MetadataPool
      */
     private $metadataPool;
+
+    /**
+     * @var Loader
+     */
+    private $optionLoader;
 
     /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
@@ -77,6 +84,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      * @param ConfigurableType\AttributeFactory $configurableAttributeFactory
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableTypeResource
      * @param MetadataPool $metadataPool
+     * @param Loader $optionLoader
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -87,7 +95,8 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $productAttributeRepository,
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable\AttributeFactory $configurableAttributeFactory,
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableTypeResource,
-        MetadataPool $metadataPool
+        MetadataPool $metadataPool,
+        Loader $optionLoader
     ) {
         $this->productRepository = $productRepository;
         $this->optionValueFactory = $optionValueFactory;
@@ -98,6 +107,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
         $this->configurableAttributeFactory = $configurableAttributeFactory;
         $this->configurableTypeResource = $configurableTypeResource;
         $this->metadataPool = $metadataPool;
+        $this->optionLoader = $optionLoader;
     }
 
     /**
@@ -107,15 +117,13 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     {
         $product = $this->getProduct($sku);
 
-        $extensionAttribute = $product->getExtensionAttributes();
-        if ($extensionAttribute !== null) {
-            $options = $extensionAttribute->getConfigurableProductOptions();
-            foreach ($options as $option) {
-                if ($option->getId() == $id) {
-                    return $option;
-                }
+        $options = $this->optionLoader->load($product);
+        foreach ($options as $option) {
+            if ($option->getId() == $id) {
+                return $option;
             }
         }
+
         throw new NoSuchEntityException(__('Requested option doesn\'t exist: %1', $id));
     }
 
@@ -124,14 +132,9 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      */
     public function getList($sku)
     {
-        $options = [];
         $product = $this->getProduct($sku);
 
-        $extensionAttribute = $product->getExtensionAttributes();
-        if ($extensionAttribute !== null) {
-            $options = $extensionAttribute->getConfigurableProductOptions();
-        }
-        return $options;
+        return $this->optionLoader->load($product);
     }
 
     /**
@@ -139,7 +142,9 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      */
     public function delete(OptionInterface $option)
     {
-        $product = $this->getProductById($option->getProductId());
+        $entityId = $this->configurableTypeResource->getEntityIdByAttribute($option);
+        $product = $this->getProductById($entityId);
+
         try {
             $this->configurableTypeResource->saveProducts($product, []);
         } catch (\Exception $exception) {
@@ -179,10 +184,12 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     public function save($sku, OptionInterface $option)
     {
         $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
-        /** @var Product $product */
-        $product = $this->getProduct($sku);
         if ($option->getId()) {
+            /** @var Product $product */
+            $product = $this->getProduct($sku);
+            $data = $option->getData();
             $option->load($option->getId());
+            $option->setData(array_replace_recursive($option->getData(), $data));
             if (!$option->getId() || $option->getProductId() != $product->getData($metadata->getLinkField())) {
                 throw new NoSuchEntityException(
                     __(
@@ -192,6 +199,8 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
                 );
             }
         } else {
+            /** @var Product $product */
+            $product = $this->productRepository->get($sku);
             $this->validateNewOptionData($option);
             $allowedTypes = [ProductType::TYPE_SIMPLE, ProductType::TYPE_VIRTUAL, ConfigurableType::TYPE_CODE];
             if (!in_array($product->getTypeId(), $allowedTypes)) {
