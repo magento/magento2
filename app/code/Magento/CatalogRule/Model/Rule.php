@@ -572,6 +572,15 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
         return $result;
     }
 
+    /**
+     * @param string $formName
+     * @return string
+     */
+    public function getConditionsFieldSetId($formName = '')
+    {
+        return $formName . 'rule_conditions_fieldset_' . $this->getId();
+    }
+
     //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}

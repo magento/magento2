@@ -7,9 +7,22 @@ define([
     'Magento_Ui/js/lib/spinner',
     'rjsResolver',
     './adapter',
-    'uiCollection'
-], function (_, loader, resolver, adapter, Collection) {
+    'uiCollection',
+    'mageUtils',
+    'jquery',
+    'Magento_Ui/js/core/app'
+], function (_, loader, resolver, adapter, Collection, utils, $, app) {
     'use strict';
+
+    function prepareParams(params) {
+        var result = '?';
+
+        _.each(params, function (value, key) {
+            result += key + '=' + value + '&';
+        });
+
+        return result.slice(0, -1);
+    }
 
     /**
      * Collect form data.
@@ -43,14 +56,64 @@ define([
         return result;
     }
 
+    function makeRequest(params, data, url) {
+        var save = $.Deferred();
+
+        data = utils.serialize(data);
+        data['form_key'] = window.FORM_KEY;
+
+        if (!url) {
+            save.resolve();
+        }
+
+        $('body').trigger('processStart');
+
+        $.ajax({
+            url: url + prepareParams(params),
+            data: data,
+            dataType: 'json',
+            success: function (resp) {
+                if (resp.ajaxExpired) {
+                    window.location.href = resp.ajaxRedirect;
+                }
+
+                if (!resp.error) {
+                    save.resolve(resp);
+
+                    return true;
+                }
+
+                $('body').notification('clear');
+                $.each(resp.messages, function (key, message) {
+                    $('body').notification('add', {
+                        error: resp.error,
+                        message: message,
+                        insertMethod: function (msg) {
+                            $('.page-main-actions').after(msg);
+                        }
+                    });
+                });
+            },
+            complete: function () {
+                $('body').trigger('processStop');
+            }
+        });
+
+        return save.promise();
+    }
+
     return Collection.extend({
         defaults: {
             selectorPrefix: false,
             eventPrefix: '.${ $.index }',
             ajaxSave: false,
             ajaxSaveType: 'default',
+            imports: {
+                reloadUrl: '${ $.provider}:reloadUrl'
+            },
             listens: {
-                selectorPrefix: 'destroyAdapter initAdapter'
+                selectorPrefix: 'destroyAdapter initAdapter',
+                '${ $.name }.${ $.reloadItem }': 'params.set reload'
             }
         },
 
@@ -91,8 +154,7 @@ define([
             adapter.on({
                 'reset': this.reset.bind(this),
                 'save': this.save.bind(this, true, {}),
-                'saveAndContinue': this.save.bind(this, false, {}),
-                'saveAndApply': this.saveAndApply.bind(this, true, {})
+                'saveAndContinue': this.save.bind(this, false, {})
             }, this.selectorPrefix, this.eventPrefix);
 
             return this;
@@ -188,7 +250,6 @@ define([
             this.source.trigger('data.validate');
         },
 
-
         /**
          * Trigger reset form data.
          */
@@ -197,22 +258,16 @@ define([
         },
 
         /**
-         * Save form and apply data
-         */
-        saveAndApply: function (redirect) {
-            this.validate();
-
-            if (!this.source.get('params.invalid')) {
-                this.source.set('data.auto_apply', 1);
-                this.submit(redirect);
-            }
-        },
-
-        /**
          * Trigger overload form data.
          */
         overload: function () {
             this.source.trigger('data.overload');
+        },
+
+        reload: function () {
+            makeRequest(this.params, this.data, this.reloadUrl).then(function (data) {
+                app(data, true);
+            });
         }
     });
 });
