@@ -252,8 +252,8 @@
                     <item name="label" xsi:type="string" translate="true">Anchor</item>
                     <item name="prefer" xsi:type="string">toggle</item>
                     <item name="valueMap" xsi:type="array">
-                        <item name="true" xsi:type="boolean">true</item>
-                        <item name="false" xsi:type="boolean">false</item>
+                        <item name="true" xsi:type="string">1</item>
+                        <item name="false" xsi:type="string">0</item>
                     </item>
                 </item>
             </argument>
