@@ -90,7 +90,7 @@ class CheckUserLoginObserver implements ObserverInterface
      * @return void
      * @deprecated
      */
-    public function setCustomerRepository(\Magento\Customer\Api\CustomerRepositoryInterface $customerRepository)
+    private function setCustomerRepository(\Magento\Customer\Api\CustomerRepositoryInterface $customerRepository)
     {
 
         $this->customerRepository = $customerRepository;
@@ -102,7 +102,7 @@ class CheckUserLoginObserver implements ObserverInterface
      * @return \Magento\Customer\Api\CustomerRepositoryInterface
      * @deprecated
      */
-    public function getCustomerRepository()
+    private function getCustomerRepository()
     {
 
         if (!($this->customerRepository instanceof \Magento\Customer\Api\CustomerRepositoryInterface)) {
@@ -121,7 +121,7 @@ class CheckUserLoginObserver implements ObserverInterface
      * @return void
      * @deprecated
      */
-    public function setAccountManagementHelper(AccountManagementHelper $accountManagementHelper)
+    private function setAccountManagementHelper(AccountManagementHelper $accountManagementHelper)
     {
 
         $this->accountManagementHelper = $accountManagementHelper;
@@ -133,7 +133,7 @@ class CheckUserLoginObserver implements ObserverInterface
      * @return AccountManagementHelper
      * @deprecated
      */
-    public function getAccountManagementHelper()
+    private function getAccountManagementHelper()
     {
 
         if (!($this->accountManagementHelper instanceof \Magento\Customer\Helper\AccountManagement)) {

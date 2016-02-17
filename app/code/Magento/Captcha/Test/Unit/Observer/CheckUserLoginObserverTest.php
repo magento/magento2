@@ -5,6 +5,8 @@
  */
 namespace Magento\Captcha\Test\Unit\Observer;
 
+use Zend\Server\Reflection\ReflectionMethod;
+
 class CheckUserLoginObserverTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Captcha\Helper\Data |\PHPUnit_Framework_MockObject_MockObject */
@@ -97,8 +99,20 @@ class CheckUserLoginObserverTest extends \PHPUnit_Framework_TestCase
                 'customerUrl' => $this->customerUrlMock,
             ]
         );
-        $this->observer->setAccountManagementHelper($this->accountManagementHelperMock);
-        $this->observer->setCustomerRepository($this->customerRepositoryMock);
+
+        $methodSetAccountManagementHelper = new \ReflectionMethod(
+            'Magento\Captcha\Observer\CheckUserLoginObserver',
+            'setAccountManagementHelper'
+        );
+        $methodSetAccountManagementHelper->setAccessible(true);
+        $methodSetAccountManagementHelper->invoke($this->observer, $this->accountManagementHelperMock);
+
+        $methodSetCustomerRepository = new \ReflectionMethod(
+            'Magento\Captcha\Observer\CheckUserLoginObserver',
+            'setCustomerRepository'
+        );
+        $methodSetCustomerRepository->setAccessible(true);
+        $methodSetCustomerRepository->invoke($this->observer, $this->customerRepositoryMock);
     }
 
     /**
