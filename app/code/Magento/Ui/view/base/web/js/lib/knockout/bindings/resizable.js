@@ -21,12 +21,14 @@ define([
 
     /**
      * Recalcs allowed min, max width and height based on configured selectors
-     *
-     * @param {Object} event
-     * @param {Object} ui
      */
-    function recalcAllowedSize(event, ui) {
-        var size;
+    function recalcAllowedSize() {
+        var size,
+            element = this.element;
+
+        if (_.isEmpty(this.widthUpdate)) {
+            $(element).css('width', 'auto');
+        }
 
         _.each(this.sizeConstraints, function (selector, key) {
             async.async({
@@ -34,7 +36,7 @@ define([
                 selector: selector
             }, function (elem) {
                 size = key.indexOf('Height') !== -1 ? $(elem).outerHeight(true) : $(elem).outerWidth(true);
-                $(ui.element).resizable('option', key, size + 1);
+                $(element).resizable('option', key, size + 1);
             });
         }, this);
     }
@@ -45,11 +47,13 @@ define([
      *
      * @param {Object} config
      * @param {Object} viewModel
+     * @param {*} element
      * @return {Object} config
      */
-    function processConfig(config, viewModel) {
+    function processConfig(config, viewModel, element) {
         var sizeConstraint,
-            sizeConstraints = {};
+            sizeConstraints = {},
+            recalc;
 
         if (_.isEmpty(config)) {
             return {};
@@ -59,14 +63,20 @@ define([
 
             if (sizeConstraint && !_.isNumber(sizeConstraint)) {
                 sizeConstraints[key] = sizeConstraint;
-                config[key] = null;
+                delete config[key];
             }
         });
 
-        config.start = recalcAllowedSize.bind({
+        recalc = recalcAllowedSize.bind({
             sizeConstraints: sizeConstraints,
-            componentName: viewModel.name
+            componentName: viewModel.name,
+            element: element,
+            widthUpdate: _.filter(sizeConstraints, function (value, key) {
+                return key.indexOf('Width') !== -1;
+            })
         });
+        config.start = recalc;
+        $(window).on('resize.resizable', recalc);
 
         return config;
     }
@@ -82,7 +92,7 @@ define([
          * @param {Object} viewModel
          */
         init: function (element, valueAccessor, allBindings, viewModel) {
-            var config = processConfig(valueAccessor(), viewModel);
+            var config = processConfig(valueAccessor(), viewModel, element);
 
             $(element).resizable(config);
         }
