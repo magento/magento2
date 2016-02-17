@@ -19,6 +19,7 @@ define([
             focused: false,
             required: false,
             disabled: false,
+            valueChangedByUser: false,
             elementTmpl: 'ui/form/element/input',
             tooltipTpl: 'ui/form/element/helper/tooltip',
             'input_type': 'input',
@@ -31,6 +32,9 @@ define([
             notice: '',
             customScope: '',
             additionalClasses: {},
+            isUseDefault: '',
+            valueUpdate: false, // ko binding valueUpdate
+
             switcherConfig: {
                 component: 'Magento_Ui/js/form/switcher',
                 name: '${ $.name }_switcher',
@@ -41,7 +45,8 @@ define([
                 visible: 'setPreview',
                 '${ $.provider }:data.reset': 'reset',
                 '${ $.provider }:data.overload': 'overload',
-                '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate'
+                '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate',
+                'isUseDefault': 'toggleUseDefault'
             },
 
             links: {
@@ -74,7 +79,7 @@ define([
 
             this._super();
 
-            this.observe('error disabled focused preview visible value warn')
+            this.observe('error disabled focused preview visible value warn isUseDefault')
                 .observe({
                     'required': !!rules['required-entry']
                 });
@@ -94,7 +99,7 @@ define([
 
             this._super();
 
-            scope   = this.dataScope,
+            scope   = this.dataScope;
             name    = scope.split('.').slice(1);
 
             _.extend(this, {
@@ -132,6 +137,7 @@ define([
             }
 
             this.on('value', this.onUpdate.bind(this));
+            this.isUseDefault(this.disabled());
 
             return this;
         },
@@ -264,7 +270,7 @@ define([
         },
 
         /**
-         * Returnes unwrapped preview observable.
+         * Returns unwrapped preview observable.
          *
          * @returns {String} Value of the preview observable.
          */
@@ -273,12 +279,21 @@ define([
         },
 
         /**
-         * Checkes if element has addons
+         * Checks if element has addons
          *
          * @returns {Boolean}
          */
         hasAddons: function () {
             return this.addbefore || this.addafter;
+        },
+
+        /**
+         * Checks if element has service setting
+         *
+         * @returns {Boolean}
+         */
+        hasService: function() {
+            return this.service && this.service.template;
         },
 
         /**
@@ -351,9 +366,10 @@ define([
                 message = !this.disabled() && this.visible() ? result.message : '',
                 isValid = this.disabled() || !this.visible() || result.passed;
 
+            this.error(message);
+
             //TODO: Implement proper result propagation for form
             if (!isValid) {
-                this.error(message);
                 this.source.set('params.invalid', true);
             }
 
@@ -370,6 +386,17 @@ define([
             this.bubble('update', this.hasChanged());
 
             this.validate();
+        },
+
+        toggleUseDefault: function (state) {
+            this.disabled(state);
+        },
+
+        /**
+         *  Callback when value is changed by user
+         */
+        userChanges: function() {
+            this.valueChangedByUser = true;
         }
     });
 });

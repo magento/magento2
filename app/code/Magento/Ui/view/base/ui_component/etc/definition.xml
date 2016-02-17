@@ -179,6 +179,24 @@
     <field class="Magento\Ui\Component\Form\Field"/>
 
     <!-- Form elements -->
+    <radioset class="Magento\Ui\Component\Form\Element\RadioSet">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/checkbox-set</item>
+                <item name="template" xsi:type="string">ui/form/element/checkbox-set</item>
+                <item name="isMultiselect" xsi:type="boolean">false</item>
+            </item>
+        </argument>
+    </radioset>
+    <checkboxset class="Magento\Ui\Component\Form\Element\CheckboxSet">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/checkbox-set</item>
+                <item name="template" xsi:type="string">ui/form/element/checkbox-set</item>
+                <item name="isMultiselect" xsi:type="boolean">true</item>
+            </item>
+        </argument>
+    </checkboxset>
     <wysiwyg class="Magento\Ui\Component\Form\Element\Wysiwyg">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
@@ -205,7 +223,7 @@
             </item>
         </argument>
     </input>
-    <hidden class="Magento\Ui\Component\Form\Element\Input">
+    <hidden class="Magento\Ui\Component\Form\Element\Hidden">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
@@ -254,6 +272,13 @@
             </item>
         </argument>
     </multiline>
+    <range class="Magento\Ui\Component\Form\Element\Range">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/filters/range</item>
+            </item>
+        </argument>
+    </range>
     <fileUploader class="Magento\Ui\Component\Form\Element\DataType\Media">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
@@ -422,6 +447,13 @@
             </item>
         </argument>
     </columnsControls>
+    <listingToolbar class="Magento\Ui\Component\Container">
+         <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/toolbar</item>
+            </item>
+        </argument>
+    </listingToolbar>
     <dynamicRows class="Magento\Ui\Component\Container">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
@@ -430,13 +462,6 @@
             </item>
         </argument>
     </dynamicRows>
-    <listingToolbar class="Magento\Ui\Component\Container">
-         <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/toolbar</item>
-            </item>
-        </argument>
-    </listingToolbar>
     <htmlContent class="Magento\Ui\Component\HtmlContent">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">

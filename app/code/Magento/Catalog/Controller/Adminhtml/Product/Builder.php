@@ -9,6 +9,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Cms\Model\Wysiwyg as WysiwygModel;
 use Magento\Framework\App\RequestInterface;
+use Magento\Store\Model\StoreFactory;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Framework\Registry;
 
@@ -35,21 +36,29 @@ class Builder
     protected $wysiwygConfig;
 
     /**
+     * @var StoreFactory
+     */
+    protected $storeFactory;
+
+    /**
      * @param ProductFactory $productFactory
      * @param Logger $logger
      * @param Registry $registry
      * @param WysiwygModel\Config $wysiwygConfig
+     * @param StoreFactory $storeFactory
      */
     public function __construct(
         ProductFactory $productFactory,
         Logger $logger,
         Registry $registry,
-        WysiwygModel\Config $wysiwygConfig
+        WysiwygModel\Config $wysiwygConfig,
+        StoreFactory $storeFactory
     ) {
         $this->productFactory = $productFactory;
         $this->logger = $logger;
         $this->registry = $registry;
         $this->wysiwygConfig = $wysiwygConfig;
+        $this->storeFactory = $storeFactory;
     }
 
     /**
@@ -64,6 +73,8 @@ class Builder
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $this->productFactory->create();
         $product->setStoreId($request->getParam('store', 0));
+        $store = $this->storeFactory->create();
+        $store->load($request->getParam('store', 0));
 
         $typeId = $request->getParam('type');
         if (!$productId && $typeId) {
@@ -87,6 +98,7 @@ class Builder
 
         $this->registry->register('product', $product);
         $this->registry->register('current_product', $product);
+        $this->registry->register('current_store', $store);
         $this->wysiwygConfig->setStoreId($request->getParam('store'));
         return $product;
     }
