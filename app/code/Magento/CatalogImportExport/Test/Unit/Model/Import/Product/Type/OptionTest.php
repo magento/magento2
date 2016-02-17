@@ -209,6 +209,11 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     protected $errorAggregator;
 
     /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPoolMock;
+
+    /**
      * Init entity adapter model
      */
     protected function setUp()
@@ -235,6 +240,15 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $timezoneInterface = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $date = new \DateTime();
         $timezoneInterface->expects($this->any())->method('date')->willReturn($date);
+        $this->metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $entityMetadataMock = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $this->metadataPoolMock->expects($this->any())
+            ->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($entityMetadataMock);
+        $entityMetadataMock->expects($this->any())
+            ->method('getLinkField')
+            ->willReturn('entity_id');
         $modelClassArgs = [
             $this->getMock('Magento\ImportExport\Model\ResourceModel\Import\Data', [], [], '', false),
             $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false),
@@ -265,10 +279,11 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                 '',
                 false
             ),
+            $this->metadataPoolMock,
             $this->_getModelDependencies($addExpectations, $deleteBehavior, $doubleOptions)
         ];
 
-        $modelClassName = '\Magento\CatalogImportExport\Model\Import\Product\Option';
+        $modelClassName = 'Magento\CatalogImportExport\Model\Import\Product\Option';
         $class = new \ReflectionClass($modelClassName);
         $this->_model = $class->newInstanceArgs($modelClassArgs);
         // Create model mock with rewritten _getMultiRowFormat method to support test data with the old format.
@@ -916,6 +931,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $model = $this->objectManagerHelper->getObject(
             'Magento\CatalogImportExport\Model\Import\Product\Option',
             [
+                'metadataPool' => $this->metadataPoolMock,
                 'data' => [
                     'data_source_model' => $modelData,
                     'product_model' => $productModel,

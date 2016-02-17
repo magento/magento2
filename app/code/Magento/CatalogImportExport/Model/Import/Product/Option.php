@@ -11,6 +11,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\App\ResourceConnection;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Entity class which provide possibility to import product custom options
@@ -373,7 +374,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->errorAggregator = $errorAggregator;
 
         /** @var \Magento\Framework\Model\Entity\EntityMetadata $productMetadata */
-        $productMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $productMetadata = $metadataPool->getMetadata(ProductInterface::class);
         $this->productEntityLinkField = $productMetadata->getLinkField();
 
         $this->_initSourceEntities($data)->_initTables($data)->_initStores($data);
