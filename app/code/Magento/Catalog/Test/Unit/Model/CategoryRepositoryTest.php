@@ -37,6 +37,11 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $storeManagerMock;
 
+    /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPoolMock;
+
     protected function setUp()
     {
         $this->categoryFactoryMock = $this->getMock(
@@ -59,10 +64,35 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['toNestedArray'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $metadataMock = $this->getMock(
+            'Magento\Framework\Model\Entity\EntityMetadata',
+            [],
+            [],
+            '',
+            false
+        );
+        $metadataMock->expects($this->any())
+            ->method('getLinkField')
+            ->willReturn('entity_id');
+
+        $this->metadataPoolMock = $this->getMock(
+            'Magento\Framework\Model\Entity\MetadataPool',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->metadataPoolMock->expects($this->any())
+            ->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\CategoryInterface::class)
+            ->willReturn($metadataMock);
+
         $this->model = new \Magento\Catalog\Model\CategoryRepository(
             $this->categoryFactoryMock,
             $this->categoryResourceMock,
             $this->storeManagerMock,
+            $this->metadataPoolMock,
             $this->extensibleDataObjectConverterMock
         );
     }

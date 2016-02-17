@@ -38,8 +38,10 @@ class Edit extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
         if (!empty($data)) {
             $model->addData($data);
         }
-        $model->getConditions()->setJsFormObject('rule_conditions_fieldset');
         $model->getConditions()->setFormName('catalog_rule_form');
+        $model->getConditions()->setJsFormObject(
+            $model->getConditionsFieldSetId($model->getConditions()->getFormName())
+        );
 
         $this->_coreRegistry->register('current_promo_catalog_rule', $model);
 
