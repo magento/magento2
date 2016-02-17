@@ -1,17 +1,19 @@
 <?php
 /**
- * Plugin for \Magento\Indexer\Model\Indexer\State model
- *
- * Copyright Â© 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Model\Indexer\Category\Product\Plugin;
+namespace Magento\CatalogRule\Model\Indexer\Plugin;
 
-use Magento\Catalog\Model\Indexer\Category\Product;
-use Magento\Catalog\Model\Indexer\Product\Category;
+use Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor;
+use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
 use Magento\Indexer\Model\Indexer\State;
 
+/**
+ * Class IndexerState
+ * @package Magento\Catalog\Model\Indexer\Category\Product\Plugin
+ */
 class IndexerState
 {
     /**
@@ -25,8 +27,8 @@ class IndexerState
      * @var string[]
      */
     protected $indexerIds = [
-        Category::INDEXER_ID,
-        Product::INDEXER_ID,
+        ProductRuleProcessor::INDEXER_ID,
+        RuleProductProcessor::INDEXER_ID,
     ];
 
     /**
@@ -46,11 +48,11 @@ class IndexerState
     public function afterSave(State $state)
     {
         if (in_array($state->getIndexerId(), $this->indexerIds)) {
-            $indexerId = $state->getIndexerId() === Product::INDEXER_ID
-                ? Category::INDEXER_ID
-                : Product::INDEXER_ID;
+            $indexerIdForValidation = $state->getIndexerId() === ProductRuleProcessor::INDEXER_ID
+                ? RuleProductProcessor::INDEXER_ID
+                : ProductRuleProcessor::INDEXER_ID;
 
-            $relatedIndexerState = $this->state->loadByIndexer($indexerId);
+            $relatedIndexerState = $this->state->loadByIndexer($indexerIdForValidation);
 
             if ($relatedIndexerState->getStatus() !== $state->getStatus()) {
                 $relatedIndexerState->setData('status', $state->getStatus());
