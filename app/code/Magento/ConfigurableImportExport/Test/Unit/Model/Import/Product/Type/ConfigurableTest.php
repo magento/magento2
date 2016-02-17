@@ -73,6 +73,11 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     protected $select;
 
     /**
+     * @var string
+     */
+    protected $productEntityLinkField = 'entity_id';
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -288,6 +293,19 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             'testattr3v3' => '6',
         ]));
 
+        $metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $entityMetadataMock = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $metadataPoolMock->expects($this->any())
+            ->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($entityMetadataMock);
+        $entityMetadataMock->expects($this->any())
+            ->method('getLinkField')
+            ->willReturn($this->productEntityLinkField);
+        $entityMetadataMock->expects($this->any())
+            ->method('getIdentifierField')
+            ->willReturn($this->productEntityLinkField);
+
         $this->configurable = $this->objectManagerHelper->getObject(
             'Magento\ConfigurableImportExport\Model\Import\Product\Type\Configurable',
             [
@@ -295,7 +313,8 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'prodAttrColFac' => $this->attrCollectionFactory,
                 'params' => $this->params,
                 'resource' => $this->resource,
-                'productColFac' => $this->productCollectionFactory
+                'productColFac' => $this->productCollectionFactory,
+                'metadataPool' => $metadataPoolMock
             ]
         );
     }
@@ -480,25 +499,25 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
     {
         $this->_entityModel->expects($this->any())->method('getNewSku')->will($this->returnValue([
             'configurableskuI22' =>
-                ['entity_id' => 1, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+                [$this->productEntityLinkField => 1, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
             'testconf2-attr2val1-testattr3v1' =>
-                ['entity_id' => 2, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+                [$this->productEntityLinkField => 2, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
             'testconf2-attr2val1-testattr30v1' =>
-                ['entity_id' => 20, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+                [$this->productEntityLinkField => 20, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
             'testconf2-attr2val1-testattr3v2' =>
-                ['entity_id' => 3, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+                [$this->productEntityLinkField => 3, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
             'testSimple' =>
-                ['entity_id' => 4, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+                [$this->productEntityLinkField => 4, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
             'testSimpleToSkip' =>
-                ['entity_id' => 5, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+                [$this->productEntityLinkField => 5, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
             'configurableskuI22withoutLabels' =>
-                ['entity_id' => 6, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+                [$this->productEntityLinkField => 6, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
             'configurableskuI22withoutVariations' =>
-                ['entity_id' => 7, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+                [$this->productEntityLinkField => 7, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
             'configurableskuI22Duplicated' =>
-                ['entity_id' => 8, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+                [$this->productEntityLinkField => 8, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
             'configurableskuI22BadPrice' =>
-                ['entity_id' => 9, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
+                [$this->productEntityLinkField => 9, 'type_id' => 'configurable', 'attr_set_code' => 'Default'],
         ]));
 
         $this->_connection->expects($this->any())->method('select')->will($this->returnValue($this->select));
@@ -536,7 +555,7 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         ->will($this->returnCallback([$this, 'isRowAllowedToImport']));
 
         $this->_entityModel->expects($this->any())->method('getOldSku')->will($this->returnValue([
-            'testSimpleOld' => ['entity_id' => 10, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'testSimpleOld' => [$this->productEntityLinkField => 10, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
         ]));
 
         $this->_entityModel->expects($this->any())->method('getAttrSetIdToName')->willReturn([4 => 'Default']);
