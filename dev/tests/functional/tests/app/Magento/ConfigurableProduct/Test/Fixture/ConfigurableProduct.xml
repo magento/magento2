@@ -32,7 +32,7 @@
         <field name="custom_design_from" is_required="0" />
         <field name="custom_design_to" is_required="0" />
         <field name="custom_layout_update" is_required="0" />
-        <field name="description" is_required="0" group="product-details" />
+        <field name="description" is_required="0" group="content" />
         <field name="enable_googlecheckout" is_required="0" />
         <field name="gallery" is_required="0" />
         <field name="gift_message_available" is_required="0" />
@@ -56,7 +56,7 @@
         <field name="price" is_required="0" group="product-details" source="Magento\Catalog\Test\Fixture\Product\Price" repository="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct\Price"/>
         <field name="quantity_and_stock_status" is_required="0" group="product-details" />
         <field name="required_options" is_required="0" />
-        <field name="short_description" is_required="0" group="autosettings" />
+        <field name="short_description" is_required="0" group="content" />
         <field name="sku" is_required="1" group="product-details" />
         <field name="small_image" is_required="0" />
         <field name="small_image_label" is_required="0" />
@@ -83,8 +83,8 @@
         <field name="configurable_attributes_data" is_required="0" group="variations" source="Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct\ConfigurableAttributesData" repository="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct\ConfigurableAttributesData" />
         <field name="website_ids" group="websites" />
         <field name="checkout_data" group="null" repository="Magento\ConfigurableProduct\Test\Repository\ConfigurableProduct\CheckoutData" />
-        <field name="up_sell_products" group="upsells" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
-        <field name="cross_sell_products" group="crosssells" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
-        <field name="related_products" group="related-products" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
+        <field name="up_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
+        <field name="cross_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
+        <field name="related_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
     </fixture>
 </config>

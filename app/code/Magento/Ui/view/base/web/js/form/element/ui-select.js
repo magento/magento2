@@ -8,16 +8,95 @@ define([
     './abstract',
     'Magento_Ui/js/lib/key-codes',
     'mage/translate',
+    'ko',
     'jquery'
-], function (_, Abstract, keyCodes, $t, $) {
+], function (_, Abstract, keyCodes, $t, ko, $) {
     'use strict';
 
     /**
+     * Processing options list
+     *
+     * @param {Array} array - Property array
+     * @param {String} separator - Level separator
+     * @param {Array} created - list to add new options
+     *
+     * @return {Array} Plain options list
+     */
+    function flattenCollection(array, separator, created) {
+        var i = 0,
+            length,
+            childCollection;
+
+        array = _.compact(array);
+        length = array.length;
+        created = created || [];
+
+        for (i; i < length; i++) {
+            created.push(array[i]);
+
+            if (array[i].hasOwnProperty(separator)) {
+                childCollection = array[i][separator];
+                delete array[i][separator];
+                flattenCollection.call(this, childCollection, separator, created);
+            }
+        }
+
+        return created;
+    }
+
+    /**
+     * Set levels to options list
+     *
+     * @param {Array} array - Property array
+     * @param {String} separator - Level separator
+     * @param {Number} level - Starting level
+     *
+     * @returns {Array} Array with levels
+     */
+    function setProperty(array, separator, level, path) {
+        var i = 0,
+            length;
+
+        array = _.compact(array);
+        length = array.length;
+        level = level || 0;
+        path = path || '';
+
+        for (i; i < length; i++) {
+            if (array[i]) {
+                _.extend(array[i], {
+                    level: level,
+                    path: path
+                });
+            }
+
+            if (array[i].hasOwnProperty(separator)) {
+                level++;
+                path = path ? path + '.' + array[i].label : array[i].label;
+                setProperty.call(this, array[i][separator], separator, level, path);
+            }
+        }
+
+        return array;
+    }
+
+    /**
      * Preprocessing options list
+     *
+     * @param {Array} nodes - Options list
+     *
+     * @return {Object} Object with property - options(options list)
+     *      and cache options with plain and tree list
      */
     function parseOptions(nodes) {
         var caption,
-            value;
+            value,
+            cacheNodes,
+            copyNodes;
+
+        nodes = setProperty(nodes, 'optgroup');
+        copyNodes = JSON.parse(JSON.stringify(nodes));
+        cacheNodes = flattenCollection(copyNodes, 'optgroup');
 
         nodes = _.map(nodes, function (node) {
             value = node.value;
@@ -33,7 +112,10 @@ define([
 
         return {
             options: _.compact(nodes),
-            cacheOptions: _.compact(nodes)
+            cacheOptions: {
+                plain: _.compact(cacheNodes),
+                tree: _.compact(nodes)
+            }
         };
     }
 
@@ -43,51 +125,119 @@ define([
             listVisible: false,
             value: [],
             filterOptions: false,
-            chipsEnabled: false,
+            chipsEnabled: true,
+            itemsQuantity: '',
             filterInputValue: '',
             filterOptionsFocus: false,
             multiselectFocus: false,
+            multiple: true,
+            selectType: 'tree',
+            lastSelectable: false,
+            showFilteredQuantity: true,
+            showCheckbox: true,
+            levelsVisibility: true,
+            openLevelsAction: true,
+            showOpenLevelsActionIcon: true,
+            optgroupLabels: false,
+            closeBtn: true,
+            showPath: true,
+            labelsDecoration: false,
+            disableLabel: false,
+            closeBtnLabel: $t('Done'),
+            optgroupTmpl: 'ui/grid/filters/elements/ui-select-optgroup',
+            quantityPlaceholder: $t('options'),
             selectedPlaceholders: {
                 defaultPlaceholder: $t('Select...'),
                 lotPlaceholders: $t('Selected')
             },
             hoverElIndex: null,
+            separator: 'optgroup',
             listens: {
                 listVisible: 'cleanHoveredElement',
                 filterInputValue: 'filterOptionsList'
+            },
+            presets: {
+                single: {
+                    showCheckbox: false,
+                    chipsEnabled: false,
+                    closeBtn: false
+                },
+                optgroup: {
+                    showCheckbox: false,
+                    lastSelectable: true,
+                    optgroupLabels: true,
+                    openLevelsAction: false,
+                    labelsDecoration: true,
+                    showOpenLevelsActionIcon: false
+                }
             }
         },
 
         /**
          * Parses options and merges the result with instance
+         * Set defaults according to mode and levels configuration
          *
          * @param  {Object} config
          * @returns {Object} Chainable.
          */
         initConfig: function (config) {
-            var result = parseOptions(config.options);
+            var result = parseOptions(config.options),
+                defaults = this.constructor.defaults,
+                multiple = _.isBoolean(config.multiple) ? config.multiple : defaults.multiple,
+                type = config.selectType || defaults.selectType,
+                showOpenLevelsActionIcon = _.isBoolean(config.showOpenLevelsActionIcon) ?
+                    config.showOpenLevelsActionIcon :
+                    defaults.showOpenLevelsActionIcon,
+                openLevelsAction = _.isBoolean(config.openLevelsAction) ?
+                    config.openLevelsAction :
+                    defaults.openLevelsAction;
 
-            _.extend(config, result);
-
+            multiple = !multiple ? 'single' : false;
+            config.showOpenLevelsActionIcon = showOpenLevelsActionIcon && openLevelsAction;
+            _.extend(config, result, defaults.presets[multiple], defaults.presets[type]);
             this._super();
 
             return this;
         },
 
         /**
-         * object with key - keyname and value - handler function for this key
-         *
-         * @returns {Object} Object with handlers function name.
+         * Check child optgroup
          */
-        keyDownHandlers: function () {
+        hasChildList: function () {
+            return _.find(this.options(), function (option) {
+                return !!option[this.separator];
+            }, this);
+        },
 
-            return {
-                enterKey: this.enterKeyHandler,
-                escapeKey: this.escapeKeyHandler,
-                spaceKey: this.enterKeyHandler,
-                pageUpKey: this.pageUpKeyHandler,
-                pageDownKey: this.pageDownKeyHandler
-            };
+        /**
+         * Check tree mode
+         */
+        isTree: function () {
+            return this.hasChildList() && this.selectType !== 'optgroup';
+        },
+
+        /**
+         * Add option to lastOptions array
+         *
+         * @param {Object} data
+         * @returns {Boolean}
+         */
+        addLastElement: function (data) {
+            if (!data.hasOwnProperty(this.separator)) {
+                !this.cacheOptions.lastOptions ? this.cacheOptions.lastOptions = [] : false;
+                this.cacheOptions.lastOptions.push(data);
+
+                return true;
+            }
+
+            return false;
+        },
+
+        /**
+         * Check label decoration
+         */
+        isLabelDecoration: function (data) {
+            return data.hasOwnProperty(this.separator) && this.labelsDecoration;
         },
 
         /**
@@ -98,16 +248,93 @@ define([
          */
         initObservable: function () {
             this._super();
-            this.observe(['listVisible',
-                          'hoverElIndex',
-                          'placeholder',
-                          'multiselectFocus',
-                          'options',
-                          'filterInputValue',
-                          'filterOptionsFocus'
+            this.observe([
+                'listVisible',
+                'hoverElIndex',
+                'placeholder',
+                'multiselectFocus',
+                'options',
+                'itemsQuantity',
+                'filterInputValue',
+                'filterOptionsFocus'
             ]);
 
             return this;
+        },
+
+        /**
+         * object with key - keyname and value - handler function for this key
+         *
+         * @returns {Object} Object with handlers function name.
+         */
+        keyDownHandlers: function () {
+            return {
+                enterKey: this.enterKeyHandler,
+                escapeKey: this.escapeKeyHandler,
+                spaceKey: this.enterKeyHandler,
+                pageUpKey: this.pageUpKeyHandler,
+                pageDownKey: this.pageDownKeyHandler
+            };
+        },
+
+        /**
+         * Processing level visibility for levels
+         *
+         * @param {Object} data - element data
+         *
+         * @returns {Boolean} level visibility.
+         */
+        showLevels: function (data) {
+            var curLevel = ++data.level;
+
+            if (!data.visible) {
+                data.visible = ko.observable(!!data.hasOwnProperty(this.separator) &&
+                    _.isBoolean(this.levelsVisibility) &&
+                    this.levelsVisibility ||
+                    data.hasOwnProperty(this.separator) && parseInt(this.levelsVisibility, 10) >= curLevel);
+
+            }
+
+            return data.visible();
+        },
+
+        /**
+         * Processing level visibility for levels
+         *
+         * @param {Object} data - element data
+         *
+         * @returns {Boolean} level visibility.
+         */
+        getLevelVisibility: function (data) {
+            if (data.visible) {
+                return data.visible();
+            }
+
+            return this.showLevels(data);
+        },
+
+        /**
+         * Set option to options array.
+         *
+         * @param {Object} option
+         * @param {Array} options
+         */
+        setOption: function (option, options) {
+            var copyOptionsTree;
+
+            options = options || this.cacheOptions.tree;
+
+            _.each(options, function (opt) {
+                if (opt.value == option.parent) { /* eslint eqeqeq:0 */
+                    delete  option.parent;
+                    opt[this.separator] ? opt[this.separator].push(option) : opt[this.separator] = [option];
+                    copyOptionsTree = JSON.parse(JSON.stringify(this.cacheOptions.tree));
+                    this.cacheOptions.plain = flattenCollection(copyOptionsTree, this.separator);
+                    this.options(this.cacheOptions.tree);
+                } else if (opt[this.separator]) {
+                    this.setOption(option, opt[this.separator]);
+                }
+            }, this);
         },
 
         /**
@@ -132,6 +359,7 @@ define([
                 this.filterOptionsFocus(false);
                 this.cacheUiSelect.focus();
             }
+
             this.keydownSwitcher(data, event);
 
             return true;
@@ -144,26 +372,69 @@ define([
             var i = 0,
                 array = [],
                 curOption,
-                value;
+                value = this.filterInputValue().trim().toLowerCase();
 
-            this.options(this.cacheOptions);
+            if (value === '') {
+                this.renderPath = false;
+                this.options(this.cacheOptions.tree);
+                this._setItemsQuantity(false);
+
+                return false;
+            }
+
+            this.showPath ? this.renderPath = true : false;
+            this.options(this.cacheOptions.plain);
 
             if (this.filterInputValue()) {
                 for (i; i < this.options().length; i++) {
                     curOption = this.options()[i].label.toLowerCase();
-                    value = this.filterInputValue().trim().toLowerCase();
 
                     if (curOption.indexOf(value) > -1) {
-                        array.push(this.options()[i]);
+                        array.push(this.options()[i]); /*eslint max-depth: [2, 4]*/
                     }
                 }
 
                 if (!value.length) {
-                    this.options(this.cacheOptions);
+                    this.options(this.cacheOptions.plain);
+                    this._setItemsQuantity(this.cacheOptions.plain.length);
                 } else {
                     this.options(array);
+                    this._setItemsQuantity(array.length);
                 }
                 this.cleanHoveredElement();
+            }
+        },
+
+        /**
+         * Get path to current oprion
+         *
+         * @param {Object} data - option data
+         * @returns {String} path
+         */
+        getPath: function (data) {
+            var pathParts,
+                createdPath = '';
+
+            if (this.renderPath) {
+                pathParts = data.path.split('.');
+                _.each(pathParts, function (curData) {
+                    createdPath = createdPath ? createdPath + ' / ' + curData : curData;
+                });
+
+                return createdPath;
+            }
+        },
+
+        /**
+         * Set filtered items quantity
+         *
+         * @param {Object} data - option data
+         */
+        _setItemsQuantity: function (data) {
+            if (this.showFilteredQuantity) {
+                data || parseInt(data, 10) === 0 ?
+                    this.itemsQuantity(data + ' ' + this.quantityPlaceholder) :
+                    this.itemsQuantity('');
             }
         },
 
@@ -200,29 +471,35 @@ define([
         /**
          * Check selected option
          *
-         * @param {String} label - option label
+         * @param {String} value - option value
          * @return {Boolean}
          */
-        isSelected: function (label) {
-            return _.contains(this.value(), label);
+        isSelected: function (value) {
+            return this.multiple ? _.contains(this.value(), value) : this.value() === value;
+        },
+
+        /**
+         * Check optgroup label
+         *
+         * @param {Object} data - element data
+         * @return {Boolean}
+         */
+        isOptgroupLabels: function (data) {
+            return data.hasOwnProperty(this.separator) && this.optgroupLabels;
         },
 
         /**
          * Check hovered option
          *
-         * @param {String} index - element index
+         * @param {Object} data - element data
          * @return {Boolean}
          */
-        isHovered: function (index, elem) {
-            var status = this.hoverElIndex() === index;
+        isHovered: function (data) {
+            var index = this.getOptionIndex(data),
+                status = this.hoverElIndex() === index;
 
-            if (
-                status &&
-                elem.offsetTop > elem.parentNode.offsetHeight ||
-                status &&
-                elem.parentNode.scrollTop > elem.offsetTop - elem.parentNode.offsetTop
-            ) {
-                elem.parentNode.scrollTop = elem.offsetTop - elem.parentNode.offsetTop;
+            if (this.selectType === 'optgroup' && data.hasOwnProperty(this.separator)) {
+                return false;
             }
 
             return status;
@@ -240,20 +517,6 @@ define([
         },
 
         /**
-         * Get filtered value*
-         */
-        getValue: function () {
-            var options = this.options(),
-                selected = this.value();
-
-            _.chain(options)
-                .pluck(options, 'value')
-                .filter(function (opt) {
-                    return _.contains(selected, opt);
-                });
-        },
-
-        /**
          * Get selected element labels
          *
          * @returns {Array} array labels
@@ -261,8 +524,10 @@ define([
         getSelected: function () {
             var selected = this.value();
 
-            return this.cacheOptions.filter(function (opt) {
-                return _.contains(selected, opt.value);
+            return this.cacheOptions.plain.filter(function (opt) {
+                return _.isArray(selected) ?
+                    _.contains(selected, opt.value) :
+                selected == opt.value;
             });
         },
 
@@ -273,19 +538,52 @@ define([
          * @returns {Object} Chainable
          */
         toggleOptionSelected: function (data) {
-            if (!_.contains(this.value(), data.value)) {
-                this.value.push(data.value);
+            var isSelected = this.isSelected(data.value);
+
+            if (this.lastSelectable && data.hasOwnProperty(this.separator)) {
+                return this;
+            }
+
+            if (!this.multiple) {
+                if (!isSelected) {
+                    this.value(data.value);
+                }
+                this.listVisible(false);
             } else {
-                this.value(_.without(this.value(), data.value));
+                if (!isSelected) { /*eslint no-lonely-if: 0*/
+                    this.value.push(data.value);
+                } else {
+                    this.value(_.without(this.value(), data.value));
+                }
             }
 
             return this;
         },
 
         /**
+         * Change visibility to child level
+         *
+         * @param {Object} data - element data
+         * @param {Object} elem - element
+         */
+        openChildLevel: function (data, elem) {
+            var contextElement;
+
+            if (
+                this.openLevelsAction &&
+                data.hasOwnProperty(this.separator) && _.isBoolean(this.levelsVisibility) ||
+                this.openLevelsAction &&
+                data.hasOwnProperty(this.separator) && parseInt(this.levelsVisibility, 10) <= data.level
+            ) {
+                contextElement = ko.contextFor($(elem).parents('li').children('ul')[0]).$data.current;
+                contextElement.visible(!contextElement.visible());
+            }
+        },
+
+        /**
          * Check selected elements
          *
-         * @returns {Bollean}
+         * @returns {Boolean}
          */
         hasData: function () {
             if (!this.value()) {
@@ -302,19 +600,39 @@ define([
          * @param {Number} index - element index
          * @param {Object} event - mousemove event
          */
-
         onMousemove: function (data, index, event) {
-            var target = $(event.target),
-                id;
+            var id,
+                context = ko.contextFor(event.target);
 
             if (this.isCursorPositionChange(event)) {
                 return false;
             }
 
-            target.is('li') ? id = target.index() : id = target.parent('li').index();
-            id !== this.hoverElIndex() ? this.hoverElIndex(id) : false;
+            if (typeof context.$data === 'object') {
+                id = this.getOptionIndex(context.$data);
+            }
 
+            id !== this.hoverElIndex() ? this.hoverElIndex(id) : false;
             this.setCursorPosition(event);
+        },
+
+        /**
+         * Get option index
+         *
+         * @param {Object} data - object with data about this element
+         *
+         * @returns {Number}
+         */
+        getOptionIndex: function (data) {
+            var index;
+
+            _.each(this.cacheOptions.plain, function (opt, id) {
+                if (data.value === opt.value) {
+                    index = id;
+                }
+            });
+
+            return index;
         },
 
         /**
@@ -337,15 +655,17 @@ define([
          */
         isCursorPositionChange: function (event) {
             return this.cursorPosition &&
-                   this.cursorPosition.x === event.pageX &&
-                   this.cursorPosition.y === event.pageY;
+                this.cursorPosition.x === event.pageX &&
+                this.cursorPosition.y === event.pageY;
         },
 
         /**
          * Set true to observable variable multiselectFocus
+         * @param {Object} ctx
+         * @param {Object} event - focus event
          */
-        onFocusIn: function (elem) {
-            !this.cacheUiSelect ? this.cacheUiSelect = elem : false;
+        onFocusIn: function (ctx, event) {
+            !this.cacheUiSelect ? this.cacheUiSelect = event.target : false;
             this.multiselectFocus(true);
         },
 
@@ -363,9 +683,13 @@ define([
          */
         enterKeyHandler: function () {
 
+            if (this.filterOptionsFocus()) {
+                return false;
+            }
+
             if (this.listVisible()) {
                 if (!_.isNull(this.hoverElIndex())) {
-                    this.toggleOptionSelected(this.options()[this.hoverElIndex()]);
+                    this.toggleOptionSelected(this.cacheOptions.plain[this.hoverElIndex()]);
                 }
             } else {
                 this.setListVisible(true);
@@ -384,14 +708,63 @@ define([
          * selected first option in list
          */
         pageDownKeyHandler: function () {
-            if (!_.isNull(this.hoverElIndex())) {
-                if (this.hoverElIndex() !== this.options().length - 1) {
-                    this.hoverElIndex(this.hoverElIndex() + 1);
-                } else {
-                    this.hoverElIndex(0);
-                }
+            if (!_.isNull(this.hoverElIndex()) && this.hoverElIndex() !== this.cacheOptions.plain.length - 1) {
+                this._setHoverToElement(1);
+                this._scrollTo(this.hoverElIndex());
+
+                return false;
+            }
+
+            this._setHoverToElement(1, -1);
+            this._scrollTo(this.hoverElIndex());
+        },
+
+        /**
+         * Set hover to visible element
+         *
+         * @param {Number} direction - iterator
+         * @param {Number} index - current hovered element
+         * @param {Array} list - collection items
+         */
+        _setHoverToElement: function (direction, index, list) {
+            var modifiedIndex;
+
+            list = list || $(this.cacheUiSelect).find('li');
+            index = index || this.hoverElIndex();
+            modifiedIndex = index + direction;
+
+            if (list.eq(modifiedIndex).is(':visible')) {
+                this.hoverElIndex(modifiedIndex);
             } else {
-                this.hoverElIndex(0);
+                this._setHoverToElement(direction, modifiedIndex, list);
+            }
+        },
+
+        /**
+         * Find current hovered element
+         * and change scroll position
+         *
+         * @param {Number} index - element index
+         */
+        _scrollTo: function (index) {
+            var curEl,
+                parents,
+                wrapper,
+                curElPos = {},
+                wrapperPos = {};
+
+            curEl = $(this.cacheUiSelect).find('li').eq(index);
+            parents = curEl.parents('ul');
+            wrapper = parents.eq(parents.length - 1);
+            curElPos.start = curEl.offset().top;
+            curElPos.end = curElPos.start + curEl.height();
+            wrapperPos.start = wrapper.offset().top;
+            wrapperPos.end = wrapperPos.start + wrapper.height();
+
+            if (curElPos.start < wrapperPos.start) {
+                wrapper.scrollTop(wrapper.scrollTop() - (wrapperPos.start - curElPos.start));
+            } else if (curElPos.end > wrapperPos.end) {
+                wrapper.scrollTop(wrapper.scrollTop() + curElPos.end - wrapperPos.end);
             }
         },
 
@@ -400,15 +773,14 @@ define([
          * selected last option in list
          */
         pageUpKeyHandler: function () {
-            if (!_.isNull(this.hoverElIndex())) {
-                if (this.hoverElIndex() !== 0) {
-                    this.hoverElIndex(this.hoverElIndex() - 1);
-                } else {
-                    this.hoverElIndex(this.options().length - 1);
-                }
-            } else {
-                this.hoverElIndex(this.options().length - 1);
+            if (this.hoverElIndex()) {
+                this._setHoverToElement(-1);
+                this._scrollTo(this.hoverElIndex());
+
+                return false;
             }
+            this._setHoverToElement(-1, this.cacheOptions.plain.length);
+            this._scrollTo(this.hoverElIndex());
         },
 
         /**
@@ -447,7 +819,9 @@ define([
         setCaption: function () {
             var length;
 
-            if (this.value()) {
+            if (!_.isArray(this.value()) && this.value()) {
+                length = 1;
+            } else if (this.value()) {
                 length = this.value().length;
             } else {
                 this.value([]);
