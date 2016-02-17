@@ -76,7 +76,8 @@ class AssertSuccessInstall extends AbstractConstraint
      * @param array $dbData
      * @return void
      */
-    private function checkInstallData(array $allData, array $adminData, array $dbData) {
+    private function checkInstallData(array $allData, array $adminData, array $dbData)
+    {
         foreach ($this->adminFieldsList as $field) {
             \PHPUnit_Framework_Assert::assertEquals(
                 $allData[$field['fixture']],
