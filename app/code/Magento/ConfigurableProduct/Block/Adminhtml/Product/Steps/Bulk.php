@@ -88,7 +88,10 @@ class Bulk extends \Magento\Ui\Block\Component\StepsWizard\StepAbstract
      */
     public function getMediaAttributes()
     {
-        static $data = $this->productFactory->create()->setTypeId(Type::TYPE_SIMPLE)->getMediaAttributes();
-        return $data;
+        static $simple;
+        if (empty($simple)) {
+            $simple = $this->productFactory->create()->setTypeId(Type::TYPE_SIMPLE)->getMediaAttributes();
+        }
+        return $simple;
     }
 }
