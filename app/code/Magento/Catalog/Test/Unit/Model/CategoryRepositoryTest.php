@@ -157,6 +157,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
                 [
                     'store_id' => 1,
                     'name' => 'category',
+                    'entity_id' => null
                 ]
             ],
             [
@@ -166,6 +167,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
                     'store_id' => 1,
                     'image_additional_data' => ['categoryImage'],
                     'name' => 'category',
+                    'entity_id' => null
                 ]
             ]
         ];
