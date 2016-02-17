@@ -23,7 +23,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resource;
+    protected $context;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Relation|\PHPUnit_Framework_MockObject_MockObject
@@ -37,15 +37,24 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')->getMock();
-
-        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
-        $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-
+        $dbAdapterMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')->getMock();
+        $resourceConnectionMock = $this->getMock('\Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $this->context = $this->getMock('Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
+        $this->context->expects($this->any())
+            ->method('getResources')
+            ->will(
+                $this->returnValue($resourceConnectionMock)
+            );
+        $resourceConnectionMock->expects($this->any())
+            ->method('getConnection')
+            ->will(
+                $this->returnValue($dbAdapterMock)
+            );
         $this->relation = $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Relation', [], [], '', false);
-
         $metadata = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
-
+        $metadata->expects($this->any())
+            ->method('getLinkField')
+            ->willReturn('entity_id');
         $this->metadataPool = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
         $this->metadataPool->expects($this->any())
             ->method('getMetadata')
@@ -56,28 +65,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->configurable = $this->objectManagerHelper->getObject(
             'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable',
             [
-                'resource' => $this->resource,
+                'context' => $this->context,
                 'catalogProductRelation' => $this->relation,
                 'metadataPool' => $this->metadataPool
             ]
         );
-    }
-
-    public function testSaveProducts()
-    {
-        $mainProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->setMethods(['getIsDuplicate', '__sleep', '__wakeup', 'getTypeInstance', 'getConnection'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $mainProduct->expects($this->once())->method('getIsDuplicate')->will($this->returnValue(false));
-
-        $typeInstance = $this->getMockBuilder('Magento\ConfigurableProduct\Model\Product\Type\Configurable')
-            ->disableOriginalConstructor()->getMock();
-        $typeInstance->expects($this->once())->method('getUsedProductIds')->will($this->returnValue([1]));
-
-        $mainProduct->expects($this->once())->method('getTypeInstance')->will($this->returnValue($typeInstance));
-
-        $this->configurable->saveProducts($mainProduct, [1, 2, 3]);
     }
 
     public function testSaveProductsForDuplicate()
@@ -105,11 +97,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'getConnection',
             ],
             [
-                $this->resource,
+                $this->context,
                 $this->relation,
-            ],
-            '',
-            false
+                $this->metadataPool
+            ]
         );
 
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
