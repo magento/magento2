@@ -38,6 +38,7 @@ class ResetUserPasswordFailedTest extends Injectable
     protected $userAccountForgotPassword;
 
     protected $systemConfig;
+
     /**
      * Preparing pages for test.
      *

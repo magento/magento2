@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Block\Account;
+
 use Magento\Customer\Model\AccountManagement;
 
 /**

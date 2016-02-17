@@ -87,7 +87,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Customer\Model\ResourceModel\CustomerRepository
      */
     protected $model;
-    
+
     public function setUp()
     {
         $this->customerResourceModel =
@@ -825,7 +825,6 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->model->deleteById($customerId));
     }
-
 
     public function testDelete()
     {

@@ -62,7 +62,6 @@ class LockAdminUserWhenCreatingNewRoleTest extends Injectable
      */
     protected $adminAuthLogin;
 
-
     /**
      * Setup data for test.
      *

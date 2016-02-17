@@ -278,7 +278,6 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
         $username = 'user1';
         $password = 'pass1';
 
-
         $this->session->expects($this->once())
             ->method('isLoggedIn')
             ->willReturn(false);

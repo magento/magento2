@@ -41,6 +41,9 @@ class User extends AbstractModel implements StorageInterface, UserInterface
 
     const XML_PATH_USER_NOTIFICATION_TEMPLATE = 'admin/emails/user_notification_template';
 
+    /** @deprecated */
+    const XML_PATH_RESET_PASSWORD_TEMPLATE = 'admin/emails/reset_password_template';
+
     /**
      * Model event prefix
      *

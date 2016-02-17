@@ -97,7 +97,6 @@ class EmailNotificationTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-
         $this->scopeConfigMock =  $this->getMock(
             '\Magento\Framework\App\Config\ScopeConfigInterface',
             ['getValue', 'isSetFlag'],

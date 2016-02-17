@@ -15,6 +15,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertPasswordLengthErrorMessage extends AbstractConstraint
 {
     const PASSWORD_LENGTH_ERROR_MESSAGE = 'Please enter a password with at least 8 characters.';
+
     /**
      * Assert that appropriate message is displayed on "Create New Customer Account" page(frontend) if password length
      * is below 8 characters.

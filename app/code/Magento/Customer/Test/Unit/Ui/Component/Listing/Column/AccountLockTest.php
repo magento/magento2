@@ -39,7 +39,6 @@ class AccountLockTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
     /**
      * @param string $lockExpirationDate
      * @param \Magento\Framework\Phrase $expectedResult
