@@ -89,6 +89,7 @@ class CheckUserLoginObserver implements ObserverInterface
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @return void
      * @deprecated
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function setCustomerRepository(\Magento\Customer\Api\CustomerRepositoryInterface $customerRepository)
     {
@@ -120,6 +121,7 @@ class CheckUserLoginObserver implements ObserverInterface
      * @param AccountManagementHelper $accountManagementHelper
      * @return void
      * @deprecated
+     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function setAccountManagementHelper(AccountManagementHelper $accountManagementHelper)
     {
