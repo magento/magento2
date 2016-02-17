@@ -191,6 +191,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $option = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_options"][0];
 
         $optionId = $option['id'];
+        $productId = $option['product_id'];
         $updatedOption = [
             'id' => $optionId,
             'attribute_id' => $option['attribute_id'],
@@ -201,7 +202,7 @@ class ProductRepositoryTest extends WebapiAbstract
                     'value_index' => $option['values'][0]['value_index'],
                 ],
             ],
-            'product_id' => $response['id'],
+            'product_id' => $productId,
         ];
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]['configurable_product_options'][0] =
             $updatedOption;
