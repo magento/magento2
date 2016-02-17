@@ -42,8 +42,8 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Url */
     private $_customerUrl;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Helper\Config */
-    protected $customerConfigHelper;
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Helper\AccountManagement */
+    protected $accountManagementHelperMock;
 
     /** @var Register */
     private $_block;
@@ -61,7 +61,13 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->customerConfigHelper = $this->getMock('Magento\Customer\Helper\Config', [], [], '', false);
+        $this->accountManagementHelperMock =  $this->getMock(
+            '\Magento\Customer\Helper\AccountManagement',
+            [],
+            [],
+            '',
+            false
+        );
         $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($this->_scopeConfig));
 
@@ -76,7 +82,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
             $this->_customerSession,
             $this->_customerUrl
         );
-        $this->_block->setCustomerConfigHelper($this->customerConfigHelper);
+        $this->_block->setAccountManagementHelper($this->accountManagementHelperMock);
     }
 
     /**
@@ -358,7 +364,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMinimumPasswordLength()
     {
-        $this->customerConfigHelper->expects(
+        $this->accountManagementHelperMock->expects(
             $this->once()
         )->method(
             'getMinimumPasswordLength'
@@ -373,7 +379,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRequiredCharacterClassesNumber()
     {
-        $this->customerConfigHelper->expects(
+        $this->accountManagementHelperMock->expects(
             $this->once()
         )->method(
             'getRequiredCharacterClassesNumber'
