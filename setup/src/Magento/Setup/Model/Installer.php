@@ -95,7 +95,7 @@ class Installer
     /**
      * Deployment configuration reader
      *
-     * @var Writer
+     * @var Reader
      */
     private $deploymentConfigReader;
 
