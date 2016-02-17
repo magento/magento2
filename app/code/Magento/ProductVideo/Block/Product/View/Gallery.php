@@ -73,4 +73,13 @@ class Gallery extends \Magento\Catalog\Block\Product\View\Gallery
         ];
         return $this->jsonEncoder->encode($videoSettingData);
     }
+
+    /**
+     * Return media gallery for product options
+     * @return string
+     */
+    public function getOptionsMediaGalleryDataJson()
+    {
+        return  $this->jsonEncoder->encode([]);
+    }
 }
