@@ -84,126 +84,121 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             ]
         ];
 
-        $meta['base_fieldset']['children']['attribute_options_container'] = [
-            'arguments' => [
-                'data' => [
-                    'config' => [
-                        'formElement' => 'container',
-                        'componentType' => 'container',
-                        'component' => 'Magento_Catalog/js/components/visible-on-option',
-                        'valuesForOptions' => [
-                            'select',
-                            'multiselect'
-                        ],
-                        'dataScope' => 'attribute_options_container'
-                    ]
-                ]
-            ],
-            'children' => [
-                'attribute_options' => [
-                    'arguments' => [
-                        'data' => [
-                            'config' => [
-                                'componentType' => 'dynamicRows',
-                                'dataScope' => 'attribute_options',
-                                'addButtonLabel' => __('Add Value'),
-//                                'visible' => false,
-                                'imports' => [
-//                                    'visible' => 'product_attribute_add_form.frontend_input:select'
-                                ],
-                            ]
-                        ]
-                    ],
-                    'children' => [
-                        'record' => [
-                            'arguments' => [
-                                'data' => [
-                                    'config' => [
-                                        'componentType' => 'container',
-                                        'isTemplate' => true,
-                                        'is_collection' => true,
-                                        'component' => 'Magento_Ui/js/dynamic-rows/record',
-                                        'positionProvider' => 'attribute_options.position'
-                                    ],
-                                ],
-                            ],
-                            'children' => [
-                                'is_default' => [
-                                    'arguments' => [
-                                        'data' => [
-                                            'config' => [
-                                                'componentType' => 'field',
-                                                'dataType' => Form\Element\DataType\Boolean::NAME,
-                                                'formElement' => Form\Element\Checkbox::NAME,
-                                                'label' => __('Is Default'),
-                                                'dataScope' => 'is_default',
-                                                'prefer' => 'radio',
-                                                'value' => '1',
-                                                'sortOrder' => 10,
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                                'options[0]' => [
-                                    'arguments' => [
-                                        'data' => [
-                                            'config' => [
-                                                'componentType' => Form\Field::NAME,
-                                                'dataType' => Form\Element\DataType\Text::NAME,
-                                                'dataScope' => 'option[0]',
-                                                'formElement' => Form\Element\Input::NAME,
-                                                'label' => __('Default Store View'),
-                                                'sortOrder' => 20,
-                                            ]
-                                        ]
-                                    ]
-                                ],
-                                'options[1]' => [
-                                    'arguments' => [
-                                        'data' => [
-                                            'config' => [
-                                                'componentType' => Form\Field::NAME,
-                                                'dataType' => Form\Element\DataType\Text::NAME,
-                                                'dataScope' => 'options[1]',
-                                                'formElement' => Form\Element\Input::NAME,
-                                                'label' => __('Admin'),
-                                                'sortOrder' => 30,
-                                            ]
-                                        ]
-                                    ]
-                                ],
-                                'position' => [
-                                    'arguments' => [
-                                        'data' => [
-                                            'config' => [
-                                                'componentType' => Form\Field::NAME,
-                                                'dataType' => Form\Element\DataType\Text::NAME,
-                                                'formElement' => Form\Element\Input::NAME,
-                                                'dataScope' => 'position',
-                                                'visible' => false,
-                                                'additionalClasses' => ['_hidden' => true]
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                                'action_delete' => [
-                                    'arguments' => [
-                                        'data' => [
-                                            'config' => [
-                                                'componentType' => 'actionDelete',
-                                                'dataType' => Form\Element\DataType\Text::NAME,
-                                                'label' => '',
-                                                'fit' => true,
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ];
+//        $meta['base_fieldset']['children']['attribute_options_container'] = [
+//            'arguments' => [
+//                'data' => [
+//                    'config' => [
+//                        'formElement' => 'container',
+//                        'componentType' => 'container',
+//                        'component' => 'Magento_Catalog/js/components/visible-on-option',
+//                        'valuesForOptions' => [
+//                            'select',
+//                            'multiselect'
+//                        ]
+//                    ]
+//                ]
+//            ],
+//            'children' => [
+//                'attribute_options' => [
+//                    'arguments' => [
+//                        'data' => [
+//                            'config' => [
+//                                'componentType' => 'dynamicRows',
+//                                'dataScope' => 'attribute_options',
+//                                'addButtonLabel' => __('Add Value')
+//                            ]
+//                        ]
+//                    ],
+//                    'children' => [
+//                        'record' => [
+//                            'arguments' => [
+//                                'data' => [
+//                                    'config' => [
+//                                        'componentType' => 'container',
+//                                        'isTemplate' => true,
+//                                        'is_collection' => true,
+//                                        'component' => 'Magento_Ui/js/dynamic-rows/record',
+//                                        'positionProvider' => 'attribute_options.position'
+//                                    ],
+//                                ],
+//                            ],
+//                            'children' => [
+//                                'is_default' => [
+//                                    'arguments' => [
+//                                        'data' => [
+//                                            'config' => [
+//                                                'componentType' => 'field',
+//                                                'dataType' => Form\Element\DataType\Boolean::NAME,
+//                                                'formElement' => Form\Element\Checkbox::NAME,
+//                                                'label' => __('Is Default'),
+//                                                'dataScope' => 'is_default',
+//                                                'prefer' => 'radio',
+//                                                'value' => '1',
+//                                                'sortOrder' => 10,
+//                                            ],
+//                                        ],
+//                                    ],
+//                                ],
+//                                'options[0]' => [
+//                                    'arguments' => [
+//                                        'data' => [
+//                                            'config' => [
+//                                                'componentType' => Form\Field::NAME,
+//                                                'dataType' => Form\Element\DataType\Text::NAME,
+//                                                'dataScope' => 'option[0]',
+//                                                'formElement' => Form\Element\Input::NAME,
+//                                                'label' => __('Default Store View'),
+//                                                'sortOrder' => 20,
+//                                            ]
+//                                        ]
+//                                    ]
+//                                ],
+//                                'options[1]' => [
+//                                    'arguments' => [
+//                                        'data' => [
+//                                            'config' => [
+//                                                'componentType' => Form\Field::NAME,
+//                                                'dataType' => Form\Element\DataType\Text::NAME,
+//                                                'dataScope' => 'options[1]',
+//                                                'formElement' => Form\Element\Input::NAME,
+//                                                'label' => __('Admin'),
+//                                                'sortOrder' => 30,
+//                                            ]
+//                                        ]
+//                                    ]
+//                                ],
+//                                'position' => [
+//                                    'arguments' => [
+//                                        'data' => [
+//                                            'config' => [
+//                                                'componentType' => Form\Field::NAME,
+//                                                'dataType' => Form\Element\DataType\Text::NAME,
+//                                                'formElement' => Form\Element\Input::NAME,
+//                                                'dataScope' => 'position',
+//                                                'visible' => false,
+//                                                'additionalClasses' => ['_hidden' => true]
+//                                            ],
+//                                        ],
+//                                    ],
+//                                ],
+//                                'action_delete' => [
+//                                    'arguments' => [
+//                                        'data' => [
+//                                            'config' => [
+//                                                'componentType' => 'actionDelete',
+//                                                'dataType' => Form\Element\DataType\Text::NAME,
+//                                                'label' => '',
+//                                                'fit' => true,
+//                                            ],
+//                                        ],
+//                                    ],
+//                                ],
+//                            ]
+//                        ]
+//                    ]
+//                ]
+//            ]
+//        ];
 
         return $meta;
     }

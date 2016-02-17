@@ -9,27 +9,21 @@ define([
 
     return Group.extend({
         defaults: {
-            valuesForOptions: [], //  ['select', 'multiselect'],
+            valuesForOptions: [],
             visibilityState: true,
             imports: {
                 toggleVisibility: '${ $.parentName }.frontend_input:value'
             }
-
         },
 
         initElement: function (item) {
             this._super();
-
             item.set('visible', this.visibilityState);
-
             return this;
         },
 
         toggleVisibility: function (selected) {
-            //this.visible(this.valuesForOptions.indexOf(selected) != -1);
-            //console.log(selected);
-            //console.log(this.valuesForOptions);
-            var isShown = this.visibilityState = this.valuesForOptions.indexOf(selected) !== -1;
+            var isShown = this.visibilityState = selected in this.valuesForOptions; //this.valuesForOptions.indexOf(selected) !== -1;
 
             this.elems.each(function (child) {
                child.set('visible', isShown);
