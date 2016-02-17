@@ -271,15 +271,13 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function getVariationMedia($attributeCode, $optionId)
     {
-        $variationProduct = $this->swatchHelper->loadFirstVariation(
-            'swatch_image',
+        $variationProduct = $this->swatchHelper->loadFirstVariationWithSwatchImage(
             $this->getProduct(),
             [$attributeCode => $optionId]
         );
 
         if (!$variationProduct) {
-            $variationProduct = $this->swatchHelper->loadFirstVariation(
-                'image',
+            $variationProduct = $this->swatchHelper->loadFirstVariationWithImage(
                 $this->getProduct(),
                 [$attributeCode => $optionId]
             );
