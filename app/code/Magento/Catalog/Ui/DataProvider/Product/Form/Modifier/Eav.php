@@ -281,10 +281,49 @@ class Eav extends AbstractModifier
                 $child['arguments']['data']['config']['validation'] = $rules;
             }
 
+            $child['arguments']['data']['config']['validation'] = $this->mapValidations($attribute, $child);
+
             $meta[static::CONTAINER_PREFIX . $code]['children'][$code] = $child;
         }
 
         return $meta;
+    }
+
+    /**
+     * @param ProductAttributeInterface $attribute
+     * @param array $data
+     * @return array
+     */
+    private function mapValidations(ProductAttributeInterface $attribute, array $data)
+    {
+        $rules = isset($data['arguments']['data']['config']['validation'])
+            ? $data['arguments']['data']['config']['validation'] : [];
+
+        $validationClass = explode(' ', $attribute->getFrontendClass());
+
+        foreach ($validationClass as $class) {
+            if (preg_match('/^maximum-length-(\d+)$/', $class, $matches)) {
+                $rules = array_merge($rules, ['max_text_length' => $matches[1]]);
+                continue;
+            }
+            if (preg_match('/^minimum-length-(\d+)$/', $class, $matches)) {
+                $rules = array_merge($rules, ['min_text_length' => $matches[1]]);
+                continue;
+            }
+
+            switch ($class) {
+                case 'validate-number':
+                case 'validate-digits':
+                case 'validate-email':
+                case 'validate-url':
+                case 'validate-alpha':
+                case 'validate-alphanum':
+                    $rules = array_merge($rules, [$class => true]);
+                    break;
+            }
+        }
+
+        return $rules;
     }
 
     /**
