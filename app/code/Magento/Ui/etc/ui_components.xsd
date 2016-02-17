@@ -99,6 +99,11 @@
             <xs:extension base="input"/>
         </xs:complexContent>
     </xs:complexType>
+    <xs:complexType name="range">
+        <xs:complexContent>
+            <xs:extension base="input"/>
+        </xs:complexContent>
+    </xs:complexType>
     <xs:complexType name="filterInput">
         <xs:complexContent>
             <xs:extension base="input"/>
@@ -195,6 +200,24 @@
     <xs:complexType name="multiselect">
         <xs:complexContent>
             <xs:extension base="select"/>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="checkboxset">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="radioset">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
+            </xs:extension>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="textarea">
@@ -416,6 +439,15 @@
                     </xs:element>
                 </xs:sequence>
                 <xs:attribute name="path" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="dynamicRows">
+        <xs:complexContent>
+            <xs:extension base="ui_element">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:group ref="configurable"/>
+                </xs:choice>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
