@@ -30,9 +30,15 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
     protected $links;
 
     /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param array $params
      * @param Grouped\Links $links
      */
@@ -41,9 +47,11 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
         \Magento\Framework\App\ResourceConnection $resource,
         array $params,
-        Grouped\Links $links
+        Grouped\Links $links,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
     ) {
         $this->links = $links;
+        $this->metadataPool = $metadataPool;
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
     }
 
@@ -57,6 +65,7 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
      */
     public function saveData()
     {
+        $productMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $newSku = $this->_entityModel->getNewSku();
         $oldSku = $this->_entityModel->getOldSku();
         $attributes = $this->links->getAttributes();
@@ -84,9 +93,9 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                     $associatedSkuAndQty = explode(self::SKU_QTY_DELIMITER, $associatedSkuAndQty);
                     $associatedSku = isset($associatedSkuAndQty[0]) ? trim($associatedSkuAndQty[0]) : null;
                     if (isset($newSku[$associatedSku])) {
-                        $linkedProductId = $newSku[$associatedSku]['entity_id'];
+                        $linkedProductId = $newSku[$associatedSku][$productMetadata->getLinkField()];
                     } elseif (isset($oldSku[$associatedSku])) {
-                        $linkedProductId = $oldSku[$associatedSku]['entity_id'];
+                        $linkedProductId = $oldSku[$associatedSku][$productMetadata->getLinkField()];
                     } else {
                         continue;
                     }
@@ -98,7 +107,7 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                         $rowData[$colAttrSet] = $productData['attr_set_code'];
                         $rowData[Product::COL_TYPE] = $productData['type_id'];
                     }
-                    $productId = $productData['entity_id'];
+                    $productId = $productData[$productMetadata->getLinkField()];
 
                     $linksData['product_ids'][$productId] = true;
                     $linksData['relation'][] = ['parent_id' => $productId, 'child_id' => $linkedProductId];
