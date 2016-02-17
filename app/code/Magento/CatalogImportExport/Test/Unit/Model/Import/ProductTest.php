@@ -146,11 +146,6 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     // @codingStandardsIgnoreEnd
     protected $taxClassProcessor;
 
-    /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $metadataPool;
-
     /** @var  \Magento\CatalogImportExport\Model\Import\Product */
     protected $importProduct;
 
@@ -326,13 +321,15 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 ->disableOriginalConstructor()
                 ->getMock();
 
-        $this->metadataPool = $this->getMock(
-            'Magento\Framework\Model\Entity\MetadataPool',
-            [],
-            [],
-            '',
-            false
-        );
+        $metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $entityMetadataMock = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $metadataPoolMock->expects($this->any())
+            ->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($entityMetadataMock);
+        $entityMetadataMock->expects($this->any())
+            ->method('getLinkField')
+            ->willReturn('entity_id');
 
         $this->scopeConfig = $this->getMockBuilder('\Magento\Framework\App\Config\ScopeConfigInterface')
             ->disableOriginalConstructor()
@@ -352,45 +349,50 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ->_initTypeModels()
             ->_initSkus();
 
-        $this->importProduct = new Product(
-            $this->jsonHelper,
-            $this->importExportData,
-            $this->_dataSourceModel,
-            $this->config,
-            $this->resource,
-            $this->resourceHelper,
-            $this->string,
-            $this->errorAggregator,
-            $this->_eventManager,
-            $this->stockRegistry,
-            $this->stockConfiguration,
-            $this->stockStateProvider,
-            $this->_catalogData,
-            $this->_importConfig,
-            $this->_resourceFactory,
-            $this->optionFactory,
-            $this->_setColFactory,
-            $this->_productTypeFactory,
-            $this->_linkFactory,
-            $this->_proxyProdFactory,
-            $this->_uploaderFactory,
-            $this->_filesystem,
-            $this->_stockResItemFac,
-            $this->_localeDate,
-            $this->dateTime,
-            $this->_logger,
-            $this->indexerRegistry,
-            $this->storeResolver,
-            $this->skuProcessor,
-            $this->categoryProcessor,
-            $this->validator,
-            $this->objectRelationProcessor,
-            $this->transactionManager,
-            $this->taxClassProcessor,
-            $this->metadataPool,
-            $this->scopeConfig,
-            $this->productUrl,
-            $this->data
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $this->importProduct = $objectManager->getObject(
+            'Magento\CatalogImportExport\Model\Import\Product',
+            [
+                'jsonHelper' => $this->jsonHelper,
+                'importExportData' => $this->importExportData,
+                'importData' => $this->_dataSourceModel,
+                'config' => $this->config,
+                'resource' => $this->resource,
+                'resourceHelper' => $this->resourceHelper,
+                'string' => $this->string,
+                'errorAggregator' => $this->errorAggregator,
+                'eventManager' => $this->_eventManager,
+                'stockRegistry' => $this->stockRegistry,
+                'stockConfiguration' => $this->stockConfiguration,
+                'stockStateProvider' => $this->stockStateProvider,
+                'catalogData' => $this->_catalogData,
+                'importConfig' => $this->_importConfig,
+                'resourceFactory' => $this->_resourceFactory,
+                'optionFactory' => $this->optionFactory,
+                'setColFactory' => $this->_setColFactory,
+                'productTypeFactory' => $this->_productTypeFactory,
+                'linkFactory' => $this->_linkFactory,
+                'proxyProdFactory' => $this->_proxyProdFactory,
+                'uploaderFactory' => $this->_uploaderFactory,
+                'filesystem' => $this->_filesystem,
+                'stockResItemFac' => $this->_stockResItemFac,
+                'localeDate' => $this->_localeDate,
+                'dateTime' => $this->dateTime,
+                'logger' => $this->_logger,
+                'indexerRegistry' => $this->indexerRegistry,
+                'storeResolver' => $this->storeResolver,
+                'skuProcessor' => $this->skuProcessor,
+                'categoryProcessor' => $this->categoryProcessor,
+                'validator' => $this->validator,
+                'objectRelationProcessor' => $this->objectRelationProcessor,
+                'transactionManager' => $this->transactionManager,
+                'taxClassProcessor' => $this->taxClassProcessor,
+                'metadataPool' => $metadataPoolMock,
+                'scopeConfig' => $this->scopeConfig,
+                'productUrl' => $this->productUrl,
+                'data' => $this->data
+            ]
         );
     }
 
@@ -527,13 +529,6 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 ]
             ]
         ];
-        $metadataMock = $this->getMockBuilder('\Magento\Framework\Model\Entity\EntityMetadata')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->metadataPool->expects($this->any())->method('getMetadata')
-            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
-            ->willReturn($metadataMock);
-        $metadataMock->expects($this->any())->method('getLinkField')->willReturn('entity_id');
         $entityTable = 'catalog_product_entity';
         $resource = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel')
             ->disableOriginalConstructor()
