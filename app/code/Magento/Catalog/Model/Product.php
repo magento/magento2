@@ -1403,7 +1403,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Set product links info
      *
      * @param \Magento\Catalog\Api\Data\ProductLinkInterface[] $links
-     * @return this
+     * @return $this
      */
     public function setProductLinks(array $links = null)
     {
