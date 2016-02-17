@@ -5,7 +5,7 @@
  */
 namespace Magento\Customer\Block\Form;
 
-use Magento\Customer\Helper\Config as CustomerConfigHelper;
+use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 
 /**
  * Customer register form block
@@ -30,9 +30,9 @@ class Register extends \Magento\Directory\Block\Data
     protected $_customerUrl;
 
     /**
-     * @var CustomerConfigHelper
+     * @var AccountManagementHelper
      */
-    protected $customerConfigHelper;
+    protected $accountManagementHelper;
 
     /**
      * Constructor
@@ -46,7 +46,7 @@ class Register extends \Magento\Directory\Block\Data
      * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Url $customerUrl
-     * @param CustomerConfigHelper $customerConfigHelper
+     * @param AccountManagementHelper $accountManagementHelper
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -61,13 +61,13 @@ class Register extends \Magento\Directory\Block\Data
         \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Url $customerUrl,
-        CustomerConfigHelper $customerConfigHelper,
+        AccountManagementHelper $accountManagementHelper,
         array $data = []
     ) {
         $this->_customerUrl = $customerUrl;
         $this->_moduleManager = $moduleManager;
         $this->_customerSession = $customerSession;
-        $this->customerConfigHelper = $customerConfigHelper;
+        $this->accountManagementHelper = $accountManagementHelper;
         parent::__construct(
             $context,
             $directoryHelper,
@@ -212,7 +212,7 @@ class Register extends \Magento\Directory\Block\Data
      */
     public function getMinimumPasswordLength()
     {
-        return $this->customerConfigHelper->getMinimumPasswordLength();
+        return $this->accountManagementHelper->getMinimumPasswordLength();
     }
 
     /**
@@ -222,6 +222,6 @@ class Register extends \Magento\Directory\Block\Data
      */
     public function getRequiredCharacterClassesNumber()
     {
-        return $this->customerConfigHelper->getRequiredCharacterClassesNumber();
+        return $this->accountManagementHelper->getRequiredCharacterClassesNumber();
     }
 }
