@@ -387,4 +387,26 @@ class DataGrid extends Grid
         $this->_rootElement->find($this->fullTextSearchField)->setValue($text);
         $this->_rootElement->find($this->fullTextSearchButton)->click();
     }
+
+    /**
+     * Get rows data.
+     *
+     * @param array $columns
+     * @return array
+     */
+    public function getRowsData(array $columns)
+    {
+        $data = [];
+        $rows = $this->_rootElement->getElements($this->rowItem);
+        foreach ($rows as $row) {
+            $rowData = [];
+            foreach ($columns as $columnName) {
+                $rowData[$columnName] = trim($row->find('div[data-index="' . $columnName . '"]')->getText());
+            }
+
+            $data[] = $rowData;
+        }
+
+        return $data;
+    }
 }

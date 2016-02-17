@@ -8,6 +8,7 @@ namespace Magento\Ui\Test\Block\Adminhtml;
 
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\ElementInterface;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Is used to represent a new unified form with collapsible sections on the page.
@@ -116,5 +117,27 @@ class FormSections extends AbstractFormContainers
     public function isCollapsed($sectionName)
     {
         return $this->getContainerElement($sectionName)->find($this->opened)->isVisible();
+    }
+
+    /**
+     * Get Require Notice Attributes.
+     *
+     * @param InjectableFixture $product
+     * @return array
+     */
+    public function getRequireNoticeAttributes(InjectableFixture $product)
+    {
+        $data = [];
+        $tabs = $this->getFixtureFieldsByContainers($product);
+        foreach (array_keys($tabs) as $tabName) {
+            $tab = $this->getSection($tabName);
+            $this->openSection($tabName);
+            $errors = $tab->getJsErrors();
+            if (!empty($errors)) {
+                $data[$tabName] = $errors;
+            }
+        }
+
+        return $data;
     }
 }
