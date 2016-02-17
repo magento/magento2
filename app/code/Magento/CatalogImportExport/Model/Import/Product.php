@@ -727,7 +727,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $this->scopeConfig = $scopeConfig;
         $this->productUrl = $productUrl;
         /** @var \Magento\Framework\Model\Entity\EntityMetadata $productMetadata */
-        $productMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $productMetadata = $this->metadataPool->getMetadata(ProductInterface::class);
         $this->productEntityLinkField = $productMetadata->getLinkField();
         parent::__construct(
             $jsonHelper,
