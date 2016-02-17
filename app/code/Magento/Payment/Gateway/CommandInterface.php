@@ -5,6 +5,8 @@
  */
 namespace Magento\Payment\Gateway;
 
+use Magento\Payment\Gateway\Command\CommandException;
+
 /**
  * Interface CommandInterface
  * @package Magento\Payment\Gateway
@@ -17,6 +19,7 @@ interface CommandInterface
      *
      * @param array $commandSubject
      * @return null|Command\ResultInterface
+     * @throws CommandException
      */
     public function execute(array $commandSubject);
 }
