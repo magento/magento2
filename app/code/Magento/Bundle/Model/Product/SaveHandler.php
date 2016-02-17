@@ -55,7 +55,7 @@ class SaveHandler
     public function execute($entityType, $entity)
     {
         $bundleProductOptions = $entity->getExtensionAttributes()->getBundleProductOptions();
-        if ($entity->getTypeId() !== 'bundle' || $bundleProductOptions === null) {
+        if ($entity->getTypeId() !== 'bundle' || empty($bundleProductOptions)) {
             return $entity;
         }
         /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
