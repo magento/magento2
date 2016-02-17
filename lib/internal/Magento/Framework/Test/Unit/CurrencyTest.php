@@ -5,9 +5,7 @@
  */
 namespace Magento\Framework\Test\Unit;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Currency;
-use Magento\Framework\Filesystem\DriverInterface;
 
 /**
  * Test for Magento\Framework\Currency
@@ -16,22 +14,18 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstruct()
     {
-        $testCacheDir = realpath(__DIR__ . DIRECTORY_SEPARATOR . '_files') . DIRECTORY_SEPARATOR;
-        $writer = $this->getMock('Magento\Framework\Filesystem\Directory\WriteInterface', [], [], '', false, false);
-        $writer->expects($this->once())->method('getAbsolutePath')->willReturn($testCacheDir);
-        /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject $filesystem */
-        $filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false, false);
-        $filesystem->expects($this->once())
-            ->method('getDirectoryWrite')
-            ->with(DirectoryList::CACHE)
-            ->willReturn($writer);
+        $frontendCache = $this->getMock('Magento\Framework\Cache\FrontendInterface', [], [], '', false, false);
+        $lowLevelFrontend = $this->getMock('Zend_Cache_Core', [], [], '', false, false);
+        /** @var \Magento\Framework\App\Cache|\PHPUnit_Framework_MockObject_MockObject $appCache */
+        $appCache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false, false);
+        $frontendCache->expects($this->once())->method('getLowLevelFrontend')->willReturn($lowLevelFrontend);
+        $appCache->expects($this->once())
+            ->method('getFrontend')
+            ->willReturn($frontendCache);
 
-        // Create new currency object, test values for cache directory and file permission options
-        $currency = new Currency($filesystem, null, 'en_US');
-        $this->assertEquals(
-            DriverInterface::WRITEABLE_FILE_MODE,
-            $currency->getCache()->getBackend()->getOption('cache_file_perm')
-        );
-        $this->assertEquals($testCacheDir, $currency->getCache()->getBackend()->getOption('cache_dir'));
+        // Create new currency object
+        $currency = new Currency($appCache, null, 'en_US');
+        $this->assertEquals($lowLevelFrontend, $currency->getCache());
+        $this->assertEquals('USD', $currency->getShortName());
     }
 }
