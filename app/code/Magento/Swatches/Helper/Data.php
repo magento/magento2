@@ -141,18 +141,18 @@ class Data
 
     /**
      * @param string $attributeCode swatch_image|image
-     * @param Product $configurableProduct
+     * @param ModelProduct $configurableProduct
      * @param array $requiredAttributes
      * @return bool|Product
      */
-    public function loadFirstVariation($attributeCode, Product $configurableProduct, array $requiredAttributes)
+    private function loadFirstVariation($attributeCode, ModelProduct $configurableProduct, array $requiredAttributes)
     {
         if ($this->isProductHasSwatch($configurableProduct)) {
             $usedProducts = $configurableProduct->getTypeInstance()->getUsedProducts($configurableProduct);
 
             foreach ($usedProducts as $simpleProduct) {
                 if (!in_array($simpleProduct->getData($attributeCode), [null, self::EMPTY_IMAGE_VALUE], true)
-                    && !array_diff($requiredAttributes, array_filter($simpleProduct->getData(), 'is_scalar'))
+                    && !array_diff_assoc($requiredAttributes, $simpleProduct->getData())
                 ) {
                     return $simpleProduct;
                 }
@@ -160,6 +160,26 @@ class Data
         }
 
         return false;
+    }
+
+    /**
+     * @param Product $configurableProduct
+     * @param array $requiredAttributes
+     * @return bool|Product
+     */
+    public function loadFirstVariationWithSwatchImage(Product $configurableProduct, array $requiredAttributes)
+    {
+        return $this->loadFirstVariation('swatch_image', $configurableProduct, $requiredAttributes);
+    }
+
+    /**
+     * @param Product $configurableProduct
+     * @param array $requiredAttributes
+     * @return bool|Product
+     */
+    public function loadFirstVariationWithImage(Product $configurableProduct, array $requiredAttributes)
+    {
+        return $this->loadFirstVariation('image', $configurableProduct, $requiredAttributes);
     }
 
     /**
