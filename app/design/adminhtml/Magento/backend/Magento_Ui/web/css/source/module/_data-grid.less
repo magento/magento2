@@ -183,6 +183,14 @@ body._in-resize {
             border-left: 1px solid @color-blue-pure;
             border-right: 1px solid @color-blue-pure;
         }
+
+        &._hidden {
+            display: none;
+        }
+
+        &._fit {
+            width: 1%;
+        }
     }
 
     td {
@@ -660,6 +668,20 @@ body._in-resize {
         [class*='action-'] {
             min-width: 9rem;
         }
+    }
+
+    //  Draggable row
+    .data-grid-draggable-row-cell {
+        width: 1%;
+
+        .draggable-handle {
+            &:extend(.abs-draggable-handle all);
+            padding: 0;
+        }
+    }
+
+    .action-delete {
+        &:extend(.abs-action-button-as-link all);
     }
 }
 

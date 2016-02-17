@@ -25,6 +25,12 @@ define([
             var self = this;
 
             self.$selector = $('#' + self.selector);
+            self.$selector.on(
+                'setVaultNotActive',
+                function () {
+                    self.$selector.off('submitOrder.braintreetwo_vault');
+                }
+            );
             this._super();
 
             this.initEventHandlers();
@@ -60,7 +66,7 @@ define([
          * Enable form event listeners
          */
         enableEventListeners: function () {
-            this.$selector.on('submitOrder', this.submitOrder.bind(this));
+            this.$selector.on('submitOrder.braintreetwo_vault', this.submitOrder.bind(this));
         },
 
         /**
@@ -121,8 +127,30 @@ define([
          * @param {String} nonce
          */
         setPaymentDetails: function (nonce) {
+            this.createPublicHashSelector();
+
             this.$selector.find('[name="payment[public_hash]"]').val(this.publicHash);
-            this.$selector.find('[name="payment[payment_method_nonce]"]').val(nonce);
+            this.$selector.find('#braintreetwo_nonce').val(nonce);
+        },
+
+        /**
+         * Creates public hash selector
+         */
+        createPublicHashSelector: function () {
+            var $input;
+
+            if (this.$selector.find('#braintreetwo_nonce').size() === 0) {
+                $input = $('<input>').attr(
+                    {
+                        type: 'hidden',
+                        id: 'braintreetwo_nonce',
+                        name: 'payment[payment_method_nonce]'
+                    }
+                );
+
+                $input.appendTo(this.$selector);
+                $input.prop('disabled', false);
+            }
         },
 
         /**
