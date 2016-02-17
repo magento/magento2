@@ -7,7 +7,9 @@ namespace Magento\BraintreeTwo\Model\Ui;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\BraintreeTwo\Gateway\Config\Config;
+use Magento\BraintreeTwo\Gateway\Config\PayPal\Config as PayPalConfig;
 use Magento\BraintreeTwo\Model\Adapter\BraintreeAdapter;
+use Magento\Framework\Locale\ResolverInterface;
 
 /**
  * Class ConfigProvider
@@ -16,10 +18,22 @@ final class ConfigProvider implements ConfigProviderInterface
 {
     const CODE = 'braintreetwo';
 
+    const PAYPAL_CODE = 'braintreetwo_paypal';
+
+    /**
+     * @var ResolverInterface
+     */
+    private $localeResolver;
+
     /**
      * @var Config
      */
     private $config;
+
+    /**
+     * @var PayPalConfig
+     */
+    private $payPalConfig;
 
     /**
      * @var BraintreeAdapter
@@ -35,12 +49,20 @@ final class ConfigProvider implements ConfigProviderInterface
      * Constructor
      *
      * @param Config $config
+     * @param PayPalConfig $payPalConfig;
      * @param BraintreeAdapter $adapter
+     * @param ResolverInterface $localeResolver
      */
-    public function __construct(Config $config, BraintreeAdapter $adapter)
-    {
+    public function __construct(
+        Config $config,
+        PayPalConfig $payPalConfig,
+        BraintreeAdapter $adapter,
+        ResolverInterface $localeResolver
+    ) {
         $this->config = $config;
+        $this->payPalConfig = $payPalConfig;
         $this->adapter = $adapter;
+        $this->localeResolver = $localeResolver;
     }
 
     /**
@@ -50,9 +72,12 @@ final class ConfigProvider implements ConfigProviderInterface
      */
     public function getConfig()
     {
+        $isPayPalActive = $this->payPalConfig->isActive();
         return [
             'payment' => [
                 self::CODE => [
+                    'isActive' => $this->config->isActive(),
+                    'isSingleUse' => !$isPayPalActive,
                     'clientToken' => $this->getClientToken(),
                     'ccTypesMapper' => $this->config->getCctypesMapper(),
                     'sdkUrl' => $this->config->getSdkUrl(),
@@ -68,6 +93,15 @@ final class ConfigProvider implements ConfigProviderInterface
                     'enabled' => $this->config->isVerify3DSecure(),
                     'thresholdAmount' => $this->config->getThresholdAmount(),
                     'specificCountries' => $this->config->get3DSecureSpecificCountries()
+                ],
+                self::PAYPAL_CODE => [
+                    'isActive' => $isPayPalActive,
+                    'title' => $this->payPalConfig->getTitle(),
+                    'isAllowShippingAddressOverride' => $this->payPalConfig->isAllowToEditShippingAddress(),
+                    'merchantName' => $this->payPalConfig->getMerchantName(),
+                    'locale' => strtolower($this->localeResolver->getLocale()),
+                    'paymentAcceptanceMarkSrc' =>
+                        'https://www.paypalobjects.com/webstatic/en_US/i/buttons/pp-acceptance-medium.png',
                 ]
             ]
         ];
