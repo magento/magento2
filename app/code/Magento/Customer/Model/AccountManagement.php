@@ -527,7 +527,7 @@ class AccountManagement implements AccountManagementInterface
      */
     protected function getMinPasswordLength()
     {
-        return $minPasswordLength = $this->accountManagementHelper->getMinimumPasswordLength();
+        return $this->accountManagementHelper->getMinimumPasswordLength();
     }
 
     /**
