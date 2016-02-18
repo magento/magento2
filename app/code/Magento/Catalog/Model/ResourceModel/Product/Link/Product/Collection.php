@@ -77,6 +77,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param GroupManagementInterface $groupManagement
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation
      * @param MetadataPool $metadataPool
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -101,6 +102,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         GroupManagementInterface $groupManagement,
+        \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation,
         MetadataPool $metadataPool,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
@@ -125,6 +127,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $customerSession,
             $dateTime,
             $groupManagement,
+            $productLimitation,
             $connection
         );
     }
