@@ -542,10 +542,10 @@
         <arguments>
             <argument name="operations" xsi:type="array">
                 <item name="default" xsi:type="array">
-                    <item name="read" xsi:type="object">Magento\Framework\Model\Operation\Read</item>
-                    <item name="create" xsi:type="object">Magento\Framework\Model\Operation\Write\Create</item>
-                    <item name="update" xsi:type="object">Magento\Framework\Model\Operation\Write\Update</item>
-                    <item name="delete" xsi:type="object">Magento\Framework\Model\Operation\Write\Delete</item>
+                    <item name="read" xsi:type="string">Magento\Framework\Model\Operation\Read</item>
+                    <item name="create" xsi:type="string">Magento\Framework\Model\Operation\Write\Create</item>
+                    <item name="update" xsi:type="string">Magento\Framework\Model\Operation\Write\Update</item>
+                    <item name="delete" xsi:type="string">Magento\Framework\Model\Operation\Write\Delete</item>
                 </item>
             </argument>
         </arguments>
@@ -556,6 +556,14 @@
                 <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
                     <item name="entityTableName" xsi:type="string">catalog_product_entity</item>
                     <item name="eavEntityType" xsi:type="string">catalog_product</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                    <item name="entityContext" xsi:type="array">
+                        <item name="store_id" xsi:type="string">store_id</item>
+                    </item>
+                </item>
+                <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_category_entity</item>
+                    <item name="eavEntityType" xsi:type="string">catalog_category</item>
                     <item name="identifierField" xsi:type="string">entity_id</item>
                     <item name="entityContext" xsi:type="array">
                         <item name="store_id" xsi:type="string">store_id</item>
@@ -584,4 +592,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction">
+        <arguments>
+            <argument name="skipStaticColumns" xsi:type="array">
+                <item name="entity_type_id" xsi:type="string">entity_type_id</item>
+                <item name="attribute_set_id" xsi:type="string">attribute_set_id</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation"  shared="false"/>
 </config>

@@ -16,7 +16,7 @@
             <field name="associated" xsi:type="array">
                 <item name="dataset" xsi:type="string">defaultSimpleProduct</item>
             </field>
-            <field name="status" xsi:type="string">Product online</field>
+            <field name="status" xsi:type="string">Yes</field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">taxable_goods</item>
@@ -42,7 +42,7 @@
             <field name="associated" xsi:type="array">
                 <item name="dataset" xsi:type="string">defaultSimpleProduct</item>
             </field>
-            <field name="status" xsi:type="string">Product online</field>
+            <field name="status" xsi:type="string">Yes</field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">taxable_goods</item>
@@ -72,7 +72,7 @@
             <field name="associated" xsi:type="array">
                 <item name="dataset" xsi:type="string">defaultSimpleProduct</item>
             </field>
-            <field name="status" xsi:type="string">Product online</field>
+            <field name="status" xsi:type="string">Yes</field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">taxable_goods</item>
@@ -98,7 +98,7 @@
             <field name="associated" xsi:type="array">
                 <item name="dataset" xsi:type="string">three_simple_products</item>
             </field>
-            <field name="status" xsi:type="string">Product online</field>
+            <field name="status" xsi:type="string">Yes</field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">taxable_goods</item>

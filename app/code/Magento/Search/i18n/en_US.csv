@@ -53,7 +53,6 @@ Reports,Reports
 "Your search query can't be longer than %1, so we shortened your query.","Your search query can't be longer than %1, so we shortened your query."
 "Synonym group with id %1 cannot be deleted. %2","Synonym group with id %1 cannot be deleted. %2"
 "You saved the synonym group.","You saved the synonym group."
-"Merge conflict with existing synonym group(s): %1","Merge conflict with existing synonym group(s): %1"
 "Global (All Store Views)","Global (All Store Views)"
 "All Websites","All Websites"
 "    All Store Views","    All Store Views"
@@ -84,3 +83,5 @@ Synonyms,Synonyms
 Website,Website
 "Delete items","Delete items"
 "Are you sure you want to delete the selected synonym groups?","Are you sure you want to delete the selected synonym groups?"
+"The terms you entered, (%1), belong to 1 existing synonym group, %2. Select the "Merge existing synonyms" checkbox so the terms can be merged.","The terms you entered, (%1), belong to 1 existing synonym group, %2. Select the "Merge existing synonyms" checkbox so the terms can be merged."
+"The terms you entered, (%1), belong to %2 existing synonym groups, %3 and %4. Select the "Merge existing synonyms" checkbox so the terms can be merged.","The terms you entered, (%1), belong to %2 existing synonym groups, %3 and %4. Select the "Merge existing synonyms" checkbox so the terms can be merged."

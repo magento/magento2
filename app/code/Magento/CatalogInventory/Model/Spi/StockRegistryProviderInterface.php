@@ -11,22 +11,22 @@ namespace Magento\CatalogInventory\Model\Spi;
 interface StockRegistryProviderInterface
 {
     /**
-     * @param int|null $stockId
+     * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockInterface
      */
-    public function getStock($stockId);
+    public function getStock($scopeId);
 
     /**
      * @param int $productId
-     * @param int $stockId
+     * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
      */
-    public function getStockItem($productId, $stockId);
+    public function getStockItem($productId, $scopeId);
 
     /**
      * @param int $productId
-     * @param int $stockId
+     * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockStatusInterface
      */
-    public function getStockStatus($productId, $stockId);
+    public function getStockStatus($productId, $scopeId);
 }

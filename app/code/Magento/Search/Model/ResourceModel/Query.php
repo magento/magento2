@@ -49,7 +49,7 @@ class Query extends AbstractDb
     }
 
     /**
-     * Custom load model only by query text
+     * Custom load model only by query text (skip synonym for)
      *
      * @param AbstractModel $object
      * @param string $value

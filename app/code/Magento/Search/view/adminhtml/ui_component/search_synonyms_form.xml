@@ -85,14 +85,14 @@
                 <item name="config" xsi:type="array">
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Synonyms</item>
-                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="formElement" xsi:type="string">textarea</item>
                     <item name="source" xsi:type="string">block</item>
                     <item name="dataScope" xsi:type="string">synonyms</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
                     <item name="tooltip" xsi:type="array">
-                        <item name="description" xsi:type="string" translate="true">Comma-separated list of synonyms</item>
+                        <item name="description" xsi:type="string" translate="true">Comma-separated list of synonyms. The terms entered (separated by commas) will be used as an “OR” search query to search your entire store. For example, if you enter “shoes,footwear”, and user were to search for "shoes", the search results will include any product or content with term “shoes" or "footwear.”</item>
                     </item>
                 </item>
             </argument>
@@ -101,9 +101,9 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="additionalClasses" xsi:type="string">admin__field-no-label</item>
-                    <item name="description" xsi:type="string" translate="true">Merge with existing</item>
+                    <item name="description" xsi:type="string" translate="true">Merge existing synonyms</item>
                     <item name="dataType" xsi:type="string">boolean</item>
-                    <item name="default" xsi:type="boolean">true</item>
+                    <item name="default" xsi:type="boolean">false</item>
                     <item name="formElement" xsi:type="string">checkbox</item>
                     <item name="dataScope" xsi:type="string">mergeOnConflict</item>
                     <item name="source" xsi:type="string">block</item>

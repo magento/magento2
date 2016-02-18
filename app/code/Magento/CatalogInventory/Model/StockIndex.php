@@ -13,7 +13,6 @@ use Magento\Catalog\Model\Product\Website as ProductWebsite;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\CatalogInventory\Api\StockIndexInterface;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
-use Magento\CatalogInventory\Model\Spi\StockResolverInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
@@ -56,31 +55,22 @@ class StockIndex implements StockIndexInterface
      */
     protected $productTypes = [];
 
-
-    /**
-     * @var StockResolverInterface
-     */
-    protected $stockResolver;
-
     /**
      * @param StockRegistryProviderInterface $stockRegistryProvider
      * @param ProductRepositoryInterface $productRepository
      * @param ProductWebsite $productWebsite
      * @param ProductType $productType
-     * @param StockResolverInterface $stockResolver
      */
     public function __construct(
         StockRegistryProviderInterface $stockRegistryProvider,
         ProductRepositoryInterface $productRepository,
         ProductWebsite $productWebsite,
-        ProductType $productType,
-        StockResolverInterface $stockResolver
+        ProductType $productType
     ) {
         $this->stockRegistryProvider = $stockRegistryProvider;
         $this->productRepository = $productRepository;
         $this->productWebsite = $productWebsite;
         $this->productType = $productType;
-        $this->stockResolver = $stockResolver;
     }
 
     /**
@@ -122,8 +112,7 @@ class StockIndex implements StockIndexInterface
      */
     public function updateProductStockStatus($productId, $websiteId)
     {
-        $stockId = $this->stockResolver->getStockId($productId, $websiteId);
-        $item = $this->stockRegistryProvider->getStockItem($productId, $stockId);
+        $item = $this->stockRegistryProvider->getStockItem($productId, $websiteId);
 
         $status = \Magento\CatalogInventory\Model\Stock\Status::STATUS_IN_STOCK;
         $qty = 0;
@@ -242,8 +231,7 @@ class StockIndex implements StockIndexInterface
         }
 
         foreach ($parentIds as $parentId) {
-            $stockId = $this->stockResolver->getStockId($productId, $websiteId);
-            $item = $this->stockRegistryProvider->getStockItem($parentId, $stockId);
+            $item = $this->stockRegistryProvider->getStockItem($parentId, $websiteId);
             $status = \Magento\CatalogInventory\Model\Stock\Status::STATUS_IN_STOCK;
             $qty = 0;
             if ($item->getItemId()) {

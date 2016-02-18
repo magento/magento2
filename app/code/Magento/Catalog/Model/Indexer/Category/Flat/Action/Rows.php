@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\Indexer\Category\Flat\Action;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Model\Entity\MetadataPool;
 
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 {
@@ -19,16 +20,20 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
+     * @param MetadataPool $metadataPool
+     * @param array $skipStaticColumns
      * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
-        CategoryRepositoryInterface $categoryRepository
+        MetadataPool $metadataPool,
+        CategoryRepositoryInterface $categoryRepository,
+        $skipStaticColumns = []
     ) {
         $this->categoryRepository = $categoryRepository;
-        parent::__construct($resource, $storeManager, $resourceHelper);
+        parent::__construct($resource, $storeManager, $resourceHelper, $metadataPool, $skipStaticColumns);
     }
 
     /**
@@ -122,14 +127,16 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         /** @var \Magento\Framework\DB\Select $select */
         $select = $this->connection->select()->from(
             ['cf' => $this->getTableNameByStore($store, $useTempTable)]
-        )->joinLeft(
-            ['ce' => $this->getTableName('catalog_category_entity')],
-            'cf.path = ce.path',
-            []
         )->where(
             "cf.path = {$rootIdExpr} OR cf.path = {$rootCatIdExpr} OR cf.path like {$catIdExpr}"
         )->where(
-            'ce.entity_id IS NULL'
+            'cf.entity_id NOT IN (?)',
+            new \Zend_Db_Expr(
+                $this->connection->select()->from(
+                    ['ce' => $this->getTableName('catalog_category_entity')],
+                    ['entity_id']
+                )
+            )
         );
 
         $sql = $select->deleteFromSelect('cf');
@@ -157,7 +164,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         )->where(
             "path = {$rootIdExpr} OR path = {$rootCatIdExpr} OR path like {$catIdExpr}"
         )->where(
-            'entity_id IN (?)',
+            "entity_id IN (?)",
             $ids
         );
 
