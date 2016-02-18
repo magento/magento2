@@ -44,12 +44,20 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var \Magento\Framework\Model\Entity\EntityMetadata
+     */
+    protected $productMetadata;
+
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create(
             'Magento\CatalogImportExport\Model\Import\Product'
         );
+        /** @var \Magento\Framework\Model\Entity\MetadataPool $metadataPool */
+        $metadataPool = $this->objectManager->get('Magento\Framework\Model\Entity\MetadataPool');
+        $this->productMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
     }
 
     /**
@@ -138,7 +146,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
             $actualLink = $link->getData();
             $this->assertArrayHasKey('link_type', $actualLink);
             $this->assertArrayHasKey('product_id', $actualLink);
-            $this->assertEquals($actualLink['product_id'], $product->getId());
+            $this->assertEquals($actualLink['product_id'], $product->getData($this->productMetadata->getLinkField()));
             foreach ($expectedLinks[$actualLink['link_type']] as $expectedKey => $expectedValue) {
                 $this->assertArrayHasKey($expectedKey, $actualLink);
                 $this->assertEquals($actualLink[$expectedKey], $expectedValue);
@@ -171,7 +179,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
             $actualSample = $sample->getData();
             $this->assertArrayHasKey('sample_type', $actualSample);
             $this->assertArrayHasKey('product_id', $actualSample);
-            $this->assertEquals($actualSample['product_id'], $product->getId());
+            $this->assertEquals($actualSample['product_id'], $product->getData($this->productMetadata->getLinkField()));
             foreach ($expectedSamples[$actualSample['sample_type']] as $expectedKey => $expectedValue) {
                 $this->assertArrayHasKey($expectedKey, $actualSample);
                 $this->assertEquals($actualSample[$expectedKey], $expectedValue);
