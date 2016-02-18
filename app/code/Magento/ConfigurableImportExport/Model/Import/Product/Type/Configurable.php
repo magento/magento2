@@ -651,13 +651,13 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             // @todo understand why do we need this condition
             if ($this->_getSuperAttributeId($rowId, $attrParams['id'])) {
                 $productSuperAttrId = $this->_getSuperAttributeId($rowId, $attrParams['id']);
-            } elseif (isset($this->_superAttributesData['attributes'][$entityId][$attrParams['id']])) {
+            } elseif (isset($this->_superAttributesData['attributes'][$rowId][$attrParams['id']])) {
                 $attributes = $this->_superAttributesData['attributes'];
-                $productSuperAttrId = $attributes[$entityId][$attrParams['id']]['product_super_attribute_id'];
-                $this->_collectSuperDataLabels($data, $productSuperAttrId, $entityId, $variationLabels);
+                $productSuperAttrId = $attributes[$rowId][$attrParams['id']]['product_super_attribute_id'];
+                $this->_collectSuperDataLabels($data, $productSuperAttrId, $rowId, $variationLabels);
             } else {
                 $productSuperAttrId = $this->_getNextAttrId();
-                $this->_collectSuperDataLabels($data, $productSuperAttrId, $entityId, $variationLabels);
+                $this->_collectSuperDataLabels($data, $productSuperAttrId, $rowId, $variationLabels);
             }
         }
         //@codingStandardsIgnoreEnd
