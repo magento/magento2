@@ -25,7 +25,7 @@ class FaultTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Model\Soap\Fault */
     protected $_soapFault;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_localeResolverMock;
 
     /**
