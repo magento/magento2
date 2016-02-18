@@ -25,7 +25,7 @@
                 <argument name="block" xsi:type="string">admin.product.edit.tab.super.config.grid.container</argument>
             </action>
         </referenceBlock>
-        <!--<referenceBlock name="product_form">
+       <!-- <referenceBlock name="product_form">
             <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config" name="admin.product.edit.tab.super.config.grid.container">
                 <arguments>
                     <argument name="config" xsi:type="array">
