@@ -631,6 +631,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
 
         $this->_productSuperData = [
             'product_id' => $rowId,
+            'entity_id' => $entityId,
             'attr_set_code' => $this->_productData['attr_set_code'],
             'used_attributes' => empty($this->_skuSuperData[$rowId]) ? [] : $this->_skuSuperData[$rowId],
             'assoc_ids' => [],
@@ -685,9 +686,9 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $superProductEntityId = $oldSku[$data['_super_products_sku']][$this->productEntityIdentifierField];
             }
 
-            if ($superProductRowId) {
+            if ($superProductEntityId) {
                 if (isset($data['display']) && $data['display'] == 0) {
-                    $this->_simpleIdsToDelete[] = $superProductRowId;
+                    $this->_simpleIdsToDelete[] = $superProductEntityId;
                 } else {
                     $this->_productSuperData['assoc_ids'][$superProductEntityId] = true;
                 }
