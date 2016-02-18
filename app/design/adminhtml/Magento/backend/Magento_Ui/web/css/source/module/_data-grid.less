@@ -132,6 +132,23 @@ body._in-resize {
         &._odd-row {
             td {
                 background-color: @data-grid-td__even__background-color;
+
+                &._update-status-active {
+                    background: @data-grid-td__update__active__background-color;
+                }
+
+                &._update-status-upcoming {
+                    background: @data-grid-td__update__upcoming__background-color;
+                }
+            }
+        }
+
+        &:hover {
+            td {
+                &._update-status-active,
+                &._update-status-upcoming {
+                    background-color: @data-grid-tr__hover__background-color;
+                }
             }
         }
 
@@ -246,6 +263,14 @@ body._in-resize {
             text-align: left;
             top: auto;
             z-index: 1;
+        }
+
+        &._update-status-active {
+            background: @data-grid-td__update__active__background-color;
+        }
+
+        &._update-status-upcoming {
+            background: @data-grid-td__update__upcoming__background-color;
         }
     }
 

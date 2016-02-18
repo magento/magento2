@@ -12,7 +12,7 @@
         <tbody>
             <tr class="data-row" repeat="foreach: rows, item: '$row'" css="'_odd-row': $index % 2">
                 <td outerfasteach="data: getVisible(), as: '$col'"
-                    css="getFieldClass()" click="getFieldHandler($row())" template="getBody()"/>
+                    css="getFieldClass($row())" click="getFieldHandler($row())" template="getBody()"/>
             </tr>
             <tr ifnot="hasData()" class="data-grid-tr-no-data">
                 <td attr="colspan: countVisible()" translate="'We couldn\'t find any records.'"/>
