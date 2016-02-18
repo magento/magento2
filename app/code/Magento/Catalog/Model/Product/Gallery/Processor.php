@@ -336,6 +336,10 @@ class Processor
         return $this;
     }
 
+    /**
+     * get media attribute codes
+     * @return array
+     */
     public function getMediaAttributeCodes()
     {
         return $this->mediaConfig->getMediaAttributeCodes();

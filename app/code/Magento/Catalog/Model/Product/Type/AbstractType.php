@@ -570,7 +570,6 @@ abstract class AbstractType
             }
         }
 
-
         $eventName = sprintf('catalog_product_type_prepare_%s_options', $processMode);
         $this->_eventManager->dispatch(
             $eventName,
