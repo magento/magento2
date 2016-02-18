@@ -283,7 +283,7 @@ class ProductRepositoryTest extends WebapiAbstract
             $productId1, $nonExistingId
         ];
 
-        $expectedMessage = 'Product with id "%1" does not exist.';
+        $expectedMessage = 'Unable to save product';
         try {
             $this->saveProduct($response);
             $this->fail("Expected exception");
@@ -296,7 +296,6 @@ class ProductRepositoryTest extends WebapiAbstract
         } catch (\Exception $e) {
             $errorObj = $this->processRestExceptionResult($e);
             $this->assertEquals($expectedMessage, $errorObj['message']);
-            $this->assertEquals(['0' => '999'], $errorObj['parameters']);
         }
     }
 
@@ -349,8 +348,8 @@ class ProductRepositoryTest extends WebapiAbstract
      */
     public function testUpdateConfigurableProductLinksWithWithoutVariationAttributes()
     {
-        $productId1 = 10;
-        $productId2 = 20;
+        $productId1 = 99;
+        $productId2 = 88;
 
         $response = $this->createConfigurableProduct();
 
@@ -360,7 +359,7 @@ class ProductRepositoryTest extends WebapiAbstract
             $productId1, $productId2
         ];
 
-        $expectedMessage = 'The configurable product does not have any variation attribute.';
+        $expectedMessage = 'Unable to save product';
         try {
             $this->saveProduct($response);
             $this->fail("Expected exception");
