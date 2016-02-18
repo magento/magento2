@@ -16,5 +16,6 @@
         <field name="group_id" is_required="1 "/>
         <field name="synonyms" is_required="0" />
         <field name="scope_id" is_required="0" source="Magento\Search\Test\Fixture\SynonymGroup\ScopeId" />
+        <field name="mergeOnConflict" is_required="0" />
     </fixture>
 </config>
