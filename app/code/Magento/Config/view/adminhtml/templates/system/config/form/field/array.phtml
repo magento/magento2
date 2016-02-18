@@ -15,7 +15,7 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
 
 <div class="design_theme_ua_regexp" id="grid<?php /* @escapeNotVerified */ echo $_htmlId; ?>">
     <div class="admin__control-table-wrapper">
-        <table class="admin__control-table">
+        <table class="admin__control-table" id="<?php /* @escapeNotVerified */ echo $block->getElement()->getId(); ?>">
             <thead>
             <tr>
                 <?php foreach ($block->getColumns() as $columnName => $column): ?>
