@@ -10,32 +10,32 @@ use Magento\Sales\Model\Order\ItemRepository;
 class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\DataObject\Factory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Factory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectFactory;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Metadata | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Metadata|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadata;
 
     /**
-     * @var \Magento\Sales\Api\Data\OrderItemSearchResultInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\Data\OrderItemSearchResultInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $searchResultFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ProductOptionProcessorInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ProductOptionProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productOptionProcessorMock;
 
     /**
-     * @var \Magento\Catalog\Model\ProductOptionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ProductOptionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $productOptionFactory;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductOptionExtensionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Api\Data\ProductOptionExtensionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $extensionFactory;
 
@@ -310,6 +310,12 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
                 'custom_options' => $this->productOptionProcessorMock,
             ]
         );
+        $orderItemExtensionMock = $this->getMock('\Magento\Sales\Api\Data\OrderItemExtension', [], [], '', false);
+        $model->setOrderItemExtensionDependency($orderItemExtensionMock);
+        $shippingBuilderMock = $this->getMock('\Magento\Sales\Model\Order\ShippingBuilder', [], [], '', false);
+        $shippingBuilderMock->expects($this->once())->method('setOrderId');
+        $model->setShippingBuilderDependency($shippingBuilderMock);
+
         return $model;
     }
 
