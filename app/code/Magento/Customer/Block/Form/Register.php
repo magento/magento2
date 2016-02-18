@@ -208,7 +208,7 @@ class Register extends \Magento\Directory\Block\Data
     }
 
     /**
-     * Get required character classes number
+     * Get number of password required character classes
      *
      * @return string
      */
