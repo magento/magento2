@@ -38,17 +38,7 @@ class RecurringData implements InstallDataInterface
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        $dbThemes = $this->themeRegistration->getAllDbThemes()->getData();
-        $dbThemeNames = [];
-        foreach ($dbThemes as $dbTheme) {
-            $dbThemeNames[] = $dbTheme['area'] . '/' . $dbTheme['code'];
-        }
-
-        $filesystemThemes = $this->themeRegistration->getAllPhysicalThemes()->getItems();
-        $filesystemThemeNames = array_keys($filesystemThemes);
-
-        if (sizeof(array_diff($dbThemeNames, $filesystemThemeNames)) > 0
-            || sizeof(array_diff($filesystemThemeNames, $dbThemeNames)) > 0) {
+        if ($this->themeRegistration->isThemeMismatch()) {
             $this->themeRegistration->register();
         }
     }

@@ -815,26 +815,19 @@ class Installer
 
         if ($type === 'schema') {
             $this->log->log('Schema post-updates:');
-            foreach ($moduleNames as $moduleName) {
-                $this->log->log("Module '{$moduleName}':");
-                $modulePostUpdater = $this->getSchemaDataHandler($moduleName, 'schema-recurring');
-                if ($modulePostUpdater) {
-                    $this->log->logInline("Running recurring.. ");
-                    $modulePostUpdater->install($setup, $moduleContextList[$moduleName]);
-                }
-                $this->logProgress();
-            }
+            $handlerType = 'schema-recurring';
         } else if ($type === 'data') {
             $this->log->log('Data post-updates:');
-            foreach ($moduleNames as $moduleName) {
-                $this->log->log("Module '{$moduleName}':");
-                $modulePostUpdater = $this->getSchemaDataHandler($moduleName, 'data-recurring');
-                if ($modulePostUpdater) {
-                    $this->log->logInline("Running data recurring.. ");
-                    $modulePostUpdater->install($setup, $moduleContextList[$moduleName]);
-                }
-                $this->logProgress();
+            $handlerType = 'data-recurring';
+        }
+        foreach ($moduleNames as $moduleName) {
+            $this->log->log("Module '{$moduleName}':");
+            $modulePostUpdater = $this->getSchemaDataHandler($moduleName, $handlerType);
+            if ($modulePostUpdater) {
+                $this->log->logInline('Running ' + str_replace('-', ' ', $handlerType) + '...');
+                $modulePostUpdater->install($setup, $moduleContextList[$moduleName]);
             }
+            $this->logProgress();
         }
     }
 
