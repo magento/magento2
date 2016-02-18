@@ -17,9 +17,6 @@
                         <item name="formElement" xsi:type="string">checkbox</item>
                         <item name="sortOrder" xsi:type="number">15</item>
                         <item name="component" xsi:type="string">Magento_Catalog/js/components/url-key-handle-changes</item>
-                        <item name="listens" xsi:type="array">
-                            <item name="${ $.provider }:data.url_key" xsi:type="string">handleChanges</item>
-                        </item>
                         <item name="valueMap" xsi:type="array">
                             <item name="false" xsi:type="number">0</item>
                         </item>
