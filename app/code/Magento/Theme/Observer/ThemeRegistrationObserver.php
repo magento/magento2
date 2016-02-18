@@ -10,6 +10,9 @@ use Magento\Framework\Event\Observer as EventObserver;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Theme\Model\Theme;
 
+/**
+ * @deprecated since event theme_registration_from_filesystem is no longer used.
+ */
 class ThemeRegistrationObserver implements ObserverInterface
 {
     /**

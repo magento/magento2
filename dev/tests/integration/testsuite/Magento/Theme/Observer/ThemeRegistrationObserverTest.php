@@ -9,6 +9,9 @@
  */
 namespace Magento\Theme\Observer;
 
+/**
+ * @deprecated since event theme_registration_from_filesystem is no longer used.
+ */
 class ThemeRegistrationObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -48,11 +48,6 @@ class InstallData implements InstallDataInterface
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        /*
-         * Register themes
-         */
-        $setup->getEventManager()->dispatch('theme_registration_from_filesystem');
-
         /**
          * Update theme's data
          */

@@ -135,23 +135,29 @@ class Registration
     }
 
     /**
-     * Get physical themes
+     * Returns true if there is mismatch between physical themes and themes in DB
      *
-     * @return ThemeInterface
+     * @return bool
      */
-    public function getAllPhysicalThemes()
+    public function isThemeMismatch()
     {
-        return $this->_themeCollection;
-    }
+        $dbThemes = $this->_collectionFactory->create();
+        $dbThemeNames = [];
+        foreach ($dbThemes as $dbTheme) {
+            $dbThemeNames[] = $dbTheme->getFullPath();
+        }
 
-    /**
-     * Get DB themes
-     *
-     * @return ThemeInterface
-     */
-    public function getAllDbThemes()
-    {
-        return $this->_collectionFactory->create();
+        $filesystemThemeNames = [];
+        $filesystemThemes = $this->_themeCollection->getItems();
+        foreach ($filesystemThemes as $filesystemTheme) {
+            $filesystemThemeNames[] = $filesystemTheme->getFullPath();
+        }
+
+        if (sizeof(array_diff($dbThemeNames, $filesystemThemeNames)) > 0
+            || sizeof(array_diff($filesystemThemeNames, $dbThemeNames)) > 0) {
+            return true;
+        }
+        return false;
     }
 
     /**
