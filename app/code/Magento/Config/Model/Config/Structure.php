@@ -52,6 +52,13 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
     protected $_elements;
 
     /**
+     * List of config sections
+     *
+     * @var array
+     */
+    protected $sectionList;
+
+    /**
      * @param \Magento\Config\Model\Config\Structure\Data $structureData
      * @param \Magento\Config\Model\Config\Structure\Element\Iterator\Tab $tabIterator
      * @param \Magento\Config\Model\Config\Structure\Element\FlyweightFactory $flyweightFactory
@@ -85,6 +92,26 @@ class Structure implements \Magento\Config\Model\Config\Structure\SearchInterfac
             $this->_tabIterator->setElements($this->_data['tabs'], $this->_scopeDefiner->getScope());
         }
         return $this->_tabIterator;
+    }
+
+    /**
+     * Retrieve config section list
+     *
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    public function getSectionList()
+    {
+        if (empty($this->sectionList)) {
+            foreach ($this->_data['sections'] as $sectionId => $section) {
+                if (array_key_exists('children', $section) && is_array($section['children'])) {
+                    foreach ($section['children'] as $childId => $child) {
+                        $this->sectionList[$sectionId . '_' . $childId] = true;
+                    }
+                }
+            }
+        }
+        return $this->sectionList;
     }
 
     /**

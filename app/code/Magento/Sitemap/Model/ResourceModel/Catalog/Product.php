@@ -6,6 +6,7 @@
 namespace Magento\Sitemap\Model\ResourceModel\Catalog;
 
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
+use Magento\Store\Model\Store;
 
 /**
  * Sitemap resource product collection model
@@ -36,10 +37,6 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected $mediaGalleryReadHandler;
 
-    /**
-     * Init resource model (catalog/category)
-     *
-     */
     /**
      * Sitemap data
      *
@@ -179,35 +176,23 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $connection = $this->getConnection();
         $attribute = $this->_getAttribute($attributeCode);
+        $linkField = $this->_productResource->getLinkField();
+        $attrTableAlias = 't1_' . $attributeCode;
         $this->_select->joinLeft(
-            ['t1_' . $attributeCode => $attribute['table']],
-            'e.entity_id = t1_' . $attributeCode . '.entity_id AND ' . $connection->quoteInto(
-                ' t1_' . $attributeCode . '.store_id = ?',
-                \Magento\Store\Model\Store::DEFAULT_STORE_ID
-            ) . $connection->quoteInto(
-                ' AND t1_' . $attributeCode . '.attribute_id = ?',
-                $attribute['attribute_id']
-            ),
+            [$attrTableAlias => $attribute['table']],
+            "e.{$linkField} = {$attrTableAlias}.{$linkField}"
+            . ' AND ' . $connection->quoteInto($attrTableAlias . '.store_id = ?', Store::DEFAULT_STORE_ID)
+            . ' AND ' . $connection->quoteInto($attrTableAlias . '.attribute_id = ?', $attribute['attribute_id']),
             []
         );
 
         if (!$attribute['is_global']) {
+            $attrTableAlias2 = 't2_' . $attributeCode;
             $this->_select->joinLeft(
                 ['t2_' . $attributeCode => $attribute['table']],
-                $this->getConnection()->quoteInto(
-                    't1_' .
-                    $attributeCode .
-                    '.entity_id = t2_' .
-                    $attributeCode .
-                    '.entity_id AND t1_' .
-                    $attributeCode .
-                    '.attribute_id = t2_' .
-                    $attributeCode .
-                    '.attribute_id AND t2_' .
-                    $attributeCode .
-                    '.store_id = ?',
-                    $storeId
-                ),
+                "{$attrTableAlias}.{$linkField} = {$attrTableAlias2}.{$linkField}"
+                . ' AND ' . $attrTableAlias . '.attribute_id = ' . $attrTableAlias2 . '.attribute_id'
+                . ' AND ' . $connection->quoteInto($attrTableAlias2 . '.store_id = ?', $storeId),
                 []
             );
         }
@@ -239,14 +224,14 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Get category collection array
      *
-     * @param null|string|bool|int|\Magento\Store\Model\Store $storeId
+     * @param null|string|bool|int|Store $storeId
      * @return array|bool
      */
     public function getCollection($storeId)
     {
         $products = [];
 
-        /* @var $store \Magento\Store\Model\Store */
+        /* @var $store Store */
         $store = $this->_storeManager->getStore($storeId);
         if (!$store) {
             return false;
@@ -256,7 +241,7 @@ class Product extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $this->_select = $connection->select()->from(
             ['e' => $this->getMainTable()],
-            [$this->getIdFieldName(), 'updated_at']
+            [$this->getIdFieldName(), $this->_productResource->getLinkField(), 'updated_at']
         )->joinInner(
             ['w' => $this->getTable('catalog_product_website')],
             'e.entity_id = w.product_id',

@@ -96,7 +96,11 @@ class SampleDataDeployCommand extends Command
             $application->setAutoExit(false);
             $result = $application->run($commandInput, $output);
             if ($result !== 0) {
-                $output->writeln('<info>' . 'There is an error during sample data deployment.' . '</info>');
+                $output->writeln(
+                    '<info>' . 'There is an error during sample data deployment. Composer file will be reverted.'
+                    . '</info>'
+                );
+                $application->resetComposer();
             }
         } else {
             $output->writeln('<info>' . 'There is no sample data for current set of modules.' . '</info>');

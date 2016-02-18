@@ -51,6 +51,13 @@ class FilePermissions
     protected $applicationCurrentNonWritableDirectories = [];
 
     /**
+     * List of non-writable paths in a specified directory
+     *
+     * @var array
+     */
+    protected $nonWritablePathsInDirectories = [];
+
+    /**
      * @param Filesystem $filesystem
      * @param DirectoryList $directoryList
      */
@@ -110,8 +117,12 @@ class FilePermissions
     {
         if (!$this->installationCurrentWritableDirectories) {
             foreach ($this->installationWritableDirectories as $code => $path) {
-                if ($this->isWritable($code) && $this->checkRecursiveDirectories($path)) {
-                    $this->installationCurrentWritableDirectories[] = $path;
+                if ($this->isWritable($code)) {
+                    if ($this->checkRecursiveDirectories($path)) {
+                        $this->installationCurrentWritableDirectories[] = $path;
+                    }
+                } else {
+                    $this->nonWritablePathsInDirectories[$path] = [$path];
                 }
             }
         }
@@ -136,17 +147,19 @@ class FilePermissions
         ];
 
         $directoryIterator = new Filter($directoryIterator, $noWritableFilesFolders);
+        $foundNonWritable = false;
 
         try {
             foreach ($directoryIterator as $subDirectory) {
                 if (!$subDirectory->isWritable()) {
-                    return false;
+                    $this->nonWritablePathsInDirectories[$directory][] = $subDirectory;
+                    $foundNonWritable = true;
                 }
             }
         } catch (\UnexpectedValueException $e) {
             return false;
         }
-        return true;
+        return !$foundNonWritable;
     }
 
     /**
@@ -205,8 +218,30 @@ class FilePermissions
     }
 
     /**
+     * Checks writable paths for installation
+     *
+     * @return array
+     */
+    public function getMissingWritablePathsForInstallation()
+    {
+        $required = $this->getInstallationWritableDirectories();
+        $current = $this->getInstallationCurrentWritableDirectories();
+        $missingPaths = [];
+        foreach (array_diff($required, $current) as $missingPath) {
+            if (isset($this->nonWritablePathsInDirectories[$missingPath])) {
+                $missingPaths = array_merge(
+                    $missingPaths,
+                    $this->nonWritablePathsInDirectories[$missingPath]
+                );
+            }
+        }
+        return $missingPaths;
+    }
+
+    /**
      * Checks writable directories for installation
      *
+     * @deprecated Use getMissingWritablePathsForInstallation() to get all missing writable paths required for install
      * @return array
      */
     public function getMissingWritableDirectoriesForInstallation()
