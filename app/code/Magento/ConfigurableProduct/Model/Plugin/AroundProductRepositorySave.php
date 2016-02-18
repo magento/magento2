@@ -64,7 +64,7 @@ class AroundProductRepositorySave
             return $result;
         }
 
-        $extensionAttributes = $product->getExtensionAttributes();
+        $extensionAttributes = $result->getExtensionAttributes();
         if ($extensionAttributes === null) {
             return $result;
         }
@@ -97,17 +97,9 @@ class AroundProductRepositorySave
     private function validateProductLinks(array $attributeCodes, array $linkIds)
     {
         $valueMap = [];
-        if (empty($attributeCodes) && !empty($linkIds)) {
-            throw new InputException(
-                __('The configurable product does not have any variation attribute.')
-            );
-        }
 
         foreach ($linkIds as $productId) {
             $variation = $this->productFactory->create()->load($productId);
-            if (!$variation->getId()) {
-                throw new InputException(__('Product with id "%1" does not exist.', $productId));
-            }
             $valueKey = '';
             foreach ($attributeCodes as $attributeCode) {
                 if (!$variation->getData($attributeCode)) {
