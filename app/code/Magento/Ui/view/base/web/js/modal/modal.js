@@ -384,17 +384,23 @@ define([
          * Creates buttons pane.
          */
         _createButtons: function () {
-            var that = this;
-
             this.buttons = this._getElem(this.options.modalAction);
             _.each(this.options.buttons, function (btn, key) {
-                var button = that.buttons[key];
+                var button = this.buttons[key];
 
                 if (btn.attr) {
                     $(button).attr(btn.attr);
                 }
-                $(button).on('click', _.bind(btn.click, that));
-            });
+
+                if (btn.class) {
+                    $(button).addClass(btn.class);
+                }
+
+                if (!btn.click) {
+                    btn.click = this.closeModal;
+                }
+                $(button).on('click', _.bind(btn.click, this));
+            }, this);
         },
 
         /**
