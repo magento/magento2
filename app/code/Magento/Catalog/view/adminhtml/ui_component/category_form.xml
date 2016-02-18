@@ -255,6 +255,7 @@
                         <item name="true" xsi:type="string">1</item>
                         <item name="false" xsi:type="string">0</item>
                     </item>
+                    <item name="default" xsi:type="number">1</item>
                 </item>
             </argument>
         </field>
