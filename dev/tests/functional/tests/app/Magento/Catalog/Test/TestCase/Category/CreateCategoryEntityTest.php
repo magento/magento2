@@ -69,7 +69,6 @@ class CreateCategoryEntityTest extends Injectable
      */
     public function test(Category $category, $addCategory)
     {
-        $this->markTestIncomplete('MAGETWO-48731');
         $this->catalogCategoryIndex->open();
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($category, false);
         $this->catalogCategoryIndex->getTreeCategories()->$addCategory();
