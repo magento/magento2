@@ -75,7 +75,6 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
      */
     public function setScopeConfig(ScopeConfigInterface $scopeConfig)
     {
-
         $this->scopeConfig = $scopeConfig;
     }
 
@@ -87,7 +86,6 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
      */
     public function getScopeConfig()
     {
-
         if (!($this->scopeConfig instanceof \Magento\Framework\App\Config\ScopeConfigInterface)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
                 'Magento\Framework\App\Config\ScopeConfigInterface'

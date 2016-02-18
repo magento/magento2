@@ -95,7 +95,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      */
     public function setAccountManagementHelper(AccountManagement $accountManagementHelper)
     {
-
         $this->accountManagementHelper = $accountManagementHelper;
     }
 
@@ -107,7 +106,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      */
     public function getAccountManagementHelper()
     {
-
         if (!($this->accountManagementHelper instanceof \Magento\Customer\Helper\AccountManagement)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
                 'Magento\Customer\Helper\AccountManagement'
@@ -138,7 +136,6 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      */
     public function getEmailNotification()
     {
-
         if (!($this->emailNotification instanceof \Magento\Customer\Helper\EmailNotification)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
                 'Magento\Customer\Helper\EmailNotification'
