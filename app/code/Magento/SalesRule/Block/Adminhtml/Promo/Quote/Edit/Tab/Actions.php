@@ -133,7 +133,6 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
         return parent::_prepareForm();
     }
 
-
     /**
      * Handles addition of actions tab to supplied form.
      *
