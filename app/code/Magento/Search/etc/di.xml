@@ -75,4 +75,13 @@
             </argument>
         </arguments>
     </type>
+    <preference for="Magento\Framework\Search\SearchEngine\ConfigInterface" type="Magento\Search\Model\SearchEngine\Config" />
+    <type name="Magento\Search\Model\SearchEngine\Config">
+        <arguments>
+            <argument name="dataStorage" xsi:type="object">Magento\Search\Model\SearchEngine\Config\Data</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Model\Menu\Builder">
+        <plugin name="SearchTermMenuBuilder" type="Magento\Search\Model\SearchEngine\MenuBuilder" />
+    </type>
 </config>
