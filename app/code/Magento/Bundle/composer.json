@@ -17,7 +17,8 @@
         "magento/module-gift-message": "100.0.*",
         "magento/framework": "100.0.*",
         "magento/module-quote": "100.0.*",
-        "magento/module-media-storage": "100.0.*"
+        "magento/module-media-storage": "100.0.*",
+        "magento/module-ui": "100.0.*"
     },
     "suggest": {
         "magento/module-webapi": "100.0.*",

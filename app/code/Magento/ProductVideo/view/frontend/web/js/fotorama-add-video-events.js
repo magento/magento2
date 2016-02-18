@@ -93,7 +93,8 @@ define([
     $.widget('mage.AddFotoramaVideoEvents', {
         options: {
             videoData: '',
-            videoSettings: ''
+            videoSettings: '',
+            optionsVideoData: ''
         },
 
         PV: 'product-video', // [CONST]
@@ -108,6 +109,7 @@ define([
         Base: 0, //on check for video is base this setting become true if there is any video with base role
         MobileMaxWidth: 767,
         GP: 'gallery-placeholder', //gallery placeholder class is needed to find and erase <script> tag
+        videoData: null,
 
         /**
          * Creates widget
@@ -126,6 +128,7 @@ define([
          * @private
          */
         _initialize: function () {
+            this._loadVideoData();
             if (this._checkForVideoExist()) {
                 this._checkFullscreen();
                 this._listenForFullscreen();
@@ -142,6 +145,32 @@ define([
                 this.options.videoData = options.videoData;
             }
             this._initialize();
+        },
+
+        /**
+         *
+         * @private
+         */
+        _loadVideoData: function () {
+            var $widget = this;
+
+            if (!$widget.videoData) {
+                $widget.videoData = $widget.options.VideoData;
+            }
+
+            $('#product-options-wrapper').find('[option-selected]').each(function () {
+                var key = $(this).attr('attribute-code') + '_' + $(this).attr('option-selected');
+
+                if ($widget.options.optionsVideoData && $widget.options.optionsVideoData[key]) {
+                    $widget.options.VideoData = $widget.options.optionsVideoData[key];
+                } else {
+                    $widget.options.VideoData = $widget.videoData;
+                }
+            });
+
+            if (!$('#product-options-wrapper').find('[option-selected]').length) {
+                $widget.options.VideoData = $widget.videoData;
+            }
         },
 
         /**
@@ -629,7 +658,13 @@ define([
          */
         _unloadVideoPlayer: function ($wrapper, current, close) {
             var self = this;
+
+            if (!$wrapper) {
+                return;
+            }
+
             $wrapper.find('.' + this.PVLOADED).removeClass(this.PVLOADED);
+
             $wrapper.find('.' + this.PV).each(function () {
                 var $item = $(this).parent(),
                     cloneVideoDiv,
