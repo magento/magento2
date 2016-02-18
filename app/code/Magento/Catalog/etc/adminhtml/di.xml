@@ -146,7 +146,7 @@
     </type>
     <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\System" shared="false">
         <arguments>
-            <argument name="urlSubmit" xsi:type="string">catalogstaging/product/save</argument>
+            <argument name="urlSubmit" xsi:type="string">catalog/product/save</argument>
         </arguments>
     </type>
 </config>
