@@ -30,6 +30,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
+     * Configurable product options SKU list
+     *
+     * @var array
+     */
+    protected $optionSkuList = ['Configurable 1-Option 1', 'Configurable 1-Option 2'];
+
+    /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
@@ -37,9 +44,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->model = $this->objectManager->create(
-            'Magento\CatalogImportExport\Model\Import\Product'
-        );
+        $this->model = $this->objectManager->create('Magento\CatalogImportExport\Model\Import\Product');
     }
 
     /**
@@ -74,28 +79,29 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($errors->getErrorsCount() == 0);
         $this->model->importData();
 
+        /** @var \Magento\Catalog\Model\ResourceModel\Product $resource */
         $resource = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Product');
         $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
         $this->assertTrue(is_numeric($productId));
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create(
-            'Magento\Catalog\Model\Product'
-        );
+        $product = $this->objectManager->create('Magento\Catalog\Model\Product');
         $product->load($productId);
 
         $this->assertFalse($product->isObjectNew());
         $this->assertEquals(self::TEST_PRODUCT_NAME, $product->getName());
         $this->assertEquals(self::TEST_PRODUCT_TYPE, $product->getTypeId());
 
-        $childProductSkuList = [];
         $options = $product->getTypeInstance()->getConfigurableOptions($product);
         foreach ($options as $option) {
             foreach ($option as $optionData) {
-                $childProductSkuList[] = $optionData['sku'];
+                $this->assertContains($optionData['sku'], $this->optionSkuList);
             }
         }
-        sort($childProductSkuList);
-        $this->assertEquals($childProductSkuList, ['Configurable 1-Option 1', 'Configurable 1-Option 2']);
+
+        $optionsIdList = $resource->getProductsIdsBySkus($this->optionSkuList);
+        foreach ($optionsIdList as $optionId) {
+            $this->assertArrayHasKey($optionId, $product->getExtensionAttributes()->getConfigurableProductLinks());
+        }
 
         $configurableOptionCollection = $product->getExtensionAttributes()->getConfigurableProductOptions();
         $this->assertEquals(1, count($configurableOptionCollection));
@@ -103,6 +109,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $optionData = $option->getData();
             $this->assertArrayHasKey('product_super_attribute_id', $optionData);
             $this->assertArrayHasKey('product_id', $optionData);
+            $this->assertEquals($product->getId(), $optionData['product_id']);
             $this->assertArrayHasKey('attribute_id', $optionData);
             $this->assertArrayHasKey('position', $optionData);
             $this->assertArrayHasKey('extension_attributes', $optionData);
