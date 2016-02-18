@@ -8,6 +8,7 @@
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\Framework\Model\Entity\MetadataPool;
 
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
@@ -17,12 +18,12 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @var \Magento\Catalog\Model\ResourceModel\Product\Relation
      */
-    protected $_catalogProductRelation;
+    protected $catalogProductRelation;
 
     /**
      * @var MetadataPool
      */
-    protected $metadataPool;
+    private $metadataPool;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -36,7 +37,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         MetadataPool $metadataPool,
         $connectionName = null
     ) {
-        $this->_catalogProductRelation = $catalogProductRelation;
+        $this->catalogProductRelation = $catalogProductRelation;
         $this->metadataPool = $metadataPool;
         parent::__construct($context, $connectionName);
     }
@@ -52,45 +53,64 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
+     * Get product entity id by product attribute
+     *
+     * @param OptionInterface $option
+     * @return int
+     */
+    public function getEntityIdByAttribute(OptionInterface $option)
+    {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+
+        $select = $this->getConnection()->select()->from(
+            ['e' => $this->getTable('catalog_product_entity')],
+            ['e.entity_id']
+        )->where(
+            'e.' . $metadata->getLinkField() . '=?',
+            $option->getProductId()
+        )->limit(1);
+
+        return (int) $this->getConnection()->fetchOne($select);
+    }
+
+    /**
      * Save configurable product relations
      *
      * @param \Magento\Catalog\Model\Product $mainProduct the parent id
      * @param array $productIds the children id array
      * @return $this
      */
-    public function saveProducts($mainProduct, $productIds)
+    public function saveProducts($mainProduct, array $productIds)
     {
-        $isProductInstance = false;
-        if ($mainProduct instanceof \Magento\Catalog\Model\Product) {
-            $mainProductId = $mainProduct->getId();
-            $isProductInstance = true;
-        }
-        $old = [];
-        if (!$mainProduct->getIsDuplicate()) {
-            $old = $mainProduct->getTypeInstance()->getUsedProductIds($mainProduct);
+        if (!$mainProduct instanceof ProductInterface) {
+            return $this;
         }
 
-        $insert = array_diff($productIds, $old);
-        $delete = array_diff($old, $productIds);
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $productId = $mainProduct->getData($metadata->getLinkField());
 
-        if ((!empty($insert) || !empty($delete)) && $isProductInstance) {
-            $mainProduct->setIsRelationsChanged(true);
+        $data = [];
+        foreach ($productIds as $id) {
+            $data[] = ['product_id' => (int) $id, 'parent_id' => (int) $productId];
         }
 
-        if (!empty($delete)) {
-            $where = ['parent_id = ?' => $mainProductId, 'product_id IN(?)' => $delete];
-            $this->getConnection()->delete($this->getMainTable(), $where);
+        if (!empty($data)) {
+            $this->getConnection()->insertOnDuplicate(
+                $this->getMainTable(),
+                $data,
+                ['product_id', 'parent_id']
+            );
         }
-        if (!empty($insert)) {
-            $data = [];
-            foreach ($insert as $childId) {
-                $data[] = ['product_id' => (int)$childId, 'parent_id' => (int)$mainProductId];
-            }
-            $this->getConnection()->insertMultiple($this->getMainTable(), $data);
+
+        $where = ['parent_id = ?' => $productId];
+        if (!empty($productIds)) {
+            $where['product_id NOT IN(?)'] = $productIds;
         }
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+
+        $this->getConnection()->delete($this->getMainTable(), $where);
+
         // configurable product relations should be added to relation table
-        $this->_catalogProductRelation->processRelations($mainProduct->getData($linkField), $productIds);
+        $this->catalogProductRelation->processRelations($productId, $productIds);
 
         return $this;
     }
@@ -108,15 +128,16 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getChildrenIds($parentId, $required = true)
     {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         $select = $this->getConnection()->select()->from(
-            ['l' => $this->getMainTable()],
-            ['product_id', 'parent_id']
-        )->join(
             ['e' => $this->getTable('catalog_product_entity')],
-            'e.entity_id = l.product_id AND e.required_options = 0',
+            ['l.product_id']
+        )->join(
+            ['l' => $this->getMainTable()],
+            'l.parent_id = e.' . $metadata->getLinkField(),
             []
         )->where(
-            'parent_id IN (?)',
+            'e.entity_id IN (?) AND e.required_options = 0',
             $parentId
         );
 
@@ -129,7 +150,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Retrieve parent ids array by requered child
+     * Retrieve parent ids array by required child
      *
      * @param int|array $childId
      * @return string[]
@@ -138,15 +159,19 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $parentIds = [];
 
-        $select = $this->getConnection()->select()->from(
-            $this->getMainTable(),
-            ['product_id', 'parent_id']
-        )->where(
-            'product_id IN(?)',
-            $childId
-        );
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+
+        $select = $this->getConnection()
+            ->select()
+            ->from(['l' => $this->getMainTable()], [])
+            ->join(
+                ['e' => $this->getTable('catalog_product_entity')],
+                'e.' . $metadata->getLinkField() . ' = l.parent_id',
+                ['e.entity_id']
+            )->where('l.product_id IN(?)', $childId);
+
         foreach ($this->getConnection()->fetchAll($select) as $row) {
-            $parentIds[] = $row['parent_id'];
+            $parentIds[] = $row['entity_id'];
         }
 
         return $parentIds;
@@ -161,18 +186,23 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getConfigurableOptions($product, $attributes)
     {
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $attributesOptionsData = [];
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $productLinkFieldId = $product->getData($metadata->getLinkField());
         foreach ($attributes as $superAttribute) {
             $select = $this->getConnection()->select()->from(
                 ['super_attribute' => $this->getTable('catalog_product_super_attribute')],
                 [
                     'sku' => 'entity.sku',
-                    'product_id' => 'super_attribute.product_id',
+                    'product_id' => 'product_entity.entity_id',
                     'attribute_code' => 'attribute.attribute_code',
                     'option_title' => 'option_value.value',
                     'super_attribute_label' => 'attribute_label.value',
                 ]
+            )->joinInner(
+                ['product_entity' => $this->getTable('catalog_product_entity')],
+                'product_entity.' . $metadata->getLinkField() . ' = super_attribute.product_id',
+                []
             )->joinInner(
                 ['product_link' => $this->getTable('catalog_product_super_link')],
                 'product_link.parent_id = super_attribute.product_id',
@@ -183,7 +213,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 []
             )->joinInner(
                 ['entity' => $this->getTable('catalog_product_entity')],
-                "entity.{$linkField} = product_link.product_id",
+                'entity.entity_id = product_link.product_id',
                 []
             )->joinInner(
                 ['entity_value' => $superAttribute->getBackendTable()],
@@ -192,7 +222,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     [
                         'entity_value.attribute_id = super_attribute.attribute_id',
                         'entity_value.store_id = 0',
-                        "entity_value.{$linkField} = product_link.product_id"
+                        "entity_value.{$metadata->getLinkField()} = product_link.product_id"
                     ]
                 ),
                 []
@@ -218,9 +248,8 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 []
             )->where(
                 'super_attribute.product_id = ?',
-                $product->getId()
+                $productLinkFieldId
             );
-
             $attributesOptionsData[$superAttribute->getAttributeId()] = $this->getConnection()->fetchAll($select);
         }
         return $attributesOptionsData;
