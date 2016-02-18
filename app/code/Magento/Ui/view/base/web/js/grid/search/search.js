@@ -45,7 +45,7 @@ define([
          * @returns {Search} Chainable.
          */
         initialize: function () {
-            var urlParams = window.location.href.slice(window.location.href.search("[\&\?](search=)")).split('&'),
+            var urlParams = window.location.href.slice(window.location.href.search('[\&\?](search=)')).split('&'),
                 searchTerm = [];
 
             this._super()
