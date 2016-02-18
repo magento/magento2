@@ -321,6 +321,18 @@ class ItemRepository implements OrderItemRepositoryInterface
     }
 
     /**
+     * The setter function to inject the mocked dependency during unit test
+     *
+     * @param OrderItemExtension $orderItemExtension
+     * @return void
+     * @deprecated
+     */
+    public function setOrderItemExtensionDependency($orderItemExtension)
+    {
+        $this->orderItemExtension = $orderItemExtension;
+    }
+
+    /**
      * Get the new ShippingBuilder dependency for application code
      *
      * @return ShippingBuilder
@@ -334,5 +346,17 @@ class ItemRepository implements OrderItemRepositoryInterface
             );
         }
         return $this->shippingBuilder;
+    }
+
+    /**
+     * The setter function to inject the mocked dependency during unit test
+     *
+     * @param ShippingBuilder shippingBuilder
+     * @return void
+     * @deprecated
+     */
+    public function setShippingBuilderDependency($shippingBuilder)
+    {
+        $this->shippingBuilder = $shippingBuilder;
     }
 }
