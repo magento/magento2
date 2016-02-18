@@ -11,6 +11,16 @@ use Magento\ImportExport\Model\Import;
 class GroupedTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Configurable product test Name
+     */
+    const TEST_PRODUCT_NAME = 'Test Grouped';
+
+    /**
+     * Configurable product test Type
+     */
+    const TEST_PRODUCT_TYPE = 'grouped';
+
+    /**
      * @var \Magento\CatalogImportExport\Model\Import\Product
      */
     protected $model;
@@ -19,6 +29,13 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
+
+    /**
+     * Grouped product options SKU list
+     *
+     * @var array
+     */
+    protected $optionSkuList = ['Simple for Grouped 1', 'Simple for Grouped 2'];
 
     protected function setUp()
     {
@@ -64,15 +81,14 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $product = $this->objectManager->create('Magento\Catalog\Model\Product');
         $product->load($productId);
 
-        $childProducts = $product->getTypeInstance()->getAssociatedProducts($product);
+        $this->assertFalse($product->isObjectNew());
+        $this->assertEquals(self::TEST_PRODUCT_NAME, $product->getName());
+        $this->assertEquals(self::TEST_PRODUCT_TYPE, $product->getTypeId());
 
-        $childProductSkus = [];
-        foreach ($childProducts as $childProduct) {
-            $childProductSkus[] = $childProduct->getSku();
+        $childProductCollection = $product->getTypeInstance()->getAssociatedProducts($product);
+
+        foreach ($childProductCollection as $childProduct) {
+            $this->assertContains($childProduct->getSku(), $this->optionSkuList);
         }
-
-        sort($childProductSkus);
-
-        $this->assertEquals($childProductSkus, ['Simple for Grouped 1', 'Simple for Grouped 2']);
     }
 }
