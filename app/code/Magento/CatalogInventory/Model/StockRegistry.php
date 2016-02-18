@@ -11,9 +11,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\CatalogInventory\Model\Spi\StockResolverInterface;
 use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
-use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
 
 /**
  * Class StockRegistry
@@ -48,48 +46,36 @@ class StockRegistry implements StockRegistryInterface
     protected $criteriaFactory;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Spi\StockResolverInterface
-     */
-    protected $stockResolver;
-
-    /**
-     * @var StockStateProviderInterface
-     */
-    protected $stockStateProvider;
-
-    /**
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockRegistryProviderInterface $stockRegistryProvider
      * @param StockItemRepositoryInterface $stockItemRepository
      * @param StockItemCriteriaInterfaceFactory $criteriaFactory
      * @param ProductFactory $productFactory
-     * @param StockResolverInterface $stockResolver
-     * @param StockStateProviderInterface $stockStateProvider
      */
     public function __construct(
         StockConfigurationInterface $stockConfiguration,
         StockRegistryProviderInterface $stockRegistryProvider,
         StockItemRepositoryInterface $stockItemRepository,
         StockItemCriteriaInterfaceFactory $criteriaFactory,
-        ProductFactory $productFactory,
-        StockResolverInterface $stockResolver,
-        StockStateProviderInterface $stockStateProvider
+        ProductFactory $productFactory
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->stockRegistryProvider = $stockRegistryProvider;
         $this->stockItemRepository = $stockItemRepository;
         $this->criteriaFactory = $criteriaFactory;
         $this->productFactory = $productFactory;
-        $this->stockResolver = $stockResolver;
-        $this->stockStateProvider = $stockStateProvider;
     }
 
     /**
-     * @inheritdoc
+     * @param int $scopeId
+     * @return \Magento\CatalogInventory\Api\Data\StockInterface
      */
-    public function getStock($stockId = null)
+    public function getStock($scopeId = null)
     {
-        return $this->stockRegistryProvider->getStock($stockId);
+        //if (!$scopeId) {
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        //}
+        return $this->stockRegistryProvider->getStock($scopeId);
     }
 
     /**
@@ -99,12 +85,10 @@ class StockRegistry implements StockRegistryInterface
      */
     public function getStockItem($productId, $scopeId = null)
     {
-        if (!$scopeId) {
-            $scopeId = $this->stockConfiguration->getDefaultScopeId();
-        }
-        $stockId = $this->stockResolver->getStockId($productId, $scopeId);
-
-        return $this->stockRegistryProvider->getStockItem($productId, $stockId);
+        //if (!$scopeId) {
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        //}
+        return $this->stockRegistryProvider->getStockItem($productId, $scopeId);
     }
 
     /**
@@ -115,12 +99,11 @@ class StockRegistry implements StockRegistryInterface
      */
     public function getStockItemBySku($productSku, $scopeId = null)
     {
-        if (!$scopeId) {
-            $scopeId = $this->stockConfiguration->getDefaultScopeId();
-        }
+        //if (!$scopeId) {
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        //}
         $productId = $this->resolveProductId($productSku);
-        $stockId = $this->stockResolver->getStockId($productId, $scopeId);
-        return $this->stockRegistryProvider->getStockItem($productId, $stockId);
+        return $this->stockRegistryProvider->getStockItem($productId, $scopeId);
     }
 
     /**
@@ -130,11 +113,10 @@ class StockRegistry implements StockRegistryInterface
      */
     public function getStockStatus($productId, $scopeId = null)
     {
-        if (!$scopeId) {
-            $scopeId = $this->stockConfiguration->getDefaultScopeId();
-        }
-        $stockId = $this->stockResolver->getStockId($productId, $scopeId);
-        return $this->stockRegistryProvider->getStockStatus($productId, $stockId);
+        //if (!$scopeId) {
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        //}
+        return $this->stockRegistryProvider->getStockStatus($productId, $scopeId);
     }
 
     /**
@@ -145,12 +127,11 @@ class StockRegistry implements StockRegistryInterface
      */
     public function getStockStatusBySku($productSku, $scopeId = null)
     {
-        if (!$scopeId) {
-            $scopeId = $this->stockConfiguration->getDefaultScopeId();
-        }
+        //if (!$scopeId) {
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        //}
         $productId = $this->resolveProductId($productSku);
-        $stockId = $this->stockResolver->getStockId($productId, $scopeId);
-        return $this->getStockStatus($productId, $stockId);
+        return $this->getStockStatus($productId, $scopeId);
     }
 
     /**
@@ -161,11 +142,10 @@ class StockRegistry implements StockRegistryInterface
      */
     public function getProductStockStatus($productId, $scopeId = null)
     {
-        if (!$scopeId) {
-            $scopeId = $this->stockConfiguration->getDefaultScopeId();
-        }
-        $stockId = $this->stockResolver->getStockId($productId, $scopeId);
-        $stockStatus = $this->getStockStatus($productId, $stockId);
+        //if (!$scopeId) {
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        //}
+        $stockStatus = $this->getStockStatus($productId, $scopeId);
         return $stockStatus->getStockStatus();
     }
 
@@ -177,12 +157,11 @@ class StockRegistry implements StockRegistryInterface
      */
     public function getProductStockStatusBySku($productSku, $scopeId = null)
     {
-        if (!$scopeId) {
-            $scopeId = $this->stockConfiguration->getDefaultScopeId();
-        }
+        //if (!$scopeId) {
+        $scopeId = $this->stockConfiguration->getDefaultScopeId();
+        //}
         $productId = $this->resolveProductId($productSku);
-        $stockId = $this->stockResolver->getStockId($productId, $scopeId);
-        return $this->getProductStockStatus($productId, $stockId);
+        return $this->getProductStockStatus($productId, $scopeId);
     }
 
     /**

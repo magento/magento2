@@ -36,11 +36,6 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     protected $_scopeConfig;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
-     */
-    protected $metadataPool;
-
-    /**
      * Class constructor
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -54,13 +49,12 @@ class DefaultStock extends AbstractIndexer implements StockInterface
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         $connectionName = null
     ) {
         $this->_scopeConfig = $scopeConfig;
-        $this->metadataPool = $metadataPool;
-        parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
+        parent::__construct($context, $tableStrategy, $eavConfig, $metadataPool, $connectionName);
     }
 
     /**

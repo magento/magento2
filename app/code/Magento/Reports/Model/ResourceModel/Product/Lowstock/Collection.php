@@ -46,6 +46,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
     protected $_itemResource;
 
     /**
+     * Collection constructor.
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -65,6 +66,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation
      * @param \Magento\Catalog\Model\ResourceModel\Product $product
      * @param \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory
      * @param \Magento\Catalog\Model\Product\Type $productType
@@ -72,7 +74,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration
      * @param \Magento\CatalogInventory\Model\ResourceModel\Stock\Item $itemResource
-     * @param mixed $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -96,6 +98,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
+        \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation,
         \Magento\Catalog\Model\ResourceModel\Product $product,
         \Magento\Reports\Model\Event\TypeFactory $eventTypeFactory,
         \Magento\Catalog\Model\Product\Type $productType,
@@ -125,6 +128,7 @@ class Collection extends \Magento\Reports\Model\ResourceModel\Product\Collection
             $customerSession,
             $dateTime,
             $groupManagement,
+            $productLimitation,
             $product,
             $eventTypeFactory,
             $productType,

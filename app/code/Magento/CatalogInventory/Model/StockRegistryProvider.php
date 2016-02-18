@@ -15,13 +15,11 @@ use Magento\CatalogInventory\Api\Data\StockStatusInterfaceFactory;
 use Magento\CatalogInventory\Api\StockCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockItemCriteriaInterfaceFactory;
 use Magento\CatalogInventory\Api\StockStatusCriteriaInterfaceFactory;
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class StockRegistryProvider
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
 class StockRegistryProvider implements StockRegistryProviderInterface
 {
@@ -71,11 +69,6 @@ class StockRegistryProvider implements StockRegistryProviderInterface
     protected $stockStatusCriteriaFactory;
 
     /**
-     * @var StockConfigurationInterface
-     */
-    protected $stockConfiguration;
-
-    /**
      * @var array
      */
     protected $stocks = [];
@@ -100,7 +93,6 @@ class StockRegistryProvider implements StockRegistryProviderInterface
      * @param StockCriteriaInterfaceFactory $stockCriteriaFactory
      * @param StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory
      * @param StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory
-     * @param StockConfigurationInterface $stockConfiguration
      */
     public function __construct(
         StockRepositoryInterface $stockRepository,
@@ -111,8 +103,7 @@ class StockRegistryProvider implements StockRegistryProviderInterface
         StockStatusInterfaceFactory $stockStatusFactory,
         StockCriteriaInterfaceFactory $stockCriteriaFactory,
         StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory,
-        StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory,
-        StockConfigurationInterface $stockConfiguration
+        StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory
     ) {
         $this->stockRepository = $stockRepository;
         $this->stockFactory = $stockFactory;
@@ -120,49 +111,43 @@ class StockRegistryProvider implements StockRegistryProviderInterface
         $this->stockItemFactory = $stockItemFactory;
         $this->stockStatusRepository = $stockStatusRepository;
         $this->stockStatusFactory = $stockStatusFactory;
+
         $this->stockCriteriaFactory = $stockCriteriaFactory;
         $this->stockItemCriteriaFactory = $stockItemCriteriaFactory;
         $this->stockStatusCriteriaFactory = $stockStatusCriteriaFactory;
-        $this->stockConfiguration = $stockConfiguration;
     }
 
     /**
-     * @inheritdoc
+     * @param int|null $scopeId
+     * @return \Magento\CatalogInventory\Api\Data\StockInterface
      */
-    public function getStock($stockId)
+    public function getStock($scopeId)
     {
-        if (!isset($this->stocks[$stockId])) {
-            if ($stockId !== null) {
-                $stock = $this->stockRepository->get($stockId);
-            } else {
-                /** @var \Magento\CatalogInventory\Api\StockCriteriaInterface $criteria */
-                $criteria = $this->stockCriteriaFactory->create();
-                $criteria->setScopeFilter($this->stockConfiguration->getDefaultScopeId());
-                $collection = $this->stockRepository->getList($criteria);
-                $stock = current($collection->getItems());
-            }
+        if (!isset($this->stocks[$scopeId])) {
+            $criteria = $this->stockCriteriaFactory->create();
+            $criteria->setScopeFilter($scopeId);
+            $collection = $this->stockRepository->getList($criteria);
+            $stock = current($collection->getItems());
             if ($stock && $stock->getStockId()) {
-                $this->stocks[$stockId] = $stock;
+                $this->stocks[$scopeId] = $stock;
             } else {
                 return $this->stockFactory->create();
             }
         }
-        return $this->stocks[$stockId];
+        return $this->stocks[$scopeId];
     }
 
     /**
      * @param int $productId
-     * @param int $stockId
+     * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockItemInterface
      */
-    public function getStockItem($productId, $stockId)
+    public function getStockItem($productId, $scopeId)
     {
-        $key = $stockId . '/' . $productId;
+        $key = $scopeId . '/' . $productId;
         if (!isset($this->stockItems[$key])) {
-            /** @var \Magento\CatalogInventory\Api\StockItemCriteriaInterface $criteria */
             $criteria = $this->stockItemCriteriaFactory->create();
             $criteria->setProductsFilter($productId);
-            $criteria->setStockFilter($this->getStock($stockId));
             $collection = $this->stockItemRepository->getList($criteria);
             $stockItem = current($collection->getItems());
             if ($stockItem && $stockItem->getItemId()) {
@@ -176,17 +161,16 @@ class StockRegistryProvider implements StockRegistryProviderInterface
 
     /**
      * @param int $productId
-     * @param int $stockId
+     * @param int $scopeId
      * @return \Magento\CatalogInventory\Api\Data\StockStatusInterface
      */
-    public function getStockStatus($productId, $stockId)
+    public function getStockStatus($productId, $scopeId)
     {
-        $key = $stockId . '/' . $productId;
+        $key = $scopeId . '/' . $productId;
         if (!isset($this->stockStatuses[$key])) {
-            /** @var \Magento\CatalogInventory\Api\stockStatusCriteriaInterface $criteria */
             $criteria = $this->stockStatusCriteriaFactory->create();
             $criteria->setProductsFilter($productId);
-            $criteria->addFilter('stock', 'stock_id', $stockId);
+            $criteria->setScopeFilter($scopeId);
             $collection = $this->stockStatusRepository->getList($criteria);
             $stockStatus = current($collection->getItems());
             if ($stockStatus && $stockStatus->getProductId()) {

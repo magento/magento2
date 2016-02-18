@@ -1,0 +1,55 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="admin__field" visible="visible" disabled="disabled" css="element.setClasses(element)">
+    <label if="element.label" class="admin__field-label" attr="for: element.uid">
+        <span text="element.label"/>
+    </label>
+
+    <div class="admin__field-control" data-role="grid-wrapper" attr="'data-index': index">
+        <div class="admin__control-table-wrapper">
+            <table class="admin__dynamic-rows admin__control-table" data-role="grid" attr="{'data-index': index}">
+                <thead if="element.columnsHeader">
+                <tr>
+                    <th if="dndConfig.enabled"/>
+
+                    <!-- ko foreach: {data: labels, as: 'item'}  -->
+                    <th text="item.label",
+                        css="$parent.setClasses(item)",
+                        visible="item.visible",
+                        disabled="item.disabled"
+                        attr="{'data-name': name}"/>
+                    <!-- /ko -->
+                </tr>
+                </thead>
+
+                <tbody data-bind="foreach: elems">
+                <tr class="data-row">
+                    <td if="$parent.dndConfig.enabled"
+                        class="_fit"
+                        template="name: $parent.dndConfig.template, data: $parent.dnd"/>
+
+                    <!-- ko foreach: { data: elems, as: 'elem'}  -->
+                    <td if="elem.template"
+                        css="$parents[1].setClasses(elem)"
+                        visible="elem.visible"
+                        disabled="elem.disabled"
+                        template="elem.template"/>
+                    <!-- /ko -->
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="admin__control-table-action" if="element.addButton">
+            <button attr="{disabled: disabled, 'data-action': 'add_new_row'}"
+                    type="button"
+                    click="addChild.bind($data, false, false)">
+                <span text="addButtonLabel"/>
+            </button>
+        </div>
+    </div>
+</div>

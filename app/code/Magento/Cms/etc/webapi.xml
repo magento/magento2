@@ -11,7 +11,7 @@
     <route url="/V1/cmsPage/:pageId" method="GET">
         <service class="Magento\Cms\Api\PageRepositoryInterface" method="getById"/>
         <resources>
-            <resource ref="Magento_Cms::page"/>
+            <resource ref="anonymous"/>
         </resources>
     </route>
     <route url="/V1/cmsPage/search" method="GET">
@@ -42,7 +42,7 @@
     <route url="/V1/cmsBlock/:blockId" method="GET">
         <service class="Magento\Cms\Api\BlockRepositoryInterface" method="getById"/>
         <resources>
-            <resource ref="Magento_Cms::block"/>
+            <resource ref="anonymous"/>
         </resources>
     </route>
     <route url="/V1/cmsBlock/search" method="GET">

@@ -63,7 +63,7 @@ class Save extends \Magento\Search\Controller\Adminhtml\Synonyms
                     $synGroupRepository->save($synGroupModel, true);
                     $this->getMessageManager()->addSuccessMessage(__('You saved the synonym group.'));
                 } catch (MergeConflictException $exception) {
-                    $this->getMessageManager()->addErrorMessage($exception->getMessage());
+                    $this->getMessageManager()->addErrorMessage($this->getErrorMessage($exception));
                     $this->_getSession()->setFormData($data);
                     return $resultRedirect->setPath('*/*/edit', ['group_id' => $synGroupModel->getId()]);
                 }
@@ -75,5 +75,45 @@ class Save extends \Magento\Search\Controller\Adminhtml\Synonyms
             }
         }
         return $resultRedirect->setPath('*/*/');
+    }
+
+    /**
+     * Constructs the error message from the Merge conflict exception
+     *
+     * @param MergeConflictException $exception
+     * @return \Magento\Framework\Phrase
+     */
+    private function getErrorMessage(MergeConflictException $exception)
+    {
+        $data = $this->getRequest()->getPostValue();
+        $conflictingSynonyms = $exception->getConflictingSynonyms();
+
+        foreach ($conflictingSynonyms as $key => $conflictingSynonym) {
+            $conflictingSynonyms[$key] = '(' . implode(',', $conflictingSynonym) . ')';
+        }
+
+        if (count($conflictingSynonyms) == 1) {
+            $conflictingSynonymsMessage = __(
+                'The terms you entered, (%1), ' .
+                'belong to 1 existing synonym group, %2. ' .
+                'Select the "Merge existing synonyms" checkbox so the terms can be merged.',
+                $data['synonyms'],
+                $conflictingSynonyms[0]
+            );
+        } else {
+            $lastConflict = array_pop($conflictingSynonyms);
+            $conflictingInfo = implode(', ', $conflictingSynonyms);
+            $conflictingSynonymsMessage = __(
+                'The terms you entered, (%1), ' .
+                'belong to %2 existing synonym groups, %3 and %4. ' .
+                'Select the "Merge existing synonyms" checkbox so the terms can be merged.',
+                $data['synonyms'],
+                count($conflictingSynonyms) + 1,
+                $conflictingInfo,
+                $lastConflict
+            );
+        }
+
+        return $conflictingSynonymsMessage;
     }
 }
