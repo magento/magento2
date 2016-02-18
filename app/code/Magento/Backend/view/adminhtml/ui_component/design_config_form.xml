@@ -54,7 +54,6 @@
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">User Agent Rules</item>
                         <item name="component" xsi:type="string" translate="true">Magento_Ui/js/dynamic-rows/record</item>
-                        <item name="sortOrder" xsi:type="number">20</item>
                         <item name="isTemplate" xsi:type="boolean">true</item>
                         <item name="is_collection" xsi:type="boolean">true</item>
                         <item name="showFallbackReset" xsi:type="boolean">false</item>

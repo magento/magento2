@@ -133,4 +133,12 @@ class Exceptions extends ArraySerialized
 
         return false;
     }
+
+    /**
+     * @return array
+     */
+    public function getValue()
+    {
+        return $this->getData('value') ?: [];
+    }
 }
