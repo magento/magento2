@@ -881,8 +881,10 @@ class User extends AbstractModel implements StorageInterface, UserInterface
                 'result' => $isCheckSuccessful
             ]
         );
-        $this->reload();
-        if ($this->getLockExpires()) {
+        // Check if lock information has been updated in observers
+        $clonedUser = clone($this);
+        $clonedUser->reload();
+        if ($clonedUser->getLockExpires()) {
             throw new \Magento\Framework\Exception\State\UserLockedException(
                 __('Your account is temporarily disabled.')
             );
