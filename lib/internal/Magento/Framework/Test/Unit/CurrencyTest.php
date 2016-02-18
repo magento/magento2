@@ -16,8 +16,8 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
     {
         $frontendCache = $this->getMock('Magento\Framework\Cache\FrontendInterface', [], [], '', false, false);
         $lowLevelFrontend = $this->getMock('Zend_Cache_Core', [], [], '', false, false);
-        /** @var \Magento\Framework\App\Cache|\PHPUnit_Framework_MockObject_MockObject $appCache */
-        $appCache = $this->getMock('Magento\Framework\App\Cache', [], [], '', false, false);
+        /** @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject $appCache */
+        $appCache = $this->getMock('Magento\Framework\App\CacheInterface', [], [], '', false, false);
         $frontendCache->expects($this->once())->method('getLowLevelFrontend')->willReturn($lowLevelFrontend);
         $appCache->expects($this->once())
             ->method('getFrontend')

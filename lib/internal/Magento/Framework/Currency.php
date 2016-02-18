@@ -5,19 +5,19 @@
  */
 namespace Magento\Framework;
 
-use Magento\Framework\App\Cache;
+use Magento\Framework\App\CacheInterface;
 
 class Currency extends \Zend_Currency implements CurrencyInterface
 {
     /**
      * Creates a currency instance.
      *
-     * @param Cache $appCache
-     * @param  string|array $options Options array or currency short name when string is given
-     * @param  string $locale Locale name
+     * @param CacheInterface $appCache
+     * @param string|array $options Options array or currency short name when string is given
+     * @param string $locale Locale name
      */
     public function __construct(
-        Cache $appCache,
+        CacheInterface $appCache,
         $options = null,
         $locale = null
     ) {
