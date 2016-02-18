@@ -55,7 +55,6 @@ class InterceptorSubstitutionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($outputConfig, $modifier->modify($inputConfig));
     }
 
-
     /**
      * Input config
      *
