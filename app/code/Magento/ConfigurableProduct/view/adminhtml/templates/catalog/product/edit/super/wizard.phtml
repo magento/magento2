@@ -13,27 +13,32 @@ $productMatrix = $block->getProductMatrix();
 $attributes = $block->getProductAttributes();
 $currencySymbol = $block->getCurrencySymbol();
 ?>
-<div data-role="step-wizard-dialog" data-bind="scope: 'modal'">
-    <!-- ko template: getTemplate() --><!-- /ko -->
+<div data-role="step-wizard-dialog" data-bind="scope: 'product_form.product_form.configurableModal'">
+    <!-- ko template: getTemplate() -->
+    <?php
+    /* @escapeNotVerified */ echo $block->getVariationWizard([
+        'attributes' => $attributes,
+        'configurations' => $productMatrix
+    ]);
+    ?>
+    <!-- /ko -->
 </div>
 <script type="text/x-magento-init">
     {
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                    "modal": {
+                    "product_form.product_form.configurableModal": {
                         "component": "Magento_Ui/js/modal/modal-component",
-                        "options": {"type": "slide", "title": "other"},
-                        "children": {
-                            "configurableVariations": {
-                                "component": "Magento_ConfigurableProduct/js/variations/variations",
-                                "variations": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($productMatrix) ?>,
-                                "productAttributes": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributes) ?>,
-                                "productUrl": "<?= /* @noEscape */ $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>",
-                                "currencySymbol": "<?= /* @noEscape */ $currencySymbol ?>",
-                                "configurableProductGrid": "configurableProductGrid"
-                            }
-                        }
+                        "options": {"type": "slide", "title": "<?= /* @escapeNotVerified */  __('Create Product Configurations') ?>"}
+                    },
+                    "configurableVariations": {
+                        "component": "Magento_ConfigurableProduct/js/variations/variations",
+                        "variations": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($productMatrix) ?>,
+                        "productAttributes": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributes) ?>,
+                        "productUrl": "<?= /* @noEscape */ $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>",
+                        "currencySymbol": "<?= /* @noEscape */ $currencySymbol ?>",
+                        "configurableProductGrid": "configurableProductGrid"
                     }
                 }
             }
@@ -42,10 +47,6 @@ $currencySymbol = $block->getCurrencySymbol();
 </script>
 <script>
     require(['jquery'], function ($) {
-        $('[data-role="step-wizard-dialog"]').applyBindings();
-       /* $('body').trigger('contentUpdated');
-        //$('[data-panel="product-variations"]').applyBindings();
-        $('[data-role=somelongstring]').applyBindings();
-        $('[data-role=somelongstring]').trigger('openModal');*/
+        $('[data-role=step-wizard-dialog]').applyBindings();
     })
 </script>
