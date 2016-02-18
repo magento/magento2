@@ -34,12 +34,17 @@ class BundleTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     *
+     *
+     * @var array
+     */
+    protected $optionSkuList = ['Simple 1', 'Simple 2', 'Simple 3'];
+
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->model = $this->objectManager->create(
-            'Magento\CatalogImportExport\Model\Import\Product'
-        );
+        $this->model = $this->objectManager->create('Magento\CatalogImportExport\Model\Import\Product');
     }
 
     /**
@@ -79,9 +84,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $productId = $resource->getIdBySku(self::TEST_PRODUCT_NAME);
         $this->assertTrue(is_numeric($productId));
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create(
-            'Magento\Catalog\Model\Product'
-        );
+        $product = $this->objectManager->create('Magento\Catalog\Model\Product');
         $product->load($productId);
 
         $this->assertFalse($product->isObjectNew());
@@ -90,6 +93,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         //TODO: Uncomment assertion after MAGETWO-49157 fix
         //$this->assertEquals(1, $product->getShipmentType());
 
+        $optionsIdList = $resource->getProductsIdsBySkus($this->optionSkuList);
         $bundleOptions = $product->getExtensionAttributes()->getBundleProductOptions();
         $this->assertEquals(2, count($bundleOptions));
         foreach ($bundleOptions as $optionKey => $option) {
@@ -98,7 +102,9 @@ class BundleTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals(self::TEST_PRODUCT_NAME, $option->getData('sku'));
             $this->assertEquals($optionKey + 1, count($option->getData('product_links')));
             foreach ($option->getData('product_links') as $linkKey => $productLink) {
-                $this->assertEquals('Simple ' . ($optionKey + 1 + $linkKey), $productLink->getData('sku'));
+                $optionSku = 'Simple ' . ($optionKey + 1 + $linkKey);
+                $this->assertEquals($optionsIdList[$optionSku], $productLink->getData('entity_id'));
+                $this->assertEquals($optionSku, $productLink->getData('sku'));
             }
         }
     }
