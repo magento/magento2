@@ -1199,9 +1199,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         return $this->_getData('special_to_date');
     }
 
-    /*******************************************************************************
-     ** Linked products API
-     */
     /**
      * Retrieve array of related products
      *
@@ -1416,9 +1413,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         return $this;
     }
 
-    /*******************************************************************************
-     ** Media API
-     */
     /**
      * Retrieve attributes for media gallery
      *
@@ -2333,7 +2327,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         return $dataArray;
     }
 
-    //@codeCoverageIgnoreEnd
     /**
      * Set product sku
      *

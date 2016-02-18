@@ -191,7 +191,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testLoadFirstVariationWithSwatchImage($imageTypes, $expected, $requiredAttributes)
     {
         $this->getSwatchAttributes($this->productMock);
-        $this->getUsedProducts('swatch_image', $imageTypes + $requiredAttributes);
+        $this->getUsedProducts($imageTypes + $requiredAttributes);
 
         $result = $this->swatchHelperObject->loadFirstVariationWithSwatchImage($this->productMock, $requiredAttributes);
 
@@ -250,7 +250,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     public function testLoadFirstVariationWithImage($imageTypes, $expected, $requiredAttributes)
     {
         $this->getSwatchAttributes($this->productMock);
-        $this->getUsedProducts('image', $imageTypes + $requiredAttributes);
+        $this->getUsedProducts($imageTypes + $requiredAttributes);
 
         $result = $this->swatchHelperObject->loadFirstVariationWithImage($this->productMock, $requiredAttributes);
 
@@ -386,7 +386,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->attributeMock->method('getData')->with('swatch_input_type')->willReturn('visual');
     }
 
-    protected function getUsedProducts($attributeCode, array $attributes)
+    protected function getUsedProducts(array $attributes)
     {
         $this->productMock
             ->expects($this->atLeastOnce())
@@ -545,7 +545,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('__call')
             ->with('getProductAttribute')
             ->willReturn($this->attributeMock);
-
 
         $this->attributeMock->method('setStoreId')->will($this->returnSelf());
         $storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
