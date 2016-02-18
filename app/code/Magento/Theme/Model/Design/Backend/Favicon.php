@@ -5,12 +5,12 @@
  */
 namespace Magento\Theme\Model\Design\Backend;
 
-class Logo extends Image
+class Favicon extends Image
 {
     /**
      * @var string
      */
-    protected $uploadDir = 'logo';
+    protected $uploadDir = 'favicon';
 
     /**
      * Getter for allowed extensions of uploaded files.
@@ -19,6 +19,6 @@ class Logo extends Image
      */
     public function getAllowedExtensions()
     {
-        return ['jpg', 'jpeg', 'gif', 'png', 'svg'];
+        return ['ico', 'png', 'gif', 'jpg', 'jpeg', 'apng', 'svg'];
     }
 }

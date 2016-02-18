@@ -3,12 +3,12 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Ui\Controller\Adminhtml\Component\FileUploader;
+namespace Magento\Theme\Controller\Adminhtml\Design\Config\FileUploader;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\Ui\Model\FileUploader\ImageProcessor;
+use Magento\Theme\Model\Design\Config\FileUploader\ImageProcessor;
 
 class Save extends Action
 {

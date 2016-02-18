@@ -62,10 +62,14 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="label" xsi:type="string" translate="true">Favicon Icon</item>
-                        <item name="dataType" xsi:type="string">text</item>
-                        <item name="formElement" xsi:type="string">file</item>
-                        <item name="dataScope" xsi:type="string">head_shortcut_icon</item>
+                        <item name="formElement" xsi:type="string">fileUploader</item>
+                        <item name="componentType" xsi:type="string">fileUploader</item>
                         <item name="notice" xsi:type="string" translate="true">Allowed file types: ICO, PNG, GIF, JPG, JPEG, APNG, SVG. Not all browsers support all these formats!</item>
+                        <!--<item name="maxFileSize" xsi:type="number">982000</item>-->
+                        <!--<item name="allowedExtensions" xsi:type="string">jpg jpeg gif png svg</item>-->
+                        <item name="uploaderConfig" xsi:type="array">
+                            <item name="url" xsi:type="string">theme/design_config_fileUploader/save</item>
+                        </item>
                     </item>
                 </argument>
             </field>
@@ -160,7 +164,7 @@
                         <item name="maxFileSize" xsi:type="number">982000</item>
                         <item name="allowedExtensions" xsi:type="string">jpg jpeg gif png svg</item>
                         <item name="uploaderConfig" xsi:type="array">
-                            <item name="url" xsi:type="string">mui/component_fileUploader/save</item>
+                            <item name="url" xsi:type="string">theme/design_config_fileUploader/save</item>
                         </item>
                     </item>
                 </argument>
