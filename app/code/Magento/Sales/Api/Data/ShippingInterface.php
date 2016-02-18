@@ -47,7 +47,7 @@ interface ShippingInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @param \Magento\Sales\Api\Data\OrderAddressInterface $address
      * @return $this
      */
-    public function setAddress($address);
+    public function setAddress(\Magento\Sales\Api\Data\OrderAddressInterface $address);
 
     /**
      * Sets method to shipping
@@ -63,5 +63,5 @@ interface ShippingInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @param \Magento\Sales\Api\Data\TotalInterface $total
      * @return $this
      */
-    public function setTotal($total);
+    public function setTotal(\Magento\Sales\Api\Data\TotalInterface $total);
 }
