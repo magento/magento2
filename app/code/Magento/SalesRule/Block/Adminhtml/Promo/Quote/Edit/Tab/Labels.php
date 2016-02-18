@@ -33,7 +33,6 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
         parent::__construct($context, $registry, $formFactory, $data);
     }
 
-
     /**
      * @var string
      */
@@ -116,7 +115,6 @@ class Labels extends \Magento\Backend\Block\Widget\Form\Generic implements
             $rule = $this->ruleFactory->create();
             $rule->load($id);
         }
-
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
