@@ -154,6 +154,7 @@
         border-bottom: 0;
     }
 }
+
 .admin__collapsible-content {
     max-height: 0;
     transform-origin: 0 0;
@@ -163,7 +164,7 @@
 
     &._show {
         max-height: 100%;
-        transform: scaleY(1);
+        transform: none;
         visibility: visible;
     }
 }
@@ -198,6 +199,16 @@
                     left: 0;
                     right: auto;
                 }
+            }
+        }
+    }
+
+    .modal-slide & {
+        .admin__collapsible-title {
+            .__collapsible-title-pattern();
+
+            &:before {
+                left: auto;
             }
         }
     }

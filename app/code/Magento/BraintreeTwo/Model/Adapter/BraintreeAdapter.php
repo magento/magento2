@@ -101,7 +101,7 @@ class BraintreeAdapter
     }
 
     /**
-     * @param string $id
+     * @param string $token
      * @return \Braintree\CreditCard|null
      */
     public function find($token)
@@ -111,6 +111,15 @@ class BraintreeAdapter
         } catch (\Exception $e) {
             return null;
         }
+    }
+
+    /**
+     * @param array $filters
+     * @return \Braintree\ResourceCollection
+     */
+    public function search(array $filters)
+    {
+        return Transaction::search($filters);
     }
 
     /**

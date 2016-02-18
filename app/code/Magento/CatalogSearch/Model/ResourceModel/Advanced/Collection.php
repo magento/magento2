@@ -66,6 +66,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Search\Api\SearchInterface $search
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation
      * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
@@ -93,6 +94,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Search\Api\SearchInterface $search,
+        \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation,
         \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         FilterBuilder $filterBuilder,
@@ -122,6 +124,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $customerSession,
             $dateTime,
             $groupManagement,
+            $productLimitation,
             $connection
         );
     }
