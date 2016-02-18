@@ -6,12 +6,14 @@
 -->
 <div class="fieldset-wrapper"
      css="$data.additionalClasses"
-     attr="'data-level': $data.level">
+     attr="'data-level': $data.level, 'data-index': index"
+     data-bind="visible: $data.visible === undefined ? true: $data.visible">
     <div class="fieldset-wrapper-title"
          tabindex="0"
          click="toggleOpened"
          keyboard="13: toggleOpened"
-         visible="label">
+         if="label">
+
         <strong css="'admin__collapsible-title': collapsible,
                       title: !collapsible,
                       '_changed': changed,
@@ -36,6 +38,7 @@
             </span>
         </strong>
     </div>
+
     <div class="admin__fieldset-wrapper-content"
          css="'admin__collapsible-content': collapsible, '_show': opened, '_hide': !opened">
         <fieldset class="admin__fieldset" each="data: elems, as: 'element'" render=""/>
