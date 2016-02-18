@@ -139,6 +139,16 @@ class Eav extends AbstractModifier
     private $bannedInputTypes = ['media_image'];
 
     /**
+     * @var array
+     */
+    private $attributesToDisable;
+
+    /**
+     * @var array
+     */
+    private $attributesToEliminate;
+
+    /**
      * Initialize dependencies
      *
      * @param LocatorInterface $locator
@@ -155,6 +165,8 @@ class Eav extends AbstractModifier
      * @param SortOrderBuilder $sortOrderBuilder
      * @param EavAttributeFactory $eavAttributeFactory
      * @param Translit $translitFilter
+     * @param array $attributesToDisable
+     * @param array $attributesToEliminate
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -171,7 +183,9 @@ class Eav extends AbstractModifier
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SortOrderBuilder $sortOrderBuilder,
         EavAttributeFactory $eavAttributeFactory,
-        Translit $translitFilter
+        Translit $translitFilter,
+        $attributesToDisable = [],
+        $attributesToEliminate = []
     ) {
         $this->locator = $locator;
         $this->eavValidationRules = $eavValidationRules;
@@ -187,6 +201,8 @@ class Eav extends AbstractModifier
         $this->sortOrderBuilder = $sortOrderBuilder;
         $this->eavAttributeFactory = $eavAttributeFactory;
         $this->translitFilter = $translitFilter;
+        $this->attributesToDisable = $attributesToDisable;
+        $this->attributesToEliminate = $attributesToEliminate;
     }
 
     /**
@@ -230,6 +246,9 @@ class Eav extends AbstractModifier
             }
 
             $code = $attribute->getAttributeCode();
+           if (in_array($code, $this->attributesToEliminate)) {
+               continue;
+            }
             $canDisplayService = $this->canDisplayUseDefault($attribute);
             $usedDefault = $this->usedDefault($attribute);
 
@@ -276,6 +295,9 @@ class Eav extends AbstractModifier
                 $child['arguments']['data']['config']['disabled'] = $usedDefault;
             }
 
+            if (in_array($code, $this->attributesToDisable)) {
+                $child['arguments']['data']['config']['disabled'] = true;
+            }
             // TODO: getAttributeModel() should not be used when MAGETWO-48284 is complete
             if (($rules = $this->eavValidationRules->build($this->getAttributeModel($attribute), $child))) {
                 $child['arguments']['data']['config']['validation'] = $rules;
