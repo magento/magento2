@@ -125,6 +125,11 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
     protected $_ruleProductProcessor;
 
     /**
+     * @var Data\Condition\Converter
+     */
+    protected $ruleConditionConverter;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -141,6 +146,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
      * @param \Magento\CatalogRule\Helper\Data $catalogRuleData
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypesList
      * @param Indexer\Rule\RuleProductProcessor $ruleProductProcessor
+     * @param Data\Condition\Converter $ruleConditionConverter
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $relatedCacheTypes
@@ -165,6 +171,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
         \Magento\CatalogRule\Helper\Data $catalogRuleData,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypesList,
         \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor $ruleProductProcessor,
+        \Magento\CatalogRule\Model\Data\Condition\Converter $ruleConditionConverter,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $relatedCacheTypes = [],
@@ -181,6 +188,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
         $this->_cacheTypesList = $cacheTypesList;
         $this->_relatedCacheTypes = $relatedCacheTypes;
         $this->_ruleProductProcessor = $ruleProductProcessor;
+        $this->ruleConditionConverter = $ruleConditionConverter;
+
         parent::__construct(
             $context,
             $registry,
@@ -352,11 +361,6 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
         $action = $dataObject->getData('simple_action');
         $discount = $dataObject->getData('discount_amount');
         $result = array_merge($result, $this->validateDiscount($action, $discount));
-        if ($dataObject->getData('sub_is_enable') == 1) {
-            $action = $dataObject->getData('sub_simple_action');
-            $discount = $dataObject->getData('sub_discount_amount');
-            $result = array_merge($result, $this->validateDiscount($action, $discount));
-        }
 
         return !empty($result) ? $result : true;
     }
@@ -418,15 +422,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
             if ($rulesData) {
                 foreach ($rulesData as $ruleData) {
                     if ($product->getParentId()) {
-                        if (!empty($ruleData['sub_simple_action'])) {
-                            $priceRules = $this->_catalogRuleData->calcPriceRule(
-                                $ruleData['sub_simple_action'],
-                                $ruleData['sub_discount_amount'],
-                                $priceRules ? $priceRules : $price
-                            );
-                        } else {
-                            $priceRules = $priceRules ? $priceRules : $price;
-                        }
+                        $priceRules = $priceRules ? $priceRules : $price;
                         if ($ruleData['action_stop']) {
                             break;
                         }
@@ -576,6 +572,15 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
         return $result;
     }
 
+    /**
+     * @param string $formName
+     * @return string
+     */
+    public function getConditionsFieldSetId($formName = '')
+    {
+        return $formName . 'rule_conditions_fieldset_' . $this->getId();
+    }
+
     //@codeCoverageIgnoreStart
     /**
      * {@inheritdoc}
@@ -644,33 +649,20 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
     /**
      * {@inheritdoc}
      */
-    public function getConditionsSerialized()
+    public function getRuleCondition()
     {
-        return $this->getData(self::CONDITIONS_SERIALIZED);
+        return $this->ruleConditionConverter->arrayToDataModel($this->getConditions()->asArray());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setConditionsSerialized($conditions)
+    public function setRuleCondition($condition)
     {
-        return $this->setData(self::CONDITIONS_SERIALIZED, $conditions);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getActionsSerialized()
-    {
-        return $this->getData(self::ACTIONS_SERIALIZED);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setActionsSerialized($actions)
-    {
-        return $this->setData(self::ACTIONS_SERIALIZED, $actions);
+        $this->getConditions()
+            ->setConditions([])
+            ->loadArray($this->ruleConditionConverter->dataModelToArray($condition));
+        return $this;
     }
 
     /**

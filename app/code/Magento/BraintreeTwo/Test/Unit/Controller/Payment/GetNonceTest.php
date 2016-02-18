@@ -24,7 +24,6 @@ use Psr\Log\LoggerInterface;
  */
 class GetNonceTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var GetNonce
      */

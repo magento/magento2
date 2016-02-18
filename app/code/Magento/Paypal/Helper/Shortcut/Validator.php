@@ -17,11 +17,6 @@ class Validator implements ValidatorInterface
     private $_paypalConfigFactory;
 
     /**
-     * @var \Magento\Checkout\Model\Session
-     */
-    private $_checkoutSession;
-
-    /**
      * @var \Magento\Framework\Registry
      */
     private $_registry;
