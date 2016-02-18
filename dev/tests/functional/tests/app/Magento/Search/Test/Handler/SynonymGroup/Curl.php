@@ -21,7 +21,7 @@ class Curl extends AbstractCurl implements SynonymGroupInterface
      *
      * @var string
      */
-    protected $saveUrl = 'search/synonym/save/back/edit';
+    protected $saveUrl = 'search/synonyms/save/';
 
     /**
      * Mapping values for data.
@@ -29,19 +29,15 @@ class Curl extends AbstractCurl implements SynonymGroupInterface
      * @var array
      */
     protected $mappingData = [
-        'is_active' => [
+        'mergeOnConflict' => [
             'Yes' => 1,
             'No' => 0,
         ],
-    ];
-
-    /**
-     * Mapping values for Stores.
-     *
-     * @var array
-     */
-    protected $scope_id = [
-        'All Store Views' => 0,
+        'scope_id' => [
+            'All Websites' => '0:0',
+            'All Store Views' => '1:0',
+            'Default Store View' => '1:1',
+        ],
     ];
 
     /**
@@ -53,7 +49,8 @@ class Curl extends AbstractCurl implements SynonymGroupInterface
      */
     public function persist(FixtureInterface $fixture = null)
     {
-        $data = $this->prepareData($fixture);
+        $data = $this->replaceMappingData($fixture->getData());
+
         $url = $_ENV['app_backend_url'] . $this->saveUrl;
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->write($url, $data);
@@ -67,25 +64,5 @@ class Curl extends AbstractCurl implements SynonymGroupInterface
         $id = isset($matches[1]) ? $matches[1] : null;
 
         return ['group_id' => $id];
-    }
-
-    /**
-     * Prepare data from text to values.
-     *
-     * @param FixtureInterface $fixture
-     * @return array
-     */
-    protected function prepareData($fixture)
-    {
-        $data = $this->replaceMappingData($fixture->getData());
-        if (isset($data['scope_id'])) {
-            $stores = [];
-            foreach ($data['scope_id'] as $store) {
-                $stores[] = isset($this->scope_id[$store]) ? $this->scope_id[$store] : $store;
-            }
-            $data['scope_id'] = $stores;
-        }
-
-        return $data;
     }
 }
