@@ -163,6 +163,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     protected $eventManagerMock;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $mediaConfig;
+
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -332,6 +335,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
+        $this->mediaConfig = $this->getMock('Magento\Catalog\Model\Product\Media\Config', [], [], '', false);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
             'Magento\Catalog\Model\Product',
@@ -356,6 +360,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'customAttributeFactory' => $this->attributeValueFactory,
                 'mediaGalleryEntryConverterPool' => $this->mediaGalleryEntryConverterPoolMock,
                 'linkRepository' => $this->productLinkRepositoryMock,
+                'catalogProductMediaConfig' => $this->mediaConfig,
                 'data' => ['id' => 1]
             ]
         );
@@ -990,8 +995,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMediaAttributeValues()
     {
-        $this->setupMediaAttributes();
-
+        $this->mediaConfig->expects($this->once())->method('getMediaAttributeCodes')
+            ->willReturn(['image', 'small_image']);
         $this->model->setData('image', 'imageValue');
         $this->model->setData('small_image', 'smallImageValue');
 

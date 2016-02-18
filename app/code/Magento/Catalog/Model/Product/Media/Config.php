@@ -170,6 +170,9 @@ class Config implements ConfigInterface
         return ltrim(str_replace('\\', '/', $file), '/');
     }
 
+    /**
+     * @return array
+     */
     public function getMediaAttributeCodes()
     {
         return $this->attributeHelper->getAttributeCodesByFrontendType('media_image');
