@@ -21,4 +21,31 @@ class Media extends AbstractDataType
     {
         return static::NAME;
     }
+
+    /**
+     * Prepare component configuration
+     *
+     * @return void
+     */
+    public function prepare()
+    {
+        if ($this->getData('config/uploaderConfig/url')) {
+            $this->setData(
+                array_replace_recursive(
+                    $this->getData(),
+                    [
+                        'config' => [
+                            'uploaderConfig' => [
+                                'url' => $this->getContext()->getUrl(
+                                    $this->getData('config/uploaderConfig/url'),
+                                    ['_secure' => true]
+                                )
+                            ],
+                        ],
+                    ]
+                )
+            );
+        }
+        parent::prepare();
+    }
 }
