@@ -93,7 +93,8 @@ define([
     $.widget('mage.AddFotoramaVideoEvents', {
         options: {
             VideoData: '',
-            VideoSettings: ''
+            VideoSettings: '',
+            OptionsVideoData: ''
         },
 
         PV: 'product-video', // [CONST]
@@ -106,12 +107,15 @@ define([
         Base: 0, //on check for video is base this setting become true if there is any video with base role
         MobileMaxWidth: 767,
         GP: 'gallery-placeholder', //gallery placeholder class is needed to find and erase <script> tag
+        videoData: null,
 
         /**
          *
          * @private
          */
         _init: function () {
+            this._loadVideoData();
+
             if (this._checkForVideoExist()) {
                 this._checkFullscreen();
                 this._listenForFullscreen();
@@ -119,6 +123,32 @@ define([
                 this._isVideoBase();
                 this._initFotoramaVideo();
                 this._attachFotoramaEvents();
+            }
+        },
+
+        /**
+         *
+         * @private
+         */
+        _loadVideoData: function () {
+            var $widget = this;
+
+            if (!$widget.videoData) {
+                $widget.videoData = $widget.options.VideoData;
+            }
+
+            $('#product-options-wrapper').find('[option-selected]').each(function () {
+                var key = $(this).attr('attribute-code') + '_' + $(this).attr('option-selected');
+
+                if ($widget.options.OptionsVideoData && $widget.options.OptionsVideoData[key]) {
+                    $widget.options.VideoData = $widget.options.OptionsVideoData[key];
+                } else {
+                    $widget.options.VideoData = $widget.videoData;
+                }
+            });
+
+            if (!$('#product-options-wrapper').find('[option-selected]').length) {
+                $widget.options.VideoData = $widget.videoData;
             }
         },
 
@@ -439,18 +469,23 @@ define([
          * @private
          */
         _checkForVideo: function (e, fotorama, number) {
-            var frameNumber = parseInt(fotorama.activeFrame.i, 10),
-                videoData = this.options.VideoData[frameNumber - 1 + number],
-                $image = fotorama.data[frameNumber - 1 + number];
+            var videoData = this.options.VideoData[fotorama.activeIndex + number],
+                $image = fotorama.data[fotorama.activeIndex + number];
 
-            if ($image) {
-                $image = $image.$stageFrame;
+            if (!$image) {
+                return;
             }
 
-            if ($image && videoData && videoData.mediaType === this.VID) {
+            $image = $image.$stageFrame;
+
+            if (videoData && videoData.mediaType === this.VID) {
                 $(fotorama.activeFrame.$stageFrame).removeAttr('href');
                 this._prepareForVideoContainer($image, videoData, fotorama, number);
                 $('.fotorama-video-container').addClass('video-unplayed');
+            } else if ($image.find('.' + this.PV).length !== 0) {
+                $image.find('.' + this.PV).remove();
+                $image.removeClass('fotorama-video-container');
+                $image.removeClass('video-unplayed');
             }
         },
 
@@ -596,6 +631,9 @@ define([
         _unloadVideoPlayer: function ($wrapper, current, close) {
             var self = this;
 
+            if (!$wrapper) {
+                return;
+            }
             $wrapper.find('.' + this.PV).each(function () {
                 var $item = $(this).parent(),
                     cloneVideoDiv,
@@ -642,7 +680,8 @@ define([
         $('.gallery-placeholder').on('fotorama:ready', function () {
             $(element).find('.fotorama').AddFotoramaVideoEvents({
                 VideoData: config.fotoramaVideoData || [],
-                VideoSettings: config.fotoramaVideoSettings || {}
+                VideoSettings: config.fotoramaVideoSettings || {},
+                OptionsVideoData: config.fotoramaOptionsVideoData || {}
             });
         });
     };
