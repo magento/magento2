@@ -151,7 +151,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
         }
         $conditionsFieldSetId = $model->getConditionsFieldSetId($formName);
         $newChildUrl = $this->getUrl(
-            'sales_rule/promo_quote/newConditionHtml/form/rule_conditions_fieldset_' . $conditionsFieldSetId,
+            'sales_rule/promo_quote/newConditionHtml/form/' . $conditionsFieldSetId,
             ['form_namespace' => $formName]
         );
 
