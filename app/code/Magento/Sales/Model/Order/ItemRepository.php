@@ -19,7 +19,6 @@ use Magento\Sales\Api\Data\OrderItemSearchResultInterfaceFactory;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Api\Data\OrderItemExtension;
 use Magento\Sales\Api\Data\OrderItemExtensionInterface;
-use Magento\Sales\Model\Order\ShippingBuilder;
 use Magento\Sales\Model\ResourceModel\Metadata;
 
 /**
@@ -56,12 +55,12 @@ class ItemRepository implements OrderItemRepositoryInterface
     /**
      * @var OrderItemExtension
      */
-    protected $orderItemExtension;
+    private $orderItemExtension;
 
     /**
      * @var ShippingBuilder
      */
-    protected $shippingBuilder;
+    private $shippingBuilder;
 
     /**
      * @var ProductOptionProcessorInterface[]
@@ -327,7 +326,7 @@ class ItemRepository implements OrderItemRepositoryInterface
      * @return void
      * @deprecated
      */
-    public function setOrderItemExtensionDependency($orderItemExtension)
+    public function setOrderItemExtensionDependency(OrderItemExtension $orderItemExtension)
     {
         $this->orderItemExtension = $orderItemExtension;
     }
@@ -335,12 +334,12 @@ class ItemRepository implements OrderItemRepositoryInterface
     /**
      * Get the new ShippingBuilder dependency for application code
      *
-     * @return ShippingBuilder
+     * @return \Magento\Sales\Model\Order\ShippingBuilder
      * @deprecated
      */
     private function getShippingBuilderDependency()
     {
-        if (!$this->shippingBuilder instanceof ShippingBuilder) {
+        if (!$this->shippingBuilder instanceof \Magento\Sales\Model\Order\ShippingBuilder) {
             $this->shippingBuilder = \Magento\Framework\App\ObjectManager::getInstance()->get(
                 '\Magento\Sales\Model\Order\ShippingBuilder'
             );
@@ -351,11 +350,11 @@ class ItemRepository implements OrderItemRepositoryInterface
     /**
      * The setter function to inject the mocked dependency during unit test
      *
-     * @param ShippingBuilder shippingBuilder
+     * @param \Magento\Sales\Model\Order\ShippingBuilder shippingBuilder
      * @return void
      * @deprecated
      */
-    public function setShippingBuilderDependency($shippingBuilder)
+    public function setShippingBuilderDependency(\Magento\Sales\Model\Order\ShippingBuilder $shippingBuilder)
     {
         $this->shippingBuilder = $shippingBuilder;
     }

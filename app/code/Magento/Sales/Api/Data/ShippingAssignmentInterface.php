@@ -49,7 +49,7 @@ interface ShippingAssignmentInterface extends ExtensibleDataInterface
      * @param \Magento\Sales\Api\Data\ShippingInterface $shipping
      * @return $this
      */
-    public function setShipping($shipping);
+    public function setShipping(\Magento\Sales\Api\Data\ShippingInterface $shipping);
 
     /**
      * Sets order items to shipping assignment

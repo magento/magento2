@@ -15,7 +15,7 @@ class Shipping extends AbstractExtensibleModel implements ShippingInterface
      */
     public function getAddress()
     {
-        return $this->_getData(static::KEY_ADDRESS);
+        return $this->_getData(self::KEY_ADDRESS);
     }
 
     /**
@@ -23,7 +23,7 @@ class Shipping extends AbstractExtensibleModel implements ShippingInterface
      */
     public function getMethod()
     {
-        return $this->_getData(static::KEY_METHOD);
+        return $this->_getData(self::KEY_METHOD);
     }
 
     /**
@@ -31,13 +31,13 @@ class Shipping extends AbstractExtensibleModel implements ShippingInterface
      */
     public function getTotal()
     {
-        return $this->_getData(static::KEY_TOTAL);
+        return $this->_getData(self::KEY_TOTAL);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setAddress($address)
+    public function setAddress(\Magento\Sales\Api\Data\OrderAddressInterface $address)
     {
         return $this->setData(self::KEY_ADDRESS, $address);
     }
@@ -53,7 +53,7 @@ class Shipping extends AbstractExtensibleModel implements ShippingInterface
     /**
      * {@inheritdoc}
      */
-    public function setTotal($total)
+    public function setTotal(\Magento\Sales\Api\Data\TotalInterface $total)
     {
         return $this->setData(self::KEY_TOTAL, $total);
     }

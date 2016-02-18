@@ -15,7 +15,7 @@ class ShippingAssignment extends AbstractExtensibleModel implements ShippingAssi
      */
     public function getShipping()
     {
-        return $this->_getData(ShippingAssignmentInterface::KEY_SHIPPING);
+        return $this->_getData(self::KEY_SHIPPING);
     }
 
     /**
@@ -23,7 +23,7 @@ class ShippingAssignment extends AbstractExtensibleModel implements ShippingAssi
      */
     public function getItems()
     {
-        return $this->_getData(ShippingAssignmentInterface::KEY_ITEMS);
+        return $this->_getData(self::KEY_ITEMS);
     }
 
     /**
@@ -31,15 +31,15 @@ class ShippingAssignment extends AbstractExtensibleModel implements ShippingAssi
      */
     public function getStockId()
     {
-        return $this->_getData(ShippingAssignmentInterface::KEY_STOCK_ID);
+        return $this->_getData(self::KEY_STOCK_ID);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setShipping($shipping)
+    public function setShipping(\Magento\Sales\Api\Data\ShippingInterface $shipping)
     {
-        return $this->setData(ShippingAssignmentInterface::KEY_SHIPPING, $shipping);
+        return $this->setData(self::KEY_SHIPPING, $shipping);
     }
 
     /**
@@ -47,7 +47,7 @@ class ShippingAssignment extends AbstractExtensibleModel implements ShippingAssi
      */
     public function setItems(array $items)
     {
-        return $this->setData(ShippingAssignmentInterface::KEY_ITEMS, $items);
+        return $this->setData(self::KEY_ITEMS, $items);
     }
 
     /**
@@ -55,6 +55,6 @@ class ShippingAssignment extends AbstractExtensibleModel implements ShippingAssi
      */
     public function setStockId($stockId = null)
     {
-        return $this->setData(ShippingAssignmentInterface::KEY_STOCK_ID, $stockId);
+        return $this->setData(self::KEY_STOCK_ID, $stockId);
     }
 }
