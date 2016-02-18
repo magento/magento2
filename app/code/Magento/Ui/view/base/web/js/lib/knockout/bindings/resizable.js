@@ -6,18 +6,51 @@ define([
     'ko',
     'jquery',
     'Magento_Ui/js/lib/view/utils/async',
+    'uiRegistry',
     'underscore',
     '../template/renderer',
     'jquery/ui'
-], function (ko, $, async, _, renderer) {
+], function (ko, $, async, registry, _, renderer) {
     'use strict';
 
     var sizeOptions = [
-        'minHeight',
-        'maxHeight',
-        'minWidth',
-        'maxWidth'
-    ];
+            'minHeight',
+            'maxHeight',
+            'minWidth',
+            'maxWidth'
+        ],
+
+        handles = {
+            height: '.ui-resizable-s, .ui-resizable-n',
+            width: '.ui-resizable-w, .ui-resizable-e'
+        };
+
+    /**
+     * Recalcs visibility of handles, width and height of resizable based on content
+     * @param {HTMLElement} element
+     */
+    function adjustSize(element) {
+        var maxHeight,
+            maxWidth;
+
+        element = $(element);
+        maxHeight = element.resizable('option').maxHeight;
+        maxWidth = element.resizable('option').maxWidth;
+
+        if (maxHeight && element.height() > maxHeight) {
+            element.height(maxHeight + 1);
+            $(handles.height).hide();
+        } else {
+            $(handles.height).show();
+        }
+
+        if (maxWidth && $(element).width() > maxWidth) {
+            element.width(maxWidth + 1);
+            $(handles.width).hide();
+        } else {
+            $(handles.width).show();
+        }
+    }
 
     /**
      * Recalcs allowed min, max width and height based on configured selectors
@@ -39,6 +72,8 @@ define([
                 $(element).resizable('option', key, size + 1);
             });
         }, this);
+
+        adjustSize(element);
     }
 
     /**
@@ -77,6 +112,7 @@ define([
         });
         config.start = recalc;
         $(window).on('resize.resizable', recalc);
+        registry.get(viewModel.provider).on('reloaded', recalc);
 
         return config;
     }
