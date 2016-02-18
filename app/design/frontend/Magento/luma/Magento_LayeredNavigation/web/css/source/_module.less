@@ -204,6 +204,10 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     body {
         &.filter-active {
+            .page-header {
+                display: none;
+            }
+
             .page-wrapper {
                 height: 0;
                 margin-top: -999999em;
