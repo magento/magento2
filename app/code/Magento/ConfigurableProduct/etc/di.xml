@@ -126,4 +126,7 @@
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Price">
         <plugin name="configurable" type="Magento\ConfigurableProduct\Model\Plugin\PriceBackend" sortOrder="100" />
     </type>
+    <type name="\Magento\ProductVideo\Block\Product\View\Gallery">
+        <plugin name="product_video_gallery" type="\Magento\ConfigurableProduct\Block\Plugin\Product\Media\Gallery" />
+    </type>
 </config>
