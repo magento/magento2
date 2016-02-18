@@ -40,7 +40,7 @@ class SecurityManager
     /**
      * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $eventManager;
+    private $eventManager;
 
     /**
      * SecurityManager constructor.
