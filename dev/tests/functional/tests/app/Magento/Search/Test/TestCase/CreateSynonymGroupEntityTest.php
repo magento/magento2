@@ -6,9 +6,6 @@
 
 namespace Magento\Search\Test\TestCase;
 
-use Magento\Backend\Test\Page\Adminhtml\StoreDelete;
-use Magento\Backend\Test\Page\Adminhtml\StoreIndex;
-use Magento\Backend\Test\Page\Adminhtml\StoreNew;
 use Magento\Search\Test\Page\Adminhtml\SynonymGroupIndex;
 use Magento\Search\Test\Page\Adminhtml\SynonymGroupNew;
 use Magento\Mtf\TestCase\Injectable;
@@ -51,86 +48,18 @@ class CreateSynonymGroupEntityTest extends Injectable
     protected $synonymGroupNew;
 
     /**
-     * Page StoreIndex.
-     *
-     * @var StoreIndex
-     */
-    protected $storeIndex;
-
-    /**
-     * Page StoreNew.
-     *
-     * @var StoreNew
-     */
-    protected $storeNew;
-
-    /**
-     * Page StoreDelete.
-     *
-     * @var StoreDelete
-     */
-    protected $storeDelete;
-
-    /**
-     * Store Name.
-     *
-     * @var array
-     */
-    protected $storeName;
-
-    /**
-     * Skipped stores for tearDown.
-     *
-     * @var array
-     */
-    protected $skippedStores = [
-        'All Store Views',
-        'Default Store View',
-    ];
-
-    /**
      * Injection data.
      *
      * @param SynonymGroupIndex $synonymGroupIndex
      * @param SynonymGroupNew $synonymGroupNew
-     * @param StoreIndex $storeIndex
-     * @param StoreNew $storeNew
-     * @param StoreDelete $storeDelete
      * @return void
      */
     public function __inject(
         SynonymGroupIndex $synonymGroupIndex,
-        SynonymGroupNew $synonymGroupNew,
-        StoreIndex $storeIndex,
-        StoreNew $storeNew,
-        StoreDelete $storeDelete
+        SynonymGroupNew $synonymGroupNew
     ) {
         $this->synonymGroupIndex = $synonymGroupIndex;
         $this->synonymGroupNew = $synonymGroupNew;
-        $this->storeIndex = $storeIndex;
-        $this->storeNew = $storeNew;
-        $this->storeDelete = $storeDelete;
-    }
-
-    /**
-     * Delete Store after test.
-     *
-     * @return void
-     */
-    public function tearDown()
-    {
-//        foreach ($this->storeName as $store) {
-//            if (in_array($store, $this->skippedStores) or $store === null) {
-//                continue;
-//            }
-//            $tmp = explode("/", $store);
-//            $filter['store_title'] = end($tmp);
-//            $this->storeIndex->open();
-//            $this->storeIndex->getStoreGrid()->searchAndOpen($filter);
-//            $this->storeNew->getFormPageActions()->delete();
-//            $this->storeDelete->getStoreForm()->fillForm(['create_backup' => 'No']);
-//            $this->storeDelete->getFormPageActions()->delete();
-//        }
     }
 
     /**
@@ -141,9 +70,6 @@ class CreateSynonymGroupEntityTest extends Injectable
      */
     public function test(SynonymGroup $synonymGroup)
     {
-        // Prepare data for tearDown
-        $this->storeName[] = $synonymGroup->getScopeId();
-
         // Steps
         $this->synonymGroupIndex->open();
         $this->synonymGroupIndex->getGridPageActions()->addNew();
