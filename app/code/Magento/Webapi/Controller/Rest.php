@@ -20,6 +20,8 @@ use Magento\Webapi\Controller\Rest\ParamsOverrider;
 use Magento\Webapi\Controller\Rest\Router;
 use Magento\Webapi\Controller\Rest\Router\Route;
 use Magento\Webapi\Model\Rest\Swagger\Generator;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 
 /**
  * Front controller for WebAPI REST area.
@@ -86,6 +88,11 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     private $storeManager;
 
     /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
+
+    /**
      * Initialize dependencies
      *
      * @param RestRequest $request
@@ -139,6 +146,31 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         $this->serviceOutputProcessor = $serviceOutputProcessor;
         $this->swaggerGenerator = $swaggerGenerator;
         $this->storeManager = $storeManager;
+    }
+
+    /**
+     * Get deployment config
+     *
+     * @return DeploymentConfig
+     */
+    private function getDeploymentConfig()
+    {
+        if (!$this->deploymentConfig instanceof \Magento\Framework\App\DeploymentConfig) {
+            $this->deploymentConfig = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\App\DeploymentConfig');
+        }
+        return $this->deploymentConfig;
+    }
+
+    /**
+     * Set deployment config
+     *
+     * @param Magento\Framework\App\DeploymentConfig $deploymentConfig
+     * @deprecated
+     */
+    public function setDeploymentConfig(\Magento\Framework\App\DeploymentConfig $deploymentConfig)
+    {
+        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -254,6 +286,10 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
         );
         if ($this->_request->getParam(FieldsFilter::FILTER_PARAMETER) && is_array($outputData)) {
             $outputData = $this->fieldsFilter->filter($outputData);
+        }
+        $header = $this->getDeploymentConfig()->get(ConfigOptionsListConstants::CONFIG_PATH_X_FRAME_OPT);
+        if ($header) {
+            $this->_response->setHeader('X-Frame-Options', $header);
         }
         $this->_response->prepareResponse($outputData);
     }
