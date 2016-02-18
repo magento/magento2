@@ -100,21 +100,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected $_addTaxPercents = false;
 
     /**
-     * Product limitation filters
-     * Allowed filters
-     *  store_id                int;
-     *  category_id             int;
-     *  category_is_anchor      int;
-     *  visibility              array|int;
-     *  website_ids             array|int;
-     *  store_table             string;
-     *  use_price_index         bool;   join price index table flag
-     *  customer_group_id       int;    required for price; customer group limitation for price
-     *  website_id              int;    required for price; website limitation for price
-     *
-     * @var array
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation
      */
-    protected $_productLimitationFilters = [];
+    protected $_productLimitationFilters;
 
     /**
      * Category product count select
@@ -275,6 +263,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param GroupManagementInterface $groupManagement
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -299,6 +288,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         GroupManagementInterface $groupManagement,
+        \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->moduleManager = $moduleManager;
@@ -311,6 +301,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $this->_resourceHelper = $resourceHelper;
         $this->dateTime = $dateTime;
         $this->_groupManagement = $groupManagement;
+        $this->_productLimitationFilters = $productLimitation;
         parent::__construct(
             $entityFactory,
             $logger,
@@ -811,7 +802,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Get filters applied to collection
      *
-     * @return array
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation
      */
     public function getLimitationFilters()
     {
@@ -1434,7 +1425,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function addPriceData($customerGroupId = null, $websiteId = null)
     {
-        $this->_productLimitationFilters['use_price_index'] = true;
+        $this->_productLimitationFilters->setUsePriceIndex(true);
 
         if (!isset($this->_productLimitationFilters['customer_group_id']) && is_null($customerGroupId)) {
             $customerGroupId = $this->_customerSession->getCustomerGroupId();
@@ -1646,9 +1637,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         $storeId = $this->getStoreId();
         if ($attribute == 'price' && $storeId != 0) {
             $this->addPriceData();
-            $this->getSelect()->order("price_index.min_price {$dir}");
-
-            return $this;
+            if ($this->_productLimitationFilters->isUsingPriceIndex()) {
+                $this->getSelect()->order("price_index.min_price {$dir}");
+                return $this;
+            }
         }
 
         if ($this->isEnabledFlat()) {
@@ -1864,7 +1856,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     protected function _productLimitationPrice($joinLeft = false)
     {
         $filters = $this->_productLimitationFilters;
-        if (empty($filters['use_price_index'])) {
+        if (!$filters->isUsingPriceIndex()) {
             return $this;
         }
 
@@ -1923,7 +1915,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     public function applyFrontendPriceLimitations()
     {
-        $this->_productLimitationFilters['use_price_index'] = true;
+        $this->_productLimitationFilters->setUsePriceIndex(true);
         if (!isset($this->_productLimitationFilters['customer_group_id'])) {
             $customerGroupId = $this->_customerSession->getCustomerGroupId();
             $this->_productLimitationFilters['customer_group_id'] = $customerGroupId;
