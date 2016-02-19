@@ -93,17 +93,17 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         //TODO: Uncomment assertion after MAGETWO-49157 fix
         //$this->assertEquals(1, $product->getShipmentType());
 
-        $optionsIdList = $resource->getProductsIdsBySkus($this->optionSkuList);
-        $bundleOptions = $product->getExtensionAttributes()->getBundleProductOptions();
-        $this->assertEquals(2, count($bundleOptions));
-        foreach ($bundleOptions as $optionKey => $option) {
+        $optionIdList = $resource->getProductsIdsBySkus($this->optionSkuList);
+        $bundleOptionCollection = $product->getExtensionAttributes()->getBundleProductOptions();
+        $this->assertEquals(2, count($bundleOptionCollection));
+        foreach ($bundleOptionCollection as $optionKey => $option) {
             $this->assertEquals('checkbox', $option->getData('type'));
             $this->assertEquals('Option ' . ($optionKey + 1), $option->getData('title'));
             $this->assertEquals(self::TEST_PRODUCT_NAME, $option->getData('sku'));
             $this->assertEquals($optionKey + 1, count($option->getData('product_links')));
             foreach ($option->getData('product_links') as $linkKey => $productLink) {
                 $optionSku = 'Simple ' . ($optionKey + 1 + $linkKey);
-                $this->assertEquals($optionsIdList[$optionSku], $productLink->getData('entity_id'));
+                $this->assertEquals($optionIdList[$optionSku], $productLink->getData('entity_id'));
                 $this->assertEquals($optionSku, $productLink->getData('sku'));
             }
         }
