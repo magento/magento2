@@ -19,7 +19,7 @@ use Magento\Search\Test\Fixture\SynonymGroup;
  * Steps:
  * 1. Open Backend.
  * 2. Go to Marketing > Search Synonyms.
- * 3. Delete created Synonym Grou
+ * 3. Delete created Synonym Group
  * 4. Perform all assertions.
  *
  * @group Search_(PS)
