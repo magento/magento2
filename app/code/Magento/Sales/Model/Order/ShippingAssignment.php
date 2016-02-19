@@ -57,4 +57,21 @@ class ShippingAssignment extends AbstractExtensibleModel implements ShippingAssi
     {
         return $this->setData(self::KEY_STOCK_ID, $stockId);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtensionAttributes(
+        \Magento\Sales\Api\Data\ShippingAssignmentExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

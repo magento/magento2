@@ -57,4 +57,21 @@ class Shipping extends AbstractExtensibleModel implements ShippingInterface
     {
         return $this->setData(self::KEY_TOTAL, $total);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtensionAttributes(
+        \Magento\Sales\Api\Data\ShippingExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }
