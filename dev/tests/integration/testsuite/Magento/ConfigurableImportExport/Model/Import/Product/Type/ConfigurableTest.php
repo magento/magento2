@@ -91,15 +91,15 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(self::TEST_PRODUCT_NAME, $product->getName());
         $this->assertEquals(self::TEST_PRODUCT_TYPE, $product->getTypeId());
 
-        $options = $product->getTypeInstance()->getConfigurableOptions($product);
-        foreach ($options as $option) {
+        $optionCollection = $product->getTypeInstance()->getConfigurableOptions($product);
+        foreach ($optionCollection as $option) {
             foreach ($option as $optionData) {
                 $this->assertContains($optionData['sku'], $this->optionSkuList);
             }
         }
 
-        $optionsIdList = $resource->getProductsIdsBySkus($this->optionSkuList);
-        foreach ($optionsIdList as $optionId) {
+        $optionIdList = $resource->getProductsIdsBySkus($this->optionSkuList);
+        foreach ($optionIdList as $optionId) {
             $this->assertArrayHasKey($optionId, $product->getExtensionAttributes()->getConfigurableProductLinks());
         }
 
