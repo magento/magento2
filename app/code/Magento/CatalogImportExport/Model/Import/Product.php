@@ -1182,7 +1182,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     protected function _saveProductAttributes(array $attributesData)
     {
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         foreach ($attributesData as $tableName => $skuData) {
             $tableData = [];
             foreach ($skuData as $sku => $attributes) {
@@ -1190,13 +1189,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                     $this->_connection->select()
                         ->from($this->getResource()->getTable('catalog_product_entity'))
                         ->where('sku = ?', $sku)
-                        ->columns($metadata->getLinkField())
+                        ->columns($this->getProductEntityLinkField())
                 );
 
                 foreach ($attributes as $attributeId => $storeValues) {
                     foreach ($storeValues as $storeId => $storeValue) {
                         $tableData[] = [
-                            $metadata->getLinkField() => $linkId,
+                            $this->getProductEntityLinkField() => $linkId,
                             'attribute_id' => $attributeId,
                             'store_id' => $storeId,
                             'value' => $storeValue,
