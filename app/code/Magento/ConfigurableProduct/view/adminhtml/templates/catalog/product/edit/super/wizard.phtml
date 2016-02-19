@@ -30,7 +30,13 @@ $currencySymbol = $block->getCurrencySymbol();
                 "components": {
                     "product_form.product_form.configurableModal": {
                         "component": "Magento_Ui/js/modal/modal-component",
-                        "options": {"type": "slide", "title": "<?= /* @escapeNotVerified */  __('Create Product Configurations') ?>"}
+                        "options": {"type": "slide", "title": "<?= /* @escapeNotVerified */  __('Create Product Configurations') ?>"},
+                        "children": {
+                            "wizard": {
+                                "url": "<?= /* @noEscape */ $block->getUrl('catalog/product/wizard', ['id' => $block->getProduct()->getId()]) ?>",
+                                "component": "Magento_Ui/js/form/components/html"
+                            }
+                        }
                     },
                     "configurableVariations": {
                         "component": "Magento_ConfigurableProduct/js/variations/variations",
