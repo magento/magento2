@@ -50,7 +50,6 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
      */
     private $composerInformation;
 
-
     public function setUp()
     {
         $this->composerAppFactory = $this->getMock(

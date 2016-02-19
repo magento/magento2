@@ -22,7 +22,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
         $cacheManager->clean($cacheManager->getAvailableTypes());
 
-
         $fileResolver = $this->getMockForAbstractClass(
             'Magento\Framework\Config\FileResolverInterface',
             [],

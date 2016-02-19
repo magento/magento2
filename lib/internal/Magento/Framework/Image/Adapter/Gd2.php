@@ -44,6 +44,7 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
         $this->_fileMimeType = null;
         $this->_fileType = null;
     }
+
     /**
      * Open image for processing
      *
