@@ -30,12 +30,13 @@
 
 // Tree
 @action-multiselect-tree-arrow__color: @color-gray65-almost;
-@action-multiselect-tree-arrow__size: 1.8rem;
+@action-multiselect-tree-arrow__size: 2.2rem;
+@action-multiselect-tree-level__width: 2rem;
 @action-multiselect-tree-lines: @action-multiselect-tree-lines__size @action-multiselect-tree-lines__style @action-multiselect-tree-lines__color;
 @action-multiselect-tree-lines__color: @color-gray65-almost;
 @action-multiselect-tree-lines__size: 1px;
 @action-multiselect-tree-lines__style: dashed;
-@action-multiselect-tree-menu-item__margin-left: @action-multiselect-tree-arrow__size + @action-multiselect-menu-item__padding;
+@action-multiselect-tree-menu-item__margin-left: @action-multiselect-tree-arrow__size + @action-multiselect-tree-level__width;
 
 //
 //  Multiselect default view
@@ -118,6 +119,7 @@
     .admin__action-multiselect-item-path {
         color: @action-multiselect-menu-item-path__color;
         font-size: 1.2rem;
+        font-weight: @font-weight__regular;
         padding-left: 1rem;
     }
 }
@@ -261,8 +263,6 @@
 
         .action-menu-item {
             margin-top: .1rem;
-            padding-left: .5rem;
-            padding-right: .5rem;
         }
     }
 
@@ -291,7 +291,7 @@
 
         &._with-checkbox {
             .admin__action-multiselect-label {
-                padding-left: @control-checkbox-radio__size + .5rem;
+                padding-left: @control-checkbox-radio__size + 1rem;
             }
         }
     }
@@ -300,6 +300,8 @@
         position: relative;
 
         .admin__action-multiselect-menu-inner {
+            padding-left: @action-multiselect-tree-menu-item__margin-left - @action-multiselect-menu-item__padding;
+
             &:before {
                 left: @action-multiselect-menu-item__padding + @action-multiselect-tree-arrow__size + @action-multiselect-tree-arrow__size/2;
             }
@@ -327,7 +329,7 @@
             border-top: @action-multiselect-tree-lines;
             height: 1px;
             top: @action-multiselect-menu-item__padding + @action-multiselect-tree-arrow__size/2;
-            width: @action-multiselect-tree-menu-item__margin-left;
+            width: @action-multiselect-tree-menu-item__margin-left + @action-multiselect-menu-item__padding;
         }
 
         //  Vertical dotted line
@@ -347,19 +349,27 @@
 
         //  Top level on tree
         &._root {
+            margin-left: -@action-multiselect-menu-item__padding;
+
             &:after {
-                left: @action-multiselect-tree-arrow__size;
+                left: @action-multiselect-tree-arrow__size + @action-multiselect-menu-item__padding;
                 width: @action-multiselect-tree-arrow__size;
             }
 
             &:before {
-                left: @action-multiselect-tree-arrow__size;
+                left: @action-multiselect-tree-arrow__size + @action-multiselect-menu-item__padding;
                 top: @action-multiselect-menu-item__padding;
             }
 
             &._parent {
                 &:after {
                     display: none;
+                }
+            }
+
+            &:first-child {
+                &:before {
+                    top: @action-multiselect-menu-item__padding + @action-multiselect-tree-arrow__size/2;
                 }
             }
 
@@ -372,13 +382,14 @@
     }
 
     .admin__action-multiselect-label {
+        line-height: @action-multiselect-tree-arrow__size;
         vertical-align: middle;
-        word-break: break-word;
+        word-break: break-all;
 
         &:before {
             left: 0;
             position: absolute;
-            top: .1rem;
+            top: .4rem;
         }
     }
 }
