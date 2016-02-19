@@ -65,7 +65,7 @@ class Image extends File
     }
 
     /**
-     * Save uploaded file before saving config value
+     * Save uploaded file and remote temporary file before saving config value
      *
      * @return $this
      * @throws LocalizedException
@@ -83,16 +83,11 @@ class Image extends File
             $this->setValue($value['file']);
             return $this;
         }
-
         $filename = $value['file'];
-        try {
-             $result = $this->_mediaDirectory->copyFile(
-                $this->imageConfig->getTmpMediaPath($filename),
-                $this->_appendScopeInfo($this->uploadDir) . '/' . $filename
-            );
-        } catch (\Exception $e) {
-            throw new LocalizedException(__($e->getMessage()));
-        }
+         $result = $this->_mediaDirectory->copyFile(
+            $this->imageConfig->getTmpMediaPath($filename),
+            $this->_appendScopeInfo($this->uploadDir) . '/' . $filename
+        );
         if ($result) {
             $this->_mediaDirectory->delete($this->imageConfig->getTmpMediaPath($filename));
             $filename = $this->_prependScopeInfo($filename);

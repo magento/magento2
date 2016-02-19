@@ -5,7 +5,9 @@
  */
 namespace Magento\Theme\Model\Design\Config\FileUploader;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaStorage\Model\File\UploaderFactory;
+use Magento\Theme\Model\Design\Backend\Image;
 use Magento\Theme\Model\Design\BackendModelFactory;
 use Magento\Theme\Model\Design\Config\MetadataProvider;
 
@@ -34,6 +36,7 @@ class ImageProcessor
      * @param UploaderFactory $uploaderFactory
      * @param Config $imageConfig
      * @param BackendModelFactory $backendModelFactory
+     * @param MetadataProvider $metadataProvider
      */
     public function __construct(
         UploaderFactory $uploaderFactory,
@@ -48,9 +51,11 @@ class ImageProcessor
     }
 
     /**
+     * Save file to temp media directory
+     *
      * @param  string $fileId
      * @return array
-     * @throws \Exception
+     * @throws LocalizedException
      */
     public function saveToTmp($fileId)
     {
@@ -64,15 +69,17 @@ class ImageProcessor
     }
 
     /**
+     * Save image
+     *
      * @param string $fileId
      * @param string $destination
      * @return array
-     * @throws \Exception
+     * @throws LocalizedException
      */
     protected function save($fileId, $destination)
     {
         $result = ['file' => '', 'size' => ''];
-        /** @var \Magento\Theme\Model\Design\Backend\Image $backendModel */
+        /** @var Image $backendModel */
         $backendModel = $this->getBackendModel($fileId);
         $uploader = $this->uploaderFactory->create(['fileId' => $fileId]);
         $uploader->setAllowRenameFiles(true);
@@ -83,15 +90,17 @@ class ImageProcessor
     }
 
     /**
+     * Retrieve backend model by field code
+     *
      * @param string $code
-     * @return \Magento\Framework\App\Config\Value
-     * @throws \Exception
+     * @return Image
+     * @throws LocalizedException
      */
     protected function getBackendModel($code)
     {
         $metadata = $this->metadataProvider->get();
         if (!(isset($metadata[$code]) && isset($metadata[$code]['backend_model']))) {
-            throw new \Exception('Backend model is not specified for ' . $code);
+            throw new LocalizedException(__('Backend model is not specified for %1', $code));
         }
         return $this->backendModelFactory->createByPath($metadata[$code]['path']);
     }

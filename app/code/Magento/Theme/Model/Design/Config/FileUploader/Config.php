@@ -46,11 +46,13 @@ class Config extends AbstractHelper
     ) {
         parent::__construct($context);
         $this->storeManager = $storeManager;
-        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::PUB);
+        $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->imageDir = $imageDir;
     }
 
     /**
+     * Retrieve absolute temp media path
+     *
      * @return string
      */
     public function getAbsoluteTmpMediaPath()
@@ -59,6 +61,8 @@ class Config extends AbstractHelper
     }
 
     /**
+     * Retrieve base temp media url
+     *
      * @return string
      */
     public function getBaseTmpMediaUrl()
@@ -67,6 +71,8 @@ class Config extends AbstractHelper
     }
 
     /**
+     * Retrieve temp media url
+     *
      * @param string $file
      * @return string
      */
@@ -76,6 +82,8 @@ class Config extends AbstractHelper
     }
 
     /**
+     * Retrieve store media url
+     *
      * @return mixed
      */
     public function getStoreMediaUrl()
@@ -84,6 +92,8 @@ class Config extends AbstractHelper
     }
 
     /**
+     * Retrieve base media url
+     *
      * @return string
      */
     public function getBaseMediaUrl()
@@ -92,6 +102,8 @@ class Config extends AbstractHelper
     }
 
     /**
+     * Retrieve media url
+     *
      * @param string $file
      * @return string
      */
@@ -108,19 +120,23 @@ class Config extends AbstractHelper
      */
     public function getBaseTmpMediaPath()
     {
-        return 'media/tmp/' . $this->imageDir;
+        return 'tmp/' . $this->imageDir;
     }
 
     /**
+     * Retrieve temp media path
+     *
      * @param string $filename
      * @return string
      */
     public function getTmpMediaPath($filename)
     {
-        return 'tmp/' . $this->imageDir . '/' . $filename;
+        return $this->getBaseTmpMediaPath() . '/' . $filename;
     }
 
     /**
+     * Prepare file
+     *
      * @param string $file
      * @return string
      */

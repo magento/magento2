@@ -60,7 +60,7 @@
                         <item name="config" xsi:type="array">
                             <item name="label" xsi:type="string" translate="true">Image Position</item>
                             <item name="dataType" xsi:type="string">text</item>
-                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="formElement" xsi:type="string">select</item>
                             <item name="dataScope" xsi:type="string">watermark_swatch_image_position</item>
                         </item>
                     </argument>
