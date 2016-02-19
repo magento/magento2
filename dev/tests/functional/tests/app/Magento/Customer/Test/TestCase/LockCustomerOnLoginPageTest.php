@@ -23,13 +23,13 @@ use Magento\Mtf\Fixture\FixtureFactory;
  * 3. "Invalid login or password." appears after each login attempt.
  * 4. Perform all assertions.
  *
- * @ZephyrId SPM-125
+ * @ZephyrId MAGETWO-49519
  */
 class LockCustomerOnLoginPageTest extends Injectable
 {
     /* tags */
     const MVP = 'no';
-    const DOMAIN = 'CS';
+    const DOMAIN = 'PS';
     /* end tags */
 
     /**

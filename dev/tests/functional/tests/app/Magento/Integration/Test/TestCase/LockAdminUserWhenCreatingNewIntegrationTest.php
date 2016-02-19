@@ -27,7 +27,7 @@ use Magento\User\Test\Fixture\User;
  * 6. "You have entered an invalid password for current user." appears after each attempt.
  * 7. Perform all assertions.
  *
- * @ZephyrId SPM-104
+ * @ZephyrId MAGETWO-49038
  */
 class LockAdminUserWhenCreatingNewIntegrationTest extends Injectable
 {

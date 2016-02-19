@@ -29,7 +29,7 @@ use Magento\Customer\Test\Page\CustomerAccountLogin;
  * 6. "The password doesn't match this account." appears after each change password attempt.
  * 7. Perform all assertions.
  *
- * @ZephyrId SPM-126
+ * @ZephyrId MAGETWO-29411
  */
 class LockCustomerOnEditPageTest extends Injectable
 {
