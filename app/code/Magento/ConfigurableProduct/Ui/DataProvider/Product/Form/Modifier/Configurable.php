@@ -141,7 +141,13 @@ class Configurable extends AbstractModifier
                                 'actions' => [
                                     [
                                         'targetName' =>
-                                            'configurableVariations',
+                                            'product_form.product_form.configurableModal',
+                                        'actionName' => 'trigger',
+                                        'params' => ['active', true],
+                                    ],
+                                    [
+                                        'targetName' =>
+                                            'product_form.product_form.configurableModal',
                                         'actionName' => 'openModal',
                                     ],
                                 ],
