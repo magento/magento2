@@ -134,6 +134,11 @@ class Eav extends AbstractModifier
     private $translitFilter;
 
     /**
+     * @var array
+     */
+    private $bannedInputTypes = ['media_image'];
+
+    /**
      * Initialize dependencies
      *
      * @param LocatorInterface $locator
@@ -218,7 +223,12 @@ class Eav extends AbstractModifier
     protected function getAttributesMeta(array $attributes, $groupCode)
     {
         $meta = [];
+
         foreach ($attributes as $sortKey => $attribute) {
+            if (in_array($attribute->getFrontendInput(), $this->bannedInputTypes)) {
+                continue;
+            }
+
             $code = $attribute->getAttributeCode();
             $canDisplayService = $this->canDisplayUseDefault($attribute);
             $usedDefault = $this->usedDefault($attribute);
@@ -462,6 +472,46 @@ class Eav extends AbstractModifier
         }
 
         $meta = $this->addWysiwyg($attribute, $meta);
+        $meta = $this->customizeCheckbox($attribute, $meta);
+        $meta = $this->customizePriceAttribute($attribute, $meta);
+
+        return $meta;
+    }
+
+    /**
+     * Customize checkboxes
+     *
+     * @param ProductAttributeInterface $attribute
+     * @param array $meta
+     * @return array
+     */
+    private function customizeCheckbox(ProductAttributeInterface $attribute, array $meta)
+    {
+        if ($attribute->getFrontendInput() === 'boolean') {
+            $meta['arguments']['data']['config']['prefer'] = 'toggle';
+            $meta['arguments']['data']['config']['valueMap'] = [
+                'true' => '1',
+                'false' => '0',
+            ];
+        }
+
+        return $meta;
+    }
+
+    /**
+     * Customize attribute that has price type
+     *
+     * @param ProductAttributeInterface $attribute
+     * @param array $meta
+     * @return array
+     */
+    private function customizePriceAttribute(ProductAttributeInterface $attribute, array $meta)
+    {
+        if ($attribute->getFrontendInput() === 'price') {
+            $meta['arguments']['data']['config']['addbefore'] = $this->locator->getStore()
+                ->getBaseCurrency()
+                ->getCurrencySymbol();
+        }
 
         return $meta;
     }
