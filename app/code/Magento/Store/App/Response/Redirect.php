@@ -210,7 +210,36 @@ class Redirect implements \Magento\Framework\App\Response\RedirectInterface
             $directLinkType = \Magento\Framework\UrlInterface::URL_TYPE_DIRECT_LINK;
             $unsecureBaseUrl = $this->_storeManager->getStore()->getBaseUrl($directLinkType, false);
             $secureBaseUrl = $this->_storeManager->getStore()->getBaseUrl($directLinkType, true);
-            return (strpos($url, $unsecureBaseUrl) === 0) || (strpos($url, $secureBaseUrl) === 0);
+            $internal = (strpos($url, $unsecureBaseUrl) === 0) || (strpos($url, $secureBaseUrl) === 0);
+            if (true === $internal) {
+                /**
+                 * check if the referer belongs to another storeview
+                 */
+                $linkFromOtherStoreview = false;
+                $currentStore = $this->_storeManager->getStore();
+                $stores = $this->_storeManager->getStores(true);
+                foreach ($stores as $store) {
+                    if ($currentStore->getId() !== $store->getId())
+                    {
+                        $unsecureBaseUrl = $store
+                            ->getBaseUrl($directLinkType, false);
+                        $secureBaseUrl = $store
+                            ->getBaseUrl($directLinkType, true);
+                        $fromOtherStoreview = (
+                            strpos($url, $unsecureBaseUrl) === 0)
+                            || (strpos($url, $secureBaseUrl) === 0
+                        );
+                        if (true === $fromOtherStoreview
+                            && false === $linkFromOtherStoreview) {
+                            $linkFromOtherStoreview = true;
+                        }
+                    }
+                }
+                if (true === $linkFromOtherStoreview) {
+                    $internal = false;
+                }
+            }
+            return $internal;
         }
         return false;
     }
