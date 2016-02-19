@@ -257,7 +257,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function getMetadataPool()
     {
         if (!isset($this->metadataPool)) {
-            $this->metadataPool = \Magento\Framework\App\ObjectionManager::getInstance()
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
                 ->get('Magento\Framework\Model\Entity\MetadataPool');
         }
         return $this->metadataPool;
