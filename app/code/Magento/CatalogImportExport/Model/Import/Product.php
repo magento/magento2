@@ -2505,11 +2505,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     public function setMetadataPool(\Magento\Framework\Model\Entity\MetadataPool $metadataPool)
     {
-        if (!$this->metadataPool) {
-            $this->metadataPool = $metadataPool;
-        } else {
+        if ($this->metadataPool) {
             throw new \LogicException("Metadata pool is already set");
         }
+        $this->metadataPool = $metadataPool;
     }
 
     /**
