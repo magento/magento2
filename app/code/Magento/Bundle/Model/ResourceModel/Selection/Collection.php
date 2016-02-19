@@ -20,85 +20,18 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     protected $_selectionTable;
 
     /**
+     * Product metadata pool
+     *
      * @var \Magento\Framework\Model\Entity\MetadataPool
      */
     private $metadataPool;
 
     /**
-     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Eav\Model\EntityFactory $eavEntityFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
-     * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Url $catalogUrl
-     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param GroupManagementInterface $groupManagement
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * Product entity link field
+     *
+     * @var string
      */
-    public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Eav\Model\EntityFactory $eavEntityFactory,
-        \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
-        \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\Manager $moduleManager,
-        \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
-        \Magento\Catalog\Model\ResourceModel\Url $catalogUrl,
-        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
-    ) {
-        $this->metadataPool = $metadataPool;
-        parent::__construct(
-            $entityFactory,
-            $logger,
-            $fetchStrategy,
-            $eventManager,
-            $eavConfig,
-            $resource,
-            $eavEntityFactory,
-            $resourceHelper,
-            $universalFactory,
-            $storeManager,
-            $moduleManager,
-            $catalogProductFlatState,
-            $scopeConfig,
-            $productOptionFactory,
-            $catalogUrl,
-            $localeDate,
-            $customerSession,
-            $dateTime,
-            $groupManagement,
-            $productLimitation,
-            $connection
-        );
-    }
+    private $productEntityLinkField;
 
     /**
      * Initialize collection
@@ -136,10 +69,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     protected function _initSelect()
     {
         parent::_initSelect();
-        $productMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $this->getSelect()->join(
             ['selection' => $this->_selectionTable],
-            "selection.product_id = e.{$productMetadata->getLinkField()}",
+            "selection.product_id = e.{$this->getProductEntityLinkField()}",
             ['*']
         );
     }
@@ -212,5 +144,48 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     {
         $this->getSelect()->order('selection.position asc')->order('selection.selection_id asc');
         return $this;
+    }
+
+    /**
+     * Get product metadata pool
+     *
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!isset($this->metadataPool)) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
+    }
+
+    /**
+     * Set product Metadata pool
+     *
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @return void
+     * @throws \LogicException
+     */
+    public function setMetadataPool(\Magento\Framework\Model\Entity\MetadataPool $metadataPool)
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = $metadataPool;
+        } else {
+            throw new \LogicException("Metadata pool is already set");
+        }
+    }
+
+    /**
+     * Get product entity link field
+     *
+     * @return string
+     */
+    private function getProductEntityLinkField()
+    {
+        if (!isset($this->productEntityLinkField)) {
+            $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)->getLinkField();
+        }
+        return $this->productEntityLinkField;
     }
 }
