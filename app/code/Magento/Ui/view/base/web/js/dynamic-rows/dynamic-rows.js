@@ -74,7 +74,7 @@ define([
             this._super()
                 .initChildren()
                 .initDnd()
-                .isColumnsHeader()
+                .setColumnsHeaderListener()
                 .initDefaultRecord();
 
             return this;
@@ -118,7 +118,7 @@ define([
          *
          * @returns {Object} Chainable.
          */
-        isColumnsHeader: function () {
+        setColumnsHeaderListener: function () {
             if (this.columnsHeaderAfterRender) {
                 this.on('elems', this.renderColumnsHeader.bind(this));
             }
@@ -217,6 +217,7 @@ define([
             sorted = this.elems().sort(function (propOne, propTwo) {
                 return parseInt(propOne.position, 10) - parseInt(propTwo.position, 10);
             });
+
             updatedCollection = this.updatePosition(sorted, position, elem.name);
             this.elems(updatedCollection);
         },
@@ -317,9 +318,9 @@ define([
                 this.removeMaxPosition();
                 recordsData = this._getDataByProp(recordId);
                 this._updateData(recordsData);
-                this._sortAfterDelete();
                 --this.recordIterator;
             }
+            this._sort();
         },
 
         /**
@@ -339,7 +340,7 @@ define([
         /**
          * Sort elems by position property
          */
-        _sortAfterDelete: function () {
+        _sort: function () {
             this.elems(this.elems().sort(function (propOne, propTwo) {
                 return parseInt(propOne.position, 10) - parseInt(propTwo.position, 10);
             }));
