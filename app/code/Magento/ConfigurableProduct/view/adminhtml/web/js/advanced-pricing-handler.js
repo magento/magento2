@@ -2,7 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+/*
 define([
     'jquery',
     'Magento_Catalog/catalog/type-events'
@@ -43,3 +43,4 @@ define([
         }
     };
 });
+*/

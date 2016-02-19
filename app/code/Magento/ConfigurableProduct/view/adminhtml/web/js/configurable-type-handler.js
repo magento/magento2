@@ -86,6 +86,7 @@ define([
         _initType: function () {
             var suggestContainer = $('#product-template-suggest-container .action-dropdown > .action-toggle');
 
+            /*
             if (productType.type.current === 'configurable') {
                 this._setElementDisabled(suggestContainer.addClass('disabled'), true);
                 this._setElementDisabled($('#inventory_qty'), true);
@@ -98,12 +99,15 @@ define([
                 this._setElementDisabled($('#inventory_stock_availability'), true);
                 this._setElementDisabled($('#qty'), false, true);
             }
+            */
 
-            if (['simple', 'virtual', 'configurable'].indexOf(productType.type.current) < 0) {
+            /*if (['simple', 'virtual', 'configurable'].indexOf(productType.type.current) < 0) {
                 this.hide();
             } else {
                 this.show();
-            }
+            }*/
+
+            this.show();
         },
 
         /**
@@ -114,12 +118,13 @@ define([
             this.$block = $(data.blockId + ' input[name="attributes[]"]');
             this.hasVariations = data.hasVariations;
 
-            advancedPricingHandler.init();
-            priceTypeHandler.init();
+            //advancedPricingHandler.init();
+            //priceTypeHandler.init();
 
-            if (productType.type.init === 'configurable' && !this.hasVariations) {
+            /*if (productType.type.init === 'configurable' && !this.hasVariations) {
                 $(document).trigger('setTypeProduct', 'simple');
-            }
+            }*/
+            $(document).trigger('setTypeProduct', 'simple');
 
             this.bindAll();
             this._initType();
