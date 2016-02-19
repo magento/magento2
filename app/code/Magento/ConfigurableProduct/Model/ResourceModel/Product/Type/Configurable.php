@@ -201,7 +201,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 ]
             )->joinInner(
                 ['product_entity' => $this->getTable('catalog_product_entity')],
-                'product_entity.' . $metadata->getLinkField() . ' = super_attribute.product_id',
+                "product_entity.{$metadata->getLinkField()} = super_attribute.product_id",
                 []
             )->joinInner(
                 ['product_link' => $this->getTable('catalog_product_super_link')],
