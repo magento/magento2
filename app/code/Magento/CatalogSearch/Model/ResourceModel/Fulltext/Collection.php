@@ -8,6 +8,8 @@ namespace Magento\CatalogSearch\Model\ResourceModel\Fulltext;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
+use Magento\Framework\Search\Response\QueryResponse;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Fulltext Collection
@@ -15,8 +17,34 @@ use Magento\Framework\Search\Adapter\Mysql\TemporaryStorage;
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
-    /** 
-     * @var string 
+    /**
+     * @var  QueryResponse
+     * @deprecated
+     */
+    protected $queryResponse;
+
+    /**
+     * Catalog search data
+     *
+     * @var \Magento\Search\Model\QueryFactory
+     * @deprecated
+     */
+    protected $queryFactory = null;
+
+    /**
+     * @var \Magento\Framework\Search\Request\Builder
+     * @deprecated
+     */
+    private $requestBuilder;
+
+    /**
+     * @var \Magento\Search\Model\SearchEngine
+     * @deprecated
+     */
+    private $searchEngine;
+
+    /**
+     * @var string
      */
     private $queryText;
 
@@ -76,11 +104,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation
+     * @param \Magento\Search\Model\QueryFactory $catalogSearchData
+     * @param \Magento\Framework\Search\Request\Builder $requestBuilder
+     * @param \Magento\Search\Model\SearchEngine $searchEngine
      * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
-     * @param \Magento\Search\Api\SearchInterface $search
-     * @param \Magento\Framework\Api\Search\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @param string $searchRequestName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -105,13 +133,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation,
+        \Magento\Search\Model\QueryFactory $catalogSearchData,
+        \Magento\Framework\Search\Request\Builder $requestBuilder,
+        \Magento\Search\Model\SearchEngine $searchEngine,
         \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
-        \Magento\Search\Api\SearchInterface $search,
-        \Magento\Framework\Api\Search\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         $searchRequestName = 'catalog_view_container'
     ) {
+        $this->queryFactory = $catalogSearchData;
         parent::__construct(
             $entityFactory,
             $logger,
@@ -135,11 +164,73 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $productLimitation,
             $connection
         );
+        $this->requestBuilder = $requestBuilder;
+        $this->searchEngine = $searchEngine;
         $this->temporaryStorageFactory = $temporaryStorageFactory;
         $this->searchRequestName = $searchRequestName;
-        $this->search = $search;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->filterBuilder = $filterBuilder;
+    }
+
+
+    /**
+     * @deprecated
+     */
+    private function getSearch()
+    {
+        if ($this->search !== null) {
+            $this->search = ObjectManager::getInstance()->get('\Magento\Search\Api\SearchInterface');
+        }
+        return $this->search;
+    }
+
+    /**
+     * @deprecated
+     * @param \Magento\Search\Api\SearchInterface $object
+     */
+    public function setSearch($object)
+    {
+        $this->search = $object;
+    }
+
+    /**
+     * @deprecated
+     */
+    private function getSearchCriteriaBuilder()
+    {
+        if ($this->searchCriteriaBuilder !== null) {
+            $this->searchCriteriaBuilder = ObjectManager::getInstance()
+                ->get('\Magento\Framework\Api\Search\SearchCriteriaBuilder');
+        }
+        return $this->searchCriteriaBuilder;
+    }
+
+    /**
+     * @deprecated
+     * @param \Magento\Framework\Api\Search\SearchCriteriaBuilder $object
+     */
+    public function setSearchCriteriaBuilder($object)
+    {
+        $this->searchCriteriaBuilder = $object;
+    }
+
+
+    /**
+     * @deprecated
+     */
+    private function getFilterBuilder()
+    {
+        if ($this->filterBuilder !== null) {
+            $this->filterBuilder = ObjectManager::getInstance()->get('\Magento\Framework\Api\FilterBuilder');
+        }
+        return $this->filterBuilder;
+    }
+
+    /**
+     * @deprecated
+     * @param \Magento\Framework\Api\FilterBuilder $object
+     */
+    public function setFilterBuilder($object)
+    {
+        $this->filterBuilder = $object;
     }
 
     /**
@@ -155,6 +246,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             throw new \RuntimeException('Illegal state');
         }
 
+        $this->getSearchCriteriaBuilder();
+        $this->getFilterBuilder();
         if (!is_array($condition) || !in_array(key($condition), ['from', 'to'])) {
             $this->filterBuilder->setField($field);
             $this->filterBuilder->setValue($condition);
@@ -191,6 +284,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected function _renderFiltersBefore()
     {
+        $this->getSearchCriteriaBuilder();
+        $this->getFilterBuilder();
+        $this->getSearch();
+
         if ($this->queryText) {
             $this->filterBuilder->setField('search_term');
             $this->filterBuilder->setValue($this->queryText);

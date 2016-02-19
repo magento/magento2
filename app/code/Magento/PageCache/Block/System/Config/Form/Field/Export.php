@@ -64,4 +64,16 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
     {
         return $this->getUrl('*/PageCache/exportVarnishConfig', $params);
     }
+
+    /**
+     * Return PageCache TTL value from config
+     * to avoid saving empty field
+     *
+     * @return string
+     * @deprecated
+     */
+    public function getTtlValue()
+    {
+        return $this->_scopeConfig->getValue(\Magento\PageCache\Model\Config::XML_PAGECACHE_TTL);
+    }
 }
