@@ -10,14 +10,14 @@ use Magento\Search\Test\Page\Adminhtml\SynonymGroupIndex;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Assert that after save block successful message appears.
+ * Assert that after delete synonym group successful delete message appears.
  */
-class AssertSynonymGroupSuccessSaveMessage extends AbstractConstraint
+class AssertSynonymGroupDeleteMessage extends AbstractConstraint
 {
-    const SUCCESS_SAVE_MESSAGE = 'You saved the synonym group.';
+    const DELETE_MESSAGE = 'The synonym group has been deleted.';
 
     /**
-     * Assert that after save Synonym Group successful message appears.
+     * Assert that after delete Synonym Group successful delete message appears.
      *
      * @param SynonymGroupIndex $synonymGroupIndex
      * @return void
@@ -26,10 +26,10 @@ class AssertSynonymGroupSuccessSaveMessage extends AbstractConstraint
     {
         $actualMessage = $synonymGroupIndex->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
-            self::SUCCESS_SAVE_MESSAGE,
+            self::DELETE_MESSAGE,
             $actualMessage,
             'Wrong success message is displayed.'
-            . "\nExpected: " . self::SUCCESS_SAVE_MESSAGE
+            . "\nExpected: " . self::DELETE_MESSAGE
             . "\nActual: " . $actualMessage
         );
     }
@@ -41,6 +41,6 @@ class AssertSynonymGroupSuccessSaveMessage extends AbstractConstraint
      */
     public function toString()
     {
-        return 'Synonym Group success create message is present.';
+        return 'Synonym Group success delete message is present.';
     }
 }
