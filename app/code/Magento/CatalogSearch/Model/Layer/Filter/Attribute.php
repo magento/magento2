@@ -92,17 +92,22 @@ class Attribute extends AbstractFilter
             if (empty($option['value'])) {
                 continue;
             }
+
+            $count = isset($optionsFacetedData[$option['value']]['count'])
+                ? (int)$optionsFacetedData[$option['value']]['count']
+                : 0;
             // Check filter type
-            if (empty($optionsFacetedData[$option['value']]['count'])
-                || ($this->getAttributeIsFilterable($attribute) == static::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS
-                    && !$this->isOptionReducesResults($optionsFacetedData[$option['value']]['count'], $productSize))
+            if (
+                $count === 0
+                && $this->getAttributeIsFilterable($attribute) === static::ATTRIBUTE_OPTIONS_ONLY_WITH_RESULTS
+                && !$this->isOptionReducesResults($optionsFacetedData[$option['value']]['count'], $productSize)
             ) {
                 continue;
             }
             $this->itemDataBuilder->addItemData(
                 $this->tagFilter->filter($option['label']),
                 $option['value'],
-                $optionsFacetedData[$option['value']]['count']
+                $count
             );
         }
 
