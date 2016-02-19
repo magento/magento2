@@ -74,7 +74,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getType', 'getId'])
             ->getMockForAbstractClass();
         $themeFromCollection = $this->getMockBuilder('Magento\Framework\View\Design\ThemeInterface')
-            ->setMethods(['setType', 'save', 'getParentTheme', 'getType', 'getParentId', 'setParentId'])
+            ->setMethods(['setType', 'save', 'getParentTheme', 'getType', 'getParentId', 'setParentId', 'getFullPath'])
             ->getMockForAbstractClass();
         $collection = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\Data\Collection')
             ->disableOriginalConstructor()
@@ -112,7 +112,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
             ->method('hasTheme')
             ->with($themeFromCollection)
             ->willReturn(false);
-        $this->filesystemCollection->expects($this->once())
+        $this->filesystemCollection->expects($this->exactly(2))
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$theme]));
         $collection->expects($this->once())
@@ -165,6 +165,9 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
             ->method('setParentId')
             ->with($parentThemeFromCollectionId)
             ->willReturnSelf();
+        $themeFromCollection->expects($this->any())
+            ->method('getFullPath')
+            ->willReturn('/theme/in/db');
         $parentThemeFromCollection->expects($this->any())
             ->method('getType')
             ->willReturn(ThemeInterface::TYPE_VIRTUAL);
@@ -174,54 +177,4 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(get_class($this->model), $this->model->register());
     }
-
-    /**
-     * @dataProvider isThemeMismatchDataProvider
-     *
-     * @param bool $assert
-     * @param array $dbThemes
-     * @param array $filesystemThemes
-     */
-    public function testIsThemeMismatch($assert, $dbThemes, $filesystemThemes)
-    {
-        $collection = $this->getMock('Magento\Theme\Model\ResourceModel\Theme\Data\Collection', [], [], '', false);
-        $collection->expects($this->any())->method('getIterator')->willReturn(new \ArrayIterator($dbThemes));
-
-        $this->collectionFactory->expects($this->once())->method('create')->willReturn($collection);
-
-        $this->filesystemCollection
-            ->expects($this->once())
-            ->method('getItems')
-            ->willReturn(new \ArrayIterator($filesystemThemes));
-
-        $this->assertSame($assert, $this->model->isThemeMismatch());
-    }
-
-    /**
-     * @return array
-     */
-    function isThemeMismatchDataProvider()
-    {
-        $themeInDBOne = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $themeInDBOne->expects($this->any())->method('getFullPath')->willReturn('vendorOne/themeOne');;
-
-        $themeInDBTwo = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $themeInDBTwo->expects($this->any())->method('getFullPath')->willReturn('vendorTwo/themeTwo');;
-
-        $filesystemThemeOne = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $filesystemThemeOne->expects($this->any())->method('getFullPath')->willReturn('vendorOne/themeOne');
-
-        $filesystemThemeTwo = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $filesystemThemeTwo->expects($this->any())->method('getFullPath')->willReturn('vendorTwo/themeTwo');
-
-        return [
-            [false,[$themeInDBOne, $themeInDBTwo], [$filesystemThemeOne, $filesystemThemeTwo] ],
-            [true, [$themeInDBOne], [$filesystemThemeOne, $filesystemThemeTwo] ],
-            [true, [$themeInDBOne, $themeInDBTwo], [$filesystemThemeOne] ],
-            [true, [], [$filesystemThemeOne] ],
-            [true, [$themeInDBOne], [] ],
-            [false, [], [] ],
-        ];
-    }
-
 }
