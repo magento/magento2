@@ -149,32 +149,6 @@ class Registration
     }
 
     /**
-     * Returns true if there is mismatch between physical themes and themes in DB
-     *
-     * @return bool
-     */
-    public function isThemeMismatch()
-    {
-        $dbThemes = $this->_collectionFactory->create();
-        $dbThemeNames = [];
-        foreach ($dbThemes as $dbTheme) {
-            $dbThemeNames[] = $dbTheme->getFullPath();
-        }
-
-        $filesystemThemeNames = [];
-        $filesystemThemes = $this->_themeCollection->getItems();
-        foreach ($filesystemThemes as $filesystemTheme) {
-            $filesystemThemeNames[] = $filesystemTheme->getFullPath();
-        }
-
-        if (sizeof(array_diff($dbThemeNames, $filesystemThemeNames)) > 0
-            || sizeof(array_diff($filesystemThemeNames, $dbThemeNames)) > 0) {
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * Get theme from DB by full path
      *
      * @param string $fullPath
