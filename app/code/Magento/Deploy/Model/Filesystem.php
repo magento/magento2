@@ -112,7 +112,7 @@ class Filesystem
                 DirectoryList::STATIC_VIEW
             ],
             self::PERMISSIONS_DIR,
-            self::PERMISSIONS_DIR
+            self::PERMISSIONS_FILE
         );
 
         // Trigger static assets compilation and deployment
