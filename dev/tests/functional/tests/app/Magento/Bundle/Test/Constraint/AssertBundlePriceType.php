@@ -79,7 +79,6 @@ class AssertBundlePriceType extends AbstractConstraint
         $cartItem = $checkoutCartView->getCartBlock()->getCartItem($product);
         $specialPrice = 0;
 
-
         $optionPrice = [];
         $fillData = $product->getCheckoutData();
         foreach ($fillData['options']['bundle_options'] as $key => $data) {
