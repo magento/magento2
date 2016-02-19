@@ -319,10 +319,15 @@ FAULT_MESSAGE;
         }
         $paramsXml = '';
         foreach ($parameters as $parameterName => $parameterValue) {
-            if (is_string($parameterName) && (is_string($parameterValue) || is_numeric($parameterValue))) {
+            if ((is_string($parameterName) || is_numeric($parameterName))
+                && (is_string($parameterValue) || is_numeric($parameterValue))
+            ) {
                 $keyNode = self::NODE_DETAIL_PARAMETER_KEY;
                 $valueNode = self::NODE_DETAIL_PARAMETER_VALUE;
                 $parameterNode = self::NODE_DETAIL_PARAMETER;
+                if (is_numeric($parameterName)) {
+                    $parameterName++;
+                }
                 $paramsXml .= "<m:$parameterNode><m:$keyNode>$parameterName</m:$keyNode><m:$valueNode>"
                     . htmlspecialchars($parameterValue) . "</m:$valueNode></m:$parameterNode>";
             }
