@@ -276,11 +276,10 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function setMetadataPool(\Magento\Framework\Model\Entity\MetadataPool $metadataPool)
     {
-        if (!$this->metadataPool) {
-            $this->metadataPool = $metadataPool;
-        } else {
+        if ($this->metadataPool) {
             throw new \LogicException("Metadata pool is already set");
         }
+        $this->metadataPool = $metadataPool;
     }
 
     /**
