@@ -115,10 +115,10 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     /**
      * Register entity to delete
      *
-     * @param OrderInterface $entity
+     * @param \Magento\Sales\Api\Data\OrderInterface $entity
      * @return bool
      */
-    public function delete(OrderInterface $entity)
+    public function delete(\Magento\Sales\Api\Data\OrderInterface $entity)
     {
         $this->metadata->getMapper()->delete($entity);
         unset($this->registry[$entity->getEntityId()]);
@@ -140,10 +140,10 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
     /**
      * Perform persist operations for one entity
      *
-     * @param OrderInterface $entity
-     * @return OrderInterface
+     * @param \Magento\Sales\Api\Data\OrderInterface $entity
+     * @return \Magento\Sales\Api\Data\OrderInterface
      */
-    public function save(OrderInterface $entity)
+    public function save(\Magento\Sales\Api\Data\OrderInterface $entity)
     {
         $this->metadata->getMapper()->save($entity);
         $this->registry[$entity->getEntityId()] = $entity;

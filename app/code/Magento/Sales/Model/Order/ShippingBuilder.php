@@ -5,15 +5,12 @@
  */
 namespace Magento\Sales\Model\Order;
 
-use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Api\Data\ShippingInterface;
 use Magento\Sales\Api\Data\ShippingInterfaceFactory;
 use Magento\Sales\Api\Data\TotalInterface;
 use Magento\Sales\Api\Data\TotalInterfaceFactory;
-use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderFactory;
-use Magento\Sales\Model\Order\Address;
-use Magento\Sales\Model\ResourceModel\Order\Address\CollectionFactory as AddressCollectionFactory;
 
 /**
  * Class ShippingBuilder
@@ -27,7 +24,7 @@ class ShippingBuilder
     private $orderId = null;
 
     /**
-     * @var OrderInterface
+     * @var Order
      */
     private $order;
 
@@ -47,28 +44,20 @@ class ShippingBuilder
     private $totalFactory;
 
     /**
-     * @var AddressCollectionFactory
-     */
-    private $addressCollectionFactory;
-
-    /**
      * ShippingBuilder constructor.
      *
      * @param OrderFactory $orderFactory
      * @param ShippingInterfaceFactory $shippingFactory
      * @param TotalInterfaceFactory $totalFactory
-     * @param AddressCollectionFactory $addressCollectionFactory
      */
     public function __construct(
         OrderFactory $orderFactory,
         ShippingInterfaceFactory $shippingFactory,
-        TotalInterfaceFactory $totalFactory,
-        AddressCollectionFactory $addressCollectionFactory
+        TotalInterfaceFactory $totalFactory
     ) {
         $this->orderFactory = $orderFactory;
         $this->shippingFactory = $shippingFactory;
         $this->totalFactory = $totalFactory;
-        $this->addressCollectionFactory = $addressCollectionFactory;
     }
 
     /**
@@ -91,7 +80,7 @@ class ShippingBuilder
             if ($this->order->getEntityId()) {
                 /** @var ShippingInterface $shipping */
                 $shipping = $this->shippingFactory->create();
-                $shipping->setAddress($this->getAddress());
+                $shipping->setAddress($this->order->getShippingAddress());
                 $shipping->setMethod($this->order->getShippingMethod());
                 $shipping->setTotal($this->getTotal());
             }
@@ -105,21 +94,6 @@ class ShippingBuilder
     private function getOrderId()
     {
         return $this->orderId;
-    }
-
-    /**
-     * @return OrderAddressInterface|null
-     */
-    private function getAddress()
-    {
-        $collection = $this->addressCollectionFactory->create()->setOrderFilter($this->order);
-        /** @var OrderAddressInterface $address  */
-        foreach ($collection as $address) {
-            if ($address->getAddressType() == Address::TYPE_SHIPPING) { // && !$address->isDeleted()) {
-                return $address;
-            }
-        }
-        return null;
     }
 
     /**
