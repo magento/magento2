@@ -297,4 +297,21 @@ class ShippingTotal extends AbstractExtensibleModel implements TotalInterface
     {
         return $this->setData(self::SHIPPING_TAX_REFUNDED, $shippingTaxRefunded);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtensionAttributes(
+        \Magento\Sales\Api\Data\TotalExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
 }

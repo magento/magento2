@@ -8,7 +8,7 @@ namespace Magento\Sales\Api\Data;
 /**
  * Interface TotalInterface
  */
-interface TotalInterface
+interface TotalInterface extends ExtensibleDataInterface
 {
     /**#@+
      * Constants for keys of data array. Identical to the name of the getter in snake case.
@@ -356,4 +356,21 @@ interface TotalInterface
      * @return $this
      */
     public function setShippingTaxRefunded($shippingTaxRefunded);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\TotalExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\TotalExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Sales\Api\Data\TotalExtensionInterface $extensionAttributes
+    );
 }

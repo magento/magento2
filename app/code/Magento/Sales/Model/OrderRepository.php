@@ -193,11 +193,11 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * @return ShippingAssignmentBuilder
      * @deprecated
      */
-    private function getShippingAssignmentbuilderDependency()
+    private function getShippingAssignmentBuilderDependency()
     {
-        if (!$this->shippingAssignmentBuilder instanceof ShippingAssignmentbuilder) {
+        if (!$this->shippingAssignmentBuilder instanceof ShippingAssignmentBuilder) {
             $this->shippingAssignmentBuilder = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                '\Magento\Sales\Model\Order\ShippingAssignmentbuilder'
+                '\Magento\Sales\Model\Order\ShippingAssignmentBuilder'
             );
         }
         return $this->shippingAssignmentBuilder;
