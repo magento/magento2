@@ -21,7 +21,7 @@ use Magento\Security\Test\Page\UserAccountForgotPassword;
  * 3. Password reset failed message appears on each password reset attempt starting the second one.
  * 4. Perform all assertions.
  *
- * @ZephyrId SPM-66
+ * @ZephyrId MAGETWO-49028
  */
 class ResetUserPasswordFailedTest extends Injectable
 {
