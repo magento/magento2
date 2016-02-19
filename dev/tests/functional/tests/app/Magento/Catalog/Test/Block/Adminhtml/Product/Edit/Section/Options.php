@@ -9,6 +9,7 @@ namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Search\Grid;
 use Magento\Mtf\ObjectManager;
+use Magento\Mtf\Client\ElementInterface;
 use Magento\Mtf\Client\Locator;
 use Magento\Ui\Test\Block\Adminhtml\Section;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\AbstractOptions;
@@ -111,21 +112,7 @@ class Options extends Section
 
             // Fill subform
             if (isset($field['type']) && !empty($options)) {
-                /** @var AbstractOptions $optionsForm */
-                $optionsForm = $this->blockFactory->create(
-                    __NAMESPACE__ . '\Options\Type\\' . $this->optionNameConvert($field['type']),
-                    ['element' => $rootElement]
-                );
-                $context = $rootElement->find($this->addValue)->isVisible()
-                    ? $this->dynamicDataRow
-                    : $this->staticDataRow;
-                foreach ($options as $key => $option) {
-                    ++$key;
-                    $optionsForm->fillOptions(
-                        $option,
-                        $rootElement->find(sprintf($context, $key))
-                    );
-                }
+                $this->setOptionTypeData($options, $field['type'], $rootElement);
             }
         }
 
@@ -159,6 +146,34 @@ class Options extends Section
             'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Search\Grid',
             ['element' => $this->_rootElement->find($this->importGrid)]
         );
+    }
+
+    /**
+     * Set Option Type data.
+     *
+     * @param array $options
+     * @param string $type
+     * @param ElementInterface $element
+     * @return $this
+     */
+    private function setOptionTypeData(array $options, $type, ElementInterface $element)
+    {
+        /** @var AbstractOptions $optionsForm */
+        $optionsForm = $this->blockFactory->create(
+            __NAMESPACE__ . '\Options\Type\\' . $this->optionNameConvert($type),
+            ['element' => $element]
+        );
+        $context = $element->find($this->addValue)->isVisible()
+            ? $this->dynamicDataRow
+            : $this->staticDataRow;
+        foreach ($options as $key => $option) {
+            ++$key;
+            $optionsForm->fillOptions(
+                $option,
+                $element->find(sprintf($context, $key))
+            );
+        }
+        return $this;
     }
 
     /**
