@@ -65,17 +65,11 @@ class PaymentDetailsHandler implements HandlerInterface
         $paymentDO = $this->subjectReader->readPayment($handlingSubject);
         /** @var \Braintree\Transaction $transaction */
         $transaction = $this->subjectReader->readTransaction($response);
-        /**
-         * @TODO after changes in sales module should be refactored for new interfaces
-         */
         /** @var OrderPaymentInterface $payment */
         $payment = $paymentDO->getPayment();
-        ContextHelper::assertOrderPayment($payment);
 
-        $payment->setTransactionId($transaction->id);
         $payment->setCcTransId($transaction->id);
         $payment->setLastTransId($transaction->id);
-        $payment->setIsTransactionClosed(false);
 
         //remove previously set payment nonce
         $payment->unsAdditionalInformation(DataAssignObserver::PAYMENT_METHOD_NONCE);
