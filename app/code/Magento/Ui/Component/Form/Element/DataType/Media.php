@@ -30,21 +30,18 @@ class Media extends AbstractDataType
     public function prepare()
     {
         if ($this->getData('config/uploaderConfig/url')) {
-            $this->setData(
-                array_replace_recursive(
-                    $this->getData(),
-                    [
-                        'config' => [
-                            'uploaderConfig' => [
-                                'url' => $this->getContext()->getUrl(
-                                    $this->getData('config/uploaderConfig/url'),
-                                    ['_secure' => true]
-                                )
-                            ],
+            $url = $this->getContext()->getUrl($this->getData('config/uploaderConfig/url'), ['_secure' => true]);
+            $data = array_replace_recursive(
+                $this->getData(),
+                [
+                    'config' => [
+                        'uploaderConfig' => [
+                            'url' => $url
                         ],
-                    ]
-                )
+                    ],
+                ]
             );
+            $this->setData($data);
         }
         parent::prepare();
     }
