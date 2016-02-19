@@ -68,4 +68,3 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($resultJson, $this->controller->execute());
     }
 }
-

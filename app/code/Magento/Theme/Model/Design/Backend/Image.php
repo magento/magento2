@@ -18,9 +18,6 @@ use Magento\Framework\Registry;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Theme\Model\Design\Config\FileUploader\Config;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class Image extends File
 {
     /**
@@ -34,7 +31,18 @@ class Image extends File
     protected $imageConfig;
 
     /**
-     * @inheritDoc
+     * @param Context $context
+     * @param Registry $registry
+     * @param ScopeConfigInterface $config
+     * @param TypeListInterface $cacheTypeList
+     * @param UploaderFactory $uploaderFactory
+     * @param RequestDataInterface $requestData
+     * @param Filesystem $filesystem
+     * @param Config $imageConfig
+     * @param AbstractResource|null $resource
+     * @param AbstractDb|null $resourceCollection
+     * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -75,9 +83,9 @@ class Image extends File
         $values = $this->getValue();
         $value = reset($values) ?: [];
         if (!isset($value['file'])) {
-            throw new LocalizedException(
-                __($this->getData('field_config/field') . ' does not contain field \'file\'')
-            );
+             throw new LocalizedException(
+                 __($this->getData('field_config/field') . ' does not contain field \'file\'')
+             );
         }
         if (isset($value['exists'])) {
             $this->setValue($value['file']);

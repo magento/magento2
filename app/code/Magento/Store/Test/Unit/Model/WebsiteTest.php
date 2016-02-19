@@ -65,7 +65,6 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->model->isCanDelete());
     }
 
-
     public function testGetScopeType()
     {
         $this->assertEquals(ScopeInterface::SCOPE_WEBSITE, $this->model->getScopeType());

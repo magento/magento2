@@ -22,6 +22,7 @@ class ImageProcessor
      * @var Config
      */
     protected $imageConfig;
+
     /**
      * @var BackendModelFactory
      */

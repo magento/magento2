@@ -25,6 +25,7 @@ class DataProvider extends AbstractDataProvider
      * @var DataProvider\DataLoader
      */
     protected $dataLoader;
+
     /**
      * @var DataProvider\MetadataLoader
      */

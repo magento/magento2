@@ -51,9 +51,8 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         $url = 'http://magento2.com/module/actionPath/path/key/34523456234523trdg';
         $this->context->expects($this->once())
             ->method('getUrl')
-            ->with('module/actionPath/path',  ['_secure' => true])
+            ->with('module/actionPath/path', ['_secure' => true])
             ->willReturn($url);
         $this->media->prepare();
     }
 }
-
