@@ -19,12 +19,56 @@
 
 @control-collapsible-content__padding: @indent__s;
 
+@control-collapsible-row__dragging__background-color: @color-light-gray0;
+
+@control-collapsible-horizontal-dragover-mark__color: @color-blue-dodger;
+@control-collapsible-horizontal-dragover-mark__height: 3px;
+
 //
 //  Table with collapsible panel
 //  _____________________________________________
 
 .admin__control-collapsible {
     width: 100%;
+
+    ._dragged {
+        .admin__collapsible-block-wrapper {
+            .admin__collapsible-title {
+                background: @control-collapsible-row__dragging__background-color;
+            }
+        }
+    }
+
+    ._dragover-top,
+    ._dragover-bottom {
+        .admin__collapsible-block-wrapper {
+            &:before {
+                background: @control-collapsible-horizontal-dragover-mark__color;
+                content: '';
+                display: block;
+                height: @control-collapsible-horizontal-dragover-mark__height;
+                left: 0;
+                position: absolute;
+                right: 0;
+            }
+        }
+    }
+
+    ._dragover-top {
+        .admin__collapsible-block-wrapper {
+            &:before {
+                top: -@control-collapsible-horizontal-dragover-mark__height;
+            }
+        }
+    }
+
+    ._dragover-bottom {
+        .admin__collapsible-block-wrapper {
+            &:before {
+                bottom: -@control-collapsible-horizontal-dragover-mark__height;
+            }
+        }
+    }
 
     .admin__collapsible-block-wrapper {
         &.fieldset-wrapper {
