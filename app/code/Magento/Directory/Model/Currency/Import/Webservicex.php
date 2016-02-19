@@ -4,45 +4,46 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+namespace Magento\Directory\Model\Currency\Import;
 
 /**
  * Currency rate import model (From www.webservicex.net)
  */
-namespace Magento\Directory\Model\Currency\Import;
-
 class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImport
 {
     /**
      * @var string
      */
-    const CURRENCY_CONVERTER_URL = 'http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate?FromCurrency={{CURRENCY_FROM}}&ToCurrency={{CURRENCY_TO}}';
+    const CURRENCY_CONVERTER_URL = 'http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate?' .
+        'FromCurrency={{CURRENCY_FROM}}&ToCurrency={{CURRENCY_TO}}';
 
     /**
-     * HTTP client
+     * Http Client Factory
      *
-     * @var \Magento\Framework\HTTP\ZendClient
+     * @var \Magento\Framework\HTTP\ZendClientFactory
      */
-    protected $_httpClient;
+    protected $httpClientFactory;
 
     /**
-     * Core store config
+     * Core scope config
      *
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
-    protected $_scopeConfig;
+    private $scopeConfig;
 
     /**
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
     ) {
         parent::__construct($currencyFactory);
-        $this->_scopeConfig = $scopeConfig;
-        $this->_httpClient = new \Magento\Framework\HTTP\ZendClient();
+        $this->scopeConfig = $scopeConfig;
+        $this->httpClientFactory = $httpClientFactory;
     }
 
     /**
@@ -55,13 +56,15 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
     {
         $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, self::CURRENCY_CONVERTER_URL);
         $url = str_replace('{{CURRENCY_TO}}', $currencyTo, $url);
+        /** @var \Magento\Framework\HTTP\ZendClient $httpClient */
+        $httpClient = $this->httpClientFactory->create();
 
         try {
-            $response = $this->_httpClient->setUri(
+            $response = $httpClient->setUri(
                 $url
             )->setConfig(
                 [
-                    'timeout' => $this->_scopeConfig->getValue(
+                    'timeout' => $this->scopeConfig->getValue(
                         'currency/webservicex/timeout',
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                     ),
