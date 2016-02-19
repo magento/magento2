@@ -100,94 +100,207 @@
                 </item>
             </argument>
         </field>
-        <container name="attribute_options_container">
+    </fieldset>
+    <fieldset name="attribute_options_container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option</item>
+                <item name="label" xsi:type="string" translate="true">Values</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sortOrder" xsi:type="number">15</item>
+                <item name="dataScope" xsi:type="string"></item>
+                <item name="valuesForOptions" xsi:type="array">
+                    <item name="select" xsi:type="string">select</item>
+                    <item name="multiselect" xsi:type="string">multiselect</item>
+                </item>
+            </item>
+        </argument>
+        <dynamicRows name="attribute_options">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="formElement" xsi:type="string">container</item>
-                    <item name="componentType" xsi:type="string">container</item>
-                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option</item>
-                    <item name="valuesForOptions" xsi:type="array">
-                        <item name="select" xsi:type="string">select</item>
-                        <item name="multiselect" xsi:type="string">multiselect</item>
-                    </item>
+                    <item name="componentType" xsi:type="string">dynamicRows</item>
+                    <item name="dataScope" xsi:type="string"></item>
+                    <item name="addButtonLabel" xsi:type="string" translate="true">Add Value</item>
                 </item>
             </argument>
-            <dynamicRows name="attribute_options">
+            <container name="record">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="componentType" xsi:type="string">dynamicRows</item>
-                        <item name="dataScope" xsi:type="string">attribute_options</item>
-                        <item name="label" xsi:type="string" translate="true">Add Value</item>
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/record</item>
+                        <item name="componentType" xsi:type="string">container</item>
+                        <item name="positionProvider" xsi:type="string">attribute_options.position</item>
+                        <item name="dataScope" xsi:type="string"></item>
                     </item>
                 </argument>
-                <container name="record">
+                <field name="is_default">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
-                            <item name="isTemplate" xsi:type="boolean">true</item>
-                            <item name="is_collection" xsi:type="boolean">true</item>
-                            <item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/record</item>
-                            <item name="componentType" xsi:type="string">container</item>
-                            <item name="positionProvider" xsi:type="string">attribute_options.position</item>
-                            <item name="visible" xsi:type="boolean">false</item>
+                            <item name="dataType" xsi:type="string">boolean</item>
+                            <item name="formElement" xsi:type="string">checkbox</item>
+                            <item name="label" xsi:type="string" translate="true">Is Default</item>
+                            <item name="dataScope" xsi:type="string">is_default</item>
+                            <item name="prefer" xsi:type="string">radio</item>
+                            <item name="value" xsi:type="string">1</item>
+                            <item name="sortOrder" xsi:type="string">0</item>
                         </item>
                     </argument>
-                    <field name="is_default">
-                        <argument name="data" xsi:type="array">
-                            <item name="config" xsi:type="array">
-                                <item name="dataType" xsi:type="string">boolean</item>
-                                <item name="formElement" xsi:type="string">checkbox</item>
-                                <item name="label" xsi:type="string" translate="true">Is Default</item>
-                                <item name="dataScope" xsi:type="string">is_default</item>
-                                <item name="prefer" xsi:type="string">radio</item>
-                                <item name="value" xsi:type="string">1</item>
+                </field>
+                <field name="1">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="label" xsi:type="string" translate="true">Default Store View</item>
+                            <item name="dataScope" xsi:type="string">value.option_1</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="0">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="label" xsi:type="string" translate="true">Admin</item>
+                            <item name="dataScope" xsi:type="string">value.option_0</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="position">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="dataScope" xsi:type="string">position</item>
+                            <item name="visible" xsi:type="boolean">false</item>
+                            <item name="additionalClasses" xsi:type="array">
+                                <item name="_hidden" xsi:type="boolean">true</item>
                             </item>
-                        </argument>
-                    </field>
-                    <field name="options[0]">
-                        <argument name="data" xsi:type="array">
-                            <item name="config" xsi:type="array">
-                                <item name="dataType" xsi:type="string">text</item>
-                                <item name="formElement" xsi:type="string">input</item>
-                                <item name="label" xsi:type="string" translate="true">Default Store View</item>
-                                <item name="dataScope" xsi:type="string">option[0]</item>
-                            </item>
-                        </argument>
-                    </field>
-                    <field name="options[1]">
-                        <argument name="data" xsi:type="array">
-                            <item name="config" xsi:type="array">
-                                <item name="dataType" xsi:type="string">text</item>
-                                <item name="formElement" xsi:type="string">input</item>
-                                <item name="label" xsi:type="string" translate="true">Admin</item>
-                                <item name="dataScope" xsi:type="string">option[1]</item>
-                            </item>
-                        </argument>
-                    </field>
-                    <field name="position">
-                        <argument name="data" xsi:type="array">
-                            <item name="config" xsi:type="array">
-                                <item name="dataType" xsi:type="string">text</item>
-                                <item name="formElement" xsi:type="string">input</item>
-                                <item name="label" xsi:type="string" translate="true">Admin</item>
-                                <item name="dataScope" xsi:type="string">position</item>
-                                <item name="visible" xsi:type="boolean">false</item>
-                                <item name="additionalClasses" xsi:type="array">
-                                    <item name="_hidden" xsi:type="boolean">true</item>
-                                </item>
-                            </item>
-                        </argument>
-                    </field>
-                    <actionDelete>
-                        <argument name="data" xsi:type="array">
+                        </item>
+                    </argument>
+                </field>
+                <actionDelete name="action_delete">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
                             <item name="componentType" xsi:type="string">actionDelete</item>
                             <item name="dataType" xsi:type="string">text</item>
-                            <item name="label" xsi:type="string"></item>
                             <item name="fit" xsi:type="boolean">true</item>
-                        </argument>
-                    </actionDelete>
-                </container>
-            </dynamicRows>
-        </container>
+                        </item>
+                    </argument>
+                </actionDelete>
+            </container>
+        </dynamicRows>
+    </fieldset>
+
+    <fieldset name="text_swatch_container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option</item>
+                <item name="label" xsi:type="string" translate="true">Manage Swatch (Values of Your Attribute)</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sortOrder" xsi:type="number">15</item>
+                <item name="valuesForOptions" xsi:type="array">
+                    <item name="swatch_text" xsi:type="string">swatch_text</item>
+                </item>
+            </item>
+        </argument>
+        <dynamicRows name="text_swatch">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="componentType" xsi:type="string">dynamicRows</item>
+                    <item name="dataScope" xsi:type="string">text_swatch</item>
+                    <item name="addButtonLabel" xsi:type="string" translate="true">Add Swatch</item>
+                </item>
+            </argument>
+            <container name="record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/record</item>
+                        <item name="componentType" xsi:type="string">container</item>
+                        <item name="positionProvider" xsi:type="string">text_swatch.position</item>
+                        <item name="dataScope" xsi:type="string"></item>
+                    </item>
+                </argument>
+                <field name="defaulttext">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">boolean</item>
+                            <item name="formElement" xsi:type="string">checkbox</item>
+                            <item name="label" xsi:type="string" translate="true">Is Default</item>
+                            <item name="dataScope" xsi:type="string">defaulttext[]</item>
+                            <item name="prefer" xsi:type="string">radio</item>
+                            <item name="value" xsi:type="string">1</item>
+                            <item name="sortOrder" xsi:type="string">0</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="swatchtext_1">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="label" xsi:type="string" translate="true">Swatch</item>
+                            <item name="dataScope" xsi:type="string">swatchtext.value.option_1</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="optiontext_1">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="label" xsi:type="string" translate="true">Default Store View</item>
+                            <item name="dataScope" xsi:type="string">optiontext.value.option_1</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="swatchtext_0">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="label" xsi:type="string" translate="true">Swatch</item>
+                            <item name="dataScope" xsi:type="string">swatchtext.value.option_0</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="optiontext_0">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="label" xsi:type="string" translate="true">Admin</item>
+                            <item name="dataScope" xsi:type="string">optiontext.value.option_0</item>
+                        </item>
+                    </argument>
+                </field>
+                <field name="position">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="dataScope" xsi:type="string">position</item>
+                            <item name="visible" xsi:type="boolean">false</item>
+                            <item name="additionalClasses" xsi:type="array">
+                                <item name="_hidden" xsi:type="boolean">true</item>
+                            </item>
+                        </item>
+                    </argument>
+                </field>
+                <actionDelete name="action_delete">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="componentType" xsi:type="string">actionDelete</item>
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="fit" xsi:type="boolean">true</item>
+                        </item>
+                    </argument>
+                </actionDelete>
+            </container>
+        </dynamicRows>
     </fieldset>
 
     <fieldset name="advanced_fieldset">
