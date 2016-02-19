@@ -72,6 +72,10 @@ class Category extends AbstractResource
      * @var EntityManager
      */
     protected $entityManager;
+    /**
+     * @var Category\AggregateCount
+     */
+    private $aggregateCount;
 
     /**
      * Category constructor.
@@ -82,6 +86,7 @@ class Category extends AbstractResource
      * @param Category\TreeFactory $categoryTreeFactory
      * @param Category\CollectionFactory $categoryCollectionFactory
      * @param EntityManager $entityManager
+     * @param Category\AggregateCount $aggregateCount
      * @param array $data
      */
     public function __construct(
@@ -92,6 +97,7 @@ class Category extends AbstractResource
         \Magento\Catalog\Model\ResourceModel\Category\TreeFactory $categoryTreeFactory,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         EntityManager $entityManager,
+        Category\AggregateCount $aggregateCount,
         $data = []
     ) {
         parent::__construct(
@@ -104,8 +110,8 @@ class Category extends AbstractResource
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_eventManager = $eventManager;
         $this->entityManager = $entityManager;
-
         $this->connectionName  = 'catalog';
+        $this->aggregateCount = $aggregateCount;
     }
 
     /**
@@ -171,6 +177,21 @@ class Category extends AbstractResource
             $this->_tree = $this->_categoryTreeFactory->create()->load();
         }
         return $this->_tree;
+    }
+
+    /**
+     * Process category data before delete
+     * update children count for parent category
+     * delete child categories
+     *
+     * @param \Magento\Framework\DataObject $object
+     * @return $this
+     */
+    protected function _beforeDelete(\Magento\Framework\DataObject $object)
+    {
+        parent::_beforeDelete($object);
+        $this->aggregateCount->processDelete($object);
+        $this->deleteChildren($object);
     }
 
     /**
