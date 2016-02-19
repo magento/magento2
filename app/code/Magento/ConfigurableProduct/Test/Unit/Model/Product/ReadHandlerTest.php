@@ -6,13 +6,9 @@
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product;
 
 use Magento\Catalog\Model\Product;
-use Magento\ConfigurableProduct\Api\Data\OptionValueInterface;
-use Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory;
+use Magento\ConfigurableProduct\Helper\Product\Options\Loader;
 use Magento\ConfigurableProduct\Model\Product\ReadHandler;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
-use Magento\Framework\Model\Entity\EntityMetadata;
-use Magento\Framework\Model\Entity\MetadataPool;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -21,60 +17,26 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
 class ReadHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var OptionValueInterfaceFactory|MockObject
-     */
-    private $optionValueFactory;
-
-    /**
-     * @var MetadataPool|MockObject
-     */
-    private $metadataPool;
-
-    /**
-     * @var EntityMetadata|MockObject
-     */
-    private $metadata;
-
-    /**
      * @var ReadHandler
      */
     private $readHandler;
+
+    /**
+     * @var Loader|MockObject
+     */
+    private $optionLoader;
 
     /**
      * @inheritdoc
      */
     protected function setUp()
     {
-        $this->optionValueFactory = $this->getMockBuilder(OptionValueInterfaceFactory::class)
+        $this->optionLoader = $this->getMockBuilder(Loader::class)
             ->disableOriginalConstructor()
-            ->setMethods(['create'])
+            ->setMethods(['load'])
             ->getMock();
 
-        $this->initMetadataPoolMock();
-
-        $this->readHandler = new ReadHandler($this->optionValueFactory, $this->metadataPool);
-    }
-
-    /**
-     * Init mock object for metadata pool
-     *
-     * @return void
-     */
-    private function initMetadataPoolMock()
-    {
-        $this->metadata = $this->getMockBuilder(EntityMetadata::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getLinkField'])
-            ->getMock();
-
-        $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getMetadata'])
-            ->getMock();
-
-        $this->metadataPool->expects(static::any())
-            ->method('getMetadata')
-            ->willReturn($this->metadata);
+        $this->readHandler = new ReadHandler($this->optionLoader);
     }
 
     /**
@@ -107,14 +69,13 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ['value_index' => 12],
             ['value_index' => 13]
         ];
-        $linkField = 'entity_id';
         $entityId = 1;
         $ids = [1, 2, 3];
 
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods([
-                'getTypeId', 'getData', 'getExtensionAttributes', 'setExtensionAttributes', 'getTypeInstance'
+                'getTypeId', 'getId', 'getExtensionAttributes', 'setExtensionAttributes', 'getTypeInstance'
             ])
             ->getMock();
 
@@ -122,7 +83,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getTypeId')
             ->willReturn(Configurable::TYPE_CODE);
 
-        $extensionAttributes = $this->getMockBuilder(PaymentExtensionAttributes::class)
+        $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
             ->disableOriginalConstructor()
             ->setMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
             ->getMockForAbstractClass();
@@ -131,43 +92,22 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
 
+        $this->optionLoader->expects(static::once())
+            ->method('load')
+            ->with($product)
+            ->willReturn($options);
+
         $typeInstance = $this->getMockBuilder(Configurable::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConfigurableAttributes', 'getChildrenIds'])
+            ->setMethods(['getChildrenIds'])
             ->getMock();
 
-        $attribute = $this->getMockBuilder(Attribute::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getOptions', 'setValues'])
-            ->getMock();
-        $typeInstance->expects(static::once())
-            ->method('getConfigurableAttributes')
-            ->with($product)
-            ->willReturn([$attribute]);
-
-        $product->expects(static::exactly(2))
+        $product->expects(static::once())
             ->method('getTypeInstance')
             ->willReturn($typeInstance);
 
-        $attribute->expects(static::once())
-            ->method('getOptions')
-            ->willReturn($options);
-
-        $optionValue = $this->getMock(OptionValueInterface::class);
-        $this->optionValueFactory->expects(static::exactly(sizeof($options)))
-            ->method('create')
-            ->willReturn($optionValue);
-        $optionValue->expects(static::exactly(2))
-            ->method('setValueIndex');
-        $attribute->expects(static::once())
-            ->method('setValues');
-
-        $this->metadata->expects(static::once())
-            ->method('getLinkField')
-            ->willReturn($linkField);
         $product->expects(static::once())
-            ->method('getData')
-            ->with($linkField)
+            ->method('getId')
             ->willReturn($entityId);
 
         $typeInstance->expects(static::once())

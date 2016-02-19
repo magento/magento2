@@ -72,7 +72,7 @@ class AroundProductRepositorySave
         $configurableLinks = (array) $extensionAttributes->getConfigurableProductLinks();
         $configurableOptions = (array) $extensionAttributes->getConfigurableProductOptions();
 
-        if (empty($configurableLinks) && empty($extensionAttributes)) {
+        if (empty($configurableLinks) && empty($configurableOptions)) {
             return $result;
         }
 
@@ -111,7 +111,7 @@ class AroundProductRepositorySave
             }
             if (isset($valueMap[$valueKey])) {
                 throw new InputException(
-                    __('Products "%1" and %2 have the same set of attribute values.', $productId, $valueMap[$valueKey])
+                    __('Products "%1" and "%2" have the same set of attribute values.', $productId, $valueMap[$valueKey])
                 );
             }
             $valueMap[$valueKey] = $productId;

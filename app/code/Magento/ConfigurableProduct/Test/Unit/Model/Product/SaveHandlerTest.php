@@ -62,12 +62,11 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->initConfigurableFactoryMock();
 
-
         $this->productAttributeRepository = $this->getMock(ProductAttributeRepositoryInterface::class);
 
         $this->saveHandler = new SaveHandler(
+            $this->configurable,
             $this->optionRepository,
-            $this->configurableFactory,
             $this->productAttributeRepository
         );
     }
@@ -111,7 +110,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getSku')
             ->willReturn($sku);
 
-        $extensionAttributes = $this->getMockBuilder(PaymentExtensionAttributes::class)
+        $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
             ->setMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -162,7 +161,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getSku')
             ->willReturn($sku);
 
-        $extensionAttributes = $this->getMockBuilder(PaymentExtensionAttributes::class)
+        $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
             ->setMethods(['getConfigurableProductOptions', 'getConfigurableProductLinks'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
