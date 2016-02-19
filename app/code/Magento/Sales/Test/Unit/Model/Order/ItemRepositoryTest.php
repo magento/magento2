@@ -310,10 +310,19 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
                 'custom_options' => $this->productOptionProcessorMock,
             ]
         );
-        $orderItemExtensionMock = $this->getMock('\Magento\Sales\Api\Data\OrderItemExtension', [], [], '', false);
+        $shipping = $this->getMockForAbstractClass('\Magento\Sales\Api\Data\ShippingInterface', [], '', false);
+        $orderItemExtensionMock = $this->getMock(
+            '\Magento\Sales\Api\Data\OrderItemExtension',
+            ['setShipping'],
+            [],
+            '',
+            false
+        );
+        $orderItemExtensionMock->expects($this->once())->method('setShipping')->with($shipping);
         $model->setOrderItemExtensionDependency($orderItemExtensionMock);
         $shippingBuilderMock = $this->getMock('\Magento\Sales\Model\Order\ShippingBuilder', [], [], '', false);
         $shippingBuilderMock->expects($this->once())->method('setOrderId');
+        $shippingBuilderMock->expects($this->once())->method('create')->willReturn($shipping);
         $model->setShippingBuilderDependency($shippingBuilderMock);
 
         return $model;
