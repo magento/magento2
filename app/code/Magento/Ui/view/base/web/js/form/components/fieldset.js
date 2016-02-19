@@ -16,8 +16,10 @@ define([
             loading: false,
             error: false,
             opened: false,
-            additionalClasses: {},
-            level: 0
+            level: 0,
+            visible: true,
+            disabled: false,
+            additionalClasses: {}
         },
 
         /**
@@ -39,7 +41,7 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('changed loading error');
+                .observe('changed loading error visible');
 
             return this;
         },
@@ -52,13 +54,22 @@ define([
          * @return {Object} - reference to instance
          */
         initElement: function (elem) {
-            this._super();
+            elem.initContainer(this);
 
             elem.on({
                 'update':   this.onChildrenUpdate,
                 'loading':  this.onContentLoading,
                 'error':  this.onChildrenError
             });
+
+            if (this.disabled) {
+                try {
+                    elem.disabled(true);
+                }
+                catch (e) {
+
+                }
+            }
 
             return this;
         },

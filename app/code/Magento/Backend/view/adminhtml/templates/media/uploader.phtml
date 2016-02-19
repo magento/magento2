@@ -38,6 +38,9 @@ require([
 
     $('#fileupload').fileupload({
         dataType: 'json',
+        formData: {
+            'form_key': window.FORM_KEY
+        },
         dropZone: '[data-tab-panel=image-management]',
         sequentialUploads: true,
         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
