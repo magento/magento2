@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Interface TotalInterface
  */
