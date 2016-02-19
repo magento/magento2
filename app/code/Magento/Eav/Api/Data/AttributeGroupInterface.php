@@ -17,7 +17,6 @@ interface AttributeGroupInterface extends ExtensibleDataInterface
     const ATTRIBUTE_GROUP_CODE = 'attribute_group_code';
     const TAB_GROUP_CODE = 'tab_group_code';
 
-
     /**
      * Retrieve id
      *
@@ -88,10 +87,10 @@ interface AttributeGroupInterface extends ExtensibleDataInterface
     /**
      * Set default ID
      *
-     * @param int $value
+     * @param int $defaultId
      * @return $this
      */
-    public function setDefaultId($value);
+    public function setDefaultId($defaultId);
 
     /**
      * Retrieve attribute group code

@@ -20,6 +20,8 @@ use Magento\Framework\Api\SortOrderBuilder;
 
 /**
  * Class AddAttributeToTemplate
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Product
 {
@@ -57,11 +59,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
      * @var AttributeGroupInterfaceFactory
      */
     protected $attributeGroupFactory;
-
-    /**
-     * @var CatalogEavResource
-     */
-    protected $catalogEavResourceFactory;
 
     /**
      * @var AttributeManagementInterfaces
@@ -124,10 +121,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
             $groupName = $request->getParam('groupName');
             $groupSortOrder = $request->getParam('groupSortOrder');
 
-            $attributeSearchCriteriaBuilder = $this->addBasicAttributeSearchFilters(
-                $attributeSearchCriteriaBuilder,
-                $attributeSet
-            );
+            $attributeSearchCriteriaBuilder = $this->addBasicAttributeSearchFilters($attributeSearchCriteriaBuilder);
 
             $attributeSearchCriteria = $attributeSearchCriteriaBuilder->create();
             $attributeGroupSearchCriteria = $groupSearchCriteriaBuilder
@@ -187,26 +181,22 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
      * Adding basic filters
      *
      * @param SearchCriteriaBuilder $attributeSearchCriteriaBuilder
-     * @param AttributeSetInterface $attributeSet
      * @return SearchCriteriaBuilder
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function addBasicAttributeSearchFilters(
-        SearchCriteriaBuilder $attributeSearchCriteriaBuilder,
-        AttributeSetInterface $attributeSet
+        SearchCriteriaBuilder $attributeSearchCriteriaBuilder
     ) {
         $attributesIds = (array)$this->getRequest()->getParam('attributesIds', []);
 
         if (!empty($attributesIds['selected'])) {
-            $attributeSearchCriteriaBuilder->addFilter(
+            return $attributeSearchCriteriaBuilder->addFilter(
                 'attribute_id',
                 [$attributesIds['selected']],
                 'in'
             );
-        } else {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please, specify attributes'));
         }
 
-        return $attributeSearchCriteriaBuilder;
+        throw new \Magento\Framework\Exception\LocalizedException(__('Please, specify attributes'));
     }
 }
