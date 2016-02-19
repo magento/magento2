@@ -134,7 +134,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     {
         $product = $this->getProduct($sku);
 
-        return $this->optionLoader->load($product);
+        return (array) $this->optionLoader->load($product);
     }
 
     /**
@@ -149,7 +149,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             $this->configurableTypeResource->saveProducts($product, []);
         } catch (\Exception $exception) {
             throw new StateException(
-                __('Cannot delete variations from product: %1', $option->getProductId())
+                __('Cannot delete variations from product: %1', $entityId)
             );
         }
         try {
