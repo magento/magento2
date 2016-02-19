@@ -10,7 +10,7 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Ui\Component\Form;
-use Magento\Ui\Component\Modal;
+use Magento\Ui\Component\DynamicRows;
 
 /**
  * Data provider for Configurable products
@@ -152,6 +152,114 @@ class Configurable extends AbstractModifier
                                     ],
                                 ],
                                 'title' => __('Create Configurations'),
+                            ],
+                        ],
+                    ],
+                ],
+                //'variations' => $this->getGrid(),
+            ],
+        ];
+    }
+
+    /**
+     * Returns dynamic rows configuration
+     *
+     * @return array
+     */
+    /*protected function getGrid()
+    {
+        return [
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'additionalClasses' => 'admin__field-wide',
+                        'componentType' => DynamicRows::NAME,
+                        'label' => __('Current Variations'),
+                        'renderDefaultRecord' => true,
+                        'template' => 'ui/dynamic-rows/templates/grid',
+                        'component' => 'Magento_Ui/js/dynamic-rows/dynamic-rows-grid',
+                        'addButton' => false,
+                        'itemTemplate' => 'record',
+                        'dataScope' => 'data.links',
+                        'deleteButtonLabel' => __('Remove'),
+                        'dataProvider' => 'grouped_product_listing',
+                        'map' => [
+                            'id' => 'entity_id',
+                            'name' => 'name',
+                        ],
+                        'links' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
+                        'sortOrder' => 20,
+                        'columnsHeader' => true,
+                        'columnsHeaderAfterRender' => false,
+                    ],
+                ],
+            ],
+            'children' => $this->getRows(),
+        ];
+    }*/
+
+    /**
+     * Returns Dynamic rows records configuration
+     *
+     * @return array
+     */
+    protected function getRows()
+    {
+        return [
+            'record' => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'componentType' => 'container',
+                            'isTemplate' => false,
+                            'is_collection' => true,
+                            'component' => 'Magento_Ui/js/dynamic-rows/record',
+                            'dataScope' => '',
+                        ],
+                    ],
+                ],
+                'children' => [
+                    'id' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'dataType' => Form\Element\DataType\Number::NAME,
+                                    'formElement' => Form\Element\Input::NAME,
+                                    'componentType' => Form\Field::NAME,
+                                    'dataScope' => 'qty',
+                                    'label' => __('Default Quantity'),
+                                    'fit' => true,
+                                    'additionalClasses' => 'admin__field-small',
+                                    'sortOrder' => 80,
+                                ],
+                            ],
+                        ],
+                    ],
+                    'actionDelete' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'additionalClasses' => 'data-grid-actions-cell',
+                                    'componentType' => 'actionDelete',
+                                    'dataType' => Form\Element\DataType\Text::NAME,
+                                    'label' => __('Actions'),
+                                    'sortOrder' => 90,
+                                    'fit' => true,
+                                ],
+                            ],
+                        ],
+                    ],
+                    'position' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'dataType' => Form\Element\DataType\Number::NAME,
+                                    'formElement' => Form\Element\Input::NAME,
+                                    'componentType' => Form\Field::NAME,
+                                    'dataScope' => 'position',
+                                    'sortOrder' => 100,
+                                    'visible' => false,
+                                ],
                             ],
                         ],
                     ],
