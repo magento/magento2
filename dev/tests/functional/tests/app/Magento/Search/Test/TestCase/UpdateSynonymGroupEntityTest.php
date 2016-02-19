@@ -19,14 +19,14 @@ use Magento\Search\Test\Fixture\SynonymGroup;
  * Steps:
  * 1. Open Backend.
  * 2. Go to Marketing > Search Synonyms.
- * 3. Click "New Synonym Group" button.
+ * 3. Open created Synonym Group.
  * 4. Fill data according to dataset.
  * 5. Perform all assertions.
  *
  * @group Search_(PS)
- * @ZephyrId MAGETWO-47684
+ * @ZephyrId MAGETWO-49412
  */
-class MergeSynonymGroupEntityTest extends Injectable
+class UpdateSynonymGroupEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
@@ -74,7 +74,7 @@ class MergeSynonymGroupEntityTest extends Injectable
     }
 
     /**
-     * Merge Synonym Group.
+     * Update Synonym Group.
      *
      * @param SynonymGroup $initialSynonymGroup
      * @param SynonymGroup $synonymGroup
@@ -87,18 +87,10 @@ class MergeSynonymGroupEntityTest extends Injectable
 
         $initialData = ($initialSynonymGroup->getData());
         $synonyms = $initialData['synonyms'];
-        $synonyms = explode(',', $synonyms);
-        $data = $synonymGroup->getData();
-        $data['synonyms'] = $synonyms[0] . ',' . $data['synonyms'];
-        $data['scope_id'] = [
-            'dataset' => 'default_store_view'
-        ];
-
-        $synonymGroup = $this->factory->createByCode('synonymGroup', ['data' => $data]);
 
         // Steps
         $this->synonymGroupIndex->open();
-        $this->synonymGroupIndex->getGridPageActions()->addNew();
+        $this->synonymGroupIndex->getSynonymGroupGrid()->searchAndOpen(['synonyms' => $synonyms]);
         $this->synonymGroupNew->getSynonymGroupForm()->fill($synonymGroup);
         $this->synonymGroupNew->getFormPageActions()->save();
     }

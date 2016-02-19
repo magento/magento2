@@ -11,7 +11,7 @@
             <field name="scope_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">default_store_view</item>
             </field>
-            <field name="synonyms" xsi:type="string">test_synonym_%isolation%, test_synonym_2_test_synonym_%isolation%</field>
+            <field name="synonyms" xsi:type="string">test_synonym_%isolation%,test_synonym_2_test_synonym_%isolation%</field>
             <field name="mergeOnConflict" xsi:type="string">Yes</field>
         </dataset>
     </repository>
