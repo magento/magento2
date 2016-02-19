@@ -37,23 +37,26 @@ class SkuProcessor
     protected $productTypeModels;
 
     /**
+     * Product metadata pool
+     *
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * Product entity link field
+     *
      * @var string
      */
     private $productEntityLinkField;
 
     /**
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      */
     public function __construct(
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+        \Magento\Catalog\Model\ProductFactory $productFactory
     ) {
         $this->productFactory = $productFactory;
-
-        /** @var \Magento\Framework\Model\Entity\EntityMetadata $productMetadata */
-        $productMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
-        $this->productEntityLinkField = $productMetadata->getLinkField();
     }
 
     /**
@@ -145,9 +148,52 @@ class SkuProcessor
                 'attr_set_id' => $info['attribute_set_id'],
                 'entity_id' => $info['entity_id'],
                 'supported_type' => isset($this->productTypeModels[$typeId]),
-                $this->productEntityLinkField => $info[$this->productEntityLinkField],
+                $this->getProductEntityLinkField() => $info[$this->getProductEntityLinkField()],
             ];
         }
         return $oldSkus;
+    }
+
+    /**
+     * Get product metadata pool
+     *
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!isset($this->metadataPool)) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
+    }
+
+    /**
+     * Set product Metadata pool
+     *
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @return void
+     * @throws \LogicException
+     */
+    public function setMetadataPool(\Magento\Framework\Model\Entity\MetadataPool $metadataPool)
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = $metadataPool;
+        } else {
+            throw new \LogicException("Metadata pool is already set");
+        }
+    }
+
+    /**
+     * Get product entity link field
+     *
+     * @return string
+     */
+    private function getProductEntityLinkField()
+    {
+        if (!isset($this->productEntityLinkField)) {
+            $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)->getLinkField();
+        }
+        return $this->productEntityLinkField;
     }
 }
