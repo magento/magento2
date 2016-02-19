@@ -184,16 +184,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected $_nextAttrId;
 
     /**
-     * @var string
-     */
-    private $productEntityIdentifierField;
-
-    /**
-     * @var string
-     */
-    private $productEntityLinkField;
-
-    /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -201,7 +191,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig
      * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $_productColFac
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac,
@@ -210,8 +199,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         array $params,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $productTypesConfig,
         \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $_productColFac,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $_productColFac
     ) {
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
         $this->_productTypesConfig = $productTypesConfig;
@@ -219,10 +207,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $this->_resource = $resource;
         $this->_productColFac = $_productColFac;
         $this->_connection = $this->_entityModel->getConnection();
-        /** @var \Magento\Framework\Model\Entity\EntityMetadata $productMetadata */
-        $productMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
-        $this->productEntityIdentifierField = $productMetadata->getIdentifierField();
-        $this->productEntityLinkField = $productMetadata->getLinkField();
     }
 
     /**
@@ -624,8 +608,9 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     protected function _collectSuperData($rowData)
     {
-        $rowId = $this->_productData[$this->productEntityLinkField];
-        $entityId = $this->_productData[$this->productEntityIdentifierField];
+        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $rowId = $this->_productData[$metadata->getLinkField()];
+        $entityId = $this->_productData[$metadata->getIdentifierField()];
 
         $this->_processSuperData();
 
@@ -673,13 +658,14 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     protected function _collectAssocIds($data)
     {
+        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $newSku = $this->_entityModel->getNewSku();
         $oldSku = $this->_entityModel->getOldSku();
         if (!empty($data['_super_products_sku'])) {
             if (isset($newSku[$data['_super_products_sku']])) {
-                $superProductRowId = $newSku[$data['_super_products_sku']][$this->productEntityLinkField];
+                $superProductRowId = $newSku[$data['_super_products_sku']][$metadata->getLinkField()];
             } elseif (isset($oldSku[$data['_super_products_sku']])) {
-                $superProductRowId = $oldSku[$data['_super_products_sku']][$this->productEntityLinkField];
+                $superProductRowId = $oldSku[$data['_super_products_sku']][$metadata->getLinkField()];
             }
 
             if ($superProductRowId) {
@@ -836,5 +822,25 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $error |= !parent::isRowValid($option, $rowNum, $isNewProduct);
         }
         return !$error;
+    }
+
+    /**
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected function getMetadataPool()
+    {
+        if (!isset($this->metadataPool)) {
+            $this->metadataPool = \Magento\Framework\App\ObjectionManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
+    }
+
+    /**
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     */
+    public function setMetadataPool(\Magento\Framework\Model\Entity\MetadataPool $metadataPool)
+    {
+        $this->metadataPool = $metadataPool;
     }
 }

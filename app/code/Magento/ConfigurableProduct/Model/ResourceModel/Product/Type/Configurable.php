@@ -9,7 +9,6 @@ namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
 
 class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
@@ -21,24 +20,21 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $catalogProductRelation;
 
     /**
-     * @var MetadataPool
+     * @var \Magento\Framework\Model\Entity\MetadataPool
      */
     private $metadataPool;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Catalog\Model\ResourceModel\Product\Relation $catalogProductRelation
-     * @param MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Catalog\Model\ResourceModel\Product\Relation $catalogProductRelation,
-        MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->catalogProductRelation = $catalogProductRelation;
-        $this->metadataPool = $metadataPool;
         parent::__construct($context, $connectionName);
     }
 
@@ -60,7 +56,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getEntityIdByAttribute(OptionInterface $option)
     {
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
 
         $select = $this->getConnection()->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
@@ -86,7 +82,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             return $this;
         }
 
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $productId = $mainProduct->getData($metadata->getLinkField());
 
         $data = [];
@@ -128,7 +124,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getChildrenIds($parentId, $required = true)
     {
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $select = $this->getConnection()->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
             ['l.product_id']
@@ -159,7 +155,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $parentIds = [];
 
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
 
         $select = $this->getConnection()
             ->select()
@@ -187,8 +183,8 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getConfigurableOptions($product, $attributes)
     {
         $attributesOptionsData = [];
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
-        $productLinkFieldId = $product->getData($metadata->getLinkField());
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+        $productId = $product->getData($metadata->getLinkField());
         foreach ($attributes as $superAttribute) {
             $select = $this->getConnection()->select()->from(
                 ['super_attribute' => $this->getTable('catalog_product_super_attribute')],
@@ -248,10 +244,30 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                 []
             )->where(
                 'super_attribute.product_id = ?',
-                $productLinkFieldId
+                $productId
             );
             $attributesOptionsData[$superAttribute->getAttributeId()] = $this->getConnection()->fetchAll($select);
         }
         return $attributesOptionsData;
+    }
+
+    /**
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected function getMetadataPool()
+    {
+        if (!isset($this->metadataPool)) {
+            $this->metadataPool = \Magento\Framework\App\ObjectionManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
+    }
+
+    /**
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     */
+    public function setMetadataPool(\Magento\Framework\Model\Entity\MetadataPool $metadataPool)
+    {
+        $this->metadataPool = $metadataPool;
     }
 }
