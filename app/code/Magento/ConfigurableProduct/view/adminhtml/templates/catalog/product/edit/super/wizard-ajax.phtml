@@ -17,3 +17,8 @@ $attributes = $block->getProductAttributes();
     'configurations' => $productMatrix
 ]);
 ?>
+<script>
+    require(['jquery'], function ($) {
+        $('[data-role=steps-wizard-main]').applyBindings();
+    })
+</script>
