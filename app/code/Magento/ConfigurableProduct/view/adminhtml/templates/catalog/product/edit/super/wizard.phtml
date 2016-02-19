@@ -14,14 +14,7 @@ $attributes = $block->getProductAttributes();
 $currencySymbol = $block->getCurrencySymbol();
 ?>
 <div data-role="step-wizard-dialog" data-bind="scope: 'product_form.product_form.configurableModal'">
-    <!-- ko template: getTemplate() -->
-    <?php
-    /* @escapeNotVerified */ echo $block->getVariationWizard([
-        'attributes' => $attributes,
-        'configurations' => $productMatrix
-    ]);
-    ?>
-    <!-- /ko -->
+    <!-- ko template: getTemplate() --><!-- /ko -->
 </div>
 <script type="text/x-magento-init">
     {
