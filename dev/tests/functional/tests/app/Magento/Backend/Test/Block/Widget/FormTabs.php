@@ -80,7 +80,7 @@ class FormTabs extends AbstractFormContainers
      * Open tab.
      *
      * @param string $tabName
-     * @return Tab
+     * @return $this
      * @throws \Exception
      */
     public function openTab($tabName)

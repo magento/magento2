@@ -8,12 +8,11 @@ namespace Magento\Catalog\Test\Block\Adminhtml\Category\Edit\Section;
 
 use Magento\Ui\Test\Block\Adminhtml\Section;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Catalog\Test\Block\Adminhtml\Category\Section\ProductGrid;
 
 /**
- * Products grid of Category Products tab.
+ * Category Products section.
  */
-class Product extends Section
+class Products extends Section
 {
     /**
      * An element locator which allows to select entities in grid.
@@ -71,14 +70,14 @@ class Product extends Section
     }
 
     /**
-     * Returns role grid.
+     * Returns product grid.
      *
-     * @return ProductGrid
+     * @return \Magento\Catalog\Test\Block\Adminhtml\Category\Edit\Section\ProductGrid
      */
     public function getProductGrid()
     {
         return $this->blockFactory->create(
-            'Magento\Catalog\Test\Block\Adminhtml\Category\Section\ProductGrid',
+            'Magento\Catalog\Test\Block\Adminhtml\Category\Edit\Section\ProductGrid',
             ['element' => $this->_rootElement->find($this->productGrid)]
         );
     }
