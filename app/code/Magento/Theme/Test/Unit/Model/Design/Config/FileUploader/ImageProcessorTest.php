@@ -34,6 +34,7 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $this->uploaderFactory = $this->getMockBuilder('Magento\MediaStorage\Model\File\UploaderFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
         $this->uploader = $this->getMockBuilder('Magento\MediaStorage\Model\File\Uploader')
             ->disableOriginalConstructor()
