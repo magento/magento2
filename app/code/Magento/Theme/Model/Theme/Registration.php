@@ -77,8 +77,7 @@ class Registration
         }
 
         $filesystemThemeNames = [];
-        $filesystemThemes = $this->_themeCollection->getItems();
-        foreach ($filesystemThemes as $filesystemTheme) {
+        foreach ($this->_themeCollection as $filesystemTheme) {
             $filesystemThemeNames[] = $filesystemTheme->getFullPath();
         }
 
