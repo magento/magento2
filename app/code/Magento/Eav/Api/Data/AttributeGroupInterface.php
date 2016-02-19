@@ -10,10 +10,13 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 interface AttributeGroupInterface extends ExtensibleDataInterface
 {
     const GROUP_ID = 'attribute_group_id';
-
     const GROUP_NAME = 'attribute_group_name';
-
     const ATTRIBUTE_SET_ID = 'attribute_set_id';
+    const SORT_ORDER = 'sort_order';
+    const DEFAULT_ID = 'default_id';
+    const ATTRIBUTE_GROUP_CODE = 'attribute_group_code';
+    const TAB_GROUP_CODE = 'tab_group_code';
+
 
     /**
      * Retrieve id
@@ -59,6 +62,66 @@ interface AttributeGroupInterface extends ExtensibleDataInterface
      * @return $this
      */
     public function setAttributeSetId($attributeSetId);
+
+    /**
+     * Retrieve sort order
+     *
+     * @return int
+     */
+    public function getSortOrder();
+
+    /**
+     * Set sort order
+     *
+     * @param int $sortOrder
+     * @return $this
+     */
+    public function setSortOrder($sortOrder);
+
+    /**
+     * Retrieve default ID
+     *
+     * @return int
+     */
+    public function getDefaultId();
+
+    /**
+     * Set default ID
+     *
+     * @param int $value
+     * @return $this
+     */
+    public function setDefaultId($value);
+
+    /**
+     * Retrieve attribute group code
+     *
+     * @return string
+     */
+    public function getAttributeGroupCode();
+
+    /**
+     * Set attribute group code
+     *
+     * @param string $attributeGroupCode
+     * @return $this
+     */
+    public function setAttributeGroupCode($attributeGroupCode);
+
+    /**
+     * Retrieve tab group code
+     *
+     * @return string
+     */
+    public function getTabGroupCode();
+
+    /**
+     * Set tab group code
+     *
+     * @param string $tabGroupCode
+     * @return $this
+     */
+    public function setTabGroupCode($tabGroupCode);
 
     /**
      * Retrieve existing extension attributes object.
