@@ -230,9 +230,6 @@ class Eav extends AbstractModifier
             }
 
             $code = $attribute->getAttributeCode();
-            $canDisplayService = $this->canDisplayUseDefault($attribute);
-            $usedDefault = $this->usedDefault($attribute);
-
             $child = $this->setupMetaProperties($attribute);
 
             $meta[static::CONTAINER_PREFIX . $code] = [
@@ -261,19 +258,17 @@ class Eav extends AbstractModifier
             $child['arguments']['data']['config']['globalScope'] = $this->isScopeGlobal($attribute);
             $child['arguments']['data']['config']['sortOrder'] = $sortKey * self::SORT_ORDER_MULTIPLIER;
 
+            $canDisplayService = $this->canDisplayUseDefault($attribute);
             if ($canDisplayService) {
+                $usedDefault = $this->usedDefault($attribute);
                 $child['arguments']['data']['config']['service'] = [
                     'template' => 'ui/form/element/helper/service',
                 ];
-                $child['usedDefault'] = $usedDefault;
+                $child['arguments']['data']['config']['disabled'] = $usedDefault;
             }
 
             if (!isset($child['arguments']['data']['config']['componentType'])) {
                 $child['arguments']['data']['config']['componentType'] = Field::NAME;
-            }
-
-            if ($this->locator->getStore()->getId() && !$this->isScopeGlobal($attribute)) {
-                $child['arguments']['data']['config']['disabled'] = $usedDefault;
             }
 
             // TODO: getAttributeModel() should not be used when MAGETWO-48284 is complete
