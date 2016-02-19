@@ -356,5 +356,4 @@ interface TotalInterface
      * @return $this
      */
     public function setShippingTaxRefunded($shippingTaxRefunded);
-
 }

@@ -66,4 +66,21 @@ interface ShippingAssignmentInterface extends ExtensibleDataInterface
      * @return $this
      */
     public function setStockId($stockId = null);
+
+    /**
+     * Retrieve existing extension attributes object or create a new one.
+     *
+     * @return \Magento\Sales\Api\Data\ShippingAssignmentExtensionInterface|null
+     */
+    public function getExtensionAttributes();
+
+    /**
+     * Set an extension attributes object.
+     *
+     * @param \Magento\Sales\Api\Data\ShippingAssignmentExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(
+        \Magento\Sales\Api\Data\ShippingAssignmentExtensionInterface $extensionAttributes
+    );
 }
