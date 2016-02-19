@@ -69,9 +69,9 @@
             <special_from_date>
                 <selector>[name="product[special_from_date]"]</selector>
             </special_from_date>
-            <special_from_date>
+            <special_to_date>
                 <selector>[name="product[special_to_date]"]</selector>
-            </special_from_date>
+            </special_to_date>
             <cost>
                 <selector>[name="product[cost]"]</selector>
             </cost>

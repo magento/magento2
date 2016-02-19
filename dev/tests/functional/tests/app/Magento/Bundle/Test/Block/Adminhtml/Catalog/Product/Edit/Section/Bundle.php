@@ -28,29 +28,36 @@ class Bundle extends Section
      *
      * @var string
      */
-    protected $openOption = '[data-index="bundle_options"] tbody tr:nth-child(%d) [data-role="collapsible-title"]';
+    protected $openOption =
+        '[data-index="bundle_options"] > tbody > tr:nth-child(%d) [data-role="collapsible-title"]';
 
     /**
      * Selector for option content.
      *
      * @var string
      */
-    protected $optionContent = '[data-index="bundle_options"] tbody tr:nth-child(%d) [data-role="collapsible-content"]';
+    protected $optionContent =
+        '[data-index="bundle_options"] > tbody > tr:nth-child(%d) [data-role="collapsible-content"]';
+
+    /**
+     * Locator for bundle option row.
+     *
+     * @var string
+     */
+    protected $bundleOption = '[data-index="bundle_options"] > tbody > tr:nth-child(%d)';
 
     /**
      * Get bundle options block.
      *
-     * @param int $blockNumber
+     * @param int $rowNumber
      * @return Option
      */
-    protected function getBundleOptionBlock($blockNumber)
+    protected function getBundleOptionBlock($rowNumber)
     {
         return $this->blockFactory->create(
             'Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Section\Bundle\Option',
             [
-                'element' => $this->_rootElement->find(
-                    sprintf('[data-index="bundle_options"] tbody tr:nth-child(%d)', $blockNumber)
-                )
+                'element' => $this->_rootElement->find(sprintf($this->bundleOption, $rowNumber))
             ]
         );
     }
@@ -96,15 +103,15 @@ class Bundle extends Section
         if (!isset($fields['bundle_selections'])) {
             return $this;
         }
-        $index = 0;
+        $index = 1;
         foreach ($fields['bundle_selections']['value']['bundle_options'] as $key => &$bundleOption) {
-            if (!$this->_rootElement->find(sprintf($this->optionContent, $key))->isVisible()) {
+            if (!$this->_rootElement->find(sprintf($this->optionContent, $index))->isVisible()) {
                 $this->_rootElement->find(sprintf($this->openOption, $index))->click();
             }
             foreach ($bundleOption['assigned_products'] as &$product) {
                 $product['data']['getProductName'] = $product['search_data']['name'];
             }
-            $newFields['bundle_selections'][$key] = $this->getBundleOptionBlock($key)->getOptionData($bundleOption);
+            $newFields['bundle_selections'][$key] = $this->getBundleOptionBlock($index)->getOptionData($bundleOption);
             $index++;
         }
 
