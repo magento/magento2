@@ -111,7 +111,11 @@ class AroundProductRepositorySave
             }
             if (isset($valueMap[$valueKey])) {
                 throw new InputException(
-                    __('Products "%1" and "%2" have the same set of attribute values.', $productId, $valueMap[$valueKey])
+                    __(
+                        'Products "%1" and "%2" have the same set of attribute values.',
+                        $productId,
+                        $valueMap[$valueKey]
+                    )
                 );
             }
             $valueMap[$valueKey] = $productId;

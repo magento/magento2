@@ -6,7 +6,6 @@
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Plugin;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
@@ -14,11 +13,12 @@ use Magento\Catalog\Model\ProductFactory;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
 use Magento\ConfigurableProduct\Model\Plugin\AroundProductRepositorySave;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\ConfigurableProduct\Test\Unit\Model\Product\ProductExtensionAttributes;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use \Magento\ConfigurableProduct\Test\Unit\Model\Product\ProductExtensionAttributes;
 
 /**
  * Class AroundProductRepositorySaveTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
 {
