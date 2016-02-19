@@ -4,12 +4,9 @@
  */
 
 define([
-    'ko',
-    'mageUtils',
     'underscore',
-    'uiLayout',
     './dynamic-rows'
-], function (ko, utils, _, layout, dynamicRows) {
+], function (_, dynamicRows) {
     'use strict';
 
     return dynamicRows.extend({
