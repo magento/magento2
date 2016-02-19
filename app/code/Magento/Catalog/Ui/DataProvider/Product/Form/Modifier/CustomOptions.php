@@ -246,9 +246,15 @@ class CustomOptions extends AbstractModifier
                         static::CONTAINER_HEADER_NAME => $this->getHeaderContainerConfig(10),
                         static::GRID_OPTIONS_NAME => $this->getOptionsGridConfig(20),
                         static::FIELD_ENABLE => $this->getEnableFieldConfig(30),
-                        static::IMPORT_OPTIONS_MODAL => $this->getImportOptionsModalConfig()
                     ]
                 ]
+            ]
+        );
+
+        $this->meta = array_merge_recursive(
+            $this->meta,
+            [
+                static::IMPORT_OPTIONS_MODAL => $this->getImportOptionsModalConfig()
             ]
         );
 
@@ -288,9 +294,16 @@ class CustomOptions extends AbstractModifier
                                 'actions' => [
                                     [
                                         'targetName' => 'product_form.product_form.'
-                                            . static::GROUP_CUSTOM_OPTIONS_NAME . '.' . static::IMPORT_OPTIONS_MODAL,
-                                        'actionName' => 'toggleModal',
-                                    ]
+                                            . static::IMPORT_OPTIONS_MODAL,
+                                        'actionName' => 'openModal',
+                                    ],
+                                    [
+                                        'targetName' =>
+                                            'product_form.product_form.'
+                                            . static::IMPORT_OPTIONS_MODAL
+                                            . '.product_custom_options_listing',
+                                        'actionName' => 'render',
+                                    ],
                                 ],
                                 'displayAsLink' => true,
                                 'sortOrder' => 10,
@@ -336,6 +349,7 @@ class CustomOptions extends AbstractModifier
                     'config' => [
                         'addButtonLabel' => __('Add Option'),
                         'componentType' => DynamicRows::NAME,
+                        'component' => 'Magento_Catalog/js/components/dynamic-rows-import-custom-options',
                         'template' => 'ui/dynamic-rows/templates/collapsible',
                         'additionalClasses' => 'admin__field-wide',
                         'deleteProperty' => static::FIELD_IS_DELETE,
@@ -345,6 +359,8 @@ class CustomOptions extends AbstractModifier
                         'columnsHeader' => false,
                         'collapsibleHeader' => true,
                         'sortOrder' => $sortOrder,
+                        'dataProvider' => 'product_custom_options_listing',
+                        'links' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
                     ],
                 ],
             ],
@@ -422,7 +438,6 @@ class CustomOptions extends AbstractModifier
             'arguments' => [
                 'data' => [
                     'config' => [
-                        'isTemplate' => true,
                         'componentType' => Modal::NAME,
                         'dataScope' => '',
                         'provider' => 'product_form.product_form_data_source',
@@ -434,10 +449,11 @@ class CustomOptions extends AbstractModifier
                                     'class' => 'action-primary',
                                     'actions' => [
                                         [
-                                            'targetName' => '${ $.name }',
-                                            'actionName' => 'actionCancel'
-                                        ]
-                                    ]
+                                            'targetName' => 'index = product_custom_options_listing',
+                                            'actionName' => 'save'
+                                        ],
+                                        'closeModal'
+                                    ],
                                 ],
                             ],
                         ],
@@ -445,19 +461,20 @@ class CustomOptions extends AbstractModifier
                 ],
             ],
             'children' => [
-                'grouped_product_listing' => [
+                'product_custom_options_listing' => [
                     'arguments' => [
                         'data' => [
                             'config' => [
-                                'component' => 'Magento_Ui/js/form/components/insert-listing',
-                                'componentType' => 'container',
+                                'autoRender' => false,
+                                'componentType' => 'insertListing',
                                 'dataScope' => 'product_custom_options_listing',
                                 'externalProvider' =>
                                     'product_custom_options_listing.product_custom_options_listing_data_source',
+                                'selectionsProvider' => 'product_custom_options_listing.product_custom_options_listing.product_columns.ids',
                                 'ns' => 'product_custom_options_listing',
                                 'render_url' => $this->urlBuilder->getUrl('mui/index/render'),
                                 'realTimeLink' => true,
-                                'behaviourType' => 'edit',
+                                'behaviourType' => 'simple',
                                 'externalFilterMode' => true,
                                 'currentProductId' => $this->locator->getProduct()->getId(),
                                 'dataLinks' => [
