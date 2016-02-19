@@ -18,6 +18,7 @@ use Magento\Framework\Exception\InputException;
 
 /**
  * Repository class for @see OrderInterface
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
 {
@@ -156,23 +157,24 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      */
     private function setShippingAssignments(OrderInterface $order)
     {
-//        /** @var OrderExtensionInterface $extensionAttributes */
-//        $extensionAttributes = $order->getExtensionAttributes();
-//
-//        if ($extensionAttributes === null) {
-//            $extensionAttributes = $this->getOrderExtensionDependency();
-//        } elseif ($extensionAttributes->getShippingAssignments() !== null) {
-//            return;
-//        }
-//        /** @var ShippingAssignmentInterface $shippingAssignment */
-//        $shippingAssignments = $this->getShippingAssignmentBuilderDependency();
-//        $shippingAssignments->setOrderId($order->getEntityId());
-//        $extensionAttributes->setShippingAssignments($shippingAssignments->create());
-//        $order->setExtensionAttributes($extensionAttributes);
+        /** @var OrderExtensionInterface $extensionAttributes */
+        $extensionAttributes = $order->getExtensionAttributes();
+
+        if ($extensionAttributes === null) {
+            $extensionAttributes = $this->getOrderExtensionDependency();
+        } elseif ($extensionAttributes->getShippingAssignments() !== null) {
+            return;
+        }
+        /** @var ShippingAssignmentInterface $shippingAssignment */
+        $shippingAssignments = $this->getShippingAssignmentBuilderDependency();
+        $shippingAssignments->setOrderId($order->getEntityId());
+        $extensionAttributes->setShippingAssignments($shippingAssignments->create());
+        $order->setExtensionAttributes($extensionAttributes);
     }
 
     /**
      * Get the new OrderExtension dependency for application code
+     * @return OrderExtension
      * @deprecated
      */
     private function getOrderExtensionDependency()
