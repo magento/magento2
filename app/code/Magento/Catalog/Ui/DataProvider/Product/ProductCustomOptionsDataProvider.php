@@ -13,6 +13,11 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Option as ProductOption;
 use Magento\Framework\DataObject;
 
+/**
+ * DataProvider for grid on Import Custom Options modal panel
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ProductCustomOptionsDataProvider extends ProductDataProvider
 {
     /**
