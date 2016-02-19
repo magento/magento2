@@ -11,7 +11,7 @@ use Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Help
 use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProduct;
 use Magento\ConfigurableProduct\Model\Product\VariationHandler;
-use Magento\ConfigurableProduct\Test\Unit\Model\Product\PaymentExtensionAttributes;
+use Magento\ConfigurableProduct\Test\Unit\Model\Product\ProductExtensionAttributes;
 use Magento\Framework\App\Request\Http;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
@@ -123,7 +123,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->willReturnMap($paramValueMap);
 
-        $extensionAttributes = $this->getMockBuilder(PaymentExtensionAttributes::class)
+        $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
             ->disableOriginalConstructor()
             ->setMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
             ->getMockForAbstractClass();
@@ -188,7 +188,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->willReturnMap($paramValueMap);
 
-        $extensionAttributes = $this->getMockBuilder(PaymentExtensionAttributes::class)
+        $extensionAttributes = $this->getMockBuilder(ProductExtensionAttributes::class)
             ->disableOriginalConstructor()
             ->setMethods(['setConfigurableProductOptions', 'setConfigurableProductLinks'])
             ->getMockForAbstractClass();

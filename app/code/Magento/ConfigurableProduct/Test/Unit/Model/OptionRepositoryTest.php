@@ -203,7 +203,9 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testDeleteCantDeleteOption()
     {
         $entityId = 3;
-        $optionMock = $this->getMock(OptionInterface::class);
+        $optionMock = $this->getMockBuilder(Attribute::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $optionMock->expects(self::once())
             ->method('getId')
@@ -227,7 +229,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('saveProducts')
             ->with($this->productMock);
 
-        $this->optionResource->expects(self::never())
+        $this->optionResource->expects(self::once())
             ->method('delete')
             ->with($optionMock)
             ->willThrowException(new \Exception());
