@@ -92,7 +92,7 @@ class Image extends File
             return $this;
         }
         $filename = $value['file'];
-         $result = $this->_mediaDirectory->copyFile(
+        $result = $this->_mediaDirectory->copyFile(
             $this->imageConfig->getTmpMediaPath($filename),
             $this->_appendScopeInfo($this->uploadDir) . '/' . $filename
         );
