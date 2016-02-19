@@ -113,21 +113,18 @@ class CaptureStrategyCommand implements CommandInterface
     private function getCommand(OrderPaymentInterface $payment)
     {
         // if auth transaction is not exists execute authorize&capture command
-        if (!$payment->getAuthorizationTransaction()) {
+        $existsCapture = $this->isExistsCaptureTransaction($payment);
+        if (!$payment->getAuthorizationTransaction() && !$existsCapture) {
             return self::SALE;
         }
 
         // do capture for authorization transaction
-        if (!$this->isExistsCaptureTransaction($payment)) {
+        if (!$existsCapture) {
             return self::CAPTURE;
         }
 
         // process capture for payment via Vault
-        if ($this->isExistsVaultToken($payment)) {
-            return self::VAULT_CAPTURE;
-        }
-
-        return self::CLONE_TRANSACTION;
+        return self::VAULT_CAPTURE;
     }
 
     /**
@@ -151,17 +148,5 @@ class CaptureStrategyCommand implements CommandInterface
 
         $count = $this->transactionRepository->getList($searchCriteria)->getTotalCount();
         return (boolean) $count;
-    }
-
-    /**
-     * Check if payment was used vault token
-     *
-     * @param OrderPaymentInterface $payment
-     * @return bool
-     */
-    private function isExistsVaultToken(OrderPaymentInterface $payment)
-    {
-        $extensionAttributes = $payment->getExtensionAttributes();
-        return (boolean) $extensionAttributes->getVaultPaymentToken();
     }
 }

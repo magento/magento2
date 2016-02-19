@@ -79,6 +79,7 @@ define([
          */
         onActiveChange: function (isActive) {
             if (!isActive) {
+                this.$selector.off('submitOrder.braintreetwo');
 
                 return;
             }
@@ -244,7 +245,7 @@ define([
          * Enable form event listeners
          */
         enableEventListeners: function () {
-            this.$selector.on('submitOrder', this.submitOrder.bind(this));
+            this.$selector.on('submitOrder.braintreetwo', this.submitOrder.bind(this));
         },
 
         /**
