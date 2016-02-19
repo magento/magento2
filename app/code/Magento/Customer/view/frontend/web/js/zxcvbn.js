@@ -1,7 +1,9 @@
 /*
+ * Realistic Password Strength Estimator v4.2.0
+ *
  * Copyright (c) 2012-2015 Dan Wheeler and Dropbox, Inc.
  *
- * https://github.com/dropbox/zxcvbn/blob/master/LICENSE.txt
+ * See https://github.com/dropbox/zxcvbn/blob/master/LICENSE.txt
  */
 (function (f) {
     if (typeof exports === "object" && typeof module !== "undefined") {
