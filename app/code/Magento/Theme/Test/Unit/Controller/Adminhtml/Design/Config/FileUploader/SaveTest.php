@@ -36,12 +36,14 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->resultPage = $this->getMockBuilder('Magento\Framework\Controller\ResultInterface')
             ->setMethods(['setData'])
             ->getMockForAbstractClass();
-
         $this->imageProcessor = $this->getMockBuilder('Magento\Theme\Model\Design\Config\FileUploader\ImageProcessor')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->context->expects($this->once())
+            ->method('getResultFactory')
+            ->willReturn($this->resultFactory);
 
-        $this->controller = new Save($this->context, $this->resultFactory, $this->imageProcessor);
+        $this->controller = new Save($this->context, $this->imageProcessor);
     }
 
     public function testExecute()
