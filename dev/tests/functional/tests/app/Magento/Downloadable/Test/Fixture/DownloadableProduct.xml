@@ -81,8 +81,7 @@
         <field name="upsell_tgtr_position_limit" is_required="0" />
         <field name="url_key" is_required="0" group="search-engine-optimization" />
         <field name="url_path" is_required="0" />
-        <field name="visibility" is_required="0" group="autosettings" />
-        <field name="weight" is_required="0" group="product-details" />
+        <field name="visibility" is_required="0" group="product-details" />
         <field name="custom_options" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\Product\CustomOptions" repository="Magento\Catalog\Test\Repository\Product\CustomOptions" />
         <field name="id" />
         <field name="website_ids" group="websites" />

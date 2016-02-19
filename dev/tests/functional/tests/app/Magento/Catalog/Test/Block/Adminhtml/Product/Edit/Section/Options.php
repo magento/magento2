@@ -23,14 +23,14 @@ class Options extends Section
      *
      * @var string
      */
-    protected $customOptionRow = '//*[*[@class="fieldset-wrapper-title"]//span[.="%s"]]';
+    protected $customOptionRow = './/*[*[@class="fieldset-wrapper-title"]//span[.="%s"]]';
 
     /**
-     * New custom option row CSS locator.
+     * New custom option row locator.
      *
      * @var string
      */
-    protected $newCustomOptionRow = '[data-index="custom_options"] [data-role="grid"] tbody tr:nth-child(%d)';
+    protected $newCustomOptionRow = './/*[@data-index="options"]/tbody/tr[%d]';
 
     /**
      * Add an option button.
@@ -52,6 +52,27 @@ class Options extends Section
      * @var string
      */
     protected $importGrid = ".product_form_product_form_custom_options_import_options_modal";
+
+    /**
+     * Locator for 'Add Value' button.
+     *
+     * @var string
+     */
+    protected $addValue = '[data-action="add_new_row"]';
+
+    /**
+     * Locator for dynamic data row.
+     *
+     * @var string
+     */
+    protected $dynamicDataRow = '[data-index="values"] tbody tr:nth-child(%d)';
+
+    /**
+     * Locator for static data row.
+     *
+     * @var string
+     */
+    protected $staticDataRow = '[data-index="container_type_static"] div:nth-child(%d)';
 
     /**
      * Fill custom options form on tab.
@@ -81,7 +102,10 @@ class Options extends Section
                 unset($field['options']);
             }
 
-            $rootElement = $this->_rootElement->find(sprintf($this->newCustomOptionRow, $keyRoot + 1));
+            $rootElement = $this->_rootElement->find(
+                sprintf($this->newCustomOptionRow, $keyRoot + 1),
+                Locator::SELECTOR_XPATH
+            );
             $data = $this->dataMapping($field);
             $this->_fill($data, $rootElement);
 
@@ -92,12 +116,14 @@ class Options extends Section
                     __NAMESPACE__ . '\Options\Type\\' . $this->optionNameConvert($field['type']),
                     ['element' => $rootElement]
                 );
-
+                $context = $rootElement->find($this->addValue)->isVisible()
+                    ? $this->dynamicDataRow
+                    : $this->staticDataRow;
                 foreach ($options as $key => $option) {
                     ++$key;
                     $optionsForm->fillOptions(
                         $option,
-                        $rootElement->find('[data-index="values"] tbody tr:nth-child(' . $key . ')')
+                        $rootElement->find(sprintf($context, $key))
                     );
                 }
             }
@@ -177,11 +203,13 @@ class Options extends Section
                     __NAMESPACE__ . '\Options\Type\\' . $this->optionNameConvert($field['type']),
                     ['element' => $rootElement]
                 );
-
+                $context = $rootElement->find($this->addValue)->isVisible()
+                    ? $this->dynamicDataRow
+                    : $this->staticDataRow;
                 foreach ($options as $key => $option) {
                     $formDataItem['options'][$key++] = $optionsForm->getDataOptions(
                         $option,
-                        $rootElement->find('.fieldset .data-table tbody tr:nth-child(' . $key . ')')
+                        $rootElement->find(sprintf($context, $key))
                     );
                 }
             }
