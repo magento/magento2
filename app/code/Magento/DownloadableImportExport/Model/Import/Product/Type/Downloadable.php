@@ -866,7 +866,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected function getMetadataPool()
     {
         if (!isset($this->metadataPool)) {
-            $this->metadataPool = \Magento\Framework\App\ObjectionManager::getInstance()
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
                 ->get('Magento\Framework\Model\Entity\MetadataPool');
         }
         return $this->metadataPool;
