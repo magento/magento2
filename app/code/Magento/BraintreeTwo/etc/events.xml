@@ -10,4 +10,7 @@
     <event name="payment_method_assign_data_braintreetwo">
         <observer name="braintreetwo_gateway_data_assign" instance="Magento\BraintreeTwo\Observer\DataAssignObserver" />
     </event>
+    <event name="payment_method_assign_data_braintreetwo_paypal">
+        <observer name="braintreetwo_paypal_gateway_data_assign" instance="Magento\BraintreeTwo\Observer\DataAssignObserver" />
+    </event>
 </config>

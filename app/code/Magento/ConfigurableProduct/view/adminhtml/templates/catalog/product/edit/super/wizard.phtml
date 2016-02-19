@@ -12,14 +12,16 @@
 $productMatrix = $block->getProductMatrix();
 $attributes = $block->getProductAttributes();
 $currencySymbol = $block->getCurrencySymbol();
-
-$stepWizardHtml = $block->getVariationWizard([
-    'attributes' => $attributes,
-    'configurations' => $productMatrix
-]);
 ?>
 <div data-role="step-wizard-dialog" data-bind="scope: 'product_form.product_form.configurableModal'">
-    <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- ko template: getTemplate() -->
+    <?php
+    /* @escapeNotVerified */ echo $block->getVariationWizard([
+        'attributes' => $attributes,
+        'configurations' => $productMatrix
+    ]);
+    ?>
+    <!-- /ko -->
 </div>
 <script type="text/x-magento-init">
     {
@@ -31,7 +33,7 @@ $stepWizardHtml = $block->getVariationWizard([
                         "options": {"type": "slide", "title": "<?= /* @escapeNotVerified */  __('Create Product Configurations') ?>"},
                         "children": {
                             "wizard": {
-                                "url": "<?= /* @noEscape */ $block->getUrl('catalog/product/wizard') ?>",
+                                "url": "<?= /* @noEscape */ $block->getUrl('catalog/product/wizard', ['id' => $block->getProduct()->getId()]) ?>",
                                 "component": "Magento_Ui/js/form/components/html"
                             }
                         }
