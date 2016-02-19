@@ -7,7 +7,6 @@
 namespace Magento\Catalog\Test\Block\Adminhtml\Category\Edit\Section;
 
 use Magento\Ui\Test\Block\Adminhtml\Section;
-use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Category Products section.
@@ -32,10 +31,9 @@ class Products extends Section
      * Fill category products.
      *
      * @param array $fields
-     * @param SimpleElement|null $element
      * @return void
      */
-    public function setFieldsData(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields)
     {
         if (!isset($fields['category_products'])) {
             return;
@@ -49,10 +47,9 @@ class Products extends Section
      * Get data of the Category Products section.
      *
      * @param array|null $fields
-     * @param SimpleElement|null $element
      * @return array
      */
-    public function getFieldsData($fields = null, SimpleElement $element = null)
+    public function getFieldsData($fields = null)
     {
         $data = $this->dataMapping($fields);
         $result = [];
