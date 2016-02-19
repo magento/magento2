@@ -66,7 +66,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      * load entity
      *
      * @param int $id
-     * @return OrderInterface
+     * @return \Magento\Sales\Api\Data\OrderInterface
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
@@ -156,19 +156,19 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
      */
     private function setShippingAssignments(OrderInterface $order)
     {
-        /** @var OrderExtensionInterface $extensionAttributes */
-        $extensionAttributes = $order->getExtensionAttributes();
-
-        if ($extensionAttributes === null) {
-            $extensionAttributes = $this->getOrderExtensionDependency();
-        } elseif ($extensionAttributes->getShippingAssignments() !== null) {
-            return;
-        }
-        /** @var ShippingAssignmentInterface $shippingAssignment */
-        $shippingAssignments = $this->getShippingAssignmentBuilderDependency();
-        $shippingAssignments->setOrderId($order->getEntityId());
-        $extensionAttributes->setShippingAssignments($shippingAssignments->create());
-        $order->setExtensionAttributes($extensionAttributes);
+//        /** @var OrderExtensionInterface $extensionAttributes */
+//        $extensionAttributes = $order->getExtensionAttributes();
+//
+//        if ($extensionAttributes === null) {
+//            $extensionAttributes = $this->getOrderExtensionDependency();
+//        } elseif ($extensionAttributes->getShippingAssignments() !== null) {
+//            return;
+//        }
+//        /** @var ShippingAssignmentInterface $shippingAssignment */
+//        $shippingAssignments = $this->getShippingAssignmentBuilderDependency();
+//        $shippingAssignments->setOrderId($order->getEntityId());
+//        $extensionAttributes->setShippingAssignments($shippingAssignments->create());
+//        $order->setExtensionAttributes($extensionAttributes);
     }
 
     /**
