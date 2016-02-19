@@ -66,10 +66,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable',
             [
                 'context' => $this->context,
-                'catalogProductRelation' => $this->relation,
-                'metadataPool' => $this->metadataPool
+                'catalogProductRelation' => $this->relation
             ]
         );
+        $this->configurable->setMetadataPool($this->metadataPool);
     }
 
     public function testSaveProductsForDuplicate()
@@ -90,6 +90,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConfigurableOptions()
     {
+        /** @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurable */
         $configurable = $this->getMock(
             'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable',
             [
@@ -98,10 +99,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 $this->context,
-                $this->relation,
-                $this->metadataPool
+                $this->relation
             ]
         );
+        $configurable->setMetadataPool($this->metadataPool);
 
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->setMethods(
