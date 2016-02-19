@@ -72,10 +72,11 @@ class Category extends AbstractResource
      * @var EntityManager
      */
     protected $entityManager;
+
     /**
      * @var Category\AggregateCount
      */
-    private $aggregateCount;
+    protected $aggregateCount;
 
     /**
      * Category constructor.
