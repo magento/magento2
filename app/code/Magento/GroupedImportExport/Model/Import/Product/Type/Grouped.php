@@ -134,7 +134,7 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
     protected function getMetadataPool()
     {
         if (!isset($this->metadataPool)) {
-            $this->metadataPool = \Magento\Framework\App\ObjectionManager::getInstance()
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
                 ->get('Magento\Framework\Model\Entity\MetadataPool');
         }
         return $this->metadataPool;
