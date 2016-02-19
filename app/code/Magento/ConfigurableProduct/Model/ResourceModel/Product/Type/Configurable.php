@@ -218,7 +218,7 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     [
                         'entity_value.attribute_id = super_attribute.attribute_id',
                         'entity_value.store_id = 0',
-                        "entity_value.{$metadata->getLinkField()} = product_link.product_id"
+                        "entity_value.{$metadata->getLinkField()} = entity.{$metadata->getLinkField()}"
                     ]
                 ),
                 []
