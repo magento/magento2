@@ -93,6 +93,7 @@ class UpgradeData implements UpgradeDataInterface
 
         if (version_compare($context->getVersion(), '2.0.7', '<')) {
             $this->upgradeVersionTwoZeroSeven($customerSetup);
+            $this->upgradeCustomerPasswordResetlinkExpirationPeriodConfig($setup);
         }
 
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
@@ -457,6 +458,21 @@ class UpgradeData implements UpgradeDataInterface
                 'visible' => false,
                 'system' => true,
             ]
+        );
+    }
+
+    /**
+     * @param ModuleDataSetupInterface $setup
+     * @return void
+     */
+    private function upgradeCustomerPasswordResetlinkExpirationPeriodConfig($setup)
+    {
+        $configTable = $setup->getTable('core_config_data');
+
+        $setup->getConnection()->update(
+            $configTable,
+            ['value' => new \Zend_Db_Expr('value*24')],
+            ['path = ?' => \Magento\Customer\Model\Customer::XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD]
         );
     }
 }
