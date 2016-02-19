@@ -41,13 +41,17 @@ class ExpressConfigProviderTest extends \PHPUnit_Framework_TestCase
         $payment->expects($this->atLeastOnce())->method('isAvailable')->willReturn(true);
         $payment->expects($this->atLeastOnce())->method('getCheckoutRedirectUrl')->willReturn('http://redirect.url');
         $paymentHelper->expects($this->atLeastOnce())->method('getMethodInstance')->willReturn($payment);
-        
+
+        /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject $urlBuilderMock */
+        $urlBuilderMock = $this->getMock('Magento\Framework\UrlInterface', [], [], '', false);
+
         $configProvider = new ExpressConfigProvider(
             $configFactory,
             $localeResolver,
             $currentCustomer,
             $paypalHelper,
-            $paymentHelper
+            $paymentHelper,
+            $urlBuilderMock
         );
         $configProvider->getConfig();
     }
