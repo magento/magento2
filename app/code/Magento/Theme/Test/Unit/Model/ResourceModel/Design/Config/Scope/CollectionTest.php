@@ -123,7 +123,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 'WebsiteValue'
             );
 
-
         $expectedResult = [
             new \Magento\Framework\DataObject([
                 'store_website_id' => null,

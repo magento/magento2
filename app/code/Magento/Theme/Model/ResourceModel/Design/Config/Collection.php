@@ -43,7 +43,6 @@ class Collection extends ConfigCollection
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
-
     /**
      * Add paths filter to collection
      *

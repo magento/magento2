@@ -115,9 +115,7 @@ class MetadataLoaderTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->willReturn('value');
 
-
         $result = $this->model->getData();
-
         $expected = [
             'fieldset1' => [
                 'children' => [

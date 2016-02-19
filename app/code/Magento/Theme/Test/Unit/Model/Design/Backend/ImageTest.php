@@ -134,7 +134,6 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $tmpMediaPath,
                 'image/store/1/' . $value
-
             )
             ->willReturn(true);
         $this->mediaDirectory->expects($this->once())
@@ -184,4 +183,3 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         );
     }
 }
-

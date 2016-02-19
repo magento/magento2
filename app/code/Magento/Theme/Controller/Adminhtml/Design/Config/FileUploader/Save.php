@@ -13,11 +13,6 @@ use Magento\Theme\Model\Design\Config\FileUploader\ImageProcessor;
 class Save extends Action
 {
     /**
-     * @var ResultFactory
-     */
-    protected $resultFactory;
-
-    /**
      * @var ImageProcessor
      */
     protected $imageProcessor;
@@ -33,7 +28,6 @@ class Save extends Action
         ImageProcessor $imageProcessor
     ) {
         parent::__construct($context);
-        $this->resultFactory = $resultFactory;
         $this->imageProcessor = $imageProcessor;
     }
 
