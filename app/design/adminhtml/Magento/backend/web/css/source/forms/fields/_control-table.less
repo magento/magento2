@@ -16,6 +16,9 @@
 @control-table-cell__padding-vertical: 1.3rem;
 @control-table-cell__padding-horizontal: 1rem;
 
+@control-table-horizontal-dragover-mark__color: @color-blue-dodger;
+@control-table-horizontal-dragover-mark__width: 3px;
+
 //
 
 .admin__control-table-wrapper {
@@ -52,6 +55,18 @@
         &:last-child {
             td {
                 border-bottom: none;
+            }
+        }
+
+        &._dragover-top {
+            td {
+                box-shadow: inset 0 @control-table-horizontal-dragover-mark__width 0 0 @control-table-horizontal-dragover-mark__color;
+            }
+        }
+
+        &._dragover-bottom {
+            td {
+                box-shadow: inset 0 -@control-table-horizontal-dragover-mark__width 0 0 @control-table-horizontal-dragover-mark__color;
             }
         }
 
