@@ -20,20 +20,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     protected $_selectionTable;
 
     /**
-     * Product metadata pool
-     *
-     * @var \Magento\Framework\Model\Entity\MetadataPool
-     */
-    private $metadataPool;
-
-    /**
-     * Product entity link field
-     *
-     * @var string
-     */
-    private $productEntityLinkField;
-
-    /**
      * Initialize collection
      *
      * @return void
@@ -71,7 +57,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         parent::_initSelect();
         $this->getSelect()->join(
             ['selection' => $this->_selectionTable],
-            "selection.product_id = e.{$this->getProductEntityLinkField()}",
+            'selection.product_id = e.entity_id',
             ['*']
         );
     }
@@ -144,48 +130,5 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     {
         $this->getSelect()->order('selection.position asc')->order('selection.selection_id asc');
         return $this;
-    }
-
-    /**
-     * Get product metadata pool
-     *
-     * @return \Magento\Framework\Model\Entity\MetadataPool
-     */
-    private function getMetadataPool()
-    {
-        if (!isset($this->metadataPool)) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\Entity\MetadataPool');
-        }
-        return $this->metadataPool;
-    }
-
-    /**
-     * Set product Metadata pool
-     *
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
-     * @return void
-     * @throws \LogicException
-     */
-    public function setMetadataPool(\Magento\Framework\Model\Entity\MetadataPool $metadataPool)
-    {
-        if (!$this->metadataPool) {
-            $this->metadataPool = $metadataPool;
-        } else {
-            throw new \LogicException("Metadata pool is already set");
-        }
-    }
-
-    /**
-     * Get product entity link field
-     *
-     * @return string
-     */
-    private function getProductEntityLinkField()
-    {
-        if (!isset($this->productEntityLinkField)) {
-            $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)->getLinkField();
-        }
-        return $this->productEntityLinkField;
     }
 }
