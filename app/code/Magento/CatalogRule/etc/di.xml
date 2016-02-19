@@ -127,8 +127,5 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Indexer\Model\Indexer\State">
-        <plugin name="syncCatalogRulesIndexers" type="Magento\CatalogRule\Model\Indexer\Plugin\IndexerState" />
-    </type>
     <preference for="Magento\CatalogRule\Api\Data\ConditionInterface" type="Magento\CatalogRule\Model\Data\Condition" />
 </config>
