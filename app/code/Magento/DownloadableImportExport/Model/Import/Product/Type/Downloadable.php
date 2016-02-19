@@ -255,7 +255,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $params
      * @param \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper
      * @param \Magento\DownloadableImportExport\Helper\Data $downloadableHelper
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -264,8 +263,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         \Magento\Framework\App\ResourceConnection $resource,
         array $params,
         \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper,
-        \Magento\DownloadableImportExport\Helper\Data $downloadableHelper,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+        \Magento\DownloadableImportExport\Helper\Data $downloadableHelper
     ) {
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
         $this->parameters = $this->_entityModel->getParameters();
@@ -273,7 +271,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $this->connection = $resource->getConnection('write');
         $this->uploaderHelper = $uploaderHelper;
         $this->downloadableHelper = $downloadableHelper;
-        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -283,7 +280,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     public function saveData()
     {
-        $productMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $productMetadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $newSku = $this->_entityModel->getNewSku();
         while ($bunch = $this->_entityModel->getNextBunch()) {
             foreach ($bunch as $rowNum => $rowData) {
@@ -861,5 +858,25 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         ];
         $this->productIds = [];
         return $this;
+    }
+
+    /**
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected function getMetadataPool()
+    {
+        if (!isset($this->metadataPool)) {
+            $this->metadataPool = \Magento\Framework\App\ObjectionManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
+    }
+
+    /**
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     */
+    public function setMetadataPool(\Magento\Framework\Model\Entity\MetadataPool $metadataPool)
+    {
+        $this->metadataPool = $metadataPool;
     }
 }
