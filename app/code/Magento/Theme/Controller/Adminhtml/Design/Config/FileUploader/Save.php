@@ -19,12 +19,10 @@ class Save extends Action
 
     /**
      * @param Context $context
-     * @param ResultFactory $resultFactory
      * @param ImageProcessor $imageProcessor
      */
     public function __construct(
         Context $context,
-        ResultFactory $resultFactory,
         ImageProcessor $imageProcessor
     ) {
         parent::__construct($context);
