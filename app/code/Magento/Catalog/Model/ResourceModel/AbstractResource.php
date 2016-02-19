@@ -633,7 +633,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * Reset firstly loaded attributes
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @param integer $entityId
      * @param array|null $attributes
      * @return $this
