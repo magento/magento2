@@ -177,7 +177,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function setSortOrder($sortOrder)
     {
-        return $this->setData(self::SORT_ORDER);
+        return $this->setData(self::SORT_ORDER, $sortOrder);
     }
 
     /**
@@ -191,9 +191,9 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * {@inheritdoc}
      */
-    public function setDefaultId($value)
+    public function setDefaultId($defaultId)
     {
-        return $this->setData(self::DEFAULT_ID);
+        return $this->setData(self::DEFAULT_ID, $defaultId);
     }
 
     /**
@@ -209,7 +209,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function setAttributeGroupCode($attributeGroupCode)
     {
-        return $this->setData(self::ATTRIBUTE_GROUP_CODE);
+        return $this->setData(self::ATTRIBUTE_GROUP_CODE, $attributeGroupCode);
     }
 
     /**
@@ -225,7 +225,7 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
      */
     public function setTabGroupCode($tabGroupCode)
     {
-        return $this->setData(self::TAB_GROUP_CODE);
+        return $this->setData(self::TAB_GROUP_CODE, $tabGroupCode);
     }
 
     /**
