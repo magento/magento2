@@ -3,16 +3,16 @@
  * See COPYING.txt for license details.
  */
 define([
-    'uiCollection'
-], function (Group) {
+    'Magento_Ui/js/form/components/fieldset'
+], function (Fieldset) {
     'use strict';
 
-    return Group.extend({
+    return Fieldset.extend({
         defaults: {
             valuesForOptions: [],
             visibilityState: true,
             imports: {
-                toggleVisibility: '${ $.parentName }.frontend_input:value'
+                toggleVisibility: '${ $.parentName }.base_fieldset.frontend_input:value'
             }
         },
 
@@ -23,8 +23,8 @@ define([
         },
 
         toggleVisibility: function (selected) {
-            var isShown = this.visibilityState = selected in this.valuesForOptions; //this.valuesForOptions.indexOf(selected) !== -1;
-
+            var isShown = this.visibilityState = selected in this.valuesForOptions;
+            this.visible(isShown);
             this.elems.each(function (child) {
                child.set('visible', isShown);
             });
