@@ -49,6 +49,7 @@
                 <item name="alias" xsi:type="string">braintree.paypal.mini-cart</item>
                 <item name="button_id" xsi:type="string">braintree-paypal-mini-cart</item>
             </argument>
+            <argument name="payment" xsi:type="object">BraintreeTwoPayPalFacade</argument>
         </arguments>
     </type>
 </config>
