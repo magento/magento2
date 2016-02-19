@@ -12,18 +12,18 @@ use Magento\ImportExport\Model\Import;
 class RowCustomizer implements RowCustomizerInterface
 {
     /**
+     * Product metadata pool
+     *
      * @var \Magento\Framework\Model\Entity\MetadataPool
      */
     private $metadataPool;
 
     /**
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * Product entity link field
+     *
+     * @var string
      */
-    public function __construct(
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
-    ) {
-        $this->metadataPool = $metadataPool;
-    }
+    private $productEntityLinkField;
 
     /**
      * @var array
@@ -39,11 +39,9 @@ class RowCustomizer implements RowCustomizerInterface
      */
     public function prepareData($collection, $productIds)
     {
-        /** @var \Magento\Framework\Model\Entity\EntityMetadata $productMetadata */
-        $productMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $productCollection = clone $collection;
         $productCollection->addAttributeToFilter(
-            $productMetadata->getLinkField(),
+            $this->getProductEntityLinkField(),
             ['in' => $productIds]
         )->addAttributeToFilter(
             'type_id',
@@ -132,5 +130,49 @@ class RowCustomizer implements RowCustomizerInterface
             $additionalRowsCount = max($additionalRowsCount, count($this->configurableData[$productId]));
         }
         return $additionalRowsCount;
+    }
+
+
+    /**
+     * Get product metadata pool
+     *
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!isset($this->metadataPool)) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
+    }
+
+    /**
+     * Set product Metadata pool
+     *
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @return void
+     * @throws \LogicException
+     */
+    public function setMetadataPool(\Magento\Framework\Model\Entity\MetadataPool $metadataPool)
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = $metadataPool;
+        } else {
+            throw new \LogicException("Metadata pool is already set");
+        }
+    }
+
+    /**
+     * Get product entity link field
+     *
+     * @return string
+     */
+    private function getProductEntityLinkField()
+    {
+        if (!isset($this->productEntityLinkField)) {
+            $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)->getLinkField();
+        }
+        return $this->productEntityLinkField;
     }
 }
