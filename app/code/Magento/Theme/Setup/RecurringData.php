@@ -38,8 +38,6 @@ class RecurringData implements InstallDataInterface
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        if ($this->themeRegistration->isThemeMismatch()) {
-            $this->themeRegistration->register();
-        }
+        $this->themeRegistration->register();
     }
 }
