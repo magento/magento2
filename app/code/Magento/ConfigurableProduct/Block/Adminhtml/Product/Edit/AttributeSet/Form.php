@@ -119,7 +119,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->setForm($form);
     }
 
-
     /**
      * @return string
      */
