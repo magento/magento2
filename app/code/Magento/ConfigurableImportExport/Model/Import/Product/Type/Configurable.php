@@ -676,21 +676,17 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $newSku = $this->_entityModel->getNewSku();
         $oldSku = $this->_entityModel->getOldSku();
         if (!empty($data['_super_products_sku'])) {
-            // @todo check if this line can be removed
-            $superProductRowId = '';
             if (isset($newSku[$data['_super_products_sku']])) {
                 $superProductRowId = $newSku[$data['_super_products_sku']][$this->productEntityLinkField];
-                $superProductEntityId = $newSku[$data['_super_products_sku']][$this->productEntityIdentifierField];
             } elseif (isset($oldSku[$data['_super_products_sku']])) {
                 $superProductRowId = $oldSku[$data['_super_products_sku']][$this->productEntityLinkField];
-                $superProductEntityId = $oldSku[$data['_super_products_sku']][$this->productEntityIdentifierField];
             }
 
-            if ($superProductEntityId) {
+            if ($superProductRowId) {
                 if (isset($data['display']) && $data['display'] == 0) {
-                    $this->_simpleIdsToDelete[] = $superProductEntityId;
+                    $this->_simpleIdsToDelete[] = $superProductRowId;
                 } else {
-                    $this->_productSuperData['assoc_ids'][$superProductEntityId] = true;
+                    $this->_productSuperData['assoc_ids'][$superProductRowId] = true;
                 }
             }
         }
