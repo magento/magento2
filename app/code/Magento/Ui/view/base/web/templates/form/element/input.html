@@ -6,6 +6,7 @@
 -->
 <input class="admin__control-text" type="text"
     data-bind="
+        event: {change: userChanges},
         value: value,
         hasFocus: focused,
         valueUpdate: valueUpdate,
