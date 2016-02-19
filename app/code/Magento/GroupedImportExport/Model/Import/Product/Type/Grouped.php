@@ -38,7 +38,6 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param array $params
      * @param Grouped\Links $links
      */
@@ -47,11 +46,9 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
         \Magento\Framework\App\ResourceConnection $resource,
         array $params,
-        Grouped\Links $links,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+        Grouped\Links $links
     ) {
         $this->links = $links;
-        $this->metadataPool = $metadataPool;
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
     }
 
@@ -65,7 +62,7 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
      */
     public function saveData()
     {
-        $productMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $productMetadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $newSku = $this->_entityModel->getNewSku();
         $oldSku = $this->_entityModel->getOldSku();
         $attributes = $this->links->getAttributes();
@@ -129,5 +126,25 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
             $this->links->saveLinksData($linksData);
         }
         return $this;
+    }
+
+    /**
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected function getMetadataPool()
+    {
+        if (!isset($this->metadataPool)) {
+            $this->metadataPool = \Magento\Framework\App\ObjectionManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
+    }
+
+    /**
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     */
+    public function setMetadataPool(\Magento\Framework\Model\Entity\MetadataPool $metadataPool)
+    {
+        $this->metadataPool = $metadataPool;
     }
 }
