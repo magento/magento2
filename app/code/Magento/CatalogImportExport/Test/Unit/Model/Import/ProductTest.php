@@ -167,6 +167,16 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     {
         parent::setUp();
 
+        $metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $entityMetadataMock = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $metadataPoolMock->expects($this->any())
+            ->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($entityMetadataMock);
+        $entityMetadataMock->expects($this->any())
+            ->method('getLinkField')
+            ->willReturn('entity_id');
+
         /* For parent object construct */
         $this->jsonHelper =
             $this->getMockBuilder('\Magento\Framework\Json\Helper\Data')
@@ -299,6 +309,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\SkuProcessor')
                 ->disableOriginalConstructor()
                 ->getMock();
+        $this->skuProcessor->setMetadataPool($metadataPoolMock);
         $this->categoryProcessor =
             $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor')
                 ->disableOriginalConstructor()
@@ -320,16 +331,6 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor')
                 ->disableOriginalConstructor()
                 ->getMock();
-
-        $metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
-        $entityMetadataMock = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
-        $metadataPoolMock->expects($this->any())
-            ->method('getMetadata')
-            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
-            ->willReturn($entityMetadataMock);
-        $entityMetadataMock->expects($this->any())
-            ->method('getLinkField')
-            ->willReturn('entity_id');
 
         $this->scopeConfig = $this->getMockBuilder('\Magento\Framework\App\Config\ScopeConfigInterface')
             ->disableOriginalConstructor()
@@ -388,12 +389,12 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 'objectRelationProcessor' => $this->objectRelationProcessor,
                 'transactionManager' => $this->transactionManager,
                 'taxClassProcessor' => $this->taxClassProcessor,
-                'metadataPool' => $metadataPoolMock,
                 'scopeConfig' => $this->scopeConfig,
                 'productUrl' => $this->productUrl,
                 'data' => $this->data
             ]
         );
+        $this->importProduct->setMetadataPool($metadataPoolMock);
     }
 
     /**
@@ -1067,6 +1068,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             'attr_set_id' =>
                 $_attrSetNameToId[$rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET]],
             'attr_set_code' => $rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_ATTR_SET],//value
+            'row_id' => null
         ];
         $importProduct = $this->createModelMockWithErrorAggregator(
             ['addRowError', 'getOptionEntity'],
