@@ -148,6 +148,21 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $dateTime;
 
     /**
+     * Product metadata pool
+     *
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    private $metadataPool;
+
+
+    /**
+     * Product entity link field
+     *
+     * @var string
+     */
+    private $productEntityLinkField;
+
+    /**
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
@@ -413,7 +428,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 if (isset($this->_oldSkus[$sku])) {
                     $productId = $this->_oldSkus[$sku];
                     foreach ($priceRows as $row) {
-                        $row['entity_id'] = $productId;
+                        $row[$this->getProductEntityLinkField()] = $productId;
                         $priceIn[] = $row;
                         $entityIds[] = $productId;
                     }
@@ -436,11 +451,12 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected function deleteProductTierPrices(array $listSku, $table)
     {
         $tableName = $this->_resourceFactory->create()->getTable($table);
+        $productEntityLinkField = $this->getProductEntityLinkField();
         if ($tableName && $listSku) {
             if (!$this->_cachedSkuToDelete) {
                 $this->_cachedSkuToDelete = $this->_connection->fetchCol(
                     $this->_connection->select()
-                        ->from($this->_catalogProductEntity, 'entity_id')
+                        ->from($this->_catalogProductEntity, $productEntityLinkField)
                         ->where('sku IN (?)', $listSku)
                 );
             }
@@ -448,7 +464,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 try {
                     $this->countItemsDeleted += $this->_connection->delete(
                         $tableName,
-                        $this->_connection->quoteInto('entity_id IN (?)', $this->_cachedSkuToDelete)
+                        $this->_connection->quoteInto($productEntityLinkField . ' IN (?)', $this->_cachedSkuToDelete)
                     );
                     return true;
                 } catch (\Exception $e) {
@@ -515,7 +531,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $oldSkus = $this->_connection->fetchPairs(
             $this->_connection->select()->from(
                 $this->_catalogProductEntity,
-                ['sku', 'entity_id']
+                ['sku', $this->getProductEntityLinkField()]
             )
         );
         return $oldSkus;
@@ -531,15 +547,16 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected function processCountExistingPrices($prices, $table)
     {
         $tableName = $this->_resourceFactory->create()->getTable($table);
+        $productEntityLinkField = $this->getProductEntityLinkField();
         $existingPrices = $this->_connection->fetchAssoc(
             $this->_connection->select()->from(
                 $tableName,
-                ['value_id', 'entity_id', 'all_groups', 'customer_group_id']
+                ['value_id', $productEntityLinkField, 'all_groups', 'customer_group_id']
             )
         );
         foreach ($existingPrices as $existingPrice) {
             foreach ($this->_oldSkus as $sku => $productId) {
-                if ($existingPrice['entity_id'] == $productId && isset($prices[$sku])) {
+                if ($existingPrice[$productEntityLinkField] == $productId && isset($prices[$sku])) {
                     $this->incrementCounterUpdated($prices[$sku], $existingPrice);
                 }
             }
@@ -580,5 +597,52 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->countItemsCreated -= $this->countItemsUpdated;
 
         return $this;
+    }
+
+
+    /**
+     * Get product metadata pool
+     *
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     * @deprecated
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
+    }
+
+    /**
+     * Set product Metadata pool
+     *
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @return void
+     * @throws \LogicException
+     * @deprecated
+     */
+    public function setMetadataPool(\Magento\Framework\Model\Entity\MetadataPool $metadataPool)
+    {
+        if ($this->metadataPool) {
+            throw new \LogicException("Metadata pool is already set");
+        }
+        $this->metadataPool = $metadataPool;
+    }
+
+    /**
+     * Get product entity link field
+     *
+     * @return string
+     */
+    private function getProductEntityLinkField()
+    {
+        if (!$this->productEntityLinkField) {
+            $this->productEntityLinkField = $this->getMetadataPool()
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getLinkField();
+        }
+        return $this->productEntityLinkField;
     }
 }
