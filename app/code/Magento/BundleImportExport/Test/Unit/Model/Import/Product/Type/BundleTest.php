@@ -108,6 +108,9 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ));
     }
 
+    /*
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         parent::setUp();
