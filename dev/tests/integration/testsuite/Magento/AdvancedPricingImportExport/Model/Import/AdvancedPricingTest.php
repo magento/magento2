@@ -110,7 +110,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $productIdList = $resource->getProductsIdsBySkus(array_keys($this->expectedTierPrice));
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->objectManager->create('Magento\Catalog\Model\Product');
-        foreach($productIdList as $sku => $productId) {
+        foreach ($productIdList as $sku => $productId) {
             $product->load($productId);
             $tierPriceCollection = $product->getTierPrices();
             $this->assertEquals(3, count($tierPriceCollection));

@@ -26,4 +26,3 @@ $productModel->setName('AdvancedPricingSimple 2')
     ->setPrice(654)
     ->setIsObjectNew(true)
     ->save();
-

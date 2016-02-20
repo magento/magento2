@@ -64,6 +64,8 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testDownloadableImport()
     {
