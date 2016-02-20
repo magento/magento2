@@ -33,7 +33,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $metadataPool;
+    protected $metadataPoolMock;
 
     protected function setUp()
     {
@@ -51,15 +51,15 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 $this->returnValue($dbAdapterMock)
             );
         $this->relation = $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Relation', [], [], '', false);
-        $metadata = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
-        $metadata->expects($this->any())
+        $metadataMock = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $metadataMock->expects($this->any())
             ->method('getLinkField')
             ->willReturn('entity_id');
-        $this->metadataPool = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
-        $this->metadataPool->expects($this->any())
+        $this->metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $this->metadataPoolMock->expects($this->any())
             ->method('getMetadata')
             ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
-            ->willReturn($metadata);
+            ->willReturn($metadataMock);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->configurable = $this->objectManagerHelper->getObject(
@@ -69,7 +69,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'catalogProductRelation' => $this->relation
             ]
         );
-        $this->configurable->setMetadataPool($this->metadataPool);
+        $this->configurable->setMetadataPool($this->metadataPoolMock);
     }
 
     public function testSaveProductsForDuplicate()
