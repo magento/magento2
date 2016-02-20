@@ -2488,7 +2488,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function getMetadataPool()
     {
-        if (!isset($this->metadataPool)) {
+        if (!$this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
                 ->get('Magento\Framework\Model\Entity\MetadataPool');
         }
@@ -2517,8 +2517,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     private function getProductEntityLinkField()
     {
-        if (!isset($this->productEntityLinkField)) {
-            $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)->getLinkField();
+        if (!$this->productEntityLinkField) {
+            $this->productEntityLinkField = $this->getMetadataPool()
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getLinkField();
         }
         return $this->productEntityLinkField;
     }
