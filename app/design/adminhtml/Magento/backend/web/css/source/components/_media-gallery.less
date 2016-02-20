@@ -72,10 +72,10 @@
         bottom: 0;
         left: 0;
         margin: auto;
+        max-width: 100%;
         position: absolute;
         right: 0;
         top: 0;
-        width: 100%;
         z-index: @image-gallery-image__z-index;
     }
 
@@ -328,6 +328,11 @@
 
 .image-panel-preview {
     margin-left: 0;
+
+    img {
+        display: block;
+        margin: auto;
+    }
 }
 
 .image-panel-controls {
@@ -380,10 +385,6 @@
     .lib-font-size(11);
     color: @color-gray40;
     margin: 0 0 @indent__s;
-}
-
-.image-panel-preview img {
-    width: 100%;
 }
 
 //
