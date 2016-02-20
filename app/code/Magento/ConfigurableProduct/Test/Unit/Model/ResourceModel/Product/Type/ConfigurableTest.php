@@ -6,15 +6,12 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Product\Type;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable;
-use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Configurable
+     * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable
      */
     protected $configurable;
 
@@ -26,7 +23,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resource;
+    protected $context;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Relation|\PHPUnit_Framework_MockObject_MockObject
@@ -38,54 +35,52 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     protected $metadataPool;
 
-    /**
-     * @var \Magento\Framework\Model\Entity\EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $metadata;
-
     protected function setUp()
     {
-        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')->getMock();
-
-        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
-        $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-
+        $dbAdapterMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')->getMock();
+        $resourceConnectionMock = $this->getMock('\Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $this->context = $this->getMock('Magento\Framework\Model\ResourceModel\Db\Context', [], [], '', false);
+        $this->context->expects($this->any())
+            ->method('getResources')
+            ->will(
+                $this->returnValue($resourceConnectionMock)
+            );
+        $resourceConnectionMock->expects($this->any())
+            ->method('getConnection')
+            ->will(
+                $this->returnValue($dbAdapterMock)
+            );
         $this->relation = $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Relation', [], [], '', false);
-
-        $this->metadata = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
-
+        $metadata = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $metadata->expects($this->any())
+            ->method('getLinkField')
+            ->willReturn('entity_id');
         $this->metadataPool = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
         $this->metadataPool->expects($this->any())
             ->method('getMetadata')
-            ->with(ProductInterface::class)
-            ->willReturn($this->metadata);
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($metadata);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->configurable = $this->objectManagerHelper->getObject(
             'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable',
             [
-                'resource' => $this->resource,
-                'catalogProductRelation' => $this->relation,
-                'metadataPool' => $this->metadataPool
+                'context' => $this->context,
+                'catalogProductRelation' => $this->relation
             ]
         );
+        $this->configurable->setMetadataPool($this->metadataPool);
     }
 
-    public function testSaveProducts()
+    public function testSaveProductsForDuplicate()
     {
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $mainProduct */
         $mainProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->setMethods(['__sleep', '__wakeup', 'getData'])
+            ->setMethods(['getIsDuplicate', '__sleep', '__wakeup', 'getTypeInstance', 'getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->metadata->expects($this->once())
-            ->method('getLinkField')
-            ->willReturn('link');
-        $mainProduct->expects($this->once())
-            ->method('getData')
-            ->with('link')
-            ->willReturn(3);
+        $mainProduct->expects($this->once())->method('getIsDuplicate')->will($this->returnValue(true));
+        $mainProduct->expects($this->never())->method('getTypeInstance')->will($this->returnSelf());
 
         $this->configurable->saveProducts($mainProduct, [1, 2, 3]);
     }
@@ -95,42 +90,40 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConfigurableOptions()
     {
-        $context = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        /** @var Configurable|\PHPUnit_Framework_MockObject_MockObject $configurable */
-        $configurable = $this->getMockBuilder(Configurable::class)
-            ->setMethods(['getTable', 'getConnection'])
-            ->setConstructorArgs([$context, $this->relation, $this->metadataPool])
-            ->getMock();
+        /** @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurable */
+        $configurable = $this->getMock(
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable',
+            [
+                'getTable',
+                'getConnection',
+            ],
+            [
+                $this->context,
+                $this->relation
+            ]
+        );
+        $configurable->setMetadataPool($this->metadataPool);
 
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->setMethods(
                 [
                     '__sleep',
                     '__wakeup',
-                    'getData',
+                    'getId',
                 ]
             )
             ->disableOriginalConstructor()
             ->getMock();
-
-        $this->metadata->expects(self::exactly(2))
-            ->method('getLinkField')
-            ->willReturn('link');
         $product->expects($this->once())
-            ->method('getData')
-            ->with('link')
+            ->method('getId')
             ->willReturn('getId value');
 
-        $configurable->expects($this->exactly(7))
+        $configurable->expects($this->exactly(6))
             ->method('getTable')
             ->will(
                 $this->returnValueMap(
                     [
                         ['catalog_product_super_attribute', 'catalog_product_super_attribute value'],
-                        ['catalog_product_entity', 'catalog_product_entity value'],
                         ['catalog_product_super_link', 'catalog_product_super_link value'],
                         ['eav_attribute', 'eav_attribute value'],
                         ['catalog_product_entity', 'catalog_product_entity value'],
@@ -157,7 +150,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 ['super_attribute' => 'catalog_product_super_attribute value'],
                 [
                     'sku' => 'entity.sku',
-                    'product_id' => 'product_entity.entity_id',
+                    'product_id' => 'super_attribute.product_id',
                     'attribute_code' => 'attribute.attribute_code',
                     'option_title' => 'option_value.value',
                     'super_attribute_label' =>  'attribute_label.value'
@@ -185,15 +178,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $superAttribute,
         ];
 
-        $select->expects($this->exactly(5))
+        $select->expects($this->exactly(4))
             ->method('joinInner')
             ->will($this->returnSelf())
             ->withConsecutive(
-                [
-                    ['product_entity' => 'catalog_product_entity value'],
-                    'product_entity.link = super_attribute.product_id',
-                    []
-                ],
                 [
                     ['product_link' => 'catalog_product_super_link value'],
                     'product_link.parent_id = super_attribute.product_id',
