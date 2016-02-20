@@ -555,7 +555,11 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                         ->will($this->returnCallback([$this, 'isRowAllowedToImport']));
 
         $this->_entityModel->expects($this->any())->method('getOldSku')->will($this->returnValue([
-            'testSimpleOld' => [$this->productEntityLinkField => 10, 'type_id' => 'simple', 'attr_set_code' => 'Default'],
+            'testSimpleOld' => [
+                $this->productEntityLinkField => 10,
+                'type_id' => 'simple',
+                'attr_set_code' => 'Default'
+            ],
         ]));
 
         $this->_entityModel->expects($this->any())->method('getAttrSetIdToName')->willReturn([4 => 'Default']);
