@@ -274,7 +274,6 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $this->bundle->saveData();
     }
 
-
     /**
      * Data provider for saveData()
      *

@@ -661,7 +661,6 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->assertEquals($expectedId, $result);
     }
 
-
     /**
      * @dataProvider getRowScopeDataProvider
      */
