@@ -58,6 +58,9 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      */
     protected $entityModel;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         parent::setUp();

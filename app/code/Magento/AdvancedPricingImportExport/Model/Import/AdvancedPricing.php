@@ -15,6 +15,7 @@ use Magento\Framework\App\ResourceConnection;
  *
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {

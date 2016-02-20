@@ -413,7 +413,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             false
         );
         $this->productEntity->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
-        $this->productEntity->setMetadataPool($this->metadataPoolMock);;
+        $this->productEntity->setMetadataPool($this->metadataPoolMock);
 
         $productModelMock = $this->getMock('stdClass', ['getProductEntitiesInfo']);
         $productModelMock->expects(
