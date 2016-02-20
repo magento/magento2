@@ -313,10 +313,10 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'prodAttrColFac' => $this->attrCollectionFactory,
                 'params' => $this->params,
                 'resource' => $this->resource,
-                'productColFac' => $this->productCollectionFactory,
-                'metadataPool' => $metadataPoolMock
+                'productColFac' => $this->productCollectionFactory
             ]
         );
+        $this->configurable->setMetadataPool($metadataPoolMock);
     }
 
     /**
