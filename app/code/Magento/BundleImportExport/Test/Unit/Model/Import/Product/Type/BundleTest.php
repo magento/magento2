@@ -53,6 +53,11 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     protected $setCollection;
 
     /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPool;
+
+    /**
      *
      * @return void
      */
@@ -189,6 +194,17 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                 'params' => $this->params
             ]
         );
+
+        $metadata = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $metadata->expects($this->any())
+            ->method('getLinkField')
+            ->willReturn('entity_id');
+        $this->metadataPool = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $this->metadataPool->expects($this->any())
+            ->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($metadata);
+        $this->bundle->setMetadataPool($this->metadataPool);
     }
 
     /**
