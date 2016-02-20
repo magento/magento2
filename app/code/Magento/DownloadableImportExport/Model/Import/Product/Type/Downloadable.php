@@ -242,9 +242,18 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected $downloadableHelper;
 
     /**
+     * Product metadata pool
+     *
      * @var \Magento\Framework\Model\Entity\MetadataPool
      */
     private $metadataPool;
+
+    /**
+     * Product entity link field
+     *
+     * @var string
+     */
+    private $productEntityLinkField;
 
     /**
      * Constructor
@@ -255,7 +264,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      * @param array $params
      * @param \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper
      * @param \Magento\DownloadableImportExport\Helper\Data $downloadableHelper
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -264,8 +272,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         \Magento\Framework\App\ResourceConnection $resource,
         array $params,
         \Magento\DownloadableImportExport\Helper\Uploader $uploaderHelper,
-        \Magento\DownloadableImportExport\Helper\Data $downloadableHelper,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+        \Magento\DownloadableImportExport\Helper\Data $downloadableHelper
     ) {
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
         $this->parameters = $this->_entityModel->getParameters();
@@ -273,7 +280,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         $this->connection = $resource->getConnection('write');
         $this->uploaderHelper = $uploaderHelper;
         $this->downloadableHelper = $downloadableHelper;
-        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -283,7 +289,6 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     public function saveData()
     {
-        $productMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $newSku = $this->_entityModel->getNewSku();
         while ($bunch = $this->_entityModel->getNextBunch()) {
             foreach ($bunch as $rowNum => $rowData) {
@@ -294,7 +299,7 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 if ($this->_type != $productData['type_id']) {
                     continue;
                 }
-                $this->parseOptions($rowData, $productData[$productMetadata->getLinkField()]);
+                $this->parseOptions($rowData, $productData[$this->getProductEntityLinkField()]);
             }
             if (!empty($this->cachedOptions['sample']) || !empty($this->cachedOptions['link'])) {
                 $this->saveOptions();
@@ -861,5 +866,49 @@ class Downloadable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
         ];
         $this->productIds = [];
         return $this;
+    }
+
+    /**
+     * Get product metadata pool
+     *
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
+    }
+
+    /**
+     * Set product Metadata pool
+     *
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @return void
+     * @throws \LogicException
+     */
+    public function setMetadataPool(\Magento\Framework\Model\Entity\MetadataPool $metadataPool)
+    {
+        if ($this->metadataPool) {
+            throw new \LogicException("Metadata pool is already set");
+        }
+        $this->metadataPool = $metadataPool;
+    }
+
+    /**
+     * Get product entity link field
+     *
+     * @return string
+     */
+    private function getProductEntityLinkField()
+    {
+        if (!$this->productEntityLinkField) {
+            $this->productEntityLinkField = $this->getMetadataPool()
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getLinkField();
+        }
+        return $this->productEntityLinkField;
     }
 }

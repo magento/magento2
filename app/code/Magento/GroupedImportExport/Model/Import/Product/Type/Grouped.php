@@ -30,15 +30,23 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
     protected $links;
 
     /**
+     * Product metadata pool
+     *
      * @var \Magento\Framework\Model\Entity\MetadataPool
      */
     private $metadataPool;
 
     /**
+     * Product entity link field
+     *
+     * @var string
+     */
+    private $productEntityLinkField;
+
+    /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param array $params
      * @param Grouped\Links $links
      */
@@ -47,11 +55,9 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac,
         \Magento\Framework\App\ResourceConnection $resource,
         array $params,
-        Grouped\Links $links,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+        Grouped\Links $links
     ) {
         $this->links = $links;
-        $this->metadataPool = $metadataPool;
         parent::__construct($attrSetColFac, $prodAttrColFac, $resource, $params);
     }
 
@@ -65,7 +71,6 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
      */
     public function saveData()
     {
-        $productMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $newSku = $this->_entityModel->getNewSku();
         $oldSku = $this->_entityModel->getOldSku();
         $attributes = $this->links->getAttributes();
@@ -93,9 +98,9 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                     $associatedSkuAndQty = explode(self::SKU_QTY_DELIMITER, $associatedSkuAndQty);
                     $associatedSku = isset($associatedSkuAndQty[0]) ? trim($associatedSkuAndQty[0]) : null;
                     if (isset($newSku[$associatedSku])) {
-                        $linkedProductId = $newSku[$associatedSku][$productMetadata->getIdentifierField()];
+                        $linkedProductId = $newSku[$associatedSku][$this->getProductEntityLinkField()];
                     } elseif (isset($oldSku[$associatedSku])) {
-                        $linkedProductId = $oldSku[$associatedSku][$productMetadata->getIdentifierField()];
+                        $linkedProductId = $oldSku[$associatedSku][$this->getProductEntityLinkField()];
                     } else {
                         continue;
                     }
@@ -107,7 +112,7 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                         $rowData[$colAttrSet] = $productData['attr_set_code'];
                         $rowData[Product::COL_TYPE] = $productData['type_id'];
                     }
-                    $productId = $productData[$productMetadata->getLinkField()];
+                    $productId = $productData[$this->getProductEntityLinkField()];
 
                     $linksData['product_ids'][$productId] = true;
                     $linksData['relation'][] = ['parent_id' => $productId, 'child_id' => $linkedProductId];
@@ -129,5 +134,49 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
             $this->links->saveLinksData($linksData);
         }
         return $this;
+    }
+
+    /**
+     * Get product metadata pool
+     *
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
+    }
+
+    /**
+     * Set product Metadata pool
+     *
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @return void
+     * @throws \LogicException
+     */
+    public function setMetadataPool(\Magento\Framework\Model\Entity\MetadataPool $metadataPool)
+    {
+        if ($this->metadataPool) {
+            throw new \LogicException("Metadata pool is already set");
+        }
+        $this->metadataPool = $metadataPool;
+    }
+
+    /**
+     * Get product entity link field
+     *
+     * @return string
+     */
+    private function getProductEntityLinkField()
+    {
+        if (!$this->productEntityLinkField) {
+            $this->productEntityLinkField = $this->getMetadataPool()
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getLinkField();
+        }
+        return $this->productEntityLinkField;
     }
 }
