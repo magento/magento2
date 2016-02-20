@@ -326,7 +326,7 @@ class ProductRepositoryTest extends WebapiAbstract
             $productId1, $productId2
         ];
 
-        $expectedMessage = 'Products "%1" and %2 have the same set of attribute values.';
+        $expectedMessage = 'Products "%1" and "%2" have the same set of attribute values.';
         try {
             $this->saveProduct($response);
             $this->fail("Expected exception");

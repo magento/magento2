@@ -8,9 +8,9 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model\Product;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 
 /**
- * Class PaymentExtensionAttributes
+ * Class ProductExtensionAttributes
  */
-abstract class PaymentExtensionAttributes implements ProductExtensionInterface
+abstract class ProductExtensionAttributes implements ProductExtensionInterface
 {
 
 }

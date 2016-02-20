@@ -85,6 +85,8 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $configurableTypeResource
      * @param MetadataPool $metadataPool
      * @param Loader $optionLoader
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
@@ -134,7 +136,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
     {
         $product = $this->getProduct($sku);
 
-        return $this->optionLoader->load($product);
+        return (array) $this->optionLoader->load($product);
     }
 
     /**
@@ -149,7 +151,7 @@ class OptionRepository implements \Magento\ConfigurableProduct\Api\OptionReposit
             $this->configurableTypeResource->saveProducts($product, []);
         } catch (\Exception $exception) {
             throw new StateException(
-                __('Cannot delete variations from product: %1', $option->getProductId())
+                __('Cannot delete variations from product: %1', $entityId)
             );
         }
         try {

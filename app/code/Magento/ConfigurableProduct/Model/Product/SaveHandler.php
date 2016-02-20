@@ -43,9 +43,9 @@ class SaveHandler
         OptionRepositoryInterface $optionRepository,
         ProductAttributeRepositoryInterface $productAttributeRepository
     ) {
+        $this->resourceModel = $resourceModel;
         $this->optionRepository = $optionRepository;
         $this->productAttributeRepository = $productAttributeRepository;
-        $this->resourceModel = $resourceModel;
     }
 
     /**
