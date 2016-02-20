@@ -430,11 +430,12 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Deletes tier prices prices.
      *
      * @param array $listSku
-     * @param string $tableName
+     * @param string $table
      * @return bool
      */
-    protected function deleteProductTierPrices(array $listSku, $tableName)
+    protected function deleteProductTierPrices(array $listSku, $table)
     {
+        $tableName = $this->_resourceFactory->create()->getTable($table);
         if ($tableName && $listSku) {
             if (!$this->_cachedSkuToDelete) {
                 $this->_cachedSkuToDelete = $this->_connection->fetchCol(
@@ -529,9 +530,10 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function processCountExistingPrices($prices, $table)
     {
+        $tableName = $this->_resourceFactory->create()->getTable($table);
         $existingPrices = $this->_connection->fetchAssoc(
             $this->_connection->select()->from(
-                $this->_connection->getTableName($table),
+                $tableName,
                 ['value_id', 'entity_id', 'all_groups', 'customer_group_id']
             )
         );
