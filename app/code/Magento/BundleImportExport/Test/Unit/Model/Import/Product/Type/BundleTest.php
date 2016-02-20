@@ -55,7 +55,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     /**
      * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $metadataPool;
+    protected $metadataPoolMock;
 
     /**
      *
@@ -195,16 +195,16 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ]
         );
 
-        $metadata = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
-        $metadata->expects($this->any())
+        $metadataMock = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $metadataMock->expects($this->any())
             ->method('getLinkField')
             ->willReturn('entity_id');
-        $this->metadataPool = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
-        $this->metadataPool->expects($this->any())
+        $this->metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $this->metadataPoolMock->expects($this->any())
             ->method('getMetadata')
             ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
-            ->willReturn($metadata);
-        $this->bundle->setMetadataPool($this->metadataPool);
+            ->willReturn($metadataMock);
+        $this->bundle->setMetadataPool($this->metadataPoolMock);
     }
 
     /**

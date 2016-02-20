@@ -21,7 +21,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\ConfigurableImportExport\Model\Export\RowCustomizer
      */
-    protected $_model;
+    protected $model;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Collection|\PHPUnit_Framework_MockObject_MockObject
@@ -46,7 +46,9 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $entityMetadataMock->expects($this->any())
             ->method('getLinkField')
             ->willReturn('entity_id');
-        $this->_model = new \Magento\ConfigurableImportExport\Model\Export\RowCustomizer($metadataPoolMock);
+        $this->model = new \Magento\ConfigurableImportExport\Model\Export\RowCustomizer();
+        $this->model->setMetadataPool($metadataPoolMock);
+
     }
 
     public function testPrepareData()
@@ -65,7 +67,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
                 'configurable_variations',
                 'configurable_variation_labels',
             ],
-            $this->_model->addHeaderColumns(
+            $this->model->addHeaderColumns(
                 ['column_1', 'column_2', 'column_3']
             )
         );
@@ -81,7 +83,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->_initConfigurableData();
         $this->assertEquals(
             $expected,
-            $this->_model->addData($data['data_row'], $data['product_id'])
+            $this->model->addData($data['data_row'], $data['product_id'])
         );
     }
 
@@ -95,7 +97,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->_initConfigurableData();
         $this->assertEquals(
             $expected,
-            $this->_model->getAdditionalRowsCount($data['row_count'], $data['product_id'])
+            $this->model->getAdditionalRowsCount($data['row_count'], $data['product_id'])
         );
     }
 
@@ -249,9 +251,9 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(false));
 
 
-        $this->_model->prepareData($this->_collectionMock, $productIds);
+        $this->model->prepareData($this->_collectionMock, $productIds);
 
-        $configurableData = $this->getPropertyValue($this->_model, 'configurableData');
+        $configurableData = $this->getPropertyValue($this->model, 'configurableData');
 
         $this->assertEquals($expectedConfigurableData, $configurableData);
     }

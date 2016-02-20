@@ -156,6 +156,19 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 'links' => $this->links
             ]
         );
+        $metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $entityMetadataMock = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $metadataPoolMock->expects($this->any())
+            ->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($entityMetadataMock);
+        $entityMetadataMock->expects($this->any())
+            ->method('getLinkField')
+            ->willReturn('entity_id');
+        $entityMetadataMock->expects($this->any())
+            ->method('getIdentifierField')
+            ->willReturn('entity_id');
+        $this->grouped->setMetadataPool($metadataPoolMock);
     }
 
     /**
