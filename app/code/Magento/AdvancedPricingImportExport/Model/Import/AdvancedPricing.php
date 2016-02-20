@@ -199,11 +199,11 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->_storeResolver = $storeResolver;
         $this->_importProduct = $importProduct;
         $this->_validators[self::VALIDATOR_MAIN] = $validator->init($this);
+        $this->_catalogProductEntity = $this->_resourceFactory->create()->getTable('catalog_product_entity');
         $this->_oldSkus = $this->retrieveOldSkus();
         $this->_validators[self::VALIDATOR_WEBSITE] = $websiteValidator;
         $this->_validators[self::VALIDATOR_TEAR_PRICE] = $tierPriceValidator;
         $this->errorAggregator = $errorAggregator;
-        $this->_catalogProductEntity = $this->_resourceFactory->create()->getTable('catalog_product_entity');
 
         foreach (array_merge($this->errorMessageTemplates, $this->_messageTemplates) as $errorCode => $message) {
             $this->getErrorAggregator()->addErrorMessageTemplate($errorCode, $message);
@@ -513,7 +513,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     {
         $oldSkus = $this->_connection->fetchPairs(
             $this->_connection->select()->from(
-                $this->_connection->getTableName('catalog_product_entity'),
+                $this->_catalogProductEntity,
                 ['sku', 'entity_id']
             )
         );
