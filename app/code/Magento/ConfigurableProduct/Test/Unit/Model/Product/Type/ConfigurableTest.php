@@ -204,6 +204,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'getConfigurableProductLinks'
             ])
             ->getMockForAbstractClass();
+        $this->entityMetadata->expects(static::once())
+            ->method('getLinkField')
+            ->willReturn('link');
         $dataMap = [
             ['extension_attributes', null, $extensionAttributes],
             ['_cache_instance_used_product_attribute_ids', null, 1],
@@ -212,9 +215,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->any())
             ->method('getData')
             ->willReturnMap($dataMap);
-        $product->expects(self::exactly(1))
-            ->method('getId')
-            ->willReturn(1);
         $attribute = $this->getMockBuilder('\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute')
             ->disableOriginalConstructor()
             ->setMethods(['addData', 'setStoreId', 'setProductId', 'save', '__wakeup', '__sleep'])

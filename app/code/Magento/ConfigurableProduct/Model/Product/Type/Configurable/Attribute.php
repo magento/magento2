@@ -87,6 +87,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     {
         return $this->getData('options');
     }
+
     /**
      * {@inheritdoc}
      */
@@ -182,6 +183,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * @param string $attributeId
      * @return $this

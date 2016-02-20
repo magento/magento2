@@ -11,6 +11,7 @@ use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
  * Abstract action reindex class
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractAction
 {
