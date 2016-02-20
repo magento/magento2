@@ -44,6 +44,13 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
     private $productEntityLinkField;
 
     /**
+     * Product entity identifier field
+     *
+     * @var string
+     */
+    private $productEntityIdentifierField;
+
+    /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $attrSetColFac
      * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $prodAttrColFac
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -98,9 +105,9 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                     $associatedSkuAndQty = explode(self::SKU_QTY_DELIMITER, $associatedSkuAndQty);
                     $associatedSku = isset($associatedSkuAndQty[0]) ? trim($associatedSkuAndQty[0]) : null;
                     if (isset($newSku[$associatedSku])) {
-                        $linkedProductId = $newSku[$associatedSku][$this->getProductEntityLinkField()];
+                        $linkedProductId = $newSku[$associatedSku][$this->getProductEntityIdentifierField()];
                     } elseif (isset($oldSku[$associatedSku])) {
-                        $linkedProductId = $oldSku[$associatedSku][$this->getProductEntityLinkField()];
+                        $linkedProductId = $oldSku[$associatedSku][$this->getProductEntityIdentifierField()];
                     } else {
                         continue;
                     }
@@ -178,5 +185,20 @@ class Grouped extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abs
                 ->getLinkField();
         }
         return $this->productEntityLinkField;
+    }
+
+    /**
+     * Get product entity identifier field
+     *
+     * @return string
+     */
+    private function getProductEntityIdentifierField()
+    {
+        if (!$this->productEntityIdentifierField) {
+            $this->productEntityIdentifierField = $this->getMetadataPool()
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getIdentifierField();
+        }
+        return $this->productEntityIdentifierField;
     }
 }
