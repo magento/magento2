@@ -175,7 +175,6 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             1 => 'configurable'
         ];
 
-
         $this->_connection = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
             [

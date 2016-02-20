@@ -154,7 +154,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     private $metadataPool;
 
-
     /**
      * Product entity link field
      *
@@ -598,7 +597,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
         return $this;
     }
-
 
     /**
      * Get product metadata pool
