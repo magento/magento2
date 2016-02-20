@@ -41,10 +41,18 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * @var \Magento\Framework\Model\Entity\EntityMetadata
+     */
+    protected $productMetadata;
+
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->model = $this->objectManager->create('Magento\CatalogImportExport\Model\Import\Product');
+        /** @var \Magento\Framework\Model\Entity\MetadataPool $metadataPool */
+        $metadataPool = $this->objectManager->get('Magento\Framework\Model\Entity\MetadataPool');
+        $this->productMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
     }
 
     /**
@@ -109,7 +117,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             $optionData = $option->getData();
             $this->assertArrayHasKey('product_super_attribute_id', $optionData);
             $this->assertArrayHasKey('product_id', $optionData);
-            $this->assertEquals($product->getId(), $optionData['product_id']);
+            $this->assertEquals($product->getData($this->productMetadata->getLinkField()), $optionData['product_id']);
             $this->assertArrayHasKey('attribute_id', $optionData);
             $this->assertArrayHasKey('position', $optionData);
             $this->assertArrayHasKey('extension_attributes', $optionData);
