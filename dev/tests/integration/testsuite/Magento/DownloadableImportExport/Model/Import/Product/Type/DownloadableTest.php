@@ -65,7 +65,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
-    public function testBundleImport()
+    public function testDownloadableImport()
     {
         // import data from CSV file
         $pathToFile = __DIR__ . '/../../_files/import_downloadable.csv';

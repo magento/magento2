@@ -336,7 +336,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         $this->_cachedSkuToProducts = $this->connection->fetchPairs(
             $this->connection->select()->from(
                 $this->_resource->getTableName('catalog_product_entity'),
-                ['sku', $this->getProductEntityLinkField()]
+                ['sku', 'entity_id']
             )->where(
                 'sku IN (?)',
                 $this->_cachedSkus
