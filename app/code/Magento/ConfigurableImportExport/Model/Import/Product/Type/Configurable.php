@@ -18,6 +18,7 @@ use \Magento\Catalog\Api\Data\ProductInterface;
  * @package Magento\ConfigurableImportExport\Model\Import\Product\Type
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
