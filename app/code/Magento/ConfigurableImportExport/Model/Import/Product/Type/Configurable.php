@@ -854,7 +854,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     private function getMetadataPool()
     {
-        if (!isset($this->metadataPool)) {
+        if (!$this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
                 ->get('Magento\Framework\Model\Entity\MetadataPool');
         }
@@ -883,8 +883,10 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     private function getProductEntityLinkField()
     {
-        if (!isset($this->productEntityLinkField)) {
-            $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)->getLinkField();
+        if (!$this->productEntityLinkField) {
+            $this->productEntityLinkField = $this->getMetadataPool()
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getLinkField();
         }
         return $this->productEntityLinkField;
     }
@@ -896,8 +898,8 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     private function getProductEntityIdentifierField()
     {
-        if (!isset($this->productEntityIdentifierField)) {
-            $this->getMetadataPool()
+        if (!$this->productEntityIdentifierField) {
+            $this->productEntityIdentifierField = $this->getMetadataPool()
                 ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
                 ->getIdentifierField();
         }
