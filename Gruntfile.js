@@ -11,16 +11,11 @@ module.exports = function (grunt) {
         path = require('path'),
         themes = require('./dev/tools/grunt/configs/themes'),
         configDir = './dev/tools/grunt/configs',
-        taskDir = './dev/tools/grunt/tasks';
+        tasks = grunt.file.expand('./dev/tools/grunt/tasks/*');
 
-    [
-        taskDir + '/mage-minify',
-        taskDir + '/deploy',
-        taskDir + '/black-list-generator',
-        taskDir + '/clean-black-list',
-        taskDir + '/static',
-        'time-grunt'
-    ].forEach(function (task) {
+    tasks = _.map(tasks, function(task){ return task.replace('.js', '') });
+
+    tasks.forEach(function (task) {
         require(task)(grunt);
     });
 
