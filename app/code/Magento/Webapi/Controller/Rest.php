@@ -165,7 +165,8 @@ class Rest implements \Magento\Framework\App\FrontControllerInterface
     /**
      * Set deployment config
      *
-     * @param Magento\Framework\App\DeploymentConfig $deploymentConfig
+     * @param \Magento\Framework\App\DeploymentConfig $deploymentConfig
+     * @return void
      * @deprecated
      */
     public function setDeploymentConfig(\Magento\Framework\App\DeploymentConfig $deploymentConfig)

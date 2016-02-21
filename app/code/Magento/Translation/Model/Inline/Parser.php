@@ -143,7 +143,7 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      * For unit testing purpose only
      *
      * @param \Magento\Translation\Model\Inline\CacheManager $cacheManager
-     *
+     * @return void
      * @deprecated
      */
     public function setCacheManager(\Magento\Translation\Model\Inline\CacheManager $cacheManager)
