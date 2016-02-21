@@ -20,6 +20,9 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
     /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\PageCache\Cache */
     protected $_cacheMock;
 
+    /** @var  \PHPUnit_Framework_MockObject_MockObject|\Magento\PageCache\Model\Cache\Type */
+    private $fullPageCacheMock;
+
     /**
      * Set up all mocks and data for test
      */
@@ -33,11 +36,13 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->_cacheMock = $this->getMock('Magento\Framework\App\PageCache\Cache', ['clean'], [], '', false);
+        $this->fullPageCacheMock = $this->getMock('\Magento\PageCache\Model\Cache\Type', ['clean'], [], '', false);
 
         $this->_model = new \Magento\PageCache\Observer\FlushCacheByTags(
             $this->_configMock,
             $this->_cacheMock
         );
+        $this->_model->setCache($this->fullPageCacheMock);
     }
 
     /**
@@ -68,7 +73,7 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
                 );
             $observedObject->expects($this->once())->method('getIdentities')->will($this->returnValue($tags));
 
-            $this->_cacheMock->expects($this->once())->method('clean')->with($this->equalTo($expectedTags));
+            $this->fullPageCacheMock->expects($this->once())->method('clean')->with($this->equalTo($expectedTags));
         }
 
         $this->_model->execute($observerObject);
@@ -102,7 +107,7 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
         );
         $observedObject->expects($this->once())->method('getIdentities')->will($this->returnValue($tags));
 
-        $this->_cacheMock->expects($this->never())->method('clean');
+        $this->fullPageCacheMock->expects($this->never())->method('clean');
 
         $this->_model->execute($observerObject);
     }
