@@ -52,7 +52,7 @@ class UpgradeData implements UpgradeDataInterface
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function upgrade(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
@@ -61,230 +61,27 @@ class UpgradeData implements UpgradeDataInterface
         $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
 
         if (version_compare($context->getVersion(), '2.0.6', '<')) {
-            $customerSetup->updateEntityType(
-                \Magento\Customer\Model\Customer::ENTITY,
-                'entity_model',
-                'Magento\Customer\Model\ResourceModel\Customer'
-            );
-            $customerSetup->updateEntityType(
-                \Magento\Customer\Model\Customer::ENTITY,
-                'increment_model',
-                'Magento\Eav\Model\Entity\Increment\NumericValue'
-            );
-            $customerSetup->updateEntityType(
-                \Magento\Customer\Model\Customer::ENTITY,
-                'entity_attribute_collection',
-                'Magento\Customer\Model\ResourceModel\Attribute\Collection'
-            );
-            $customerSetup->updateEntityType(
-                'customer_address',
-                'entity_model',
-                'Magento\Customer\Model\ResourceModel\Address'
-            );
-            $customerSetup->updateEntityType(
-                'customer_address',
-                'entity_attribute_collection',
-                'Magento\Customer\Model\ResourceModel\Address\Attribute\Collection'
-            );
-            $customerSetup->updateAttribute(
-                'customer_address',
-                'country_id',
-                'source_model',
-                'Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Country'
-            );
-            $customerSetup->updateAttribute(
-                'customer_address',
-                'region',
-                'backend_model',
-                'Magento\Customer\Model\ResourceModel\Address\Attribute\Backend\Region'
-            );
-            $customerSetup->updateAttribute(
-                'customer_address',
-                'region_id',
-                'source_model',
-                'Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Region'
-            );
+            $this->upgradeVersionTwoZeroSix($customerSetup);
         }
 
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
-            $entityAttributes = [
-                'customer' => [
-                    'website_id' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => true,
-                        'is_searchable_in_grid' => false,
-                    ],
-                    'created_in' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => true,
-                    ],
-                    'email' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => true,
-                        'is_searchable_in_grid' => true,
-                    ],
-                    'group_id' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => true,
-                        'is_searchable_in_grid' => false,
-                    ],
-                    'dob' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => true,
-                        'is_searchable_in_grid' => false,
-                    ],
-                    'taxvat' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => true,
-                    ],
-                    'confirmation' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => true,
-                        'is_searchable_in_grid' => false,
-                    ],
-                    'created_at' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => true,
-                        'is_searchable_in_grid' => false,
-                    ],
-                    'gender' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => true,
-                        'is_searchable_in_grid' => false,
-                    ],
-                ],
-                'customer_address' => [
-                    'company' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => true,
-                    ],
-                    'street' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => true,
-                    ],
-                    'city' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => true,
-                    ],
-                    'country_id' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => true,
-                        'is_searchable_in_grid' => false,
-                    ],
-                    'region' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => true,
-                    ],
-                    'region_id' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => true,
-                        'is_searchable_in_grid' => false,
-                    ],
-                    'postcode' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => true,
-                        'is_searchable_in_grid' => true,
-                    ],
-                    'telephone' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => true,
-                        'is_filterable_in_grid' => true,
-                        'is_searchable_in_grid' => true,
-                    ],
-                    'fax' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => true,
-                    ],
-                ],
-            ];
-            $this->upgradeAttributes($entityAttributes, $customerSetup);
+            $this->upgradeVersionTwoZeroOne($customerSetup);
         }
 
         if (version_compare($context->getVersion(), '2.0.2') < 0) {
-            $entityTypeId = $customerSetup->getEntityTypeId(Customer::ENTITY);
-            $attributeId = $customerSetup->getAttributeId($entityTypeId, 'gender');
-
-            $option = ['attribute_id' => $attributeId, 'values' => [3 => 'Not Specified']];
-            $customerSetup->addAttributeOption($option);
+            $this->upgradeVersionTwoZeroTwo($customerSetup);
         }
 
         if (version_compare($context->getVersion(), '2.0.3', '<')) {
-            $entityAttributes = [
-                'customer_address' => [
-                    'region_id' => [
-                        'is_used_in_grid' => false,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => false,
-                    ],
-                    'firstname' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => true,
-                    ],
-                    'lastname' => [
-                        'is_used_in_grid' => true,
-                        'is_visible_in_grid' => false,
-                        'is_filterable_in_grid' => false,
-                        'is_searchable_in_grid' => true,
-                    ],
-                ],
-            ];
-            $this->upgradeAttributes($entityAttributes, $customerSetup);
+            $this->upgradeVersionTwoZeroThree($customerSetup);
         }
 
         if (version_compare($context->getVersion(), '2.0.4', '<')) {
-            $customerSetup->addAttribute(
-                Customer::ENTITY,
-                'updated_at',
-                [
-                    'type' => 'static',
-                    'label' => 'Updated At',
-                    'input' => 'date',
-                    'required' => false,
-                    'sort_order' => 87,
-                    'visible' => false,
-                    'system' => false,
-                ]
-            );
+            $this->upgradeVersionTwoZeroFour($customerSetup);
         }
 
         if (version_compare($context->getVersion(), '2.0.5', '<')) {
-            $this->upgradeHash($setup);
-            $entityAttributes = [
-                'customer_address' => [
-                    'fax' => [
-                        'is_visible' => false,
-                        'is_system' => false,
-                    ],
-                ],
-            ];
-            $this->upgradeAttributes($entityAttributes, $customerSetup);
+            $this->upgradeVersionTwoZeroFive($customerSetup, $setup);
         }
 
         if (version_compare($context->getVersion(), '2.0.6', '<')) {
@@ -292,6 +89,11 @@ class UpgradeData implements UpgradeDataInterface
                 $setup->getTable('customer_form_attribute'),
                 ['form_code = ?' => 'checkout_register']
             );
+        }
+
+        if (version_compare($context->getVersion(), '2.0.7', '<')) {
+            $this->upgradeVersionTwoZeroSeven($customerSetup);
+            $this->upgradeCustomerPasswordResetlinkExpirationPeriodConfig($setup);
         }
 
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
@@ -349,5 +151,328 @@ class UpgradeData implements UpgradeDataInterface
             $where = ['entity_id = ?' => (int)$customer['entity_id']];
             $setup->getConnection()->update($customerEntityTable, $bind, $where);
         }
+    }
+
+    /**
+     * @param CustomerSetup $customerSetup
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    private function upgradeVersionTwoZeroOne($customerSetup)
+    {
+        $entityAttributes = [
+            'customer' => [
+                'website_id' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => true,
+                    'is_filterable_in_grid' => true,
+                    'is_searchable_in_grid' => false,
+                ],
+                'created_in' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => true,
+                    'is_filterable_in_grid' => false,
+                    'is_searchable_in_grid' => true,
+                ],
+                'email' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => true,
+                    'is_filterable_in_grid' => true,
+                    'is_searchable_in_grid' => true,
+                ],
+                'group_id' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => true,
+                    'is_filterable_in_grid' => true,
+                    'is_searchable_in_grid' => false,
+                ],
+                'dob' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => true,
+                    'is_filterable_in_grid' => true,
+                    'is_searchable_in_grid' => false,
+                ],
+                'taxvat' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => true,
+                    'is_filterable_in_grid' => false,
+                    'is_searchable_in_grid' => true,
+                ],
+                'confirmation' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => true,
+                    'is_filterable_in_grid' => true,
+                    'is_searchable_in_grid' => false,
+                ],
+                'created_at' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => true,
+                    'is_filterable_in_grid' => true,
+                    'is_searchable_in_grid' => false,
+                ],
+                'gender' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => true,
+                    'is_filterable_in_grid' => true,
+                    'is_searchable_in_grid' => false,
+                ],
+            ],
+            'customer_address' => [
+                'company' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => false,
+                    'is_filterable_in_grid' => false,
+                    'is_searchable_in_grid' => true,
+                ],
+                'street' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => false,
+                    'is_filterable_in_grid' => false,
+                    'is_searchable_in_grid' => true,
+                ],
+                'city' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => false,
+                    'is_filterable_in_grid' => false,
+                    'is_searchable_in_grid' => true,
+                ],
+                'country_id' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => true,
+                    'is_filterable_in_grid' => true,
+                    'is_searchable_in_grid' => false,
+                ],
+                'region' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => true,
+                    'is_filterable_in_grid' => false,
+                    'is_searchable_in_grid' => true,
+                ],
+                'region_id' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => false,
+                    'is_filterable_in_grid' => true,
+                    'is_searchable_in_grid' => false,
+                ],
+                'postcode' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => true,
+                    'is_filterable_in_grid' => true,
+                    'is_searchable_in_grid' => true,
+                ],
+                'telephone' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => true,
+                    'is_filterable_in_grid' => true,
+                    'is_searchable_in_grid' => true,
+                ],
+                'fax' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => false,
+                    'is_filterable_in_grid' => false,
+                    'is_searchable_in_grid' => true,
+                ],
+            ],
+        ];
+        $this->upgradeAttributes($entityAttributes, $customerSetup);
+    }
+
+    /**
+     * @param CustomerSetup $customerSetup
+     * @return void
+     */
+    private function upgradeVersionTwoZeroTwo($customerSetup)
+    {
+        $entityTypeId = $customerSetup->getEntityTypeId(Customer::ENTITY);
+        $attributeId = $customerSetup->getAttributeId($entityTypeId, 'gender');
+
+        $option = ['attribute_id' => $attributeId, 'values' => [3 => 'Not Specified']];
+        $customerSetup->addAttributeOption($option);
+    }
+
+    /**
+     * @param CustomerSetup $customerSetup
+     * @return void
+     */
+    private function upgradeVersionTwoZeroThree($customerSetup)
+    {
+        $entityAttributes = [
+            'customer_address' => [
+                'region_id' => [
+                    'is_used_in_grid' => false,
+                    'is_visible_in_grid' => false,
+                    'is_filterable_in_grid' => false,
+                    'is_searchable_in_grid' => false,
+                ],
+                'firstname' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => false,
+                    'is_filterable_in_grid' => false,
+                    'is_searchable_in_grid' => true,
+                ],
+                'lastname' => [
+                    'is_used_in_grid' => true,
+                    'is_visible_in_grid' => false,
+                    'is_filterable_in_grid' => false,
+                    'is_searchable_in_grid' => true,
+                ],
+            ],
+        ];
+        $this->upgradeAttributes($entityAttributes, $customerSetup);
+    }
+
+    /**
+     * @param CustomerSetup $customerSetup
+     * @return void
+     */
+    private function upgradeVersionTwoZeroFour($customerSetup)
+    {
+        $customerSetup->addAttribute(
+            Customer::ENTITY,
+            'updated_at',
+            [
+                'type' => 'static',
+                'label' => 'Updated At',
+                'input' => 'date',
+                'required' => false,
+                'sort_order' => 87,
+                'visible' => false,
+                'system' => false,
+            ]
+        );
+    }
+
+    /**
+     * @param CustomerSetup $customerSetup
+     * @param ModuleDataSetupInterface $setup
+     * @return void
+     */
+    private function upgradeVersionTwoZeroFive($customerSetup, $setup)
+    {
+        $this->upgradeHash($setup);
+        $entityAttributes = [
+            'customer_address' => [
+                'fax' => [
+                    'is_visible' => false,
+                    'is_system' => false,
+                ],
+            ],
+        ];
+        $this->upgradeAttributes($entityAttributes, $customerSetup);
+    }
+
+    /**
+     * @param CustomerSetup $customerSetup
+     * @return void
+     */
+    private function upgradeVersionTwoZeroSix($customerSetup)
+    {
+        $customerSetup->updateEntityType(
+            \Magento\Customer\Model\Customer::ENTITY,
+            'entity_model',
+            'Magento\Customer\Model\ResourceModel\Customer'
+        );
+        $customerSetup->updateEntityType(
+            \Magento\Customer\Model\Customer::ENTITY,
+            'increment_model',
+            'Magento\Eav\Model\Entity\Increment\NumericValue'
+        );
+        $customerSetup->updateEntityType(
+            \Magento\Customer\Model\Customer::ENTITY,
+            'entity_attribute_collection',
+            'Magento\Customer\Model\ResourceModel\Attribute\Collection'
+        );
+        $customerSetup->updateEntityType(
+            'customer_address',
+            'entity_model',
+            'Magento\Customer\Model\ResourceModel\Address'
+        );
+        $customerSetup->updateEntityType(
+            'customer_address',
+            'entity_attribute_collection',
+            'Magento\Customer\Model\ResourceModel\Address\Attribute\Collection'
+        );
+        $customerSetup->updateAttribute(
+            'customer_address',
+            'country_id',
+            'source_model',
+            'Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Country'
+        );
+        $customerSetup->updateAttribute(
+            'customer_address',
+            'region',
+            'backend_model',
+            'Magento\Customer\Model\ResourceModel\Address\Attribute\Backend\Region'
+        );
+        $customerSetup->updateAttribute(
+            'customer_address',
+            'region_id',
+            'source_model',
+            'Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Region'
+        );
+    }
+
+    /**
+     * @param CustomerSetup $customerSetup
+     * @return void
+     */
+    private function upgradeVersionTwoZeroSeven($customerSetup)
+    {
+        $customerSetup->addAttribute(
+            Customer::ENTITY,
+            'failures_num',
+            [
+                'type' => 'static',
+                'label' => 'Failures Number',
+                'input' => 'hidden',
+                'required' => false,
+                'sort_order' => 100,
+                'visible' => false,
+                'system' => true,
+            ]
+        );
+
+        $customerSetup->addAttribute(
+            Customer::ENTITY,
+            'first_failure',
+            [
+                'type' => 'static',
+                'label' => 'First Failure Date',
+                'input' => 'date',
+                'required' => false,
+                'sort_order' => 110,
+                'visible' => false,
+                'system' => true,
+            ]
+        );
+
+        $customerSetup->addAttribute(
+            Customer::ENTITY,
+            'lock_expires',
+            [
+                'type' => 'static',
+                'label' => 'Failures Number',
+                'input' => 'date',
+                'required' => false,
+                'sort_order' => 120,
+                'visible' => false,
+                'system' => true,
+            ]
+        );
+    }
+
+    /**
+     * @param ModuleDataSetupInterface $setup
+     * @return void
+     */
+    private function upgradeCustomerPasswordResetlinkExpirationPeriodConfig($setup)
+    {
+        $configTable = $setup->getTable('core_config_data');
+
+        $setup->getConnection()->update(
+            $configTable,
+            ['value' => new \Zend_Db_Expr('value*24')],
+            ['path = ?' => \Magento\Customer\Model\Customer::XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD]
+        );
     }
 }
