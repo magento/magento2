@@ -6,12 +6,17 @@
  */
 namespace Magento\PageCache\Observer;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 class FlushAllCache implements ObserverInterface
 {
     /**
      * @var \Magento\Framework\App\PageCache\Cache
+     *
+     * @deprecated
      */
     protected $_cache;
 
@@ -21,6 +26,11 @@ class FlushAllCache implements ObserverInterface
      * @var \Magento\PageCache\Model\Config
      */
     protected $_config;
+
+    /**
+     * @var \Magento\PageCache\Model\Cache\Type
+     */
+    private $fullPageCache;
 
     /**
      * @param \Magento\PageCache\Model\Config $config
@@ -41,7 +51,32 @@ class FlushAllCache implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         if ($this->_config->getType() == \Magento\PageCache\Model\Config::BUILT_IN) {
-            $this->_cache->clean();
+            $this->getCache()->clean();
         }
+    }
+
+    /**
+     * TODO: Workaround to support backwards compatibility, will rework to use Dependency Injection in MAGETWO-49547
+     *
+     * @return \Magento\PageCache\Model\Cache\Type
+     */
+    private function getCache()
+    {
+        if (!$this->fullPageCache) {
+            $this->fullPageCache = ObjectManager::getInstance()->get('\Magento\PageCache\Model\Cache\Type');
+        }
+        return $this->fullPageCache;
+    }
+
+    /**
+     * @param \Magento\PageCache\Model\Cache\Type $cache
+     * @throws LocalizedException
+     */
+    public function setCache(\Magento\PageCache\Model\Cache\Type $cache)
+    {
+        if ($this->fullPageCache) {
+            throw new LocalizedException(new Phrase('fullPageCache is already set'));
+        }
+        $this->fullPageCache = $cache;
     }
 }

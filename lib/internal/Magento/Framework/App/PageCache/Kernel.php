@@ -4,6 +4,9 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\PageCache;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 /**
  * Builtin cache processor
@@ -11,7 +14,9 @@ namespace Magento\Framework\App\PageCache;
 class Kernel
 {
     /**
-     * @var Cache
+     * @var \Magento\PageCache\Model\Cache\Type
+     *
+     * @deprecated
      */
     protected $cache;
 
@@ -24,6 +29,11 @@ class Kernel
      * @var \Magento\Framework\App\Request\Http
      */
     protected $request;
+
+    /**
+     * @var \Magento\PageCache\Model\Cache\Type
+     */
+    private $fullPageCache;
 
     /**
      * @param Cache $cache
@@ -48,7 +58,7 @@ class Kernel
     public function load()
     {
         if ($this->request->isGet() || $this->request->isHead()) {
-            return unserialize($this->cache->load($this->identifier->getValue()));
+            return unserialize($this->getCache()->load($this->identifier->getValue()));
         }
         return false;
     }
@@ -75,8 +85,33 @@ class Kernel
                 if (!headers_sent()) {
                     header_remove('Set-Cookie');
                 }
-                $this->cache->save(serialize($response), $this->identifier->getValue(), $tags, $maxAge);
+                $this->getCache()->save(serialize($response), $this->identifier->getValue(), $tags, $maxAge);
             }
         }
+    }
+
+    /**
+     * TODO: Workaround to support backwards compatibility, will rework to use Dependency Injection in MAGETWO-49547
+     *
+     * @return \Magento\PageCache\Model\Cache\Type
+     */
+    private function getCache()
+    {
+        if (!$this->fullPageCache) {
+            $this->fullPageCache = ObjectManager::getInstance()->get('\Magento\PageCache\Model\Cache\Type');
+        }
+        return $this->fullPageCache;
+    }
+
+    /**
+     * @param \Magento\PageCache\Model\Cache\Type $cache
+     * @throws LocalizedException
+     */
+    public function setCache(\Magento\PageCache\Model\Cache\Type $cache)
+    {
+        if ($this->fullPageCache) {
+            throw new LocalizedException(new Phrase('fullPageCache is already set'));
+        }
+        $this->fullPageCache = $cache;
     }
 }
