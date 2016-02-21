@@ -41,5 +41,6 @@
         <field name="resources" group="api" />
         <field name="token_secret" group="integration_info" />
         <field name="consumer_secret" group="integration_info" />
+        <field name="current_password" group="integration_info" source="Magento\User\Test\Fixture\User\CurrentPassword" />
     </fixture>
 </config>
