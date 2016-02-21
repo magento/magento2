@@ -11,6 +11,7 @@
             <data name="customer/data/firstname" xsi:type="string">Jany %isolation%</data>
             <data name="customer/data/lastname" xsi:type="string">Doe %isolation%</data>
             <data name="customer/data/email" xsi:type="string">janydoe%isolation%@example.com</data>
+            <data name="customer/data/current_password" xsi:type="string">123123^q</data>
             <data name="address/data/firstname" xsi:type="string">Jany %isolation%</data>
             <data name="address/data/lastname" xsi:type="string">Doe %isolation%</data>
             <data name="address/data/company" xsi:type="string">Company %isolation%</data>
@@ -27,6 +28,7 @@
             <data name="customer/data/firstname" xsi:type="string">Jonny %isolation%</data>
             <data name="customer/data/lastname" xsi:type="string">Doe %isolation%</data>
             <data name="customer/data/email" xsi:type="string">jonny%isolation%@example.com</data>
+            <data name="customer/data/current_password" xsi:type="string">123123^q</data>
             <data name="address/data/firstname" xsi:type="string">John %isolation%</data>
             <data name="address/data/lastname" xsi:type="string">Doe %isolation%</data>
             <data name="address/data/company" xsi:type="string">Company %isolation%</data>
@@ -43,6 +45,7 @@
             <data name="customer/data/firstname" xsi:type="string">Jean %isolation%</data>
             <data name="customer/data/lastname" xsi:type="string">Reno %isolation%</data>
             <data name="customer/data/email" xsi:type="string">jean%isolation%@example.com</data>
+            <data name="customer/data/current_password" xsi:type="string">123123^q</data>
             <data name="address/data/firstname" xsi:type="string">Jean %isolation%</data>
             <data name="address/data/lastname" xsi:type="string">Reno %isolation%</data>
             <data name="address/data/company" xsi:type="string">Magento %isolation%</data>
@@ -60,6 +63,7 @@
             <data name="customer/data/firstname" xsi:type="string">-</data>
             <data name="customer/data/lastname" xsi:type="string">-</data>
             <data name="customer/data/email" xsi:type="string">-</data>
+            <data name="customer/data/current_password" xsi:type="string">123123^q</data>
             <data name="address/data/firstname" xsi:type="string">John</data>
             <data name="address/data/lastname" xsi:type="string">Doe</data>
             <data name="address/data/company" xsi:type="string">Magento %isolation%</data>
