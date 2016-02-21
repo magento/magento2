@@ -102,7 +102,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 $this->relation
             ]
         );
-        $configurable->setMetadataPool($this->metadataPool);
+        $configurable->setMetadataPool($this->metadataPoolMock);
 
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->setMethods(
