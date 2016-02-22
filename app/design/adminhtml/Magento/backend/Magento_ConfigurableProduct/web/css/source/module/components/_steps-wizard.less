@@ -5,26 +5,38 @@
 
 //
 //  Variables
-//  ---------------------------------------------
+//  _____________________________________________
 
 @steps-wizard-section-title__border-color: @color-gray89;
 @steps-wizard-section-title__font-size: 1.8rem;
 
 //
 //  Common
-//  ---------------------------------------------
+//  _____________________________________________
 
 .product-create-configuration {
     &:extend(.abs-clearfix all);
-    padding: @indent__s 0 ;
+    padding: @indent__s 0;
+
     .product-create-configuration-info {
         float: left;
-        width: 50%;
+        width: 60%;
     }
+
     .product-create-configuration-actions {
         float: right;
         text-align: right;
-        width: 50%;
+        width: 40%;
+        &:extend(.abs-clearfix all);
+    }
+
+    .product-create-configuration-action {
+        float: right;
+        margin-left: @indent__s;
+    }
+
+    .action-menu-item {
+        padding-right: 0;
     }
 }
 
@@ -36,8 +48,9 @@
         background: @page-main-actions__background-color;
         border-bottom: 1px solid @page-main-actions__border-color;
         border-top: 1px solid @page-main-actions__border-color;
-        margin: 0 0 @indent__s;
+        margin: 0 0 @indent__base;
         padding: @page-main-actions__padding;
+        text-align: center;
     }
 
     .steps-wizard-title {
@@ -50,8 +63,9 @@
     }
 
     .admin__data-grid-wrap {
-        .action-multiselect-wrap {
+        .action-multicheck-wrap {
             position: static;
+            
             .action-menu {
                 left: 0;
                 margin-top: 16px;
@@ -60,9 +74,21 @@
                 z-index: 2;
             }
         }
-    }
 
-    .admin__data-grid-pager-wrap {
-        float: right;
+        .note {
+            margin: @indent__base 0;
+        }
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+    .steps-wizard {
+        .steps-wizard-navigation {
+            text-align: left;
+        }
     }
 }

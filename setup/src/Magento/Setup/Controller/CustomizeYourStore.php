@@ -5,8 +5,10 @@
  */
 namespace Magento\Setup\Controller;
 
+use Magento\Framework\Filesystem;
+use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Setup\Lists;
-use Magento\Setup\Model\SampleData;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\View\Model\JsonModel;
@@ -14,23 +16,30 @@ use Zend\View\Model\JsonModel;
 class CustomizeYourStore extends AbstractActionController
 {
     /**
+     * @var FullModuleList
+     */
+    protected $moduleList;
+
+    /**
      * @var Lists
      */
     protected $list;
 
     /**
-     * @var SampleData
+     * @var ObjectManagerProvider
      */
-    protected $sampleData;
+    protected $objectManagerProvider;
 
     /**
+     * @param FullModuleList $moduleList
      * @param Lists $list
-     * @param SampleData $sampleData
+     * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(Lists $list, SampleData $sampleData)
+    public function __construct(FullModuleList $moduleList, Lists $list, ObjectManagerProvider $objectManagerProvider)
     {
+        $this->moduleList = $moduleList;
         $this->list = $list;
-        $this->sampleData = $sampleData;
+        $this->objectManagerProvider = $objectManagerProvider;
     }
 
     /**
@@ -38,13 +47,23 @@ class CustomizeYourStore extends AbstractActionController
      */
     public function indexAction()
     {
+        $sampleDataDeployed = $this->moduleList->has('Magento_SampleData');
+        if ($sampleDataDeployed) {
+            /** @var \Magento\Framework\Setup\SampleData\State $sampleData */
+            $sampleData = $this->objectManagerProvider->get()->get('Magento\Framework\Setup\SampleData\State');
+            $isSampleDataInstalled = $sampleData->isInstalled();
+            $isSampleDataErrorInstallation = $sampleData->hasError();
+        } else {
+            $isSampleDataInstalled = false;
+            $isSampleDataErrorInstallation = false;
+        }
+
         $view = new ViewModel([
             'timezone' => $this->list->getTimezoneList(),
             'currency' => $this->list->getCurrencyList(),
             'language' => $this->list->getLocaleList(),
-            'isSampledataEnabled' => $this->sampleData->isDeployed(),
-            'isSampleDataInstalled' => $this->sampleData->isInstalledSuccessfully(),
-            'isSampleDataErrorInstallation' => $this->sampleData->isInstallationError()
+            'isSampleDataInstalled' => $isSampleDataInstalled,
+            'isSampleDataErrorInstallation' => $isSampleDataErrorInstallation
         ]);
         $view->setTerminal(true);
         return $view;

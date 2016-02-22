@@ -7,19 +7,25 @@
 namespace Magento\Sales\Test\Block\Adminhtml\CreditMemo;
 
 /**
- * Class Grid
- * Credit memo grid on Credit memos index page
+ * Credit memo grid on Credit memos index page.
  */
-class Grid extends \Magento\Backend\Test\Block\Widget\Grid
+class Grid extends \Magento\Ui\Test\Block\Adminhtml\DataGrid
 {
     /**
-     * Filters array mapping
+     * Locator value for "View" link inside action column.
+     *
+     * @var string
+     */
+    protected $editLink = '.data-grid-actions-cell a';
+
+    /**
+     * Filters array mapping.
      *
      * @var array
      */
     protected $filters = [
         'id' => [
-            'selector' => 'input[name="real_creditmemo_id"]',
+            'selector' => 'input[name="increment_id"]',
         ],
         'order_id' => [
             'selector' => 'input[name="order_increment_id"]',

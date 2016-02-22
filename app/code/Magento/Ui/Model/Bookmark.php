@@ -5,18 +5,21 @@
  */
 namespace Magento\Ui\Model;
 
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 use Magento\Framework\Json\DecoderInterface;
-use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\Ui\Api\Data\BookmarkInterface;
-use Magento\Ui\Model\Resource\Bookmark\Collection;
-use Magento\Ui\Model\Resource\Bookmark as ResourceBookmark;
+use Magento\Ui\Model\ResourceModel\Bookmark\Collection;
+use Magento\Ui\Model\ResourceModel\Bookmark as ResourceBookmark;
 
 /**
  * Domain class Bookmark
+ * @codeCoverageIgnore
  */
-class Bookmark extends AbstractModel implements BookmarkInterface
+class Bookmark extends AbstractExtensibleModel implements BookmarkInterface
 {
     /**
      * @var DecoderInterface
@@ -24,23 +27,35 @@ class Bookmark extends AbstractModel implements BookmarkInterface
     protected $jsonDecoder;
 
     /**
-     * @param DecoderInterface $jsonDecoder
      * @param Context $context
      * @param Registry $registry
+     * @param ExtensionAttributesFactory $extensionFactory
+     * @param AttributeValueFactory $customAttributeFactory
      * @param ResourceBookmark $resource
      * @param Collection $resourceCollection
+     * @param DecoderInterface $jsonDecoder
      * @param array $data
      */
     public function __construct(
         Context $context,
         Registry $registry,
+        ExtensionAttributesFactory $extensionFactory,
+        AttributeValueFactory $customAttributeFactory,
         ResourceBookmark $resource,
         Collection $resourceCollection,
         DecoderInterface $jsonDecoder,
         array $data = []
     ) {
         $this->jsonDecoder = $jsonDecoder;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**
@@ -110,7 +125,11 @@ class Bookmark extends AbstractModel implements BookmarkInterface
      */
     public function getConfig()
     {
-        return $this->jsonDecoder->decode($this->getData(self::CONFIG));
+        $config = $this->getData(self::CONFIG);
+        if ($config) {
+            return $this->jsonDecoder->decode($config);
+        }
+        return [];
     }
 
     /**
@@ -230,5 +249,26 @@ class Bookmark extends AbstractModel implements BookmarkInterface
     public function setUpdatedAt($updatedAt)
     {
         return $this->setData(self::UPDATED_AT, $updatedAt);
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\Ui\Api\Data\BookmarkExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\Ui\Api\Data\BookmarkExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\Ui\Api\Data\BookmarkExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

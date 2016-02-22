@@ -31,7 +31,7 @@ class UpdateCatalogPriceRuleEntityTest extends AbstractCatalogRuleEntityTest
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'MX';
-    const STABLE = 'no';
+    const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 
     /**

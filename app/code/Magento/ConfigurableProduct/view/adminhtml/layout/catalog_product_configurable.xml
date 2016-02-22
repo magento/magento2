@@ -5,22 +5,15 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <css src="Magento_ConfigurableProduct::css/configurable-product.css"/>
     </head>
     <update handle="catalog_product_superconfig_config"/>
     <body>
         <referenceBlock name="product_tabs">
-            <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config" name="admin.product.edit.tab.super.config.grid.container">
-                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config" template="Magento_ConfigurableProduct::catalog/product/edit/super/generator.phtml" name="product-variations-generator" as="generator">
-                    <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Attribute" template="Magento_ConfigurableProduct::catalog/product/edit/super/attribute-template.phtml" as="attribute-renderer"/>
-                    <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Matrix" template="Magento_ConfigurableProduct::catalog/product/edit/super/matrix.phtml" as="matrix"/>
-                </block>
-            </block>
-            <action method="addTab">
-                <argument name="name" xsi:type="string">super_config</argument>
-                <argument name="block" xsi:type="string">admin.product.edit.tab.super.config.grid.container</argument>
+            <action method="removeTab">
+                <argument name="name" xsi:type="string">advanced-pricing</argument>
             </action>
         </referenceBlock>
     </body>

@@ -6,14 +6,11 @@
 require __DIR__ . '/multiselect_attribute.php';
 
 /** @var $installer \Magento\Catalog\Setup\CategorySetup */
-$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Catalog\Setup\CategorySetup',
-    ['resourceName' => 'catalog_setup']
-);
+$installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Setup\CategorySetup');
 
-/** @var $options \Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection */
+/** @var $options \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection */
 $options = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection'
+    'Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection'
 );
 $options->setAttributeFilter($attribute->getId());
 $optionIds = $options->getAllIds();

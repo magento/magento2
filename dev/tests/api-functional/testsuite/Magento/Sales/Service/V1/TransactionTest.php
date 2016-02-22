@@ -50,12 +50,17 @@ class TransactionTest extends WebapiAbstract
     {
         /** @var Order $order */
         $order = $this->objectManager->create('Magento\Sales\Model\Order');
+        /**
+         * @var $transactionRepository \Magento\Sales\Model\Order\Payment\Transaction\Repository
+         */
+        $transactionRepository = 'Magento\Sales\Model\Order\Payment\Transaction\Repository';
+        $transactionRepository = $this->objectManager->create($transactionRepository);
         $order->loadByIncrementId('100000006');
 
         /** @var Payment $payment */
         $payment = $order->getPayment();
         /** @var Transaction $transaction */
-        $transaction = $payment->getTransaction('trx_auth');
+        $transaction = $transactionRepository->getByTransactionId('trx_auth', $payment->getId(), $order->getId());
 
         $childTransactions = $transaction->getChildTransactions();
         $childTransaction = reset($childTransactions);
@@ -89,12 +94,17 @@ class TransactionTest extends WebapiAbstract
     {
         /** @var Order $order */
         $order = $this->objectManager->create('Magento\Sales\Model\Order');
+        /**
+         * @var $transactionRepository \Magento\Sales\Model\Order\Payment\Transaction\Repository
+         */
+        $transactionRepository = 'Magento\Sales\Model\Order\Payment\Transaction\Repository';
+        $transactionRepository = $this->objectManager->create($transactionRepository);
         $order->loadByIncrementId('100000006');
 
         /** @var Payment $payment */
         $payment = $order->getPayment();
         /** @var Transaction $transaction */
-        $transaction = $payment->getTransaction('trx_auth');
+        $transaction = $transactionRepository->getByTransactionId('trx_auth', $payment->getId(), $order->getId());
 
         $childTransactions = $transaction->getChildTransactions();
 
@@ -108,7 +118,7 @@ class TransactionTest extends WebapiAbstract
         $searchCriteriaBuilder->addFilters($filters);
         $searchData = $searchCriteriaBuilder->create()->__toArray();
 
-        $requestData = ['criteria' => $searchData];
+        $requestData = ['searchCriteria' => $searchData];
 
         $serviceInfo = [
             'rest' => [

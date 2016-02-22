@@ -12,11 +12,12 @@
 //  in a custom theme. Use this file if you want to set specific variables for emails.
 //  For example, you can make the email font, typography, colors, etc unique from the frontend theme.
 
+//  Structure
+@email-body__width: 660px;
+@email-body__padding: @indent__m;
+
 //  Colors
-@email__background-color: darken(@color-white, 6%);
+@email__background-color: @color-white-smoke;
 
 //  Headings
-@heading__font-weight__base: @font-weight__bold;
-
-//  Tables
-@table-head__background-color: @color-gray95;
+@h3__font-weight: @heading__font-weight__base;

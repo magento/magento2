@@ -11,7 +11,7 @@ interface FilterableAttributeListInterface
     /**
      * Retrieve list of filterable attributes
      *
-     * @return array|\Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @return array|\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
      */
     public function getList();
 }

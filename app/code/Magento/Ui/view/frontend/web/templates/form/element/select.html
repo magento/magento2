@@ -13,9 +13,13 @@
         placeholder: placeholder
     },
     hasFocus: focused,
-    optgroup: options,
+    options: options,
     value: value,
-    optionsCaption: caption,
     optionsValue: 'value',
-    optionsText: 'label'"
+    optionsText: 'label',
+    optionsAfterRender: function(option, item) {
+        if (item && item.disabled) {
+            ko.applyBindingsToNode(option, {attr: {disabled: true}}, item);
+        }
+    }"
 />

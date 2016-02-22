@@ -5,7 +5,7 @@
  */
 
 $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-    'Magento\SalesRule\Model\Resource\Rule\Collection'
+    'Magento\SalesRule\Model\ResourceModel\Rule\Collection'
 );
 $items = array_values($this->_collection->getItems());
 

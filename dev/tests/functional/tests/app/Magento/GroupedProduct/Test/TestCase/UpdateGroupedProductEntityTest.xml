@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\GroupedProduct\Test\TestCase\UpdateGroupedProductEntityTest">
+    <testCase name="Magento\GroupedProduct\Test\TestCase\UpdateGroupedProductEntityTest" summary="Update Grouped Product" ticketId="MAGETWO-26462">
         <variation name="UpdateGroupedProductEntityTestVariation1">
             <data name="originalProduct/dataset" xsi:type="string">grouped_product_out_of_stock</data>
             <data name="product/data/name" xsi:type="string">GroupedProduct_edited %isolation%</data>

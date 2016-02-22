@@ -71,7 +71,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected $formFactoryMock;
 
     /**
-     * @var \Magento\Framework\ObjectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObjectFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectFactoryMock;
 
@@ -121,7 +121,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected $redirectFactoryMock;
 
     /**
-     * @var \Magento\Customer\Api\AccountManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\AccountManagement|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $managementMock;
 
@@ -129,6 +129,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Customer\Api\Data\AddressInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $addressDataFactoryMock;
+
+    /**
+     * @var \Magento\Customer\Helper\EmailNotification | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $emailNotification;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -165,7 +170,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->formFactoryMock = $this->getMockBuilder('Magento\Customer\Model\Metadata\FormFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->objectFactoryMock = $this->getMockBuilder('Magento\Framework\ObjectFactory')
+        $this->objectFactoryMock = $this->getMockBuilder('Magento\Framework\DataObjectFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -199,12 +204,17 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->managementMock = $this->getMockBuilder('Magento\Customer\Api\AccountManagementInterface')
+        $this->managementMock = $this->getMockBuilder('Magento\Customer\Model\AccountManagement')
             ->disableOriginalConstructor()
+            ->setMethods(['createAccount'])
             ->getMock();
         $this->addressDataFactoryMock = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterfaceFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
+            ->getMock();
+        $this->emailNotification = $this->getMockBuilder('Magento\Customer\Helper\EmailNotification')
+            ->disableOriginalConstructor()
+            ->setMethods(['sendNotificationEmailsIfRequired'])
             ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -234,6 +244,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'coreRegistry' => $this->registryMock,
                 'customerAccountManagement' => $this->managementMock,
                 'addressDataFactory' => $this->addressDataFactoryMock,
+                'emailNotification' => $this->emailNotification
             ]
         );
     }
@@ -299,7 +310,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             \Magento\Customer\Api\Data\CustomerInterface::DEFAULT_BILLING => $addressId,
             \Magento\Customer\Api\Data\CustomerInterface::DEFAULT_SHIPPING => $addressId,
             'confirmation' => false,
-            'sendemail' => false,
+            'sendemail_store_id' => '1',
             'id' => $customerId,
         ];
         $mergedAddressData = [
@@ -380,8 +391,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        /** @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject $objectMock */
-        $objectMock = $this->getMockBuilder('Magento\Framework\Object')
+        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -457,6 +468,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->customerRepositoryMock->expects($this->once())
             ->method('save')
             ->with($customerMock)
+            ->willReturnSelf();
+
+        $this->emailNotification->expects($this->once())
+            ->method('sendNotificationEmailsIfRequired')
+            ->with($customerMock, $customerMock)
             ->willReturnSelf();
 
         $this->authorizationMock->expects($this->once())
@@ -561,7 +577,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             \Magento\Customer\Api\Data\CustomerInterface::DEFAULT_BILLING => null,
             \Magento\Customer\Api\Data\CustomerInterface::DEFAULT_SHIPPING => null,
             'confirmation' => false,
-            'sendemail' => false,
         ];
         $mergedAddressData = [
             'entity_id' => $addressId,
@@ -641,8 +656,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        /** @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject $objectMock */
-        $objectMock = $this->getMockBuilder('Magento\Framework\Object')
+        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -827,8 +842,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with($this->requestMock, 'customer')
             ->willReturn($filteredData);
 
-        /** @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject $objectMock */
-        $objectMock = $this->getMockBuilder('Magento\Framework\Object')
+        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -967,8 +982,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with($this->requestMock, 'customer')
             ->willReturn($filteredData);
 
-        /** @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject $objectMock */
-        $objectMock = $this->getMockBuilder('Magento\Framework\Object')
+        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -1107,8 +1122,8 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with($this->requestMock, 'customer')
             ->willReturn($filteredData);
 
-        /** @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject $objectMock */
-        $objectMock = $this->getMockBuilder('Magento\Framework\Object')
+        /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+        $objectMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 

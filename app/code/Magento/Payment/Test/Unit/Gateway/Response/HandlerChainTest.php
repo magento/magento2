@@ -6,6 +6,7 @@
 namespace Magento\Payment\Test\Unit\Gateway\Response;
 
 use Magento\Payment\Gateway\Response\HandlerChain;
+use Magento\Payment\Gateway\Response\HandlerInterface;
 
 class HandlerChainTest extends \PHPUnit_Framework_TestCase
 {
@@ -31,7 +32,7 @@ class HandlerChainTest extends \PHPUnit_Framework_TestCase
                         'handler1' => 'Magento\Payment\Gateway\Response\HandlerInterface',
                         'handler2' => 'Magento\Payment\Gateway\Response\HandlerInterface'
                     ],
-                    'type' => 'Magento\Payment\Gateway\Response\HandlerInterface'
+                    'type' => HandlerInterface::class
                 ]
             )
             ->willReturn($tMap);
@@ -49,11 +50,11 @@ class HandlerChainTest extends \PHPUnit_Framework_TestCase
             ->with($handlingSubject, $response);
 
         $chain = new HandlerChain(
+            $tMapFactory,
             [
                 'handler1' => 'Magento\Payment\Gateway\Response\HandlerInterface',
                 'handler2' => 'Magento\Payment\Gateway\Response\HandlerInterface'
-            ],
-            $tMapFactory
+            ]
         );
         $chain->handle($handlingSubject, $response);
     }

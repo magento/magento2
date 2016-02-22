@@ -6,7 +6,7 @@
  */
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
 
     <!-- Product Service -->
     <route url="/V1/products" method="POST">
@@ -196,7 +196,7 @@
             <resource ref="anonymous"/>
         </resources>
     </route>
-    <route url="/V1/products/:sku/media/:imageId" method="GET">
+    <route url="/V1/products/:sku/media/:entryId" method="GET">
         <service class="Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface" method="get"/>
         <resources>
             <resource ref="anonymous"/>
@@ -224,26 +224,6 @@
         <service class="Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface" method="getList"/>
         <resources>
             <resource ref="anonymous"/>
-        </resources>
-    </route>
-
-    <!-- Group Price -->
-    <route url="/V1/products/:sku/group-prices/" method="GET">
-        <service class="Magento\Catalog\Api\ProductGroupPriceManagementInterface" method="getList"/>
-        <resources>
-            <resource ref="anonymous"/>
-        </resources>
-    </route>
-    <route url="/V1/products/:sku/group-prices/:customerGroupId/price/:price" method="POST">
-        <service class="Magento\Catalog\Api\ProductGroupPriceManagementInterface" method="add"/>
-        <resources>
-            <resource ref="Magento_Catalog::catalog"/>
-        </resources>
-    </route>
-    <route url="/V1/products/:sku/group-prices/:customerGroupId/" method="DELETE">
-        <service class="Magento\Catalog\Api\ProductGroupPriceManagementInterface" method="remove"/>
-        <resources>
-            <resource ref="Magento_Catalog::catalog"/>
         </resources>
     </route>
 
@@ -403,6 +383,26 @@
         <service class="Magento\Catalog\Api\CategoryLinkRepositoryInterface" method="deleteByIds" />
         <resources>
             <resource ref="Magento_Catalog::categories" />
+        </resources>
+    </route>
+
+    <!-- Product Website Links -->
+    <route url="/V1/products/:sku/websites" method="POST">
+        <service class="Magento\Catalog\Api\ProductWebsiteLinkRepositoryInterface" method="save" />
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/products/:sku/websites" method="PUT">
+        <service class="Magento\Catalog\Api\ProductWebsiteLinkRepositoryInterface" method="save" />
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/products/:sku/websites/:websiteId" method="DELETE">
+        <service class="Magento\Catalog\Api\ProductWebsiteLinkRepositoryInterface" method="deleteById" />
+        <resources>
+            <resource ref="Magento_Catalog::products" />
         </resources>
     </route>
 </routes>

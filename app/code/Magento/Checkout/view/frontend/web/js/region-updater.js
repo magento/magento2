@@ -15,7 +15,7 @@ define([
     $.widget('mage.regionUpdater', {
         options: {
             regionTemplate:
-                '<option value="<%- data.value %>" title="<%- data.title %>" <% if (data.isSelected) { %>selected="selected"<% } %>>' +
+                '<option value="<%- data.value %>" <% if (data.isSelected) { %>selected="selected"<% } %>>' +
                     '<%- data.title %>' +
                 '</option>',
             isRegionRequired: true,

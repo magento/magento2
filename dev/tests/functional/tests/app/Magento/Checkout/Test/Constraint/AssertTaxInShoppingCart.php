@@ -24,11 +24,14 @@ class AssertTaxInShoppingCart extends AbstractConstraint
      *
      * @param CheckoutCart $checkoutCart
      * @param Cart $cart
+     * @param boolean $requireReload
      * @return void
      */
-    public function processAssert(CheckoutCart $checkoutCart, Cart $cart)
+    public function processAssert(CheckoutCart $checkoutCart, Cart $cart, $requireReload = true)
     {
-        $checkoutCart->open();
+        if ($requireReload) {
+            $checkoutCart->open();
+        }
 
         $fixtureTaxAmount = number_format((float)$cart->getTaxAmount(), 2);
         $pageTaxAmount = $checkoutCart->getTotalsBlock()->getTax();

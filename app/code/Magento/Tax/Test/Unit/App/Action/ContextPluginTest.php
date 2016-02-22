@@ -73,6 +73,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
 
         $this->taxCalculationMock = $this->getMockBuilder('Magento\Tax\Model\Calculation\Proxy')
             ->disableOriginalConstructor()
+            ->setMethods(['getTaxRates'])
             ->getMock();
 
         $this->customerSessionMock = $this->getMockBuilder('Magento\Customer\Model\Session')

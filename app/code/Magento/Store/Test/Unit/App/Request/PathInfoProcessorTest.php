@@ -5,6 +5,8 @@
  */
 namespace Magento\Store\Test\Unit\App\Request;
 
+use Magento\Framework\Exception\NoSuchEntityException;
+
 class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -41,13 +43,10 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
         $this->_storeManagerMock->expects(
             $this->once()
         )->method(
-            'getStores'
+            'getStore'
         )->with(
-            false,
-            true
-        )->will(
-            $this->returnValue(['storeCode' => $store])
-        );
+            'storeCode'
+        )->willReturn($store);
         $store->expects($this->once())->method('isUseStoreInUrl')->will($this->returnValue(true));
         $this->_requestMock->expects(
             $this->once()
@@ -68,13 +67,10 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
         $this->_storeManagerMock->expects(
             $this->once()
         )->method(
-            'getStores'
+            'getStore'
         )->with(
-            false,
-            true
-        )->will(
-            $this->returnValue(['storeCode' => $store])
-        );
+            'storeCode'
+        )->willReturn($store);
         $store->expects($this->once())->method('isUseStoreInUrl')->will($this->returnValue(true));
         $this->_requestMock->expects(
             $this->once()
@@ -96,13 +92,10 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
         $this->_storeManagerMock->expects(
             $this->once()
         )->method(
-            'getStores'
+            'getStore'
         )->with(
-            false,
-            true
-        )->will(
-            $this->returnValue(['0' => $store])
-        );
+            '0'
+        )->willReturn($store);
         $store->expects($this->once())->method('isUseStoreInUrl')->will($this->returnValue(true));
         $this->_requestMock->expects(
             $this->once()
@@ -120,18 +113,11 @@ class PathInfoProcessorTest extends \PHPUnit_Framework_TestCase
     public function testProcessIfStoreCodeIsNotExist()
     {
         $store = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
-        $this->_storeManagerMock->expects(
-            $this->once()
-        )->method(
-            'getStores'
-        )->with(
-            false,
-            true
-        )->will(
-            $this->returnValue(['0' => $store])
-        );
+        $this->_storeManagerMock->expects($this->once())->method('getStore')->with('storeCode')
+            ->willThrowException(new NoSuchEntityException());
         $store->expects($this->never())->method('isUseStoreInUrl');
         $this->_requestMock->expects($this->never())->method('isDirectAccessFrontendName');
+
         $this->assertEquals($this->_pathInfo, $this->_model->process($this->_requestMock, $this->_pathInfo));
     }
 }

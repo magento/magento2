@@ -167,4 +167,14 @@ class AddressAdapter implements AddressAdapterInterface
     {
         return $this->address->getSuffix();
     }
+
+    /**
+     * Get company
+     *
+     * @return string
+     */
+    public function getCompany()
+    {
+        return $this->address->getCompany();
+    }
 }

@@ -159,7 +159,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'date_format' => $dateFormat,
                 'label' => __('From'),
                 'title' => __('From'),
-                'required' => true
+                'required' => true,
+                'class' => 'admin__control-text'
             ]
         );
 
@@ -171,7 +172,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'date_format' => $dateFormat,
                 'label' => __('To'),
                 'title' => __('To'),
-                'required' => true
+                'required' => true,
+                'class' => 'admin__control-text'
             ]
         );
 
@@ -232,7 +234,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             // apply field options
             foreach ($this->_fieldOptions as $fieldId => $fieldOptions) {
                 $field = $fieldset->getElements()->searchById($fieldId);
-                /** @var \Magento\Framework\Object $field */
+                /** @var \Magento\Framework\DataObject $field */
                 if ($field) {
                     foreach ($fieldOptions as $k => $v) {
                         $field->setDataUsingMethod($k, $v);

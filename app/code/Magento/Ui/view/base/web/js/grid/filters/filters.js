@@ -6,8 +6,8 @@ define([
     'underscore',
     'mageUtils',
     'uiLayout',
-    'Magento_Ui/js/lib/collapsible'
-], function (_, utils, layout, Collapsible) {
+    'uiCollection'
+], function (_, utils, layout, Collection) {
     'use strict';
 
     /**
@@ -31,20 +31,52 @@ define([
      * @returns {Object}
      */
     function removeEmpty(data) {
-        data = utils.flatten(data);
-        data = _.omit(data, utils.isEmpty);
-
-        return utils.unflatten(data);
+        return utils.mapRecursive(data, utils.removeEmptyValues.bind(utils));
     }
 
-    return Collapsible.extend({
+    return Collection.extend({
         defaults: {
             template: 'ui/grid/filters/filters',
+            stickyTmpl: 'ui/grid/sticky/filters',
+            _processed: [],
+            columnsProvider: 'ns = ${ $.ns }, componentType = columns',
             applied: {
                 placeholder: true
             },
             filters: {
                 placeholder: true
+            },
+            templates: {
+                filters: {
+                    base: {
+                        parent: '${ $.$data.filters.name }',
+                        name: '${ $.$data.column.index }',
+                        provider: '${ $.$data.filters.name }',
+                        dataScope: '${ $.$data.column.index }',
+                        label: '${ $.$data.column.label }',
+                        imports: {
+                            visible: '${ $.$data.column.name }:visible'
+                        }
+                    },
+                    text: {
+                        component: 'Magento_Ui/js/form/element/abstract',
+                        template: 'ui/grid/filters/field'
+                    },
+                    select: {
+                        component: 'Magento_Ui/js/form/element/select',
+                        template: 'ui/grid/filters/field',
+                        options: '${ JSON.stringify($.$data.column.options) }',
+                        caption: ' '
+                    },
+                    dateRange: {
+                        component: 'Magento_Ui/js/grid/filters/range',
+                        rangeType: 'date'
+                    },
+                    textRange: {
+                        component: 'Magento_Ui/js/grid/filters/range',
+                        rangeType: 'text'
+                    }
+                }
             },
             chipsConfig: {
                 name: '${ $.name }_chips',
@@ -52,16 +84,20 @@ define([
                 component: 'Magento_Ui/js/grid/filters/chips'
             },
             listens: {
-                active: 'extractPreviews',
-                applied: 'cancel extractActive'
+                active: 'updatePreviews',
+                applied: 'cancel updateActive'
             },
-            links: {
-                applied: '${ $.storageConfig.path }'
+            statefull: {
+                applied: true
             },
             exports: {
                 applied: '${ $.provider }:params.filters'
             },
+            imports: {
+                'onColumnsUpdate': '${ $.columnsProvider }:elems'
+            },
             modules: {
+                columns: '${ $.columnsProvider }',
                 chips: '${ $.chipsConfig.provider }'
             }
         },
@@ -72,10 +108,11 @@ define([
          * @returns {Filters} Chainable.
          */
         initialize: function () {
+            _.bindAll(this, 'updateActive');
+
             this._super()
                 .initChips()
-                .cancel()
-                .extractActive();
+                .cancel();
 
             return this;
         },
@@ -87,7 +124,7 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe({
+                .track({
                     active: [],
                     previews: []
                 });
@@ -109,13 +146,16 @@ define([
         },
 
         /**
-         * Called when another element was added to current component.
+         * Called when another element was added to filters collection.
          *
          * @returns {Filters} Chainable.
          */
-        initElement: function () {
-            this._super()
-                .extractActive();
+        initElement: function (elem) {
+            this._super();
+
+            elem.on('elems', this.updateActive);
+
+            this.updateActive();
 
             return this;
         },
@@ -123,15 +163,14 @@ define([
         /**
          * Clears filters data.
          *
-         * @param {Object} [filter] - If provided, then only specified filter will be cleared.
-         *      Otherwise, clears all data.
-         *
+         * @param {Object} [filter] - If provided, then only specified
+         *      filter will be cleared. Otherwise, clears all data.
          * @returns {Filters} Chainable.
          */
         clear: function (filter) {
             filter ?
                 filter.clear() :
-                this.active.each('clear');
+                _.invoke(this.active, 'clear');
 
             this.apply();
 
@@ -161,12 +200,92 @@ define([
         },
 
         /**
-         * Tells wether filters pannel should be opened.
+         * Sets provided data to filter components (without applying it).
          *
-         * @returns {Boolean}
+         * @param {Object} data - Filters data.
+         * @param {Boolean} [partial=false] - Flag that defines whether
+         *      to completely replace current filters data or to extend it.
+         * @returns {Filters} Chainable.
          */
-        isOpened: function () {
-            return this.opened() && this.hasVisible();
+        setData: function (data, partial) {
+            var filters = partial ? this.filters : {};
+
+            data = utils.extend({}, filters, data);
+
+            this.set('filters', data);
+
+            return this;
+        },
+
+        /**
+         * Creates instance of a filter associated with the provided column.
+         *
+         * @param {Column} column - Column component for which to create a filter.
+         * @returns {Filters} Chainable.
+         */
+        addFilter: function (column) {
+            var index       = column.index,
+                processed   = this._processed,
+                filter;
+
+            if (!column.filter || _.contains(processed, index)) {
+                return this;
+            }
+
+            filter = this.buildFilter(column);
+
+            processed.push(index);
+
+            layout([filter]);
+
+            return this;
+        },
+
+        /**
+         * Creates filter component configuration associated with the provided column.
+         *
+         * @param {Column} column - Column component whith a basic filter declaration.
+         * @returns {Object} Filters' configuration.
+         */
+        buildFilter: function (column) {
+            var filters = this.templates.filters,
+                filter  = column.filter,
+                type    = filters[filter.filterType];
+
+            if (_.isObject(filter) && type) {
+                filter = utils.extend({}, type, filter);
+            } else if (_.isString(filter)) {
+                filter = filters[filter];
+            }
+
+            filter = utils.extend({}, filters.base, filter);
+
+            return utils.template(filter, {
+                filters: this,
+                column: column
+            }, true, true);
+        },
+
+        /**
+         * Returns an array of range filters.
+         *
+         * @returns {Array}
+         */
+        getRanges: function () {
+            return this.elems.filter(function (filter) {
+                return filter.isRange;
+            });
+        },
+
+        /**
+         * Returns an array of non-range filters.
+         *
+         * @returns {Array}
+         */
+        getPlain: function () {
+            return this.elems.filter(function (filter) {
+                return !filter.isRange;
+            });
         },
 
         /**
@@ -186,7 +305,7 @@ define([
          * @returns {Boolean}
          */
         isFilterActive: function (filter) {
-            return this.active.contains(filter);
+            return _.contains(this.active, filter);
         },
 
         /**
@@ -204,10 +323,23 @@ define([
          *
          * @returns {Filters} Chainable.
          */
-        extractActive: function () {
-            this.active(this.elems.filter('hasData'));
+        updateActive: function () {
+            var applied = _.keys(this.applied);
+
+            this.active = this.elems.filter(function (elem) {
+                return _.contains(applied, elem.index);
+            });
 
             return this;
+        },
+
+        /**
+         * Returns number of applied filters.
+         *
+         * @returns {Number}
+         */
+        countActive: function () {
+            return this.active.length;
         },
 
         /**
@@ -216,12 +348,21 @@ define([
          * @param {Array} filters - Filters to be processed.
          * @returns {Filters} Chainable.
          */
-        extractPreviews: function (filters) {
+        updatePreviews: function (filters) {
             var previews = filters.map(extractPreview);
 
-            this.previews(_.compact(previews));
+            this.previews = _.compact(previews);
 
             return this;
+        },
+
+        /**
+         * Listener of the columns provider children array changes.
+         *
+         * @param {Array} columns - Current columns list.
+         */
+        onColumnsUpdate: function (columns) {
+            columns.forEach(this.addFilter, this);
         }
     });
 });

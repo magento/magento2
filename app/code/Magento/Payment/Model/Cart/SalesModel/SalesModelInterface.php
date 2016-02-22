@@ -43,7 +43,7 @@ interface SalesModelInterface
     public function getBaseDiscountAmount();
 
     /**
-     * Wrapper for \Magento\Framework\Object getDataUsingMethod method
+     * Wrapper for \Magento\Framework\DataObject getDataUsingMethod method
      *
      * @param string $key
      * @param mixed $args

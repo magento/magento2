@@ -45,7 +45,7 @@ class ValueTest extends \PHPUnit_Framework_TestCase
     public function testGetValuesCollection()
     {
         $this->assertInstanceOf(
-            '\Magento\Catalog\Model\Resource\Product\Option\Value\Collection',
+            '\Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection',
             $this->model->getValuesCollection($this->getMockedOption())
         );
     }
@@ -53,7 +53,7 @@ class ValueTest extends \PHPUnit_Framework_TestCase
     public function testGetValuesByOption()
     {
         $this->assertInstanceOf(
-            '\Magento\Catalog\Model\Resource\Product\Option\Value\Collection',
+            '\Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection',
             $this->model->getValuesByOption([1], 1, 1)
         );
     }
@@ -96,13 +96,14 @@ class ValueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Catalog\Model\Resource\Product\Option\Value\CollectionFactory
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory
      */
     private function getMockedValueCollectionFactory()
     {
         $mockedCollection = $this->getMockedValueCollection();
 
-        $mockBuilder = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Product\Option\Value\CollectionFactory')
+        $mockBuilder =
+            $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor();
         $mock = $mockBuilder->getMock();
@@ -115,11 +116,11 @@ class ValueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Catalog\Model\Resource\Product\Option\Value\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection
      */
     private function getMockedValueCollection()
     {
-        $mockBuilder = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Product\Option\Value\Collection')
+        $mockBuilder = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection')
             ->setMethods(['addFieldToFilter', 'getValuesByOption', 'getValues'])
             ->disableOriginalConstructor();
         $mock = $mockBuilder->getMock();
@@ -175,11 +176,11 @@ class ValueTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @return \Magento\Catalog\Model\Resource\Product\Option\Value
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Value
      */
     private function getMockedResource()
     {
-        $mockBuilder = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Product\Option\Value')
+        $mockBuilder = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Product\Option\Value')
             ->setMethods(
                 [
                     'duplicate',

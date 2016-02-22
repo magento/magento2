@@ -30,7 +30,7 @@ class AssertOrderStatusSuccessUnassignMessage extends AbstractConstraint
     {
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
-            $orderStatusIndexPage->getMessagesBlock()->getSuccessMessages()
+            $orderStatusIndexPage->getMessagesBlock()->getSuccessMessage()
         );
     }
 

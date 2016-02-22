@@ -5,8 +5,8 @@
  */
 namespace Magento\PageCache\Model;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Module\Dir;
 
 /**
  * Model is responsible for replacing default vcl template
@@ -64,23 +64,31 @@ class Config
     protected $_cacheState;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var Filesystem\Directory\ReadFactory
      */
-    protected $_modulesDirectory;
+    protected $readFactory;
 
     /**
-     * @param Filesystem $filesystem
+     * @var \Magento\Framework\Module\Dir\Reader
+     */
+    protected $reader;
+
+    /**
+     * @param Filesystem\Directory\ReadFactory $readFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
+     * @param Dir\Reader $reader
      */
     public function __construct(
-        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Filesystem\Directory\ReadFactory $readFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\Cache\StateInterface $cacheState
+        \Magento\Framework\App\Cache\StateInterface $cacheState,
+        \Magento\Framework\Module\Dir\Reader $reader
     ) {
-        $this->_modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
+        $this->readFactory = $readFactory;
         $this->_scopeConfig = $scopeConfig;
         $this->_cacheState = $cacheState;
+        $this->reader = $reader;
     }
 
     /**
@@ -114,7 +122,11 @@ class Config
      */
     public function getVclFile($vclTemplatePath)
     {
-        $data = $this->_modulesDirectory->readFile($this->_scopeConfig->getValue($vclTemplatePath));
+        $moduleEtcPath = $this->reader->getModuleDir(Dir::MODULE_ETC_DIR, 'Magento_PageCache');
+        $configFilePath = $moduleEtcPath . '/' . $this->_scopeConfig->getValue($vclTemplatePath);
+        $directoryRead = $this->readFactory->create($moduleEtcPath);
+        $configFilePath = $directoryRead->getRelativePath($configFilePath);
+        $data = $directoryRead->readFile($configFilePath);
         return strtr($data, $this->_getReplacements());
     }
 

@@ -5,6 +5,7 @@
  */
 namespace Magento\Indexer\Console\Command;
 
+use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -19,9 +20,9 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     protected function configure()
     {
         $this->setName('indexer:reindex')
-            ->setDescription(
-                'Reindexes Data'
-            )->setDefinition($this->getInputList());
+            ->setDescription('Reindexes Data')
+            ->setDefinition($this->getInputList());
+
         parent::configure();
     }
 
@@ -30,7 +31,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $indexers = $this->getIndexers($input, $output);
+        $indexers = $this->getIndexers($input);
         foreach ($indexers as $indexer) {
             try {
                 $startTime = microtime(true);
@@ -39,7 +40,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                 $output->writeln(
                     $indexer->getTitle() . ' index has been rebuilt successfully in ' . gmdate('H:i:s', $resultTime)
                 );
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
                 $output->writeln($e->getMessage());
             } catch (\Exception $e) {
                 $output->writeln($indexer->getTitle() . ' indexer process unknown error:');

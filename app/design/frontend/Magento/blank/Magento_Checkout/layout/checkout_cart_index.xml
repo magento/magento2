@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="checkout.cart.items">
             <container name="checkout.cart.container" htmlTag="div" htmlClass="cart-container" before="-">
@@ -14,9 +14,6 @@
                         <arguments>
                             <argument translate="true" name="text" xsi:type="string">Summary</argument>
                             <argument name="tag" xsi:type="string">strong</argument>
-                            <argument name="attributes" xsi:type="array">
-                                <item name="title" translate="true" xsi:type="string">Summary</item>
-                            </argument>
                             <argument name="css_class" xsi:type="string">summary title</argument>
                         </arguments>
                     </block>

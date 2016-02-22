@@ -10,9 +10,12 @@
 
 <?php if ($websites = $block->getWebsites()): ?>
 <div class="field field-store-switcher">
-    <label class="label" for="store_switcher"><?php echo __('Choose Store View:') ?></label>
+    <label class="label" for="store_switcher"><?php /* @escapeNotVerified */ echo __('Choose Store View:') ?></label>
     <div class="control">
-        <select name="store_switcher" id="store_switcher">
+        <select
+            id="store_switcher"
+            class="admin__control-select"
+            name="store_switcher">
             <?php foreach ($websites as $website): ?>
                 <?php $showWebsite = false; ?>
                 <?php foreach ($website->getGroups() as $group): ?>
@@ -20,13 +23,13 @@
                     <?php foreach ($block->getStores($group) as $store): ?>
                         <?php if ($showWebsite == false): ?>
                             <?php $showWebsite = true; ?>
-                            <optgroup label="<?php echo $website->getName() ?>"></optgroup>
+                            <optgroup label="<?php /* @escapeNotVerified */ echo $website->getName() ?>"></optgroup>
                         <?php endif; ?>
                         <?php if ($showGroup == false): ?>
                             <?php $showGroup = true; ?>
-                            <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $group->getName() ?>">
+                            <optgroup label="&nbsp;&nbsp;&nbsp;<?php /* @escapeNotVerified */ echo $group->getName() ?>">
                         <?php endif; ?>
-                        <option value="<?php echo $store->getId() ?>"<?php if ($block->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $store->getName() ?></option>
+                        <option value="<?php /* @escapeNotVerified */ echo $store->getId() ?>"<?php if ($block->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php /* @escapeNotVerified */ echo $store->getName() ?></option>
                     <?php endforeach; ?>
                     <?php if ($showGroup): ?>
                         </optgroup>

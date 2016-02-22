@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
-class Processor extends \Magento\Indexer\Model\Indexer\AbstractProcessor
+class Processor extends \Magento\Framework\Indexer\AbstractProcessor
 {
     /**
      * Indexer ID
@@ -18,11 +18,11 @@ class Processor extends \Magento\Indexer\Model\Indexer\AbstractProcessor
     protected $_state;
 
     /**
-     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param State $state
      */
     public function __construct(
-        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $state
     ) {
         parent::__construct($indexerRegistry);

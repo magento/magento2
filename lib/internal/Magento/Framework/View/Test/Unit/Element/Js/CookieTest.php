@@ -13,17 +13,17 @@ class CookieTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\View\Element\Template\Context
      */
     protected $contextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Session\Config\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $sessionConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Validator\Ip|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $ipValidatorMock;
 
@@ -102,5 +102,15 @@ class CookieTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->model->getPath();
         $this->assertEquals($path, $result);
+    }
+
+    public function testGetLifetime()
+    {
+        $lifetime = 3600;
+        $this->sessionConfigMock->expects(static::once())
+            ->method('getCookieLifetime')
+            ->willReturn($lifetime);
+
+        $this->assertEquals($lifetime, $this->model->getLifetime());
     }
 }

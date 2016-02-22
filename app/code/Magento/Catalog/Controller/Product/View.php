@@ -99,13 +99,13 @@ class View extends \Magento\Catalog\Controller\Product
         }
 
         // Prepare helper and params
-        $params = new \Magento\Framework\Object();
+        $params = new \Magento\Framework\DataObject();
         $params->setCategoryId($categoryId);
         $params->setSpecifyOptions($specifyOptions);
 
         // Render page
         try {
-            $page = $this->resultPageFactory->create(false, ['isIsolated' => true]);
+            $page = $this->resultPageFactory->create();
             $this->viewHelper->prepareAndRender($page, $productId, $this, $params);
             return $page;
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {

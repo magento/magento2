@@ -351,8 +351,8 @@ class StorageTest extends \PHPUnit_Framework_TestCase
 
         $collection = [];
         foreach ($fileNames as $filename) {
-            /** @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject $objectMock */
-            $objectMock = $this->getMock('Magento\Framework\Object', ['getFilename'], [], '', false);
+            /** @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject $objectMock */
+            $objectMock = $this->getMock('Magento\Framework\DataObject', ['getFilename'], [], '', false);
             $objectMock->expects($this->any())
                 ->method('getFilename')
                 ->willReturn(self::STORAGE_ROOT_DIR . $filename);

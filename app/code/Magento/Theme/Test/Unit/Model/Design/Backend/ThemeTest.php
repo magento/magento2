@@ -7,6 +7,7 @@
 namespace Magento\Theme\Test\Unit\Model\Design\Backend;
 
 use Magento\Framework\App\Area;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Theme\Model\Design\Backend\Theme;
 
 class ThemeTest extends \PHPUnit_Framework_TestCase
@@ -19,60 +20,45 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $context;
-
-    /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $registry;
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $config;
+    protected $contextMock;
 
     /**
      * @var \Magento\Framework\View\DesignInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $design;
+    protected $designMock;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Design|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Cache\TypeListInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resource;
+    protected $cacheTypeListMock;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Design\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $resourceCollection;
+    protected $configMock;
 
     protected function setUp()
     {
-        $this->context = $this->getMockBuilder('Magento\Framework\Model\Context')
+        $this->contextMock = $this->getMockBuilder('Magento\Framework\Model\Context')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->registry = $this->getMockBuilder('Magento\Framework\Registry')
+        $this->designMock = $this->getMockBuilder('Magento\Framework\View\DesignInterface')->getMock();
+        $this->cacheTypeListMock = $this->getMockBuilder('Magento\Framework\App\Cache\TypeListInterface')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->config = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')->getMock();
-        $this->design = $this->getMockBuilder('Magento\Framework\View\DesignInterface')->getMock();
-        $this->resource = $this->getMockBuilder('Magento\Theme\Model\Resource\Design')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->resourceCollection = $this->getMockBuilder('Magento\Theme\Model\Resource\Design\Collection')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->context->expects($this->once())
+        $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
             ->willReturn($this->getMockBuilder('Magento\Framework\Event\ManagerInterface')->getMock());
+        $this->configMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')->getMock();
 
-        $this->model = new Theme(
-            $this->context,
-            $this->registry,
-            $this->config,
-            $this->design,
-            $this->resource,
-            $this->resourceCollection
+        $this->model = (new ObjectManager($this))->getObject(
+            'Magento\Theme\Model\Design\Backend\Theme',
+            [
+                'design' => $this->designMock,
+                'context' => $this->contextMock,
+                'cacheTypeList' => $this->cacheTypeListMock,
+                'config' => $this->configMock,
+            ]
         );
     }
 
@@ -84,10 +70,50 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSave()
     {
-        $this->design->expects($this->once())
+        $this->designMock->expects($this->once())
             ->method('setDesignTheme')
             ->with('some_value', Area::AREA_FRONTEND);
         $this->model->setValue('some_value');
         $this->assertInstanceOf(get_class($this->model), $this->model->beforeSave());
+    }
+
+    /**
+     * @param int $callNumber
+     * @param string $oldValue
+     * @dataProvider afterSaveDataProvider
+     */
+    public function testAfterSave($callNumber, $oldValue)
+    {
+        $this->cacheTypeListMock->expects($this->exactly($callNumber))
+            ->method('invalidate');
+        $this->configMock->expects($this->any())
+            ->method('getValue')
+            ->willReturnMap(
+                [
+                    [
+                        Theme::XML_PATH_INVALID_CACHES,
+                        \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                        null,
+                        ['block_html' => 1, 'layout' => 1, 'translate' => 1]
+                    ],
+                    [
+                        null,
+                        \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT,
+                        null,
+                        $oldValue
+                    ],
+
+                ]
+            );
+        $this->model->setValue('some_value');
+        $this->assertInstanceOf(get_class($this->model), $this->model->afterSave());
+    }
+
+    public function afterSaveDataProvider()
+    {
+        return [
+            [0, 'some_value'],
+            [2, 'other_value'],
+        ];
     }
 }

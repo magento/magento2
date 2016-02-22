@@ -90,7 +90,7 @@ class Cleaner
                 }
                 break;
             case QueryInterface::TYPE_MATCH:
-                if (preg_match('/\$(.+)\$/si', $query['value'], $matches)) {
+                if (!array_key_exists('is_bind', $query)) {
                     unset($this->requestData['queries'][$queryName]);
                 }
                 break;
@@ -131,7 +131,7 @@ class Cleaner
                     switch ($aggregationValue['type']) {
                         case 'dynamicBucket':
                             if (is_string($aggregationValue['method'])
-                                && preg_match('/\$(.+)\$/si', $aggregationValue['method'])
+                                && preg_match('/^\$(.+)\$$/si', $aggregationValue['method'])
                             ) {
                                 unset($this->requestData['aggregations'][$aggregationName]);
                             }
@@ -164,14 +164,14 @@ class Cleaner
         switch ($filter['type']) {
             case FilterInterface::TYPE_WILDCARD:
             case FilterInterface::TYPE_TERM:
-                if (is_string($filter['value']) && preg_match('/\$(.+)\$/si', $filter['value'], $matches)) {
+                if (!array_key_exists('is_bind', $filter)) {
                     unset($this->requestData['filters'][$filterName]);
                 }
                 break;
             case FilterInterface::TYPE_RANGE:
                 $keys = ['from', 'to'];
                 foreach ($keys as $key) {
-                    if (isset($filter[$key]) && preg_match('/\$(.+)\$/si', $filter[$key], $matches)) {
+                    if (isset($filter[$key]) && preg_match('/^\$(.+)\$$/si', $filter[$key])) {
                         unset($this->requestData['filters'][$filterName][$key]);
                     }
                 }

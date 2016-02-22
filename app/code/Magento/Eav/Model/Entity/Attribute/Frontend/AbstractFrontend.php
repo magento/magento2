@@ -27,6 +27,7 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
 
     /**
      * @param \Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory $attrBooleanFactory
+     * @codeCoverageIgnore
      */
     public function __construct(\Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory $attrBooleanFactory)
     {
@@ -38,6 +39,7 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setAttribute($attribute)
     {
@@ -49,6 +51,7 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      * Get attribute instance
      *
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @codeCoverageIgnore
      */
     public function getAttribute()
     {
@@ -59,6 +62,7 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      * Get attribute type for user interface form
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getInputType()
     {
@@ -66,7 +70,7 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
     }
 
     /**
-     * Retrieve lable
+     * Retrieve label
      *
      * @return string
      */
@@ -81,12 +85,22 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
     }
 
     /**
+     * Retrieve localized label
+     *
+     * @return \Magento\Framework\Phrase
+     */
+    public function getLocalizedLabel()
+    {
+        return __($this->getLabel());
+    }
+
+    /**
      * Retrieve attribute value
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return mixed
      */
-    public function getValue(\Magento\Framework\Object $object)
+    public function getValue(\Magento\Framework\DataObject $object)
     {
         $value = $object->getData($this->getAttribute()->getAttributeCode());
         if (in_array($this->getConfigField('input'), ['select', 'boolean'])) {
@@ -117,6 +131,7 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      * Checks if attribute is visible on frontend
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isVisible()
     {
@@ -187,6 +202,7 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      *
      * @param string $fieldName
      * @return mixed
+     * @codeCoverageIgnore
      */
     public function getConfigField($fieldName)
     {
@@ -222,6 +238,7 @@ abstract class AbstractFrontend implements \Magento\Eav\Model\Entity\Attribute\F
      * Retrieve Input Renderer Class
      *
      * @return string|null
+     * @codeCoverageIgnore
      */
     public function getInputRendererClass()
     {

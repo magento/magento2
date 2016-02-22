@@ -9,7 +9,7 @@ namespace Magento\Customer\Test\TestCase;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountCreate;
 use Magento\Cms\Test\Page\CmsIndex;
-use Magento\Customer\Test\Page\CustomerAccountLogout;
+use Magento\Customer\Test\TestStep\LogoutCustomerOnFrontendStep;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
@@ -28,61 +28,69 @@ class RegisterCustomerFrontendEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'CS';
-    const TEST_TYPE = 'acceptance_test';
-    const TO_MAINTAIN = 'yes';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     /* end tags */
 
     /**
+     * Customer registry page.
+     *
      * @var CustomerAccountCreate
      */
     protected $customerAccountCreate;
 
     /**
-     * @var CustomerAccountLogout
-     */
-    protected $customerAccountLogout;
-
-    /**
+     * Cms page.
+     *
      * @var CmsIndex $cmsIndex
      */
     protected $cmsIndex;
 
     /**
+     * Customer log out step.
+     *
+     * @var LogoutCustomerOnFrontendStep
+     */
+    protected $logoutCustomerOnFrontendStep;
+
+    /**
+     * Inject data.
+     *
      * @param CustomerAccountCreate $customerAccountCreate
-     * @param CustomerAccountLogout $customerAccountLogout
      * @param CmsIndex $cmsIndex
+     * @param LogoutCustomerOnFrontendStep $logoutCustomerOnFrontendStep
+     * @return void
      */
     public function __inject(
         CustomerAccountCreate $customerAccountCreate,
-        CustomerAccountLogout $customerAccountLogout,
-        CmsIndex $cmsIndex
+        CmsIndex $cmsIndex,
+        LogoutCustomerOnFrontendStep $logoutCustomerOnFrontendStep
     ) {
-        $this->customerAccountLogout = $customerAccountLogout;
         $this->customerAccountCreate = $customerAccountCreate;
         $this->cmsIndex = $cmsIndex;
-        $this->customerAccountLogout->open();
+        $this->logoutCustomerOnFrontendStep = $logoutCustomerOnFrontendStep;
     }
 
     /**
-     * Create Customer account on frontend
+     * Create Customer account on Storefront.
      *
      * @param Customer $customer
+     * @return void
      */
     public function test(Customer $customer)
     {
-        //Steps
+        // Steps
         $this->cmsIndex->open();
         $this->cmsIndex->getLinksBlock()->openLink('Create an Account');
         $this->customerAccountCreate->getRegisterForm()->registerCustomer($customer);
     }
 
     /**
-     * Logout customer from frontend account
+     * Logout customer from frontend account.
      *
-     * return void
+     * @return void
      */
     public function tearDown()
     {
-        $this->customerAccountLogout->open();
+        $this->logoutCustomerOnFrontendStep->run();
     }
 }

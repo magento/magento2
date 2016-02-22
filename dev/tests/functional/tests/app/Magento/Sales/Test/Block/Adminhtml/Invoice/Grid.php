@@ -7,13 +7,12 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Invoice;
 
 /**
- * Class Grid
- * Invoice grid on invoice index page
+ * Invoice grid on invoice index page.
  */
-class Grid extends \Magento\Backend\Test\Block\Widget\Grid
+class Grid extends \Magento\Ui\Test\Block\Adminhtml\DataGrid
 {
     /**
-     * Filters array mapping
+     * Filters array mapping.
      *
      * @var array
      */
@@ -31,4 +30,11 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
             'selector' => 'input[name="grand_total[to]"]',
         ],
     ];
+
+    /**
+     * Locator value for "View" link inside action column.
+     *
+     * @var string
+     */
+    protected $editLink = '.action-menu-item[href*="view"]';
 }

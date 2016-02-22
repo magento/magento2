@@ -5,37 +5,52 @@
  */
 namespace Magento\Usps\Test\Unit\Model;
 
+use Magento\Quote\Model\Quote\Address\RateRequest;
+
 class CarrierTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Usps\Model\Carrier
-     */
-    protected $_model;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_httpResponse;
+    protected $httpResponse;
 
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
-    protected $_helper;
+    protected $helper;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\Error|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $error;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $errorFactory;
+
+    /**
+     * @var \Magento\Usps\Model\Carrier|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $carrier;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scope;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function setUp()
     {
-        $this->_helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-        $scopeConfig = $this->getMockBuilder(
+        $this->scope = $this->getMockBuilder(
             '\Magento\Framework\App\Config\ScopeConfigInterface'
-        )->setMethods(
-            ['isSetFlag', 'getValue']
         )->disableOriginalConstructor()->getMock();
-        $scopeConfig->expects($this->any())->method('isSetFlag')->will($this->returnValue(true));
-        $scopeConfig->expects(
+
+        $this->scope->expects(
             $this->any()
         )->method(
             'getValue'
@@ -90,7 +105,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $rateMethodFactory->expects($this->any())->method('create')->will($this->returnValue($rateMethod));
 
         // http client
-        $this->_httpResponse = $this->getMockBuilder(
+        $this->httpResponse = $this->getMockBuilder(
             '\Zend_Http_Response'
         )->disableOriginalConstructor()->setMethods(
             ['getBody']
@@ -101,7 +116,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()->setMethods(
             ['request']
         )->getMock();
-        $httpClient->expects($this->any())->method('request')->will($this->returnValue($this->_httpResponse));
+        $httpClient->expects($this->any())->method('request')->will($this->returnValue($this->httpResponse));
 
         $httpClientFactory = $this->getMockBuilder(
             '\Magento\Framework\HTTP\ZendClientFactory'
@@ -112,17 +127,30 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
 
         $data = ['id' => 'usps', 'store' => '1'];
 
+        $this->error = $this->getMockBuilder('\Magento\Quote\Model\Quote\Address\RateResult\Error')
+            ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
+            ->getMock();
+
+        $this->errorFactory = $this->getMockBuilder('Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+
+        $this->errorFactory->expects($this->any())->method('create')->willReturn($this->error);
+
         $arguments = [
-            'scopeConfig' => $scopeConfig,
+            'scopeConfig' => $this->scope,
             'xmlSecurity' => new \Magento\Framework\Xml\Security(),
             'xmlElFactory' => $xmlElFactory,
             'rateFactory' => $rateFactory,
             'rateMethodFactory' => $rateMethodFactory,
             'httpClientFactory' => $httpClientFactory,
             'data' => $data,
+            'rateErrorFactory' => $this->errorFactory,
+
         ];
 
-        $this->_model = $this->_helper->getObject('Magento\Usps\Model\Carrier', $arguments);
+        $this->carrier = $this->helper->getObject('Magento\Usps\Model\Carrier', $arguments);
     }
 
     /**
@@ -130,17 +158,19 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCodeArray($code)
     {
-        $this->assertNotEmpty($this->_model->getCode($code));
+        $this->assertNotEmpty($this->carrier->getCode($code));
     }
 
     public function testGetCodeBool()
     {
-        $this->assertFalse($this->_model->getCode('test_code'));
+        $this->assertFalse($this->carrier->getCode('test_code'));
     }
 
     public function testCollectRates()
     {
-        $this->_httpResponse->expects(
+        $this->scope->expects($this->any())->method('isSetFlag')->will($this->returnValue(true));
+
+        $this->httpResponse->expects(
             $this->any()
         )->method(
             'getBody'
@@ -148,28 +178,47 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(file_get_contents(__DIR__ . '/_files/success_usps_response_rates.xml'))
         );
         // for setRequest
-        $request = $this->_helper->getObject(
+        $data = require __DIR__ . '/_files/rates_request_data.php';
+        $request = $this->helper->getObject(
             'Magento\Quote\Model\Quote\Address\RateRequest',
-            require __DIR__ . '/_files/rates_request_data.php'
+            ['data' => $data[0]]
         );
 
-        $this->assertNotEmpty($this->_model->collectRates($request)->getAllRates());
+        $this->assertNotEmpty($this->carrier->collectRates($request)->getAllRates());
+    }
+
+    public function testCollectRatesWithUnavailableService()
+    {
+        $expectedCount = 5;
+
+        $this->scope->expects(static::once())
+            ->method('isSetFlag')
+            ->willReturn(true);
+
+        $this->httpResponse->expects(static::once())
+            ->method('getBody')
+            ->willReturn(file_get_contents(__DIR__ . '/_files/response_rates.xml'));
+
+        $data = require __DIR__ . '/_files/rates_request_data.php';
+        $request = $this->helper->getObject(RateRequest::class, ['data' => $data[1]]);
+        $rates = $this->carrier->collectRates($request)->getAllRates();
+        static::assertEquals($expectedCount, count($rates));
     }
 
     public function testReturnOfShipment()
     {
-        $this->_httpResponse->expects(
+        $this->httpResponse->expects(
             $this->any()
         )->method(
             'getBody'
         )->will(
             $this->returnValue(file_get_contents(__DIR__ . '/_files/success_usps_response_return_shipment.xml'))
         );
-        $request = $this->_helper->getObject(
+        $request = $this->helper->getObject(
             'Magento\Shipping\Model\Shipment\ReturnShipment',
             require __DIR__ . '/_files/return_shipment_request_data.php'
         );
-        $this->assertNotEmpty($this->_model->returnOfShipment($request)->getInfo()[0]['tracking_number']);
+        $this->assertNotEmpty($this->carrier->returnOfShipment($request)->getInfo()[0]['tracking_number']);
     }
 
     /**
@@ -184,6 +233,8 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                 return '0_FCLE,0_FCL,0_FCP,1,2,3,4,6,7,13,16,17,22,23,25,27,28,33,34,35,36,37,42,43,53,' .
                     '55,56,57,61,INT_1,INT_2,INT_4,INT_6,INT_7,INT_8,INT_9,INT_10,INT_11,INT_12,INT_13,INT_14,' .
                     'INT_15,INT_16,INT_20,INT_26';
+            case 'carriers/usps/showmethod':
+                return 1;
             default:
                 return null;
         }
@@ -195,5 +246,33 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
     public function codeDataProvider()
     {
         return [['container'], ['machinable'], ['method'], ['size']];
+    }
+
+    public function testCollectRatesErrorMessage()
+    {
+        $this->scope->expects($this->once())->method('isSetFlag')->willReturn(false);
+
+        $this->error->expects($this->once())->method('setCarrier')->with('usps');
+        $this->error->expects($this->once())->method('setCarrierTitle');
+        $this->error->expects($this->once())->method('setErrorMessage');
+
+        $request = new RateRequest();
+        $this->assertSame($this->error, $this->carrier->collectRates($request));
+    }
+
+    public function testCollectRatesFail()
+    {
+        $this->scope->expects($this->once())->method('isSetFlag')->willReturn(true);
+        $this->scope->expects($this->atLeastOnce())->method('getValue')->willReturnMap(
+            [
+                ['carriers/usps/userid' => 123],
+                ['carriers/usps/container' => 11],
+
+            ]
+        );
+        $request = new RateRequest();
+        $request->setPackageWeight(1);
+
+        $this->assertNotEmpty($this->carrier->collectRates($request));
     }
 }

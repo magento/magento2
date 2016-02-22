@@ -15,11 +15,15 @@ class Cancel extends \Magento\Sales\Controller\Adminhtml\Order
      */
     public function execute()
     {
-        $order = $this->_initOrder();
         $resultRedirect = $this->resultRedirectFactory->create();
+        if (!$this->isValidPostRequest()) {
+            $this->messageManager->addError(__('You have not canceled the item.'));
+            return $resultRedirect->setPath('sales/*/');
+        }
+        $order = $this->_initOrder();
         if ($order) {
             try {
-                $order->cancel()->save();
+                $this->orderManagement->cancel($order->getEntityId());
                 $this->messageManager->addSuccess(__('You canceled the order.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());

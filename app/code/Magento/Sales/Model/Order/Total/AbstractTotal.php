@@ -10,7 +10,7 @@ namespace Magento\Sales\Model\Order\Total;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-abstract class AbstractTotal extends \Magento\Framework\Object
+abstract class AbstractTotal extends \Magento\Framework\DataObject
 {
     /**
      * Process model configuration array.

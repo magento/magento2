@@ -18,6 +18,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,

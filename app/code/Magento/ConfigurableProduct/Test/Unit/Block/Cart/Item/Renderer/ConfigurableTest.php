@@ -56,69 +56,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testGetProductThumbnailUrl()
-    {
-        $url = 'pub/media/catalog/product/cache/1/thumbnail/75x/9df78eab33525d08d6e5fb8d27136e95/_/_/__green.gif';
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-
-        $configView = $this->getMock('Magento\Framework\Config\View', ['getVarValue'], [], '', false);
-        $configView->expects($this->any())->method('getVarValue')->will($this->returnValue(75));
-
-        $this->_configManager->expects($this->any())->method('getViewConfig')->will($this->returnValue($configView));
-
-        $product = $this->getMock(
-            'Magento\Catalog\Model\Product',
-            ['isConfigurable', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $product->expects($this->any())->method('isConfigurable')->will($this->returnValue(true));
-
-        $childProduct = $this->getMock(
-            'Magento\Catalog\Model\Product',
-            ['getThumbnail', 'getDataByKey', '__wakeup'],
-            [],
-            '',
-            false
-        );
-        $childProduct->expects($this->any())->method('getThumbnail')->will($this->returnValue('/_/_/__green.gif'));
-
-        $this->_imageHelper->expects($this->any())->method('init')->will($this->returnValue($this->_imageHelper));
-        $this->_imageHelper->expects($this->any())->method('resize')->will($this->returnValue($this->_imageHelper));
-        $this->_imageHelper->expects($this->any())->method('__toString')->will($this->returnValue($url));
-
-        $arguments = [
-            'statusListFactory' => $this->getMock(
-                'Magento\Sales\Model\Status\ListFactory',
-                [],
-                [],
-                '',
-                false
-            ),
-            'productFactory' => $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false),
-            'itemOptionFactory' => $this->getMock(
-                'Magento\Quote\Model\Quote\Item\OptionFactory',
-                [],
-                [],
-                '',
-                false
-            ),
-            'priceCurrency' => $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock(),
-        ];
-        $childItem = $objectManagerHelper->getObject('Magento\Quote\Model\Quote\Item', $arguments);
-        $childItem->setData('product', $childProduct);
-
-        $item = $objectManagerHelper->getObject('Magento\Quote\Model\Quote\Item', $arguments);
-        $item->setData('product', $product);
-        $item->addChild($childItem);
-
-        $this->_renderer->setItem($item);
-
-        $configurableUrl = $this->_renderer->getProductThumbnailUrl();
-        $this->assertNotNull($configurableUrl);
-    }
-
     /**
      * Child thumbnail is available and config option is not set to use parent thumbnail.
      */

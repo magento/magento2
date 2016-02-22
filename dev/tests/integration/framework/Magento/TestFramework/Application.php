@@ -7,6 +7,7 @@ namespace Magento\TestFramework;
 
 use Magento\Framework\Autoload\AutoloaderInterface;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
@@ -163,7 +164,10 @@ class Application
 
         $customDirs = $this->getCustomDirs();
         $this->dirList = new \Magento\Framework\App\Filesystem\DirectoryList(BP, $customDirs);
-        \Magento\Framework\Autoload\Populator::populateMappings($autoloadWrapper, $this->dirList);
+        \Magento\Framework\Autoload\Populator::populateMappings(
+            $autoloadWrapper,
+            $this->dirList
+        );
         $this->_initParams = [
             \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => $customDirs,
             \Magento\Framework\App\State::PARAM_MODE => $appMode
@@ -186,7 +190,8 @@ class Application
         if (null === $this->_db) {
             if ($this->isInstalled()) {
                 $configPool = new \Magento\Framework\Config\File\ConfigFilePool();
-                $reader = new Reader($this->dirList, $configPool);
+                $driverPool = new \Magento\Framework\Filesystem\DriverPool();
+                $reader = new Reader($this->dirList, $driverPool, $configPool);
                 $deploymentConfig = new DeploymentConfig($reader, []);
                 $host = $deploymentConfig->get(
                     ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
@@ -363,7 +368,6 @@ class Application
                 'core_app_init_current_store_after' => [
                     'integration_tests' => [
                         'instance' => 'Magento\TestFramework\Event\Magento',
-                        'method' => 'initStoreAfter',
                         'name' => 'integration_tests'
                     ]
                 ]
@@ -438,6 +442,7 @@ class Application
         $dirs = \Magento\Framework\App\Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS;
         $this->_ensureDirExists($this->installDir);
         $this->_ensureDirExists($this->_configDir);
+        $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::PUB][DirectoryList::PATH]);
         $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::MEDIA][DirectoryList::PATH]);
         $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::STATIC_VIEW][DirectoryList::PATH]);
         $this->_ensureDirExists($this->_initParams[$dirs][DirectoryList::VAR_DIR][DirectoryList::PATH]);
@@ -460,7 +465,7 @@ class Application
 
         // enable only specified list of caches
         $initParamsQuery = $this->getInitParamsQuery();
-        $this->_shell->execute('php -f %s cache:disable --all --bootstrap=%s', [BP . '/bin/magento', $initParamsQuery]);
+        $this->_shell->execute('php -f %s cache:disable --bootstrap=%s', [BP . '/bin/magento', $initParamsQuery]);
         $this->_shell->execute(
             'php -f %s cache:enable %s %s %s %s --bootstrap=%s',
             [
@@ -487,13 +492,15 @@ class Application
     private function copyAppConfigFiles()
     {
         $globalConfigFiles = glob(
-            $this->_globalConfigDir . '/{di.xml,vendor_path.php}',
+            $this->_globalConfigDir . '/{di.xml,*/di.xml,vendor_path.php}',
             GLOB_BRACE
         );
         foreach ($globalConfigFiles as $file) {
             $targetFile = $this->_configDir . str_replace($this->_globalConfigDir, '', $file);
             $this->_ensureDirExists(dirname($targetFile));
-            copy($file, $targetFile);
+            if ($file !== $targetFile) {
+                copy($file, $targetFile);
+            }
         }
     }
 
@@ -566,7 +573,7 @@ class Application
     {
         if (!file_exists($dir)) {
             $old = umask(0);
-            mkdir($dir, 0777);
+            mkdir($dir, DriverInterface::WRITEABLE_DIRECTORY_MODE);
             umask($old);
         } elseif (!is_dir($dir)) {
             throw new \Magento\Framework\Exception\LocalizedException(__("'%1' is not a directory.", $dir));
@@ -621,15 +628,15 @@ class Application
         $customDirs = [
             DirectoryList::CONFIG => [$path => "{$this->installDir}/etc"],
             DirectoryList::VAR_DIR => [$path => $var],
-            DirectoryList::MEDIA => [$path => "{$this->installDir}/media"],
-            DirectoryList::STATIC_VIEW => [$path => "{$this->installDir}/pub_static"],
+            DirectoryList::MEDIA => [$path => "{$this->installDir}/pub/media"],
+            DirectoryList::STATIC_VIEW => [$path => "{$this->installDir}/pub/static"],
             DirectoryList::GENERATION => [$path => "{$var}/generation"],
             DirectoryList::CACHE => [$path => "{$var}/cache"],
             DirectoryList::LOG => [$path => "{$var}/log"],
-            DirectoryList::THEMES => [$path => BP . '/app/design'],
             DirectoryList::SESSION => [$path => "{$var}/session"],
             DirectoryList::TMP => [$path => "{$var}/tmp"],
             DirectoryList::UPLOAD => [$path => "{$var}/upload"],
+            DirectoryList::PUB => [$path => "{$this->installDir}/pub"],
         ];
         return $customDirs;
     }

@@ -6,14 +6,14 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Sales\Test\TestCase\MoveProductsInComparedOnOrderPageTest">
+    <testCase name="Magento\Sales\Test\TestCase\MoveProductsInComparedOnOrderPageTest" summary="Add Products to Order from Products in Comparison List Section" ticketId="MAGETWO-28050">
         <variation name="MoveProductsInComparedOnOrderPageTestVariation1">
             <data name="products" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid" />
         </variation>
         <variation name="MoveProductsInComparedOnOrderPageTestVariation2">
-            <data name="products" xsi:type="string">configurableProduct::default,configurableProduct::default</data>
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInItemsOrderedGrid" />
+            <data name="products" xsi:type="string">configurableProduct::configurable_with_qty_1,configurableProduct::configurable_with_qty_1</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid" />
         </variation>
     </testCase>
 </config>

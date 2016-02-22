@@ -10,7 +10,7 @@
              module="Magento_Newsletter"
              type="flat"
              entity_type="newsletter_template"
-             collection="Magento\Newsletter\Model\Resource\Template\Collection"
+             collection="Magento\Newsletter\Model\ResourceModel\Template\Collection"
              identifier="template_id"
              repository_class="Magento\Newsletter\Test\Repository\Template"
              handler_interface="Magento\Newsletter\Test\Handler\Template\TemplateInterface"

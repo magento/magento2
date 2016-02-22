@@ -53,11 +53,6 @@ class Product extends \Magento\Framework\Url\Helper\Data
     protected $_coreRegistry;
 
     /**
-     * @var string
-     */
-    protected $_typeSwitcherLabel;
-
-    /**
      * @var \Magento\Catalog\Model\Attribute\Config
      */
     protected $_attributeConfig;
@@ -103,7 +98,6 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
-     * @param string $typeSwitcherLabel
      * @param array $reindexPriceIndexerData
      * @param array $reindexProductCategoryIndexerData
      * @param ProductRepositoryInterface $productRepository
@@ -117,14 +111,12 @@ class Product extends \Magento\Framework\Url\Helper\Data
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Catalog\Model\Attribute\Config $attributeConfig,
-        $typeSwitcherLabel,
         $reindexPriceIndexerData,
         $reindexProductCategoryIndexerData,
         ProductRepositoryInterface $productRepository,
         CategoryRepositoryInterface $categoryRepository
     ) {
         $this->_catalogSession = $catalogSession;
-        $this->_typeSwitcherLabel = $typeSwitcherLabel;
         $this->_attributeConfig = $attributeConfig;
         $this->_coreRegistry = $coreRegistry;
         $this->_assetRepo = $assetRepo;
@@ -140,7 +132,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * Retrieve data for price indexer update
      *
      * @param \Magento\Catalog\Model\Product|array $data
-     * @return boolean
+     * @return bool
      */
     public function isDataForPriceIndexerWasChanged($data)
     {
@@ -169,7 +161,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * Retrieve data for product category indexer update
      *
      * @param \Magento\Catalog\Model\Product $data
-     * @return boolean
+     * @return bool
      */
     public function isDataForProductCategoryIndexerWasChanged(\Magento\Catalog\Model\Product $data)
     {
@@ -185,7 +177,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * Retrieve product view page url
      *
      * @param int|ModelProduct $product
-     * @return string|false
+     * @return string|bool
      */
     public function getProductUrl($product)
     {
@@ -222,7 +214,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
     /**
      * Retrieve base image url
      *
-     * @param ModelProduct|\Magento\Framework\Object $product
+     * @param ModelProduct|\Magento\Framework\DataObject $product
      * @return string|bool
      */
     public function getImageUrl($product)
@@ -240,7 +232,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
     /**
      * Retrieve small image url
      *
-     * @param ModelProduct|\Magento\Framework\Object $product
+     * @param ModelProduct|\Magento\Framework\DataObject $product
      * @return string|bool
      */
     public function getSmallImageUrl($product)
@@ -258,7 +250,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
     /**
      * Retrieve thumbnail image url
      *
-     * @param ModelProduct|\Magento\Framework\Object $product
+     * @param ModelProduct|\Magento\Framework\DataObject $product
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -298,7 +290,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      *
      * @param ModelProduct|int $product
      * @param string $where
-     * @return boolean
+     * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function canShow($product, $where = 'catalog')
@@ -398,9 +390,9 @@ class Product extends \Magento\Framework\Url\Helper\Data
      *
      * @param int $productId
      * @param \Magento\Framework\App\Action\Action $controller
-     * @param \Magento\Framework\Object $params
+     * @param \Magento\Framework\DataObject $params
      *
-     * @return false|ModelProduct
+     * @return bool|ModelProduct
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -408,7 +400,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
     {
         // Prepare data for routine
         if (!$params) {
-            $params = new \Magento\Framework\Object();
+            $params = new \Magento\Framework\DataObject();
         }
 
         // Init and load product
@@ -479,7 +471,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * Also parses and adds product management related values - e.g. qty
      *
      * @param ModelProduct $product
-     * @param \Magento\Framework\Object $buyRequest
+     * @param \Magento\Framework\DataObject $buyRequest
      * @return Product
      */
     public function prepareProductOptions($product, $buyRequest)
@@ -496,30 +488,30 @@ class Product extends \Magento\Framework\Url\Helper\Data
      * This method is used to attach additional parameters to processed buyRequest.
      *
      * $params holds parameters of what operation must be performed:
-     * - 'current_config', \Magento\Framework\Object or array - current buyRequest that configures product in this item,
-     *   used to restore currently attached files
+     * - 'current_config', \Magento\Framework\DataObject or array - current buyRequest
+     *   that configures product in this item, used to restore currently attached files
      * - 'files_prefix': string[a-z0-9_] - prefix that was added at frontend to names of file inputs,
      *   so they won't intersect with other submitted options
      *
-     * @param \Magento\Framework\Object|array $buyRequest
-     * @param \Magento\Framework\Object|array $params
-     * @return \Magento\Framework\Object
+     * @param \Magento\Framework\DataObject|array $buyRequest
+     * @param \Magento\Framework\DataObject|array $params
+     * @return \Magento\Framework\DataObject
      */
     public function addParamsToBuyRequest($buyRequest, $params)
     {
         if (is_array($buyRequest)) {
-            $buyRequest = new \Magento\Framework\Object($buyRequest);
+            $buyRequest = new \Magento\Framework\DataObject($buyRequest);
         }
         if (is_array($params)) {
-            $params = new \Magento\Framework\Object($params);
+            $params = new \Magento\Framework\DataObject($params);
         }
 
-        // Ensure that currentConfig goes as \Magento\Framework\Object - for easier work with it later
+        // Ensure that currentConfig goes as \Magento\Framework\DataObject - for easier work with it later
         $currentConfig = $params->getCurrentConfig();
         if ($currentConfig) {
             if (is_array($currentConfig)) {
-                $params->setCurrentConfig(new \Magento\Framework\Object($currentConfig));
-            } elseif (!$currentConfig instanceof \Magento\Framework\Object) {
+                $params->setCurrentConfig(new \Magento\Framework\DataObject($currentConfig));
+            } elseif (!$currentConfig instanceof \Magento\Framework\DataObject) {
                 $params->unsCurrentConfig();
             }
         }
@@ -529,8 +521,8 @@ class Product extends \Magento\Framework\Url\Helper\Data
          * where '_processing_params' comes in $buyRequest as array from user input
          */
         $processingParams = $buyRequest->getData('_processing_params');
-        if (!$processingParams || !$processingParams instanceof \Magento\Framework\Object) {
-            $processingParams = new \Magento\Framework\Object();
+        if (!$processingParams || !$processingParams instanceof \Magento\Framework\DataObject) {
+            $processingParams = new \Magento\Framework\DataObject();
             $buyRequest->setData('_processing_params', $processingParams);
         }
         $processingParams->addData($params->getData());
@@ -555,7 +547,7 @@ class Product extends \Magento\Framework\Url\Helper\Data
     /**
      * Get flag that shows if Magento has to check product to be saleable (enabled and/or inStock)
      *
-     * @return boolean
+     * @return bool
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getSkipSaleableCheck()
@@ -581,15 +573,5 @@ class Product extends \Magento\Framework\Url\Helper\Data
     public function getAttributesAllowedForAutogeneration()
     {
         return $this->_attributeConfig->getAttributeNames('used_in_autogeneration');
-    }
-
-    /**
-     * Get label for virtual control
-     *
-     * @return \Magento\Framework\Phrase
-     */
-    public function getTypeSwitcherControlLabel()
-    {
-        return __($this->_typeSwitcherLabel);
     }
 }

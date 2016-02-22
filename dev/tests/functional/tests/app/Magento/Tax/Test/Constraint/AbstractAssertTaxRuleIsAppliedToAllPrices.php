@@ -18,6 +18,8 @@ use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Checks that prices excl tax on category, product and cart pages are equal to specified in dataset.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstraint
 {
@@ -152,7 +154,6 @@ abstract class AbstractAssertTaxRuleIsAppliedToAllPrices extends AbstractConstra
      */
     public function getCartPrices(InjectableFixture $product, $actualPrices)
     {
-        $this->checkoutCart->open();
         $actualPrices['cart_item_price_excl_tax'] =
             $this->checkoutCart->getCartBlock()->getCartItem($product)->getPriceExclTax();
         $actualPrices['cart_item_price_incl_tax'] =

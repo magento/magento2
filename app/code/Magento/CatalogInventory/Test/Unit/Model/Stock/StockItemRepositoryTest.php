@@ -40,7 +40,7 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $stockStateProviderMock;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Stock\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stockItemResourceMock;
 
@@ -79,6 +79,11 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $indexProcessorMock;
 
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $dateTime;
+
     protected function setUp()
     {
         $this->stockItemMock = $this->getMockBuilder('\Magento\CatalogInventory\Model\Stock\Item')
@@ -112,7 +117,7 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
         )
             ->disableOriginalConstructor()
             ->getMock();
-        $this->stockItemResourceMock = $this->getMockBuilder('Magento\CatalogInventory\Model\Resource\Stock\Item')
+        $this->stockItemResourceMock = $this->getMockBuilder('Magento\CatalogInventory\Model\ResourceModel\Stock\Item')
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockItemFactoryMock = $this->getMockBuilder(
@@ -156,6 +161,13 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->dateTime = $this->getMock(
+            'Magento\Framework\Stdlib\DateTime\DateTime',
+            ['gmtDate'],
+            [],
+            '',
+            false
+        );
 
         $this->model = new StockItemRepository(
             $this->stockConfigurationMock,
@@ -167,7 +179,8 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->queryBuilderFactoryMock,
             $this->mapperMock,
             $this->localeDateMock,
-            $this->indexProcessorMock
+            $this->indexProcessorMock,
+            $this->dateTime
         );
     }
 
@@ -244,6 +257,8 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('verifyNotification')
             ->with($this->stockItemMock)
             ->willReturn(true);
+        $this->dateTime->expects($this->once())
+            ->method('gmtDate');
         $this->stockItemMock->expects($this->atLeastOnce())->method('setStockStatusChangedAuto')->willReturnSelf();
         $this->stockItemMock->expects($this->once())
             ->method('hasStockStatusChangedAutomaticallyFlag')

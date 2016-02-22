@@ -78,7 +78,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
      */
     public function testReindexAll()
     {
-        /** @var  $indexer \Magento\Indexer\Model\IndexerInterface */
+        /** @var  $indexer \Magento\Framework\Indexer\IndexerInterface */
         $indexer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Indexer\Model\Indexer'
         );
@@ -92,7 +92,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
         )->load(
             2
         );
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Category\Flat', $category->getResource());
+        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Category\Flat', $category->getResource());
         $this->checkCategoryData($category);
     }
 
@@ -109,7 +109,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
             2
         );
 
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Category\Flat', $category->getResource());
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Flat::class, $category->getResource());
 
         $result = $category->getAllChildren(true);
         $this->assertNotEmpty($result);
@@ -174,7 +174,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
             2
         );
 
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Category\Flat', $category->getResource());
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Flat::class, $category->getResource());
 
         $result = $category->getAllChildren(true);
         $this->assertNotEmpty($result);
@@ -188,7 +188,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
             self::$categoryOne
         );
 
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Category\Flat', $categoryOne->getResource());
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Flat::class, $categoryOne->getResource());
 
         $result = $categoryOne->getAllChildren(true);
         $this->assertNotEmpty($result);
@@ -198,12 +198,12 @@ class FlatTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Catalog\Model\Category $categoryTwo */
         $categoryTwo = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
+            \Magento\Catalog\Model\Category::class
         )->load(
             self::$categoryTwo
         );
 
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Category\Flat', $categoryTwo->getResource());
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Flat::class, $categoryTwo->getResource());
 
         $this->assertEquals(self::$categoryOne, $categoryTwo->getParentId());
         $this->checkCategoryData($categoryTwo);
@@ -264,7 +264,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
             2
         );
 
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Category\Flat', $category->getResource());
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Flat::class, $category->getResource());
 
         $this->checkCategoryData($category);
 
@@ -332,7 +332,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
             2
         );
 
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Category\Flat', $category->getResource());
+        $this->assertInstanceOf(\Magento\Catalog\Model\ResourceModel\Category\Flat::class, $category->getResource());
 
         $result = $category->getAllChildren(true);
         $this->assertNotEmpty($result);

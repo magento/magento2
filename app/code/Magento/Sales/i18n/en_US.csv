@@ -679,3 +679,12 @@ order-header,order-header
 "State Code and Title","State Code and Title"
 "PDF Packing Slips","PDF Packing Slips"
 "Status can't be unassigned, because it is used by existing order(s).","Status can't be unassigned, because it is used by existing order(s)."
+Operations,Operations
+"Include Tax to Amount","Include Tax to Amount"
+"Orders Cron Settings","Orders Cron Settings"
+"Pending Payment Order Lifetime (minutes)","Pending Payment Order Lifetime (minutes)"
+"Asynchronous sending","Asynchronous sending"
+"Grid Settings","Grid Settings"
+"Asynchronous indexing","Asynchronous indexing"
+"Visible On Storefront","Visible On Storefront"
+"Please select a customer","Please select a customer"

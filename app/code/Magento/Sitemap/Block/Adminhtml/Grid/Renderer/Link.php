@@ -44,10 +44,10 @@ class Link extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
     /**
      * Prepare link to display in grid
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         /** @var $sitemap \Magento\Sitemap\Model\Sitemap */
         $sitemap = $this->_sitemapFactory->create();

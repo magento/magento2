@@ -5,12 +5,12 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="\Magento\Wishlist\Model\AuthenticationStateInterface" type="\Magento\Wishlist\Model\AuthenticationState" />
     <preference for="\Magento\Wishlist\Controller\WishlistProviderInterface" type="\Magento\Wishlist\Controller\WishlistProvider" />
-    <type name="Magento\Wishlist\Model\Resource\Item\Collection\Grid">
+    <type name="Magento\Wishlist\Model\ResourceModel\Item\Collection\Grid">
         <arguments>
-            <argument name="resource" xsi:type="object">Magento\Wishlist\Model\Resource\Item</argument>
+            <argument name="resource" xsi:type="object">Magento\Wishlist\Model\ResourceModel\Item</argument>
         </arguments>
     </type>
     <type name="Magento\Wishlist\Helper\Data">
@@ -18,7 +18,7 @@
             <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Wishlist\Controller\IndexInterface">
+    <type name="Magento\Wishlist\Controller\AbstractIndex">
         <plugin name="authentication" type="\Magento\Wishlist\Controller\Index\Plugin" sortOrder="10"/>
     </type>
     <virtualType name="Magento\Wishlist\Block\Context" type="Magento\Catalog\Block\Product\Context">

@@ -14,21 +14,21 @@
 //--------------------------------------
 button,
 a.action.primary {
-    .css(border-radius, @button__border-radius);
+    .lib-css(border-radius, @button__border-radius);
 }
 
 button {
     &:active {
-        .css(box-shadow, @button__shadow);
+        .lib-css(box-shadow, @button__shadow);
     }
 }
 
 a.action.primary {
-    .link-as-button();
+    .lib-link-as-button();
 }
 
 .action.primary {
-    .button-primary();
+    .lib-button-primary();
 }
 
 }

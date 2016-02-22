@@ -92,6 +92,6 @@ class Range implements FilterInterface
      */
     private function getConditionUnionOperator($isNegation)
     {
-        return $isNegation ? \Zend_Db_Select::SQL_OR : \Zend_Db_Select::SQL_AND;
+        return $isNegation ? \Magento\Framework\DB\Select::SQL_OR : \Magento\Framework\DB\Select::SQL_AND;
     }
 }

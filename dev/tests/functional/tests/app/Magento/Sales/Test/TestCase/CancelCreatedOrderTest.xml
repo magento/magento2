@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Sales\Test\TestCase\CancelCreatedOrderTest">
+    <testCase name="Magento\Sales\Test\TestCase\CancelCreatedOrderTest" summary="Cancel Created Order for Offline Payment Methods" ticketId="MAGETWO-28191">
         <variation name="CancelCreatedOrderTestVariation1">
             <data name="description" xsi:type="string">cancel order and check status on storefront</data>
             <data name="order/dataset" xsi:type="string">default</data>

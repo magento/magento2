@@ -19,25 +19,25 @@
             <?php $_product = $item->getProduct(); ?>
             <td class="col product">
                 <p>
-                    <a href="<?= $block->getProductUrl($_product) ?>">
-                        <img src="<?= $block->getSmallImageUrl($_product) ?>" height="<?= $block->getSmallImageSize() ?>" alt=""/>
+                    <a href="<?= /* @escapeNotVerified */  $block->getProductUrl($_product) ?>">
+                        <?php echo $block->getImage($_product, 'product_small_image')->toHtml(); ?>
                     </a>
                 </p>
 
                 <p>
-                    <a href="<?= $block->getProductUrl($_product) ?>">
+                    <a href="<?= /* @escapeNotVerified */  $block->getProductUrl($_product) ?>">
                         <strong><?= $block->escapeHtml($_product->getName()) ?></strong>
                     </a>
                 </p>
                 <?php if ($block->hasDescription($item)): ?>
                     <p>
-                        <strong><?= __('Comment') ?>:</strong>
-                        <br/><?= $block->getEscapedDescription($item) ?>
+                        <strong><?= /* @escapeNotVerified */  __('Comment') ?>:</strong>
+                        <br/><?= /* @escapeNotVerified */  $block->getEscapedDescription($item) ?>
                     </p>
                 <?php endif; ?>
                 <p>
-                    <a href="<?= $block->getProductUrl($_product) ?>">
-                        <?= __('View Product') ?>
+                    <a href="<?= /* @escapeNotVerified */  $block->getProductUrl($_product) ?>">
+                        <?= /* @escapeNotVerified */  __('View Product') ?>
                     </a>
                 </p>
             </td>

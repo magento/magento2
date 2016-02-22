@@ -12,7 +12,7 @@
 //  ---------------------------------------------
 
 .abs-reset-list {
-    .list-reset-styles();
+    .lib-list-reset-styles();
     > li {
         margin: 0;
     }
@@ -23,9 +23,9 @@
 //  ---------------------------------------------
 
 .abs-action-link-button {
-    .button();
-    .link-as-button();
-    .css(border-radius, @button__border-radius);
+    .lib-button();
+    .lib-link-as-button();
+    .lib-css(border-radius, @button__border-radius);
 }
 
 //
@@ -37,10 +37,12 @@
         float: left;
         clear: left;
         margin: 0 @indent__s @indent__xs 0;
+
         &:after {
             content: ': ';
         }
     }
+
     dd {
         float: left;
         display: inline-block;
@@ -63,7 +65,7 @@
 //  ---------------------------------------------
 
 @abs-button-responsive: {
-    .button-responsive();
+    .lib-button-responsive();
 };
 
 .abs-button-responsive {
@@ -88,10 +90,12 @@
 
 @abs-blocks-2columns: {
     width: 48.8%;
+
     &:nth-child(odd) {
         float: left;
         clear: left;
     }
+
     &:nth-child(even) {
         float: right;
     }
@@ -146,10 +150,11 @@
     strong {
         font-weight: 500;
     }
+
     padding-bottom: 12px;
     margin-bottom: 15px;
     border-bottom: 1px solid @secondary__color;
-    .font-size(18);
+    .lib-font-size(18);
 }
 
 //
@@ -158,8 +163,9 @@
 
 .abs-block-title {
     > strong {
-        .heading(h3);
+        .lib-heading(h3);
     }
+
     margin-bottom: 15px;
 }
 
@@ -174,21 +180,26 @@
             margin-left: 15px;
         }
     }
+
     .box-title {
-        > span {
-            .heading(h4);
-        }
         display: inline-block;
         margin: 0 0 @indent__xs;
+
+        > span {
+            .lib-heading(h4);
+        }
+
         > .action {
             font-weight: 400;
             margin-left: @indent__s;
         }
     }
+
     .block-content {
         p:last-child {
             margin-bottom: 0;
         }
+
         .box {
             margin-bottom: @indent__base;
         }
@@ -200,11 +211,11 @@
 //  ---------------------------------------------
 
 .abs-dropdown-simple {
-    .dropdown(
-        @_dropdown-list-item-padding: 5px 5px 5px 23px,
-        @_dropdown-list-min-width: 200px,
-        @_icon-font-margin: 0 0 0 5px,
-        @_icon-font-vertical-align: middle
+    .lib-dropdown(
+    @_dropdown-list-item-padding: 5px 5px 5px 23px,
+    @_dropdown-list-min-width: 200px,
+    @_icon-font-margin: 0 0 0 5px,
+    @_icon-font-vertical-align: middle
     );
 }
 
@@ -230,14 +241,14 @@
 //  ---------------------------------------------
 
 .abs-remove-button-for-blocks {
-    .icon-font(
-        @icon-remove,
-        @_icon-font-size: 26px,
-        @_icon-font-line-height: 15px,
-        @_icon-font-text-hide: true,
-        @_icon-font-color: @color-gray19,
-        @_icon-font-color-hover: @color-gray19,
-        @_icon-font-color-active: @color-gray19
+    .lib-icon-font(
+    @icon-remove,
+    @_icon-font-size: 26px,
+    @_icon-font-line-height: 15px,
+    @_icon-font-text-hide: true,
+    @_icon-font-color: @color-gray19,
+    @_icon-font-color-hover: @color-gray19,
+    @_icon-font-color-active: @color-gray19
     );
 }
 
@@ -247,8 +258,9 @@
 
 .abs-product-link {
     font-weight: @font-weight__regular;
+
     > a {
-        .link(
+        .lib-link(
         @_link-color: @product-name-link__color,
         @_link-text-decoration: @product-name-link__text-decoration,
         @_link-color-visited: @product-name-link__color__visited,
@@ -323,6 +335,7 @@
                 }
             }
         }
+
         .actions-toolbar {
             &:not(:first-child) {
                 &:extend(.abs-add-clearfix all);
@@ -332,25 +345,30 @@
                             margin-top: @indent__l;
                         }
                     }
+
                     float: left;
                 }
             }
         }
+
         .fields {
             .actions-toolbar {
                 margin: 0;
             }
         }
     }
+
     .message {
         &.notice {
             margin: @indent__l 0 0;
         }
     }
+
     .additional {
         margin-top: 55px;
         position: relative;
     }
+
     .action {
         &.remove {
             &:extend(.abs-action-remove all);
@@ -372,6 +390,7 @@
                     }
                 }
             }
+
             .additional {
                 .action {
                     &.remove {
@@ -388,7 +407,7 @@
 //  ---------------------------------------------
 
 @abs-margin-for-forms-desktop: {
-    .css(margin-left, @form-field-type-label-inline__width);
+    .lib-css(margin-left, @form-field-type-label-inline__width);
 };
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
@@ -408,7 +427,7 @@
 //  ---------------------------------------------
 
 .abs-hidden {
-    .visibility-hidden();
+    .lib-visibility-hidden();
 }
 
 //
@@ -416,7 +435,7 @@
 //  ---------------------------------------------
 
 @abs-visually-hidden: {
-    .visually-hidden();
+    .lib-visually-hidden();
 };
 
 .abs-visually-hidden {
@@ -448,11 +467,19 @@
 }
 
 //
+//  Visually hidden reset
+//  ---------------------------------------------
+
+.abs-visually-hidden-reset {
+    .lib-visually-hidden-reset();
+}
+
+//
 //  Clearfix
 //  ---------------------------------------------
 
 @abs-add-clearfix: {
-    .clearfix();
+    .lib-clearfix();
 };
 
 .abs-add-clearfix {
@@ -522,7 +549,7 @@
         .fieldset {
             > .field,
             .fields > .field {
-                .form-field-type-revert(@_type: block);
+                .lib-form-field-type-revert(@_type: block);
                 &:not(:first-child):last-of-type {
                     margin-bottom: 0;
                 }
@@ -536,13 +563,14 @@
 //  ---------------------------------------------
 
 .abs-navigation-icon {
-    .icon-font(
+    .lib-icon-font(
         @_icon-font-content: @icon-down,
         @_icon-font-size: 34px,
         @_icon-font-line-height: 1.2,
         @_icon-font-position: after,
         @_icon-font-display: block
     );
+
     &:after {
         position: absolute;
         right: @indent__xs;
@@ -555,7 +583,7 @@
 //  ---------------------------------------------
 
 .abs-split-button {
-    .dropdown-split(
+    .lib-dropdown-split(
         @_options-selector : ~".items",
         @_dropdown-split-button-border-radius-fix: true
     );
@@ -568,11 +596,11 @@
 
 .abs-action-addto-product {
     &:extend(.abs-action-link-button all);
-    .button-s();
+    .lib-button-s();
 }
 
 .abs-actions-addto-gridlist {
-    .icon-font(
+    .lib-icon-font(
         @_icon-font-content: '',
         @_icon-font-size: 29px,
         @_icon-font-color: @addto-color,
@@ -588,7 +616,7 @@
 //  ---------------------------------------------
 
 .abs-button-l {
-    .button-l();
+    .lib-button-l();
 }
 
 //
@@ -596,12 +624,13 @@
 //  ---------------------------------------------
 
 .abs-action-button-as-link {
-    .button-as-link(
+    .lib-button-as-link(
         @_margin: false
     );
     border-radius: 0;
     font-weight: @font-weight__regular;
     font-size: inherit;
+
     &:active,
     &:not(:focus) {
         box-shadow: none;
@@ -613,7 +642,7 @@
 //  ---------------------------------------------
 
 .abs-revert-secondary-color {
-    .button-revert-secondary-color();
+    .lib-button-revert-secondary-color();
 }
 
 //
@@ -621,7 +650,7 @@
 //  ---------------------------------------------
 
 .abs-revert-secondary-size {
-    .button-revert-secondary-size();
+    .lib-button-revert-secondary-size();
 }
 
 //
@@ -641,15 +670,18 @@
     .price-excluding-tax,
     .weee {
         display: inline-block;
-        .font-size(14);
+        .lib-font-size(14);
         white-space: nowrap;
     }
+
     .price-including-tax + .price-excluding-tax {
         display: inline-block;
-        .font-size(11);
+        .lib-font-size(11);
+
         &:before {
             content: "("attr(data-label)": ";
         }
+
         &:after {
             content:")";
         }
@@ -664,20 +696,22 @@
     cursor: pointer;
     padding-right: 12px;
     position: relative;
-    .icon-font(
+    .lib-icon-font(
         @icon-down,
         @_icon-font-size: 26px,
         @_icon-font-line-height: 10px,
         @_icon-font-margin: 3px 0 0 0,
         @_icon-font-position: after
     );
+
     &:after {
         position: absolute;
         right: -@indent__s;
         top: 3px;
     }
+
     &-expanded {
-        .icon-font-symbol(
+        .lib-icon-font-symbol(
             @_icon-font-content: @icon-up,
             @_icon-font-position: after
         );
@@ -685,7 +719,7 @@
 }
 
 .abs-tax-total-expanded {
-    .icon-font-symbol(
+    .lib-icon-font-symbol(
         @_icon-font-content: @icon-up,
         @_icon-font-position: after
     );
@@ -696,7 +730,7 @@
 //  ---------------------------------------------
 
 .abs-methods-shipping-title {
-    .font-size(14);
+    .lib-font-size(14);
     margin: 0 0 15px;
     font-weight: @font-weight__bold;
 }
@@ -725,13 +759,16 @@
             &:not(:last-child) {
                 border-bottom: @border-width__base solid @border-color__base;
             }
+
             &:extend(.abs-add-clearfix-mobile all);
+
             .col {
                 &.item {
                     &:before {
                         display: none;
                     }
                 }
+
                 &.qty,
                 &.price,
                 &.subtotal {
@@ -740,6 +777,7 @@
                     text-align: center;
                     white-space: nowrap;
                     width: 33%;
+
                     &:before {
                         content: attr(data-th) ":";
                         display: block;
@@ -748,6 +786,7 @@
                     }
                 }
             }
+
             .product-item-name {
                 margin: 0;
             }
@@ -761,7 +800,7 @@
 
 .abs-colon {
     &:after {
-        content: ": ";
+        content: ': ';
     }
 }
 
@@ -770,7 +809,7 @@
 //  ---------------------------------------------
 
 .abs-icon-add {
-    .icon-font(
+    .lib-icon-font(
         @_icon-font-content: @icon-expand,
         @_icon-font-size: 10px,
         @_icon-font-line-height: 10px,
@@ -780,7 +819,7 @@
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .abs-icon-add-mobile {
-        .icon-font(
+        .lib-icon-font(
             @_icon-font-content: @icon-expand,
             @_icon-font-size: 10px,
             @_icon-font-line-height: 10px,
@@ -798,9 +837,10 @@
 .abs-dropdown-items-new {
     .items .item:last-child {
         &:hover {
-            .css(background, @dropdown-list-item__hover);
+            .lib-css(background, @dropdown-list-item__hover);
         }
     }
+
     .action.new {
         &:extend(.abs-icon-add all);
         &:before {
@@ -822,20 +862,22 @@
         margin-bottom: 0;
         padding: @indent__s @indent__xl @indent__s @layout__width-xs-indent;
         position: relative;
-        .icon-font(
+        .lib-icon-font(
             @_icon-font-content: @icon-down,
             @_icon-font-size: 28px,
             @_icon-font-text-hide: false,
             @_icon-font-position: after,
             @_icon-font-display: block
         );
+
         &:after {
             position: absolute;
             right: @indent__s;
             top: 0;
         }
+
         &.active {
-            .icon-font-symbol(
+            .lib-icon-font-symbol(
                 @_icon-font-content: @icon-up,
                 @_icon-font-position: after
             );
@@ -914,11 +956,13 @@
         margin-bottom: @indent__base;
         position: relative;
         &:extend(.abs-add-clearfix-desktop all);
+
         .limiter {
             float: right;
             position: relative;
             z-index: 1;
         }
+
         .toolbar-amount {
             float: left;
             line-height: normal;
@@ -926,6 +970,7 @@
             position: relative;
             z-index: 1;
         }
+
         .pages {
             position: absolute;
             z-index: 0;
@@ -939,8 +984,8 @@
 //  ---------------------------------------------
 
 .abs-block-items-counter {
-    .css(color, @primary__color__lighter);
-    .font-size(12px);
+    .lib-css(color, @primary__color__lighter);
+    .lib-font-size(12px);
     white-space: nowrap;
 }
 
@@ -951,8 +996,8 @@
 .abs-shopping-cart-items {
     .action {
         &.continue {
-            .link-as-button();
-            .button(
+            .lib-link-as-button();
+            .lib-button(
                 @_button-padding: 7px 15px 7px 0,
                 @_button-icon-use: true,
                 @_button-font-content: @icon-prev,
@@ -962,12 +1007,14 @@
             );
             border-radius: 3px;
             font-weight: bold;
+
             &:active {
-                .css(box-shadow, @button__shadow);
+                .lib-css(box-shadow, @button__shadow);
             }
         }
+
         &.update {
-            .button-icon(
+            .lib-button-icon(
                 @icon-update,
                 @_icon-font-size: 32px,
                 @_icon-font-line-height: 16px
@@ -981,12 +1028,14 @@
         .actions {
             text-align: center;
         }
+
         .action {
             &.update,
             &.continue,
             &.clear {
                 margin: 0 auto @indent__s;
             }
+
             &.update,
             &.clear {
                 display: block;
@@ -999,13 +1048,16 @@
         float: left;
         width: 73%;
         position: relative;
+
         .actions {
             text-align: right;
         }
+
         .action {
             &.continue {
                 float: left;
             }
+
             &.clear {
                 margin-right: @indent__s;
             }
@@ -1022,6 +1074,7 @@
         &:extend(.abs-add-box-sizing all);
         position: relative;
     }
+
     input {
         &:extend(.abs-field-date-input);
     }
@@ -1032,7 +1085,7 @@
 //  ---------------------------------------------
 
 .abs-field-date-input {
-    .css(margin-right, @indent__s);
+    .lib-css(margin-right, @indent__s);
     width: calc(~"100% - (@{icon-calendar__font-size} + @{indent__s})");
 }
 
@@ -1043,8 +1096,9 @@
 .abs-field-tooltip {
     &:extend(.abs-add-box-sizing all);
     position: relative;
+
     input {
-        .css(margin-right, @indent__s);
+        .lib-css(margin-right, @indent__s);
         width: calc(~"100% - (@{checkout-tooltip-icon__font-size} + @{indent__s} + @{indent__xs})");
     }
 }
@@ -1054,27 +1108,29 @@
 //  ---------------------------------------------
 
 @abs-checkout-tooltip-content-position-top: {
-    .css(right, @checkout-tooltip-content-mobile__right);
-    .css(top, @checkout-tooltip-content-mobile__top);
+    .lib-css(right, @checkout-tooltip-content-mobile__right);
+    .lib-css(top, @checkout-tooltip-content-mobile__top);
     left: auto;
 
     &:before,
     &:after {
-        .arrow(
+        .lib-arrow(
         @_position: top,
         @_size: @checkout-tooltip-icon-arrow__font-size,
         @_color: @checkout-tooltip-content__background-color
         );
-        .css(margin-top, @checkout-tooltip-icon-arrow__left);
-        .css(right, @indent__s);
+        .lib-css(margin-top, @checkout-tooltip-icon-arrow__left);
+        .lib-css(right, @indent__s);
         left: auto;
-        top: 0%;
+        top: 0;
     }
+
     &:before {
-        .css(border-bottom-color, @checkout-tooltip-content__border-color);
+        .lib-css(border-bottom-color, @checkout-tooltip-content__border-color);
     }
+
     &:after {
-        .css(border-bottom-color, @checkout-tooltip-content__background-color);
+        .lib-css(border-bottom-color, @checkout-tooltip-content__background-color);
         top: 1px;
     }
 };
@@ -1094,9 +1150,9 @@
 //  ---------------------------------------------
 
 .abs-checkout-title {
-    .css(border-bottom, @checkout-step-title__border);
-    .css(padding-bottom, @checkout-step-title__padding);
-    .typography(
+    .lib-css(border-bottom, @checkout-step-title__border);
+    .lib-css(padding-bottom, @checkout-step-title__padding);
+    .lib-typography(
     @_font-size: @checkout-step-title__font-size,
     @_font-weight: @checkout-step-title__font-weight,
     @_font-family: false,
@@ -1113,79 +1169,147 @@
     .mark {
         font-weight: @font-weight__regular;
         padding-left: 4px;
+
         strong {
             font-weight: @font-weight__regular;
         }
     }
+
     .amount {
         padding-right: 4px;
         text-align: right;
+        white-space: nowrap;
+
         strong {
             font-weight: @font-weight__regular;
         }
     }
+
     .grand {
         .mark,
         .amount {
             padding-top: @indent__base;
         }
+
         .amount {
             padding-right: 4px;
             text-align: right;
+
             strong {
                 font-weight: @font-weight__bold;
             }
         }
     }
+
     .msrp {
         margin-bottom: @indent__s;
     }
+
     .totals-tax {
         &-summary {
             .mark,
             .amount {
-                .css(border-top, @border-width__base solid @border-color__base);
-                .css(border-bottom, @border-width__base solid @border-color__base);
+                .lib-css(border-top, @border-width__base solid @border-color__base);
+                .lib-css(border-bottom, @border-width__base solid @border-color__base);
                 cursor: pointer;
             }
+
             .amount .price {
                 position: relative;
                 padding-right: @indent__m;
-                .icon-font(
+                .lib-icon-font(
                 @icon-down,
                 @_icon-font-size: 30px,
                 @_icon-font-text-hide: true,
                 @_icon-font-position: after,
                 @_icon-font-display: block
                 );
+
                 &:after {
                     position: absolute;
                     right: -5px;
                     top: -12px;
                 }
             }
+
             &.expanded {
                 .mark,
                 .amount {
                     border-bottom: 0;
                 }
+
                 .amount .price {
-                    .icon-font-symbol(
+                    .lib-icon-font-symbol(
                     @_icon-font-content: @icon-up,
                     @_icon-font-position: after
                     );
                 }
             }
         }
+
         &-details {
             display: none;
-            .css(border-bottom, @border-width__base solid @border-color__base);
+            .lib-css(border-bottom, @border-width__base solid @border-color__base);
+
             &.shown {
                 display: table-row;
             }
         }
     }
+
     .table-caption {
         &:extend(.abs-no-display all);
+    }
+}
+
+//
+//  Shopping cart and payment disaount codes block
+//  ---------------------------------------------
+
+.abs-discount-block {
+    > .title {
+        border-top: @border-width__base solid @border-color__base;
+        cursor: pointer;
+        font-weight: @font-weight__semibold;
+        .lib-icon-font(
+        @_icon-font-content: @icon-down,
+        @_icon-font-size: 30px,
+        @_icon-font-position: after,
+        @_icon-font-display: block
+        );
+        margin-bottom: 0;
+        overflow: hidden;
+        padding: 7px @indent__l 7px @indent__xs;
+        position: relative;
+
+        &:after {
+            position: absolute;
+            right: -5px;
+            top: -5px;
+        }
+
+        strong {
+            .column.main & {
+                .lib-font-size(18);
+                font-weight: @font-weight__regular;
+            }
+        }
+    }
+
+    > .content {
+        display: none;
+    }
+
+    &.active {
+        > .title {
+            .lib-icon-font-symbol(
+            @_icon-font-content: @icon-prev,
+            @_icon-font-position: after
+            );
+        }
+
+        > .content {
+            display: block;
+        }
     }
 }

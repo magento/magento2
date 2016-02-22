@@ -6,18 +6,19 @@
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\Eav\Model\Config;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\IndexerInterface;
+use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
+use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
-use Magento\Indexer\Model\SaveHandler\Batch;
-use Magento\Indexer\Model\ScopeResolver\IndexScopeResolver;
+use Magento\Framework\Indexer\SaveHandler\Batch;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 
 class IndexerHandler implements IndexerInterface
 {
     /**
-     * @var IndexStructure
+     * @var IndexStructureInterface
      */
     private $indexStructure;
 
@@ -57,17 +58,17 @@ class IndexerHandler implements IndexerInterface
     private $indexScopeResolver;
 
     /**
-     * @param IndexStructure $indexStructure
-     * @param Resource|Resource $resource
+     * @param IndexStructureInterface $indexStructure
+     * @param ResourceConnection $resource
      * @param Config $eavConfig
      * @param Batch $batch
-     * @param \Magento\Indexer\Model\ScopeResolver\IndexScopeResolver $indexScopeResolver
+     * @param \Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver $indexScopeResolver
      * @param array $data
      * @param int $batchSize
      */
     public function __construct(
-        IndexStructure $indexStructure,
-        Resource $resource,
+        IndexStructureInterface $indexStructure,
+        ResourceConnection $resource,
         Config $eavConfig,
         Batch $batch,
         IndexScopeResolver $indexScopeResolver,
@@ -102,7 +103,8 @@ class IndexerHandler implements IndexerInterface
     public function deleteIndex($dimensions, \Traversable $documents)
     {
         foreach ($this->batch->getItems($documents, $this->batchSize) as $batchDocuments) {
-            $this->getAdapter()->delete($this->getTableName($dimensions), ['entity_id in (?)' => $batchDocuments]);
+            $this->resource->getConnection()
+                ->delete($this->getTableName($dimensions), ['entity_id in (?)' => $batchDocuments]);
         }
     }
 
@@ -112,7 +114,7 @@ class IndexerHandler implements IndexerInterface
     public function cleanIndex($dimensions)
     {
         $this->indexStructure->delete($this->getIndexName(), $dimensions);
-        $this->indexStructure->create($this->getIndexName(), $dimensions);
+        $this->indexStructure->create($this->getIndexName(), [], $dimensions);
     }
 
     /**
@@ -141,14 +143,6 @@ class IndexerHandler implements IndexerInterface
     }
 
     /**
-     * @return AdapterInterface
-     */
-    private function getAdapter()
-    {
-        return $this->resource->getConnection(Resource::DEFAULT_WRITE_RESOURCE);
-    }
-
-    /**
      * @param array $documents
      * @param Dimension[] $dimensions
      * @return void
@@ -159,7 +153,7 @@ class IndexerHandler implements IndexerInterface
         if (empty($documents)) {
             return;
         }
-        $this->getAdapter()->insertOnDuplicate(
+        $this->resource->getConnection()->insertOnDuplicate(
             $this->getTableName($dimensions),
             $documents,
             ['data_index']

@@ -23,8 +23,8 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder */
         $searchCriteriaBuilder = Bootstrap::getObjectManager()->create('Magento\Framework\Api\SearchCriteriaBuilder');
 
-        /** @var \Magento\Quote\Model\QuoteRepository $quoteRepository */
-        $quoteRepository = Bootstrap::getObjectManager()->create('Magento\Quote\Model\QuoteRepository');
+        /** @var \Magento\Quote\Api\CartRepositoryInterface $quoteRepository */
+        $quoteRepository = Bootstrap::getObjectManager()->create('Magento\Quote\Api\CartRepositoryInterface');
         $searchResult = $quoteRepository->getList($searchCriteriaBuilder->create());
         $items = $searchResult->getItems();
         /** @var \Magento\Quote\Api\Data\CartInterface $actualQuote */

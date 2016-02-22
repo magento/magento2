@@ -67,6 +67,7 @@ class DeleteAttributeStep implements TestStepInterface
         if ($this->catalogProductAttributeIndex->getGrid()->isRowVisible($filter)) {
             $this->catalogProductAttributeIndex->getGrid()->searchAndOpen($filter);
             $this->catalogProductAttributeNew->getPageActions()->delete();
+            $this->catalogProductAttributeNew->getModalBlock()->acceptAlert();
         }
     }
 }

@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Bundle\Api\ProductOptionTypeListInterface" type="Magento\Bundle\Model\OptionTypeList" />
     <preference for="Magento\Bundle\Api\Data\OptionTypeInterface" type="Magento\Bundle\Model\Source\Option\Type" />
     <preference for="Magento\Bundle\Api\ProductLinkManagementInterface" type="Magento\Bundle\Model\LinkManagement" />
@@ -13,6 +13,7 @@
     <preference for="Magento\Bundle\Api\ProductOptionRepositoryInterface" type="Magento\Bundle\Model\OptionRepository" />
     <preference for="Magento\Bundle\Api\ProductOptionManagementInterface" type="Magento\Bundle\Model\OptionManagement" />
     <preference for="Magento\Bundle\Api\Data\OptionInterface" type="Magento\Bundle\Model\Option" />
+    <preference for="Magento\Bundle\Api\Data\BundleOptionInterface" type="Magento\Bundle\Model\BundleOption" />
     <type name="Magento\Bundle\Model\Source\Option\Type">
         <arguments>
             <argument name="options" xsi:type="array">
@@ -44,7 +45,6 @@
                 <item name="regular_price" xsi:type="string">Magento\Bundle\Pricing\Price\BundleRegularPrice</item>
                 <item name="final_price" xsi:type="string">Magento\Bundle\Pricing\Price\FinalPrice</item>
                 <item name="tier_price" xsi:type="string">Magento\Bundle\Pricing\Price\TierPrice</item>
-                <item name="group_price" xsi:type="string">Magento\Bundle\Pricing\Price\GroupPrice</item>
                 <item name="special_price" xsi:type="string">Magento\Bundle\Pricing\Price\SpecialPrice</item>
                 <item name="custom_option_price" xsi:type="string">Magento\Catalog\Pricing\Price\CustomOptionPrice</item>
                 <item name="base_price" xsi:type="string">Magento\Catalog\Pricing\Price\BasePrice</item>
@@ -77,17 +77,56 @@
     <type name="Magento\Catalog\Model\Product\Attribute\Backend\Price">
         <plugin name="bundle" type="Magento\Bundle\Model\Plugin\PriceBackend" sortOrder="100" />
     </type>
-    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
-        <plugin name="bundleSaveOptions" type="\Magento\Bundle\Model\Plugin\BundleSaveOptions"/>
-    </type>
     <type name="Magento\Catalog\Model\Product">
-        <plugin name="bundleLoadOptions" type="\Magento\Bundle\Model\Plugin\BundleLoadOptions"/>
         <plugin name="bundle" type="Magento\Bundle\Model\Plugin\Product" sortOrder="100" />
+    </type>
+    <type name="Magento\Framework\Model\ResourceModel\Db\Relation\ActionPool">
+        <arguments>
+            <argument name="relationActions" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
+                    <item name="create" xsi:type="array">
+                        <item name="create_bundle_options" xsi:type="string">Magento\Bundle\Model\Product\SaveHandler</item>
+                    </item>
+                    <item name="update" xsi:type="array">
+                        <item name="update_bundle_options" xsi:type="string">Magento\Bundle\Model\Product\SaveHandler</item>
+                    </item>
+                    <item name="read" xsi:type="array">
+                        <item name="read_bundle_options" xsi:type="string">Magento\Bundle\Model\Product\ReadHandler</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
     </type>
     <type name="Magento\Bundle\Model\Product\Type">
         <arguments>
             <argument name="stockRegistry" xsi:type="object">Magento\CatalogInventory\Api\StockRegistryInterface\Proxy</argument>
             <argument name="stockState" xsi:type="object">Magento\CatalogInventory\Api\StockStateInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Helper\Product">
+        <arguments>
+            <argument name="reindexPriceIndexerData" xsi:type="array">
+                <item name="byDataResult" xsi:type="array">
+                    <item name="is_relations_changed" xsi:type="string">is_relations_changed</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
+        <plugin name="append_bundle_data_to_order" type="Magento\Bundle\Model\Plugin\QuoteItem"/>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Item\Repository">
+        <arguments>
+            <argument name="cartItemProcessors" xsi:type="array">
+                <item name="bundle" xsi:type="object">\Magento\Bundle\Model\CartItemProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Api\OrderItemRepositoryInterface">
+        <arguments>
+            <argument name="processorPool" xsi:type="array">
+                <item name="bundle" xsi:type="object">Magento\Bundle\Model\ProductOptionProcessor</item>
+            </argument>
         </arguments>
     </type>
 </config>

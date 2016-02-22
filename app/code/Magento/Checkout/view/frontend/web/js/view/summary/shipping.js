@@ -8,10 +8,9 @@ define(
     [
         'jquery',
         'Magento_Checkout/js/view/summary/abstract-total',
-        'Magento_Checkout/js/model/quote',
-        'Magento_Checkout/js/model/shipping-service'
+        'Magento_Checkout/js/model/quote'
     ],
-    function ($, Component, quote, shippingService) {
+    function ($, Component, quote) {
         return Component.extend({
             defaults: {
                 template: 'Magento_Checkout/summary/shipping'
@@ -22,7 +21,8 @@ define(
                 if (!this.isCalculated()) {
                     return '';
                 }
-                return shippingService.getTitleByCode(quote.shippingMethod())
+                var shippingMethod = quote.shippingMethod();
+                return shippingMethod ? shippingMethod.carrier_title + " - " + shippingMethod.method_title : '';
             },
             isCalculated: function() {
                 return this.totals() && this.isFullMode() && null != quote.shippingMethod();

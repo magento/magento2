@@ -13,7 +13,7 @@ use Magento\Customer\Model\Context as CustomerContext;
  * @SuppressWarnings(PHPMD.LongVariable)
  */
 class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implements
-    \Magento\Framework\Object\IdentityInterface
+    \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * Default value for products count that will be shown
@@ -42,20 +42,20 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
     /**
      * Product collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productCollectionFactory;
 
     /**
      * @param Context $context
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      */
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Framework\App\Http\Context $httpContext,
         array $data = []
@@ -108,14 +108,14 @@ class NewProduct extends \Magento\Catalog\Block\Product\AbstractProduct implemen
     /**
      * Prepare and return product collection
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Collection|Object|\Magento\Framework\Data\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection|Object|\Magento\Framework\Data\Collection
      */
     protected function _getProductCollection()
     {
         $todayStartOfDayDate = $this->_localeDate->date()->setTime(0, 0, 0)->format('Y-m-d H:i:s');
         $todayEndOfDayDate = $this->_localeDate->date()->setTime(23, 59, 59)->format('Y-m-d H:i:s');
 
-        /** @var $collection \Magento\Catalog\Model\Resource\Product\Collection */
+        /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
         $collection = $this->_productCollectionFactory->create();
         $collection->setVisibility($this->_catalogProductVisibility->getVisibleInCatalogIds());
 

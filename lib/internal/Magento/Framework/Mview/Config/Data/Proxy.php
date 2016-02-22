@@ -8,7 +8,8 @@ namespace Magento\Framework\Mview\Config\Data;
 /**
  * Proxy class for \Magento\Framework\Mview\Config\Data
  */
-class Proxy extends \Magento\Framework\Mview\Config\Data
+class Proxy extends \Magento\Framework\Mview\Config\Data implements
+    \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
     /**
      * Object Manager instance

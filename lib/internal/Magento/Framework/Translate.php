@@ -204,6 +204,9 @@ class Translate implements \Magento\Framework\TranslateInterface
         if (!isset($this->_config['theme'])) {
             $this->_config['theme'] = $this->_viewDesign->getDesignTheme()->getId();
         }
+        if (!isset($this->_config['module'])) {
+            $this->_config['module'] = $this->getControllerModuleName();
+        }
         return $this;
     }
 
@@ -233,13 +236,38 @@ class Translate implements \Magento\Framework\TranslateInterface
     }
 
     /**
+     * Retrieve name of the current module
+     * @return mixed
+     */
+    protected function getControllerModuleName()
+    {
+        return $this->request->getControllerModule();
+    }
+
+    /**
      * Load data from module translation files
      *
      * @return $this
      */
     protected function _loadModuleTranslation()
     {
-        foreach ($this->_moduleList->getNames() as $module) {
+        $currentModule = $this->getControllerModuleName();
+        $allModulesExceptCurrent = array_diff($this->_moduleList->getNames(), [$currentModule]);
+
+        $this->loadModuleTranslationByModulesList($allModulesExceptCurrent);
+        $this->loadModuleTranslationByModulesList([$currentModule]);
+        return $this;
+    }
+
+    /**
+     * Load data from module translation files by list of modules
+     *
+     * @param array $modules
+     * @return $this
+     */
+    protected function loadModuleTranslationByModulesList(array $modules)
+    {
+        foreach ($modules as $module) {
             $moduleFilePath = $this->_getModuleTranslationFile($module, $this->getLocale());
             $this->_addData($this->_getFileData($moduleFilePath));
         }
@@ -304,7 +332,7 @@ class Translate implements \Magento\Framework\TranslateInterface
     protected function _loadDbTranslation()
     {
         $data = $this->_translateResource->getTranslationArray(null, $this->getLocale());
-        $this->_addData($data);
+        $this->_addData(array_map("htmlspecialchars_decode", $data));
         return $this;
     }
 
@@ -317,7 +345,7 @@ class Translate implements \Magento\Framework\TranslateInterface
      */
     protected function _getModuleTranslationFile($moduleName, $locale)
     {
-        $file = $this->_modulesReader->getModuleDir('i18n', $moduleName);
+        $file = $this->_modulesReader->getModuleDir(Module\Dir::MODULE_I18N_DIR, $moduleName);
         $file .= '/' . $locale . '.csv';
         return $file;
     }
@@ -427,6 +455,9 @@ class Translate implements \Magento\Framework\TranslateInterface
             }
             if (isset($this->_config['theme'])) {
                 $this->_cacheId .= '_' . $this->_config['theme'];
+            }
+            if (isset($this->_config['module'])) {
+                $this->_cacheId .= '_' . $this->_config['module'];
             }
         }
         return $this->_cacheId;

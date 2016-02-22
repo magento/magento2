@@ -7,21 +7,20 @@
 /**
  * @var $block \Magento\Braintree\Block\Datajs
  */
-?>
-<?php
+
 $arrayData = [
     "kountId" => $this->helper('Magento\Braintree\Helper\Data')->getKountId() ?
         $this->helper('Magento\Braintree\Helper\Data')->getKountId() : false,
     "formId" =>$block->getFormId(),
     "merchantId" => $block->getMerchantId(),
-    "braintreeDataJs" => $block->getJsSrc(),
+    "braintreeDataJs" => $block->escapeUrl($block->getJsSrc()),
 ];
 $serializedFormData = $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($arrayData);
 ?>
 <script type="text/x-magento-init">
     {
         "body": {
-             "braintreeDataJs": <?php echo $serializedFormData ?>
+             "braintreeDataJs": <?php /* @noEscape */ echo $serializedFormData ?>
         }
     }
 </script>

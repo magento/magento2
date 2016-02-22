@@ -1,5 +1,10 @@
 Options All -Indexes
+
 <IfModule mod_php5.c>
+php_flag engine 0
+</IfModule>
+
+<IfModule mod_php7.c>
 php_flag engine 0
 </IfModule>
 

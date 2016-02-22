@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Config;
 /**
  * Config data model
  *
- * @method \Magento\Framework\Model\Resource\Db\AbstractDb getResource()
+ * @method \Magento\Framework\Model\ResourceModel\Db\AbstractDb getResource()
  * @method string getScope()
  * @method \Magento\Framework\App\Config\ValueInterface setScope(string $value)
  * @method int getScopeId()
@@ -43,33 +43,31 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     protected $_config;
 
     /**
+     * @var \Magento\Framework\App\Cache\TypeListInterface
+     */
+    protected $cacheTypeList;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param ScopeConfigInterface $config
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_config = $config;
+        $this->cacheTypeList = $cacheTypeList;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-    }
-
-    /**
-     * Add availability call after load as public
-     *
-     * @return void
-     */
-    public function afterLoad()
-    {
-        $this->_afterLoad();
     }
 
     /**
@@ -106,5 +104,21 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
     {
         $data = $this->_getData('fieldset_data');
         return is_array($data) && isset($data[$key]) ? $data[$key] : null;
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
+     *
+     * @return $this
+     */
+    public function afterSave()
+    {
+        if ($this->isValueChanged()) {
+            $this->cacheTypeList->invalidate(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER);
+        }
+
+        return parent::afterSave();
     }
 }

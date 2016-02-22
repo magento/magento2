@@ -11,24 +11,40 @@ class Product extends AbstractPlugin
     /**
      * Reindex on product save
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product
+     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
+     * @param \Closure $proceed
+     * @param \Magento\Framework\Model\AbstractModel $product
+     * @return \Magento\Catalog\Model\ResourceModel\Product
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSave(\Magento\Catalog\Model\Product $product)
-    {
-        $this->reindexRow($product->getId());
-        return $product;
+    public function aroundSave(
+        \Magento\Catalog\Model\ResourceModel\Product $productResource,
+        \Closure $proceed,
+        \Magento\Framework\Model\AbstractModel $product
+    ) {
+        $productResource->addCommitCallback(function () use ($product) {
+            $this->reindexRow($product->getEntityId());
+        });
+        return $proceed($product);
     }
 
     /**
      * Reindex on product delete
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product
+     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
+     * @param \Closure $proceed
+     * @param \Magento\Framework\Model\AbstractModel $product
+     * @return \Magento\Catalog\Model\ResourceModel\Product
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterDelete(\Magento\Catalog\Model\Product $product)
-    {
-        $this->reindexRow($product->getId());
-        return $product;
+    public function aroundDelete(
+        \Magento\Catalog\Model\ResourceModel\Product $productResource,
+        \Closure $proceed,
+        \Magento\Framework\Model\AbstractModel $product
+    ) {
+        $productResource->addCommitCallback(function () use ($product) {
+            $this->reindexRow($product->getEntityId());
+        });
+        return $proceed($product);
     }
 }

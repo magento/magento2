@@ -16,7 +16,7 @@ class CouponsMassDelete extends \Magento\SalesRule\Controller\Adminhtml\Promo\Qu
     public function execute()
     {
         $this->_initRule();
-        $rule = $this->_coreRegistry->registry('current_promo_quote_rule');
+        $rule = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
 
         if (!$rule->getId()) {
             $this->_forward('noroute');
@@ -26,7 +26,7 @@ class CouponsMassDelete extends \Magento\SalesRule\Controller\Adminhtml\Promo\Qu
 
         if (is_array($codesIds)) {
             $couponsCollection = $this->_objectManager->create(
-                'Magento\SalesRule\Model\Resource\Coupon\Collection'
+                'Magento\SalesRule\Model\ResourceModel\Coupon\Collection'
             )->addFieldToFilter(
                 'coupon_id',
                 ['in' => $codesIds]

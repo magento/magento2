@@ -24,7 +24,7 @@
         <div class="product-item-details">
             <strong class="product-item-name">
                 <!-- ko if: product_has_url -->
-                <a data-bind="attr: {href: product_url, title: product_name}, text: product_name"></a>
+                <a data-bind="attr: {href: product_url}, text: product_name"></a>
                 <!-- /ko -->
                 <!-- ko ifnot: product_has_url -->
                     <!-- ko text: product_name --><!-- /ko -->
@@ -33,18 +33,18 @@
 
             <!-- ko if: options.length -->
             <div class="product options" data-mage-init='{"collapsible":{"openedState": "active", "saveState": false}}'>
-                <span data-role="title" class="toggle"><!-- ko text: $t('See Details') --><!-- /ko --></span>
+                <span data-role="title" class="toggle"><!-- ko i18n: 'See Details' --><!-- /ko --></span>
 
                 <div data-role="content" class="content">
-                    <strong class="subtitle"><!-- ko text: $t('Options Details') --><!-- /ko --></strong>
+                    <strong class="subtitle"><!-- ko i18n: 'Options Details' --><!-- /ko --></strong>
                     <dl class="product options list">
                         <!-- ko foreach: { data: options, as: 'option' } -->
                         <dt class="label"><!-- ko text: option.label --><!-- /ko --></dt>
                         <dd class="values">
-                            <!-- ko if: Array.isArray(option) -->
+                            <!-- ko if: Array.isArray(option.value) -->
                                 <span data-bind="html: option.value.join('<br>')"></span>
                             <!-- /ko -->
-                            <!-- ko ifnot: Array.isArray(option) -->
+                            <!-- ko ifnot: Array.isArray(option.value) -->
                                 <span data-bind="html: option.value"></span>
                             <!-- /ko -->
                         </dd>
@@ -58,8 +58,8 @@
                 <!-- ko if: canApplyMsrp -->
 
                 <div class="details-map">
-                    <span class="label" data-bind="text: $t('Price')"></span>
-                    <span class="value" data-bind="text: $t('See price before order confirmation.')"></span>
+                    <span class="label" data-bind="i18n: 'Price'"></span>
+                    <span class="value" data-bind="i18n: 'See price before order confirmation.'"></span>
                 </div>
                 <!-- /ko -->
                 <!-- ko ifnot: canApplyMsrp -->
@@ -69,7 +69,8 @@
                 <!-- /ko -->
 
                 <div class="details-qty qty">
-                    <span class="label" data-bind="text: $t('Qty')"></span>
+                    <label class="label" data-bind="i18n: 'Qty', attr: {
+                           for: 'cart-item-'+item_id+'-qty'}"></label>
                     <input data-bind="attr: {
                            id: 'cart-item-'+item_id+'-qty',
                            'data-cart-item': item_id,
@@ -86,7 +87,7 @@
                            }"
                             class="update-cart-item"
                             style="display: none">
-                        <span data-bind="text: $t('Update')"></span>
+                        <span data-bind="i18n: 'Update'"></span>
                     </button>
                 </div>
             </div>
@@ -95,14 +96,14 @@
                 <!-- ko if: is_visible_in_site_visibility -->
                 <div class="primary">
                     <a data-bind="attr: {href: configure_url, title: $t('Edit item')}" class="action edit">
-                        <span data-bind="text: $t('Edit')"></span>
+                        <span data-bind="i18n: 'Edit'"></span>
                     </a>
                 </div>
                 <!-- /ko -->
                 <div class="secondary">
                     <a href="#" data-bind="attr: {'data-cart-item': item_id, title: $t('Remove item')}"
                        class="action delete">
-                        <span data-bind="text: $t('Remove')"></span>
+                        <span data-bind="i18n: 'Remove'"></span>
                     </a>
                 </div>
             </div>

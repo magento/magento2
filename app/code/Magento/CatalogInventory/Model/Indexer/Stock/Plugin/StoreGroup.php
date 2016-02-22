@@ -23,14 +23,14 @@ class StoreGroup
     /**
      * Before save handler
      *
-     * @param \Magento\Store\Model\Resource\Group $subject
+     * @param \Magento\Store\Model\ResourceModel\Group $subject
      * @param \Magento\Framework\Model\AbstractModel $object
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeSave(
-        \Magento\Store\Model\Resource\Group $subject,
+        \Magento\Store\Model\ResourceModel\Group $subject,
         \Magento\Framework\Model\AbstractModel $object
     ) {
         if (!$object->getId() || $object->dataHasChangedFor('website_id')) {

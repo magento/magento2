@@ -72,13 +72,7 @@ class GuestCartManagementTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->cartRepositoryMock = $this->getMock(
-            'Magento\Quote\Api\CartRepositoryInterface',
-            ['get', 'getList'],
-            [],
-            '',
-            false
-        );
+        $this->cartRepositoryMock = $this->getMock('Magento\Quote\Api\CartRepositoryInterface');
 
         $this->quoteMock = $this->getMockForAbstractClass(
             'Magento\Quote\Api\Data\CartInterface',
@@ -104,7 +98,6 @@ class GuestCartManagementTest extends \PHPUnit_Framework_TestCase
     {
         $maskedCartId = 'masked1cart2id3';
         $cartId = 1;
-
         $this->quoteIdMaskMock->expects($this->once())->method('setQuoteId')->with($cartId)->willReturnSelf();
         $this->quoteIdMaskMock->expects($this->once())->method('save')->willReturnSelf();
         $this->quoteIdMaskMock->expects($this->once())->method('getMaskedId')->willreturn($maskedCartId);

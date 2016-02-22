@@ -85,7 +85,6 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
 
         $this->address = $this->getMockBuilder('\Magento\Quote\Model\Quote\Address')
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'getQuote', 'getShippingDiscountAmount', 'getBaseShippingDiscountAmount'])
             ->getMock();
 
         $this->address->expects($this->any())
@@ -127,8 +126,23 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
         $shippingTaxClass,
         $shippingPriceInclTax
     ) {
+        $shippingAssignmentMock = $this->getMock('Magento\Quote\Api\Data\ShippingAssignmentInterface');
+        $methods = [
+            'getShippingDiscountAmount',
+            'getShippingTaxCalculationAmount',
+            'setShippingTaxCalculationAmount',
+            'getShippingAmount',
+            'setBaseShippingTaxCalculationAmount',
+            'getBaseShippingAmount',
+            'getBaseShippingDiscountAmount'
+        ];
+        $totalsMock = $this->getMock('Magento\Quote\Model\Quote\Address\Total', $methods, [], '', false);
+        $shippingMock = $this->getMock('Magento\Quote\Api\Data\ShippingInterface');
+        $shippingAssignmentMock->expects($this->once())->method('getShipping')->willReturn($shippingMock);
+        $shippingMock->expects($this->once())->method('getAddress')->willReturn($this->address);
         $baseShippingAmount = $addressData['base_shipping_amount'];
         $shippingAmount = $addressData['shipping_amount'];
+        $totalsMock->expects($this->any())->method('getShippingTaxCalculationAmount')->willReturn($shippingAmount);
         $this->taxConfig->expects($this->any())
             ->method('getShippingTaxClass')
             ->with($this->store)
@@ -137,27 +151,28 @@ class CommonTaxCollectorTest extends \PHPUnit_Framework_TestCase
             ->method('shippingPriceIncludesTax')
             ->with($this->store)
             ->will($this->returnValue($shippingPriceInclTax));
-        $this->address
+        $totalsMock
              ->expects($this->atLeastOnce())
              ->method('getShippingDiscountAmount')
              ->willReturn($shippingAmount);
         if ($shippingAmount) {
             if ($useBaseCurrency && $shippingAmount != 0) {
-                $this->address
+                $totalsMock
                     ->expects($this->once())
                     ->method('getBaseShippingDiscountAmount')
                     ->willReturn($baseShippingAmount);
                 $expectedDiscountAmount = $baseShippingAmount;
             } else {
-                $this->address->expects($this->never())->method('getBaseShippingDiscountAmount');
+                $totalsMock->expects($this->never())->method('getBaseShippingDiscountAmount');
                 $expectedDiscountAmount = $shippingAmount;
             }
         }
         foreach ($addressData as $key => $value) {
-            $this->address->setData($key, $value);
+            $totalsMock->setData($key, $value);
         }
         $this->assertEquals($this->quoteDetailsItemDataObject,
-            $this->commonTaxCollector->getShippingDataObject($this->address, $useBaseCurrency));
+            $this->commonTaxCollector->getShippingDataObject($shippingAssignmentMock, $totalsMock, $useBaseCurrency));
+
         if ($shippingAmount) {
             $this->assertEquals($expectedDiscountAmount, $this->quoteDetailsItemDataObject->getDiscountAmount());
         }

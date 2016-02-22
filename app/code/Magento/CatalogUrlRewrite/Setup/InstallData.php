@@ -50,7 +50,7 @@ class InstallData implements InstallDataInterface
                 'input' => 'text',
                 'required' => false,
                 'sort_order' => 3,
-                'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE,
+                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
                 'group' => 'General Information',
             ]
         );
@@ -62,7 +62,7 @@ class InstallData implements InstallDataInterface
                 'type' => 'varchar',
                 'required' => false,
                 'sort_order' => 17,
-                'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE,
+                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
                 'visible' => false,
                 'group' => 'General Information',
             ]
@@ -77,7 +77,7 @@ class InstallData implements InstallDataInterface
                 'input' => 'text',
                 'required' => false,
                 'sort_order' => 10,
-                'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE,
+                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
                 'used_in_product_listing' => true,
                 'group' => 'Search Engine Optimization',
                 'is_used_in_grid' => true,
@@ -93,7 +93,7 @@ class InstallData implements InstallDataInterface
                 'type' => 'varchar',
                 'required' => false,
                 'sort_order' => 11,
-                'global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE,
+                'global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
                 'visible' => false,
             ]
         );

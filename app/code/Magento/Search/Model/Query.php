@@ -5,22 +5,23 @@
  */
 namespace Magento\Search\Model;
 
-use Magento\Search\Model\Resource\Query\Collection as QueryCollection;
-use Magento\Search\Model\Resource\Query\CollectionFactory as QueryCollectionFactory;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Search\Model\ResourceModel\Query\Collection as QueryCollection;
+use Magento\Search\Model\ResourceModel\Query\CollectionFactory as QueryCollectionFactory;
 use Magento\Search\Model\SearchCollectionInterface as Collection;
 use Magento\Search\Model\SearchCollectionFactory as CollectionFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\Resource\AbstractResource;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Search query model
  *
- * @method Resource\Query _getResource()
- * @method Resource\Query getResource()
+ * @method \Magento\Search\Model\ResourceModel\Query _getResource()
+ * @method \Magento\Search\Model\ResourceModel\Query getResource()
  * @method \Magento\Search\Model\Query setQueryText(string $value)
  * @method int getNumResults()
  * @method \Magento\Search\Model\Query setNumResults(int $value)
@@ -101,7 +102,7 @@ class Query extends AbstractModel implements QueryInterface
      * @param CollectionFactory $searchCollectionFactory
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param DbCollection $resourceCollection
      * @param array $data
      */
@@ -130,7 +131,7 @@ class Query extends AbstractModel implements QueryInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Search\Model\Resource\Query');
+        $this->_init('Magento\Search\Model\ResourceModel\Query');
     }
 
     /**
@@ -171,6 +172,12 @@ class Query extends AbstractModel implements QueryInterface
     public function loadByQuery($text)
     {
         $this->_getResource()->loadByQuery($this, $text);
+
+        $synonymFor = $this->getSynonymFor();
+        if (!empty($synonymFor)) {
+            $this->setQueryText($synonymFor);
+        }
+
         $this->_afterLoad();
         $this->setOrigData();
         return $this;
@@ -227,6 +234,36 @@ class Query extends AbstractModel implements QueryInterface
             $this->save();
             $this->setIsActive(1);
         }
+
+        return $this;
+    }
+
+    /**
+     * Save query with incremental popularity
+     *
+     * @return $this
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function saveIncrementalPopularity()
+    {
+        $this->getResource()->saveIncrementalPopularity($this);
+
+        return $this;
+    }
+
+    /**
+     * Save query with number of results
+     *
+     * @param int $numResults
+     * @return $this
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    public function saveNumResults($numResults)
+    {
+        $this->setNumResults($numResults);
+        $this->getResource()->saveNumResults($this);
 
         return $this;
     }

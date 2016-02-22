@@ -11,7 +11,7 @@
              type="eav"
              entity_type="catalog_product"
              product_type="downloadable"
-             collection="Magento\Catalog\Model\Resource\Product\Collection"
+             collection="Magento\Catalog\Model\ResourceModel\Product\Collection"
              identifier="sku"
              repository_class="Magento\Downloadable\Test\Repository\DownloadableProduct"
              handler_interface="Magento\Downloadable\Test\Handler\DownloadableProduct\DownloadableProductInterface"
@@ -31,10 +31,9 @@
         <field name="custom_design_from" is_required="0" />
         <field name="custom_design_to" is_required="0" />
         <field name="custom_layout_update" is_required="0" />
-        <field name="description" is_required="0" group="product-details" />
+        <field name="description" is_required="0" group="content" />
         <field name="gallery" is_required="0" />
         <field name="gift_message_available" is_required="0" />
-        <field name="group_price" is_required="0" group="advanced-pricing" repository="Magento\Catalog\Test\Repository\Product\GroupPriceOptions" />
         <field name="has_options" is_required="0" />
         <field name="image" is_required="0" />
         <field name="image_label" is_required="0" />
@@ -62,7 +61,7 @@
         <field name="related_tgtr_position_limit" is_required="0" />
         <field name="required_options" is_required="0" />
         <field name="samples_title" is_required="1" />
-        <field name="short_description" is_required="0" group="autosettings" />
+        <field name="short_description" is_required="0" group="content" />
         <field name="downloadable" is_required="0" group="downloadable_information" />
         <field name="downloadable_links" is_required="0" group="downloadable_information" repository="Magento\Downloadable\Test\Repository\DownloadableProduct\Links" />
         <field name="downloadable_sample" is_required="0" group="downloadable_information" repository="Magento\Downloadable\Test\Repository\DownloadableProduct\Samples" />
@@ -86,11 +85,10 @@
         <field name="weight" is_required="0" group="product-details" />
         <field name="custom_options" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\Product\CustomOptions" repository="Magento\Catalog\Test\Repository\Product\CustomOptions" />
         <field name="id" />
-        <field name="is_virtual" group="product-details" />
         <field name="website_ids" group="websites" />
         <field name="checkout_data" group="null" repository="Magento\Downloadable\Test\Repository\DownloadableProduct\CheckoutData" />
-        <field name="cross_sell_products" group="crosssells" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
-        <field name="up_sell_products" group="upsells" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
-        <field name="related_products" group="related-products" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
+        <field name="cross_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
+        <field name="up_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
+        <field name="related_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
     </fixture>
 </config>

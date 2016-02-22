@@ -19,18 +19,27 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
     protected $resultPageFactory;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
+     * Edit constructor.
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
+        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -46,9 +55,22 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
         $parentId = (int)$this->getRequest()->getParam('parent');
         $categoryId = (int)$this->getRequest()->getParam('id');
 
-        if ($storeId && !$categoryId && !$parentId) {
-            $store = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface')->getStore($storeId);
-            $this->getRequest()->setParam('id', (int)$store->getRootCategoryId());
+        if (!$categoryId && !$parentId) {
+            if ($storeId) {
+                $categoryId = (int)$this->storeManager->getStore($storeId)->getRootCategoryId();
+            } else {
+                $defaultStoreView = $this->storeManager->getDefaultStoreView();
+                if ($defaultStoreView) {
+                    $categoryId = (int)$defaultStoreView->getRootCategoryId();
+                } else {
+                    $stores = $this->storeManager->getStores();
+                    if (count($stores)) {
+                        $store = reset($stores);
+                        $categoryId = (int)$store->getRootCategoryId();
+                    }
+                }
+            }
+            $this->getRequest()->setParam('id', $categoryId);
         }
 
         $category = $this->_initCategory(true);
@@ -93,8 +115,8 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
                 }
             }
 
-            $eventResponse = new \Magento\Framework\Object([
-                'content' => $resultPage->getLayout()->getBlock('category.edit')->getFormHtml()
+            $eventResponse = new \Magento\Framework\DataObject([
+                'content' => $resultPage->getLayout()->getUiComponent('category_form')->getFormHtml()
                     . $resultPage->getLayout()->getBlock('category.tree')
                         ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs'),
                 'messages' => $resultPage->getLayout()->getMessagesBlock()->getGroupedHtml(),

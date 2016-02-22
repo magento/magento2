@@ -5,6 +5,9 @@
  */
 namespace Magento\Email\Model\Template;
 
+use Magento\Framework\View\Asset\ContentProcessorException;
+use Magento\Framework\View\Asset\ContentProcessorInterface;
+
 /**
  * Core Email Template Filter Model
  *
@@ -64,7 +67,7 @@ class Filter extends \Magento\Framework\Filter\Template
      *
      * @var int
      */
-    protected $_storeId = null;
+    protected $_storeId;
 
     /**
      * @var array
@@ -89,7 +92,7 @@ class Filter extends \Magento\Framework\Filter\Template
     /**
      * @var \Magento\Framework\Escaper
      */
-    protected $_escaper = null;
+    protected $_escaper;
 
     /**
      * Core store config
@@ -146,7 +149,12 @@ class Filter extends \Magento\Framework\Filter\Template
     protected $emogrifier;
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @var \Magento\Email\Model\Source\Variables
+     */
+    protected $configVariables;
+
+    /**
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
@@ -158,12 +166,13 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\UrlInterface $urlModel
      * @param \Pelago\Emogrifier $emogrifier
+     * @param \Magento\Email\Model\Source\Variables $configVariables
      * @param array $variables
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Escaper $escaper,
         \Magento\Framework\View\Asset\Repository $assetRepo,
@@ -175,6 +184,7 @@ class Filter extends \Magento\Framework\Filter\Template
         \Magento\Framework\App\State $appState,
         \Magento\Framework\UrlInterface $urlModel,
         \Pelago\Emogrifier $emogrifier,
+        \Magento\Email\Model\Source\Variables $configVariables,
         $variables = []
     ) {
         $this->_escaper = $escaper;
@@ -189,6 +199,7 @@ class Filter extends \Magento\Framework\Filter\Template
         $this->_appState = $appState;
         $this->urlModel = $urlModel;
         $this->emogrifier = $emogrifier;
+        $this->configVariables = $configVariables;
         parent::__construct($string, $variables);
     }
 
@@ -206,7 +217,6 @@ class Filter extends \Magento\Framework\Filter\Template
 
     /**
      * Setter whether SID is allowed in store directive
-     * Doesn't set anything intentionally, since SID is not allowed in any kind of emails
      *
      * @param bool $flag
      * @return $this
@@ -225,7 +235,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function setPlainTemplateMode($plainTemplateMode)
     {
-        $this->plainTemplateMode = (bool) $plainTemplateMode;
+        $this->plainTemplateMode = (bool)$plainTemplateMode;
         return $this;
     }
 
@@ -247,7 +257,7 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function setIsChildTemplate($isChildTemplate)
     {
-        $this->isChildTemplate = (bool) $isChildTemplate;
+        $this->isChildTemplate = (bool)$isChildTemplate;
         return $this;
     }
 
@@ -703,7 +713,7 @@ class Filter extends \Magento\Framework\Filter\Template
         $configValue = '';
         $params = $this->getParameters($construction[2]);
         $storeId = $this->getStoreId();
-        if (isset($params['path'])) {
+        if (isset($params['path']) && $this->isAvailableConfigVariable($params['path'])) {
             $configValue = $this->_scopeConfig->getValue(
                 $params['path'],
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
@@ -711,6 +721,20 @@ class Filter extends \Magento\Framework\Filter\Template
             );
         }
         return $configValue;
+    }
+
+    /**
+     * Check if given variable is available for directive "Config"
+     *
+     * @param string $variable
+     * @return bool
+     */
+    private function isAvailableConfigVariable($variable)
+    {
+        return in_array(
+            $variable,
+            array_column($this->configVariables->getData(), 'value')
+        );
     }
 
     /**
@@ -753,6 +777,10 @@ class Filter extends \Magento\Framework\Filter\Template
      */
     public function cssDirective($construction)
     {
+        if ($this->isPlainTemplateMode()) {
+            return '';
+        }
+
         $params = $this->getParameters($construction[2]);
         $file = isset($params['file']) ? $params['file'] : null;
         if (!$file) {
@@ -762,8 +790,8 @@ class Filter extends \Magento\Framework\Filter\Template
 
         $css = $this->getCssFilesContent([$params['file']]);
 
-        if (strpos($css, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX) !== false) {
-            // Return LESS compilation error wrapped in CSS comment
+        if (strpos($css, ContentProcessorInterface::ERROR_MESSAGE_PREFIX) !== false) {
+            // Return compilation error wrapped in CSS comment
             return '/*' . PHP_EOL . $css . PHP_EOL . '*/';
         } elseif (!empty($css)) {
             return $css;
@@ -858,10 +886,15 @@ class Filter extends \Magento\Framework\Filter\Template
             );
         }
         $css = '';
-        foreach ($files as $file) {
-            $asset = $this->_assetRepo->createAsset($file, $designParams);
-            $css .= $asset->getContent();
+        try {
+            foreach ($files as $file) {
+                $asset = $this->_assetRepo->createAsset($file, $designParams);
+                $css .= $asset->getContent();
+            }
+        } catch (ContentProcessorException $exception) {
+            $css = $exception->getMessage();
         }
+
         return $css;
     }
 
@@ -882,12 +915,12 @@ class Filter extends \Magento\Framework\Filter\Template
         // Only run Emogrify if HTML and CSS contain content
         if ($html && $cssToInline) {
             try {
-                // Don't try to compile CSS that has LESS compilation errors
-                if (strpos($cssToInline, \Magento\Framework\Css\PreProcessor\Adapter\Oyejorge::ERROR_MESSAGE_PREFIX)
+                // Don't try to compile CSS that has compilation errors
+                if (strpos($cssToInline, ContentProcessorInterface::ERROR_MESSAGE_PREFIX)
                     !== false
                 ) {
                     throw new \Magento\Framework\Exception\MailException(
-                        __('<pre>' . PHP_EOL . $cssToInline . PHP_EOL . '</pre>')
+                        __('<pre> %1 </pre>', PHP_EOL . $cssToInline . PHP_EOL)
                     );
                 }
 

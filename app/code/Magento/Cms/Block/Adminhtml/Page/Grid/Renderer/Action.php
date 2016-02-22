@@ -29,10 +29,10 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstract
     /**
      * Render action
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         $href = $this->actionUrlBuilder->getUrl(
             $row->getIdentifier(),

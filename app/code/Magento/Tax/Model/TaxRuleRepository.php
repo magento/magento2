@@ -7,7 +7,6 @@
 namespace Magento\Tax\Model;
 
 use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -18,9 +17,9 @@ use Magento\Tax\Api\TaxRuleRepositoryInterface;
 use Magento\Tax\Api\Data\TaxRuleSearchResultsInterfaceFactory;
 use Magento\Tax\Model\Calculation\RuleFactory;
 use Magento\Tax\Model\Calculation\TaxRuleRegistry;
-use Magento\Tax\Model\Resource\Calculation\Rule as Resource;
-use Magento\Tax\Model\Resource\Calculation\Rule\Collection;
-use Magento\Tax\Model\Resource\Calculation\Rule\CollectionFactory;
+use Magento\Tax\Model\ResourceModel\Calculation\Rule as ResourceRule;
+use Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection;
+use Magento\Tax\Model\ResourceModel\Calculation\Rule\CollectionFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -48,7 +47,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
     protected $collectionFactory;
 
     /**
-     * @var Resource
+     * @var ResourceRule
      */
     protected $resource;
 
@@ -62,7 +61,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
      * @param TaxRuleSearchResultsInterfaceFactory $searchResultsFactory
      * @param RuleFactory $ruleFactory
      * @param CollectionFactory $collectionFactory
-     * @param Resource $resource
+     * @param ResourceRule $resource
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      */
     public function __construct(
@@ -70,7 +69,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
         TaxRuleSearchResultsInterfaceFactory $searchResultsFactory,
         RuleFactory $ruleFactory,
         CollectionFactory $collectionFactory,
-        Resource $resource,
+        ResourceRule $resource,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
     ) {
         $this->taxRuleRegistry = $taxRuleRegistry;
@@ -163,7 +162,7 @@ class TaxRuleRepository implements TaxRuleRepositoryInterface
             foreach ($sortOrders as $sortOrder) {
                 $collection->addOrder(
                     $this->translateField($sortOrder->getField()),
-                    ($sortOrder->getDirection() == SearchCriteria::SORT_ASC) ? 'ASC' : 'DESC'
+                    ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
                 );
             }
         }

@@ -6,24 +6,27 @@ define([
     'underscore',
     'uiRegistry',
     'mageUtils',
-    'uiComponent'
-], function (_, registry, utils, Component) {
+    'uiElement'
+], function (_, registry, utils, Element) {
     'use strict';
 
-    return Component.extend({
+    return Element.extend({
         defaults: {
             headerTmpl: 'ui/grid/columns/text',
             bodyTmpl: 'ui/grid/cells/text',
+            disableAction: false,
+            controlVisibility: true,
             sortable: true,
             sorting: false,
             visible: true,
             draggable: true,
+            fieldClass: {},
             ignoreTmpls: {
                 fieldAction: true
             },
-            links: {
-                visible: '${ $.storageConfig.path }.visible',
-                sorting: '${ $.storageConfig.path }.sorting'
+            statefull: {
+                visible: true,
+                sorting: true
             },
             imports: {
                 exportSorting: 'sorting'
@@ -37,13 +40,45 @@ define([
         },
 
         /**
+         * Initializes column component.
+         *
+         * @returns {Column} Chainable.
+         */
+        initialize: function () {
+            this._super()
+                .initFieldClass();
+
+            return this;
+        },
+
+        /**
          * Initializes observable properties.
          *
          * @returns {Column} Chainable.
          */
         initObservable: function () {
             this._super()
-                .observe('visible dragging dragover sorting');
+                .track([
+                    'visible',
+                    'sorting',
+                    'disableAction'
+                ])
+                .observe([
+                    'dragging'
+                ]);
+
+            return this;
+        },
+
+        /**
+         * Extends list of field classes.
+         *
+         * @returns {Column} Chainable.
+         */
+        initFieldClass: function () {
+            _.extend(this.fieldClass, {
+                _dragging: this.dragging
+            });
 
             return this;
         },
@@ -53,7 +88,7 @@ define([
          *
          * @param {String} state - Defines what state should be used: saved or default.
          * @param {String} [property] - Defines what columns' property should be applied.
-         *      If not specfied, then all columns stored properties will be used.
+         *      If not specified, then all columns stored properties will be used.
          * @returns {Column} Chainable.
          */
         applyState: function (state, property) {
@@ -63,7 +98,7 @@ define([
                 namespace += '.' + property;
             }
 
-            this.storage('applyState', state, namespace);
+            this.storage('applyStateOf', state, namespace);
 
             return this;
         },
@@ -77,47 +112,78 @@ define([
          * @returns {Column} Chainable.
          */
         sort: function (enable) {
-            var direction = false;
-
             if (!this.sortable) {
                 return this;
             }
 
-            if (enable !== false) {
-                direction = this.toggleDirection();
-            }
-
-            this.sorting(direction);
+            enable !== false ?
+                this.toggleSorting() :
+                this.sorting = false;
 
             return this;
         },
 
         /**
-         * Exports sorting data to the dataProvider if
-         * sorting of a column is enabled.
+         * Sets descending columns' sorting.
          *
-         * @param {(String|Boolean)} sorting - Columns' sorting state.
+         * @returns {Column} Chainable.
          */
-        exportSorting: function (sorting) {
-            if (!sorting) {
-                return;
+        sortDescending: function () {
+            if (this.sortable) {
+                this.sorting = 'desc';
             }
 
-            this.source('set', 'params.sorting', {
-                field: this.index,
-                direction: sorting
-            });
+            return this;
+        },
+
+        /**
+         * Sets ascending columns' sorting.
+         *
+         * @returns {Column} Chainable.
+         */
+        sortAscending: function () {
+            if (this.sortable) {
+                this.sorting = 'asc';
+            }
+
+            return this;
         },
 
         /**
          * Toggles sorting direction.
          *
-         * @returns {String} New direction.
+         * @returns {Column} Chainable.
          */
-        toggleDirection: function () {
-            return this.sorting() === 'asc' ?
-                'desc' :
-                'asc';
+        toggleSorting: function () {
+            this.sorting === 'asc' ?
+                this.sortDescending() :
+                this.sortAscending();
+
+            return this;
+        },
+
+        /**
+         * Checks if column is sorted.
+         *
+         * @returns {Boolean}
+         */
+        isSorted: function () {
+            return !!this.sorting;
+        },
+
+        /**
+         * Exports sorting data to the dataProvider if
+         * sorting of a column is enabled.
+         */
+        exportSorting: function () {
+            if (!this.sorting) {
+                return;
+            }
+
+            this.source('set', 'params.sorting', {
+                field: this.index,
+                direction: this.sorting
+            });
         },
 
         /**
@@ -127,11 +193,12 @@ define([
          * @returns {Boolean}
          */
         hasFieldAction: function () {
-            return !!this.fieldAction;
+            return !!this.fieldAction || !!this.fieldActions;
         },
 
         /**
-         * Applies action described in a 'fieldAction' property.
+         * Applies action described in a 'fieldAction' property
+         * or actions described in 'fieldActions' property.
          *
          * @param {Number} rowIndex - Index of a row which initiates action.
          * @returns {Column} Chainable.
@@ -147,13 +214,30 @@ define([
          *      }
          */
         applyFieldAction: function (rowIndex) {
-            var action = this.fieldAction,
-                callback;
-
-            if (!this.hasFieldAction()) {
+            if (!this.hasFieldAction() || this.disableAction) {
                 return this;
             }
 
+            if (this.fieldActions) {
+                this.fieldActions.forEach(this.applySingleAction.bind(this, rowIndex), this);
+            } else {
+                this.applySingleAction(rowIndex);
+            }
+
+            return this;
+        },
+
+        /**
+         * Applies single action
+         *
+         * @param {Number} rowIndex - Index of a row which initiates action.
+         * @param {Object} action - Action (fieldAction) to be applied
+         *
+         */
+        applySingleAction: function (rowIndex, action) {
+            var callback;
+
+            action = action || this.fieldAction;
             action = utils.template(action, {
                 column: this,
                 rowIndex: rowIndex
@@ -164,8 +248,18 @@ define([
             if (_.isFunction(callback)) {
                 callback();
             }
+        },
 
-            return this;
+        /**
+         * Returns field action handler if it was specified.
+         *
+         * @param {Object} record - Record object with which action is associated.
+         * @returns {Function|Undefined}
+         */
+        getFieldHandler: function (record) {
+            if (this.hasFieldAction()) {
+                return this.applyFieldAction.bind(this, record._rowIndex);
+            }
         },
 
         /**
@@ -173,7 +267,7 @@ define([
          *
          * @param {Object} action - Actions' object.
          * @returns {Function|Boolean} Callback function or false
-         *      value if it was imposible create a callback.
+         *      value if it was impossible create a callback.
          */
         _getFieldCallback: function (action) {
             var args     = action.params || [],
@@ -197,11 +291,20 @@ define([
         /**
          * Ment to preprocess data associated with a current columns' field.
          *
-         * @param {*} data - Data to be preprocessed.
+         * @param {Object} record - Data to be preprocessed.
          * @returns {String}
          */
-        getLabel: function (data) {
-            return data;
+        getLabel: function (record) {
+            return record[this.index];
+        },
+
+        /**
+         * Returns list of classes that should be applied to a field.
+         *
+         * @returns {Object}
+         */
+        getFieldClass: function () {
+            return this.fieldClass;
         },
 
         /**

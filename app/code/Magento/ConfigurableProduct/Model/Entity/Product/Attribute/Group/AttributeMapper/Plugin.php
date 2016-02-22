@@ -7,13 +7,13 @@
  */
 namespace Magento\ConfigurableProduct\Model\Entity\Product\Attribute\Group\AttributeMapper;
 
-use Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\AttributeFactory;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\AttributeFactory;
 use Magento\Framework\Registry;
 
 class Plugin
 {
     /**
-     * @var \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\AttributeFactory
+     * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\AttributeFactory
      */
     protected $attributeFactory;
 

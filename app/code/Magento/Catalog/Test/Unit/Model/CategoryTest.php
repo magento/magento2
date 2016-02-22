@@ -34,7 +34,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
-    /** @var \Magento\Catalog\Model\Resource\Category\Tree|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Category\Tree|\PHPUnit_Framework_MockObject_MockObject */
     protected $categoryTreeResource;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
@@ -61,10 +61,10 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Model\Indexer\Category\Flat\State|\PHPUnit_Framework_MockObject_MockObject */
     protected $flatState;
 
-    /** @var \Magento\Indexer\Model\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $flatIndexer;
 
-    /** @var \Magento\Indexer\Model\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Indexer\IndexerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $productIndexer;
 
     /** @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject */
@@ -73,10 +73,10 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\UrlRewrite\Model\UrlFinderInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $urlFinder;
 
-    /** @var \Magento\Framework\Model\Resource\AbstractResource|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject */
     protected $resource;
 
-    /** @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject */
     protected $indexerRegistry;
 
     /**
@@ -108,16 +108,16 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
         $this->registry = $this->getMock('Magento\Framework\Registry');
         $this->storeManager = $this->getMock('Magento\Store\Model\StoreManagerInterface');
-        $this->categoryTreeResource = $this->getMock('Magento\Catalog\Model\Resource\Category\Tree', [], [], '', false);
+        $this->categoryTreeResource = $this->getMock('Magento\Catalog\Model\ResourceModel\Category\Tree', [], [], '', false);
         $this->categoryTreeFactory = $this->getMock(
-            'Magento\Catalog\Model\Resource\Category\TreeFactory',
+            'Magento\Catalog\Model\ResourceModel\Category\TreeFactory',
             ['create'],
             [],
             '',
             false);
         $this->categoryRepository = $this->getMock('Magento\Catalog\Api\CategoryRepositoryInterface');
         $this->storeCollectionFactory = $this->getMock(
-            'Magento\Store\Model\Resource\Store\CollectionFactory',
+            'Magento\Store\Model\ResourceModel\Store\CollectionFactory',
             ['create'],
             [],
             '',
@@ -125,7 +125,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->url = $this->getMock('Magento\Framework\UrlInterface');
         $this->productCollectionFactory = $this->getMock(
-            'Magento\Catalog\Model\Resource\Product\CollectionFactory',
+            'Magento\Catalog\Model\ResourceModel\Product\CollectionFactory',
             ['create'],
             [],
             '',
@@ -140,8 +140,8 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->flatState = $this->getMock('Magento\Catalog\Model\Indexer\Category\Flat\State', [], [], '', false);
-        $this->flatIndexer = $this->getMock('Magento\Indexer\Model\IndexerInterface');
-        $this->productIndexer = $this->getMock('Magento\Indexer\Model\IndexerInterface');
+        $this->flatIndexer = $this->getMock('Magento\Framework\Indexer\IndexerInterface');
+        $this->productIndexer = $this->getMock('Magento\Framework\Indexer\IndexerInterface');
         $this->categoryUrlPathGenerator = $this->getMock(
             'Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator',
             [],
@@ -151,13 +151,13 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->urlFinder = $this->getMock('Magento\UrlRewrite\Model\UrlFinderInterface');
         $this->resource = $this->getMock(
-            'Magento\Catalog\Model\Resource\Category',
+            'Magento\Catalog\Model\ResourceModel\Category',
             [],
             [],
             '',
             false
         );
-        $this->indexerRegistry = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+        $this->indexerRegistry = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', ['get'], [], '', false);
 
         $this->metadataServiceMock = $this->getMock('\Magento\Catalog\Api\CategoryAttributeRepositoryInterface');
         $this->attributeValueFactory = $this->getMockBuilder('Magento\Framework\Api\AttributeValueFactory')
@@ -380,21 +380,37 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     public function reindexFlatDisabledTestDataProvider()
     {
         return [
-            'set 1' => [false, 1],
-            'set 2' => [true, 0],
+            [false, null, null, null, 0],
+            [true, null, null, null, 0],
+            [false, [], null, null, 0],
+            [false, ["1", "2"], null, null, 1],
+            [false, null, 1, null, 1],
+            [false, ["1", "2"], 0, 1, 1],
+            [false, null, 1, 1, 0],
         ];
     }
 
     /**
-     * @param $productScheduled
-     * @param $expectedProductReindexCall
+     * @param bool $productScheduled
+     * @param array $affectedIds
+     * @param int|string $isAnchorOrig
+     * @param int|string $isAnchor
+     * @param int $expectedProductReindexCall
      *
      * @dataProvider reindexFlatDisabledTestDataProvider
      */
-    public function testReindexFlatDisabled($productScheduled, $expectedProductReindexCall)
-    {
-        $affectedProductIds = ["1", "2"];
-        $this->category->setAffectedProductIds($affectedProductIds);
+    public function testReindexFlatDisabled(
+        $productScheduled,
+        $affectedIds,
+        $isAnchorOrig,
+        $isAnchor,
+        $expectedProductReindexCall
+    ) {
+        $this->category->setAffectedProductIds($affectedIds);
+        $this->category->setData('is_anchor', $isAnchor);
+        $this->category->setOrigData('is_anchor', $isAnchorOrig);
+        $this->category->setAffectedProductIds($affectedIds);
+
         $pathIds = ['path/1/2', 'path/2/3'];
         $this->category->setData('path_ids', $pathIds);
         $this->category->setId('123');
@@ -403,8 +419,12 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->method('isFlatEnabled')
             ->will($this->returnValue(false));
 
-        $this->productIndexer->expects($this->exactly(1))->method('isScheduled')->will($this->returnValue($productScheduled));
-        $this->productIndexer->expects($this->exactly($expectedProductReindexCall))->method('reindexList')->with($pathIds);
+        $this->productIndexer->expects($this->exactly(1))
+            ->method('isScheduled')
+            ->willReturn($productScheduled);
+        $this->productIndexer->expects($this->exactly($expectedProductReindexCall))
+            ->method('reindexList')
+            ->with($pathIds);
 
         $this->indexerRegistry->expects($this->at(0))
             ->method('get')

@@ -10,17 +10,18 @@
 <script>
 require([
     "jquery",
-    'mage/template',
+    "mage/template",
+    "Magento_Ui/js/modal/alert",
     "jquery/file-uploader",
     "Magento_Theme/js/sortable",
     "mage/translate"
-], function ($, mageTemplate) {
+], function ($, mageTemplate, alert) {
 
     $('#js_files_uploader').fileupload({
         dataType: 'json',
         replaceFileInput: false,
         sequentialUploads: true,
-        url: '<?php echo $block->getJsUploadUrl(); ?>',
+        url: '<?php /* @escapeNotVerified */ echo $block->getJsUploadUrl(); ?>',
 
         /**
          * Add data
@@ -109,7 +110,9 @@ require([
             $(progressSelector).removeClass('upload-progress').addClass('upload-failure');
 
             $(this).val('');
-            alert($.mage.__("We don't recognize this file extension."));
+            alert({
+                content: $.mage.__("We don't recognize this file extension.")
+            });
         }
     });
 

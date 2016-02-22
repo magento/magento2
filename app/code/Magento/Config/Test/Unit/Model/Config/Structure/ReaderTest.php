@@ -89,8 +89,8 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
             ->method('compile')
             ->with(
                 $this->isInstanceOf('\DOMElement'),
-                $this->isInstanceOf('Magento\Framework\Object'),
-                $this->isInstanceOf('Magento\Framework\Object')
+                $this->isInstanceOf('Magento\Framework\DataObject'),
+                $this->isInstanceOf('Magento\Framework\DataObject')
             );
         $this->converterMock->expects($this->once())
             ->method('convert')

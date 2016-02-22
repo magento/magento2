@@ -11,7 +11,7 @@
              type="eav"
              entity_type="catalog_product"
              product_type="bundle"
-             collection="Magento\Catalog\Model\Resource\Product\Collection"
+             collection="Magento\Catalog\Model\ResourceModel\Product\Collection"
              identifier="sku"
              repository_class="Magento\Bundle\Test\Repository\BundleProduct"
              handler_interface="Magento\Bundle\Test\Handler\BundleProduct\BundleProductInterface"
@@ -31,12 +31,11 @@
         <field name="custom_design_from" is_required="0" />
         <field name="custom_design_to" is_required="0" />
         <field name="custom_layout_update" is_required="0" />
-        <field name="description" is_required="0" group="product-details" />
+        <field name="description" is_required="0" group="content" />
         <field name="enable_googlecheckout" is_required="0" />
         <field name="gallery" is_required="0" />
         <field name="gift_message_available" is_required="0" group="autosettings" />
         <field name="use_config_gift_message_available" is_required="0" group="autosettings" />
-        <field name="group_price" is_required="0" group="advanced-pricing" repository="Magento\Catalog\Test\Repository\Product\GroupPriceOptions" />
         <field name="has_options" is_required="0" />
         <field name="image" is_required="0" />
         <field name="image_label" is_required="0" />
@@ -64,7 +63,7 @@
         <field name="use_config_manage_stock" group="advanced-inventory" />
         <field name="manage_stock" group="advanced-inventory" />
         <field name="shipment_type" is_required="1" group="product-details" />
-        <field name="short_description" is_required="0" group="autosettings" />
+        <field name="short_description" is_required="0" group="content" />
         <field name="sku" is_required="1" group="product-details" />
         <field name="sku_type" is_required="1" group="product-details" />
         <field name="weight_type" is_required="1" group="product-details" />
@@ -92,8 +91,8 @@
         <field name="stock_data" group="advanced-inventory" />
         <field name="category_id" group="product-details" />
         <field name="website_ids" group="websites" />
-        <field name="cross_sell_products" group="crosssells" source="Magento\Catalog\Test\Fixture\Product\UpSellProducts" />
-        <field name="up_sell_products" group="upsells" source="Magento\Catalog\Test\Fixture\Product\CrossSellProducts" />
-        <field name="related_products" group="related-products" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
+        <field name="cross_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\UpSellProducts" />
+        <field name="up_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\CrossSellProducts" />
+        <field name="related_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />
     </fixture>
 </config>

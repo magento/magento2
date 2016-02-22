@@ -6,18 +6,19 @@
 namespace Magento\ConfigurableProduct\Model\Attribute;
 
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
+use Magento\Framework\App\ResourceConnection;
 
 class LockValidator implements LockValidatorInterface
 {
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var Resource
      */
     protected $resource;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param ResourceConnection $resource
      */
-    public function __construct(\Magento\Framework\App\Resource $resource)
+    public function __construct(ResourceConnection $resource)
     {
         $this->resource = $resource;
     }
@@ -32,12 +33,12 @@ class LockValidator implements LockValidatorInterface
      */
     public function validate(\Magento\Framework\Model\AbstractModel $object, $attributeSet = null)
     {
-        $adapter = $this->resource->getConnection('read');
+        $connection = $this->resource->getConnection();
         $attrTable = $this->resource->getTableName('catalog_product_super_attribute');
         $productTable = $this->resource->getTableName('catalog_product_entity');
 
         $bind = ['attribute_id' => $object->getAttributeId()];
-        $select = clone $adapter->select();
+        $select = clone $connection->select();
         $select->reset()->from(
             ['main_table' => $attrTable],
             ['psa_count' => 'COUNT(product_super_attribute_id)']
@@ -57,7 +58,7 @@ class LockValidator implements LockValidatorInterface
             $select->where('entity.attribute_set_id = :attribute_set_id');
         }
 
-        if ($adapter->fetchOne($select, $bind)) {
+        if ($connection->fetchOne($select, $bind)) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('This attribute is used in configurable products.')
             );

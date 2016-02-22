@@ -7,7 +7,7 @@
  */
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Button;
 
 class Edit extends Button
@@ -15,10 +15,10 @@ class Edit extends Button
     /**
      * Return 'onclick' action for the button (redirect to the integration edit page).
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    protected function _getOnclickAttribute(Object $row)
+    protected function _getOnclickAttribute(DataObject $row)
     {
         return sprintf("window.location.href='%s'", $this->getUrl('*/*/edit', ['id' => $row->getId()]));
     }
@@ -26,10 +26,10 @@ class Edit extends Button
     /**
      * Get title depending on whether element is disabled or not.
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    protected function _getTitleAttribute(Object $row)
+    protected function _getTitleAttribute(DataObject $row)
     {
         return $this->_isConfigBasedIntegration($row) ? __('View') : __('Edit');
     }
@@ -37,10 +37,10 @@ class Edit extends Button
     /**
      * Get the icon on the grid according to the integration type
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function _getClassAttribute(Object $row)
+    public function _getClassAttribute(DataObject $row)
     {
         $class = $this->_isConfigBasedIntegration($row) ? 'info' : 'edit';
 

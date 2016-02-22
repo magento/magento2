@@ -32,9 +32,14 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $objectManagerMock;
 
     /**
      * @var \Magento\MediaStorage\Helper\File\Storage|\PHPUnit_Framework_MockObject_MockObject
@@ -63,6 +68,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
         $this->responseMock = $this->getMock('Magento\Framework\App\ResponseInterface', [], [], '', false);
         $this->directoryMock = $this->getMock(
@@ -74,12 +80,12 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
         );
         $this->fileSystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $this->storage = $this->getMock('Magento\MediaStorage\Helper\File\Storage', [], [], '', false);
-        $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
 
         $this->contextMock = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $this->contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
-        $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManager);
+        $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
 
         $this->urlDecoderMock = $this->getMock('Magento\Framework\Url\DecoderInterface', [], [], '', false);
         $this->resultRawMock = $this->getMock('Magento\Framework\Controller\Result\Raw', [], [], '', false);
@@ -100,8 +106,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
     public function testExecuteNoParamsShouldThrowException()
     {
         /** @var \Magento\Customer\Controller\Adminhtml\Index\Viewfile $controller */
-        $controller = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject('Magento\Customer\Controller\Adminhtml\Index\Viewfile');
+        $controller = $this->objectManager->getObject('Magento\Customer\Controller\Adminhtml\Index\Viewfile');
         $controller->execute();
     }
 
@@ -122,7 +127,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
 
         $this->storage->expects($this->once())->method('processStorageFile')->with($path)->willReturn(true);
 
-        $this->objectManager->expects($this->any())->method('get')
+        $this->objectManagerMock->expects($this->any())->method('get')
             ->willReturnMap(
                 [
                     ['Magento\Framework\Filesystem', $this->fileSystemMock],
@@ -141,7 +146,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
         )->willReturn($fileResponse);
 
         /** @var \Magento\Customer\Controller\Adminhtml\Index\Viewfile $controller */
-        $controller = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
+        $controller = $this->objectManager->getObject(
             'Magento\Customer\Controller\Adminhtml\Index\Viewfile',
             [
                 'context' => $this->contextMock,
@@ -172,7 +177,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
 
         $this->storage->expects($this->once())->method('processStorageFile')->with($path)->willReturn(true);
 
-        $this->objectManager->expects($this->any())->method('get')
+        $this->objectManagerMock->expects($this->any())->method('get')
             ->willReturnMap(
                 [
                     ['Magento\Framework\Filesystem', $this->fileSystemMock],
@@ -204,7 +209,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
         $this->resultRawFactoryMock->expects($this->once())->method('create')->willReturn($this->resultRawMock);
 
         /** @var \Magento\Customer\Controller\Adminhtml\Index\Viewfile $controller */
-        $controller = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
+        $controller = $this->objectManager->getObject(
             'Magento\Customer\Controller\Adminhtml\Index\Viewfile',
             [
                 'context' => $this->contextMock,

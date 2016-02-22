@@ -31,7 +31,7 @@ class AdvancedSearchEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'MX';
-    const TEST_TYPE = 'acceptance_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     /* end tags */
 
     /**
@@ -78,7 +78,7 @@ class AdvancedSearchEntityTest extends Injectable
         AdvancedSearch $searchPage
     ) {
         $cmsIndex->open();
-        $cmsIndex->getSearchBlock()->clickAdvancedSearchButton();
+        $cmsIndex->getFooterBlock()->openAdvancedSearch();
         $searchForm = $searchPage->getForm();
         $searchForm->fill($productSearch);
         $searchForm->submit();

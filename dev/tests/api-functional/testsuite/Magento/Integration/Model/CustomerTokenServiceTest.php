@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\User\Model\User as UserModel;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
-use Magento\Integration\Model\Resource\Oauth\Token\CollectionFactory;
+use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory;
 
 /**
  * api-functional test for \Magento\Integration\Model\CustomerTokenService.
@@ -56,7 +56,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
             'Magento\Customer\Api\AccountManagementInterface'
         );
         $tokenCollectionFactory = Bootstrap::getObjectManager()->get(
-            'Magento\Integration\Model\Resource\Oauth\Token\CollectionFactory'
+            'Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory'
         );
         $this->tokenCollection = $tokenCollectionFactory->create();
         $this->userModel = Bootstrap::getObjectManager()->get('Magento\User\Model\User');
@@ -82,7 +82,7 @@ class CustomerTokenServiceTest extends WebapiAbstract
 
         $customerData = $this->customerAccountManagement->authenticate($customerUserName, $password);
 
-        /** @var $this->tokenCollection \Magento\Integration\Model\Resource\Oauth\Token\Collection */
+        /** @var $this->tokenCollection \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection */
         $this->tokenCollection->addFilterByCustomerId($customerData->getId());
 
         foreach ($this->tokenCollection->getItems() as $item) {

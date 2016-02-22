@@ -16,7 +16,7 @@
  *  getForm() - html
  */
 ?>
-<form action="<?php echo $block->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
+<form action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
     <?php echo $block->getBlockHtml('formkey')?>
     <div class="accordion">
         <?php echo $block->getChildHtml('form') ?>
@@ -25,7 +25,7 @@
 <script>
 require([
     "jquery",
-    "Magento_Ui/js/lib/registry/registry",
+    "uiRegistry",
     "jquery/jquery.hashchange",
     "mage/mage",
     "prototype",

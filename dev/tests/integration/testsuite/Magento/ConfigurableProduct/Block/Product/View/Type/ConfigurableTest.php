@@ -44,7 +44,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         $attributes = $this->_block->getAllowAttributes();
         $this->assertInstanceOf(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute\Collection',
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection',
             $attributes
         );
         $this->assertGreaterThanOrEqual(1, $attributes->getSize());

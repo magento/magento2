@@ -5,37 +5,27 @@
  */
 -->
 
-<th class="data-grid-multiselect-cell">
-    <div
-        class="action-multiselect-wrap"
-        data-bind="css: { '_active': menuVisible, '_disabled': !totalRecords()},
-                   outerClick: hideMenu">
-        <input
-            id="mass-select-checkbox"
-            class="admin__control-checkbox"
-            type="checkbox"
-            data-bind="checked: allSelected,
-                       event: { change: toggleSelectAll },
-                       css: { '_indeterminate': indetermine },
-                       enable: totalRecords">
-        <label for="mass-select-checkbox"></label>
-        <button
-            class="action-multiselect-toggle"
-            data-toggle="dropdown"
-            data-bind="css: { '_active': menuVisible },
-                       click: toggleMenu,
-                       enable: totalRecords">
-            <span data-bind="text: $t('Options')"></span>
+<th class="data-grid-multicheck-cell">
+    <div class="action-multicheck-wrap" css="_disabled: !totalRecords()" collapsible="">
+        <input class="admin__control-checkbox" type="checkbox"
+            data-bind="
+                checked: allSelected(),
+                attr: {id: ++ko.uid},
+                event: { change: toggleSelectAll },
+                css: { '_indeterminate': indetermine },
+                enable: totalRecords">
+        <label attr="for: ko.uid"/>
+        <button class="action-multicheck-toggle" data-toggle="dropdown"
+            data-bind="css: { '_active': $collapsible.opened },
+                       enable: totalRecords,
+                       toggleCollapsible">
+            <span translate="'Options'"/>
         </button>
-        <ul
-            class="action-menu"
-            data-bind="click: hideMenu">
-            <!-- ko foreach: actions -->
+        <ul class="action-menu" each="actions" closeCollapsible="">
             <li data-bind="click: $parent[value].bind($parent),
                            visible: $parent.isActionRelevant(value)">
-                <span class="action-menu-item" data-bind="text: label"></span>
+                <span class="action-menu-item" text="label"/>
             </li>
-            <!-- /ko -->
         </ul>
     </div>
 </th>

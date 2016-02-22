@@ -10,18 +10,18 @@ class ValidationStateTest extends \PHPUnit_Framework_TestCase
     /**
      * @param string $appMode
      * @param boolean $expectedResult
-     * @dataProvider isValidatedDataProvider
+     * @dataProvider isValidationRequiredDataProvider
      */
-    public function testIsValidated($appMode, $expectedResult)
+    public function testIsValidationRequired($appMode, $expectedResult)
     {
         $model = new \Magento\Framework\App\Arguments\ValidationState($appMode);
-        $this->assertEquals($model->isValidated(), $expectedResult);
+        $this->assertEquals($model->isValidationRequired(), $expectedResult);
     }
 
     /**
      * @return array
      */
-    public function isValidatedDataProvider()
+    public function isValidationRequiredDataProvider()
     {
         return [
             [\Magento\Framework\App\State::MODE_DEVELOPER, true],

@@ -51,7 +51,7 @@ class VaultTest extends \PHPUnit_Framework_TestCase
     protected $helperMock;
 
     /**
-     * @var  \Magento\Directory\Model\Resource\Country\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var  \Magento\Directory\Model\ResourceModel\Country\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $countryFactoryMock;
 
@@ -113,7 +113,7 @@ class VaultTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->salesTransactionCollectionFactoryMock = $this->getMockBuilder(
-            '\Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory'
+            '\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory'
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -126,7 +126,8 @@ class VaultTest extends \PHPUnit_Framework_TestCase
         $this->errorHelperMock = $this->getMockBuilder('\Magento\Braintree\Helper\Error')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->countryFactoryMock = $this->getMockBuilder('\Magento\Directory\Model\Resource\Country\CollectionFactory')
+        $this->countryFactoryMock =
+            $this->getMockBuilder('\Magento\Directory\Model\ResourceModel\Country\CollectionFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
@@ -421,7 +422,7 @@ class VaultTest extends \PHPUnit_Framework_TestCase
             ->method('getCustomerId')
             ->willReturn($params['customerId']);
 
-        $countryCollectionMock = $this->getMockBuilder('\Magento\Directory\Model\Resource\Country\Collection')
+        $countryCollectionMock = $this->getMockBuilder('\Magento\Directory\Model\ResourceModel\Country\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 

@@ -5,6 +5,9 @@
  */
 namespace Magento\Indexer\Model;
 
+use Magento\Framework\Indexer\ConfigInterface;
+use Magento\Framework\Indexer\IndexerInterface;
+
 class Processor
 {
     /**

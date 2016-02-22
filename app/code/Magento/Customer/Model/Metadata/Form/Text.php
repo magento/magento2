@@ -12,7 +12,7 @@ use Magento\Framework\Api\ArrayObjectSearch;
 class Text extends AbstractData
 {
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $_string;
 
@@ -24,7 +24,7 @@ class Text extends AbstractData
      * @param string $value
      * @param string $entityTypeCode
      * @param bool $isAjax
-     * @param \Magento\Framework\Stdlib\String $stringHelper
+     * @param \Magento\Framework\Stdlib\StringUtils $stringHelper
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
@@ -34,7 +34,7 @@ class Text extends AbstractData
         $value,
         $entityTypeCode,
         $isAjax,
-        \Magento\Framework\Stdlib\String $stringHelper
+        \Magento\Framework\Stdlib\StringUtils $stringHelper
     ) {
         parent::__construct($localeDate, $logger, $attribute, $localeResolver, $value, $entityTypeCode, $isAjax);
         $this->_string = $stringHelper;

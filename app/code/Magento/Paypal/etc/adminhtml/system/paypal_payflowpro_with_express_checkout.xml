@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Config/etc/system_include.xsd">
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
     <group id="paypal_payflowpro_with_express_checkout" translate="label comment" extends="payment_all_paypal/paypal_payflowpro">
         <label>Payflow Pro (Includes Express Checkout)</label>
         <attribute type="paypal_ec_separate">0</attribute>
@@ -14,6 +14,8 @@
             <field id="enable_paypal_payflow">
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\Payment</frontend_model>
             </field>
+            <field id="enable_in_context_checkout" showInDefault="0" showInWebsite="0"/>
+            <field id="merchant_id" showInDefault="0" showInWebsite="0"/>
             <group id="paypal_payflow_api_settings" translate="label">
                 <label>Payflow Pro and Express Checkout</label>
                 <field id="business_account" extends="payment_all_paypal/express_checkout/express_checkout_required/express_checkout_required_express_checkout/business_account" translate="label" sortOrder="10">

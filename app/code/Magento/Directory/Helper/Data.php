@@ -9,6 +9,8 @@
  */
 namespace Magento\Directory\Helper;
 
+use Magento\Store\Model\ScopeInterface;
+
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
@@ -35,16 +37,27 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**#@-*/
 
     /**
+     * Path to config value that contains codes of the most used countries.
+     * Such countries can be shown on the top of the country list.
+     */
+    const XML_PATH_TOP_COUNTRIES = 'general/country/destinations';
+
+    /**
+     * Path to config value that contains weight unit
+     */
+    const XML_PATH_WEIGHT_UNIT = 'general/locale/weight_unit';
+
+    /**
      * Country collection
      *
-     * @var \Magento\Directory\Model\Resource\Country\Collection
+     * @var \Magento\Directory\Model\ResourceModel\Country\Collection
      */
     protected $_countryCollection;
 
     /**
      * Region collection
      *
-     * @var \Magento\Directory\Model\Resource\Region\Collection
+     * @var \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     protected $_regionCollection;
 
@@ -75,7 +88,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_configCacheType;
 
     /**
-     * @var \Magento\Directory\Model\Resource\Region\CollectionFactory
+     * @var \Magento\Directory\Model\ResourceModel\Region\CollectionFactory
      */
     protected $_regCollectionFactory;
 
@@ -97,8 +110,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
-     * @param \Magento\Directory\Model\Resource\Country\Collection $countryCollection
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regCollectionFactory,
+     * @param \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection
+     * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regCollectionFactory,
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -106,8 +119,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function __construct(
         \Magento\Framework\App\Helper\Context $context,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
-        \Magento\Directory\Model\Resource\Country\Collection $countryCollection,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regCollectionFactory,
+        \Magento\Directory\Model\ResourceModel\Country\Collection $countryCollection,
+        \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regCollectionFactory,
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory
@@ -124,7 +137,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve region collection
      *
-     * @return \Magento\Directory\Model\Resource\Region\Collection
+     * @return \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     public function getRegionCollection()
     {
@@ -138,12 +151,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Retrieve country collection
      *
-     * @return \Magento\Directory\Model\Resource\Country\Collection
+     * @param null|int|string|\Magento\Store\Model\Store $store
+     * @return \Magento\Directory\Model\ResourceModel\Country\Collection
      */
-    public function getCountryCollection()
+    public function getCountryCollection($store = null)
     {
         if (!$this->_countryCollection->isLoaded()) {
-            $this->_countryCollection->loadByStore();
+            $this->_countryCollection->loadByStore($store);
         }
         return $this->_countryCollection;
     }
@@ -207,7 +221,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $value = trim(
                 $this->scopeConfig->getValue(
                     self::OPTIONAL_ZIP_COUNTRIES_CONFIG_PATH,
-                    \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                    ScopeInterface::SCOPE_STORE
                 )
             );
             $this->_optZipCountries = preg_split('/\,/', $value, 0, PREG_SPLIT_NO_EMPTY);
@@ -241,7 +255,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $value = trim(
             $this->scopeConfig->getValue(
                 self::XML_PATH_STATES_REQUIRED,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE
             )
         );
         $countryList = preg_split('/\,/', $value, 0, PREG_SPLIT_NO_EMPTY);
@@ -260,7 +274,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (bool)$this->scopeConfig->getValue(
             self::XML_PATH_DISPLAY_ALL_STATES,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 
@@ -299,7 +313,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_DEFAULT_COUNTRY,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $store
         );
     }
@@ -334,5 +348,29 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             ];
         }
         return $regions;
+    }
+
+    /**
+     * Retrieve list of codes of the most used countries
+     *
+     * @return array
+     */
+    public function getTopCountryCodes()
+    {
+        $configValue = (string)$this->scopeConfig->getValue(
+            self::XML_PATH_TOP_COUNTRIES,
+            ScopeInterface::SCOPE_STORE
+        );
+        return !empty($configValue) ? explode(',', $configValue) : [];
+    }
+
+    /**
+     * Retrieve weight unit
+     *
+     * @return string
+     */
+    public function getWeightUnit()
+    {
+        return $this->scopeConfig->getValue(self::XML_PATH_WEIGHT_UNIT, ScopeInterface::SCOPE_STORE);
     }
 }

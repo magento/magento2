@@ -22,7 +22,7 @@ class Action extends \Magento\Framework\Model\AbstractModel
      */
     protected $_productWebsiteFactory;
 
-    /** @var \Magento\Indexer\Model\IndexerRegistry */
+    /** @var \Magento\Framework\Indexer\IndexerRegistry */
     protected $indexerRegistry;
 
     /**
@@ -39,10 +39,10 @@ class Action extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param WebsiteFactory $productWebsiteFactory
-     * @param \Magento\Indexer\Model\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -50,10 +50,10 @@ class Action extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\Product\WebsiteFactory $productWebsiteFactory,
-        \Magento\Indexer\Model\IndexerRegistry $indexerRegistry,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Catalog\Model\Indexer\Product\Eav\Processor $productEavIndexerProcessor,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -71,13 +71,13 @@ class Action extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Catalog\Model\Resource\Product\Action');
+        $this->_init('Magento\Catalog\Model\ResourceModel\Product\Action');
     }
 
     /**
      * Retrieve resource instance wrapper
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Action
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Action
      */
     protected function _getResource()
     {
@@ -135,12 +135,12 @@ class Action extends \Magento\Framework\Model\AbstractModel
     /**
      * Check is attribute indexable in EAV
      *
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute|string $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute|string $attribute
      * @return bool
      */
     protected function _attributeIsIndexable($attribute)
     {
-        if (!$attribute instanceof \Magento\Catalog\Model\Resource\Eav\Attribute) {
+        if (!$attribute instanceof \Magento\Catalog\Model\ResourceModel\Eav\Attribute) {
             $attribute = $this->_eavConfig->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $attribute);
         }
 

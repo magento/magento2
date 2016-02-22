@@ -15,7 +15,7 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacken
     /**
      * Set attribute default value if value empty
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      */
     public function beforeSave($object)

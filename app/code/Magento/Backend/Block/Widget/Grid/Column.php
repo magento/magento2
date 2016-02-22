@@ -268,10 +268,10 @@ class Column extends \Magento\Backend\Block\Widget
     /**
      * Retrieve row column field value for display
      *
-     * @param   \Magento\Framework\Object $row
+     * @param   \Magento\Framework\DataObject $row
      * @return  string
      */
-    public function getRowField(\Magento\Framework\Object $row)
+    public function getRowField(\Magento\Framework\DataObject $row)
     {
         $renderedValue = $this->getRenderer()->render($row);
         if ($this->getHtmlDecorators()) {
@@ -296,10 +296,10 @@ class Column extends \Magento\Backend\Block\Widget
     /**
      * Retrieve row column field value for export
      *
-     * @param   \Magento\Framework\Object $row
+     * @param   \Magento\Framework\DataObject $row
      * @return  string
      */
-    public function getRowFieldExport(\Magento\Framework\Object $row)
+    public function getRowFieldExport(\Magento\Framework\DataObject $row)
     {
         $renderedValue = $this->getRenderer()->renderExport($row);
 
@@ -447,7 +447,7 @@ class Column extends \Magento\Backend\Block\Widget
      */
     protected function _getFilterByType()
     {
-        $type = strtolower($this->getType());
+        $type = $this->getFilterType() ? strtolower($this->getFilterType()) : strtolower($this->getType());
         $filterClass = isset($this->_filterTypes[$type]) ? $this->_filterTypes[$type] : $this->_filterTypes['default'];
 
         return $filterClass;

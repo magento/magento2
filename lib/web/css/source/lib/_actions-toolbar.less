@@ -7,7 +7,7 @@
 //  Actions-toolbar
 //  _____________________________________________
 
-.actions-toolbar(
+.lib-actions-toolbar(
     @_actions-toolbar-actions-position: @actions-toolbar-actions__position,
     @_actions-toolbar-actions-reverse: @actions-toolbar-actions__reverse,
     @_actions-toolbar-margin: @actions-toolbar__margin,
@@ -19,36 +19,42 @@
     @_actions-toolbar-primary-actions-links-margin-top: @actions-toolbar-actions-links-primary__margin-top,
     @_actions-toolbar-secondary-actions-links-margin-top: @actions-toolbar-actions-links-secondary__margin-top
 ) {
-    .clearfix();
-    .css(margin, @_actions-toolbar-margin);
-    .css(padding, @_actions-toolbar-padding);
-    ._actions-toolbar-align(@_actions-toolbar-actions-position);
-    ._actions-toolbar-floats(@_actions-toolbar-actions-position, @_actions-toolbar-actions-reverse);
+    .lib-clearfix();
+    .lib-css(margin, @_actions-toolbar-margin);
+    .lib-css(padding, @_actions-toolbar-padding);
+    ._lib-actions-toolbar-align(@_actions-toolbar-actions-position);
+    ._lib-actions-toolbar-floats(@_actions-toolbar-actions-position, @_actions-toolbar-actions-reverse);
     .primary,
     .secondary {
         display: inline-block;
+
         .action {
-            .css(margin, @_actions-toolbar-actions-margin);
+            .lib-css(margin, @_actions-toolbar-actions-margin);
         }
+
         a.action {
             display: inline-block;
-            .css(margin-top, @_actions-toolbar-actions-links-margin-top);
+            .lib-css(margin-top, @_actions-toolbar-actions-links-margin-top);
         }
     }
+
     .primary {
         .action {
-            .css(margin, @_actions-toolbar-primary-actions-margin);
+            .lib-css(margin, @_actions-toolbar-primary-actions-margin);
         }
+
         a.action {
-            .css(margin-top, @_actions-toolbar-primary-actions-links-margin-top);
+            .lib-css(margin-top, @_actions-toolbar-primary-actions-links-margin-top);
         }
     }
+
     .secondary {
         .action {
-            .css(margin, @_actions-toolbar-secondary-actions-margin);
+            .lib-css(margin, @_actions-toolbar-secondary-actions-margin);
         }
+
         a.action {
-            .css(margin-top, @_actions-toolbar-secondary-actions-links-margin-top);
+            .lib-css(margin-top, @_actions-toolbar-secondary-actions-links-margin-top);
         }
     }
 }
@@ -57,7 +63,7 @@
 //  Actions-toolbar-clear-floats
 //  ---------------------------------------------
 
-.actions-toolbar-clear-floats() {
+.lib-actions-toolbar-clear-floats() {
     .primary,
     .secondary {
         display: block;
@@ -69,35 +75,37 @@
 //  Internal use mixins
 //  ---------------------------------------------
 
-._actions-toolbar-align(@_actions-toolbar-actions-position) when not (@_actions-toolbar-actions-position = justify) {
-    .css(text-align, @_actions-toolbar-actions-position);
+._lib-actions-toolbar-align(@_actions-toolbar-actions-position) when not (@_actions-toolbar-actions-position = justify) {
+    .lib-css(text-align, @_actions-toolbar-actions-position);
 }
 
-._actions-toolbar-floats(
+._lib-actions-toolbar-floats(
     @_actions-toolbar-actions-position,
     @_actions-toolbar-actions-reverse
 ) when (@_actions-toolbar-actions-position = justify) and (@_actions-toolbar-actions-reverse = false) {
     .primary {
         float: left;
     }
+
     .secondary {
         float: right;
     }
 }
 
-._actions-toolbar-floats(
+._lib-actions-toolbar-floats(
     @_actions-toolbar-actions-position,
     @_actions-toolbar-actions-reverse
 ) when (@_actions-toolbar-actions-position = justify) and (@_actions-toolbar-actions-reverse = true) {
     .primary {
         float: right;
     }
+
     .secondary {
         float: left;
     }
 }
 
-._actions-toolbar-floats(
+._lib-actions-toolbar-floats(
     @_actions-toolbar-actions-position,
     @_actions-toolbar-actions-reverse
 ) when (@_actions-toolbar-actions-position = left) and (@_actions-toolbar-actions-reverse = false) {
@@ -106,7 +114,7 @@
     }
 }
 
-._actions-toolbar-floats(
+._lib-actions-toolbar-floats(
     @_actions-toolbar-actions-position,
     @_actions-toolbar-actions-reverse
 ) when (@_actions-toolbar-actions-position = left) and (@_actions-toolbar-actions-reverse = true) {
@@ -115,7 +123,7 @@
     }
 }
 
-._actions-toolbar-floats(
+._lib-actions-toolbar-floats(
     @_actions-toolbar-actions-position,
     @_actions-toolbar-actions-reverse
 ) when (@_actions-toolbar-actions-position = right) and (@_actions-toolbar-actions-reverse = false) {
@@ -124,7 +132,7 @@
     }
 }
 
-._actions-toolbar-floats(
+._lib-actions-toolbar-floats(
     @_actions-toolbar-actions-position,
     @_actions-toolbar-actions-reverse
 ) when (@_actions-toolbar-actions-position = right) and (@_actions-toolbar-actions-reverse = true) {
@@ -133,7 +141,7 @@
     }
 }
 
-._actions-toolbar-floats(
+._lib-actions-toolbar-floats(
     @_actions-toolbar-actions-position,
     @_actions-toolbar-actions-reverse
 ) when (@_actions-toolbar-actions-position = center) {

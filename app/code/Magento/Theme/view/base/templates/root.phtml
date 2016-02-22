@@ -8,13 +8,13 @@
 
 ?>
 <!doctype html>
-<html <?php echo $htmlAttributes ?>>
-    <head <?php echo $headAttributes ?>>
-        <?php echo $requireJs ?>
-        <?php echo $headContent ?>
-        <?php echo $headAdditional ?>
+<html <?php /* @escapeNotVerified */ echo $htmlAttributes ?>>
+    <head <?php /* @escapeNotVerified */ echo $headAttributes ?>>
+        <?php /* @escapeNotVerified */ echo $requireJs ?>
+        <?php /* @escapeNotVerified */ echo $headContent ?>
+        <?php /* @escapeNotVerified */ echo $headAdditional ?>
     </head>
-    <body data-container="body" data-mage-init='{"loaderAjax": {}, "loader": { "icon": "<?php echo $loaderIcon; ?>"}}' <?php echo $bodyAttributes ?>>
-        <?php echo $layoutContent ?>
+    <body data-container="body" data-mage-init='{"loaderAjax": {}, "loader": { "icon": "<?php /* @escapeNotVerified */ echo $loaderIcon; ?>"}}' <?php /* @escapeNotVerified */ echo $bodyAttributes ?>>
+        <?php /* @escapeNotVerified */ echo $layoutContent ?>
     </body>
 </html>

@@ -64,8 +64,6 @@ class DateTime
      * @param  string $format
      * @param  int|string $input date in current timezone
      * @return string
-     *
-     * @deprecated (MAGETWO-35555)
      */
     public function gmtDate($format = null, $input = null)
     {

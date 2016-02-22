@@ -5,9 +5,10 @@
  */
 namespace Magento\TestFramework\Db\Sequence;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Webapi\Exception;
-use Magento\SalesSequence\Model\Resource\Meta as ResourceMetadata;
-use Magento\Framework\App\Resource as AppResource;
+use Magento\SalesSequence\Model\ResourceModel\Meta as ResourceMetadata;
+use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
 use Magento\SalesSequence\Model\ProfileFactory;
 use Magento\SalesSequence\Model\MetaFactory;
@@ -189,14 +190,17 @@ class Builder extends \Magento\SalesSequence\Model\Builder
             $this->data['entity_type'],
             $this->data['store_id']
         );
-        $adapter = $this->appResource->getConnection('write');
-        if ($metadata->getId() && !$adapter->isTableExists($this->getSequenceName())) {
+        $connection = $this->appResource->getConnection();
+        if ($metadata->getId() && !$connection->isTableExists($this->getSequenceName())) {
             throw new \Magento\Framework\Exception\AlreadyExistsException(
                 __('Sequence with this metadata already exists')
             );
         }
     }
 
+    /**
+     * @return string
+     */
     protected function getSequenceName()
     {
         return $this->appResource->getTableName(

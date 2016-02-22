@@ -20,7 +20,7 @@ class CountryRegion extends \Magento\Backend\App\Action
         $countryId = $this->getRequest()->getParam('parent');
         if (!empty($countryId)) {
             $arrRegions = $this->_objectManager->create(
-                'Magento\Directory\Model\Resource\Region\Collection'
+                'Magento\Directory\Model\ResourceModel\Region\Collection'
             )->addCountryFilter(
                 $countryId
             )->load()->toOptionArray();

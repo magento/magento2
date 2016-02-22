@@ -8,8 +8,6 @@ namespace Magento\Framework\RequireJs\Test\Unit;
 
 use \Magento\Framework\RequireJs\Config;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -23,9 +21,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     private $design;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\File\Read|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $baseDir;
+    private $fileReader;
 
     /**
      * @var \Magento\Framework\View\Asset\ContextInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -57,12 +55,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->design = $this->getMockForAbstractClass('\Magento\Framework\View\DesignInterface');
-        $this->baseDir = $this->getMockForAbstractClass('\Magento\Framework\Filesystem\Directory\ReadInterface');
-        $filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
-        $filesystem->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::ROOT)
-            ->will($this->returnValue($this->baseDir));
+
+        $readFactory = $this->getMock('\Magento\Framework\Filesystem\File\ReadFactory', [], [], '', false);
+        $this->fileReader = $this->getMock('\Magento\Framework\Filesystem\File\Read', [], [], '', false);
+        $readFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->fileReader));
         $repo = $this->getMock('\Magento\Framework\View\Asset\Repository', [], [], '', false);
         $this->context = $this->getMockBuilder('Magento\Framework\View\Asset\ContextInterface')
             ->setMethods(
@@ -84,7 +82,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->object = new Config(
             $this->fileSource,
             $this->design,
-            $filesystem,
+            $readFactory,
             $repo,
             $this->minifyAdapterMock,
             $this->minificationMock
@@ -93,19 +91,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetConfig()
     {
-        $this->baseDir->expects($this->any())
-            ->method('getRelativePath')
-            ->will($this->returnCallback(function ($path) {
-                return 'relative/' . $path;
-            }));
-        $this->baseDir->expects($this->any())
-            ->method('readFile')
+        $this->fileReader->expects($this->any())
+            ->method('readAll')
             ->will($this->returnCallback(function ($file) {
                 return $file . ' content';
             }));
         $fileOne = $this->getMock('\Magento\Framework\View\File', [], [], '', false);
         $fileOne->expects($this->once())
             ->method('getFilename')
+            ->will($this->returnValue('some/full/relative/path/file_one.js'));
+        $fileOne->expects($this->once())
+            ->method('getName')
             ->will($this->returnValue('file_one.js'));
         $fileOne->expects($this->once())
             ->method('getModule')
@@ -113,6 +109,9 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $fileTwo = $this->getMock('\Magento\Framework\View\File', [], [], '', false);
         $fileTwo->expects($this->once())
             ->method('getFilename')
+            ->will($this->returnValue('some/full/relative/path/file_two.js'));
+        $fileTwo->expects($this->once())
+            ->method('getName')
             ->will($this->returnValue('file_two.js'));
         $theme = $this->getMockForAbstractClass('\Magento\Framework\View\Design\ThemeInterface');
         $this->design->expects($this->once())
@@ -130,13 +129,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $expected = <<<expected
 (function(require){
-require.config({"baseUrl":""});
 (function() {
-relative/file_one.js content
+file_one.js content
 require.config(config);
 })();
 (function() {
-relative/file_two.js content
+file_two.js content
 require.config(config);
 })();
 
@@ -152,7 +150,7 @@ expected;
             ->willReturnArgument(0);
 
         $actual = $this->object->getConfig();
-        $this->assertStringMatchesFormat($expected, $actual);
+        $this->assertEquals($actual, $expected);
     }
 
     public function testGetMinResolverCode()
@@ -196,6 +194,17 @@ code;
         $this->context->expects($this->once())->method('getConfigPath')->will($this->returnValue('path'));
         $actual = $this->object->getConfigFileRelativePath();
         $this->assertSame('_requirejs/path/requirejs-config.js', $actual);
+    }
+
+    public function testGetMixinsFileRelativePath()
+    {
+        $this->minificationMock
+            ->expects($this->any())
+            ->method('addMinifiedSign')
+            ->willReturnArgument(0);
+        $this->context->expects($this->once())->method('getPath')->will($this->returnValue('path'));
+        $actual = $this->object->getMixinsFileRelativePath();
+        $this->assertSame('path/mage/requirejs/mixins.js', $actual);
     }
 
     public function testGetMinResolverRelativePath()

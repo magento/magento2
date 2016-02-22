@@ -18,7 +18,7 @@ class Decimal extends AbstractFilter
     private $priceCurrency;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Layer\Filter\Decimal
+     * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Decimal
      */
     private $resource;
 
@@ -27,7 +27,7 @@ class Decimal extends AbstractFilter
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $layer
      * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
-     * @param \Magento\Catalog\Model\Resource\Layer\Filter\DecimalFactory $filterDecimalFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Layer\Filter\DecimalFactory $filterDecimalFactory
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
      * @param array $data
      */
@@ -36,7 +36,7 @@ class Decimal extends AbstractFilter
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer $layer,
         \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder,
-        \Magento\Catalog\Model\Resource\Layer\Filter\DecimalFactory $filterDecimalFactory,
+        \Magento\Catalog\Model\ResourceModel\Layer\Filter\DecimalFactory $filterDecimalFactory,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         array $data = []
     ) {
@@ -95,7 +95,7 @@ class Decimal extends AbstractFilter
     {
         $attribute = $this->getAttributeModel();
 
-        /** @var \Magento\CatalogSearch\Model\Resource\Fulltext\Collection $productCollection */
+        /** @var \Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection $productCollection */
         $productCollection = $this->getLayer()->getProductCollection();
         $productSize = $productCollection->getSize();
         $facets = $productCollection->getFacetedData($attribute->getAttributeCode());

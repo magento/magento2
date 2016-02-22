@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <virtualType name="Magento\Checkout\Model\Session\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">checkout</argument>
@@ -22,4 +22,8 @@
     <preference for="Magento\Checkout\Api\Data\PaymentDetailsInterface" type="Magento\Checkout\Model\PaymentDetails" />
     <preference for="Magento\Checkout\Api\GuestPaymentInformationManagementInterface" type="Magento\Checkout\Model\GuestPaymentInformationManagement" />
     <preference for="Magento\Checkout\Api\PaymentInformationManagementInterface" type="Magento\Checkout\Model\PaymentInformationManagement" />
+    <preference for="Magento\Checkout\Api\Data\TotalsInformationInterface" type="Magento\Checkout\Model\TotalsInformation" />
+    <preference for="Magento\Checkout\Api\GuestTotalsInformationManagementInterface" type="Magento\Checkout\Model\GuestTotalsInformationManagement" />
+    <preference for="Magento\Checkout\Api\TotalsInformationManagementInterface" type="Magento\Checkout\Model\TotalsInformationManagement" />
+    <preference for="Magento\Checkout\Api\AgreementsValidatorInterface" type="Magento\Checkout\Model\AgreementsValidator" />
 </config>

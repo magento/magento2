@@ -69,7 +69,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
     {
         $fieldSet = $this->getMock('Magento\Framework\Data\Form\Element\Fieldset', [], [], '', false);
         $form = $this->getMock('Magento\Framework\Data\Form', [], [], '', false);
-        $attributeModel = $this->getMock('\Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+        $attributeModel = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $entityType = $this->getMock('Magento\Eav\Model\Entity\Type', [], [], '', false);
         $formElement = $this->getMock('Magento\Framework\Data\Form\Element\Text', ['setDisabled'], [], '', false);
         $directoryReadInterface = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadInterface');
@@ -89,7 +89,7 @@ class AdvancedTest extends \PHPUnit_Framework_TestCase
         $this->localeDate->expects($this->any())->method('getDateFormat')->willReturn('mm/dd/yy');
         $entityType->expects($this->any())->method('getEntityTypeCode')->willReturn('entity_type_code');
         $this->eavData->expects($this->any())->method('getFrontendClasses')->willReturn([]);
-        $formElement->expects($this->exactly(3))->method('setDisabled')->willReturnSelf();
+        $formElement->expects($this->exactly(2))->method('setDisabled')->willReturnSelf();
         $this->yesNo->expects($this->any())->method('toOptionArray')->willReturn(['yes', 'no']);
         $this->filesystem->expects($this->any())->method('getDirectoryRead')->willReturn($directoryReadInterface);
         $directoryReadInterface->expects($this->any())->method('getRelativePath')->willReturn('relative_path');

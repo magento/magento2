@@ -11,11 +11,10 @@
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
-            <field name="status" xsi:type="string">Product online</field>
+            <field name="status" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
-            <field name="is_virtual" xsi:type="string">Yes</field>
             <field name="url_key" xsi:type="string">virtual-product%isolation%</field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="attribute_set_id" xsi:type="array">
@@ -39,7 +38,6 @@
             <field name="url_key" xsi:type="string">virtual-product%isolation%</field>
             <field name="name" xsi:type="string">Virtual product %isolation%</field>
             <field name="sku" xsi:type="string">sku_virtual_product_%isolation%</field>
-            <field name="is_virtual" xsi:type="string">Yes</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">10</item>
             </field>
@@ -55,7 +53,6 @@
             <field name="url_key" xsi:type="string">virtual-product%isolation%</field>
             <field name="name" xsi:type="string">Virtual product %isolation%</field>
             <field name="sku" xsi:type="string">sku_virtual_product_%isolation%</field>
-            <field name="is_virtual" xsi:type="string">Yes</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">10</item>
             </field>
@@ -74,11 +71,10 @@
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
-            <field name="status" xsi:type="string">Product online</field>
+            <field name="status" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
-            <field name="is_virtual" xsi:type="string">Yes</field>
             <field name="url_key" xsi:type="string">virtual-product%isolation%</field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="attribute_set_id" xsi:type="array">
@@ -102,11 +98,10 @@
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
-            <field name="status" xsi:type="string">Product online</field>
+            <field name="status" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
-            <field name="is_virtual" xsi:type="string">Yes</field>
             <field name="url_key" xsi:type="string">virtual-product%isolation%</field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="attribute_set_id" xsi:type="array">
@@ -132,11 +127,10 @@
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
-            <field name="status" xsi:type="string">Product online</field>
+            <field name="status" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
-            <field name="is_virtual" xsi:type="string">Yes</field>
             <field name="url_key" xsi:type="string">virtual-product%isolation%</field>
             <field name="visibility" xsi:type="string">Catalog, Search</field>
             <field name="attribute_set_id" xsi:type="array">
@@ -161,7 +155,6 @@
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
-            <field name="is_virtual" xsi:type="string">Yes</field>
             <field name="url_key" xsi:type="string">virtual-product%isolation%</field>
             <field name="name" xsi:type="string">Virtual product %isolation%</field>
             <field name="sku" xsi:type="string">sku_virtual_product_%isolation%</field>

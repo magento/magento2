@@ -5,6 +5,8 @@
  */
 namespace Magento\OfflineShipping\Model\Carrier;
 
+use Magento\Quote\Model\Quote\Address\RateRequest;
+
 class Pickup extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     \Magento\Shipping\Model\Carrier\CarrierInterface
 {
@@ -50,11 +52,11 @@ class Pickup extends \Magento\Shipping\Model\Carrier\AbstractCarrier implements
     }
 
     /**
-     * @param \Magento\Framework\Object $request
+     * @param RateRequest $request
      * @return \Magento\Shipping\Model\Rate\Result
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function collectRates(\Magento\Framework\Object $request)
+    public function collectRates(RateRequest $request)
     {
         if (!$this->getConfigFlag('active')) {
             return false;

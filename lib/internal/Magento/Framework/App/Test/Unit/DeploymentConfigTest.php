@@ -7,6 +7,7 @@
 namespace Magento\Framework\App\Test\Unit;
 
 use \Magento\Framework\App\DeploymentConfig;
+use \Magento\Framework\Config\ConfigOptionsListConstants;
 
 class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
 {
@@ -88,7 +89,9 @@ class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testIsAvailable()
     {
-        $this->reader->expects($this->once())->method('load')->willReturn(['a' => 1]);
+        $this->reader->expects($this->once())->method('load')->willReturn([
+            ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE => 1
+        ]);
         $object = new DeploymentConfig($this->reader);
         $this->assertTrue($object->isAvailable());
     }
@@ -103,7 +106,9 @@ class DeploymentConfigTest extends \PHPUnit_Framework_TestCase
     public function testNotAvailableThenAvailable()
     {
         $this->reader->expects($this->at(0))->method('load')->willReturn([]);
-        $this->reader->expects($this->at(1))->method('load')->willReturn(['a' => 1]);
+        $this->reader->expects($this->at(1))->method('load')->willReturn([
+            ConfigOptionsListConstants::CONFIG_PATH_INSTALL_DATE => 1
+        ]);
         $object = new DeploymentConfig($this->reader);
         $this->assertFalse($object->isAvailable());
         $this->assertTrue($object->isAvailable());

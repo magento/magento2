@@ -6,11 +6,11 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\GiftMessage\Test\TestCase\CheckoutWithGiftMessagesTest">
+    <testCase name="Magento\GiftMessage\Test\TestCase\CheckoutWithGiftMessagesTest" summary="One Page Checkout with Gift Messages" ticketId="MAGETWO-28978">
         <variation name="CheckoutWithGiftMessagesTestVariation1">
             <data name="products" xsi:type="string">catalogProductSimple::default, catalogProductVirtual::default</data>
             <data name="customer/dataset" xsi:type="string">default</data>
-            <data name="billingAddress/dataset" xsi:type="string">US_address_1</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
@@ -22,12 +22,13 @@
             <data name="giftMessage/data/message" xsi:type="string">text_gift_message</data>
             <data name="payment/method" xsi:type="string">cashondelivery</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrder" />
         </variation>
         <variation name="CheckoutWithGiftMessagesTestVariation2">
             <data name="products" xsi:type="string">catalogProductSimple::default, catalogProductVirtual::default</data>
             <data name="customer/dataset" xsi:type="string">default</data>
-            <data name="billingAddress/dataset" xsi:type="string">US_address_1</data>
+            <data name="shippingAddress/dataset" xsi:type="string">US_address_1_without_email</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
             <data name="shipping/shipping_service" xsi:type="string">Flat Rate</data>
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
@@ -37,8 +38,10 @@
             <data name="giftMessage/data/sender" xsi:type="string">John Doe</data>
             <data name="giftMessage/data/recipient" xsi:type="string">Jane Doe</data>
             <data name="giftMessage/data/message" xsi:type="string">text_gift_message</data>
+            <data name="giftMessage/data/items/datasets" xsi:type="string">default</data>
             <data name="payment/method" xsi:type="string">cashondelivery</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\GiftMessage\Test\Constraint\AssertGiftMessageInFrontendOrderItems" />
         </variation>
     </testCase>

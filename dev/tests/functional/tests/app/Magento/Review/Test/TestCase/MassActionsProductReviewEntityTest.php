@@ -13,22 +13,18 @@ use Magento\Review\Test\Page\Adminhtml\ReviewIndex;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test creation for MassActions ProductReviewEntity
- *
- * Test Flow:
- *
  * Preconditions:
- * 1. Simple product created
- * 2. Product Review created on frontend
+ * 1. Simple product created.
+ * 2. Product Review created on frontend.
  *
  * Steps:
- * 1. Login to backend
- * 2. Navigate to Marketing -> User Content -> Reviews
- * 3. Search and select review created in precondition
- * 4. Select Mass Action
- * 5. Select Action from Dataset
- * 6. Click "Submit" button
- * 7. Perform Asserts
+ * 1. Login to backend.
+ * 2. Navigate to Marketing > User Content > Reviews.
+ * 3. Search and select review created in precondition.
+ * 4. Select Mass Action.
+ * 5. Select Action from Dataset.
+ * 6. Click "Submit" button.
+ * 7. Perform Asserts.
  *
  * @group Reviews_and_Ratings_(MX)
  * @ZephyrId MAGETWO-26618
@@ -41,35 +37,35 @@ class MassActionsProductReviewEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Backend rating grid page
+     * Backend rating grid page.
      *
      * @var RatingIndex
      */
     protected $ratingIndex;
 
     /**
-     * Backend rating edit page
+     * Backend rating edit page.
      *
      * @var RatingEdit
      */
     protected $ratingEdit;
 
     /**
-     * Review index page
+     * Review index page.
      *
      * @var ReviewIndex
      */
     protected $reviewIndex;
 
     /**
-     * Fixture review
+     * Fixture review.
      *
      * @var Review
      */
     protected $review;
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param ReviewIndex $reviewIndex
      * @param RatingIndex $ratingIndex
@@ -94,7 +90,7 @@ class MassActionsProductReviewEntityTest extends Injectable
     }
 
     /**
-     * Apply for MassActions ProductReviewEntity
+     * Apply for MassActions ProductReviewEntity.
      *
      * @param string $gridActions
      * @param string $gridStatus
@@ -112,7 +108,7 @@ class MassActionsProductReviewEntityTest extends Injectable
     }
 
     /**
-     * Clear data after test
+     * Clear data after test.
      *
      * @return void
      */
@@ -123,6 +119,7 @@ class MassActionsProductReviewEntityTest extends Injectable
             foreach ($this->review->getRatings() as $rating) {
                 $this->ratingIndex->getRatingGrid()->searchAndOpen(['rating_code' => $rating['title']]);
                 $this->ratingEdit->getPageActions()->delete();
+                $this->ratingEdit->getModalBlock()->acceptAlert();
             }
         }
     }

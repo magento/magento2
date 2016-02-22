@@ -17,6 +17,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
 
     /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
+     * @codeCoverageIgnore
      */
     public function __construct(\Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate)
     {
@@ -29,7 +30,7 @@ class Datetime extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBacke
      * Should set (bool, string) correct type for empty value from html form,
      * necessary for further process, else date string
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return $this
      */

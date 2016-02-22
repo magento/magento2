@@ -48,7 +48,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     protected $storeManager;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Helper|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Eav\Model\ResourceModel\Helper|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceHelper;
 
@@ -88,12 +88,12 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     protected $localeResolver;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Framework\Data\Collection\Db|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceCollection;
 
@@ -122,6 +122,11 @@ class FilterTest extends \PHPUnit_Framework_TestCase
      */
     protected $filter;
 
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dateTimeFormatter;
+
     public function setUp()
     {
         $this->modelContext = $this->getMock('Magento\Framework\Model\Context', [], [], '', false);
@@ -143,7 +148,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->eavConfig = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
         $this->eavTypeFactory = $this->getMock('Magento\Eav\Model\Entity\TypeFactory', [], [], '', false);
         $this->storeManager = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
-        $this->resourceHelper = $this->getMock('Magento\Eav\Model\Resource\Helper', [], [], '', false);
+        $this->resourceHelper = $this->getMock('Magento\Eav\Model\ResourceModel\Helper', [], [], '', false);
         $this->universalFactory = $this->getMock('Magento\Framework\Validator\UniversalFactory', [], [], '', false);
         $this->optionDataFactory = $this->getMock(
             'Magento\Eav\Api\Data\AttributeOptionInterfaceFactory',
@@ -170,7 +175,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->localeResolver = $this->getMock('Magento\Framework\Locale\Resolver', [], [], '', false);
-        $this->resource = $this->getMock('Magento\Catalog\Model\Resource\Product', [], [], '', false);
+        $this->resource = $this->getMock('Magento\Catalog\Model\ResourceModel\Product', [], [], '', false);
         $this->resourceCollection = $this->getMockForAbstractClass(
             'Magento\Framework\Data\Collection\AbstractDb',
             [],
@@ -208,6 +213,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())->method('getLayout')->will($this->returnValue($layout));
         $this->backendHelper = $this->getMock('Magento\Backend\Helper\Data', [], [], '', false);
         $this->importExportData = $this->getMock('Magento\ImportExport\Helper\Data', [], [], '', false);
+        $this->dateTimeFormatter = $this->getMock('Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface');
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->filter = $this->objectManagerHelper->getObject(
             'Magento\ImportExport\Block\Adminhtml\Export\Filter',
@@ -246,6 +252,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
             $this->localeDate,
             $this->reservedAttributeList,
             $this->localeResolver,
+            $this->dateTimeFormatter,
             $this->resource,
             $this->resourceCollection
         );
@@ -254,7 +261,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $attribute->setOptions($attributeData['options']);
         $attribute->setFilterOptions($attributeData['filter_options']);
         $attribute->setBackendType($backendType);
-        $column = new \Magento\Framework\Object();
+        $column = new \Magento\Framework\DataObject();
         $column->setData($columnValue, 'value');
         $isExport = true;
         $this->filter->decorateFilter($value, $attribute, $column, $isExport);

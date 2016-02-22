@@ -63,7 +63,7 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      *
      * @var array
      */
-    protected $_serviceClassTypes = ['Proxy', 'Interceptor'];
+    protected $_serviceClassTypes = ['Interceptor'];
 
     /**
      * @var \Magento\Framework\Config\ScopeListInterface

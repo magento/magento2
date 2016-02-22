@@ -24,7 +24,7 @@ class AssertCurrencyRateSuccessSaveMessage extends AbstractConstraint
      */
     public function processAssert(SystemCurrencyIndex $currencyIndexPage)
     {
-        $actualMessage = $currencyIndexPage->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $currencyIndexPage->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,

@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Eav/etc/eav_attributes.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Eav:etc/eav_attributes.xsd">
     <entity type="catalog_product">
         <attribute code="sku">
             <field code="is_global" locked="true" />
@@ -26,14 +26,12 @@
             <field code="is_filterable" locked="true" />
             <field code="is_filterable_in_search" locked="true" />
         </attribute>
-        <attribute code="group_price">
-            <field code="is_searchable" locked="true" />
-        </attribute>
         <attribute code="price_type">
             <field code="is_searchable" locked="true" />
         </attribute>
         <attribute code="category_ids">
             <field code="is_searchable" locked="true" />
+            <field code="used_for_sort_by" locked="true" />
         </attribute>
         <attribute code="media_gallery">
             <field code="is_searchable" locked="true" />

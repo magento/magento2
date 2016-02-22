@@ -7,6 +7,9 @@ namespace Magento\Setup\Console\Command;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Module\Dependency\ServiceLocator;
 
 /**
@@ -15,19 +18,20 @@ use Magento\Setup\Module\Dependency\ServiceLocator;
 class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
 {
     /**
-     * @var DirectoryList
+     * @var ComponentRegistrarInterface
      */
-    private $directoryList;
+    private $registrar;
 
     /**
      * Constructor
-     *
-     * @param DirectoryList $directoryList
+     * 
+     * @param ComponentRegistrarInterface $registrar
+     * @param ObjectManagerProvider $objectManagerProvider
      */
-    public function __construct(DirectoryList $directoryList)
+    public function __construct(ComponentRegistrarInterface $registrar, ObjectManagerProvider $objectManagerProvider)
     {
-        $this->directoryList = $directoryList;
-        parent::__construct();
+        $this->registrar = $registrar;
+        parent::__construct($objectManagerProvider);
     }
 
     /**
@@ -58,13 +62,9 @@ class DependenciesShowFrameworkCommand extends AbstractDependenciesCommand
      */
     protected function buildReport($outputPath)
     {
-        $root = $this->directoryList->getRoot();
-        $filePath = str_replace(
-            $root,
-            Files::init()->getPathToSource(),
-            $this->directoryList->getPath(DirectoryList::MODULES) . '/Magento'
-        );
-        $filesForParse = Files::init()->getFiles([$filePath], '*');
+        $filePaths = $this->registrar->getPaths(ComponentRegistrar::MODULE);
+
+        $filesForParse = Files::init()->getFiles($filePaths, '*');
         $configFiles = Files::init()->getConfigFiles('module.xml', [], false);
 
         ServiceLocator::getFrameworkDependenciesReportBuilder()->build(

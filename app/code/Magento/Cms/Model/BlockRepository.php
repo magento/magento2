@@ -8,11 +8,14 @@ namespace Magento\Cms\Model;
 use Magento\Cms\Api\Data;
 use Magento\Cms\Api\BlockRepositoryInterface;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Cms\Model\ResourceModel\Block as ResourceBlock;
+use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollectionFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class BlockRepository
@@ -21,7 +24,7 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 class BlockRepository implements BlockRepositoryInterface
 {
     /**
-     * @var Resource\Block
+     * @var ResourceBlock
      */
     protected $resource;
 
@@ -31,7 +34,7 @@ class BlockRepository implements BlockRepositoryInterface
     protected $blockFactory;
 
     /**
-     * @var Resource\Block\CollectionFactory
+     * @var BlockCollectionFactory
      */
     protected $blockCollectionFactory;
 
@@ -56,22 +59,29 @@ class BlockRepository implements BlockRepositoryInterface
     protected $dataBlockFactory;
 
     /**
-     * @param Resource\Block $resource
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * @param ResourceBlock $resource
      * @param BlockFactory $blockFactory
      * @param Data\BlockInterfaceFactory $dataBlockFactory
-     * @param Resource\Block\CollectionFactory $blockCollectionFactory
+     * @param BlockCollectionFactory $blockCollectionFactory
      * @param Data\BlockSearchResultsInterfaceFactory $searchResultsFactory
      * @param DataObjectHelper $dataObjectHelper
      * @param DataObjectProcessor $dataObjectProcessor
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        Resource\Block $resource,
+        ResourceBlock $resource,
         BlockFactory $blockFactory,
         \Magento\Cms\Api\Data\BlockInterfaceFactory $dataBlockFactory,
-        Resource\Block\CollectionFactory $blockCollectionFactory,
+        BlockCollectionFactory $blockCollectionFactory,
         Data\BlockSearchResultsInterfaceFactory $searchResultsFactory,
         DataObjectHelper $dataObjectHelper,
-        DataObjectProcessor $dataObjectProcessor
+        DataObjectProcessor $dataObjectProcessor,
+        StoreManagerInterface $storeManager
     ) {
         $this->resource = $resource;
         $this->blockFactory = $blockFactory;
@@ -80,6 +90,7 @@ class BlockRepository implements BlockRepositoryInterface
         $this->dataObjectHelper = $dataObjectHelper;
         $this->dataBlockFactory = $dataBlockFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -91,6 +102,8 @@ class BlockRepository implements BlockRepositoryInterface
      */
     public function save(Data\BlockInterface $block)
     {
+        $storeId = $this->storeManager->getStore()->getId();
+        $block->setStoreId($storeId);
         try {
             $this->resource->save($block);
         } catch (\Exception $exception) {
@@ -122,7 +135,7 @@ class BlockRepository implements BlockRepositoryInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @param \Magento\Framework\Api\SearchCriteriaInterface $criteria
-     * @return Resource\Block\Collection
+     * @return \Magento\Cms\Model\ResourceModel\Block\Collection
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $criteria)
     {
@@ -146,7 +159,7 @@ class BlockRepository implements BlockRepositoryInterface
             foreach ($sortOrders as $sortOrder) {
                 $collection->addOrder(
                     $sortOrder->getField(),
-                    ($sortOrder->getDirection() == SearchCriteriaInterface::SORT_ASC) ? 'ASC' : 'DESC'
+                    ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
                 );
             }
         }

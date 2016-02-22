@@ -7,6 +7,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 /**
  * @magentoAppArea adminhtml
+ * @magentoDbIsolation enabled
  */
 class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendController
 {
@@ -170,7 +171,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $postData = $this->_getAttributeData() + ['attribute_id' => '2'];
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
-        $model = $this->_objectManager->create('Magento\Catalog\Model\Resource\Eav\Attribute');
+        $model = $this->_objectManager->create('Magento\Catalog\Model\ResourceModel\Eav\Attribute');
         $model->load($postData['attribute_id']);
         $this->assertNull($model->getData('apply_to'));
     }
@@ -183,8 +184,8 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         $postData = $this->_getAttributeData() + ['attribute_id' => '1'];
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
-        /** @var \Magento\Catalog\Model\Resource\Eav\Attribute $model */
-        $model = $this->_objectManager->create('Magento\Catalog\Model\Resource\Eav\Attribute');
+        /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $model */
+        $model = $this->_objectManager->create('Magento\Catalog\Model\ResourceModel\Eav\Attribute');
         $model->load($postData['attribute_id']);
         $this->assertEquals('simple', $model->getData('apply_to'));
     }
@@ -198,7 +199,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         unset($postData['apply_to']);
         $this->getRequest()->setPostValue($postData);
         $this->dispatch('backend/catalog/product_attribute/save');
-        $model = $this->_objectManager->create('Magento\Catalog\Model\Resource\Eav\Attribute');
+        $model = $this->_objectManager->create('Magento\Catalog\Model\ResourceModel\Eav\Attribute');
         $model->load($postData['attribute_id']);
         $this->assertEquals(['simple'], $model->getApplyTo());
     }
@@ -210,8 +211,8 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
      */
     public function testSaveActionCleanAttributeLabelCache()
     {
-        /** @var \Magento\Translation\Model\Resource\String $string */
-        $string = $this->_objectManager->create('Magento\Translation\Model\Resource\String');
+        /** @var \Magento\Translation\Model\ResourceModel\StringUtils $string */
+        $string = $this->_objectManager->create('Magento\Translation\Model\ResourceModel\StringUtils');
         $this->assertEquals('predefined string translation', $this->_translate('string to translate'));
         $string->saveTranslate('string to translate', 'new string translation');
         $postData = $this->_getAttributeData() + ['attribute_id' => 1];
@@ -248,7 +249,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     protected function _getAttributeData()
     {
         return [
-            'is_global' => \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_STORE,
+            'is_global' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
             'default_value_text' => '0',
             'default_value_yesno' => '0',
             'default_value_date' => '',

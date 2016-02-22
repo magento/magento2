@@ -17,12 +17,17 @@ namespace Magento\Framework\View\Element;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractBlock extends \Magento\Framework\Object implements BlockInterface
+abstract class AbstractBlock extends \Magento\Framework\DataObject implements BlockInterface
 {
     /**
      * Cache group Tag
      */
     const CACHE_GROUP = \Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER;
+
+    /**
+     * Prefix for cache key of block
+     */
+    const CACHE_KEY_PREFIX = 'BLOCK_';
 
     /**
      * Design
@@ -780,21 +785,25 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
     /**
      * Retrieve formatting date
      *
-     * @param   \DateTime|string|null $date
-     * @param   int $format
-     * @param   bool $showTime
-     * @return  string
+     * @param null|string|\DateTime $date
+     * @param int $format
+     * @param bool $showTime
+     * @param null|string $timezone
+     * @return string
      */
     public function formatDate(
         $date = null,
         $format = \IntlDateFormatter::SHORT,
-        $showTime = false
+        $showTime = false,
+        $timezone = null
     ) {
         $date = $date instanceof \DateTimeInterface ? $date : new \DateTime($date);
         return $this->_localeDate->formatDateTime(
             $date,
             $format,
-            $showTime ? $format : \IntlDateFormatter::NONE
+            $showTime ? $format : \IntlDateFormatter::NONE,
+            null,
+            $timezone
         );
     }
 
@@ -954,7 +963,7 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
     public function getCacheKey()
     {
         if ($this->hasData('cache_key')) {
-            return $this->getData('cache_key');
+            return static::CACHE_KEY_PREFIX . $this->getData('cache_key');
         }
         /**
          * don't prevent recalculation by saving generated cache key
@@ -966,7 +975,7 @@ abstract class AbstractBlock extends \Magento\Framework\Object implements BlockI
         // ignore array keys
         $key = implode('|', $key);
         $key = sha1($key);
-        return $key;
+        return static::CACHE_KEY_PREFIX . $key;
     }
 
     /**

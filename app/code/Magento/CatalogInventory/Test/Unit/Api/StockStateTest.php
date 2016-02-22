@@ -48,7 +48,7 @@ class StockStateTest extends \PHPUnit_Framework_TestCase
     protected $stockStatus;
 
     /**
-     * @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectResult;
 
@@ -82,7 +82,7 @@ class StockStateTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->objectResult = $this->getMock(
-            '\Magento\Framework\Object',
+            '\Magento\Framework\DataObject',
             [],
             [],
             '',

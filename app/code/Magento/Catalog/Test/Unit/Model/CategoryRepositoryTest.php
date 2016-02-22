@@ -27,6 +27,11 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $storeManagerMock;
 
+    /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPoolMock;
+
     protected function setUp()
     {
         $this->categoryFactoryMock = $this->getMock(
@@ -36,13 +41,38 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->categoryResourceMock = $this->getMock('\Magento\Catalog\Model\Resource\Category', [], [], '', false);
+        $this->categoryResourceMock =
+            $this->getMock('\Magento\Catalog\Model\ResourceModel\Category', [], [], '', false);
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+
+        $metadataMock = $this->getMock(
+            'Magento\Framework\Model\Entity\EntityMetadata',
+            [],
+            [],
+            '',
+            false
+        );
+        $metadataMock->expects($this->any())
+            ->method('getLinkField')
+            ->willReturn('entity_id');
+
+        $this->metadataPoolMock = $this->getMock(
+            'Magento\Framework\Model\Entity\MetadataPool',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->metadataPoolMock->expects($this->any())
+            ->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\CategoryInterface::class)
+            ->willReturn($metadataMock);
 
         $this->model = new \Magento\Catalog\Model\CategoryRepository(
             $this->categoryFactoryMock,
             $this->categoryResourceMock,
-            $this->storeManagerMock
+            $this->storeManagerMock,
+            $this->metadataPoolMock
         );
     }
 
@@ -111,7 +141,9 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
         $categoryMock->expects($this->once())->method('getParentId')->willReturn(3);
         $categoryMock->expects($this->once())->method('getPath')->willReturn('path');
         $categoryMock->expects($this->once())->method('getIsActive')->willReturn(true);
-        $this->categoryResourceMock->expects($this->once())->method('save')->willReturn('\Magento\Framework\Object');
+        $this->categoryResourceMock->expects($this->once())
+            ->method('save')
+            ->willReturn('\Magento\Framework\DataObject');
         $this->assertEquals($categoryMock, $this->model->save($categoryMock));
     }
 
@@ -132,7 +164,9 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
         $parentCategoryMock->expects($this->once())->method('getPath')->willReturn('path');
         $categoryMock->expects($this->once())->method('validate')->willReturn(true);
         $categoryMock->expects($this->once())->method('getParentId')->willReturn(3);
-        $this->categoryResourceMock->expects($this->once())->method('save')->willReturn('\Magento\Framework\Object');
+        $this->categoryResourceMock->expects($this->once())
+            ->method('save')
+            ->willReturn('\Magento\Framework\DataObject');
         $this->assertEquals($categoryMock, $this->model->save($categoryMock));
     }
 
@@ -165,7 +199,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->setExpectedException($expectedException, $expectedExceptionMessage);
         $categoryId = 5;
         $categoryMock = $this->getMock('\Magento\Catalog\Model\Category', [], [], '', false);
-        $objectMock = $this->getMock('\Magento\Framework\Object', ['getFrontend', 'getLabel'], [], '', false);
+        $objectMock = $this->getMock('\Magento\Framework\DataObject', ['getFrontend', 'getLabel'], [], '', false);
         $categoryMock->expects(
             $this->atLeastOnce()
         )->method('getId')->willReturn($categoryId);

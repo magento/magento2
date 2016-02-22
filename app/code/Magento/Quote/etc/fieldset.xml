@@ -6,9 +6,9 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Object/etc/fieldset.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:DataObject/etc/fieldset.xsd">
     <scope id="global">
-        <fieldset id="quote_convert_address">
+        <fieldset id="sales_convert_quote_address">
             <field name="weight">
                 <aspect name="to_order" />
             </field>
@@ -154,6 +154,26 @@
                 <aspect name="to_customer_address" />
             </field>
             <field name="fax">
+                <aspect name="to_order_address" />
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="vat_id">
+                <aspect name="to_order_address" />
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="vat_is_valid">
+                <aspect name="to_order_address" />
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="vat_request_id">
+                <aspect name="to_order_address" />
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="vat_request_date">
+                <aspect name="to_order_address" />
+                <aspect name="to_customer_address" />
+            </field>
+            <field name="vat_request_success">
                 <aspect name="to_order_address" />
                 <aspect name="to_customer_address" />
             </field>

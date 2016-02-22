@@ -5,36 +5,57 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
 
-use Magento\Cms\Controller\Adminhtml\AbstractMassStatus;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Ui\Component\MassAction\Filter;
+use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 
 /**
  * Class MassDisable
  */
-class MassDisable extends AbstractMassStatus
+class MassDisable extends \Magento\Backend\App\Action
 {
     /**
-     * Field id
+     * @var Filter
      */
-    const ID_FIELD = 'page_id';
+    protected $filter;
 
     /**
-     * Resource collection
-     *
-     * @var string
+     * @var CollectionFactory
      */
-    protected $collection = 'Magento\Cms\Model\Resource\Page\Collection';
+    protected $collectionFactory;
 
     /**
-     * Page model
-     *
-     * @var string
+     * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
      */
-    protected $model = 'Magento\Cms\Model\Page';
+    public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
+    {
+        $this->filter = $filter;
+        $this->collectionFactory = $collectionFactory;
+        parent::__construct($context);
+    }
 
     /**
-     * Page disable status
+     * Execute action
      *
-     * @var boolean
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
-    protected $status = false;
+    public function execute()
+    {
+        $collection = $this->filter->getCollection($this->collectionFactory->create());
+
+        foreach ($collection as $item) {
+            $item->setIsActive(false);
+            $item->save();
+        }
+
+        $this->messageManager->addSuccess(__('A total of %1 record(s) have been disabled.', $collection->getSize()));
+
+        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        return $resultRedirect->setPath('*/*/');
+    }
 }

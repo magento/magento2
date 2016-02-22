@@ -8,7 +8,6 @@ namespace Magento\Catalog\Test\Handler\CatalogProductAttribute;
 
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
@@ -43,7 +42,11 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
             'No' => 0,
             'Filterable (with results)' => 1,
             'Filterable (no results)' => 2
-        ]
+        ],
+        'is_used_for_promo_rules' => [
+            'No' => 0,
+            'Yes' => 1,
+        ],
     ];
 
     /**
@@ -55,15 +58,18 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
      */
     public function persist(FixtureInterface $fixture = null)
     {
+        if ($fixture->hasData('attribute_id')) {
+            return ['attribute_id' => $fixture->getData('attribute_id')];
+        }
         $data = $this->replaceMappingData($fixture->getData());
         $data['frontend_label'] = [0 => $data['frontend_label']];
 
         if (isset($data['options'])) {
             foreach ($data['options'] as $key => $values) {
-                if ($values['is_default'] == 'Yes') {
-                    $data['default'][] = $values['view'];
-                }
                 $index = 'option_' . $key;
+                if ($values['is_default'] == 'Yes') {
+                    $data['default'][] = $index;
+                }
                 $data['option']['value'][$index] = [$values['admin'], $values['view']];
                 $data['option']['order'][$index] = $key;
             }
@@ -72,7 +78,7 @@ class Curl extends AbstractCurl implements CatalogProductAttributeInterface
 
         $url = $_ENV['app_backend_url'] . 'catalog/product_attribute/save/back/edit';
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
 

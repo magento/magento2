@@ -38,6 +38,19 @@ class Title extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Provide own page content heading
+     *
+     * @return string
+     */
+    public function getPageHeading()
+    {
+        if (!empty($this->pageTitle)) {
+            return $this->pageTitle;
+        }
+        return $this->pageConfig->getTitle()->getShortHeading();
+    }
+
+    /**
      * Set own page title
      *
      * @param string $pageTitle

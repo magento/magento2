@@ -16,6 +16,6 @@ class Product extends AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\CatalogUrlRewrite\Model\Resource\Category\Product');
+        $this->_init('Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product');
     }
 }

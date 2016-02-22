@@ -85,7 +85,7 @@ Permissions,Permissions
 "Your password must be at least %1 characters.","Your password must be at least %1 characters."
 "Your password must include both numeric and alphabetic characters.","Your password must include both numeric and alphabetic characters."
 "Your password confirmation must match your password.","Your password confirmation must match your password."
-"This account is inactive.","This account is inactive."
+"You did not sign in correctly or your account is temporarily disabled.","You did not sign in correctly or your account is temporarily disabled."
 "Forgot your user name or password?","Forgot your user name or password?"
 "Retrieve Password","Retrieve Password"
 "Forgot your password?","Forgot your password?"
@@ -94,4 +94,35 @@ Permissions,Permissions
 Resources,Resources
 "Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?","Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?"
 "Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?","Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?"
-"Reset Password Template","Reset Password Template"
+"User Notification Template","User Notification Template"
+No,No
+Yes,Yes
+Username,Username
+"Locked Users","Locked Users"
+"Unlocked %1 user(s).","Unlocked %1 user(s)."
+"This account is locked.","This account is locked."
+"It's time to change your password.","It's time to change your password."
+"It's time to <a href=""%1"">change your password</a>.","It's time to <a href=""%1"">change your password</a>."
+"Sorry, but this password has already been used. Please create another.","Sorry, but this password has already been used. Please create another."
+"Your password has expired; please contact your administrator.","Your password has expired; please contact your administrator."
+Recommended,Recommended
+Forced,Forced
+"Maximum Login Failures to Lockout Account","Maximum Login Failures to Lockout Account"
+"We will disable this feature if the value is empty.","We will disable this feature if the value is empty."
+"Lockout Time (minutes)","Lockout Time (minutes)"
+"Password Lifetime (days)","Password Lifetime (days)"
+"We will disable this feature if the value is empty. ","We will disable this feature if the value is empty. "
+"Password Change","Password Change"
+"Admin Accounts Locks","Admin Accounts Locks"
+Unlock,Unlock
+"Last login","Last login"
+Failures,Failures
+Unlocked,Unlocked
+"All Users","All Users"
+"User Roles","User Roles"
+"Your Password","Your Password"
+"Hello,","Hello,"
+"We have received a request to change the following information associated with your account at %store_name: %changes.","We have received a request to change the following information associated with your account at %store_name: %changes."
+"If you have not authorized this action, please contact us immediately at %store_email","If you have not authorized this action, please contact us immediately at %store_email"
+"or call us at %store_phone","or call us at %store_phone"
+"Thanks,","Thanks,"

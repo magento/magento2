@@ -15,6 +15,7 @@ use Magento\Framework\Exception\AuthorizationException;
  * Test Rest controller.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class RestTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,19 +25,14 @@ class RestTest extends \PHPUnit_Framework_TestCase
     protected $_restController;
 
     /**
-     * @var \Magento\Framework\Webapi\Rest\Request
+     * @var \Magento\Framework\Webapi\Rest\Request|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_requestMock;
 
     /**
-     * @var \Magento\Framework\Webapi\Rest\Response
+     * @var \Magento\Framework\Webapi\Rest\Response|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_responseMock;
-
-    /**
-     * @var \Magento\Webapi\Controller\Rest\Router
-     */
-    protected $_routerMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Webapi\Controller\Rest\Router\Route
@@ -44,34 +40,19 @@ class RestTest extends \PHPUnit_Framework_TestCase
     protected $_routeMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    protected $_objectManagerMock;
-
-    /**
-     * @var \stdClass
+     * @var \stdClass|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_serviceMock;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_appStateMock;
-
-    /**
-     * @var \Magento\Framework\Oauth\OauthInterface
+     * @var \Magento\Framework\Oauth\OauthInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_oauthServiceMock;
 
     /**
-     * @var \Magento\Framework\AuthorizationInterface
+     * @var \Magento\Framework\Webapi\Authorization|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_authorizationMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $areaListMock;
 
     /**
      * @var \Magento\Framework\Webapi\ServiceInputProcessor|\PHPUnit_Framework_MockObject_MockObject
@@ -79,54 +60,55 @@ class RestTest extends \PHPUnit_Framework_TestCase
     protected $serviceInputProcessorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Webapi\Model\Rest\Swagger\Generator | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $areaMock;
-    
-    /**
-     * @var \Magento\Webapi\Controller\Rest\ParamsOverrider|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $paramsOverriderMock;
+    protected $swaggerGeneratorMock;
 
-    /**
-     * @var \Magento\Framework\Reflection\DataObjectProcessor|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dataObjectProcessorMock;
+    /** @var  \Magento\Store\Model\StoreManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    private $storeManagerMock;
+
+    /** @var  \Magento\Store\Api\Data\StoreInterface | \PHPUnit_Framework_MockObject_MockObject*/
+    private $storeMock;
 
     const SERVICE_METHOD = 'testMethod';
 
     const SERVICE_ID = 'Magento\Webapi\Controller\TestService';
 
-    protected function mockArguments()
+    protected function setUp()
     {
         $this->_requestMock = $this->getMockBuilder('Magento\Framework\Webapi\Rest\Request')
-            ->setMethods(['isSecure', 'getRequestData'])->disableOriginalConstructor()->getMock();
+            ->setMethods(
+                [
+                    'isSecure', 'getRequestData', 'getParams', 'getParam', 'getRequestedServices', 'getPathInfo',
+                    'getHttpHost', 'getMethod',
+                ]
+            )->disableOriginalConstructor()->getMock();
+        $this->_requestMock->expects($this->any())
+            ->method('getHttpHost')
+            ->willReturn('testHostName.com');
         $this->_responseMock = $this->getMockBuilder('Magento\Framework\Webapi\Rest\Response')
-            ->setMethods(['sendResponse', 'getHeaders', 'prepareResponse'])->disableOriginalConstructor()->getMock();
-        $this->_routerMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\Router')->setMethods(['match'])
+            ->setMethods(['sendResponse', 'prepareResponse'])->disableOriginalConstructor()->getMock();
+        $routerMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\Router')->setMethods(['match'])
             ->disableOriginalConstructor()->getMock();
         $this->_routeMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\Router\Route')
             ->setMethods(['isSecure', 'getServiceMethod', 'getServiceClass', 'getAclResources', 'getParameters'])
             ->disableOriginalConstructor()->getMock();
-        $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_serviceMock = $this->getMockBuilder(self::SERVICE_ID)->setMethods([self::SERVICE_METHOD])
-            ->disableOriginalConstructor()->getMock();
-        $this->_appStateMock = $this->getMockBuilder('Magento\Framework\App\State')
             ->disableOriginalConstructor()->getMock();
         $this->_oauthServiceMock = $this->getMockBuilder('\Magento\Framework\Oauth\OauthInterface')
             ->setMethods(['validateAccessTokenRequest'])->getMockForAbstractClass();
-        $this->_authorizationMock = $this->getMockBuilder('Magento\Framework\AuthorizationInterface')
+        $this->_authorizationMock = $this->getMockBuilder('Magento\Framework\Webapi\Authorization')
             ->disableOriginalConstructor()->getMock();
-        $this->paramsOverriderMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\ParamsOverrider')
+        $paramsOverriderMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\ParamsOverrider')
             ->setMethods(['overrideParams'])
             ->disableOriginalConstructor()->getMock();
-        $this->dataObjectProcessorMock = $this->getMockBuilder('Magento\Framework\Reflection\DataObjectProcessor')
+        $dataObjectProcessorMock = $this->getMockBuilder('Magento\Framework\Reflection\DataObjectProcessor')
             ->disableOriginalConstructor()->setMethods(['getMethodReturnType'])->getMockForAbstractClass();
-    }
-
-    protected function setUp()
-    {
-        $this->mockArguments();
+        $this->swaggerGeneratorMock = $this->getMockBuilder('Magento\Webapi\Model\Rest\Swagger\Generator')
+            ->disableOriginalConstructor()
+            ->setMethods(['generate', 'getListOfServices'])
+            ->getMockForAbstractClass();
 
         $layoutMock = $this->getMockBuilder('Magento\Framework\View\LayoutInterface')
             ->disableOriginalConstructor()->getMock();
@@ -135,41 +117,98 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->serviceInputProcessorMock = $this->getMockBuilder('\Magento\Framework\Webapi\ServiceInputProcessor')
             ->disableOriginalConstructor()->setMethods(['process'])->getMock();
-        $this->areaListMock = $this->getMock('\Magento\Framework\App\AreaList', [], [], '', false);
-        $this->areaMock = $this->getMock('Magento\Framework\App\AreaInterface');
-        $this->areaListMock->expects($this->any())->method('getArea')->will($this->returnValue($this->areaMock));
+        $areaListMock = $this->getMock('\Magento\Framework\App\AreaList', [], [], '', false);
+        $areaMock = $this->getMock('Magento\Framework\App\AreaInterface');
+        $areaListMock->expects($this->any())->method('getArea')->will($this->returnValue($areaMock));
+        $this->storeMock = $this->getMock('\Magento\Store\Api\Data\StoreInterface');
+        $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
+        $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($this->storeMock);
+
         /** Init SUT. */
         $this->_restController =
             $objectManager->getObject('Magento\Webapi\Controller\Rest',
                 [
                     'request' => $this->_requestMock,
                     'response' => $this->_responseMock,
-                    'router' => $this->_routerMock,
-                    'objectManager' => $this->_objectManagerMock,
-                    'appState' => $this->_appStateMock,
+                    'router' => $routerMock,
+                    'objectManager' => $objectManagerMock,
                     'layout' => $layoutMock,
                     'oauthService' => $this->_oauthServiceMock,
                     'authorization' => $this->_authorizationMock,
                     'serviceInputProcessor' => $this->serviceInputProcessorMock,
                     'errorProcessor' => $errorProcessorMock,
-                    'areaList' => $this->areaListMock,
-                    'paramsOverrider' => $this->paramsOverriderMock,
-                    'dataObjectProcessor' => $this->dataObjectProcessorMock
+                    'areaList' => $areaListMock,
+                    'paramsOverrider' => $paramsOverriderMock,
+                    'dataObjectProcessor' => $dataObjectProcessorMock,
+                    'swaggerGenerator' => $this->swaggerGeneratorMock,
+                    'storeManager' => $this->storeManagerMock
                 ]
             );
         // Set default expectations used by all tests
         $this->_routeMock->expects($this->any())->method('getServiceClass')->will($this->returnValue(self::SERVICE_ID));
         $this->_routeMock->expects($this->any())->method('getServiceMethod')
             ->will($this->returnValue(self::SERVICE_METHOD));
-        $this->_routerMock->expects($this->any())->method('match')->will($this->returnValue($this->_routeMock));
-        $this->_objectManagerMock->expects($this->any())->method('get')->will($this->returnValue($this->_serviceMock));
+        $routerMock->expects($this->any())->method('match')->will($this->returnValue($this->_routeMock));
+        $objectManagerMock->expects($this->any())->method('get')->will($this->returnValue($this->_serviceMock));
         $this->_responseMock->expects($this->any())->method('prepareResponse')->will($this->returnValue([]));
         $this->_serviceMock->expects($this->any())->method(self::SERVICE_METHOD)->will($this->returnValue(null));
-        $this->dataObjectProcessorMock->expects($this->any())->method('getMethodReturnType')
+        $dataObjectProcessorMock->expects($this->any())->method('getMethodReturnType')
             ->with(self::SERVICE_ID, self::SERVICE_METHOD)
             ->will($this->returnValue('null'));
-        $this->paramsOverriderMock->expects($this->any())->method('overrideParams')->will($this->returnValue([]));
+        $paramsOverriderMock->expects($this->any())->method('overrideParams')->will($this->returnValue([]));
+
         parent::setUp();
+    }
+
+    public function testDispatchSchemaRequest()
+    {
+        $params = [
+            \Magento\Framework\Webapi\Request::REQUEST_PARAM_SERVICES => 'foo',
+        ];
+        $this->_requestMock->expects($this->any())
+            ->method('getPathInfo')
+            ->willReturn(\Magento\Webapi\Controller\Rest::SCHEMA_PATH);
+        $this->_requestMock->expects($this->any())
+            ->method('getParams')
+            ->will($this->returnValue($params));
+        $schema = 'Some REST schema content';
+        $this->swaggerGeneratorMock->expects($this->any())->method('generate')->willReturn($schema);
+
+        /** @var \Magento\Framework\App\ResponseInterface $response */
+        $response = $this->_restController->dispatch($this->_requestMock);
+        $this->assertEquals($schema, $response->getBody());
+    }
+
+    public function testDispatchAllSchemaRequest()
+    {
+        $params = [
+            \Magento\Framework\Webapi\Request::REQUEST_PARAM_SERVICES => 'all',
+        ];
+        $this->_requestMock->expects($this->any())
+            ->method('getPathInfo')
+            ->willReturn(\Magento\Webapi\Controller\Rest::SCHEMA_PATH);
+        $this->_requestMock->expects($this->any())
+            ->method('getParam')
+            ->will(
+                $this->returnValueMap(
+                    [
+                        [\Magento\Framework\Webapi\Request::REQUEST_PARAM_SERVICES, null, 'all']
+                    ]
+                )
+            );
+        $this->_requestMock->expects($this->any())
+            ->method('getParams')
+            ->will($this->returnValue($params));
+        $this->_requestMock->expects($this->any())
+            ->method('getRequestedServices')
+            ->will($this->returnValue('all'));
+        $schema = 'Some REST schema content';
+        $this->swaggerGeneratorMock->expects($this->any())->method('generate')->willReturn($schema);
+        $this->swaggerGeneratorMock->expects($this->once())->method('getListOfServices')
+            ->willReturn(['listOfServices']);
+
+        $this->_restController->dispatch($this->_requestMock);
+        $this->assertEquals($schema, $this->_responseMock->getBody());
     }
 
     /**
@@ -238,6 +277,22 @@ class RestTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->_responseMock->isException());
         $exceptionArray = $this->_responseMock->getException();
         $this->assertEquals($expectedMsg, $exceptionArray[0]->getMessage());
+    }
+
+    public function testGetMethodAllStoresInvalid()
+    {
+        $this->_routeMock->expects($this->any())->method('getAclResources')->will($this->returnValue(['1']));
+        $this->_authorizationMock->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
+        $this->storeMock->expects($this->once())->method('getCode')->willReturn('admin');
+        $this->_requestMock->expects($this->once())->method('getMethod')->willReturn('get');
+
+        $this->_restController->dispatch($this->_requestMock);
+
+        $this->assertTrue($this->_responseMock->isException());
+        $this->assertSame(
+            "Cannot perform GET operation with store code 'all'",
+            $this->_responseMock->getException()[0]->getMessage()
+        );
     }
 }
 

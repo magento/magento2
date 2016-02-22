@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="cataloginventory" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Inventory</label>
@@ -32,7 +32,7 @@
                     <validate>validate-number</validate>
                 </field>
                 <field id="display_product_stock_status" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Display products availability in stock on Storefront.</label>
+                    <label>Display Products Availability in Stock on Storefront</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>

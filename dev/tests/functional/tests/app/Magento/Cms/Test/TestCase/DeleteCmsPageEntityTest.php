@@ -74,5 +74,6 @@ class DeleteCmsPageEntityTest extends Injectable
         $this->cmsPageIndex->open();
         $this->cmsPageIndex->getCmsPageGridBlock()->searchAndOpen(['title' => $cmsPage->getTitle()]);
         $this->cmsPageNew->getPageMainActions()->delete();
+        $this->cmsPageNew->getModalBlock()->acceptAlert();
     }
 }

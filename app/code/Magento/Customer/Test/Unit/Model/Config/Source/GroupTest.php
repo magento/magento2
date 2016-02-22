@@ -26,7 +26,7 @@ class GroupTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->groupServiceMock = $this->getMock('\Magento\Customer\Api\GroupManagementInterface');
-        $this->converterMock = $this->getMock('\Magento\Framework\Convert\Object', [], [], '', false);
+        $this->converterMock = $this->getMock('\Magento\Framework\Convert\DataObject', [], [], '', false);
         $this->model =
             new \Magento\Customer\Model\Config\Source\Group($this->groupServiceMock, $this->converterMock);
     }

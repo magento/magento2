@@ -211,11 +211,11 @@ abstract class AbstractType
     /**
      * Return relation info about used products for specific type instance
      *
-     * @return \Magento\Framework\Object Object with information data
+     * @return \Magento\Framework\DataObject Object with information data
      */
     public function getRelationInfo()
     {
-        return new \Magento\Framework\Object();
+        return new \Magento\Framework\DataObject();
     }
 
     /**
@@ -310,7 +310,7 @@ abstract class AbstractType
      *
      * @param  int $attributeId
      * @param  \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute|null
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute|null
      */
     public function getAttributeById($attributeId, $product)
     {
@@ -356,13 +356,13 @@ abstract class AbstractType
      * Prepare product and its configuration to be added to some products list.
      * Perform standard preparation process and then prepare options belonging to specific product type.
      *
-     * @param  \Magento\Framework\Object $buyRequest
+     * @param  \Magento\Framework\DataObject $buyRequest
      * @param  \Magento\Catalog\Model\Product $product
      * @param  string $processMode
      * @return array|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _prepareProduct(\Magento\Framework\Object $buyRequest, $product, $processMode)
+    protected function _prepareProduct(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
         // try to add custom options
         try {
@@ -423,13 +423,13 @@ abstract class AbstractType
     /**
      * Process product configuration
      *
-     * @param \Magento\Framework\Object $buyRequest
+     * @param \Magento\Framework\DataObject $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @param string $processMode
      * @return array|string
      */
     public function processConfiguration(
-        \Magento\Framework\Object $buyRequest,
+        \Magento\Framework\DataObject $buyRequest,
         $product,
         $processMode = self::PROCESS_MODE_LITE
     ) {
@@ -442,12 +442,12 @@ abstract class AbstractType
      * Initialize product(s) for add to cart process.
      * Advanced version of func to prepare product for cart - processMode can be specified there.
      *
-     * @param \Magento\Framework\Object $buyRequest
+     * @param \Magento\Framework\DataObject $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @param null|string $processMode
      * @return array|string
      */
-    public function prepareForCartAdvanced(\Magento\Framework\Object $buyRequest, $product, $processMode = null)
+    public function prepareForCartAdvanced(\Magento\Framework\DataObject $buyRequest, $product, $processMode = null)
     {
         if (!$processMode) {
             $processMode = self::PROCESS_MODE_FULL;
@@ -460,11 +460,11 @@ abstract class AbstractType
     /**
      * Initialize product(s) for add to cart process
      *
-     * @param \Magento\Framework\Object $buyRequest
+     * @param \Magento\Framework\DataObject $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @return array|string
      */
-    public function prepareForCart(\Magento\Framework\Object $buyRequest, $product)
+    public function prepareForCart(\Magento\Framework\DataObject $buyRequest, $product)
     {
         return $this->prepareForCartAdvanced($buyRequest, $product, self::PROCESS_MODE_FULL);
     }
@@ -565,29 +565,36 @@ abstract class AbstractType
     /**
      * Process custom defined options for product
      *
-     * @param \Magento\Framework\Object $buyRequest
+     * @param \Magento\Framework\DataObject $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @param string $processMode
      * @return array
      */
-    protected function _prepareOptions(\Magento\Framework\Object $buyRequest, $product, $processMode)
+    protected function _prepareOptions(\Magento\Framework\DataObject $buyRequest, $product, $processMode)
     {
         $transport = new \StdClass();
         $transport->options = [];
-        foreach ($product->getOptions() as $option) {
-            /* @var $option \Magento\Catalog\Model\Product\Option */
-            $group = $option->groupFactory($option->getType())
-                ->setOption($option)
-                ->setProduct($product)
-                ->setRequest($buyRequest)
-                ->setProcessMode($processMode)
-                ->validateUserValue($buyRequest->getOptions());
+        $options = null;
+        if ($product->getHasOptions()) {
+            $options = $product->getOptions();
+        }
+        if ($options !== null) {
+            foreach ($options as $option) {
+                /* @var $option \Magento\Catalog\Model\Product\Option */
+                $group = $option->groupFactory($option->getType())
+                    ->setOption($option)
+                    ->setProduct($product)
+                    ->setRequest($buyRequest)
+                    ->setProcessMode($processMode)
+                    ->validateUserValue($buyRequest->getOptions());
 
-            $preparedValue = $group->prepareForCart();
-            if ($preparedValue !== null) {
-                $transport->options[$option->getId()] = $preparedValue;
+                $preparedValue = $group->prepareForCart();
+                if ($preparedValue !== null) {
+                    $transport->options[$option->getId()] = $preparedValue;
+                }
             }
         }
+
 
         $eventName = sprintf('catalog_product_type_prepare_%s_options', $processMode);
         $this->_eventManager->dispatch(
@@ -606,8 +613,9 @@ abstract class AbstractType
      */
     public function checkProductBuyState($product)
     {
-        if (!$product->getSkipCheckRequiredOption()) {
-            foreach ($product->getOptions() as $option) {
+        if (!$product->getSkipCheckRequiredOption() && $product->getHasOptions()) {
+            $options = $product->getProductOptionsCollection();
+            foreach ($options as $option) {
                 if ($option->getIsRequire()) {
                     $customOption = $product->getCustomOption(self::OPTION_PREFIX . $option->getId());
                     if (!$customOption || strlen($customOption->getValue()) == 0) {
@@ -796,7 +804,7 @@ abstract class AbstractType
 
                     $group = $option->groupFactory($option->getType())
                         ->setOption($option)
-                        ->setListener(new \Magento\Framework\Object());
+                        ->setListener(new \Magento\Framework\DataObject());
 
                     $optionSku = $group->getOptionSku($confItemOption->getValue(), $skuDelimiter);
                     if ($optionSku) {
@@ -841,14 +849,14 @@ abstract class AbstractType
      * so need to change configuration item qty option value too.
      *
      * @param array $options
-     * @param \Magento\Framework\Object $option
+     * @param \Magento\Framework\DataObject $option
      * @param int|float|null $value
      * @param \Magento\Catalog\Model\Product $product
      *
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function updateQtyOption($options, \Magento\Framework\Object $option, $value, $product)
+    public function updateQtyOption($options, \Magento\Framework\DataObject $option, $value, $product)
     {
         return $this;
     }
@@ -970,7 +978,10 @@ abstract class AbstractType
     {
         $searchData = [];
         if ($product->getHasOptions()) {
-            $searchData = $this->_catalogProductOption->getSearchableData($product->getId(), $product->getStoreId());
+            $searchData = $this->_catalogProductOption->getSearchableData(
+                $product->getEntityId(),
+                $product->getStoreId()
+            );
         }
 
         return $searchData;
@@ -995,7 +1006,7 @@ abstract class AbstractType
      * Prepare selected options for product
      *
      * @param  \Magento\Catalog\Model\Product $product
-     * @param  \Magento\Framework\Object $buyRequest
+     * @param  \Magento\Framework\DataObject $buyRequest
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -1008,7 +1019,7 @@ abstract class AbstractType
      * Check product's options configuration
      *
      * @param  \Magento\Catalog\Model\Product $product
-     * @param  \Magento\Framework\Object $buyRequest
+     * @param  \Magento\Framework\DataObject $buyRequest
      * @return array
      */
     public function checkProductConfiguration($product, $buyRequest)

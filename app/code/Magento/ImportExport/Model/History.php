@@ -8,8 +8,8 @@ namespace Magento\ImportExport\Model;
 /**
  * Import history model
  *
- * @method \Magento\ImportExport\Model\Resource\History _getResource()
- * @method \Magento\ImportExport\Model\Resource\History getResource()
+ * @method \Magento\ImportExport\Model\ResourceModel\History _getResource()
+ * @method \Magento\ImportExport\Model\ResourceModel\History getResource()
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.LongVariable)
  */
@@ -22,6 +22,8 @@ class History extends \Magento\Framework\Model\AbstractModel
     const USER_ID = 'user_id';
 
     const IMPORTED_FILE = 'imported_file';
+
+    const ERROR_FILE = 'error_file';
 
     const EXECUTION_TIME = 'execution_time';
 
@@ -45,8 +47,8 @@ class History extends \Magento\Framework\Model\AbstractModel
      *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\ImportExport\Model\Resource\History $resource
-     * @param \Magento\ImportExport\Model\Resource\History\Collection $resourceCollection
+     * @param \Magento\ImportExport\Model\ResourceModel\History $resource
+     * @param \Magento\ImportExport\Model\ResourceModel\History\Collection $resourceCollection
      * @param \Magento\ImportExport\Helper\Report $reportHelper
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param array $data
@@ -54,8 +56,8 @@ class History extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\ImportExport\Model\Resource\History $resource,
-        \Magento\ImportExport\Model\Resource\History\Collection $resourceCollection,
+        \Magento\ImportExport\Model\ResourceModel\History $resource,
+        \Magento\ImportExport\Model\ResourceModel\History\Collection $resourceCollection,
         \Magento\ImportExport\Helper\Report $reportHelper,
         \Magento\Backend\Model\Auth\Session $authSession,
         array $data = []
@@ -73,7 +75,7 @@ class History extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\ImportExport\Model\Resource\History');
+        $this->_init('Magento\ImportExport\Model\ResourceModel\History');
     }
 
     /**
@@ -87,6 +89,19 @@ class History extends \Magento\Framework\Model\AbstractModel
         $this->setUserId($this->getAdminId());
         $this->setExecutionTime(self::IMPORT_VALIDATION);
         $this->setImportedFile($filename);
+        $this->save();
+        return $this;
+    }
+
+    /**
+     * Add errors to import history report
+     *
+     * @param string $filename
+     * @return $this
+     */
+    public function addErrorReportFile($filename)
+    {
+        $this->setErrorFile($filename);
         $this->save();
         return $this;
     }
@@ -171,6 +186,16 @@ class History extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Get error file
+     *
+     * @return string
+     */
+    public function getErrorFile()
+    {
+        return $this->getData(self::ERROR_FILE);
+    }
+
+    /**
      * Get import execution time
      *
      * @return string
@@ -235,6 +260,16 @@ class History extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+     * Set error file name
+     *
+     * @param string $errorFile
+     * @return $this
+     */
+    public function setErrorFile($errorFile)
+    {
+        return $this->setData(self::ERROR_FILE, $errorFile);
+    }
+    /**
      * Set Execution Time
      *
      * @param string $executionTime
@@ -254,6 +289,16 @@ class History extends \Magento\Framework\Model\AbstractModel
     public function setSummary($summary)
     {
         return $this->setData(self::SUMMARY, $summary);
+    }
+
+    /**
+     * @return $this
+     */
+    public function loadLastInsertItem()
+    {
+        $this->load($this->getLastItemId());
+
+        return $this;
     }
 
     /**

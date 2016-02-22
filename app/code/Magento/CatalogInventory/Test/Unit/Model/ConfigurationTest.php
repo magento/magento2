@@ -71,7 +71,7 @@ class ConfigurationTest extends \PHPUnit_Framework_TestCase
         $this->storeManagerMock->expects($this->once())
             ->method('getWebsite')
             ->willReturn($websiteMock);
-        $this->assertEquals($id, $this->model->getDefaultWebsiteId());
+        $this->assertEquals($id, $this->model->getDefaultScopeId());
     }
 
     public function testGetIsQtyTypeIds()

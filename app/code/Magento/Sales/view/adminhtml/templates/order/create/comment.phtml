@@ -10,12 +10,12 @@
 
 <?php /* <h4 class="icon-head fieldset-legend <?php echo $block->getHeaderCssClass() ?>"><?php echo $block->getHeaderText() ?></h4> */ ?>
 <div class="admin__field field-comment">
-    <label for="order-comment" class="admin__field-label"><span><?php echo __('Order Comments') ?></span></label>
+    <label for="order-comment" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Order Comments') ?></span></label>
     <div class="admin__field-control">
         <textarea
             id="order-comment"
             name="order[comment][customer_note]"
-            class="admin__control-textarea"><?php echo $block->getCommentNote() ?></textarea>
+            class="admin__control-textarea"><?php /* @escapeNotVerified */ echo $block->getCommentNote() ?></textarea>
     </div>
 </div>
 <script>

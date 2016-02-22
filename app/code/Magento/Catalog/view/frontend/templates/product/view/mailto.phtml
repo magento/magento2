@@ -9,7 +9,6 @@
 ?>
 <?php $_product = $block->getProduct() ?>
 <?php if ($block->canEmailToFriend()): ?>
-    <a title="<?php echo __('Email') ?>"
-       href="<?php echo $this->helper('Magento\Catalog\Helper\Product')->getEmailToFriendUrl($_product) ?>"
-       class="action mailto friend"><span><?php echo __('Email') ?></span></a>
+    <a href="<?php /* @escapeNotVerified */ echo $this->helper('Magento\Catalog\Helper\Product')->getEmailToFriendUrl($_product) ?>"
+       class="action mailto friend"><span><?php /* @escapeNotVerified */ echo __('Email') ?></span></a>
 <?php endif; ?>

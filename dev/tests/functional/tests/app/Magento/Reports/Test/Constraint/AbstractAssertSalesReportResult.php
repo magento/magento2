@@ -39,7 +39,7 @@ abstract class AbstractAssertSalesReportResult extends AbstractConstraint
     protected function searchInSalesReportGrid(array $salesReport)
     {
         $this->salesReportPage->open();
-        $this->salesReportPage->getMessagesBlock()->clickLinkInMessages('notice', 'here');
+        $this->salesReportPage->getMessagesBlock()->clickLinkInMessage('notice', 'here');
         $this->salesReportPage->getFilterBlock()->viewsReport($salesReport);
         $this->salesReportPage->getActionBlock()->showReport();
     }

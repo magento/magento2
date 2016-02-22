@@ -8,20 +8,21 @@ namespace Magento\CheckoutAgreements\Block\Adminhtml\Agreement;
 class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 {
     /**
-     * @var \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory
+     * @var \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory
      */
     protected $_collectionFactory;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory $collectionFactory
+     * @param \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory $collectionFactory
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory $collectionFactory,
+        \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory $collectionFactory,
         array $data = []
     ) {
         $this->_collectionFactory = $collectionFactory;
@@ -42,6 +43,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
     /**
      * @return $this
+     * @codeCoverageIgnore
      */
     protected function _prepareCollection()
     {
@@ -76,10 +78,10 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         if (!$this->_storeManager->isSingleStoreMode()) {
             $this->addColumn(
-                'store_id',
+                'stores',
                 [
                     'header' => __('Store View'),
-                    'index' => 'store_id',
+                    'index' => 'stores',
                     'type' => 'store',
                     'store_all' => true,
                     'store_view' => true,
@@ -131,8 +133,9 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
+     * @codeCoverageIgnore
      */
     public function getRowUrl($row)
     {

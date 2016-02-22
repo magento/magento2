@@ -5,9 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Cron/etc/crontab.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
-        <job name="aggregate_sales_report_coupons_data" instance="Magento\SalesRule\Model\Observer" method="aggregateSalesReportCouponsData">
+        <job name="aggregate_sales_report_coupons_data" instance="Magento\SalesRule\Cron\AggregateSalesReportCouponsData" method="execute">
             <schedule>0 0 * * *</schedule>
         </job>
     </group>

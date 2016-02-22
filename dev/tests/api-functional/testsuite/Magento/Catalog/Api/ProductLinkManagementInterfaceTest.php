@@ -9,6 +9,9 @@ namespace Magento\Catalog\Api;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * @magentoAppIsolation enabled
+ */
 class ProductLinkManagementInterfaceTest extends WebapiAbstract
 {
     const SERVICE_NAME = 'catalogProductLinkManagementV1';
@@ -16,7 +19,7 @@ class ProductLinkManagementInterfaceTest extends WebapiAbstract
     const RESOURCE_PATH = '/V1/products/';
 
     /**
-     * @var \Magento\Framework\ObjectManager
+     * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
 
@@ -84,8 +87,8 @@ class ProductLinkManagementInterfaceTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual.php
+     * @magentoApiDataFixture Magento/Catalog/_files/products_related.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_virtual_in_stock.php
      */
     public function testAssign()
     {

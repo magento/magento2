@@ -9,13 +9,23 @@
     class="modal-<%= data.type %> <%= data.modalClass %>
            <% if(data.innerScroll){ %><%= data.innerScrollClass %><% } %>"
     data-role="modal"
-    data-type="<%= data.type %>">
-    <div class="modal-inner-wrap">
+    data-type="<%= data.type %>"
+    tabindex="0">
+    <div data-role="focusable-start" tabindex="0"></div>
+    <div class="modal-inner-wrap"
+         data-role="focusable-scope">
         <header class="modal-header">
-            <% if(data.title){ %>
             <h1 class="modal-title"
-                data-role="title"><%= data.title %></h1>
-            <% } %>
+                data-role="title">
+                <% if(data.title){ %>
+                    <%= data.title %>
+                <% } %>
+                <span data-role="subTitle">
+                    <% if(data.subTitle){ %>
+                        <%= data.subTitle %>
+                    <% } %>
+                </span>
+            </h1>
             <button
                 class="action-close"
                 data-role="closeBtn"
@@ -40,4 +50,5 @@
         </header>
         <div class="modal-content" data-role="content"></div>
     </div>
+    <div data-role="focusable-end" tabindex="0"></div>
 </aside>

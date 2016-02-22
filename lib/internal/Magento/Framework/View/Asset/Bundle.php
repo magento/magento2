@@ -21,6 +21,11 @@ class Bundle
      */
     protected $assets = [];
 
+    /**
+     * @var array
+     */
+    protected $assetsContent = [];
+
     /** @var  Bundle\Config */
     protected $bundleConfig;
 
@@ -79,10 +84,8 @@ class Bundle
         $parts = &$this->assets[$this->getContextCode($asset)][$asset->getContentType()];
         if (!isset($parts[$partIndex])) {
             $parts[$partIndex]['assets'] = [];
-            $parts[$partIndex]['space'] = $this->getMaxPartSize($asset);
         }
         $parts[$partIndex]['assets'][$this->getAssetKey($asset)] = $asset;
-        $parts[$partIndex]['space'] -= $this->getAssetSize($asset);
     }
 
     /**
@@ -119,12 +122,11 @@ class Bundle
         $parts = $this->assets[$this->getContextCode($asset)][$asset->getContentType()];
 
         $maxPartSize = $this->getMaxPartSize($asset);
-        $assetSize = $this->getAssetSize($asset);
-        $minSpace = $maxPartSize + 1;
+        $minSpace = $maxPartSize;
         $minIndex = -1;
         if ($maxPartSize && count($parts)) {
             foreach ($parts as $partIndex => $part) {
-                $space = $part['space'] - $assetSize;
+                $space = $maxPartSize - $this->getSizePartWithNewAsset($asset, $part['assets']);
                 if ($space >= 0 && $space < $minSpace) {
                     $minSpace = $space;
                     $minIndex = $partIndex;
@@ -145,12 +147,16 @@ class Bundle
     }
 
     /**
+     * Get part size after adding new asset
+     *
      * @param LocalInterface $asset
-     * @return int
+     * @param LocalInterface[] $assets
+     * @return float
      */
-    protected function getAssetSize(LocalInterface $asset)
+    protected function getSizePartWithNewAsset(LocalInterface $asset, $assets = [])
     {
-        return mb_strlen(utf8_encode($asset->getContent()), 'utf-8') / 1024;
+        $assets[$this->getAssetKey($asset)] = $asset;
+        return mb_strlen($this->getPartContent($assets), 'utf-8') / 1024;
     }
 
     /**
@@ -176,7 +182,7 @@ class Bundle
     {
         $contents = [];
         foreach ($assets as $key => $asset) {
-            $contents[$key] = utf8_encode($asset->getContent());
+            $contents[$key] = $this->getAssetContent($asset);
         }
 
         $partType = reset($assets)->getContentType();
@@ -188,6 +194,24 @@ class Bundle
             "});\n";
 
         return $content;
+    }
+
+    /**
+     * Get content of asset
+     *
+     * @param LocalInterface $asset
+     * @return string
+     */
+    protected function getAssetContent(LocalInterface $asset)
+    {
+        $assetContextCode = $this->getContextCode($asset);
+        $assetContentType = $asset->getContentType();
+        $assetKey = $this->getAssetKey($asset);
+        if (!isset($this->assetsContent[$assetContextCode][$assetContentType][$assetKey])) {
+            $this->assetsContent[$assetContextCode][$assetContentType][$assetKey] = utf8_encode($asset->getContent());
+        }
+
+        return $this->assetsContent[$assetContextCode][$assetContentType][$assetKey];
     }
 
     /**
@@ -220,6 +244,7 @@ class Bundle
         }
         $this->assets = [];
         $this->content = [];
+        $this->assetsContent = [];
     }
 
     /**
@@ -233,7 +258,8 @@ class Bundle
         $bundlePath = '';
         foreach ($types as $parts) {
             /** @var FallbackContext $context */
-            $context = reset(reset($parts)['assets'])->getContext();
+            $assetsParts = reset($parts);
+            $context = reset($assetsParts['assets'])->getContext();
             $bundlePath = empty($bundlePath) ? $context->getPath() . Manager::BUNDLE_PATH : $bundlePath;
             $this->fillContent($parts, $context);
         }

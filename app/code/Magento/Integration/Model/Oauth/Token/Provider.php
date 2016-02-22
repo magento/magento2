@@ -7,6 +7,7 @@
 namespace Magento\Integration\Model\Oauth\Token;
 
 use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\Encryption\Helper\Security;
 use Magento\Framework\Oauth\TokenProviderInterface;
 use Magento\Integration\Model\Oauth\Token;
 
@@ -216,7 +217,7 @@ class Provider implements TokenProviderInterface
                 __('Verifier is not the correct length')
             );
         }
-        if ($tokenVerifier != $oauthVerifier) {
+        if (!Security::compareStrings($tokenVerifier, $oauthVerifier)) {
             throw new \Magento\Framework\Oauth\Exception(
                 __('Token verifier and verifier token do not match')
             );

@@ -11,10 +11,20 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Action\Context;
 
-class Create extends \Magento\Customer\Controller\Account
+class Create extends \Magento\Customer\Controller\AbstractAccount
 {
     /** @var Registration */
     protected $registration;
+
+    /**
+     * @var Session
+     */
+    protected $session;
+
+    /**
+     * @var PageFactory
+     */
+    protected $resultPageFactory;
 
     /**
      * @param Context $context
@@ -28,8 +38,10 @@ class Create extends \Magento\Customer\Controller\Account
         PageFactory $resultPageFactory,
         Registration $registration
     ) {
+        $this->session = $customerSession;
+        $this->resultPageFactory = $resultPageFactory;
         $this->registration = $registration;
-        parent::__construct($context, $customerSession, $resultPageFactory);
+        parent::__construct($context);
     }
 
     /**
@@ -39,7 +51,7 @@ class Create extends \Magento\Customer\Controller\Account
      */
     public function execute()
     {
-        if ($this->_getSession()->isLoggedIn() || !$this->registration->isAllowed()) {
+        if ($this->session->isLoggedIn() || !$this->registration->isAllowed()) {
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             $resultRedirect->setPath('*/*');

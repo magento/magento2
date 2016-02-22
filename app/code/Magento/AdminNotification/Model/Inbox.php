@@ -12,8 +12,8 @@ use Magento\AdminNotification\Model\InboxInterface;
 /**
  * AdminNotification Inbox model
  *
- * @method \Magento\AdminNotification\Model\Resource\Inbox _getResource()
- * @method \Magento\AdminNotification\Model\Resource\Inbox getResource()
+ * @method \Magento\AdminNotification\Model\ResourceModel\Inbox _getResource()
+ * @method \Magento\AdminNotification\Model\ResourceModel\Inbox getResource()
  * @method int getSeverity()
  * @method \Magento\AdminNotification\Model\Inbox setSeverity(int $value)
  * @method string getDateAdded()
@@ -38,7 +38,7 @@ class Inbox extends \Magento\Framework\Model\AbstractModel implements NotifierIn
      */
     protected function _construct()
     {
-        $this->_init('Magento\AdminNotification\Model\Resource\Inbox');
+        $this->_init('Magento\AdminNotification\Model\ResourceModel\Inbox');
     }
 
     /**

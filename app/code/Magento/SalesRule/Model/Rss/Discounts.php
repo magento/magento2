@@ -12,7 +12,7 @@ namespace Magento\SalesRule\Model\Rss;
 class Discounts
 {
     /**
-     * @var \Magento\SalesRule\Model\Resource\Rule\CollectionFactory
+     * @var \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory
      */
     protected $collectionFactory;
 
@@ -23,11 +23,11 @@ class Discounts
 
     /**
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory
+     * @param \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $collectionFactory
      */
     public function __construct(
         \Magento\Framework\Stdlib\DateTime $dateTime,
-        \Magento\SalesRule\Model\Resource\Rule\CollectionFactory $collectionFactory
+        \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $collectionFactory
     ) {
         $this->dateTime = $dateTime;
         $this->collectionFactory = $collectionFactory;
@@ -36,11 +36,11 @@ class Discounts
     /**
      * @param int $websiteId
      * @param int $customerGroupId
-     * @return \Magento\SalesRule\Model\Resource\Rule\Collection
+     * @return \Magento\SalesRule\Model\ResourceModel\Rule\Collection
      */
     public function getDiscountCollection($websiteId, $customerGroupId)
     {
-        /** @var $collection \Magento\SalesRule\Model\Resource\Rule\Collection */
+        /** @var $collection \Magento\SalesRule\Model\ResourceModel\Rule\Collection */
         $collection = $this->collectionFactory->create();
         $collection->addWebsiteGroupDateFilter(
             $websiteId,

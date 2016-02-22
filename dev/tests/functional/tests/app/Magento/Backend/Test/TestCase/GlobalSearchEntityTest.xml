@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Backend\Test\TestCase\GlobalSearchEntityTest">
+    <testCase name="Magento\Backend\Test\TestCase\GlobalSearchEntityTest" summary="Global Search Backend " ticketId="MAGETWO-28457">
         <variation name="GlobalSearchEntityTestVariation2">
             <data name="description" xsi:type="string">search with 2 sign return no results</data>
             <data name="search/data/query" xsi:type="string">:)</data>

@@ -9,6 +9,7 @@ namespace Magento\Catalog\Block\Product;
  * Test class for \Magento\Catalog\Block\Product\List.
  *
  * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+ * @magentoAppArea frontend
  */
 class ListTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,7 +38,7 @@ class ListTest extends \PHPUnit_Framework_TestCase
     {
         $this->_block->setShowRootCategory(true);
         $collection = $this->_block->getLoadedProductCollection();
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Product\Collection', $collection);
+        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Product\Collection', $collection);
         /* Check that root category was defined for Layer as current */
         $this->assertEquals(2, $this->_block->getLayer()->getCurrentCategory()->getId());
     }

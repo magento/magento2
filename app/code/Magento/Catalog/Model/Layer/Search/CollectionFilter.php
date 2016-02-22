@@ -46,7 +46,7 @@ class CollectionFilter implements CollectionFilterInterface
     /**
      * Filter product collection
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @param \Magento\Catalog\Model\Category $category
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -63,7 +63,6 @@ class CollectionFilter implements CollectionFilterInterface
             ->addTaxPercents()
             ->addStoreFilter()
             ->addUrlRewrite()
-            ->setVisibility($this->productVisibility->getVisibleInSearchIds())
-            ->setOrder('relevance', Select::SQL_ASC);
+            ->setVisibility($this->productVisibility->getVisibleInSearchIds());
     }
 }

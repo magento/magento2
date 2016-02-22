@@ -6,9 +6,15 @@
 
 namespace Magento\GiftMessage\Test\Block\Cart\Item;
 
+use Magento\Mtf\Block\BlockFactory;
 use Magento\GiftMessage\Test\Fixture\GiftMessage;
 use Magento\Mtf\Block\Form;
+use Magento\Mtf\Block\Mapper;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Util\ModuleResolver\SequenceSorterInterface;
 
 /**
  * Add gift options on checkout cart item level
@@ -20,7 +26,7 @@ class GiftOptions extends Form
      *
      * @var string
      */
-    protected $giftMessageItemForm = '//div[@class="gift-message"]//fieldset[ancestor::tbody[contains(.,"%s")]]';
+    protected $giftMessageItemForm = '.gift-message fieldset';
 
     /**
      * Allow Gift Options for items
@@ -44,6 +50,35 @@ class GiftOptions extends Form
     protected $giftMessageSummary = '//div[@class="gift-message-summary"][ancestor::tbody[contains(.,"%s")]]';
 
     /**
+     * Fixture factory.
+     *
+     * @var FixtureFactory
+     */
+    protected $fixtureFactory;
+
+    /**
+     * @param SimpleElement $element
+     * @param BlockFactory $blockFactory
+     * @param Mapper $mapper
+     * @param BrowserInterface $browser
+     * @param SequenceSorterInterface $sequenceSorter
+     * @param FixtureFactory $fixtureFactory
+     * @param array $config [optional]
+     */
+    public function __construct(
+        SimpleElement $element,
+        BlockFactory $blockFactory,
+        Mapper $mapper,
+        BrowserInterface $browser,
+        SequenceSorterInterface $sequenceSorter,
+        FixtureFactory $fixtureFactory,
+        array $config = []
+    ) {
+        parent::__construct($element, $blockFactory, $mapper, $browser, $sequenceSorter, $config);
+        $this->fixtureFactory = $fixtureFactory;
+    }
+
+    /**
      * Fill gift message form on item level
      *
      * @param GiftMessage $giftMessage
@@ -55,21 +90,23 @@ class GiftOptions extends Form
         /** @var \Magento\GiftMessage\Test\Block\Cart\GiftOptions\GiftMessageForm $giftMessageForm */
         if ($giftMessage->getAllowGiftOptionsForItems() === 'Yes') {
             foreach ($products as $product) {
-                if ($product->getIsVirtual() !== 'Yes') {
+                if ($product->getProductHasWeight() == 'Yes') {
                     $this->_rootElement->find(
                         sprintf($this->allowGiftOptions, $product->getName()),
                         Locator::SELECTOR_XPATH
                     )->click();
                     $giftMessageForm = $this->blockFactory->create(
                         'Magento\GiftMessage\Test\Block\Cart\GiftOptions\GiftMessageForm',
-                        [
-                            'element' => $this->_rootElement->find(
-                                sprintf($this->giftMessageItemForm, $product->getName()),
-                                Locator::SELECTOR_XPATH
-                            )
-                        ]
+                        ['element' => $this->_rootElement->find($this->giftMessageItemForm)]
                     );
-                    $giftMessageForm->fill($giftMessage);
+                    $giftMessage = $giftMessage->getItems()[0];
+                    $formData = [
+                        'sender' => $giftMessage->getSender(),
+                        'recipient' => $giftMessage->getRecipient(),
+                        'message' => $giftMessage->getMessage()
+                    ];
+                    $formData = $this->fixtureFactory->createByCode('giftMessage', ['data' => $formData]);
+                    $giftMessageForm->fill($formData);
                     $this->_rootElement->find($this->giftMessageItemButton)->click();
                     $this->waitForElementVisible(
                         sprintf($this->giftMessageSummary, $product->getName()),

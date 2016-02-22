@@ -10,15 +10,13 @@ use Magento\Quote\Model\Quote\Address;
 /**
  * Shopping Cart Rule data model
  *
- * @method \Magento\SalesRule\Model\Resource\Rule _getResource()
- * @method \Magento\SalesRule\Model\Resource\Rule getResource()
+ * @method \Magento\SalesRule\Model\ResourceModel\Rule _getResource()
+ * @method \Magento\SalesRule\Model\ResourceModel\Rule getResource()
  * @method string getName()
  * @method \Magento\SalesRule\Model\Rule setName(string $value)
  * @method string getDescription()
  * @method \Magento\SalesRule\Model\Rule setDescription(string $value)
- * @method string getFromDate()
  * @method \Magento\SalesRule\Model\Rule setFromDate(string $value)
- * @method string getToDate()
  * @method \Magento\SalesRule\Model\Rule setToDate(string $value)
  * @method int getUsesPerCustomer()
  * @method \Magento\SalesRule\Model\Rule setUsesPerCustomer(int $value)
@@ -163,7 +161,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected $_condProdCombineF;
 
     /**
-     * @var \Magento\SalesRule\Model\Resource\Coupon\Collection
+     * @var \Magento\SalesRule\Model\ResourceModel\Coupon\Collection
      */
     protected $_couponCollection;
 
@@ -175,31 +173,35 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\SalesRule\Model\CouponFactory $couponFactory
-     * @param \Magento\SalesRule\Model\Coupon\CodegeneratorFactory $codegenFactory
-     * @param \Magento\SalesRule\Model\Rule\Condition\CombineFactory $condCombineFactory
-     * @param \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory $condProdCombineF
-     * @param \Magento\SalesRule\Model\Resource\Coupon\Collection $couponCollection
+     * @param CouponFactory $couponFactory
+     * @param Coupon\CodegeneratorFactory $codegenFactory
+     * @param Rule\Condition\CombineFactory $condCombineFactory
+     * @param Rule\Condition\Product\CombineFactory $condProdCombineF
+     * @param ResourceModel\Coupon\Collection $couponCollection
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\SalesRule\Model\CouponFactory $couponFactory,
         \Magento\SalesRule\Model\Coupon\CodegeneratorFactory $codegenFactory,
         \Magento\SalesRule\Model\Rule\Condition\CombineFactory $condCombineFactory,
         \Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory $condProdCombineF,
-        \Magento\SalesRule\Model\Resource\Coupon\Collection $couponCollection,
+        \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $couponCollection,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -209,7 +211,17 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         $this->_condProdCombineF = $condProdCombineF;
         $this->_couponCollection = $couponCollection;
         $this->_storeManager = $storeManager;
-        parent::__construct($context, $registry, $formFactory, $localeDate, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $formFactory,
+            $localeDate,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**
@@ -220,7 +232,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\SalesRule\Model\Resource\Rule');
+        $this->_init('Magento\SalesRule\Model\ResourceModel\Rule');
         $this->setIdFieldName('rule_id');
     }
 
@@ -231,11 +243,31 @@ class Rule extends \Magento\Rule\Model\AbstractModel
      */
     protected function _afterLoad()
     {
+        $this->loadRelations();
+        return parent::_afterLoad();
+    }
+
+    /**
+     * Load all relative data
+     *
+     * @return void
+     */
+    public function loadRelations()
+    {
+        $this->loadCouponCode();
+    }
+
+    /**
+     * Load coupon code
+     *
+     * @return void
+     */
+    public function loadCouponCode()
+    {
         $this->setCouponCode($this->getPrimaryCoupon()->getCode());
-        if ($this->getUsesPerCoupon() !== null && !$this->getUseAutoGeneration()) {
+        if ($this->getUsesPerCoupon() == null && !$this->getUseAutoGeneration()) {
             $this->setUsesPerCoupon($this->getPrimaryCoupon()->getUsageLimit());
         }
-        return parent::_afterLoad();
     }
 
     /**
@@ -419,7 +451,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
                 \Magento\SalesRule\Model\Rule::COUPON_TYPE_NO_COUPON => __('No Coupon'),
                 \Magento\SalesRule\Model\Rule::COUPON_TYPE_SPECIFIC => __('Specific Coupon'),
             ];
-            $transport = new \Magento\Framework\Object(
+            $transport = new \Magento\Framework\DataObject(
                 ['coupon_types' => $this->_couponTypes, 'is_coupon_type_auto_visible' => false]
             );
             $this->_eventManager->dispatch('salesrule_rule_get_coupon_types', ['transport' => $transport]);
@@ -496,6 +528,22 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         }
 
         return $coupon;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFromDate()
+    {
+        return $this->getData('from_date');
+    }
+
+    /**
+     * @return string
+     */
+    public function getToDate()
+    {
+        return $this->getData('to_date');
     }
 
     /**

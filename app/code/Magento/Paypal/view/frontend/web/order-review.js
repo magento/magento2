@@ -6,11 +6,12 @@
 /*global alert*/
 define([
     "jquery",
+    'Magento_Ui/js/modal/alert',
     "jquery/ui",
     "mage/translate",
     "mage/mage",
     "mage/validation"
-], function($){
+], function($, alert){
     "use strict";
 
     $.widget('mage.orderReview', {
@@ -27,7 +28,8 @@ define([
             updateShippingMethodSubmitSelector: "#update-shipping-method-submit",
             reviewSubmitSelector: "#review-submit",
             shippingMethodUpdateUrl: null,
-            updateOrderSubmitUrl: null
+            updateOrderSubmitUrl: null,
+            canEditShippingMethod: false
         },
 
         /**
@@ -49,7 +51,7 @@ define([
                 .find(this.options.updateShippingMethodSubmitSelector).hide().end()
                 .find(this.options.reviewSubmitSelector).hide();
             this._shippingTobilling();
-            if ($(this.options.shippingSubmitFormSelector).length) {
+            if ($(this.options.shippingSubmitFormSelector).length && this.options.canEditShippingMethod) {
                 this.isShippingSubmitForm = true;
                 $(this.options.shippingSubmitFormSelector).find(this.options.updateShippingMethodSubmitSelector).hide().end()
                     .on('change',
@@ -129,7 +131,9 @@ define([
                                     msg = msg.join("\n");
                                 }
                             }
-                            alert($.mage.__(msg));
+                            alert({
+                                content: $.mage.__(msg)
+                            });
                             return false;
                         }
                         if (response.redirect) {
@@ -141,11 +145,15 @@ define([
                             return false;
                         }
                         this._ajaxComplete();
-                        alert($.mage.__('Sorry, something went wrong.'));
+                        alert({
+                            content: $.mage.__('Sorry, something went wrong.')
+                        });
                     }
                 },
                 error: function () {
-                    alert($.mage.__('Sorry, something went wrong. Please try again later.'));
+                    alert({
+                        content: $.mage.__('Sorry, something went wrong. Please try again later.')
+                    });
                     this._ajaxComplete();
                 }
             });

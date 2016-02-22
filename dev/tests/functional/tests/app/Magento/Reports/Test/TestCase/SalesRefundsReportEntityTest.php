@@ -68,7 +68,7 @@ class SalesRefundsReportEntityTest extends Injectable
     {
         // Preconditions
         $this->refundsReport->open();
-        $this->refundsReport->getMessagesBlock()->clickLinkInMessages('notice', 'here');
+        $this->refundsReport->getMessagesBlock()->clickLinkInMessage('notice', 'here');
         $this->refundsReport->getFilterBlock()->viewsReport($refundsReport);
         $this->refundsReport->getActionBlock()->showReport();
         $initialRefundsResult = $this->refundsReport->getGridBlock()->getLastResult();

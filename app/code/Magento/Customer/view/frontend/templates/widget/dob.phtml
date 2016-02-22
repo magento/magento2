@@ -35,12 +35,12 @@ NOTE: Regarding styles - if we leave it this way, we'll move it to boxes.css
 $fieldCssClass = 'field date field-' . $block->getHtmlId();
 $fieldCssClass .= $block->isRequired() ? ' required' : '';
 ?>
-<div class="<?php echo $fieldCssClass; ?>">
-    <label class="label" for="<?php echo $block->getHtmlId()?>"><span><?php echo $block->getLabel() ?></span></label>
+<div class="<?php /* @escapeNotVerified */ echo $fieldCssClass; ?>">
+    <label class="label" for="<?php echo $block->getHtmlId()?>"><span><?php /* @escapeNotVerified */ echo $block->getLabel() ?></span></label>
     <div class="control customer-dob">
         <?php echo $block->getFieldHtml(); ?>
         <?php if ($_message = $block->getAdditionalDescription()) : ?>
-            <div class="note"><?php echo $_message; ?></div>
+            <div class="note"><?php /* @escapeNotVerified */ echo $_message; ?></div>
         <?php endif; ?>
     </div>
 </div>

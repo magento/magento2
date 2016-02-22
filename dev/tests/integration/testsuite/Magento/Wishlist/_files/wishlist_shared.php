@@ -32,7 +32,7 @@ foreach ($simpleProduct->getOptions() as $option) {
 /* @var $wishlist \Magento\Wishlist\Model\Wishlist */
 $wishlist = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Wishlist\Model\Wishlist');
 $wishlist->loadByCustomerId($customer->getId(), true);
-$wishlist->addNewItem($simpleProduct, new \Magento\Framework\Object(['options' => $options]));
+$wishlist->addNewItem($simpleProduct, new \Magento\Framework\DataObject(['options' => $options]));
 $wishlist->setSharingCode('fixture_unique_code')
     ->setShared(1)
     ->save();

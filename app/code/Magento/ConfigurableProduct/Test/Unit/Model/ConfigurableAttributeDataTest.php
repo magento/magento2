@@ -22,7 +22,7 @@ class ConfigurableAttributeDataTest extends \PHPUnit_Framework_TestCase
     protected $configurableAttributeData;
 
     /**
-     * @var \Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute|
+     * @var \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute|
      * \PHPUnit_Framework_MockObject_MockObject
      */
     protected $attributeMock;
@@ -39,15 +39,15 @@ class ConfigurableAttributeDataTest extends \PHPUnit_Framework_TestCase
                 'setParentId',
                 'hasPreconfiguredValues',
                 'getPreconfiguredValues',
-                '__wakeup',
-                'getPriceInfo'
+                'getPriceInfo',
+                'getStoreId'
             ],
             [],
             '',
             false
         );
         $this->attributeMock = $this->getMock(
-            'Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable\Attribute',
+            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute',
             [],
             [],
             '',
@@ -61,6 +61,7 @@ class ConfigurableAttributeDataTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareJsonAttributes()
     {
+        $storeId = '1';
         $attributeId = 5;
         $attributeOptions = [
             ['value_index' => 'option_id_1', 'label' => 'label_1'],
@@ -96,7 +97,7 @@ class ConfigurableAttributeDataTest extends \PHPUnit_Framework_TestCase
 
         $productAttributeMock = $this->getMockBuilder('Magento\Catalog\Model\Entity\Attribute')
             ->disableOriginalConstructor()
-            ->setMethods(['getLabel', '__wakeup', 'getAttributeCode', 'getId', 'getAttributeLabel'])
+            ->setMethods(['getStoreLabel', '__wakeup', 'getAttributeCode', 'getId', 'getAttributeLabel'])
             ->getMock();
         $productAttributeMock->expects($this->once())
             ->method('getId')
@@ -112,8 +113,10 @@ class ConfigurableAttributeDataTest extends \PHPUnit_Framework_TestCase
         $attributeMock->expects($this->once())
             ->method('getProductAttribute')
             ->willReturn($productAttributeMock);
-        $attributeMock->expects($this->once())
-            ->method('getLabel')
+        $this->product->expects($this->once())->method('getStoreId')->willReturn($storeId);
+        $productAttributeMock->expects($this->once())
+            ->method('getStoreLabel')
+            ->with($storeId)
             ->willReturn($expected['attributes'][$attributeId]['label']);
 
         $attributeMock->expects($this->atLeastOnce())
@@ -131,7 +134,7 @@ class ConfigurableAttributeDataTest extends \PHPUnit_Framework_TestCase
             ->with($this->product)
             ->willReturn([$attributeMock]);
 
-        $configuredValueMock = $this->getMockBuilder('Magento\Framework\Object')
+        $configuredValueMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
         $configuredValueMock->expects($this->any())

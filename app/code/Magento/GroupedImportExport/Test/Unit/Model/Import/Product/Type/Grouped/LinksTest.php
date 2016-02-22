@@ -6,6 +6,7 @@
 
 namespace Magento\GroupedImportExport\Test\Unit\Model\Import\Product\Type\Grouped;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class LinksTest extends \PHPUnit_Framework_TestCase
@@ -16,10 +17,10 @@ class LinksTest extends \PHPUnit_Framework_TestCase
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Catalog\Model\Resource\Product\Link|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Product\Link|\PHPUnit_Framework_MockObject_MockObject */
     protected $link;
 
-    /** @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
     protected $resource;
 
     /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql */
@@ -33,12 +34,13 @@ class LinksTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->link = $this->getMock('Magento\Catalog\Model\Resource\Product\Link', [], [], '', false);
+        $this->link = $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Link', [], [], '', false);
         $this->connection = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
-        $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
-        $this->resource->expects($this->once())->method('getConnection')->with('write')->will(
-            $this->returnValue($this->connection)
-        );
+        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $this->resource
+            ->expects($this->once())
+            ->method('getConnection')
+            ->will($this->returnValue($this->connection));
 
         $this->import = $this->getMock('Magento\ImportExport\Model\Import', [], [], '', false);
         $this->importFactory = $this->getMock('Magento\ImportExport\Model\ImportFactory', ['create'], [], '', false);
@@ -162,7 +164,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
 
     protected function processBehaviorGetter($behavior)
     {
-        $dataSource = $this->getMock('Magento\ImportExport\Model\Resource\Import\Data', [], [], '', false);
+        $dataSource = $this->getMock('Magento\ImportExport\Model\ResourceModel\Import\Data', [], [], '', false);
         $dataSource->expects($this->once())->method('getBehavior')->will($this->returnValue($behavior));
         $this->import->expects($this->once())->method('getDataSourceModel')->will($this->returnValue($dataSource));
     }

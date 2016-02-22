@@ -8,7 +8,7 @@ namespace Magento\Braintree\Test\Unit\Model\PaymentMethod;
 
 use Magento\Braintree\Model\PaymentMethod;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use \Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
+use \Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
 use Magento\Framework\Exception\LocalizedException;
 use \Braintree_Result_Successful;
 use \Braintree_Result_Error;
@@ -141,7 +141,7 @@ class PayPalTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->salesTransactionCollectionFactoryMock = $this->getMockBuilder(
-            '\Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory'
+            '\Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory'
         )->disableOriginalConstructor()
             ->getMock();
         $this->productMetaDataMock = $this->getMockBuilder('\Magento\Framework\App\ProductMetadataInterface')
@@ -235,7 +235,7 @@ class PayPalTest extends \PHPUnit_Framework_TestCase
             'payment_method_nonce' => $paymentMethodNonce,
             'store_in_vault' => $storeInVault,
         ];
-        $data = new \Magento\Framework\Object($data);
+        $data = new \Magento\Framework\DataObject($data);
         $this->model->setInfoInstance($this->infoInstanceMock);
 
         //ignore all fields except for payment_method_nonce
@@ -256,9 +256,9 @@ class PayPalTest extends \PHPUnit_Framework_TestCase
         $ccType,
         $ccToken = null
     ) {
-        $quoteObj = new \Magento\Framework\Object(
+        $quoteObj = new \Magento\Framework\DataObject(
             [
-                'billing_address' => new \Magento\Framework\Object(
+                'billing_address' => new \Magento\Framework\DataObject(
                     [
                         'country_id' => $countryId,
                     ]
@@ -360,13 +360,13 @@ class PayPalTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \Magento\Framework\Object $paymentObject
+     * @param \Magento\Framework\DataObject $paymentObject
      * @param int $storeId
      * @return array
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setupPaymentObject(
-        \Magento\Framework\Object $paymentObject,
+        \Magento\Framework\DataObject $paymentObject,
         $storeId
     ) {
         $customerId = '12';
@@ -399,11 +399,11 @@ class PayPalTest extends \PHPUnit_Framework_TestCase
             'address_type' => 'billing',
         ];
 
-        $billingAddress = new \Magento\Framework\Object(
+        $billingAddress = new \Magento\Framework\DataObject(
             $addressData
         );
         $addressData['address_type'] = 'shipping';
-        $shippingAddress = new \Magento\Framework\Object(
+        $shippingAddress = new \Magento\Framework\DataObject(
             $addressData
         );
 
@@ -587,7 +587,7 @@ class PayPalTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->model, $this->model->authorize($paymentObject, $amount));
         foreach ($expectedPaymentFields as $key => $value) {
             if ($key == 'getTransactionAdditionalInfo') {
-                $this->assertEquals($value, $paymentObject->getTransactionAdditionalInfo('token'));
+                $this->assertEquals($value, $paymentObject->getTransactionAdditionalInfo());
             } else {
                 $this->assertEquals($value, $paymentObject->getData($key), 'Incorrect field in paymentobject: ' . $key);
             }
@@ -761,8 +761,8 @@ class PayPalTest extends \PHPUnit_Framework_TestCase
             ->method('critical');
 
         $this->model->capture($paymentObject, $amount);
-        $this->assertEquals(0, $paymentObject->getIsTransactionClosed());
-        $this->assertFalse($paymentObject->getShouldCloseParentTransaction());
+        $this->assertEquals(false, $paymentObject->getIsTransactionClosed());
+        $this->assertEquals(true, $paymentObject->getShouldCloseParentTransaction());
     }
 
     /**

@@ -210,6 +210,7 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($queryResult));
 
         $url = $model->getUrl('catalog/product/view', [
+            '_scope' => $this->getMockForAbstractClass('Magento\Store\Api\Data\StoreInterface'),
             '_fragment' => 'anchor',
             '_escape' => 1,
             '_query' => $query,

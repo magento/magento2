@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\App\Config\Storage\WriterInterface" type="Magento\Framework\App\Config\Storage\Writer" />
     <preference for="Magento\Framework\App\Request\PathInfoProcessorInterface" type="Magento\Backend\App\Request\PathInfoProcessor" />
     <preference for="Magento\Backend\Model\Auth\StorageInterface" type="Magento\Backend\Model\Auth\Session" />
@@ -57,11 +57,6 @@
             <argument name="backendUrl" xsi:type="object">Magento\Backend\Model\UrlInterface\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Backend\Model\Observer">
-        <arguments>
-            <argument name="backendSession" xsi:type="object">Magento\Backend\Model\Session\Proxy</argument>
-        </arguments>
-    </type>
     <type name="Magento\Backend\Model\Url\ScopeResolver">
         <arguments>
             <argument name="areaCode" xsi:type="string">adminhtml</argument>
@@ -78,20 +73,20 @@
     </type>
     <preference for="Magento\Framework\Authorization\RoleLocatorInterface" type="Magento\Backend\Model\Authorization\RoleLocator" />
     <preference for="Magento\Framework\Authorization\PolicyInterface" type="Magento\Framework\Authorization\Policy\Acl"/>
-    <preference for="Magento\Framework\Acl\Resource\ProviderInterface" type="Magento\Framework\Acl\Resource\Provider"/>
-    <type name="Magento\Framework\Acl\Resource\Config\Reader\Filesystem">
+    <preference for="Magento\Framework\Acl\AclResource\ProviderInterface" type="Magento\Framework\Acl\AclResource\Provider"/>
+    <type name="Magento\Framework\Acl\AclResource\Config\Reader\Filesystem">
         <arguments>
-            <argument name="converter" xsi:type="object">Magento\Framework\Acl\Resource\Config\Converter\Dom</argument>
+            <argument name="converter" xsi:type="object">Magento\Framework\Acl\AclResource\Config\Converter\Dom</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Acl\Resource\Provider">
+    <type name="Magento\Framework\Acl\AclResource\Provider">
         <arguments>
-            <argument name="configReader" xsi:type="object">Magento\Framework\Acl\Resource\Config\Reader\Filesystem</argument>
+            <argument name="configReader" xsi:type="object">Magento\Framework\Acl\AclResource\Config\Reader\Filesystem</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Acl\Builder">
         <arguments>
-            <argument name="resourceLoader" xsi:type="object">Magento\Framework\Acl\Loader\Resource</argument>
+            <argument name="resourceLoader" xsi:type="object">Magento\Framework\Acl\Loader\ResourceLoader</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Acl\Cache">
@@ -139,6 +134,11 @@
             <argument name="storage" xsi:type="object">Magento\Backend\Model\Session\Storage</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\App\Request\DataPersistor">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Backend\Model\Session</argument>
+        </arguments>
+    </type>
     <virtualType name="Magento\Backend\Model\Session\Quote\Storage" type="Magento\Framework\Session\Storage">
         <arguments>
             <argument name="namespace" xsi:type="string">adminhtml_quote</argument>
@@ -171,6 +171,13 @@
         <arguments>
             <argument name="backendApps" xsi:type="array">
                 <item name="setup" xsi:type="object">Magento\Setup\BackendApp</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Response\HeaderManager">
+        <arguments>
+            <argument name="headerProviderList" xsi:type="array">
+                <item name="x-frame-options" xsi:type="object">Magento\Framework\App\Response\HeaderProvider\XFrameOptions</item>
             </argument>
         </arguments>
     </type>

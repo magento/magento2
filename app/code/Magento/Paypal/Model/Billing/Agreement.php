@@ -10,8 +10,8 @@ use Magento\Sales\Model\Order\Payment;
 /**
  * Billing Agreement abstract model
  *
- * @method \Magento\Paypal\Model\Resource\Billing\Agreement _getResource()
- * @method \Magento\Paypal\Model\Resource\Billing\Agreement getResource()
+ * @method \Magento\Paypal\Model\ResourceModel\Billing\Agreement _getResource()
+ * @method \Magento\Paypal\Model\ResourceModel\Billing\Agreement getResource()
  * @method int getCustomerId()
  * @method \Magento\Paypal\Model\Billing\Agreement setCustomerId(int $value)
  * @method string getMethodCode()
@@ -43,7 +43,7 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
     protected $_relatedOrders = [];
 
     /**
-     * @var \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory
+     * @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory
      */
     protected $_billingAgreementFactory;
 
@@ -56,9 +56,9 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Payment\Helper\Data $paymentData
-     * @param \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory $billingAgreementFactory
+     * @param \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory $billingAgreementFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -66,9 +66,9 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Payment\Helper\Data $paymentData,
-        \Magento\Paypal\Model\Resource\Billing\Agreement\CollectionFactory $billingAgreementFactory,
+        \Magento\Paypal\Model\ResourceModel\Billing\Agreement\CollectionFactory $billingAgreementFactory,
         \Magento\Framework\Stdlib\DateTime\DateTimeFactory $dateFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -84,7 +84,7 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      */
     protected function _construct()
     {
-        $this->_init('Magento\Paypal\Model\Resource\Billing\Agreement');
+        $this->_init('Magento\Paypal\Model\ResourceModel\Billing\Agreement');
     }
 
     /**
@@ -266,7 +266,7 @@ class Agreement extends \Magento\Paypal\Model\Billing\AbstractAgreement
      * Retrieve available customer Billing Agreements
      *
      * @param int $customerId
-     * @return \Magento\Paypal\Model\Resource\Billing\Agreement\Collection
+     * @return \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection
      */
     public function getAvailableCustomerBillingAgreements($customerId)
     {

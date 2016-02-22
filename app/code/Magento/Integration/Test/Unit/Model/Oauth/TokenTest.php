@@ -48,11 +48,6 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     protected $validatorMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dateTimeMock;
-
-    /**
      * @var \Magento\Integration\Model\Oauth\ConsumerFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $consumerFactoryMock;
@@ -68,7 +63,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     protected $oauthHelperMock;
 
     /**
-     * @var \Magento\Framework\Model\Resource\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -101,10 +96,6 @@ class TokenTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->dateTimeMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')
-            ->disableOriginalConstructor()
-            ->getMock();
-
         $this->consumerFactoryMock = $this->getMockBuilder('Magento\Integration\Model\Oauth\ConsumerFactory')
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -119,14 +110,13 @@ class TokenTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\Resource\AbstractResource')
+        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\AbstractResource')
             ->setMethods(
                 [
                     'getIdFieldName',
                     'deleteOldEntries',
                     '_construct',
-                    '_getReadAdapter',
-                    '_getWriteAdapter',
+                    'getConnection',
                     'selectTokenByType',
                     'save',
                     'selectTokenByConsumerIdAndUserType',
@@ -156,7 +146,6 @@ class TokenTest extends \PHPUnit_Framework_TestCase
             $this->registryMock,
             $this->keyLengthFactoryMock,
             $this->validatorMock,
-            $this->dateTimeMock,
             $this->consumerFactoryMock,
             $this->oauthDataMock,
             $this->oauthHelperMock,

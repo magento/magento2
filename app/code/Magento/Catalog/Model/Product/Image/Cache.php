@@ -7,7 +7,7 @@ namespace Magento\Catalog\Model\Product\Image;
 
 use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Product;
-use Magento\Theme\Model\Resource\Theme\Collection as ThemeCollection;
+use Magento\Theme\Model\ResourceModel\Theme\Collection as ThemeCollection;
 use Magento\Framework\App\Area;
 use Magento\Framework\View\ConfigInterface;
 
@@ -58,89 +58,19 @@ class Cache
     protected function getData()
     {
         if (!$this->data) {
+            /** @var \Magento\Theme\Model\Theme $theme */
             foreach ($this->themeCollection->loadRegisteredThemes() as $theme) {
                 $config = $this->viewConfig->getViewConfig([
                     'area' => Area::AREA_FRONTEND,
                     'themeModel' => $theme,
                 ]);
-                $this->data = array_merge(
-                    $this->data,
-                    $this->applyFilters($config->getVars('Magento_Catalog'))
-                );
+                $images = $config->getMediaEntities('Magento_Catalog', ImageHelper::MEDIA_TYPE_CONFIG_NODE);
+                foreach ($images as $imageId => $imageData) {
+                    $this->data[$theme->getCode() . $imageId] = array_merge(['id' => $imageId], $imageData);
+                }
             }
         }
         return $this->data;
-    }
-
-    /**
-     * Filter data with well formed syntax (name:parameter)
-     *
-     * @param array $vars
-     * @return array
-     */
-    protected function getWellFormed(array $vars)
-    {
-        if (empty($vars)) {
-            return [];
-        }
-        $filtered = array_filter(array_keys($vars), function ($key) {
-            return stripos($key, ':') !== false;
-        });
-        return array_intersect_key($vars, array_flip($filtered));
-    }
-
-    /**
-     * Convert flat data array to tree-like data array
-     *
-     * @param array $data
-     * @return array
-     */
-    protected function convertToTree(array $data)
-    {
-        $result = [];
-        foreach ($data as $name => $value) {
-            list($identifier, $parameter) = explode(':', $name);
-            $result[$identifier][$parameter] = $value;
-        }
-        return $result;
-    }
-
-    /**
-     * Check data integrity and unify data array items
-     *
-     * @param array $data
-     * @return array
-     */
-    protected function getUnique(array $data)
-    {
-        $result = [];
-        foreach ($data as $item) {
-            if (!isset($item['type'])
-                || !isset($item['width'])
-                || !isset($item['height'])) {
-                continue;
-            }
-            $newItem = [
-                'type'   => $item['type'],
-                'width'  => $item['width'],
-                'height' => $item['height'],
-            ];
-            $result[implode('_', $newItem)] = $newItem;
-        }
-        return $result;
-    }
-
-    /**
-     * Apply filters and converters to config data
-     *
-     * @param array $data
-     * @return array
-     */
-    protected function applyFilters(array $data)
-    {
-        $data = $this->getWellFormed($data);
-        $data = $this->convertToTree($data);
-        return $this->getUnique($data);
     }
 
     /**
@@ -154,13 +84,47 @@ class Cache
         $galleryImages = $product->getMediaGalleryImages();
         if ($galleryImages) {
             foreach ($galleryImages as $image) {
-                foreach ($this->getData() as $params) {
-                    $this->imageHelper->init($product, $params['type'], $image->getFile())
-                        ->resize($params['width'], $params['height'])
-                        ->save();
+                foreach ($this->getData() as $imageData) {
+                    $this->processImageData($product, $imageData, $image->getFile());
                 }
             }
         }
+        return $this;
+    }
+
+    /**
+     * Process image data
+     *
+     * @param Product $product
+     * @param array $imageData
+     * @param string $file
+     * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    protected function processImageData(Product $product, array $imageData, $file)
+    {
+        $this->imageHelper->init($product, $imageData['id'], $imageData);
+        $this->imageHelper->setImageFile($file);
+
+        if (isset($imageData['aspect_ratio'])) {
+            $this->imageHelper->keepAspectRatio($imageData['aspect_ratio']);
+        }
+        if (isset($imageData['frame'])) {
+            $this->imageHelper->keepFrame($imageData['frame']);
+        }
+        if (isset($imageData['transparency'])) {
+            $this->imageHelper->keepTransparency($imageData['transparency']);
+        }
+        if (isset($imageData['constrain'])) {
+            $this->imageHelper->constrainOnly($imageData['constrain']);
+        }
+        if (isset($imageData['background'])) {
+            $this->imageHelper->backgroundColor($imageData['background']);
+        }
+
+        $this->imageHelper->save();
+
         return $this;
     }
 }

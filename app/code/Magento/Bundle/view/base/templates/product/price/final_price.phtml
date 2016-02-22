@@ -23,14 +23,14 @@ $minimalRegularPrice = $regularPriceModel->getMinimalPrice();
 ?>
 <?php if ($block->getSaleableItem()->getPriceView()): ?>
     <p class="minimal-price">
-        <?php echo $block->renderAmount($minimalPrice, [
+        <?php /* @escapeNotVerified */ echo $block->renderAmount($minimalPrice, [
             'display_label'     => __('As low as'),
             'price_id'          => $block->getPriceId('from-'),
             'include_container' => true
         ]); ?>
         <?php if ($minimalPrice < $minimalRegularPrice): ?>
             <span class="old-price">
-                <?php echo $block->renderAmount($minimalRegularPrice, [
+                <?php /* @escapeNotVerified */ echo $block->renderAmount($minimalRegularPrice, [
                     'display_label'     => __('Regular Price'),
                     'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
                     'include_container' => true,
@@ -42,7 +42,7 @@ $minimalRegularPrice = $regularPriceModel->getMinimalPrice();
 <?php else: ?>
     <?php if ($block->showRangePrice()): ?>
         <p class="price-from">
-            <?php echo $block->renderAmount($minimalPrice, [
+            <?php /* @escapeNotVerified */ echo $block->renderAmount($minimalPrice, [
                 'display_label'     => __('From'),
                 'price_id'          => $block->getPriceId('from-'),
                 'price_type'        => 'minPrice',
@@ -50,7 +50,7 @@ $minimalRegularPrice = $regularPriceModel->getMinimalPrice();
             ]); ?>
             <?php if ($minimalPrice < $minimalRegularPrice): ?>
                 <span class="old-price">
-                    <?php echo $block->renderAmount($minimalRegularPrice, [
+                    <?php /* @escapeNotVerified */ echo $block->renderAmount($minimalRegularPrice, [
                         'display_label'     => __('Regular Price'),
                         'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
                         'include_container' => true,
@@ -60,7 +60,7 @@ $minimalRegularPrice = $regularPriceModel->getMinimalPrice();
             <?php endif ?>
         </p>
         <p class="price-to">
-            <?php echo $block->renderAmount($maximalPrice, [
+            <?php /* @escapeNotVerified */ echo $block->renderAmount($maximalPrice, [
                 'display_label'     => __('To'),
                 'price_id'          => $block->getPriceId('to-'),
                 'price_type'        => 'maxPrice',
@@ -68,7 +68,7 @@ $minimalRegularPrice = $regularPriceModel->getMinimalPrice();
             ]); ?>
             <?php if ($maximalPrice < $maximalRegularPrice): ?>
                 <span class="old-price">
-                    <?php echo $block->renderAmount($maximalRegularPrice, [
+                    <?php /* @escapeNotVerified */ echo $block->renderAmount($maximalRegularPrice, [
                         'display_label'     => __('Regular Price'),
                         'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
                         'include_container' => true,
@@ -78,13 +78,13 @@ $minimalRegularPrice = $regularPriceModel->getMinimalPrice();
             <?php endif ?>
         </p>
     <?php else: ?>
-        <?php echo $block->renderAmount($minimalPrice, [
+        <?php /* @escapeNotVerified */ echo $block->renderAmount($minimalPrice, [
             'price_id'          => $block->getPriceId('product-price-'),
             'include_container' => true
         ]); ?>
         <?php if ($minimalPrice < $minimalRegularPrice): ?>
             <span class="old-price">
-                <?php echo $block->renderAmount($minimalRegularPrice, [
+                <?php /* @escapeNotVerified */ echo $block->renderAmount($minimalRegularPrice, [
                     'display_label'     => __('Regular Price'),
                     'price_id'          => $block->getPriceId('old-price-' . $idSuffix),
                     'include_container' => true,

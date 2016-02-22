@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="shortcut_buttons_container">
-        <observer name="braintree_paypal_shortcuts" instance="Magento\Braintree\Model\Observer" method="addPaypalShortcuts" />
+        <observer name="braintree_paypal_shortcuts" instance="Magento\Braintree\Observer\AddPaypalShortcuts" />
     </event>
 </config>

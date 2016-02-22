@@ -6,24 +6,29 @@
 
 namespace Magento\Framework\Data\Test\Unit\Form;
 
-use \Magento\Framework\Data\Form\FormKey;
-
-use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\FormKey;
+use Magento\Framework\Math\Random;
+use Magento\Framework\Session\SessionManager;
 
 class FormKeyTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Random|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $mathRandomMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var SessionManager|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $sessionMock;
 
     /**
-     * @var \Magento\Framework\Data\Form\FormKey
+     * @var \Zend\Escaper\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $escaperMock;
+
+    /**
+     * @var FormKey
      */
     protected $formKey;
 
@@ -32,9 +37,12 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
         $this->mathRandomMock = $this->getMock('Magento\Framework\Math\Random', [], [], '', false);
         $methods = ['setData', 'getData'];
         $this->sessionMock = $this->getMock('Magento\Framework\Session\SessionManager', $methods, [], '', false);
+        $this->escaperMock = $this->getMock('Magento\Framework\Escaper', [], [], '', false);
+        $this->escaperMock->expects($this->any())->method('escapeHtmlAttr')->willReturnArgument(0);
         $this->formKey = new FormKey(
             $this->mathRandomMock,
-            $this->sessionMock
+            $this->sessionMock,
+            $this->escaperMock
         );
     }
 
@@ -69,5 +77,26 @@ class FormKeyTest extends \PHPUnit_Framework_TestCase
             ->method('getRandomString');
         $this->sessionMock->expects($this->never())->method('setData');
         $this->assertEquals('random_string', $this->formKey->getFormKey());
+    }
+
+    public function testIsPresent()
+    {
+        $this->sessionMock->expects(static::once())
+            ->method('getData')
+            ->with(FormKey::FORM_KEY)
+            ->willReturn('Form key');
+
+        static::assertTrue($this->formKey->isPresent());
+    }
+
+    public function testSet()
+    {
+        $formKeyValue = 'Form key';
+
+        $this->sessionMock->expects(static::once())
+            ->method('setData')
+            ->with(FormKey::FORM_KEY, $formKeyValue);
+
+        $this->formKey->set($formKeyValue);
     }
 }

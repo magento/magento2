@@ -20,7 +20,11 @@
 @data-grid-td__border-inner-style: dashed;
 @data-grid-td__border-outer-style: solid;
 @data-grid-td__even__background-color: @color-white-smoke;
+@data-grid-td__even__dragging__background-color: @color-light-gray0;
+@data-grid-td__even__edit__background-color: darken(@data-grid-td__even__background-color, 10%);
 @data-grid-td__odd__background-color: @page__background-color;
+@data-grid-td__odd__dragging__background-color: @color-gray85;
+@data-grid-td__odd__edit__background-color: darken(@data-grid-td__odd__background-color, 10%);
 
 @data-grid-th__border-color: @color-darkie-gray;
 @data-grid-th__border-style: solid;
@@ -38,6 +42,27 @@
 
 @data-grid-row-parent-marker__size: 1rem;
 
+@data-grid-editable-row-actions__width: 25rem;
+@data-grid-editable-cell__border-color: @color-gray68;
+
+@data-grid-bulk-edit-panel__background-color: @color-lazy-sun-white;
+
+@data-grid-td__dragging__background-color: @color-light-gray0;
 @data-grid-td__dragging__opacity: 95%;
-@data-grid-dragging-copy__border-color: @color-blue-pure;
 @data-grid-dragging-copy__border: 1px solid @data-grid-dragging-copy__border-color;
+@data-grid-dragging-copy__border-color: @color-blue-pure;
+@data-grid-dragging-copy__outline-color: @color-blue-pure;
+
+@data-grid-horizontal-dragover-mark__color: @color-blue-dodger;
+@data-grid-horizontal-dragover-mark__width: 3px;
+
+@data-grid-spinner__size: 4rem;
+
+//  Header
+
+@data-grid-header-add-indent__bottom: .9rem;
+@data-grid-header-add-indent__top: .5rem;
+
+@data-grid-header-row__indent: @indent__base;
+
+@data-grid-action__z-index: @data-grid-header__z-index - 10;

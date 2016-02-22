@@ -231,7 +231,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
         $customPrice = 9.99;
         $qty = 3;
         $buyRequestMock = $this->getMock(
-            'Magento\Framework\Object',
+            'Magento\Framework\DataObject',
             [
                 'setCustomPrice',
                 'setValue',
@@ -297,7 +297,7 @@ class UpdaterTest extends \PHPUnit_Framework_TestCase
     {
         $qty = 3;
         $buyRequestMock = $this->getMock(
-            'Magento\Framework\Object',
+            'Magento\Framework\DataObject',
             [
                 'setCustomPrice',
                 'setValue',

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Url;
 
-class QueryParamsResolver extends \Magento\Framework\Object implements QueryParamsResolverInterface
+class QueryParamsResolver extends \Magento\Framework\DataObject implements QueryParamsResolverInterface
 {
     /**
      * {@inheritdoc}
@@ -29,7 +29,7 @@ class QueryParamsResolver extends \Magento\Framework\Object implements QueryPara
      */
     public function setQuery($data)
     {
-        if ($this->_getData('query') != $data) {
+        if ($this->_getData('query') !== $data) {
             $this->unsetData('query_params');
             $this->setData('query', $data);
         }

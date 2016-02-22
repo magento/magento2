@@ -32,7 +32,7 @@ class QueryFactoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $objectManagerMock;
 
-    /** @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject */
     protected $stringMock;
 
     /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -54,7 +54,7 @@ class QueryFactoryTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
             ->setMethods([])
             ->getMock();
-        $this->stringMock = $this->getMockBuilder('Magento\Framework\Stdlib\String')
+        $this->stringMock = $this->getMockBuilder('Magento\Framework\Stdlib\StringUtils')
             ->setMethods(['cleanString', 'substr'])
             ->getMock();
         $this->stringMock->expects($this->any())

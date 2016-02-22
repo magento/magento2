@@ -19,7 +19,7 @@ $jsonHelper = $this->helper('Magento\Framework\Json\Helper\Data');
     ], function () {
         window.resetRobotsToDefault = function(){
             $('design_search_engine_robots_custom_instructions').value = <?php
-                echo $jsonHelper->jsonEncode($block->getRobotsDefaultCustomInstructions())
+                /* @escapeNotVerified */ echo $jsonHelper->jsonEncode($block->getRobotsDefaultCustomInstructions())
             ?>;
         }
     });

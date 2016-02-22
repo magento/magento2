@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Block\Html;
 
-use Magento\Framework\Object\IdentityInterface;
+use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Data\TreeFactory;
 use Magento\Framework\Data\Tree\Node;
@@ -49,6 +49,7 @@ class Topmenu extends Template implements IdentityInterface
         TreeFactory $treeFactory,
         array $data = []
     ) {
+        $this->setCacheLifetime(30 * 60);
         parent::__construct($context, $data);
         $this->_menu = $nodeFactory->create(
             [
@@ -79,13 +80,12 @@ class Topmenu extends Template implements IdentityInterface
 
         $html = $this->_getHtml($this->_menu, $childrenWrapClass, $limit);
 
-        $transportObject = new \Magento\Framework\Object(['html' => $html]);
+        $transportObject = new \Magento\Framework\DataObject(['html' => $html]);
         $this->_eventManager->dispatch(
             'page_block_html_topmenu_gethtml_after',
             ['menu' => $this->_menu, 'transportObject' => $transportObject]
         );
         $html = $transportObject->getHtml();
-
         return $html;
     }
 
@@ -332,5 +332,27 @@ class Topmenu extends Template implements IdentityInterface
     public function getIdentities()
     {
         return $this->identities;
+    }
+
+    /**
+     * Get cache key informative items
+     *
+     * @return array
+     */
+    public function getCacheKeyInfo()
+    {
+        $keyInfo = parent::getCacheKeyInfo();
+        $keyInfo[] = $this->getUrl('*/*/*', ['_current' => true, '_query' => '']);
+        return $keyInfo;
+    }
+
+    /**
+     * Get tags array for saving cache
+     *
+     * @return array
+     */
+    protected function getCacheTags()
+    {
+        return array_merge(parent::getCacheTags(), $this->getIdentities());
     }
 }

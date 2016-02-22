@@ -5,14 +5,14 @@
  * See COPYING.txt for license details.
  */
 -->
-<components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../etc/ui_definition.xsd">
+<components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_definition.xsd">
     <dataSource class="Magento\Ui\Component\DataSource"/>
     <listing sorting="true" class="Magento\Ui\Component\Listing">
         <argument name="data" xsi:type="array">
             <item name="template" xsi:type="string">templates/listing/default</item>
             <item name="save_parameters_in_session" xsi:type="string">1</item>
             <item name="client_root" xsi:type="string">mui/index/render</item>
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">uiComponent</item>
             </item>
         </argument>
@@ -20,17 +20,30 @@
 
     <paging class="Magento\Ui\Component\Paging">
         <argument name="data" xsi:type="array">
-            <item name="template" xsi:type="string">templates/paging/default</item>
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/paging</item>
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/paging/paging</item>
+                <item name="displayArea" xsi:type="string">bottom</item>
+                <item name="storageConfig" xsi:type="array">
+                    <item name="provider" xsi:type="string">ns = ${ $.ns }, index = bookmarks</item>
+                    <item name="namespace" xsi:type="string">current.paging</item>
+                </item>
             </item>
         </argument>
     </paging>
 
     <filters class="Magento\Ui\Component\Filters">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/filters/filters</item>
+                <item name="displayArea" xsi:type="string">dataGridFilters</item>
+                <item name="dataScope" xsi:type="string">filters</item>
+                <item name="storageConfig" xsi:type="array">
+                    <item name="provider" xsi:type="string">ns = ${ $.ns }, index = bookmarks</item>
+                    <item name="namespace" xsi:type="string">current.filters</item>
+                </item>
+            </item>
+            <item name="observers" xsi:type="array">
+                <item name="column" xsi:type="string">column</item>
             </item>
         </argument>
     </filters>
@@ -39,41 +52,32 @@
             <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/search/search</item>
                 <item name="displayArea" xsi:type="string">dataGridFilters</item>
-
+                <item name="storageConfig" xsi:type="array">
+                    <item name="provider" xsi:type="string">ns = ${ $.ns }, index = bookmarks</item>
+                    <item name="namespace" xsi:type="string">current.search</item>
+                </item>
             </item>
         </argument>
     </filterSearch>
     <filterSelect class="Magento\Ui\Component\Filters\Type\Select">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="template" xsi:type="string" translate="true">ui/grid/filters/elements/select</item>
+                <item name="template" xsi:type="string">ui/grid/filters/field</item>
             </item>
         </argument>
     </filterSelect>
     <filterRange class="Magento\Ui\Component\Filters\Type\Range">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/filters/group</item>
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/filters/range</item>
             </item>
         </argument>
     </filterRange>
-    <filterInput class="Magento\Ui\Component\Filters\Type\Input">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="template" xsi:type="string">ui/grid/filters/elements/input</item>
-            </item>
-        </argument>
-    </filterInput>
-    <filterDate class="Magento\Ui\Component\Filters\Type\Date">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="template" xsi:type="string">ui/grid/filters/elements/date</item>
-            </item>
-        </argument>
-    </filterDate>
+    <filterInput class="Magento\Ui\Component\Filters\Type\Input"/>
+    <filterDate class="Magento\Ui\Component\Filters\Type\Date"/>
     <container class="Magento\Ui\Component\Container">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">uiComponent</item>
             </item>
             <item name="template" xsi:type="string">templates/container/default</item>
@@ -81,36 +85,81 @@
     </container>
     <massaction class="Magento\Ui\Component\MassAction">
         <argument name="data" xsi:type="array">
-            <item name="template" xsi:type="string">templates/listingcontainer/massaction/default</item>
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/massactions</item>
+                <item name="displayArea" xsi:type="string">bottom</item>
             </item>
         </argument>
     </massaction>
     <actions class="Magento\Ui\Component\Control\Action">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/actions</item>
             </item>
         </argument>
     </actions>
-
-
-
+    <action class="Magento\Ui\Component\Action">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">uiComponent</item>
+            </item>
+        </argument>
+    </action>
 
     <columns class="Magento\Ui\Component\Listing\Columns">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/listing</item>
+                <item name="componentType" xsi:type="string">columns</item>
+                <item name="storageConfig" xsi:type="array">
+                    <item name="provider" xsi:type="string">ns = ${ $.ns }, index = bookmarks</item>
+                    <item name="namespace" xsi:type="string">current</item>
+                </item>
+                <item name="childDefaults" xsi:type="array">
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">ns = ${ $.ns }, index = bookmarks</item>
+                        <item name="root" xsi:type="string">columns.${ $.index }</item>
+                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root }</item>
+                    </item>
+                </item>
             </item>
         </argument>
     </columns>
     <column class="Magento\Ui\Component\Listing\Columns\Column">
         <argument name="data" xsi:type="array">
             <item name="state_prefix" xsi:type="string">columns</item>
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                <item name="componentType" xsi:type="string">column</item>
+                <item name="dataType" xsi:type="string">text</item>
+            </item>
         </argument>
     </column>
+    <actionsColumn class="Magento\Ui\Component\Listing\Columns\Column">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/actions</item>
+                <item name="dataType" xsi:type="string">actions</item>
+                <item name="label" xsi:type="string" translate="true">Action</item>
+            </item>
+        </argument>
+    </actionsColumn>
+    <selectionsColumn class="Magento\Ui\Component\MassAction\Columns\Column">
+        <argument name="data" xsi:type="array">
+            <item name="state_prefix" xsi:type="string">columns</item>
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/multiselect</item>
+            </item>
+        </argument>
+    </selectionsColumn>
 
+    <component class="Magento\Ui\Component\Container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">uiComponent</item>
+            </item>
+        </argument>
+    </component>
 
     <form class="Magento\Ui\Component\Form">
         <argument name="data" xsi:type="array">
@@ -130,69 +179,114 @@
     <field class="Magento\Ui\Component\Form\Field"/>
 
     <!-- Form elements -->
+    <radioset class="Magento\Ui\Component\Form\Element\RadioSet">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/checkbox-set</item>
+                <item name="template" xsi:type="string">ui/form/element/checkbox-set</item>
+                <item name="isMultiselect" xsi:type="boolean">false</item>
+            </item>
+        </argument>
+    </radioset>
+    <checkboxset class="Magento\Ui\Component\Form\Element\CheckboxSet">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/checkbox-set</item>
+                <item name="template" xsi:type="string">ui/form/element/checkbox-set</item>
+                <item name="isMultiselect" xsi:type="boolean">true</item>
+            </item>
+        </argument>
+    </checkboxset>
+    <wysiwyg class="Magento\Ui\Component\Form\Element\Wysiwyg">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/wysiwyg</item>
+                <item name="template" xsi:type="string">ui/content/content</item>
+                <item name="elementTmpl" xsi:type="string">ui/content/content</item>
+            </item>
+        </argument>
+    </wysiwyg>
+    <actionDelete class="Magento\Ui\Component\Form\Element\ActionDelete">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                <item name="elementTmpl" xsi:type="string">ui/dynamic-rows/cells/action-delete</item>
+                <item name="template" xsi:type="string">ui/dynamic-rows/cells/action-delete</item>
+            </item>
+        </argument>
+    </actionDelete>
     <input class="Magento\Ui\Component\Form\Element\Input">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
-                <item name="config" xsi:type="array">
-                    <item name="template" xsi:type="string">ui/form/field</item>
-                    <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
-                </item>
+                <item name="template" xsi:type="string">ui/form/field</item>
             </item>
         </argument>
     </input>
+    <hidden class="Magento\Ui\Component\Form\Element\Hidden">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                <item name="template" xsi:type="string">ui/form/element/hidden</item>
+            </item>
+        </argument>
+    </hidden>
     <checkbox class="Magento\Ui\Component\Form\Element\Checkbox">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/form/element/boolean</item>
-                <item name="extends" xsi:type="string">input</item>
-                <item name="config" xsi:type="array">
-                    <item name="elementTmpl" xsi:type="string">ui/form/element/checkbox</item>
-                </item>
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/single-checkbox</item>
+                <item name="template" xsi:type="string">ui/form/field</item>
             </item>
         </argument>
     </checkbox>
     <select class="Magento\Ui\Component\Form\Element\Select">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/select</item>
-                <item name="extends" xsi:type="string">input</item>
-                <item name="config" xsi:type="array">
-                    <item name="elementTmpl" xsi:type="string">ui/form/element/select</item>
-                </item>
+                <item name="template" xsi:type="string">ui/form/field</item>
             </item>
         </argument>
     </select>
-    <multiselect class="Magento\Ui\Component\Form\Element\Select">
+    <multiselect class="Magento\Ui\Component\Form\Element\MultiSelect">
         <argument name="data" xsi:type="array">
             <item name="template" xsi:type="string">ui/form/element/multiselect</item>
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/multiselect</item>
-                <item name="extends" xsi:type="string">input</item>
-                <item name="config" xsi:type="array">
-                    <item name="elementTmpl" xsi:type="string">ui/form/element/multiselect</item>
-                </item>
+                <item name="template" xsi:type="string">ui/form/field</item>
+                <item name="size" xsi:type="string">6</item>
             </item>
         </argument>
     </multiselect>
     <textarea class="Magento\Ui\Component\Form\Element\Textarea">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/textarea</item>
-                <item name="extends" xsi:type="string">input</item>
-                <item name="config" xsi:type="array">
-                    <item name="elementTmpl" xsi:type="string">ui/form/element/textarea</item>
-                </item>
+                <item name="template" xsi:type="string">ui/form/field</item>
             </item>
         </argument>
     </textarea>
     <multiline class="Magento\Ui\Component\Form\Element\Multiline">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/components/group</item>
             </item>
         </argument>
     </multiline>
+    <range class="Magento\Ui\Component\Form\Element\Range">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/filters/range</item>
+            </item>
+        </argument>
+    </range>
+    <fileUploader class="Magento\Ui\Component\Form\Element\DataType\Media">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/file-uploader</item>
+                <item name="template" xsi:type="string">ui/form/element/uploader/uploader</item>
+            </item>
+        </argument>
+    </fileUploader>
     <!-- Form elements -->
 
     <!-- Form element data types -->
@@ -207,45 +301,81 @@
     <price class="Magento\Ui\Component\Form\Element\DataType\Price"/>
     <image class="Magento\Ui\Component\Form\Element\DataType\Media">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="extends" xsi:type="string">input</item>
-                <item name="config" xsi:type="array">
-                    <item name="elementTmpl" xsi:type="string">ui/form/element/media</item>
-                </item>
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/media</item>
+                <item name="template" xsi:type="string">ui/form/field</item>
+                <item name="elementTmpl" xsi:type="string">ui/form/element/media</item>
             </item>
         </argument>
     </image>
+    <file class="Magento\Ui\Component\Form\Element\DataType\Media">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/media</item>
+                <item name="template" xsi:type="string">ui/form/field</item>
+                <item name="elementTmpl" xsi:type="string">ui/form/element/media</item>
+            </item>
+        </argument>
+    </file>
     <date class="Magento\Ui\Component\Form\Element\DataType\Date">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="extends" xsi:type="string">input</item>
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/date</item>
-                <item name="config" xsi:type="array">
-                    <item name="elementTmpl" xsi:type="string">ui/form/element/date</item>
-                </item>
+                <item name="template" xsi:type="string">ui/form/field</item>
             </item>
         </argument>
     </date>
     <boolean class="Magento\Ui\Component\Form\Element\DataType\Boolean">
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
-                <item name="extends" xsi:type="string">input</item>
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                <item name="config" xsi:type="array">
+                    <item name="template" xsi:type="string">ui/form/field</item>
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/input</item>
+                </item>
             </item>
         </argument>
     </boolean>
     <email class="Magento\Ui\Component\Form\Element\DataType\Email">
         <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="extends" xsi:type="string">input</item>
-                <item name="config" xsi:type="array">
-                    <item name="elementTmpl" xsi:type="string">ui/form/element/email</item>
-                </item>
-            </item>
             <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                <item name="template" xsi:type="string">ui/form/field</item>
+                <item name="elementTmpl" xsi:type="string">ui/form/element/email</item>
                 <item name="addbefore" xsi:type="string">@email:</item>
             </item>
         </argument>
     </email>
+    <insertForm class="Magento\Ui\Component\Container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/components/insert-form</item>
+                <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                <item name="render_url" xsi:type="url" path="mui/index/render"/>
+                <item name="autoRender" xsi:type="boolean">false</item>
+                <item name="dataLinks" xsi:type="array">
+                    <item name="imports" xsi:type="boolean">false</item>
+                    <item name="exports" xsi:type="boolean">false</item>
+                </item>
+                <item name="realTimeLink" xsi:type="boolean">false</item>
+            </item>
+        </argument>
+    </insertForm>
+    <insertListing class="Magento\Ui\Component\Container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/components/insert-listing</item>
+                <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                <item name="render_url" xsi:type="url" path="mui/index/render"/>
+                <item name="autoRender" xsi:type="boolean">false</item>
+                <item name="dataLinks" xsi:type="array">
+                    <item name="imports" xsi:type="boolean">true</item>
+                    <item name="exports" xsi:type="boolean">false</item>
+                </item>
+                <item name="realTimeLink" xsi:type="boolean">true</item>
+            </item>
+        </argument>
+    </insertListing>
     <!-- Form element data types -->
 
 
@@ -269,14 +399,81 @@
     <!-- bookmark -->
     <bookmark class="Magento\Ui\Component\Bookmark">
         <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/bookmarks/bookmarks</item>
+                <item name="displayArea" xsi:type="string">dataGridActions</item>
+                <item name="storageConfig" xsi:type="array">
+                    <item name="saveUrl" xsi:type="url" path="mui/bookmark/save"/>
+                    <item name="deleteUrl" xsi:type="url" path="mui/bookmark/delete"/>
+                    <item name="namespace" xsi:type="string">${ $.ns }</item>
+                </item>
+            </item>
         </argument>
     </bookmark>
     <exportButton class="Magento\Ui\Component\ExportButton">
         <argument name="data" xsi:type="array">
-            <item name="template" xsi:type="string">templates/export/button</item>
-            <item name="js_config" xsi:type="array">
+            <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/export</item>
+                <item name="displayArea" xsi:type="string">dataGridActions</item>
+                <item name="options" xsi:type="array">
+                    <item name="cvs" xsi:type="array">
+                        <item name="value" xsi:type="string">csv</item>
+                        <item name="label" xsi:type="string" translate="true">CSV</item>
+                        <item name="url" xsi:type="string">mui/export/gridToCsv</item>
+                    </item>
+                    <item name="xml" xsi:type="array">
+                        <item name="value" xsi:type="string">xml</item>
+                        <item name="label" xsi:type="string" translate="true">Excel XML</item>
+                        <item name="url" xsi:type="string">mui/export/gridToXml</item>
+                    </item>
+                </item>
             </item>
         </argument>
     </exportButton>
+    <modal class="Magento\Ui\Component\Container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/modal/modal-component</item>
+                <item name="options" xsi:type="array">
+                    <item name="type" xsi:type="string">slide</item>
+                </item>
+            </item>
+        </argument>
+    </modal>
+    <columnsControls class="Magento\Ui\Component\Container">
+         <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
+            </item>
+        </argument>
+    </columnsControls>
+    <listingToolbar class="Magento\Ui\Component\Container">
+         <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/toolbar</item>
+            </item>
+        </argument>
+    </listingToolbar>
+    <dynamicRows class="Magento\Ui\Component\Container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/dynamic-rows</item>
+                <item name="template" xsi:type="string">ui/dynamic-rows/templates/default</item>
+            </item>
+        </argument>
+    </dynamicRows>
+    <htmlContent class="Magento\Ui\Component\HtmlContent">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/components/html</item>
+            </item>
+        </argument>
+    </htmlContent>
+    <button class="Magento\Ui\Component\Container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/components/button</item>
+            </item>
+        </argument>
+    </button>
 </components>

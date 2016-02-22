@@ -6,9 +6,10 @@
 /*global confirm:true*/
 define([
     "jquery",
+    'Magento_Ui/js/modal/confirm',
     "jquery/ui",
     "mage/translate"
-], function($){
+], function($, confirm){
     "use strict";
     
     $.widget('mage.address', {
@@ -53,14 +54,22 @@ define([
          * @return {Boolean}
          */
         _deleteAddress: function(e) {
-            if (confirm(this.options.deleteConfirmMessage)) {
-                if (typeof $(e.target).parent().data('address') !== 'undefined') {
-                    window.location = this.options.deleteUrlPrefix + $(e.target).parent().data('address');
+            var self = this;
+
+            confirm({
+                content: this.options.deleteConfirmMessage,
+                actions: {
+                    confirm: function() {
+                        if (typeof $(e.target).parent().data('address') !== 'undefined') {
+                            window.location = self.options.deleteUrlPrefix + $(e.target).parent().data('address');
+                        }
+                        else {
+                            window.location = self.options.deleteUrlPrefix + $(e.target).data('address');
+                        }
+                    }
                 }
-                else {
-                    window.location = this.options.deleteUrlPrefix + $(e.target).data('address');
-                }
-            }
+            });
+
             return false;
         }
     });

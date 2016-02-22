@@ -17,6 +17,7 @@ class Factory
 
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @codeCoverageIgnore
      */
     public function __construct(\Magento\Framework\ObjectManagerInterface $objectManager)
     {

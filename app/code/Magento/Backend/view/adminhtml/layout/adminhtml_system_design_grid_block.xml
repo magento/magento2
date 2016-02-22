@@ -5,13 +5,13 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="adminhtml.system.design.container">
             <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.system.design.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">designGrid</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Theme\Model\Resource\Design\Collection</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Theme\Model\ResourceModel\Design\Collection</argument>
                     <argument name="use_ajax" xsi:type="string">1</argument>
                     <argument name="save_parameters_in_session" xsi:type="string">1</argument>
                     <argument name="grid_url" xsi:type="url" path="*/*/grid">
@@ -41,6 +41,8 @@
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="package">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Design</argument>
+                            <argument name="type" xsi:type="string">options</argument>
+                            <argument name="options" xsi:type="options" model="Magento\Framework\View\Design\Theme\Label\Options"/>
                             <argument name="width" xsi:type="string">150px</argument>
                             <argument name="index" xsi:type="string">design</argument>
                         </arguments>
@@ -51,6 +53,7 @@
                             <argument name="align" xsi:type="string">left</argument>
                             <argument name="width" xsi:type="string">100px</argument>
                             <argument name="type" xsi:type="string">date</argument>
+                            <argument name="timezone" xsi:type="boolean">false</argument>
                             <argument name="index" xsi:type="string">date_from</argument>
                         </arguments>
                     </block>
@@ -60,6 +63,7 @@
                             <argument name="align" xsi:type="string">left</argument>
                             <argument name="width" xsi:type="string">100px</argument>
                             <argument name="type" xsi:type="string">date</argument>
+                            <argument name="timezone" xsi:type="boolean">false</argument>
                             <argument name="index" xsi:type="string">date_to</argument>
                         </arguments>
                     </block>

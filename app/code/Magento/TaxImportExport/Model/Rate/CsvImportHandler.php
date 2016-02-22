@@ -13,7 +13,7 @@ class CsvImportHandler
     /**
      * Collection of publicly available stores
      *
-     * @var \Magento\Store\Model\Resource\Store\Collection
+     * @var \Magento\Store\Model\ResourceModel\Store\Collection
      */
     protected $_publicStores;
 
@@ -22,7 +22,7 @@ class CsvImportHandler
      *
      * The instance is used to retrieve regions based on country code
      *
-     * @var \Magento\Directory\Model\Resource\Region\Collection
+     * @var \Magento\Directory\Model\ResourceModel\Region\Collection
      */
     protected $_regionCollection;
 
@@ -41,22 +41,32 @@ class CsvImportHandler
     protected $_taxRateFactory;
 
     /**
-     * @param \Magento\Store\Model\Resource\Store\Collection $storeCollection
-     * @param \Magento\Directory\Model\Resource\Region\Collection $regionCollection
+     * CSV Processor
+     *
+     * @var \Magento\Framework\File\Csv
+     */
+    protected $csvProcessor;
+
+    /**
+     * @param \Magento\Store\Model\ResourceModel\Store\Collection $storeCollection
+     * @param \Magento\Directory\Model\ResourceModel\Region\Collection $regionCollection
      * @param \Magento\Directory\Model\CountryFactory $countryFactory
      * @param \Magento\Tax\Model\Calculation\RateFactory $taxRateFactory
+     * @param \Magento\Framework\File\Csv $csvProcessor
      */
     public function __construct(
-        \Magento\Store\Model\Resource\Store\Collection $storeCollection,
-        \Magento\Directory\Model\Resource\Region\Collection $regionCollection,
+        \Magento\Store\Model\ResourceModel\Store\Collection $storeCollection,
+        \Magento\Directory\Model\ResourceModel\Region\Collection $regionCollection,
         \Magento\Directory\Model\CountryFactory $countryFactory,
-        \Magento\Tax\Model\Calculation\RateFactory $taxRateFactory
+        \Magento\Tax\Model\Calculation\RateFactory $taxRateFactory,
+        \Magento\Framework\File\Csv $csvProcessor
     ) {
         // prevent admin store from loading
         $this->_publicStores = $storeCollection->setLoadDefault(false);
         $this->_regionCollection = $regionCollection;
         $this->_countryFactory = $countryFactory;
         $this->_taxRateFactory = $taxRateFactory;
+        $this->csvProcessor = $csvProcessor;
     }
 
     /**
@@ -91,8 +101,7 @@ class CsvImportHandler
         if (!isset($file['tmp_name'])) {
             throw new \Magento\Framework\Exception\LocalizedException(__('Invalid file upload attempt.'));
         }
-        $csvProcessor = new \Magento\Framework\File\Csv();
-        $ratesRawData = $csvProcessor->getData($file['tmp_name']);
+        $ratesRawData = $this->csvProcessor->getData($file['tmp_name']);
         // first row of file represents headers
         $fileFields = $ratesRawData[0];
         $validFields = $this->_filterFileFields($fileFields);

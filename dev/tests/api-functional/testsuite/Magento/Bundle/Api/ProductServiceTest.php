@@ -23,7 +23,7 @@ class ProductServiceTest extends WebapiAbstract
     const BUNDLE_PRODUCT_ID = 'sku-test-product-bundle';
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected $productCollection;
 
@@ -33,7 +33,7 @@ class ProductServiceTest extends WebapiAbstract
     public function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->productCollection = $objectManager->get('Magento\Catalog\Model\Resource\Product\Collection');
+        $this->productCollection = $objectManager->get('Magento\Catalog\Model\ResourceModel\Product\Collection');
     }
 
     /**
@@ -119,8 +119,6 @@ class ProductServiceTest extends WebapiAbstract
         $bundleProduct = $this->createFixedPriceBundleProduct();
         $bundleProductOptions = $this->getBundleProductOptions($bundleProduct);
 
-        $existingSelectionId = $bundleProductOptions[0]['product_links'][0]['id'];
-
         //Change the type of existing option
         $bundleProductOptions[0]['type'] = 'select';
         //Change the sku of existing link and qty
@@ -136,7 +134,6 @@ class ProductServiceTest extends WebapiAbstract
         $this->assertEquals('select', $bundleOptions[0]['type']);
         $this->assertEquals('simple2', $bundleOptions[0]['product_links'][0]['sku']);
         $this->assertEquals(2, $bundleOptions[0]['product_links'][0]['qty']);
-        $this->assertEquals($existingSelectionId, $bundleOptions[0]['product_links'][0]['id']);
         $this->assertEquals(10, $bundleOptions[0]['product_links'][0]['price']);
         $this->assertEquals(1, $bundleOptions[0]['product_links'][0]['price_type']);
     }
@@ -147,6 +144,7 @@ class ProductServiceTest extends WebapiAbstract
      */
     public function testUpdateBundleModifyExistingOptionOnly()
     {
+        $this->markTestSkipped('Skipped, due to MAGETWO-46857');
         $bundleProduct = $this->createFixedPriceBundleProduct();
         $bundleProductOptions = $this->getBundleProductOptions($bundleProduct);
 

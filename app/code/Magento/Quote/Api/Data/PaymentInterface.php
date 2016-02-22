@@ -18,16 +18,6 @@ interface PaymentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
 
     const KEY_METHOD = 'method';
 
-    const KEY_CC_OWNER = 'cc_owner';
-
-    const KEY_CC_NUMBER = 'cc_number';
-
-    const KEY_CC_TYPE = 'cc_type';
-
-    const KEY_CC_EXP_YEAR = 'cc_exp_year';
-
-    const KEY_CC_EXP_MONTH = 'cc_exp_month';
-
     const KEY_ADDITIONAL_DATA = 'additional_data';
 
     /**#@-*/
@@ -61,81 +51,6 @@ interface PaymentInterface extends \Magento\Framework\Api\ExtensibleDataInterfac
      * @return $this
      */
     public function setMethod($method);
-
-    /**
-     * Get credit card owner
-     *
-     * @return string|null
-     */
-    public function getCcOwner();
-
-    /**
-     * Set credit card owner
-     *
-     * @param string $ccOwner
-     * @return $this
-     */
-    public function setCcOwner($ccOwner);
-
-    /**
-     * Get credit card number
-     *
-     * @return string|null
-     */
-    public function getCcNumber();
-
-    /**
-     * Set credit card number
-     *
-     * @param string $ccNumber
-     * @return $this
-     */
-    public function setCcNumber($ccNumber);
-
-    /**
-     * Get credit card type
-     *
-     * @return string|null
-     */
-    public function getCcType();
-
-    /**
-     * Set credit card type
-     *
-     * @param string $ccType
-     * @return $this
-     */
-    public function setCcType($ccType);
-
-    /**
-     * Get credit card expiration year
-     *
-     * @return string|null
-     */
-    public function getCcExpYear();
-
-    /**
-     * Set credit card expiration year
-     *
-     * @param string $ccExpYear
-     * @return $this
-     */
-    public function setCcExpYear($ccExpYear);
-
-    /**
-     * Get credit card expiration month
-     *
-     * @return string|null
-     */
-    public function getCcExpMonth();
-
-    /**
-     * Set credit card expiration month
-     *
-     * @param string $ccExpMonth
-     * @return $this
-     */
-    public function setCcExpMonth($ccExpMonth);
 
     /**
      * Get payment additional details

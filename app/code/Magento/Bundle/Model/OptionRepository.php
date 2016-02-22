@@ -6,6 +6,7 @@
  */
 namespace Magento\Bundle\Model;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -31,7 +32,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     protected $optionFactory;
 
     /**
-     * @var Resource\Option
+     * @var \Magento\Bundle\Model\ResourceModel\Option
      */
     protected $optionResource;
 
@@ -61,27 +62,36 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     protected $dataObjectHelper;
 
     /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Product\Type $type
      * @param \Magento\Bundle\Api\Data\OptionInterfaceFactory $optionFactory
-     * @param Resource\Option $optionResource
+     * @param \Magento\Bundle\Model\ResourceModel\Option $optionResource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Bundle\Api\ProductLinkManagementInterface $linkManagement
      * @param Product\OptionList $productOptionList
      * @param Product\LinksList $linkList
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Bundle\Model\Product\Type $type,
         \Magento\Bundle\Api\Data\OptionInterfaceFactory $optionFactory,
-        \Magento\Bundle\Model\Resource\Option $optionResource,
+        \Magento\Bundle\Model\ResourceModel\Option $optionResource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Bundle\Api\ProductLinkManagementInterface $linkManagement,
         \Magento\Bundle\Model\Product\OptionList $productOptionList,
         \Magento\Bundle\Model\Product\LinksList $linkList,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
     ) {
+        $this->metadataPool = $metadataPool;
         $this->productRepository = $productRepository;
         $this->type = $type;
         $this->optionFactory = $optionFactory;
@@ -129,6 +139,15 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     public function getList($sku)
     {
         $product = $this->getProduct($sku);
+        return $this->getListByProduct($product);
+    }
+
+    /**
+     * @param ProductInterface $product
+     * @return \Magento\Bundle\Api\Data\OptionInterface[]
+     */
+    public function getListByProduct(ProductInterface $product)
+    {
         return $this->productOptionList->getItems($product);
     }
 
@@ -166,30 +185,15 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         \Magento\Catalog\Api\Data\ProductInterface $product,
         \Magento\Bundle\Api\Data\OptionInterface $option
     ) {
-        $option->setStoreId($this->storeManager->getStore()->getId());
-        $option->setParentId($product->getId());
+        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
 
-        $optionId = $option->getOptionId();
+        $option->setStoreId($product->getStoreId());
+        $option->setParentId($product->getData($metadata->getLinkField()));
         $linksToAdd = [];
-        if (!$optionId) {
-            $option->setDefaultTitle($option->getTitle());
-            if (is_array($option->getProductLinks())) {
-                $linksToAdd = $option->getProductLinks();
-            }
-        } else {
-            $optionCollection = $this->type->getOptionsCollection($product);
-
-            /** @var \Magento\Bundle\Model\Option $existingOption */
-            $existingOption = $optionCollection->getItemById($option->getOptionId());
-
-            if (!isset($existingOption) || !$existingOption->getOptionId()) {
-                throw new NoSuchEntityException(__('Requested option doesn\'t exist'));
-            }
-
-            $option->setData(array_merge($existingOption->getData(), $option->getData()));
-            $this->updateOptionSelection($product, $option);
+        $option->setDefaultTitle($option->getTitle());
+        if (is_array($option->getProductLinks())) {
+            $linksToAdd = $option->getProductLinks();
         }
-
         try {
             $this->optionResource->save($option);
         } catch (\Exception $e) {
@@ -200,7 +204,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         foreach ($linksToAdd as $linkedProduct) {
             $this->linkManagement->addChild($product, $option->getOptionId(), $linkedProduct);
         }
-
+        $product->setIsRelationsChanged(true);
         return $option->getOptionId();
     }
 
@@ -215,25 +219,16 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         \Magento\Catalog\Api\Data\ProductInterface $product,
         \Magento\Bundle\Api\Data\OptionInterface $option
     ) {
-        $optionId = $option->getOptionId();
-        $existingLinks = $this->linkManagement->getChildren($product->getSku(), $optionId);
+        $existingLinks = [];
         $linksToAdd = [];
-        $linksToUpdate = [];
         $linksToDelete = [];
         if (is_array($option->getProductLinks())) {
             $productLinks = $option->getProductLinks();
             foreach ($productLinks as $productLink) {
-                if (!$productLink->getId()) {
-                    $linksToAdd[] = $productLink;
-                } else {
-                    $linksToUpdate[] = $productLink;
-                }
+                $linksToAdd[] = $productLink;
             }
             /** @var \Magento\Bundle\Api\Data\LinkInterface[] $linksToDelete */
-            $linksToDelete = array_udiff($existingLinks, $linksToUpdate, [$this, 'compareLinks']);
-        }
-        foreach ($linksToUpdate as $linkedProduct) {
-            $this->linkManagement->saveChild($product->getSku(), $linkedProduct);
+            $linksToDelete = $this->compareLinks([], $existingLinks);
         }
         foreach ($linksToDelete as $linkedProduct) {
             $this->linkManagement->removeChild(
@@ -263,21 +258,34 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     }
 
     /**
-     * Compare two links and determine if they are equal
+     * Computes the difference of arrays
      *
-     * @param \Magento\Bundle\Api\Data\LinkInterface $firstLink
-     * @param \Magento\Bundle\Api\Data\LinkInterface $secondLink
-     * @return int
+     * @param array $firstArray of \Magento\Bundle\Api\Data\LinkInterface
+     * @param array $secondArray of \Magento\Bundle\Api\Data\LinkInterface
+     * @return array
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
      */
     private function compareLinks(
-        \Magento\Bundle\Api\Data\LinkInterface $firstLink,
-        \Magento\Bundle\Api\Data\LinkInterface $secondLink
+        array $firstArray,
+        array $secondArray
     ) {
-        if ($firstLink->getId() == $secondLink->getId()) {
-            return 0;
-        } else {
-            return 1;
+        $result = [];
+        if (count($firstArray) < count($secondArray)) {
+            $holder = $firstArray;
+            $firstArray = $secondArray;
+            $secondArray = $holder;
         }
+        foreach ($firstArray as $obj) {
+            foreach ($secondArray as $objToCompare) {
+                if (
+                    $obj->getId() != $objToCompare->getId()
+                    && $obj instanceof \Magento\Bundle\Api\Data\LinkInterface
+                    && $objToCompare instanceof \Magento\Bundle\Api\Data\LinkInterface
+                ) {
+                    $result[] = $obj;
+                }
+            }
+        }
+        return $result;
     }
 }

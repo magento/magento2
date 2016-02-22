@@ -22,7 +22,7 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
      * @covers \Magento\CheckoutAgreements\Model\Agreement::validateData
      *
      * @dataProvider validateDataDataProvider
-     * @param \Magento\Framework\Object $inputData
+     * @param \Magento\Framework\DataObject $inputData
      * @param array|bool $expectedResult
      */
     public function testValidateData($inputData, $expectedResult)
@@ -37,33 +37,33 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'inputData' => (new \Magento\Framework\Object())->setContentHeight('1px'),
+                'inputData' => (new \Magento\Framework\DataObject())->setContentHeight('1px'),
                 'expectedResult' => true,
             ],
             [
-                'inputData' => (new \Magento\Framework\Object())->setContentHeight('1.1px'),
+                'inputData' => (new \Magento\Framework\DataObject())->setContentHeight('1.1px'),
                 'expectedResult' => true
             ],
             [
-                'inputData' => (new \Magento\Framework\Object())->setContentHeight('0.1in'),
+                'inputData' => (new \Magento\Framework\DataObject())->setContentHeight('0.1in'),
                 'expectedResult' => true
             ],
             [
-                'inputData' => (new \Magento\Framework\Object())->setContentHeight('5%'),
+                'inputData' => (new \Magento\Framework\DataObject())->setContentHeight('5%'),
                 'expectedResult' => true
             ],
             [
-                'inputData' => (new \Magento\Framework\Object())->setContentHeight('5'),
+                'inputData' => (new \Magento\Framework\DataObject())->setContentHeight('5'),
                 'expectedResult' => true
             ],
             [
-                'inputData' => (new \Magento\Framework\Object())->setContentHeight('px'),
+                'inputData' => (new \Magento\Framework\DataObject())->setContentHeight('px'),
                 'expectedResult' => [
                     "Please input a valid CSS-height. For example 100px or 77pt or 20em or .5ex or 50%.",
                 ]
             ],
             [
-                'inputData' => (new \Magento\Framework\Object())->setContentHeight('abracadabra'),
+                'inputData' => (new \Magento\Framework\DataObject())->setContentHeight('abracadabra'),
                 'expectedResult' => [
                     "Please input a valid CSS-height. For example 100px or 77pt or 20em or .5ex or 50%.",
                 ]

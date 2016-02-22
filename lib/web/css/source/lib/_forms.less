@@ -7,7 +7,7 @@
 //  Forms
 //  _____________________________________________
 
-.form-element-input(
+.lib-form-element-input(
     @_type: @form-element-input-type,
     @_background: ~"@{@{_type}__background}",
     @_border: ~"@{@{_type}__border}",
@@ -40,26 +40,24 @@
     @_focus-color: ~"@{@{_type}__focus__color}",
     @_focus-font-style: ~"@{@{_type}__focus__font-style}"
 ) {
+    .lib-css(background, @_background);
+    .lib-css(background-clip, @_background-clip);
+    .lib-css(border, @_border);
+    .lib-css(border-radius, @_border-radius);
+    .lib-css(color, @_color);
+    .lib-css(font-family, @_font-family);
+    .lib-css(font-size, @_font-size);
+    .lib-css(font-style, @_font-style);
+    .lib-css(font-weight, @_font-weight);
+    .lib-css(height, @_height);
+    .lib-css(line-height, @_line-height);
+    .lib-css(margin, @_margin);
+    .lib-css(padding, @_padding);
+    .lib-css(vertical-align, @_vertical-align);
+    .lib-css(width, @_width);
     box-sizing: border-box;
-    .css(background, @_background);
-    .css(border, @_border);
-    .css(border-radius, @_border-radius);
-    .css(height, @_height);
-    .css(width, @_width);
-    .css(padding, @_padding);
-    .css(margin, @_margin);
 
-    .css(font-size, @_font-size);
-    .css(font-family, @_font-family);
-    .css(font-weight, @_font-weight);
-    .css(line-height, @_line-height);
-    .css(font-style, @_font-style);
-    .css(color, @_color);
-
-    .css(background-clip, @_background-clip);
-    .css(vertical-align, @_vertical-align);
-
-    ._form-element-focus(
+    ._lib-form-element-focus(
         @_background,
         @_focus-background,
         @_border,
@@ -70,7 +68,7 @@
         @_focus-font-style
     );
 
-    ._form-element-disabled(
+    ._lib-form-element-disabled(
         @_background,
         @_disabled-background,
         @_border,
@@ -82,7 +80,7 @@
         @_disabled-opacity
     );
 
-    ._form-element-placeholder(
+    ._lib-form-element-placeholder(
         @_type,
         @_placeholder-color,
         @_font-style,
@@ -90,29 +88,31 @@
     );
 }
 
-.form-element-choice(
+.lib-form-element-choice(
     @_type: @form-element-choice__type,
     @_vertical-align: ~"@{@{_type}__vertical-align}",
     @_margin: ~"@{@{_type}__margin}",
     @_disabled-opacity: ~"@{@{_type}__disabled__opacity}"
 ) {
-    .css(vertical-align, @_vertical-align);
-    .css(margin, @_margin);
+    .lib-css(margin, @_margin);
+    .lib-css(vertical-align, @_vertical-align);
+
     &:disabled {
-        ._form-element-add-opacity(@_disabled-opacity);
+        ._lib-form-element-add-opacity(@_disabled-opacity);
     }
 }
 
-.form-element-number-reset() {
+.lib-form-element-number-reset() {
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
+
     -moz-appearance: textfield;
 }
 
-.form-element-search-reset() {
+.lib-form-element-search-reset() {
     -webkit-appearance: none;
     &::-webkit-search-cancel-button,
     &::-webkit-search-decoration,
@@ -122,11 +122,11 @@
     }
 }
 
-.form-element-textarea-resize(@_textarea-resize: @textarea__resize) {
-    .css(resize, @_textarea-resize);
+.lib-form-element-textarea-resize(@_textarea-resize: @textarea__resize) {
+    .lib-css(resize, @_textarea-resize);
 }
 
-.form-element-color(
+.lib-form-element-color(
     @_border-color: '',
     @_background: '',
     @_color: '',
@@ -138,31 +138,36 @@
     @_disabled-color: '',
     @_placeholder-color: ''
 ) {
-    .css(background, @_background);
-    .css(border-color, @_border-color);
-    .css(color, @_color);
+    .lib-css(background, @_background);
+    .lib-css(border-color, @_border-color);
+    .lib-css(color, @_color);
+
     &:focus {
-        ._form-element-state-add-border-color(@_focus-border-color, @_border-color);
-        ._form-element-state-add-background(@_focus-background, @_background);
-        ._form-element-state-add-font-color(@_focus-color, @_color);
+        ._lib-form-element-state-add-border-color(@_focus-border-color, @_border-color);
+        ._lib-form-element-state-add-background(@_focus-background, @_background);
+        ._lib-form-element-state-add-font-color(@_focus-color, @_color);
     }
+
     &:disabled {
-        ._form-element-state-add-border-color(@_disabled-border-color, @_border-color);
-        ._form-element-state-add-background(@_disabled-background, @_background);
-        ._form-element-state-add-font-color(@_disabled-color, @_color);
+        ._lib-form-element-state-add-border-color(@_disabled-border-color, @_border-color);
+        ._lib-form-element-state-add-background(@_disabled-background, @_background);
+        ._lib-form-element-state-add-font-color(@_disabled-color, @_color);
     }
+
     &::-moz-placeholder {
-        .css(color, @_placeholder-color);
+        .lib-css(color, @_placeholder-color);
     }
+
     &::-webkit-input-placeholder {
-        .css(color, @_placeholder-color);
+        .lib-css(color, @_placeholder-color);
     }
+
     &:-ms-input-placeholder {
-        .css(color, @_placeholder-color);
+        .lib-css(color, @_placeholder-color);
     }
 }
 
-.form-validation(
+.lib-form-validation(
     @_element-color-error: @form-element-validation__color-error,
     @_element-color-valid: @form-element-validation__color-valid,
     @_element-border-color-error: @form-element-validation__border-error,
@@ -171,14 +176,15 @@
     @_element-background-valid: @form-element-validation__background-valid
 ) {
     &.mage-error {
-        .form-element-color(
+        .lib-form-element-color(
             @_border-color: @_element-border-color-error,
             @_background: @_element-background-error,
             @_color: @_element-color-error
         );
     }
+
     &.valid {
-        .form-element-color(
+        .lib-form-element-color(
             @_border-color: @_element-border-color-valid,
             @_background: @_element-background-valid,
             @_color: @_element-color-valid
@@ -186,7 +192,7 @@
     }
 }
 
-.form-validation-note(
+.lib-form-validation-note(
     @_note-color: @form-validation-note__color-error,
     @_note-font-size: @form-validation-note__font-size,
     @_note-font-family: @form-validation-note__font-family,
@@ -209,7 +215,7 @@
     @_note-icon-font-position: @form-validation-note-icon__font-position,
     @_note-icon-font-text-hide: @form-validation-note-icon__font-text-hide
 ) {
-    .typography(
+    .lib-typography(
         @_font-size: @_note-font-size,
         @_color: @_note-color,
         @_font-family: @_note-font-family,
@@ -217,7 +223,7 @@
         @_line-height: @_note-line-height,
         @_font-style: @_note-font-style
     );
-    ._form-validation-icon(
+    ._lib-form-validation-icon(
         @_note-icon-use,
         @_note-icon-font-content,
         @_note-icon-font,
@@ -233,7 +239,7 @@
     );
 }
 
-.form-validation-color(
+.lib-form-validation-color(
     @_element-border-color-error: '',
     @_element-background-error: '',
     @_element-color-error: '',
@@ -242,14 +248,15 @@
     @_element-color-valid: ''
 ) {
     &.mage-error {
-        .form-element-color(
+        .lib-form-element-color(
             @_border-color: @_element-border-color-error,
             @_background: @_element-background-error,
             @_color: @_element-color-error
         );
     }
+
     &.valid {
-        .form-element-color(
+        .lib-form-element-color(
             @_border-color: @_element-border-color-valid,
             @_background: @_element-background-valid,
             @_color: @_element-color-valid
@@ -257,7 +264,7 @@
     }
 }
 
-.form-element-all() {
+.lib-form-element-all() {
     input[type="text"],
     input[type="password"],
     input[type="url"],
@@ -266,47 +273,47 @@
     input[type="number"],
     input[type="datetime"],
     input[type="email"] {
-        .form-element-input(@_type: input-text);
+        .lib-form-element-input(@_type: input-text);
     }
 
     input[type="number"] {
-        .form-element-number-reset();
+        .lib-form-element-number-reset();
     }
 
     input[type="search"] {
-        .form-element-search-reset();
+        .lib-form-element-search-reset();
     }
 
     select {
-        .form-element-input(@_type: select);
+        .lib-form-element-input(@_type: select);
     }
 
     select[multiple="multiple"] {
-        .css(height, auto);
+        .lib-css(height, auto);
         background-image: none;
     }
 
     textarea {
-        .form-element-input(@_type: textarea);
-        .form-element-textarea-resize();
+        .lib-form-element-input(@_type: textarea);
+        .lib-form-element-textarea-resize();
     }
 
     input[type="checkbox"] {
-        .form-element-choice(@_type: input-checkbox);
+        .lib-form-element-choice(@_type: input-checkbox);
     }
 
     input[type="radio"] {
-        .form-element-choice(@_type: input-radio);
+        .lib-form-element-choice(@_type: input-radio);
     }
 
     input,
     select,
     textarea {
-        .form-validation();
+        .lib-form-validation();
     }
 
     div.mage-error[generated] {
-        .form-validation-note();
+        .lib-form-validation-note();
     }
 
     input[type="button"],
@@ -327,7 +334,7 @@
 //  Internal use mixins
 //  ---------------------------------------------
 
-._form-validation-icon(
+._lib-form-validation-icon(
     @_note-icon-use,
     @_note-icon-font-content,
     @_note-icon-font,
@@ -341,7 +348,7 @@
     @_note-icon-font-position,
     @_note-icon-font-text-hide
 ) when (@_note-icon-use = true) {
-    .icon-font(
+    .lib-icon-font(
         @_icon-font-content: @_note-icon-font-content,
         @_icon-font: @_note-icon-font,
         @_icon-font-size: @_note-icon-font-size,
@@ -356,12 +363,12 @@
     );
 }
 
-._form-element-add-opacity(@_opacity) when not (@_opacity = 1) {
-    .css(opacity, @_opacity);
+._lib-form-element-add-opacity(@_opacity) when not (@_opacity = 1) {
+    .lib-css(opacity, @_opacity);
 }
 
 //  Only for states :disabled, :focus, placeholder
-._form-element-focus(
+._lib-form-element-focus(
     @_background-default,
     @_background-state,
     @_border-default,
@@ -372,14 +379,14 @@
     @_font-style-state
 ) {
     &:focus {
-        ._form-element-state-add-background(@_background-state, @_background-default);
-        ._form-element-state-add-border(@_border-state, @_border-default);
-        ._form-element-state-add-font-color(@_color-state, @_color-default);
-        ._form-element-state-add-font-style(@_font-style-state, @_font-style-default);
+        ._lib-form-element-state-add-background(@_background-state, @_background-default);
+        ._lib-form-element-state-add-border(@_border-state, @_border-default);
+        ._lib-form-element-state-add-font-color(@_color-state, @_color-default);
+        ._lib-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
     }
 }
 
-._form-element-disabled(
+._lib-form-element-disabled(
     @_background-default,
     @_background-state,
     @_border-default,
@@ -391,55 +398,57 @@
     @_opacity
 ) {
     &:disabled {
-        ._form-element-add-opacity(@_opacity);
-        ._form-element-state-add-background(@_background-state, @_background-default);
-        ._form-element-state-add-border(@_border-state, @_border-default);
-        ._form-element-state-add-font-color(@_color-state, @_color-default);
-        ._form-element-state-add-font-style(@_font-style-state, @_font-style-default);
+        ._lib-form-element-add-opacity(@_opacity);
+        ._lib-form-element-state-add-background(@_background-state, @_background-default);
+        ._lib-form-element-state-add-border(@_border-state, @_border-default);
+        ._lib-form-element-state-add-font-color(@_color-state, @_color-default);
+        ._lib-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
     }
 }
 
-._form-element-placeholder(
+._lib-form-element-placeholder(
     @_type,
     @_color,
     @_font-style-default,
     @_font-style-state
 ) when not (@_type = select) {
     &::-moz-placeholder {
-        .css(color, @_color);
-        ._form-element-state-add-font-style(@_font-style-state, @_font-style-default);
+        .lib-css(color, @_color);
+        ._lib-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
     }
+
     &::-webkit-input-placeholder {
-        .css(color, @_color);
-        ._form-element-state-add-font-style(@_font-style-state, @_font-style-default);
+        .lib-css(color, @_color);
+        ._lib-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
     }
+
     &:-ms-input-placeholder {
-        .css(color, @_color);
-        ._form-element-state-add-font-style(@_font-style-state, @_font-style-default);
+        .lib-css(color, @_color);
+        ._lib-form-element-state-add-font-style(@_font-style-state, @_font-style-default);
     }
 }
 
-._form-element-state-add-background(@_background-state, @_background-default) when not (@_background-state = @_background-default) {
-    .css(background, @_background-state);
+._lib-form-element-state-add-background(@_background-state, @_background-default) when not (@_background-state = @_background-default) {
+    .lib-css(background, @_background-state);
 }
 
-._form-element-state-add-border(@_border-state, @_border-default) when not ('@{_border-state}' = '@{_border-default}') {
-    .css(border, @_border-state);
+._lib-form-element-state-add-border(@_border-state, @_border-default) when not ('@{_border-state}' = '@{_border-default}') {
+    .lib-css(border, @_border-state);
 }
 
-._form-element-state-add-border-color(@_border-state, @_border-default) when not (@_border-state = @_border-default) {
-    .css(border-color, @_border-state);
+._lib-form-element-state-add-border-color(@_border-state, @_border-default) when not (@_border-state = @_border-default) {
+    .lib-css(border-color, @_border-state);
 }
 
-._form-element-state-add-font-style(@_font-style-state, @_font-style-default) when not (@_font-style-state = @_font-style-default) {
-    .css(font-style, @_font-style-state);
+._lib-form-element-state-add-font-style(@_font-style-state, @_font-style-default) when not (@_font-style-state = @_font-style-default) {
+    .lib-css(font-style, @_font-style-state);
 }
 
-._form-element-state-add-font-color(@_color-state, @_color-default) when not (@_color-state = @_color-default) {
-    .css(color, @_color-state);
+._lib-form-element-state-add-font-color(@_color-state, @_color-default) when not (@_color-state = @_color-default) {
+    .lib-css(color, @_color-state);
 }
 
-.form-fieldset(
+.lib-form-fieldset(
     @_border: @form-fieldset__border,
     @_margin: @form-fieldset__margin,
     @_padding: @form-fieldset__padding,
@@ -453,9 +462,9 @@
     @_legend-padding: @form-fieldset-legend__padding,
     @_legend-width: @form-fieldset-legend__width
 ) {
-    .css(padding, @_padding);
-    .css(margin, @_margin);
-    .css(border, @_border);
+    .lib-css(border, @_border);
+    .lib-css(margin, @_margin);
+    .lib-css(padding, @_padding);
     letter-spacing: -.31em;
     //word-spacing: -.43em;
 
@@ -465,9 +474,13 @@
     }
 
     > .legend {
-        .css(margin, @_legend-margin);
-        .css(padding, @_legend-padding);
-        .typography(
+        .lib-css(margin, @_legend-margin);
+        .lib-css(padding, @_legend-padding);
+        .lib-css(width, @_legend-width);
+        box-sizing: border-box;
+        float: left;
+
+        .lib-typography(
             @_font-size: @_legend-font-size,
             @_color: @_legend-color,
             @_font-family: @_legend-font-family,
@@ -475,20 +488,18 @@
             @_line-height: @_legend-line-height,
             @_font-style: @_legend-font-style
         );
-        box-sizing: border-box;
-        float: left;
-        .css(width, @_legend-width);
+
         & + br {
+            clear: both;
             display: block;
-            visibility: hidden;
             height: 0;
             overflow: hidden;
-            clear: both;
+            visibility: hidden;
         }
     }
 }
 
-.form-field(
+.lib-form-field(
     @_type: @form-field-type,
     @_type-inline-margin: @form-field-type-inline__margin,
     @_type-inline-label-margin: @form-field-type-label-inline__margin,
@@ -543,9 +554,9 @@
     @_note-icon-font-position: @form-field-note-icon-font__position,
     @_note-icon-font-text-hide: @form-field-note-icon-font__text-hide
 ) {
-    .css(border, @_border);
+    .lib-css(border, @_border);
 
-    .form-field-type(
+    .lib-form-field-type(
         @_type,
         @_type-inline-margin,
         @_type-inline-label-margin,
@@ -564,14 +575,14 @@
         margin-bottom: 0;
     }
 
-    .form-field-column(
+    .lib-form-field-column(
         @_column,
         @_column-padding,
         @_column-number
     );
 
     > .label {
-        .typography(
+        .lib-typography(
             @_font-size: @_label-font-size,
             @_color: @_label-color,
             @_font-family: @_label-font-family,
@@ -591,59 +602,66 @@
     }
 
     .fields.group {
-        .clearfix();
+        .lib-clearfix();
         .field {
             box-sizing: border-box;
             float: left;
         }
+
         &.group-2 .field {
             width: 50% !important;
         }
+
         &.group-3 .field {
             width: 33.3% !important;
         }
+
         &.group-4 .field {
             width: 25% !important;
         }
+
         &.group-5 .field {
             width: 20% !important;
         }
     }
 
     .addon {
-        .vendor-prefix-display(inline-flex);
-        .vendor-prefix-flex-wrap(nowrap);
+        .lib-vendor-prefix-display(inline-flex);
+        .lib-vendor-prefix-flex-wrap(nowrap);
         padding: 0;
         width: 100%;
+
         textarea,
         select,
         input {
-            .vendor-prefix-order(2);
-            .vendor-prefix-flex-basis(100%);
+            .lib-vendor-prefix-order(2);
+            .lib-vendor-prefix-flex-basis(100%);
             display: inline-block;
             margin: 0;
             width: auto;
         }
+
         .addbefore,
         .addafter {
-            .vendor-prefix-order(3);
+            .lib-form-element-input(@_type: input-text);
+            .lib-vendor-prefix-order(3);
             display: inline-block;
-            .form-element-input(@_type: input-text);
-            width: auto;
-            white-space: nowrap;
             vertical-align: middle;
+            white-space: nowrap;
+            width: auto;
         }
+
         .addbefore {
             float: left;
-            .vendor-prefix-order(1);
+            .lib-vendor-prefix-order(1);
         }
     }
 
     .additional {
-        .css(margin-top, @_additional-vertical-indent);
+        .lib-css(margin-top, @_additional-vertical-indent);
     }
 
-    ._form-field-required(
+    ._lib-form-field-required(
         @_label-asterisk-color,
         @_label-asterisk-font-size,
         @_label-asterisk-font-family,
@@ -653,7 +671,7 @@
         @_label-asterisk-margin
     );
 
-    ._form-field-note(
+    ._lib-form-field-note(
         @_note-font-size,
         @_note-color,
         @_note-font-family,
@@ -677,7 +695,7 @@
     );
 }
 
-.form-field-type(
+.lib-form-field-type(
     @_type: @form-field-type,
     @_type-inline-margin: @form-field-type-inline__margin,
     @_type-inline-label-margin: @form-field-type-label-inline__margin,
@@ -691,7 +709,7 @@
     @_type-block-label-padding: @form-field-type-label-block__padding,
     @_type-block-label-align: @form-field-type-label-block__align
 ) when (@_type = inline) {
-    ._form-field-type-inline(
+    ._lib-form-field-type-inline(
         @_type-inline-margin,
         @_type-inline-label-margin,
         @_type-inline-label-padding,
@@ -702,7 +720,7 @@
     );
 }
 
-.form-field-type(
+.lib-form-field-type(
     @_type: @form-field-type,
     @_type-inline-margin: @form-field-type-inline__margin,
     @_type-inline-label-margin: @form-field-type-label-inline__margin,
@@ -716,7 +734,7 @@
     @_type-block-label-padding: @form-field-type-label-block__padding,
     @_type-block-label-align: @form-field-type-label-block__align
 ) when (@_type = block) {
-    ._form-field-type-block(
+    ._lib-form-field-type-block(
         @_type-block-margin,
         @_type-block-label-margin,
         @_type-block-label-padding,
@@ -724,7 +742,7 @@
     );
 }
 
-._form-field-type-inline(
+._lib-form-field-type-inline(
     @_type-inline-margin,
     @_type-inline-label-margin,
     @_type-inline-label-padding,
@@ -733,58 +751,61 @@
     @_type-inline-label-align,
     @_vertical-indent
 ) {
+    .lib-clearfix();
+    .lib-css(margin, @_type-inline-margin);
     box-sizing: border-box;
-    .clearfix();
-    .css(margin, @_type-inline-margin);
 
     &.choice:before,
     &.no-label:before {
+        .lib-css(padding, @_type-inline-label-padding);
+        .lib-css(width, @_type-inline-label-width);
         box-sizing: border-box;
-        content: " ";
+        content: ' ';
+        float: left;
         height: 1px;
-        float: left;
-        .css(padding, @_type-inline-label-padding);
-        .css(width, @_type-inline-label-width);
     }
+
     .description {
+        .lib-css(padding, @_type-inline-label-padding);
+        .lib-css(text-align, @_type-inline-label-align);
+        .lib-css(width, @_type-inline-label-width);
         box-sizing: border-box;
         float: left;
-        .css(padding, @_type-inline-label-padding);
-        .css(text-align, @_type-inline-label-align);
-        .css(width, @_type-inline-label-width);
     }
+
     &:not(.choice) {
         > .label {
+            .lib-css(margin, @_type-inline-label-margin);
+            .lib-css(padding, @_type-inline-label-padding);
+            .lib-css(text-align, @_type-inline-label-align);
+            .lib-css(width, @_type-inline-label-width);
             box-sizing: border-box;
             float: left;
-            .css(margin, @_type-inline-label-margin);
-            .css(padding, @_type-inline-label-padding);
-            .css(text-align, @_type-inline-label-align);
-            .css(width, @_type-inline-label-width);
         }
+
         > .control {
+            .lib-css(width, @_type-inline-control-width);
             float: left;
-            .css(width, @_type-inline-control-width);
         }
     }
 }
 
-._form-field-type-block(
+._lib-form-field-type-block(
     @_type-block-margin,
     @_type-block-label-margin,
     @_type-block-label-padding,
     @_type-block-label-align
 ) {
-    .css(margin, @_type-block-margin);
+    .lib-css(margin, @_type-block-margin);
     > .label {
+        .lib-css(margin, @_type-block-label-margin);
+        .lib-css(padding, @_type-block-label-padding);
+        .lib-css(text-align, @_type-block-label-align);
         display: inline-block;
-        .css(text-align, @_type-block-label-align);
-        .css(margin, @_type-block-label-margin);
-        .css(padding, @_type-block-label-padding);
     }
 }
 
-._form-field-required(
+._lib-form-field-required(
     @_color: @form-field-label-asterisk__color,
     @_font-size: @form-field-label-asterisk__font-size,
     @_font-family: @form-field-label-asterisk__font-family,
@@ -793,21 +814,24 @@
     @_line-height: @form-field-label-asterisk__line-height,
     @_margin: @form-field-label-asterisk__margin
 ) {
-    &.required > .label:after {
-        content: '*';
-        .typography(
+    &.required > .label,
+    &._required > .label {
+        &:after {
+            content: '*';
+            .lib-typography(
             @_font-size: @_font-size,
             @_color: @_color,
             @_font-family: @_font-family,
             @_font-weight: @_font-weight,
             @_line-height: @_line-height,
             @_font-style: @_font-style
-        );
-        .css(margin, @_margin);
+            );
+            .lib-css(margin, @_margin);
+        }
     }
 }
 
-._form-field-note(
+._lib-form-field-note(
     @_note-font-size,
     @_note-color,
     @_note-font-family,
@@ -830,7 +854,7 @@
     @_note-icon-font-text-hide
 ) {
     .note {
-        .typography(
+        .lib-typography(
             @_font-size: @_note-font-size,
             @_color: @_note-color,
             @_font-family: @_note-font-family,
@@ -838,9 +862,11 @@
             @_line-height: @_note-line-height,
             @_font-style: @_note-font-style
         );
-        .css(margin, @_note-margin);
-        .css(padding, @_note-padding);
-        .icon-font(
+
+        .lib-css(margin, @_note-margin);
+        .lib-css(padding, @_note-padding);
+
+        .lib-icon-font(
             @_icon-font-content: @_note-icon-font-content,
             @_icon-font: @_note-icon-font,
             @_icon-font-size: @_note-icon-font-size,
@@ -856,7 +882,7 @@
     }
 }
 
-.form-field-type-revert(
+.lib-form-field-type-revert(
     @_type: @form-field-type-revert,
     @_type-inline-margin: @form-field-type-inline__margin,
     @_type-inline-label-margin: @form-field-type-label-inline__margin,
@@ -872,34 +898,41 @@
 ) when (@_type = block) and not (@_type = false) {
     &:not(.choice) {
         > .label {
-            width: auto;
-            float: none;
             box-sizing: content-box;
-            ._revert-type-block-label-align(
+            float: none;
+            width: auto;
+
+            ._lib-revert-type-block-label-align(
                 @_type-block-label-align
             );
-            ._revert-type-block-label-padding(
+
+            ._lib-revert-type-block-label-padding(
                 @_type-block-label-padding
             );
         }
+
         > .control {
-            width: auto;
             float: none;
+            width: auto;
         }
     }
-    ._form-field-type-block(
+
+    ._lib-form-field-type-block(
         @_type-block-margin,
         @_type-block-label-margin,
         @_type-block-label-padding,
         @_type-block-label-align
     );
-    &.choice:before,
-    &.no-label:before {
-        display: none;
+
+    &.choice,
+    &.no-label {
+        &:before {
+            display: none;
+        }
     }
 }
 
-.form-field-type-revert(
+.lib-form-field-type-revert(
     @_type: @form-field-type-revert,
     @_type-inline-margin: @form-field-type-inline__margin,
     @_type-inline-label-margin: @form-field-type-label-inline__margin,
@@ -914,11 +947,11 @@
     @_type-block-label-align: @form-field-type-label-block__align
 ) when (@_type = inline) and not (@_type = false) {
     > .label {
-        ._revert-type-inline-label-margin(
+        ._lib-revert-type-inline-label-margin(
             @_type-inline-label-margin
         );
     }
-    ._form-field-type-inline(
+    ._lib-form-field-type-inline(
         @_type-inline-margin,
         @_type-inline-label-margin,
         @_type-inline-label-padding,
@@ -929,16 +962,16 @@
     );
 }
 
-.form-field-column(
+.lib-form-field-column(
     @_column: @form-field-column,
     @_column-padding: @form-field-column__padding,
     @_column-number: @form-field-column__number
 ) when (@_column = true) {
+    .lib-css(padding, @_column-padding);
     box-sizing: border-box;
-    //float: left;
     display: inline-block;
-    .css(padding, @_column-padding);
-    .form-field-column-number(@_column-number);
+
+    .lib-form-field-column-number(@_column-number);
     vertical-align: top;
 
     & + .fieldset {
@@ -946,29 +979,29 @@
     }
 }
 
-.form-field-column-number(@_column-number: @form-field-column__number) {
-    .css(width, 100% / @_column-number);
+.lib-form-field-column-number(@_column-number: @form-field-column__number) {
+    .lib-css(width, 100% / @_column-number);
 }
 
-._revert-type-block-label-padding(
+._lib-revert-type-block-label-padding(
     @_type-block-label-padding
 ) when (@_type-block-label-padding = false) {
     padding: 0;
 }
 
-._revert-type-block-label-align(
+._lib-revert-type-block-label-align(
     @_type-block-label-align
 ) when (@_type-block-label-align = false) {
     text-align: left;
 }
 
-._revert-type-inline-label-margin(
+._lib-revert-type-inline-label-margin(
     @_type-inline-label-margin
 ) when (@_type-inline-label-margin = false) {
     margin: 0;
 }
 
-.form-hasrequired(
+.lib-form-hasrequired(
     @_position: @form-hasrequired__position,
     @_color: @form-hasrequired__color,
     @_font-size: @form-hasrequired__font-size,
@@ -980,7 +1013,7 @@
     @_margin: @form-hasrequired__margin,
     @_padding: @form-hasrequired__padding
 ) {
-    ._form-hasrequired-position(
+    ._lib-form-hasrequired-position(
         @_position,
         @_border,
         @_margin,
@@ -994,7 +1027,7 @@
     );
 }
 
-._form-hasrequired-position(
+._lib-form-hasrequired-position(
     @_position,
     @_border,
     @_margin,
@@ -1007,7 +1040,7 @@
     @_font-style
 ) when (@_position = top) {
     &:before {
-        ._form-hasrequired-position-any(
+        ._lib-form-hasrequired-position-any(
             @_border,
             @_margin,
             @_padding,
@@ -1021,7 +1054,7 @@
     }
 }
 
-._form-hasrequired-position(
+._lib-form-hasrequired-position(
     @_position,
     @_border,
     @_margin,
@@ -1034,7 +1067,7 @@
     @_font-style
 ) when (@_position = bottom) {
     &:after {
-        ._form-hasrequired-position-any(
+        ._lib-form-hasrequired-position-any(
             @_border,
             @_margin,
             @_padding,
@@ -1048,7 +1081,7 @@
     }
 }
 
-._form-hasrequired-position-any(
+._lib-form-hasrequired-position-any(
     @_border,
     @_margin,
     @_padding,
@@ -1059,9 +1092,14 @@
     @_line-height,
     @_font-style
 ) {
+    .lib-css(border, @_border);
+    .lib-css(margin, @_margin);
+    .lib-css(padding, @_padding);
     content: attr(data-hasrequired);
     display: block;
-    .typography(
+    letter-spacing: normal;
+    word-spacing: normal;
+    .lib-typography(
         @_font-size: @_font-size,
         @_color: @_color,
         @_font-family: @_font-family,
@@ -1069,10 +1107,4 @@
         @_line-height: @_line-height,
         @_font-style: @_font-style
     );
-    .css(border, @_border);
-    .css(margin, @_margin);
-    .css(padding, @_padding);
-
-    letter-spacing: normal;
-    word-spacing: normal;
 }

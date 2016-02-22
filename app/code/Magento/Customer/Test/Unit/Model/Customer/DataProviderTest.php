@@ -8,10 +8,11 @@ namespace Magento\Customer\Test\Unit\Model\Customer;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Customer\Model\Customer\DataProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
-use Magento\Customer\Model\Resource\Customer\CollectionFactory;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 
 /**
  * Class DataProviderTest
@@ -49,7 +50,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerCollectionFactoryMock = $this->getMock(
-            'Magento\Customer\Model\Resource\Customer\CollectionFactory',
+            'Magento\Customer\Model\ResourceModel\Customer\CollectionFactory',
             ['create'],
             [],
             '',
@@ -100,37 +101,51 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             [
                 'expected' => [
                     'customer' => [
-                        'fields' => [
+                        'children' => [
                             self::ATTRIBUTE_CODE => [
-                                'dataType' => 'frontend_input',
-                                'formElement' => 'frontend_input',
-                                'options' => 'test-options',
-                                'visible' => 'is_visible',
-                                'required' => 'is_required',
-                                'label' => 'frontend_label',
-                                'sortOrder' => 'sort_order',
-                                'notice' => 'note',
-                                'default' => 'default_value',
-                                'size' => 'multiline_count',
-                            ]
-                        ]
+                                'arguments' => [
+                                    'data' => [
+                                        'config' => [
+                                            'dataType' => 'frontend_input',
+                                            'formElement' => 'frontend_input',
+                                            'options' => 'test-options',
+                                            'visible' => 'is_visible',
+                                            'required' => 'is_required',
+                                            'label' => 'frontend_label',
+                                            'sortOrder' => 'sort_order',
+                                            'notice' => 'note',
+                                            'default' => 'default_value',
+                                            'size' => 'multiline_count',
+                                            'componentType' => Field::NAME,
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                     'address' => [
-                        'fields' => [
+                        'children' => [
                             self::ATTRIBUTE_CODE => [
-                                'dataType' => 'frontend_input',
-                                'formElement' => 'frontend_input',
-                                'options' => 'test-options',
-                                'visible' => 'is_visible',
-                                'required' => 'is_required',
-                                'label' => 'frontend_label',
-                                'sortOrder' => 'sort_order',
-                                'notice' => 'note',
-                                'default' => 'default_value',
-                                'size' => 'multiline_count',
-                            ]
-                        ]
-                    ]
+                                'arguments' => [
+                                    'data' => [
+                                        'config' => [
+                                            'dataType' => 'frontend_input',
+                                            'formElement' => 'frontend_input',
+                                            'options' => 'test-options',
+                                            'visible' => 'is_visible',
+                                            'required' => 'is_required',
+                                            'label' => 'frontend_label',
+                                            'sortOrder' => 'sort_order',
+                                            'notice' => 'note',
+                                            'default' => 'default_value',
+                                            'size' => 'multiline_count',
+                                            'componentType' => Field::NAME,
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ]
             ]
         ];
@@ -141,7 +156,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected function getCustomerCollectionFactoryMock()
     {
-        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\Resource\Customer\Collection')
+        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -245,5 +260,91 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->with($attributeMock, $this->logicalNot($this->isEmpty()));
 
         return [$attributeMock];
+    }
+
+    public function testGetData()
+    {
+        $customer = $this->getMockBuilder('Magento\Customer\Model\Customer')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $address = $this->getMockBuilder('Magento\Customer\Model\Address')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Customer\Collection')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $collectionMock->expects($this->once())
+            ->method('addAttributeToSelect')
+            ->with('*');
+
+        $this->customerCollectionFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($collectionMock);
+
+        $collectionMock->expects($this->once())
+            ->method('getItems')
+            ->willReturn([$customer]);
+        $customer->expects($this->once())
+            ->method('getData')
+            ->willReturn([
+                'email' => 'test@test.ua',
+                'default_billing' => 2,
+                'default_shipping' => 2,
+            ]);
+        $customer->expects($this->once())
+            ->method('getAddresses')
+            ->willReturn([$address]);
+        $address->expects($this->atLeastOnce())
+            ->method('getId')
+            ->willReturn(2);
+        $address->expects($this->once())
+            ->method('load')
+            ->with(2)
+            ->willReturnSelf();
+        $address->expects($this->once())
+            ->method('getData')
+            ->willReturn([
+                'firstname' => 'firstname',
+                'lastname' => 'lastname',
+                'street' => "street\nstreet",
+            ]);
+
+        $helper = new ObjectManager($this);
+        $dataProvider = $helper->getObject(
+            '\Magento\Customer\Model\Customer\DataProvider',
+            [
+                'name' => 'test-name',
+                'primaryFieldName' => 'primary-field-name',
+                'requestFieldName' => 'request-field-name',
+                'eavValidationRules' => $this->eavValidationRulesMock,
+                'customerCollectionFactory' => $this->customerCollectionFactoryMock,
+                'eavConfig' => $this->getEavConfigMock()
+            ]
+        );
+        $this->assertEquals(
+            [
+                '' => [
+                    'customer' => [
+                        'email' => 'test@test.ua',
+                        'default_billing' => 2,
+                        'default_shipping' => 2,
+                    ],
+                    'address' => [
+                        2 => [
+                            'firstname' => 'firstname',
+                            'lastname' => 'lastname',
+                            'street' => [
+                                'street',
+                                'street',
+                            ],
+                            'default_billing' => 2,
+                            'default_shipping' => 2,
+                        ]
+                    ]
+                ]
+            ],
+            $dataProvider->getData()
+        );
     }
 }

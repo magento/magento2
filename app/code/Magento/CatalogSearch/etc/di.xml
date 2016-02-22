@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Field\Resolver" />
     <preference for="Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider"/>
     <preference for="Magento\Framework\Search\Adapter\Mysql\Filter\PreprocessorInterface" type="Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor" />
@@ -13,12 +13,21 @@
     <preference for="Magento\Framework\Search\Adapter\OptionsInterface" type="Magento\CatalogSearch\Model\Adapter\Options" />
     <type name="Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory">
         <arguments>
-            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\Resource\EngineInterface::CONFIG_ENGINE_PATH</argument>
+            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
             <argument name="handlers" xsi:type="array">
                 <item name="mysql" xsi:type="string">Magento\CatalogSearch\Model\Indexer\IndexerHandler</item>
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogSearch\Model\Indexer\IndexStructureFactory">
+        <arguments>
+            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
+            <argument name="structures" xsi:type="array">
+                <item name="mysql" xsi:type="string">Magento\CatalogSearch\Model\Indexer\IndexStructure</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\Indexer\IndexStructureInterface" type="Magento\CatalogSearch\Model\Indexer\IndexStructureProxy" />
     <type name="Magento\Framework\Search\Adapter\Mysql\Aggregation\DataProviderContainer">
         <arguments>
             <argument name="dataProviders" xsi:type="array">
@@ -33,29 +42,19 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="advancedSearchFilterList" type="Magento\Catalog\Model\Layer\FilterList">
-        <arguments>
-            <argument name="filterableAttributes" xsi:type="object">Magento\CatalogSearch\Model\Layer\Advanced\FilterableAttributeList</argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\CatalogSearch\Model\Layer\Advanced\FilterableAttributeList">
-        <arguments>
-            <argument name="layer" xsi:type="object">Magento\CatalogSearch\Model\Layer\Advanced</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Catalog\Model\Product">
+    <type name="Magento\Catalog\Model\ResourceModel\Product">
         <plugin name="catalogsearchFulltextProduct" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product"/>
     </type>
     <type name="Magento\Catalog\Model\Product\Action">
         <plugin name="catalogsearchFulltextMassAction" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product\Action"/>
     </type>
-    <type name="Magento\Store\Model\Resource\Store">
+    <type name="Magento\Store\Model\ResourceModel\Store">
         <plugin name="catalogsearchFulltextIndexerStoreView" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\View" />
     </type>
-    <type name="Magento\Store\Model\Resource\Group">
+    <type name="Magento\Store\Model\ResourceModel\Group">
         <plugin name="catalogsearchFulltextIndexerStoreGroup" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\Group"/>
     </type>
-    <type name="Magento\Catalog\Model\Resource\Attribute">
+    <type name="Magento\Catalog\Model\ResourceModel\Attribute">
         <plugin name="catalogsearchFulltextIndexerAttribute" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute"/>
     </type>
     <type name="Magento\Framework\Search\EntityMetadata" />
@@ -79,7 +78,7 @@
     </type>
     <type name="Magento\Framework\Search\Dynamic\IntervalFactory">
         <arguments>
-            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\Resource\EngineInterface::CONFIG_ENGINE_PATH</argument>
+            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
             <argument name="intervals" xsi:type="array">
                 <item name="mysql" xsi:type="string">Magento\Framework\Search\Adapter\Mysql\Aggregation\Interval</item>
             </argument>
@@ -88,7 +87,7 @@
     </type>
     <type name="Magento\Framework\Search\Dynamic\DataProviderFactory">
         <arguments>
-            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\Resource\EngineInterface::CONFIG_ENGINE_PATH</argument>
+            <argument name="configPath" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
             <argument name="dataProviders" xsi:type="array">
                 <item name="mysql" xsi:type="string">Magento\CatalogSearch\Model\Adapter\Mysql\Dynamic\DataProvider</item>
             </argument>
@@ -105,7 +104,7 @@
             </argument>
         </arguments>
     </type>
-    <preference for="Magento\Search\Model\SearchCollectionInterface" type="Magento\CatalogSearch\Model\Resource\Search\Collection" />
+    <preference for="Magento\Search\Model\SearchCollectionInterface" type="Magento\CatalogSearch\Model\ResourceModel\Search\Collection" />
     <type name="Magento\Catalog\Model\Layer\Search\CollectionFilter">
         <plugin name="searchQuery" type="Magento\CatalogSearch\Model\Layer\Search\Plugin\CollectionFilter" />
     </type>
@@ -129,35 +128,43 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\CatalogSearch\Model\Resource\Fulltext\CollectionFactory" type="Magento\Catalog\Model\Resource\Product\CollectionFactory">
+    <virtualType name="Magento\CatalogSearch\Model\ResourceModel\Fulltext\CollectionFactory" type="Magento\Catalog\Model\ResourceModel\Product\CollectionFactory">
         <arguments>
-            <argument name="instanceName" xsi:type="string">Magento\CatalogSearch\Model\Resource\Fulltext\Collection</argument>
+            <argument name="instanceName" xsi:type="string">Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection</argument>
         </arguments>
     </virtualType>
     <type name="Magento\CatalogSearch\Model\Layer\Category\ItemCollectionProvider">
         <arguments>
-            <argument name="collectionFactory" xsi:type="object">Magento\CatalogSearch\Model\Resource\Fulltext\CollectionFactory</argument>
+            <argument name="collectionFactory" xsi:type="object">Magento\CatalogSearch\Model\ResourceModel\Fulltext\CollectionFactory</argument>
         </arguments>
     </type>
+
+    <virtualType name="Magento\CatalogSearch\Model\ResourceModel\Fulltext\SearchCollection" type="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection">
+        <arguments>
+            <argument name="searchRequestName" xsi:type="string">quick_search_container</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="Magento\CatalogSearch\Model\ResourceModel\Fulltext\SearchCollectionFactory" type="Magento\Catalog\Model\ResourceModel\Product\CollectionFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">Magento\CatalogSearch\Model\ResourceModel\Fulltext\SearchCollection</argument>
+        </arguments>
+    </virtualType>
+
     <virtualType name="Magento\CatalogSearch\Model\Layer\Search\ItemCollectionProvider" type="Magento\Catalog\Model\Layer\Search\ItemCollectionProvider">
         <arguments>
-            <argument name="collectionFactory" xsi:type="object">Magento\CatalogSearch\Model\Resource\Fulltext\CollectionFactory</argument>
+            <argument name="collectionFactory" xsi:type="object">Magento\CatalogSearch\Model\ResourceModel\Fulltext\SearchCollectionFactory</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\CatalogSearch\Model\Resource\Advanced\CollectionFactory"
-                 type="Magento\Catalog\Model\Resource\Product\CollectionFactory">
+    <virtualType name="Magento\CatalogSearch\Model\ResourceModel\Advanced\CollectionFactory"
+                 type="Magento\Catalog\Model\ResourceModel\Product\CollectionFactory">
         <arguments>
-            <argument name="instanceName" xsi:type="string">Magento\CatalogSearch\Model\Resource\Advanced\Collection</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Magento\CatalogSearch\Model\Layer\Advanced\ItemCollectionProvider" type="Magento\Catalog\Model\Layer\Search\ItemCollectionProvider">
-        <arguments>
-            <argument name="collectionFactory" xsi:type="object">Magento\CatalogSearch\Model\Resource\Advanced\CollectionFactory</argument>
+            <argument name="instanceName" xsi:type="string">Magento\CatalogSearch\Model\ResourceModel\Advanced\Collection</argument>
         </arguments>
     </virtualType>
     <type name="Magento\CatalogSearch\Model\Advanced">
         <arguments>
-            <argument name="productCollectionFactory" xsi:type="object">Magento\CatalogSearch\Model\Resource\Advanced\CollectionFactory</argument>
+            <argument name="productCollectionFactory" xsi:type="object">Magento\CatalogSearch\Model\ResourceModel\Advanced\CollectionFactory</argument>
         </arguments>
     </type>
     <virtualType name="Magento\CatalogSearch\Model\Layer\Category\Context" type="Magento\Catalog\Model\Layer\Category\Context">
@@ -171,13 +178,6 @@
             <argument name="stateKey" xsi:type="object">Magento\CatalogSearch\Model\Layer\Search\StateKey</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\CatalogSearch\Model\Layer\Advanced\Context">
-        <arguments>
-            <argument name="collectionProvider" xsi:type="object">Magento\CatalogSearch\Model\Layer\Advanced\ItemCollectionProvider</argument>
-            <argument name="stateKey" xsi:type="object">Magento\CatalogSearch\Model\Layer\Search\StateKey</argument>
-            <argument name="collectionFilter" xsi:type="object">Magento\CatalogSearch\Model\Layer\Advanced\CollectionFilter</argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Model\Layer\Category">
         <arguments>
             <argument name="context" xsi:type="object">Magento\CatalogSearch\Model\Layer\Category\Context</argument>
@@ -188,23 +188,11 @@
             <argument name="context" xsi:type="object">Magento\CatalogSearch\Model\Layer\Search\Context</argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogSearch\Model\Layer\Advanced">
-        <arguments>
-            <argument name="context" xsi:type="object">Magento\CatalogSearch\Model\Layer\Advanced\Context</argument>
-        </arguments>
-    </type>
     <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Aggregation\DataProvider">
         <arguments>
             <argument name="range" xsi:type="object">Magento\Catalog\Model\Layer\Filter\Price\Range\Proxy</argument>
         </arguments>
         <plugin name="categoryIdAggregation" type="Magento\CatalogSearch\Model\Adapter\Mysql\Plugin\Aggregation\Category\DataProvider" />
-    </type>
-    <type name="Magento\Catalog\Model\Layer\Resolver">
-        <arguments>
-            <argument name="layersPool" xsi:type="array">
-                <item name="advanced" xsi:type="string">Magento\CatalogSearch\Model\Layer\Advanced</item>
-            </argument>
-        </arguments>
     </type>
     <type name="Magento\Framework\Search\Adapter\Mysql\Mapper">
         <arguments>
@@ -216,19 +204,19 @@
     </type>
     <type name="Magento\CatalogSearch\Model\Adapter\Mysql\Filter\Preprocessor">
         <arguments>
-            <argument name="attributePrefix" xsi:type="const">Magento\CatalogSearch\Model\Resource\Engine::ATTRIBUTE_PREFIX</argument>
+            <argument name="attributePrefix" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\Engine::ATTRIBUTE_PREFIX</argument>
         </arguments>
     </type>
-    <type name="Magento\CatalogSearch\Model\Resource\EngineProvider">
+    <type name="Magento\CatalogSearch\Model\ResourceModel\EngineProvider">
         <arguments>
             <argument name="engines" xsi:type="array">
-                <item name="mysql" xsi:type="string">Magento\CatalogSearch\Model\Resource\Engine</item>
+                <item name="mysql" xsi:type="string">Magento\CatalogSearch\Model\ResourceModel\Engine</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Search\Model\AdapterFactory">
         <arguments>
-            <argument name="path" xsi:type="const">Magento\CatalogSearch\Model\Resource\EngineInterface::CONFIG_ENGINE_PATH</argument>
+            <argument name="path" xsi:type="const">Magento\CatalogSearch\Model\ResourceModel\EngineInterface::CONFIG_ENGINE_PATH</argument>
             <argument name="scopeType" xsi:type="const">\Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </type>

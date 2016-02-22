@@ -23,6 +23,9 @@ abstract class Integration extends Action
 
     const REGISTRY_KEY_CURRENT_INTEGRATION = 'current_integration';
 
+    /** Saved API form data session key */
+    const REGISTRY_KEY_CURRENT_RESOURCE = 'current_resource';
+
     /**
      * @var \Magento\Framework\Registry
      */
@@ -43,7 +46,7 @@ abstract class Integration extends Action
     /** @var \Magento\Integration\Helper\Data */
     protected $_integrationData;
 
-    /** @var \Magento\Integration\Model\Resource\Integration\Collection */
+    /** @var \Magento\Integration\Model\ResourceModel\Integration\Collection */
     protected $_integrationCollection;
 
     /**
@@ -60,7 +63,7 @@ abstract class Integration extends Action
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Integration\Helper\Data $integrationData
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Integration\Model\Resource\Integration\Collection $integrationCollection
+     * @param \Magento\Integration\Model\ResourceModel\Integration\Collection $integrationCollection
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -71,7 +74,7 @@ abstract class Integration extends Action
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Integration\Helper\Data $integrationData,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Integration\Model\Resource\Integration\Collection $integrationCollection
+        \Magento\Integration\Model\ResourceModel\Integration\Collection $integrationCollection
     ) {
         parent::__construct($context);
         $this->_registry = $registry;
@@ -111,6 +114,23 @@ abstract class Integration extends Action
             return $this;
         } else {
             return parent::_redirect($path, $arguments);
+        }
+    }
+
+    /**
+     * Restore saved form resources
+     *
+     * @return void
+     */
+    protected function restoreResourceAndSaveToRegistry()
+    {
+        $restoredFormData = $this->_getSession()->getIntegrationData();
+        if ($restoredFormData) {
+            $resource = isset($restoredFormData['resource']) ? $restoredFormData['resource'] : [];
+            $this->_registry->register(
+                self::REGISTRY_KEY_CURRENT_RESOURCE,
+                ['all_resources' => $restoredFormData['all_resources'], 'resource' => $resource]
+            );
         }
     }
 }

@@ -11,25 +11,26 @@ namespace Magento\Eav\Model\Entity\VersionControl;
 abstract class AbstractEntity extends \Magento\Eav\Model\Entity\AbstractEntity
 {
     /**
-     * @var \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot
      */
     protected $entitySnapshot;
 
     /**
-     * @var \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite
+     * @var \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite
      */
     protected $entityRelationComposite;
 
     /**
      * @param \Magento\Eav\Model\Entity\Context $context
-     * @param \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot
-     * @param \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite
+     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot
+     * @param \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Eav\Model\Entity\Context $context,
-        \Magento\Framework\Model\Resource\Db\VersionControl\Snapshot $entitySnapshot,
-        \Magento\Framework\Model\Resource\Db\VersionControl\RelationComposite $entityRelationComposite,
+        \Magento\Framework\Model\ResourceModel\Db\VersionControl\Snapshot $entitySnapshot,
+        \Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite $entityRelationComposite,
         $data = []
     ) {
         $this->entitySnapshot = $entitySnapshot;
@@ -41,7 +42,7 @@ abstract class AbstractEntity extends \Magento\Eav\Model\Entity\AbstractEntity
     /**
      * @inheritdoc
      */
-    protected function _afterLoad(\Magento\Framework\Object $object)
+    protected function _afterLoad(\Magento\Framework\DataObject $object)
     {
         $this->entitySnapshot->registerSnapshot($object);
         return parent::_afterLoad($object);
@@ -110,6 +111,7 @@ abstract class AbstractEntity extends \Magento\Eav\Model\Entity\AbstractEntity
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return bool
+     * @codeCoverageIgnore
      */
     protected function isModified(\Magento\Framework\Model\AbstractModel $object)
     {

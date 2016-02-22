@@ -23,14 +23,14 @@ use Magento\Mtf\TestCase\Injectable;
  * 4. Delete Redirect.
  * 5. Perform all assertions.
  *
- * @group URL_Rewrites_(PS)
+ * @group URL_Rewrites_(MX)
  * @ZephyrId MAGETWO-25915
  */
 class DeleteCmsPageUrlRewriteEntityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';
-    const DOMAIN = 'PS';
+    const DOMAIN = 'MX';
     /* end tags */
 
     /**
@@ -77,5 +77,6 @@ class DeleteCmsPageUrlRewriteEntityTest extends Injectable
         $this->urlRewriteIndex->open();
         $this->urlRewriteIndex->getUrlRedirectGrid()->searchAndOpen(['request_path' => $urlRewrite->getRequestPath()]);
         $this->urlRewriteEdit->getPageMainActions()->delete();
+        $this->urlRewriteEdit->getModalBlock()->acceptAlert();
     }
 }

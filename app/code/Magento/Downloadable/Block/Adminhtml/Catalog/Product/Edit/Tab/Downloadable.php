@@ -5,12 +5,18 @@
  */
 namespace Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget;
+use Magento\Backend\Block\Widget\Tab\TabInterface;
+use Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs;
+use Magento\Framework\Registry;
+
 /**
  * Adminhtml catalog product downloadable items tab and form
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Downloadable extends \Magento\Backend\Block\Widget implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Downloadable extends Widget implements TabInterface
 {
     /**
      * Reference to product objects that is being edited
@@ -20,7 +26,7 @@ class Downloadable extends \Magento\Backend\Block\Widget implements \Magento\Bac
     protected $_product = null;
 
     /**
-     * @var \Magento\Framework\Object|null
+     * @var \Magento\Framework\DataObject|null
      */
     protected $_config = null;
 
@@ -34,27 +40,37 @@ class Downloadable extends \Magento\Backend\Block\Widget implements \Magento\Bac
      *
      * @var string
      */
-    protected $accordionBlockId = 'downloadableInfo';
+    protected $blockId = 'downloadableInfo';
 
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param Context $context
+     * @param Registry $registry
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
+        Context $context,
+        Registry $registry,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
+    }
+
+    /**
+     * Get parent tab code
+     *
+     * @return string
+     */
+    public function getParentTab()
+    {
+        return 'product-details';
     }
 
     /**
@@ -122,7 +138,7 @@ class Downloadable extends \Magento\Backend\Block\Widget implements \Magento\Bac
      */
     public function getGroupCode()
     {
-        return \Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs::ADVANCED_TAB_GROUP_CODE;
+        return Tabs::ADVANCED_TAB_GROUP_CODE;
     }
 
     /**
@@ -132,43 +148,23 @@ class Downloadable extends \Magento\Backend\Block\Widget implements \Magento\Bac
      */
     public function getContentTabId()
     {
-        return 'tab_content_' . $this->accordionBlockId;
+        return 'tab_content_' . $this->blockId;
     }
 
     /**
-     * Render block HTML
-     *
-     * @return string
+     * @return bool
      */
-    protected function _toHtml()
+    public function isDownloadable()
     {
-        $accordion = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Accordion')
-            ->setId($this->accordionBlockId);
-        $accordion->addItem(
-            'samples',
-            [
-                'title' => __('Samples'),
-                'content' => $this->getLayout()->createBlock(
-                    'Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Samples'
-                )->toHtml(),
-                'open' => false
-            ]
-        );
+        return $this->getProduct()->getTypeId() == \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE;
+    }
 
-        $accordion->addItem(
-            'links',
-            [
-                'title' => __('Links'),
-                'content' => $this->getLayout()->createBlock(
-                    'Magento\Downloadable\Block\Adminhtml\Catalog\Product\Edit\Tab\Downloadable\Links',
-                    'catalog.product.edit.tab.downloadable.links'
-                )->toHtml(),
-                'open' => true
-            ]
-        );
-
-        $this->setChild('accordion', $accordion);
-
-        return parent::_toHtml();
+    /**
+     * @return $this
+     */
+    protected function _prepareLayout()
+    {
+        $this->setData('opened', $this->isDownloadable());
+        return parent::_prepareLayout();
     }
 }

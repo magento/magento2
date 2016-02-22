@@ -8,7 +8,9 @@
 
 namespace Magento\Downloadable\Block\Sales\Order\Email\Items\Order;
 
+use Magento\Downloadable\Model\Link;
 use Magento\Downloadable\Model\Link\Purchased\Item;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Downloadable Sales Order Email items renderer
@@ -28,20 +30,20 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultO
     protected $_purchasedFactory;
 
     /**
-     * @var \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory
+     * @var \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory
      */
     protected $_itemsFactory;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory
-     * @param \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory
+     * @param \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Downloadable\Model\Link\PurchasedFactory $purchasedFactory,
-        \Magento\Downloadable\Model\Resource\Link\Purchased\Item\CollectionFactory $itemsFactory,
+        \Magento\Downloadable\Model\ResourceModel\Link\Purchased\Item\CollectionFactory $itemsFactory,
         array $data = []
     ) {
         $this->_purchasedFactory = $purchasedFactory;
@@ -57,8 +59,8 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultO
     public function getLinks()
     {
         $this->_purchased = $this->_purchasedFactory->create()->load(
-            $this->getItem()->getOrder()->getId(),
-            'order_id'
+            $this->getItem()->getId(),
+            'order_item_id'
         );
         $purchasedLinks = $this->_itemsFactory->create()->addFieldToFilter('order_item_id', $this->getItem()->getId());
         $this->_purchased->setPurchasedItems($purchasedLinks);
@@ -71,10 +73,10 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\Order\DefaultO
      */
     public function getLinksTitle()
     {
-        if ($this->_purchased->getLinkSectionTitle()) {
-            return $this->_purchased->getLinkSectionTitle();
-        }
-        return $this->_scopeConfig->getValue(\Magento\Downloadable\Model\Link::XML_PATH_LINKS_TITLE, \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return $this->getLinks()->getLinkSectionTitle() ?: $this->_scopeConfig->getValue(
+            Link::XML_PATH_LINKS_TITLE,
+            ScopeInterface::SCOPE_STORE
+        );
     }
 
     /**

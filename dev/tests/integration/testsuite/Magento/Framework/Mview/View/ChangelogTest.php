@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Mview\View;
 
+use Magento\Framework\App\ResourceConnection;
+
 /**
  * Test Class for \Magento\Framework\Mview\View\Changelog
  */
@@ -16,7 +18,7 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $resource;
 
@@ -32,11 +34,14 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
+    /**
+     * @return void
+     */
     public function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->resource = $this->objectManager->get('Magento\Framework\App\Resource');
-        $this->connection = $this->resource->getConnection('core_write');
+        $this->resource = $this->objectManager->get('Magento\Framework\App\ResourceConnection');
+        $this->connection = $this->resource->getConnection();
 
         $this->model = $this->objectManager->create(
             'Magento\Framework\Mview\View\Changelog',
@@ -46,6 +51,9 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
         $this->model->create();
     }
 
+    /**
+     * @return void
+     */
     public function tearDown()
     {
         $this->model->drop();
@@ -53,6 +61,8 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test for create() and drop() methods
+     *
+     * @return void
      */
     public function testCreateAndDrop()
     {
@@ -72,6 +82,8 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test for getVersion() method
+     *
+     * @return void
      */
     public function testGetVersion()
     {
@@ -90,6 +102,8 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test for clear() method
+     *
+     * @return void
      */
     public function testClear()
     {
@@ -104,6 +118,8 @@ class ChangelogTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test for getList() method
+     *
+     * @return void
      */
     public function testGetList()
     {

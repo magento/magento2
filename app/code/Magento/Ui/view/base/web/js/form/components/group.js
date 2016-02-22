@@ -4,14 +4,15 @@
  */
 define([
     'underscore',
-    'uiComponent'
-], function (_, Component) {
+    'uiCollection'
+], function (_, Collection) {
     'use strict';
 
-    return Component.extend({
+    return Collection.extend({
         defaults: {
             visible: true,
             label: '',
+            showLabel: true,
             required: false,
             template: 'ui/group/group',
             fieldTemplate: 'ui/form/field',
@@ -66,6 +67,8 @@ define([
             }
 
             _.extend(this.additionalClasses, {
+                'admin__control-grouped': !this.breakLine,
+                'admin__control-fields': this.breakLine,
                 required:   this.required,
                 _error:     this.error,
                 _disabled:  this.disabled
@@ -88,6 +91,15 @@ define([
          */
         isMultiple: function () {
             return this.elems.getLength() > 1;
+        },
+
+        /**
+         * Returns an array of child components previews.
+         *
+         * @returns {Array}
+         */
+        getPreview: function () {
+            return this.elems.map('getPreview');
         }
     });
 });

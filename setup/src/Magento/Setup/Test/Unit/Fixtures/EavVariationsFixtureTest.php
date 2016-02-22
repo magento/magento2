@@ -31,7 +31,7 @@ class EavVariationsFixtureTest extends \PHPUnit_Framework_TestCase
     public function testExecute()
     {
         $attributeMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\Eav\Attribute',
+            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
             [
                 'setAttributeSetId',
                 'setAttributeGroupId',
@@ -63,7 +63,7 @@ class EavVariationsFixtureTest extends \PHPUnit_Framework_TestCase
         $cacheMock = $this->getMock('Magento\Framework\App\CacheInterface', [], [], '', false);
 
         $valueMap = [
-            ['Magento\Catalog\Model\Resource\Eav\Attribute', [], $attributeMock],
+            ['Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], $attributeMock],
             ['Magento\Store\Model\StoreManager', [], $storeManagerMock],
             ['Magento\Eav\Model\Entity\Attribute\Set', $setMock],
             ['Magento\Framework\App\CacheInterface', $cacheMock]
@@ -91,13 +91,13 @@ class EavVariationsFixtureTest extends \PHPUnit_Framework_TestCase
 
     public function testNoFixtureConfigValue()
     {
-        $attributeMock = $this->getMock('Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+        $attributeMock = $this->getMock('Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $attributeMock->expects($this->never())->method('save');
 
         $objectManagerMock = $this->getMock('Magento\Framework\ObjectManager\ObjectManager', [], [], '', false);
         $objectManagerMock->expects($this->never())
             ->method('create')
-            ->with($this->equalTo('Magento\Catalog\Model\Resource\Eav\Attribute'))
+            ->with($this->equalTo('Magento\Catalog\Model\ResourceModel\Eav\Attribute'))
             ->willReturn($attributeMock);
 
         $this->fixtureModelMock

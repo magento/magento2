@@ -16,7 +16,7 @@ class Resolver implements \Magento\Framework\View\Design\Theme\ResolverInterface
     protected $design;
 
     /**
-     * @var \Magento\Theme\Model\Resource\Theme\CollectionFactory
+     * @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory
      */
     protected $themeFactory;
 
@@ -28,12 +28,12 @@ class Resolver implements \Magento\Framework\View\Design\Theme\ResolverInterface
     /**
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\View\DesignInterface $design
-     * @param \Magento\Theme\Model\Resource\Theme\CollectionFactory $themeFactory
+     * @param \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $themeFactory
      */
     public function __construct(
         \Magento\Framework\App\State $appState,
         \Magento\Framework\View\DesignInterface $design,
-        \Magento\Theme\Model\Resource\Theme\CollectionFactory $themeFactory
+        \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $themeFactory
     ) {
         $this->design = $design;
         $this->themeFactory = $themeFactory;
@@ -52,7 +52,7 @@ class Resolver implements \Magento\Framework\View\Design\Theme\ResolverInterface
             return $this->design->getDesignTheme();
         }
 
-        /** @var \Magento\Theme\Model\Resource\Theme\Collection $themeCollection */
+        /** @var \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection */
         $themeCollection = $this->themeFactory->create();
         $themeIdentifier = $this->design->getConfigurationDesignTheme($area);
         if (is_numeric($themeIdentifier)) {

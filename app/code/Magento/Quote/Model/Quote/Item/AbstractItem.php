@@ -87,7 +87,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * @param AttributeValueFactory $customAttributeFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -98,7 +98,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
         AttributeValueFactory $customAttributeFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -161,7 +161,7 @@ abstract class AbstractItem extends \Magento\Framework\Model\AbstractExtensibleM
      * Needed to implement \Magento\Catalog\Model\Product\Configuration\Item\Interface.
      * Return null, as quote item needs no additional configuration.
      *
-     * @return null|\Magento\Framework\Object
+     * @return null|\Magento\Framework\DataObject
      */
     public function getFileDownloadParams()
     {

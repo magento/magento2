@@ -34,6 +34,9 @@ class FormTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManager;
 
+    /** @var \Magento\Framework\UrlInterface|PHPUnit_Framework_MockObject_MockObject */
+    protected $urlBuilder;
+
     protected function setUp()
     {
         $this->storeManager = $this->getMock('\Magento\Store\Model\StoreManagerInterface');
@@ -46,6 +49,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->method('getIsGuestAllowToWrite')
             ->willReturn(true);
 
+        $this->urlBuilder = $this->getMockBuilder('Magento\Framework\UrlInterface')->getMockForAbstractClass();
         $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $this->context->expects(
             $this->any()
@@ -57,6 +61,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
+        $this->context->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilder);
         $this->productRepository = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface');
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -80,7 +85,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getStore'
         )->will(
-            $this->returnValue(new \Magento\Framework\Object(['id' => $storeId]))
+            $this->returnValue(new \Magento\Framework\DataObject(['id' => $storeId]))
         );
 
         $this->requestMock->expects($this->once())
@@ -95,5 +100,36 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->willReturn($productMock);
 
         $this->assertSame($productMock, $this->object->getProductInfo());
+    }
+
+    /**
+     * @param bool $isSecure
+     * @param string $actionUrl
+     * @param int $productId
+     * @dataProvider getActionDataProvider
+     */
+    public function testGetAction($isSecure, $actionUrl, $productId)
+    {
+        $this->urlBuilder->expects($this->any())
+            ->method('getUrl')
+            ->with('review/product/post', ['_secure' => $isSecure, 'id' => $productId])
+            ->willReturn($actionUrl . '/id/' . $productId);
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->with('id', false)
+            ->willReturn($productId);
+        $this->requestMock->expects($this->any())
+            ->method('isSecure')
+            ->willReturn($isSecure);
+
+        $this->assertEquals($actionUrl . '/id/' . $productId, $this->object->getAction());
+    }
+
+    public function getActionDataProvider()
+    {
+        return [
+            [false, 'http://localhost/review/product/post', 3],
+            [true, 'https://localhost/review/product/post' ,3],
+        ];
     }
 }

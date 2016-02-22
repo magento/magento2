@@ -30,7 +30,7 @@ class AssertUsedSuperAttributeImpossibleDeleteMessages extends AbstractConstrain
     {
         \PHPUnit_Framework_Assert::assertEquals(
             self::ERROR_DELETE_MESSAGE,
-            $newPage->getMessagesBlock()->getErrorMessages(),
+            $newPage->getMessagesBlock()->getErrorMessage(),
             'Wrong impossible to delete message is not displayed.'
         );
     }

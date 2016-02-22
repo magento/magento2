@@ -24,7 +24,7 @@ class AssertCmsPageDeleteMessage extends AbstractConstraint
      */
     public function processAssert(CmsPageIndex $cmsIndex)
     {
-        $actualMessage = $cmsIndex->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $cmsIndex->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_DELETE_MESSAGE,
             $actualMessage,

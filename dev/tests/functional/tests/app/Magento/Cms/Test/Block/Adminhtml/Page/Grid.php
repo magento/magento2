@@ -8,6 +8,7 @@ namespace Magento\Cms\Test\Block\Adminhtml\Page;
 
 use Magento\Mtf\Client\Locator;
 use Magento\Ui\Test\Block\Adminhtml\DataGrid;
+use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
  * Backend Data Grid for managing "CMS Page" entities.
@@ -15,50 +16,56 @@ use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 class Grid extends DataGrid
 {
     /**
+     * Select action toggle.
+     *
+     * @var string
+     */
+    protected $selectAction = '.action-select';
+
+    /**
      * Filters array mapping.
      *
      * @var array
      */
     protected $filters = [
         'page_id_from' => [
-            'selector' => '[name="filters[page_id][from]"]',
+            'selector' => '[name="page_id[from]"]',
         ],
         'page_id_to' => [
-            'selector' => '[name="filters[page_id][to]"]',
+            'selector' => '[name="page_id[to]"]',
         ],
         'title' => [
-            'selector' => '[name="filters[title]"]',
+            'selector' => '[name="title"]',
         ],
         'identifier' => [
-            'selector' => '[name="filters[identifier]"]',
+            'selector' => '[name="identifier"]',
         ],
         'page_layout' => [
-            'selector' => '[name="filters[page_layout]"]',
-            'input' => 'select',
+            'selector' => '//label[span[text()="Layout"]]/following-sibling::div',
+            'strategy' => 'xpath',
+            'input' => 'dropdownmultiselect',
         ],
         'store_id' => [
-            'selector' => '[name="filters[store_id]"]',
+            'selector' => '[name="store_id"]',
             'input' => 'selectstore'
         ],
         'is_active' => [
-            'selector' => '[name="filters[is_active]"]',
-            'input' => 'select',
+            'selector' => '//label[span[text()="Status"]]/following-sibling::div',
+            'strategy' => 'xpath',
+            'input' => 'dropdownmultiselect',
         ],
         'creation_time_from' => [
-            'selector' => '[name="filters[creation_time][from]"]',
+            'selector' => '[name="creation_time[from]"]',
         ],
         'creation_time_to' => [
-            'selector' => '[name="filters[creation_time][to]"]',
+            'selector' => '[name="creation_time[to]"]',
         ],
         'update_time_from' => [
-            'selector' => '[name="filters[update_time][from]"]',
+            'selector' => '[name="update_time[from]"]',
         ],
         'update_time_to' => [
-            'selector' => '[name="filters[update_time][to]"]',
-        ],
-        'under_version_control' => [
-            'selector' => '[name="filters[under_version_control]"]',
-        ],
+            'selector' => '[name="update_time[to]"]',
+        ]
     ];
 
     /**
@@ -66,8 +73,20 @@ class Grid extends DataGrid
      *
      * @var string
      */
-    protected $previewCmsPage = "..//a[contains(@class, 'action-menu-item') and text() = '%s']";
-    
+    protected $previewCmsPage = '[data-action="item-preview"]';
+
+    /**
+     * Click on "Edit" link.
+     *
+     * @param SimpleElement $rowItem
+     * @return void
+     */
+    protected function clickEditLink(SimpleElement $rowItem)
+    {
+        $rowItem->find($this->selectAction)->click();
+        $rowItem->find($this->editLink)->click();
+    }
+
     /**
      * Search item and open it on Frontend.
      *
@@ -77,37 +96,13 @@ class Grid extends DataGrid
      */
     public function searchAndPreview(array $filter)
     {
-        $itemName = 'Preview';
         $this->search($filter);
-        $rowItem = $this->_rootElement->find($this->rowItem);
+        $rowItem = $this->getRow([$filter['title']]);
         if ($rowItem->isVisible()) {
-            $selector = sprintf('//tr[td="%s"]//*[@class="action-select"]', $filter['title']);
-            $selectedRow = $this->_rootElement->find($selector, Locator::SELECTOR_XPATH);
-            $selectedRow->click();
-            $selectedRow->find(sprintf($this->previewCmsPage, $itemName), Locator::SELECTOR_XPATH)->click();
+            $rowItem->find($this->selectAction)->click();
+            $rowItem->find($this->previewCmsPage)->click();
         } else {
             throw new \Exception('Searched item was not found.');
         }
-    }
-
-    /**
-     * Wait loader.
-     *
-     * @return void
-     */
-    protected function waitLoader()
-    {
-        try {
-            $browser = $this->browser;
-            $selector = $this->loader;
-            $browser->waitUntil(
-                function () use ($browser, $selector) {
-                    return $browser->find($selector)->isVisible() == true ? true : null;
-                }
-            );
-        } catch (\Exception $e) {
-        }
-
-        parent::waitLoader();
     }
 }

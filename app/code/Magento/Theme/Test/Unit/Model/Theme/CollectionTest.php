@@ -13,36 +13,38 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Collection
      */
-    protected $model;
-
-    /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $filesystem;
+    private $model;
 
     /**
      * @var \Magento\Framework\Config\ThemeFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $themeConfigFactory;
+    private $themeConfigFactory;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $directory;
+    private $directory;
 
     /**
      * @var \Magento\Framework\Data\Collection\EntityFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $entityFactory;
+    private $entityFactory;
+
+    /**
+     * @var \Magento\Framework\View\Design\Theme\ThemePackageList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $themePackageList;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $readDirFactory;
 
     protected function setUp()
     {
         $this->entityFactory = $this->getMockBuilder('Magento\Framework\Data\Collection\EntityFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
-            ->getMock();
-        $this->filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')
-            ->disableOriginalConstructor()
             ->getMock();
         $this->themeConfigFactory = $this->getMockBuilder('Magento\Framework\Config\ThemeFactory')
             ->setMethods(['create'])
@@ -52,14 +54,23 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->filesystem->expects($this->once())
-            ->method('getDirectoryRead')
-            ->willReturn($this->directory);
+        $this->themePackageList = $this->getMock(
+            '\Magento\Framework\View\Design\Theme\ThemePackageList',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->readDirFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
+        $this->readDirFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->directory));
 
         $this->model = new Collection(
             $this->entityFactory,
-            $this->filesystem,
-            $this->themeConfigFactory
+            $this->themeConfigFactory,
+            $this->themePackageList,
+            $this->readDirFactory
         );
     }
 
@@ -69,47 +80,40 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoadData()
     {
-        $relativeDir = 'dir';
         $fileContent = 'content file';
         $media = ['preview_image' => 'preview.jpg'];
         $themeTitle = 'Theme title';
-        $themeConfigs = ['frontend/theme/code'];
+        $themeConfigFile = 'theme.xml';
         $themeConfig = $this->getMockBuilder('Magento\Framework\Config\Theme')->disableOriginalConstructor()->getMock();
         $theme = $this->getMockBuilder('Magento\Theme\Model\Theme')->disableOriginalConstructor()->getMock();
         $parentTheme = ['parentThemeCode'];
         $parentThemePath = 'frontend/parent/theme';
 
+        $themePackage = $this->getMock('\Magento\Framework\View\Design\Theme\ThemePackage', [], [], '', false);
+        $themePackage->expects($this->any())
+            ->method('getArea')
+            ->will($this->returnValue('frontend'));
+        $themePackage->expects($this->any())
+            ->method('getVendor')
+            ->will($this->returnValue('theme'));
+        $themePackage->expects($this->any())
+            ->method('getName')
+            ->will($this->returnValue('code'));
+        $this->themePackageList->expects($this->once())
+            ->method('getThemes')
+            ->will($this->returnValue([$themePackage]));
         $this->directory->expects($this->once())
-            ->method('search')
-            ->with($relativeDir)
-            ->willReturn($themeConfigs);
-        $this->directory->expects($this->any())
             ->method('isExist')
-            ->with($themeConfigs[0])
+            ->with($themeConfigFile)
             ->willReturn(true);
-        $this->directory->expects($this->any())
+        $this->directory->expects($this->once())
             ->method('readFile')
-            ->with($themeConfigs[0])
+            ->with($themeConfigFile)
             ->willReturn($fileContent);
-        $this->directory->expects($this->any())
-            ->method('getRelativePath')
-            ->with($themeConfigs[0])
-            ->willReturn($themeConfigs[0]);
-        $this->directory->expects($this->any())
-            ->method('getAbsolutePath')
-            ->willReturnMap(
-                [
-                    [$themeConfigs[0], $themeConfigs[0]],
-                    [null, ''],
-                ]
-            );
         $this->themeConfigFactory->expects($this->once())
             ->method('create')
             ->with(['configContent' => $fileContent])
             ->willReturn($themeConfig);
-        $this->directory->expects($this->at(1))
-            ->method('getAbsolutePath')
-            ->willReturn('');
         $this->entityFactory->expects($this->any())
             ->method('create')
             ->with('Magento\Theme\Model\Theme')
@@ -130,11 +134,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                     'parent_id' => null,
                     'type' => ThemeInterface::TYPE_PHYSICAL,
                     'area' => 'frontend',
-                    'theme_path' => 'theme',
-                    'code' => 'theme',
+                    'theme_path' => 'theme/code',
+                    'code' => 'theme/code',
                     'theme_title' => $themeTitle,
                     'preview_image' => $media['preview_image'],
-                    'parent_theme_path' => $parentTheme[0]
+                    'parent_theme_path' => 'theme/parentThemeCode'
                 ]
             )
             ->willReturnSelf();
@@ -146,18 +150,72 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getArea')
             ->willReturn('frontend');
 
-        $this->model->addTargetPattern($relativeDir);
         $this->assertInstanceOf(get_class($this->model), $this->model->loadData());
     }
 
     /**
-     * @test
-     * @return void
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please specify at least one target pattern to theme config file.
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage Constraint 'unsupported_type' is not supported
      */
-    public function testGetTargetPatternsException()
+    public function testAddConstraintUnsupportedType()
     {
-        $this->model->getTargetPatterns();
+        $this->model->addConstraint('unsupported_type', 'value');
+    }
+
+    /**
+     * @param array $inputValues
+     * @param array $expected
+     *
+     * @dataProvider addConstraintDataProvider
+     */
+    public function testAddConstraint(array $inputValues, array $expected)
+    {
+        foreach ($inputValues as $data) {
+            $type = $data[0];
+            $value = $data[1];
+            $this->model->addConstraint($type, $value);
+        }
+        $default = [
+            Collection::CONSTRAINT_AREA => [],
+            Collection::CONSTRAINT_VENDOR => [],
+            Collection::CONSTRAINT_THEME_NAME => []
+        ];
+        $expected = array_merge($default, $expected);
+        $this->assertAttributeSame($expected, 'constraints', $this->model);
+    }
+
+    /**
+     * @return array
+     */
+    public function addConstraintDataProvider()
+    {
+        return [
+            'area' => [
+                [[Collection::CONSTRAINT_AREA, 'area']],
+                [Collection::CONSTRAINT_AREA => ['area']]
+            ],
+            'vendor' => [
+                [[Collection::CONSTRAINT_VENDOR, 'Vendor']],
+                [Collection::CONSTRAINT_VENDOR => ['Vendor']]
+            ],
+            'theme name' => [
+                [[Collection::CONSTRAINT_THEME_NAME, 'theme_name']],
+                [Collection::CONSTRAINT_THEME_NAME => ['theme_name']]
+            ],
+            'area, vendor and theme name' => [
+                [
+                    [Collection::CONSTRAINT_AREA, 'area_one'],
+                    [Collection::CONSTRAINT_AREA, 'area_two'],
+                    [Collection::CONSTRAINT_VENDOR, 'Vendor'],
+                    [Collection::CONSTRAINT_VENDOR, 'Vendor'],
+                    [Collection::CONSTRAINT_THEME_NAME, 'theme_name']
+                ],
+                [
+                    Collection::CONSTRAINT_AREA => ['area_one', 'area_two'],
+                    Collection::CONSTRAINT_VENDOR => ['Vendor'],
+                    Collection::CONSTRAINT_THEME_NAME => ['theme_name']
+                ]
+            ],
+        ];
     }
 }

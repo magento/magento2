@@ -36,7 +36,7 @@ class Renderer implements RendererInterface
     protected $escaper;
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -55,7 +55,7 @@ class Renderer implements RendererInterface
      * @param \Magento\Framework\View\Asset\MergeService $assetMergeService
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
@@ -63,7 +63,7 @@ class Renderer implements RendererInterface
         \Magento\Framework\View\Asset\MergeService $assetMergeService,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\Escaper $escaper,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Psr\Log\LoggerInterface $logger
     ) {
         $this->pageConfig = $pageConfig;
@@ -106,7 +106,7 @@ class Renderer implements RendererInterface
      */
     public function renderTitle()
     {
-        return '<title>' . $this->pageConfig->getTitle()->get() . '</title>' . "\n";
+        return '<title>' . $this->escaper->escapeHtml($this->pageConfig->getTitle()->get()) . '</title>' . "\n";
     }
 
     /**

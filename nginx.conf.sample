@@ -26,12 +26,41 @@ charset off;
 
 location /setup {
     root $MAGE_ROOT;
-
     location ~ ^/setup/index.php {
         fastcgi_pass   fastcgi_backend;
         fastcgi_index  index.php;
         fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
         include        fastcgi_params;
+    }
+
+    location ~ ^/setup/(?!pub/). {
+        deny all;
+    }
+
+    location ~ ^/setup/pub/ {
+        add_header X-Frame-Options "SAMEORIGIN";
+    }
+}
+
+location /update {
+    root $MAGE_ROOT;
+
+    location ~ ^/update/index.php {
+        fastcgi_split_path_info ^(/update/index.php)(/.+)$;
+        fastcgi_pass   fastcgi_backend;
+        fastcgi_index  index.php;
+        fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+        fastcgi_param  PATH_INFO        $fastcgi_path_info;
+        include        fastcgi_params;
+    }
+
+    # deny everything but index.php
+    location ~ ^/update/(?!pub/). {
+        deny all;
+    }
+
+    location ~ ^/update/pub/ {
+        add_header X-Frame-Options "SAMEORIGIN";
     }
 }
 
@@ -40,7 +69,11 @@ location / {
 }
 
 location /pub {
+    location ~ ^/pub/media/(downloadable|customer|import|theme_customization/.*\.xml) {
+        deny all;
+    }
     alias $MAGE_ROOT/pub;
+    add_header X-Frame-Options "SAMEORIGIN";
 }
 
 location /static/ {
@@ -49,6 +82,7 @@ location /static/ {
     }
     location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2)$ {
         add_header Cache-Control "public";
+        add_header X-Frame-Options "SAMEORIGIN";
         expires +1y;
 
         if (!-f $request_filename) {
@@ -57,6 +91,7 @@ location /static/ {
     }
     location ~* \.(zip|gz|gzip|bz2|csv|xml)$ {
         add_header Cache-Control "no-store";
+        add_header X-Frame-Options "SAMEORIGIN";
         expires    off;
 
         if (!-f $request_filename) {
@@ -66,20 +101,29 @@ location /static/ {
     if (!-f $request_filename) {
         rewrite ^/static/(version\d*/)?(.*)$ /static.php?resource=$2 last;
     }
+    add_header X-Frame-Options "SAMEORIGIN";
 }
 
 location /media/ {
     try_files $uri $uri/ /get.php?$args;
+
+    location ~ ^/media/theme_customization/.*\.xml {
+        deny all;
+    }
+
     location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2)$ {
         add_header Cache-Control "public";
+        add_header X-Frame-Options "SAMEORIGIN";
         expires +1y;
         try_files $uri $uri/ /get.php?$args;
     }
     location ~* \.(zip|gz|gzip|bz2|csv|xml)$ {
         add_header Cache-Control "no-store";
+        add_header X-Frame-Options "SAMEORIGIN";
         expires    off;
         try_files $uri $uri/ /get.php?$args;
     }
+    add_header X-Frame-Options "SAMEORIGIN";
 }
 
 location /media/customer/ {
@@ -90,15 +134,7 @@ location /media/downloadable/ {
     deny all;
 }
 
-location ~ /media/theme_customization/.*\.xml$ {
-    deny all;
-}
-
-location /errors/ {
-    try_files $uri =404;
-}
-
-location ~ ^/errors/.*\.(xml|phtml)$ {
+location /media/import/ {
     deny all;
 }
 

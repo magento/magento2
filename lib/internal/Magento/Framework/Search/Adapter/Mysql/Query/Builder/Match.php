@@ -10,12 +10,12 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\Field\FieldInterface;
 use Magento\Framework\Search\Adapter\Mysql\Field\ResolverInterface;
 use Magento\Framework\Search\Adapter\Mysql\ScoreBuilder;
-use Magento\Framework\Search\Request\Query\Bool;
+use Magento\Framework\Search\Request\Query\BoolExpression;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 
 class Match implements QueryInterface
 {
-    const SPECIAL_CHARACTERS = '-+~/\\<>\'":*$#@()!,.?`=';
+    const SPECIAL_CHARACTERS = '-+~/\\<>\'":*$#@()!,.?`=%&^';
 
     const MINIMAL_CHARACTER_LENGTH = 3;
 
@@ -35,14 +35,24 @@ class Match implements QueryInterface
     private $fulltextHelper;
 
     /**
+     * @var string
+     */
+    private $fulltextSearchMode;
+
+    /**
      * @param ResolverInterface $resolver
      * @param Fulltext $fulltextHelper
+     * @param string $fulltextSearchMode
      */
-    public function __construct(ResolverInterface $resolver, Fulltext $fulltextHelper)
-    {
+    public function __construct(
+        ResolverInterface $resolver,
+        Fulltext $fulltextHelper,
+        $fulltextSearchMode = Fulltext::FULLTEXT_MODE_BOOLEAN
+    ) {
         $this->resolver = $resolver;
         $this->replaceSymbols = str_split(self::SPECIAL_CHARACTERS, 1);
         $this->fulltextHelper = $fulltextHelper;
+        $this->fulltextSearchMode = $fulltextSearchMode;
     }
 
     /**
@@ -76,9 +86,9 @@ class Match implements QueryInterface
         $matchQuery = $this->fulltextHelper->getMatchQuery(
             $columns,
             $queryValue,
-            Fulltext::FULLTEXT_MODE_BOOLEAN
+            $this->fulltextSearchMode
         );
-        $scoreBuilder->addCondition($matchQuery);
+        $scoreBuilder->addCondition($matchQuery, true);
 
         if ($fieldIds) {
             $matchQuery = sprintf('(%s AND search_index.attribute_id IN (%s))', $matchQuery, implode(',', $fieldIds));
@@ -99,9 +109,9 @@ class Match implements QueryInterface
         $queryValue = str_replace($this->replaceSymbols, ' ', $queryValue);
 
         $stringPrefix = '';
-        if ($conditionType === Bool::QUERY_CONDITION_MUST) {
+        if ($conditionType === BoolExpression::QUERY_CONDITION_MUST) {
             $stringPrefix = '+';
-        } elseif ($conditionType === Bool::QUERY_CONDITION_NOT) {
+        } elseif ($conditionType === BoolExpression::QUERY_CONDITION_NOT) {
             $stringPrefix = '-';
         }
 

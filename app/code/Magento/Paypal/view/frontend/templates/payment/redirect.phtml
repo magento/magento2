@@ -5,20 +5,23 @@
  */
 
 // @codingStandardsIgnoreFile
-
-?>
-<?php
 /**
+ * @var \Magento\PayPal\Block\Express\Form $block
  * @see \Magento\PayPal\Block\Express\Form
  */
+$code = $block->escapeHtml($block->getBillingAgreementCode());
 ?>
-<fieldset class="fieldset paypal items redirect" id="payment_form_<?php echo $block->getMethodCode() ?>" style="display:none;">
-    <div><?php echo $block->getRedirectMessage(); ?></div>
-    <?php $code = $block->getBillingAgreementCode(); ?>
+<fieldset class="fieldset paypal items redirect" style="display:none;"
+          id="payment_form_<?php echo $block->escapeHtml($block->getMethodCode()); ?>">
+    <div><?php echo $block->escapeHtml($block->getRedirectMessage()); ?></div>
+    <?php  ?>
     <?php if ($code): ?>
-        <input type="checkbox" id="<?php echo $code ?>" value="1" name="payment[<?php echo $code ?>]" class="checkbox">
-        <label for="<?php echo $code ?>" class="label">
-            <span><?php echo __('Sign a billing agreement to streamline further purchases with PayPal.') ?></span>
+        <input type="checkbox" id="<?php /* @noEscape */ echo $code; ?>" value="1" class="checkbox"
+               name="payment[<?php /* @noEscape */ echo $code; ?>]">
+        <label for="<?php /* @noEscape */ echo $code; ?>" class="label">
+            <span>
+                <?php echo $block->escapeHtml(__('Sign a billing agreement to streamline further purchases  with PayPal.')); ?>
+            </span>
         </label>
     <?php endif; ?>
 </fieldset>

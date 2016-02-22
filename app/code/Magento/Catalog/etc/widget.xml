@@ -6,7 +6,7 @@
  */
 -->
 <widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../Magento/Widget/etc/widget.xsd">
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
     <widget id="new_products" class="Magento\Catalog\Block\Product\Widget\NewWidget" is_email_compatible="true"
             placeholder_image="Magento_Catalog::images/product_widget_new.png" ttl="86400">
         <label translate="true">Catalog New Products List</label>
@@ -96,7 +96,7 @@
                 <block class="Magento\Catalog\Block\Adminhtml\Product\Widget\Chooser">
                     <data>
                         <item name="button" xsi:type="array">
-                            <item name="open" xsi:type="string">Select Product...</item>
+                            <item name="open" xsi:type="string" translate="true">Select Product...</item>
                         </item>
                     </data>
                 </block>
@@ -135,7 +135,7 @@
                 <block class="Magento\Catalog\Block\Adminhtml\Category\Widget\Chooser">
                     <data>
                         <item name="button" xsi:type="array">
-                            <item name="open" xsi:type="string">Select Category...</item>
+                            <item name="open" xsi:type="string" translate="true">Select Category...</item>
                         </item>
                     </data>
                 </block>

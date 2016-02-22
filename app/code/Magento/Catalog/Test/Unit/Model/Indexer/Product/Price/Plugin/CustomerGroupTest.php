@@ -26,7 +26,7 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
     protected $_subjectMock;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexerRegistryMock;
 
@@ -46,7 +46,7 @@ class CustomerGroupTest extends \PHPUnit_Framework_TestCase
             false
         );
         $indexerMock->expects($this->once())->method('invalidate');
-        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+        $this->indexerRegistryMock = $this->getMock('Magento\Framework\Indexer\IndexerRegistry', ['get'], [], '', false);
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
             ->with(\Magento\Catalog\Model\Indexer\Product\Price\Processor::INDEXER_ID)

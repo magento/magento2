@@ -18,10 +18,7 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Backend\App\Action\Context| \PHPUnit_Framework_MockObject_MockObject */
     protected $contextMock;
 
-    /** @var \Magento\Framework\ObjectManager\ObjectManager|\PHPUnit_Framework_MockObject_MockObject */
-    protected $objectManagerMock;
-
-    /** @var  \Magento\Sales\Model\Order |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  \Magento\Sales\Api\Data\OrderInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $orderMock;
 
     /** @var  \Magento\Backend\Model\View\Result\RedirectFactory | \PHPUnit_Framework_MockObject_MockObject*/
@@ -38,6 +35,21 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Framework\Message\Manager|\PHPUnit_Framework_MockObject_MockObject */
     protected $messageManagerMock;
+
+    /**
+     * @var \Magento\Sales\Api\OrderManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderManagementMock;
+
+    /**
+     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $orderRepositoryMock;
+
+    /**
+     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $loggerMock;
 
     protected function setUp()
     {
@@ -58,7 +70,15 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
+        $this->orderManagementMock = $this->getMockBuilder('Magento\Sales\Api\OrderManagementInterface')
+            ->getMockForAbstractClass();
+        $this->orderRepositoryMock = $this->getMockBuilder('Magento\Sales\Api\OrderRepositoryInterface')
+            ->getMockForAbstractClass();
+        $this->loggerMock = $this->getMockBuilder('Psr\Log\LoggerInterface')
+            ->getMockForAbstractClass();
+        $this->orderMock = $this->getMockBuilder('Magento\Sales\Api\Data\OrderInterface')
+            ->setMethods(['getPayment'])
+            ->getMockForAbstractClass();
         $this->messageManagerMock = $this->getMock(
             'Magento\Framework\Message\Manager',
             ['addSuccess', 'addError'],
@@ -83,23 +103,6 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->orderMock = $this->getMock(
-            'Magento\Sales\Model\Order',
-            ['load', 'getId', 'getPayment', 'save'],
-            [],
-            '',
-            false
-        );
-
-        $this->objectManagerMock = $this->getMock(
-            'Magento\Framework\ObjectManager\ObjectManager',
-            ['create'],
-            [],
-            '',
-            false
-        );
-
-
         $this->resultRedirectMock = $this->getMock(
             'Magento\Backend\Model\View\Result\Redirect',
             ['setPath'],
@@ -111,8 +114,6 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\Request\Http')
             ->setMethods(['getParam'])
             ->disableOriginalConstructor()->getMock();
-
-        $this->contextMock->expects($this->once())->method('getObjectManager')->willReturn($this->objectManagerMock);
         $this->contextMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
         $this->contextMock->expects($this->once())->method('getMessageManager')->willReturn($this->messageManagerMock);
         $this->contextMock->expects($this->once())
@@ -122,7 +123,9 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
         $this->reviewPayment = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
             'Magento\Sales\Controller\Adminhtml\Order\ReviewPayment',
             [
-                'context' => $this->contextMock
+                'context' => $this->contextMock,
+                'orderManager' => $this->orderManagementMock,
+                'orderRepository' => $this->orderRepositoryMock
             ]
         );
     }
@@ -138,13 +141,17 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
         $this->resultRedirectFactoryMock->expects($this->once())->method('create')
             ->willReturn($this->resultRedirectMock);
 
-        $this->objectManagerMock->expects($this->once())->method('create')->with('Magento\Sales\Model\Order')
-            ->willReturn($this->orderMock);
 
-        $this->orderMock->expects($this->once())->method('load')->with($orderId)->willReturn($this->orderMock);
-        $this->orderMock->expects($this->any())->method('getId')->willReturn($orderId);
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('get')
+            ->with($orderId)
+            ->willReturn($this->orderMock);
+        $this->orderMock->expects($this->any())->method('getEntityId')->willReturn($orderId);
         $this->orderMock->expects($this->any())->method('getPayment')->willReturn($this->paymentMock);
-        $this->orderMock->expects($this->once())->method('save')->willReturnSelf();
+        $this->orderRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($this->orderMock)
+            ->willReturnSelf();
 
         $this->paymentMock->expects($this->once())->method('update');
         $this->paymentMock->expects($this->any())->method('getIsTransactionApproved')->willReturn(true);

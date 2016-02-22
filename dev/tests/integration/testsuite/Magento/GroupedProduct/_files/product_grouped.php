@@ -5,15 +5,18 @@
  */
 
 require realpath(__DIR__ . '/../../') . '/Catalog/_files/product_simple_duplicated.php';
-require realpath(__DIR__ . '/../../') . '/Catalog/_files/product_virtual.php';
+require realpath(__DIR__ . '/../../') . '/Catalog/_files/product_virtual_in_stock.php';
+
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$productRepository = $objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface');
+
+$productId = $productRepository->get('simple-1')->getId();
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
 $product->isObjectNew(true);
 $product->setTypeId(
     \Magento\GroupedProduct\Model\Product\Type\Grouped::TYPE_CODE
-)->setId(
-    9
 )->setAttributeSetId(
     4
 )->setWebsiteIds(
@@ -30,6 +33,31 @@ $product->setTypeId(
     \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
 )->setStatus(
     \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
-)->setGroupedLinkData(
-    [2 => ['qty' => 1, 'position' => 1], 21 => ['qty' => 1, 'position' => 2]]
-)->save();
+);
+
+$newLinks = [];
+$productLinkFactory = $objectManager->get('Magento\Catalog\Api\Data\ProductLinkInterfaceFactory');
+/** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
+$productLink = $productLinkFactory->create();
+$linkedProduct = $productRepository->getById($productId);
+$productLink->setSku($product->getSku())
+    ->setLinkType('associated')
+    ->setLinkedProductSku($linkedProduct->getSku())
+    ->setLinkedProductType($linkedProduct->getTypeId())
+    ->setPosition(1)
+    ->getExtensionAttributes()
+    ->setQty(1);
+$newLinks[] = $productLink;
+/** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
+$productLink = $productLinkFactory->create();
+$linkedProduct = $productRepository->getById(21);
+$productLink->setSku($product->getSku())
+    ->setLinkType('associated')
+    ->setLinkedProductSku($linkedProduct->getSku())
+    ->setLinkedProductType($linkedProduct->getTypeId())
+    ->setPosition(2)
+    ->getExtensionAttributes()
+    ->setQty(1);
+$newLinks[] = $productLink;
+$product->setProductLinks($newLinks);
+$product->save();

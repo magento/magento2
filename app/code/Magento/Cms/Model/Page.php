@@ -6,16 +6,19 @@
 namespace Magento\Cms\Model;
 
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Framework\Object\IdentityInterface;
+use Magento\Cms\Model\ResourceModel\Page as ResourceCmsPage;
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Model\AbstractModel;
 
 /**
  * Cms Page Model
  *
- * @method \Magento\Cms\Model\Resource\Page _getResource()
- * @method \Magento\Cms\Model\Resource\Page getResource()
- * @method int[] getStores()
+ * @method ResourceCmsPage _getResource()
+ * @method ResourceCmsPage getResource()
+ * @method Page setStoreId(array $storeId)
+ * @method array getStoreId()
  */
-class Page extends \Magento\Framework\Model\AbstractModel implements PageInterface, IdentityInterface
+class Page extends AbstractModel implements PageInterface, IdentityInterface
 {
     /**
      * No route page id
@@ -53,7 +56,7 @@ class Page extends \Magento\Framework\Model\AbstractModel implements PageInterfa
      */
     protected function _construct()
     {
-        $this->_init('Magento\Cms\Model\Resource\Page');
+        $this->_init('Magento\Cms\Model\ResourceModel\Page');
     }
 
     /**
@@ -79,6 +82,16 @@ class Page extends \Magento\Framework\Model\AbstractModel implements PageInterfa
     public function noRoutePage()
     {
         return $this->load(self::NOROUTE_PAGE_ID, $this->getIdFieldName());
+    }
+
+    /**
+     * Receive page store ids
+     *
+     * @return int[]
+     */
+    public function getStores()
+    {
+        return $this->hasData('stores') ? $this->getData('stores') : $this->getData('store_id');
     }
 
     /**

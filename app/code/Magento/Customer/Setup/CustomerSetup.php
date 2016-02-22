@@ -12,7 +12,7 @@ use Magento\Eav\Model\Entity\Setup\Context;
 use Magento\Eav\Setup\EavSetup;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory;
 
 /**
  * @codeCoverageIgnore
@@ -126,12 +126,12 @@ class CustomerSetup extends EavSetup
     {
         $entities = [
             'customer' => [
-                'entity_model' => 'Magento\Customer\Model\Resource\Customer',
+                'entity_model' => 'Magento\Customer\Model\ResourceModel\Customer',
                 'attribute_model' => 'Magento\Customer\Model\Attribute',
                 'table' => 'customer_entity',
-                'increment_model' => 'Magento\Eav\Model\Entity\Increment\Numeric',
+                'increment_model' => 'Magento\Eav\Model\Entity\Increment\NumericValue',
                 'additional_attribute_table' => 'customer_eav_attribute',
-                'entity_attribute_collection' => 'Magento\Customer\Model\Resource\Attribute\Collection',
+                'entity_attribute_collection' => 'Magento\Customer\Model\ResourceModel\Attribute\Collection',
                 'attributes' => [
                     'website_id' => [
                         'type' => 'static',
@@ -229,7 +229,7 @@ class CustomerSetup extends EavSetup
                     ],
                     'dob' => [
                         'type' => 'static',
-                        'label' => 'Date Of Birth',
+                        'label' => 'Date of Birth',
                         'input' => 'date',
                         'frontend' => 'Magento\Eav\Model\Entity\Attribute\Frontend\Datetime',
                         'backend' => 'Magento\Eav\Model\Entity\Attribute\Backend\Datetime',
@@ -338,11 +338,11 @@ class CustomerSetup extends EavSetup
                 ],
             ],
             'customer_address' => [
-                'entity_model' => 'Magento\Customer\Model\Resource\Address',
+                'entity_model' => 'Magento\Customer\Model\ResourceModel\Address',
                 'attribute_model' => 'Magento\Customer\Model\Attribute',
                 'table' => 'customer_address_entity',
                 'additional_attribute_table' => 'customer_eav_attribute',
-                'entity_attribute_collection' => 'Magento\Customer\Model\Resource\Address\Attribute\Collection',
+                'entity_attribute_collection' => 'Magento\Customer\Model\ResourceModel\Address\Attribute\Collection',
                 'attributes' => [
                     'prefix' => [
                         'type' => 'static',
@@ -421,7 +421,7 @@ class CustomerSetup extends EavSetup
                         'type' => 'static',
                         'label' => 'Country',
                         'input' => 'select',
-                        'source' => 'Magento\Customer\Model\Resource\Address\Attribute\Source\Country',
+                        'source' => 'Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Country',
                         'sort_order' => 90,
                         'position' => 90,
                     ],
@@ -429,7 +429,7 @@ class CustomerSetup extends EavSetup
                         'type' => 'static',
                         'label' => 'State/Province',
                         'input' => 'text',
-                        'backend' => 'Magento\Customer\Model\Resource\Address\Attribute\Backend\Region',
+                        'backend' => 'Magento\Customer\Model\ResourceModel\Address\Attribute\Backend\Region',
                         'required' => false,
                         'sort_order' => 100,
                         'position' => 100,
@@ -438,7 +438,7 @@ class CustomerSetup extends EavSetup
                         'type' => 'static',
                         'label' => 'State/Province',
                         'input' => 'hidden',
-                        'source' => 'Magento\Customer\Model\Resource\Address\Attribute\Source\Region',
+                        'source' => 'Magento\Customer\Model\ResourceModel\Address\Attribute\Source\Region',
                         'required' => false,
                         'sort_order' => 100,
                         'position' => 100,

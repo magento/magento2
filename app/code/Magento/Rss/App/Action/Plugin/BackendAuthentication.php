@@ -48,6 +48,7 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory
      * @param \Magento\Backend\App\BackendAppList $backendAppList
+     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param \Magento\Framework\HTTP\Authentication $httpAuthentication
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\AuthorizationInterface $authorization
@@ -63,6 +64,7 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
         \Magento\Backend\Model\UrlInterface $backendUrl,
         \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Backend\App\BackendAppList $backendAppList,
+        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Magento\Framework\HTTP\Authentication $httpAuthentication,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\AuthorizationInterface $authorization,
@@ -80,7 +82,8 @@ class BackendAuthentication extends \Magento\Backend\App\Action\Plugin\Authentic
             $messageManager,
             $backendUrl,
             $resultRedirectFactory,
-            $backendAppList
+            $backendAppList,
+            $formKeyValidator
         );
     }
 

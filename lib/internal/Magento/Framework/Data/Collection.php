@@ -26,7 +26,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Collection items
      *
-     * @var \Magento\Framework\Object[]
+     * @var \Magento\Framework\DataObject[]
      */
     protected $_items = [];
 
@@ -35,7 +35,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @var string
      */
-    protected $_itemObjectClass = 'Magento\Framework\Object';
+    protected $_itemObjectClass = 'Magento\Framework\DataObject';
 
     /**
      * Order configuration
@@ -47,7 +47,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Filters configuration
      *
-     * @var \Magento\Framework\Object[]
+     * @var \Magento\Framework\DataObject[]
      */
     protected $_filters = [];
 
@@ -118,7 +118,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function addFilter($field, $value, $type = 'and')
     {
-        $filter = new \Magento\Framework\Object();
+        $filter = new \Magento\Framework\DataObject();
         // implements ArrayAccess
         $filter['field'] = $field;
         $filter['value'] = $value;
@@ -183,7 +183,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * - array() -- get all filters
      *
      * @param string|string[] $field
-     * @return \Magento\Framework\Object|\Magento\Framework\Object[]|void
+     * @return \Magento\Framework\DataObject|\Magento\Framework\DataObject[]|void
      */
     public function getFilter($field)
     {
@@ -293,7 +293,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Retrieve collection first item
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getFirstItem()
     {
@@ -310,7 +310,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Retrieve collection last item
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getLastItem()
     {
@@ -326,7 +326,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Retrieve collection items
      *
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getItems()
     {
@@ -376,7 +376,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param   string $column
      * @param   mixed $value
-     * @return  \Magento\Framework\Object || null
+     * @return  \Magento\Framework\DataObject || null
      */
     public function getItemByColumnValue($column, $value)
     {
@@ -393,18 +393,18 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Adding item to item array
      *
-     * @param   \Magento\Framework\Object $item
+     * @param   \Magento\Framework\DataObject $item
      * @return $this
      * @throws \Exception
      */
-    public function addItem(\Magento\Framework\Object $item)
+    public function addItem(\Magento\Framework\DataObject $item)
     {
         $itemId = $this->_getItemId($item);
 
         if ($itemId !== null) {
             if (isset($this->_items[$itemId])) {
                 throw new \Exception(
-                    'Item (' . get_class($item) . ') with the same id "' . $item->getId() . '" already exist'
+                    'Item (' . get_class($item) . ') with the same ID "' . $item->getId() . '" already exists.'
                 );
             }
             $this->_items[$itemId] = $item;
@@ -417,7 +417,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Add item that has no id to collection
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return $this
      */
     protected function _addItem($item)
@@ -429,10 +429,10 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Retrieve item id
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return mixed
      */
-    protected function _getItemId(\Magento\Framework\Object $item)
+    protected function _getItemId(\Magento\Framework\DataObject $item)
     {
         return $item->getId();
     }
@@ -593,8 +593,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function setItemObjectClass($className)
     {
-        if (!is_a($className, 'Magento\Framework\Object', true)) {
-            throw new \InvalidArgumentException($className . ' does not extend \Magento\Framework\Object');
+        if (!is_a($className, 'Magento\Framework\DataObject', true)) {
+            throw new \InvalidArgumentException($className . ' does not extend \Magento\Framework\DataObject');
         }
         $this->_itemObjectClass = $className;
         return $this;
@@ -603,7 +603,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Retrieve collection empty item
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getNewEmptyItem()
     {
@@ -799,7 +799,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Retrieve item by id
      *
      * @param   mixed $idValue
-     * @return  \Magento\Framework\Object
+     * @return  \Magento\Framework\DataObject
      */
     public function getItemById($idValue)
     {

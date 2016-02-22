@@ -7,65 +7,82 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Ui\Component\MassAction\Filter;
+use Magento\Sales\Model\Order\Pdf\Invoice;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Pdfinvoices extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory
+     * @var FileFactory
      */
     protected $fileFactory;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+     * @var DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @var Invoice
+     */
+    protected $pdfInvoice;
+
+    /**
+     * @var CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
+     * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
+     * @param DateTime $dateTime
+     * @param FileFactory $fileFactory
+     * @param Invoice $pdfInvoice
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory
+        Context $context,
+        Filter $filter,
+        CollectionFactory $collectionFactory,
+        DateTime $dateTime,
+        FileFactory $fileFactory,
+        Invoice $pdfInvoice
     ) {
         $this->fileFactory = $fileFactory;
-        parent::__construct($context);
+        $this->dateTime = $dateTime;
+        $this->pdfInvoice = $pdfInvoice;
+        $this->collectionFactory = $collectionFactory;
+        parent::__construct($context, $filter);
     }
 
     /**
      * Print invoices for selected orders
      *
      * @param AbstractCollection $collection
-     * @return ResponseInterface|\Magento\Backend\Model\View\Result\Redirect
+     * @return ResponseInterface|ResultInterface
      */
     protected function massAction(AbstractCollection $collection)
     {
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $flag = false;
-        /** @var \Magento\Sales\Model\Order $order */
-        foreach ($collection->getItems() as $order) {
-            $invoices = $order->getInvoiceCollection();
-            if ($invoices->getSize() > 0) {
-                $flag = true;
-                if (!isset($pdf)) {
-                    $pdf = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Invoice')
-                        ->getPdf($invoices);
-                } else {
-                    $pages = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Invoice')
-                        ->getPdf($invoices);
-                    $pdf->pages = array_merge($pdf->pages, $pages->pages);
-                }
-            }
-        }
-        if ($flag) {
-            $date = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')
-                ->date('Y-m-d_H-i-s');
-            return $this->fileFactory->create(
-                'invoice' . $date . '.pdf',
-                $pdf->render(),
-                DirectoryList::VAR_DIR,
-                'application/pdf'
-            );
-        } else {
+        $invoicesCollection = $this->collectionFactory->create()->setOrderFilter(['in' => $collection->getAllIds()]);
+        if (!$invoicesCollection->getSize()) {
             $this->messageManager->addError(__('There are no printable documents related to selected orders.'));
-            $resultRedirect->setPath('sales/*/');
-            return $resultRedirect;
+            return $this->resultRedirectFactory->create()->setPath($this->getComponentRefererUrl());
         }
+        return $this->fileFactory->create(
+            sprintf('packingslip%s.pdf', $this->dateTime->date('Y-m-d_H-i-s')),
+            $this->pdfInvoice->getPdf($invoicesCollection->getItems())->render(),
+            DirectoryList::VAR_DIR,
+            'application/pdf'
+        );
     }
 }

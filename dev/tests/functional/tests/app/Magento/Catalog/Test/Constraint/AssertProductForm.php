@@ -27,15 +27,15 @@ class AssertProductForm extends AbstractAssertForm
     ];
 
     /**
-     * Sort fields for fixture and form data
+     * Sort fields for fixture and form data.
      *
      * @var array
      */
     protected $sortFields = [
         'custom_options::title',
-        'cross_sell_products::entity_id',
-        'up_sell_products::entity_id',
-        'related_products::entity_id',
+        'cross_sell_products::id',
+        'up_sell_products::id',
+        'related_products::id',
     ];
 
     /**
@@ -87,13 +87,19 @@ class AssertProductForm extends AbstractAssertForm
         if (isset($data['website_ids']) && !is_array($data['website_ids'])) {
             $data['website_ids'] = [$data['website_ids']];
         }
+
         if (!empty($this->specialArray)) {
             $data = $this->prepareSpecialPriceArray($data);
+        }
+
+        if (isset($data['price'])) {
+            $data['price'] = number_format($data['price'], 2);
         }
 
         foreach ($sortFields as $path) {
             $data = $this->sortDataByPath($data, $path);
         }
+
         return $data;
     }
 
@@ -127,6 +133,7 @@ class AssertProductForm extends AbstractAssertForm
         foreach ($sortFields as $path) {
             $data = $this->sortDataByPath($data, $path);
         }
+
         return $data;
     }
 

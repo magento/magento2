@@ -6,8 +6,6 @@
 
 namespace Magento\Framework\View\Asset;
 
-use Magento\Framework\View\Asset\ConfigInterface as AssetConfigInterface;
-
 /**
  * A locally available static view file asset that can be referred with a file path
  *
@@ -117,8 +115,11 @@ class File implements MergeableInterface
     public function getRelativeSourceFilePath()
     {
         $path = $this->filePath;
-        if (strpos($this->source->findRelativeSourceFilePath($this), 'less')) {
-            $path = str_replace('.css', '.less', $this->filePath);
+        $sourcePath = $this->source->findSource($this);
+        if ($sourcePath) {
+            $origExt = pathinfo($path, PATHINFO_EXTENSION);
+            $ext = pathinfo($sourcePath, PATHINFO_EXTENSION);
+            $path = str_replace('.' . $origExt, '.' . $ext, $this->filePath);
         }
         $result = '';
         $result = $this->join($result, $this->context->getPath());

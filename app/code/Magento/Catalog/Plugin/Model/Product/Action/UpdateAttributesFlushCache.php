@@ -7,7 +7,7 @@ namespace Magento\Catalog\Plugin\Model\Product\Action;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Action;
-use Magento\Indexer\Model\CacheContext;
+use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Event\ManagerInterface as EventManager;
 
 class UpdateAttributesFlushCache

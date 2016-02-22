@@ -5,77 +5,100 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Developer\Model\TemplateEngine\Plugin;
 
+use Magento\Developer\Helper\Data as DevHelper;
+use Magento\Developer\Model\TemplateEngine\Decorator\DebugHintsFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\View\TemplateEngineFactory;
+use Magento\Framework\View\TemplateEngineInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class DebugHints
 {
-    /**#@+
-     * XPath of configuration of the debugging hints
+    /**
+     * XPath of configuration of the debug block names
      */
-    const XML_PATH_DEBUG_TEMPLATE_HINTS = 'dev/debug/template_hints';
-
     const XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS = 'dev/debug/template_hints_blocks';
 
-    /**#@-*/
-
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ScopeConfigInterface
      */
-    private $objectManager;
+    protected $scopeConfig;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var StoreManagerInterface
      */
-    private $scopeConfig;
+    protected $storeManager;
 
     /**
-     * @var \Magento\Developer\Helper\Data
+     * @var DevHelper
      */
-    private $devHelper;
+    protected $devHelper;
 
     /**
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Developer\Helper\Data $devHelper
+     * @var DebugHintsFactory
+     */
+    protected $debugHintsFactory;
+
+    /**
+     * XPath of configuration of the debug hints
+     *
+     * Allowed values:
+     *     dev/debug/template_hints_storefront
+     *     dev/debug/template_hints_admin
+     *
+     * @var string
+     */
+    protected $debugHintsPath;
+
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     * @param StoreManagerInterface $storeManager
+     * @param DevHelper $devHelper
+     * @param DebugHintsFactory $debugHintsFactory
+     * @param string $debugHintsPath
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Developer\Helper\Data $devHelper
+        ScopeConfigInterface $scopeConfig,
+        StoreManagerInterface $storeManager,
+        DevHelper $devHelper,
+        DebugHintsFactory $debugHintsFactory,
+        $debugHintsPath
     ) {
-        $this->objectManager = $objectManager;
         $this->scopeConfig = $scopeConfig;
+        $this->storeManager = $storeManager;
         $this->devHelper = $devHelper;
+        $this->debugHintsFactory = $debugHintsFactory;
+        $this->debugHintsPath = $debugHintsPath;
     }
 
     /**
      * Wrap template engine instance with the debugging hints decorator, depending of the store configuration
      *
-     * @param \Magento\Framework\View\TemplateEngineFactory $subject
-     * @param \Magento\Framework\View\TemplateEngineInterface $invocationResult
+     * @param TemplateEngineFactory $subject
+     * @param TemplateEngineInterface $invocationResult
      *
-     * @return \Magento\Framework\View\TemplateEngineInterface
+     * @return TemplateEngineInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterCreate(
-        \Magento\Framework\View\TemplateEngineFactory $subject,
-        \Magento\Framework\View\TemplateEngineInterface $invocationResult
+        TemplateEngineFactory $subject,
+        TemplateEngineInterface $invocationResult
     ) {
-        if ($this->scopeConfig->getValue(self::XML_PATH_DEBUG_TEMPLATE_HINTS, ScopeInterface::SCOPE_STORE) &&
-            $this->devHelper->isDevAllowed()) {
+        $storeCode = $this->storeManager->getStore()->getCode();
+        if ($this->scopeConfig->getValue($this->debugHintsPath, ScopeInterface::SCOPE_STORE, $storeCode)
+            && $this->devHelper->isDevAllowed()) {
             $showBlockHints = $this->scopeConfig->getValue(
                 self::XML_PATH_DEBUG_TEMPLATE_HINTS_BLOCKS,
-                ScopeInterface::SCOPE_STORE
+                ScopeInterface::SCOPE_STORE,
+                $storeCode
             );
-            return $this->objectManager->create(
-                'Magento\Developer\Model\TemplateEngine\Decorator\DebugHints',
-                ['subject' => $invocationResult, 'showBlockHints' => $showBlockHints]
-            );
+            return $this->debugHintsFactory->create([
+                'subject' => $invocationResult,
+                'showBlockHints' => $showBlockHints,
+            ]);
         }
         return $invocationResult;
     }

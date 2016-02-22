@@ -5,9 +5,8 @@
  */
 namespace Magento\Cms\Model\Page;
 
-use Magento\Cms\Model\Resource\Page\CollectionFactory;
-use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
-use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
+use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
+use Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
  * Class DataProvider
@@ -15,21 +14,26 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
     /**
-     * @var \Magento\Cms\Model\Resource\Block\Collection
+     * @var \Magento\Cms\Model\ResourceModel\Page\Collection
      */
     protected $collection;
 
     /**
-     * @var FilterPool
+     * @var DataPersistorInterface
      */
-    protected $filterPool;
+    protected $dataPersistor;
+
+    /**
+     * @var array
+     */
+    protected $loadedData;
 
     /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param CollectionFactory $collectionFactory
-     * @param FilterPool $filterPool
+     * @param CollectionFactory $pageCollectionFactory
+     * @param DataPersistorInterface $dataPersistor
      * @param array $meta
      * @param array $data
      */
@@ -37,31 +41,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $name,
         $primaryFieldName,
         $requestFieldName,
-        CollectionFactory $collectionFactory,
-        FilterPool $filterPool,
+        CollectionFactory $pageCollectionFactory,
+        DataPersistorInterface $dataPersistor,
         array $meta = [],
         array $data = []
     ) {
+        $this->collection = $pageCollectionFactory->create();
+        $this->dataPersistor = $dataPersistor;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
-        $this->filterPool = $filterPool;
-        $this->collection = $collectionFactory->create();
-        $this->collection->setFirstStoreFlag(true);
-    }
-
-    /**
-     * @return \Magento\Cms\Model\Resource\Page\Collection
-     */
-    protected function getCollection()
-    {
-        return $this->collection;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function addFilter($condition, $field = null, $type = 'regular')
-    {
-        $this->filterPool->registerNewFilter($condition, $field, $type);
     }
 
     /**
@@ -71,18 +58,22 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     public function getData()
     {
-        $this->filterPool->applyFilters($this->collection);
-        return $this->collection->toArray();
-    }
+        if (isset($this->loadedData)) {
+            return $this->loadedData;
+        }
+        $items = $this->collection->getItems();
+        /** @var \Magento\Cms\Model\Page $page */
+        foreach ($items as $page) {
+            $this->loadedData[$page->getId()] = $page->getData();
+        }
 
-    /**
-     * Retrieve count of loaded items
-     *
-     * @return int
-     */
-    public function count()
-    {
-        $this->filterPool->applyFilters($this->collection);
-        return $this->collection->count();
+        $data = $this->dataPersistor->get('cms_page');
+        if (!empty($data)) {
+            $page = $this->collection->getNewEmptyItem();
+            $page->setData($data);
+            $this->loadedData[$page->getId()] = $page->getData();
+        }
+
+        return $this->loadedData;
     }
 }

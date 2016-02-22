@@ -7,7 +7,7 @@
 /**
  * Eav attribute set model
  *
- * @method \Magento\Eav\Model\Resource\Entity\Attribute\Set getResource()
+ * @method \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set getResource()
  * @method int getEntityTypeId()
  * @method \Magento\Eav\Model\Entity\Attribute\Set setEntityTypeId(int $value)
  * @method string getAttributeSetName()
@@ -41,7 +41,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Resource instance
      *
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set
      */
     protected $_resource;
 
@@ -68,7 +68,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     protected $_attributeFactory;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute
      */
     protected $_resourceAttribute;
 
@@ -80,11 +80,12 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param GroupFactory $attrGroupFactory
      * @param \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute $resourceAttribute
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute $resourceAttribute
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -94,8 +95,8 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Entity\Attribute\GroupFactory $attrGroupFactory,
         \Magento\Eav\Model\Entity\AttributeFactory $attributeFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute $resourceAttribute,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute $resourceAttribute,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -118,10 +119,11 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      * Initialize resource model
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\Resource\Entity\Attribute\Set');
+        $this->_init('Magento\Eav\Model\ResourceModel\Entity\Attribute\Set');
     }
 
     /**
@@ -171,6 +173,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
      *
      * @param array $data
      * @return $this
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -188,16 +191,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
         }
         if ($data['groups']) {
             foreach ($data['groups'] as $group) {
-                $modelGroup = $this->_attrGroupFactory->create();
-                $modelGroup->setId(
-                    is_numeric($group[0]) && $group[0] > 0 ? $group[0] : null
-                )->setAttributeGroupName(
-                    $group[1]
-                )->setAttributeSetId(
-                    $this->getId()
-                )->setSortOrder(
-                    $group[2]
-                );
+                $modelGroup = $this->initGroupModel($group);
 
                 if ($data['attributes']) {
                     foreach ($data['attributes'] as $attribute) {
@@ -227,10 +221,17 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
 
         if ($data['not_attributes']) {
             $modelAttributeArray = [];
-            foreach ($data['not_attributes'] as $attributeId) {
-                $modelAttribute = $this->_attributeFactory->create();
-
-                $modelAttribute->setEntityAttributeId($attributeId);
+            $data['not_attributes'] = array_filter($data['not_attributes']);
+            foreach ($data['not_attributes'] as $entityAttributeId) {
+                $entityAttribute = $this->_resourceAttribute->getEntityAttribute($entityAttributeId);
+                if (!$entityAttribute) {
+                    throw new LocalizedException(__('Entity attribute with id "%1" not found', $entityAttributeId));
+                }
+                $modelAttribute = $this->_eavConfig->getAttribute(
+                    $this->getEntityTypeId(),
+                    $entityAttribute['attribute_id']
+                );
+                $modelAttribute->setEntityAttributeId($entityAttributeId);
                 $modelAttributeArray[] = $modelAttribute;
             }
             $this->setRemoveAttributes($modelAttributeArray);
@@ -249,6 +250,31 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
         $this->setAttributeSetName($data['attribute_set_name'])->setEntityTypeId($this->getEntityTypeId());
 
         return $this;
+    }
+
+    /**
+     * @param array $group
+     * @return Group
+     */
+    private function initGroupModel($group)
+    {
+        $modelGroup = $this->_attrGroupFactory->create();
+        $modelGroup->setId(
+            is_numeric($group[0]) && $group[0] > 0 ? $group[0] : null
+        )->setAttributeGroupName(
+            $group[1]
+        )->setAttributeSetId(
+            $this->getId()
+        )->setSortOrder(
+            $group[2]
+        );
+        if ($modelGroup->getId()) {
+            $group = $this->_attrGroupFactory->create()->load($modelGroup->getId());
+            if ($group->getId()) {
+                $modelGroup->setAttributeGroupCode($group->getAttributeGroupCode());
+            }
+        }
+        return $modelGroup;
     }
 
     /**
@@ -346,7 +372,7 @@ class Set extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * Get resource instance
      *
-     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
+     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _getResource()
     {

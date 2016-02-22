@@ -13,7 +13,7 @@ use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Math\Division as MathDivision;
-use Magento\Framework\Object\Factory as ObjectFactory;
+use Magento\Framework\DataObject\Factory as ObjectFactory;
 
 /**
  * Interface StockStateProvider
@@ -72,8 +72,10 @@ class StockStateProvider implements StockStateProviderInterface
      */
     public function verifyStock(StockItemInterface $stockItem)
     {
-        if ($stockItem->getQty() !== null
-            && $stockItem->getBackorders() == StockItemInterface::BACKORDERS_NO
+        if ($stockItem->getQty() === null && $stockItem->getManageStock()) {
+            return false;
+        }
+        if ($stockItem->getBackorders() == StockItemInterface::BACKORDERS_NO
             && $stockItem->getQty() <= $stockItem->getMinQty()
         ) {
             return false;
@@ -95,7 +97,7 @@ class StockStateProvider implements StockStateProviderInterface
      * @param int|float $qty
      * @param int|float $summaryQty
      * @param int|float $origQty
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -294,11 +296,11 @@ class StockStateProvider implements StockStateProviderInterface
     /**
      * @param StockItemInterface $stockItem
      * @param float|int $qty
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function checkQtyIncrements(StockItemInterface $stockItem, $qty)
     {
-        $result = new \Magento\Framework\Object();
+        $result = new \Magento\Framework\DataObject();
         if ($stockItem->getSuppressCheckQtyIncrements()) {
             return $result;
         }

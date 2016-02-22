@@ -36,4 +36,22 @@ class SortOrderBuilder extends AbstractSimpleObjectBuilder
         $this->_set(SortOrder::DIRECTION, $direction);
         return $this;
     }
+
+    /**
+     * @return $this
+     */
+    public function setAscendingDirection()
+    {
+        $this->setDirection(SortOrder::SORT_ASC);
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    public function setDescendingDirection()
+    {
+        $this->setDirection(SortOrder::SORT_DESC);
+        return $this;
+    }
 }

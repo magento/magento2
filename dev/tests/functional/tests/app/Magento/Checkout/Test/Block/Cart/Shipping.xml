@@ -13,9 +13,6 @@
         <region_id>
             <input>select</input>
         </region_id>
-        <region />
-        <postcode>
-            <selector>#postcode</selector>
-        </postcode>
+        <postcode />
     </fields>
 </mapping>

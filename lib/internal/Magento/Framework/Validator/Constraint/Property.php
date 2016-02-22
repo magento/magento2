@@ -33,7 +33,7 @@ class Property extends \Magento\Framework\Validator\Constraint
     }
 
     /**
-     * Get value that should be validated. Tries to extract value's property if \Magento\Framework\Object or \ArrayAccess or array
+     * Get value that should be validated. Tries to extract value's property if \Magento\Framework\DataObject or \ArrayAccess or array
      * is passed
      *
      * @param mixed $value
@@ -43,7 +43,7 @@ class Property extends \Magento\Framework\Validator\Constraint
     {
         $result = null;
 
-        if ($value instanceof \Magento\Framework\Object) {
+        if ($value instanceof \Magento\Framework\DataObject) {
             $result = $value->getDataUsingMethod($this->_property);
         } elseif ((is_array($value) || $value instanceof \ArrayAccess) && isset($value[$this->_property])) {
             $result = $value[$this->_property];

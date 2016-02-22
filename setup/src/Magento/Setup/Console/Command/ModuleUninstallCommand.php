@@ -9,16 +9,12 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\MaintenanceMode;
 use Magento\Framework\Backup\Factory;
 use Magento\Framework\Composer\ComposerInformation;
-use Magento\Framework\Composer\Remove;
-use Magento\Framework\Config\ConfigOptionsListConstants;
-use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Module\DependencyChecker;
-use Magento\Framework\Module\ModuleList\Loader;
 use Magento\Framework\Module\FullModuleList;
 use Magento\Framework\Module\PackageInfo;
-use Magento\Framework\Module\Resource;
 use Magento\Framework\Setup\BackupRollbackFactory;
-use Magento\Setup\Model\ModuleContext;
+use Magento\Setup\Model\ModuleRegistryUninstaller;
+use Magento\Setup\Model\ModuleUninstaller;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\UninstallCollector;
 use Symfony\Component\Console\Input\InputInterface;
@@ -64,13 +60,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $fullModuleList;
 
     /**
-     * Deployment Configuration writer
-     *
-     * @var DeploymentConfig\Writer
-     */
-    private $writer;
-
-    /**
      * Module package info
      *
      * @var PackageInfo
@@ -83,13 +72,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
      * @var UninstallCollector
      */
     private $collector;
-
-    /**
-     * Module Resource
-     *
-     * @var Resource
-     */
-    private $moduleResource;
 
     /**
      * Composer general dependency checker
@@ -106,18 +88,6 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $composer;
 
     /**
-     * @var Loader
-     */
-    private $loader;
-
-    /**
-     * Code remover
-     *
-     * @var Remove
-     */
-    private $remove;
-
-    /**
      * BackupRollback factory
      *
      * @var BackupRollbackFactory
@@ -125,42 +95,52 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     private $backupRollbackFactory;
 
     /**
+     * Module Uninstaller
+     *
+     * @var ModuleUninstaller
+     */
+    private $moduleUninstaller;
+
+    /**
+     * Module Registry uninstaller
+     *
+     * @var ModuleRegistryUninstaller
+     */
+    private $moduleRegistryUninstaller;
+
+    /**
      * Constructor
      *
      * @param ComposerInformation $composer
      * @param DeploymentConfig $deploymentConfig
-     * @param DeploymentConfig\Writer $writer
      * @param FullModuleList $fullModuleList
-     * @param Loader $loader
      * @param MaintenanceMode $maintenanceMode
      * @param ObjectManagerProvider $objectManagerProvider
-     * @param Remove $remove
      * @param UninstallCollector $collector
+     * @param ModuleUninstaller $moduleUninstaller
+     * @param ModuleRegistryUninstaller $moduleRegistryUninstaller
      */
     public function __construct(
         ComposerInformation $composer,
         DeploymentConfig $deploymentConfig,
-        DeploymentConfig\Writer $writer,
         FullModuleList $fullModuleList,
-        Loader $loader,
         MaintenanceMode $maintenanceMode,
         ObjectManagerProvider $objectManagerProvider,
-        Remove $remove,
-        UninstallCollector $collector
+        UninstallCollector $collector,
+        ModuleUninstaller $moduleUninstaller,
+        ModuleRegistryUninstaller $moduleRegistryUninstaller
     ) {
         parent::__construct($objectManagerProvider);
         $this->composer = $composer;
         $this->deploymentConfig = $deploymentConfig;
-        $this->writer = $writer;
         $this->maintenanceMode = $maintenanceMode;
         $this->fullModuleList = $fullModuleList;
         $this->packageInfo = $this->objectManager->get('Magento\Framework\Module\PackageInfoFactory')->create();
         $this->collector = $collector;
-        $this->moduleResource = $this->objectManager->get('Magento\Framework\Module\Resource');
         $this->dependencyChecker = $this->objectManager->get('Magento\Framework\Module\DependencyChecker');
-        $this->loader = $loader;
-        $this->remove = $remove;
         $this->backupRollbackFactory = $this->objectManager->get('Magento\Framework\Setup\BackupRollbackFactory');
+        $this->moduleUninstaller = $moduleUninstaller;
+        $this->moduleRegistryUninstaller = $moduleRegistryUninstaller;
     }
 
     /**
@@ -268,14 +248,9 @@ class ModuleUninstallCommand extends AbstractModuleCommand
                     );
                 }
             }
-            $output->writeln('<info>Removing ' . implode(', ', $modules) . ' from module registry in database</info>');
-            $this->removeModulesFromDb($modules);
-            $output->writeln(
-                '<info>Removing ' . implode(', ', $modules) .  ' from module list in deployment configuration</info>'
-            );
-            $this->removeModulesFromDeploymentConfig($modules);
-            $output->writeln('<info>Removing code from Magento codebase:</info>');
-            $this->removeCode($modules);
+            $this->moduleRegistryUninstaller->removeModulesFromDb($output, $modules);
+            $this->moduleRegistryUninstaller->removeModulesFromDeploymentConfig($output, $modules);
+            $this->moduleUninstaller->uninstallCode($output, $modules);
             $this->cleanup($input, $output);
             $output->writeln('<info>Disabling maintenance mode</info>');
             $this->maintenanceMode->set(false);
@@ -305,6 +280,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         }
         if ($input->getOption(self::INPUT_KEY_BACKUP_DB)) {
             $dbBackup = $this->backupRollbackFactory->create($output);
+            $this->setAreaCode();
             $dbBackup->dbBackup($time);
         }
     }
@@ -324,36 +300,10 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         } else {
             $output->writeln('<info>Removing data</info>');
         }
-        $uninstalls = $this->collector->collectUninstall();
-        $setupModel = $this->objectManager->get('Magento\Setup\Module\Setup');
-        foreach ($modules as $module) {
-            if (isset($uninstalls[$module])) {
-                $output->writeln("<info>Removing data of $module</info>");
-                $uninstalls[$module]->uninstall(
-                    $setupModel,
-                    new ModuleContext($this->moduleResource->getDbVersion($module) ?: '')
-                );
-            } else {
-                $output->writeln("<info>No data to clear in $module</info>");
-            }
-        }
+        $this->moduleUninstaller->uninstallData($output, $modules);
     }
 
-    /**
-     * Run 'composer remove' to remove code
-     *
-     * @param array $modules
-     * @return void
-     */
-    private function removeCode(array $modules)
-    {
-        $packages = [];
-        foreach ($modules as $module) {
-            $packages[] = $this->packageInfo->getPackageName($module);
-        }
-        $this->remove->remove($packages);
 
-    }
 
     /**
      * Validate list of modules against installed composer packages and return error messages
@@ -412,37 +362,18 @@ class ModuleUninstallCommand extends AbstractModuleCommand
     }
 
     /**
-     * Removes module from setup_module table
+     * Sets area code to start a session for database backup and rollback
      *
-     * @param string[] $modules
      * @return void
      */
-    private function removeModulesFromDb(array $modules)
+    private function setAreaCode()
     {
-        /** @var \Magento\Setup\Module\DataSetup $setup */
-        $setup = $this->objectManager->get('Magento\Setup\Module\DataSetup');
-        foreach ($modules as $module) {
-            $setup->deleteTableRow('setup_module', 'module', $module);
-        }
-    }
-
-    /**
-     * Removes module from deployment configuration
-     *
-     * @param string[] $modules
-     * @return void
-     */
-    private function removeModulesFromDeploymentConfig(array $modules)
-    {
-        $existingModules = $this->deploymentConfig->getConfigData(ConfigOptionsListConstants::KEY_MODULES);
-        $newSort = $this->loader->load($modules);
-        $newModules = [];
-        foreach (array_keys($newSort) as $module) {
-            $newModules[$module] = $existingModules[$module];
-        }
-        $this->writer->saveConfig(
-            [ConfigFilePool::APP_CONFIG => [ConfigOptionsListConstants::KEY_MODULES => $newModules]],
-            true
-        );
+        $areaCode = 'adminhtml';
+        /** @var \Magento\Framework\App\State $appState */
+        $appState = $this->objectManager->get('Magento\Framework\App\State');
+        $appState->setAreaCode($areaCode);
+        /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
+        $configLoader = $this->objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
+        $this->objectManager->configure($configLoader->load($areaCode));
     }
 }

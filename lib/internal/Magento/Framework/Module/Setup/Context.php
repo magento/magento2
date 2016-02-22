@@ -18,7 +18,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     protected $_eventManager;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resourceModel;
 
@@ -57,7 +57,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
      *
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\App\Resource $appResource
+     * @param \Magento\Framework\App\ResourceConnection $appResource
      * @param \Magento\Framework\Module\Dir\Reader $modulesReader
      * @param \Magento\Framework\Module\ModuleListInterface $moduleList
      * @param \Magento\Framework\Module\ResourceInterface $resource
@@ -68,7 +68,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\App\Resource $appResource,
+        \Magento\Framework\App\ResourceConnection $appResource,
         \Magento\Framework\Module\Dir\Reader $modulesReader,
         \Magento\Framework\Module\ModuleListInterface $moduleList,
         \Magento\Framework\Module\ResourceInterface $resource,
@@ -120,7 +120,7 @@ class Context implements \Magento\Framework\ObjectManager\ContextInterface
     }
 
     /**
-     * @return \Magento\Framework\App\Resource
+     * @return \Magento\Framework\App\ResourceConnection
      */
     public function getResourceModel()
     {

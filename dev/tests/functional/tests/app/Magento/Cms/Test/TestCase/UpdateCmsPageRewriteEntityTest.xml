@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Cms\Test\TestCase\UpdateCmsPageRewriteEntityTest">
+    <testCase name="Magento\Cms\Test\TestCase\UpdateCmsPageRewriteEntityTest" summary="Update Cms Page URL Rewrites " ticketId="MAGETWO-26173">
         <variation name="UpdateCmsPageRewriteEntityTestVariation1">
             <data name="cmsPageRewrite/dataset" xsi:type="string">cms_default_no_redirect</data>
             <data name="urlRewrite/data/store_id" xsi:type="string">Main Website/Main Website Store/%default%</data>

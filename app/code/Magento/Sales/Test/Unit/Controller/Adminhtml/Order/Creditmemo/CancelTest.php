@@ -23,11 +23,6 @@ class CancelTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $loaderMock;
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
     protected $requestMock;
 
     /**
@@ -41,9 +36,9 @@ class CancelTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Api\CreditmemoManagementInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $creditmemoMock;
+    protected $creditmemoManagementMock;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
@@ -90,10 +85,13 @@ class CancelTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->creditmemoMock = $this->getMockBuilder('Magento\Sales\Model\Order\Creditmemo')
-            ->disableOriginalConstructor()
-            ->setMethods(['getInvoice', 'getOrder', 'cancel', 'getId', '__wakeUp'])
-            ->getMock();
+        $this->creditmemoManagementMock = $this->getMock(
+            'Magento\Sales\Api\CreditmemoManagementInterface',
+            [],
+            [],
+            '',
+            false
+        );
         $titleMock = $this->getMockBuilder('Magento\Framework\App\Action\Title')
             ->disableOriginalConstructor()
             ->getMock();
@@ -111,9 +109,6 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->helperMock = $this->getMockBuilder('Magento\Backend\Helper\Data')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->loaderMock = $this->getMockBuilder('Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader')
             ->disableOriginalConstructor()
             ->getMock();
         $this->resultRedirectFactoryMock = $this->getMockBuilder('Magento\Backend\Model\View\Result\RedirectFactory')
@@ -169,7 +164,6 @@ class CancelTest extends \PHPUnit_Framework_TestCase
             'Magento\Sales\Controller\Adminhtml\Order\Creditmemo\Cancel',
             [
                 'context' => $this->contextMock,
-                'creditmemoLoader' => $this->loaderMock,
                 'resultForwardFactory' => $this->resultForwardFactoryMock
             ]
         );
@@ -180,28 +174,28 @@ class CancelTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteModelException()
     {
-        $id = 123;
+        $creditmemoId = 123;
         $message = 'Model exception';
         $e = new \Magento\Framework\Exception\LocalizedException(__($message));
 
-        $this->requestMock->expects($this->any())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
-            ->willReturnArgument(0);
-        $this->creditmemoMock->expects($this->once())
+            ->with('creditmemo_id')
+            ->willReturn($creditmemoId);
+        $this->objectManagerMock->expects($this->once())
+            ->method('create')
+            ->with('Magento\Sales\Api\CreditmemoManagementInterface')
+            ->willReturn($this->creditmemoManagementMock);
+        $this->creditmemoManagementMock->expects($this->once())
             ->method('cancel')
+            ->with($creditmemoId)
             ->willThrowException($e);
-        $this->loaderMock->expects($this->once())
-            ->method('load')
-            ->willReturn($this->creditmemoMock);
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->resultRedirectMock);
-        $this->creditmemoMock->expects($this->atLeastOnce())
-            ->method('getId')
-            ->willReturn($id);
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
-            ->with('sales/*/view', ['creditmemo_id' => $id])
+            ->with('sales/*/view', ['creditmemo_id' => $creditmemoId])
             ->willReturnSelf();
 
         $this->assertInstanceOf(
@@ -215,28 +209,28 @@ class CancelTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteException()
     {
-        $id = 321;
+        $creditmemoId = 321;
         $message = 'Model exception';
         $e = new \Exception($message);
 
-        $this->requestMock->expects($this->any())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
-            ->willReturnArgument(0);
-        $this->creditmemoMock->expects($this->once())
+            ->with('creditmemo_id')
+            ->willReturn($creditmemoId);
+        $this->objectManagerMock->expects($this->once())
+            ->method('create')
+            ->with('Magento\Sales\Api\CreditmemoManagementInterface')
+            ->willReturn($this->creditmemoManagementMock);
+        $this->creditmemoManagementMock->expects($this->once())
             ->method('cancel')
+            ->with($creditmemoId)
             ->willThrowException($e);
-        $this->loaderMock->expects($this->once())
-            ->method('load')
-            ->willReturn($this->creditmemoMock);
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->resultRedirectMock);
-        $this->creditmemoMock->expects($this->atLeastOnce())
-            ->method('getId')
-            ->willReturn($id);
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
-            ->with('sales/*/view', ['creditmemo_id' => $id])
+            ->with('sales/*/view', ['creditmemo_id' => $creditmemoId])
             ->willReturnSelf();
 
         $this->assertInstanceOf(
@@ -250,13 +244,10 @@ class CancelTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteNoCreditmemo()
     {
-        $this->requestMock->expects($this->any())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
-            ->withAnyParameters()
-            ->willReturnArgument(0);
-        $this->loaderMock->expects($this->once())
-            ->method('load')
-            ->willReturn(false);
+            ->with('creditmemo_id')
+            ->willReturn(null);
         $this->resultForwardFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->resultForwardMock);
@@ -276,46 +267,28 @@ class CancelTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
-        $id = '111';
+        $creditmemoId = '111';
 
-        $transactionMock = $this->getMockBuilder('Magento\Framework\DB\Transaction')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $invoiceMock = $this->getMockBuilder('Magento\Sales\Model\Order\Invoice')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $orderMock = $this->getMockBuilder('Magento\Sales\Model\Order')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->requestMock->expects($this->any())
+        $this->requestMock->expects($this->once())
             ->method('getParam')
-            ->willReturnArgument(0);
-        $this->loaderMock->expects($this->once())
-            ->method('load')
-            ->willReturn($this->creditmemoMock);
+            ->with('creditmemo_id')
+            ->willReturn($creditmemoId);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with('Magento\Framework\DB\Transaction')
-            ->willReturn($transactionMock);
-        $this->creditmemoMock->expects($this->any())
-            ->method('getOrder')
-            ->willReturn($orderMock);
-        $this->creditmemoMock->expects($this->any())
-            ->method('getInvoice')
-            ->willReturn($invoiceMock);
+            ->with('Magento\Sales\Api\CreditmemoManagementInterface')
+            ->willReturn($this->creditmemoManagementMock);
+        $this->creditmemoManagementMock->expects($this->once())
+            ->method('cancel')
+            ->with($creditmemoId);
         $this->messageManagerMock->expects($this->once())
             ->method('addSuccess')
             ->with('The credit memo has been canceled.');
         $this->resultRedirectFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->resultRedirectMock);
-        $this->creditmemoMock->expects($this->atLeastOnce())
-            ->method('getId')
-            ->willReturn($id);
         $this->resultRedirectMock->expects($this->once())
             ->method('setPath')
-            ->with('sales/*/view', ['creditmemo_id' => $id])
+            ->with('sales/*/view', ['creditmemo_id' => $creditmemoId])
             ->willReturnSelf();
 
         $this->assertInstanceOf(

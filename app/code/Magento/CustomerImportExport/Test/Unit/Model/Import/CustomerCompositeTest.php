@@ -34,7 +34,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     protected $_addressAttributes = ['city', 'country', 'street'];
 
     /**
-     * @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_string;
 
@@ -44,27 +44,27 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     protected $_importFactory;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
     /**
-     * @var \Magento\ImportExport\Model\Resource\Helper
+     * @var \Magento\ImportExport\Model\ResourceModel\Helper
      */
     protected $_resourceHelper;
 
     /**
-     * @var \Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory
+     * @var \Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory
      */
     protected $_dataFactory;
 
     /**
-     * @var CustomerFactory
+     * @var \Magento\CustomerImportExport\Model\Import\CustomerFactory
      */
     protected $_customerFactory;
 
     /**
-     * @var AddressFactory
+     * @var \Magento\CustomerImportExport\Model\Import\AddressFactory
      */
     protected $_addressFactory;
 
@@ -72,6 +72,23 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_scopeConfigMock;
+
+    /**
+     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
+     * |\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $errorAggregator;
+
+    /**
+     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError $newError
+     */
+    protected $error;
+
+    /**
+     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory
+     * |\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $errorFactory;
 
     /**
      * Expected prepared data after method CustomerComposite::_prepareRowForDb
@@ -112,7 +129,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Framework\App\Helper\Context', ['getTranslateInline'], [], '', false);
         $context->expects($this->any())->method('getTranslateInline')->will($this->returnValue($translateInline));
 
-        $this->_string = new \Magento\Framework\Stdlib\String();
+        $this->_string = new \Magento\Framework\Stdlib\StringUtils();
 
         $this->_importFactory = $this->getMock(
             'Magento\ImportExport\Model\ImportFactory',
@@ -121,16 +138,16 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->_resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->_resourceHelper = $this->getMock(
-            'Magento\ImportExport\Model\Resource\Helper',
+            'Magento\ImportExport\Model\ResourceModel\Helper',
             [],
             [],
             '',
             false
         );
         $this->_dataFactory = $this->getMock(
-            'Magento\CustomerImportExport\Model\Resource\Import\CustomerComposite\DataFactory',
+            'Magento\CustomerImportExport\Model\ResourceModel\Import\CustomerComposite\DataFactory',
             [],
             [],
             '',
@@ -151,6 +168,33 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->errorFactory = $this->getMock(
+            '\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
+
+        $this->error = $this->getMock(
+            '\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError',
+            ['init'],
+            [],
+            '',
+            false
+        );
+
+        $this->errorFactory->expects($this->any())->method('create')->will($this->returnValue($this->error));
+        $this->error->expects($this->any())->method('init')->will($this->returnValue(true));
+
+        $this->errorAggregator = $this->getMock(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
+            ['hasToBeTerminated'],
+            [$this->errorFactory],
+            '',
+            true
+        );
+
         $this->_scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
     }
 
@@ -166,6 +210,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
             $this->_importFactory,
             $this->_resourceHelper,
             $this->_resource,
+            $this->errorAggregator,
             $this->_dataFactory,
             $this->_customerFactory,
             $this->_addressFactory,
@@ -274,7 +319,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
 
         $attributeList = [];
         foreach ($this->_customerAttributes as $code) {
-            $attribute = new \Magento\Framework\Object(['attribute_code' => $code]);
+            $attribute = new \Magento\Framework\DataObject(['attribute_code' => $code]);
             $attributeList[] = $attribute;
         }
         $customerEntity->expects(
@@ -309,7 +354,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
 
         $attributeList = [];
         foreach ($this->_addressAttributes as $code) {
-            $attribute = new \Magento\Framework\Object(['attribute_code' => $code]);
+            $attribute = new \Magento\Framework\DataObject(['attribute_code' => $code]);
             $attributeList[] = $attribute;
         }
         $addressEntity->expects(
@@ -542,24 +587,6 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
                 '$expectedErrors' => [],
                 '$behavior' => Import::BEHAVIOR_APPEND,
             ],
-            'customer and addresses row with filed validation, append behavior' => [
-                '$rows' => [
-                    [
-                        Customer::COLUMN_EMAIL => 'test@test.com',
-                        Customer::COLUMN_WEBSITE => 'admin',
-                        Address::COLUMN_ADDRESS_ID => null,
-                    ],
-                    [
-                        Customer::COLUMN_EMAIL => '',
-                        Customer::COLUMN_WEBSITE => '',
-                        Address::COLUMN_ADDRESS_ID => 1
-                    ],
-                ],
-                '$calls' => ['customerValidationCalls' => 1, 'addressValidationCalls' => 0],
-                '$validationReturn' => false,
-                '$expectedErrors' => ['Orphan rows that will be skipped due default row errors'],
-                '$behavior' => Import::BEHAVIOR_APPEND,
-            ]
         ];
     }
 
@@ -623,42 +650,6 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         $modelUnderTest->setSource($source);
     }
 
-    public function testGetErrorMessages()
-    {
-        $errorMessages = [
-            'Required field' => [1, 2, 3],
-            'Bad password' => [1],
-            'Wrong website' => [1, 2],
-        ];
-        $customerEntity = $this->_getCustomerEntityMock();
-        $customerEntity->expects($this->once())->method('getErrorMessages')->will($this->returnValue($errorMessages));
-
-        $errorMessages = ['Required field' => [2, 3, 4, 5], 'Wrong address' => [1, 2]];
-        $addressEntity = $this->_getAddressEntityMock();
-        $addressEntity->expects($this->once())->method('getErrorMessages')->will($this->returnValue($errorMessages));
-
-        $data = $this->_getModelDependencies();
-        $data['customer_entity'] = $customerEntity;
-        $data['address_entity'] = $addressEntity;
-
-        $modelUnderTest = $this->_createModelMock($data);
-
-        $modelUnderTest->addRowError('Bad password', 1);
-
-        $expectedErrors = [
-            'Required field' => [1, 2, 3, 4, 5],
-            'Bad password' => [2],
-            'Wrong website' => [1, 2],
-            'Wrong address' => [1, 2],
-        ];
-
-        $actualErrors = $modelUnderTest->getErrorMessages();
-        foreach ($expectedErrors as $error => $rows) {
-            $this->assertArrayHasKey($error, $actualErrors);
-            $this->assertSame($rows, array_values($actualErrors[$error]));
-        }
-    }
-
     public function testPrepareRowForDb()
     {
         $modelUnderTest = $this->_getModelMockForPrepareRowForDb();
@@ -674,7 +665,7 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Callback for \Magento\ImportExport\Model\Resource\Import\Data::saveBunch to verify correctness of data
+     * Callback for \Magento\ImportExport\Model\ResourceModel\Import\Data::saveBunch to verify correctness of data
      * for method CustomerComposite::_prepareRowForDb
      *
      * @param string $entityType
@@ -762,26 +753,6 @@ class CustomerCompositeTest extends \PHPUnit_Framework_TestCase
         } else {
             $this->assertFalse($importResult);
         }
-    }
-
-    public function testGetErrorsCount()
-    {
-        $customerReturnData = 1;
-        $addressReturnData = 2;
-        $model = $this->_getModelForGetterTest('getErrorsCount', $customerReturnData, $addressReturnData);
-        $model->addRowError(CustomerComposite::ERROR_ROW_IS_ORPHAN, 1);
-
-        $this->assertEquals($customerReturnData + $addressReturnData + 1, $model->getErrorsCount());
-    }
-
-    public function testGetInvalidRowsCount()
-    {
-        $customerReturnData = 3;
-        $addressReturnData = 2;
-        $model = $this->_getModelForGetterTest('getInvalidRowsCount', $customerReturnData, $addressReturnData);
-        $model->addRowError(CustomerComposite::ERROR_ROW_IS_ORPHAN, 1);
-
-        $this->assertEquals($customerReturnData + $addressReturnData + 1, $model->getInvalidRowsCount());
     }
 
     public function testGetProcessedEntitiesCount()

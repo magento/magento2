@@ -30,7 +30,7 @@ class AssertAccessTokensErrorRevokeMessage extends AbstractConstraint
     {
         \PHPUnit_Framework_Assert::assertEquals(
             self::ERROR_MESSAGE,
-            $userEdit->getMessagesBlock()->getErrorMessages()
+            $userEdit->getMessagesBlock()->getErrorMessage()
         );
     }
 

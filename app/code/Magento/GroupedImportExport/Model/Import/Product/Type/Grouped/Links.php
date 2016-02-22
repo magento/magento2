@@ -5,13 +5,15 @@
  */
 namespace Magento\GroupedImportExport\Model\Import\Product\Type\Grouped;
 
+use Magento\Framework\App\ResourceConnection;
+
 /**
  * Processing db operations for import entity of grouped product type
  */
 class Links
 {
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Link
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Link
      */
     protected $productLink;
 
@@ -38,18 +40,18 @@ class Links
     protected $attributes;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Product\Link $productLink
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Link $productLink
+     * @param ResourceConnection $resource
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Product\Link $productLink,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Catalog\Model\ResourceModel\Product\Link $productLink,
+        ResourceConnection $resource,
         \Magento\ImportExport\Model\ImportFactory $importFactory
     ) {
         $this->productLink = $productLink;
         $this->importFactory = $importFactory;
-        $this->connection = $resource->getConnection('write');
+        $this->connection = $resource->getConnection();
     }
 
     /**
@@ -147,7 +149,7 @@ class Links
      */
     protected function getLinkTypeId()
     {
-        return \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED;
+        return \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED;
     }
 
     /**

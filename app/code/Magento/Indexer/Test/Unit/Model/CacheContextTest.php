@@ -9,7 +9,7 @@ namespace Magento\Indexer\Test\Unit\Model;
 class CacheContextTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Indexer\Model\CacheContext
+     * @var \Magento\Framework\Indexer\CacheContext
      */
     protected $context;
 
@@ -18,7 +18,7 @@ class CacheContextTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->context = new \Magento\Indexer\Model\CacheContext();
+        $this->context = new \Magento\Framework\Indexer\CacheContext();
     }
 
     /**

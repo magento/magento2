@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\View\Design\Theme\FileInterface" type="Magento\Theme\Model\Theme\File" />
     <preference for="Magento\Framework\View\Design\Theme\ThemeProviderInterface" type="Magento\Theme\Model\Theme\ThemeProvider" />
     <preference for="Magento\Framework\View\Design\Theme\FileProviderInterface" type="Magento\Theme\Model\Theme\FileProvider" />
@@ -13,6 +13,24 @@
     <preference for="Magento\Framework\App\DesignInterface" type="Magento\Theme\Model\Design" />
     <preference for="Magento\Framework\View\Page\FaviconInterface" type="Magento\Theme\Model\Favicon\Favicon" />
     <preference for="Magento\Framework\View\Design\Theme\ListInterface" type="Magento\Theme\Model\Theme\Collection" />
+    <preference for="Magento\Framework\View\Element\Message\InterpretationStrategyInterface" type="Magento\Framework\View\Element\Message\InterpretationMediator" />
+    <type name="Magento\Framework\View\Element\Message\Renderer\RenderersPool">
+        <arguments>
+            <argument name="renderers" xsi:type="array">
+                <item name="escape_renderer" xsi:type="object">Magento\Framework\View\Element\Message\Renderer\EscapeRenderer</item>
+                <item name="block_renderer" xsi:type="object">Magento\Framework\View\Element\Message\Renderer\BlockRenderer</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\Message\MessageConfigurationsPool">
+        <arguments>
+            <argument name="configurationsMap" xsi:type="array">
+                <item name="default_message_identifier" xsi:type="array">
+                    <item name="renderer" xsi:type="const">\Magento\Framework\View\Element\Message\Renderer\EscapeRenderer::CODE</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Theme\Model\Config">
         <arguments>
             <argument name="configCache" xsi:type="object">Magento\Framework\App\Cache\Type\Config</argument>
@@ -64,7 +82,7 @@
     <type name="Magento\Theme\Model\View\Design">
         <arguments>
             <argument name="themes" xsi:type="array">
-                <item name="frontend" xsi:type="string">Magento/blank</item>
+                <item name="frontend" xsi:type="string">Magento/luma</item>
                 <item name="adminhtml" xsi:type="string">Magento/backend</item>
             </argument>
         </arguments>

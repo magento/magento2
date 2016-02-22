@@ -5,11 +5,11 @@
  */
 namespace Magento\Authorizenet\Model;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Response object
  */
-class Response extends Object
+class Response extends DataObject
 {
 }

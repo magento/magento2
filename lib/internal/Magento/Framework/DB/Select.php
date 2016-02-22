@@ -50,14 +50,21 @@ class Select extends \Zend_Db_Select
      * Class constructor
      * Add straight join support
      *
-     * @param \Zend_Db_Adapter_Abstract $adapter
+     * @param Adapter\Pdo\Mysql $adapter
+     * @param Select\SelectRenderer $selectRenderer
+     * @param array $parts
      */
-    public function __construct(\Zend_Db_Adapter_Abstract $adapter)
-    {
+    public function __construct(
+        \Magento\Framework\DB\Adapter\Pdo\Mysql $adapter,
+        \Magento\Framework\DB\Select\SelectRenderer $selectRenderer,
+        $parts = []
+    ) {
+        self::$_partsInit = array_merge(self::$_partsInit, $parts);
         if (!isset(self::$_partsInit[self::STRAIGHT_JOIN])) {
             self::$_partsInit = [self::STRAIGHT_JOIN => false] + self::$_partsInit;
         }
 
+        $this->selectRenderer = $selectRenderer;
         parent::__construct($adapter);
     }
 
@@ -101,7 +108,7 @@ class Select extends \Zend_Db_Select
             $type = null;
         }
         if (is_array($value)) {
-            $cond = $this->getAdapter()->quoteInto($cond, $value);
+            $cond = $this->getConnection()->quoteInto($cond, $value);
             $value = null;
         }
         return parent::where($cond, $value, $type);
@@ -274,7 +281,7 @@ class Select extends \Zend_Db_Select
      * @param  string $cond Join on this condition
      * @param  array|string $cols The columns to select from the joined table
      * @param  string $schema The database name to specify, if any.
-     * @return \Zend_Db_Select This \Zend_Db_Select object
+     * @return \Magento\Framework\DB\Select This \Magento\Framework\DB\Select object
      * @throws \Zend_Db_Select_Exception
      */
     protected function _join($type, $name, $cond, $cols, $schema = null)
@@ -315,7 +322,7 @@ class Select extends \Zend_Db_Select
      */
     public function crossUpdateFromSelect($table)
     {
-        return $this->getAdapter()->updateFromSelect($this, $table);
+        return $this->getConnection()->updateFromSelect($this, $table);
     }
 
     /**
@@ -329,7 +336,7 @@ class Select extends \Zend_Db_Select
     public function insertFromSelect($tableName, $fields = [], $onDuplicate = true)
     {
         $mode = $onDuplicate ? AdapterInterface::INSERT_ON_DUPLICATE : false;
-        return $this->getAdapter()->insertFromSelect($this, $tableName, $fields, $mode);
+        return $this->getConnection()->insertFromSelect($this, $tableName, $fields, $mode);
     }
 
     /**
@@ -341,7 +348,7 @@ class Select extends \Zend_Db_Select
      */
     public function insertIgnoreFromSelect($tableName, $fields = [])
     {
-        return $this->getAdapter()->insertFromSelect($this, $tableName, $fields, AdapterInterface::INSERT_IGNORE);
+        return $this->getConnection()->insertFromSelect($this, $tableName, $fields, AdapterInterface::INSERT_IGNORE);
     }
 
     /**
@@ -352,7 +359,7 @@ class Select extends \Zend_Db_Select
      */
     public function deleteFromSelect($table)
     {
-        return $this->getAdapter()->deleteFromSelect($this, $table);
+        return $this->getConnection()->deleteFromSelect($this, $table);
     }
 
     /**
@@ -473,5 +480,25 @@ class Select extends \Zend_Db_Select
 
         $this->where($exists);
         return $this;
+    }
+
+    /**
+     * Get adapter
+     *
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
+    public function getConnection()
+    {
+        return $this->_adapter;
+    }
+
+    /**
+     * Converts this object to an SQL SELECT string.
+     *
+     * @return string|null This object as a SELECT string. (or null if a string cannot be produced.)
+     */
+    public function assemble()
+    {
+        return $this->selectRenderer->render($this);
     }
 }

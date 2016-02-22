@@ -19,7 +19,8 @@ class Status implements \Magento\Framework\Option\ArrayInterface
     {
         return [
             ['value' => \Magento\Integration\Model\Integration::STATUS_INACTIVE, 'label' => __('Inactive')],
-            ['value' => \Magento\Integration\Model\Integration::STATUS_ACTIVE, 'label' => __('Active')]
+            ['value' => \Magento\Integration\Model\Integration::STATUS_ACTIVE, 'label' => __('Active')],
+            ['value' => \Magento\Integration\Model\Integration::STATUS_RECREATED, 'label' => __('Reset')]
         ];
     }
 }

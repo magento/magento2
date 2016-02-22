@@ -6,7 +6,9 @@
 namespace Magento\Framework\View\Element\UiComponent\Config;
 
 use Magento\Framework\Config\Dom;
+use Magento\Framework\Config\Dom\UrnResolver;
 use Magento\Framework\Module\Dir\Reader as DirectoryReader;
+use \Magento\Framework\Config\ValidationStateInterface;
 
 /**
  * Class DomMerger
@@ -17,6 +19,11 @@ class DomMerger implements DomMergerInterface
      * Format of items in errors array to be used by default. Available placeholders - fields of \LibXMLError.
      */
     const ERROR_FORMAT_DEFAULT = "Message: %message%\nLine: %line%\n";
+
+    /**
+     * @var \Magento\Framework\Config\ValidationStateInterface
+     */
+    private $validationState;
 
     /**
      * Location schema file
@@ -56,32 +63,26 @@ class DomMerger implements DomMergerInterface
     /**
      * Build DOM with initial XML contents and specifying identifier attributes for merging
      *
-     * Format of $schemaFileType: array('etc', 'sql', 'data', 'i18n', 'view', 'Controller')
-     * Format of $schemaFileModule: 'Magento_XXXXX'
-     * Format of $schemaFileName: 'schema.xsd'
+     * Format of $schema: Absolute schema file path or URN
      * Format of $idAttributes: array('name', 'id')
      * Format of $contextXPath: array('/config/ui')
      * The path to ID attribute name should not include any attribute notations or modifiers -- only node names
      *
-     * @param string $schemaFileType
-     * @param string $schemaFileModule
-     * @param string $schemaFileName
-     * @param DirectoryReader $directoryReader
+     * @param ValidationStateInterface $validationState
+     * @param string $schema
      * @param bool $isMergeSimpleXMLElement
      * @param array $contextXPath
      * @param array $idAttributes
      */
     public function __construct(
-        DirectoryReader $directoryReader,
-        $schemaFileType,
-        $schemaFileModule,
-        $schemaFileName,
+        ValidationStateInterface $validationState,
+        $schema,
         $isMergeSimpleXMLElement = false,
         array $contextXPath = [],
         array $idAttributes = []
     ) {
-        $this->schemaFilePath = $directoryReader->getModuleDir($schemaFileType, $schemaFileModule) . '/'
-            . trim($schemaFileName, '/');
+        $this->validationState = $validationState;
+        $this->schema = $schema;
         $this->isMergeSimpleXMLElement = $isMergeSimpleXMLElement;
         $this->contextXPath = $contextXPath;
         $this->idAttributes = $idAttributes;
@@ -321,10 +322,12 @@ class DomMerger implements DomMergerInterface
     {
         $domDocument = new \DOMDocument();
         $domDocument->loadXML($xml);
-        if ($this->schemaFilePath) {
+        if ($this->validationState->isValidationRequired() && $this->schema) {
             $errors = $this->validateDomDocument($domDocument);
             if (count($errors)) {
-                throw new \Magento\Framework\Exception\LocalizedException(implode("\n", $errors));
+                throw new \Magento\Framework\Exception\LocalizedException(
+                    new \Magento\Framework\Phrase(implode("\n", $errors))
+                );
             }
         }
 
@@ -339,23 +342,12 @@ class DomMerger implements DomMergerInterface
      * @return array of errors
      * @throws \Exception
      */
-    protected function validateDomDocument(\DOMDocument $domDocument, $schemaFilePath = null)
+    protected function validateDomDocument(\DOMDocument $domDocument, $schema = null)
     {
-        $schemaFilePath = $schemaFilePath !== null ? $schemaFilePath : $this->schemaFilePath;
+        $schema = $schema !== null ? $schema : $this->schema;
         libxml_use_internal_errors(true);
         try {
-            $result = $domDocument->schemaValidate($schemaFilePath);
-            $errors = [];
-            if (!$result) {
-                $validationErrors = libxml_get_errors();
-                if (count($validationErrors)) {
-                    foreach ($validationErrors as $error) {
-                        $errors[] = $this->renderErrorMessage($error, static::ERROR_FORMAT_DEFAULT);
-                    }
-                } else {
-                    $errors[] = 'Unknown validation error';
-                }
-            }
+            $errors = \Magento\Framework\Config\Dom::validateDomDocument($domDocument, $schema);
         } catch (\Exception $exception) {
             libxml_use_internal_errors(false);
             throw $exception;
@@ -450,6 +442,9 @@ class DomMerger implements DomMergerInterface
      */
     public function validate($schemaFilePath = null)
     {
+        if (!$this->validationState->isValidationRequired()) {
+            return [];
+        }
         return $this->validateDomDocument($this->getDom(), $schemaFilePath);
     }
 }

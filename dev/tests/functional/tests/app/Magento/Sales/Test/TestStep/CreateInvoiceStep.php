@@ -69,6 +69,13 @@ class CreateInvoiceStep implements TestStepInterface
     protected $data;
 
     /**
+     * Whether Invoice is partial.
+     *
+     * @var string
+     */
+    protected $isInvoicePartial;
+
+    /**
      * @construct
      * @param OrderIndex $orderIndex
      * @param SalesOrderView $salesOrderView
@@ -76,7 +83,8 @@ class CreateInvoiceStep implements TestStepInterface
      * @param OrderInvoiceView $orderInvoiceView
      * @param OrderInjectable $order
      * @param OrderShipmentView $orderShipmentView
-     * @param array|null $data[optional]
+     * @param array|null $data [optional]
+     * @param string $isInvoicePartial [optional]
      */
     public function __construct(
         OrderIndex $orderIndex,
@@ -85,7 +93,8 @@ class CreateInvoiceStep implements TestStepInterface
         OrderInvoiceView $orderInvoiceView,
         OrderInjectable $order,
         OrderShipmentView $orderShipmentView,
-        $data = null
+        $data = null,
+        $isInvoicePartial = null
     ) {
         $this->orderIndex = $orderIndex;
         $this->salesOrderView = $salesOrderView;
@@ -94,6 +103,7 @@ class CreateInvoiceStep implements TestStepInterface
         $this->order = $order;
         $this->orderShipmentView = $orderShipmentView;
         $this->data = $data;
+        $this->isInvoicePartial = $isInvoicePartial;
     }
 
     /**
@@ -107,8 +117,16 @@ class CreateInvoiceStep implements TestStepInterface
         $this->orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $this->order->getId()]);
         $this->salesOrderView->getPageActions()->invoice();
         if (!empty($this->data)) {
-            $this->orderInvoiceNew->getFormBlock()->fillData($this->data, $this->order->getEntityId()['products']);
+            $this->orderInvoiceNew->getFormBlock()->fillProductData(
+                $this->data,
+                $this->order->getEntityId()['products']
+            );
             $this->orderInvoiceNew->getFormBlock()->updateQty();
+            $this->orderInvoiceNew->getFormBlock()->fillFormData($this->data);
+            if (isset($this->isInvoicePartial)) {
+                $this->orderInvoiceNew->getFormBlock()->submit();
+                $this->salesOrderView->getPageActions()->invoice();
+            }
         }
         $this->orderInvoiceNew->getFormBlock()->submit();
         $invoiceIds = $this->getInvoiceIds();
@@ -117,8 +135,10 @@ class CreateInvoiceStep implements TestStepInterface
         }
 
         return [
-            'invoiceIds' => $invoiceIds,
-            'shipmentIds' => isset($shipmentIds) ? $shipmentIds : null,
+            'ids' => [
+                'invoiceIds' => $invoiceIds,
+                'shipmentIds' => isset($shipmentIds) ? $shipmentIds : null,
+            ]
         ];
     }
 

@@ -46,7 +46,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             $escaperMock,
             $this->urlBuilder
         );
-        $formMock = new \Magento\Framework\Object();
+        $formMock = new \Magento\Framework\DataObject();
         $formMock->getHtmlIdPrefix('id_prefix');
         $formMock->getHtmlIdPrefix('id_suffix');
         $this->_image->setForm($formMock);

@@ -173,11 +173,11 @@ class TypeListTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns prepared type
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     private function _getPreparedType()
     {
-        return new \Magento\Framework\Object(
+        return new \Magento\Framework\DataObject(
             [
                 'id' => self::TYPE_KEY,
                 'cache_type' => $this->_typesArray[self::TYPE_KEY]['label'],

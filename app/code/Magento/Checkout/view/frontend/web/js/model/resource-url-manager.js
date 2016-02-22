@@ -13,6 +13,15 @@ define(
     function(customer, urlBuilder, utils) {
         "use strict";
         return {
+            getUrlForTotalsEstimationForNewAddress: function(quote) {
+                var params = (this.getCheckoutMethod() == 'guest') ? {cartId: quote.getQuoteId()} : {};
+                var urls = {
+                    'guest': '/guest-carts/:cartId/totals-information',
+                    'customer': '/carts/mine/totals-information'
+                };
+                return this.getUrl(urls, params);
+            },
+
             getUrlForEstimationShippingMethodsForNewAddress: function(quote) {
                 var params = (this.getCheckoutMethod() == 'guest') ? {quoteId: quote.getQuoteId()} : {};
                 var urls = {
@@ -60,7 +69,7 @@ define(
             getUrlForSetShippingInformation: function(quote) {
                 var params = (this.getCheckoutMethod() == 'guest') ? {cartId: quote.getQuoteId()} : {};
                 var urls = {
-                    'guest': '/carts/:cartId/shipping-information',
+                    'guest': '/guest-carts/:cartId/shipping-information',
                     'customer': '/carts/mine/shipping-information'
                 };
                 return this.getUrl(urls, params);

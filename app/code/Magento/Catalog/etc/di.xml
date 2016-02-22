@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Catalog\Api\Data\ProductInterface" type="Magento\Catalog\Model\Product" />
     <preference for="Magento\Catalog\Api\ProductRepositoryInterface" type="Magento\Catalog\Model\ProductRepository" />
     <preference for="Magento\Catalog\Api\CategoryAttributeRepositoryInterface" type="Magento\Catalog\Model\Category\AttributeRepository" />
@@ -25,7 +25,7 @@
     <preference for="Magento\Catalog\Api\CategoryRepositoryInterface" type="Magento\Catalog\Model\CategoryRepository" />
     <preference for="Magento\Catalog\Api\Data\CategoryTreeInterface" type="Magento\Catalog\Model\Category" />
     <preference for="Magento\Catalog\Api\ProductAttributeRepositoryInterface" type="Magento\Catalog\Model\Product\Attribute\Repository" />
-    <preference for="Magento\Catalog\Api\Data\ProductAttributeInterface" type="Magento\Catalog\Model\Resource\Eav\Attribute" />
+    <preference for="Magento\Catalog\Api\Data\ProductAttributeInterface" type="Magento\Catalog\Model\ResourceModel\Eav\Attribute" />
     <preference for="Magento\Catalog\Api\ProductTypeListInterface" type="Magento\Catalog\Model\ProductTypeList" />
     <preference for="Magento\Catalog\Api\Data\ProductTypeInterface" type="Magento\Catalog\Model\ProductType" />
     <preference for="Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface" type="Magento\Catalog\Model\Product\Gallery\GalleryManagement" />
@@ -42,7 +42,8 @@
     <preference for="Magento\Catalog\Api\ProductAttributeManagementInterface" type="Magento\Catalog\Model\Product\Attribute\Management" />
     <preference for="Magento\Catalog\Api\AttributeSetManagementInterface" type="Magento\Catalog\Model\Product\Attribute\SetManagement" />
     <preference for="Magento\Catalog\Api\AttributeSetRepositoryInterface" type="Magento\Catalog\Model\Product\Attribute\SetRepository" />
-    <type name="Magento\Log\Model\Resource\Log">
+    <preference for="Magento\Catalog\Api\ProductManagementInterface" type="Magento\Catalog\Model\ProductManagement" />
+    <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
     <type name="Magento\Indexer\Model\Indexer\State">
@@ -62,13 +63,18 @@
             <argument name="changelog" xsi:type="object" shared="false">Magento\Framework\Mview\View\ChangelogInterface</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool">
+        <arguments>
+            <argument name="mediaGalleryEntryConvertersCollection" xsi:type="array">
+                <item name="image" xsi:type="object">Magento\Catalog\Model\Product\Attribute\Backend\Media\ImageEntryConverter</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Catalog\Helper\Product">
         <arguments>
-            <argument name="typeSwitcherLabel" xsi:type="string">Virtual</argument>
             <argument name="catalogSession" xsi:type="object">Magento\Catalog\Model\Session\Proxy</argument>
             <argument name="reindexPriceIndexerData" xsi:type="array">
                 <item name="byDataResult" xsi:type="array">
-                    <item name="group_price_changed" xsi:type="string">group_price_changed</item>
                     <item name="tier_price_changed" xsi:type="string">tier_price_changed</item>
                 </item>
                 <item name="byDataChange" xsi:type="array">
@@ -101,9 +107,9 @@
             <argument name="productLink" xsi:type="object">Magento\Catalog\Model\Product\Link\Proxy</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Resource\Product\Collection">
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Collection">
         <arguments>
-            <argument name="catalogUrl" xsi:type="object">Magento\Catalog\Model\Resource\Url\Proxy</argument>
+            <argument name="catalogUrl" xsi:type="object">Magento\Catalog\Model\ResourceModel\Url\Proxy</argument>
             <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
         </arguments>
     </type>
@@ -158,16 +164,16 @@
             <argument name="storage" xsi:type="object">Magento\Catalog\Model\Session\Storage</argument>
         </arguments>
     </type>
-    <type name="Magento\Store\Model\Resource\Website">
+    <type name="Magento\Store\Model\ResourceModel\Website">
         <plugin name="priceIndexerOnWebsiteDelete" type="Magento\Catalog\Model\Indexer\Product\Price\Plugin\Website"/>
     </type>
-    <type name="Magento\Store\Model\Resource\Store">
+    <type name="Magento\Store\Model\ResourceModel\Store">
         <plugin name="storeViewResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreView"/>
         <plugin name="catalogProductFlatIndexerStore" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\Store" />
         <plugin name="categoryStoreAroundSave" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreView"/>
         <plugin name="productAttributesStoreViewSave" type="Magento\Catalog\Model\Indexer\Product\Eav\Plugin\StoreView"/>
     </type>
-    <type name="Magento\Store\Model\Resource\Group">
+    <type name="Magento\Store\Model\ResourceModel\Group">
         <plugin name="storeGroupResourceAroundSave" type="Magento\Catalog\Model\Indexer\Category\Flat\Plugin\StoreGroup"/>
         <plugin name="catalogProductFlatIndexerStoreGroup" type="Magento\Catalog\Model\Indexer\Product\Flat\Plugin\StoreGroup" />
         <plugin name="categoryStoreGroupAroundSave" type="Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreGroup"/>
@@ -185,7 +191,7 @@
     </type>
     <type name="Magento\Catalog\Model\Indexer\Product\Price\AbstractAction">
         <arguments>
-            <argument name="defaultPriceIndexer" xsi:type="object">Magento\Catalog\Model\Resource\Product\Indexer\Price\DefaultPrice</argument>
+            <argument name="defaultPriceIndexer" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\DefaultPrice</argument>
         </arguments>
     </type>
     <type name="Magento\Eav\Model\Entity\Attribute\Set">
@@ -226,7 +232,7 @@
     <type name="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite">
         <arguments>
             <argument name="propertyMappers" xsi:type="array">
-                <item name="catalog" xsi:type="string">Magento\Catalog\Model\Resource\Setup\PropertyMapper</item>
+                <item name="catalog" xsi:type="string">Magento\Catalog\Model\ResourceModel\Setup\PropertyMapper</item>
             </argument>
         </arguments>
     </type>
@@ -267,7 +273,7 @@
     </type>
     <type name="Magento\Catalog\Model\Indexer\Product\Price\Processor">
         <arguments>
-            <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\IndexerInterface</argument>
+            <argument name="indexer" xsi:type="object" shared="false">Magento\Framework\Indexer\IndexerInterface</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Indexer\Product\Flat">
@@ -303,7 +309,6 @@
                 <item name="regular_price" xsi:type="string">Magento\Catalog\Pricing\Price\RegularPrice</item>
                 <item name="final_price" xsi:type="string">Magento\Catalog\Pricing\Price\FinalPrice</item>
                 <item name="tier_price" xsi:type="string">Magento\Catalog\Pricing\Price\TierPrice</item>
-                <item name="group_price" xsi:type="string">Magento\Catalog\Pricing\Price\GroupPrice</item>
                 <item name="special_price" xsi:type="string">Magento\Catalog\Pricing\Price\SpecialPrice</item>
                 <item name="base_price" xsi:type="string">Magento\Catalog\Pricing\Price\BasePrice</item>
                 <item name="custom_option_price" xsi:type="string">Magento\Catalog\Pricing\Price\CustomOptionPrice</item>
@@ -376,12 +381,12 @@
     </type>
     <virtualType name="Magento\Catalog\Block\Category\Widget\Link" type="Magento\Catalog\Block\Widget\Link">
         <arguments>
-            <argument name="entityResource" xsi:type="object">Magento\Catalog\Model\Resource\Category</argument>
+            <argument name="entityResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Category</argument>
         </arguments>
     </virtualType>
     <virtualType name="Magento\Catalog\Block\Product\Widget\Link" type="Magento\Catalog\Block\Widget\Link">
         <arguments>
-            <argument name="entityResource" xsi:type="object">Magento\Catalog\Model\Resource\Product</argument>
+            <argument name="entityResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Product</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Framework\App\Rss\RssManagerInterface">
@@ -445,8 +450,8 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Resource\Config">
-        <plugin name="productListingAttributesCaching" type="Magento\Catalog\Plugin\Model\Resource\Config" />
+    <type name="Magento\Catalog\Model\ResourceModel\Config">
+        <plugin name="productListingAttributesCaching" type="Magento\Catalog\Plugin\Model\ResourceModel\Config" />
     </type>
     <preference for="Magento\Catalog\Api\ProductLinkTypeListInterface" type="Magento\Catalog\Model\Product\LinkTypeProvider" />
     <preference for="Magento\Catalog\Api\Data\ProductLinkAttributeInterface" type="\Magento\Catalog\Model\ProductLink\Attribute" />
@@ -454,10 +459,10 @@
     <preference for="Magento\Catalog\Api\ProductLinkManagementInterface" type="Magento\Catalog\Model\ProductLink\Management" />
     <preference for="Magento\Catalog\Api\Data\ProductLinkInterface" type="Magento\Catalog\Model\ProductLink\Link" />
     <preference for="\Magento\Catalog\Api\CategoryLinkManagementInterface" type="\Magento\Catalog\Model\CategoryLinkManagement" />
+    <preference for="Magento\Catalog\Api\Data\ProductWebsiteLinkInterface" type="Magento\Catalog\Model\ProductWebsiteLink" />
+    <preference for="Magento\Catalog\Api\ProductWebsiteLinkRepositoryInterface" type="Magento\Catalog\Model\ProductWebsiteLinkRepository" />
     <preference for="\Magento\Catalog\Api\CategoryLinkRepositoryInterface" type="\Magento\Catalog\Model\CategoryLinkRepository" />
     <preference for="Magento\Catalog\Api\Data\ProductCustomOptionInterface" type="Magento\Catalog\Model\Product\Option" />
-    <preference for="Magento\Catalog\Api\ProductGroupPriceManagementInterface" type="Magento\Catalog\Model\Product\GroupPriceManagement" />
-    <preference for="Magento\Catalog\Api\Data\ProductGroupPriceInterface" type="Magento\Catalog\Model\Product\GroupPrice" />
     <preference for="Magento\Catalog\Api\ProductCustomOptionRepositoryInterface" type="\Magento\Catalog\Model\Product\Option\Repository" />
     <preference for="Magento\Catalog\Api\Data\ProductCustomOptionTypeInterface" type="Magento\Catalog\Model\Product\Option\Type" />
     <preference for="Magento\Catalog\Api\ProductTierPriceManagementInterface" type="\Magento\Catalog\Model\Product\TierPriceManagement" />
@@ -465,14 +470,16 @@
     <preference for="Magento\Catalog\Api\Data\CategoryProductLinkInterface" type="Magento\Catalog\Model\CategoryProductLink" />
     <preference for="Magento\Catalog\Api\ProductCustomOptionTypeListInterface" type="Magento\Catalog\Model\ProductOptions\TypeList" />
     <preference for="Magento\Catalog\Api\Data\ProductCustomOptionValuesInterface" type="\Magento\Catalog\Model\Product\Option\Value" />
-    <virtualType name="Magento\Catalog\Model\Resource\Attribute\Collection" type="Magento\Eav\Model\Resource\Entity\Attribute\Collection">
+    <preference for="Magento\Catalog\Api\Data\CustomOptionInterface" type="Magento\Catalog\Model\CustomOptions\CustomOption" />
+    <preference for="Magento\Catalog\Api\Data\ProductOptionInterface" type="Magento\Catalog\Model\ProductOption" />
+    <virtualType name="Magento\Catalog\Model\ResourceModel\Attribute\Collection" type="Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection">
     </virtualType>
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
-        <plugin name="transactionWrapper" type="\Magento\Catalog\Model\Plugin\ProductRepository\TransactionWrapper" sortOrder="-1"/>
+        <plugin name="transactionWrapper" type="Magento\Catalog\Model\Plugin\ProductRepository\TransactionWrapper" sortOrder="-1"/>
     </type>
     <type name="Magento\Catalog\Model\CategoryRepository">
         <arguments>
-            <argument name="categoryResource" xsi:type="object">Magento\Catalog\Model\Resource\Category\Proxy</argument>
+            <argument name="categoryResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Category\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Helper\Product\ConfigurationPool">
@@ -482,4 +489,116 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="imagesResizeCommand" xsi:type="object">Magento\Catalog\Console\Command\ImagesResizeCommand</item>
+                <item name="productAttributesCleanUp" xsi:type="object">Magento\Catalog\Console\Command\ProductAttributesCleanUp</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Console\Command\ImagesResizeCommand">
+        <arguments>
+            <argument name="productRepository" xsi:type="object">Magento\Catalog\Api\ProductRepositoryInterface\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Config\View">
+        <arguments>
+            <argument name="xpath" xsi:type="array">
+                <item name="image" xsi:type="array">
+                    <item name="/view/media/images" xsi:type="array">
+                        <item name="id" xsi:type="string">module</item>
+                    </item>
+                    <item name="/view/media/images/image" xsi:type="array">
+                        <item name="id1" xsi:type="string">id</item>
+                        <item name="id2" xsi:type="string">type</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Xsd\Media\TypeDataExtractorPool">
+        <arguments>
+            <argument name="extractors" xsi:type="array">
+                <item name="images" xsi:type="object">Magento\Catalog\Model\ImageExtractor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Item\Repository">
+        <arguments>
+            <argument name="cartItemProcessors" xsi:type="array">
+                <item name="custom_options" xsi:type="object">Magento\Catalog\Model\CustomOptions\CustomOptionProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Api\OrderItemRepositoryInterface">
+        <arguments>
+            <argument name="processorPool" xsi:type="array">
+                <item name="custom_options" xsi:type="object">Magento\Catalog\Model\ProductOptionProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Model\OrchestratorPool">
+        <arguments>
+            <argument name="operations" xsi:type="array">
+                <item name="default" xsi:type="array">
+                    <item name="read" xsi:type="string">Magento\Framework\Model\Operation\Read</item>
+                    <item name="create" xsi:type="string">Magento\Framework\Model\Operation\Write\Create</item>
+                    <item name="update" xsi:type="string">Magento\Framework\Model\Operation\Write\Update</item>
+                    <item name="delete" xsi:type="string">Magento\Framework\Model\Operation\Write\Delete</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Model\Entity\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_product_entity</item>
+                    <item name="eavEntityType" xsi:type="string">catalog_product</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                    <item name="entityContext" xsi:type="array">
+                        <item name="store_id" xsi:type="string">store_id</item>
+                    </item>
+                </item>
+                <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_category_entity</item>
+                    <item name="eavEntityType" xsi:type="string">catalog_category</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                    <item name="entityContext" xsi:type="array">
+                        <item name="store_id" xsi:type="string">store_id</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Model\ResourceModel\Db\Relation\ActionPool">
+        <arguments>
+            <argument name="relationActions" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
+                    <item name="read" xsi:type="array">
+                        <item name="optionReader" xsi:type="string">Magento\Catalog\Model\Product\Option\ReadHandler</item>
+                        <item name="mediaGalleryRead" xsi:type="string">Magento\Catalog\Model\Product\Gallery\ReadHandler</item>
+                    </item>
+                    <item name="create" xsi:type="array">
+                        <item name="custom_options" xsi:type="string">Magento\Catalog\Model\Product\Option\SaveHandler</item>
+                        <item name="mediaGalleryCreate" xsi:type="string">Magento\Catalog\Model\Product\Gallery\CreateHandler</item>
+                    </item>
+                    <item name="update" xsi:type="array">
+                        <item name="optionUpdater" xsi:type="string">Magento\Catalog\Model\Product\Option\SaveHandler</item>
+                        <item name="mediaGalleryUpdate" xsi:type="string">Magento\Catalog\Model\Product\Gallery\UpdateHandler</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction">
+        <arguments>
+            <argument name="skipStaticColumns" xsi:type="array">
+                <item name="entity_type_id" xsi:type="string">entity_type_id</item>
+                <item name="attribute_set_id" xsi:type="string">attribute_set_id</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation"  shared="false"/>
 </config>

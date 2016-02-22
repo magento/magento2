@@ -13,11 +13,6 @@ use Magento\Setup\Module\Di\Code\Reader\ClassesScanner;
 class RepositoryGenerator implements OperationInterface
 {
     /**
-     * @var Scanner\DirectoryScanner
-     */
-    private $directoryScanner;
-
-    /**
      * @var Scanner\RepositoryScanner
      */
     private $repositoryScanner;
@@ -33,21 +28,26 @@ class RepositoryGenerator implements OperationInterface
     private $classesScanner;
 
     /**
-     * @param Scanner\DirectoryScanner $directoryScanner
+     * @var Scanner\ConfigurationScanner
+     */
+    private $configurationScanner;
+
+    /**
      * @param ClassesScanner $classesScanner
      * @param Scanner\RepositoryScanner $repositoryScanner
+     * @param Scanner\ConfigurationScanner $configurationScanner
      * @param array $data
      */
     public function __construct(
-        Scanner\DirectoryScanner $directoryScanner,
         ClassesScanner $classesScanner,
         Scanner\RepositoryScanner $repositoryScanner,
+        \Magento\Setup\Module\Di\Code\Scanner\ConfigurationScanner $configurationScanner,
         $data = []
     ) {
-        $this->directoryScanner = $directoryScanner;
         $this->repositoryScanner = $repositoryScanner;
         $this->data = $data;
         $this->classesScanner = $classesScanner;
+        $this->configurationScanner = $configurationScanner;
     }
 
     /**
@@ -57,15 +57,12 @@ class RepositoryGenerator implements OperationInterface
      */
     public function doOperation()
     {
-        if (array_diff(array_keys($this->data), ['filePatterns', 'path'])
-            !== array_diff(['filePatterns', 'path'], array_keys($this->data))) {
-            return;
+        foreach ($this->data['paths'] as $path) {
+            $this->classesScanner->getList($path);
         }
-
-        $this->classesScanner->getList($this->data['path']);
         $this->repositoryScanner->setUseAutoload(false);
-        $files = $this->directoryScanner->scan($this->data['path'], $this->data['filePatterns']);
-        $repositories = $this->repositoryScanner->collectEntities($files['di']);
+        $files = $this->configurationScanner->scan('di.xml');
+        $repositories = $this->repositoryScanner->collectEntities($files);
         foreach ($repositories as $entityName) {
             class_exists($entityName);
         }

@@ -5,113 +5,26 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceBlock name="admin.product.edit.tab.super.config.grid.container">
-            <block class="Magento\Backend\Block\Widget\Grid" name="admin.product.edit.tab.super.config.grid" as="grid">
-                <arguments>
-                    <argument name="id" xsi:type="string">configurable_associated_products_grid</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\ConfigurableProduct\Model\Resource\Product\Collection\AssociatedProduct</argument>
-                    <argument name="use_ajax" xsi:type="string">true</argument>
-                    <argument name="default_sort" xsi:type="string">entity_id</argument>
-                    <argument name="default_dir" xsi:type="string">DESC</argument>
-                    <argument name="save_parameters_in_session" xsi:type="string">0</argument>
-                    <argument name="grid_url" xsi:type="url" path="*/product_superConfig/index">
-                        <param name="_current">1</param>
-                    </argument>
-                </arguments>
-                <block class="Magento\ConfigurableProduct\Block\Product\Configurable\AssociatedSelector\Backend\Grid\ColumnSet" as="grid.columnSet" name="admin.product.edit.tab.super.config.grid.columnSet">
-                    <arguments>
-                        <argument name="id" xsi:type="string">super_product_links</argument>
-                    </arguments>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="entity_id">
-                        <arguments>
-                            <argument name="header" xsi:type="string" translate="true">ID</argument>
-                            <argument name="width" xsi:type="string">60px</argument>
-                            <argument name="type" xsi:type="string">text</argument>
-                            <argument name="index" xsi:type="string">entity_id</argument>
-                            <argument name="id" xsi:type="string">entity_id</argument>
-                            <argument name="filter" xsi:type="string">0</argument>
-                            <argument name="sortable" xsi:type="string">1</argument>
-                            <argument name="renderer" xsi:type="string">Magento\ConfigurableProduct\Block\Product\Configurable\AssociatedSelector\Renderer\Id</argument>
-                        </arguments>
-                    </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="name">
-                        <arguments>
-                            <argument name="header" xsi:type="string" translate="true">Name</argument>
-                            <argument name="type" xsi:type="string">text</argument>
-                            <argument name="escape" xsi:type="string">1</argument>
-                            <argument name="index" xsi:type="string">name</argument>
-                            <argument name="id" xsi:type="string">name</argument>
-                            <argument name="filter" xsi:type="string">0</argument>
-                            <argument name="sortable" xsi:type="string">1</argument>
-                        </arguments>
-                    </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="price">
-                        <arguments>
-                            <argument name="header" xsi:type="string" translate="true">Price</argument>
-                            <argument name="type" xsi:type="string">currency</argument>
-                            <argument name="index" xsi:type="string">price</argument>
-                            <argument name="id" xsi:type="string">price</argument>
-                            <argument name="filter" xsi:type="string">0</argument>
-                            <argument name="sortable" xsi:type="string">1</argument>
-                        </arguments>
-                    </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="sku" name="admin.product.edit.tab.super.config.grid.sku">
-                        <arguments>
-                            <argument name="header" xsi:type="string" translate="true">SKU</argument>
-                            <argument name="type" xsi:type="string">text</argument>
-                            <argument name="escape" xsi:type="string">1</argument>
-                            <argument name="index" xsi:type="string">sku</argument>
-                            <argument name="id" xsi:type="string">sku</argument>
-                            <argument name="filter" xsi:type="string">0</argument>
-                            <argument name="sortable" xsi:type="string">1</argument>
-                        </arguments>
-                    </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="weight">
-                        <arguments>
-                            <argument name="header" xsi:type="string" translate="true">Weight</argument>
-                            <argument name="type" xsi:type="string">text</argument>
-                            <argument name="index" xsi:type="string">weight</argument>
-                            <argument name="id" xsi:type="string">weight</argument>
-                            <argument name="filter" xsi:type="string">0</argument>
-                            <argument name="sortable" xsi:type="string">1</argument>
-                        </arguments>
-                    </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="inventory_in_stock" after="admin.product.edit.tab.super.config.grid.sku">
-                        <arguments>
-                            <argument name="header" xsi:type="string" translate="true">Stock Availability</argument>
-                            <argument name="type" xsi:type="string">text</argument>
-                            <argument name="index" xsi:type="string">inventory_in_stock</argument>
-                            <argument name="id" xsi:type="string">inventory_in_stock</argument>
-                            <argument name="filter" xsi:type="string">0</argument>
-                            <argument name="sortable" xsi:type="string">1</argument>
-                            <argument name="renderer" xsi:type="string">Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super\Config\Grid\Renderer\Inventory</argument>
-                        </arguments>
-                    </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="qty" after="admin.product.edit.tab.super.config.grid.sku">
-                        <arguments>
-                            <argument name="header" xsi:type="string" translate="true">Qty</argument>
-                            <argument name="type" xsi:type="string">text</argument>
-                            <argument name="index" xsi:type="string">qty</argument>
-                            <argument name="id" xsi:type="string">qty</argument>
-                            <argument name="filter" xsi:type="string">0</argument>
-                            <argument name="sortable" xsi:type="string">1</argument>
-                        </arguments>
+        <referenceBlock name="product_tabs">
+            <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config" name="admin.product.edit.tab.super.config.grid.container">
+                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix" template="Magento_ConfigurableProduct::catalog/product/edit/super/matrix.phtml" as="matrix">
+                    <block class="Magento\Ui\Block\Component\StepsWizard" name="variation-steps-wizard">
+                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes" name="step1" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/select_attributes.phtml">
+                            <uiComponent name="product_attributes_listing"/>
+                        </block>
+                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues" name="step2" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/attributes_values.phtml"/>
+                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" name="step3" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/bulk.phtml"/>
+                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary" name="step4" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml"/>
                     </block>
                 </block>
             </block>
+            <action method="addTab">
+                <argument name="name" xsi:type="string">super_config</argument>
+                <argument name="block" xsi:type="string">admin.product.edit.tab.super.config.grid.container</argument>
+            </action>
         </referenceBlock>
-        <referenceContainer name="content">
-            <block class="Magento\Ui\Block\Component\StepsWizard" name="variation-steps-wizard">
-                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes" name="step1" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/select_attributes.phtml">
-                    <uiComponent name="product_attributes_listing"/>
-                </block>
-                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues" name="step2" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/attributes_values.phtml"/>
-                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" name="step3"
-                       template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/bulk.phtml"/>
-                <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary" name="step4" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml"/>
-            </block>
-        </referenceContainer>
+
     </body>
 </page>

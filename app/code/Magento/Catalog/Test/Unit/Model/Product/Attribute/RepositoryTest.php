@@ -66,7 +66,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->attributeResourceMock =
-            $this->getMock('Magento\Catalog\Model\Resource\Attribute', [], [], '', false);
+            $this->getMock('Magento\Catalog\Model\ResourceModel\Attribute', [], [], '', false);
         $this->productHelperMock =
             $this->getMock('Magento\Catalog\Helper\Product', [], [], '', false);
         $this->filterManagerMock =
@@ -75,7 +75,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Eav\Api\AttributeRepositoryInterface', [], [], '', false);
         $this->eavConfigMock = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
         $this->eavConfigMock->expects($this->any())->method('getEntityType')
-            ->willReturn(new \Magento\Framework\Object(['default_attribute_set_id' => 4]));
+            ->willReturn(new \Magento\Framework\DataObject(['default_attribute_set_id' => 4]));
         $this->validatorFactoryMock = $this->getMock(
             'Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory',
             ['create'],
@@ -138,7 +138,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $attributeMock = $this->getMock('Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+        $attributeMock = $this->getMock('Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $this->attributeResourceMock->expects($this->once())->method('delete')->with($attributeMock);
 
         $this->assertEquals(true, $this->model->delete($attributeMock));
@@ -147,7 +147,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     public function testDeleteById()
     {
         $attributeCode = 'some attribute code';
-        $attributeMock = $this->getMock('Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+        $attributeMock = $this->getMock('Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $this->eavAttributeRepositoryMock->expects($this->once())
             ->method('get')
             ->with(
@@ -182,8 +182,8 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testSaveNoSuchEntityException()
     {
-        $attributeMock = $this->getMock('Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
-        $existingModelMock = $this->getMock('Magento\Catalog\Model\Resource\Eav\Attribute', [], [], '', false);
+        $attributeMock = $this->getMock('Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
+        $existingModelMock = $this->getMock('Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $attributeMock->expects($this->once())->method('getAttributeId')->willReturn('12');
         $attributeCode = 'test attribute code';
         $attributeMock->expects($this->once())->method('getAttributeCode')->willReturn($attributeCode);
@@ -207,7 +207,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     public function testSaveInputExceptionRequiredField()
     {
         $attributeMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\Eav\Attribute',
+            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
             ['getFrontendLabels', 'getDefaultFrontendLabel', '__wakeup', 'getAttributeId', 'setAttributeId'],
             [],
             '',
@@ -228,7 +228,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     public function testSaveInputExceptionInvalidFieldValue()
     {
         $attributeMock = $this->getMock(
-            'Magento\Catalog\Model\Resource\Eav\Attribute',
+            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
             ['getFrontendLabels', 'getDefaultFrontendLabel', 'getAttributeId', '__wakeup', 'setAttributeId'],
             [],
             '',

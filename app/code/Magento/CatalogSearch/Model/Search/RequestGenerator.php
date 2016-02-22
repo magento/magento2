@@ -5,8 +5,9 @@
  */
 namespace Magento\CatalogSearch\Model\Search;
 
+use Magento\Catalog\Api\Data\EavAttributeInterface;
 use Magento\Catalog\Model\Entity\Attribute;
-use Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\QueryInterface;
@@ -40,25 +41,31 @@ class RequestGenerator
     public function generate()
     {
         $requests = [];
-        $requests['quick_search_container'] = $this->generateQuickSearchRequest();
+        $requests['catalog_view_container'] =
+            $this->generateRequest(EavAttributeInterface::IS_FILTERABLE, 'catalog_view_container', false);
+        $requests['quick_search_container'] =
+            $this->generateRequest(EavAttributeInterface::IS_FILTERABLE_IN_SEARCH, 'quick_search_container', true);
         $requests['advanced_search_container'] = $this->generateAdvancedSearchRequest();
         return $requests;
     }
 
     /**
-     * Generate quick search request
+     * Generate search request
      *
+     * @param string $attributeType
+     * @param string $container
+     * @param bool $useFulltext
      * @return array
      */
-    private function generateQuickSearchRequest()
+    private function generateRequest($attributeType, $container, $useFulltext)
     {
         $request = [];
         foreach ($this->getSearchableAttributes() as $attribute) {
-            if ($attribute->getIsFilterable()) {
+            if ($attribute->getData($attributeType)) {
                 if (!in_array($attribute->getAttributeCode(), ['price', 'category_ids'])) {
                     $queryName = $attribute->getAttributeCode() . '_query';
 
-                    $request['queries']['quick_search_container']['queryReference'][] = [
+                    $request['queries'][$container]['queryReference'][] = [
                         'clause' => 'should',
                         'ref' => $queryName,
                     ];
@@ -107,10 +114,12 @@ class RequestGenerator
                 //same fields have special semantics
                 continue;
             }
-            $request['queries']['search']['match'][] = [
-                'field' => $attribute->getAttributeCode(),
-                'boost' => $attribute->getSearchWeight() ?: 1,
-            ];
+            if ($useFulltext) {
+                $request['queries']['search']['match'][] = [
+                    'field' => $attribute->getAttributeCode(),
+                    'boost' => $attribute->getSearchWeight() ?: 1,
+                ];
+            }
         }
         return $request;
     }
@@ -122,11 +131,11 @@ class RequestGenerator
      */
     protected function getSearchableAttributes()
     {
-        /** @var \Magento\Catalog\Model\Resource\Product\Attribute\Collection $productAttributes */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection $productAttributes */
         $productAttributes = $this->productAttributeCollectionFactory->create();
         $productAttributes->addFieldToFilter(
-            ['is_searchable', 'is_visible_in_advanced_search', 'is_filterable'],
-            [1, 1, [1, 2]]
+            ['is_searchable', 'is_visible_in_advanced_search', 'is_filterable', 'is_filterable_in_search'],
+            [1, 1, [1, 2], 1]
         );
 
         return $productAttributes;

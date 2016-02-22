@@ -132,10 +132,10 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Retrieve rendered item html content
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return string
      */
-    public function getItemHtml(\Magento\Framework\Object $item)
+    public function getItemHtml(\Magento\Framework\DataObject $item)
     {
         if ($item->getOrderItem()) {
             $type = $item->getOrderItem()->getProductType();
@@ -149,10 +149,10 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Retrieve rendered item extra info html content
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return string
      */
-    public function getItemExtraInfoHtml(\Magento\Framework\Object $item)
+    public function getItemExtraInfoHtml(\Magento\Framework\DataObject $item)
     {
         $extraInfoBlock = $this->getChildBlock('order_item_extra_info');
         if ($extraInfoBlock) {
@@ -164,12 +164,12 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Retrieve rendered column html content
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @param string $column the column key
      * @param string $field the custom item field
      * @return string
      */
-    public function getColumnHtml(\Magento\Framework\Object $item, $column, $field = null)
+    public function getColumnHtml(\Magento\Framework\DataObject $item, $column, $field = null)
     {
         if ($item->getOrderItem()) {
             $block = $this->getColumnRenderer($column, $item->getOrderItem()->getProductType());
@@ -316,10 +316,10 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Retrieve tax calculation html content
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return string
      */
-    public function displayTaxCalculation(\Magento\Framework\Object $item)
+    public function displayTaxCalculation(\Magento\Framework\DataObject $item)
     {
         if ($item->getTaxPercent() && $item->getTaxString() == '') {
             $percents = [$item->getTaxPercent()];
@@ -338,10 +338,10 @@ class AbstractItems extends \Magento\Backend\Block\Template
     /**
      * Retrieve tax with percent html content
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return string
      */
-    public function displayTaxPercent(\Magento\Framework\Object $item)
+    public function displayTaxPercent(\Magento\Framework\DataObject $item)
     {
         if ($item->getTaxPercent()) {
             return sprintf('%s%%', $item->getTaxPercent() + 0);

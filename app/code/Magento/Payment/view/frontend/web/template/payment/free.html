@@ -13,6 +13,9 @@
         <label data-bind="attr: {'for': getCode()}" class="label"><span data-bind="text: getTitle()"></span></label>
     </div>
     <div class="payment-method-content">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
         <div class="payment-method-billing-address">
             <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
             <!-- ko template: getTemplate() --><!-- /ko -->
@@ -32,7 +35,7 @@
                         attr: {title: $t('Place Order')},
                         css: {disabled: !isPlaceOrderActionAllowed()}
                         ">
-                    <span data-bind="text: $t('Place Order')"></span>
+                    <span data-bind="i18n: 'Place Order'"></span>
                 </button>
             </div>
         </div>

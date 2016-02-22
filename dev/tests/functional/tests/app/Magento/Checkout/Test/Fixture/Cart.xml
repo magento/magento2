@@ -58,6 +58,7 @@
         <field name="customer_gender" is_required="" />
         <field name="subtotal" is_required="" />
         <field name="base_subtotal" is_required="" />
+        <field name="discount" is_required="" />
         <field name="subtotal_with_discount" is_required="" />
         <field name="base_subtotal_with_discount" is_required="" />
         <field name="is_changed" is_required="" />

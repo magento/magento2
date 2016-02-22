@@ -22,13 +22,13 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     public function testGetLabel()
     {
         $this->assertEmpty($this->_model->getLabel());
-        $this->_model->setProductAttribute(new \Magento\Framework\Object(['store_label' => 'Store Label']));
+        $this->_model->setProductAttribute(new \Magento\Framework\DataObject(['store_label' => 'Store Label']));
         $this->assertEquals('Store Label', $this->_model->getLabel());
 
         $this->_model->setUseDefault(
             1
         )->setProductAttribute(
-            new \Magento\Framework\Object(['store_label' => 'Other Label'])
+            new \Magento\Framework\DataObject(['store_label' => 'Other Label'])
         );
         $this->assertEquals('Other Label', $this->_model->getLabel());
     }

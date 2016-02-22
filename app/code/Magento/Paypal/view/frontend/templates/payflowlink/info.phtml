@@ -5,9 +5,10 @@
  */
 
 /**
- * @var $block \Magento\Paypal\Block\Payflow\Link\Form
+ * @var \Magento\Paypal\Block\Payflow\Link\Form $block
  */
 ?>
-<div class="payflowlink items" id="payment_form_<?php echo $block->getMethodCode() ?>" style="display:none">
-    <?php echo __('You will be required to enter your payment details after you place an order.') ?>
+<div class="payflowlink items" id="payment_form_<?php echo $block->escapeHtml($block->getMethodCode()); ?>"
+     style="display:none">
+    <?php echo $block->escapeHtml(__('You will be required to enter your payment details after you place an order.'));?>
 </div>

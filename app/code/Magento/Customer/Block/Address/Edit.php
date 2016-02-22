@@ -51,8 +51,8 @@ class Edit extends \Magento\Directory\Block\Data
      * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\Json\EncoderInterface $jsonEncoder
      * @param \Magento\Framework\App\Cache\Type\Config $configCacheType
-     * @param \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory
-     * @param \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory
+     * @param \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory
+     * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory
@@ -67,8 +67,8 @@ class Edit extends \Magento\Directory\Block\Data
         \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Framework\Json\EncoderInterface $jsonEncoder,
         \Magento\Framework\App\Cache\Type\Config $configCacheType,
-        \Magento\Directory\Model\Resource\Region\CollectionFactory $regionCollectionFactory,
-        \Magento\Directory\Model\Resource\Country\CollectionFactory $countryCollectionFactory,
+        \Magento\Directory\Model\ResourceModel\Region\CollectionFactory $regionCollectionFactory,
+        \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $countryCollectionFactory,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
         \Magento\Customer\Api\Data\AddressInterfaceFactory $addressDataFactory,
@@ -126,12 +126,10 @@ class Edit extends \Magento\Directory\Block\Data
         $this->pageConfig->getTitle()->set($this->getTitle());
 
         if ($postedData = $this->_customerSession->getAddressFormData(true)) {
-            if (!empty($postedData['region_id']) || !empty($postedData['region'])) {
-                $postedData['region'] = [
-                    'region_id' => $postedData['region_id'],
-                    'region' => $postedData['region'],
-                ];
-            }
+            $postedData['region'] = [
+                'region_id' => $postedData['region_id'],
+                'region' => $postedData['region'],
+            ];
             $this->dataObjectHelper->populateWithArray(
                 $this->_address,
                 $postedData,

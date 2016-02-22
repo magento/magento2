@@ -116,7 +116,7 @@ class Login extends \Magento\Framework\App\Action\Action
         } catch (\Exception $e) {
             $response = [
                 'errors' => true,
-                'message' => __('Something went wrong while validating the login and password.')
+                'message' => __('Invalid login or password.')
             ];
         }
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */

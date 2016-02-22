@@ -37,7 +37,7 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
     /**
      * Get attribute value for save.
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return string|bool
      */
     protected function _getValueForSave($object)
@@ -58,7 +58,7 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
      * Before save hook.
      * Prepare attribute value for save
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @return $this
      */
     public function beforeSave($object)
@@ -77,7 +77,7 @@ class Startdate extends \Magento\Eav\Model\Entity\Attribute\Backend\Datetime
      * Product from date attribute validate function.
      * In case invalid data throws exception.
      *
-     * @param \Magento\Framework\Object $object
+     * @param \Magento\Framework\DataObject $object
      * @throws \Magento\Eav\Model\Entity\Attribute\Exception
      * @return bool
      */

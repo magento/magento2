@@ -11,7 +11,7 @@ use Magento\Checkout\Model\Cart as CustomerCart;
 class EstimatePost extends \Magento\Checkout\Controller\Cart
 {
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -22,7 +22,8 @@ class EstimatePost extends \Magento\Checkout\Controller\Cart
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
      * @param CustomerCart $cart
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @codeCoverageIgnore
      */
     public function __construct(
         Framework\App\Action\Context $context,
@@ -31,7 +32,7 @@ class EstimatePost extends \Magento\Checkout\Controller\Cart
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         CustomerCart $cart,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
     ) {
         $this->quoteRepository = $quoteRepository;
         parent::__construct(

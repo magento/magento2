@@ -74,11 +74,11 @@ class TaxRateCollection extends AbstractServiceCollection
      * Creates a collection item that represents a tax rate for the tax rates grid.
      *
      * @param TaxRate $taxRate Input data for creating the item.
-     * @return \Magento\Framework\Object Collection item that represents a tax rate
+     * @return \Magento\Framework\DataObject Collection item that represents a tax rate
      */
     protected function createTaxRateCollectionItem(TaxRate $taxRate)
     {
-        $collectionItem = new \Magento\Framework\Object();
+        $collectionItem = new \Magento\Framework\DataObject();
         $collectionItem->setTaxCalculationRateId($taxRate->getId());
         $collectionItem->setCode($taxRate->getCode());
         $collectionItem->setTaxCountryId($taxRate->getTaxCountryId());

@@ -97,11 +97,15 @@ class WebLoggerTest extends \PHPUnit_Framework_TestCase
         $e2 = new \Exception('Dummy Exception2');
 
         $this->webLogger->logError($e1);
-        $this->assertContains('[ERROR] exception \'Exception\' with message \'Dummy Exception1\'', self::$log);
+        $this->assertContains('[ERROR]', self::$log);
+        $this->assertContains('Exception', self::$log);
+        $this->assertContains($e1->getMessage(), self::$log);
 
         $this->webLogger->logError($e2);
-        $this->assertContains('[ERROR] exception \'Exception\' with message \'Dummy Exception1\'', self::$log);
-        $this->assertContains('[ERROR] exception \'Exception\' with message \'Dummy Exception2\'', self::$log);
+        $this->assertContains('[ERROR]', self::$log);
+        $this->assertContains('Exception', self::$log);
+        $this->assertContains($e1->getMessage(), self::$log);
+        $this->assertContains($e2->getMessage(), self::$log);
     }
 
     public function testLog()

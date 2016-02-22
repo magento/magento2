@@ -11,30 +11,31 @@
 <?php $_option = $block->getOption() ?>
 <?php $_selections = $_option->getSelections() ?>
 <div class="field option <?php echo ($_option->getRequired()) ? ' required': ''; ?>">
-    <label class="label" for="bundle-option-<?php echo $_option->getId() ?>">
+    <label class="label" for="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>">
         <span><?php echo $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
     <div class="control">
         <?php if ($block->showSingle()): ?>
-            <?php echo $block->getSelectionQtyTitlePrice($_selections[0]) ?>
+            <?php /* @escapeNotVerified */ echo $block->getSelectionQtyTitlePrice($_selections[0]) ?>
             <input type="hidden"
-                   name="bundle_option[<?php echo $_option->getId() ?>]"
-                   value="<?php echo $_selections[0]->getSelectionId() ?>"/>
+                   name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
+                   value="<?php /* @escapeNotVerified */ echo $_selections[0]->getSelectionId() ?>"/>
         <?php else: ?>
             <select multiple="multiple"
                     size="5"
-                    id="bundle-option-<?php echo $_option->getId() ?>"
-                    name="bundle_option[<?php echo $_option->getId() ?>][]"
-                    class="bundle-option-<?php echo $_option->getId() ?> multiselect product bundle option change-container-classname"
+                    id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>"
+                    name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>][]"
+                    data-selector="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>][]"
+                    class="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?> multiselect product bundle option change-container-classname"
                     <?php if ($_option->getRequired()) echo 'data-validate={required:true}' ?>>
                 <?php if(!$_option->getRequired()): ?>
-                    <option value=""><?php echo __('None') ?></option>
+                    <option value=""><?php /* @escapeNotVerified */ echo __('None') ?></option>
                 <?php endif; ?>
                 <?php foreach ($_selections as $_selection): ?>
-                    <option value="<?php echo $_selection->getSelectionId() ?>"
+                    <option value="<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>"
                             <?php if ($block->isSelected($_selection)) echo ' selected="selected"' ?>
                             <?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?>>
-                        <?php echo $block->getSelectionQtyTitlePrice($_selection, false) ?>
+                        <?php /* @escapeNotVerified */ echo $block->getSelectionQtyTitlePrice($_selection, false) ?>
                     </option>
                 <?php endforeach; ?>
             </select>

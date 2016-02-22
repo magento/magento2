@@ -15,7 +15,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
      *
      * @var string
      */
-    protected $dataInterface = 'Magento\Framework\Object';
+    protected $dataInterface = 'Magento\Framework\DataObject';
 
     /**
      * @var AbstractSearchResult
@@ -47,7 +47,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
     }
 
     /**
-     * @return \Magento\Framework\Object|mixed
+     * @return \Magento\Framework\DataObject|mixed
      */
     public function getFirstItem()
     {
@@ -55,7 +55,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
     }
 
     /**
-     * @return \Magento\Framework\Object|mixed
+     * @return \Magento\Framework\DataObject|mixed
      */
     public function getLastItem()
     {
@@ -77,7 +77,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
 
     /**
      * @param int $id
-     * @return \Magento\Framework\Object|null
+     * @return \Magento\Framework\DataObject|null
      */
     public function getItemById($id)
     {
@@ -120,7 +120,7 @@ class SearchResultProcessor extends AbstractDataObject implements SearchResultPr
     /**
      * @param string $column
      * @param mixed $value
-     * @return \Magento\Framework\Object|null
+     * @return \Magento\Framework\DataObject|null
      */
     public function getItemByColumnValue($column, $value)
     {

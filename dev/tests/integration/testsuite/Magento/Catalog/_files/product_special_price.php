@@ -7,7 +7,6 @@
 /** @var $product \Magento\Catalog\Model\Product */
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
 $product->setTypeId('simple')
-    ->setId(1)
     ->setAttributeSetId(4)
     ->setWebsiteIds([1])
     ->setName('Simple Product')

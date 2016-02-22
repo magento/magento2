@@ -24,16 +24,6 @@ class Input extends AbstractFilter
     protected $wrappedComponent;
 
     /**
-     * Get component name
-     *
-     * @return string
-     */
-    public function getComponentName()
-    {
-        return static::NAME;
-    }
-
-    /**
      * Prepare component configuration
      *
      * @return void
@@ -73,25 +63,17 @@ class Input extends AbstractFilter
      */
     protected function applyFilter()
     {
-        $condition = $this->getCondition();
-        if ($condition !== null) {
-            $this->getContext()->getDataProvider()->addFilter($condition, $this->getName());
-        }
-    }
+        if (isset($this->filterData[$this->getName()])) {
+            $value = $this->filterData[$this->getName()];
 
-    /**
-     * Get condition by data type
-     *
-     * @return array|null
-     */
-    public function getCondition()
-    {
-        $value = isset($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : null;
-        $condition = null;
-        if (!empty($value) || is_numeric($value)) {
-            $condition = ['like' => sprintf('%%%s%%', $value)];
-        }
+            if (!empty($value)) {
+                $filter = $this->filterBuilder->setConditionType('like')
+                    ->setField($this->getName())
+                    ->setValue(sprintf('%%%s%%', $value))
+                    ->create();
 
-        return $condition;
+                $this->getContext()->getDataProvider()->addFilter($filter);
+            }
+        }
     }
 }

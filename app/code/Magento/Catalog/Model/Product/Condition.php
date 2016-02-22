@@ -15,7 +15,7 @@ use Magento\Framework\DB\Select;
  * @method string|array getTable()
  * @method Condition setTable($table)
  */
-class Condition extends \Magento\Framework\Object implements \Magento\Catalog\Model\Product\Condition\ConditionInterface
+class Condition extends \Magento\Framework\DataObject implements Condition\ConditionInterface
 {
     /**
      * @param AbstractCollection $collection

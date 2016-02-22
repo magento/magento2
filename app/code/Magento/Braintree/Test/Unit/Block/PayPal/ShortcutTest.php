@@ -5,6 +5,11 @@
  */
 namespace Magento\Braintree\Test\Unit\Block\PayPal;
 
+use Magento\Braintree\Block\PayPal\Shortcut;
+
+/**
+ * Class ShortcutTest
+ */
 class ShortcutTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -43,12 +48,12 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
     protected $urlBuilderMock;
 
     /**
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $container;
 
     /**
-     * @var \Magento\Braintree\Block\PayPal\Shortcut
+     * @var Shortcut
      */
     protected $block;
 
@@ -90,7 +95,7 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
             ->method('getUrlBuilder')
             ->willReturn($this->urlBuilderMock);
 
-        $this->container = new \Magento\Framework\Object(
+        $this->container = new \Magento\Framework\DataObject(
             [
                 'module_name' => 'Magento_Catalog',
             ]
@@ -127,7 +132,7 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
     public function testGetAmount()
     {
         $amount = 10.5;
-        $quote = new \Magento\Framework\Object(
+        $quote = new \Magento\Framework\DataObject(
             [
                 'base_grand_total' => $amount,
             ]
@@ -156,9 +161,9 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
     {
         $currency = 'USD';
 
-        $quote = new \Magento\Framework\Object(
+        $quote = new \Magento\Framework\DataObject(
             [
-                'currency' => new \Magento\Framework\Object(
+                'currency' => new \Magento\Framework\DataObject(
                     [
                         'base_currency_code' => $currency,
                     ]
@@ -256,11 +261,7 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
             'Magento\Braintree\Block\PayPal\Shortcut',
             [
                 'data' => [
-                    'container' => new \Magento\Framework\Object(
-                        [
-                            'module_name' => 'Magento_Catalog',
-                        ]
-                    )
+                    Shortcut::MINI_CART_FLAG_KEY => 1
                 ]
             ]
         );
@@ -283,11 +284,7 @@ class ShortcutTest extends \PHPUnit_Framework_TestCase
             [
                 'mathRandom' => $this->mathRandomMock,
                 'data' => [
-                    'container' => new \Magento\Framework\Object(
-                        [
-                            'module_name' => 'Magento_Checkout',
-                        ]
-                    )
+                    Shortcut::MINI_CART_FLAG_KEY => 0
                 ]
             ]
         );

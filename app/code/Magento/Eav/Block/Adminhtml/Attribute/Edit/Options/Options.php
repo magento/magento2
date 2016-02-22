@@ -11,7 +11,7 @@
  */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Edit\Options;
 
-use Magento\Store\Model\Resource\Store\Collection;
+use Magento\Store\Model\ResourceModel\Store\Collection;
 
 class Options extends \Magento\Backend\Block\Template
 {
@@ -21,7 +21,7 @@ class Options extends \Magento\Backend\Block\Template
     protected $_registry;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory
      */
     protected $_attrOptionCollectionFactory;
 
@@ -38,14 +38,14 @@ class Options extends \Magento\Backend\Block\Template
     /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         array $data = []
     ) {
@@ -107,7 +107,7 @@ class Options extends \Magento\Backend\Block\Template
 
     /**
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
-     * @param array|\Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection $optionCollection
+     * @param array|\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection $optionCollection
      * @return array
      */
     protected function _prepareOptionValues(
@@ -136,7 +136,7 @@ class Options extends \Magento\Backend\Block\Template
                 $defaultValues
             );
             foreach ($bunch as $value) {
-                $values[] = new \Magento\Framework\Object($value);
+                $values[] = new \Magento\Framework\DataObject($value);
             }
         }
 
@@ -148,7 +148,7 @@ class Options extends \Magento\Backend\Block\Template
      * It is represented by an array in case of system attribute
      *
      * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute
-     * @return array|\Magento\Eav\Model\Resource\Entity\Attribute\Option\Collection
+     * @return array|\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\Collection
      */
     protected function _getOptionValuesCollection(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute)
     {
@@ -172,7 +172,7 @@ class Options extends \Magento\Backend\Block\Template
     /**
      * Prepare option values of system attribute
      *
-     * @param array|\Magento\Eav\Model\Resource\Entity\Attribute\Option $option
+     * @param array|\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option $option
      * @param string $inputType
      * @param array $defaultValues
      * @param string $valuePrefix
@@ -211,7 +211,7 @@ class Options extends \Magento\Backend\Block\Template
     /**
      * Prepare option values of user defined attribute
      *
-     * @param array|\Magento\Eav\Model\Resource\Entity\Attribute\Option $option
+     * @param array|\Magento\Eav\Model\ResourceModel\Entity\Attribute\Option $option
      * @param string $inputType
      * @param array $defaultValues
      * @return array
@@ -267,6 +267,7 @@ class Options extends \Magento\Backend\Block\Template
      * Retrieve attribute object from registry
      *
      * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @codeCoverageIgnore
      */
     protected function getAttributeObject()
     {

@@ -11,10 +11,10 @@
 //  Variables
 //  ---------------------------------------------
 
-@upgrade-home-item__background-color: @color-gray98;
-@upgrade-home-item__border-color: @color-gray80;
-@upgrade-home-item__color: @text__color;
-@upgrade-home-item__active__border-color: darken(@color-gray80, 25%);
+@setup-home-item__background-color: @color-gray98;
+@setup-home-item__border-color: @color-gray80;
+@setup-home-item__color: @text__color;
+@setup-home-item__active__border-color: darken(@color-gray80, 25%);
 
 //
 
@@ -23,16 +23,16 @@
     max-width: 91rem;
 }
 
-.upgrade-home-title {
+.setup-home-title {
     margin-bottom: 3.9rem;
     padding-top: 1.8rem;
     text-align: center;
 }
 
-.upgrade-home-item {
-    background-color: @upgrade-home-item__background-color;
-    border: 1px solid @upgrade-home-item__border-color;
-    color: @upgrade-home-item__color;
+.setup-home-item {
+    background-color: @setup-home-item__background-color;
+    border: 1px solid @setup-home-item__border-color;
+    color: @setup-home-item__color;
     display: block;
     margin-bottom: 2rem;
     margin-left: 1.3rem;
@@ -40,15 +40,18 @@
     min-height: 30rem;
     padding: 2rem;
     text-align: center;
+
     &:hover {
-        border-color: @upgrade-home-item__active__border-color;
-        color: @upgrade-home-item__color;
+        border-color: @setup-home-item__active__border-color;
+        color: @setup-home-item__color;
         text-decoration: none;
         transition: border-color .1s linear;
     }
+
     &:active {
         transform: scale(.99);
     }
+
     &:before {
         &:extend(.abs-icon all);
         display: block;
@@ -58,31 +61,31 @@
     }
 }
 
-.upgrade-home-item-component {
+.setup-home-item-component {
     &:before {
         content: @icon-lego__content;
     }
 }
 
-.upgrade-home-item-upgrade {
+.setup-home-item-upgrade {
     &:before {
-        content: @icon-upgrade__content;
+        content: @icon-updater__content;
     }
 }
 
-.upgrade-home-item-configuration {
+.setup-home-item-configuration {
     &:before {
         content: @icon-system-config__content;
     }
 }
 
-.upgrade-home-item-title {
+.setup-home-item-title {
     display: block;
     font-size: 1.8rem;
     letter-spacing: @letter-spacing__small;
     margin-bottom: 1rem;
 }
 
-.upgrade-home-item-description {
+.setup-home-item-description {
     display: block;
 }

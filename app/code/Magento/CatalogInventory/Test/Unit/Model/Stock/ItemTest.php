@@ -58,12 +58,12 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected $stockItemRepository;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Stock\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Stock\Item\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceCollection;
 
@@ -110,7 +110,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->resource = $this->getMock(
-            'Magento\CatalogInventory\Model\Resource\Stock\Item',
+            'Magento\CatalogInventory\Model\ResourceModel\Stock\Item',
             [],
             [],
             '',
@@ -118,7 +118,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->resourceCollection = $this->getMock(
-            'Magento\CatalogInventory\Model\Resource\Stock\Item\Collection',
+            'Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection',
             [],
             [],
             '',

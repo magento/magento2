@@ -5,16 +5,20 @@
  */
 namespace Magento\Ui\Component;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
+use Magento\Framework\View\Element\UiComponent\ObserverInterface;
+use Magento\Framework\Data\ValueSourceInterface;
 
 /**
  * Abstract class AbstractComponent
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractComponent extends Object implements UiComponentInterface
+abstract class AbstractComponent extends DataObject implements UiComponentInterface
 {
     /**
      * Render context
@@ -52,6 +56,8 @@ abstract class AbstractComponent extends Object implements UiComponentInterface
     ) {
         $this->context = $context;
         $this->components = $components;
+        $this->initObservers($data);
+        $this->context->getProcessor()->register($this);
         $this->_data = array_replace_recursive($this->_data, $data);
     }
 
@@ -82,6 +88,12 @@ abstract class AbstractComponent extends Object implements UiComponentInterface
      */
     public function prepare()
     {
+        $config = $this->getData('config');
+        if (isset($config['value']) && $config['value'] instanceof ValueSourceInterface) {
+            $config['value'] = $config['value']->getValue($this->getName());
+        }
+        $this->setData('config', (array)$config);
+
         $jsConfig = $this->getJsConfig($this);
         if (isset($jsConfig['provider'])) {
             unset($jsConfig['extends']);
@@ -89,9 +101,34 @@ abstract class AbstractComponent extends Object implements UiComponentInterface
         } else {
             $this->getContext()->addComponentDefinition($this->getComponentName(), $jsConfig);
         }
+
+        if ($this->hasData('actions')) {
+            $this->getContext()->addActions($this->getData('actions'), $this);
+        }
+
         if ($this->hasData('buttons')) {
             $this->getContext()->addButtons($this->getData('buttons'), $this);
         }
+        $this->getContext()->getProcessor()->notify($this->getComponentName());
+    }
+
+    /**
+     * Call prepare method in the component UI
+     *
+     * @param UiComponentInterface $component
+     * @return $this
+     */
+    protected function prepareChildComponent(UiComponentInterface $component)
+    {
+        $childComponents = $component->getChildComponents();
+        if (!empty($childComponents)) {
+            foreach ($childComponents as $child) {
+                $this->prepareChildComponent($child);
+            }
+        }
+        $component->prepare();
+
+        return $this;
     }
 
     /**
@@ -178,7 +215,7 @@ abstract class AbstractComponent extends Object implements UiComponentInterface
      */
     public function getConfiguration()
     {
-        return (array) $this->getData('config');
+        return (array)$this->getData('config');
     }
 
     /**
@@ -190,7 +227,7 @@ abstract class AbstractComponent extends Object implements UiComponentInterface
      */
     public function getJsConfig(UiComponentInterface $component)
     {
-        $jsConfig = (array) $component->getData('js_config');
+        $jsConfig = (array)$component->getData('js_config');
         if (!isset($jsConfig['extends'])) {
             $jsConfig['extends'] = $component->getContext()->getNamespace();
         }
@@ -225,12 +262,11 @@ abstract class AbstractComponent extends Object implements UiComponentInterface
      * Prepare Data Source
      *
      * @param array $dataSource
-     * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return array
      */
-    public function prepareDataSource(array & $dataSource)
+    public function prepareDataSource(array $dataSource)
     {
-        //
+        return $dataSource;
     }
 
     /**
@@ -239,5 +275,26 @@ abstract class AbstractComponent extends Object implements UiComponentInterface
     public function getDataSourceData()
     {
         return [];
+    }
+
+    /**
+     * Initiate observers
+     *
+     * @param array $data
+     * @return void
+     */
+    protected function initObservers(array & $data = [])
+    {
+        if (isset($data['observers']) && is_array($data['observers'])) {
+            foreach ($data['observers'] as $observerType => $observer) {
+                if (!is_object($observer)) {
+                    $observer = $this;
+                }
+                if ($observer instanceof ObserverInterface) {
+                    $this->getContext()->getProcessor()->attach($observerType, $observer);
+                }
+                unset($data['observers']);
+            }
+        }
     }
 }

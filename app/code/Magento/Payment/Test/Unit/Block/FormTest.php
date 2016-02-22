@@ -8,7 +8,7 @@
 
 namespace Magento\Payment\Test\Unit\Block;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 class FormTest extends \PHPUnit_Framework_TestCase
 {
@@ -62,7 +62,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMethodException()
     {
-        $method = new \Magento\Framework\Object([]);
+        $method = new \Magento\Framework\DataObject([]);
         $this->_object->setData('method', $method);
         $this->_object->getMethod();
     }

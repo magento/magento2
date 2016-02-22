@@ -8,7 +8,7 @@
 
 namespace Magento\Downloadable\Block\Catalog\Product;
 
-use Magento\Downloadable\Model\Resource\Sample;
+use Magento\Downloadable\Model\ResourceModel\Sample;
 
 /**
  * Downloadable Product Samples part block

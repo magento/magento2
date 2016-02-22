@@ -11,6 +11,7 @@ use Magento\Directory\Helper\Data;
 use Magento\Directory\Model\Currency;
 use Magento\Setup\Module\Setup;
 use Magento\Store\Model\Store;
+use Magento\Ui\Model\Config as UiConfig;
 
 /**
  * Model Class to Install User Configuration Data
@@ -31,6 +32,7 @@ class StoreConfigurationDataMapper
     const KEY_TIMEZONE = 'timezone';
     const KEY_CURRENCY = 'currency';
     const KEY_ADMIN_USE_SECURITY_KEY = 'admin-use-security-key';
+    const KEY_JS_LOGGING = 'js-logging';
     /**#@- */
 
     /**
@@ -50,6 +52,7 @@ class StoreConfigurationDataMapper
         Currency::XML_PATH_CURRENCY_DEFAULT => self::KEY_CURRENCY,
         Currency::XML_PATH_CURRENCY_ALLOW => self::KEY_CURRENCY,
         Url::XML_PATH_USE_SECURE_KEY => self::KEY_ADMIN_USE_SECURITY_KEY,
+        UiConfig::XML_PATH_LOGGING => self::KEY_JS_LOGGING
     ];
 
     /**

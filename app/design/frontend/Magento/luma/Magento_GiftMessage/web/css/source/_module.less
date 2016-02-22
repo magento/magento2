@@ -26,16 +26,10 @@
 
 & when (@media-common = true) {
     .gift-message {
-        .actions-toolbar {
-            .action-cancel {
-                &:extend(.abs-action-button-as-link all);
-                display: none;
-            }
-        }
         .field {
             .label {
-                .css(color, @gift-message-field-label__color);
-                .css(font-weight, @font-weight__regular);
+                .lib-css(color, @gift-message-field-label__color);
+                .lib-css(font-weight, @font-weight__regular);
             }
         }
     }
@@ -43,8 +37,9 @@
     .cart.table-wrapper {
         .item-gift {
             &._active {
-                .css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
+                .lib-css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
             }
+
             .action {
                 margin-right: 0;
             }
@@ -52,11 +47,18 @@
     }
 
     .gift-options {
-        &:extend(.abs-add-clearfix all);
+        margin: @indent__base 0;
+
+        .actions-toolbar {
+            .action-cancel {
+                &:extend(.abs-action-button-as-link all);
+                display: none;
+            }
+        }
     }
 
     .gift-options-title {
-        .css(font-weight, @font-weight__semibold);
+        .lib-css(font-weight, @font-weight__semibold);
         margin: 0 0 @indent__base;
     }
 
@@ -76,10 +78,11 @@
                 }
             }
         }
+
         .action-edit,
         .action-delete {
             &:extend(.abs-action-button-as-link all);
-            .icon-font(
+            .lib-icon-font(
             @icon-edit,
             @_icon-font-size: 18px,
             @_icon-font-line-height: 20px,
@@ -90,11 +93,12 @@
             );
         }
         .action-delete {
-            .icon-font-symbol(
+            .lib-icon-font-symbol(
             @_icon-font-content: @icon-trash
             );
         }
     }
+
     .gift-summary,
     .cart.table-wrapper .gift-summary {
         .actions-toolbar {
@@ -117,8 +121,10 @@
             margin-right: -100%;
             padding: @indent__base 0;
             width: 100%;
+
             &._active {
-                display: block;
+                display: table;
+                table-layout: fixed;
             }
         }
     }
@@ -128,20 +134,21 @@
     //  ---------------------------------------------
 
     .gift-item-block {
-        .css(border-bottom, @gift-item-block__border-width solid @gift-item-block__border-color);
+        .lib-css(border-bottom, @gift-item-block__border-width solid @gift-item-block__border-color);
         margin: 0;
+
         &._active {
             .title {
                 &:after {
-                    .css(content, @gift-item-block-title-icon__active__content);
+                    .lib-css(content, @gift-item-block-title-icon__active__content);
                 }
             }
         }
 
         .title {
-            .css(color, @gift-item-block-title__color);
+            .lib-css(color, @gift-item-block-title__color);
             cursor: pointer;
-            .icon-font(
+            .lib-icon-font(
             @gift-item-block-title-icon__content,
             @_icon-font-size: @gift-item-block-title-icon__font-size,
             @_icon-font-line-height: @gift-item-block-title-icon__line-height,
@@ -171,20 +178,24 @@
         .order-gift-message,
         .block-order-details-gift-message {
             &:extend(.abs-add-clearfix all);
+
             dt {
                 &:after {
                     content: '';
                 }
             }
+
             .label {
                 &:extend(.abs-colon all);
             }
+
             .item-message {
                 clear: left;
             }
+
             .item-options {
                 dt {
-                    .css(font-weight, @font-weight__regular);
+                    .lib-css(font-weight, @font-weight__regular);
                     margin: @indent__s 0;
                 }
             }
@@ -197,6 +208,7 @@
                 &:not(.expanded-content) {
                     &:extend(.abs-hidden);
                 }
+
                 .action.close {
                     &:extend(.abs-no-display all);
                 }
@@ -222,7 +234,7 @@
     .gift-message {
         .actions-toolbar {
             .action-update {
-                .font-size(20);
+                .lib-font-size(20);
                 padding: 15px;
                 width: 100%;
             }
@@ -231,15 +243,17 @@
 
     .gift-item-block {
         border-bottom: 0;
-        .css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
+        .lib-css(border-top, @gift-item-block__border-width solid @gift-item-block__border-color);
+
         .title {
             &:after {
-                .font-size(12);
+                .lib-font-size(12);
                 position: absolute;
                 right: 20px;
                 top: 10px;
             }
         }
+
         .content {
             padding-left: 1.5rem;
             padding-right: 1.5rem;
@@ -252,7 +266,7 @@
 
     .cart.table-wrapper {
         .action-gift {
-            .icon-font(
+            .lib-icon-font(
             @icon-present,
             @_icon-font-size: 18px,
             @_icon-font-line-height: 20px,
@@ -262,16 +276,19 @@
             @_icon-font-color-active: @minicart-icons-color,
             @_icon-font-position: after
             );
+
             &._active {
                 border: @border-width__base solid @color-gray-light5;
                 border-bottom-color: @color-white;
                 margin: -@indent__xs 14px -1px -15px;
                 padding: 4px @indent__s 9px 14px;
+
                 &:after {
                     color: @primary__color;
                 }
             }
         }
+
         .gift-content {
             border-top: @border-width__base solid @color-gray-light5;
             margin-right: -@mobile-cart-padding;
@@ -295,33 +312,59 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .gift-message {
+        .field {
+            &:extend(.abs-clearfix all);
+            .lib-form-field-type-revert(
+            @_type: inline,
+            @_type-inline-label-align: left
+            );
+        }
+    }
+
+    .gift-options {
+        position: relative;
+        z-index: 1;
+
         .actions-toolbar {
+            clear: both;
             padding: 0;
+            position: static;
+
             .secondary {
                 float: right;
+
                 .action {
                     float: right;
                     margin-left: @indent__base;
                     margin-right: 0;
                 }
+
                 .action-cancel {
                     display: block;
                     float: left;
                     margin-top: 6px;
                 }
             }
-        }
-        .field {
-            &:extend(.abs-clearfix all);
-            .form-field-type-revert(
-            @_type: inline,
-            @_type-inline-label-align: left
-            );
+
+            &:nth-child(3) {
+                &:before {
+                    .lib-css(border-left, 1px solid @gift-item-block__border-color);
+                    bottom: 5rem;
+                    content: "";
+                    display: block;
+                    left: 50%;
+                    overflow: hidden;
+                    position: absolute;
+                    top: 0;
+                    width: 0;
+                }
+            }
         }
     }
+
     .gift-options-title {
-        .css(font-weight, @font-weight__light);
-        .font-size(18);
+        .lib-css(font-weight, @font-weight__light);
+        .lib-font-size(18);
     }
 
     .gift-item-block {
@@ -344,7 +387,7 @@
     .cart.table-wrapper {
         .action-gift {
             float: left;
-            .icon-font(
+            .lib-icon-font(
             @icon-down,
             @_icon-font-size: 18px,
             @_icon-font-line-height: 20px,
@@ -354,10 +397,19 @@
             @_icon-font-margin: 0 0 0 @indent__s,
             @_icon-font-position: after
             );
+
             &._active {
                 &:after {
                     content: @icon-up;
                 }
+            }
+        }
+
+        .gift-options {
+            .actions-toolbar {
+                clear: both;
+                padding: 0;
+                position: static;
             }
         }
     }
@@ -366,6 +418,7 @@
         .cart-gift-item {
             &:extend(.abs-shopping-cart-items-desktop all);
             margin-bottom: @indent__base;
+
             .gift-options,
             .gift-summary {
                 padding-bottom: @indent__base;

@@ -28,9 +28,15 @@ class LinkTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->objectManager = new ObjectManager($this);
+        $context = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
+            ->getMockForAbstractClass();
+        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $context->expects($this->any())->method('getProcessor')->willReturn($processor);
 
-        $this->link = $this->objectManager->getObject('Magento\Ui\Component\Control\Link');
+        $this->objectManager = new ObjectManager($this);
+        $this->link = $this->objectManager->getObject('Magento\Ui\Component\Control\Link', ['context' => $context]);
     }
 
     /**

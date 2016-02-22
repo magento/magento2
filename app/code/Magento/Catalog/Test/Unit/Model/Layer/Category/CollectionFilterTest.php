@@ -43,7 +43,7 @@ class CollectionFilterTest extends \PHPUnit_Framework_TestCase
     public function testFilter()
     {
         $collectionMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\Collection', [], [], '', false
+            '\Magento\Catalog\Model\ResourceModel\Product\Collection', [], [], '', false
         );
 
         $categoryMock = $this->getMock('\Magento\Catalog\Model\Category', [], [], '', false);

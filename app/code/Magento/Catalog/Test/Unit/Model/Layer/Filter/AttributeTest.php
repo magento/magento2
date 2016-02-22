@@ -14,7 +14,7 @@ use PHPUnit_Framework_MockObject_MockObject as MockObject;
  */
 class AttributeTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var  \Magento\Catalog\Model\Resource\Layer\Filter\Attribute|MockObject */
+    /** @var  \Magento\Catalog\Model\ResourceModel\Layer\Filter\Attribute|MockObject */
     private $filterAttribute;
 
     /**
@@ -34,7 +34,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\RequestInterface|MockObject */
     private $request;
 
-    /** @var  \Magento\Catalog\Model\Resource\Layer\Filter\AttributeFactory|MockObject */
+    /** @var  \Magento\Catalog\Model\ResourceModel\Layer\Filter\AttributeFactory|MockObject */
     private $filterAttributeFactory;
 
     /** @var  \Magento\Catalog\Model\Layer\Filter\ItemFactory|MockObject */
@@ -76,7 +76,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['addItemData', 'build'])
             ->getMock();
 
-        $this->filterAttribute = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Layer\Filter\Attribute')
+        $this->filterAttribute = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Layer\Filter\Attribute')
             ->disableOriginalConstructor()
             ->setMethods(['getCount', 'applyFilterToCollection'])
             ->getMock();
@@ -86,7 +86,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnSelf());
 
         $this->filterAttributeFactory = $this->getMockBuilder(
-            '\Magento\Catalog\Model\Resource\Layer\Filter\AttributeFactory'
+            '\Magento\Catalog\Model\ResourceModel\Layer\Filter\AttributeFactory'
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -129,7 +129,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
             ->method('filter')
             ->will($this->returnArgument(0));
 
-        $string = $this->getMockBuilder('\Magento\Framework\Stdlib\String')
+        $string = $this->getMockBuilder('\Magento\Framework\Stdlib\StringUtils')
             ->disableOriginalConstructor()
             ->setMethods(['strlen'])
             ->getMock();

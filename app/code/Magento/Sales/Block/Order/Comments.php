@@ -8,17 +8,17 @@ namespace Magento\Sales\Block\Order;
 class Comments extends \Magento\Framework\View\Element\Template
 {
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory
      */
     protected $_invoiceCollectionFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory
      */
     protected $_memoCollectionFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Shipment\Comment\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory
      */
     protected $_shipmentCollectionFactory;
 
@@ -32,22 +32,22 @@ class Comments extends \Magento\Framework\View\Element\Template
     /**
      * Current comments collection
      *
-     * @var \Magento\Sales\Model\Resource\Order\Comment\Collection\AbstractCollection
+     * @var \Magento\Sales\Model\ResourceModel\Order\Comment\Collection\AbstractCollection
      */
     protected $_commentCollection;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory $invoiceCollectionFactory
-     * @param \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $memoCollectionFactory
-     * @param \Magento\Sales\Model\Resource\Order\Shipment\Comment\CollectionFactory $shipmentCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory $invoiceCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory $memoCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory $shipmentCollectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory $invoiceCollectionFactory,
-        \Magento\Sales\Model\Resource\Order\Creditmemo\Comment\CollectionFactory $memoCollectionFactory,
-        \Magento\Sales\Model\Resource\Order\Shipment\Comment\CollectionFactory $shipmentCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory $invoiceCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Comment\CollectionFactory $memoCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory $shipmentCollectionFactory,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -83,7 +83,7 @@ class Comments extends \Magento\Framework\View\Element\Template
     /**
      * Initialize model comments and return comment collection
      *
-     * @return \Magento\Sales\Model\Resource\Order\Comment\Collection\AbstractCollection
+     * @return \Magento\Sales\Model\ResourceModel\Order\Comment\Collection\AbstractCollection
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getComments()

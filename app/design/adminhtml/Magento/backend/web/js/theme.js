@@ -10,7 +10,6 @@ define('globalNavigationScroll', [
 
     var win = $(window),
         subMenuClass = '.submenu',
-        overlapClassName = '_overlap',
         fixedClassName = '_fixed',
         menu = $('.menu-wrapper'),
         content = $('.page-wrapper'),
@@ -84,7 +83,7 @@ define('globalNavigationScroll', [
 
                     menu.css('top', -nextTop);
 
-                } else if (winTop < winTopLast) { // scroll up
+                } else if (winTop <= winTopLast) { // scroll up
 
                     nextTop > -scrollStep ?
                         nextTop += scrollStep : nextTop = 0;
@@ -118,21 +117,28 @@ define('globalNavigationScroll', [
         //  Reset position if fixed and out of smart scroll
         if ((menuHeight < contentHeight) && (menuHeight <= winHeight)) {
             menu.removeAttr('style');
-            //  Remove overlap classes from submenus and clear overlap adding event
-            subMenus.removeClass(overlapClassName);
             menuItems.off();
         }
 
     });
 
     //  Add event to menuItems to check submenu overlap
-    menuItems.on('click', function () {
-        
-        var submenu = $(this).children(subMenuClass);
+    menuItems.on('click', function (e) {
+
+        var submenu = $(this).children(subMenuClass),
+            delta,
+            logo = $('.logo')[0].offsetHeight;
+
         submenuHeight = submenu.height();
 
-        if (isMenuFixed() && (submenuHeight > winHeight)) {
-            checkAddClass(submenu, overlapClassName);
+        if (submenuHeight > menuHeight && menuHeight + logo > winHeight) {
+            menu.height(submenuHeight - logo);
+            delta = -menu.position().top;
+            window.scrollTo(0, 0);
+            positionMenu();
+            window.scrollTo(0, delta);
+            positionMenu();
+            menuHeight = submenuHeight;
         }
     });
 
@@ -161,7 +167,7 @@ define('globalNavigation', [
         _create: function () {
             var selectors = this.options.selectors;
 
-            this.menu      = this.element;
+            this.menu = this.element;
             this.menuLinks = $(selectors.topLevelHref, selectors.topLevelItem);
             this.closeActions = $(selectors.closeSubmenuBtn);
 
@@ -195,9 +201,9 @@ define('globalNavigation', [
          * Remove active class from current menu item
          * Turn back active class to current page menu item
          */
-        _blur: function(e){
+        _blur: function (e) {
             var selectors = this.options.selectors,
-                menuItem  = $(e.target).closest(selectors.topLevelItem),
+                menuItem = $(e.target).closest(selectors.topLevelItem),
                 currentItem = $(selectors.menu).find(selectors.currentItem);
 
             menuItem.removeClass('_active');
@@ -207,11 +213,11 @@ define('globalNavigation', [
         /**
          * Add focus to active menu item
          */
-        _keyboard: function(e) {
+        _keyboard: function (e) {
             var selectors = this.options.selectors,
-                menuItem  = $(e.target).closest(selectors.topLevelItem);
+                menuItem = $(e.target).closest(selectors.topLevelItem);
 
-            if(e.which === 13) {
+            if (e.which === 13) {
                 this._close(e);
                 $(selectors.topLevelHref, menuItem).focus();
             }
@@ -222,11 +228,11 @@ define('globalNavigation', [
          */
         _focus: function (e) {
             var selectors = this.options.selectors,
-                menuItem  = $(e.target).closest(selectors.topLevelItem);
+                menuItem = $(e.target).closest(selectors.topLevelItem);
 
             menuItem.addClass('_active')
-                    .siblings(selectors.topLevelItem)
-                    .removeClass('_active');
+                .siblings(selectors.topLevelItem)
+                .removeClass('_active');
         },
 
         _closeSubmenu: function (e) {
@@ -239,22 +245,25 @@ define('globalNavigation', [
         },
 
         _open: function (e) {
-            var selectors           = this.options.selectors,
-                menuItemSelector    = selectors.topLevelItem,
-                menuItem            = $(e.target).closest(menuItemSelector),
-                subMenu             = $(selectors.subMenu, menuItem),
-                close               = this._closeSubmenu.bind(this),
-                closeBtn            = subMenu.find(selectors.closeSubmenuBtn);
+            var selectors = this.options.selectors,
+                menuItemSelector = selectors.topLevelItem,
+                menuItem = $(e.target).closest(menuItemSelector),
+                subMenu = $(selectors.subMenu, menuItem),
+                close = this._closeSubmenu.bind(this),
+                closeBtn = subMenu.find(selectors.closeSubmenuBtn);
+
 
             if (subMenu.length) {
                 e.preventDefault();
             }
 
             menuItem.addClass('_show')
-                    .siblings(menuItemSelector)
-                    .removeClass('_show');
+                .siblings(menuItemSelector)
+                .removeClass('_show');
 
             subMenu.attr('aria-expanded', 'true');
+
+            //subMenu.css('height', subMenu.find('ul.menu')[0].height() + subMenu.find('strong.submenu-title').height());
 
             closeBtn.on('click', close);
 
@@ -263,11 +272,11 @@ define('globalNavigation', [
         },
 
         _close: function (e) {
-            var selectors   = this.options.selectors,
-                menuItem    = this.menu.find(selectors.topLevelItem + '._show'),
-                subMenu     = $(selectors.subMenu, menuItem),
-                closeBtn    = subMenu.find(selectors.closeSubmenuBtn),
-                blur        = this._blur.bind(this);
+            var selectors = this.options.selectors,
+                menuItem = this.menu.find(selectors.topLevelItem + '._show'),
+                subMenu = $(selectors.subMenu, menuItem),
+                closeBtn = subMenu.find(selectors.closeSubmenuBtn),
+                blur = this._blur.bind(this);
 
             e.preventDefault();
 

@@ -8,33 +8,33 @@
     <!-- ko if: isBothPricesDisplayed() -->
     <tr class="totals shipping excl">
         <th class="mark" scope="row">
-            <span class="label" data-bind="text: $t(title) + ' ' + $t(excludingTaxMessage)"></span>
-            <span class="value" data-bind="text: $t(getShippingMethodTitle())"></span>
+            <span class="label" data-bind="text: title+ ' ' + excludingTaxMessage"></span>
+            <span class="value" data-bind="text: getShippingMethodTitle()"></span>
         </th>
         <td class="amount">
             <!-- ko if: isCalculated() -->
             <span class="price"
-                  data-bind="text: $t(getExcludingValue()), attr: {'data-th': $t(excludingTaxMessage)}"></span>
+                  data-bind="text: getExcludingValue(), attr: {'data-th': excludingTaxMessage}"></span>
             <!-- /ko -->
             <!-- ko ifnot: isCalculated() -->
             <span class="not-calculated"
-                  data-bind="text: $t(getExcludingValue()), attr: {'data-th': $t(excludingTaxMessage)}"></span>
+                  data-bind="text: getExcludingValue(), attr: {'data-th': excludingTaxMessage}"></span>
             <!-- /ko -->
         </td>
     </tr>
     <tr class="totals shipping incl">
         <th class="mark" scope="row">
-            <span class="label" data-bind="text: $t(title) + ' ' + $t(includingTaxMessage)"></span>
-            <span class="value" data-bind="text: $t(getShippingMethodTitle())"></span>
+            <span class="label" data-bind="text: title + ' ' + includingTaxMessage"></span>
+            <span class="value" data-bind="text: getShippingMethodTitle()"></span>
         </th>
         <td class="amount">
             <!-- ko if: isCalculated() -->
             <span class="price"
-                  data-bind="text: $t(getIncludingValue()), attr: {'data-th': $t(title) + ' ' + $t(excludingTaxMessage)}"></span>
+                  data-bind="text: getIncludingValue(), attr: {'data-th': title + ' ' + excludingTaxMessage}"></span>
             <!-- /ko -->
             <!-- ko ifnot: isCalculated() -->
             <span class="not-calculated"
-                  data-bind="text: $t(getIncludingValue()), attr: {'data-th': $t(title) + ' ' + $t(excludingTaxMessage)}"></span>
+                  data-bind="text: getIncludingValue(), attr: {'data-th': title + ' ' + excludingTaxMessage}"></span>
             <!-- /ko -->
         </td>
     </tr>
@@ -42,17 +42,17 @@
     <!-- ko if: isIncludingDisplayed() -->
     <tr class="totals shipping incl">
         <th class="mark" scope="row">
-            <span class="label" data-bind="text: $t(title)"></span>
-            <span class="value" data-bind="text: $t(getShippingMethodTitle())"></span>
+            <span class="label" data-bind="i18n: title"></span>
+            <span class="value" data-bind="text: getShippingMethodTitle()"></span>
         </th>
         <td class="amount">
             <!-- ko if: isCalculated() -->
             <span class="price"
-                  data-bind="text: $t(getIncludingValue()), attr: {'data-th': $t(title)}"></span>
+                  data-bind="text: getIncludingValue(), attr: {'data-th': title}"></span>
             <!-- /ko -->
             <!-- ko ifnot: isCalculated() -->
             <span class="not-calculated"
-                  data-bind="text: $t(getIncludingValue()), attr: {'data-th': $t(title)}"></span>
+                  data-bind="text: getIncludingValue(), attr: {'data-th': title}"></span>
             <!-- /ko -->
         </td>
     </tr>
@@ -60,17 +60,17 @@
     <!-- ko if: isExcludingDisplayed() -->
     <tr class="totals shipping excl">
         <th class="mark" scope="row">
-            <span class="label" data-bind="text: $t(title)"></span>
-            <span class="value" data-bind="text: $t(getShippingMethodTitle())"></span>
+            <span class="label" data-bind="i18n: title"></span>
+            <span class="value" data-bind="text: getShippingMethodTitle()"></span>
         </th>
         <td class="amount">
             <!-- ko if: isCalculated() -->
             <span class="price"
-                  data-bind="text: $t(getValue()), attr: {'data-th': $t(title)}"></span>
+                  data-bind="text: getValue(), attr: {'data-th': title}"></span>
             <!-- /ko -->
             <!-- ko ifnot: isCalculated() -->
             <span class="not-calculated"
-                  data-bind="text: $t(getValue()), attr: {'data-th': $t(title)}"></span>
+                  data-bind="text: getValue(), attr: {'data-th': title}"></span>
             <!-- /ko -->
         </td>
     </tr>

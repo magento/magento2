@@ -7,8 +7,60 @@
 //  Components
 //  _____________________________________________
 
+@import 'fields/_control-collapsible.less';
 @import 'fields/_control-table.less';
 @import 'fields/_field-tooltips.less';
+
+//
+//  Extends
+//  _____________________________________________
+
+.abs-field-size-x-small {
+    width: @field-size__xs;
+}
+
+.abs-field-size-small {
+    width: @field-size__s;
+}
+
+.abs-field-size-medium {
+    width: @field-size__m;
+}
+
+.abs-field-size-large {
+    width: @field-size__l;
+}
+
+.abs-field-sizes {
+    &.admin__field-x-small {
+        > .admin__field-control  {
+            &:extend(.abs-field-size-x-small all);
+        }
+    }
+
+    &.admin__field-small {
+        > .admin__field-control  {
+            &:extend(.abs-field-size-small all);
+        }
+    }
+
+    &.admin__field-medium {
+        > .admin__field-control {
+            &:extend(.abs-field-size-medium all);
+        }
+    }
+
+    &.admin__field-large {
+        > .admin__field-control {
+            &:extend(.abs-field-size-large all);
+        }
+    }
+}
+
+.abs-field-no-label {
+    #mix-grid .return_length(@field-label-grid__column, @field-grid__columns, '+');
+    margin-left: @_length;
+}
 
 //
 //  Form Fields
@@ -23,6 +75,22 @@
     margin: 0;
     min-width: 0;
     padding: 0;
+
+    //  Filedset section
+    .fieldset-wrapper {
+        &.admin__fieldset-section {
+            > .fieldset-wrapper-title {
+                margin: @indent__s 0;
+                padding-left: @indent__s;
+
+                strong {
+                    font-size: @collapsible-title__font-size;
+                    font-weight: @font-weight__semibold;
+                }
+            }
+        }
+    }
+
     > .admin__field {
         border: 0;
         margin: 0;
@@ -32,6 +100,7 @@
         &.admin__field-wide {
             &:extend(.abs-field-rows all);
         }
+
         > .admin__field-control {
             #mix-grid .column(@field-control-grid__column, @field-grid__columns);
         }
@@ -39,7 +108,28 @@
         > .admin__field-label {
             #mix-grid .column(@field-label-grid__column, @field-grid__columns);
         }
+
+        &:extend(.abs-field-sizes all);
+
+        &.admin__field-no-label {
+            > .admin__field-label {
+                display: none;
+            }
+
+            > .admin__field-control {
+                &:extend(.abs-field-no-label all);
+            }
+        }
     }
+}
+
+.admin__fieldset-product-websites {
+    position: relative;
+    z-index: @z-index-3;
+}
+
+.admin__fieldset-note {
+    margin-bottom: @indent__base;
 }
 
 .admin__form-field {
@@ -56,12 +146,21 @@
     }
 }
 
+.admin__field-no-label {
+    &:extend(.abs-field-no-label all);
+}
+
+.admin__field-row {
+    &:extend(.abs-field-rows all);
+}
+
 //
 //  Label
 //  ---------------------------------------------
 
 .admin__field-label {
     color: @field-label__color;
+    cursor: pointer;
     margin: 0;
     text-align: right;
 
@@ -93,6 +192,7 @@
         }
     }
 
+    .required > &, //  ToDo UI: change classes "required" to "_required".
     ._required > & {
         span:after {
             color: @field-label__required__color;
@@ -118,6 +218,7 @@
 //  ---------------------------------------------
 
 .admin__field {
+    &:extend(.abs-field-sizes all);
     margin-bottom: 0;
 
     & + & {
@@ -143,7 +244,7 @@
 
     &[data-config-scope] {
         &:before {
-            #mix-grid .return_length(7, @field-grid__columns);
+            #mix-grid .return_length(@field-label-grid__column + @field-control-grid__column, @field-grid__columns);
             color: @field-scope__color;
             content: attr(data-config-scope);
             display: inline-block;
@@ -154,25 +255,99 @@
             position: absolute;
 
             & {
-                #mix-grid .return_length(2, @field-grid__columns);
-                width: @_length;
+                #mix-grid .width(@field-label-grid__column, @field-grid__columns);
             }
         }
+
         .admin__field-control &:nth-child(n+2):before {
             content: '';
         }
     }
 
     &._error {
+        .admin__field-control [class*='admin__control-'] [class*='admin__addon-']:before,
         .admin__field-control [class*='admin__addon-']:before,
         .admin__field-control > [class*='admin__control-'] {
             border-color: @field-error-control__border-color;
         }
     }
+
+    &._disabled,
+    &._disabled:hover {
+        box-shadow: inherit;
+        cursor: inherit;
+        opacity: 1;
+        outline: inherit;
+    }
+
+    &._hidden {
+        display: none;
+    }
 }
+
 .admin__field-control {
     & + & {
         margin-top: 1.5rem;
+    }
+
+    //  If there is a tooltip
+    &._with-tooltip {
+        > .admin__field-option,
+        > .admin__control-select,
+        > .admin__control-text,
+        > .admin__control-textarea {
+            max-width: ~'calc(100% - @{field-tooltip__width} - 4px)'; // Minus space size
+        }
+
+        .admin__field-tooltip {
+            width: auto;
+        }
+
+        .admin__field-option {
+            display: inline-block;
+        }
+    }
+}
+
+//  Collapsible radiobutton field
+.admin__field-collapsible {
+    .admin__fieldset > & {
+        margin-bottom: 0;
+
+        .admin__field-control {
+            border-top: 1px solid @field-collapsible__border-color;
+            display: block;
+            font-size: 1.7rem;
+            font-weight: @font-weight__bold;
+            padding: 1.7rem 0;
+            width: calc(100% - @indent__l);
+        }
+        
+        .admin__field-option {
+            padding-top: 0;
+        }
+    }
+
+    + div {
+        margin-top: @indent__m;
+    }
+
+    .admin__control-radio {
+        + label {
+            &:before {
+                height: 1.8rem;
+                width: 1.8rem;
+            }
+        }
+
+        &:checked {
+            + label {
+                &:after {
+                    left: 4px;
+                    top: 5px;
+                }
+            }
+        }
     }
 }
 
@@ -202,6 +377,11 @@
     padding: 0;
 }
 
+//  Field additional information
+.admin__additional-info {
+    padding-top: @indent__s;
+}
+
 //  Field containing checkbox or radio
 .admin__field-option {
     padding-top: @field-option__padding-top;
@@ -214,11 +394,13 @@
         &:nth-child(1):nth-last-child(2),
         &:nth-child(2):nth-last-child(1) {
             display: inline-block;
+
             + .admin__field-option {
                 display: inline-block;
                 margin-left: 41px;
                 margin-top: 0;
             }
+
             + .admin__field-option:before {
                 background: @field-divider__background-color;
                 content: '';
@@ -237,6 +419,11 @@
     padding-top: @field-option__padding-top;
 }
 
+//  Field use default value action
+.admin__field-service {
+    padding-top: @indent__s;
+}
+
 //
 //  Field containing multiple fields
 //  _____________________________________________
@@ -245,6 +432,7 @@
 .admin__control-fields {
     & > .admin__field:first-child {
         position: static;
+
         & > .admin__field-label {
             #mix-grid .column(@field-label-grid__column, @field-grid__columns);
             cursor: pointer;
@@ -261,10 +449,15 @@
     .admin__field-label ~ .admin__field-control {
         width: 100%;
     }
-    .admin__field:nth-child(n+2):not(.admin__field-option) {
+
+    .admin__field:nth-child(n+2):not(.admin__field-option):not(.admin__field-group-show-label) {
         > .admin__field-label {
             .extend__visually-hidden();
         }
+    }
+
+    .admin__field-option {
+        padding-top: 0;
     }
 }
 
@@ -272,22 +465,183 @@
 [class*='admin__control-grouped'] {
     box-sizing: border-box;
     display: table;
-    table-layout: fixed;
     width: 100%;
+
     & > .admin__field {
         display: table-cell;
         vertical-align: top;
-        width: 50%;
+
         > .admin__field-control {
             float: none;
             width: 100%;
         }
-        &:nth-child(n+2) {
-            padding-left: 20px;
-            &:not(.admin__field-option) .admin__field-label {
-                .visually-hidden();
+
+        //  Stretch group column size to control
+        &.admin__field-default,
+        &.admin__field-x-small,
+        &.admin__field-small,
+        &.admin__field-medium,
+        &.admin__field-large {
+            width: 1px;
+
+            + .admin__field:last-child {
+                width: auto;
             }
         }
+
+        &:extend(.abs-field-sizes all);
+
+        &:nth-child(n+2) {
+            padding-left: @field-group-label__padding;
+
+            &:not(.admin__field-option):not(.admin__field-group-show-label):not(.admin__field-date) {
+                > .admin__field-label {
+                    .lib-visually-hidden();
+                }
+            }
+        }
+    }
+}
+
+//  Group of controls with equal width
+.admin__control-group-equal {
+    table-layout: fixed;
+
+    & > .admin__field {
+        width: 50%;
+    }
+}
+
+//  Group of checkboxes or radiobuttons
+.admin__field-control-group {
+    margin-top: .8rem;
+
+    & > .admin__field {
+        padding: 0;
+    }
+}
+
+//  Group of date fields
+.admin__control-grouped-date {
+    & > .admin__field-date {
+        white-space: nowrap;
+        width: 1px;
+
+        &.admin__field {
+            > .admin__field-control  {
+                &:extend(.abs-field-size-small all);
+                float: left;
+                position: relative;
+            }
+        }
+
+        + .admin__field:last-child {
+            width: auto;
+        }
+
+        + .admin__field-date {
+            > .admin__field-label {
+                float: left;
+                padding-right: @field-group-label__padding;
+            }
+        }
+    }
+    
+    .ui-datepicker-trigger {
+        top: 0;
+        left: 100%;
+    }
+}
+
+//  Group of fields with labels above in line
+.admin__field-group-columns {
+    &.admin__field-control.admin__control-grouped {
+        #mix-grid .column(@field-grid__columns, @field-grid__columns);
+    }
+
+    & > .admin__field {
+        &:first-child {
+            & > .admin__field-label {
+                float: none;
+                margin: 0;
+                opacity: 1;
+                position: static;
+            }
+        }
+
+        &:nth-child(n+2) {
+            &:not(.admin__field-option):not(.admin__field-group-show-label):not(.admin__field-date) {
+                > .admin__field-label[class] {
+                    .lib-visually-hidden-reset();
+                }
+            }
+        }
+    }
+
+    .admin__control-select {
+        width: 100%;
+    }
+}
+
+//  Additional field for group
+.admin__field-group-additional {
+    &:extend(.abs-field-no-label all);
+    clear: both;
+
+    .action-advanced {
+        margin-top: @indent__s;
+    }
+
+    .action-secondary {
+        width: 100%;
+    }
+}
+
+//  Show label for field in group
+.admin__field-group-show-label {
+    white-space: nowrap;
+
+    > .admin__field-label,
+    > .admin__field-control {
+        display: inline-block;
+        vertical-align: top;
+    }
+
+    > .admin__field-label {
+        margin-right: @field-group-label__padding;
+    }
+}
+
+//
+//  Complex Field
+//  _____________________________________________
+
+.admin_field-complex {
+    &:extend(.abs-clearfix all);
+    margin-bottom: 3rem;
+    padding-left: @indent__s;
+
+    .admin_field-complex-title {
+        clear: both;
+        color: @collapsible-title__color;
+        font-size: @collapsible-title__font-size;
+        font-weight: @font-weight__semibold;
+        letter-spacing: .025em;
+        margin-bottom: @indent__s;
+    }
+
+    .admin_field-complex-elements {
+        float: right;
+        max-width: 40%;
+
+        button {
+            margin-left: @indent__m;
+        }
+    }
+
+    .admin_field-complex-content {
+        max-width: 60%;
+        overflow: hidden;
     }
 }
 
@@ -300,6 +654,8 @@
     float: left;
     position: static;
     width: 100%;
+
+    &:extend(.abs-fieldset-legend);
     & + br {
         display: block;
         height: 0;
@@ -307,3 +663,4 @@
         clear: left;
     }
 }
+

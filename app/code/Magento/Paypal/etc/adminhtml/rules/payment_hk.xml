@@ -6,7 +6,7 @@
  */
 -->
 <rules xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../../../../../../../app/code/Magento/Paypal/etc/rules.xsd">
+       xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Paypal:etc/rules.xsd">
     <!-- Website Payments Pro Hosted Solution (Includes Express Checkout) -->
     <payment id="payments_pro_hosted_solution_hk">
         <events selector="[data-enable='payment']">
@@ -73,6 +73,10 @@
                 </predicate>
             </event>
         </events>
+        <events selector="[data-enable='in-context-api']">
+            <event value="0" name="deactivate-in-context-api"/>
+            <event value="1" name="activate-in-context-api"/>
+        </events>
         <relation target="wps_other">
             <rule type="disable" event="activate-rule"/>
         </relation>
@@ -81,6 +85,13 @@
             <rule type="paypal/express/mark-disable" event="deactivate-rule">
                 <argument name="wps_other">wps_other</argument>
             </rule>
+            <rule type="paypal/in-context/enable" event="activate-rule"/>
+            <rule type="paypal/in-context/disable" event="deactivate-rule"/>
+            <rule type="paypal/in-context/show-merchant-id" event="activate-rule"/>
+            <rule type="paypal/in-context/hide-merchant-id" event="deactivate-rule"/>
+            <rule type="paypal/in-context/activate" event="activate-in-context-api"/>
+            <rule type="paypal/in-context/deactivate" event="deactivate-in-context-api"/>
+            <rule type="paypal/in-context/disable-conditional" event=":load"/>
             <rule type="conflict" event=":load">
                 <argument name="wps_other">wps_other</argument>
             </rule>

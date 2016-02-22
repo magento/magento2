@@ -17,7 +17,7 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
     /**
      * Product collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productCollectionFactory;
 
@@ -32,7 +32,7 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      * @param CategoryRepositoryInterface $categoryRepository
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param array $data
      */
     public function __construct(
@@ -41,7 +41,7 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
         CategoryRepositoryInterface $categoryRepository,
         \Magento\Framework\Url\Helper\Data $urlHelper,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         array $data = []
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -56,12 +56,12 @@ class Random extends \Magento\Catalog\Block\Product\ListProduct
     }
 
     /**
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     protected function _getProductCollection()
     {
         if ($this->_productCollection === null) {
-            /** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
+            /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
             $collection = $this->_productCollectionFactory->create();
             $this->_catalogLayer->prepareProductCollection($collection);
             $collection->getSelect()->order('rand()');

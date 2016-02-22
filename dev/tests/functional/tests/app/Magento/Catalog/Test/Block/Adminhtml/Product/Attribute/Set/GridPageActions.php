@@ -10,7 +10,7 @@ use Magento\Backend\Test\Block\GridPageActions as AbstractGridPageActions;
 
 /**
  * Class GridPageActions
- * Grid page actions block on Product Templates page
+ * Grid page actions block on Attribute Sets page
  */
 class GridPageActions extends AbstractGridPageActions
 {

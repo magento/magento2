@@ -9,6 +9,8 @@ namespace Magento\Catalog\Model\Layer;
  * Test class for \Magento\Catalog\Model\Layer.
  *
  * @magentoDataFixture Magento/Catalog/_files/categories.php
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  */
 class CategoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,12 +34,11 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetProductCollection()
     {
-        /** @var $collection \Magento\Catalog\Model\Resource\Product\Collection */
+        /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Collection */
         $collection = $this->_model->getProductCollection();
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Product\Collection', $collection);
+        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Product\Collection', $collection);
         $ids = $collection->getAllIds();
-        $this->assertContains(1, $ids);
-        $this->assertContains(2, $ids);
+        $this->assertEquals(2, count($ids));
         $this->assertSame($collection, $this->_model->getProductCollection());
     }
 
@@ -129,7 +130,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
                 'Magento\Catalog\Model\Layer\Category'
             );
-            $model->setCurrentCategory(new \Magento\Framework\Object());
+            $model->setCurrentCategory(new \Magento\Framework\DataObject());
             $this->fail('Assign category of invalid class.');
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
         }

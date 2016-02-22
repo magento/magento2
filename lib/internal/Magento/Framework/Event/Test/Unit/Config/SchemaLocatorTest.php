@@ -8,31 +8,48 @@ namespace Magento\Framework\Event\Test\Unit\Config;
 class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection\Config\SchemaLocator
      */
-    protected $_moduleReaderMock;
+    protected $model;
 
-    /**
-     * @var \Magento\Framework\Event\Config\SchemaLocator
-     */
-    protected $_model;
+    /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
+    protected $urnResolver;
+
+    /** @var \Magento\Framework\Config\Dom\UrnResolver $urnResolverMock */
+    protected $urnResolverMock;
 
     protected function setUp()
     {
-        $this->_model = new \Magento\Framework\Event\Config\SchemaLocator();
+        $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $this->urnResolverMock = $this->getMock('Magento\Framework\Config\Dom\UrnResolver', [], [], '', false);
+        $this->model = new \Magento\Framework\Event\Config\SchemaLocator($this->urnResolverMock);
     }
 
     public function testGetSchema()
     {
-        $expected = str_replace('\\', '/', BP . '/lib/internal/Magento/Framework/Event/etc/events.xsd');
-        $actual = str_replace('\\', '/', $this->_model->getSchema());
-        $this->assertEquals($expected, $actual);
+        $this->urnResolverMock->expects($this->once())
+            ->method('getRealPath')
+            ->with('urn:magento:framework:Event/etc/events.xsd')
+            ->willReturn(
+                $this->urnResolver->getRealPath('urn:magento:framework:Event/etc/events.xsd')
+            );
+        $this->assertEquals(
+            $this->urnResolver->getRealPath('urn:magento:framework:Event/etc/events.xsd'),
+            $this->model->getSchema()
+        );
     }
 
     public function testGetPerFileSchema()
     {
-        $actual = str_replace('\\', '/', $this->_model->getPerFileSchema());
-        $expected = str_replace('\\', '/', BP . '/lib/internal/Magento/Framework/Event/etc/events.xsd');
-        $this->assertEquals($expected, $actual);
+        $this->urnResolverMock->expects($this->once())
+            ->method('getRealPath')
+            ->with('urn:magento:framework:Event/etc/events.xsd')
+            ->willReturn(
+                $this->urnResolver->getRealPath('urn:magento:framework:Event/etc/events.xsd')
+            );
+        $this->assertEquals(
+            $this->urnResolver->getRealPath('urn:magento:framework:Event/etc/events.xsd'),
+            $this->model->getPerFileSchema()
+        );
     }
 }

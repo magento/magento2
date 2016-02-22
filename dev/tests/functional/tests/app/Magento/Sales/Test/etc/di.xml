@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
  -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Sales\Test\Constraint\AssertOrderStatusInGrid">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
@@ -26,7 +26,17 @@
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
-    <type name="Magento\Sales\Test\Constraint\AssertOrderCommentsHistory">
+    <type name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertCaptureInCommentsHistory">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertTransactionDetails">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>

@@ -48,10 +48,10 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateModel
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $configuration
      * @param \Magento\MediaStorage\Helper\File\Media $mediaHelper
-     * @param \Magento\MediaStorage\Model\Resource\File\Storage\Database $resource
+     * @param \Magento\MediaStorage\Model\ResourceModel\File\Storage\Database $resource
      * @param Directory\DatabaseFactory $directoryFactory
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
-     * @param null $connectionName
+     * @param string $connectionName
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -62,7 +62,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
         \Magento\Framework\Stdlib\DateTime\DateTime $dateModel,
         \Magento\Framework\App\Config\ScopeConfigInterface $configuration,
         \Magento\MediaStorage\Helper\File\Media $mediaHelper,
-        \Magento\MediaStorage\Model\Resource\File\Storage\Database $resource,
+        \Magento\MediaStorage\Model\ResourceModel\File\Storage\Database $resource,
         \Magento\MediaStorage\Model\File\Storage\Directory\DatabaseFactory $directoryFactory,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         $connectionName = null,

@@ -6,10 +6,10 @@
 
 return [
     'db-host' => '127.0.0.1',
-    'db-user' => 'travis',
+    'db-user' => 'root',
     'db-password' => '',
     'db-name' => 'magento_integration_tests',
-    'db-prefix' => 'travis_',
+    'db-prefix' => 'trv_',
     'backend-frontname' => 'backend',
     'admin-user' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
     'admin-password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,

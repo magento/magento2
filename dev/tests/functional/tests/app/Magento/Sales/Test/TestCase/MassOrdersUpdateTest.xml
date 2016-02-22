@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Sales\Test\TestCase\MassOrdersUpdateTest">
+    <testCase name="Magento\Sales\Test\TestCase\MassOrdersUpdateTest" summary="Mass Update Orders" ticketId="MAGETWO-27897">
         <variation name="MassOrdersUpdateTestVariation1">
             <data name="description" xsi:type="string">cancel orders in status Pending and Processing</data>
             <data name="steps" xsi:type="string">-</data>

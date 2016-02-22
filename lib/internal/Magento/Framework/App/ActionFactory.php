@@ -26,17 +26,14 @@ class ActionFactory
      * Create action
      *
      * @param string $actionName
-     * @param array $arguments
      * @return ActionInterface
      * @throws \InvalidArgumentException
      */
-    public function create($actionName, array $arguments = [])
+    public function create($actionName)
     {
         if (!is_subclass_of($actionName, '\Magento\Framework\App\ActionInterface')) {
             throw new \InvalidArgumentException('Invalid action name provided');
         }
-        $context = $this->_objectManager->create('Magento\Framework\App\Action\Context', $arguments);
-        $arguments['context'] = $context;
-        return $this->_objectManager->create($actionName, $arguments);
+        return $this->_objectManager->create($actionName);
     }
 }

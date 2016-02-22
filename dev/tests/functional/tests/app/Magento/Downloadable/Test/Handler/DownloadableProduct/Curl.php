@@ -7,22 +7,20 @@
 namespace Magento\Downloadable\Test\Handler\DownloadableProduct;
 
 use Magento\Catalog\Test\Handler\CatalogProductSimple\Curl as ProductCurl;
+use Magento\Downloadable\Test\Fixture\DownloadableProduct;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Config\DataInterface;
 use Magento\Mtf\System\Event\EventManagerInterface;
-use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
 /**
- * Class Curl
- * Create new downloadable product via curl
+ * Create new downloadable product via curl.
  */
 class Curl extends ProductCurl implements DownloadableProductInterface
 {
     /**
-     * Constructor
-     *
+     * @constructor
      * @param DataInterface $configuration
      * @param EventManagerInterface $eventManager
      */
@@ -44,56 +42,65 @@ class Curl extends ProductCurl implements DownloadableProductInterface
     }
 
     /**
-     * Prepare POST data for creating product request
+     * Prepare POST data for creating product request.
      *
      * @param FixtureInterface $fixture
-     * @param string|null $prefix [optional]
      * @return array
      */
-    protected function prepareData(FixtureInterface $fixture, $prefix = null)
+    public function prepareData(FixtureInterface $fixture)
     {
-        $data = parent::prepareData($fixture, null);
+        /** @var DownloadableProduct $fixture */
+        $fixtureData = parent::prepareData($fixture);
+        $downloadableData = [
+            'downloadable_sample' => $fixture->getDownloadableSample(),
+            'downloadable_links' => $fixture->getDownloadableLinks()
+        ];
+        $data = [];
 
-        $downloadableData = [];
-        if (!empty($data['downloadable_links'])) {
-            $data['links_title'] = $data['downloadable_links']['title'];
-            $data['links_purchased_separately'] = $data['downloadable_links']['links_purchased_separately'];
-
-            foreach ($data['downloadable_links']['downloadable']['link'] as $key => $link) {
-                $downloadableData['downloadable']['link'][$key]['title'] = $link['title'];
+        if (!empty($downloadableData['downloadable_sample'])) {
+            foreach ($downloadableData['downloadable_sample']['downloadable']['sample'] as $key => $sample) {
+                $data['downloadable']['sample'][$key]['title'] = $sample['title'];
                 // only url type
-                $downloadableData['downloadable']['link'][$key]['type'] = 'url';
-                $downloadableData['downloadable']['link'][$key]['link_url'] = $link['file_link_url'];
-                $downloadableData['downloadable']['link'][$key]['price'] = $link['price'];
-                $downloadableData['downloadable']['link'][$key]['number_of_downloads'] = $link['number_of_downloads'];
-                $downloadableData['downloadable']['link'][$key]['is_shareable'] = $link['is_shareable'];
-                $downloadableData['downloadable']['link'][$key]['sort_order'] = $link['sort_order'];
-                $downloadableData['downloadable']['link'][$key]['sample']['type'] = 'url';
-                $downloadableData['downloadable']['link'][$key]['sample']['url'] = $link['sample']['sample_url'];
+                $data['downloadable']['sample'][$key]['type'] = 'url';
+                $data['downloadable']['sample'][$key]['sample_url'] = $sample['sample_url'];
+                $data['downloadable']['sample'][$key]['sort_order'] = $sample['sort_order'];
             }
-            unset($data['downloadable_links']);
-        }
 
-        if (!empty($data['downloadable_sample'])) {
-            $data['samples_title'] = $data['downloadable_sample']['title'];
-            foreach ($data['downloadable_sample']['downloadable']['sample'] as $key => $sample) {
-                $downloadableData['downloadable']['sample'][$key]['title'] = $sample['title'];
-                // only url type
-                $downloadableData['downloadable']['sample'][$key]['type'] = 'url';
-                $downloadableData['downloadable']['sample'][$key]['sample_url'] = $sample['sample_url'];
-                $downloadableData['downloadable']['sample'][$key]['sort_order'] = $sample['sort_order'];
-            }
+            $sampleTitle = $downloadableData['downloadable_sample']['title'];
+            $data['samples_title'] = ['product' => $sampleTitle];
+
             unset($data['downloadable_sample']);
         }
 
-        $data = $prefix ? [$prefix => $data] : $data;
-        $data = array_merge($data, $downloadableData);
+        if (!empty($downloadableData['downloadable_links'])) {
+            foreach ($downloadableData['downloadable_links']['downloadable']['link'] as $key => $link) {
+                $data['downloadable']['link'][$key]['title'] = $link['title'];
+                // only url type
+                $data['downloadable']['link'][$key]['type'] = 'url';
+                $data['downloadable']['link'][$key]['link_url'] = $link['file_link_url'];
+                $data['downloadable']['link'][$key]['price'] = $link['price'];
+                $data['downloadable']['link'][$key]['number_of_downloads'] = $link['number_of_downloads'];
+                $data['downloadable']['link'][$key]['is_shareable'] = $link['is_shareable'];
+                $data['downloadable']['link'][$key]['sort_order'] = $link['sort_order'];
+                $data['downloadable']['link'][$key]['sample']['type'] = 'url';
+                $data['downloadable']['link'][$key]['sample']['url'] = $link['sample']['sample_url'];
+            }
 
+            $links = [
+                'links_title' => $downloadableData['downloadable_links']['title'],
+                'links_purchased_separately' => $downloadableData['downloadable_links']['links_purchased_separately']
+            ];
+            $data = array_merge($data, ['product' => $links]);
+
+            unset($downloadableData['downloadable_links']);
+        }
+
+        $data = array_merge_recursive($fixtureData, $data);
         return $this->replaceMappingData($data);
     }
 
     /**
-     * Create product via curl
+     * Create product via curl.
      *
      * @param array $data
      * @param array $config
@@ -105,7 +112,7 @@ class Curl extends ProductCurl implements DownloadableProductInterface
         $url = $this->getUrl($config);
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
         $curl->addOption(CURLOPT_HEADER, 1);
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
 

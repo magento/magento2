@@ -5,21 +5,19 @@
  */
 namespace Magento\CatalogInventory\Helper;
 
-use Magento\CatalogInventory\Api\StockRegistryInterface;
+use Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\StatusFactory;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Status;
+use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
+use Magento\Catalog\Model\Product;
 
 /**
  * Class Stock
  */
 class Stock
 {
-    /**
-     * @var StockRegistryInterface
-     */
-    protected $stockRegistry;
-
     /**
      * Store model manager
      *
@@ -35,45 +33,50 @@ class Stock
     protected $scopeConfig;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Stock\Status
+     * @var Status
      */
     protected $stockStatusResource;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var StatusFactory
      */
-    protected $objectManger;
+    protected $stockStatusFactory;
 
     /**
-     * @param StockRegistryInterface $stockRegistry
+     * @var StockRegistryProviderInterface
+     */
+    private $stockRegistryProvider;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param ScopeConfigInterface $scopeConfig
-     * @param ObjectManagerInterface $objectManager
+     * @param StatusFactory $stockStatusFactory
+     * @param StockRegistryProviderInterface $stockRegistryProvider
      */
     public function __construct(
-        StockRegistryInterface $stockRegistry,
         StoreManagerInterface $storeManager,
         ScopeConfigInterface $scopeConfig,
-        ObjectManagerInterface $objectManager
+        StatusFactory $stockStatusFactory,
+        StockRegistryProviderInterface $stockRegistryProvider
     ) {
-        $this->stockRegistry = $stockRegistry;
         $this->storeManager = $storeManager;
         $this->scopeConfig = $scopeConfig;
-        $this->objectManger = $objectManager;
+        $this->stockStatusFactory  = $stockStatusFactory;
+        $this->stockRegistryProvider = $stockRegistryProvider;
     }
 
     /**
      * Assign stock status information to product
      *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param int $stockStatus
+     * @param Product $product
+     * @param int $status
      * @return void
      */
-    public function assignStatusToProduct(\Magento\Catalog\Model\Product $product, $stockStatus = null)
+    public function assignStatusToProduct(Product $product, $status = null)
     {
-        if ($stockStatus === null) {
+        if ($status === null) {
             $websiteId = $product->getStore()->getWebsiteId();
-            $stockStatus = $this->stockRegistry->getStockStatus($product->getId(), $websiteId);
+            $stockStatus = $this->stockRegistryProvider->getStockStatus($product->getId(), $websiteId);
             $status = $stockStatus->getStockStatus();
         }
         $product->setIsSalable($status);
@@ -82,18 +85,15 @@ class Stock
     /**
      * Add stock status information to products
      *
-     * @param \Magento\Catalog\Model\Resource\Collection\AbstractCollection $productCollection
+     * @param AbstractCollection $productCollection
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function addStockStatusToProducts(
-        \Magento\Catalog\Model\Resource\Collection\AbstractCollection $productCollection
-    ) {
+    public function addStockStatusToProducts(AbstractCollection $productCollection)
+    {
         $websiteId = $this->storeManager->getStore($productCollection->getStoreId())->getWebsiteId();
-        $productIds = [];
         foreach ($productCollection as $product) {
             $productId = $product->getId();
-            $stockStatus = $this->stockRegistry->getStockStatus($productId, $websiteId);
+            $stockStatus = $this->stockRegistryProvider->getStockStatus($productId, $websiteId);
             $status = $stockStatus->getStockStatus();
             $product->setIsSalable($status);
         }
@@ -102,7 +102,7 @@ class Stock
     /**
      * Adds filtering for collection to return only in stock products
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Link\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collection
      * @return void
      */
     public function addInStockFilterToCollection($collection)
@@ -132,22 +132,9 @@ class Stock
     }
 
     /**
-     * Add stock status to prepare index select
-     *
-     * @param \Magento\Framework\DB\Select $select
-     * @param \Magento\Store\Model\Website $website
-     * @return void
-     */
-    public function addStockStatusToSelect(\Magento\Framework\DB\Select $select, \Magento\Store\Model\Website $website)
-    {
-        $resource = $this->getStockStatusResource();
-        $resource->addStockStatusToSelect($select, $website);
-    }
-
-    /**
      * Add only is in stock products filter to product collection
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $collection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @return void
      */
     public function addIsInStockFilterToCollection($collection)
@@ -157,14 +144,12 @@ class Stock
     }
 
     /**
-     * @return \Magento\CatalogInventory\Model\Resource\Stock\Status
+     * @return Status
      */
     protected function getStockStatusResource()
     {
         if (empty($this->stockStatusResource)) {
-            $this->stockStatusResource = $this->objectManger->get(
-                'Magento\CatalogInventory\Model\Resource\Stock\Status'
-            );
+            $this->stockStatusResource = $this->stockStatusFactory->create();
         }
         return $this->stockStatusResource;
     }

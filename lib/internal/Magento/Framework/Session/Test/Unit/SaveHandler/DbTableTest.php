@@ -82,7 +82,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
         );
 
         $resource = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',
@@ -106,7 +106,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
     public function testCheckConnectionNoConnection()
     {
         $resource = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',
@@ -147,7 +147,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
         );
 
         $resource = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',
@@ -184,7 +184,7 @@ class DbTableTest extends \PHPUnit_Framework_TestCase
     protected function _prepareResourceMock($connection)
     {
         $resource = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             [],
             [],
             '',

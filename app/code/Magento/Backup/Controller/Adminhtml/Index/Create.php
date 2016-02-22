@@ -23,7 +23,7 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index
             return $this->_redirect('*/*/index');
         }
 
-        $response = new \Magento\Framework\Object();
+        $response = new \Magento\Framework\DataObject();
 
         /**
          * @var \Magento\Backup\Helper\Data $helper

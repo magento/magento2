@@ -5,7 +5,6 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
 class IndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
@@ -22,16 +21,12 @@ class IndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
      *
      * @var string
      */
-    protected $schemeFile;
+    protected $schemaFile;
 
     protected function setUp()
     {
-        /** @var Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Filesystem'
-        );
-        $this->schemeFile = $filesystem->getDirectoryRead(DirectoryList::APP)
-            ->getAbsolutePath('code/Magento/Indexer/etc/indexer.xsd');
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $this->schemaFile = $urnResolver->getRealPath('urn:magento:framework:Indexer/etc/indexer.xsd');
     }
 
     /**
@@ -41,8 +36,11 @@ class IndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function testIndexerConfigFile($file)
     {
-        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file));
-        $result = $domConfig->validate($this->schemeFile, $errors);
+        $validationStateMock = $this->getMock('\Magento\Framework\Config\ValidationStateInterface', [], [], '', false);
+        $validationStateMock->method('isValidationRequired')
+            ->willReturn(true);
+        $domConfig = new \Magento\Framework\Config\Dom(file_get_contents($file), $validationStateMock);
+        $result = $domConfig->validate($this->schemaFile, $errors);
         $message = "Invalid XML-file: {$file}\n";
         foreach ($errors as $error) {
             $message .= "{$error}\n";
@@ -55,17 +53,6 @@ class IndexerConfigFilesTest extends \PHPUnit_Framework_TestCase
      */
     public function indexerConfigFileDataProvider()
     {
-        /** @var Filesystem $filesystem */
-        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Filesystem'
-        );
-        $fileList = glob(
-            $filesystem->getDirectoryRead(DirectoryList::APP)->getAbsolutePath() . '/*/*/*/etc/indexer.xml'
-        );
-        $dataProviderResult = [];
-        foreach ($fileList as $file) {
-            $dataProviderResult[$file] = [$file];
-        }
-        return $dataProviderResult;
+        return \Magento\Framework\App\Utility\Files::init()->getConfigFiles('indexer.xml');
     }
 }

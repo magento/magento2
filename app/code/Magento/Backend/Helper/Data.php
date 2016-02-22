@@ -198,10 +198,11 @@ class Data extends AbstractHelper
     /**
      * Return Backend area front name
      *
-     * @return string
+     * @param bool $checkHost
+     * @return bool|string
      */
-    public function getAreaFrontName()
+    public function getAreaFrontName($checkHost = false)
     {
-        return $this->_frontNameResolver->getFrontName();
+        return $this->_frontNameResolver->getFrontName($checkHost);
     }
 }

@@ -5,6 +5,8 @@
  */
 namespace Magento\ImportExport\Model;
 
+use Magento\ImportExport\Model\Import;
+
 /**
  * @magentoDataFixture Magento/ImportExport/_files/import_data.php
  */
@@ -13,7 +15,7 @@ class ImportTest extends \PHPUnit_Framework_TestCase
     /**
      * Model object which is used for tests
      *
-     * @var \Magento\ImportExport\Model\Import
+     * @var Import
      */
     protected $_model;
 
@@ -31,18 +33,24 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         'catalog_product' => [
             'token' => 'Magento\ImportExport\Model\Source\Import\Behavior\Basic',
             'code' => 'basic_behavior',
+            'notes' => [
+                \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE => "Note: Product IDs will be regenerated."
+            ],
         ],
         'customer_composite' => [
             'token' => 'Magento\ImportExport\Model\Source\Import\Behavior\Basic',
             'code' => 'basic_behavior',
+            'notes' => [],
         ],
         'customer' => [
             'token' => 'Magento\ImportExport\Model\Source\Import\Behavior\Custom',
             'code' => 'custom_behavior',
+            'notes' => [],
         ],
         'customer_address' => [
             'token' => 'Magento\ImportExport\Model\Source\Import\Behavior\Custom',
             'code' => 'custom_behavior',
+            'notes' => [],
         ],
     ];
 
@@ -72,9 +80,9 @@ class ImportTest extends \PHPUnit_Framework_TestCase
      */
     public function testImportSource()
     {
-        /** @var $customersCollection \Magento\Customer\Model\Resource\Customer\Collection */
+        /** @var $customersCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
         $customersCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Resource\Customer\Collection'
+            'Magento\Customer\Model\ResourceModel\Customer\Collection'
         );
 
         $existCustomersCount = count($customersCollection->load());
@@ -82,6 +90,10 @@ class ImportTest extends \PHPUnit_Framework_TestCase
         $customersCollection->resetData();
         $customersCollection->clear();
 
+        $this->_model->setData(
+            Import::FIELD_NAME_VALIDATION_STRATEGY,
+            Import\ErrorProcessing\ProcessingErrorAggregatorInterface::VALIDATION_STRATEGY_SKIP_ERRORS
+        );
         $this->_model->importSource();
 
         $customers = $customersCollection->getItems();

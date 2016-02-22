@@ -13,7 +13,7 @@ interface SearchResultInterface
     /**
      * Retrieve collection items
      *
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getItems();
 

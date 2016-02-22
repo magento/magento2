@@ -9,6 +9,8 @@
  */
 namespace Magento\Test\Legacy;
 
+use Magento\Framework\App\Utility\Files;
+
 class TableTest extends \PHPUnit_Framework_TestCase
 {
     public function testTableName()
@@ -32,7 +34,14 @@ class TableTest extends \PHPUnit_Framework_TestCase
                 $message = $this->_composeFoundsMessage($legacyTables);
                 $this->assertEmpty($message, $message);
             },
-            \Magento\Framework\App\Utility\Files::init()->getPhpFiles(true, true, true, true, false)
+            Files::init()->getPhpFiles(
+                Files::INCLUDE_APP_CODE
+                | Files::INCLUDE_PUB_CODE
+                | Files::INCLUDE_LIBS
+                | Files::INCLUDE_TEMPLATES
+                | Files::AS_DATA_SET
+                | Files::INCLUDE_NON_CLASSES
+            )
         );
     }
 

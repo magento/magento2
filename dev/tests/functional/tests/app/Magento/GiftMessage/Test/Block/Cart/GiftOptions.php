@@ -7,7 +7,13 @@
 namespace Magento\GiftMessage\Test\Block\Cart;
 
 use Magento\GiftMessage\Test\Fixture\GiftMessage;
+use Magento\Mtf\Block\BlockFactory;
 use Magento\Mtf\Block\Form;
+use Magento\Mtf\Block\Mapper;
+use Magento\Mtf\Client\BrowserInterface;
+use Magento\Mtf\Client\Element\SimpleElement;
+use Magento\Mtf\Fixture\FixtureFactory;
+use Magento\Mtf\Util\ModuleResolver\SequenceSorterInterface;
 
 /**
  * Class GiftOptions
@@ -44,6 +50,35 @@ class GiftOptions extends Form
     protected $giftMessageSummary = ".gift-message-summary";
 
     /**
+     * Fixture factory.
+     *
+     * @var FixtureFactory
+     */
+    protected $fixtureFactory;
+
+    /**
+     * @param SimpleElement $element
+     * @param BlockFactory $blockFactory
+     * @param Mapper $mapper
+     * @param BrowserInterface $browser
+     * @param SequenceSorterInterface $sequenceSorter
+     * @param FixtureFactory $fixtureFactory
+     * @param array $config [optional]
+     */
+    public function __construct(
+        SimpleElement $element,
+        BlockFactory $blockFactory,
+        Mapper $mapper,
+        BrowserInterface $browser,
+        SequenceSorterInterface $sequenceSorter,
+        FixtureFactory $fixtureFactory,
+        array $config = []
+    ) {
+        parent::__construct($element, $blockFactory, $mapper, $browser, $sequenceSorter, $config);
+        $this->fixtureFactory = $fixtureFactory;
+    }
+
+    /**
      * Fill gift message form on order level
      *
      * @param GiftMessage $giftMessage
@@ -58,7 +93,13 @@ class GiftOptions extends Form
                 'Magento\GiftMessage\Test\Block\Cart\GiftOptions\GiftMessageForm',
                 ['element' => $this->_rootElement->find($this->giftMessageOrderForm)]
             );
-            $giftMessageForm->fill($giftMessage);
+            $formData = [
+                'sender' => $giftMessage->getSender(),
+                'recipient' => $giftMessage->getRecipient(),
+                'message' => $giftMessage->getMessage()
+            ];
+            $formData = $this->fixtureFactory->createByCode('giftMessage', ['data' => $formData]);
+            $giftMessageForm->fill($formData);
             $this->_rootElement->find($this->giftMessageOrderButton)->click();
             $this->waitForElementVisible($this->giftMessageSummary);
         }

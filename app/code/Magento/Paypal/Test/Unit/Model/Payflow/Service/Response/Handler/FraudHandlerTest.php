@@ -5,7 +5,7 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Handler;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Paypal\Model\Payflow\Service\Response\Handler\FraudHandler;
 use Magento\Paypal\Model\Info;
@@ -37,7 +37,7 @@ class FraudHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->paymentMock = $this->getMockBuilder('Magento\Payment\Model\InfoInterface')
             ->getMock();
-        $this->responseMock = $this->getMockBuilder('Magento\Framework\Object')
+        $this->responseMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
         $this->paypalInfoManagerMock = $this->getMockBuilder('Magento\Paypal\Model\Info')

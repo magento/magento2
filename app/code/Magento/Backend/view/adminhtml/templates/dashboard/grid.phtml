@@ -14,7 +14,7 @@ $numColumns = sizeof($block->getColumns());
 <?php if ($block->getCollection()): ?>
 <div class="dashboard-item-content">
     <?php if ($block->getCollection()->getSize()>0): ?>
-        <table class="admin__table-primary dashboard-data" id="<?php echo $block->getId() ?>_table">
+        <table class="admin__table-primary dashboard-data" id="<?php /* @escapeNotVerified */ echo $block->getId() ?>_table">
             <?php
             /* This part is commented to remove all <col> tags from the code. */
             /* foreach ($block->getColumns() as $_column): ?>
@@ -34,9 +34,9 @@ $numColumns = sizeof($block->getColumns());
             <?php if (!$block->getIsCollapsed()): ?>
                 <tbody>
                 <?php foreach ($block->getCollection() as $_index => $_item): ?>
-                    <tr title="<?php echo $block->getRowUrl($_item) ?>">
+                    <tr title="<?php /* @escapeNotVerified */ echo $block->getRowUrl($_item) ?>">
                     <?php $i = 0; foreach ($block->getColumns() as $_column): ?>
-                        <td class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"><?php echo(($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?></td>
+                        <td class="<?php /* @escapeNotVerified */ echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>"><?php echo(($_html = $_column->getRowField($_item)) != '' ? $_html : '&nbsp;') ?></td>
                     <?php endforeach; ?>
                     </tr>
                 <?php endforeach; ?>
@@ -44,35 +44,49 @@ $numColumns = sizeof($block->getColumns());
             <?php endif; ?>
         </table>
     <?php else: ?>
-        <div class="<?php echo $block->getEmptyTextClass() ?>"><?php echo $block->getEmptyText() ?></div>
+        <div class="<?php /* @escapeNotVerified */ echo $block->getEmptyTextClass() ?>"><?php /* @escapeNotVerified */ echo $block->getEmptyText() ?></div>
     <?php endif; ?>
 </div>
 <?php if ($block->canDisplayContainer()): ?>
 <script>
-var deps = ['mage/adminhtml/grid'];
+var deps = [];
 
-<?php if (strpos($block->getRowClickCallback(), 'order.') !== false): ?>
-deps.push('Magento_Sales/order/create/form')
+<?php if ($block->getDependencyJsObject()): ?>
+deps.push('uiRegistry');
 <?php endif; ?>
 
-require(deps, function(){
+<?php if (strpos($block->getRowClickCallback(), 'order.') !== false): ?>
+deps.push('Magento_Sales/order/create/form');
+<?php endif; ?>
+
+deps.push('mage/adminhtml/grid');
+
+require(deps, function(<?php echo ($block->getDependencyJsObject() ? 'registry' : '') ?>){
     <?php //TODO: getJsObjectName and getRowClickCallback has unexpected behavior. Should be removed ?>
 
-    <?php echo $block->getJsObjectName() ?> = new varienGrid('<?php echo $block->getId() ?>', '<?php echo $block->getGridUrl() ?>', '<?php echo $block->getVarNamePage() ?>', '<?php echo $block->getVarNameSort() ?>', '<?php echo $block->getVarNameDir() ?>', '<?php echo $block->getVarNameFilter() ?>');
-    <?php echo $block->getJsObjectName() ?>.useAjax = '<?php echo $block->getUseAjax() ?>';
+    <?php if ($block->getDependencyJsObject()): ?>
+        registry.get('<?php /* @escapeNotVerified */ echo $block->getDependencyJsObject() ?>', function (<?php /* @escapeNotVerified */ echo $block->getDependencyJsObject() ?>) {
+    <?php endif; ?>
+
+    <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?> = new varienGrid('<?php /* @escapeNotVerified */ echo $block->getId() ?>', '<?php /* @escapeNotVerified */ echo $block->getGridUrl() ?>', '<?php /* @escapeNotVerified */ echo $block->getVarNamePage() ?>', '<?php /* @escapeNotVerified */ echo $block->getVarNameSort() ?>', '<?php /* @escapeNotVerified */ echo $block->getVarNameDir() ?>', '<?php /* @escapeNotVerified */ echo $block->getVarNameFilter() ?>');
+    <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.useAjax = '<?php /* @escapeNotVerified */ echo $block->getUseAjax() ?>';
     <?php if ($block->getRowClickCallback()): ?>
-        <?php echo $block->getJsObjectName() ?>.rowClickCallback = <?php echo $block->getRowClickCallback() ?>;
+        <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.rowClickCallback = <?php /* @escapeNotVerified */ echo $block->getRowClickCallback() ?>;
     <?php endif; ?>
     <?php if ($block->getCheckboxCheckCallback()): ?>
-        <?php echo $block->getJsObjectName() ?>.checkboxCheckCallback = <?php echo $block->getCheckboxCheckCallback() ?>;
+        <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.checkboxCheckCallback = <?php /* @escapeNotVerified */ echo $block->getCheckboxCheckCallback() ?>;
     <?php endif; ?>
     <?php if ($block->getRowInitCallback()): ?>
-        <?php echo $block->getJsObjectName() ?>.initRowCallback = <?php echo $block->getRowInitCallback() ?>;
-        <?php echo $block->getJsObjectName() ?>.rows.each(function(row){<?php echo $block->getRowInitCallback() ?>(<?php echo $block->getJsObjectName() ?>, row)});
+        <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.initRowCallback = <?php /* @escapeNotVerified */ echo $block->getRowInitCallback() ?>;
+        <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.rows.each(function(row){<?php /* @escapeNotVerified */ echo $block->getRowInitCallback() ?>(<?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>, row)});
     <?php endif; ?>
     <?php if ($block->getMassactionBlock()->isAvailable()): ?>
-    <?php echo $block->getMassactionBlock()->getJavaScript() ?>
+    <?php /* @escapeNotVerified */ echo $block->getMassactionBlock()->getJavaScript() ?>
     <?php endif ?>
+
+    <?php if ($block->getDependencyJsObject()): ?>
+    });
+    <?php endif; ?>
 
 });
 </script>

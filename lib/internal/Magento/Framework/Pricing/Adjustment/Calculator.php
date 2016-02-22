@@ -7,7 +7,7 @@
 namespace Magento\Framework\Pricing\Adjustment;
 
 use Magento\Framework\Pricing\Amount\AmountFactory;
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 
 /**
  * Class Calculator
@@ -33,25 +33,33 @@ class Calculator implements CalculatorInterface
      *
      * @param float|string $amount
      * @param SaleableInterface $saleableItem
-     * @param null|bool|string $exclude
+     * @param null|bool|string|array $exclude
      * @param null|array $context
      * @return \Magento\Framework\Pricing\Amount\AmountInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getAmount($amount, SaleableInterface $saleableItem, $exclude = null, $context = [])
     {
         $baseAmount = $fullAmount = $amount;
+        $previousAdjustments = 0;
         $adjustments = [];
         foreach ($saleableItem->getPriceInfo()->getAdjustments() as $adjustment) {
             $code = $adjustment->getAdjustmentCode();
             $toExclude = false;
-            if ($exclude === true || ($exclude !== null && $code === $exclude)) {
-                $toExclude = true;
+            if (!is_array($exclude)) {
+                if ($exclude === true || ($exclude !== null && $code === $exclude)) {
+                    $toExclude = true;
+                }
+            } else {
+                if (in_array($code, $exclude)) {
+                    $toExclude = true;
+                }
             }
             if ($adjustment->isIncludedInBasePrice()) {
                 $adjust = $adjustment->extractAdjustment($baseAmount, $saleableItem, $context);
                 $baseAmount -= $adjust;
                 $fullAmount = $adjustment->applyAdjustment($fullAmount, $saleableItem, $context);
-                $adjust = $fullAmount - $baseAmount;
+                $adjust = $fullAmount - $baseAmount - $previousAdjustments;
                 if (!$toExclude) {
                     $adjustments[$code] = $adjust;
                 }
@@ -63,6 +71,7 @@ class Calculator implements CalculatorInterface
                 $adjust = $newAmount - $fullAmount;
                 $adjustments[$code] = $adjust;
                 $fullAmount = $newAmount;
+                $previousAdjustments += $adjust;
             }
         }
 

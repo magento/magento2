@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Search\Dynamic;
 
+use Magento\Framework\DB\Ddl\Table;
+use Magento\Framework\Search\Dynamic\EntityStorage;
 use Magento\Framework\Search\Request\BucketInterface;
 
 interface DataProviderInterface
@@ -17,27 +19,36 @@ interface DataProviderInterface
     public function getRange();
 
     /**
-     * @param int[] $entityIds
+     * @param EntityStorage $entityStorage
      * @return array
      */
-    public function getAggregations(array $entityIds);
+    public function getAggregations(EntityStorage $entityStorage);
 
     /**
      * @param BucketInterface $bucket
      * @param array $dimensions
-     * @param int[] $entityIds
-     * @return \Magento\Framework\Search\Dynamic\IntervalInterface
+     * @param EntityStorage $entityStorage
+     * @return IntervalInterface
      */
-    public function getInterval(BucketInterface $bucket, array $dimensions, array $entityIds);
+    public function getInterval(
+        BucketInterface $bucket,
+        array $dimensions,
+        EntityStorage $entityStorage
+    );
 
     /**
      * @param BucketInterface $bucket
      * @param array $dimensions
      * @param int $range
-     * @param int[] $entityIds
+     * @param EntityStorage $entityStorage
      * @return array
      */
-    public function getAggregation(BucketInterface $bucket, array $dimensions, $range, array $entityIds);
+    public function getAggregation(
+        BucketInterface $bucket,
+        array $dimensions,
+        $range,
+        EntityStorage $entityStorage
+    );
 
     /**
      * @param int $range

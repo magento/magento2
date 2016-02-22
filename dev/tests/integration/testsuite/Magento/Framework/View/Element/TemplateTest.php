@@ -22,7 +22,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
         )->createBlock(
             'Magento\Framework\View\Element\Template',
             '',
-            ['context' => $context, 'data' => ['module_name' => 'Magento_View']]
+            ['context' => $context]
         );
     }
 
@@ -84,7 +84,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
 
     public function testGetObjectData()
     {
-        $object = new \Magento\Framework\Object(['key' => 'value']);
+        $object = new \Magento\Framework\DataObject(['key' => 'value']);
         $this->assertEquals('value', $this->_block->getObjectData($object, 'key'));
     }
 

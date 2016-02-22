@@ -60,7 +60,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                     'tags' => [
                         [
                             'name' => 'var',
-                            'description' => '\Magento\Framework\App\Resource',
+                            'description' => '\Magento\Framework\App\ResourceConnection',
                         ],
                     ],
                 ]
@@ -182,7 +182,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                 ],
                 [
                     'name' => 'resource',
-                    'type' => '\Magento\Framework\App\Resource'
+                    'type' => '\Magento\Framework\App\ResourceConnection'
                 ],
             ],
             'body' => "\$this->"
@@ -208,7 +208,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
                     ],
                     [
                         'name' => 'param',
-                        'description' => '\Magento\Framework\App\Resource $resource'
+                        'description' => '\Magento\Framework\App\ResourceConnection $resource'
                     ],
                 ],
             ]
@@ -221,7 +221,8 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
     protected function _getGetConnectionMethod()
     {
         $body = "if (!\$this->connection) {\n"
-        . "    \$this->connection = \$this->resource->getConnection('write');\n"
+        . "    \$this->connection = \$this->resource->getConnection("
+        . "\\Magento\\Framework\\App\\ResourceConnection::DEFAULT_CONNECTION);\n"
         . "}\n"
         . "return \$this->connection;";
 
@@ -248,8 +249,7 @@ class Persistor extends \Magento\Framework\Code\Generator\EntityAbstract
      */
     protected function _getLoadEntityMethod()
     {
-        $body = "\$entity = \$this->{$this->_getSourceFactoryPropertyName()}->create();\n"
-            . "\$this->{$this->_getSourceResourcePropertyName()}->load(\$entity, \$key);\n"
+        $body = "\$entity = \$this->{$this->_getSourceFactoryPropertyName()}->create()->load(\$key);\n"
             . "return \$entity;";
         return [
             'name' => 'loadEntity',

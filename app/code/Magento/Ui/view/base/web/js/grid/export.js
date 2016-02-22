@@ -5,32 +5,30 @@
 define([
     'jquery',
     'underscore',
-    'ko',
-    'Magento_Ui/js/lib/collapsible'
-], function ($, _, ko, Collapsible) {
+    'uiElement'
+], function ($, _, Element) {
     'use strict';
 
-    return Collapsible.extend({
-
+    return Element.extend({
         defaults: {
             template: 'ui/grid/exportButton',
+            selectProvider: 'ns = ${ $.ns }, index = ids',
             checked: '',
-            params: {
-                filters: {}
-            },
-            filtersConfig: {
-                provider: '${ $.provider }',
-                path: 'params.filters'
-            },
-            imports: {
-                'params.filters': '${ $.filtersConfig.provider }:${ $.filtersConfig.path }'
+            modules: {
+                selections: '${ $.selectProvider }'
             }
         },
 
         initialize: function () {
             this._super()
-                .observe('checked')
                 .initChecked();
+        },
+
+        initObservable: function () {
+            this._super()
+                .observe('checked');
+
+            return this;
         },
 
         initChecked: function () {
@@ -39,17 +37,54 @@ define([
                     this.options[0].value
                 );
             }
+
             return this;
         },
 
-        applyOption: function () {
-            var option = _.filter(this.options, function (op) {
-                return op.value === this.checked();
-            }, this)[0];
+        getParams: function () {
+            var selections = this.selections(),
+                data = selections ? selections.getSelections() : null,
+                itemsType,
+                result = {};
 
-            location.href = option.url + '?' + $.param({
-                'filters': this.params.filters
+            if (data) {
+                itemsType = data.excludeMode ? 'excluded' : 'selected';
+                result.filters = data.params.filters;
+                result.search = data.params.search;
+                result.namespace = data.params.namespace;
+                result[itemsType] = data[itemsType];
+
+                if (!result[itemsType].length) {
+                    result[itemsType] = false;
+                }
+            }
+
+            return result;
+        },
+
+        getActiveOption: function () {
+            return _.findWhere(this.options, {
+                value: this.checked()
             });
+        },
+
+        buildOptionUrl: function (option) {
+            var params = this.getParams();
+
+            if (!params) {
+                return 'javascript:void(0);';
+            }
+
+            return option.url + '?' + $.param(params);
+            //TODO: MAGETWO-40250
+        },
+
+        applyOption: function () {
+            var option = this.getActiveOption(),
+                url = this.buildOptionUrl(option);
+
+            location.href = url;
+
         }
     });
 });

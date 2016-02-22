@@ -46,7 +46,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             ->create('Magento\CustomerImportExport\Model\Import\Customer');
         $this->_model->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE]);
 
-        $propertyAccessor = new \ReflectionProperty($this->_model, '_messageTemplates');
+        $propertyAccessor = new \ReflectionProperty($this->_model, 'errorMessageTemplates');
         $propertyAccessor->setAccessible(true);
         $propertyAccessor->setValue($this->_model, []);
 
@@ -84,9 +84,9 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             $this->directoryWrite
         );
 
-        /** @var $customersCollection \Magento\Customer\Model\Resource\Customer\Collection */
+        /** @var $customersCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
         $customersCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Resource\Customer\Collection'
+            'Magento\Customer\Model\ResourceModel\Customer\Collection'
         );
         $customersCollection->addAttributeToSelect('firstname', 'inner')->addAttributeToSelect('lastname', 'inner');
 
@@ -98,7 +98,8 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $this->_model
             ->setParameters(['behavior' => Import::BEHAVIOR_ADD_UPDATE])
             ->setSource($source)
-            ->isDataValid();
+            ->validateData()
+            ->hasToBeTerminated();
 
         $this->_model->importData();
 
@@ -148,21 +149,19 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         \Magento\TestFramework\Helper\Bootstrap::getInstance()
             ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
         $source = new \Magento\ImportExport\Model\Import\Source\Csv(
-            __DIR__ . '/_files/customers_to_import.csv',
+            __DIR__ . '/_files/customers_to_delete.csv',
             $this->directoryWrite
         );
 
-        /** @var $customerCollection \Magento\Customer\Model\Resource\Customer\Collection */
+        /** @var $customerCollection \Magento\Customer\Model\ResourceModel\Customer\Collection */
         $customerCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Customer\Model\Resource\Customer\Collection'
+            'Magento\Customer\Model\ResourceModel\Customer\Collection'
         );
         $this->assertEquals(3, $customerCollection->count(), 'Count of existing customers are invalid');
 
-        $this->_model->setParameters(
-            ['behavior' => Import::BEHAVIOR_DELETE]
-        )->setSource(
-                $source
-            )->isDataValid();
+        $this->_model->setParameters(['behavior' => Import::BEHAVIOR_DELETE])
+            ->setSource($source)
+            ->validateData();
 
         $this->_model->importData();
 
@@ -178,68 +177,75 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
     public function testValidateRowDuplicateEmail()
     {
+        $this->_model->getErrorAggregator()->clear();
         $this->_model->validateRow($this->_customerData, 0);
-        $this->assertEquals(0, $this->_model->getErrorsCount());
+        $this->assertEquals(0, $this->_model->getErrorAggregator()->getErrorsCount());
 
         $this->_customerData[Customer::COLUMN_EMAIL] = strtoupper(
             $this->_customerData[Customer::COLUMN_EMAIL]
         );
         $this->_model->validateRow($this->_customerData, 1);
-        $this->assertEquals(1, $this->_model->getErrorsCount());
-        $this->assertArrayHasKey(
-            Customer::ERROR_DUPLICATE_EMAIL_SITE,
-            $this->_model->getErrorMessages()
+        $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount());
+        $this->assertNotEmpty(
+            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_DUPLICATE_EMAIL_SITE]
+            )
         );
     }
 
     public function testValidateRowInvalidEmail()
     {
+        $this->_model->getErrorAggregator()->clear();
         $this->_customerData[Customer::COLUMN_EMAIL] = 'wrong_email@format';
         $this->_model->validateRow($this->_customerData, 0);
-        $this->assertEquals(1, $this->_model->getErrorsCount());
-        $this->assertArrayHasKey(
-            Customer::ERROR_INVALID_EMAIL,
-            $this->_model->getErrorMessages()
+        $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount());
+        $this->assertNotEmpty(
+            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_INVALID_EMAIL]
+            )
         );
     }
 
     public function testValidateRowInvalidWebsite()
     {
+        $this->_model->getErrorAggregator()->clear();
         $this->_customerData[Customer::COLUMN_WEBSITE] = 'not_existing_web_site';
         $this->_model->validateRow($this->_customerData, 0);
-        $this->assertEquals(1, $this->_model->getErrorsCount());
-        $this->assertArrayHasKey(
-            Customer::ERROR_INVALID_WEBSITE,
-            $this->_model->getErrorMessages()
+        $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount());
+        $this->assertNotEmpty(
+            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_INVALID_WEBSITE]
+            )
         );
     }
 
     public function testValidateRowInvalidStore()
     {
+        $this->_model->getErrorAggregator()->clear();
         $this->_customerData[Customer::COLUMN_STORE] = 'not_existing_web_store';
         $this->_model->validateRow($this->_customerData, 0);
-        $this->assertEquals(1, $this->_model->getErrorsCount());
-        $this->assertArrayHasKey(
-            Customer::ERROR_INVALID_STORE,
-            $this->_model->getErrorMessages()
+        $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount());
+        $this->assertNotEmpty(
+            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_INVALID_STORE]
+            )
         );
     }
 
     public function testValidateRowPasswordLengthIncorrect()
     {
+        $this->_model->getErrorAggregator()->clear();
         $this->_customerData['password'] = '12345';
         $this->_model->validateRow($this->_customerData, 0);
-        $this->assertEquals(1, $this->_model->getErrorsCount());
-        $this->assertArrayHasKey(
-            Customer::ERROR_PASSWORD_LENGTH, $this->_model->getErrorMessages()
+        $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount());
+        $this->assertNotEmpty(
+            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_PASSWORD_LENGTH]
+            )
         );
     }
 
     public function testValidateRowPasswordLengthCorrect()
     {
+        $this->_model->getErrorAggregator()->clear();
         $this->_customerData['password'] = '1234567890';
         $this->_model->validateRow($this->_customerData, 0);
-        $this->assertEquals(0, $this->_model->getErrorsCount());
+        $this->assertEquals(0, $this->_model->getErrorAggregator()->getErrorsCount());
     }
 
     /**
@@ -247,27 +253,33 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateRowAttributeRequired()
     {
+        $this->_model->getErrorAggregator()->clear();
         unset($this->_customerData['firstname']);
         unset($this->_customerData['lastname']);
         unset($this->_customerData['group_id']);
 
         $this->_model->validateRow($this->_customerData, 0);
-        $this->assertEquals(0, $this->_model->getErrorsCount());
+        $this->assertEquals(0, $this->_model->getErrorAggregator()->getErrorsCount());
 
         $this->_customerData[Customer::COLUMN_EMAIL] = 'new.customer@example.com';
         $this->_model->validateRow($this->_customerData, 1);
-        $this->assertGreaterThan(0, $this->_model->getErrorsCount());
-        $this->assertArrayHasKey(Customer::ERROR_VALUE_IS_REQUIRED, $this->_model->getErrorMessages());
+        $this->assertGreaterThan(0, $this->_model->getErrorAggregator()->getErrorsCount());
+        $this->assertNotEmpty(
+            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_VALUE_IS_REQUIRED]
+            )
+        );
     }
 
     public function testValidateEmailForDeleteBehavior()
     {
+        $this->_model->getErrorAggregator()->clear();
         $this->_customerData[Customer::COLUMN_EMAIL] = 'new.customer@example.com';
         $this->_model->setParameters(['behavior' => Import::BEHAVIOR_DELETE]);
         $this->_model->validateRow($this->_customerData, 0);
-        $this->assertGreaterThan(0, $this->_model->getErrorsCount());
-        $this->assertArrayHasKey(
-            Customer::ERROR_CUSTOMER_NOT_FOUND, $this->_model->getErrorMessages()
+        $this->assertGreaterThan(0, $this->_model->getErrorAggregator()->getErrorsCount());
+        $this->assertNotEmpty(
+            $this->_model->getErrorAggregator()->getErrorsByCode([Customer::ERROR_CUSTOMER_NOT_FOUND]
+            )
         );
     }
 }

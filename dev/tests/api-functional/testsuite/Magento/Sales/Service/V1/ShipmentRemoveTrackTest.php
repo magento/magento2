@@ -46,7 +46,7 @@ class ShipmentRemoveTrackTest extends WebapiAbstract
     public function testShipmentRemoveTrack()
     {
         /** @var \Magento\Sales\Model\Order\Shipment $shipment */
-        $shipmentCollection = $this->objectManager->get('Magento\Sales\Model\Resource\Order\Shipment\Collection');
+        $shipmentCollection = $this->objectManager->get('Magento\Sales\Model\ResourceModel\Order\Shipment\Collection');
         $shipment = $shipmentCollection->getFirstItem();
 
         /** @var \Magento\Sales\Model\Order\Shipment\Track $track */

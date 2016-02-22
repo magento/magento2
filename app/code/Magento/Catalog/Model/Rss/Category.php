@@ -17,7 +17,7 @@ class Category
     protected $catalogLayer;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $collectionFactory;
 
@@ -28,12 +28,12 @@ class Category
 
     /**
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory
      * @param \Magento\Catalog\Model\Product\Visibility $visibility
      */
     public function __construct(
         \Magento\Catalog\Model\Layer\Resolver $layerResolver,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $collectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $collectionFactory,
         \Magento\Catalog\Model\Product\Visibility $visibility
     ) {
         $this->catalogLayer = $layerResolver->get();
@@ -57,7 +57,7 @@ class Category
             ->addAttributeToFilter('is_active', 1)
             ->addIdFilter($category->getChildren())
             ->load();
-        /** @var $productCollection \Magento\Catalog\Model\Resource\Product\Collection */
+        /** @var $productCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
         $productCollection = $this->collectionFactory->create();
 
         $currentCategory = $layer->setCurrentCategory($category);

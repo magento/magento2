@@ -29,6 +29,7 @@ class ProductRepositoryTest extends WebapiAbstract
 
     protected function setUp()
     {
+        $this->markTestSkipped('Test skiped due to MAGETWO-46832');
         $this->testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
     }
 
@@ -293,8 +294,9 @@ class ProductRepositoryTest extends WebapiAbstract
         $link1Id = $resultLinks[0]['id'];
         $link2Id = $resultLinks[1]['id'];
 
-        $linkFile = 'link1_content_updated.jpg';
-        $sampleFile = 'link1_sample_updated.jpg';
+        $linkFile = 'link1_content_updated';
+        $sampleFile = 'link1_sample_updated';
+        $extension = '.jpg';
         $updatedLink1Data = [
             'id' => $link1Id,
             'title' => 'link1_updated',
@@ -304,12 +306,12 @@ class ProductRepositoryTest extends WebapiAbstract
             'number_of_downloads' => 999,
             'link_type' => 'file',
             'link_file_content' => [
-                'name' => $linkFile,
+                'name' => $linkFile . $extension,
                 'file_data' => base64_encode(file_get_contents($this->testImagePath)),
             ],
             'sample_type' => 'file',
             'sample_file_content' => [
-                'name' => $sampleFile,
+                'name' => $sampleFile . $extension,
                 'file_data' => base64_encode(file_get_contents($this->testImagePath)),
             ],
         ];
@@ -351,8 +353,10 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertEquals($link1Id, $resultLinks[0]['id']);
         $this->assertTrue(isset($resultLinks[0]['link_file']));
         $this->assertGreaterThan(0, strpos($resultLinks[0]['link_file'], $linkFile));
+        $this->assertStringEndsWith($extension, $resultLinks[0]['link_file']);
         $this->assertTrue(isset($resultLinks[0]['sample_file']));
         $this->assertGreaterThan(0, strpos($resultLinks[0]['sample_file'], $sampleFile));
+        $this->assertStringEndsWith($extension, $resultLinks[0]['sample_file']);
         unset($resultLinks[0]['id']);
         unset($resultLinks[0]['link_file']);
         unset($resultLinks[0]['sample_file']);
@@ -500,13 +504,15 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertEquals($sample1Id, $resultSamples[0]['id']);
         unset($resultSamples[0]['id']);
         $this->assertTrue(isset($resultSamples[0]['sample_file']));
-        $this->assertContains('sample1.jpg', $resultSamples[0]['sample_file']);
+        $this->assertContains('sample1', $resultSamples[0]['sample_file']);
+        $this->assertStringEndsWith('.jpg', $resultSamples[0]['sample_file']);
         unset($resultSamples[0]['sample_file']);
         $this->assertTrue(isset($resultSamples[1]['id']));
         $this->assertEquals($sample2Id, $resultSamples[1]['id']);
         unset($resultSamples[1]['id']);
         $this->assertTrue(isset($resultSamples[1]['sample_file']));
-        $this->assertContains('sample2.jpg', $resultSamples[1]['sample_file']);
+        $this->assertContains('sample2', $resultSamples[1]['sample_file']);
+        $this->assertStringEndsWith('.jpg', $resultSamples[1]['sample_file']);
         unset($resultSamples[1]['sample_file']);
 
         $expectedSampleData = [

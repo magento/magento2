@@ -5,6 +5,7 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Attribute;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class LockValidatorTest extends \PHPUnit_Framework_TestCase
@@ -15,14 +16,14 @@ class LockValidatorTest extends \PHPUnit_Framework_TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
 
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $adapter;
+    private $connectionMock;
 
     /**
      * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
@@ -33,11 +34,11 @@ class LockValidatorTest extends \PHPUnit_Framework_TestCase
     {
         $helper = new ObjectManager($this);
 
-        $this->resource = $this->getMockBuilder('Magento\Framework\App\Resource')
+        $this->resource = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->adapter = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $this->connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
             ->setMethods(['select', 'fetchOne'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -83,8 +84,8 @@ class LockValidatorTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $object->expects($this->once())->method('getAttributeId')->will($this->returnValue($attributeId));
 
-        $this->resource->expects($this->once())->method('getConnection')->with($this->equalTo('read'))
-            ->will($this->returnValue($this->adapter));
+        $this->resource->expects($this->once())->method('getConnection')
+            ->will($this->returnValue($this->connectionMock));
         $this->resource->expects($this->at(1))->method('getTableName')
             ->with($this->equalTo('catalog_product_super_attribute'))
             ->will($this->returnValue($attrTable));
@@ -92,9 +93,9 @@ class LockValidatorTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('catalog_product_entity'))
             ->will($this->returnValue($productTable));
 
-        $this->adapter->expects($this->once())->method('select')
+        $this->connectionMock->expects($this->once())->method('select')
             ->will($this->returnValue($this->select));
-        $this->adapter->expects($this->once())->method('fetchOne')
+        $this->connectionMock->expects($this->once())->method('fetchOne')
             ->with($this->equalTo($this->select), $this->equalTo($bind))
             ->will($this->returnValue($exception));
 

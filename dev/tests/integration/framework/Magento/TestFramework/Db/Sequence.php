@@ -5,7 +5,7 @@
  */
 namespace Magento\TestFramework\Db;
 
-use Magento\Framework\App\Resource as AppResource;
+use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Ddl\Sequence as DdlSequence;
 
 /**
@@ -51,7 +51,7 @@ class Sequence
      */
     public function generateSequences($n = 10)
     {
-        $connection = $this->appResource->getConnection('write');
+        $connection = $this->appResource->getConnection();
         for ($i = 0; $i < $n; $i++) {
             foreach ($this->entities as $entityName) {
                 $sequenceName = $this->appResource->getTableName(sprintf('sequence_%s_%s', $entityName, $i));

@@ -15,50 +15,75 @@ use Magento\Mtf\Client\Locator;
 class Links extends Block
 {
     /**
-     * Selector for qty products on compare.
-     *
-     * @var string
-     */
-    protected $qtyCompareProducts = '.compare .counter.qty';
-
-    /**
-     * Link selector.
+     * Locator value for correspondent link.
      *
      * @var string
      */
     protected $link = '//a[contains(text(), "%s")]';
 
     /**
-     * Welcome message on frontend.
+     * Locator value for welcome message.
      *
      * @var string
      */
     protected $welcomeMessage = '.greet.welcome';
 
     /**
-     * Open Link by title.
+     * Locator value for "Expand/Collapse Customer Menu" button.
+     *
+     * @var string
+     */
+    protected $toggleButton = '[data-action="customer-menu-toggle"]';
+
+    /**
+     * Locator value for Customer Menu.
+     *
+     * @var string
+     */
+    protected $customerMenu = '.customer-menu > ul';
+
+    /**
+     * Expand Customer Menu (located in page Header) if it was collapsed.
+     *
+     * @return void
+     */
+    protected function expandCustomerMenu()
+    {
+        $this->_rootElement->find($this->toggleButton)->click();
+    }
+
+    /**
+     * Open link by its title.
      *
      * @param string $linkTitle
      * @return void
      */
     public function openLink($linkTitle)
     {
-        $this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH)->click();
+        $link = $this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH);
+        if (!$link->isVisible()) {
+            $this->expandCustomerMenu();
+        }
+        $link->click();
     }
 
     /**
-     * Is visible Link by title.
+     * Verify if correspondent link is present or not.
      *
      * @param string $linkTitle
      * @return bool
      */
     public function isLinkVisible($linkTitle)
     {
-        return $this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH)->isVisible();
+        $link = $this->_rootElement->find(sprintf($this->link, $linkTitle), Locator::SELECTOR_XPATH);
+        if (!$link->isVisible()) {
+            $this->expandCustomerMenu();
+        }
+        return $link->isVisible();
     }
 
     /**
-     * Wait for link is visible.
+     * Wait until correspondent link appears.
      *
      * @param string $linkTitle
      * @return void
@@ -76,19 +101,6 @@ class Links extends Block
     }
 
     /**
-     * Get the number of products added to compare list.
-     *
-     * @return string
-     */
-    public function getQtyInCompareList()
-    {
-        $this->waitForElementVisible($this->qtyCompareProducts);
-        $compareProductLink = $this->_rootElement->find($this->qtyCompareProducts);
-        preg_match_all('/^\d+/', $compareProductLink->getText(), $matches);
-        return $matches[0][0];
-    }
-
-    /**
      * Get url from link.
      *
      * @param string $linkTitle
@@ -103,7 +115,7 @@ class Links extends Block
     }
 
     /**
-     * Waiter for welcome message.
+     * Wait until welcome message appears.
      *
      * @return void
      */

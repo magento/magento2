@@ -30,6 +30,7 @@ class BackendTemplate extends Template
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Email\Model\Template\Config $emailConfig
      * @param \Magento\Email\Model\TemplateFactory $templateFactory
+     * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\UrlInterface $urlModel
      * @param \Magento\Email\Model\Template\FilterFactory $filterFactory
      * @param \Magento\Config\Model\Config\Structure $structure
@@ -48,6 +49,7 @@ class BackendTemplate extends Template
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Email\Model\Template\Config $emailConfig,
         \Magento\Email\Model\TemplateFactory $templateFactory,
+        \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\UrlInterface $urlModel,
         \Magento\Email\Model\Template\FilterFactory $filterFactory,
         \Magento\Config\Model\Config\Structure $structure,
@@ -65,6 +67,7 @@ class BackendTemplate extends Template
             $scopeConfig,
             $emailConfig,
             $templateFactory,
+            $filterManager,
             $urlModel,
             $filterFactory,
             $data

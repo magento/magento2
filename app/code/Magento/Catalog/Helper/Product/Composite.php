@@ -91,10 +91,10 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
      * Prepares and render result of composite product configuration update for a case
      * when single configuration submitted
      *
-     * @param \Magento\Framework\Object $updateResult
+     * @param \Magento\Framework\DataObject $updateResult
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function renderUpdateResult(\Magento\Framework\Object $updateResult)
+    public function renderUpdateResult(\Magento\Framework\DataObject $updateResult)
     {
         $this->_coreRegistry->register('composite_update_result', $updateResult);
         return $this->_initUpdateResultLayout();
@@ -129,10 +129,10 @@ class Composite extends \Magento\Framework\App\Helper\AbstractHelper
      *  - 'ok' = true, and 'product_id', 'buy_request', 'current_store_id', 'current_customer_id'
      *  - 'error' = true, and 'message' to show
      *
-     * @param \Magento\Framework\Object $configureResult
+     * @param \Magento\Framework\DataObject $configureResult
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function renderConfigureResult(\Magento\Framework\Object $configureResult)
+    public function renderConfigureResult(\Magento\Framework\DataObject $configureResult)
     {
         try {
             if (!$configureResult->getOk()) {

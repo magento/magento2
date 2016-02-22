@@ -5,8 +5,12 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Backend\App\Action\Context;
+use Magento\Ui\Component\MassAction\Filter;
 
 /**
  * Class AbstractMassStatus
@@ -14,21 +18,29 @@ use Magento\Framework\Controller\ResultFactory;
 abstract class AbstractMassAction extends \Magento\Backend\App\Action
 {
     /**
-     * Field id
-     */
-    const ID_FIELD = 'entity_id';
-
-    /**
-     * Redirect url
-     */
-    const REDIRECT_URL = 'sales/order/';
-
-    /**
-     * Resource collection
-     *
      * @var string
      */
-    protected $collection = 'Magento\Sales\Model\Resource\Order\Grid\Collection';
+    protected $redirectUrl = '*/*/';
+
+    /**
+     * @var \Magento\Ui\Component\MassAction\Filter
+     */
+    protected $filter;
+
+    /**
+     * @var object
+     */
+    protected $collectionFactory;
+
+    /**
+     * @param Context $context
+     * @param Filter $filter
+     */
+    public function __construct(Context $context, Filter $filter)
+    {
+        parent::__construct($context);
+        $this->filter = $filter;
+    }
 
     /**
      * Execute action
@@ -38,34 +50,32 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        $selected = $this->getRequest()->getParam('selected');
-        $excluded = $this->getRequest()->getParam('excluded');
-
-        $collection = $this->_objectManager->create($this->collection);
         try {
-            if (!empty($excluded)) {
-                $collection->addFieldToFilter(static::ID_FIELD, ['nin' => $excluded]);
-                $this->massAction($collection);
-            } elseif (!empty($selected)) {
-                $collection->addFieldToFilter(static::ID_FIELD, ['in' => $selected]);
-                $this->massAction($collection);
-            } else {
-                $this->messageManager->addError(__('Please select item(s).'));
-            }
+            $collection = $this->filter->getCollection($this->collectionFactory->create());
+            return $this->massAction($collection);
         } catch (\Exception $e) {
             $this->messageManager->addError($e->getMessage());
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+            return $resultRedirect->setPath($this->redirectUrl);
         }
-
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        return $resultRedirect->setPath(static::REDIRECT_URL);
     }
 
+    /**
+     * Return component referer url
+     * TODO: Technical dept referer url should be implement as a part of Action configuration in in appropriate way
+     *
+     * @return null|string
+     */
+    protected function getComponentRefererUrl()
+    {
+        return $this->filter->getComponentRefererUrl()?: 'sales/*/';
+    }
     /**
      * Set status to collection items
      *
      * @param AbstractCollection $collection
-     * @return void
+     * @return ResponseInterface|ResultInterface
      */
     abstract protected function massAction(AbstractCollection $collection);
 }

@@ -26,7 +26,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
     private $product;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject
      */
     private $productResource;
 
@@ -44,7 +44,7 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getHasOptions', '__wakeup', '__sleep', 'getResource'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->productResource = $this->getMockBuilder('Magento\Catalog\Model\Resource\Product')
+        $this->productResource = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product')
             ->setMethods(['getSortedAttributes', 'loadAllAttributes'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();

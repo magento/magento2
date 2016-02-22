@@ -14,43 +14,45 @@
 <?php $_default     = $_option->getDefaultSelection(); ?>
 <?php list($_defaultQty, $_canChangeQty) = $block->getDefaultValues(); ?>
 <div class="field option <?php echo ($_option->getRequired()) ? ' required': ''; ?>">
-    <label class="label" for="bundle-option-<?php echo $_option->getId() ?>">
+    <label class="label" for="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>">
         <span><?php echo $block->escapeHtml($_option->getTitle()) ?></span>
     </label>
     <div class="control">
         <?php if ($block->showSingle()): ?>
-            <?php echo $block->getSelectionTitlePrice($_selections[0]) ?>
+            <?php /* @escapeNotVerified */ echo $block->getSelectionTitlePrice($_selections[0]) ?>
             <input type="hidden"
-                   class="bundle-option-<?php echo $_option->getId() ?>  product bundle option"
-                   name="bundle_option[<?php echo $_option->getId() ?>]"
-                   value="<?php echo $_selections[0]->getSelectionId() ?>"/>
+                   class="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>  product bundle option"
+                   name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
+                   value="<?php /* @escapeNotVerified */ echo $_selections[0]->getSelectionId() ?>"/>
         <?php else:?>
-            <select id="bundle-option-<?php echo $_option->getId() ?>"
-                    name="bundle_option[<?php echo $_option->getId() ?>]"
-                    class="bundle-option-<?php echo $_option->getId() ?> product bundle option bundle-option-select change-container-classname"
+            <select id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>"
+                    name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
+                    data-selector="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
+                    class="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?> product bundle option bundle-option-select change-container-classname"
                 <?php if ($_option->getRequired()) echo 'data-validate = {required:true}' ?>>
-                <option value=""><?php echo __('Choose a selection...') ?></option>
+                <option value=""><?php /* @escapeNotVerified */ echo __('Choose a selection...') ?></option>
                 <?php foreach ($_selections as $_selection): ?>
-                    <option value="<?php echo $_selection->getSelectionId() ?>"
+                    <option value="<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>"
                         <?php if ($block->isSelected($_selection)) echo ' selected="selected"' ?>
                         <?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?>>
-                        <?php echo $block->getSelectionTitlePrice($_selection, false) ?>
+                        <?php /* @escapeNotVerified */ echo $block->getSelectionTitlePrice($_selection, false) ?>
                     </option>
                 <?php endforeach; ?>
             </select>
         <?php endif; ?>
         <div class="nested">
             <div class="field qty qty-holder">
-                <label class="label" for="bundle-option-<?php echo $_option->getId() ?>-qty-input">
-                    <span><?php echo __('Quantity') ?></span>
+                <label class="label" for="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-qty-input">
+                    <span><?php /* @escapeNotVerified */ echo __('Quantity') ?></span>
                 </label>
                 <div class="control">
                     <input <?php if (!$_canChangeQty) echo ' disabled="disabled"' ?>
-                           id="bundle-option-<?php echo $_option->getId() ?>-qty-input"
+                           id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-qty-input"
                            class="input-text qty<?php if (!$_canChangeQty) echo ' qty-disabled' ?>"
                            type="number"
-                           name="bundle_option_qty[<?php echo $_option->getId() ?>]"
-                           value="<?php echo $_defaultQty ?>"/>
+                           name="bundle_option_qty[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
+                           data-selector="bundle_option_qty[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
+                           value="<?php /* @escapeNotVerified */ echo $_defaultQty ?>"/>
                 </div>
             </div>
         </div>

@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Catalog\Block\Widget\Link">
         <arguments>
             <argument name="urlFinder" xsi:type="object">Magento\CatalogUrlRewrite\Model\Storage\DbStorage</argument>
@@ -16,8 +16,11 @@
             <argument name="urlFinder" xsi:type="object">Magento\CatalogUrlRewrite\Model\Storage\DbStorage</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Resource\Category">
+    <type name="Magento\Catalog\Model\ResourceModel\Category">
         <plugin name="category_move_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Move"/>
         <plugin name="category_delete_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Category\Remove"/>
+    </type>
+    <type name="Magento\UrlRewrite\Model\StorageInterface">
+        <plugin name="storage_plugin" type="Magento\CatalogUrlRewrite\Model\Category\Plugin\Storage"/>
     </type>
 </config>

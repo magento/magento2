@@ -56,6 +56,10 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->contextMock = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\ContextInterface')
             ->getMockForAbstractClass();
+        $processor = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\Processor')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->contextMock->expects($this->any())->method('getProcessor')->willReturn($processor);
 
         $this->field = new Field(
             $this->contextMock,
@@ -135,10 +139,10 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             ->with('config', $this->logicalNot($this->isEmpty()));
         $wrappedComponentMock->expects($this->once())
             ->method('prepare');
-        $wrappedComponentMock->expects($this->once())
+        $wrappedComponentMock->expects($this->atLeastOnce())
             ->method('getChildComponents')
             ->willReturn($this->getComponentsMock());
-        $wrappedComponentMock->expects($this->exactly(2))
+        $wrappedComponentMock->expects($this->any())
             ->method('getComponentName')
             ->willReturn(self::COMPONENT_NAME);
         $wrappedComponentMock->expects($this->once())

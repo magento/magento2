@@ -82,5 +82,6 @@ class DeleteCatalogPriceRuleEntityTest extends Injectable
         $this->catalogRuleIndex->open();
         $this->catalogRuleIndex->getCatalogRuleGrid()->searchAndOpen($filter);
         $this->catalogRuleNew->getFormPageActions()->delete();
+        $this->catalogRuleNew->getModalBlock()->acceptAlert();
     }
 }

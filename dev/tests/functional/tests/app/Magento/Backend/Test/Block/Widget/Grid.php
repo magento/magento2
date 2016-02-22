@@ -67,7 +67,7 @@ abstract class Grid extends Block
      *
      * @var string
      */
-    protected $selectItem = 'tbody tr .col-select';
+    protected $selectItem = 'tbody tr [type="checkbox"]';
 
     /**
      * 'Select All' link
@@ -189,6 +189,13 @@ abstract class Grid extends Block
     protected $rowPattern = '//tbody/tr[%s]';
 
     /**
+     * Selector for confirm.
+     *
+     * @var string
+     */
+    protected $confirmModal = '.confirm._show[data-role=modal]';
+
+    /**
      * Get backend abstract block
      *
      * @return \Magento\Backend\Test\Block\Template
@@ -246,12 +253,13 @@ abstract class Grid extends Block
     public function searchAndOpen(array $filter)
     {
         $this->search($filter);
-        $rowItem = $this->_rootElement->find($this->rowItem, Locator::SELECTOR_CSS);
+        $rowItem = $this->getRow($filter);
         if ($rowItem->isVisible()) {
             $rowItem->find($this->editLink, Locator::SELECTOR_CSS)->click();
         } else {
-            throw new \Exception('Searched item was not found.');
+            throw new \Exception("Searched item was not found by filter\n" . print_r($filter, true));
         }
+        $this->waitLoader();
     }
 
     /**
@@ -261,14 +269,13 @@ abstract class Grid extends Block
      */
     protected function waitLoader()
     {
-        $browser = $this->browser;
-        $selector = $this->loader;
-        $browser->waitUntil(
-            function () use ($browser, $selector) {
-                $productSavedMessage = $browser->find($selector);
-                return $productSavedMessage->isVisible() == false ? true : null;
+        $this->browser->waitUntil(
+            function () {
+                $element = $this->browser->find($this->loader);
+                return $element->isVisible() == false ? true : null;
             }
         );
+
         $this->getTemplateBlock()->waitLoader();
     }
 
@@ -281,7 +288,7 @@ abstract class Grid extends Block
     public function searchAndSelect(array $filter)
     {
         $this->search($filter);
-        $selectItem = $this->_rootElement->find($this->selectItem);
+        $selectItem = $this->getRow($filter)->find($this->selectItem);
         if ($selectItem->isVisible()) {
             $selectItem->click();
         } else {
@@ -294,12 +301,13 @@ abstract class Grid extends Block
      */
     public function resetFilter()
     {
+        $this->waitLoader();
         $this->_rootElement->find($this->resetButton)->click();
         $this->waitLoader();
     }
 
     /**
-     * Perform selected massaction over checked items
+     * Perform selected massaction over checked items.
      *
      * @param array $items
      * @param array|string $action [array -> key = value from first select; value => value from subselect]
@@ -340,7 +348,10 @@ abstract class Grid extends Block
     {
         $this->_rootElement->find($this->massactionSubmit, Locator::SELECTOR_CSS)->click();
         if ($acceptAlert) {
-            $this->browser->acceptAlert();
+            $element = $this->browser->find($this->confirmModal);
+            /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
+            $modal = $this->blockFactory->create('Magento\Ui\Test\Block\Adminhtml\Modal', ['element' => $element]);
+            $modal->acceptAlert();
         }
     }
 
@@ -348,18 +359,18 @@ abstract class Grid extends Block
      * Obtain specific row in grid
      *
      * @param array $filter
-     * @param bool $isSearchable
      * @param bool $isStrict
      * @return SimpleElement
      */
-    protected function getRow(array $filter, $isSearchable = true, $isStrict = true)
+    protected function getRow(array $filter, $isStrict = true)
     {
-        if ($isSearchable) {
-            $this->search($filter);
-        }
         $rowTemplate = ($isStrict) ? $this->rowTemplateStrict : $this->rowTemplate;
         $rows = [];
         foreach ($filter as $value) {
+            if (strpos($value, '"') !== false) {
+                $rowTemplate = str_replace('"', '', $rowTemplate);
+                $value = $this->xpathEscape($value);
+            }
             $rows[] = sprintf($rowTemplate, $value);
         }
         $location = sprintf($this->rowPattern, implode(' and ', $rows));
@@ -400,7 +411,12 @@ abstract class Grid extends Block
      */
     public function isRowVisible(array $filter, $isSearchable = true, $isStrict = true)
     {
-        return $this->getRow($filter, $isSearchable, $isStrict)->isVisible();
+        $this->waitLoader();
+        if ($isSearchable) {
+            $this->search($filter);
+        }
+
+        return $this->getRow($filter, $isStrict)->isVisible();
     }
 
     /**
@@ -451,5 +467,31 @@ abstract class Grid extends Block
     public function openFirstRow()
     {
         $this->_rootElement->find($this->firstRowSelector, Locator::SELECTOR_XPATH)->click();
+    }
+
+    /**
+     * Escape single and/or double quotes in XPath selector by concat()
+     *
+     * @param string $query
+     * @param string $defaultDelim [optional]
+     * @return string
+     */
+    protected function xpathEscape($query, $defaultDelim = '"')
+    {
+        if (strpos($query, $defaultDelim) === false) {
+            return $defaultDelim . $query . $defaultDelim;
+        }
+        preg_match_all("#(?:('+)|[^']+)#", $query, $matches);
+        list($parts, $apos) = $matches;
+        $delim = '';
+        foreach ($parts as $i => &$part) {
+            $delim = $apos[$i] ? '"' : "'";
+            $part = $delim . $part . $delim;
+        }
+        if (count($parts) == 1) {
+            $parts[] = $delim . $delim;
+        }
+
+        return 'concat(' . implode(',', $parts) . ')';
     }
 }

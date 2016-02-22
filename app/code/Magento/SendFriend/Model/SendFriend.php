@@ -10,8 +10,8 @@ use Magento\Framework\Exception\LocalizedException as CoreException;
 /**
  * SendFriend Log
  *
- * @method \Magento\SendFriend\Model\Resource\SendFriend _getResource()
- * @method \Magento\SendFriend\Model\Resource\SendFriend getResource()
+ * @method \Magento\SendFriend\Model\ResourceModel\SendFriend _getResource()
+ * @method \Magento\SendFriend\Model\ResourceModel\SendFriend getResource()
  * @method int getIp()
  * @method \Magento\SendFriend\Model\SendFriend setIp(int $value)
  * @method int getTime()
@@ -39,7 +39,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
     /**
      * Sender data array
      *
-     * @var \Magento\Framework\Object|array
+     * @var \Magento\Framework\DataObject|array
      */
     protected $_sender = [];
 
@@ -119,7 +119,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress
      * @param \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -135,7 +135,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress $remoteAddress,
         \Magento\Framework\Stdlib\CookieManagerInterface $cookieManager,
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -157,7 +157,7 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\SendFriend\Model\Resource\SendFriend');
+        $this->_init('Magento\SendFriend\Model\ResourceModel\SendFriend');
     }
 
     /**
@@ -200,7 +200,8 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
                     'message' => $message,
                     'sender_name' => $sender['name'],
                     'sender_email' => $sender['email'],
-                    'product_image' => $this->_catalogImage->init($this->getProduct(), 'small_image')->resize(75),
+                    'product_image' => $this->_catalogImage->init($this->getProduct(), 'sendfriend_small_image')
+                        ->getUrl(),
                 ]
             )->addTo(
                 $email,
@@ -307,20 +308,20 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
 
         return $this->setData(
             '_recipients',
-            new \Magento\Framework\Object(['emails' => $emails, 'names' => $names])
+            new \Magento\Framework\DataObject(['emails' => $emails, 'names' => $names])
         );
     }
 
     /**
      * Retrieve Recipients object
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getRecipients()
     {
         $recipients = $this->_getData('_recipients');
-        if (!$recipients instanceof \Magento\Framework\Object) {
-            $recipients = new \Magento\Framework\Object(['emails' => [], 'names' => []]);
+        if (!$recipients instanceof \Magento\Framework\DataObject) {
+            $recipients = new \Magento\Framework\DataObject(['emails' => [], 'names' => []]);
             $this->setData('_recipients', $recipients);
         }
         return $recipients;
@@ -364,19 +365,19 @@ class SendFriend extends \Magento\Framework\Model\AbstractModel
             __('Invalid Sender Information');
         }
 
-        return $this->setData('_sender', new \Magento\Framework\Object($sender));
+        return $this->setData('_sender', new \Magento\Framework\DataObject($sender));
     }
 
     /**
      * Retrieve Sender Information Object
      *
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getSender()
     {
         $sender = $this->_getData('_sender');
-        if (!$sender instanceof \Magento\Framework\Object) {
+        if (!$sender instanceof \Magento\Framework\DataObject) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('Please define the correct sender information.')
             );

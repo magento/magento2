@@ -16,14 +16,11 @@ class XsdValidator
     {
         $document = new \DOMDocument();
         $document->loadXML($xml);
+
         libxml_use_internal_errors(true);
-        $document->schemaValidate($schema);
-        $validationResult = libxml_get_errors();
+        $errors = \Magento\Framework\Config\Dom::validateDomDocument($document, $schema);
         libxml_use_internal_errors(false);
-        $result = [];
-        foreach ($validationResult as $error) {
-            $result[] = trim($error->message);
-        }
-        return $result;
+
+        return $errors;
     }
 }

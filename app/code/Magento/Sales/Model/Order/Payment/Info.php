@@ -42,7 +42,7 @@ class Info extends AbstractModel implements InfoInterface
      * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -53,7 +53,7 @@ class Info extends AbstractModel implements InfoInterface
         \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Payment\Helper\Data $paymentData,
         \Magento\Framework\Encryption\EncryptorInterface $encryptor,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -193,9 +193,12 @@ class Info extends AbstractModel implements InfoInterface
         if ($key && isset($this->additionalInformation[$key])) {
             unset($this->additionalInformation[$key]);
             return $this->setData('additional_information', $this->additionalInformation);
+        } elseif (null === $key) {
+            $this->additionalInformation = [];
+            return $this->unsetData('additional_information');
         }
-        $this->additionalInformation = [];
-        return $this->unsetData('additional_information');
+
+        return $this;
     }
 
     /**

@@ -1,5 +1,6 @@
 ############################################
-## uncomment the line below to enable developer mode
+## overrides deployment configuration mode value
+## use command bin/magento deploy:mode:set to switch modes
 
 #   SetEnv MAGE_MODE developer
 
@@ -32,6 +33,32 @@
     DirectoryIndex index.php
 
 <IfModule mod_php5.c>
+
+############################################
+## adjust memory limit
+
+    php_value memory_limit 768M
+    php_value max_execution_time 18000
+
+############################################
+## disable automatic session start
+## before autoload was initialized
+
+    php_flag session.auto_start off
+
+############################################
+## enable resulting html compression
+
+    #php_flag zlib.output_compression on
+
+###########################################
+## disable user agent verification to not break multiple image upload
+
+    php_flag suhosin.session.cryptua off
+
+</IfModule>
+
+<IfModule mod_php7.c>
 
 ############################################
 ## adjust memory limit
@@ -102,6 +129,13 @@
 
 </IfModule>
 
+############################################
+## workaround for Apache 2.4.6 CentOS build when working via ProxyPassMatch with HHVM (or any other)
+## Please, set it on virtual host configuration level
+
+##    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+############################################
+
 <IfModule mod_rewrite.c>
 
 ############################################
@@ -170,13 +204,79 @@
 </IfModule>
 
 ###########################################
-## Deny access to release notes to prevent disclosure of the installed Magento version
+## Deny access to root files to hide sensitive application information
+    RedirectMatch 404 /\.git
 
-    <Files RELEASE_NOTES.txt>
-        Order allow,deny
-        Deny from all
+    <Files composer.json>
+        order allow,deny
+        deny from all
     </Files>
-############################################
+    <Files composer.lock>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files .gitignore>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files .htaccess>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files .htaccess.sample>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files .php_cs>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files .travis.yml>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files CHANGELOG.md>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files CONTRIBUTING.md>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files COPYING.txt>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files Gruntfile.js>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files LICENSE.txt>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files LICENSE_AFL.txt>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files nginx.conf.sample>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files package.json>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files php.ini.sample>
+        order allow,deny
+        deny from all
+    </Files>
+    <Files README.md>
+        order allow,deny
+        deny from all
+    </Files>
+
+################################
 ## If running in cluster environment, uncomment this
 ## http://developer.yahoo.com/performance/rules.html#etags
 

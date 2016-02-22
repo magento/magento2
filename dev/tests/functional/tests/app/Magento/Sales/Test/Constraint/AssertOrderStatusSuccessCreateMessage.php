@@ -29,7 +29,7 @@ class AssertOrderStatusSuccessCreateMessage extends AbstractConstraint
      */
     public function processAssert(OrderStatusIndex $orderStatusIndexPage)
     {
-        $actualMessage = $orderStatusIndexPage->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $orderStatusIndexPage->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,

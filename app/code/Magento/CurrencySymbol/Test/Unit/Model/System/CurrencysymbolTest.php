@@ -209,8 +209,6 @@ class CurrencysymbolTest extends \PHPUnit_Framework_TestCase
         $configMock->expects($this->any())->method('setGroups')->with($value)->willReturnSelf();
 
         $this->coreConfigMock->expects($this->once())->method('reinit');
-        $this->storeManagerMock->expects($this->once())->method('reinitStores');
-
         $this->cacheTypeListMock->expects($this->atLeastOnce())->method('invalidate');
 
         $this->eventManagerMock->expects($this->atLeastOnce())->method('dispatch')->willReturnMap(

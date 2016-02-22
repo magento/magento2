@@ -81,7 +81,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $storeManager,
             $this->getMock('Magento\ImportExport\Model\Export\Factory', [], [], '', false),
             $this->getMock(
-                'Magento\ImportExport\Model\Resource\CollectionByPagesIteratorFactory',
+                'Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory',
                 [],
                 [],
                 '',
@@ -89,7 +89,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ),
             $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface', [], [], '', false),
             $this->getMock('Magento\Eav\Model\Config', [], [], '', false),
-            $this->getMock('Magento\Customer\Model\Resource\Customer\CollectionFactory', [], [], '', false),
+            $this->getMock('Magento\Customer\Model\ResourceModel\Customer\CollectionFactory', [], [], '', false),
             $this->getMock(
                 'Magento\CustomerImportExport\Model\Export\CustomerFactory',
                 [],
@@ -97,7 +97,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 '',
                 false
             ),
-            $this->getMock('Magento\Customer\Model\Resource\Address\CollectionFactory', [], [], '', false),
+            $this->getMock('Magento\Customer\Model\ResourceModel\Address\CollectionFactory', [], [], '', false),
             $this->_getModelDependencies()
         );
     }
@@ -199,7 +199,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             $websiteData = ['id' => $id, 'code' => $code];
-            $websites[$id] = new \Magento\Framework\Object($websiteData);
+            $websites[$id] = new \Magento\Framework\DataObject($websiteData);
         }
 
         return $websites;
@@ -217,7 +217,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function iterate(\Magento\Framework\Data\Collection\AbstractDb $collection, $pageSize, array $callbacks)
     {
         $resource = $this->getMock(
-            'Magento\Customer\Model\Resource\Customer',
+            'Magento\Customer\Model\ResourceModel\Customer',
             ['getIdFieldName'],
             [],
             '',
@@ -229,7 +229,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             'resource' => $resource,
             $this->getMock('Magento\Customer\Model\Config\Share', [], [], '', false),
             $this->getMock('Magento\Customer\Model\AddressFactory', [], [], '', false),
-            $this->getMock('Magento\Customer\Model\Resource\Address\CollectionFactory', [], [], '', false),
+            $this->getMock('Magento\Customer\Model\ResourceModel\Address\CollectionFactory', [], [], '', false),
             $this->getMock('Magento\Customer\Model\GroupFactory', [], [], '', false),
             $this->getMock('Magento\Customer\Model\AttributeFactory', [], [], '', false),
         ];

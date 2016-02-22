@@ -6,7 +6,7 @@
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:include schemaLocation="elements.xsd"/>
+    <xs:include schemaLocation="urn:magento:framework:View/Layout/etc/elements.xsd"/>
 
     <xs:element name="layout">
         <xs:annotation>

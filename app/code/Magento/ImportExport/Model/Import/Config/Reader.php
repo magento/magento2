@@ -15,7 +15,7 @@ class Reader extends \Magento\Framework\Config\Reader\Filesystem
     protected $_idAttributes = [
         '/config/entity' => 'name',
         '/config/entityType' => ['entity', 'name'],
-        '/config/relatedIndexers' => ['entity', 'name'],
+        '/config/relatedIndexer' => ['entity', 'name'],
     ];
 
     /**

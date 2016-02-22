@@ -4,10 +4,9 @@
  */
 define([
     "jquery",
-    "jquery/ui",
-    "mage/dataPost",
-    "jquery/jquery.cookie"
-], function($){
+    "jquery/ui"
+
+], function($) {
     /**
      * ProductListToolbarForm Widget - this widget is setting cookie and submitting form according to toolbar controls
      */
@@ -18,47 +17,71 @@ define([
             directionControl: '[data-role="direction-switcher"]',
             orderControl: '[data-role="sorter"]',
             limitControl: '[data-role="limiter"]',
-            modeCookie: 'product_list_mode',
-            directionCookie: 'product_list_dir',
-            orderCookie: 'product_list_order',
-            limitCookie: 'product_list_limit',
-            postData: {}
+            mode: 'product_list_mode',
+            direction: 'product_list_dir',
+            order: 'product_list_order',
+            limit: 'product_list_limit',
+            modeDefault: 'grid',
+            directionDefault: 'asc',
+            orderDefault: 'position',
+            limitDefault: '9',
+            url: ''
         },
 
-        _create: function() {
-            this._bind($(this.options.modeControl), this.options.modeCookie);
-            this._bind($(this.options.directionControl), this.options.directionCookie);
-            this._bind($(this.options.orderControl), this.options.orderCookie);
-            this._bind($(this.options.limitControl), this.options.limitCookie);
+        _create: function () {
+            this._bind($(this.options.modeControl), this.options.mode, this.options.modeDefault);
+            this._bind($(this.options.directionControl), this.options.direction, this.options.directionDefault);
+            this._bind($(this.options.orderControl), this.options.order, this.options.orderDefault);
+            this._bind($(this.options.limitControl), this.options.limit, this.options.limitDefault);
         },
 
-        _bind: function(element, cookieValue) {
+        _bind: function (element, paramName, defaultValue) {
             if (element.is("select")) {
-                element.on('change', {cookieName: cookieValue}, $.proxy(this._processSelect, this));
+                element.on('change', {paramName: paramName, default: defaultValue}, $.proxy(this._processSelect, this));
             } else {
-                element.on('click', {cookieName: cookieValue}, $.proxy(this._processLink, this));
+                element.on('click', {paramName: paramName, default: defaultValue}, $.proxy(this._processLink, this));
             }
         },
 
-        _processLink: function(event) {
+        _processLink: function (event) {
             event.preventDefault();
-            this._setCookie(event.data.cookieName, $(event.currentTarget).data('value'));
-            $.mage.dataPost().postData(this.options.postData);
-        },
-
-        _processSelect: function(event) {
-            this._setCookie(
-                event.data.cookieName,
-                event.currentTarget.options[event.currentTarget.selectedIndex].value
+            this.changeUrl(
+                event.data.paramName,
+                $(event.currentTarget).data('value'),
+                event.data.default
             );
-            $.mage.dataPost().postData(this.options.postData);
         },
 
-        _setCookie: function(cookieName, cookieValue) {
-            $.cookie(cookieName, cookieValue, {path: '/'});
+        _processSelect: function (event) {
+            this.changeUrl(
+                event.data.paramName,
+                event.currentTarget.options[event.currentTarget.selectedIndex].value,
+                event.data.default
+            );
+        },
+
+        changeUrl: function (paramName, paramValue, defaultValue) {
+            var decode = window.decodeURIComponent;
+            var urlPaths = this.options.url.split('?'),
+                baseUrl = urlPaths[0],
+                urlParams = urlPaths[1] ? urlPaths[1].split('&') : [],
+                paramData = {},
+                parameters;
+            for (var i = 0; i < urlParams.length; i++) {
+                parameters = urlParams[i].split('=');
+                paramData[decode(parameters[0])] = parameters[1] !== undefined
+                    ? decode(parameters[1].replace(/\+/g, '%20'))
+                    : '';
+            }
+            paramData[paramName] = paramValue;
+            if (paramValue == defaultValue) {
+                delete paramData[paramName];
+            }
+            paramData = $.param(paramData);
+
+            location.href = baseUrl + (paramData.length ? '?' + paramData : '');
         }
     });
-    
 
     return $.mage.productListToolbarForm;
 });

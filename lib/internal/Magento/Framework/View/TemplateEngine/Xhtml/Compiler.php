@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\TemplateEngine\Xhtml;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\TextInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\CdataInterface;
 use Magento\Framework\View\TemplateEngine\Xhtml\Compiler\CommentInterface;
@@ -76,11 +76,11 @@ class Compiler implements CompilerInterface
      * The compilation of the template and filling in the data
      *
      * @param \DOMNode $node
-     * @param Object $processedObject
-     * @param Object $context
+     * @param DataObject $processedObject
+     * @param DataObject $context
      * @return void
      */
-    public function compile(\DOMNode $node, Object $processedObject, Object $context)
+    public function compile(\DOMNode $node, DataObject $processedObject, DataObject $context)
     {
         switch ($node->nodeType) {
             case XML_TEXT_NODE:

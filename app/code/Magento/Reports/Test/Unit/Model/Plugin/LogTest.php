@@ -31,12 +31,12 @@ class LogTest extends \PHPUnit_Framework_TestCase
     protected $viewedMock;
 
     /**
-     * @var \Magento\Log\Model\Resource\Log|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Visitor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $logResourceMock;
 
     /**
-     * @var \Magento\Log\Model\Resource\Log|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\ResourceModel\Visitor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subjectMock;
 
@@ -55,10 +55,10 @@ class LogTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->logResourceMock = $this->getMockBuilder('Magento\Log\Model\Resource\Log')
+        $this->logResourceMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Visitor')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->subjectMock = $this->getMockBuilder('Magento\Log\Model\Resource\Log')
+        $this->subjectMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Visitor')
             ->disableOriginalConstructor()
             ->getMock();
 

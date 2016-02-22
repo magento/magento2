@@ -8,7 +8,6 @@ namespace Magento\Backend\Console\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 
 abstract class AbstractCacheManageCommand extends AbstractCacheCommand
 {
@@ -18,11 +17,6 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
     const INPUT_KEY_TYPES = 'types';
 
     /**
-     * Input key all
-     */
-    const INPUT_KEY_ALL = 'all';
-
-    /**
      * {@inheritdoc}
      */
     protected function configure()
@@ -30,17 +24,10 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
         $this->addArgument(
             self::INPUT_KEY_TYPES,
             InputArgument::IS_ARRAY,
-            'List of cache types, space separated. If omitted, all caches will be affected'
-        );
-        $this->addOption(
-            self::INPUT_KEY_ALL,
-            null,
-            InputOption::VALUE_NONE,
-            'All cache types'
+            'Space-separated list of cache types or omit to apply to all cache types.'
         );
         parent::configure();
     }
-
 
     /**
      * Get requested cache types
@@ -56,7 +43,7 @@ abstract class AbstractCacheManageCommand extends AbstractCacheCommand
             $requestedTypes = array_filter(array_map('trim', $requestedTypes), 'strlen');
         }
         if (empty($requestedTypes)) {
-            return [];
+            return $this->cacheManager->getAvailableTypes();
         } else {
             $availableTypes = $this->cacheManager->getAvailableTypes();
             $unsupportedTypes = array_diff($requestedTypes, $availableTypes);

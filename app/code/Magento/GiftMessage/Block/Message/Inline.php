@@ -48,9 +48,9 @@ class Inline extends \Magento\Framework\View\Element\Template
     protected $_customerSession;
 
     /**
-     * @var \Magento\Catalog\Helper\Image
+     * @var \Magento\Catalog\Block\Product\ImageBuilder
      */
-    protected $_imageHelper;
+    protected $imageBuilder;
 
     /**
      * @var \Magento\Framework\App\Http\Context
@@ -68,7 +68,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\GiftMessage\Helper\Message $giftMessageMessage
-     * @param \Magento\Catalog\Helper\Image $imageHelper
+     * @param \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder
      * @param \Magento\Framework\App\Http\Context $httpContext
      * @param array $data
      */
@@ -76,11 +76,11 @@ class Inline extends \Magento\Framework\View\Element\Template
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\GiftMessage\Helper\Message $giftMessageMessage,
-        \Magento\Catalog\Helper\Image $imageHelper,
+        \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder,
         \Magento\Framework\App\Http\Context $httpContext,
         array $data = []
     ) {
-        $this->_imageHelper = $imageHelper;
+        $this->imageBuilder = $imageBuilder;
         $this->_giftMessageMessage = $giftMessageMessage;
         $this->_customerSession = $customerSession;
         parent::__construct($context, $data);
@@ -93,6 +93,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      *
      * @param mixed $entity
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setEntity($entity)
     {
@@ -104,6 +105,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Get entity
      *
      * @return mixed
+     * @codeCoverageIgnore
      */
     public function getEntity()
     {
@@ -115,6 +117,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      *
      * @param string $type
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setType($type)
     {
@@ -126,6 +129,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Get type
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getType()
     {
@@ -137,6 +141,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      *
      * @param $type string
      * @return $this
+     * @codeCoverageIgnore
      */
     public function setCheckoutType($type)
     {
@@ -148,6 +153,7 @@ class Inline extends \Magento\Framework\View\Element\Template
      * Return checkout type. Typical values are 'onepage_checkout' and 'multishipping_address'
      *
      * @return string|null
+     * @codeCoverageIgnore
      */
     public function getCheckoutType()
     {
@@ -323,34 +329,13 @@ class Inline extends \Magento\Framework\View\Element\Template
     /**
      * Check availability of giftmessages for specified entity item
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return bool
      */
     public function isItemMessagesAvailable($item)
     {
         $type = substr($this->getType(), 0, 5) == 'multi' ? 'address_item' : 'item';
         return $this->_giftMessageMessage->isMessagesAllowed($type, $item);
-    }
-
-    /**
-     * Product thumbnail image url getter
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return string
-     */
-    public function getThumbnailUrl($product)
-    {
-        return (string)$this->_imageHelper->init($product, 'thumbnail')->resize($this->getThumbnailSize());
-    }
-
-    /**
-     * Thumbnail image size getter
-     *
-     * @return int
-     */
-    public function getThumbnailSize()
-    {
-        return $this->getVar('product_thumbnail_image_size', 'Magento_Catalog');
     }
 
     /**
@@ -365,5 +350,21 @@ class Inline extends \Magento\Framework\View\Element\Template
             return parent::_toHtml();
         }
         return '';
+    }
+
+    /**
+     * Retrieve product image
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param string $imageId
+     * @param array $attributes
+     * @return \Magento\Catalog\Block\Product\Image
+     */
+    public function getImage($product, $imageId, $attributes = [])
+    {
+        return $this->imageBuilder->setProduct($product)
+            ->setImageId($imageId)
+            ->setAttributes($attributes)
+            ->create();
     }
 }

@@ -17,21 +17,24 @@ class ExcelTest extends \PHPUnit_Framework_TestCase
      * @var array
      */
     private $_testData = [
-        ['ID', 'Name', 'Email', 'Group', 'Telephone', '+Telephone', 'ZIP', '0ZIP', 'Country', 'State/Province'],
+        [
+            'ID', 'Name', 'Email', 'Group', 'Telephone', '+Telephone', 'ZIP', '0ZIP', 'Country', 'State/Province',
+            'Symbol=', 'Symbol-', 'Symbol+'
+        ],
         [
             1, 'Jon Doe', 'jon.doe@magento.com', 'General', '310-111-1111', '+310-111-1111', 90232, '090232',
-            'United States', 'California'
+            'United States', 'California', '=', '-', '+'
         ],
     ];
 
     protected $_testHeader = [
-        'HeaderID', 'HeaderName', 'HeaderEmail', 'HeaderGroup', 'HeaderPhone', 'Header+Phone',
-        'HeaderZIP', 'Header0ZIP', 'HeaderCountry', 'HeaderRegion',
+        'HeaderID', 'HeaderName', 'HeaderEmail', 'HeaderGroup', 'HeaderPhone', 'Header+Phone', 'HeaderZIP',
+        'Header0ZIP', 'HeaderCountry', 'HeaderRegion', 'HeaderSymbol=', 'HeaderSymbol-', 'HeaderSymbol+'
     ];
 
     protected $_testFooter = [
-        'FooterID', 'FooterName', 'FooterEmail', 'FooterGroup', 'FooterPhone', 'Footer+Phone',
-        'FooterZIP', 'Footer0ZIP', 'FooterCountry', 'FooterRegion',
+        'FooterID', 'FooterName', 'FooterEmail', 'FooterGroup', 'FooterPhone', 'Footer+Phone', 'FooterZIP',
+        'Footer0ZIP', 'FooterCountry', 'FooterRegion', 'FooterSymbol=', 'FooterSymbol-', 'FooterSymbol+'
     ];
 
     /**

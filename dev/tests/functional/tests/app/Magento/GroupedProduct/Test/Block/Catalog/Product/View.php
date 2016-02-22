@@ -20,7 +20,7 @@ class View extends ParentView
      *
      * @var string
      */
-    protected $groupedProductBlock = '.table-wrapper.grouped';
+    protected $groupedProductBlock = '[class="table-wrapper grouped"]';
 
     /**
      * This member holds the class name of the tier price block.
@@ -81,8 +81,7 @@ class View extends ParentView
      */
     public function getOptions(FixtureInterface $product)
     {
-        $groupedOptions = $this->getGroupedProductBlock()->getOptions($product);
-        return ['grouped_options' => $groupedOptions] + parent::getOptions($product);
+        return ['grouped_options' => $this->getGroupedProductBlock()->getOptions($product)];
     }
 
     /**

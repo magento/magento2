@@ -6,9 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Paypal\Test\TestCase\ExpressCheckoutFromShoppingCartTest">
-        <variation name="ExpressCheckoutFromShoppingCartTestVariation1">
-            <data name="description" xsi:type="string">MAGETWO-12414 - Check Out as a Guest with "Checkout with PayPal" button (Payflow Edition) from the Shopping Cart and Offline Shipping</data>
+    <testCase name="Magento\Paypal\Test\TestCase\ExpressCheckoutFromShoppingCartTest" summary="Guest Checkout with &quot;Checkout with PayPal&quot; button (Payflow Edition) from the Shopping Cart and Offline Shipping" ticketId="MAGETWO-12414">
+        <variation name="ExpressCheckoutFromShoppingCartTestVariation1" summary="Check Out as a Guest with 'Checkout with PayPal' button (Payflow Edition) from the Shopping Cart and Offline Shipping" ticketId="MAGETWO-12414">
             <data name="products" xsi:type="string">catalogProductSimple::simple_10_dollar, configurableProduct::with_one_option, bundleProduct::fixed_100_dollar_with_required_options</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
             <data name="sandboxCustomer/dataSet" xsi:type="string">sandbox_us_default</data>
@@ -27,10 +26,11 @@
                 <item name="grandTotal" xsi:type="string">156.81</item>
             </data>
             <data name="configData" xsi:type="string">payflowpro</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test_deprecated</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
         </variation>
     </testCase>
 </config>

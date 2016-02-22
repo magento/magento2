@@ -19,7 +19,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     /**
      * Resource instance
      *
-     * @var \Magento\Catalog\Model\Resource\Layer\Filter\Price
+     * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price
      */
     protected $_resource;
 
@@ -67,7 +67,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $layer
      * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
-     * @param \Magento\Catalog\Model\Resource\Layer\Filter\Price $resource
+     * @param \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price $resource
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Search\Dynamic\Algorithm $priceAlgorithm
      * @param \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency
@@ -81,7 +81,7 @@ class Price extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer $layer,
         \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder,
-        \Magento\Catalog\Model\Resource\Layer\Filter\Price $resource,
+        \Magento\Catalog\Model\ResourceModel\Layer\Filter\Price $resource,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Search\Dynamic\Algorithm $priceAlgorithm,
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,

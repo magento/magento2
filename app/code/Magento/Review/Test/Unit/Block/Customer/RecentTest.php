@@ -18,10 +18,10 @@ class RecentTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\View\Element\Template\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $context;
 
-    /** @var \Magento\Review\Model\Resource\Review\Product\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Review\Model\ResourceModel\Review\Product\Collection|\PHPUnit_Framework_MockObject_MockObject */
     protected $collection;
 
-    /** @var \Magento\Review\Model\Resource\Review\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $collectionFactory;
 
     /** @var \Magento\Customer\Helper\Session\CurrentCustomer|\PHPUnit_Framework_MockObject_MockObject */
@@ -42,14 +42,14 @@ class RecentTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($this->storeManager)
         );
         $this->collection = $this->getMock(
-            'Magento\Review\Model\Resource\Review\Product\Collection',
+            'Magento\Review\Model\ResourceModel\Review\Product\Collection',
             [],
             [],
             '',
             false
         );
         $this->collectionFactory = $this->getMock(
-            'Magento\Review\Model\Resource\Review\Product\CollectionFactory',
+            'Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory',
             ['create'],
             [],
             '',
@@ -88,7 +88,7 @@ class RecentTest extends \PHPUnit_Framework_TestCase
         )->method(
             'getStore'
         )->will(
-            $this->returnValue(new \Magento\Framework\Object(['id' => 42]))
+            $this->returnValue(new \Magento\Framework\DataObject(['id' => 42]))
         );
         $this->currentCustomer->expects($this->any())->method('getCustomerId')->will($this->returnValue(4242));
 

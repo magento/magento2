@@ -106,12 +106,14 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
             'enable, do not clear static content' => [
                 true,
                 false,
-                '%amodules have been enabled%aMagento_Module1%aGenerated static view files were not cleared%a'
+                '%amodules have been enabled%aMagento_Module1%a' .
+                'Info: Some modules might require static view files to be cleared.%a'
             ],
             'disable, do not clear static content' => [
                 false,
                 false,
-                '%amodules have been disabled%aMagento_Module1%aGenerated static view files were not cleared%a'
+                '%amodules have been disabled%aMagento_Module1%a' .
+                'Info: Some modules might require static view files to be cleared.%a'
             ],
             'enable, clear static content' => [
                 true,

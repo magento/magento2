@@ -21,7 +21,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $moduleManager;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory]
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory]
      */
     protected $_setsFactory;
 
@@ -54,7 +54,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setsFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Model\Product\Type $type
      * @param \Magento\Catalog\Model\Product\Attribute\Source\Status $status
@@ -68,7 +68,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\CollectionFactory $setsFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory $setsFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Model\Product\Type $type,
         \Magento\Catalog\Model\Product\Attribute\Source\Status $status,
@@ -114,6 +114,8 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
+        parent::_prepareCollection();
+
         $store = $this->_getStore();
         $collection = $this->_productFactory->create()->getCollection()->addAttributeToSelect(
             'sku'
@@ -181,7 +183,6 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $this->setCollection($collection);
 
-        parent::_prepareCollection();
         $this->getCollection()->addWebsiteNamesToResult();
         return $this;
     }
@@ -262,7 +263,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->addColumn(
             'set_name',
             [
-                'header' => __('Product Template'),
+                'header' => __('Attribute Set'),
                 'index' => 'attribute_set_id',
                 'type' => 'options',
                 'options' => $sets,
@@ -433,7 +434,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product|\Magento\Framework\Object $row
+     * @param \Magento\Catalog\Model\Product|\Magento\Framework\DataObject $row
      * @return string
      */
     public function getRowUrl($row)

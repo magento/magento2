@@ -20,7 +20,7 @@ class Render extends AbstractAction
      *
      * @return void
      */
-    protected function execute()
+    public function execute()
     {
         $component = $this->factory->create($this->_request->getParam('namespace'));
         $this->prepareComponent($component);

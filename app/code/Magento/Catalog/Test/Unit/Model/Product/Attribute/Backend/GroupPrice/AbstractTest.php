@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend\GroupPrice;
 class AbstractTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice
      */
     protected $_model;
 
@@ -30,7 +30,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
         $configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $localeFormatMock = $this->getMock('\Magento\Framework\Locale\FormatInterface', [], [], '', false);
         $groupManagement = $this->getMock('Magento\Customer\Api\GroupManagementInterface', [], [], '', false);
-
+        $metadataPool = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
         $this->_model = $this->getMockForAbstractClass(
             'Magento\Catalog\Model\Product\Attribute\Backend\GroupPrice\AbstractGroupPrice',
             [
@@ -40,7 +40,8 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
                 'config' => $configMock,
                 'localeFormat' => $localeFormatMock,
                 'catalogProductType' => $productTypeMock,
-                'groupManagement' => $groupManagement
+                'groupManagement' => $groupManagement,
+                'metadataPool' => $metadataPool
             ]
         );
         $resource = $this->getMock('StdClass', ['getMainTable']);
@@ -67,12 +68,12 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         $attribute->expects($this->any())->method('getBackendTable')->will($this->returnValue('table'));
 
-        $attribute->expects($this->any())->method('getName')->will($this->returnValue('group_price'));
+        $attribute->expects($this->any())->method('getName')->will($this->returnValue('tear_price'));
 
         $this->_model->setAttribute($attribute);
 
-        $object = new \Magento\Framework\Object();
-        $object->setGroupPrice([['price_id' => 10]]);
+        $object = new \Magento\Framework\DataObject();
+        $object->setTearPrice([['price_id' => 10]]);
         $object->setId(555);
 
         $this->assertEquals(

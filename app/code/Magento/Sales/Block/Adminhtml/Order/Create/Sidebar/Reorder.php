@@ -24,7 +24,7 @@ class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
     /**
      * Orders factory
      *
-     * @var \Magento\Sales\Model\Resource\Order\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */
     protected $_ordersFactory;
 
@@ -34,7 +34,7 @@ class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
      * @param \Magento\Sales\Model\AdminOrder\Create $orderCreate
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Sales\Model\Config $salesConfig
-     * @param \Magento\Sales\Model\Resource\Order\CollectionFactory $ordersFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $ordersFactory
      * @param array $data
      */
     public function __construct(
@@ -43,7 +43,7 @@ class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
         \Magento\Sales\Model\AdminOrder\Create $orderCreate,
         PriceCurrencyInterface $priceCurrency,
         \Magento\Sales\Model\Config $salesConfig,
-        \Magento\Sales\Model\Resource\Order\CollectionFactory $ordersFactory,
+        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $ordersFactory,
         array $data = []
     ) {
         $this->_ordersFactory = $ordersFactory;
@@ -151,7 +151,7 @@ class Reorder extends \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\Abstra
     /**
      * Retrieve identifier of block item
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return int
      */
     public function getIdentifierId($item)

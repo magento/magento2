@@ -15,7 +15,7 @@ abstract class Validatevat extends \Magento\Backend\App\Action
     /**
      * Perform customer VAT ID validation
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     protected function _validate()
     {

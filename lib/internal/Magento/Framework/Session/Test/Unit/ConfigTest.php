@@ -15,6 +15,9 @@ use \Magento\Framework\Session\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
+    /** mock session.save_handler value from deployment config */
+    const SESSION_HANDLER_CONFIG = 'files';
+
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
@@ -132,11 +135,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('FOOBAR', $this->config->getName());
     }
 
-    public function testSaveHandlerDefaultsToIniSettings()
+    public function testSaveHandlerFromConfig()
     {
         $this->getModel($this->validatorMock);
         $this->assertSame(
-            ini_get('session.save_handler'),
+            self::SESSION_HANDLER_CONFIG,
             $this->config->getSaveHandler(),
             var_export($this->config->toArray(), 1)
         );
@@ -145,8 +148,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testSaveHandlerIsMutable()
     {
         $this->getModel($this->validatorMock);
-        $this->config->setSaveHandler('user');
+        $this->config->setSaveHandler('redis');
         $this->assertEquals('user', $this->config->getSaveHandler());
+        $this->assertEquals('redis', $this->config->getSaveHandlerName());
+        $this->config->setSaveHandler('files');
+        $this->assertEquals('files', $this->config->getSaveHandler());
+        $this->assertEquals('files', $this->config->getSaveHandlerName());
     }
 
     public function testCookieLifetimeIsMutable()
@@ -442,17 +449,17 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->configMock->method('getValue')
             ->will($this->returnValueMap($getValueReturnMap));
 
-        $filesystemMock = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
+        $filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
         $dirMock = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
         $filesystemMock->expects($this->any())
             ->method('getDirectoryWrite')
             ->will($this->returnValue($dirMock));
 
-        $deploymentConfigMock = $this->getMock('\Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $deploymentConfigMock = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
         $deploymentConfigMock->expects($this->at(0))
             ->method('get')
-            ->with(Config::PARAM_SESSION_SAVE_METHOD, 'files')
-            ->will($this->returnValue('files'));
+            ->with(Config::PARAM_SESSION_SAVE_METHOD, ini_get('session.save_handler') ?: 'files')
+            ->willReturn(self::SESSION_HANDLER_CONFIG);
         $deploymentConfigMock->expects($this->at(1))
             ->method('get')
             ->with(Config::PARAM_SESSION_SAVE_PATH)

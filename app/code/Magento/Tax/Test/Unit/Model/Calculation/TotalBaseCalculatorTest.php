@@ -22,6 +22,21 @@ class TotalBaseCalculatorTest extends RowBaseAndTotalBaseCalculatorTestCase
             $this->taxDetailsItem,
             $this->calculate($this->totalBaseCalculator)
         );
+        $this->assertEquals(self::UNIT_PRICE_INCL_TAX_ROUNDED, $this->taxDetailsItem->getPriceInclTax());
+    }
+
+    public function testCalculateWithTaxInPriceNoRounding()
+    {
+        $this->initTotalBaseCalculator();
+        $this->totalBaseCalculator->expects($this->exactly(3))
+            ->method('deltaRound')->will($this->returnValue(0));
+        $this->initMocks(true);
+
+        $this->assertSame(
+            $this->taxDetailsItem,
+            $this->calculate($this->totalBaseCalculator, false)
+        );
+        $this->assertEquals(self::UNIT_PRICE_INCL_TAX, $this->taxDetailsItem->getPriceInclTax());
     }
 
     public function testCalculateWithTaxNotInPrice()

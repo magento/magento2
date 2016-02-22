@@ -10,15 +10,15 @@ class ConfigurableAttributeHandler
     /**
      * Attribute collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory
      */
     protected $collectionFactory;
 
     /**
-     * @param \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeColFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory
      */
     public function __construct(
-        \Magento\Catalog\Model\Resource\Product\Attribute\CollectionFactory $attributeColFactory
+        \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory
     ) {
         $this->collectionFactory = $attributeColFactory;
     }
@@ -26,11 +26,11 @@ class ConfigurableAttributeHandler
     /**
      * Retrieve list of attributes applicable for configurable product
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Attribute\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection
      */
     public function getApplicableAttributes()
     {
-        /** @var $collection \Magento\Catalog\Model\Resource\Product\Attribute\Collection */
+        /** @var $collection \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection */
         $collection = $this->collectionFactory->create();
         return $collection->addFieldToFilter(
             'frontend_input',
@@ -40,7 +40,7 @@ class ConfigurableAttributeHandler
             1
         )->addFieldToFilter(
             'is_global',
-            \Magento\Catalog\Model\Resource\Eav\Attribute::SCOPE_GLOBAL
+            \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL
         );
     }
 

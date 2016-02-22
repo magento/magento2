@@ -11,41 +11,41 @@ use Magento\Mtf\Factory\Factory;
 use Magento\Mtf\Page\Page;
 
 /**
- * class MultishippingCheckoutRegister
- * Register new customer while performing multishipping addresses checkout
- *
+ * Register new customer while performing multishipping addresses checkout.
  */
 class MultishippingCheckoutRegister extends Page
 {
     /**
-     * URL for register customer page
+     * URL for register customer page.
      */
     const MCA = 'multishipping/checkout/register';
 
     /**
-     * Customer register block form
+     * Customer register block form.
      *
      * @var string
      */
     protected $registerBlock = '#form-validate';
 
     /**
-     * Custom constructor
+     * Init page. Set page url.
+     *
+     * @return void
      */
-    protected function _init()
+    protected function initUrl()
     {
-        $this->_url = $_ENV['app_frontend_url'] . self::MCA;
+        $this->url = $_ENV['app_frontend_url'] . self::MCA;
     }
 
     /**
-     * Get customer register block form
+     * Get customer register block form.
      *
      * @return \Magento\Customer\Test\Block\Form\Register
      */
     public function getRegisterBlock()
     {
         return Factory::getBlockFactory()->getMagentoCustomerFormRegister(
-            $this->_browser->find($this->registerBlock, Locator::SELECTOR_CSS)
+            $this->browser->find($this->registerBlock, Locator::SELECTOR_CSS)
         );
     }
 }

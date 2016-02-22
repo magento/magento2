@@ -11,21 +11,25 @@ namespace Magento\Framework\App\PageCache;
 class Identifier
 {
     /**
-     * @var string
+     * @var \Magento\Framework\App\Request\Http
      */
-    protected $value;
+    protected $request;
+
+    /**
+     * @var \Magento\Framework\App\Http\Context
+     */
+    protected $context;
 
     /**
      * @param \Magento\Framework\App\Request\Http $request
+     * @param \Magento\Framework\App\Http\Context $context
      */
-    public function __construct(\Magento\Framework\App\Request\Http $request)
-    {
-        $data = [
-            $request->isSecure(),
-            $request->getRequestUri(),
-            $request->get(\Magento\Framework\App\Response\Http::COOKIE_VARY_STRING),
-        ];
-        $this->value = md5(serialize($data));
+    public function __construct(
+        \Magento\Framework\App\Request\Http $request,
+        \Magento\Framework\App\Http\Context $context
+    ) {
+        $this->request = $request;
+        $this->context = $context;
     }
 
     /**
@@ -35,6 +39,11 @@ class Identifier
      */
     public function getValue()
     {
-        return $this->value;
+        $data = [
+            $this->request->getUriString(),
+            $this->request->get(\Magento\Framework\App\Response\Http::COOKIE_VARY_STRING)
+                ?: $this->context->getVaryString()
+        ];
+        return md5(serialize($data));
     }
 }

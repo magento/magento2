@@ -6,16 +6,18 @@
 
 namespace Magento\CatalogSearch\Model\Search;
 
+use Magento\CatalogSearch\Model\Search\TableMapper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Adapter\Mysql\ConditionManager;
 use Magento\Framework\Search\Adapter\Mysql\IndexBuilderInterface;
 use Magento\Framework\Search\Request\Dimension;
-use Magento\Framework\Search\Request\QueryInterface;
+use Magento\Framework\Search\Request\Filter\BoolExpression;
+use Magento\Framework\Search\Request\FilterInterface;
 use Magento\Framework\Search\Request\QueryInterface as RequestQueryInterface;
 use Magento\Framework\Search\RequestInterface;
-use Magento\Indexer\Model\ScopeResolver\IndexScopeResolver;
+use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
@@ -39,34 +41,44 @@ class IndexBuilder implements IndexBuilderInterface
      * @var StoreManagerInterface
      */
     private $storeManager;
+
     /**
      * @var IndexScopeResolver
      */
     private $scopeResolver;
+
     /**
      * @var ConditionManager
      */
     private $conditionManager;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @var TableMapper
+     */
+    private $tableMapper;
+
+    /**
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param ScopeConfigInterface $config
      * @param StoreManagerInterface $storeManager
      * @param ConditionManager $conditionManager
      * @param IndexScopeResolver $scopeResolver
+     * @param TableMapper $tableMapper
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         ScopeConfigInterface $config,
         StoreManagerInterface $storeManager,
         ConditionManager $conditionManager,
-        IndexScopeResolver $scopeResolver
+        IndexScopeResolver $scopeResolver,
+        TableMapper $tableMapper
     ) {
         $this->resource = $resource;
         $this->config = $config;
         $this->storeManager = $storeManager;
         $this->conditionManager = $conditionManager;
         $this->scopeResolver = $scopeResolver;
+        $this->tableMapper = $tableMapper;
     }
 
     /**
@@ -78,7 +90,7 @@ class IndexBuilder implements IndexBuilderInterface
     public function build(RequestInterface $request)
     {
         $searchIndexTable = $this->scopeResolver->resolve($request->getIndex(), $request->getDimensions());
-        $select = $this->getSelect()
+        $select = $this->resource->getConnection()->select()
             ->from(
                 ['search_index' => $searchIndexTable],
                 ['entity_id' => 'entity_id']
@@ -89,19 +101,7 @@ class IndexBuilder implements IndexBuilderInterface
                 []
             );
 
-        if ($this->isNeedToAddFilters($request)) {
-            $select
-                ->joinLeft(
-                    ['category_index' => $this->resource->getTableName('catalog_category_product_index')],
-                    'search_index.entity_id = category_index.product_id',
-                    []
-                )
-                ->joinLeft(
-                    ['cpie' => $this->resource->getTableName('catalog_product_index_eav')],
-                    'search_index.entity_id = cpie.entity_id AND search_index.attribute_id = cpie.attribute_id',
-                    []
-                );
-        }
+        $select = $this->tableMapper->addTables($select, $request);
 
         $select = $this->processDimensions($request, $select);
 
@@ -113,7 +113,7 @@ class IndexBuilder implements IndexBuilderInterface
             $select->joinLeft(
                 ['stock_index' => $this->resource->getTableName('cataloginventory_stock_status')],
                 'search_index.entity_id = stock_index.product_id'
-                . $this->getReadConnection()->quoteInto(
+                . $this->resource->getConnection()->quoteInto(
                     ' AND stock_index.website_id = ?',
                     $this->storeManager->getWebsite()->getId()
                 ),
@@ -163,64 +163,5 @@ class IndexBuilder implements IndexBuilderInterface
         }
 
         return $preparedDimensions;
-    }
-
-    /**
-     * Get read connection
-     *
-     * @return \Magento\Framework\DB\Adapter\AdapterInterface
-     */
-    private function getReadConnection()
-    {
-        return $this->resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
-    }
-
-    /**
-     * Get empty Select
-     *
-     * @return Select
-     */
-    private function getSelect()
-    {
-        return $this->getReadConnection()->select();
-    }
-
-    /**
-     * @param RequestInterface $request
-     * @return bool
-     */
-    private function isNeedToAddFilters(RequestInterface $request)
-    {
-        return $this->hasFilters($request->getQuery());
-    }
-
-    /**
-     * @param QueryInterface $query
-     * @return bool
-     */
-    private function hasFilters(QueryInterface $query)
-    {
-        $hasFilters = false;
-        switch ($query->getType()) {
-            case RequestQueryInterface::TYPE_BOOL:
-                /** @var \Magento\Framework\Search\Request\Query\Bool $query */
-                foreach ($query->getMust() as $subQuery) {
-                    $hasFilters |= $this->hasFilters($subQuery);
-                }
-                foreach ($query->getShould() as $subQuery) {
-                    $hasFilters |= $this->hasFilters($subQuery);
-                }
-                foreach ($query->getMustNot() as $subQuery) {
-                    $hasFilters |= $this->hasFilters($subQuery);
-                }
-                break;
-            case RequestQueryInterface::TYPE_FILTER:
-                $hasFilters |= true;
-                break;
-            default:
-                $hasFilters |= false;
-                break;
-        }
-        return $hasFilters;
     }
 }

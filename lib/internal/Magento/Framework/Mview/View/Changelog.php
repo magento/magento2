@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Mview\View;
 
+use Magento\Framework\App\ResourceConnection;
+
 class Changelog implements ChangelogInterface
 {
     /**
@@ -18,11 +20,11 @@ class Changelog implements ChangelogInterface
     const COLUMN_NAME = 'entity_id';
 
     /**
-     * Database write connection
+     * Database connection
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected $write;
+    protected $connection;
 
     /**
      * View Id identifier
@@ -32,16 +34,16 @@ class Changelog implements ChangelogInterface
     protected $viewId;
 
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $resource;
 
     /**
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      */
-    public function __construct(\Magento\Framework\App\Resource $resource)
+    public function __construct(\Magento\Framework\App\ResourceConnection $resource)
     {
-        $this->write = $resource->getConnection('core_write');
+        $this->connection = $resource->getConnection();
         $this->resource = $resource;
         $this->checkConnection();
     }
@@ -54,7 +56,7 @@ class Changelog implements ChangelogInterface
      */
     protected function checkConnection()
     {
-        if (!$this->write) {
+        if (!$this->connection) {
             throw new \Exception('Write DB connection is not available');
         }
     }
@@ -68,11 +70,11 @@ class Changelog implements ChangelogInterface
     public function create()
     {
         $changelogTableName = $this->resource->getTableName($this->getName());
-        if ($this->write->isTableExists($changelogTableName)) {
+        if ($this->connection->isTableExists($changelogTableName)) {
             throw new \Exception("Table {$changelogTableName} already exist");
         }
 
-        $table = $this->write->newTable(
+        $table = $this->connection->newTable(
             $changelogTableName
         )->addColumn(
             'version_id',
@@ -88,7 +90,7 @@ class Changelog implements ChangelogInterface
             'Entity ID'
         );
 
-        $this->write->createTable($table);
+        $this->connection->createTable($table);
     }
 
     /**
@@ -100,11 +102,11 @@ class Changelog implements ChangelogInterface
     public function drop()
     {
         $changelogTableName = $this->resource->getTableName($this->getName());
-        if (!$this->write->isTableExists($changelogTableName)) {
+        if (!$this->connection->isTableExists($changelogTableName)) {
             throw new \Exception("Table {$changelogTableName} does not exist");
         }
 
-        $this->write->dropTable($changelogTableName);
+        $this->connection->dropTable($changelogTableName);
     }
 
     /**
@@ -117,11 +119,11 @@ class Changelog implements ChangelogInterface
     public function clear($versionId)
     {
         $changelogTableName = $this->resource->getTableName($this->getName());
-        if (!$this->write->isTableExists($changelogTableName)) {
+        if (!$this->connection->isTableExists($changelogTableName)) {
             throw new \Exception("Table {$changelogTableName} does not exist");
         }
 
-        $this->write->delete($changelogTableName, ['version_id <= ?' => (int)$versionId]);
+        $this->connection->delete($changelogTableName, ['version_id <= ?' => (int)$versionId]);
 
         return true;
     }
@@ -137,11 +139,11 @@ class Changelog implements ChangelogInterface
     public function getList($fromVersionId, $toVersionId)
     {
         $changelogTableName = $this->resource->getTableName($this->getName());
-        if (!$this->write->isTableExists($changelogTableName)) {
+        if (!$this->connection->isTableExists($changelogTableName)) {
             throw new \Exception("Table {$changelogTableName} does not exist");
         }
 
-        $select = $this->write->select()->distinct(
+        $select = $this->connection->select()->distinct(
             true
         )->from(
             $changelogTableName,
@@ -154,7 +156,7 @@ class Changelog implements ChangelogInterface
             (int)$toVersionId
         );
 
-        return $this->write->fetchCol($select);
+        return $this->connection->fetchCol($select);
     }
 
     /**
@@ -166,10 +168,10 @@ class Changelog implements ChangelogInterface
     public function getVersion()
     {
         $changelogTableName = $this->resource->getTableName($this->getName());
-        if (!$this->write->isTableExists($changelogTableName)) {
+        if (!$this->connection->isTableExists($changelogTableName)) {
             throw new \Exception("Table {$changelogTableName} does not exist");
         }
-        $row = $this->write->fetchRow('SHOW TABLE STATUS LIKE ?', [$changelogTableName]);
+        $row = $this->connection->fetchRow('SHOW TABLE STATUS LIKE ?', [$changelogTableName]);
         if (isset($row['Auto_increment'])) {
             return (int)$row['Auto_increment'] - 1;
         } else {

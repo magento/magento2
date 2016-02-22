@@ -13,15 +13,16 @@ require __DIR__ . '/../../../Magento/Catalog/_files/products_rollback.php';
 
 /** @var \Magento\Framework\Registry $registry */
 $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
-
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-$product->load(3);
-if ($product->getId()) {
-    $product->delete();
+$productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get('Magento\Catalog\Api\ProductRepositoryInterface');
+try {
+    $product = $productRepository->get('bundle-product');
+    $productRepository->delete($product);
+} catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+    //Product already removed
 }
 
 $registry->unregister('isSecureArea');

@@ -50,9 +50,9 @@ class InvalidateTokenTest extends \Magento\TestFramework\TestCase\AbstractBacken
         /** @var \Magento\Integration\Api\AdminTokenServiceInterface $tokenService */
         $tokenService = Bootstrap::getObjectManager()->get('Magento\Integration\Api\AdminTokenServiceInterface');
 
-        /** @var \Magento\Integration\Model\Resource\Oauth\Token\CollectionFactory $tokenModelCollectionFactory */
+        /** @var \Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory $tokenModelCollectionFactory */
         $tokenModelCollectionFactory = Bootstrap::getObjectManager()->get(
-            'Magento\Integration\Model\Resource\Oauth\Token\CollectionFactory'
+            'Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory'
         );
 
         /** @var \Magento\User\Model\User $userModel */

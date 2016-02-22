@@ -5,6 +5,8 @@
  */
 namespace Magento\Newsletter\Model\Queue;
 
+use Magento\Email\Model\AbstractTemplate;
+
 class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
 {
     /**
@@ -27,16 +29,29 @@ class TransportBuilder extends \Magento\Framework\Mail\Template\TransportBuilder
     }
 
     /**
+     * @param AbstractTemplate $template
+     * @return void
+     */
+    protected function setTemplateFilter(AbstractTemplate $template)
+    {
+        if (isset($this->templateData['template_filter'])) {
+            $template->setTemplateFilter($this->templateData['template_filter']);
+        }
+    }
+
+    /**
      * @inheritdoc
      */
     protected function prepareMessage()
     {
+        /** @var AbstractTemplate $template */
         $template = $this->getTemplate()->setData($this->templateData);
+        $this->setTemplateFilter($template);
 
         $this->message->setMessageType(
             \Magento\Framework\Mail\MessageInterface::TYPE_HTML
         )->setBody(
-            $template->getProcessedTemplate()
+            $template->getProcessedTemplate($this->templateVars)
         )->setSubject(
             $template->getSubject()
         );

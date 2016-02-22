@@ -6,7 +6,7 @@
  */
 -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:include schemaLocation="elements.xsd"/>
+    <xs:include schemaLocation="urn:magento:framework:View/Layout/etc/elements.xsd"/>
 
     <xs:complexType name="genericLayout">
         <xs:sequence minOccurs="0" maxOccurs="unbounded">
@@ -15,8 +15,8 @@
             <xs:element ref="block" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="referenceBlock" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="update" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element ref="remove" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element ref="move" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element ref="uiComponent" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 

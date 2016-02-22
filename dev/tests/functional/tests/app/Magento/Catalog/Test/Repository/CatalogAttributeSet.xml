@@ -28,5 +28,15 @@
                 <item name="dataset" xsi:type="string">attribute_type_fpt</item>
             </field>
         </dataset>
+
+        <dataset name="custom_attribute_set_with_colors">
+            <field name="attribute_set_name" xsi:type="string">Custom_attribute_set_with_colors_%isolation%</field>
+            <field name="skeleton_set" xsi:type="array">
+                <item name="dataset" xsi:type="string">default</item>
+            </field>
+            <field name="assigned_attributes" xsi:type="array">
+                <item name="dataset" xsi:type="string">color_for_promo_rules</item>
+            </field>
+        </dataset>
     </repository>
 </config>

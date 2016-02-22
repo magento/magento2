@@ -27,6 +27,8 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
      */
     public function testSave($productLink, $productId, $productPosition = 0)
     {
+        $this->checkIfTestable();
+
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH_SUFFIX
@@ -69,6 +71,8 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
      */
     public function testUpdateProduct($productLink, $productId, $productPosition = 0)
     {
+        $this->checkIfTestable();
+
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH_SUFFIX
@@ -107,6 +111,8 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
      */
     public function testDelete()
     {
+        $this->checkIfTestable();
+
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH_SUFFIX . '/' . $this->categoryId .
@@ -144,6 +150,22 @@ class CategoryLinkRepositoryTest extends WebapiAbstract
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * MAGETWO-41737: Skip tests when the flag 'custom_categories_sort' is up
+     * @return void
+     */
+    private function checkIfTestable()
+    {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        /** @var \Magento\Framework\App\Config\ScopeConfigInterface $config */
+        $config = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface');
+
+        if ($config->getValue('catalog/custom_categories_sort') == 1) {
+            $this->markTestSkipped('Will be fixed after MAGETWO-41737');
         }
     }
 }

@@ -9,6 +9,7 @@
 namespace Magento\Paypal\Block\Express;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Quote\Model\Quote\Address\Rate;
 
 /**
  * Paypal Express Onepage checkout block
@@ -35,7 +36,7 @@ class Review extends \Magento\Framework\View\Element\Template
     /**
      * Currently selected shipping rate
      *
-     * @var \Magento\Quote\Model\Quote\Address\Rate
+     * @var Rate
      */
     protected $_currentShippingRate = null;
 
@@ -142,10 +143,10 @@ class Review extends \Magento\Framework\View\Element\Template
     /**
      * Get either shipping rate code or empty value on error
      *
-     * @param \Magento\Framework\Object $rate
+     * @param \Magento\Framework\DataObject $rate
      * @return string
      */
-    public function renderShippingRateValue(\Magento\Framework\Object $rate)
+    public function renderShippingRateValue(\Magento\Framework\DataObject $rate)
     {
         if ($rate->getErrorMessage()) {
             return '';
@@ -156,7 +157,7 @@ class Review extends \Magento\Framework\View\Element\Template
     /**
      * Get shipping rate code title and its price or error message
      *
-     * @param \Magento\Framework\Object $rate
+     * @param \Magento\Framework\DataObject $rate
      * @param string $format
      * @param string $inclTaxFormat
      * @return string
@@ -174,7 +175,7 @@ class Review extends \Magento\Framework\View\Element\Template
 
             $incl = $this->_getShippingPrice($rate->getPrice(), true);
             if ($incl != $price && $this->_taxHelper->displayShippingBothPrices()) {
-                $renderedInclTax = sprintf($inclTaxFormat, __('Incl. Tax'), $incl);
+                $renderedInclTax = sprintf($inclTaxFormat, $this->escapeHtml(__('Incl. Tax')), $incl);
             }
         }
         return sprintf($format, $this->escapeHtml($rate->getMethodTitle()), $price, $renderedInclTax);
@@ -183,11 +184,32 @@ class Review extends \Magento\Framework\View\Element\Template
     /**
      * Getter for current shipping rate
      *
-     * @return \Magento\Quote\Model\Quote\Address\Rate
+     * @return Rate
      */
     public function getCurrentShippingRate()
     {
         return $this->_currentShippingRate;
+    }
+
+    /**
+     * Whether can edit shipping method
+     *
+     * @return bool
+     */
+    public function canEditShippingMethod()
+    {
+        return $this->getData('can_edit_shipping_method') || !$this->getCurrentShippingRate();
+    }
+
+    /**
+     * Get quote email
+     *
+     * @return string
+     */
+    public function getEmail()
+    {
+        $billingAddress = $this->getBillingAddress();
+        return $billingAddress ? $billingAddress->getEmail() : '';
     }
 
     /**
@@ -264,7 +286,7 @@ class Review extends \Magento\Framework\View\Element\Template
                 ->getAdditionalInformation(\Magento\Paypal\Model\Express\Checkout::PAYMENT_INFO_BUTTON) == 1;
             // misc shipping parameters
             $this->setShippingMethodSubmitUrl(
-                $this->getUrl("{$this->_controllerPath}/saveShippingMethod")
+                $this->getUrl("{$this->_controllerPath}/saveShippingMethod", ['_secure' => true])
             )->setCanEditShippingAddress(
                 $canEditShippingAddress
             )->setCanEditShippingMethod(
@@ -275,7 +297,7 @@ class Review extends \Magento\Framework\View\Element\Template
         $this->setEditUrl(
             $this->getUrl("{$this->_controllerPath}/edit")
         )->setPlaceOrderUrl(
-            $this->getUrl("{$this->_controllerPath}/placeOrder")
+            $this->getUrl("{$this->_controllerPath}/placeOrder", ['_secure' => true])
         );
 
         return parent::_beforeToHtml();

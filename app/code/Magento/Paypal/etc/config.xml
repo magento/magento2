@@ -5,12 +5,12 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <paypal>
             <bncode>Magento_Cart_Community</bncode>
             <style>
-                <logo>nowAccepting_150x60</logo>
+                <logo></logo>
             </style>
             <wpp>
                 <api_password backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
@@ -89,6 +89,9 @@
                 <avs_zip>0</avs_zip>
                 <avs_international>0</avs_international>
                 <avs_security_code>1</avs_security_code>
+                <cc_year_length>2</cc_year_length>
+                <can_authorize_vault>1</can_authorize_vault>
+                <can_capture_vault>1</can_capture_vault>
             </payflowpro>
             <paypal_billing_agreement>
                 <active>1</active>

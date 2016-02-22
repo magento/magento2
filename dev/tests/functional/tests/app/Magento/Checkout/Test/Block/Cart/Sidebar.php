@@ -20,7 +20,7 @@ class Sidebar extends Block
      *
      * @var string
      */
-    protected $qty = '//*[@class="product"]/*[@title="%s"]/following-sibling::*//*[contains(@class,"item-qty")]';
+    private $qty = '//*[@class="product"]/*[@title="%s"]/following-sibling::*//*[contains(@class,"item-qty")]';
 
     /**
      * Mini cart link selector.
@@ -28,6 +28,27 @@ class Sidebar extends Block
      * @var string
      */
     protected $cartLink = 'a.showcart';
+
+    /**
+     * Locator value for "Check out with Braintree PayPal" button.
+     *
+     * @var string
+     */
+    protected $braintreePaypalCheckoutButton = './/button[contains(@id, "braintree-paypal-mini-cart")]';
+
+    /**
+     * Minicart items quantity
+     *
+     * @var string
+     */
+    protected $productCounter = './/*[@class="counter-number"]';
+
+    /**
+     * Empty minicart message
+     *
+     * @var string
+     */
+    protected $emptyCartMessage = './/*[@id="minicart-content-wrapper"]//*[@class="subtitle empty"]';
 
     /**
      * Mini cart content selector.
@@ -55,7 +76,21 @@ class Sidebar extends Block
      *
      * @var string
      */
-    protected $counterQty = './/div[@class="minicart-wrapper"]//span[@class="counter qty"]';
+    protected $counterQty = '.minicart-wrapper .counter.qty';
+
+    /**
+     * Locator value for Mini Shopping Cart wrapper.
+     *
+     * @var string
+     */
+    protected $counterNumberWrapper = '.minicart-wrapper';
+
+    /**
+     * Loading masc.
+     *
+     * @var string
+     */
+    protected $loadingMask = '.loading-mask';
 
     /**
      * Open mini cart.
@@ -71,6 +106,17 @@ class Sidebar extends Block
     }
 
     /**
+     * Click "Check out with Braintree PayPal" button.
+     *
+     * @return void
+     */
+    public function clickBraintreePaypalButton()
+    {
+        $this->_rootElement->find($this->braintreePaypalCheckoutButton, Locator::SELECTOR_XPATH)
+            ->click();
+    }
+
+    /**
      * Wait counter qty visibility.
      *
      * @return void
@@ -81,10 +127,31 @@ class Sidebar extends Block
         $selector = $this->counterQty;
         $browser->waitUntil(
             function () use ($browser, $selector) {
-                $counterQty = $browser->find($selector, Locator::SELECTOR_XPATH);
+                $counterQty = $browser->find($selector);
                 return $counterQty->isVisible() ? true : null;
             }
         );
+    }
+
+    /**
+     * Get empty minicart message
+     *
+     * @return string
+     */
+    public function getEmptyMessage()
+    {
+        $this->_rootElement->find($this->cartLink)->click();
+        return $this->_rootElement->find($this->emptyCartMessage, Locator::SELECTOR_XPATH)->getText();
+    }
+
+    /**
+     * Is minicart items quantity block visible
+     *
+     * @return bool
+     */
+    public function isItemsQtyVisible()
+    {
+        return $this->_rootElement->find($this->productCounter, Locator::SELECTOR_XPATH)->isVisible();
     }
 
     /**
@@ -126,5 +193,32 @@ class Sidebar extends Block
         }
 
         return $cartItem;
+    }
+
+    /**
+     * Wait for init minicart.
+     *
+     * @return void
+     */
+    public function waitInit()
+    {
+        $browser = $this->browser;
+        $selector = $this->counterNumberWrapper;
+        $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $counterQty = $browser->find($selector);
+                return $counterQty->isVisible() ? true : null;
+            }
+        );
+    }
+
+    /**
+     * Wait for loader is not visible.
+     *
+     * @return void
+     */
+    public function waitLoader()
+    {
+        $this->waitForElementNotVisible($this->loadingMask);
     }
 }

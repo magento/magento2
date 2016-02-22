@@ -5,8 +5,8 @@
  */
 namespace Magento\Indexer\Model\Processor;
 
-use Magento\Indexer\Model\HandlerInterface;
-use Magento\Indexer\Model\HandlerPool;
+use Magento\Framework\Indexer\HandlerInterface;
+use Magento\Framework\Indexer\HandlerPool;
 
 class Handler
 {

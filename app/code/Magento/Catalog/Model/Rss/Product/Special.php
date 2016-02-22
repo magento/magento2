@@ -36,7 +36,7 @@ class Special
     /**
      * @param int $storeId
      * @param int $customerGroupId
-     * @return \Magento\Catalog\Model\Resource\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function getProductsCollection($storeId, $customerGroupId)
     {

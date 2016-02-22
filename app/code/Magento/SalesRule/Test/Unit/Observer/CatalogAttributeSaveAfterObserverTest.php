@@ -1,0 +1,82 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\SalesRule\Test\Unit\Observer;
+
+class CatalogAttributeSaveAfterObserverTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @var \Magento\SalesRule\Observer\CatalogAttributeSaveAfterObserver|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $model;
+
+    /**
+     * @var \Magento\SalesRule\Observer\CheckSalesRulesAvailability|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $checkSalesRulesAvailability;
+
+
+    protected function setUp()
+    {
+        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->initMocks();
+
+        $this->model = $helper->getObject(
+            'Magento\SalesRule\Observer\CatalogAttributeSaveAfterObserver',
+            [
+                'checkSalesRulesAvailability' => $this->checkSalesRulesAvailability
+            ]
+        );
+    }
+
+    protected function initMocks()
+    {
+        $this->checkSalesRulesAvailability = $this->getMock(
+            'Magento\SalesRule\Observer\CheckSalesRulesAvailability',
+            [],
+            [],
+            '',
+            false
+        );
+    }
+
+    public function testCatalogAttributeSaveAfter()
+    {
+        $attributeCode = 'attributeCode';
+        $observer = $this->getMock('Magento\Framework\Event\Observer', [], [], '', false);
+        $event = $this->getMock('Magento\Framework\Event', ['getAttribute', '__wakeup'], [], '', false);
+        $attribute = $this->getMock(
+            'Magento\Catalog\Model\ResourceModel\Eav\Attribute',
+            ['dataHasChangedFor', 'getIsUsedForPromoRules', 'getAttributeCode', '__wakeup'],
+            [],
+            '',
+            false
+        );
+
+        $observer->expects($this->once())
+            ->method('getEvent')
+            ->will($this->returnValue($event));
+        $event->expects($this->any())
+            ->method('getAttribute')
+            ->will($this->returnValue($attribute));
+        $attribute->expects($this->any())
+            ->method('dataHasChangedFor')
+            ->with('is_used_for_promo_rules')
+            ->will($this->returnValue(true));
+        $attribute->expects($this->any())
+            ->method('getIsUsedForPromoRules')
+            ->will($this->returnValue(false));
+        $attribute->expects($this->any())
+            ->method('getAttributeCode')
+            ->will($this->returnValue($attributeCode));
+
+        $this->checkSalesRulesAvailability
+            ->expects($this->once())
+            ->method('checkSalesRulesAvailability')
+            ->willReturn('true');
+
+        $this->assertEquals($this->model, $this->model->execute($observer));
+    }
+}

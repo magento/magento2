@@ -82,7 +82,7 @@ class Option
      * @param \Magento\Quote\Model\Quote\Item $quoteItem
      * @param int $qty
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function initialize(

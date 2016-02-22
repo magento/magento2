@@ -142,7 +142,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->quoteRepository = $this->getMock('Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepository = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

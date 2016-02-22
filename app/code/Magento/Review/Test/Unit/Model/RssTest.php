@@ -58,7 +58,7 @@ class RssTest extends \PHPUnit_Framework_TestCase
             false
         );
         $productCollection = $this->getMock(
-            'Magento\Review\Model\Resource\Review\Product\Collection',
+            'Magento\Review\Model\ResourceModel\Review\Product\Collection',
             [
                 'addStatusFilter',
                 'addAttributeToSelect',

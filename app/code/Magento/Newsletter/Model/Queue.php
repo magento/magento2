@@ -10,8 +10,8 @@ use Magento\Framework\App\TemplateTypesInterface;
 /**
  * Newsletter queue model.
  *
- * @method \Magento\Newsletter\Model\Resource\Queue _getResource()
- * @method \Magento\Newsletter\Model\Resource\Queue getResource()
+ * @method \Magento\Newsletter\Model\ResourceModel\Queue _getResource()
+ * @method \Magento\Newsletter\Model\ResourceModel\Queue getResource()
  * @method int getTemplateId()
  * @method \Magento\Newsletter\Model\Queue setTemplateId(int $value)
  * @method int getNewsletterType()
@@ -47,7 +47,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
     /**
      * Subscribers collection
      *
-     * @var \Magento\Newsletter\Model\Resource\Subscriber\Collection
+     * @var \Magento\Newsletter\Model\ResourceModel\Subscriber\Collection
      */
     protected $_subscribersCollection;
 
@@ -115,9 +115,9 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Magento\Newsletter\Model\TemplateFactory $templateFactory
      * @param \Magento\Newsletter\Model\ProblemFactory $problemFactory
-     * @param \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory $subscriberCollectionFactory
+     * @param \Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory $subscriberCollectionFactory
      * @param \Magento\Newsletter\Model\Queue\TransportBuilder $transportBuilder
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -129,9 +129,9 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Magento\Newsletter\Model\TemplateFactory $templateFactory,
         \Magento\Newsletter\Model\ProblemFactory $problemFactory,
-        \Magento\Newsletter\Model\Resource\Subscriber\CollectionFactory $subscriberCollectionFactory,
+        \Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory $subscriberCollectionFactory,
         \Magento\Newsletter\Model\Queue\TransportBuilder $transportBuilder,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -158,7 +158,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\Newsletter\Model\Resource\Queue');
+        $this->_init('Magento\Newsletter\Model\ResourceModel\Queue');
     }
 
     /**

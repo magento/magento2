@@ -15,17 +15,30 @@ define(
         'Magento_Checkout/js/model/resource-url-manager',
         'Magento_Checkout/js/model/payment-service',
         'Magento_Checkout/js/model/error-processor',
-        'Magento_Ui/js/model/messageList',
+        'Magento_SalesRule/js/model/payment/discount-messages',
         'mage/storage',
         'Magento_Checkout/js/action/get-totals',
-        'mage/translate'
+        'mage/translate',
+        'Magento_Checkout/js/model/payment/method-list'
     ],
-    function (ko, $, quote, urlManager, paymentService, errorProcessor, messageList, storage, getTotalsAction, $t) {
+    function (
+        ko,
+        $,
+        quote,
+        urlManager,
+        paymentService,
+        errorProcessor,
+        messageContainer,
+        storage,
+        getTotalsAction,
+        $t,
+        paymentMethodList
+    ) {
         'use strict';
         return function (couponCode, isApplied, isLoading) {
             var quoteId = quote.getQuoteId();
             var url = urlManager.getApplyCouponUrl(couponCode, quoteId);
-            var message = $t('Your coupon was successfully applied');
+            var message = $t('Your coupon was successfully applied.');
             return storage.put(
                 url,
                 {},
@@ -39,16 +52,16 @@ define(
                         getTotalsAction([], deferred);
                         $.when(deferred).done(function() {
                             paymentService.setPaymentMethods(
-                                paymentService.getAvailablePaymentMethods()
+                                paymentMethodList()
                             );
                         });
-                        messageList.addSuccessMessage({'message': message});
+                        messageContainer.addSuccessMessage({'message': message});
                     }
                 }
             ).fail(
                 function (response) {
                     isLoading(false);
-                    errorProcessor.process(response);
+                    errorProcessor.process(response, messageContainer);
                 }
             );
         };

@@ -55,6 +55,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      * @param StockHelper $stockHelper
      * @param array $data
      *
+     * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -131,6 +132,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      * Count items
      *
      * @return int
+     * @codeCoverageIgnore
      */
     public function getItemCount()
     {
@@ -162,6 +164,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      * Get last product ID that was added to cart and remove this information from session
      *
      * @return int
+     * @codeCoverageIgnore
      */
     protected function _getLastAddedProductId()
     {
@@ -172,6 +175,7 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
      * Get quote instance
      *
      * @return \Magento\Quote\Model\Quote
+     * @codeCoverageIgnore
      */
     public function getQuote()
     {
@@ -181,11 +185,11 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Get crosssell products collection
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Link\Product\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection
      */
     protected function _getCollection()
     {
-        /** @var \Magento\Catalog\Model\Resource\Product\Link\Product\Collection $collection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection $collection */
         $collection = $this->_productLinkFactory->create()->useCrossSellLinks()->getProductCollection()->setStoreId(
             $this->_storeManager->getStore()->getId()
         )->addStoreFilter()->setPageSize(
@@ -194,8 +198,6 @@ class Crosssell extends \Magento\Catalog\Block\Product\AbstractProduct
             $this->_productVisibility->getVisibleInCatalogIds()
         );
         $this->_addProductAttributesAndPrices($collection);
-
-        $this->stockHelper->addInStockFilterToCollection($collection);
 
         return $collection;
     }

@@ -10,14 +10,12 @@ namespace Magento\Tax\Model\Calculation;
 use Magento\Directory\Model\CountryFactory;
 use Magento\Directory\Model\RegionFactory;
 use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Tax\Model\Calculation\Rate;
 use Magento\Tax\Model\Calculation\Rate\Converter;
-use Magento\Tax\Model\Resource\Calculation\Rate\Collection;
+use Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -61,7 +59,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
     protected $regionFactory;
 
     /**
-     * @var \Magento\Tax\Model\Resource\Calculation\Rate
+     * @var \Magento\Tax\Model\ResourceModel\Calculation\Rate
      */
     protected $resourceModel;
 
@@ -77,7 +75,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
      * @param RateFactory $rateFactory
      * @param CountryFactory $countryFactory
      * @param RegionFactory $regionFactory
-     * @param \Magento\Tax\Model\Resource\Calculation\Rate $rateResource
+     * @param \Magento\Tax\Model\ResourceModel\Calculation\Rate $rateResource
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
      */
     public function __construct(
@@ -87,7 +85,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
         RateFactory $rateFactory,
         CountryFactory $countryFactory,
         RegionFactory $regionFactory,
-        \Magento\Tax\Model\Resource\Calculation\Rate $rateResource,
+        \Magento\Tax\Model\ResourceModel\Calculation\Rate $rateResource,
         \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
     ) {
         $this->converter = $converter;
@@ -152,7 +150,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
-        /** @var \Magento\Tax\Model\Resource\Calculation\Rate\Collection $collection */
+        /** @var \Magento\Tax\Model\ResourceModel\Calculation\Rate\Collection $collection */
         $collection = $this->rateFactory->create()->getCollection();
         $this->joinProcessor->process($collection);
         $collection->joinRegionTable();
@@ -168,7 +166,7 @@ class RateRepository implements \Magento\Tax\Api\TaxRateRepositoryInterface
             foreach ($sortOrders as $sortOrder) {
                 $collection->addOrder(
                     $this->translateField($sortOrder->getField()),
-                    ($sortOrder->getDirection() == SearchCriteria::SORT_ASC) ? 'ASC' : 'DESC'
+                    ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
                 );
             }
         }

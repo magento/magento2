@@ -51,7 +51,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Display price attribute value in base order currency and in place order currency
      *
-     * @param   \Magento\Framework\Object $dataObject
+     * @param   \Magento\Framework\DataObject $dataObject
      * @param   string $code
      * @param   bool $strong
      * @param   string $separator
@@ -75,7 +75,7 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get "double" prices html (block with base and place currency)
      *
-     * @param   \Magento\Framework\Object $dataObject
+     * @param   \Magento\Framework\DataObject $dataObject
      * @param   float $basePrice
      * @param   float $price
      * @param   bool $strong
@@ -113,8 +113,8 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Filter collection by removing not available product types
      *
-     * @param \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection $collection
-     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @param \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection $collection
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function applySalableProductTypesFilter($collection)
     {
@@ -149,10 +149,29 @@ class Admin extends \Magento\Framework\App\Helper\AbstractHelper
             $links = [];
             $i = 1;
             $data = str_replace('%', '%%', $data);
-            $regexp = '@(<a[^>]*>(?:[^<]|<[^/]|</[^a]|</a[^>])*</a>)@';
+            $regexp = "/<a\s[^>]*href\s*?=\s*?([\"\']??)([^\" >]*?)\\1[^>]*>(.*)<\/a>/siU";
             while (preg_match($regexp, $data, $matches)) {
-                $links[] = $matches[1];
-                $data = str_replace($matches[1], '%' . $i . '$s', $data);
+                //Revert the sprintf escaping
+                $url = str_replace('%%', '%', $matches[2]);
+                $text = str_replace('%%', '%', $matches[3]);
+                //Check for an valid url
+                if ($url) {
+                    $urlScheme = strtolower(parse_url($url, PHP_URL_SCHEME));
+                    if ($urlScheme !== 'http' && $urlScheme !== 'https') {
+                        $url = null;
+                    }
+                }
+                //Use hash tag as fallback
+                if (!$url) {
+                    $url = '#';
+                }
+                //Recreate a minimalistic secure a tag
+                $links[] = sprintf(
+                    '<a href="%s">%s</a>',
+                    htmlspecialchars($url, ENT_QUOTES, 'UTF-8', false),
+                    $this->escaper->escapeHtml($text)
+                );
+                $data = str_replace($matches[0], '%' . $i . '$s', $data);
                 ++$i;
             }
             $data = $this->escaper->escapeHtml($data, $allowedTags);

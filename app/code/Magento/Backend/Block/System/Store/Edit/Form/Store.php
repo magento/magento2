@@ -127,7 +127,7 @@ class Store extends \Magento\Backend\Block\System\Store\Edit\AbstractForm
             [
                 'name' => 'store[is_active]',
                 'label' => __('Status'),
-                'value' => $storeModel->getIsActive(),
+                'value' => $storeModel->isActive(),
                 'options' => [0 => __('Disabled'), 1 => __('Enabled')],
                 'required' => true,
                 'disabled' => $storeModel->isReadOnly()

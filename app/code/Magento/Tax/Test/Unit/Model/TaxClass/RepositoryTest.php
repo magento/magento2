@@ -6,11 +6,11 @@
 
 namespace Magento\Tax\Test\Unit\Model\TaxClass;
 
+use Magento\Framework\Api\SortOrder;
 use \Magento\Tax\Model\TaxClass\Repository;
 
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Api\SearchCriteria;
 
 class RepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -82,14 +82,14 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->taxClassCollectionFactory = $this->getMock(
-            '\Magento\Tax\Model\Resource\TaxClass\CollectionFactory',
+            '\Magento\Tax\Model\ResourceModel\TaxClass\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
 
-        $this->taxClassResourceMock = $this->getMock('\Magento\Tax\Model\Resource\TaxClass', [], [], '', false);
+        $this->taxClassResourceMock = $this->getMock('\Magento\Tax\Model\ResourceModel\TaxClass', [], [], '', false);
 
         $this->extensionAttributesJoinProcessorMock = $this->getMock(
             '\Magento\Framework\Api\ExtensionAttribute\JoinProcessor',
@@ -199,7 +199,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $searchCriteria = $this->getMock('\Magento\Framework\Api\SearchCriteriaInterface');
         $filterGroup = $this->getMock('\Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
         $filter = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
-        $collection = $this->getMock('\Magento\Tax\Model\Resource\TaxClass\Collection', [], [], '', false);
+        $collection = $this->getMock('\Magento\Tax\Model\ResourceModel\TaxClass\Collection', [], [], '', false);
         $sortOrder = $this->getMock('\Magento\Framework\Api\SortOrder', [], [], '', false);
 
         $this->extensionAttributesJoinProcessorMock->expects($this->once())
@@ -215,7 +215,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
 
         $searchCriteria->expects($this->exactly(2))->method('getSortOrders')->willReturn([$sortOrder]);
         $sortOrder->expects($this->once())->method('getField')->willReturn('field');
-        $sortOrder->expects($this->once())->method('getDirection')->willReturn(SearchCriteria::SORT_ASC);
+        $sortOrder->expects($this->once())->method('getDirection')->willReturn(SortOrder::SORT_ASC);
         $collection->expects($this->once())->method('addOrder')->with('field', 'ASC');
         $searchCriteria->expects($this->once())->method('getPageSize')->willReturn(20);
         $searchCriteria->expects($this->once())->method('getCurrentPage')->willReturn(0);

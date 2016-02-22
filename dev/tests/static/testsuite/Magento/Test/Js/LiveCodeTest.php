@@ -58,14 +58,14 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        $reportDir = Files::init()->getPathToSource() . '/dev/tests/static/report';
+        $reportDir = BP . '/dev/tests/static/report';
         if (!is_dir($reportDir)) {
-            mkdir($reportDir, 0777);
+            mkdir($reportDir, 0770);
         }
         self::$_reportFile = $reportDir . '/js_report.txt';
         @unlink(self::$_reportFile);
-        $whiteList = Files::readLists(__DIR__ . '/_files/jshint/whitelist/*.txt');
-        $blackList = Files::readLists(__DIR__ . '/_files/jshint/blacklist/*.txt');
+        $whiteList = Files::init()->readLists(__DIR__ . '/_files/jshint/whitelist/*.txt');
+        $blackList = Files::init()->readLists(__DIR__ . '/_files/jshint/blacklist/*.txt');
         foreach ($blackList as $listFiles) {
             self::$_blackListJsFiles = array_merge(self::$_blackListJsFiles, self::_scanJsFile($listFiles));
         }

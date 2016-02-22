@@ -7,6 +7,13 @@
  */
 namespace Magento\Webapi\Model\Soap;
 
+use Magento\Framework\Webapi\Request;
+
+/**
+ * SOAP Server
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Server
 {
     const SOAP_DEFAULT_ENCODING = 'UTF-8';
@@ -34,7 +41,7 @@ class Server
     protected $_configScope;
 
     /**
-     * @var \Magento\Webapi\Controller\Soap\Request
+     * @var Request
      */
     protected $_request;
 
@@ -59,25 +66,32 @@ class Server
     protected $_scopeConfig;
 
     /**
+     * @var Wsdl\Generator
+     */
+    private $wsdlGenerator;
+
+    /**
      * Initialize dependencies, initialize WSDL cache.
      *
      * @param \Magento\Framework\App\AreaList $areaList
      * @param \Magento\Framework\Config\ScopeInterface $configScope
-     * @param \Magento\Webapi\Controller\Soap\Request $request
+     * @param Request $request
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Webapi\Model\Soap\ServerFactory $soapServerFactory
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param Wsdl\Generator $wsdlGenerator
      * @throws \Magento\Framework\Webapi\Exception
      */
     public function __construct(
         \Magento\Framework\App\AreaList $areaList,
         \Magento\Framework\Config\ScopeInterface $configScope,
-        \Magento\Webapi\Controller\Soap\Request $request,
+        Request $request,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Webapi\Model\Soap\ServerFactory $soapServerFactory,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Webapi\Model\Soap\Wsdl\Generator $wsdlGenerator
     ) {
         if (!extension_loaded('soap')) {
             throw new \Magento\Framework\Webapi\Exception(
@@ -93,6 +107,7 @@ class Server
         $this->_soapServerFactory = $soapServerFactory;
         $this->_typeProcessor = $typeProcessor;
         $this->_scopeConfig = $scopeConfig;
+        $this->wsdlGenerator = $wsdlGenerator;
     }
 
     /**
@@ -105,8 +120,26 @@ class Server
         $rawRequestBody = file_get_contents('php://input');
         $this->_checkRequest($rawRequestBody);
         $options = ['encoding' => $this->getApiCharset(), 'soap_version' => SOAP_1_2];
-        $soapServer = $this->_soapServerFactory->create($this->generateUri(true), $options);
+        $soapServer = $this->_soapServerFactory->create($this->getWsdlLocalUri(), $options);
         $soapServer->handle($rawRequestBody);
+    }
+
+    /**
+     * Get WSDL local URI
+     *
+     * Local WSDL URI is used to be able to pass wsdl schema to SoapServer without authorization
+     *
+     * @return string
+     */
+    private function getWsdlLocalUri()
+    {
+        $wsdlBody = $this->wsdlGenerator->generate(
+            $this->_request->getRequestedServices(),
+            $this->_request->getScheme(),
+            $this->_request->getHttpHost(),
+            $this->generateUri()
+        );
+        return 'data://text/plain;base64,'.base64_encode($wsdlBody);
     }
 
     /**
@@ -146,9 +179,12 @@ class Server
      */
     public function getEndpointUri()
     {
+        $storeCode = $this->_storeManager->getStore()->getCode() === \Magento\Store\Model\Store::ADMIN_CODE
+            ? \Magento\Webapi\Controller\PathProcessor::ALL_STORE_CODE
+            : $this->_storeManager->getStore()->getCode();
         return $this->_storeManager->getStore()->getBaseUrl()
             . $this->_areaList->getFrontName($this->_configScope->getCurrentScope())
-            . '/' . $this->_storeManager->getStore()->getCode();
+            . '/' . $storeCode;
     }
 
     /**

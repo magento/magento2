@@ -5,14 +5,14 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="customer_login">
-        <observer name="catalog" instance="Magento\Catalog\Model\Product\Compare\Item" method="bindCustomerLogin" shared="false" />
+        <observer name="catalog" instance="Magento\Catalog\Observer\Compare\BindCustomerLoginObserver" shared="false" />
     </event>
     <event name="customer_logout">
-        <observer name="catalog" instance="Magento\Catalog\Model\Product\Compare\Item" method="bindCustomerLogout" shared="false" />
+        <observer name="catalog" instance="Magento\Catalog\Observer\Compare\BindCustomerLogoutObserver" shared="false" />
     </event>
     <event name="page_block_html_topmenu_gethtml_before">
-        <observer name="catalog_add_topmenu_items" instance="Magento\Catalog\Model\Observer" method="addCatalogToTopmenuItems" />
+        <observer name="catalog_add_topmenu_items" instance="Magento\Catalog\Observer\AddCatalogToTopmenuItemsObserver" />
     </event>
 </config>

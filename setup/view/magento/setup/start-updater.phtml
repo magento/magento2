@@ -1,0 +1,63 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<div class="nav-bar-outer-actions">
+    <div class="outer-actions-inner-wrap">
+        <div class="btn-wrap btn-wrap-triangle-left btn-wrap-prev">
+            <button
+                type="button"
+                class="btn"
+                ng-click="goToPreviousState()"
+                >Back</button>
+        </div>
+    </div>
+</div>
+
+<h2 class="page-title">{{$state.current.header}}</h2>
+
+<div ng-show="maintenanceCalled && maintenanceStatus">
+    <span class="readiness-check-icon icon-success-round"></span>
+    <div class="readiness-check-content">
+        <h3 class="readiness-check-title">Store in maintenance mode</h3>
+        <p>
+            Your store is in maintenance mode and will automatically
+            return online after the {{type}}.
+        </p>
+    </div>
+</div>
+
+<div ng-show="maintenanceCalled && !maintenanceStatus">
+    <span class="readiness-check-icon icon-failed-round"></span>
+    <div class="readiness-check-content">
+        <h3 class="readiness-check-title">Check store maintenance availability</h3>
+        <p>
+            Cannot put your store in maintenance mode. Please fix that, and try again.
+        </p>
+        <p>
+            Error received from server:
+            <br> {{errorMsg}}
+        </p>
+    </div>
+</div>
+
+<form
+    novalidate
+    name="start-updater"
+    ng-show="maintenanceCalled == maintenanceStatus"
+    >
+    <div ng-repeat="package in packages">
+        <div>We're ready to {{type}} {{package.name}}{{package.version ? ' to ' + package.version : ''}}. </div>
+    </div>
+    <br/>
+    <button
+        class="btn btn-large btn-prime"
+        ng-click="update()"
+        type="button"
+        >{{buttonText}}</button>
+    <br/>
+    <div ng-show="started">{{errorMessage}}</div>
+</form>

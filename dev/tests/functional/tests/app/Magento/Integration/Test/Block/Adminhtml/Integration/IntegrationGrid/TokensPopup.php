@@ -18,7 +18,7 @@ class TokensPopup extends Form
      *
      * @var string
      */
-    protected $doneButtonSelector = '.action-primary[role="button"]';
+    protected $doneButtonSelector = '.action-primary[type="button"]';
 
     /**
      * Click Done button on Integration tokens popup window.

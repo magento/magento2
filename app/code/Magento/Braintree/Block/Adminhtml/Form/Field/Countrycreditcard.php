@@ -78,10 +78,10 @@ class Countrycreditcard extends \Magento\Config\Block\System\Config\Form\Field\F
     /**
      * Prepare existing row data object
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return void
      */
-    protected function _prepareArrayRow(\Magento\Framework\Object $row)
+    protected function _prepareArrayRow(\Magento\Framework\DataObject $row)
     {
         $country = $row->getCountryId();
         $options = [];

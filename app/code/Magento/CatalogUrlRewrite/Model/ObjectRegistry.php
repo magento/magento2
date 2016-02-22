@@ -10,12 +10,12 @@ class ObjectRegistry
     /**
      * Key is id of entity, value is entity
      *
-     * @var \Magento\Framework\Object[]
+     * @var \Magento\Framework\DataObject[]
      */
     protected $entitiesMap;
 
     /**
-     * @param \Magento\Framework\Object[] $entities
+     * @param \Magento\Framework\DataObject[] $entities
      */
     public function __construct($entities)
     {
@@ -27,7 +27,7 @@ class ObjectRegistry
 
     /**
      * @param int $entityId
-     * @return \Magento\Framework\Object|null
+     * @return \Magento\Framework\DataObject|null
      */
     public function get($entityId)
     {
@@ -35,7 +35,7 @@ class ObjectRegistry
     }
 
     /**
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getList()
     {

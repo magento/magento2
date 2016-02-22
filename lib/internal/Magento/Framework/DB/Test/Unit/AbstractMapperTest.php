@@ -16,7 +16,7 @@ use Magento\Framework\DB\Select;
 class AbstractMapperTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Model\Resource\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -63,7 +63,7 @@ class AbstractMapperTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->resourceMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\Resource\Db\AbstractDb',
+            'Magento\Framework\Model\ResourceModel\Db\AbstractDb',
             [],
             '',
             false,
@@ -247,7 +247,7 @@ class AbstractMapperTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($resultCondition));
 
         if (is_array($field)) {
-            $resultCondition = '(' . implode(') ' . \Zend_Db_Select::SQL_OR
+            $resultCondition = '(' . implode(') ' . \Magento\Framework\DB\Select::SQL_OR
                     . ' (', array_fill(0, count($field), $resultCondition)) . ')';
         }
 

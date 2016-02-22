@@ -6,12 +6,6 @@
 
 namespace Magento\Translation\Model\Js;
 
-use Magento\Framework\App\Utility\Files;
-use Magento\Framework\App\State;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 /**
  * DataProvider for js translation
  */
@@ -20,7 +14,7 @@ class DataProvider implements DataProviderInterface
     /**
      * Application state
      *
-     * @var State
+     * @var \Magento\Framework\App\State
      */
     protected $appState;
 
@@ -34,29 +28,54 @@ class DataProvider implements DataProviderInterface
     /**
      * Files utility
      *
-     * @var Files
+     * @var \Magento\Framework\App\Utility\Files
      */
     protected $filesUtility;
 
     /**
      * Filesystem
      *
-     * @var ReadInterface
+     * @var \Magento\Framework\Filesystem\File\ReadFactory
      */
-    protected $rootDirectory;
+    protected $fileReadFactory;
 
     /**
-     * @param State $appState
-     * @param Config $config
-     * @param Filesystem $filesystem
-     * @param Files $filesUtility
+     * Basic translate renderer
+     *
+     * @var \Magento\Framework\Phrase\Renderer\Translate
      */
-    public function __construct(State $appState, Config $config, Filesystem $filesystem, Files $filesUtility = null)
-    {
+    protected $translate;
+
+    /**
+     * @param \Magento\Framework\App\State $appState
+     * @param Config $config
+     * @param \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory
+     * @param \Magento\Framework\Phrase\Renderer\Translate $translate
+     * @param \Magento\Framework\Component\ComponentRegistrar $componentRegistrar
+     * @param \Magento\Framework\Component\DirSearch $dirSearch
+     * @param \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList
+     * @param \Magento\Framework\App\Utility\Files|null $filesUtility
+     */
+    public function __construct(
+        \Magento\Framework\App\State $appState,
+        Config $config,
+        \Magento\Framework\Filesystem\File\ReadFactory $fileReadFactory,
+        \Magento\Framework\Phrase\Renderer\Translate $translate,
+        \Magento\Framework\Component\ComponentRegistrar $componentRegistrar,
+        \Magento\Framework\Component\DirSearch $dirSearch,
+        \Magento\Framework\View\Design\Theme\ThemePackageList $themePackageList,
+        \Magento\Framework\App\Utility\Files $filesUtility = null
+    ) {
         $this->appState = $appState;
         $this->config = $config;
-        $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
-        $this->filesUtility = (null !== $filesUtility) ? $filesUtility : new Files(BP);
+        $this->fileReadFactory = $fileReadFactory;
+        $this->translate = $translate;
+        $this->filesUtility = (null !== $filesUtility) ?
+            $filesUtility : new \Magento\Framework\App\Utility\Files(
+                $componentRegistrar,
+                $dirSearch,
+                $themePackageList
+            );
     }
 
     /**
@@ -69,22 +88,22 @@ class DataProvider implements DataProviderInterface
      */
     public function getData($themePath)
     {
-        $dictionary = [];
         $areaCode = $this->appState->getAreaCode();
 
-        $files = $this->filesUtility->getJsFiles($areaCode, $themePath);
-        $staticHtmlFiles = $this->filesUtility->getStaticHtmlFiles($areaCode, $themePath);
+        $files = array_merge(
+            $this->filesUtility->getJsFiles('base', $themePath),
+            $this->filesUtility->getJsFiles($areaCode, $themePath),
+            $this->filesUtility->getStaticHtmlFiles('base', $themePath),
+            $this->filesUtility->getStaticHtmlFiles($areaCode, $themePath)
+        );
 
-        if (is_array($staticHtmlFiles)) {
-            foreach ($staticHtmlFiles as $staticFile) {
-                $files[] = $staticFile;
-            }
-        }
-
+        $dictionary = [];
         foreach ($files as $filePath) {
-            $content = $this->rootDirectory->readFile($this->rootDirectory->getRelativePath($filePath[0]));
+            /** @var \Magento\Framework\Filesystem\File\Read $read */
+            $read = $this->fileReadFactory->create($filePath[0], \Magento\Framework\Filesystem\DriverPool::FILE);
+            $content = $read->readAll();
             foreach ($this->getPhrases($content) as $phrase) {
-                $translatedPhrase = (string) __($phrase);
+                $translatedPhrase = $this->translate->render([$phrase], []);
                 if ($phrase != $translatedPhrase) {
                     $dictionary[$phrase] = $translatedPhrase;
                 }
@@ -108,9 +127,9 @@ class DataProvider implements DataProviderInterface
             $result = preg_match_all($pattern, $content, $matches);
 
             if ($result) {
-                if (isset($matches[1])) {
-                    foreach ($matches[1] as $match) {
-                        $phrases[] = $match;
+                if (isset($matches[2])) {
+                    foreach ($matches[2] as $match) {
+                        $phrases[] = str_replace('\\\'', '\'', $match);
                     }
                 }
             }

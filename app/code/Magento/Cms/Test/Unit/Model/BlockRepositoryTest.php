@@ -6,7 +6,7 @@
 namespace Magento\Cms\Test\Unit\Model;
 
 use Magento\Cms\Model\BlockRepository;
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SortOrder;
 
 /**
  * Test for Magento\Cms\Model\BlockRepository
@@ -19,7 +19,7 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $repository;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Resource\Block
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\ResourceModel\Block
      */
     protected $blockResource;
 
@@ -49,16 +49,21 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $dataObjectProcessor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\Resource\Block\Collection
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Cms\Model\ResourceModel\Block\Collection
      */
     protected $collection;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * Initialize repository
      */
     public function setUp()
     {
-        $this->blockResource = $this->getMockBuilder('Magento\Cms\Model\Resource\Block')
+        $this->blockResource = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Block')
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataObjectProcessor = $this->getMockBuilder('Magento\Framework\Reflection\DataObjectProcessor')
@@ -76,17 +81,25 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $collectionFactory = $this->getMockBuilder('Magento\Cms\Model\Resource\Block\CollectionFactory')
+        $collectionFactory = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Block\CollectionFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store = $this->getMockBuilder('\Magento\Store\Api\Data\StoreInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $store->expects($this->any())->method('getId')->willReturn(0);
+        $this->storeManager->expects($this->any())->method('getStore')->willReturn($store);
 
         $this->block = $this->getMockBuilder('Magento\Cms\Model\Block')->disableOriginalConstructor()->getMock();
         $this->blockData = $this->getMockBuilder('Magento\Cms\Api\Data\BlockInterface')
             ->getMock();
         $this->blockSearchResult = $this->getMockBuilder('Magento\Cms\Api\Data\BlockSearchResultsInterface')
             ->getMock();
-        $this->collection = $this->getMockBuilder('Magento\Cms\Model\Resource\Block\Collection')
+        $this->collection = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Block\Collection')
             ->disableOriginalConstructor()
             ->setMethods(['addFieldToFilter', 'getSize', 'setCurPage', 'setPageSize', 'load', 'addOrder'])
             ->getMock();
@@ -107,7 +120,7 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
          * @var \Magento\Cms\Model\BlockFactory $blockFactory
          * @var \Magento\Cms\Api\Data\BlockInterfaceFactory $blockDataFactory
          * @var \Magento\Cms\Api\Data\BlockSearchResultsInterfaceFactory $blockSearchResultFactory
-         * @var \Magento\Cms\Model\Resource\Block\CollectionFactory $collectionFactory
+         * @var \Magento\Cms\Model\ResourceModel\Block\CollectionFactory $collectionFactory
          */
 
         $this->dataHelper = $this->getMockBuilder('Magento\Framework\Api\DataObjectHelper')
@@ -121,7 +134,8 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
             $collectionFactory,
             $blockSearchResultFactory,
             $this->dataHelper,
-            $this->dataObjectProcessor
+            $this->dataObjectProcessor,
+            $this->storeManager
         );
     }
 
@@ -236,7 +250,7 @@ class BlockRepositoryTest extends \PHPUnit_Framework_TestCase
         $storeFilter->expects($this->any())->method('getField')->willReturn('store_id');
         $storeFilter->expects($this->once())->method('getValue')->willReturn(1);
         $sortOrder->expects($this->once())->method('getField')->willReturn($sortField);
-        $sortOrder->expects($this->once())->method('getDirection')->willReturn(SearchCriteriaInterface::SORT_DESC);
+        $sortOrder->expects($this->once())->method('getDirection')->willReturn(SortOrder::SORT_DESC);
 
         /** @var \Magento\Framework\Api\SearchCriteriaInterface $criteria */
 

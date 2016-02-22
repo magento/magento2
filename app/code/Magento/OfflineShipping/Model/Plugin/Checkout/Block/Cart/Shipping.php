@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * Checkout cart shipping block plugin
  *
@@ -29,13 +27,16 @@ class Shipping
     }
 
     /**
-     * @param \Magento\Checkout\Block\Cart\Shipping $subject
+     * @param \Magento\Checkout\Block\Cart\LayoutProcessor $subject
      * @param  bool $result
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterGetStateActive(\Magento\Checkout\Block\Cart\Shipping $subject, $result)
+    public function afterIsStateActive(\Magento\Checkout\Block\Cart\LayoutProcessor $subject, $result)
     {
-        return (bool)$result || (bool)$this->_scopeConfig->getValue('carriers/tablerate/active', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+        return (bool)$result || (bool)$this->_scopeConfig->getValue(
+            'carriers/tablerate/active',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
     }
 }

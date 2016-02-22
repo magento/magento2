@@ -5,7 +5,7 @@
  */
 namespace Magento\Sales\Test\Unit\Ui\Component\Listing\Column\Status;
 
-use Magento\Sales\Model\Resource\Order\Status\CollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Ui\Component\Listing\Column\Status\Options;
 
@@ -28,8 +28,8 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new ObjectManager($this);
         $this->collectionFactoryMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Status\CollectionFactory',
-            [],
+            'Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory',
+            ['create'],
             [],
             '',
             false
@@ -42,7 +42,8 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
 
     public function testToOptionArray()
     {
-        $collectionMock = $this->getMock('Magento\Sales\Model\Resource\Order\Status\Collection', [], [], '', false);
+        $collectionMock =
+            $this->getMock('Magento\Sales\Model\ResourceModel\Order\Status\Collection', [], [], '', false);
         $options = ['options'];
 
         $this->collectionFactoryMock->expects($this->once())

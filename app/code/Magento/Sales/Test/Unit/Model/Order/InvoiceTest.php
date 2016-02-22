@@ -9,7 +9,7 @@
 namespace Magento\Sales\Test\Unit\Model\Order;
 
 use Magento\Sales\Model\Order\Invoice;
-use Magento\Sales\Model\Resource\OrderFactory;
+use Magento\Sales\Model\ResourceModel\OrderFactory;
 
 /**
  * Class InvoiceTest
@@ -78,7 +78,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $this->paymentMock = $this->getMockBuilder(
             'Magento\Sales\Model\Order\Payment'
         )->disableOriginalConstructor()->setMethods(
-            ['canVoid', '__wakeup', 'canCapture', 'capture', 'pay', 'hasForcedState', 'getForcedState']
+            ['canVoid', '__wakeup', 'canCapture', 'capture', 'pay']
         )->getMock();
 
         $this->orderFactory = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
@@ -93,7 +93,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
             'context' => $contextMock,
             'orderFactory' => $this->orderFactory,
             'orderResourceFactory' => $this->getMock(
-                'Magento\Sales\Model\Resource\OrderFactory',
+                'Magento\Sales\Model\ResourceModel\OrderFactory',
                 [],
                 [],
                 '',
@@ -107,7 +107,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
                     false
                 ),
             'invoiceItemCollectionFactory' => $this->getMock(
-                'Magento\Sales\Model\Resource\Order\Invoice\Item\CollectionFactory',
+                'Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory',
                 [],
                 [],
                 '',
@@ -121,7 +121,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
                 false
             ),
             'commentCollectionFactory' => $this->getMock(
-                'Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory',
+                'Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory',
                 [],
                 [],
                 '',
@@ -344,19 +344,13 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
         $this->model->setIsPaid(true);
         $this->orderMock->expects($this->any())->method('getPayment')->willReturn($this->paymentMock);
         $this->paymentMock->expects($this->any())->method('capture')->with($this->model)->willReturnSelf();
-        $this->mockPay(false, null);
+        $this->mockPay();
         $this->assertEquals($this->model, $this->model->capture());
     }
 
-    public function mockPay($hasForcedState, $forcedState)
+    public function mockPay()
     {
         $this->orderMock->expects($this->any())->method('getPayment')->willReturn($this->paymentMock);
-        $this->paymentMock->expects($this->once())->method('hasForcedState')->willReturn($hasForcedState);
-        if ($hasForcedState) {
-            $this->paymentMock->expects($this->once())->method('getForcedState')->willReturn($forcedState);
-        } else {
-            $this->paymentMock->expects($this->never())->method('getForcedState');
-        }
         $this->paymentMock->expects($this->once())->method('pay')->with($this->model)->willReturnSelf();
         $this->eventManagerMock
             ->expects($this->once())
@@ -366,8 +360,6 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider payDataProvider
-     * @param bool $hasForcedState
-     * @param float string|null $forcedState
      * @param float $orderTotalPaid
      * @param float $orderBaseTotalPaid
      * @param float $grandTotal
@@ -375,15 +367,13 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
      * @param float $expectedState
      */
     public function testPay(
-        $hasForcedState,
-        $forcedState,
         $orderTotalPaid,
         $orderBaseTotalPaid,
         $grandTotal,
         $baseGrandTotal,
         $expectedState
     ) {
-        $this->mockPay($hasForcedState, $forcedState);
+        $this->mockPay();
         $this->model->setGrandTotal($grandTotal);
         $this->model->setBaseGrandTotal($baseGrandTotal);
         $this->orderMock->setTotalPaid($orderTotalPaid);
@@ -400,7 +390,7 @@ class InvoiceTest extends \PHPUnit_Framework_TestCase
     {
         //ToDo: fill data provider and uncomment assertings totals in testPay
         return [
-            [true, 'payment_state', 10.99, 1.00, 10.99, 1.00, 'payment_state']
+            [10.99, 1.00, 10.99, 1.00, Invoice::STATE_PAID]
         ];
     }
 }

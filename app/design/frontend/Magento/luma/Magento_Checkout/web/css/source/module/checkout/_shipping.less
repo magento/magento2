@@ -51,14 +51,15 @@
 
         .form-login,
         .form-shipping-address {
-            .css(margin-top, @checkout-shipping-address__margin-top);
-            .css(margin-bottom, @checkout-shipping-address__margin-top);
+            .lib-css(margin-top, @checkout-shipping-address__margin-top);
+            .lib-css(margin-bottom, @checkout-shipping-address__margin-top);
             .fieldset {
                 .field {
                     .label {
                         font-weight: @font-weight__regular;
                     }
                 }
+
                 .note {
                     font-size: @font-size__base;
                     margin-top: @indent__s;
@@ -72,28 +73,28 @@
 
         .shipping-address-item {
             &:extend(.abs-add-box-sizing all);
-            .css(border, @checkout-shipping-item__border);
-            .css(font-size, @font-size__base);
-            .css(line-height, @checkout-shipping-item__line-height);
-            .css(margin, @checkout-shipping-item__margin);
-            .css(padding, @checkout-shipping-item__padding);
-            .css(transition, @checkout-shipping-item__transition);
-            .css(width, @checkout-shipping-item-tablet__width);
+            .lib-css(border, @checkout-shipping-item__border);
+            .lib-css(font-size, @font-size__base);
+            .lib-css(line-height, @checkout-shipping-item__line-height);
+            .lib-css(margin, @checkout-shipping-item__margin);
+            .lib-css(padding, @checkout-shipping-item__padding);
+            .lib-css(transition, @checkout-shipping-item__transition);
+            .lib-css(width, @checkout-shipping-item-tablet__width);
             display: inline-block;
             position: relative;
             vertical-align: top;
             word-wrap: break-word;
 
             &.selected-item {
-                .css(border-color, @checkout-shipping-item__active__border-color);
+                .lib-css(border-color, @checkout-shipping-item__active__border-color);
 
                 &:after {
-                    .css(background, @checkout-shipping-item-icon__background-color);
-                    .css(color, @checkout-shipping-item-icon__color);
-                    .css(content, @checkout-shipping-item-icon__content);
-                    .css(font-family, @icons__font-name);
-                    .css(height, @checkout-shipping-item-icon__selected__height);
-                    .css(width, @checkout-shipping-item-icon__selected__width);
+                    .lib-css(background, @checkout-shipping-item-icon__background-color);
+                    .lib-css(color, @checkout-shipping-item-icon__color);
+                    .lib-css(content, @checkout-shipping-item-icon__content);
+                    .lib-css(font-family, @icons__font-name);
+                    .lib-css(height, @checkout-shipping-item-icon__selected__height);
+                    .lib-css(width, @checkout-shipping-item-icon__selected__width);
                     font-size: 19px;
                     line-height: 21px;
                     padding-top: 2px;
@@ -118,6 +119,7 @@
 
         .action-show-popup {
             margin: 0 0 @indent__base;
+
             > span {
                 &:before {
                     content: '+';
@@ -147,6 +149,7 @@
         .step-title {
             margin-bottom: 0;
         }
+
         .no-quotes-block {
             margin: @indent__base 0;
         }
@@ -169,17 +172,20 @@
                 display: none;
             }
         }
+
         tbody {
             td {
-                .css(border-top, @checkout-shipping-method__border);
-                .css(padding-bottom, @checkout-shipping-method__padding);
-                .css(padding-top, @checkout-shipping-method__padding);
+                .lib-css(border-top, @checkout-shipping-method__border);
+                .lib-css(padding-bottom, @checkout-shipping-method__padding);
+                .lib-css(padding-top, @checkout-shipping-method__padding);
+
                 &:first-child {
                     padding-left: 0;
                     padding-right: 0;
                     width: 20px;
                 }
             }
+
             tr {
                 &:first-child {
                     td {
@@ -187,9 +193,11 @@
                     }
                 }
             }
+
             .col-price {
                 font-weight: @font-weight__semibold;
             }
+
             .row-error {
                 td {
                     border-top: none;
@@ -210,28 +218,29 @@
         .form-login,
         .form-shipping-address,
         .methods-shipping {
-            .css(background, @checkout-step-content-mobile__background);
-            .css(margin, @checkout-step-content-mobile__margin);
-            .css(padding, @indent__base @checkout-step-content-mobile__margin-s);
+            .lib-css(background, @checkout-step-content-mobile__background);
+            .lib-css(margin, @checkout-step-content-mobile__margin);
+            .lib-css(padding, @indent__base @checkout-step-content-mobile__margin-s);
         }
 
         .form-login {
             + .form-shipping-address {
-                .css(margin-top, -(@checkout-step-content-mobile__margin-s));
+                .lib-css(margin-top, -(@checkout-step-content-mobile__margin-s));
             }
         }
 
         .shipping-address-item {
-            .css(border-bottom, 1px solid @checkout-shipping-item-before__border-color);
-            .css(margin, @checkout-shipping-item-mobile__margin);
-            .css(padding, @checkout-shipping-item-mobile__padding);
-            .css(width, @checkout-shipping-item-mobile__width);
+            .lib-css(border-bottom, 1px solid @checkout-shipping-item-before__border-color);
+            .lib-css(margin, @checkout-shipping-item-mobile__margin);
+            .lib-css(padding, @checkout-shipping-item-mobile__padding);
+            .lib-css(width, @checkout-shipping-item-mobile__width);
+
             &.selected-item {
-                .css(padding, @checkout-shipping-item-mobile__active__padding);
+                .lib-css(padding, @checkout-shipping-item-mobile__active__padding);
                 border-bottom-width: 2px;
 
                 .edit-address-link {
-                    .css(right, @checkout-shipping-item-icon__selected__width + @indent__s);
+                    .lib-css(right, @checkout-shipping-item-icon__selected__width + @indent__s);
                 }
             }
         }
@@ -247,12 +256,12 @@
         }
 
         .methods-shipping {
-            .css(border-bottom, @checkout-step-title__border);
+            .lib-css(border-bottom, @checkout-step-title__border);
             padding-top: @indent__l;
         }
 
         .edit-address-link {
-            .icon-font(
+            .lib-icon-font(
                 @icon-edit,
                 @_icon-font-size: 18px,
                 @_icon-font-line-height: 20px,
@@ -279,6 +288,7 @@
             > .primary {
                 float: right;
             }
+
             .action {
                 &.primary {
                     margin: 0;
@@ -289,11 +299,11 @@
     .opc-wrapper {
         .form-login,
         .form-shipping-address {
-            .css(max-width, @checkout-shipping-address__max-width);
+            .lib-css(max-width, @checkout-shipping-address__max-width);
         }
 
         .form-login {
-            .css(border-bottom, @checkout-step-title__border);
+            .lib-css(border-bottom, @checkout-step-title__border);
             padding-bottom: @indent__base;
         }
     }
@@ -305,11 +315,11 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
     .opc-wrapper {
         .shipping-address-item {
-            .css(width, @checkout-shipping-item__width);
+            .lib-css(width, @checkout-shipping-item__width);
 
             &:before {
-                .css(background, @checkout-shipping-item-before__border-color);
-                .css(height, @checkout-shipping-item-before__height);
+                .lib-css(background, @checkout-shipping-item-before__border-color);
+                .lib-css(height, @checkout-shipping-item-before__height);
                 content: '';
                 left: 0;
                 position: absolute;

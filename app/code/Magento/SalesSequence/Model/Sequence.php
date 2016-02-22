@@ -5,7 +5,7 @@
  */
 namespace Magento\SalesSequence\Model;
 
-use Magento\Framework\App\Resource as AppResource;
+use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\DB\Sequence\SequenceInterface;
 
 /**
@@ -31,7 +31,7 @@ class Sequence implements SequenceInterface
     /**
      * @var false|\Magento\Framework\DB\Adapter\AdapterInterface
      */
-    private $adapter;
+    private $connection;
 
     /**
      * @var string
@@ -49,7 +49,7 @@ class Sequence implements SequenceInterface
         $pattern = self::DEFAULT_PATTERN
     ) {
         $this->meta = $meta;
-        $this->adapter = $resource->getConnection('sales_write');
+        $this->connection = $resource->getConnection('sales');
         $this->pattern = $pattern;
     }
 
@@ -79,8 +79,8 @@ class Sequence implements SequenceInterface
      */
     public function getNextValue()
     {
-        $this->adapter->insert($this->meta->getSequenceTable(), []);
-        $this->lastIncrementId = $this->adapter->lastInsertId($this->meta->getSequenceTable());
+        $this->connection->insert($this->meta->getSequenceTable(), []);
+        $this->lastIncrementId = $this->connection->lastInsertId($this->meta->getSequenceTable());
         return $this->getCurrentValue();
     }
 

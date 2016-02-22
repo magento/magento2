@@ -20,10 +20,9 @@
 
 .form-el-checkbox,
 .form-el-radio {
-    .visually-hidden();
+    .lib-visually-hidden();
 
     //  Disabled state
-
     &[disabled],
     &.disabled {
         + .form-label,
@@ -53,6 +52,7 @@
         position: relative;
         text-align: left;
         transition: border-color .1s linear;
+
         &:before {
             border: 1px solid;
             content: '';
@@ -112,6 +112,7 @@
             height: 1.8rem;
             width: 1.8rem;
         }
+
         &:after {
             background: transparent;
             border: .5rem solid transparent;
@@ -127,10 +128,10 @@
     }
 
     //  Checked radio state
-
     &:checked {
         + .form-label {
             cursor: default;
+
             &:after {
                 border-color: @radio-bullet__color;
             }

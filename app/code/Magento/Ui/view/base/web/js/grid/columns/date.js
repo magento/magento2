@@ -11,28 +11,29 @@ define([
 
     return Column.extend({
         defaults: {
-            dateFormat: 'MMM D, YYYY h:mm:ss A'
+            dateFormat: 'MMM d, YYYY h:mm:ss A'
         },
 
         /**
-         * Initializes components' static properties.
+         * Overrides base method to normalize date format.
          *
          * @returns {DateColumn} Chainable.
          */
-        initProperties: function () {
+        initConfig: function () {
+            this._super();
+
             this.dateFormat = utils.normalizeDate(this.dateFormat);
 
-            return this._super();
+            return this;
         },
 
         /**
          * Formats incoming date based on the 'dateFormat' property.
          *
-         * @param {String} date - Date to be formatted.
          * @returns {String} Formatted date.
          */
-        getLabel: function (date) {
-            date = moment(date);
+        getLabel: function () {
+            var date = moment(this._super());
 
             date = date.isValid() ?
                 date.format(this.dateFormat) :

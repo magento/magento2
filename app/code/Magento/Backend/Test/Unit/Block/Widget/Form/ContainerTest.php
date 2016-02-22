@@ -9,8 +9,8 @@ class ContainerTest extends \PHPUnit_Framework_TestCase
 {
     public function testSetDataObject()
     {
-        $form = new \Magento\Framework\Object();
-        $dataObject = new \Magento\Framework\Object();
+        $form = new \Magento\Framework\DataObject();
+        $dataObject = new \Magento\Framework\DataObject();
 
         // _prepateLayout() is blocked, because it is used by block to instantly add 'form' child
         $block = $this->getMock(

@@ -63,7 +63,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $orderFactoryMock;
 
-    /** @var \Magento\Framework\Object\Copy|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\DataObject\Copy|\PHPUnit_Framework_MockObject_MockObject */
     protected $copyMock;
 
     /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
@@ -87,7 +87,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerRepositoryMock;
 
-    /** @var \Magento\Quote\Model\QuoteRepository|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Quote\Api\CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $quoteRepositoryMock;
 
     /**
@@ -97,6 +97,9 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
 
     /** @var \Magento\Framework\Api\ExtensibleDataObjectConverter|\PHPUnit_Framework_MockObject_MockObject */
     protected $extensibleDataObjectConverterMock;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $totalsCollectorMock;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -139,9 +142,9 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->addressFactoryMock = $this->getMock('Magento\Customer\Model\AddressFactory', [], [], '', false);
         $this->formFactoryMock = $this->getMock('Magento\Customer\Model\Metadata\FormFactory', [], [], '', false);
         $this->customerFactoryMock = $this->getMock('Magento\Customer\Model\CustomerFactory', [], [], '', false);
-        $this->quoteManagementMock = $this->getMock('Magento\Quote\Model\QuoteManagement', [], [], '', false);
+        $this->quoteManagementMock = $this->getMock('\Magento\Quote\Api\CartManagementInterface');
         $this->orderFactoryMock = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
-        $this->copyMock = $this->getMock('Magento\Framework\Object\Copy', [], [], '', false);
+        $this->copyMock = $this->getMock('Magento\Framework\DataObject\Copy', [], [], '', false);
         $this->messageManagerMock = $this->getMock('Magento\Framework\Message\ManagerInterface');
 
         $this->customerFormFactoryMock = $this->getMock(
@@ -178,13 +181,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->quoteRepositoryMock = $this->getMock(
-            'Magento\Quote\Model\QuoteRepository',
-            [],
-            [],
-            '',
-            false
-        );
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
 
         $this->extensibleDataObjectConverterMock = $this->getMockBuilder(
             'Magento\Framework\Api\ExtensibleDataObjectConverter'
@@ -195,6 +192,7 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
             ->method('toFlatArray')
             ->will($this->returnValue([]));
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->totalsCollectorMock = $this->getMock('Magento\Quote\Model\Quote\TotalsCollector', [], [], '', false);
         $this->onepage = $this->objectManagerHelper->getObject(
             'Magento\Checkout\Model\Type\Onepage',
             [
@@ -222,7 +220,8 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
                 'customerRepository' => $this->customerRepositoryMock,
                 'extensibleDataObjectConverter' => $this->extensibleDataObjectConverterMock,
                 'quoteRepository' => $this->quoteRepositoryMock,
-                'quoteManagement' => $this->quoteManagementMock
+                'quoteManagement' => $this->quoteManagementMock,
+                'totalsCollector' => $this->totalsCollectorMock
             ]
         );
     }
@@ -360,271 +359,6 @@ class OnepageTest extends \PHPUnit_Framework_TestCase
         $this->checkoutSessionMock->expects($this->once())->method('setStepData')->with('billing', 'allow', true);
         $this->onepage->setQuote($quoteMock);
         $this->assertEquals([], $this->onepage->saveCheckoutMethod('someMethod'));
-    }
-
-    public function testSaveBillingInvalidData()
-    {
-        $this->assertEquals(['error' => -1, 'message' => 'Invalid data'], $this->onepage->saveBilling([], 0));
-    }
-
-    /**
-     * @dataProvider saveBillingDataProvider
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    public function testSaveBilling(
-        $data,
-        $customerAddressId,
-        $quoteCustomerId,
-        $addressCustomerId,
-        $isAddress,
-        $validateDataResult,
-        $validateResult,
-        $checkoutMethod,
-        $customerPassword,
-        $confirmPassword,
-        $validationResultMessages,
-        $isEmailAvailable,
-        $isVirtual,
-        $getStepDataResult,
-        $expected
-    ) {
-        $useForShipping = (int)$data['use_for_shipping'];
-
-        $passwordHash = 'password hash';
-        $this->requestMock->expects($this->any())->method('isAjax')->will($this->returnValue(false));
-        $customerValidationResultMock = $this->getMock(
-            'Magento\Customer\Api\Data\ValidationResultsInterface', [], [], '', false
-        );
-        $customerValidationResultMock
-            ->expects($this->any())
-            ->method('isValid')
-            ->will($this->returnValue(empty($validationResultMessages)));
-        $customerValidationResultMock
-            ->expects($this->any())
-            ->method('getMessages')
-            ->will($this->returnValue($validationResultMessages));
-        $this->accountManagementMock
-            ->expects($this->any())
-            ->method('getPasswordHash')
-            ->with($customerPassword)
-            ->will($this->returnValue($passwordHash));
-        $this->accountManagementMock
-            ->expects($this->any())
-            ->method('validate')
-            ->will($this->returnValue($customerValidationResultMock));
-        $this->accountManagementMock
-            ->expects($this->any())
-            ->method('isEmailAvailable')
-            ->will($this->returnValue($isEmailAvailable));
-        /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $quoteMock */
-        $quoteMock = $this->getMock(
-            'Magento\Quote\Model\Quote',
-            [
-                'getData',
-                'getCustomerId',
-                '__wakeup',
-                'getBillingAddress',
-                'setPasswordHash',
-                'getCheckoutMethod',
-                'isVirtual',
-                'getShippingAddress',
-                'getCustomerData',
-                'collectTotals',
-                'save',
-                'getCustomer'
-            ],
-            [],
-            '',
-            false
-        );
-        $customerMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Api\AbstractExtensibleObject',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['__toArray']
-        );
-        $shippingAddressMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Address',
-            [
-                'setSameAsBilling',
-                'save',
-                'collectTotals',
-                'addData',
-                'setShippingMethod',
-                'setCollectShippingRates',
-                '__wakeup'
-            ],
-            [],
-            '',
-            false
-        );
-        $quoteMock->expects($this->any())->method('getShippingAddress')->will($this->returnValue($shippingAddressMock));
-
-        $shippingAddressMock->expects($useForShipping ? $this->any() : $this->once())
-            ->method('setSameAsBilling')
-            ->with($useForShipping)
-            ->will($this->returnSelf());
-
-        $expects = (!$useForShipping || ($checkoutMethod != Onepage::METHOD_REGISTER)) ? $this->once() : $this->never();
-        $shippingAddressMock->expects($expects)
-            ->method('save');
-
-        $shippingAddressMock->expects($useForShipping ? $this->once() : $this->never())
-            ->method('addData')
-            ->will($this->returnSelf());
-
-        $shippingAddressMock->expects($this->any())
-            ->method('setSaveInAddressBook')
-            ->will($this->returnSelf());
-
-        $shippingAddressMock->expects($useForShipping ? $this->once() : $this->never())
-            ->method('setShippingMethod')
-            ->will($this->returnSelf());
-
-        $shippingAddressMock->expects($useForShipping ? $this->once() : $this->never())
-            ->method('setCollectShippingRates')
-            ->will($this->returnSelf());
-
-        $shippingAddressMock->expects($useForShipping ? $this->once() : $this->never())
-            ->method('collectTotals');
-
-        $quoteMock->expects($this->any())->method('setPasswordHash')->with($passwordHash);
-        $quoteMock->expects($this->any())->method('getCheckoutMethod')->will($this->returnValue($checkoutMethod));
-        $quoteMock->expects($this->any())->method('isVirtual')->will($this->returnValue($isVirtual));
-
-        $addressMock = $this->getMock(
-            'Magento\Quote\Model\Quote\Address',
-            [
-                'setSaveInAddressBook',
-                'getData',
-                'setEmail',
-                '__wakeup',
-                'importCustomerAddressData',
-                'validate',
-                'save'
-            ],
-            [],
-            '',
-            false
-        );
-        $addressMock->expects($this->any())->method('importCustomerAddressData')->will($this->returnSelf());
-        $addressMock->expects($this->atLeastOnce())->method('validate')->will($this->returnValue($validateResult));
-        $addressMock->expects($this->any())->method('getData')->will($this->returnValue([]));
-
-        $quoteMock->expects($this->any())->method('getBillingAddress')->will($this->returnValue($addressMock));
-        $quoteMock->expects($this->any())->method('getCustomerId')->will($this->returnValue($quoteCustomerId));
-
-        $this->quoteRepositoryMock
-            ->expects($checkoutMethod === Onepage::METHOD_REGISTER ? $this->once() : $this->never())
-            ->method('save')
-            ->with($quoteMock);
-
-        $addressMock->expects($checkoutMethod === Onepage::METHOD_REGISTER ? $this->never() : $this->once())
-            ->method('save');
-
-        $quoteMock->expects($this->any())->method('getCustomer')->will($this->returnValue($customerMock));
-        $data1 = [];
-        $extensibleDataObjectConverterMock = $this->getMock(
-            'Magento\Framework\Api\ExtensibleDataObjectConverter',
-            ['toFlatArray'],
-            [],
-            '',
-            false
-        );
-        $extensibleDataObjectConverterMock->expects($this->any())
-            ->method('toFlatArray')
-            ->with($customerMock)
-            ->will($this->returnValue($data1));
-
-        $formMock = $this->getMock('Magento\Customer\Model\Metadata\Form', [], [], '', false);
-        $formMock->expects($this->atLeastOnce())->method('validateData')->will($this->returnValue($validateDataResult));
-
-        $this->formFactoryMock->expects($this->any())->method('create')->will($this->returnValue($formMock));
-        $formMock->expects($this->any())->method('prepareRequest')->will($this->returnValue($this->requestMock));
-        $formMock->expects($this->any())
-            ->method('extractData')
-            ->with($this->requestMock)
-            ->will($this->returnValue([]));
-        $formMock->expects($this->any())
-            ->method('validateData')
-            ->with([])
-            ->will($this->returnValue(false));
-
-        $customerDataMock = $this->getMock('Magento\Customer\Api\Data\CustomerInterface', [], [], '', false);
-
-        $this->customerDataFactoryMock
-            ->expects($this->any())
-            ->method('create')
-            ->will($this->returnValue($customerDataMock));
-
-        $this->checkoutSessionMock->expects($this->any())->method('getQuote')->will($this->returnValue($quoteMock));
-        $this->checkoutSessionMock->expects($this->any())
-            ->method('getStepData')
-            ->will($this->returnValue($useForShipping ? true : $getStepDataResult));
-        $this->checkoutSessionMock->expects($this->any())->method('setStepData')->will($this->returnSelf());
-        $customerAddressMock = $this->getMockForAbstractClass(
-            'Magento\Customer\Api\Data\AddressInterface',
-            [],
-            '',
-            false
-        );
-        $customerAddressMock->expects($this->any())
-            ->method('getCustomerId')
-            ->will($this->returnValue($addressCustomerId));
-        $this->addressRepositoryMock->expects($this->any())
-            ->method('getById')
-            ->will($isAddress ? $this->returnValue($customerAddressMock) : $this->throwException(new \Exception()));
-
-        $websiteMock = $this->getMock('Magento\Store\Model\Website', [], [], '', false);
-        $this->storeManagerMock->expects($this->any())->method('getWebsite')->will($this->returnValue($websiteMock));
-        $this->assertEquals($expected, $this->onepage->saveBilling($data, $customerAddressId));
-    }
-
-    public function saveBillingDataProvider()
-    {
-        return [
-            [
-                ['use_for_shipping' => 0], // $data
-                1, // $customerAddressId
-                1, // $quoteCustomerId
-                1, // $addressCustomerId
-                true, //$isAddress
-                true, // $validateDataResult
-                true, // $validateResult
-                Onepage::METHOD_REGISTER, // $checkoutMethod
-                'password', // $customerPassword
-                'password', // $confirmPassword
-                [], // $validationResultMessages
-                true, // $isEmailAvailable
-                false, // $isVirtual
-                false, // $getStepDataResult
-                [], // $expected
-            ],
-            [
-                ['use_for_shipping' => 1], // $data
-                1, // $customerAddressId
-                1, // $quoteCustomerId
-                1, // $addressCustomerId
-                true, //$isAddress
-                true, // $validateDataResult
-                true, // $validateResult
-                Onepage::METHOD_CUSTOMER, // $checkoutMethod
-                'password', // $customerPassword
-                'password', // $confirmPassword
-                [], // $validationResultMessages
-                true, // $isEmailAvailable
-                false, // $isVirtual
-                false, // $getStepDataResult
-                [], // $expected
-            ]
-        ];
     }
 
     public function testGetLastOrderId()

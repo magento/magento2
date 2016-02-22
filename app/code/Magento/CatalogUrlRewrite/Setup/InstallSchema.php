@@ -24,7 +24,7 @@ class InstallSchema implements InstallSchemaInterface
 
         $installer->startSetup();
 
-        $tableName = \Magento\CatalogUrlRewrite\Model\Resource\Category\Product::TABLE_NAME;
+        $tableName = \Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product::TABLE_NAME;
         $table = $installer->getConnection()
             ->newTable($installer->getTable($tableName))
             ->addColumn(
@@ -60,13 +60,6 @@ class InstallSchema implements InstallSchemaInterface
                 \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
-                $installer->getFkName($tableName, 'category_id', 'catalog_category_entity', 'entity_id'),
-                'category_id',
-                $installer->getTable('catalog_category_entity'),
-                'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-            )
-            ->addForeignKey(
                 $installer->getFkName($tableName, 'url_rewrite_id', 'url_rewrite', 'url_rewrite_id'),
                 'url_rewrite_id',
                 $installer->getTable('url_rewrite'),
@@ -77,6 +70,5 @@ class InstallSchema implements InstallSchemaInterface
         $installer->getConnection()->createTable($table);
 
         $installer->endSetup();
-
     }
 }

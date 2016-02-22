@@ -25,13 +25,13 @@ class CreditmemoEmailTest extends WebapiAbstract
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        /** @var \Magento\Sales\Model\Resource\Order\Creditmemo\Collection $creditmemoCollection */
-        $creditmemoCollection = $objectManager->get('Magento\Sales\Model\Resource\Order\Creditmemo\Collection');
+        /** @var \Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection $creditmemoCollection */
+        $creditmemoCollection = $objectManager->get('Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection');
         $creditmemo = $creditmemoCollection->getFirstItem();
         $serviceInfo = [
             'rest' => [
-                'resourcePath' => '/V1/creditmemo/' . $creditmemo->getId(),
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+                'resourcePath' => '/V1/creditmemo/' . $creditmemo->getId() . '/emails',
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
             ],
             'soap' => [
                 'service' => self::SERVICE_NAME,

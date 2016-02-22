@@ -69,6 +69,17 @@ interface WriteInterface extends ReadInterface
     public function changePermissions($path, $permissions);
 
     /**
+     * Change permissions of given path
+     *
+     * @param string $path
+     * @param int $dirPermissions
+     * @param int $filePermissions
+     * @return bool
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function changePermissionsRecursively($path, $dirPermissions, $filePermissions);
+
+    /**
      * Sets access and modification time of file.
      *
      * @param string $path

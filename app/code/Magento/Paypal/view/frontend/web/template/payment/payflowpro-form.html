@@ -16,6 +16,9 @@
     </div>
 
     <div class="payment-method-content">
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
         <div class="payment-method-billing-address">
             <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
             <!-- ko template: getTemplate() --><!-- /ko -->
@@ -43,27 +46,38 @@
 
             <!-- ko template: 'Magento_Payment/payment/cc-form' --><!-- /ko -->
 
-            <div class="checkout-agreements-block">
-                <!-- ko foreach: $parent.getRegion('before-place-order') -->
-                    <!-- ko template: getTemplate() --><!-- /ko -->
-                <!--/ko-->
+            <!-- ko if: (isVaultEnabled())-->
+            <div class="field-tooltip-content">
+                <input type="checkbox"
+                       name="vault[is_enabled]"
+                       class="checkbox-inline"
+                       data-bind="attr: {'id': getCode() + '_vault_enabler'}, checked: vaultEnabler.isActivePaymentTokenEnabler"/>
+                <label class="label" data-bind="attr: {'for': getCode() + '_vault_enabler'}">
+                    <span><!-- ko i18n: 'Save credit card info for future use.'--><!-- /ko --></span>
+                </label>
             </div>
-            <div class="actions-toolbar">
-                <div class="primary">
-                    <button data-role="review-save"
-                            type="submit"
-                            data-bind="
-                            attr: {title: $t('Place Order')},
-                            enable: (getCode() == isChecked()),
-                            click: placeOrder,
-                            css: {disabled: !isPlaceOrderActionAllowed()}
-                            "
-                            class="action primary checkout"
-                            disabled>
-                        <span data-bind="text: $t('Place Order')"></span>
-                    </button>
-                </div>
-            </div>
+            <!-- /ko -->
         </form>
+        <div class="checkout-agreements-block">
+            <!-- ko foreach: $parent.getRegion('before-place-order') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!--/ko-->
+        </div>
+        <div class="actions-toolbar">
+            <div class="primary">
+                <button data-role="review-save"
+                        type="submit"
+                        data-bind="
+                        attr: {title: $t('Place Order')},
+                        enable: (getCode() == isChecked()),
+                        click: placeOrder,
+                        css: {disabled: !isPlaceOrderActionAllowed()}
+                        "
+                        class="action primary checkout"
+                        disabled>
+                    <span data-bind="i18n: 'Place Order'"></span>
+                </button>
+            </div>
+        </div>
     </div>
 </div>

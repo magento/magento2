@@ -124,9 +124,6 @@ class ConfigurableProductsFixture extends Fixture
             '_tier_price_customer_group',
             '_tier_price_qty',
             '_tier_price_price',
-            '_group_price_website',
-            '_group_price_customer_group',
-            '_group_price_price',
             '_media_attribute_id',
             '_media_image',
             '_media_label',
@@ -177,7 +174,7 @@ class ConfigurableProductsFixture extends Fixture
                 'has_options' => '0',
                 'image' => '',
                 'image_label' => '',
-                'is_returnable' => 'Use config',
+                'is_returnable' => 'no',
                 'manufacturer' => '',
                 'meta_description' => 'Configurable Product %s <p>Configurable product description 1</p>',
                 'meta_keyword' => 'Configurable Product 1',
@@ -249,9 +246,6 @@ class ConfigurableProductsFixture extends Fixture
                 '_tier_price_customer_group' => '',
                 '_tier_price_qty' => '',
                 '_tier_price_price' => '',
-                '_group_price_website' => '',
-                '_group_price_customer_group' => '',
-                '_group_price_price' => '',
                 '_media_attribute_id' => '',
                 '_media_image' => '',
                 '_media_label' => '',
@@ -286,7 +280,7 @@ class ConfigurableProductsFixture extends Fixture
                 'has_options' => '0',
                 'image' => '',
                 'image_label' => '',
-                'is_returnable' => 'Use config',
+                'is_returnable' => 'no',
                 'manufacturer' => '',
                 'meta_description' => 'Configurable Product %s <p>Configurable product description 1</p>',
                 'meta_keyword' => 'Configurable Product 1',
@@ -358,9 +352,6 @@ class ConfigurableProductsFixture extends Fixture
                 '_tier_price_customer_group' => '',
                 '_tier_price_qty' => '',
                 '_tier_price_price' => '',
-                '_group_price_website' => '',
-                '_group_price_customer_group' => '',
-                '_group_price_price' => '',
                 '_media_attribute_id' => '',
                 '_media_image' => '',
                 '_media_label' => '',
@@ -392,7 +383,7 @@ class ConfigurableProductsFixture extends Fixture
                 'has_options' => '0',
                 'image' => '',
                 'image_label' => '',
-                'is_returnable' => 'Use config',
+                'is_returnable' => 'no',
                 'manufacturer' => '',
                 'meta_description' => 'Configurable Product %s <p>Configurable product description 1</p>',
                 'meta_keyword' => 'Configurable Product 1',
@@ -464,9 +455,6 @@ class ConfigurableProductsFixture extends Fixture
                 '_tier_price_customer_group' => '',
                 '_tier_price_qty' => '',
                 '_tier_price_price' => '',
-                '_group_price_website' => '',
-                '_group_price_customer_group' => '',
-                '_group_price_price' => '',
                 '_media_attribute_id' => '',
                 '_media_image' => '',
                 '_media_label' => '',
@@ -498,7 +486,7 @@ class ConfigurableProductsFixture extends Fixture
                 'has_options' => '1',
                 'image' => '',
                 'image_label' => '',
-                'is_returnable' => 'Use config',
+                'is_returnable' => 'no',
                 'manufacturer' => '',
                 'meta_description' => 'Configurable Product %s <p>Configurable product description %s</p>',
                 'meta_keyword' => 'Configurable Product %s',
@@ -570,9 +558,6 @@ class ConfigurableProductsFixture extends Fixture
                 '_tier_price_customer_group' => '',
                 '_tier_price_qty' => '',
                 '_tier_price_price' => '',
-                '_group_price_website' => '',
-                '_group_price_customer_group' => '',
-                '_group_price_price' => '',
                 '_media_attribute_id' => '',
                 '_media_image' => '',
                 '_media_label' => '',
@@ -654,7 +639,13 @@ class ConfigurableProductsFixture extends Fixture
         /** @var \Magento\ImportExport\Model\Import $import */
         $import = $this->fixtureModel->getObjectManager()->create(
             'Magento\ImportExport\Model\Import',
-            ['data' => ['entity' => 'catalog_product', 'behavior' => 'append']]
+            [
+                'data' => [
+                    'entity' => 'catalog_product',
+                    'behavior' => 'append',
+                    'validation_strategy' => 'validation-stop-on-errors'
+                ]
+            ]
         );
 
         $source = new Generator($pattern, $configurablesCount);

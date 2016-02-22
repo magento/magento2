@@ -7,7 +7,7 @@
 // @codingStandardsIgnoreFile
 
 /**
- * Template for block \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Status\PersonalInfo
+ * @var $block \Magento\Customer\Block\Adminhtml\Edit\Tab\View\PersonalInfo
  */
 
 $lastLoginDateAdmin = $block->getLastLoginDate();
@@ -19,47 +19,51 @@ $createDateStore = $block->getStoreCreateDate();
 
 <div class="fieldset-wrapper customer-information">
     <div class="fieldset-wrapper-title">
-        <span class="title"><?php echo __('Personal Information') ?></span>
+        <span class="title"><?php /* @escapeNotVerified */ echo __('Personal Information') ?></span>
     </div>
     <table class="admin__table-secondary">
         <tbody>
         <?php echo $block->getChildHtml(); ?>
         <tr>
-            <th><?php echo __('Last Logged In:') ?></th>
-            <td><?php echo $lastLoginDateAdmin ?> (<?php echo $block->getCurrentStatus() ?>)</td>
+            <th><?php /* @escapeNotVerified */ echo __('Last Logged In:') ?></th>
+            <td><?php /* @escapeNotVerified */ echo $lastLoginDateAdmin ?> (<?php /* @escapeNotVerified */ echo $block->getCurrentStatus() ?>)</td>
         </tr>
         <?php if ($lastLoginDateAdmin != $lastLoginDateStore): ?>
         <tr>
-            <th><?php echo __('Last Logged In (%1):', $block->getStoreLastLoginDateTimezone()) ?></th>
-            <td><?php echo $lastLoginDateStore ?> (<?php echo $block->getCurrentStatus() ?>)</td>
+            <th><?php /* @escapeNotVerified */ echo __('Last Logged In (%1):', $block->getStoreLastLoginDateTimezone()) ?></th>
+            <td><?php /* @escapeNotVerified */ echo $lastLoginDateStore ?> (<?php /* @escapeNotVerified */ echo $block->getCurrentStatus() ?>)</td>
         </tr>
         <?php endif; ?>
         <tr>
-            <th><?php echo __('Confirmed email:') ?></th>
-            <td><?php echo $block->getIsConfirmedStatus() ?></td>
+            <th><?php /* @escapeNotVerified */ echo __('Account Lock:') ?></th>
+            <td><?php /* @escapeNotVerified */ echo $block->getAccountLock() ?></td>
         </tr>
         <tr>
-            <th><?php echo __('Account Created:') ?></th>
-            <td><?php echo $createDateAdmin ?></td>
+            <th><?php /* @escapeNotVerified */ echo __('Confirmed email:') ?></th>
+            <td><?php /* @escapeNotVerified */ echo $block->getIsConfirmedStatus() ?></td>
+        </tr>
+        <tr>
+            <th><?php /* @escapeNotVerified */ echo __('Account Created:') ?></th>
+            <td><?php /* @escapeNotVerified */ echo $createDateAdmin ?></td>
         </tr>
         <?php if ($createDateAdmin != $createDateStore): ?>
             <tr>
-                <th><?php echo __('Account Created on (%1):', $block->getStoreCreateDateTimezone()) ?></th>
-                <td><?php echo $createDateStore ?></td>
+                <th><?php /* @escapeNotVerified */ echo __('Account Created on (%1):', $block->getStoreCreateDateTimezone()) ?></th>
+                <td><?php /* @escapeNotVerified */ echo $createDateStore ?></td>
             </tr>
         <?php endif; ?>
         <tr>
-            <th><?php echo __('Account Created in:') ?></th>
-            <td><?php echo $block->getCreatedInStore() ?></td>
+            <th><?php /* @escapeNotVerified */ echo __('Account Created in:') ?></th>
+            <td><?php /* @escapeNotVerified */ echo $block->getCreatedInStore() ?></td>
         </tr>
         <tr>
-            <th><?php echo __('Customer Group:') ?></th>
-            <td><?php echo $block->getGroupName() ?></td>
+            <th><?php /* @escapeNotVerified */ echo __('Customer Group:') ?></th>
+            <td><?php /* @escapeNotVerified */ echo $block->getGroupName() ?></td>
         </tr>
         </tbody>
     </table>
     <address>
-        <strong><?php echo __('Default Billing Address') ?></strong><br/>
+        <strong><?php /* @escapeNotVerified */ echo __('Default Billing Address') ?></strong><br/>
         <?php echo $block->getBillingAddressHtml() ?>
     </address>
 

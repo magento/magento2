@@ -71,7 +71,7 @@ abstract class MyCreditCards extends \Magento\Framework\App\Action\Action
     public function dispatch(RequestInterface $request)
     {
         $loginUrl = $this->customerUrl->getLoginUrl();
-        if (!$this->customerSession->authenticate($this, $loginUrl)) {
+        if (!$this->customerSession->authenticate($loginUrl)) {
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
         }
         if (!$this->config->useVault()) {

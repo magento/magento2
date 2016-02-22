@@ -5,17 +5,44 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
-        <plugin name="append_bundle_data_to_order" type="Magento\Bundle\Model\Plugin\QuoteItem"/>
-    </type>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper">
         <plugin name="Bundle" type="Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle" sortOrder="60" />
+    </type>
+    <type name="Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar">
+        <plugin name="Bundle" type="Magento\Bundle\Block\Adminhtml\Order\Create\Sidebar" sortOrder="200"/>
     </type>
     <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
         <arguments>
             <argument name="constructors" xsi:type="array">
                 <item name="bundle" xsi:type="string">Magento\Bundle\Model\Product\CopyConstructor\Bundle</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\ModifierPool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="bundle" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\Composite</item>
+                    <item name="sortOrder" xsi:type="number">125</item>
+                </item>
+                <item name="bundle_stock_data" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\StockData</item>
+                    <item name="sortOrder" xsi:type="number">126</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\Composite">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="bundleSku" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundleSku</item>
+                <item name="bundlePrice" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundlePrice</item>
+                <item name="bundleWeight" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundleWeight</item>
+                <item name="bundleQuantity" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundleQuantity</item>
+                <item name="bundleAdvancedPricing" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundleAdvancedPricing</item>
+                <item name="bundlePanel" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundlePanel</item>
+                <item name="bundleCustomOptions" xsi:type="string">Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundleCustomOptions</item>
             </argument>
         </arguments>
     </type>

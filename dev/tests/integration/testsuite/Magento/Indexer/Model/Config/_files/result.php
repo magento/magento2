@@ -66,19 +66,10 @@ return [
                             [
                                 'first' =>
                                     [
-                                        0 =>
-                                            [
-                                                'fieldset' => 'first',
-                                                'from' => 'id_field',
-                                                'to' => 'second_entity_id',
-                                            ],
-                                        1 =>
-                                            [
-                                                'fieldset' => 'first',
-                                                'from' => 'id_field2',
-                                                'to' => 'second_entity_id2',
-                                            ],
-                                    ],
+                                        'fieldset' => 'first',
+                                        'from' => 'id_field',
+                                        'to' => 'second_entity_id',
+                                    ]
                             ],
                     ],
                 ],

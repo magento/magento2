@@ -14,7 +14,7 @@ namespace Magento\Backend\Block\Dashboard\Orders;
 class Grid extends \Magento\Backend\Block\Dashboard\Grid
 {
     /**
-     * @var \Magento\Reports\Model\Resource\Order\CollectionFactory
+     * @var \Magento\Reports\Model\ResourceModel\Order\CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -27,14 +27,14 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Framework\Module\Manager $moduleManager
-     * @param \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory
+     * @param \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Framework\Module\Manager $moduleManager,
-        \Magento\Reports\Model\Resource\Order\CollectionFactory $collectionFactory,
+        \Magento\Reports\Model\ResourceModel\Order\CollectionFactory $collectionFactory,
         array $data = []
     ) {
         $this->_moduleManager = $moduleManager;
@@ -82,6 +82,19 @@ class Grid extends \Magento\Backend\Block\Dashboard\Grid
         $this->setCollection($collection);
 
         return parent::_prepareCollection();
+    }
+
+    /**
+     * Process collection after loading
+     *
+     * @return $this
+     */
+    protected function _afterLoadCollection()
+    {
+        foreach ($this->getCollection() as $item) {
+            $item->getCustomer() ?: $item->setCustomer('Guest');
+        }
+        return $this;
     }
 
     /**

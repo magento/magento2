@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Reports\Test\TestCase\CustomersOrderTotalReportEntityTest">
+    <testCase name="Magento\Reports\Test\TestCase\CustomersOrderTotalReportEntityTest" summary="Customer Order Total Report" ticketId="MAGETWO-28358">
         <variation name="CustomersOrderTotalReportEntityTestVariation1">
             <data name="orders" xsi:type="string">default,virtual_product</data>
             <data name="report/report_from" xsi:type="string">m/d/Y -2 days</data>

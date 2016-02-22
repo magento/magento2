@@ -20,7 +20,7 @@ define([
 
     var params = {};
     var fields = $('category_edit_form').getElementsBySelector('input', 'select');
-    for(var i=0;i<fields.length;i++){
+    for (var i=0; i<fields.length; i++) {
         if (!fields[i].name) {
             continue;
         }

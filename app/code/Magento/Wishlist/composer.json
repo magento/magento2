@@ -2,39 +2,39 @@
     "name": "magento/module-wishlist",
     "description": "N/A",
     "require": {
-        "php": "~5.5.0|~5.6.0",
-        "magento/module-store": "1.0.0-beta",
-        "magento/module-customer": "1.0.0-beta",
-        "magento/module-catalog": "1.0.0-beta",
-        "magento/module-checkout": "1.0.0-beta",
-        "magento/module-theme": "1.0.0-beta",
-        "magento/module-catalog-inventory": "1.0.0-beta",
-        "magento/module-rss": "1.0.0-beta",
-        "magento/module-backend": "1.0.0-beta",
-        "magento/module-sales": "1.0.0-beta",
-        "magento/module-grouped-product": "1.0.0-beta",
-        "magento/framework": "1.0.0-beta",
-        "magento/module-ui": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "php": "~5.5.0|~5.6.0|~7.0.0",
+        "magento/module-store": "100.0.*",
+        "magento/module-customer": "100.0.*",
+        "magento/module-catalog": "100.0.*",
+        "magento/module-checkout": "100.0.*",
+        "magento/module-theme": "100.0.*",
+        "magento/module-catalog-inventory": "100.0.*",
+        "magento/module-rss": "100.0.*",
+        "magento/module-backend": "100.0.*",
+        "magento/module-sales": "100.0.*",
+        "magento/module-grouped-product": "100.0.*",
+        "magento/framework": "100.0.*",
+        "magento/module-ui": "100.0.*"
     },
     "suggest": {
-        "magento/module-configurable-product": "1.0.0-beta",
-        "magento/module-downloadable": "1.0.0-beta",
-        "magento/module-bundle": "1.0.0-beta",
-        "magento/module-cookie": "1.0.0-beta"
+        "magento/module-configurable-product": "100.0.*",
+        "magento/module-downloadable": "100.0.*",
+        "magento/module-bundle": "100.0.*",
+        "magento/module-cookie": "100.0.*",
+        "magento/module-wishlist-sample-data": "Sample Data version:100.0.*"
     },
     "type": "magento2-module",
-    "version": "1.0.0-beta",
+    "version": "100.0.2",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Wishlist"
-            ]
-        ]
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\Wishlist\\": ""
+        }
     }
 }

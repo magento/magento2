@@ -30,7 +30,7 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
     /**
      * Item object
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_item;
 
@@ -71,7 +71,7 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Framework\Filesystem $filesystem ,
      * @param \Magento\Framework\Filter\FilterManager $filterManager
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -81,7 +81,7 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Filter\FilterManager $filterManager,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -118,10 +118,10 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
     /**
      * Set item object
      *
-     * @param  \Magento\Framework\Object $item
+     * @param  \Magento\Framework\DataObject $item
      * @return $this
      */
-    public function setItem(\Magento\Framework\Object $item)
+    public function setItem(\Magento\Framework\DataObject $item)
     {
         $this->_item = $item;
         return $this;
@@ -183,7 +183,7 @@ abstract class AbstractItems extends \Magento\Framework\Model\AbstractModel
      * Retrieve item object
      *
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getItem()
     {

@@ -96,7 +96,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $this->_linkMock->expects($this->once())->method('getAttributes')->will($this->returnValue($attributes));
 
         $productLinkMock = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\Link',
+            '\Magento\Catalog\Model\ResourceModel\Product\Link',
             ['__wakeup', 'getLinkedProductId', 'toArray'],
             [],
             '',
@@ -107,7 +107,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         )->method(
             'setLinkTypeId'
         )->with(
-            \Magento\GroupedProduct\Model\Resource\Product\Link::LINK_TYPE_GROUPED
+            \Magento\GroupedProduct\Model\ResourceModel\Product\Link::LINK_TYPE_GROUPED
         );
 
         $productLinkMock->expects($this->once())->method('getLinkedProductId')->will($this->returnValue('100500'));
@@ -122,7 +122,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         );
 
         $collectionMock = $helper->getCollectionMock(
-            '\Magento\Catalog\Model\Resource\Product\Link\Collection',
+            '\Magento\Catalog\Model\ResourceModel\Product\Link\Collection',
             [$productLinkMock]
         );
         $collectionMock->expects($this->once())->method('setProduct')->with($this->_productMock);

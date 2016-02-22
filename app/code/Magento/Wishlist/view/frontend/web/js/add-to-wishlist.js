@@ -11,7 +11,7 @@ define([
     
     $.widget('mage.addToWishlist', {
         options: {
-            bundleInfo: 'div.control [name^=bundle_option]:not([name*=qty])',
+            bundleInfo: 'div.control [name^=bundle_option]',
             configurableInfo: '.super-attribute-select',
             groupedInfo: '#super-product-table input',
             downloadableInfo: '#downloadable-links-list input',
@@ -42,10 +42,13 @@ define([
             var self = this;
             $(event.handleObj.selector).each(function(index, element){
                 if ($(element).is('input[type=text]')
+                    || $(element).is('input[type=email]')
+                    || $(element).is('input[type=number]')
+                    || $(element).is('input[type=hidden]')
                     || $(element).is('input[type=checkbox]:checked')
                     || $(element).is('input[type=radio]:checked')
-                    || $('#' + element.id + ' option:selected').length
                     || $(element).is('textarea')
+                    || $('#' + element.id + ' option:selected').length
                 ) {
                     dataToAdd = $.extend({}, dataToAdd, self._getElementData(element));
                     return;
@@ -65,7 +68,7 @@ define([
             $('[data-action="add-to-wishlist"]').each(function(index, element) {
                 var params = $(element).data('post');
                 if (!params)
-                    params = {};
+                    params = {'data': {}};
 
                 if (!$.isEmptyObject(dataToAdd)) {
                     self._removeExcessiveData(params, dataToAdd);
@@ -88,7 +91,7 @@ define([
         },
         _getElementData: function(element) {
             var data = {},
-                elementName = $(element).attr('name'),
+                elementName = $(element).data('selector'),
                 elementValue = $(element).val();
             if ($(element).is('select[multiple]') && elementValue !== null) {
                 if (elementName.substr(elementName.length - 2) == '[]') {
@@ -120,6 +123,13 @@ define([
                     params = $(event.currentTarget).data('post'),
                     form = $(element).closest('form'),
                     action = params.action;
+                if (params.data.id) {
+                    $('<input>', {
+                        type: 'hidden',
+                        name: 'id',
+                        value: params.data.id
+                    }).appendTo(form);
+                }
                 if (params.data.uenc) {
                     action += 'uenc/' + params.data.uenc;
                 }

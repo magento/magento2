@@ -5,18 +5,18 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\CatalogInventory\Api\Data\StockInterface" type="Magento\CatalogInventory\Model\Stock" />
     <preference for="Magento\CatalogInventory\Api\Data\StockItemInterface" type="Magento\CatalogInventory\Model\Stock\Item" />
     <preference for="Magento\CatalogInventory\Api\Data\StockStatusInterface" type="Magento\CatalogInventory\Model\Stock\Status" />
 
-    <preference for="Magento\CatalogInventory\Api\Data\StockCollectionInterface" type="Magento\CatalogInventory\Model\Resource\Stock\Collection" />
-    <preference for="Magento\CatalogInventory\Api\Data\StockItemCollectionInterface" type="Magento\CatalogInventory\Model\Resource\Stock\Item\Collection" />
-    <preference for="Magento\CatalogInventory\Api\Data\StockStatusCollectionInterface" type="Magento\CatalogInventory\Model\Resource\Stock\Status\Collection" />
+    <preference for="Magento\CatalogInventory\Api\Data\StockCollectionInterface" type="Magento\CatalogInventory\Model\ResourceModel\Stock\Collection" />
+    <preference for="Magento\CatalogInventory\Api\Data\StockItemCollectionInterface" type="Magento\CatalogInventory\Model\ResourceModel\Stock\Item\Collection" />
+    <preference for="Magento\CatalogInventory\Api\Data\StockStatusCollectionInterface" type="Magento\CatalogInventory\Model\ResourceModel\Stock\Status\Collection" />
 
-    <preference for="Magento\CatalogInventory\Api\StockCriteriaInterface" type="Magento\CatalogInventory\Model\Resource\Stock\StockCriteria" />
-    <preference for="Magento\CatalogInventory\Api\StockItemCriteriaInterface" type="Magento\CatalogInventory\Model\Resource\Stock\Item\StockItemCriteria" />
-    <preference for="Magento\CatalogInventory\Api\StockStatusCriteriaInterface" type="Magento\CatalogInventory\Model\Resource\Stock\Status\StockStatusCriteria" />
+    <preference for="Magento\CatalogInventory\Api\StockCriteriaInterface" type="Magento\CatalogInventory\Model\ResourceModel\Stock\StockCriteria" />
+    <preference for="Magento\CatalogInventory\Api\StockItemCriteriaInterface" type="Magento\CatalogInventory\Model\ResourceModel\Stock\Item\StockItemCriteria" />
+    <preference for="Magento\CatalogInventory\Api\StockStatusCriteriaInterface" type="Magento\CatalogInventory\Model\ResourceModel\Stock\Status\StockStatusCriteria" />
 
     <preference for="Magento\CatalogInventory\Api\StockConfigurationInterface" type="Magento\CatalogInventory\Model\Configuration" />
     <preference for="Magento\CatalogInventory\Api\StockManagementInterface" type="Magento\CatalogInventory\Model\StockManagement" />
@@ -30,10 +30,21 @@
 
     <preference for="Magento\CatalogInventory\Model\Spi\StockRegistryProviderInterface" type="Magento\CatalogInventory\Model\StockRegistryProvider" />
     <preference for="Magento\CatalogInventory\Model\Spi\StockStateProviderInterface" type="Magento\CatalogInventory\Model\StockStateProvider" />
-
-    <type name="Magento\CatalogInventory\Model\Observer">
+    
+    <preference for="Magento\CatalogInventory\Model\ResourceModel\QtyCounterInterface" type="\Magento\CatalogInventory\Model\ResourceModel\Stock" />
+    <type name="Magento\Catalog\Model\Product\Attribute\Repository">
+        <plugin name="filterCustomAttribute" type="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute" />
+    </type>
+    <type name="Magento\CatalogInventory\Model\Plugin\FilterCustomAttribute">
         <arguments>
-            <argument name="resourceStock" xsi:type="object">Magento\CatalogInventory\Model\Resource\Stock\Proxy</argument>
+            <argument name="blackList" xsi:type="array">
+                <item name="quantity_and_stock_status" xsi:type="string">quantity_and_stock_status</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogInventory\Observer\UpdateItemsStockUponConfigChangeObserver">
+        <arguments>
+            <argument name="resourceStock" xsi:type="object">Magento\CatalogInventory\Model\ResourceModel\Stock\Proxy</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Layer">
@@ -46,7 +57,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Store\Model\Resource\Group">
+    <type name="Magento\Store\Model\ResourceModel\Group">
         <plugin name="storeGroupResourceAroundBeforeSave" type="\Magento\CatalogInventory\Model\Indexer\Stock\Plugin\StoreGroup"/>
     </type>
     <type name="Magento\Catalog\Block\Product\View">

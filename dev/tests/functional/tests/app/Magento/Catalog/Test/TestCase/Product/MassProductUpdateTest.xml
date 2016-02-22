@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Catalog\Test\TestCase\Product\MassProductUpdateTest">
+    <testCase name="Magento\Catalog\Test\TestCase\Product\MassProductUpdateTest" summary="Edit Products Using Mass Actions" ticketId="MAGETWO-21128">
         <variation name="MassProductPriceUpdateTestVariation1">
             <data name="configData" xsi:type="string">product_flat</data>
             <data name="initialProduct/dataset" xsi:type="string">simple_10_dollar</data>

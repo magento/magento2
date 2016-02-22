@@ -5,12 +5,13 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\ConfigurableProduct\Api\ConfigurableProductManagementInterface" type="Magento\ConfigurableProduct\Model\ConfigurableProductManagement" />
     <preference for="Magento\ConfigurableProduct\Api\LinkManagementInterface" type="Magento\ConfigurableProduct\Model\LinkManagement" />
     <preference for="Magento\ConfigurableProduct\Api\OptionRepositoryInterface" type="Magento\ConfigurableProduct\Model\OptionRepository" />
     <preference for="Magento\ConfigurableProduct\Api\Data\OptionInterface" type="Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute" />
     <preference for="Magento\ConfigurableProduct\Api\Data\OptionValueInterface" type="Magento\ConfigurableProduct\Model\Product\Type\Configurable\OptionValue" />
+    <preference for="Magento\ConfigurableProduct\Api\Data\ConfigurableItemOptionValueInterface" type="Magento\ConfigurableProduct\Model\Quote\Item\ConfigurableItemOptionValue" />
     <type name="Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\Initializer\Option">
         <plugin name="configurable_product" type="Magento\ConfigurableProduct\Model\Quote\Item\QuantityValidator\Initializer\Option\Plugin\ConfigurableProduct" sortOrder="50" />
     </type>
@@ -34,7 +35,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Sales\Model\Resource\Report\Bestsellers">
+    <type name="Magento\Sales\Model\ResourceModel\Report\Bestsellers">
         <arguments>
             <argument name="ignoredProductTypes" xsi:type="array">
                 <item name="configurable" xsi:type="const">\Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE</item>
@@ -44,7 +45,7 @@
     <type name="Magento\Eav\Model\Entity\Setup\PropertyMapper\Composite">
         <arguments>
             <argument name="propertyMappers" xsi:type="array">
-                <item name="configurable" xsi:type="string">Magento\ConfigurableProduct\Model\Resource\Setup\PropertyMapper</item>
+                <item name="configurable" xsi:type="string">Magento\ConfigurableProduct\Model\ResourceModel\Setup\PropertyMapper</item>
             </argument>
         </arguments>
     </type>
@@ -69,7 +70,6 @@
             <argument name="prices" xsi:type="array">
                 <item name="regular_price" xsi:type="string">Magento\ConfigurableProduct\Pricing\Price\ConfigurableRegularPrice</item>
                 <item name="final_price" xsi:type="string">Magento\ConfigurableProduct\Pricing\Price\FinalPrice</item>
-                <item name="base_price" xsi:type="string">Magento\ConfigurableProduct\Pricing\Price\BasePrice</item>
             </argument>
             <argument name="target" xsi:type="object">Magento\Catalog\Pricing\Price\Pool</argument>
         </arguments>
@@ -88,5 +88,45 @@
                 </item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Item\Repository">
+        <arguments>
+            <argument name="cartItemProcessors" xsi:type="array">
+                <item name="configurable" xsi:type="object">Magento\ConfigurableProduct\Model\Quote\Item\CartItemProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Api\OrderItemRepositoryInterface">
+        <arguments>
+            <argument name="processorPool" xsi:type="array">
+                <item name="configurable" xsi:type="object">Magento\ConfigurableProduct\Model\ProductOptionProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="ConfigurableFinalPriceResolver" type="Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver">
+        <arguments>
+            <argument name="priceResolver" xsi:type="object">Magento\ConfigurableProduct\Pricing\Price\FinalPriceResolver</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\ConfigurableProduct\Pricing\Price\FinalPrice">
+        <arguments>
+            <argument name="priceResolver" xsi:type="object">ConfigurableFinalPriceResolver</argument>
+        </arguments>
+    </type>
+    <virtualType name="ConfigurableRegularPriceResolver" type="Magento\ConfigurableProduct\Pricing\Price\ConfigurablePriceResolver">
+        <arguments>
+            <argument name="priceResolver" xsi:type="object">Magento\ConfigurableProduct\Pricing\Price\RegularPriceResolver</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\ConfigurableProduct\Pricing\Price\ConfigurableRegularPrice">
+        <arguments>
+            <argument name="priceResolver" xsi:type="object">ConfigurableRegularPriceResolver</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Attribute\Backend\Price">
+        <plugin name="configurable" type="Magento\ConfigurableProduct\Model\Plugin\PriceBackend" sortOrder="100" />
+    </type>
+    <type name="\Magento\ProductVideo\Block\Product\View\Gallery">
+        <plugin name="product_video_gallery" type="\Magento\ConfigurableProduct\Block\Plugin\Product\Media\Gallery" />
     </type>
 </config>

@@ -7,10 +7,9 @@ namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Framework\App\Action;
 use Magento\Framework\Exception\NotFoundException;
-use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Framework\Controller\ResultFactory;
 
-class Configure extends Action\Action implements IndexInterface
+class Configure extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * Core registry
@@ -74,7 +73,7 @@ class Configure extends Action\Action implements IndexInterface
 
             $this->_coreRegistry->register('wishlist_item', $item);
 
-            $params = new \Magento\Framework\Object();
+            $params = new \Magento\Framework\DataObject();
             $params->setCategoryId(false);
             $params->setConfigureMode(true);
             $buyRequest = $item->getBuyRequest();

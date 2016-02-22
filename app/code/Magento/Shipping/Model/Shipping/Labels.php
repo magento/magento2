@@ -8,7 +8,13 @@
 
 namespace Magento\Shipping\Model\Shipping;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Model\Order\Address;
+use Magento\Shipping\Model\Shipment\Request;
+use Magento\Store\Model\ScopeInterface;
+use Magento\User\Model\User;
 
 /**
  * Shipping labels model
@@ -51,7 +57,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
         \Magento\Framework\Math\Division $mathDivision,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Shipping\Model\Shipment\Request $request
+        Request $request
     ) {
         $this->_authSession = $authSession;
         $this->_request = $request;
@@ -72,7 +78,7 @@ class Labels extends \Magento\Shipping\Model\Shipping
      * Prepare and do request to shipment
      *
      * @param Shipment $orderShipment
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -81,41 +87,32 @@ class Labels extends \Magento\Shipping\Model\Shipping
     {
         $admin = $this->_authSession->getUser();
         $order = $orderShipment->getOrder();
-        $address = $order->getShippingAddress();
+
         $shippingMethod = $order->getShippingMethod(true);
         $shipmentStoreId = $orderShipment->getStoreId();
         $shipmentCarrier = $this->_carrierFactory->create($order->getShippingMethod(true)->getCarrierCode());
         $baseCurrencyCode = $this->_storeManager->getStore($shipmentStoreId)->getBaseCurrencyCode();
         if (!$shipmentCarrier) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('Invalid carrier: %1' , $shippingMethod->getCarrierCode())
-            );
+            throw new LocalizedException(__('Invalid carrier: %1', $shippingMethod->getCarrierCode()));
         }
         $shipperRegionCode = $this->_scopeConfig->getValue(
             Shipment::XML_PATH_STORE_REGION_ID,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $shipmentStoreId
         );
         if (is_numeric($shipperRegionCode)) {
             $shipperRegionCode = $this->_regionFactory->create()->load($shipperRegionCode)->getCode();
         }
 
-        $recipientRegionCode = $this->_regionFactory->create()->load($address->getRegionId())->getCode();
-
         $originStreet1 = $this->_scopeConfig->getValue(
             Shipment::XML_PATH_STORE_ADDRESS1,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+            ScopeInterface::SCOPE_STORE,
             $shipmentStoreId
         );
-        $originStreet2 = $this->_scopeConfig->getValue(
-            Shipment::XML_PATH_STORE_ADDRESS2,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $shipmentStoreId
-        );
-        $storeInfo = new \Magento\Framework\Object(
+        $storeInfo = new DataObject(
             (array)$this->_scopeConfig->getValue(
                 'general/store_information',
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $shipmentStoreId
             )
         );
@@ -128,21 +125,21 @@ class Labels extends \Magento\Shipping\Model\Shipping
             || !$shipperRegionCode
             || !$this->_scopeConfig->getValue(
                 Shipment::XML_PATH_STORE_CITY,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $shipmentStoreId
             )
             || !$this->_scopeConfig->getValue(
                 Shipment::XML_PATH_STORE_ZIP,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $shipmentStoreId
             )
             || !$this->_scopeConfig->getValue(
                 Shipment::XML_PATH_STORE_COUNTRY_ID,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $shipmentStoreId
             )
         ) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __(
                     'We don\'t have enough information to create shipping labels. Please make sure your store information and settings are complete.'
                 )
@@ -152,37 +149,87 @@ class Labels extends \Magento\Shipping\Model\Shipping
         /** @var $request \Magento\Shipping\Model\Shipment\Request */
         $request = $this->_shipmentRequestFactory->create();
         $request->setOrderShipment($orderShipment);
-        $request->setShipperContactPersonName($admin->getName());
-        $request->setShipperContactPersonFirstName($admin->getFirstname());
-        $request->setShipperContactPersonLastName($admin->getLastname());
-        $request->setShipperContactCompanyName($storeInfo->getName());
-        $request->setShipperContactPhoneNumber($storeInfo->getPhone());
-        $request->setShipperEmail($admin->getEmail());
-        $request->setShipperAddressStreet(trim($originStreet1 . ' ' . $originStreet2));
-        $request->setShipperAddressStreet1($originStreet1);
+        $address = $order->getShippingAddress();
+
+        $this->setShipperDetails($request, $admin, $storeInfo, $shipmentStoreId, $shipperRegionCode, $originStreet1);
+        $this->setRecipientDetails($request, $address);
+
+        $request->setShippingMethod($shippingMethod->getMethod());
+        $request->setPackageWeight($order->getWeight());
+        $request->setPackages($orderShipment->getPackages());
+        $request->setBaseCurrencyCode($baseCurrencyCode);
+        $request->setStoreId($shipmentStoreId);
+
+        return $shipmentCarrier->requestToShipment($request);
+    }
+
+    /**
+     * Set shipper details into request
+     * @param \Magento\Shipping\Model\Shipment\Request $request
+     * @param \Magento\User\Model\User $storeAdmin
+     * @param \Magento\Framework\DataObject $store
+     * @param $shipmentStoreId
+     * @param $regionCode
+     * @param $originStreet
+     * @return void
+     */
+    protected function setShipperDetails(
+        Request $request,
+        User $storeAdmin,
+        DataObject $store,
+        $shipmentStoreId,
+        $regionCode,
+        $originStreet
+    ) {
+        $originStreet2 = $this->_scopeConfig->getValue(
+            Shipment::XML_PATH_STORE_ADDRESS2,
+            ScopeInterface::SCOPE_STORE,
+            $shipmentStoreId
+        );
+
+        $request->setShipperContactPersonName($storeAdmin->getName());
+        $request->setShipperContactPersonFirstName($storeAdmin->getFirstname());
+        $request->setShipperContactPersonLastName($storeAdmin->getLastname());
+        $request->setShipperContactCompanyName($store->getName());
+        $request->setShipperContactPhoneNumber($store->getPhone());
+        $request->setShipperEmail($storeAdmin->getEmail());
+        $request->setShipperAddressStreet(trim($originStreet . ' ' . $originStreet2));
+        $request->setShipperAddressStreet1($originStreet);
         $request->setShipperAddressStreet2($originStreet2);
         $request->setShipperAddressCity(
             $this->_scopeConfig->getValue(
                 Shipment::XML_PATH_STORE_CITY,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $shipmentStoreId
             )
         );
-        $request->setShipperAddressStateOrProvinceCode($shipperRegionCode);
+        $request->setShipperAddressStateOrProvinceCode($regionCode);
         $request->setShipperAddressPostalCode(
             $this->_scopeConfig->getValue(
                 Shipment::XML_PATH_STORE_ZIP,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $shipmentStoreId
             )
         );
         $request->setShipperAddressCountryCode(
             $this->_scopeConfig->getValue(
                 Shipment::XML_PATH_STORE_COUNTRY_ID,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $shipmentStoreId
             )
         );
+    }
+
+    /**
+     * Set recipient details into request
+     * @param \Magento\Shipping\Model\Shipment\Request $request
+     * @param \Magento\Sales\Model\Order\Address $address
+     * @return void
+     */
+    protected function setRecipientDetails(Request $request, Address $address)
+    {
+        $recipientRegionCode = $this->_regionFactory->create()->load($address->getRegionId())->getCode();
+
         $request->setRecipientContactPersonName(trim($address->getFirstname() . ' ' . $address->getLastname()));
         $request->setRecipientContactPersonFirstName($address->getFirstname());
         $request->setRecipientContactPersonLastName($address->getLastname());
@@ -193,16 +240,9 @@ class Labels extends \Magento\Shipping\Model\Shipping
         $request->setRecipientAddressStreet1($address->getStreetLine(1));
         $request->setRecipientAddressStreet2($address->getStreetLine(2));
         $request->setRecipientAddressCity($address->getCity());
-        $request->setRecipientAddressStateOrProvinceCode($address->getRegionCode());
+        $request->setRecipientAddressStateOrProvinceCode($recipientRegionCode ?: $address->getRegionCode());
         $request->setRecipientAddressRegionCode($recipientRegionCode);
         $request->setRecipientAddressPostalCode($address->getPostcode());
         $request->setRecipientAddressCountryCode($address->getCountryId());
-        $request->setShippingMethod($shippingMethod->getMethod());
-        $request->setPackageWeight($order->getWeight());
-        $request->setPackages($orderShipment->getPackages());
-        $request->setBaseCurrencyCode($baseCurrencyCode);
-        $request->setStoreId($shipmentStoreId);
-
-        return $shipmentCarrier->requestToShipment($request);
     }
 }

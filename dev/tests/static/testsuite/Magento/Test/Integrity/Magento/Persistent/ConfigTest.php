@@ -19,7 +19,8 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getXsd()
     {
-        return '/app/code/Magento/Persistent/etc/persistent.xsd';
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        return $urnResolver->getRealPath('urn:magento:module:Magento_Persistent:etc/persistent.xsd');
     }
 
     /**

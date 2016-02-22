@@ -6,9 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Paypal\Test\TestCase\ExpressCheckoutFromProductPageTest">
-        <variation name="ExpressCheckoutFromProductPageTestVariation1">
-            <data name="description" xsi:type="string">MAGETWO-12415 - Check Out as a Guest using "Checkout with PayPal" button from Product Page and Free Shipping</data>
+    <testCase name="Magento\Paypal\Test\TestCase\ExpressCheckoutFromProductPageTest" summary="Guest Checkout using &quot;Checkout with PayPal&quot; button from Product Page and Free Shipping" ticketId="MAGETWO-12415">
+        <variation name="ExpressCheckoutFromProductPageTestVariation1" summary="Check Out as a Guest using 'Checkout with PayPal' button from Product Page and Free Shipping" ticketId="MAGETWO-12415">
             <data name="product" xsi:type="string">catalogProductSimple::simple_10_dollar</data>
             <data name="taxRule" xsi:type="string">us_ca_ny_rule</data>
             <data name="sandboxCustomer/dataset" xsi:type="string">sandbox_us_default</data>
@@ -28,10 +27,11 @@
             </data>
             <data name="payment/method" xsi:type="string">paypal_express</data>
             <data name="configData" xsi:type="string">paypal_express, freeshipping</data>
-            <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
+            <data name="tag" xsi:type="string">test_type:3rd_party_test_deprecated</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderGrandTotal" />
-            <constraint name="Magento\Sales\Test\Constraint\AssertOrderCommentsHistory" />
+            <constraint name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory" />
         </variation>
     </testCase>
 </config>

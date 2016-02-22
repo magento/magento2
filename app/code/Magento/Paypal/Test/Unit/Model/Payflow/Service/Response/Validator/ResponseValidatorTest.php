@@ -5,7 +5,8 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Validator;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
+use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Paypal\Model\Payflowpro;
 use Magento\Paypal\Model\Payflow\Service\Response\ValidatorInterface;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\ResponseValidator;
@@ -27,6 +28,11 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected $validatorMock;
 
+    /**
+     * @var Transparent|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $payflowFacade;
+
     protected function setUp()
     {
         $this->validatorMock = $this->getMockBuilder(
@@ -34,6 +40,10 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
         )
             ->setMethods(['validate'])
             ->getMockForAbstractClass();
+        $this->payflowFacade = $this->getMockBuilder(Transparent::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
 
         $this->responseValidator = new ResponseValidator([$this->validatorMock]);
     }
@@ -44,13 +54,13 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
      *
      * @dataProvider dataProviderForTestValidate
      */
-    public function testValidate(Object $response, $exactlyCount)
+    public function testValidate(DataObject $response, $exactlyCount)
     {
         $this->validatorMock->expects($this->exactly($exactlyCount))
             ->method('validate')
             ->with($response);
 
-        $this->responseValidator->validate($response);
+        $this->responseValidator->validate($response, $this->payflowFacade);
     }
 
     /**
@@ -60,15 +70,15 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
     {
         return [
             [
-                'response' => new Object(['result' => Payflowpro::RESPONSE_CODE_APPROVED]),
+                'response' => new DataObject(['result' => Payflowpro::RESPONSE_CODE_APPROVED]),
                 'exactlyCount' => 1
             ],
             [
-                'response' => new Object(['result' => Payflowpro::RESPONSE_CODE_FRAUDSERVICE_FILTER]),
+                'response' => new DataObject(['result' => Payflowpro::RESPONSE_CODE_FRAUDSERVICE_FILTER]),
                 'exactlyCount' => 1
             ],
             [
-                'response' => new Object(['result' => Payflowpro::RESPONSE_CODE_INVALID_AMOUNT]),
+                'response' => new DataObject(['result' => Payflowpro::RESPONSE_CODE_INVALID_AMOUNT]),
                 'exactlyCount' => 0
             ]
         ];
@@ -80,7 +90,7 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateFail()
     {
-        $response = new Object(
+        $response = new DataObject(
             [
                 'result' => Payflowpro::RESPONSE_CODE_APPROVED,
                 'respmsg' => 'Test error msg',
@@ -92,7 +102,7 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
             ->with($response)
             ->willReturn(false);
 
-        $this->responseValidator->validate($response);
+        $this->responseValidator->validate($response, $this->payflowFacade);
     }
 
     /**
@@ -101,7 +111,7 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testValidateUnknownCode()
     {
-        $response = new Object(
+        $response = new DataObject(
             [
                 'result' => 7777777777,
                 'respmsg' => 'Test error msg',
@@ -113,6 +123,6 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
             ->with($response)
             ->willReturn(false);
 
-        $this->responseValidator->validate($response);
+        $this->responseValidator->validate($response, $this->payflowFacade);
     }
 }

@@ -13,7 +13,7 @@ namespace Magento\ImportExport\Test\Unit\Model\Import;
 
 use Magento\ImportExport\Model\Import\AbstractEntity;
 
-class EntityAbstractTest extends \PHPUnit_Framework_TestCase
+class EntityAbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /**
      * Abstract import entity model
@@ -35,10 +35,12 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->_model = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Import\AbstractEntity',
-            $this->_getModelDependencies()
-        );
+        parent::setUp();
+
+        $this->_model = $this->getMockBuilder('Magento\ImportExport\Model\Import\AbstractEntity')
+            ->setConstructorArgs($this->_getModelDependencies())
+            ->setMethods(['_saveValidatedBunches'])
+            ->getMockForAbstractClass();
     }
 
     protected function tearDown()
@@ -53,11 +55,11 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
      */
     protected function _getModelDependencies()
     {
-        $string = new \Magento\Framework\Stdlib\String();
+        $string = new \Magento\Framework\Stdlib\StringUtils();
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $importFactory = $this->getMock('Magento\ImportExport\Model\ImportFactory', [], [], '', false);
-        $resourceHelper = $this->getMock('Magento\ImportExport\Model\Resource\Helper', [], [], '', false);
-        $resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $resourceHelper = $this->getMock('Magento\ImportExport\Model\ResourceModel\Helper', [], [], '', false);
+        $resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
 
         $data = [
             'coreString' => $string,
@@ -65,6 +67,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
             'importFactory' => $importFactory,
             'resourceHelper' => $resourceHelper,
             'resource' => $resource,
+            'errorAggregator' => $this->getErrorAggregatorObject(),
             'data' => [
                 'data_source_model' => 'not_used',
                 'connection' => 'not_used',
@@ -109,14 +112,14 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddRowError()
     {
-        $errorCode = 'error_code ';
+        $errorCode = 'error_code';
         $errorColumnName = 'error_column';
-        $this->_model->addRowError($errorCode . '%s', 0, $errorColumnName);
+        $this->_model->addRowError($errorCode . '%s', 0, $errorColumnName, $errorCode . ' %s');
 
-        $this->assertGreaterThan(0, $this->_model->getErrorsCount());
+        $this->assertGreaterThan(0, $this->_model->getErrorAggregator()->getErrorsCount());
 
-        $errors = $this->_model->getErrorMessages();
-        $this->assertArrayHasKey($errorCode . $errorColumnName, $errors);
+        $errors = $this->_model->getErrorAggregator()->getRowsGroupedByErrorCode();
+        $this->assertArrayHasKey($errorCode . ' ' . $errorColumnName, $errors);
     }
 
     /**
@@ -152,30 +155,9 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         $this->_model->addMessageTemplate($errorCode, $message);
 
         $this->_model->addRowError($errorCode, 0);
-        $errors = $this->_model->getErrorMessages();
+        $errors = $this->_model->getErrorAggregator()->getRowsGroupedByErrorCode();
 
         $this->assertArrayHasKey($message, $errors);
-    }
-
-    /**
-     * Test for method isDataValid()
-     */
-    public function testIsDataValid()
-    {
-        /** @var $model AbstractEntity|\PHPUnit_Framework_MockObject_MockObject */
-        $model = $this->getMockForAbstractClass(
-            'Magento\ImportExport\Model\Import\AbstractEntity',
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['validateData']
-        );
-        $model->expects($this->any())->method('validateData');
-        $this->assertTrue($model->isDataValid());
-        $model->addRowError('test', 1);
-        $this->assertFalse($model->isDataValid());
     }
 
     /**
@@ -417,8 +399,7 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
 
         $rowData[$attributeCode] = $data['invalid_value'];
         $this->assertFalse($this->_model->isAttributeValid($attributeCode, $attributeParams, $rowData, 0));
-
-        $this->assertEquals(1, $this->_model->getErrorsCount(), 'Wrong count of errors');
+        $this->assertEquals(1, $this->_model->getErrorAggregator()->getErrorsCount(), 'Wrong count of errors');
     }
 
     /**
@@ -525,7 +506,6 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
      * Test for method validateData()
      *
      * @covers \Magento\ImportExport\Model\Import\AbstractEntity::validateData
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateDataPermanentAttributes()
     {
@@ -537,43 +517,45 @@ class EntityAbstractTest extends \PHPUnit_Framework_TestCase
         $property->setAccessible(true);
         $property->setValue($this->_model, $permanentAttributes);
 
-        $this->_model->validateData();
+        $errorAggregator = $this->_model->validateData();
+        $this->assertEquals(1, $errorAggregator->getErrorsCount());
     }
 
     /**
      * Test for method validateData()
      *
      * @covers \Magento\ImportExport\Model\Import\AbstractEntity::validateData
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateDataEmptyColumnName()
     {
         $this->_createSourceAdapterMock(['']);
-        $this->_model->validateData();
+        $errorAggregator = $this->_model->validateData();
+        $this->assertEquals(1, $errorAggregator->getErrorsCount());
     }
 
     /**
      * Test for method validateData()
      *
      * @covers \Magento\ImportExport\Model\Import\AbstractEntity::validateData
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateDataColumnNameWithWhitespaces()
     {
         $this->_createSourceAdapterMock(['  ']);
         $this->_model->validateData();
+        $errorAggregator = $this->_model->validateData();
+        $this->assertEquals(1, $errorAggregator->getErrorsCount());
     }
 
     /**
      * Test for method validateData()
      *
      * @covers \Magento\ImportExport\Model\Import\AbstractEntity::validateData
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testValidateDataAttributeNames()
     {
         $this->_createSourceAdapterMock(['_test1']);
-        $this->_model->validateData();
+        $errorAggregator = $this->_model->validateData();
+        $this->assertEquals(1, $errorAggregator->getErrorsCount());
     }
 
     /**

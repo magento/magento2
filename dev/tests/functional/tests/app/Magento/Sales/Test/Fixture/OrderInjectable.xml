@@ -10,7 +10,7 @@
              module="Magento_Sales"
              type="flat"
              entity_type="sales_order"
-             collection="Magento\Sales\Model\Resource\Order\Collection"
+             collection="Magento\Sales\Model\ResourceModel\Order\Collection"
              repository_class="Magento\Sales\Test\Repository\OrderInjectable"
              handler_interface="Magento\Sales\Test\Handler\OrderInjectable\OrderInjectableInterface"
              class="Magento\Sales\Test\Fixture\OrderInjectable">

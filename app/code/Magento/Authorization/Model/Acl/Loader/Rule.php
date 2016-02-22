@@ -5,22 +5,24 @@
  */
 namespace Magento\Authorization\Model\Acl\Loader;
 
+use Magento\Framework\App\ResourceConnection;
+
 class Rule implements \Magento\Framework\Acl\LoaderInterface
 {
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
     /**
      * @param \Magento\Framework\Acl\RootResource $rootResource
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param array $data
      * @SuppressWarnings(PHPMD.UnusedFormalParameter):
      */
     public function __construct(
         \Magento\Framework\Acl\RootResource $rootResource,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         array $data = []
     ) {
         $this->_resource = $resource;
@@ -37,11 +39,11 @@ class Rule implements \Magento\Framework\Acl\LoaderInterface
     {
         $ruleTable = $this->_resource->getTableName("authorization_rule");
 
-        $adapter = $this->_resource->getConnection('core_read');
+        $connection = $this->_resource->getConnection();
 
-        $select = $adapter->select()->from(['r' => $ruleTable]);
+        $select = $connection->select()->from(['r' => $ruleTable]);
 
-        $rulesArr = $adapter->fetchAll($select);
+        $rulesArr = $connection->fetchAll($select);
 
         foreach ($rulesArr as $rule) {
             $role = $rule['role_id'];

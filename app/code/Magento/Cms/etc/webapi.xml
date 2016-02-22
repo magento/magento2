@@ -6,12 +6,12 @@
  */
 -->
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../app/code/Magento/Webapi/etc/webapi.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
     <!-- Cms Page -->
     <route url="/V1/cmsPage/:pageId" method="GET">
         <service class="Magento\Cms\Api\PageRepositoryInterface" method="getById"/>
         <resources>
-            <resource ref="Magento_Cms::page"/>
+            <resource ref="anonymous"/>
         </resources>
     </route>
     <route url="/V1/cmsPage/search" method="GET">
@@ -42,7 +42,7 @@
     <route url="/V1/cmsBlock/:blockId" method="GET">
         <service class="Magento\Cms\Api\BlockRepositoryInterface" method="getById"/>
         <resources>
-            <resource ref="Magento_Cms::block"/>
+            <resource ref="anonymous"/>
         </resources>
     </route>
     <route url="/V1/cmsBlock/search" method="GET">

@@ -8,7 +8,7 @@ namespace Magento\Catalog\Test\Unit\Model\Product\Attribute\Backend;
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\Attribute\Backend\Price
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Backend\Price
      */
     protected $model;
 

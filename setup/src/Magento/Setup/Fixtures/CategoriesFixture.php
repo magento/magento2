@@ -54,6 +54,7 @@ class CategoriesFixture extends Fixture
                 ->setPath($nestingPath[$groupNumber])
                 ->setLevel($nestingLevel[$groupNumber] + 1)
                 ->setAvailableSortBy('name')
+                ->setIsAnchor(false)
                 ->setDefaultSortBy('name')
                 ->setIsActive(true)
                 ->save();

@@ -31,7 +31,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->collection = $this->getMock(
-            '\Magento\Catalog\Model\Resource\Product\Collection',
+            '\Magento\Catalog\Model\ResourceModel\Product\Collection',
             [
                 '__wakeup',
                 'getSelect',

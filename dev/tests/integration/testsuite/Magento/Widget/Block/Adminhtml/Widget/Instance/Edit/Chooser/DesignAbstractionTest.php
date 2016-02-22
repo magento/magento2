@@ -58,7 +58,7 @@ class DesignAbstractionTest extends \PHPUnit_Framework_TestCase
         $this->_block = new DesignAbstraction(
             $objectManager->get('Magento\Framework\View\Element\Template\Context'),
             $processorFactoryMock,
-            $objectManager->get('Magento\Theme\Model\Resource\Theme\CollectionFactory'),
+            $objectManager->get('Magento\Theme\Model\ResourceModel\Theme\CollectionFactory'),
             $appState,
             [
                 'name' => 'design_abstractions',

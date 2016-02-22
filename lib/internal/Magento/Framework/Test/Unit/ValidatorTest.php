@@ -131,7 +131,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testAddValidator()
     {
-        $fooValidator = new \Magento\Framework\Validator\Test\Unit\Test\True();
+        $fooValidator = new \Magento\Framework\Validator\Test\Unit\Test\IsTrue();
         $classConstraint = new \Magento\Framework\Validator\Constraint($fooValidator, 'id');
         $propertyValidator = new \Magento\Framework\Validator\Constraint\Property($classConstraint, 'name', 'id');
 
@@ -154,7 +154,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetTranslator()
     {
-        $fooValidator = new \Magento\Framework\Validator\Test\Unit\Test\True();
+        $fooValidator = new \Magento\Framework\Validator\Test\Unit\Test\IsTrue();
         $this->_validator->addValidator($fooValidator);
         /** @var \Magento\Framework\Translate\AbstractAdapter $translator */
         $translator = $this->getMockBuilder('Magento\Framework\Translate\AbstractAdapter')->getMockForAbstractClass();

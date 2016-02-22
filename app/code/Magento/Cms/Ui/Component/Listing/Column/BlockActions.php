@@ -55,9 +55,9 @@ class BlockActions extends Column
      * Prepare Data Source
      *
      * @param array $dataSource
-     * @return void
+     * @return array
      */
-    public function prepareDataSource(array & $dataSource)
+    public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
@@ -71,15 +71,6 @@ class BlockActions extends Column
                                 ]
                             ),
                             'label' => __('Edit')
-                        ],
-                        'details' => [
-                            'href' => $this->urlBuilder->getUrl(
-                                static::URL_PATH_DETAILS,
-                                [
-                                    'block_id' => $item['block_id']
-                                ]
-                            ),
-                            'label' => __('Details')
                         ],
                         'delete' => [
                             'href' => $this->urlBuilder->getUrl(
@@ -98,5 +89,7 @@ class BlockActions extends Column
                 }
             }
         }
+
+        return $dataSource;
     }
 }

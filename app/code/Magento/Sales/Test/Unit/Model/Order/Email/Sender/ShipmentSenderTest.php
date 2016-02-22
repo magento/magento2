@@ -20,7 +20,7 @@ class ShipmentSenderTest extends AbstractSenderTest
     protected $shipmentMock;
 
     /**
-     * @var \Magento\Sales\Model\Resource\EntityAbstract|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\EntityAbstract|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $shipmentResourceMock;
 
@@ -29,7 +29,7 @@ class ShipmentSenderTest extends AbstractSenderTest
         $this->stepMockSetup();
 
         $this->shipmentResourceMock = $this->getMock(
-            '\Magento\Sales\Model\Resource\Order\Shipment',
+            '\Magento\Sales\Model\ResourceModel\Order\Shipment',
             ['saveAttribute'],
             [],
             '',

@@ -5,7 +5,6 @@
  */
 namespace Magento\CatalogRule\Plugin\Indexer\Product\Save;
 
-use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\Indexer\Product\ProductRuleProcessor;
 
 class ApplyRules
@@ -24,21 +23,24 @@ class ApplyRules
     }
 
     /**
-     * Apply catalog rules after product save
+     * Apply catalog rules after product resource model save
      *
-     * @param Product $subject
-     * @param Product $result
-     * @return Product
+     * @param \Magento\Catalog\Model\ResourceModel\Product $subject
+     * @param callable $proceed
+     * @param \Magento\Framework\Model\AbstractModel $product
+     * @return \Magento\Catalog\Model\ResourceModel\Product
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterSave(
-        Product $subject,
-        Product $result
+    public function aroundSave(
+        \Magento\Catalog\Model\ResourceModel\Product $subject,
+        callable $proceed,
+        \Magento\Framework\Model\AbstractModel $product
     ) {
-        if (!$result->getIsMassupdate()) {
-            $this->productRuleProcessor->reindexRow($result->getId());
+        $productResource = $proceed($product);
+        if (!$product->getIsMassupdate()) {
+            $this->productRuleProcessor->reindexRow($product->getId());
         }
-        return $result;
+        return $productResource;
     }
 }

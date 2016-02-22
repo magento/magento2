@@ -5,6 +5,7 @@
  */
 namespace Magento\Setup\Console\Command;
 
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Framework\App\ObjectManager;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,6 +14,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Magento\Framework\Api\Code\Generator\Mapper;
 use Magento\Framework\Api\Code\Generator\SearchResults;
 use Magento\Framework\Autoload\AutoloaderRegistry;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Interception\Code\Generator\Interceptor;
 use Magento\Framework\ObjectManager\Code\Generator\Converter;
 use Magento\Framework\ObjectManager\Code\Generator\Factory;
@@ -28,6 +30,7 @@ use Magento\Setup\Module\Di\Definition\Compressor;
 use Magento\Setup\Module\Di\Definition\Serializer\Igbinary;
 use Magento\Setup\Module\Di\Definition\Serializer\Standard;
 use \Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Code\Generator as CodeGenerator;
 
 /**
  * Command to generate all non-existing proxies and factories, and pre-compile class definitions,
@@ -54,6 +57,9 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
     const SERIALIZER_VALUE_IGBINARY = 'igbinary';
     /**#@- */
 
+    /** Command name */
+    const NAME = 'setup:di:compile-multi-tenant';
+
     /**
      * Object Manager
      *
@@ -78,11 +84,11 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
      *
      * @var array
      */
-    private $files;
+    private $files = [];
 
     /**
      *
-     * @var \Magento\Framework\Code\Generator
+     * @var CodeGenerator
      */
     private $generator;
 
@@ -93,15 +99,25 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
     private $log;
 
     /**
+     * @var ComponentRegistrar
+     */
+    private $componentRegistrar;
+
+    /**
      * Constructor
      *
      * @param ObjectManagerProvider $objectManagerProvider
      * @param DirectoryList $directoryList
+     * @param ComponentRegistrar $componentRegistrar
      */
-    public function __construct(ObjectManagerProvider $objectManagerProvider, DirectoryList $directoryList)
-    {
+    public function __construct(
+        ObjectManagerProvider $objectManagerProvider,
+        DirectoryList $directoryList,
+        ComponentRegistrar $componentRegistrar
+    ) {
         $this->objectManager = $objectManagerProvider->get();
         $this->directoryList = $directoryList;
+        $this->componentRegistrar = $componentRegistrar;
         parent::__construct();
     }
 
@@ -143,13 +159,41 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
                 'Allows to exclude Paths from compilation (default is #[\\\\/]m1[\\\\/]#i)'
             ),
         ];
-        $this->setName('setup:di:compile-multi-tenant')
+        $this->setName(self::NAME)
             ->setDescription(
                 'Generates all non-existing proxies and factories, and pre-compile class definitions, '
                 . 'inheritance information and plugin definitions'
             )
             ->setDefinition($options);
         parent::configure();
+    }
+
+    /**
+     * Get module directories exclude patterns
+     *
+     * @return array
+     */
+    private function getModuleExcludePatterns()
+    {
+        $modulesExcludePatterns = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $modulePath) {
+            $modulesExcludePatterns[] = "#^" . $modulePath . "/Test#";
+        }
+        return $modulesExcludePatterns;
+    }
+
+    /**
+     * Get library directories exclude patterns
+     *
+     * @return array
+     */
+    private function getLibraryExcludePatterns()
+    {
+        $libraryExcludePatterns = [];
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $libraryPath) {
+            $libraryExcludePatterns[] = "#^" . $libraryPath . "/([\\w]+/)?Test#";
+        }
+        return $libraryExcludePatterns;
     }
 
     /**
@@ -165,13 +209,13 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
 
         $generationDir = $input->getOption(self::INPUT_KEY_GENERATION) ? $input->getOption(self::INPUT_KEY_GENERATION)
             : $this->directoryList->getPath(DirectoryList::GENERATION);
+        $modulesExcludePatterns = $this->getModuleExcludePatterns();
         $testExcludePatterns = [
-            "#^" . $this->directoryList->getPath(DirectoryList::MODULES) . "/[\\w]+/[\\w]+/Test#",
-            "#^" . $this->directoryList->getPath(DirectoryList::LIB_INTERNAL)
-            . "/[\\w]+/[\\w]+/([\\w]+/)?Test#",
             "#^" . $this->directoryList->getPath(DirectoryList::SETUP) . "/[\\w]+/[\\w]+/Test#",
             "#^" . $this->directoryList->getRoot() . "/dev/tools/Magento/Tools/[\\w]+/Test#"
         ];
+        $librariesExcludePatterns = $this->getLibraryExcludePatterns();
+        $testExcludePatterns = array_merge($testExcludePatterns, $modulesExcludePatterns, $librariesExcludePatterns);
         $fileExcludePatterns = $input->getOption('exclude-pattern') ?
             [$input->getOption(self::INPUT_KEY_EXCLUDE_PATTERN)] : ['#[\\\\/]M1[\\\\/]#i'];
         $fileExcludePatterns = array_merge($fileExcludePatterns, $testExcludePatterns);
@@ -210,9 +254,16 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
     {
         // 1.1 Code scan
         $filePatterns = ['php' => '/.*\.php$/', 'di' => '/\/etc\/([a-zA-Z_]*\/di|di)\.xml$/'];
-        $codeScanDir = $this->directoryList->getRoot() . '/app';
         $directoryScanner = new Scanner\DirectoryScanner();
-        $this->files = $directoryScanner->scan($codeScanDir, $filePatterns, $fileExcludePatterns);
+        foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $codeScanDir) {
+            $this->files = array_merge_recursive(
+                $this->files,
+                $directoryScanner->scan($codeScanDir, $filePatterns, $fileExcludePatterns)
+            );
+        }
+        $this->files['di'][] = $this->directoryList->getPath(
+            \Magento\Framework\App\Filesystem\DirectoryList::CONFIG
+        ) . '/di.xml';
         $this->files['additional'] = [$input->getOption(self::INPUT_KEY_EXTRA_CLASSES_FILE)];
         $repositoryScanner = new Scanner\RepositoryScanner();
         $repositories = $repositoryScanner->collectEntities($this->files['di']);
@@ -224,26 +275,13 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
         $interceptorScanner = new Scanner\XmlInterceptorScanner();
         $this->entities['interceptors'] = $interceptorScanner->collectEntities($this->files['di']);
         // 1.2 Generation of Factory and Additional Classes
-        $generatorIo = new \Magento\Framework\Code\Generator\Io(
-            new \Magento\Framework\Filesystem\Driver\File(),
-            $generationDir
+        $generatorIo = $this->objectManager->create(
+            'Magento\Framework\Code\Generator\Io',
+            ['generationDirectory' => $generationDir]
         );
-        $this->generator = new \Magento\Framework\Code\Generator(
-            $generatorIo,
-            [
-                Interceptor::ENTITY_TYPE => 'Magento\Framework\Interception\Code\Generator\Interceptor',
-                Proxy::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Proxy',
-                Factory::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Factory',
-                Mapper::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\Mapper',
-                Persistor::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Persistor',
-                Repository::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Repository',
-                Converter::ENTITY_TYPE => 'Magento\Framework\ObjectManager\Code\Generator\Converter',
-                SearchResults::ENTITY_TYPE => 'Magento\Framework\Api\Code\Generator\SearchResults',
-                ExtensionAttributesInterfaceGenerator::ENTITY_TYPE =>
-                    'Magento\Framework\Api\Code\Generator\ExtensionAttributesInterfaceGenerator',
-                ExtensionAttributesGenerator::ENTITY_TYPE =>
-                    'Magento\Framework\Api\Code\Generator\ExtensionAttributesGenerator'
-            ]
+        $this->generator = $this->objectManager->create(
+            'Magento\Framework\Code\Generator',
+            ['ioObject' => $generatorIo]
         );
         /** Initialize object manager for code generation based on configs */
         $this->generator->setObjectManager($this->objectManager);
@@ -252,13 +290,13 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
 
         foreach ($repositories as $entityName) {
             switch ($this->generator->generateClass($entityName)) {
-                case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
+                case CodeGenerator::GENERATION_SUCCESS:
                     $this->log->add(Log::GENERATION_SUCCESS, $entityName);
                     break;
-                case \Magento\Framework\Code\Generator::GENERATION_ERROR:
+                case CodeGenerator::GENERATION_ERROR:
                     $this->log->add(Log::GENERATION_ERROR, $entityName);
                     break;
-                case \Magento\Framework\Code\Generator::GENERATION_SKIP:
+                case CodeGenerator::GENERATION_SKIP:
                 default:
                     //no log
                     break;
@@ -268,13 +306,13 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
             sort($this->entities[$type]);
             foreach ($this->entities[$type] as $entityName) {
                 switch ($this->generator->generateClass($entityName)) {
-                    case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
+                    case CodeGenerator::GENERATION_SUCCESS:
                         $this->log->add(Log::GENERATION_SUCCESS, $entityName);
                         break;
-                    case \Magento\Framework\Code\Generator::GENERATION_ERROR:
+                    case CodeGenerator::GENERATION_ERROR:
                         $this->log->add(Log::GENERATION_ERROR, $entityName);
                         break;
-                    case \Magento\Framework\Code\Generator::GENERATION_SKIP:
+                    case CodeGenerator::GENERATION_SKIP:
                     default:
                         //no log
                         break;
@@ -300,11 +338,14 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
         $relationsFile = $diDir . '/relations.ser';
         $pluginDefFile = $diDir . '/plugins.ser';
         $compilationDirs = [
-            $this->directoryList->getPath(DirectoryList::MODULES),
-            $this->directoryList->getPath(DirectoryList::LIB_INTERNAL) . '/Magento',
             $this->directoryList->getPath(DirectoryList::SETUP) . '/Magento/Setup/Module',
             $this->directoryList->getRoot() . '/dev/tools/Magento/Tools',
         ];
+        $compilationDirs = array_merge(
+            $compilationDirs,
+            $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE),
+            $this->componentRegistrar->getPaths(ComponentRegistrar::LIBRARY)
+        );
         $serializer = $input->getOption(self::INPUT_KEY_SERIALIZER) == Igbinary::NAME ? new Igbinary() : new Standard();
         // 2.1 Code scan
         $validator = new \Magento\Framework\Code\Validator();
@@ -324,7 +365,9 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
                 $directoryInstancesNamesList->getList($path);
             }
         }
-        $inheritanceScanner = new Scanner\InheritanceInterceptorScanner();
+        $inheritanceScanner = new Scanner\InheritanceInterceptorScanner(
+            new \Magento\Framework\ObjectManager\InterceptableValidator()
+        );
         $this->entities['interceptors'] = $inheritanceScanner->collectEntities(
             get_declared_classes(),
             $this->entities['interceptors']
@@ -333,13 +376,13 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
         foreach (['interceptors', 'di'] as $type) {
             foreach ($this->entities[$type] as $entityName) {
                 switch ($this->generator->generateClass($entityName)) {
-                    case \Magento\Framework\Code\Generator::GENERATION_SUCCESS:
+                    case CodeGenerator::GENERATION_SUCCESS:
                         $this->log->add(Log::GENERATION_SUCCESS, $entityName);
                         break;
-                    case \Magento\Framework\Code\Generator::GENERATION_ERROR:
+                    case CodeGenerator::GENERATION_ERROR:
                         $this->log->add(Log::GENERATION_ERROR, $entityName);
                         break;
-                    case \Magento\Framework\Code\Generator::GENERATION_SKIP:
+                    case CodeGenerator::GENERATION_SKIP:
                     default:
                         //no log
                         break;
@@ -350,8 +393,9 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
         $directoryInstancesNamesList->getList($generationDir);
         $relations = $directoryInstancesNamesList->getRelations();
         // 2.2 Compression
-        if (!file_exists(dirname($relationsFile))) {
-            mkdir(dirname($relationsFile), 0777, true);
+        $relationsFileDir = dirname($relationsFile);
+        if (!file_exists($relationsFileDir)) {
+            mkdir($relationsFileDir, DriverInterface::WRITEABLE_DIRECTORY_MODE, true);
         }
         $relations = array_filter($relations);
         file_put_contents($relationsFile, $serializer->serialize($relations));
@@ -367,8 +411,9 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
             }
         }
         $outputContent = $serializer->serialize($pluginDefinitions);
-        if (!file_exists(dirname($pluginDefFile))) {
-            mkdir(dirname($pluginDefFile), 0777, true);
+        $pluginDefFileDir = dirname($pluginDefFile);
+        if (!file_exists($pluginDefFileDir)) {
+            mkdir($pluginDefFileDir, DriverInterface::WRITEABLE_DIRECTORY_MODE, true);
         }
         file_put_contents($pluginDefFile, $outputContent);
     }

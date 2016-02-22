@@ -29,7 +29,7 @@ class ChildrenCategoriesProviderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getPath', 'getResourceCollection', 'getResource', 'getLevel', '__wakeup', 'isObjectNew'])
             ->getMock();
         $categoryCollection = $this->getMockBuilder(
-            'Magento\Catalog\Model\Resource\Collection\AbstractCollection'
+            'Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection'
         )->disableOriginalConstructor()->setMethods(['addAttributeToSelect', 'addIdFilter'])->getMock();
         $this->category->expects($this->any())->method('getPath')->willReturn('category-path');
         $this->category->expects($this->any())->method('getResourceCollection')->willReturn($categoryCollection);
@@ -38,10 +38,10 @@ class ChildrenCategoriesProviderTest extends \PHPUnit_Framework_TestCase
         $this->select = $this->getMockBuilder('Magento\Framework\DB\Select')
             ->disableOriginalConstructor()->setMethods(['from', 'where', 'deleteFromSelect'])->getMock();
         $this->connection = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
-        $categoryResource = $this->getMockBuilder('Magento\Catalog\Model\Resource\Category')
+        $categoryResource = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Category')
             ->disableOriginalConstructor()->getMock();
         $this->category->expects($this->any())->method('getResource')->willReturn($categoryResource);
-        $categoryResource->expects($this->any())->method('getReadConnection')->willReturn($this->connection);
+        $categoryResource->expects($this->any())->method('getConnection')->willReturn($this->connection);
         $this->connection->expects($this->any())->method('select')->willReturn($this->select);
         $this->connection->expects($this->any())->method('quoteIdentifier')->willReturnArgument(0);
         $this->select->expects($this->any())->method('from')->willReturnSelf();

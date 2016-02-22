@@ -6,9 +6,10 @@
 
 require __DIR__ . '/../../../Magento/Bundle/_files/product.php';
 
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-$product->load(3);
+$product = $productRepository->get('bundle-product');
 
 /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
 //Load options
@@ -27,7 +28,7 @@ foreach ($optionCollection as $option) {
     $bundleOptionsQty[$option->getId()] = 1;
 }
 
-$requestInfo = new \Magento\Framework\Object(
+$requestInfo = new \Magento\Framework\DataObject(
     ['qty' => 1, 'bundle_option' => $bundleOptions, 'bundle_option_qty' => $bundleOptionsQty]
 );
 

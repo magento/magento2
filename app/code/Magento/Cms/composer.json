@@ -2,31 +2,33 @@
     "name": "magento/module-cms",
     "description": "N/A",
     "require": {
-        "php": "~5.5.0|~5.6.0",
-        "magento/module-store": "1.0.0-beta",
-        "magento/module-theme": "1.0.0-beta",
-        "magento/module-widget": "1.0.0-beta",
-        "magento/module-backend": "1.0.0-beta",
-        "magento/module-catalog": "1.0.0-beta",
-        "magento/module-email": "1.0.0-beta",
-        "magento/module-ui": "1.0.0-beta",
-        "magento/module-variable": "1.0.0-beta",
-        "magento/module-media-storage": "1.0.0-beta",
-        "magento/framework": "1.0.0-beta",
-        "magento/magento-composer-installer": "*"
+        "php": "~5.5.0|~5.6.0|~7.0.0",
+        "magento/module-store": "100.0.*",
+        "magento/module-theme": "100.0.*",
+        "magento/module-widget": "100.0.*",
+        "magento/module-backend": "100.0.*",
+        "magento/module-catalog": "100.0.*",
+        "magento/module-email": "100.0.*",
+        "magento/module-ui": "100.0.*",
+        "magento/module-variable": "100.0.*",
+        "magento/module-media-storage": "100.0.*",
+        "magento/framework": "100.0.*"
+    },
+    "suggest": {
+        "magento/module-cms-sample-data": "Sample Data version:100.0.*"
     },
     "type": "magento2-module",
-    "version": "1.0.0-beta",
+    "version": "100.0.2",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "extra": {
-        "map": [
-            [
-                "*",
-                "Magento/Cms"
-            ]
-        ]
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\Cms\\": ""
+        }
     }
 }

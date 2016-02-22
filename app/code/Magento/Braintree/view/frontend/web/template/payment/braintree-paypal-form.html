@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
+<!-- ko if: (canInitialise())-->
 <div class="payment-method" data-bind="css: {'_active': (getCode() == isChecked())}">
     <div class="payment-method-title field choice">
         <input type="radio"
@@ -16,11 +17,9 @@
     </div>
 
     <div class="payment-method-content">
-        <div class="payment-method-billing-address">
-            <!-- ko foreach: $parent.getRegion(getBillingAddressFormName()) -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
-            <!--/ko-->
-        </div>
+        <!-- ko foreach: getRegion('messages') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
         <fieldset class="fieldset" data-bind='attr: {id: "payment_form_" + getCode()}'>
             <div data-bind="afterRender: initPayPalContainer.bind($data)"></div>
         </fieldset>
@@ -29,6 +28,7 @@
             <!-- ko template: getTemplate() --><!-- /ko -->
             <!--/ko-->
         </div>
+        <!-- ko if: isValid() -->
         <div class="actions-toolbar">
             <div class="primary">
                 <button data-role="review-save"
@@ -36,15 +36,14 @@
                         data-bind="
                         attr: {title: $t('Place Order')},
                         enable: (getCode() == isChecked()),
-                        click: placeOrder,
-                        css: {disabled: !isPlaceOrderActionAllowed()}
-                        "
+                        click: placeOrder"
                         class="action primary checkout"
                         disabled>
-                    <span data-bind="text: $t('Place Order')"></span>
+                    <span data-bind="i18n: 'Place Order'"></span>
                 </button>
             </div>
         </div>
+        <!--/ko-->
     </div>
 </div>
-
+<!-- /ko -->

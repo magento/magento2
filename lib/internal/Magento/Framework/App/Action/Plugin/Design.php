@@ -23,19 +23,16 @@ class Design
     /**
      * Initialize design
      *
-     * @param \Magento\Framework\App\Action\Action $subject
-     * @param callable $proceed
+     * @param \Magento\Framework\App\ActionInterface $subject
      * @param \Magento\Framework\App\RequestInterface $request
      *
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDispatch(
-        \Magento\Framework\App\Action\Action $subject,
-        \Closure $proceed,
+    public function beforeDispatch(
+        \Magento\Framework\App\ActionInterface $subject,
         \Magento\Framework\App\RequestInterface $request
     ) {
         $this->_designLoader->load();
-        return $proceed($request);
     }
 }

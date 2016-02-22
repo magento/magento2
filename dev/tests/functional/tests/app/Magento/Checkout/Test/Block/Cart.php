@@ -16,13 +16,13 @@ use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
  * Class Cart
- * Shopping cart block
+ * Shopping Cart block
  */
 class Cart extends Block
 {
     // @codingStandardsIgnoreStart
     /**
-     * Selector for cart item block
+     * Locator value for correspondent "Shopping Cart item" block.
      *
      * @var string
      */
@@ -30,42 +30,87 @@ class Cart extends Block
     // @codingStandardsIgnoreEnd
 
     /**
-     * Proceed to checkout block
+     * Locator value for "Proceed to One Page Checkout" block.
      *
      * @var string
      */
     protected $onepageLinkBlock = '.action.primary.checkout';
 
     /**
-     * 'Clear Shopping Cart' button
+     * Locator value for "Clear Shopping Cart" button.
      *
      * @var string
      */
     protected $clearShoppingCart = '#empty_cart_button';
 
     /**
-     * 'Update Shopping Cart' button
+     * Locator value for "Update Shopping Cart" button.
      *
      * @var string
      */
     protected $updateShoppingCart = '.update[name="update_cart_action"]';
 
     /**
-     * Cart empty block selector
+     * Locator value for "Check out with PayPal" button.
+     *
+     * @var string
+     */
+    protected $paypalCheckoutButton = '[data-action=checkout-form-submit]';
+
+    /**
+     * Locator value for "Check out with PayPal" button.
+     *
+     * @var string
+     */
+    protected $inContextPaypalCheckoutButton = '#paypal-express-in-context-mini-cart';
+
+    /**
+     * Locator value for "Check out with Braintree PayPal" button.
+     *
+     * @var string
+     */
+    protected $braintreePaypalCheckoutButton = './/button[contains(@id, "braintree-paypal-mini-cart")]';
+
+    /**
+     * Locator value for "empty Shopping Cart" block.
      *
      * @var string
      */
     protected $cartEmpty = '.cart-empty';
 
     /**
-     * Cart container selector
+     * Locator value for "Shopping Cart" container.
      *
      * @var string
      */
     protected $cartContainer = '.cart-container';
 
     /**
-     * Get cart item block
+     * Locator value for "Remove Product" button.
+     *
+     * @var string
+     */
+    protected $deleteItemButton = 'a.action.action-delete';
+
+    /**
+     * PayPal load spinner.
+     *
+     * @var string
+     */
+    protected $preloaderSpinner = '#preloaderSpinner';
+
+    /**
+     * Wait for PayPal page is loaded.
+     *
+     * @return void
+     */
+    public function waitForFormLoaded()
+    {
+        $this->waitForElementNotVisible($this->preloaderSpinner);
+    }
+
+    /**
+     * Get Shopping Cart item.
      *
      * @param FixtureInterface $product
      * @return CartItem
@@ -93,7 +138,7 @@ class Cart extends Block
     }
 
     /**
-     * Get proceed to checkout block
+     * Get "Proceed to One Page Checkout" block.
      *
      * @return Link
      */
@@ -105,17 +150,39 @@ class Cart extends Block
     }
 
     /**
-     * Press 'Check out with PayPal' button
+     * Click "Check out with Braintree PayPal" button.
+     *
+     * @return void
+     */
+    public function braintreePaypalCheckout()
+    {
+        $this->_rootElement->find($this->braintreePaypalCheckoutButton, Locator::SELECTOR_XPATH)
+            ->click();
+    }
+
+    /**
+     * Click "Check out with PayPal" button.
      *
      * @return void
      */
     public function paypalCheckout()
     {
-        $this->_rootElement->find('[data-action=checkout-form-submit]', Locator::SELECTOR_CSS)->click();
+        $this->_rootElement->find($this->paypalCheckoutButton)->click();
     }
 
     /**
-     * Returns the total discount price
+     * Click "Check out with PayPal" button.
+     */
+    public function inContextPaypalCheckout()
+    {
+        $this->_rootElement->find($this->inContextPaypalCheckoutButton)->click();
+        $this->browser->selectWindow();
+        $this->waitForFormLoaded();
+        $this->browser->closeWindow();
+    }
+
+    /**
+     * Get total discount Price value.
      *
      * @return string
      * @throws Exception
@@ -135,20 +202,19 @@ class Cart extends Block
     }
 
     /**
-     * Clear shopping cart
+     * Clear Shopping Cart.
      *
      * @return void
      */
     public function clearShoppingCart()
     {
-        $clearShoppingCart = $this->_rootElement->find($this->clearShoppingCart);
-        if ($clearShoppingCart->isVisible()) {
-            $clearShoppingCart->click();
+        while (!$this->cartIsEmpty()) {
+            $this->_rootElement->find($this->deleteItemButton)->click();
         }
     }
 
     /**
-     * Check if a product has been successfully added to the cart
+     * Check if Product is present in Shopping Cart or not.
      *
      * @param FixtureInterface $product
      * @return boolean
@@ -159,27 +225,29 @@ class Cart extends Block
     }
 
     /**
-     * Update shopping cart
+     * Update Shopping Cart.
      *
      * @return void
      */
     public function updateShoppingCart()
     {
-        $this->_rootElement->find($this->updateShoppingCart, Locator::SELECTOR_CSS)->click();
+        $this->_rootElement->find($this->updateShoppingCart)->click();
     }
 
     /**
-     * Check that cart is empty
+     * Check if Shopping Cart is empty or not.
      *
      * @return bool
      */
     public function cartIsEmpty()
     {
-        return $this->_rootElement->find($this->cartEmpty, Locator::SELECTOR_CSS)->isVisible();
+        return $this->_rootElement->find($this->cartEmpty)->isVisible();
     }
 
     /**
-     * Wait while cart container is loaded
+     * Wait while Shopping Cart container is loaded.
+     *
+     * @return void
      */
     public function waitCartContainerLoading()
     {

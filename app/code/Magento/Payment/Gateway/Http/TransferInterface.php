@@ -5,6 +5,11 @@
  */
 namespace Magento\Payment\Gateway\Http;
 
+/**
+ * Interface TransferInterface
+ * @package Magento\Payment\Gateway\Http
+ * @api
+ */
 interface TransferInterface
 {
     /**
@@ -38,7 +43,7 @@ interface TransferInterface
     /**
      * Returns request body
      *
-     * @return array
+     * @return array|string
      */
     public function getBody();
 
@@ -48,4 +53,18 @@ interface TransferInterface
      * @return string
      */
     public function getUri();
+
+    /**
+     * Returns Auth username
+     *
+     * @return string
+     */
+    public function getAuthUsername();
+
+    /**
+     * Returns Auth password
+     *
+     * @return string
+     */
+    public function getAuthPassword();
 }

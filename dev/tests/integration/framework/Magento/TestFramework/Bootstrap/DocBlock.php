@@ -54,6 +54,7 @@ class DocBlock
             new \Magento\TestFramework\Isolation\DeploymentConfig(),
             new \Magento\TestFramework\Annotation\AppIsolation($application),
             new \Magento\TestFramework\Annotation\ConfigFixture(),
+            new \Magento\TestFramework\Annotation\DataFixtureBeforeTransaction($this->_fixturesBaseDir),
             new \Magento\TestFramework\Event\Transaction(
                 new \Magento\TestFramework\EventManager(
                     [
@@ -62,6 +63,7 @@ class DocBlock
                     ]
                 )
             ),
+            new \Magento\TestFramework\Annotation\ComponentRegistrarFixture($this->_fixturesBaseDir),
             new \Magento\TestFramework\Annotation\AppArea($application),
             new \Magento\TestFramework\Annotation\Cache($application),
             new \Magento\TestFramework\Annotation\AdminConfigFixture()

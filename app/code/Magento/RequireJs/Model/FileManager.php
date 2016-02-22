@@ -83,9 +83,7 @@ class FileManager
      */
     public function createRequireJsMixinsAsset()
     {
-        $relPath = $this->config->getMixinsFileRelativePath();
-        $this->ensureSourceFile($relPath);
-        return $this->assetRepo->createArbitrary($relPath, '');
+        return $this->assetRepo->createArbitrary($this->config->getMixinsFileRelativePath(), '');
     }
 
     /**
@@ -172,5 +170,19 @@ class FileManager
         }
 
         return $bundles;
+    }
+
+    /**
+     * Remove all bundles from pool
+     *
+     * @return bool
+     */
+    public function clearBundleJsPool()
+    {
+        $dirWrite = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
+        /** @var $context \Magento\Framework\View\Asset\File\FallbackContext */
+        $context = $this->assetRepo->getStaticViewFileContext();
+        $bundleDir = $context->getPath() . '/' . Config::BUNDLE_JS_DIR;
+        return $dirWrite->delete($bundleDir);
     }
 }
