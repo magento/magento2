@@ -29,7 +29,7 @@ class AssertNewsletterSuccessCreateMessage extends AbstractConstraint
      */
     public function processAssert(TemplateIndex $templateIndex)
     {
-        $actualMessage = $templateIndex->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $templateIndex->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $actualMessage,

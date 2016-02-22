@@ -10,7 +10,7 @@
              module="Magento_Store"
              type="flat"
              entity_type="store_group"
-             collection="Magento\Store\Model\Resource\Group\Collection"
+             collection="Magento\Store\Model\ResourceModel\Group\Collection"
              repository_class="Magento\Store\Test\Repository\StoreGroup"
              handler_interface="Magento\Store\Test\Handler\StoreGroup\StoreGroupInterface"
              class="Magento\Store\Test\Fixture\StoreGroup">

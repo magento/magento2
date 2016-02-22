@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Reports\Test\TestCase\SalesCouponReportEntityTest">
+    <testCase name="Magento\Reports\Test\TestCase\SalesCouponReportEntityTest" summary="Sales Coupon Report" ticketId="MAGETWO-28190">
         <variation name="SalesCouponReportEntityTestVariation1">
             <data name="order/dataset" xsi:type="string">with_coupon</data>
             <data name="viewsReport/report_type" xsi:type="string">Order Created</data>

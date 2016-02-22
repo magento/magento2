@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Search\Dynamic\Algorithm;
 
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Search\Adapter\OptionsInterface;
 use Magento\Framework\Search\Dynamic\Algorithm;
 use Magento\Framework\Search\Dynamic\DataProviderInterface;
@@ -45,9 +46,12 @@ class Improved implements AlgorithmInterface
     /**
      * {@inheritdoc}
      */
-    public function getItems(BucketInterface $bucket, array $dimensions, array $entityIds)
-    {
-        $aggregations = $this->dataProvider->getAggregations($entityIds);
+    public function getItems(
+        BucketInterface $bucket,
+        array $dimensions,
+        \Magento\Framework\Search\Dynamic\EntityStorage $entityStorage
+    ) {
+        $aggregations = $this->dataProvider->getAggregations($entityStorage);
 
         $options = $this->options->get();
         if ($aggregations['count'] < $options['interval_division_limit']) {
@@ -62,7 +66,7 @@ class Improved implements AlgorithmInterface
 
         $this->algorithm->setLimits($aggregations['min'], $aggregations['max'] + 0.01);
 
-        $interval = $this->dataProvider->getInterval($bucket, $dimensions, $entityIds);
+        $interval = $this->dataProvider->getInterval($bucket, $dimensions, $entityStorage);
         $data = $this->algorithm->calculateSeparators($interval);
 
         $data[0]['from'] = ''; // We should not calculate min and max value

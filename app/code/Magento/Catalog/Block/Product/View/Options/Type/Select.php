@@ -59,7 +59,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                 );
                 $select->addOption(
                     $_value->getOptionTypeId(),
-                    $_value->getTitle() . ' ' . $priceStr . '',
+                    $_value->getTitle() . ' ' . strip_tags($priceStr) . '',
                     ['price' => $this->pricingHelper->currencyByStore($_value->getPrice(true), $store, false)]
                 );
             }
@@ -69,6 +69,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
             if (!$this->getSkipJsReloadPrice()) {
                 $extraParams .= ' onchange="opConfig.reloadPrice()"';
             }
+            $extraParams .= ' data-selector="' . $select->getName() . '"';
             $select->setExtraParams($extraParams);
 
             if ($configValue) {
@@ -97,6 +98,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                             ' product-custom-option" name="options[' .
                             $_option->getId() .
                             ']"' .
+                            ' data-selector="options[' . $_option->getId() . ']"' .
                             ($this->getSkipJsReloadPrice() ? '' : ' onclick="opConfig.reloadPrice()"') .
                             ' value="" checked="checked" /><label class="label admin__field-label" for="options_' .
                             $_option->getId() .
@@ -128,6 +130,11 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                     $checked = $configValue == $htmlValue ? 'checked' : '';
                 }
 
+                $dataSelector = 'options[' . $_option->getId() . ']';
+                if ($arraySign) {
+                    $dataSelector .= '[' . $htmlValue . ']';
+                }
+
                 $selectHtml .= '<div class="field choice admin__field admin__field-option' .
                     $require .
                     '">' .
@@ -142,7 +149,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                     ' name="options[' .
                     $_option->getId() .
                     ']' .
-                    (!empty($arraySign) ? '[' . $htmlValue . ']' : '') .
+                    $arraySign .
                     '" id="options_' .
                     $_option->getId() .
                     '_' .
@@ -151,6 +158,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                     $htmlValue .
                     '" ' .
                     $checked .
+                    ' data-selector="' . $dataSelector . '"' .
                     ' price="' .
                     $this->pricingHelper->currencyByStore($_value->getPrice(true), $store, false) .
                     '" />' .
@@ -160,7 +168,7 @@ class Select extends \Magento\Catalog\Block\Product\View\Options\AbstractOptions
                     $count .
                     '"><span>' .
                     $_value->getTitle() .
-                    '</span>' .
+                    '</span> ' .
                     $priceStr .
                     '</label>';
                 $selectHtml .= '</div>';

@@ -18,7 +18,10 @@ class Edit extends \Magento\Paypal\Controller\Express\AbstractExpress
         try {
             $this->getResponse()->setRedirect($this->_config->getExpressCheckoutEditUrl($this->_initToken()));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addExceptionMessage(
+                $e,
+                $e->getMessage()
+            );
             $this->_redirect('*/*/review');
         }
     }

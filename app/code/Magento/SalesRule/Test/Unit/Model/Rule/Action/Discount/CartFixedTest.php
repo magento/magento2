@@ -49,7 +49,7 @@ class CartFixedTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->rule = $this->getMock('Magento\Framework\Object', null, [], 'Rule', true);
+        $this->rule = $this->getMock('Magento\Framework\DataObject', null, [], 'Rule', true);
         $this->item = $this->getMock('Magento\Quote\Model\Quote\Item\AbstractItem', [], [], '', false);
         $this->data = $this->getMock('Magento\SalesRule\Model\Rule\Action\Discount\Data', null);
 

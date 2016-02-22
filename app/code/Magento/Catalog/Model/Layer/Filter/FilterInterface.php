@@ -87,7 +87,7 @@ interface FilterInterface
     /**
      * Get attribute model associated with filter
      *
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getAttributeModel();

@@ -9,23 +9,25 @@ define(
         'Magento_Checkout/js/view/summary/item/details/subtotal'
     ],
     function (subtotal) {
-        "use strict";
+        'use strict';
+
         var displayPriceMode = window.checkoutConfig.reviewItemPriceDisplayMode || 'including';
+
         return subtotal.extend({
             defaults: {
                 displayPriceMode: displayPriceMode,
                 template: 'Magento_Tax/checkout/summary/item/details/subtotal'
             },
-            isPriceInclTaxDisplayed: function() {
+            isPriceInclTaxDisplayed: function () {
                 return 'both' == displayPriceMode || 'including' == displayPriceMode;
             },
-            isPriceExclTaxDisplayed: function() {
+            isPriceExclTaxDisplayed: function () {
                 return 'both' == displayPriceMode || 'excluding' == displayPriceMode;
             },
-            getValueInclTax: function(quoteItem) {
+            getValueInclTax: function (quoteItem) {
                 return this.getFormattedPrice(quoteItem['row_total_incl_tax']);
             },
-            getValueExclTax: function(quoteItem) {
+            getValueExclTax: function (quoteItem) {
                 return this.getFormattedPrice(quoteItem['row_total']);
             }
 

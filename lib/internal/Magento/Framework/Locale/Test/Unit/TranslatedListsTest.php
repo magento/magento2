@@ -44,6 +44,7 @@ class TranslatedListsTest extends \PHPUnit_Framework_TestCase
     public function testGetCountryTranslation()
     {
         $this->assertNull($this->listsModel->getCountryTranslation(null));
+        $this->assertNull($this->listsModel->getCountryTranslation(null, 'en_US'));
     }
 
     public function testGetOptionAllCurrencies()
@@ -71,12 +72,14 @@ class TranslatedListsTest extends \PHPUnit_Framework_TestCase
         $expectedResults = ['USD', 'EUR', 'GBP', 'UAH'];
 
         $currencyList = $this->listsModel->getOptionCurrencies();
+        $currencyCodes = array_map(
+            function ($data) {
+                return $data['value'];
+            },
+            $currencyList
+        );
         foreach ($expectedResults as $value) {
-            $found = false;
-            foreach ($currencyList as $item) {
-                $found = $found || ($value == $item['value']);
-            }
-            $this->assertTrue($found);
+            $this->assertContains($value, $currencyCodes);
         }
     }
 

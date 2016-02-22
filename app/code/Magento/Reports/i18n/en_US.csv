@@ -147,7 +147,7 @@ Reviews,Reviews
 "Customers Report","Customers Report"
 "Product Reviews Report","Product Reviews Report"
 "Sales Report","Sales Report"
-"Best Sellers Report","Best Sellers Report"
+"Bestsellers Report","Bestsellers Report"
 "Tax Report","Tax Report"
 "Shipping Report","Shipping Report"
 "Invoice Report","Invoice Report"
@@ -170,7 +170,7 @@ Statistics,Statistics
 "Most Viewed Products Report","Most Viewed Products Report"
 "Show By","Show By"
 "Select Date","Select Date"
-"Customers that have wish list: %1%","Customers that have wish list: %1%"
+"Customers that have wish list: %1","Customers that have wish list: %1"
 "Number of wish lists: %1","Number of wish lists: %1"
 "Number of items bought from a wish list: %1","Number of items bought from a wish list: %1"
 "Number of times wish lists have been shared (emailed): %1","Number of times wish lists have been shared (emailed): %1"
@@ -219,3 +219,12 @@ Hits,Hits
 "Refresh Statistics for the Last Day","Refresh Statistics for the Last Day"
 "Are you sure you want to refresh statistics for last day?","Are you sure you want to refresh statistics for last day?"
 undefined,undefined
+"Products in Cart","Products in Cart"
+"By Customers","By Customers"
+"By Products","By Products"
+Refunds,Refunds
+"PayPal Settlement","PayPal Settlement"
+"Order Count","Order Count"
+Bestseller,Bestseller
+"Date Used","Date Used"
+"For accurate reporting, be sure to refresh lifetime statistics whenever you change the time zone.","For accurate reporting, be sure to refresh lifetime statistics whenever you change the time zone."

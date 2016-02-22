@@ -7,7 +7,7 @@ namespace Magento\Braintree\Model\Plugin\Sales\Order;
 
 use Magento\Braintree\Model\PaymentMethod;
 use Magento\Sales\Model\Order\Payment;
-use Magento\Sales\Model\Resource\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory as TransactionCollectionFactory;
 use Magento\Sales\Model\Order\Payment\Transaction as PaymentTransaction;
 
 class PaymentPlugin

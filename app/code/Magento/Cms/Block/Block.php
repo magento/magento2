@@ -11,7 +11,7 @@ namespace Magento\Cms\Block;
 /**
  * Cms block content block
  */
-class Block extends \Magento\Framework\View\Element\AbstractBlock implements \Magento\Framework\Object\IdentityInterface
+class Block extends \Magento\Framework\View\Element\AbstractBlock implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * @var \Magento\Cms\Model\Template\FilterProvider

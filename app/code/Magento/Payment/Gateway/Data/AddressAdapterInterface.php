@@ -7,6 +7,7 @@ namespace Magento\Payment\Gateway\Data;
 
 /**
  * Interface AddressAdapterInterface
+ * @api
  */
 interface AddressAdapterInterface
 {
@@ -107,4 +108,11 @@ interface AddressAdapterInterface
      * @return string
      */
     public function getSuffix();
+
+    /**
+     * Get company
+     *
+     * @return string
+     */
+    public function getCompany();
 }

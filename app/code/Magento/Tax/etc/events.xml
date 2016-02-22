@@ -5,11 +5,11 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
-    <event name="sales_quote_collect_totals_before">
-        <observer name="tax" instance="Magento\Tax\Model\Observer" method="quoteCollectTotalsBefore" />
-    </event>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="catalog_product_view_config">
-        <observer name="tax" instance="Magento\Tax\Model\Observer" method="updateProductOptions" />
+        <observer name="tax" instance="\Magento\Tax\Observer\UpdateProductOptionsObserver" />
+    </event>
+    <event name="catalog_product_option_price_configuration_after">
+        <observer name="tax" instance="Magento\Tax\Observer\GetPriceConfigurationObserver"/>
     </event>
 </config>

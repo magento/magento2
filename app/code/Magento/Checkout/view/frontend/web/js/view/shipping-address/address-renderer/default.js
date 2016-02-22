@@ -9,16 +9,19 @@ define([
     'uiComponent',
     'Magento_Checkout/js/action/select-shipping-address',
     'Magento_Checkout/js/model/quote',
-    'Magento_Checkout/js/model/shipping-address/form-popup-state'
-], function($, ko, Component, selectShippingAddressAction, quote, formPopUpState) {
+    'Magento_Checkout/js/model/shipping-address/form-popup-state',
+    'Magento_Checkout/js/checkout-data',
+    'Magento_Customer/js/customer-data'
+], function($, ko, Component, selectShippingAddressAction, quote, formPopUpState, checkoutData, customerData) {
     'use strict';
-    var countryData = window.checkoutConfig.countryData;
+    var countryData = customerData.get('directory-data');
+
     return Component.extend({
         defaults: {
             template: 'Magento_Checkout/shipping-address/address-renderer/default'
         },
 
-        initProperties: function () {
+        initObservable: function () {
             this._super();
             this.isSelected = ko.computed(function() {
                 var isSelected = false;
@@ -33,12 +36,13 @@ define([
         },
 
         getCountryName: function(countryId) {
-            return (countryData[countryId] != undefined) ? countryData[countryId].name : "";
+            return (countryData()[countryId] != undefined) ? countryData()[countryId].name : "";
         },
 
         /** Set selected customer shipping address  */
         selectAddress: function() {
             selectShippingAddressAction(this.address());
+            checkoutData.setSelectedShippingAddress(this.address().getKey());
         },
 
         editAddress: function() {

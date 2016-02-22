@@ -13,7 +13,7 @@ namespace Magento\SalesRule\Test\Unit\Model;
 class UtilityTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\Resource\Coupon\UsageFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $usageFactory;
 
@@ -53,7 +53,7 @@ class UtilityTest extends \PHPUnit_Framework_TestCase
     protected $rule;
 
     /**
-     * @var \Magento\Framework\ObjectFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObjectFactory | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectFactory;
 
@@ -75,14 +75,14 @@ class UtilityTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->usageFactory = $this->getMock(
-            'Magento\SalesRule\Model\Resource\Coupon\UsageFactory',
+            'Magento\SalesRule\Model\ResourceModel\Coupon\UsageFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->couponFactory = $this->getMock('Magento\SalesRule\Model\CouponFactory', ['create'], [], '', false);
-        $this->objectFactory = $this->getMock('Magento\Framework\ObjectFactory', ['create'], [], '', false);
+        $this->objectFactory = $this->getMock('Magento\Framework\DataObjectFactory', ['create'], [], '', false);
         $this->customerFactory = $this->getMock(
             'Magento\SalesRule\Model\Rule\CustomerFactory',
             ['create'],
@@ -260,11 +260,11 @@ class UtilityTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->will($this->returnValue($this->coupon));
 
-        $couponUsage = new \Magento\Framework\Object();
+        $couponUsage = new \Magento\Framework\DataObject();
         $this->objectFactory->expects($this->once())
             ->method('create')
             ->will($this->returnValue($couponUsage));
-        $couponUsageModel = $this->getMock('\Magento\SalesRule\Model\Resource\Coupon\Usage', [], [], '', false);
+        $couponUsageModel = $this->getMock('\Magento\SalesRule\Model\ResourceModel\Coupon\Usage', [], [], '', false);
         $couponUsage->setData(['coupon_id' => $couponId, 'times_used' => $timesUsed]);
         $this->usageFactory->expects($this->once())
             ->method('create')

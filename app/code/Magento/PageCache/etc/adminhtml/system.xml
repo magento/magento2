@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="system">
             <group id="full_page_cache" translate="label" showInDefault="1" showInWebsite="0" showInStore="0" sortOrder="600">
@@ -18,7 +18,7 @@
                     <label>Varnish Configuration</label>
                     <field id="access_list" type="text" translate="label comment" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>Access list</label>
-                        <comment>IPs access list separated with ',' that can purge Varnish configuration for config file generation.
+                        <comment>IPs access list separated with \',\' that can purge Varnish configuration for config file generation.
                             If field is empty default value localhost will be saved.</comment>
                         <backend_model>Magento\PageCache\Model\System\Config\Backend\Varnish</backend_model>
                         <depends>

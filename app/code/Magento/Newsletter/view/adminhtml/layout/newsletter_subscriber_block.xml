@@ -5,13 +5,13 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceBlock name="adminhtml.newsletter.subscriber.container">
             <block class="Magento\Newsletter\Block\Adminhtml\Subscriber\Grid" name="adminhtml.newslettrer.subscriber.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">subscriberGrid</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Newsletter\Model\Resource\Subscriber\Grid\Collection</argument>
+                    <argument name="dataSource" xsi:type="object">Magento\Newsletter\Model\ResourceModel\Subscriber\Grid\Collection</argument>
                     <argument name="default_sort" xsi:type="string">subscriber_id</argument>
                     <argument name="default_dir" xsi:type="string">desc</argument>
                     <argument name="use_ajax" xsi:type="string">1</argument>
@@ -89,7 +89,7 @@
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="firstname">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Customer First Name</argument>
-                            <argument name="index" xsi:type="string">customer_firstname</argument>
+                            <argument name="index" xsi:type="string">firstname</argument>
                             <argument name="default" xsi:type="string">----</argument>
                             <argument name="header_css_class" xsi:type="string">col-first-name</argument>
                             <argument name="column_css_class" xsi:type="string">col-first-name</argument>
@@ -98,7 +98,7 @@
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="lastname">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Customer Last Name</argument>
-                            <argument name="index" xsi:type="string">customer_lastname</argument>
+                            <argument name="index" xsi:type="string">lastname</argument>
                             <argument name="default" xsi:type="string">----</argument>
                             <argument name="header_css_class" xsi:type="string">col-last-name</argument>
                             <argument name="column_css_class" xsi:type="string">col-last-name</argument>

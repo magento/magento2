@@ -5,14 +5,14 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="design">
             <group id="email" translate="label" type="text" sortOrder="510" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Emails</label>
                 <field id="logo" translate="label comment" type="image" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Logo Image</label>
-                    <comment>Allowed file types: jpg, jpeg, gif, png. To optimize logo for high-resolution displays, upload an image that is 2x normal size and then specify 1x dimensions in width/height fields below.</comment>
+                    <comment>Allowed file types: jpg, jpeg, gif, png. To optimize logo for high-resolution displays, upload an image that is 3x normal size and then specify 1x dimensions in width/height fields below.</comment>
                     <backend_model>Magento\Config\Model\Config\Backend\Email\Logo</backend_model>
                     <base_url type="media" scope_info="1">email/logo</base_url>
                 </field>
@@ -21,10 +21,12 @@
                 </field>
                 <field id="logo_width" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Logo Width</label>
+                    <frontend_class>validate-digits</frontend_class>
                     <comment>Only necessary if image has been uploaded above. Enter number of pixels, without appending "px".</comment>
                 </field>
                 <field id="logo_height" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Logo Height</label>
+                    <frontend_class>validate-digits</frontend_class>
                     <comment>Only necessary if image has been uploaded above. Enter number of pixels, without appending "px".</comment>
                 </field>
                 <field id="header_template" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">

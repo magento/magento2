@@ -14,19 +14,19 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
 <?php if ($wishlistHelper->isAllow()) : ?>
     <div class="block block-wishlist" data-bind="scope: 'wishlist'">
         <div class="block-title">
-            <strong><?php echo $block->getTitle(); ?></strong>
+            <strong><?php /* @escapeNotVerified */ echo $block->getTitle(); ?></strong>
             <!-- ko if: wishlist().counter -->
             <span data-bind="text: wishlist().counter" class="counter"></span>
             <!-- /ko -->
         </div>
         <div class="block-content">
-            <strong class="subtitle"><?php echo __('Last Added Items') ?></strong>
+            <strong class="subtitle"><?php /* @escapeNotVerified */ echo __('Last Added Items') ?></strong>
             <!-- ko if: wishlist().counter -->
                 <ol class="product-items no-display" id="wishlist-sidebar" data-bind="foreach: wishlist().items, css: {'no-display': null}">
                     <li class="product-item">
                         <div class="product-item-info">
                             <a class="product-item-photo" data-bind="attr: { href: product_url, title: product_name }">
-                                <!-- ko template: {name: 'Magento_Wishlist/product_image', data: $data.image} --><!-- /ko -->
+                                <!-- ko template: {name: $data.image.template, data: $data.image} --><!-- /ko -->
                             </a>
                             <div class="product-item-details">
                                 <strong class="product-item-name">
@@ -39,18 +39,18 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
                                     <!-- ko if: product_is_saleable_and_visible -->
                                     <div class="actions-primary">
                                         <!-- ko if: product_has_required_options -->
-                                        <a href="#" data-bind="attr: {'data-post': add_to_cart_params}" class="action tocart primary"><span><?php echo __('Add to Cart') ?></span></a>
+                                        <a href="#" data-bind="attr: {'data-post': add_to_cart_params}" class="action tocart primary"><span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span></a>
                                         <!-- /ko -->
                                         <!-- ko ifnot: product_has_required_options -->
-                                            <button type="button" class="action tocart primary" data-bind="attr: {'data-post': add_to_cart_params}"><span><?php echo __('Add to Cart') ?></span></button>
+                                            <button type="button" class="action tocart primary" data-bind="attr: {'data-post': add_to_cart_params}"><span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span></button>
                                         <!-- /ko -->
                                     </div>
                                     <!-- /ko -->
                                     <div class="actions-secondary">
                                         <a href="#"  data-bind="attr: {'data-post': delete_item_params}"
-                                           title="<?php echo __('Remove This Item') ?>"
+                                           title="<?php /* @escapeNotVerified */ echo __('Remove This Item') ?>"
                                            class="btn-remove action delete">
-                                            <span><?php echo __('Remove This Item') ?></span>
+                                            <span><?php /* @escapeNotVerified */ echo __('Remove This Item') ?></span>
                                         </a>
                                     </div>
                                 </div>
@@ -61,13 +61,13 @@ $wishlistHelper = $this->helper('Magento\Wishlist\Helper\Data');
                 <div class="actions-toolbar no-display" data-bind="css: {'no-display': null}">
                     <div class="primary">
                         <a class="action details"
-                           href="<?php echo $this->helper('Magento\Wishlist\Helper\Data')->getListUrl() ?>"
-                           title="<?php echo __('Go to Wish List') ?>"><span><?php echo __('Go to Wish List') ?></span></a>
+                           href="<?php /* @escapeNotVerified */ echo $this->helper('Magento\Wishlist\Helper\Data')->getListUrl() ?>"
+                           title="<?php /* @escapeNotVerified */ echo __('Go to Wish List') ?>"><span><?php /* @escapeNotVerified */ echo __('Go to Wish List') ?></span></a>
                     </div>
                 </div>
             <!-- /ko -->
             <!-- ko ifnot: wishlist().counter -->
-                <div class="empty"><?php echo __('You have no items in your wish list.') ?></div>
+                <div class="empty"><?php /* @escapeNotVerified */ echo __('You have no items in your wish list.') ?></div>
             <!-- /ko -->
         </div>
     </div>

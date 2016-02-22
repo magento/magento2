@@ -7,7 +7,7 @@
 //  Tooltips
 //  _____________________________________________
 
-.tooltip(
+.lib-tooltip(
     @_tooltip-position: top,
     @_tooltip-selector-toggle: ~".tooltip-toggle",
     @_tooltip-selector-content: ~".tooltip-content",
@@ -31,21 +31,20 @@
     @_tooltip-z-index: @tooltip__z-index
 ) {
     position: relative;
-    //display: inline-block;
 
     @{_tooltip-selector-content} {
-        .css(z-index, @_tooltip-z-index);
-        .css(background, @_tooltip-background);
-        .css(min-width, @_tooltip-min-width);
-        .css(max-width, @_tooltip-max-width);
-        .css(margin, @_tooltip-margin);
-        .css(padding, @_tooltip-padding);
-        .css(border-radius, @_tooltip-border-radius);
+        .lib-css(background, @_tooltip-background);
+        .lib-css(border-radius, @_tooltip-border-radius);
+        .lib-css(margin, @_tooltip-margin);
+        .lib-css(max-width, @_tooltip-max-width);
+        .lib-css(min-width, @_tooltip-min-width);
+        .lib-css(padding, @_tooltip-padding);
+        .lib-css(z-index, @_tooltip-z-index);
         display: none;
         position: absolute;
         text-align: left;
 
-        .typography(
+        .lib-typography(
             @_color: @_tooltip-color,
             @_font-size: @_tooltip-font-size,
             @_font-family: @_tooltip-font-family,
@@ -54,7 +53,7 @@
             @_font-style: @_tooltip-font-style
         );
 
-        ._tooltip-border(@_tooltip-border-width, @_tooltip-border-color);
+        ._lib-tooltip-border(@_tooltip-border-width, @_tooltip-border-color);
 
         @_tooltip-arrow-after-margin: @_tooltip-arrow-size * -1px;
         @_tooltip-arrow-before-margin: (@_tooltip-arrow-size + round(@_tooltip-border-width * 1.41421356)) * -1px;
@@ -64,21 +63,21 @@
             border: solid transparent;
             content: '';
             height: 0;
-            width: 0;
             position: absolute;
+            width: 0;
         }
 
         &:after {
+            .lib-css(border-width, @_tooltip-arrow-size);
             border-color: transparent;
-            .css(border-width, @_tooltip-arrow-size);
         }
 
         &:before {
+            .lib-css(border-width, @_tooltip-arrow-before-margin * -1);
             border-color: transparent;
-            .css(border-width, @_tooltip-arrow-before-margin * -1);
         }
 
-        ._tooltip-arrow-position(
+        ._lib-tooltip-arrow-position(
             @_tooltip-position,
             @_tooltip-arrow-size,
             @_tooltip-background,
@@ -90,7 +89,7 @@
     }
 
     & @{_tooltip-selector-toggle} {
-        .css(cursor, @_tooltip-cursor);
+        .lib-css(cursor, @_tooltip-cursor);
     }
 
     & @{_tooltip-selector-toggle}:hover + @{_tooltip-selector-content},
@@ -100,14 +99,14 @@
     }
 }
 
-._tooltip-border(
+._lib-tooltip-border(
     @_tooltip-border-width,
     @_tooltip-border-color
 ) when not (@_tooltip-border-width = 0) and not (@_tooltip-border-width = false) and not (@_tooltip-border-color = false) {
-    .css(border, @_tooltip-border-width solid @_tooltip-border-color);
+    .lib-css(border, @_tooltip-border-width solid @_tooltip-border-color);
 }
 
-._tooltip-arrow-position(
+._lib-tooltip-arrow-position(
     @_tooltip-position,
     @_tooltip-arrow-size,
     @_tooltip-background,
@@ -116,28 +115,28 @@
     @_tooltip-arrow-offset,
     @_tooltip-border-color
 ) when (@_tooltip-position = top) {
+    .lib-css(margin-bottom, @_tooltip-arrow-size);
     bottom: 100%;
     left: 0;
-    .css(margin-bottom, @_tooltip-arrow-size);
 
     &:after,
     &:before {
         top: 100%;
     }
     &:after {
-        .css(border-top-color, @_tooltip-background);
-        .css(margin-left, @_tooltip-arrow-after-margin);
-        .css(left, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+        .lib-css(border-top-color, @_tooltip-background);
+        .lib-css(left, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+        .lib-css(margin-left, @_tooltip-arrow-after-margin);
     }
 
     &:before {
-        .css(border-top-color, @_tooltip-border-color);
-        .css(margin-left, @_tooltip-arrow-before-margin);
-        .css(left, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+        .lib-css(border-top-color, @_tooltip-border-color);
+        .lib-css(left, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+        .lib-css(margin-left, @_tooltip-arrow-before-margin);
     }
 }
 
-._tooltip-arrow-position(
+._lib-tooltip-arrow-position(
     @_tooltip-position,
     @_tooltip-arrow-size,
     @_tooltip-background,
@@ -146,28 +145,29 @@
     @_tooltip-arrow-offset,
     @_tooltip-border-color
 ) when (@_tooltip-position = left) {
+    .lib-css(margin-right, @_tooltip-arrow-size);
     right: 100%;
     top: 0;
-    .css(margin-right, @_tooltip-arrow-size);
 
     &:after,
     &:before {
         left: 100%;
     }
+
     &:after {
-        .css(border-left-color, @_tooltip-background);
-        .css(margin-top, @_tooltip-arrow-after-margin);
-        .css(top, @_tooltip-arrow-offset + @_tooltip-arrow-size)
+        .lib-css(border-left-color, @_tooltip-background);
+        .lib-css(margin-top, @_tooltip-arrow-after-margin);
+        .lib-css(top, @_tooltip-arrow-offset + @_tooltip-arrow-size)
     }
 
     &:before {
-        .css(border-left-color, @_tooltip-border-color);
-        .css(margin-top, @_tooltip-arrow-before-margin);
-        .css(top, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+        .lib-css(border-left-color, @_tooltip-border-color);
+        .lib-css(margin-top, @_tooltip-arrow-before-margin);
+        .lib-css(top, @_tooltip-arrow-offset + @_tooltip-arrow-size);
     }
 }
 
-._tooltip-arrow-position(
+._lib-tooltip-arrow-position(
     @_tooltip-position,
     @_tooltip-arrow-size,
     @_tooltip-background,
@@ -176,28 +176,29 @@
     @_tooltip-arrow-offset,
     @_tooltip-border-color
 ) when (@_tooltip-position = right) {
+    .lib-css(margin-left, @_tooltip-arrow-size);
     left: 100%;
     top: 0;
-    .css(margin-left, @_tooltip-arrow-size);
 
     &:after,
     &:before {
         right: 100%;
     }
+
     &:after {
-        .css(border-right-color, @_tooltip-background);
-        .css(margin-top, @_tooltip-arrow-after-margin);
-        .css(top, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+        .lib-css(border-right-color, @_tooltip-background);
+        .lib-css(margin-top, @_tooltip-arrow-after-margin);
+        .lib-css(top, @_tooltip-arrow-offset + @_tooltip-arrow-size);
     }
 
     &:before {
-        .css(border-right-color, @_tooltip-border-color);
-        .css(margin-top, @_tooltip-arrow-before-margin);
-        .css(top, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+        .lib-css(border-right-color, @_tooltip-border-color);
+        .lib-css(margin-top, @_tooltip-arrow-before-margin);
+        .lib-css(top, @_tooltip-arrow-offset + @_tooltip-arrow-size);
     }
 }
 
-._tooltip-arrow-position(
+._lib-tooltip-arrow-position(
     @_tooltip-position,
     @_tooltip-arrow-size,
     @_tooltip-background,
@@ -206,22 +207,24 @@
     @_tooltip-arrow-offset,
     @_tooltip-border-color
 ) when (@_tooltip-position = bottom) {
-    top: 100%;
+    .lib-css(margin-top, @_tooltip-arrow-size);
     left: 0;
-    .css(margin-top, @_tooltip-arrow-size);
+    top: 100%;
 
     &:after,
     &:before {
         bottom: 100%;
     }
+
     &:after {
-        .css(border-bottom-color, @_tooltip-background);
-        .css(margin-left, @_tooltip-arrow-after-margin);
-        .css(left, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+        .lib-css(border-bottom-color, @_tooltip-background);
+        .lib-css(left, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+        .lib-css(margin-left, @_tooltip-arrow-after-margin);
     }
+
     &:before {
-        .css(border-bottom-color, @_tooltip-border-color);
-        .css(margin-left, @_tooltip-arrow-before-margin);
-        .css(left, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+        .lib-css(border-bottom-color, @_tooltip-border-color);
+        .lib-css(left, @_tooltip-arrow-offset + @_tooltip-arrow-size);
+        .lib-css(margin-left, @_tooltip-arrow-before-margin);
     }
 }

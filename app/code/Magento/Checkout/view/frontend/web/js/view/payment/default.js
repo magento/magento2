@@ -11,24 +11,81 @@ define(
         'Magento_Checkout/js/action/select-payment-method',
         'Magento_Checkout/js/model/quote',
         'Magento_Customer/js/model/customer',
-        'Magento_Checkout/js/model/payment-service'
+        'Magento_Checkout/js/model/payment-service',
+        'Magento_Checkout/js/checkout-data',
+        'Magento_Checkout/js/model/checkout-data-resolver',
+        'uiRegistry',
+        'Magento_Checkout/js/model/payment/additional-validators',
+        'Magento_Ui/js/model/messages',
+        'uiLayout',
+        'Magento_Checkout/js/action/redirect-on-success'
     ],
-    function (ko, $, Component, placeOrderAction, selectPaymentMethodAction, quote, customer, paymentService) {
+    function (
+        ko,
+        $,
+        Component,
+        placeOrderAction,
+        selectPaymentMethodAction,
+        quote,
+        customer,
+        paymentService,
+        checkoutData,
+        checkoutDataResolver,
+        registry,
+        additionalValidators,
+        Messages,
+        layout,
+        redirectOnSuccessAction
+    ) {
         'use strict';
+
         return Component.extend({
             redirectAfterPlaceOrder: true,
             isPlaceOrderActionAllowed: ko.observable(quote.billingAddress() != null),
+
+            /**
+             * After place order callback
+             */
+            afterPlaceOrder: function () {
+                // Override this function and put after place order logic here
+            },
+
             /**
              * Initialize view.
              *
-             * @returns {Component} Chainable.
+             * @return {exports}
              */
             initialize: function () {
-                this._super().initChildren();
+                var billingAddressCode,
+                    billingAddressData,
+                    defaultAddressData;
 
-                quote.billingAddress.subscribe(function(address) {
-                    this.isPlaceOrderActionAllowed((address !== null));
+                this._super().initChildren();
+                quote.billingAddress.subscribe(function (address) {
+                    this.isPlaceOrderActionAllowed(address !== null);
                 }, this);
+                checkoutDataResolver.resolveBillingAddress();
+
+                billingAddressCode = 'billingAddress' + this.getCode();
+                registry.async('checkoutProvider')(function (checkoutProvider) {
+                    defaultAddressData = checkoutProvider.get(billingAddressCode);
+
+                    if (defaultAddressData === undefined) {
+                        // Skip if payment does not have a billing address form
+                        return;
+                    }
+                    billingAddressData = checkoutData.getBillingAddressFromData();
+
+                    if (billingAddressData) {
+                        checkoutProvider.set(
+                            billingAddressCode,
+                            $.extend(true, {}, defaultAddressData, billingAddressData)
+                        );
+                    }
+                    checkoutProvider.on(billingAddressCode, function (providerBillingAddressData) {
+                        checkoutData.setBillingAddressFromData(providerBillingAddressData);
+                    }, billingAddressCode);
+                });
 
                 return this;
             },
@@ -39,6 +96,31 @@ define(
              * @returns {Component} Chainable.
              */
             initChildren: function () {
+                this.messageContainer = new Messages();
+                this.createMessagesComponent();
+
+                return this;
+            },
+
+            /**
+             * Create child message renderer component
+             *
+             * @returns {Component} Chainable.
+             */
+            createMessagesComponent: function () {
+
+                var messagesComponent = {
+                    parent: this.name,
+                    name: this.name + '.messages',
+                    displayArea: 'messages',
+                    component: 'Magento_Ui/js/view/messages',
+                    config: {
+                        messageContainer: this.messageContainer
+                    }
+                };
+
+                layout([messagesComponent]);
+
                 return this;
             },
 
@@ -46,31 +128,49 @@ define(
              * Place order.
              */
             placeOrder: function (data, event) {
+                var self = this;
+
                 if (event) {
                     event.preventDefault();
                 }
-                var self = this,
-                    placeOrder,
-                    emailValidationResult = customer.isLoggedIn(),
-                    loginFormSelector = 'form[data-role=email-with-possible-login]';
-                if (!customer.isLoggedIn()) {
-                    $(loginFormSelector).validation();
-                    emailValidationResult = Boolean($(loginFormSelector + ' input[name=username]').valid());
-                }
-                if (emailValidationResult && this.validate()) {
-                    this.isPlaceOrderActionAllowed(false);
-                    placeOrder = placeOrderAction(this.getData(), this.redirectAfterPlaceOrder);
 
-                    $.when(placeOrder).fail(function(){
-                        self.isPlaceOrderActionAllowed(true);
-                    });
+                if (this.validate() && additionalValidators.validate()) {
+                    this.isPlaceOrderActionAllowed(false);
+
+                    this.getPlaceOrderDeferredObject()
+                        .fail(
+                            function () {
+                                self.isPlaceOrderActionAllowed(true);
+                            }
+                        ).done(
+                            function () {
+                                self.afterPlaceOrder();
+
+                                if (self.redirectAfterPlaceOrder) {
+                                    redirectOnSuccessAction.execute();
+                                }
+                            }
+                        );
+
                     return true;
                 }
+
                 return false;
             },
 
-            selectPaymentMethod: function() {
+            getPlaceOrderDeferredObject: function () {
+                return $.when(
+                    placeOrderAction(this.getData(), this.messageContainer)
+                );
+            },
+
+            /**
+             * @return {Boolean}
+             */
+            selectPaymentMethod: function () {
                 selectPaymentMethodAction(this.getData());
+                checkoutData.setSelectedPaymentMethod(this.item.method);
+
                 return true;
             },
 
@@ -85,16 +185,11 @@ define(
             /**
              * Get payment method data
              */
-            getData: function() {
+            getData: function () {
                 return {
-                    "method": this.item.method,
-                    "po_number": null,
-                    "cc_owner": null,
-                    "cc_number": null,
-                    "cc_type": null,
-                    "cc_exp_year": null,
-                    "cc_exp_month": null,
-                    "additional_data": null
+                    'method': this.item.method,
+                    'po_number': null,
+                    'additional_data': null
                 };
             },
 
@@ -112,16 +207,30 @@ define(
                 return this.item.method;
             },
 
+            /**
+             * @return {Boolean}
+             */
             validate: function () {
                 return true;
             },
 
-            getBillingAddressFormName: function() {
+            /**
+             * @return {String}
+             */
+            getBillingAddressFormName: function () {
                 return 'billing-address-form-' + this.item.method;
             },
 
+            /**
+             * Dispose billing address subscriptions
+             */
             disposeSubscriptions: function () {
                 // dispose all active subscriptions
+                var billingAddressCode = 'billingAddress' + this.getCode();
+
+                registry.async('checkoutProvider')(function (checkoutProvider) {
+                    checkoutProvider.off(billingAddressCode);
+                });
             }
         });
     }

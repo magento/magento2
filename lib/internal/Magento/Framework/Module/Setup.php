@@ -15,7 +15,7 @@ class Setup implements SetupInterface
     /**
      * Setup Connection
      *
-     * @var \Magento\Framework\DB\Adapter\Pdo\Mysql
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
     private $connection = null;
 
@@ -29,7 +29,7 @@ class Setup implements SetupInterface
     /**
      * Modules configuration
      *
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     private $resourceModel;
 
@@ -43,11 +43,11 @@ class Setup implements SetupInterface
     /**
      * Init
      *
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\App\Resource $resource,
+        \Magento\Framework\App\ResourceConnection $resource,
         $connectionName = ModuleDataSetupInterface::DEFAULT_SETUP_CONNECTION
     ) {
         $this->resourceModel = $resource;
@@ -78,6 +78,17 @@ class Setup implements SetupInterface
     {
         $this->tables[$tableName] = $realTableName;
         return $this;
+    }
+
+    /**
+     * Gets table placeholder by table name
+     *
+     * @param string $tableName
+     * @return string
+     */
+    public function getTablePlaceholder($tableName)
+    {
+        return $this->resourceModel->getTablePlaceholder($tableName);
     }
 
     /**

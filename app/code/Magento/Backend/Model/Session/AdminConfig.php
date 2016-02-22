@@ -30,26 +30,26 @@ class AdminConfig extends Config
     protected $_frontNameResolver;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $_storeManager;
-
-    /**
      * @var \Magento\Backend\App\BackendAppList
      */
     private $backendAppList;
 
     /**
+     * @var \Magento\Backend\Model\UrlFactory
+     */
+    private $backendUrlFactory;
+
+    /**
      * @param \Magento\Framework\ValidatorFactory $validatorFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Stdlib\String $stringHelper
+     * @param \Magento\Framework\Stdlib\StringUtils $stringHelper
      * @param \Magento\Framework\App\RequestInterface $request
      * @param Filesystem $filesystem
      * @param DeploymentConfig $deploymentConfig
      * @param string $scopeType
      * @param \Magento\Backend\App\BackendAppList $backendAppList
      * @param FrontNameResolver $frontNameResolver
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Backend\Model\UrlFactory $backendUrlFactory
      * @param string $lifetimePath
      * @param string $sessionName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -57,14 +57,14 @@ class AdminConfig extends Config
     public function __construct(
         \Magento\Framework\ValidatorFactory $validatorFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Stdlib\String $stringHelper,
+        \Magento\Framework\Stdlib\StringUtils $stringHelper,
         \Magento\Framework\App\RequestInterface $request,
         Filesystem $filesystem,
         DeploymentConfig $deploymentConfig,
         $scopeType,
         \Magento\Backend\App\BackendAppList $backendAppList,
         FrontNameResolver $frontNameResolver,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Backend\Model\UrlFactory $backendUrlFactory,
         $lifetimePath = self::XML_PATH_COOKIE_LIFETIME,
         $sessionName = self::SESSION_NAME_ADMIN
     ) {
@@ -79,11 +79,12 @@ class AdminConfig extends Config
             $lifetimePath
         );
         $this->_frontNameResolver = $frontNameResolver;
-        $this->_storeManager = $storeManager;
         $this->backendAppList = $backendAppList;
+        $this->backendUrlFactory = $backendUrlFactory;
         $adminPath = $this->extractAdminPath();
         $this->setCookiePath($adminPath);
         $this->setName($sessionName);
+        $this->setCookieSecure($this->_httpRequest->isSecure());
     }
 
     /**
@@ -95,7 +96,7 @@ class AdminConfig extends Config
     {
         $backendApp = $this->backendAppList->getCurrentApp();
         $cookiePath = null;
-        $baseUrl = parse_url($this->_storeManager->getStore()->getBaseUrl(), PHP_URL_PATH);
+        $baseUrl = parse_url($this->backendUrlFactory->create()->getBaseUrl(), PHP_URL_PATH);
         if (!$backendApp) {
             $cookiePath = $baseUrl . $this->_frontNameResolver->getFrontName();
             return $cookiePath;

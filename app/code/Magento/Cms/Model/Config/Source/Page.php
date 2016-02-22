@@ -5,7 +5,7 @@
  */
 namespace Magento\Cms\Model\Config\Source;
 
-use Magento\Cms\Model\Resource\Page\CollectionFactory;
+use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
 
 /**
  * Class Page

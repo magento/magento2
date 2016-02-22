@@ -44,12 +44,12 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
     protected $localeFormat;
 
     /**
-     * @var \Magento\Framework\Object\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject\Factory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectFactory;
 
     /**
-     * @var \Magento\Framework\Object|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $object;
 
@@ -125,8 +125,8 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getNumber')
             ->willReturn($this->qty);
 
-        $this->object = $this->objectManagerHelper->getObject('Magento\Framework\Object');
-        $this->objectFactory = $this->getMock('\Magento\Framework\Object\Factory', ['create'], [], '', false);
+        $this->object = $this->objectManagerHelper->getObject('Magento\Framework\DataObject');
+        $this->objectFactory = $this->getMock('\Magento\Framework\DataObject\Factory', ['create'], [], '', false);
         $this->objectFactory->expects($this->any())->method('create')->willReturn($this->object);
 
         $this->product = $this->getMock(
@@ -381,6 +381,33 @@ class StockStateProviderTest extends \PHPUnit_Framework_TestCase
                     'checkQty' => false,
                     'suggestQty' => 50.5,
                     'getStockQty' => $stockQty,
+                    'checkQtyIncrements' => false,
+                    'checkQuoteItemQty' => true,
+                ]
+            ],
+            [
+                'values' => [
+                    'getIsInStock' => true,
+                    'getQty' => null,
+                    'getMinQty' => 60,
+                    'getMinSaleQty' => 1,
+                    'getMaxSaleQty' => 99,
+                    'getNotifyStockQty' => 101,
+                    'getManageStock' => true,
+                    'getBackorders' => 0,
+                    'getQtyIncrements' => 1,
+                    '_stock_qty_' => null,
+                    '_suppress_check_qty_increments_' => false,
+                    '_is_saleable_' => true,
+                    '_ordered_items_' => 0,
+                    '_product_' => 'Test product Name',
+                ],
+                'results' => [
+                    'verifyStock' => false,
+                    'verifyNotification' => true,
+                    'checkQty' => false,
+                    'suggestQty' => 50.5,
+                    'getStockQty' => null,
                     'checkQtyIncrements' => false,
                     'checkQuoteItemQty' => true,
                 ]

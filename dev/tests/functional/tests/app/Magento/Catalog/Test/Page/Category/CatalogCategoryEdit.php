@@ -26,7 +26,7 @@ class CatalogCategoryEdit extends Page
      *
      * @var string
      */
-    protected $formBlock = '#category-edit-container';
+    protected $formBlock = '//div[contains(@data-bind, "category_form")]';
 
     /**
      * Categories tree block.
@@ -61,9 +61,9 @@ class CatalogCategoryEdit extends Page
      *
      * @return void
      */
-    protected function _init()
+    protected function initUrl()
     {
-        $this->_url = $_ENV['app_backend_url'] . self::MCA;
+        $this->url = $_ENV['app_backend_url'] . self::MCA;
     }
 
     /**
@@ -88,7 +88,7 @@ class CatalogCategoryEdit extends Page
     public function getFormBlock()
     {
         return Factory::getBlockFactory()->getMagentoCatalogAdminhtmlCategoryEditCategoryForm(
-            $this->_browser->find($this->formBlock, Locator::SELECTOR_CSS)
+            $this->browser->find($this->formBlock, Locator::SELECTOR_CSS)
         );
     }
 
@@ -100,7 +100,7 @@ class CatalogCategoryEdit extends Page
     public function getTreeBlock()
     {
         return Factory::getBlockFactory()->getMagentoCatalogAdminhtmlCategoryTree(
-            $this->_browser->find($this->treeBlock, Locator::SELECTOR_CSS),
+            $this->browser->find($this->treeBlock, Locator::SELECTOR_CSS),
             $this->getTemplateBlock()
         );
     }
@@ -113,7 +113,7 @@ class CatalogCategoryEdit extends Page
     public function getMessagesBlock()
     {
         return Factory::getBlockFactory()->getMagentoBackendMessages(
-            $this->_browser->find($this->messagesBlock, Locator::SELECTOR_CSS)
+            $this->browser->find($this->messagesBlock, Locator::SELECTOR_CSS)
         );
     }
 
@@ -125,7 +125,7 @@ class CatalogCategoryEdit extends Page
     public function getTemplateBlock()
     {
         return Factory::getBlockFactory()->getMagentoBackendTemplate(
-            $this->_browser->find($this->templateBlock, Locator::SELECTOR_CSS)
+            $this->browser->find($this->templateBlock, Locator::SELECTOR_CSS)
         );
     }
 
@@ -137,7 +137,7 @@ class CatalogCategoryEdit extends Page
     public function getPageActionsBlock()
     {
         return Factory::getBlockFactory()->getMagentoBackendFormPageActions(
-            $this->_browser->find($this->pageActionsBlock)
+            $this->browser->find($this->pageActionsBlock)
         );
     }
 }

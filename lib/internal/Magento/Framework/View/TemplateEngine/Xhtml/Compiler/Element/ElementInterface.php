@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Element;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\View\TemplateEngine\Xhtml\CompilerInterface;
 
 /**
@@ -18,9 +18,14 @@ interface ElementInterface
      *
      * @param CompilerInterface $compiler
      * @param \DOMElement $node
-     * @param Object $processedObject
-     * @param Object $context
+     * @param DataObject $processedObject
+     * @param DataObject $context
      * @return void
      */
-    public function compile(CompilerInterface $compiler, \DOMElement $node, Object $processedObject, Object $context);
+    public function compile(
+        CompilerInterface $compiler,
+        \DOMElement $node,
+        DataObject $processedObject,
+        DataObject $context
+    );
 }

@@ -10,7 +10,6 @@ use Magento\Catalog\Test\Page\Product\CatalogProductCompare;
 use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Cms\Test\Page\CmsIndex;
 use Magento\Customer\Test\Fixture\Customer;
-use Magento\Customer\Test\Page\CustomerAccountLogin;
 use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
 use Magento\Mtf\Fixture\FixtureFactory;
@@ -60,13 +59,6 @@ abstract class AbstractCompareProductsTest extends Injectable
     protected $catalogProductView;
 
     /**
-     * Customer login page.
-     *
-     * @var CustomerAccountLogin
-     */
-    protected $customerAccountLogin;
-
-    /**
      * Fixture factory.
      *
      * @var FixtureFactory
@@ -100,18 +92,15 @@ abstract class AbstractCompareProductsTest extends Injectable
      * @param CmsIndex $cmsIndex
      * @param CatalogProductView $catalogProductView
      * @param BrowserInterface $browser
-     * @param CustomerAccountLogin $customerAccountLogin
      * @return void
      */
     public function __inject(
         CmsIndex $cmsIndex,
         CatalogProductView $catalogProductView,
-        BrowserInterface $browser,
-        CustomerAccountLogin $customerAccountLogin
+        BrowserInterface $browser
     ) {
         $this->cmsIndex = $cmsIndex;
         $this->catalogProductView = $catalogProductView;
-        $this->customerAccountLogin = $customerAccountLogin;
         $this->browser = $browser;
     }
 
@@ -122,10 +111,10 @@ abstract class AbstractCompareProductsTest extends Injectable
      */
     protected function loginCustomer()
     {
-        if (!$this->cmsIndex->getLinksBlock()->isLinkVisible('Sign Out')) {
-            $this->cmsIndex->getLinksBlock()->openLink("Sign In");
-            $this->customerAccountLogin->getLoginBlock()->login($this->customer);
-        }
+        $this->objectManager->create(
+            'Magento\Customer\Test\TestStep\LoginCustomerOnFrontendStep',
+            ['customer' => $this->customer]
+        )->run();
     }
 
     /**

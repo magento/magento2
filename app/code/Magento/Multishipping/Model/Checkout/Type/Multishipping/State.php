@@ -13,7 +13,7 @@ use Magento\Multishipping\Model\Checkout\Type\Multishipping;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class State extends \Magento\Framework\Object
+class State extends \Magento\Framework\DataObject
 {
     const STEP_SELECT_ADDRESSES = 'multishipping_addresses';
 
@@ -56,11 +56,11 @@ class State extends \Magento\Framework\Object
         $this->_multishipping = $multishipping;
         parent::__construct();
         $this->_steps = [
-            self::STEP_SELECT_ADDRESSES => new \Magento\Framework\Object(['label' => __('Select Addresses')]),
-            self::STEP_SHIPPING => new \Magento\Framework\Object(['label' => __('Shipping Information')]),
-            self::STEP_BILLING => new \Magento\Framework\Object(['label' => __('Billing Information')]),
-            self::STEP_OVERVIEW => new \Magento\Framework\Object(['label' => __('Place Order')]),
-            self::STEP_SUCCESS => new \Magento\Framework\Object(['label' => __('Order Success')]),
+            self::STEP_SELECT_ADDRESSES => new \Magento\Framework\DataObject(['label' => __('Select Addresses')]),
+            self::STEP_SHIPPING => new \Magento\Framework\DataObject(['label' => __('Shipping Information')]),
+            self::STEP_BILLING => new \Magento\Framework\DataObject(['label' => __('Billing Information')]),
+            self::STEP_OVERVIEW => new \Magento\Framework\DataObject(['label' => __('Place Order')]),
+            self::STEP_SUCCESS => new \Magento\Framework\DataObject(['label' => __('Order Success')]),
         ];
 
         foreach ($this->_steps as $step) {

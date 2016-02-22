@@ -134,9 +134,7 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->creditmemoEmail = $objectManagerHelper->getObject(
             'Magento\Sales\Controller\Adminhtml\Creditmemo\AbstractCreditmemo\Email',
             [
-                'context' => $this->context,
-                'request' => $this->request,
-                'response' => $this->response,
+                'context' => $this->context
             ]
         );
     }
@@ -144,31 +142,21 @@ class EmailTest extends \PHPUnit_Framework_TestCase
     public function testEmail()
     {
         $cmId = 10000031;
-        $creditmemoClassName = 'Magento\Sales\Model\Order\Creditmemo';
-        $cmNotifierClassName = 'Magento\Sales\Model\Order\CreditmemoNotifier';
-        $creditmemo = $this->getMock($creditmemoClassName, ['load', '__wakeup'], [], '', false);
-        $cmNotifier = $this->getMock($cmNotifierClassName, ['notify', '__wakeup'], [], '', false);
+        $cmManagement = 'Magento\Sales\Api\CreditmemoManagementInterface';
+        $cmManagementMock = $this->getMock($cmManagement, [], [], '', false);
         $this->prepareRedirect($cmId);
 
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('creditmemo_id')
-            ->will($this->returnValue($cmId));
-        $this->objectManager->expects($this->at(0))
+            ->willReturn($cmId);
+        $this->objectManager->expects($this->once())
             ->method('create')
-            ->with($creditmemoClassName)
-            ->will($this->returnValue($creditmemo));
-        $creditmemo->expects($this->once())
-            ->method('load')
-            ->with($cmId)
-            ->will($this->returnSelf());
-        $this->objectManager->expects($this->at(1))
-            ->method('create')
-            ->with($cmNotifierClassName)
-            ->will($this->returnValue($cmNotifier));
-        $cmNotifier->expects($this->once())
+            ->with($cmManagement)
+            ->willReturn($cmManagementMock);
+        $cmManagementMock->expects($this->once())
             ->method('notify')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->messageManager->expects($this->once())
             ->method('addSuccess')
             ->with('You sent the message.');
@@ -185,28 +173,6 @@ class EmailTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())
             ->method('getParam')
             ->with('creditmemo_id')
-            ->will($this->returnValue(null));
-
-        $this->assertNull($this->creditmemoEmail->execute());
-    }
-
-    public function testEmailNoCreditmemo()
-    {
-        $cmId = 10000031;
-        $creditmemoClassName = 'Magento\Sales\Model\Order\Creditmemo';
-        $creditmemo = $this->getMock($creditmemoClassName, ['load', '__wakeup'], [], '', false);
-
-        $this->request->expects($this->once())
-            ->method('getParam')
-            ->with('creditmemo_id')
-            ->will($this->returnValue($cmId));
-        $this->objectManager->expects($this->at(0))
-            ->method('create')
-            ->with($creditmemoClassName)
-            ->will($this->returnValue($creditmemo));
-        $creditmemo->expects($this->once())
-            ->method('load')
-            ->with($cmId)
             ->will($this->returnValue(null));
 
         $this->assertNull($this->creditmemoEmail->execute());

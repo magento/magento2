@@ -11,22 +11,31 @@ define([
 
     return Abstract.extend({
         defaults: {
+            elementTmpl: 'ui/form/element/date',
             dateFormat: 'MM/dd/YYYY',
             options: {}
         },
 
-        initProperties: function () {
-            this.dateFormat = utils.normalizeDate(this.dateFormat);
+        /**
+         * Initializes regular properties of instance.
+         *
+         * @returns {Object} Chainable.
+         */
+        initConfig: function () {
+            this._super();
 
-            return this._super();
+            //this.dateFormat = utils.normalizeDate(this.dateFormat);
+            this.dateFormat = utils.normalizeDate('MM/dd/YYYY');
+
+            return this;
         },
 
         /**
-         * Converts initial value to the specified date format.
+         * Formats provided value according to 'dateFormat' property.
          *
          * @returns {String}
          */
-        getInitialValue: function () {
+        normalizeData: function () {
             var value = this._super();
 
             if (value) {

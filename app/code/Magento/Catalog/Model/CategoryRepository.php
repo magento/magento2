@@ -10,6 +10,7 @@ namespace Magento\Catalog\Model;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
+use Magento\Catalog\Api\Data\CategoryInterface;
 
 class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInterface
 {
@@ -29,9 +30,14 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     protected $categoryFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Category
+     * @var \Magento\Catalog\Model\ResourceModel\Category
      */
     protected $categoryResource;
+
+    /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPool;
 
     /**
      * List of fields that can used config values in case when value does not defined directly
@@ -42,17 +48,20 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
 
     /**
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
-     * @param \Magento\Catalog\Model\Resource\Category $categoryResource
+     * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
-        \Magento\Catalog\Model\Resource\Category $categoryResource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
     ) {
         $this->categoryFactory = $categoryFactory;
         $this->categoryResource = $categoryResource;
         $this->storeManager = $storeManager;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -61,8 +70,21 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     public function save(\Magento\Catalog\Api\Data\CategoryInterface $category)
     {
         $existingData = $category->toFlatArray();
+
+        /** 'available_sort_by' should be set separately because fields of array type are destroyed by toFlatArray() */
+        $existingData['available_sort_by'] = $category->getAvailableSortBy();
+
         if ($category->getId()) {
+            $metadata = $this->metadataPool->getMetadata(
+                CategoryInterface::class
+            );
+
             $existingCategory = $this->get($category->getId());
+
+            $existingData[$metadata->getLinkField()] = $existingCategory->getData(
+                $metadata->getLinkField()
+            );
+
             if (isset($existingData['image']) && is_array($existingData['image'])) {
                 $existingData['image_additional_data'] = $existingData['image'];
                 unset($existingData['image']);
@@ -104,7 +126,8 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      */
     public function get($categoryId, $storeId = null)
     {
-        if (!isset($this->instances[$categoryId])) {
+        $cacheKey = null !== $storeId ? $storeId : 'all';
+        if (!isset($this->instances[$categoryId][$cacheKey])) {
             /** @var Category $category */
             $category = $this->categoryFactory->create();
             if (null !== $storeId) {
@@ -114,9 +137,9 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             if (!$category->getId()) {
                 throw NoSuchEntityException::singleField('id', $categoryId);
             }
-            $this->instances[$categoryId] = $category;
+            $this->instances[$categoryId][$cacheKey] = $category;
         }
-        return $this->instances[$categoryId];
+        return $this->instances[$categoryId][$cacheKey];
     }
 
     /**

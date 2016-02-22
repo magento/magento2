@@ -104,7 +104,6 @@ class Design implements \Magento\Framework\View\DesignInterface
      *
      * @param string $area
      * @return $this
-     * @deprecated
      */
     public function setArea($area)
     {
@@ -169,7 +168,7 @@ class Design implements \Magento\Framework\View\DesignInterface
         $theme = null;
         $store = isset($params['store']) ? $params['store'] : null;
 
-        if ($this->_isThemePerStoveView($area)) {
+        if ($this->_isThemePerStoreView($area)) {
             if ($this->_storeManager->isSingleStoreMode()) {
                 $theme = $this->_scopeConfig->getValue(
                     self::XML_PATH_THEME_ID,
@@ -197,7 +196,7 @@ class Design implements \Magento\Framework\View\DesignInterface
      * @param string $area
      * @return bool
      */
-    private function _isThemePerStoveView($area)
+    private function _isThemePerStoreView($area)
     {
         return $area == self::DEFAULT_AREA;
     }

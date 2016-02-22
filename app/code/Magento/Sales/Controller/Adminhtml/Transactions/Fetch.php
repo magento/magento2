@@ -26,7 +26,7 @@ class Fetch extends \Magento\Sales\Controller\Adminhtml\Transactions
             return $resultRedirect->setPath('sales/*/');
         }
         try {
-            $txn->getOrderPaymentObject()->setOrder($txn->getOrder())->importTransactionInfo($txn);
+            $this->orderPaymentRepository->get($txn->getId())->setOrder($txn->getOrder())->importTransactionInfo($txn);
             $txn->save();
             $this->messageManager->addSuccess(__('The transaction details have been updated.'));
         } catch (\Magento\Framework\Exception\LocalizedException $e) {

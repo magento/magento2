@@ -25,8 +25,8 @@ use Magento\Store\Model\StoreManagerInterface;
  * );
  * $emailTemplate->send('some@domain.com', 'Name Of User', $variables);
  *
- * @method \Magento\Email\Model\Resource\Template _getResource()
- * @method \Magento\Email\Model\Resource\Template getResource()
+ * @method \Magento\Email\Model\ResourceModel\Template _getResource()
+ * @method \Magento\Email\Model\ResourceModel\Template getResource()
  * @method string getTemplateCode()
  * @method \Magento\Email\Model\Template setTemplateCode(string $value)
  * @method string getTemplateText()
@@ -105,20 +105,21 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
     private $filterFactory;
 
     /**
-     * Initialize dependencies
+     * Initialize dependencies.
      *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\View\DesignInterface $design
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\App\Emulation $appEmulation
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param Template\Config $emailConfig
-     * @param \Magento\Email\Model\TemplateFactory $templateFactory
+     * @param TemplateFactory $templateFactory
+     * @param \Magento\Framework\Filter\FilterManager $filterManager
      * @param \Magento\Framework\UrlInterface $urlModel
-     * @param \Magento\Email\Model\Template\FilterFactory $filterFactory
+     * @param Template\FilterFactory $filterFactory
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -134,6 +135,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Email\Model\Template\Config $emailConfig,
         \Magento\Email\Model\TemplateFactory $templateFactory,
+        \Magento\Framework\Filter\FilterManager $filterManager,
         \Magento\Framework\UrlInterface $urlModel,
         \Magento\Email\Model\Template\FilterFactory $filterFactory,
         array $data = []
@@ -150,6 +152,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
             $scopeConfig,
             $emailConfig,
             $templateFactory,
+            $filterManager,
             $urlModel,
             $data
         );
@@ -162,7 +165,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      */
     protected function _construct()
     {
-        $this->_init('Magento\Email\Model\Resource\Template');
+        $this->_init('Magento\Email\Model\ResourceModel\Template');
     }
 
     /**
@@ -193,16 +196,14 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
      */
     public function isValidForSend()
     {
-        return !$this->scopeConfig->isSetFlag(
-            \Magento\Email\Model\Template::XML_PATH_SYSTEM_SMTP_DISABLE,
-            ScopeInterface::SCOPE_STORE
-        ) && $this->getSenderName() && $this->getSenderEmail() && $this->getTemplateSubject();
+        return !$this->scopeConfig->isSetFlag(Template::XML_PATH_SYSTEM_SMTP_DISABLE, ScopeInterface::SCOPE_STORE)
+            && $this->getSenderName() && $this->getSenderEmail() && $this->getTemplateSubject();
     }
 
     /**
      * Getter for template type
      *
-     * @return int|string
+     * @return int
      */
     public function getType()
     {
@@ -211,7 +212,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
             $templateType = $this->emailConfig->getTemplateType($this->getId());
             $templateType = $templateType == 'html' ? self::TYPE_HTML : self::TYPE_TEXT;
         }
-        return $templateType;
+        return $templateType !== null ? $templateType : self::TYPE_HTML;
     }
 
     /**
@@ -243,7 +244,7 @@ class Template extends AbstractTemplate implements \Magento\Framework\Mail\Templ
         $this->applyDesignConfig();
         $storeId = $this->getDesignConfig()->getStore();
         try {
-            $processedResult = $processor->setStoreId($storeId)->filter($this->getTemplateSubject());
+            $processedResult = $processor->setStoreId($storeId)->filter(__($this->getTemplateSubject()));
         } catch (\Exception $e) {
             $this->cancelDesignConfig();
             throw new \Magento\Framework\Exception\MailException(__($e->getMessage()), $e);

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\View\TemplateEngine\Xhtml\Compiler\Directive;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Interface DirectiveInterface
@@ -16,10 +16,10 @@ interface DirectiveInterface
      * Execute directive
      *
      * @param array $directive
-     * @param Object $processedObject
+     * @param DataObject $processedObject
      * @return string
      */
-    public function execute($directive, Object $processedObject);
+    public function execute($directive, DataObject $processedObject);
 
     /**
      * Get regexp search pattern

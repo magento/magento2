@@ -11,42 +11,40 @@ use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 
 /**
- * Class BackendDecorator
- * Curl transport on backend
+ * Curl transport on backend.
  */
 class BackendDecorator implements CurlInterface
 {
     /**
-     * Curl transport protocol
+     * Curl transport protocol.
      *
      * @var CurlTransport
      */
     protected $transport;
 
     /**
-     * Form key
+     * Form key.
      *
      * @var string
      */
     protected $formKey = null;
 
     /**
-     * Response data
+     * Response data.
      *
      * @var string
      */
     protected $response;
 
     /**
-     * System config
+     * System config.
      *
      * @var DataInterface
      */
     protected $configuration;
 
     /**
-     * Constructor
-     *
+     * @constructor
      * @param CurlTransport $transport
      * @param DataInterface $configuration
      */
@@ -58,19 +56,25 @@ class BackendDecorator implements CurlInterface
     }
 
     /**
-     * Authorize customer on backend
+     * Authorize customer on backend.
      *
      * @throws \Exception
      * @return void
      */
     protected function authorize()
     {
+        // Perform GET to backend url so form_key is set
+        $url = $_ENV['app_backend_url'];
+        $this->transport->write($url, [], CurlInterface::GET);
+        $this->read();
+
         $url = $_ENV['app_backend_url'] . $this->configuration->get('application/0/backendLoginUrl/0/value');
         $data = [
             'login[username]' => $this->configuration->get('application/0/backendLogin/0/value'),
             'login[password]' => $this->configuration->get('application/0/backendPassword/0/value'),
+            'form_key' => $this->formKey,
         ];
-        $this->transport->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $this->transport->write($url, $data, CurlInterface::POST);
         $response = $this->read();
         if (strpos($response, 'page-login')) {
             throw new \Exception(
@@ -80,7 +84,7 @@ class BackendDecorator implements CurlInterface
     }
 
     /**
-     * Init Form Key from response
+     * Init Form Key from response.
      *
      * @return void
      */
@@ -93,28 +97,27 @@ class BackendDecorator implements CurlInterface
     }
 
     /**
-     * Send request to the remote server
+     * Send request to the remote server.
      *
-     * @param string $method
      * @param string $url
-     * @param string $httpVer
-     * @param array $headers
-     * @param array $params
+     * @param mixed $params
+     * @param string $method
+     * @param mixed $headers
      * @return void
      * @throws \Exception
      */
-    public function write($method, $url, $httpVer = '1.1', $headers = [], $params = [])
+    public function write($url, $params = [], $method = CurlInterface::POST, $headers = [])
     {
         if ($this->formKey) {
             $params['form_key'] = $this->formKey;
         } else {
             throw new \Exception(sprintf('Form key is absent! Url: "%s" Response: "%s"', $url, $this->response));
         }
-        $this->transport->write($method, $url, $httpVer, $headers, http_build_query($params));
+        $this->transport->write($url, http_build_query($params), $method, $headers);
     }
 
     /**
-     * Read response from server
+     * Read response from server.
      *
      * @return string
      */
@@ -126,10 +129,10 @@ class BackendDecorator implements CurlInterface
     }
 
     /**
-     * Add additional option to cURL
+     * Add additional option to cURL.
      *
-     * @param  int $option the CURLOPT_* constants
-     * @param  mixed $value
+     * @param int $option the CURLOPT_* constants
+     * @param mixed $value
      * @return void
      */
     public function addOption($option, $value)
@@ -138,7 +141,7 @@ class BackendDecorator implements CurlInterface
     }
 
     /**
-     * Close the connection to the server
+     * Close the connection to the server.
      *
      * @return void
      */

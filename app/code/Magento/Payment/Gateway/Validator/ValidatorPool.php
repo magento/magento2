@@ -9,6 +9,11 @@ use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\ObjectManager\TMap;
 use Magento\Framework\ObjectManager\TMapFactory;
 
+/**
+ * Class ValidatorPool
+ * @package Magento\Payment\Gateway\Validator
+ * @api
+ */
 class ValidatorPool implements \Magento\Payment\Gateway\Validator\ValidatorPoolInterface
 {
     /**
@@ -17,17 +22,17 @@ class ValidatorPool implements \Magento\Payment\Gateway\Validator\ValidatorPoolI
     private $validators;
 
     /**
-     * @param array $validators
      * @param TMapFactory $tmapFactory
+     * @param array $validators
      */
     public function __construct(
-        array $validators,
-        TMapFactory $tmapFactory
+        TMapFactory $tmapFactory,
+        array $validators = []
     ) {
         $this->validators = $tmapFactory->create(
             [
                 'array' => $validators,
-                'type' => 'Magento\Payment\Gateway\Validator\ValidatorInterface'
+                'type' => ValidatorInterface::class
             ]
         );
     }

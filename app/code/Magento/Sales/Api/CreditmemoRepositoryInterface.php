@@ -18,10 +18,10 @@ interface CreditmemoRepositoryInterface
     /**
      * Lists credit memos that match specified search criteria.
      *
-     * @param \Magento\Framework\Api\SearchCriteria $criteria The search criteria.
+     * @param \Magento\Framework\Api\SearchCriteria $searchCriteria The search criteria.
      * @return \Magento\Sales\Api\Data\CreditmemoSearchResultInterface Credit memo search result interface.
      */
-    public function getList(\Magento\Framework\Api\SearchCriteria $criteria);
+    public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria);
 
     /**
      * Loads a specified credit memo.
@@ -30,6 +30,13 @@ interface CreditmemoRepositoryInterface
      * @return \Magento\Sales\Api\Data\CreditmemoInterface Credit memo interface.
      */
     public function get($id);
+
+    /**
+     * Create credit memo instance
+     *
+     * @return \Magento\Sales\Api\Data\CreditmemoInterface Credit memo interface.
+     */
+    public function create();
 
     /**
      * Deletes a specified credit memo.

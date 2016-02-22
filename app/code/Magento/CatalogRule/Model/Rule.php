@@ -10,37 +10,18 @@ use Magento\Catalog\Model\Product;
 /**
  * Catalog Rule data model
  *
- * @method \Magento\CatalogRule\Model\Resource\Rule _getResource()
- * @method \Magento\CatalogRule\Model\Resource\Rule getResource()
- * @method string getName()
- * @method \Magento\CatalogRule\Model\Rule setName(string $value)
- * @method string getDescription()
- * @method \Magento\CatalogRule\Model\Rule setDescription(string $value)
- * @method string getFromDate()
+ * @method \Magento\CatalogRule\Model\ResourceModel\Rule _getResource()
+ * @method \Magento\CatalogRule\Model\ResourceModel\Rule getResource()
  * @method \Magento\CatalogRule\Model\Rule setFromDate(string $value)
- * @method string getToDate()
  * @method \Magento\CatalogRule\Model\Rule setToDate(string $value)
  * @method \Magento\CatalogRule\Model\Rule setCustomerGroupIds(string $value)
- * @method int getIsActive()
- * @method \Magento\CatalogRule\Model\Rule setIsActive(int $value)
- * @method string getConditionsSerialized()
- * @method \Magento\CatalogRule\Model\Rule setConditionsSerialized(string $value)
- * @method string getActionsSerialized()
- * @method \Magento\CatalogRule\Model\Rule setActionsSerialized(string $value)
- * @method int getStopRulesProcessing()
- * @method \Magento\CatalogRule\Model\Rule setStopRulesProcessing(int $value)
- * @method int getSortOrder()
- * @method \Magento\CatalogRule\Model\Rule setSortOrder(int $value)
- * @method string getSimpleAction()
- * @method \Magento\CatalogRule\Model\Rule setSimpleAction(string $value)
- * @method float getDiscountAmount()
- * @method \Magento\CatalogRule\Model\Rule setDiscountAmount(float $value)
  * @method string getWebsiteIds()
  * @method \Magento\CatalogRule\Model\Rule setWebsiteIds(string $value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  */
-class Rule extends \Magento\Rule\Model\AbstractModel
+class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\CatalogRule\Api\Data\RuleInterface
 {
     /**
      * Prefix of model events names
@@ -104,7 +85,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected $_relatedCacheTypes;
 
     /**
-     * @var \Magento\Framework\Model\Resource\Iterator
+     * @var \Magento\Framework\Model\ResourceModel\Iterator
      */
     protected $_resourceIterator;
 
@@ -134,14 +115,9 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected $_storeManager;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
      */
     protected $_productCollectionFactory;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTime;
 
     /**
      * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
@@ -149,44 +125,54 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected $_ruleProductProcessor;
 
     /**
+     * @var Data\Condition\Converter
+     */
+    protected $ruleConditionConverter;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\CatalogRule\Model\Rule\Condition\CombineFactory $combineFactory
-     * @param \Magento\CatalogRule\Model\Rule\Action\CollectionFactory $actionCollectionFactory
+     * @param Rule\Condition\CombineFactory $combineFactory
+     * @param Rule\Action\CollectionFactory $actionCollectionFactory
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param \Magento\Framework\Model\Resource\Iterator $resourceIterator
+     * @param \Magento\Framework\Model\ResourceModel\Iterator $resourceIterator
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\CatalogRule\Helper\Data $catalogRuleData
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypesList
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor $ruleProductProcessor
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param Indexer\Rule\RuleProductProcessor $ruleProductProcessor
+     * @param Data\Condition\Converter $ruleConditionConverter
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $relatedCacheTypes
      * @param array $data
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
-        \Magento\Catalog\Model\Resource\Product\CollectionFactory $productCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\CatalogRule\Model\Rule\Condition\CombineFactory $combineFactory,
         \Magento\CatalogRule\Model\Rule\Action\CollectionFactory $actionCollectionFactory,
         \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Framework\Model\Resource\Iterator $resourceIterator,
+        \Magento\Framework\Model\ResourceModel\Iterator $resourceIterator,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\CatalogRule\Helper\Data $catalogRuleData,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypesList,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor $ruleProductProcessor,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\CatalogRule\Model\Data\Condition\Converter $ruleConditionConverter,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $relatedCacheTypes = [],
         array $data = []
@@ -201,9 +187,20 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         $this->_catalogRuleData = $catalogRuleData;
         $this->_cacheTypesList = $cacheTypesList;
         $this->_relatedCacheTypes = $relatedCacheTypes;
-        $this->dateTime = $dateTime;
         $this->_ruleProductProcessor = $ruleProductProcessor;
-        parent::__construct($context, $registry, $formFactory, $localeDate, $resource, $resourceCollection, $data);
+        $this->ruleConditionConverter = $ruleConditionConverter;
+
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $formFactory,
+            $localeDate,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**
@@ -214,7 +211,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Magento\CatalogRule\Model\Resource\Rule');
+        $this->_init('Magento\CatalogRule\Model\ResourceModel\Rule');
         $this->setIdFieldName('rule_id');
     }
 
@@ -289,7 +286,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             $this->setCollectedAttributes([]);
 
             if ($this->getWebsiteIds()) {
-                /** @var $productCollection \Magento\Catalog\Model\Resource\Product\Collection */
+                /** @var $productCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
                 $productCollection = $this->_productCollectionFactory->create();
                 $productCollection->addWebsiteFilter($this->getWebsiteIds());
                 if ($this->_productsFilter) {
@@ -342,9 +339,60 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         $map = [];
         $websites = $this->_storeManager->getWebsites(true);
         foreach ($websites as $website) {
+            // Continue if website has no store to be able to create catalog rule for website without store
+            if ($website->getDefaultStore() === null) {
+                continue;
+            }
             $map[$website->getId()] = $website->getDefaultStore()->getId();
         }
         return $map;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validateData(\Magento\Framework\DataObject $dataObject)
+    {
+        $result = parent::validateData($dataObject);
+        if ($result === true) {
+            $result = [];
+        }
+
+        $action = $dataObject->getData('simple_action');
+        $discount = $dataObject->getData('discount_amount');
+        $result = array_merge($result, $this->validateDiscount($action, $discount));
+
+        return !empty($result) ? $result : true;
+    }
+
+    /**
+     * Validate discount based on action
+     *
+     * @param string $action
+     * @param string|int|float $discount
+     *
+     * @return array Validation errors
+     */
+    protected function validateDiscount($action, $discount)
+    {
+        $result = [];
+        switch ($action) {
+            case 'by_percent':
+            case 'to_percent':
+                if ($discount < 0 || $discount > 100) {
+                    $result[] = __('Percentage discount should be between 0 and 100.');
+                };
+                break;
+            case 'by_fixed':
+            case 'to_fixed':
+                if ($discount < 0) {
+                    $result[] = __('Discount value should be 0 or greater.');
+                };
+                break;
+            default:
+                $result[] = __('Unknown action.');
+        }
+        return $result;
     }
 
     /**
@@ -374,15 +422,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             if ($rulesData) {
                 foreach ($rulesData as $ruleData) {
                     if ($product->getParentId()) {
-                        if (!empty($ruleData['sub_simple_action'])) {
-                            $priceRules = $this->_catalogRuleData->calcPriceRule(
-                                $ruleData['sub_simple_action'],
-                                $ruleData['sub_discount_amount'],
-                                $priceRules ? $priceRules : $price
-                            );
-                        } else {
-                            $priceRules = $priceRules ? $priceRules : $price;
-                        }
+                        $priceRules = $priceRules ? $priceRules : $price;
                         if ($ruleData['action_stop']) {
                             break;
                         }
@@ -531,4 +571,199 @@ class Rule extends \Magento\Rule\Model\AbstractModel
         }
         return $result;
     }
+
+    /**
+     * @param string $formName
+     * @return string
+     */
+    public function getConditionsFieldSetId($formName = '')
+    {
+        return $formName . 'rule_conditions_fieldset_' . $this->getId();
+    }
+
+    //@codeCoverageIgnoreStart
+    /**
+     * {@inheritdoc}
+     */
+    public function getRuleId()
+    {
+        return $this->getData(self::RULE_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRuleId($ruleId)
+    {
+        return $this->setData(self::RULE_ID, $ruleId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getName()
+    {
+        return $this->getData(self::NAME);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setName($name)
+    {
+        return $this->setData(self::NAME, $name);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDescription()
+    {
+        return $this->getData(self::DESCRIPTION);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDescription($description)
+    {
+        return $this->setData(self::DESCRIPTION, $description);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getIsActive()
+    {
+        return $this->getData(self::IS_ACTIVE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setIsActive($isActive)
+    {
+        return $this->setData(self::IS_ACTIVE, $isActive);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRuleCondition()
+    {
+        return $this->ruleConditionConverter->arrayToDataModel($this->getConditions()->asArray());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setRuleCondition($condition)
+    {
+        $this->getConditions()
+            ->setConditions([])
+            ->loadArray($this->ruleConditionConverter->dataModelToArray($condition));
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getStopRulesProcessing()
+    {
+        return $this->getData(self::STOP_RULES_PROCESSING);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setStopRulesProcessing($isStopProcessing)
+    {
+        return $this->setData(self::STOP_RULES_PROCESSING, $isStopProcessing);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSortOrder()
+    {
+        return $this->getData(self::SORT_ORDER);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSortOrder($sortOrder)
+    {
+        return $this->setData(self::SORT_ORDER, $sortOrder);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getSimpleAction()
+    {
+        return $this->getData(self::SIMPLE_ACTION);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setSimpleAction($action)
+    {
+        return $this->setData(self::SIMPLE_ACTION, $action);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDiscountAmount()
+    {
+        return $this->getData(self::DISCOUNT_AMOUNT);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setDiscountAmount($amount)
+    {
+        return $this->setData(self::DISCOUNT_AMOUNT, $amount);
+    }
+
+    /**
+     * @return string
+     */
+    public function getFromDate()
+    {
+        return $this->getData('from_date');
+    }
+
+    /**
+     * @return string
+     */
+    public function getToDate()
+    {
+        return $this->getData('to_date');
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @return \Magento\CatalogRule\Api\Data\RuleExtensionInterface|null
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     *
+     * @param \Magento\CatalogRule\Api\Data\RuleExtensionInterface $extensionAttributes
+     * @return $this
+     */
+    public function setExtensionAttributes(\Magento\CatalogRule\Api\Data\RuleExtensionInterface $extensionAttributes)
+    {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+    //@codeCoverageIgnoreEnd
 }

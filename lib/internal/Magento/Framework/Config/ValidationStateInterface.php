@@ -17,5 +17,5 @@ interface ValidationStateInterface
      *
      * @return boolean
      */
-    public function isValidated();
+    public function isValidationRequired();
 }

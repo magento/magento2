@@ -100,7 +100,7 @@ class ViewedProductsReportEntityTest extends Injectable
         $productsList = $this->prepareProducts($products);
         $this->openProducts($productsList, $total);
         $this->productReportView->open();
-        $this->productReportView->getMessagesBlock()->clickLinkInMessages('notice', 'here');
+        $this->productReportView->getMessagesBlock()->clickLinkInMessage('notice', 'here');
 
         // Steps
         $this->productReportView->getFilterBlock()->viewsReport($viewsReport);

@@ -6,6 +6,7 @@
 namespace Magento\Customer\Test\Unit\Block\Form;
 
 use Magento\Customer\Block\Form\Register;
+use Magento\Customer\Model\AccountManagement;
 
 /**
  * Test class for \Magento\Customer\Block\Form\Register.
@@ -58,7 +59,6 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-
         $context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $context->expects($this->any())->method('getScopeConfig')->will($this->returnValue($this->_scopeConfig));
 
@@ -67,8 +67,8 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
             $this->directoryHelperMock,
             $this->getMockForAbstractClass('Magento\Framework\Json\EncoderInterface', [], '', false),
             $this->getMock('Magento\Framework\App\Cache\Type\Config', [], [], '', false),
-            $this->getMock('Magento\Directory\Model\Resource\Region\CollectionFactory', [], [], '', false),
-            $this->getMock('Magento\Directory\Model\Resource\Country\CollectionFactory', [], [], '', false),
+            $this->getMock('Magento\Directory\Model\ResourceModel\Region\CollectionFactory', [], [], '', false),
+            $this->getMock('Magento\Directory\Model\ResourceModel\Country\CollectionFactory', [], [], '', false),
             $this->_moduleManager,
             $this->_customerSession,
             $this->_customerUrl
@@ -139,18 +139,18 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFormDataNotNullFormData()
     {
-        $data = new \Magento\Framework\Object();
+        $data = new \Magento\Framework\DataObject();
         $this->_block->setData(self::FORM_DATA, $data);
         $this->assertSame($data, $this->_block->getFormData());
     }
 
     /**
      * Form data has not been set on the block and there is no customer data in the customer session. So
-     * we expect an empty \Magento\Framework\Object.
+     * we expect an empty \Magento\Framework\DataObject.
      */
     public function testGetFormDataNullFormData()
     {
-        $data = new \Magento\Framework\Object();
+        $data = new \Magento\Framework\DataObject();
         $this->_customerSession->expects($this->once())->method('getCustomerFormData')->will($this->returnValue(null));
         $this->assertEquals($data, $this->_block->getFormData());
         $this->assertEquals($data, $this->_block->getData(self::FORM_DATA));
@@ -162,7 +162,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFormDataNullFormDataCustomerFormData()
     {
-        $data = new \Magento\Framework\Object();
+        $data = new \Magento\Framework\DataObject();
         $data->setFirstname('John');
         $data->setCustomerData(1);
         $customerFormData = ['firstname' => 'John'];
@@ -183,7 +183,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFormDataCustomerFormDataRegionId()
     {
-        $data = new \Magento\Framework\Object();
+        $data = new \Magento\Framework\DataObject();
         $data->setRegionId(self::REGION_ID_ATTRIBUTE_VALUE);
         $data->setCustomerData(1);
         $data[self::REGION_ID_ATTRIBUTE_CODE] = (int)self::REGION_ID_ATTRIBUTE_VALUE;
@@ -207,7 +207,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCountryIdFormData()
     {
-        $formData = new \Magento\Framework\Object();
+        $formData = new \Magento\Framework\DataObject();
         $formData->setCountryId(self::COUNTRY_ID);
         $this->_block->setData(self::FORM_DATA, $formData);
         $this->assertEquals(self::COUNTRY_ID, $this->_block->getCountryId());
@@ -245,7 +245,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRegionByRegion()
     {
-        $formData = new \Magento\Framework\Object();
+        $formData = new \Magento\Framework\DataObject();
         $formData->setRegion(self::REGION_ATTRIBUTE_VALUE);
         $this->_block->setData(self::FORM_DATA, $formData);
         $this->assertSame(self::REGION_ATTRIBUTE_VALUE, $this->_block->getRegion());
@@ -257,7 +257,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRegionByRegionId()
     {
-        $formData = new \Magento\Framework\Object();
+        $formData = new \Magento\Framework\DataObject();
         $formData->setRegionId(self::REGION_ID_ATTRIBUTE_VALUE);
         $this->_block->setData(self::FORM_DATA, $formData);
         $this->assertSame(self::REGION_ID_ATTRIBUTE_VALUE, $this->_block->getRegion());
@@ -269,7 +269,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetRegionNull()
     {
-        $formData = new \Magento\Framework\Object();
+        $formData = new \Magento\Framework\DataObject();
         $this->_block->setData(self::FORM_DATA, $formData);
         $this->assertNull($this->_block->getRegion());
     }
@@ -308,7 +308,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
      */
     public function testRestoreSessionData()
     {
-        $data = new \Magento\Framework\Object();
+        $data = new \Magento\Framework\DataObject();
         $data->setRegionId(self::REGION_ID_ATTRIBUTE_VALUE);
         $data->setCustomerData(1);
         $data[self::REGION_ID_ATTRIBUTE_CODE] = (int)self::REGION_ID_ATTRIBUTE_VALUE;
@@ -347,5 +347,39 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
         $block = $this->_block->restoreSessionData($form, null, false);
         $this->assertSame($this->_block, $block);
         $this->assertEquals($data, $block->getData(self::FORM_DATA));
+    }
+
+    /**
+     * Test get minimum password length
+     */
+    public function testGetMinimumPasswordLength()
+    {
+        $this->_scopeConfig->expects(
+            $this->once()
+        )->method(
+            'getValue'
+        )->with(
+            AccountManagement::XML_PATH_MINIMUM_PASSWORD_LENGTH
+        )->will(
+            $this->returnValue(6)
+        );
+        $this->assertEquals(6, $this->_block->getMinimumPasswordLength());
+    }
+
+    /**
+     * Test get required character classes number
+     */
+    public function testGetRequiredCharacterClassesNumber()
+    {
+        $this->_scopeConfig->expects(
+            $this->once()
+        )->method(
+            'getValue'
+        )->with(
+            AccountManagement::XML_PATH_REQUIRED_CHARACTER_CLASSES_NUMBER
+        )->will(
+            $this->returnValue(3)
+        );
+        $this->assertEquals(3, $this->_block->getRequiredCharacterClassesNumber());
     }
 }

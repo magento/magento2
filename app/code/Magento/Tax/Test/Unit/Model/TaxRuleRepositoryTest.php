@@ -5,9 +5,8 @@
  */
 namespace Magento\Tax\Test\Unit\Model;
 
+use Magento\Framework\Api\SortOrder;
 use \Magento\Tax\Model\TaxRuleRepository;
-
-use Magento\Framework\Api\SearchCriteria as SearchCriteria;
 
 class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -76,13 +75,13 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->ruleFactory = $this->getMock('\Magento\Tax\Model\Calculation\RuleFactory', [], [], '', false);
         $this->collectionFactory = $this->getMock(
-            '\Magento\Tax\Model\Resource\Calculation\Rule\CollectionFactory',
+            '\Magento\Tax\Model\ResourceModel\Calculation\Rule\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
-        $this->resource = $this->getMock('\Magento\Tax\Model\Resource\Calculation\Rule', [], [], '', false);
+        $this->resource = $this->getMock('\Magento\Tax\Model\ResourceModel\Calculation\Rule', [], [], '', false);
         $this->extensionAttributesJoinProcessorMock = $this->getMock(
             '\Magento\Framework\Api\ExtensionAttribute\JoinProcessor',
             ['process'],
@@ -189,7 +188,8 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $pageSize = 4;
 
         $searchCriteriaMock = $this->getMock('\Magento\Framework\Api\SearchCriteria', [], [], '', false);
-        $collectionMock = $this->getMock('Magento\Tax\Model\Resource\Calculation\Rule\Collection', [], [], '', false);
+        $collectionMock =
+            $this->getMock('Magento\Tax\Model\ResourceModel\Calculation\Rule\Collection', [], [], '', false);
         $filterGroupMock = $this->getMock('\Magento\Framework\Api\Search\FilterGroup', [], [], '', false);
         $filterMock = $this->getMock('\Magento\Framework\Api\Filter', [], [], '', false);
         $sortOrderMock = $this->getMock('\Magento\Framework\Api\SortOrder', [], [], '', false);
@@ -215,7 +215,7 @@ class TaxRuleRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->searchResultsMock->expects($this->once())->method('setTotalCount')->with($collectionSize);
         $searchCriteriaMock->expects($this->once())->method('getSortOrders')->willReturn([$sortOrderMock]);
         $sortOrderMock->expects($this->once())->method('getField')->willReturn('sort_order');
-        $sortOrderMock->expects($this->once())->method('getDirection')->willReturn(SearchCriteria::SORT_ASC);
+        $sortOrderMock->expects($this->once())->method('getDirection')->willReturn(SortOrder::SORT_ASC);
         $collectionMock->expects($this->once())->method('addOrder')->with('position', 'ASC');
         $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->willReturn($currentPage);
         $collectionMock->expects($this->once())->method('setCurPage')->with($currentPage);

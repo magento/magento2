@@ -6,6 +6,7 @@
 namespace Magento\Authorizenet\Model\Directpost;
 
 use Magento\Authorizenet\Model\Response as AuthorizenetResponse;
+use Magento\Framework\Encryption\Helper\Security;
 
 /**
  * Authorize.net response model for DirectPost model
@@ -26,6 +27,7 @@ class Response extends AuthorizenetResponse
         if (!$amount) {
             $amount = '0.00';
         }
+
         return strtoupper(md5($merchantMd5 . $merchantApiLogin . $transactionId . $amount));
     }
 
@@ -39,7 +41,8 @@ class Response extends AuthorizenetResponse
     public function isValidHash($merchantMd5, $merchantApiLogin)
     {
         $hash = $this->generateHash($merchantMd5, $merchantApiLogin, $this->getXAmount(), $this->getXTransId());
-        return $hash == $this->getData('x_MD5_Hash');
+
+        return Security::compareStrings($hash, $this->getData('x_MD5_Hash'));
     }
 
     /**

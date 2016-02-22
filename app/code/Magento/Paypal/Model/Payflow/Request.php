@@ -10,7 +10,7 @@ namespace Magento\Paypal\Model\Payflow;
  *
  * @author      Magento Core Team <core@magentocommerce.com>
  */
-class Request extends \Magento\Framework\Object
+class Request extends \Magento\Framework\DataObject
 {
     /**
      * Set/Get attribute wrapper
@@ -53,7 +53,7 @@ class Request extends \Magento\Framework\Object
                 return isset($this->_data[$key]);
         }
         throw new \Magento\Framework\Exception\LocalizedException(
-            __("Invalid method %1::%2(%3)", get_class($this), $method, print_r($args, 1))
+            __("Invalid method %1::%2", get_class($this), $method)
         );
     }
 }

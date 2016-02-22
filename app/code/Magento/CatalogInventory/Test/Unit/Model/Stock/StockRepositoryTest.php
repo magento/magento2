@@ -23,7 +23,7 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $stockMock;
 
     /**
-     * @var \Magento\CatalogInventory\Model\Resource\Stock|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\CatalogInventory\Model\ResourceModel\Stock|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stockResourceMock;
 
@@ -54,7 +54,7 @@ class StockRepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->stockResourceMock = $this->getMockBuilder('\Magento\CatalogInventory\Model\Resource\Stock')
+        $this->stockResourceMock = $this->getMockBuilder('\Magento\CatalogInventory\Model\ResourceModel\Stock')
             ->disableOriginalConstructor()
             ->getMock();
         $this->stockFactoryMock = $this->getMockBuilder(

@@ -27,9 +27,9 @@ foreach ($prices as $price) {
     $lastProductId++;
 }
 
-/** @var \Magento\Catalog\Model\Resource\Product\Collection $collection */
+/** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
 $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create('Magento\Catalog\Model\Resource\Category\Collection');
+    ->create('Magento\Catalog\Model\ResourceModel\Category\Collection');
 $collection
     ->addAttributeToFilter('level', 2)
     ->load()

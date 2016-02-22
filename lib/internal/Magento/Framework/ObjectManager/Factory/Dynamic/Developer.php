@@ -64,8 +64,6 @@ class Developer extends \Magento\Framework\ObjectManager\Factory\AbstractFactory
      * @param array $arguments
      * @return object
      * @throws \Exception
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function create($requestedType, array $arguments = [])
     {

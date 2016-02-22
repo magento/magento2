@@ -6,6 +6,7 @@
 
 namespace Magento\Setup\Model;
 
+use Magento\Framework\ObjectManagerInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Magento\Framework\App\Bootstrap;
@@ -26,29 +27,22 @@ class ObjectManagerProvider
     private $serviceLocator;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @var DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
      * @param ServiceLocatorInterface $serviceLocator
-     * @param DeploymentConfig $deploymentConfig
      */
-    public function __construct(ServiceLocatorInterface $serviceLocator, DeploymentConfig $deploymentConfig)
+    public function __construct(ServiceLocatorInterface $serviceLocator)
     {
         $this->serviceLocator = $serviceLocator;
-        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
      * Retrieve object manager.
      *
-     * @return \Magento\Framework\ObjectManagerInterface
+     * @return ObjectManagerInterface
      * @throws \Magento\Setup\Exception
      */
     public function get()
@@ -57,6 +51,15 @@ class ObjectManagerProvider
             $initParams = $this->serviceLocator->get(InitParamListener::BOOTSTRAP_PARAM);
             $factory = Bootstrap::createObjectManagerFactory(BP, $initParams);
             $this->objectManager = $factory->create($initParams);
+            $this->objectManager->configure(
+                [
+                    'Magento\Framework\Stdlib\DateTime\Timezone' => [
+                        'arguments' => [
+                            'scopeType' => \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT
+                        ]
+                    ]
+                ]
+            );
         }
         return $this->objectManager;
     }
@@ -70,7 +73,18 @@ class ObjectManagerProvider
     {
         $this->objectManager = null;
     }
-    
+
+    /**
+     * Sets object manager
+     *
+     * @param ObjectManagerInterface $objectManager
+     * @return void
+     */
+    public function setObjectManager(ObjectManagerInterface $objectManager)
+    {
+        $this->objectManager = $objectManager;
+    }
+
     /**
      * Returns ObjectManagerFactory
      *

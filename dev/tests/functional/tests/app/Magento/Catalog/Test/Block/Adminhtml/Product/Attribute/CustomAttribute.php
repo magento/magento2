@@ -19,7 +19,7 @@ class CustomAttribute extends SimpleElement
      *
      * @var string
      */
-    protected $inputSelector = '.control [data-ui-id][name]';
+    protected $inputSelector = '.control [name]:not([type="hidden"]), table';
 
     /**
      * Attribute class to element type reference.
@@ -45,7 +45,9 @@ class CustomAttribute extends SimpleElement
         $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
         $element = $this->getElementByClass($this->getElementClass());
         $value = is_array($data) ? $data['value'] : $data;
-        $this->find($this->inputSelector, Locator::SELECTOR_CSS, $element)->setValue($value);
+        if ($value !== null) {
+            $this->find($this->inputSelector, Locator::SELECTOR_CSS, $element)->setValue($value);
+        }
     }
 
     /**

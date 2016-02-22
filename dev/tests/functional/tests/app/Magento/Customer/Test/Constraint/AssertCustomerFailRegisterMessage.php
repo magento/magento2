@@ -22,7 +22,7 @@ class AssertCustomerFailRegisterMessage extends AbstractConstraint
      */
     public function processAssert(CustomerAccountCreate $registerPage)
     {
-        $errorMessage = $registerPage->getMessagesBlock()->getErrorMessages();
+        $errorMessage = $registerPage->getMessagesBlock()->getErrorMessage();
         \PHPUnit_Framework_Assert::assertNotEmpty(
             $errorMessage,
             'No error message is displayed.'

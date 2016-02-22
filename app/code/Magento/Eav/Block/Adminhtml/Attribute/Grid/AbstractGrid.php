@@ -53,7 +53,7 @@ abstract class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->addColumn(
             'frontend_label',
             [
-                'header' => __('Default label'),
+                'header' => __('Default Label'),
                 'sortable' => true,
                 'index' => 'frontend_label',
                 'header_css_class' => 'col-label',
@@ -96,7 +96,7 @@ abstract class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * Return url of given row
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
     public function getRowUrl($row)

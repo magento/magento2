@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
             <block class="Magento\Checkout\Block\Onepage" name="checkout.root" template="onepage.phtml" cacheable="false">
@@ -41,13 +41,24 @@
                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/authentication</item>
                                         <item name="displayArea" xsi:type="string">authentication</item>
                                         <item name="children" xsi:type="array">
-                                        <!--Additional authentication fields-->
+                                            <!--Additional authentication fields-->
+                                            <item name="errors" xsi:type="array">
+                                                <item name="sortOrder" xsi:type="string">0</item>
+                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/authentication-messages</item>
+                                                <item name="displayArea" xsi:type="string">messages</item>
+                                            </item>
                                         </item>
                                     </item>
                                     <item name="progressBar" xsi:type="array">
                                         <item name="sortOrder" xsi:type="string">0</item>
                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/progress-bar</item>
                                         <item name="displayArea" xsi:type="string">progressBar</item>
+                                        <item name="config" xsi:type="array">
+                                            <item name="deps" xsi:type="array">
+                                                <item name="0" xsi:type="string">checkout.steps.shipping-step.shippingAddress</item>
+                                                <item name="1" xsi:type="string">checkout.steps.billing-step.payment</item>
+                                            </item>
+                                        </item>
                                     </item>
                                     <item name="estimation" xsi:type="array">
                                         <item name="sortOrder" xsi:type="string">10</item>
@@ -90,15 +101,15 @@
                                                                     <item name="type" xsi:type="string">popup</item>
                                                                     <item name="responsive" xsi:type="boolean">true</item>
                                                                     <item name="innerScroll" xsi:type="boolean">true</item>
-                                                                    <item name="title" xsi:type="string">Shipping Address</item>
+                                                                    <item name="title" xsi:type="string" translate="true">Shipping Address</item>
                                                                     <item name="trigger" xsi:type="string">opc-new-shipping-address</item>
                                                                     <item name="buttons" xsi:type="array">
                                                                         <item name="save" xsi:type="array">
-                                                                            <item name="text" xsi:type="string">Save Address</item>
+                                                                            <item name="text" xsi:type="string" translate="true">Save Address</item>
                                                                             <item name="class" xsi:type="string">action primary action-save-address</item>
                                                                         </item>
                                                                         <item name="cancel" xsi:type="array">
-                                                                            <item name="text" xsi:type="string">Cancel</item>
+                                                                            <item name="text" xsi:type="string" translate="true">Cancel</item>
                                                                             <item name="class" xsi:type="string">action secondary action-hide-popup</item>
                                                                         </item>
                                                                     </item>
@@ -110,10 +121,10 @@
                                                         <item name="sortOrder" xsi:type="string">1</item>
                                                         <item name="children" xsi:type="array">
                                                             <item name="customer-email" xsi:type="array">
-                                                                <item name="component" xsi:type="string">Magento_Customer/js/view/customer-email</item>
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/form/element/email</item>
                                                                 <item name="displayArea" xsi:type="string">customer-email</item>
                                                                 <item name="tooltip" xsi:type="array">
-                                                                    <item name="description" xsi:type="string">We'll send your order confirmation here.</item>
+                                                                    <item name="description" xsi:type="string" translate="true">We'll send your order confirmation here.</item>
                                                                 </item>
                                                                 <item name="children" xsi:type="array">
                                                                     <item name="before-login-form" xsi:type="array">
@@ -156,7 +167,7 @@
                                                                 <item name="children" xsi:type="array">
                                                                     <!-- address-list-additional-addresses -->
                                                                 </item>
-                                                              </item>
+                                                            </item>
                                                             <item name="before-shipping-method-form" xsi:type="array">
                                                                 <item name="component" xsi:type="string">uiComponent</item>
                                                                 <item name="displayArea" xsi:type="string">before-shipping-method-form</item>
@@ -173,7 +184,7 @@
                                                                 </item>
                                                                 <item name="displayArea" xsi:type="string">additional-fieldsets</item>
                                                                 <item name="children" xsi:type="array">
-                                                                     <!-- The following items override configuration of corresponding address attributes -->
+                                                                    <!-- The following items override configuration of corresponding address attributes -->
                                                                     <item name="region" xsi:type="array">
                                                                         <!-- Make region attribute invisible on frontend. Corresponding input element is created by region_id field -->
                                                                         <item name="visible" xsi:type="boolean">false</item>
@@ -186,7 +197,7 @@
                                                                             <item name="customEntry" xsi:type="string">shippingAddress.region</item>
                                                                         </item>
                                                                         <item name="validation" xsi:type="array">
-                                                                            <item name="validate-select" xsi:type="string">true</item>
+                                                                            <item name="required-entry" xsi:type="boolean">true</item>
                                                                         </item>
                                                                         <!-- Value of region_id field is filtered by the value of county_id attribute -->
                                                                         <item name="filterBy" xsi:type="array">
@@ -217,7 +228,7 @@
                                                                     <item name="telephone" xsi:type="array">
                                                                         <item name="config" xsi:type="array">
                                                                             <item name="tooltip" xsi:type="array">
-                                                                                <item name="description" xsi:type="string">For delivery questions.</item>
+                                                                                <item name="description" xsi:type="string" translate="true">For delivery questions.</item>
                                                                             </item>
                                                                         </item>
                                                                     </item>
@@ -234,7 +245,7 @@
                                                     <item name="payment" xsi:type="array">
                                                         <item name="component" xsi:type="string">Magento_Checkout/js/view/payment</item>
                                                         <item name="config" xsi:type="array">
-                                                            <item name="title" xsi:type="string">Payment</item>
+                                                            <item name="title" xsi:type="string" translate="true">Payment</item>
                                                         </item>
                                                         <item name="children" xsi:type="array">
                                                             <item name="renders" xsi:type="array">
@@ -243,11 +254,20 @@
                                                                     <!-- merge payment method renders here -->
                                                                 </item>
                                                             </item>
+                                                            <item name="additional-payment-validators" xsi:type="array">
+                                                                <item name="component" xsi:type="string">uiComponent</item>
+                                                                <item name="children" xsi:type="array">
+                                                                    <!-- merge payment validators here -->
+                                                                    <item name="email-validator" xsi:type="array">
+                                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/payment/email-validator</item>
+                                                                    </item>
+                                                                </item>
+                                                            </item>
                                                             <item name="customer-email" xsi:type="array">
-                                                                <item name="component" xsi:type="string">Magento_Customer/js/view/customer-email</item>
+                                                                <item name="component" xsi:type="string">Magento_Checkout/js/view/form/element/email</item>
                                                                 <item name="displayArea" xsi:type="string">customer-email</item>
                                                                 <item name="tooltip" xsi:type="array">
-                                                                    <item name="description" xsi:type="string">We'll send your order confirmation here.</item>
+                                                                    <item name="description" xsi:type="string" translate="true">We'll send your order confirmation here.</item>
                                                                 </item>
                                                                 <item name="children" xsi:type="array">
                                                                     <item name="before-login-form" xsi:type="array">
@@ -285,7 +305,21 @@
                                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/payment/list</item>
                                                                 <item name="displayArea" xsi:type="string">payment-methods-list</item>
                                                                 <item name="config" xsi:type="array">
-                                                                    <item name="deps" xsi:type="string">checkout.steps.billing-step.payment.renders</item>
+                                                                    <item name="deps" xsi:type="array">
+                                                                        <item name="0" xsi:type="string">checkout.steps.billing-step.payment.renders</item>
+                                                                        <item name="1" xsi:type="string">checkout.steps.billing-step.payment.additional-payment-validators</item>
+                                                                    </item>
+                                                                </item>
+                                                                <item name="children" xsi:type="array">
+                                                                    <item name="before-place-order" xsi:type="array">
+                                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                                        <item name="displayArea" xsi:type="string">before-place-order</item>
+                                                                        <item name="dataScope" xsi:type="string">before-place-order</item>
+                                                                        <item name="provider" xsi:type="string">checkoutProvider</item>
+                                                                        <item name="config" xsi:type="array">
+                                                                            <item name="template" xsi:type="string">Magento_Checkout/payment/before-place-order</item>
+                                                                        </item>
+                                                                    </item>
                                                                 </item>
                                                             </item>
                                                             <!-- merge your payment methods here -->
@@ -308,6 +342,9 @@
                                         <item name="displayArea" xsi:type="string">sidebar</item>
                                         <item name="config" xsi:type="array">
                                             <item name="template" xsi:type="string">Magento_Checkout/sidebar</item>
+                                            <item name="deps" xsi:type="array">
+                                                <item name="0" xsi:type="string">checkout.steps</item>
+                                            </item>
                                         </item>
                                         <item name="children" xsi:type="array">
                                             <item name="summary" xsi:type="array">
@@ -318,7 +355,7 @@
                                                 </item>
                                                 <item name="children" xsi:type="array">
                                                     <item name="totals" xsi:type="array">
-                                                        <item name="component" xsi:type="string">uiComponent</item>
+                                                        <item name="component" xsi:type="string">Magento_Checkout/js/view/summary/totals</item>
                                                         <item name="displayArea" xsi:type="string">totals</item>
                                                         <item name="config" xsi:type="array">
                                                             <item name="template" xsi:type="string">Magento_Checkout/summary/totals</item>
@@ -329,20 +366,20 @@
                                                             <item name="subtotal" xsi:type="array">
                                                                 <item name="component"  xsi:type="string">Magento_Checkout/js/view/summary/subtotal</item>
                                                                 <item name="config" xsi:type="array">
-                                                                    <item name="title" xsi:type="string">Cart Subtotal</item>
+                                                                    <item name="title" xsi:type="string" translate="true">Cart Subtotal</item>
                                                                 </item>
                                                             </item>
                                                             <item name="shipping" xsi:type="array">
                                                                 <item name="component"  xsi:type="string">Magento_Checkout/js/view/summary/shipping</item>
                                                                 <item name="config" xsi:type="array">
-                                                                    <item name="title" xsi:type="string">Shipping</item>
-                                                                    <item name="notCalculatedMessage" xsi:type="string">Not yet calculated</item>
+                                                                    <item name="title" xsi:type="string" translate="true">Shipping</item>
+                                                                    <item name="notCalculatedMessage" xsi:type="string" translate="true">Not yet calculated</item>
                                                                 </item>
                                                             </item>
                                                             <item name="grand-total" xsi:type="array">
                                                                 <item name="component"  xsi:type="string">Magento_Checkout/js/view/summary/grand-total</item>
                                                                 <item name="config" xsi:type="array">
-                                                                    <item name="title" xsi:type="string">Order Total</item>
+                                                                    <item name="title" xsi:type="string" translate="true">Order Total</item>
                                                                 </item>
                                                             </item>
                                                         </item>
@@ -405,6 +442,6 @@
                 </arguments>
             </block>
         </referenceContainer>
-        <remove name="page.messages" />
+        <referenceContainer name="page.messages" remove="true"/>
     </body>
 </page>

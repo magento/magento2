@@ -11,7 +11,7 @@ use Magento\Checkout\Model\Type\Onepage;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\Registry;
 use Magento\Payment\Model\IframeConfigProvider;
 use Magento\Quote\Api\CartManagementInterface;
@@ -113,7 +113,7 @@ class Place extends Payment
      */
     protected function placeCheckoutOrder()
     {
-        $result = new Object();
+        $result = new DataObject();
         $response = $this->getResponse();
         try {
             $this->cartManagement->placeOrder($this->_getCheckout()->getQuote()->getId());

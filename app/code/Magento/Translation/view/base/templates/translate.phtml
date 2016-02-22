@@ -7,15 +7,50 @@
 ?>
 <?php /** @var $block \Magento\Translation\Block\Js */ ?>
 <?php if ($block->dictionaryEnabled()): ?>
-<script>
-require([
-    "jquery",
-    "mage/translate",
-    "text!<?php echo Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME?>"
-], function($, translate, data) {
-    if (data.length) {
-        $.mage.translate.add(JSON.parse(data));
-    }
-});
-</script>
+    <script>
+        require.config({
+            deps: [
+                'jquery',
+                'mage/translate',
+                'jquery/jquery-storageapi'
+            ],
+            callback: function ($) {
+                'use strict';
+
+                var dependencies = [],
+                    versionObj;
+
+                $.initNamespaceStorage('mage-translation-storage');
+                $.initNamespaceStorage('mage-translation-file-version');
+                versionObj = $.localStorage.get('mage-translation-file-version');
+
+                if (versionObj.version !== '<?php /* @escapeNotVerified */
+                    echo sha1($block->getTranslationFileTimestamp() . $block->getTranslationFilePath()) ?>') {
+                    dependencies.push(
+                        'text!<?php /*  @escapeNotVerified */ echo Magento\Translation\Model\Js\Config::DICTIONARY_FILE_NAME?>'
+                    );
+
+                }
+
+                require.config({
+                    deps: dependencies,
+                    callback: function (string) {
+                        if (typeof string === 'string') {
+                            $.mage.translate.add(JSON.parse(string));
+                            $.localStorage.set('mage-translation-storage', string);
+                            $.localStorage.set(
+                                'mage-translation-file-version',
+                                {
+                                    version: '<?php /* @escapeNotVerified */
+                    echo sha1($block->getTranslationFileTimestamp() . $block->getTranslationFilePath()) ?>'
+                                }
+                            );
+                        } else {
+                            $.mage.translate.add($.localStorage.get('mage-translation-storage'));
+                        }
+                    }
+                });
+            }
+        });
+    </script>
 <?php endif; ?>

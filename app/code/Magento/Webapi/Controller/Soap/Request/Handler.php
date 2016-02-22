@@ -8,14 +8,15 @@ namespace Magento\Webapi\Controller\Soap\Request;
 use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\MetadataObjectInterface;
 use Magento\Framework\Api\SimpleDataObjectConverter;
-use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\Webapi\Authorization;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Webapi\ServiceInputProcessor;
-use Magento\Webapi\Controller\Soap\Request as SoapRequest;
+use Magento\Framework\Webapi\Request as SoapRequest;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Webapi\Model\Soap\Config as SoapConfig;
 use Magento\Framework\Reflection\MethodsMap;
+use Magento\Webapi\Model\ServiceMetadata;
 
 /**
  * Handler of requests to SOAP server.
@@ -37,8 +38,8 @@ class Handler
     /** @var SoapConfig */
     protected $_apiConfig;
 
-    /** @var AuthorizationInterface */
-    protected $_authorization;
+    /** @var Authorization */
+    protected $authorization;
 
     /** @var SimpleDataObjectConverter */
     protected $_dataObjectConverter;
@@ -58,7 +59,7 @@ class Handler
      * @param SoapRequest $request
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param SoapConfig $apiConfig
-     * @param AuthorizationInterface $authorization
+     * @param Authorization $authorization
      * @param SimpleDataObjectConverter $dataObjectConverter
      * @param ServiceInputProcessor $serviceInputProcessor
      * @param DataObjectProcessor $dataObjectProcessor
@@ -68,7 +69,7 @@ class Handler
         SoapRequest $request,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         SoapConfig $apiConfig,
-        AuthorizationInterface $authorization,
+        Authorization $authorization,
         SimpleDataObjectConverter $dataObjectConverter,
         ServiceInputProcessor $serviceInputProcessor,
         DataObjectProcessor $dataObjectProcessor,
@@ -77,7 +78,7 @@ class Handler
         $this->_request = $request;
         $this->_objectManager = $objectManager;
         $this->_apiConfig = $apiConfig;
-        $this->_authorization = $authorization;
+        $this->authorization = $authorization;
         $this->_dataObjectConverter = $dataObjectConverter;
         $this->serviceInputProcessor = $serviceInputProcessor;
         $this->_dataObjectProcessor = $dataObjectProcessor;
@@ -98,27 +99,19 @@ class Handler
     {
         $requestedServices = $this->_request->getRequestedServices();
         $serviceMethodInfo = $this->_apiConfig->getServiceMethodInfo($operation, $requestedServices);
-        $serviceClass = $serviceMethodInfo[SoapConfig::KEY_CLASS];
-        $serviceMethod = $serviceMethodInfo[SoapConfig::KEY_METHOD];
+        $serviceClass = $serviceMethodInfo[ServiceMetadata::KEY_CLASS];
+        $serviceMethod = $serviceMethodInfo[ServiceMetadata::KEY_METHOD];
 
         // check if the operation is a secure operation & whether the request was made in HTTPS
-        if ($serviceMethodInfo[SoapConfig::KEY_IS_SECURE] && !$this->_request->isSecure()) {
+        if ($serviceMethodInfo[ServiceMetadata::KEY_IS_SECURE] && !$this->_request->isSecure()) {
             throw new WebapiException(__("Operation allowed only in HTTPS"));
         }
 
-        $isAllowed = false;
-        foreach ($serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES] as $resource) {
-            if ($this->_authorization->isAllowed($resource)) {
-                $isAllowed = true;
-                break;
-            }
-        }
-
-        if (!$isAllowed) {
+        if (!$this->authorization->isAllowed($serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])) {
             throw new AuthorizationException(
                 __(
                     AuthorizationException::NOT_AUTHORIZED,
-                    ['resources' => implode(', ', $serviceMethodInfo[SoapConfig::KEY_ACL_RESOURCES])]
+                    ['resources' => implode(', ', $serviceMethodInfo[ServiceMetadata::KEY_ACL_RESOURCES])]
                 )
             );
         }

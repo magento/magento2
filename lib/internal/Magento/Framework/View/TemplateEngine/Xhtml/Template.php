@@ -15,17 +15,24 @@ class Template
     const XML_ENCODING = 'UTF-8';
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * @var \DOMElement
      */
     protected $templateNode;
 
     /**
-     * Constructor
-     *
+     * @param \Psr\Log\LoggerInterface $logger
      * @param string $content
      */
-    public function __construct($content)
-    {
+    public function __construct(
+        \Psr\Log\LoggerInterface $logger,
+        $content
+    ) {
+        $this->logger = $logger;
         $document = new \DOMDocument(static::XML_VERSION, static::XML_ENCODING);
         $document->loadXML($content);
         $this->templateNode = $document->documentElement;
@@ -65,6 +72,7 @@ class Template
             $this->templateNode->ownerDocument->normalizeDocument();
             $result = $this->templateNode->ownerDocument->saveHTML();
         } catch (\Exception $e) {
+            $this->logger->critical($e->getMessage());
             $result = '';
         }
         return $result;

@@ -84,7 +84,7 @@ class Checkout extends \Magento\Paypal\Model\Express\Checkout
             $billingAddress->setFirstname($details['firstName']);
             $billingAddress->setLastname($details['lastName']);
             $billingAddress->setEmail($details['email']);
-        } elseif ($billingAddress->getEmail() == null) {
+        } elseif ($exportedShippingAddress) {
             $this->importAddressData($billingAddress, $exportedShippingAddress);
             $billingAddress->setFirstname($details['firstName']);
             $billingAddress->setLastname($details['lastName']);
@@ -119,7 +119,8 @@ class Checkout extends \Magento\Paypal\Model\Express\Checkout
      */
     protected function importAddressData($address, $exportedAddress)
     {
-        $address->setStreet([$exportedAddress['streetAddress'], $exportedAddress['extendedAddress']]);
+        $extendedAddress = isset($exportedAddress['extendedAddress']) ? $exportedAddress['extendedAddress'] : null;
+        $address->setStreet([$exportedAddress['streetAddress'], $extendedAddress]);
         $address->setCity($exportedAddress['locality']);
         $address->setRegionCode($exportedAddress['region']);
         $address->setCountryId($exportedAddress['countryCodeAlpha2']);

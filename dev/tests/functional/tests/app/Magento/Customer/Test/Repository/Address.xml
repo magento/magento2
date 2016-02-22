@@ -159,7 +159,6 @@
             <field name="country_id" xsi:type="string">United Kingdom</field>
             <field name="region" xsi:type="string">London</field>
             <field name="telephone" xsi:type="string">444-44-444-44</field>
-            <field name="fax" xsi:type="string">444-44-444-44</field>
             <field name="default_billing" xsi:type="string">Yes</field>
             <field name="default_shipping" xsi:type="string">Yes</field>
         </dataset>
@@ -175,7 +174,6 @@
             <field name="country_id" xsi:type="string">United Kingdom</field>
             <field name="region" xsi:type="string">London</field>
             <field name="telephone" xsi:type="string">444-44-444-44</field>
-            <field name="fax" xsi:type="string">444-44-444-44</field>
         </dataset>
 
         <dataset name="UK_address_without_email">
@@ -188,7 +186,6 @@
             <field name="country_id" xsi:type="string">United Kingdom</field>
             <field name="region" xsi:type="string">London</field>
             <field name="telephone" xsi:type="string">444-44-444-44</field>
-            <field name="fax" xsi:type="string">444-44-444-44</field>
         </dataset>
 
         <dataset name="UK_address_with_VAT">

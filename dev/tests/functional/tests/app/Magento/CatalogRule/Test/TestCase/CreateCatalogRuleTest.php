@@ -28,7 +28,7 @@ use Magento\Customer\Test\Fixture\CustomerGroup;
 class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
 {
     /* tags */
-    const TEST_TYPE = 'acceptance_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const MVP = 'yes';
     const DOMAIN = 'MX';
     /* end tags */
@@ -37,25 +37,18 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
      * Create Catalog Price Rule.
      *
      * @param CatalogRule $catalogPriceRule
-     * @param Customer $customer
      * @param string $product
+     * @param string $conditionEntity
+     * @param Customer $customer
      * @return array
      */
-    public function testCreate(
-        CatalogRule $catalogPriceRule,
-        $product,
-        Customer $customer = null
-    ) {
+    public function testCreate(CatalogRule $catalogPriceRule, $product, $conditionEntity, Customer $customer = null)
+    {
+        /** @var CatalogProductSimple $productSimple */
         $productSimple = $this->fixtureFactory->createByCode('catalogProductSimple', ['dataset' => $product]);
         // Prepare data
         $catalogPriceRule = $this->applyCustomerGroup($catalogPriceRule, $customer);
-        $replace = [
-            'conditions' => [
-                'conditions' => [
-                    '%category_1%' => $productSimple->getDataFieldConfig('category_ids')['source']->getIds()[0],
-                ],
-            ],
-        ];
+        $replace = $this->prepareCondition($productSimple, $conditionEntity);
 
         // Open Catalog Price Rule page
         $this->catalogRuleIndex->open();
@@ -109,5 +102,37 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
         }
 
         return $catalogPriceRule;
+    }
+
+    /**
+     * Prepare condition for catalog price rule.
+     *
+     * @param CatalogProductSimple $productSimple
+     * @param string $conditionEntity
+     * @return array
+     */
+    protected function prepareCondition(CatalogProductSimple $productSimple, $conditionEntity)
+    {
+        $result = [];
+
+        switch ($conditionEntity) {
+            case 'category':
+                $result['%category_id%'] = $productSimple->getDataFieldConfig('category_ids')['source']->getIds()[0];
+                break;
+            case 'attribute':
+                /** @var \Magento\Catalog\Test\Fixture\CatalogProductAttribute[] $attrs */
+                $attributes = $productSimple->getDataFieldConfig('attribute_set_id')['source']
+                    ->getAttributeSet()->getDataFieldConfig('assigned_attributes')['source']->getAttributes();
+
+                $result['%attribute_name%'] = $attributes[0]->getFrontendLabel();
+                $result['%attribute_value%'] = $attributes[0]->getOptions()[0]['view'];
+                break;
+        }
+
+        return [
+            'conditions' => [
+                'conditions' => $result,
+            ],
+        ];
     }
 }

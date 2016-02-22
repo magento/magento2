@@ -97,7 +97,7 @@ class RendererFactoryTest extends \PHPUnit_Framework_TestCase
         $acceptTypes = ['application/json'];
         /** Mock request getAcceptTypes method to return specified value. */
         $this->_requestMock->expects($this->once())->method('getAcceptTypes')->will($this->returnValue($acceptTypes));
-        /** Mock object to return \Magento\Framework\Object */
+        /** Mock object to return \Magento\Framework\DataObject */
         $this->_objectManagerMock->expects(
             $this->once()
         )->method(
@@ -105,7 +105,7 @@ class RendererFactoryTest extends \PHPUnit_Framework_TestCase
         )->with(
             'Magento\Framework\Webapi\Rest\Response\Renderer\Json'
         )->will(
-            $this->returnValue(new \Magento\Framework\Object())
+            $this->returnValue(new \Magento\Framework\DataObject())
         );
 
         $this->setExpectedException(

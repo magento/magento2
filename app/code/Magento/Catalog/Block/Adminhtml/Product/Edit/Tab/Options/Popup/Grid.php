@@ -21,7 +21,7 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
     /**
      * Return empty row url for disabling JS click events
      *
-     * @param Product|\Magento\Framework\Object $row
+     * @param Product|\Magento\Framework\DataObject $row
      * @return string|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -52,6 +52,29 @@ class Grid extends \Magento\Catalog\Block\Adminhtml\Product\Grid
     {
         $this->setMassactionIdField('entity_id');
         $this->getMassactionBlock()->setFormFieldName('product')->addItem('import', ['label' => __('Import')]);
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function _prepareCollection()
+    {
+        parent::_prepareCollection();
+
+        if (null !== $this->getRequest()->getParam('current_product_id')) {
+            $this->getCollection()->getSelect()->where(
+                'e.entity_id != ?',
+                $this->getRequest()->getParam('current_product_id')
+            );
+        }
+
+        $this->getCollection()->getSelect()->distinct()->join(
+            ['opt' => $this->getCollection()->getTable('catalog_product_option')],
+            'opt.product_id = e.entity_id',
+            null
+        );
 
         return $this;
     }

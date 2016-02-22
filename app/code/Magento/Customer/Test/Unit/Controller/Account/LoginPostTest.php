@@ -3,187 +3,460 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Customer\Test\Unit\Controller\Account;
+
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Controller\Account\LoginPost;
+use Magento\Customer\Model\Account\Redirect as AccountRedirect;
+use Magento\Customer\Model\Session;
+use Magento\Customer\Model\Url;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Controller\Result\Redirect;
 
 /**
  * Test customer account controller
- */
-namespace Magento\Customer\Test\Unit\Controller\Account;
-
-use Magento\Customer\Model\Url;
-
-/**
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LoginPostTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Customer\Controller\Account
+     * @var LoginPost
      */
-    protected $object;
+    protected $controller;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $request;
+    protected $context;
 
     /**
-     * @var \Magento\Framework\App\ResponseInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Session | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $response;
+    protected $session;
 
     /**
-     * @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject
+     * @var AccountManagementInterface | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerSession;
+    protected $accountManagement;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Url | \PHPUnit_Framework_MockObject_MockObject
      */
     protected $url;
 
     /**
-     * @var \Magento\Customer\Model\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Form\FormKey\Validator | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerUrl;
+    protected $formkeyValidator;
 
     /**
-     * @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AccountRedirect | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $redirectMock;
+    protected $accountRedirect;
 
     /**
-     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $viewMock;
+    protected $request;
 
     /**
-     * @var \Magento\Customer\Api\AccountManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var Redirect | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $customerAccountManagementMock;
+    protected $redirect;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Message\ManagerInterface | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $redirectFactoryMock;
+    protected $messageManager;
 
     /**
-     * @var \Magento\Framework\Controller\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $redirectResultMock;
+    protected $scopeConfig;
 
-    /**
-     * List of actions that are allowed for not authorized users
-     *
-     * @var array
-     */
-    protected $openActions = [
-        'create',
-        'login',
-        'logoutsuccess',
-        'forgotpassword',
-        'forgotpasswordpost',
-        'resetpassword',
-        'resetpasswordpost',
-        'confirm',
-        'confirmation',
-        'createpassword',
-        'createpost',
-        'loginpost',
-    ];
-
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $_formKeyValidator;
-
-    /**
-     * @return void
-     */
     protected function setUp()
     {
-        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
-            ->disableOriginalConstructor()->getMock();
-        $this->response = $this->getMock(
-            'Magento\Framework\App\ResponseInterface',
-            ['setRedirect', 'sendResponse'],
-            [],
-            '',
-            false
-        );
-        $this->customerSession = $this->getMock(
-            '\Magento\Customer\Model\Session',
-            ['isLoggedIn', 'getLastCustomerId', 'getBeforeAuthUrl', 'setBeforeAuthUrl'],
-            [],
-            '',
-            false
-        );
-        $this->url = $this->getMock('\Magento\Framework\UrlInterface');
-        $this->_formKeyValidator = $this->getMock(
-            'Magento\Framework\Data\Form\FormKey\Validator',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->customerUrl = $this->getMock(
-            'Magento\Customer\Model\Url',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->formFactoryMock = $this->getMock(
-            'Magento\Customer\Model\Metadata\FormFactory',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->redirectMock = $this->getMockForAbstractClass('Magento\Framework\App\Response\RedirectInterface');
-        $this->viewMock = $this->getMockForAbstractClass('Magento\Framework\App\ViewInterface');
-        $this->customerAccountManagementMock =
-            $this->getMockForAbstractClass('Magento\Customer\Api\AccountManagementInterface');
+        $this->prepareContext();
 
-        $this->redirectResultMock = $this->getMock('Magento\Framework\Controller\Result\Redirect', [], [], '', false);
+        $this->session = $this->getMockBuilder('Magento\Customer\Model\Session')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'isLoggedIn',
+                'setCustomerDataAsLoggedIn',
+                'regenerateId',
+                'setUsername',
+            ])
+            ->getMock();
 
-        $this->redirectFactoryMock = $this->getMock(
-            'Magento\Framework\Controller\Result\RedirectFactory',
-            ['create'],
-            [],
-            '',
-            false
+        $this->accountManagement = $this->getMockBuilder('Magento\Customer\Api\AccountManagementInterface')
+            ->getMockForAbstractClass();
+
+        $this->url = $this->getMockBuilder('Magento\Customer\Model\Url')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->formkeyValidator = $this->getMockBuilder('Magento\Framework\Data\Form\FormKey\Validator')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->accountRedirect = $this->getMockBuilder('Magento\Customer\Model\Account\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+            ->getMockForAbstractClass();
+
+        $this->controller = new LoginPost(
+            $this->context,
+            $this->session,
+            $this->accountManagement,
+            $this->url,
+            $this->formkeyValidator,
+            $this->accountRedirect
         );
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->object = $objectManager->getObject(
-            'Magento\Customer\Controller\Account\LoginPost',
-            [
-                'customerSession' => $this->customerSession,
-                'url' => $this->url,
-                'request' => $this->request,
-                'response' => $this->response,
-                'formKeyValidator' => $this->_formKeyValidator,
-                'customerUrl' => $this->customerUrl,
-                'redirect' => $this->redirectMock,
-                'view' => $this->viewMock,
-                'customerAccountManagement' => $this->customerAccountManagementMock,
-                'resultRedirectFactory' => $this->redirectFactoryMock,
-            ]
-        );
+        $this->controller->setScopeConfig($this->scopeConfig);
     }
 
     /**
-     * @covers \Magento\Customer\Controller\Account::getAllowedActions
+     * @param boolean $isLoggedIn
+     * @param boolean $isValidFormKey
+     * @dataProvider invalidFormKeyDataProvider
+     */
+    public function testExecuteInvalidFormKey(
+        $isLoggedIn,
+        $isValidFormKey
+    ) {
+        $this->session->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn($isLoggedIn);
+
+        $this->formkeyValidator->expects($this->any())
+            ->method('validate')
+            ->with($this->request)
+            ->willReturn($isValidFormKey);
+
+        $this->redirect->expects($this->once())
+            ->method('setPath')
+            ->with('*/*/')
+            ->willReturnSelf();
+
+        $this->assertSame($this->redirect, $this->controller->execute());
+    }
+
+    /**
+     * @return array
+     */
+    public function invalidFormKeyDataProvider()
+    {
+        return [
+            [
+                'isLoggedIn' => true,
+                'isValidFormKey' => false,
+            ],
+            [
+                'isLoggedIn' => false,
+                'isValidFormKey' => false,
+            ],
+            [
+                'isLoggedIn' => true,
+                'isValidFormKey' => true,
+            ],
+        ];
+    }
+
+    public function testExecuteNoPostData()
+    {
+        $this->session->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(false);
+
+        $this->formkeyValidator->expects($this->once())
+            ->method('validate')
+            ->with($this->request)
+            ->willReturn(true);
+
+        $this->request->expects($this->once())
+            ->method('isPost')
+            ->willReturn(null);
+
+        $this->accountRedirect->expects($this->once())
+            ->method('getRedirect')
+            ->willReturn($this->redirect);
+
+        $this->assertSame($this->redirect, $this->controller->execute());
+    }
+
+    public function testExecuteEmptyLoginData()
+    {
+        $this->session->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(false);
+
+        $this->formkeyValidator->expects($this->once())
+            ->method('validate')
+            ->with($this->request)
+            ->willReturn(true);
+
+        $this->request->expects($this->once())
+            ->method('isPost')
+            ->willReturn(true);
+        $this->request->expects($this->once())
+            ->method('getPost')
+            ->with('login')
+            ->willReturn([]);
+
+        $this->messageManager->expects($this->once())
+            ->method('addError')
+            ->with(__('A login and a password are required.'))
+            ->willReturnSelf();
+
+        $this->accountRedirect->expects($this->once())
+            ->method('getRedirect')
+            ->willReturn($this->redirect);
+
+        $this->assertSame($this->redirect, $this->controller->execute());
+    }
+
+    public function testExecuteSuccess()
+    {
+        $username = 'user1';
+        $password = 'pass1';
+
+        $this->session->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(false);
+
+        $this->formkeyValidator->expects($this->once())
+            ->method('validate')
+            ->with($this->request)
+            ->willReturn(true);
+
+        $this->request->expects($this->once())
+            ->method('isPost')
+            ->willReturn(true);
+        $this->request->expects($this->once())
+            ->method('getPost')
+            ->with('login')
+            ->willReturn([
+                'username' => $username,
+                'password' => $password,
+            ]);
+
+        $customerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+            ->getMockForAbstractClass();
+
+        $this->accountManagement->expects($this->once())
+            ->method('authenticate')
+            ->with($username, $password)
+            ->willReturn($customerMock);
+
+        $this->session->expects($this->once())
+            ->method('setCustomerDataAsLoggedIn')
+            ->with($customerMock)
+            ->willReturnSelf();
+        $this->session->expects($this->once())
+            ->method('regenerateId')
+            ->willReturnSelf();
+
+        $this->accountRedirect->expects($this->once())
+            ->method('getRedirect')
+            ->willReturn($this->redirect);
+
+        $this->assertSame($this->redirect, $this->controller->execute());
+    }
+
+    /**
+     * @param array $exceptionData
+     *
+     * @dataProvider exceptionDataProvider
+     */
+    public function testExecuteWithException(
+        $exceptionData
+    ) {
+        $username = 'user1';
+        $password = 'pass1';
+
+        $this->session->expects($this->once())
+            ->method('isLoggedIn')
+            ->willReturn(false);
+
+        $this->formkeyValidator->expects($this->once())
+            ->method('validate')
+            ->with($this->request)
+            ->willReturn(true);
+
+        $this->request->expects($this->once())
+            ->method('isPost')
+            ->willReturn(true);
+        $this->request->expects($this->once())
+            ->method('getPost')
+            ->with('login')
+            ->willReturn([
+                'username' => $username,
+                'password' => $password,
+            ]);
+
+        $exception = new $exceptionData['exception'](__($exceptionData['message']));
+
+        $this->accountManagement->expects($this->once())
+            ->method('authenticate')
+            ->with($username, $password)
+            ->willThrowException($exception);
+
+        $this->mockExceptions($exceptionData['exception'], $username);
+
+        $this->accountRedirect->expects($this->once())
+            ->method('getRedirect')
+            ->willReturn($this->redirect);
+
+        $this->assertSame($this->redirect, $this->controller->execute());
+    }
+
+    /**
+     * @return array
+     */
+    public function exceptionDataProvider()
+    {
+        return [
+            [
+                [
+                    'message' => 'EmailNotConfirmedException',
+                    'exception' => '\Magento\Framework\Exception\EmailNotConfirmedException',
+                ],
+            ],
+            [
+                [
+                    'message' => 'AuthenticationException',
+                    'exception' => '\Magento\Framework\Exception\AuthenticationException',
+                ],
+            ],
+            [
+                [
+                    'message' => 'Exception',
+                    'exception' => '\Exception',
+                ],
+            ],
+            [
+                [
+                    'message' => 'UserLockedException',
+                    'exception' => '\Magento\Framework\Exception\State\UserLockedException',
+                ],
+            ],
+        ];
+    }
+
+    protected function prepareContext()
+    {
+        $this->context = $this->getMockBuilder('Magento\Framework\App\Action\Context')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'isPost',
+                'getPost',
+            ])
+            ->getMock();
+
+        $this->redirect = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->messageManager = $this->getMockBuilder('Magento\Framework\Message\ManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $redirectFactory = $this->getMockBuilder('Magento\Framework\Controller\Result\RedirectFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $redirectFactory->expects($this->any())
+            ->method('create')
+            ->willReturn($this->redirect);
+
+        $this->context->expects($this->any())
+            ->method('getRequest')
+            ->willReturn($this->request);
+
+        $this->context->expects($this->any())
+            ->method('getResultRedirectFactory')
+            ->willReturn($redirectFactory);
+
+        $this->context->expects($this->any())
+            ->method('getMessageManager')
+            ->willReturn($this->messageManager);
+    }
+
+    /**
+     * @param string $exception
+     * @param string $username
      * @return void
      */
-    public function testGetAllowedActions()
+    protected function mockExceptions($exception, $username)
     {
-        $this->assertAttributeEquals($this->openActions, 'openActions', $this->object);
-        /**
-         * @TODO: [TD] Protected methods must be tested via public. Eliminate getAllowedActions method and write test
-         *   for dispatch method using this property instead.
-         */
-        $method = new \ReflectionMethod('Magento\Customer\Controller\Account', 'getAllowedActions');
-        $method->setAccessible(true);
-        $this->assertEquals($this->openActions, $method->invoke($this->object));
+        $url = 'url1';
+        $email = 'hello@example.com';
+
+        switch ($exception) {
+            case '\Magento\Framework\Exception\EmailNotConfirmedException':
+                $this->url->expects($this->once())
+                    ->method('getEmailConfirmationUrl')
+                    ->with($username)
+                    ->willReturn($url);
+
+                $message = __(
+                    'This account is not confirmed.' .
+                    ' <a href="%1">Click here</a> to resend confirmation email.',
+                    $url
+                );
+                $this->messageManager->expects($this->once())
+                    ->method('addError')
+                    ->with($message)
+                    ->willReturnSelf();
+
+                $this->session->expects($this->once())
+                    ->method('setUsername')
+                    ->with($username)
+                    ->willReturnSelf();
+                break;
+
+            case '\Magento\Framework\Exception\AuthenticationException':
+                $this->messageManager->expects($this->once())
+                    ->method('addError')
+                    ->with(__('Invalid login or password.'))
+                    ->willReturnSelf();
+
+                $this->session->expects($this->once())
+                    ->method('setUsername')
+                    ->with($username)
+                    ->willReturnSelf();
+                break;
+
+            case '\Exception':
+                $this->messageManager->expects($this->once())
+                    ->method('addError')
+                    ->with(__('An unspecified error occurred. Please contact us for assistance.'))
+                    ->willReturnSelf();
+                break;
+
+            case '\Magento\Framework\Exception\State\UserLockedException':
+                $this->scopeConfig->expects($this->once())->method('getValue')->willReturn($email);
+                $message = __(
+                    'The account is locked. Please wait and try again or contact %1.',
+                    $email
+                );
+                $this->messageManager->expects($this->once())
+                    ->method('addError')
+                    ->with($message)
+                    ->willReturnSelf();
+                $this->session->expects($this->once())
+                    ->method('setUsername')
+                    ->with($username)
+                    ->willReturnSelf();
+                break;
+        }
     }
 }

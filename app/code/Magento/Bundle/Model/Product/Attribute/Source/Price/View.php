@@ -5,7 +5,7 @@
  */
 namespace Magento\Bundle\Model\Product\Attribute\Source\Price;
 
-use Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory;
 use Magento\Framework\DB\Ddl\Table;
 
 /**
@@ -37,8 +37,8 @@ class View extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     {
         if (null === $this->_options) {
             $this->_options = [
-                ['label' => __('As Low as'), 'value' => 1],
                 ['label' => __('Price Range'), 'value' => 0],
+                ['label' => __('As Low as'), 'value' => 1],
             ];
         }
         return $this->_options;

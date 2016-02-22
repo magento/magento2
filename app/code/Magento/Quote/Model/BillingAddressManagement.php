@@ -5,7 +5,7 @@
  */
 namespace Magento\Quote\Model;
 
-use Magento\Quote\Model\QuoteRepository;
+use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Framework\Exception\InputException;
 use Psr\Log\LoggerInterface as Logger;
 use Magento\Quote\Api\BillingAddressManagementInterface;
@@ -31,7 +31,7 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     /**
      * Quote repository.
      *
-     * @var QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -43,13 +43,13 @@ class BillingAddressManagement implements BillingAddressManagementInterface
     /**
      * Constructs a quote billing address service object.
      *
-     * @param QuoteRepository $quoteRepository Quote repository.
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository Quote repository.
      * @param QuoteAddressValidator $addressValidator Address validator.
      * @param Logger $logger Logger.
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      */
     public function __construct(
-        QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         QuoteAddressValidator $addressValidator,
         Logger $logger,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
@@ -99,11 +99,12 @@ class BillingAddressManagement implements BillingAddressManagementInterface
             $quote->setShippingAddress($shippingAddress);
         }
         $quote->setDataChanges(true);
+        $quote->collectTotals();
         try {
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new InputException(__('Unable to save address. Please, check input data.'));
+            throw new InputException(__('Unable to save address. Please check input data.'));
         }
         return $quote->getBillingAddress()->getId();
     }

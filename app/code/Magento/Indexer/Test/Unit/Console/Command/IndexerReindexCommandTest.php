@@ -8,7 +8,7 @@ namespace Magento\Indexer\Test\Unit\Console\Command;
 use Magento\Indexer\Console\Command\IndexerReindexCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class IndexerReindexCommandTest extends IndexerCommandCommonTestSetup
+class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
 {
     /**
      * Command being tested
@@ -19,15 +19,16 @@ class IndexerReindexCommandTest extends IndexerCommandCommonTestSetup
 
     public function testGetOptions()
     {
+        $this->stateMock->expects($this->never())->method('setAreaCode');
         $this->command = new IndexerReindexCommand($this->objectManagerFactory);
         $optionsList = $this->command->getInputList();
-        $this->assertSame(2, sizeof($optionsList));
-        $this->assertSame('all', $optionsList[0]->getName());
-        $this->assertSame('index', $optionsList[1]->getName());
+        $this->assertSame(1, sizeof($optionsList));
+        $this->assertSame('index', $optionsList[0]->getName());
     }
 
     public function testExecuteAll()
     {
+        $this->configureAdminArea();
         $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
@@ -44,6 +45,7 @@ class IndexerReindexCommandTest extends IndexerCommandCommonTestSetup
 
     public function testExecuteWithIndex()
     {
+        $this->configureAdminArea();
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $indexerOne->expects($this->once())->method('reindexAll');
         $indexerOne->expects($this->once())->method('getTitle')->willReturn('Title_indexerOne');
@@ -66,6 +68,7 @@ class IndexerReindexCommandTest extends IndexerCommandCommonTestSetup
 
     public function testExecuteWithLocalizedException()
     {
+        $this->configureAdminArea();
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $localizedException = new \Magento\Framework\Exception\LocalizedException(__('Some Exception Message'));
         $indexerOne->expects($this->once())->method('reindexAll')->will($this->throwException($localizedException));
@@ -80,6 +83,7 @@ class IndexerReindexCommandTest extends IndexerCommandCommonTestSetup
 
     public function testExecuteWithException()
     {
+        $this->configureAdminArea();
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
         $exception = new \Exception();
         $indexerOne->expects($this->once())->method('reindexAll')->will($this->throwException($exception));
@@ -93,18 +97,25 @@ class IndexerReindexCommandTest extends IndexerCommandCommonTestSetup
         $this->assertStringStartsWith('Title_indexerOne indexer process unknown error:', $actualValue);
     }
 
+    /**
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessageRegExp The following requested cache types are not supported:.*
+     */
     public function testExecuteWithExceptionInLoad()
     {
+        $this->configureAdminArea();
+        $collection = $this->getMock('Magento\Indexer\Model\Indexer\Collection', [], [], '', false);
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
+        $indexerOne->expects($this->once())->method('getId')->willReturn('id_indexer1');
+        $collection->expects($this->once())->method('getItems')->willReturn([$indexerOne]);
+
         $exception = new \Exception();
         $indexerOne->expects($this->once())->method('load')->will($this->throwException($exception));
         $indexerOne->expects($this->never())->method('getTitle');
-        $this->collectionFactory->expects($this->never())->method('create');
+        $this->collectionFactory->expects($this->once())->method('create')->will($this->returnValue($collection));
         $this->indexerFactory->expects($this->once())->method('create')->willReturn($indexerOne);
         $this->command = new IndexerReindexCommand($this->objectManagerFactory);
         $commandTester = new CommandTester($this->command);
         $commandTester->execute(['index' => ['id_indexerOne']]);
-        $actualValue = $commandTester->getDisplay();
-        $this->assertStringStartsWith('Warning: Unknown indexer with code', $actualValue);
     }
 }

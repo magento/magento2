@@ -35,4 +35,23 @@ class AssociatedProducts extends \Magento\Backend\Block\Catalog\Product\Tab\Cont
     {
         return 'product-details';
     }
+
+    /**
+     * Tab is hidden
+     *
+     * @return boolean
+     */
+    public function isHidden()
+    {
+        return false;
+    }
+
+    /**
+     * @return $this
+     */
+    protected function _prepareLayout()
+    {
+        $this->setData('opened', true);
+        return $this;
+    }
 }

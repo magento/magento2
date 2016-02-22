@@ -5,7 +5,7 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
 
 class EavAttributesConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,17 +17,15 @@ class EavAttributesConfigFilesTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        /** @var $filesystem \Magento\Framework\Filesystem */
-        $filesystem = $objectManager->get('Magento\Framework\Filesystem');
-        $modulesDirectory = $filesystem->getDirectoryRead(DirectoryList::MODULES);
+        /** @var $moduleDirSearch \Magento\Framework\Component\DirSearch */
+        $moduleDirSearch = $objectManager->get('Magento\Framework\Component\DirSearch');
         $fileIteratorFactory = $objectManager->get('Magento\Framework\Config\FileIteratorFactory');
         $xmlFiles = $fileIteratorFactory->create(
-            $modulesDirectory,
-            $modulesDirectory->search('/*/*/etc/{*/eav_attributes.xml,eav_attributes.xml}')
+            $moduleDirSearch->collectFiles(ComponentRegistrar::MODULE, 'etc/{*/eav_attributes.xml,eav_attributes.xml}')
         );
 
         $validationStateMock = $this->getMock('Magento\Framework\Config\ValidationStateInterface');
-        $validationStateMock->expects($this->any())->method('isValidated')->will($this->returnValue(true));
+        $validationStateMock->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
         $fileResolverMock = $this->getMock('Magento\Framework\Config\FileResolverInterface');
         $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($xmlFiles));
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

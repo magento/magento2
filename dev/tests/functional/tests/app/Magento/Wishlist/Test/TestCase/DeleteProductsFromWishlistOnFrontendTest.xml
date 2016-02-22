@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Wishlist\Test\TestCase\DeleteProductsFromWishlistOnFrontendTest">
+    <testCase name="Magento\Wishlist\Test\TestCase\DeleteProductsFromWishlistOnFrontendTest" summary="Delete Products from Wishlist" ticketId="MAGETWO-28874">
         <variation name="DeleteProductsFromWishlistOnFrontendTestVariation1">
             <data name="products" xsi:type="string">catalogProductSimple::product_100_dollar,catalogProductVirtual::product_50_dollar</data>
             <data name="removedProductsIndex" xsi:type="array">

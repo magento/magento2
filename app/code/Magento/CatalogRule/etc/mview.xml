@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Mview/etc/mview.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Mview/etc/mview.xsd">
     <view id="catalogrule_rule" class="Magento\CatalogRule\Model\Indexer\Rule\RuleProductIndexer" group="indexer">
         <subscriptions>
             <table name="catalogrule" entity_column="rule_id" />
@@ -17,9 +17,8 @@
             <table name="catalog_product_entity_datetime" entity_column="entity_id" />
             <table name="catalog_product_entity_decimal" entity_column="entity_id" />
             <table name="catalog_product_entity_gallery" entity_column="entity_id" />
-            <table name="catalog_product_entity_group_price" entity_column="entity_id" />
             <table name="catalog_product_entity_int" entity_column="entity_id" />
-            <table name="catalog_product_entity_media_gallery" entity_column="entity_id" />
+            <table name="catalog_product_entity_media_gallery" entity_column="value_id" />
             <table name="catalog_product_entity_media_gallery_value" entity_column="entity_id" />
             <table name="catalog_product_entity_text" entity_column="entity_id" />
             <table name="catalog_product_entity_tier_price" entity_column="entity_id" />

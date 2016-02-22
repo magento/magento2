@@ -26,13 +26,6 @@ class ZipTest extends \PHPUnit_Framework_TestCase
             ->getMock();
     }
 
-    public function testConstructorInternalCalls()
-    {
-        $this->directory->expects($this->any())->method('getRelativePath');
-        $fileName = 'test_file';
-        $this->_invokeConstructor($fileName);
-    }
-
     /**
      * Test destination argument for the second getRelativePath after preg_replace.
      *

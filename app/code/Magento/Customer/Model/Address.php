@@ -9,6 +9,7 @@ use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\Data\AddressInterfaceFactory;
 use Magento\Customer\Api\Data\AddressInterface;
 use Magento\Customer\Api\Data\RegionInterfaceFactory;
+use Magento\Framework\Indexer\StateInterface;
 
 /**
  * Customer address model
@@ -42,6 +43,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     protected $dataObjectHelper;
 
     /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry
+     */
+    protected $indexerRegistry;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -57,9 +63,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      * @param CustomerFactory $customerFactory
      * @param \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -78,12 +86,14 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         CustomerFactory $customerFactory,
         \Magento\Framework\Reflection\DataObjectProcessor $dataProcessor,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->dataProcessor = $dataProcessor;
         $this->_customerFactory = $customerFactory;
+        $this->indexerRegistry = $indexerRegistry;
         parent::__construct(
             $context,
             $registry,
@@ -109,7 +119,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      */
     protected function _construct()
     {
-        $this->_init('Magento\Customer\Model\Resource\Address');
+        $this->_init('Magento\Customer\Model\ResourceModel\Address');
     }
 
     /**
@@ -117,7 +127,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      *
      * @param AddressInterface $address
      * @return $this
-     * @deprecated Use Api/RepositoryInterface for the operations in the Data Interfaces. Don't rely on Address Model
+     * Use Api/RepositoryInterface for the operations in the Data Interfaces. Don't rely on Address Model
      */
     public function updateData(AddressInterface $address)
     {
@@ -299,5 +309,42 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     public function getEntityTypeId()
     {
         return $this->getEntityType()->getId();
+    }
+
+    /**
+     * Processing object after save data
+     *
+     * @return $this
+     */
+    public function afterSave()
+    {
+        $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
+        if ($indexer->getState()->getStatus() == StateInterface::STATUS_VALID) {
+            $this->_getResource()->addCommitCallback([$this, 'reindex']);
+        }
+        return parent::afterSave();
+    }
+
+    /**
+     * Init indexing process after customer delete
+     *
+     * @return \Magento\Framework\Model\AbstractModel
+     */
+    public function afterDeleteCommit()
+    {
+        $this->reindex();
+        return parent::afterDeleteCommit();
+    }
+
+    /**
+     * Init indexing process after customer save
+     *
+     * @return void
+     */
+    public function reindex()
+    {
+        /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
+        $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
+        $indexer->reindexRow($this->getCustomerId());
     }
 }

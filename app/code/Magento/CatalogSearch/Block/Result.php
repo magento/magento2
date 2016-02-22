@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Block;
 use Magento\Catalog\Block\Product\ListProduct;
 use Magento\Catalog\Model\Layer\Resolver as LayerResolver;
 use Magento\CatalogSearch\Helper\Data;
-use Magento\CatalogSearch\Model\Resource\Fulltext\Collection;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Search\Model\QueryFactory;
@@ -133,12 +133,13 @@ class Result extends Template
         /* @var $category \Magento\Catalog\Model\Category */
         $availableOrders = $category->getAvailableSortByOptions();
         unset($availableOrders['position']);
+        $availableOrders['relevance'] = __('Relevance');
 
         $this->getListBlock()->setAvailableOrders(
             $availableOrders
         )->setDefaultDirection(
             'desc'
-        )->setSortBy(
+        )->setDefaultSortBy(
             'relevance'
         );
 
@@ -200,7 +201,7 @@ class Result extends Template
     {
         if (!$this->getData('result_count')) {
             $size = $this->_getProductCollection()->getSize();
-            $this->_getQuery()->setNumResults($size);
+            $this->_getQuery()->saveNumResults($size);
             $this->setResultCount($size);
         }
         return $this->getData('result_count');

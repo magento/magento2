@@ -29,7 +29,7 @@
         <?php $attributes = $block->getSelectionAttributes($_item) ?>
         <?php if ($_prevOptionId != $attributes['option_id']): ?>
         <tr>
-            <td class="col-product"><div class="option-label"><?php echo $attributes['option_label'] ?></div></td>
+            <td class="col-product"><div class="option-label"><?php /* @escapeNotVerified */ echo $attributes['option_label'] ?></div></td>
             <td class="col-product">&nbsp;</td>
             <td class="col-qty last">&nbsp;</td>
         </tr>
@@ -41,7 +41,7 @@
         <td class="col-product">
             <div class="product-title"><?php echo $block->escapeHtml($_item->getName()) ?></div>
             <div class="product-sku-block">
-                <span><?php echo __('SKU') ?>:</span>
+                <span><?php /* @escapeNotVerified */ echo __('SKU') ?>:</span>
                 <?php echo implode('<br />', $this->helper('Magento\Catalog\Helper\Data')->splitSku($block->escapeHtml($_item->getSku()))); ?>
             </div>
         </td>
@@ -59,8 +59,8 @@
             <?php if ($block->isShipmentSeparately($_item)): ?>
                 <input type="text"
                        class="input-text admin__control-text"
-                       name="shipment[items][<?php echo $_item->getOrderItemId() ?>]"
-                       value="<?php echo $_item->getQty()*1 ?>" />
+                       name="shipment[items][<?php /* @escapeNotVerified */ echo $_item->getOrderItemId() ?>]"
+                       value="<?php /* @escapeNotVerified */ echo $_item->getQty()*1 ?>" />
             <?php else: ?>
                 &nbsp;
             <?php endif; ?>
@@ -73,20 +73,20 @@
             <?php if ($block->getOrderOptions($_item->getOrderItem())): ?>
                 <dl class="item-options">
                 <?php foreach ($block->getOrderOptions($_item->getOrderItem()) as $option): ?>
-                    <dt><?php echo $option['label'] ?></dt>
+                    <dt><?php /* @escapeNotVerified */ echo $option['label'] ?></dt>
                     <dd>
                     <?php if (isset($option['custom_view']) && $option['custom_view']): ?>
-                        <?php echo $option['value'];?>
+                        <?php /* @escapeNotVerified */ echo $option['value'];?>
                     <?php else: ?>
                         <?php echo $block->truncateString($option['value'], 55, '', $_remainder);?>
                         <?php if ($_remainder):?>
-                            ... <span id="<?php echo $_id = 'id' . uniqid()?>"><?php echo $_remainder ?></span>
+                            ... <span id="<?php /* @escapeNotVerified */ echo $_id = 'id' . uniqid()?>"><?php /* @escapeNotVerified */ echo $_remainder ?></span>
                             <script>
 require(['prototype'], function(){
 
-                            $('<?php echo $_id ?>').hide();
-                            $('<?php echo $_id ?>').up().observe('mouseover', function(){$('<?php echo $_id ?>').show();});
-                            $('<?php echo $_id ?>').up().observe('mouseout',  function(){$('<?php echo $_id ?>').hide();});
+                            $('<?php /* @escapeNotVerified */ echo $_id ?>').hide();
+                            $('<?php /* @escapeNotVerified */ echo $_id ?>').up().observe('mouseover', function(){$('<?php /* @escapeNotVerified */ echo $_id ?>').show();});
+                            $('<?php /* @escapeNotVerified */ echo $_id ?>').up().observe('mouseout',  function(){$('<?php /* @escapeNotVerified */ echo $_id ?>').hide();});
 
 });
 </script>

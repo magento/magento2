@@ -16,7 +16,7 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
      *
      * @var string
      */
-    protected $dataInterface = 'Magento\Framework\Object';
+    protected $dataInterface = 'Magento\Framework\DataObject';
 
     /**
      * Name prefix of events that are dispatched by model
@@ -95,7 +95,7 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
     abstract protected function init();
 
     /**
-     * @return \Magento\Framework\Object[]
+     * @return \Magento\Framework\DataObject[]
      */
     public function getItems()
     {
@@ -104,7 +104,7 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
     }
 
     /**
-     * @param \Magento\Framework\Object[] $items
+     * @param \Magento\Framework\DataObject[] $items
      * @return $this
      */
     public function setItems(array $items = null)
@@ -170,7 +170,7 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
 
     /**
      * @param array $arguments
-     * @return \Magento\Framework\Object|mixed
+     * @return \Magento\Framework\DataObject|mixed
      */
     public function createDataObject(array $arguments = [])
     {
@@ -196,10 +196,10 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
     /**
      * Get collection item identifier
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return mixed
      */
-    public function getItemId(\Magento\Framework\Object $item)
+    public function getItemId(\Magento\Framework\DataObject $item)
     {
         $field = $this->query->getIdFieldName();
         if ($field) {
@@ -252,17 +252,17 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
     /**
      * Adding item to item array
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return void
      * @throws \Exception
      */
-    protected function addItem(\Magento\Framework\Object $item)
+    protected function addItem(\Magento\Framework\DataObject $item)
     {
         $itemId = $this->getItemId($item);
         if ($itemId !== null) {
             if (isset($this->data['items'][$itemId])) {
                 throw new \Exception(
-                    'Item (' . get_class($item) . ') with the same id "' . $item->getId() . '" already exist'
+                    'Item (' . get_class($item) . ') with the same ID "' . $item->getId() . '" already exists.'
                 );
             }
             $this->data['items'][$itemId] = $item;

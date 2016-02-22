@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\CatalogInventory\Model\Stock\Item" type="Magento\CatalogInventory\Model\Adminhtml\Stock\Item" />
     <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
         <arguments>
@@ -26,6 +26,16 @@
             </argument>
             <argument name="addFilterStrategies" xsi:type="array">
                 <item name="qty" xsi:type="object">Magento\CatalogInventory\Ui\DataProvider\Product\AddQuantityFilterToCollection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\ModifierPool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="advancedInventory" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\DataProvider\Product\Form\Modifier\AdvancedInventory</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                </item>
             </argument>
         </arguments>
     </type>

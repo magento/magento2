@@ -75,5 +75,6 @@ class DeleteSalesRuleEntityTest extends Injectable
         $this->promoQuoteIndex->open();
         $this->promoQuoteIndex->getPromoQuoteGrid()->searchAndOpen(['name' => $salesRule->getName()]);
         $this->promoQuoteEdit->getFormPageActions()->delete();
+        $this->promoQuoteEdit->getModalBlock()->acceptAlert();
     }
 }

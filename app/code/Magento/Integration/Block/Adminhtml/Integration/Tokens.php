@@ -37,7 +37,7 @@ class Tokens extends \Magento\Backend\Block\Widget\Form\Generic
 
         $fieldset = $form->addFieldset(
             'base_fieldset',
-            ['legend' => __('Integration Tokens for Extensions'), 'class' => 'fieldset-wide']
+            ['legend' => __('Integration Tokens for Extensions'), 'class' => ' fieldset-wide']
         );
 
         foreach ($this->getFormFields() as $field) {

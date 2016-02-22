@@ -27,7 +27,7 @@ class Main extends \Magento\Backend\Block\Template
             'addButton',
             'Magento\Backend\Block\Widget\Button',
             [
-                'label' => __('Add Product Template'),
+                'label' => __('Add Attribute Set'),
                 'onclick' => 'setLocation(\'' . $this->getUrl('catalog/*/add') . '\')',
                 'class' => 'add primary add-set'
             ]
@@ -48,7 +48,7 @@ class Main extends \Magento\Backend\Block\Template
      */
     protected function _getHeader()
     {
-        return __('Product Templates');
+        return __('Attribute Sets');
     }
 
     /**

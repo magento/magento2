@@ -6,12 +6,12 @@
 namespace Magento\CatalogSearch\Model\Indexer;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory;
-use Magento\CatalogSearch\Model\Resource\Fulltext as FulltextResource;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
 use \Magento\Framework\Search\Request\Config as SearchRequestConfig;
 use Magento\Framework\Search\Request\DimensionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 
-class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework\Mview\ActionInterface
+class Fulltext implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
      * Indexer ID in configuration
@@ -89,10 +89,7 @@ class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Frame
         foreach ($storeIds as $storeId) {
             $dimension = $this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId]);
             $saveHandler->deleteIndex([$dimension], new \ArrayObject($ids));
-            $saveHandler->saveIndex(
-                [$dimension],
-                $this->fullAction->rebuildStoreIndex($storeId, $ids)
-            );
+            $saveHandler->saveIndex([$dimension], $this->fullAction->rebuildStoreIndex($storeId, $ids));
         }
     }
 
@@ -111,10 +108,8 @@ class Fulltext implements \Magento\Indexer\Model\ActionInterface, \Magento\Frame
         foreach ($storeIds as $storeId) {
             $dimension = $this->dimensionFactory->create(['name' => 'scope', 'value' => $storeId]);
             $saveHandler->cleanIndex([$dimension]);
-            $saveHandler->saveIndex(
-                [$dimension],
-                $this->fullAction->rebuildStoreIndex($storeId)
-            );
+            $saveHandler->saveIndex([$dimension], $this->fullAction->rebuildStoreIndex($storeId));
+
         }
         $this->fulltextResource->resetSearchResults();
         $this->searchRequestConfig->reset();

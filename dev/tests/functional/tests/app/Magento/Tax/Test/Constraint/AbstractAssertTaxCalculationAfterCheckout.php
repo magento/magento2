@@ -87,7 +87,7 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
         $shippingMethod = ['shipping_service' => 'Flat Rate', 'shipping_method' => 'Fixed'];
         $checkoutOnepage->getShippingMethodBlock()->selectShippingMethod($shippingMethod);
         $checkoutOnepage->getShippingMethodBlock()->clickContinue();
-        $checkoutOnepage->getPaymentMethodsBlock()->selectPaymentMethod(['method' => 'checkmo']);
+        $checkoutOnepage->getPaymentBlock()->selectPaymentMethod(['method' => 'checkmo']);
         $actualPrices = [];
         $actualPrices = $this->getReviewPrices($actualPrices, $product);
         $actualPrices = $this->getReviewTotals($actualPrices);
@@ -96,11 +96,11 @@ abstract class AbstractAssertTaxCalculationAfterCheckout extends AbstractConstra
         $message = 'Prices on order review should be equal to defined in dataset.';
         \PHPUnit_Framework_Assert::assertEquals(
             array_diff_key($prices, ['cart_item_price_excl_tax' => null, 'cart_item_price_incl_tax' => null]),
-            $actualPrices,
+            array_diff_key($actualPrices, ['cart_item_price_excl_tax' => null, 'cart_item_price_incl_tax' => null]),
             $message
         );
 
-        $checkoutOnepage->getPaymentMethodsBlock()->placeOrder();
+        $checkoutOnepage->getPaymentBlock()->placeOrder();
         $checkoutOnepageSuccess->getSuccessBlock()->getGuestOrderId();
         $checkoutOnepageSuccess->getSuccessBlock()->openOrder();
         $actualPrices = [];

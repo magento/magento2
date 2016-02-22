@@ -11,7 +11,6 @@ require.config({
         "mage/adminhtml/backup": ["prototype"],
         "mage/captcha": ["prototype"],
         "mage/common": ["jquery"],
-        "mage/requirejs/plugin/id-normalizer": ["jquery"],
         "mage/webapi": ["jquery"],
         "ko": { exports: "ko" },
         "moment": { exports: "moment" }

@@ -114,7 +114,7 @@ abstract class Checkout extends \Magento\Checkout\Controller\Action implements
 
         if (!in_array($action, ['login', 'register'])) {
             $customerSession = $this->_objectManager->get('Magento\Customer\Model\Session');
-            if (!$customerSession->authenticate($this, $this->_getHelper()->getMSLoginUrl())) {
+            if (!$customerSession->authenticate($this->_getHelper()->getMSLoginUrl())) {
                 $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             }
 

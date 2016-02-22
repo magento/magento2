@@ -5,7 +5,8 @@
  */
 namespace Magento\Fedex\Test\Unit\Model;
 
-use Magento\Framework\Object;
+use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Framework\DataObject;
 use Magento\Framework\Xml\Security;
 
 /**
@@ -26,13 +27,39 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scope;
+
+    /**
+     * Model under test
+     *
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\Error|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $error;
+
+    /**
+     * @var \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $errorFactory;
+
+    /**
      * @return void
      */
     public function setUp()
     {
-        $scopeConfig = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
-        $scopeConfig->expects($this->any())->method('isSetFlag')->will($this->returnValue(true));
-        $scopeConfig->expects($this->any())->method('getValue')->will($this->returnValue('ServiceType'));
+        $this->scope = $this->getMockBuilder(
+            '\Magento\Framework\App\Config\ScopeConfigInterface'
+        )->disableOriginalConstructor()->getMock();
+
+        $this->scope->expects(
+            $this->any()
+        )->method(
+            'getValue'
+        )->will(
+            $this->returnCallback([$this, 'scopeConfiggetValue'])
+        );
+
         $country = $this->getMock(
             'Magento\Directory\Model\Country',
             ['load', 'getData', '__wakeup'],
@@ -48,17 +75,20 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $rateFactory = $this->getMock('Magento\Shipping\Model\Rate\ResultFactory', ['create'], [], '', false);
         $rateFactory->expects($this->any())->method('create')->will($this->returnValue($rate));
 
+        $this->error = $this->getMockBuilder('\Magento\Quote\Model\Quote\Address\RateResult\Error')
+            ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
+            ->getMock();
+        $this->errorFactory = $this->getMockBuilder('Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->errorFactory->expects($this->any())->method('create')->willReturn($this->error);
+
         $store = $this->getMock('Magento\Store\Model\Store', ['getBaseCurrencyCode', '__wakeup'], [], '', false);
         $storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');
         $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
         $priceCurrency = $this->getMockBuilder('Magento\Framework\Pricing\PriceCurrencyInterface')->getMock();
-        $priceCurrency->expects($this->once())
-            ->method('round')
-            ->willReturnCallback(
-                function ($price) {
-                    round($price, 2);
-                }
-            );
+
         $rateMethod = $this->getMock(
             'Magento\Quote\Model\Quote\Address\RateResult\Method',
             null,
@@ -76,9 +106,8 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             'Magento\Fedex\Model\Carrier',
             ['_getCachedQuotes', '_debug'],
             [
-                'scopeConfig' => $scopeConfig,
-                'rateErrorFactory' =>
-                    $this->getMock('Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory', [], [], '', false),
+                'scopeConfig' => $this->scope,
+                'rateErrorFactory' => $this->errorFactory,
                 'logger' => $this->getMock('Psr\Log\LoggerInterface'),
                 'xmlSecurity' => new Security(),
                 'xmlElFactory' => $this->getMock('Magento\Shipping\Model\Simplexml\ElementFactory', [], [], '', false),
@@ -97,10 +126,27 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $storeManager,
                 'configReader' => $this->getMock('Magento\Framework\Module\Dir\Reader', [], [], '', false),
                 'productCollectionFactory' =>
-                    $this->getMock('Magento\Catalog\Model\Resource\Product\CollectionFactory', [], [], '', false),
+                    $this->getMock('Magento\Catalog\Model\ResourceModel\Product\CollectionFactory', [], [], '', false),
                 'data' => []
             ]
         );
+    }
+
+    /**
+     * Callback function, emulates getValue function
+     * @param $path
+     * @return null|string
+     */
+    public function scopeConfiggetValue($path)
+    {
+        switch ($path) {
+            case 'carriers/fedex/showmethod':
+                return 1;
+                break;
+            case 'carriers/fedex/allowed_methods':
+                return 'ServiceType';
+                break;
+        }
     }
 
     /**
@@ -108,22 +154,24 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
      */
     public function testCollectRatesRateAmountOriginBased($amount, $rateType, $expected)
     {
+        $this->scope->expects($this->any())->method('isSetFlag')->will($this->returnValue(true));
+
         // @codingStandardsIgnoreStart
-        $netAmount = new \Magento\Framework\Object([]);
+        $netAmount = new \Magento\Framework\DataObject([]);
         $netAmount->Amount = $amount;
 
-        $totalNetCharge = new \Magento\Framework\Object([]);
+        $totalNetCharge = new \Magento\Framework\DataObject([]);
         $totalNetCharge->TotalNetCharge = $netAmount;
         $totalNetCharge->RateType = $rateType;
 
-        $ratedShipmentDetail = new \Magento\Framework\Object([]);
+        $ratedShipmentDetail = new \Magento\Framework\DataObject([]);
         $ratedShipmentDetail->ShipmentRateDetail = $totalNetCharge;
 
-        $rate = new \Magento\Framework\Object([]);
+        $rate = new \Magento\Framework\DataObject([]);
         $rate->ServiceType = 'ServiceType';
         $rate->RatedShipmentDetails = [$ratedShipmentDetail];
 
-        $response = new \Magento\Framework\Object([]);
+        $response = new \Magento\Framework\DataObject([]);
         $response->HighestSeverity = 'SUCCESS';
         $response->RateReplyDetails = $rate;
 
@@ -149,5 +197,19 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             [12.12, 'RATED_LIST_SHIPMENT', 12.12],
             [38.9, 'PAYOR_LIST_SHIPMENT', 38.9],
         ];
+    }
+
+    public function testCollectRatesErrorMessage()
+    {
+        $this->scope->expects($this->once())->method('isSetFlag')->willReturn(false);
+
+        $this->error->expects($this->once())->method('setCarrier')->with('fedex');
+        $this->error->expects($this->once())->method('setCarrierTitle');
+        $this->error->expects($this->once())->method('setErrorMessage');
+
+        $request = new RateRequest();
+        $request->setPackageWeight(1);
+
+        $this->assertSame($this->error, $this->_model->collectRates($request));
     }
 }

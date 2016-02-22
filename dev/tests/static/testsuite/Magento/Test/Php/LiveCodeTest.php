@@ -39,10 +39,10 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$pathToSource = Utility\Files::init()->getPathToSource();
+        self::$pathToSource = BP;
         self::$reportDir = self::$pathToSource . '/dev/tests/static/report';
         if (!is_dir(self::$reportDir)) {
-            mkdir(self::$reportDir, 0777);
+            mkdir(self::$reportDir, 0770);
         }
     }
 
@@ -54,28 +54,37 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public static function getWhitelist($fileTypes = ['php'])
     {
-        $directoriesToCheck = file(__DIR__ . '/_files/whitelist/common.txt', FILE_IGNORE_NEW_LINES);
+        $directoriesToCheck = Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
 
+        $changedFiles = [];
+        foreach (glob(__DIR__ . '/_files/changed_files*') as $listFile) {
+            $changedFiles = array_merge($changedFiles, file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+        }
+        array_walk(
+            $changedFiles,
+            function (&$file) {
+                $file = BP . '/' . $file;
+            }
+        );
         $changedFiles = array_filter(
-            Utility\Files::readLists(__DIR__ . '/_files/changed_files*'),
-            function ($path) use ($directoriesToCheck) {
+            $changedFiles,
+            function ($path) use ($directoriesToCheck, $fileTypes) {
+                if (!file_exists($path)) {
+                    return false;
+                }
+                $path = realpath($path);
                 foreach ($directoriesToCheck as $directory) {
-                    if (strpos($path, BP . '/' . $directory) === 0) {
+                    $directory = realpath($directory);
+                    if (strpos($path, $directory) === 0) {
+                        if (!empty($fileTypes)) {
+                            return in_array(pathinfo($path, PATHINFO_EXTENSION), $fileTypes);
+                        }
                         return true;
                     }
                 }
                 return false;
             }
         );
-
-        if (!empty($fileTypes)) {
-            $changedFiles = array_filter(
-                $changedFiles,
-                function ($path) use ($fileTypes) {
-                    return in_array(pathinfo($path, PATHINFO_EXTENSION), $fileTypes);
-                }
-            );
-        }
 
         return $changedFiles;
     }
@@ -217,7 +226,16 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         $analyser = new \SebastianBergmann\PHPDCD\Analyser();
         $declared = [];
         $called = [];
-        foreach (Files::init()->getPhpFiles() as $file) {
+        $collectedFiles = Files::init()->getPhpFiles(
+            Files::INCLUDE_APP_CODE
+            | Files::INCLUDE_PUB_CODE
+            | Files::INCLUDE_LIBS
+            | Files::INCLUDE_TEMPLATES
+            | Files::INCLUDE_TESTS
+            | Files::AS_DATA_SET
+            | Files::INCLUDE_NON_CLASSES
+        );
+        foreach ($collectedFiles as $file) {
             $file = array_pop($file);
             $analyser->analyseFile($file);
             foreach ($analyser->getFunctionDeclarations() as $function => $declaration) {

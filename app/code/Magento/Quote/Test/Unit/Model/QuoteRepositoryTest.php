@@ -7,15 +7,15 @@
 
 namespace Magento\Quote\Test\Unit\Model;
 
-use \Magento\Quote\Model\QuoteRepository;
+use Magento\Quote\Api\CartRepositoryInterface;
 
-use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 
 class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $model;
 
@@ -45,7 +45,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $searchResultsDataFactory;
 
     /**
-     * @var \Magento\Quote\Model\Resource\Quote\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Quote\Model\ResourceModel\Quote\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteCollectionMock;
 
@@ -86,7 +86,8 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->quoteCollectionMock = $this->getMock('Magento\Quote\Model\Resource\Quote\Collection', [], [], '', false);
+        $this->quoteCollectionMock =
+            $this->getMock('Magento\Quote\Model\ResourceModel\Quote\Collection', [], [], '', false);
 
         $this->extensionAttributesJoinProcessorMock = $this->getMock(
             'Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface',
@@ -106,21 +107,6 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
                 'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock
             ]
         );
-    }
-
-    public function testCreate()
-    {
-        $this->quoteFactoryMock->expects($this->once())
-            ->method('create')
-            ->with([1, 2, 3])
-            ->willReturn($this->quoteMock);
-        $this->storeManagerMock->expects($this->never())->method('getStore');
-        $this->storeMock->expects($this->never())->method('getId');
-        $this->quoteMock->expects($this->never())->method('setSharedStoreIds');
-        $this->quoteMock->expects($this->never())->method('load');
-        $this->quoteMock->expects($this->never())->method('getId');
-
-        $this->assertEquals($this->quoteMock, $this->model->create([1, 2, 3]));
     }
 
     /**
@@ -389,7 +375,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->extensionAttributesJoinProcessorMock->expects($this->once())
             ->method('process')
             ->with(
-                $this->isInstanceOf('\Magento\Quote\Model\Resource\Quote\Collection')
+                $this->isInstanceOf('\Magento\Quote\Model\ResourceModel\Quote\Collection')
             );
 
         $this->quoteCollectionMock->expects($this->once())->method('getItems')->willReturn([$cartMock]);
@@ -404,8 +390,8 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
     public function getListSuccessDataProvider()
     {
         return [
-            'asc' => [SearchCriteria::SORT_ASC, 'ASC'],
-            'desc' => [SearchCriteria::SORT_DESC, 'DESC']
+            'asc' => [SortOrder::SORT_ASC, 'ASC'],
+            'desc' => [SortOrder::SORT_DESC, 'DESC']
         ];
     }
 }

@@ -9,9 +9,14 @@ var config = {
     },
     map: {
         '*': {
-            uiComponent: 'Magento_Ui/js/lib/component/main',
-            uiRegistry: 'Magento_Ui/js/lib/registry/registry',
-            uiLayout: 'Magento_Ui/js/core/renderer/layout'
+            uiElement:      'Magento_Ui/js/lib/core/element/element',
+            uiCollection:   'Magento_Ui/js/lib/core/collection',
+            uiComponent:    'Magento_Ui/js/lib/core/collection',
+            uiClass:        'Magento_Ui/js/lib/core/class',
+            uiEvents:       'Magento_Ui/js/lib/core/events',
+            uiRegistry:     'Magento_Ui/js/lib/registry/registry',
+            uiLayout:       'Magento_Ui/js/core/renderer/layout',
+            buttonAdapter:  'Magento_Ui/js/form/button-adapter'
         }
     }
 };

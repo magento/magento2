@@ -17,7 +17,7 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
      *
      * @var string
      */
-    protected $selectItem = 'tbody tr .col-in_products';
+    protected $selectItem = 'tbody tr .col-in_products input';
 
     /**
      * Filters array mapping

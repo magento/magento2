@@ -6,6 +6,10 @@
 namespace Magento\Customer\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\Information as StoreInformation;
 use Psr\Log\LoggerInterface as PsrLogger;
 use Magento\Store\Model\ScopeInterface;
 
@@ -53,16 +57,6 @@ class Vat
     const XML_PATH_EU_COUNTRIES_LIST = 'general/country/eu_countries';
 
     /**
-     * Configuration path to merchant country id
-     */
-    const XML_PATH_MERCHANT_COUNTRY_CODE = 'general/store_information/country_id';
-
-    /**
-     * Config path to merchant VAT number
-     */
-    const XML_PATH_MERCHANT_VAT_NUMBER = 'general/store_information/merchant_vat_number';
-
-    /**
      * @var ScopeConfigInterface
      */
     protected $scopeConfig;
@@ -87,13 +81,13 @@ class Vat
     /**
      * Retrieve merchant country code
      *
-     * @param \Magento\Store\Model\Store|string|int|null $store
+     * @param Store|string|int|null $store
      * @return string
      */
     public function getMerchantCountryCode($store = null)
     {
         return (string)$this->scopeConfig->getValue(
-            self::XML_PATH_MERCHANT_COUNTRY_CODE,
+            StoreInformation::XML_PATH_STORE_INFO_COUNTRY_CODE,
             ScopeInterface::SCOPE_STORE,
             $store
         );
@@ -102,13 +96,13 @@ class Vat
     /**
      * Retrieve merchant VAT number
      *
-     * @param \Magento\Store\Model\Store|string|int|null $store
+     * @param Store|string|int|null $store
      * @return string
      */
     public function getMerchantVatNumber($store = null)
     {
         return (string)$this->scopeConfig->getValue(
-            self::XML_PATH_MERCHANT_VAT_NUMBER,
+            StoreInformation::XML_PATH_STORE_INFO_VAT_NUMBER,
             ScopeInterface::SCOPE_STORE,
             $store
         );
@@ -118,7 +112,7 @@ class Vat
      * Retrieve customer group ID based on his VAT number
      *
      * @param string $customerCountryCode
-     * @param \Magento\Framework\Object $vatValidationResult
+     * @param DataObject $vatValidationResult
      * @param \Magento\Store\Model\Store|string|int $store
      * @return null|int
      */
@@ -163,21 +157,21 @@ class Vat
      * @param string $requesterCountryCode
      * @param string $requesterVatNumber
      *
-     * @return \Magento\Framework\Object
+     * @return DataObject
      */
     public function checkVatNumber($countryCode, $vatNumber, $requesterCountryCode = '', $requesterVatNumber = '')
     {
         // Default response
-        $gatewayResponse = new \Magento\Framework\Object(
-            ['is_valid' => false, 'request_date' => '', 'request_identifier' => '', 'request_success' => false]
-        );
+        $gatewayResponse = new DataObject([
+            'is_valid' => false,
+            'request_date' => '',
+            'request_identifier' => '',
+            'request_success' => false,
+            'request_message' => __('Error during VAT Number verification.'),
+        ]);
 
         if (!extension_loaded('soap')) {
-            $this->logger->critical(
-                new \Magento\Framework\Exception\LocalizedException(
-                    __('PHP SOAP extension is required.')
-                )
-            );
+            $this->logger->critical(new LocalizedException(__('PHP SOAP extension is required.')));
             return $gatewayResponse;
         }
 
@@ -201,6 +195,12 @@ class Vat
             $gatewayResponse->setRequestDate((string)$result->requestDate);
             $gatewayResponse->setRequestIdentifier((string)$result->requestIdentifier);
             $gatewayResponse->setRequestSuccess(true);
+
+            if ($gatewayResponse->getIsValid()) {
+                $gatewayResponse->setRequestMessage(__('VAT Number is valid.'));
+            } else {
+                $gatewayResponse->setRequestMessage(__('Please enter a valid VAT number.'));
+            }
         } catch (\Exception $exception) {
             $gatewayResponse->setIsValid(false);
             $gatewayResponse->setRequestDate('');
@@ -252,8 +252,8 @@ class Vat
      * Get VAT class
      *
      * @param string $customerCountryCode
-     * @param \Magento\Framework\Object $vatValidationResult
-     * @param \Magento\Store\Model\Store|string|int|null $store
+     * @param DataObject $vatValidationResult
+     * @param Store|string|int|null $store
      * @return null|string
      */
     public function getCustomerVatClass($customerCountryCode, $vatValidationResult, $store = null)
@@ -292,11 +292,7 @@ class Vat
     {
         $euCountries = explode(
             ',',
-            $this->scopeConfig->getValue(
-                self::XML_PATH_EU_COUNTRIES_LIST,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-                $storeId
-            )
+            $this->scopeConfig->getValue(self::XML_PATH_EU_COUNTRIES_LIST, ScopeInterface::SCOPE_STORE, $storeId)
         );
         return in_array($countryCode, $euCountries);
     }

@@ -56,24 +56,24 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
 
     .opc-progress-bar {
-        .css(margin, 0 0 @checkout-progress-bar__margin);
+        .lib-css(margin, 0 0 @checkout-progress-bar__margin);
         counter-reset: i;
         display: block;
         font-size: 0;
     }
 
     .opc-progress-bar-item {
-        .css(margin, 0 0 @checkout-progress-bar-item__margin);
-        .css(width, @checkout-progress-bar-item__width);
+        .lib-css(margin, 0 0 @checkout-progress-bar-item__margin);
+        .lib-css(width, @checkout-progress-bar-item__width);
         display: inline-block;
         position: relative;
         text-align: center;
         vertical-align: top;
 
         &:before { // Horizontal line
-            .css(background, @checkout-progress-bar-item__background-color);
-            .css(top, @checkout-progress-bar-item-element__width/2);
-            .css(transition, @checkout-progress-bar-item__transition);
+            .lib-css(background, @checkout-progress-bar-item__background-color);
+            .lib-css(top, @checkout-progress-bar-item-element__width/2);
+            .lib-css(transition, @checkout-progress-bar-item__transition);
             content: '';
             height: 7px;
             left: 0;
@@ -83,13 +83,13 @@
 
         &:first-child {
             &:before {
-                .css(border-radius, @checkout-progress-bar-item__border-radius 0 0 @checkout-progress-bar-item__border-radius);
+                .lib-css(border-radius, @checkout-progress-bar-item__border-radius 0 0 @checkout-progress-bar-item__border-radius);
             }
         }
 
         &:last-child {
             &:before {
-                .css(border-radius, 0 @checkout-progress-bar-item__border-radius @checkout-progress-bar-item__border-radius 0);
+                .lib-css(border-radius, 0 @checkout-progress-bar-item__border-radius @checkout-progress-bar-item__border-radius 0);
             }
         }
 
@@ -99,7 +99,7 @@
             width: 100%;
             word-wrap: break-word;
 
-            .typography(
+            .lib-typography(
             @_color: @checkout-progress-bar-item__background-color,
             @_font-family: false,
             @_font-size: @checkout-progress-bar__font-size,
@@ -110,11 +110,11 @@
 
             &:before, // Item element
             &:after {
-                .css(background, @checkout-progress-bar-item__background-color);
-                .css(height, @checkout-progress-bar-item-element__height);
-                .css(margin-left, -(@checkout-progress-bar-item-element__width/2));
-                .css(transition, @checkout-progress-bar-item__transition);
-                .css(width, @checkout-progress-bar-item-element__width);
+                .lib-css(background, @checkout-progress-bar-item__background-color);
+                .lib-css(height, @checkout-progress-bar-item-element__height);
+                .lib-css(margin-left, -(@checkout-progress-bar-item-element__width/2));
+                .lib-css(transition, @checkout-progress-bar-item__transition);
+                .lib-css(width, @checkout-progress-bar-item-element__width);
                 border-radius: 50%;
                 content: '';
                 left: 50%;
@@ -123,14 +123,14 @@
             }
 
             &:after { // Item element inner
-                .css(background, @checkout-progress-bar-item-element-inner__background-color);
-                .css(height, @checkout-progress-bar-item-element-inner__height);
-                .css(margin-left, -(@checkout-progress-bar-item-element-inner__width/2));
-                .css(top, @checkout-progress-bar-item-element-outer-radius__width);
-                .css(width, @checkout-progress-bar-item-element-inner__width);
+                .lib-css(background, @checkout-progress-bar-item-element-inner__background-color);
+                .lib-css(height, @checkout-progress-bar-item-element-inner__height);
+                .lib-css(margin-left, -(@checkout-progress-bar-item-element-inner__width/2));
+                .lib-css(top, @checkout-progress-bar-item-element-outer-radius__width);
+                .lib-css(width, @checkout-progress-bar-item-element-inner__width);
                 content: counter(i);
                 counter-increment: i;
-                .typography(
+                .lib-typography(
                 @_color: @checkout-progress-bar-item-element-inner__color,
                 @_font-family: false,
                 @_font-size: @checkout-progress-bar__font-size,
@@ -143,22 +143,25 @@
 
         &._complete {
             cursor: pointer;
+
             &:hover {
                 &:before {
-                    .css(background, @checkout-progress-bar-item__hover__background-color);
+                    .lib-css(background, @checkout-progress-bar-item__hover__background-color);
                 }
+
                 > span {
                     &:before {
-                        .css(background, @checkout-progress-bar-item__hover__background-color);
+                        .lib-css(background, @checkout-progress-bar-item__hover__background-color);
                     }
                 }
             }
+
             > span {
-                .css(color, @checkout-progress-bar-item__complete__color);
+                .lib-css(color, @checkout-progress-bar-item__complete__color);
 
                 &:after {
-                    .css(font-family, @icons__font-name);
-                    .css(content, @checkout-progress-bar-item-element-inner__active__content);
+                    .lib-css(font-family, @icons__font-name);
+                    .lib-css(content, @checkout-progress-bar-item-element-inner__active__content);
                 }
             }
         }
@@ -167,14 +170,17 @@
             &:before {
                 background: @checkout-progress-bar-item__active__background-color;
             }
+
             > span {
-                .css(color, @checkout-progress-bar-item__color);
+                .lib-css(color, @checkout-progress-bar-item__color);
+
                 &:before {
-                    .css(background, @checkout-progress-bar-item__active__background-color);
+                    .lib-css(background, @checkout-progress-bar-item__active__background-color);
                 }
+
                 &:after {
-                    .css(font-family, @icons__font-name);
-                    .css(content, @checkout-progress-bar-item-element-inner__active__content);
+                    .lib-css(font-family, @icons__font-name);
+                    .lib-css(content, @checkout-progress-bar-item-element-inner__active__content);
                 }
             }
         }

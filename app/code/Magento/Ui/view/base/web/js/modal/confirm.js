@@ -2,6 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'jquery',
     'underscore',
@@ -15,45 +16,82 @@ define([
         options: {
             modalClass: 'confirm',
             title: '',
+            focus: '.action-accept',
             actions: {
-                always: function(){},
-                confirm: function(){},
-                cancel: function(){}
+
+                /**
+                 * Callback always - called on all actions.
+                 */
+                always: function () {},
+
+                /**
+                 * Callback confirm.
+                 */
+                confirm: function () {},
+
+                /**
+                 * Callback cancel.
+                 */
+                cancel: function () {}
             },
             buttons: [{
                 text: $.mage.__('Cancel'),
-                class: 'action-tertiary',
-                click: function(){
-                    this.closeModal();
+                class: 'action-secondary action-dismiss',
+
+                /**
+                 * Click handler.
+                 */
+                click: function (event) {
+                    this.closeModal(event);
                 }
             }, {
                 text: $.mage.__('OK'),
-                class: 'action-secondary',
-                click: function() {
-                    this.closeModal(true);
+                class: 'action-primary action-accept',
+
+                /**
+                 * Click handler.
+                 */
+                click: function (event) {
+                    this.closeModal(event, true);
                 }
             }]
         },
-        _create: function() {
+
+        /**
+         * Create widget.
+         */
+        _create: function () {
             this._super();
-            this.modal.find(this.options.modalCloseBtn).off().on('click',  _.bind(this.closeModal, this, false));
+            this.modal.find(this.options.modalCloseBtn).off().on('click', _.bind(this.closeModal, this));
             this.openModal();
         },
-        _remove: function() {
+
+        /**
+         * Remove modal window.
+         */
+        _remove: function () {
             this.modal.remove();
         },
-        openModal: function() {
+
+        /**
+         * Open modal window.
+         */
+        openModal: function () {
             return this._super();
         },
-        closeModal: function(result) {
+
+        /**
+         * Close modal window.
+         */
+        closeModal: function (event, result) {
             result = result || false;
 
             if (result) {
-                this.options.actions.confirm();
+                this.options.actions.confirm(event);
             } else {
-                this.options.actions.cancel();
+                this.options.actions.cancel(event);
             }
-            this.options.actions.always();
+            this.options.actions.always(event);
             this.element.bind('confirmclosed', _.bind(this._remove, this));
 
             return this._super();

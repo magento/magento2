@@ -13,9 +13,9 @@ class InfoTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     public function testCustomerGridAction()
     {
-        /** @var \Magento\Paypal\Model\Resource\Billing\Agreement\Collection $billingAgreementCollection */
+        /** @var \Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection $billingAgreementCollection */
         $billingAgreementCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Paypal\Model\Resource\Billing\Agreement\Collection'
+            'Magento\Paypal\Model\ResourceModel\Billing\Agreement\Collection'
         )->load();
         $agreementId = $billingAgreementCollection->getFirstItem()->getId();
         $this->dispatch('backend/paypal/billing_agreement/view/agreement/' . $agreementId);

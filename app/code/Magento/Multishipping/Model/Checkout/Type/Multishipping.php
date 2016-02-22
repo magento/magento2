@@ -19,7 +19,7 @@ use Magento\Framework\Exception\LocalizedException;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Multishipping extends \Magento\Framework\Object
+class Multishipping extends \Magento\Framework\DataObject
 {
     /**
      * Quote shipping addresses items cache
@@ -100,7 +100,7 @@ class Multishipping extends \Magento\Framework\Object
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Quote\Model\QuoteRepository
+     * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
@@ -135,6 +135,11 @@ class Multishipping extends \Magento\Framework\Object
     protected $quoteAddressToOrderAddress;
 
     /**
+     * @var \Magento\Quote\Model\Quote\TotalsCollector
+     */
+    protected $totalsCollector;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
@@ -152,9 +157,10 @@ class Multishipping extends \Magento\Framework\Object
      * @param \Magento\Multishipping\Helper\Data $helper
      * @param OrderSender $orderSender
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Quote\Model\QuoteRepository $quoteRepository
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
+     * @param \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -176,9 +182,10 @@ class Multishipping extends \Magento\Framework\Object
         \Magento\Multishipping\Helper\Data $helper,
         OrderSender $orderSender,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Quote\Model\QuoteRepository $quoteRepository,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
+        \Magento\Quote\Model\Quote\TotalsCollector $totalsCollector,
         array $data = []
     ) {
         $this->_eventManager = $eventManager;
@@ -201,6 +208,7 @@ class Multishipping extends \Magento\Framework\Object
         $this->quoteItemToOrderItem = $quoteItemToOrderItem;
         $this->quotePaymentToOrderPayment = $quotePaymentToOrderPayment;
         $this->quoteAddressToOrderAddress = $quoteAddressToOrderAddress;
+        $this->totalsCollector = $totalsCollector;
         parent::__construct($data);
         $this->_init();
     }
@@ -281,35 +289,8 @@ class Multishipping extends \Magento\Framework\Object
         if ($this->_quoteShippingAddressesItems !== null) {
             return $this->_quoteShippingAddressesItems;
         }
-        $items = [];
-        $addresses = $this->getQuote()->getAllAddresses();
-        foreach ($addresses as $address) {
-            foreach ($address->getAllItems() as $item) {
-                if ($item->getParentItemId()) {
-                    continue;
-                }
-                if ($item->getProduct()->getIsVirtual()) {
-                    $items[] = $item;
-                    continue;
-                }
-                if ($item->getQty() > 1) {
-                    for ($i = 0, $n = $item->getQty(); $i < $n; $i++) {
-                        if ($i == 0) {
-                            $addressItem = $item;
-                        } else {
-                            $addressItem = clone $item;
-                        }
-                        $addressItem->setQty(1)->setCustomerAddressId($address->getCustomerAddressId())->save();
-                        $items[] = $addressItem;
-                    }
-                } else {
-                    $item->setCustomerAddressId($address->getCustomerAddressId());
-                    $items[] = $item;
-                }
-            }
-        }
-        $this->_quoteShippingAddressesItems = $items;
-        return $items;
+        $this->_quoteShippingAddressesItems = $this->getQuote()->getShippingAddressesItems();
+        return $this->_quoteShippingAddressesItems;
     }
 
     /**
@@ -490,6 +471,7 @@ class Multishipping extends \Magento\Framework\Object
                 }
 
                 $quoteAddress = $this->getQuote()->getShippingAddressByCustomerAddressId($address->getId());
+                $quoteAddress->setCustomerAddressId($addressId);
                 $quoteAddressItem = $quoteAddress->getItemByQuoteItemId($quoteItemId);
                 if ($quoteAddressItem) {
                     $quoteAddressItem->setQty((int)($quoteAddressItem->getQty() + $qty));
@@ -523,13 +505,9 @@ class Multishipping extends \Magento\Framework\Object
             //
         }
         if (isset($address)) {
-            $this->getQuote()->getShippingAddressByCustomerAddressId(
-                $addressId
-            )->setCollectShippingRates(
-                true
-            )->importCustomerAddressData(
-                $address
-            )->collectTotals();
+            $quoteAddress = $this->getQuote()->getShippingAddressByCustomerAddressId($addressId);
+            $quoteAddress->setCollectShippingRates(true)->importCustomerAddressData($address);
+            $this->totalsCollector->collectAddressTotals($this->getQuote(), $quoteAddress);
             $this->quoteRepository->save($this->getQuote());
         }
 
@@ -554,7 +532,8 @@ class Multishipping extends \Magento\Framework\Object
             //
         }
         if (isset($address)) {
-            $this->getQuote()->getBillingAddress($addressId)->importCustomerAddressData($address)->collectTotals();
+            $quoteAddress = $this->getQuote()->getBillingAddress($addressId)->importCustomerAddressData($address);
+            $this->totalsCollector->collectAddressTotals($this->getQuote(), $quoteAddress);
             $this->getQuote()->collectTotals();
             $this->quoteRepository->save($this->getQuote());
         }
@@ -958,6 +937,6 @@ class Multishipping extends \Magento\Framework\Object
             /** @var \Magento\Customer\Api\Data\AddressInterface $address */
             return $address->getId();
         }, $this->getCustomer()->getAddresses());
-        return in_array($addressId, $applicableAddressIds);
+        return !is_numeric($addressId) || in_array($addressId, $applicableAddressIds);
     }
 }

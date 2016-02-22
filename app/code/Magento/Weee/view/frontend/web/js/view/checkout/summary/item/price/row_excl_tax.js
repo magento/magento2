@@ -17,10 +17,29 @@ define(
 
             getFinalRowDisplayPriceExclTax: function(item) {
                 var rowTotalExclTax = parseFloat(item.row_total);
-                if(!window.checkoutConfig.getIncludeWeeeFlag) {
-                    return rowTotalExclTax + parseFloat(item.weee_tax_applied_amount);
+                if (!window.checkoutConfig.getIncludeWeeeFlag) {
+                    rowTotalExclTax += parseFloat(item.weee_tax_applied_amount);
                 }
-                return rowTotalExclTax
+                return rowTotalExclTax;
+            },
+
+            getRowDisplayPriceExclTax: function(item) {
+                var rowTotalExclTax = parseFloat(item.row_total);
+                if (window.checkoutConfig.getIncludeWeeeFlag) {
+                    rowTotalExclTax += this.getRowWeeeTaxExclTax(item);
+                }
+                return rowTotalExclTax;
+            },
+
+            getRowWeeeTaxExclTax: function(item) {
+                var totalWeeeTaxExclTaxApplied = 0;
+                if (item.weee_tax_applied) {
+                    var weeeTaxAppliedAmounts = JSON.parse(item.weee_tax_applied);
+                    weeeTaxAppliedAmounts.forEach(function (weeeTaxAppliedAmount) {
+                        totalWeeeTaxExclTaxApplied += parseFloat(Math.max(weeeTaxAppliedAmount.row_amount, 0));
+                    });
+                }
+                return totalWeeeTaxExclTaxApplied;
             }
 
         });

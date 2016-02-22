@@ -5,7 +5,8 @@
  */
 namespace Magento\Paypal\Model\Payflow\Service\Response;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
+use Magento\Paypal\Model\Payflow\Transparent;
 
 /**
  * Interface ValidatorInterface
@@ -15,8 +16,9 @@ interface ValidatorInterface
     /**
      * Validate data
      *
-     * @param Object $response
+     * @param DataObject $response
+     * @param Transparent|null $transparentModel
      * @return bool
      */
-    public function validate(Object $response);
+    public function validate(DataObject $response, Transparent $transparentModel);
 }

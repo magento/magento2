@@ -7,7 +7,7 @@
  */
 namespace Magento\Framework\Session;
 
-class Storage extends \Magento\Framework\Object implements StorageInterface
+class Storage extends \Magento\Framework\DataObject implements StorageInterface
 {
     /**
      * Namespace of storage

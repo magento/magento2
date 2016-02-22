@@ -58,6 +58,11 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
     protected $quoteMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $totalsCollectorMock;
+
+    /**
      * @var \Magento\Checkout\Model\ShippingInformationManagement
      */
     protected $model;
@@ -75,12 +80,13 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->cartTotalsRepositoryMock = $this->getMock('\Magento\Quote\Api\CartTotalRepositoryInterface');
-        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Model\QuoteRepository', [], [], '', false);
+        $this->quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $this->addressValidatorMock = $this->getMock('\Magento\Quote\Model\QuoteAddressValidator', [], [], '', false);
         $this->loggerMock = $this->getMock('\Psr\Log\LoggerInterface');
         $this->addressRepositoryMock = $this->getMock('\Magento\Customer\Api\AddressRepositoryInterface');
         $this->scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
-
+        $this->totalsCollectorMock =
+            $this->getMock('Magento\Quote\Model\Quote\TotalsCollector', [], [], '', false);
         $this->model = $objectManager->getObject(
             '\Magento\Checkout\Model\ShippingInformationManagement',
             [
@@ -91,7 +97,8 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
                 'addressValidator' => $this->addressValidatorMock,
                 'logger' => $this->loggerMock,
                 'addressRepository' => $this->addressRepositoryMock,
-                'scopeConfig' => $this->scopeConfigMock
+                'scopeConfig' => $this->scopeConfigMock,
+                'totalsCollector' => $this->totalsCollectorMock
             ]
         );
 
@@ -109,7 +116,6 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
                 'getCountryId',
                 'importCustomerAddressData',
                 'save',
-                'collectTotals',
                 'getShippingRateByCode',
                 'getShippingMethod'
             ],
@@ -124,6 +130,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
                 'isVirtual',
                 'getItemsCount',
                 'getIsMultiShipping',
+                'setIsMultiShipping',
                 'validateMinimumAmount',
                 'getStoreId',
                 'setShippingAddress',
@@ -257,7 +264,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Unable to save address. Please, check input data.
+     * @expectedExceptionMessage Unable to save address. Please check input data.
      */
     public function testSaveAddressInformationThrowExceptionWhileAddressSaving()
     {
@@ -294,8 +301,10 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
             ->with(true)
             ->willReturnSelf();
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn(1);
-        $this->shippingAddressMock->expects($this->once())->method('save')->willThrowException($exception);
-
+        $this->totalsCollectorMock
+            ->expects($this->once())
+            ->method('collectAddressTotals')
+            ->willThrowException($exception);
         $this->addressValidatorMock->expects($this->once())
             ->method('validate')
             ->with($this->shippingAddressMock)
@@ -386,8 +395,10 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
             ->with(true)
             ->willReturnSelf();
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn(1);
-        $this->shippingAddressMock->expects($this->once())->method('save')->willReturnSelf();
-        $this->shippingAddressMock->expects($this->once())->method('collectTotals')->willReturnSelf();
+        $this->totalsCollectorMock
+            ->expects($this->once())
+            ->method('collectAddressTotals')
+            ->with($this->quoteMock, $this->shippingAddressMock);
         $this->shippingAddressMock->expects($this->once())->method('getShippingMethod')->willReturn($shippingMethod);
         $this->shippingAddressMock->expects($this->once())
             ->method('getShippingRateByCode')
@@ -413,6 +424,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())->method('isVirtual')->willReturn(false);
         $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(5);
         $this->quoteMock->expects($this->once())->method('getIsMultiShipping')->willReturn(true);
+        $this->quoteMock->expects($this->once())->method('setIsMultiShipping')->with(false)->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('validateMinimumAmount')->with(true)->willReturn(false);
         $this->quoteMock->expects($this->once())->method('getStoreId')->willReturn($storeId);
 
@@ -464,8 +476,10 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
             ->with(true)
             ->willReturnSelf();
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn(1);
-        $this->shippingAddressMock->expects($this->once())->method('save')->willReturnSelf();
-        $this->shippingAddressMock->expects($this->once())->method('collectTotals')->willReturnSelf();
+        $this->totalsCollectorMock
+            ->expects($this->once())
+            ->method('collectAddressTotals')
+            ->with($this->quoteMock, $this->shippingAddressMock);
         $this->shippingAddressMock->expects($this->once())->method('getShippingMethod')->willReturn($shippingMethod);
         $this->shippingAddressMock->expects($this->once())
             ->method('getShippingRateByCode')
@@ -482,7 +496,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Unable to save shipping information. Please, check input data.
+     * @expectedExceptionMessage Unable to save shipping information. Please check input data.
      */
     public function testSaveAddressInformationIfCanNotSaveQuote()
     {
@@ -495,6 +509,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())->method('isVirtual')->willReturn(false);
         $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(5);
         $this->quoteMock->expects($this->once())->method('getIsMultiShipping')->willReturn(true);
+        $this->quoteMock->expects($this->once())->method('setIsMultiShipping')->with(false)->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('validateMinimumAmount')->with(true)->willReturn(true);
         $this->quoteMock->expects($this->once())->method('collectTotals')->willReturnSelf();
 
@@ -506,7 +521,6 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->with($this->quoteMock)
             ->willThrowException($exception);
-
         $addressInformationMock = $this->getMock('\Magento\Checkout\Api\Data\ShippingInformationInterface');
         $addressInformationMock->expects($this->once())
             ->method('getShippingAddress')
@@ -550,8 +564,11 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
             ->with(true)
             ->willReturnSelf();
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn(1);
-        $this->shippingAddressMock->expects($this->exactly(2))->method('save')->willReturnSelf();
-        $this->shippingAddressMock->expects($this->once())->method('collectTotals')->willReturnSelf();
+        $this->shippingAddressMock->expects($this->once())->method('save')->willReturnSelf();
+        $this->totalsCollectorMock
+            ->expects($this->once())
+            ->method('collectAddressTotals')
+            ->with($this->quoteMock, $this->shippingAddressMock);
         $this->shippingAddressMock->expects($this->once())->method('getShippingMethod')->willReturn($shippingMethod);
         $this->shippingAddressMock->expects($this->once())
             ->method('getShippingRateByCode')
@@ -573,6 +590,7 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
         $this->quoteMock->expects($this->once())->method('isVirtual')->willReturn(false);
         $this->quoteMock->expects($this->once())->method('getItemsCount')->willReturn(5);
         $this->quoteMock->expects($this->once())->method('getIsMultiShipping')->willReturn(true);
+        $this->quoteMock->expects($this->once())->method('setIsMultiShipping')->with(false)->willReturnSelf();
         $this->quoteMock->expects($this->once())->method('validateMinimumAmount')->with(true)->willReturn(true);
         $this->quoteMock->expects($this->once())->method('collectTotals')->willReturnSelf();
 
@@ -626,8 +644,10 @@ class ShippingInformationManagementTest extends \PHPUnit_Framework_TestCase
             ->with(true)
             ->willReturnSelf();
         $this->shippingAddressMock->expects($this->once())->method('getCountryId')->willReturn(1);
-        $this->shippingAddressMock->expects($this->exactly(2))->method('save')->willReturnSelf();
-        $this->shippingAddressMock->expects($this->once())->method('collectTotals')->willReturnSelf();
+        $this->totalsCollectorMock
+            ->expects($this->once())
+            ->method('collectAddressTotals')
+            ->with($this->quoteMock, $this->shippingAddressMock);
         $this->shippingAddressMock->expects($this->once())->method('getShippingMethod')->willReturn($shippingMethod);
         $this->shippingAddressMock->expects($this->once())
             ->method('getShippingRateByCode')

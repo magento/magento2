@@ -53,7 +53,7 @@
 
 //  Visually hidden
 .abs-visually-hidden {
-    .visually-hidden();
+    .lib-visually-hidden();
 }
 
 .extend__visually-hidden() {
@@ -62,7 +62,7 @@
 
 //  Revert visually hidden
 .abs-visually-hidden-reset {
-    .visually-hidden-reset();
+    .lib-visually-hidden-reset();
 }
 
 .extend__visually-hidden-reset() {
@@ -71,12 +71,12 @@
 
 //  Clearfixes
 .abs-clearfix {
-    .clearfix();
+    .lib-clearfix();
 }
 
 //  Clearer - clearing container using only :after element
 .abs-clearer {
-    .clearer();
+    .lib-clearer();
 }
 
 .extend__clearer() {
@@ -85,9 +85,29 @@
 
 //  Reset list styles
 .abs-list-reset-styles {
-    .list-reset-styles();
+    .lib-list-reset-styles();
 }
 
 .extend__list-reset-styles() {
     &:extend(.abs-list-reset-styles all);
+}
+
+//  Draggable handle with an icon
+.abs-draggable-handle {
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
+    cursor: move;
+    display: inline-block;
+    font-size: 0;
+    margin-top: -4px;
+    padding: 0 @indent__s 0 0;
+    vertical-align: middle;
+
+    .lib-icon-font(
+    @icon-gripper__content,
+    @_icon-font: @icons-admin__font-name,
+    @_icon-font-size: 1.8rem,
+    @_icon-font-color: @color-gray62,
+    @_icon-font-color-hover: @color-gray52
+    );
 }

@@ -35,6 +35,7 @@ class UpdateItemQty extends Action
      * @param Sidebar $sidebar
      * @param LoggerInterface $logger
      * @param Data $jsonHelper
+     * @codeCoverageIgnore
      */
     public function __construct(
         Context $context,

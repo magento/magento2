@@ -11,41 +11,40 @@ use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 
 /**
- * Curl transport on frontend
+ * Curl transport on frontend.
  */
 class FrontendDecorator implements CurlInterface
 {
     /**
-     * Curl transport protocol
+     * Curl transport protocol.
      *
      * @var CurlTransport
      */
     protected $transport;
 
     /**
-     * Form key
+     * Form key.
      *
      * @var string
      */
     protected $formKey = null;
 
     /**
-     * Response data
+     * Response data.
      *
      * @var string
      */
     protected $response;
 
     /**
-     * Cookies data
+     * Cookies data.
      *
      * @var string
      */
     protected $cookies = '';
 
     /**
-     * Constructor
-     *
+     * @constructor
      * @param CurlTransport $transport
      * @param Customer $customer
      */
@@ -56,7 +55,7 @@ class FrontendDecorator implements CurlInterface
     }
 
     /**
-     * Authorize customer on frontend
+     * Authorize customer on frontend.
      *
      * @param Customer $customer
      * @throws \Exception
@@ -65,7 +64,7 @@ class FrontendDecorator implements CurlInterface
     protected function authorize(Customer $customer)
     {
         $url = $_ENV['app_frontend_url'] . 'customer/account/login/';
-        $this->transport->write(CurlInterface::POST, $url);
+        $this->transport->write($url);
         $this->read();
         $url = $_ENV['app_frontend_url'] . 'customer/account/loginPost/';
         $data = [
@@ -73,7 +72,7 @@ class FrontendDecorator implements CurlInterface
             'login[password]' => $customer->getPassword(),
             'form_key' => $this->formKey,
         ];
-        $this->transport->write(CurlInterface::POST, $url, '1.0', ['Set-Cookie:' . $this->cookies], $data);
+        $this->transport->write($url, $data, CurlInterface::POST, ['Set-Cookie:' . $this->cookies]);
         $response = $this->read();
         if (strpos($response, 'customer/account/login')) {
             throw new \Exception($customer->getFirstname() . ', cannot be logged in by curl handler!');
@@ -81,7 +80,7 @@ class FrontendDecorator implements CurlInterface
     }
 
     /**
-     * Init Form Key from response
+     * Init Form Key from response.
      *
      * @return void
      */
@@ -95,7 +94,7 @@ class FrontendDecorator implements CurlInterface
     }
 
     /**
-     * Init Cookies from response
+     * Init Cookies from response.
      *
      * @return void
      */
@@ -108,24 +107,25 @@ class FrontendDecorator implements CurlInterface
     }
 
     /**
-     * Send request to the remote server
+     * Send request to the remote server.
      *
-     * @param string $method
      * @param string $url
-     * @param string $httpVer
-     * @param array $headers
-     * @param array $params
+     * @param mixed $params
+     * @param string $method
+     * @param mixed $headers
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function write($method, $url, $httpVer = '1.1', $headers = [], $params = [])
+    public function write($url, $params = [], $method = CurlInterface::POST, $headers = [])
     {
-        $this->transport->write($method, $url, $httpVer, ['Set-Cookie:' . $this->cookies], http_build_query($params));
+        if ($this->formKey) {
+            $params['form_key'] = $this->formKey;
+        }
+        $headers = ['Set-Cookie:' . $this->cookies];
+        $this->transport->write($url, http_build_query($params), $method, $headers);
     }
 
     /**
-     * Read response from server
+     * Read response from server.
      *
      * @return string
      */
@@ -138,7 +138,7 @@ class FrontendDecorator implements CurlInterface
     }
 
     /**
-     * Add additional option to cURL
+     * Add additional option to cURL.
      *
      * @param  int $option the CURLOPT_* constants
      * @param  mixed $value
@@ -150,7 +150,7 @@ class FrontendDecorator implements CurlInterface
     }
 
     /**
-     * Close the connection to the server
+     * Close the connection to the server.
      *
      * @return void
      */

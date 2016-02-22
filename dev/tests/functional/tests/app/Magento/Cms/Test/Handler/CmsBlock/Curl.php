@@ -8,7 +8,6 @@ namespace Magento\Cms\Test\Handler\CmsBlock;
 
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Handler\Curl as AbstractCurl;
-use Magento\Mtf\Util\Protocol\CurlInterface;
 use Magento\Mtf\Util\Protocol\CurlTransport;
 use Magento\Mtf\Util\Protocol\CurlTransport\BackendDecorator;
 
@@ -31,8 +30,8 @@ class Curl extends AbstractCurl implements CmsBlockInterface
      */
     protected $mappingData = [
         'is_active' => [
-            'Enabled' => 1,
-            'Disabled' => 0,
+            'Yes' => 1,
+            'No' => 0,
         ],
     ];
 
@@ -57,7 +56,7 @@ class Curl extends AbstractCurl implements CmsBlockInterface
         $data = $this->prepareData($fixture);
         $url = $_ENV['app_backend_url'] . $this->saveUrl;
         $curl = new BackendDecorator(new CurlTransport(), $this->_configuration);
-        $curl->write(CurlInterface::POST, $url, '1.0', [], $data);
+        $curl->write($url, $data);
         $response = $curl->read();
         $curl->close();
         if (!strpos($response, 'data-ui-id="messages-message-success"')) {

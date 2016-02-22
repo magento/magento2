@@ -9,7 +9,7 @@
     <fixture name="orderStatus"
              module="Magento_Sales"
              type="composite"
-             collection="Magento\Sales\Model\Resource\Order\Status\Collection"
+             collection="Magento\Sales\Model\ResourceModel\Order\Status\Collection"
              repository_class="Magento\Sales\Test\Repository\OrderStatus"
              handler_interface="Magento\Sales\Test\Handler\OrderStatus\OrderStatusInterface"
              class="Magento\Sales\Test\Fixture\OrderStatus">

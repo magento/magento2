@@ -9,20 +9,20 @@ namespace Magento\Translation\Model;
 class StringTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Translation\Model\String
+     * @var \Magento\Translation\Model\StringUtils
      */
     protected $_model;
 
     protected function setUp()
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Translation\Model\String'
+            'Magento\Translation\Model\StringUtils'
         );
     }
 
     public function testConstructor()
     {
-        $this->assertInstanceOf('Magento\Translation\Model\Resource\String', $this->_model->getResource());
+        $this->assertInstanceOf('Magento\Translation\Model\ResourceModel\StringUtils', $this->_model->getResource());
     }
 
     public function testSetGetString()

@@ -4,8 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+
 
 ?>
-<button type="submit" data-role="review-save" title="<?php echo __('Continue') ?>" class="button action checkout primary">
-    <span><?php echo __('Continue') ?></span></button>
+<button type="submit" data-role="review-save" title="<?php echo $block->escapeHtml(__('Continue')); ?>"
+        class="button action checkout primary">
+    <span><?php echo $block->escapeHtml(__('Continue')); ?></span>
+</button>

@@ -4,18 +4,16 @@
  * See COPYING.txt for license details.
  */
 ?>
-<?php /** @var $block \Magento\Catalog\Block\Product\Image */
+<?php /** @var $block \Magento\Catalog\Block\Product\Image */ ?>
 
-$ratio = $block->getProductImageView()->getHeight() / $block->getProductImageView()->getWidth() * 100;
-?>
 <span class="product-image-container"
-      style="width:<?php echo $block->getProductImageView()->getWidth()?>px;">
+      style="width:<?php /* @escapeNotVerified */ echo $block->getWidth()?>px;">
     <span class="product-image-wrapper"
-          style="padding-bottom: <?php echo $ratio?>%;">
+          style="padding-bottom: <?php /* @escapeNotVerified */ echo ($block->getRatio() * 100); ?>%;">
         <img class="product-image-photo"
-             <?php echo $block->getAddAttribute(); ?>
-             src="<?php echo $block->getProductImageView()->getUrl() ?>"
-             width="<?php echo $block->getProductImageView()->getResizedImageWidth()?>"
-             height="<?php echo $block->getProductImageView()->getResizedImageHeight()?>"
-             alt="<?php echo $block->stripTags($block->getProductImageView()->getLabel(), null, true) ?>"/></span>
+             <?php /* @escapeNotVerified */ echo $block->getCustomAttributes(); ?>
+             src="<?php /* @escapeNotVerified */ echo $block->getImageUrl(); ?>"
+             width="<?php /* @escapeNotVerified */ echo $block->getResizedImageWidth(); ?>"
+             height="<?php /* @escapeNotVerified */ echo $block->getResizedImageHeight(); ?>"
+             alt="<?php /* @escapeNotVerified */ echo $block->stripTags($block->getLabel(), null, true); ?>"/></span>
 </span>

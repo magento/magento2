@@ -8,9 +8,8 @@ namespace Magento\Weee\Pricing;
 
 use Magento\Catalog\Pricing\Price\CustomOptionPriceInterface;
 use Magento\Framework\Pricing\Adjustment\AdjustmentInterface;
-use Magento\Framework\Pricing\Object\SaleableInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
-use Magento\Tax\Pricing\Adjustment as TaxAdjustment;
 use Magento\Weee\Helper\Data as WeeeHelper;
 
 /**
@@ -99,13 +98,11 @@ class Adjustment implements AdjustmentInterface
      * @param SaleableInterface $saleableItem
      * @param null|array $context
      * @return float
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function extractAdjustment($amount, SaleableInterface $saleableItem, $context = [])
     {
-        if (isset($context[CustomOptionPriceInterface::CONFIGURATION_OPTION_FLAG])) {
-            return 0;
-        }
-        return $this->getAmount($saleableItem);
+        return 0;
     }
 
     /**
@@ -132,7 +129,8 @@ class Adjustment implements AdjustmentInterface
      */
     public function isExcludedWith($adjustmentCode)
     {
-        return (($adjustmentCode == self::ADJUSTMENT_CODE) || ($adjustmentCode == TaxAdjustment::ADJUSTMENT_CODE));
+        return (($adjustmentCode == self::ADJUSTMENT_CODE) ||
+            ($adjustmentCode == \Magento\Tax\Pricing\Adjustment::ADJUSTMENT_CODE));
     }
 
     /**
@@ -143,8 +141,8 @@ class Adjustment implements AdjustmentInterface
      */
     protected function getAmount(SaleableInterface $saleableItem)
     {
-        $weeeAmount = $this->weeeHelper->getAmount($saleableItem);
-        $weeeAmount = $this->priceCurrency->convertAndRound($weeeAmount);
+        $weeeAmount = $this->weeeHelper->getAmountExclTax($saleableItem);
+        $weeeAmount = $this->priceCurrency->convert($weeeAmount);
         return $weeeAmount;
     }
 
@@ -155,6 +153,6 @@ class Adjustment implements AdjustmentInterface
      */
     public function getSortOrder()
     {
-        return $this->weeeHelper->isTaxable() ? $this->sortOrder : -1;
+        return $this->sortOrder;
     }
 }

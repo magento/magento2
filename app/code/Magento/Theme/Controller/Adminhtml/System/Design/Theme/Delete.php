@@ -39,13 +39,7 @@ class Delete extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
             $this->messageManager->addException($e, __('We cannot delete the theme.'));
             $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
         }
-        /**
-         * @todo Temporary solution. Theme module should not know about the existence of editor module.
-         */
-        $path = (bool)$this->getRequest()->getParam('back', false)
-            ? 'adminhtml/system_design_editor/index/'
-            : 'adminhtml/*/';
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
-        return $resultRedirect->setPath($path);
+        return $resultRedirect->setPath('adminhtml/*/');
     }
 }

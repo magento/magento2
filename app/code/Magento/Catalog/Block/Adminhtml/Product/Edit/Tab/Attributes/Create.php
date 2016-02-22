@@ -18,19 +18,19 @@ class Create extends Button
     /**
      * Config of create new attribute
      *
-     * @var \Magento\Framework\Object
+     * @var \Magento\Framework\DataObject
      */
     protected $_config = null;
 
     /**
      * Retrieve config of new attribute creation
      *
-     * @return \Magento\Framework\Object
+     * @return \Magento\Framework\DataObject
      */
     public function getConfig()
     {
         if ($this->_config === null) {
-            $this->_config = new \Magento\Framework\Object();
+            $this->_config = new \Magento\Framework\DataObject();
         }
 
         return $this->_config;

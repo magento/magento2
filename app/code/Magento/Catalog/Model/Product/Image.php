@@ -19,6 +19,9 @@ use Magento\Store\Model\Store;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @method string getFile()
+ * @method string getLabel()
+ * @method string getPosition()
  */
 class Image extends \Magento\Framework\Model\AbstractModel
 {
@@ -57,7 +60,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * @var bool
      */
-    protected $_constrainOnly = false;
+    protected $_constrainOnly = true;
 
     /**
      * @var int[]
@@ -178,7 +181,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -195,7 +198,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\FileSystem $viewFileSystem,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -329,10 +332,10 @@ class Image extends \Magento\Framework\Model\AbstractModel
         list($width, $height) = explode('x', strtolower($size), 2);
         foreach (['width', 'height'] as $wh) {
             ${$wh}
-            = (int)${$wh};
+                = (int)${$wh};
             if (empty(${$wh})) {
                 ${$wh}
-                = null;
+                    = null;
             }
         }
 
@@ -350,7 +353,8 @@ class Image extends \Magento\Framework\Model\AbstractModel
     {
         return $this->_getMemoryLimit() > $this->_getMemoryUsage() + $this->_getNeedMemoryForFile(
             $file
-        ) || $this->_getMemoryLimit() == -1;
+        )
+        || $this->_getMemoryLimit() == -1;
     }
 
     /**
@@ -544,6 +548,16 @@ class Image extends \Magento\Framework\Model\AbstractModel
     public function getNewFile()
     {
         return $this->_newFile;
+    }
+
+    /**
+     * Retrieve 'true' if image is a base file placeholder
+     *
+     * @return bool
+     */
+    public function isBaseFilePlaceholder()
+    {
+        return (bool)$this->_isBaseFilePlaceholder;
     }
 
     /**
@@ -926,14 +940,17 @@ class Image extends \Magento\Framework\Model\AbstractModel
      */
     public function getResizedImageInfo()
     {
+        $fileInfo = null;
         if ($this->_newFile === true) {
-            $fileInfo = getimagesize(
-                $this->_assetRepo->createAsset(
-                    "Magento_Catalog::images/product/placeholder/{$this->getDestinationSubdir()}.jpg"
-                )->getSourceFile()
+            $asset = $this->_assetRepo->createAsset(
+                "Magento_Catalog::images/product/placeholder/{$this->getDestinationSubdir()}.jpg"
             );
+            $img = $asset->getSourceFile();
+            $fileInfo = getimagesize($img);
         } else {
-            $fileInfo = getimagesize($this->_mediaDirectory->getAbsolutePath($this->_newFile));
+            if ($this->_mediaDirectory->isFile($this->_mediaDirectory->getAbsolutePath($this->_newFile))) {
+                $fileInfo = getimagesize($this->_mediaDirectory->getAbsolutePath($this->_newFile));
+            }
         }
         return $fileInfo;
     }

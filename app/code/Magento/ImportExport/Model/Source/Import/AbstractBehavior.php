@@ -39,9 +39,21 @@ abstract class AbstractBehavior implements \Magento\Framework\Option\ArrayInterf
 
     /**
      * Get current behaviour group code
-     *
+     *;
      * @abstract
      * @return string
      */
     abstract public function getCode();
+
+    /**
+     * Get array of notes for possible values
+     *
+     * @param string $entityCode
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getNotes($entityCode)
+    {
+        return [];
+    }
 }

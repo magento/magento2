@@ -4,24 +4,27 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Framework\App\TemplateTypesInterface;
+
 // @codingStandardsIgnoreFile
 
+/** @var $block \Magento\Email\Block\Adminhtml\Template\Edit */
 ?>
 <?php if (!$block->getEditMode()): ?>
-<form action="<?php echo $block->getLoadUrl() ?>" method="post" id="email_template_load_form">
+<form action="<?php /* @escapeNotVerified */ echo $block->getLoadUrl() ?>" method="post" id="email_template_load_form">
     <?php echo $block->getBlockHtml('formkey')?>
-    <fieldset class="fieldset form-inline">
-        <legend class="legend"><span><?php echo __('Load default template') ?></span></legend>
-        <div class="field">
-            <label class="label" for="template_select"><?php echo __('Template') ?></label>
-            <div class="control">
-                <select id="template_select" name="code" class="select required-entry">
+    <fieldset class="admin__fieldset form-inline">
+        <legend class="admin__legend"><span><?php /* @escapeNotVerified */ echo __('Load default template') ?></span></legend><br>
+        <div class="admin__field">
+            <label class="admin__field-label" for="template_select"><?php /* @escapeNotVerified */ echo __('Template') ?></label>
+            <div class="admin__field-control">
+                <select id="template_select" name="code" class="admin__control-select required-entry">
                     <?php foreach ($block->getTemplateOptions() as $group => $options): ?>
                         <?php if ($group): ?>
                             <optgroup label="<?php echo $block->escapeHtml($group) ?>">
                         <?php endif; ?>
                         <?php foreach ($options as $option): ?>
-                            <option value="<?php echo $block->escapeHtml($option['value']) ?>"<?php echo $block->getOrigTemplateCode() == $option['value'] ? ' selected="selected"' : '' ?>><?php echo $block->escapeHtml($option['label']) ?></option>
+                            <option value="<?php echo $block->escapeHtml($option['value']) ?>"<?php /* @escapeNotVerified */ echo $block->getOrigTemplateCode() == $option['value'] ? ' selected="selected"' : '' ?>><?php echo $block->escapeHtml($option['label']) ?></option>
                         <?php endforeach; ?>
                         <?php if ($group): ?>
                             </optgroup>
@@ -30,24 +33,27 @@
                 </select>
             </div>
         </div>
-        <div class="field required">
-            <div class="control">
+        <div class="admin__field required">
+            <span class="admin__field-label"></span>
+            <div class="admin__field-control">
                 <?php echo $block->getLoadButtonHtml() ?>
             </div>
         </div>
     </fieldset>
 </form>
 <?php endif ?>
-<form action="<?php echo $block->getSaveUrl() ?>" method="post" id="email_template_edit_form">
+
+<form action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl() ?>" method="post" id="email_template_edit_form">
     <?php echo $block->getBlockHtml('formkey')?>
     <input type="hidden" id="change_flag_element" name="_change_type_flag" value="" />
-    <input type="hidden" id="orig_template_code" name="orig_template_code" value="<?php echo $block->getOrigTemplateCode() ?>" />
+    <input type="hidden" id="orig_template_code" name="orig_template_code" value="<?php /* @escapeNotVerified */ echo $block->getOrigTemplateCode() ?>" />
     <?php echo $block->getFormHtml() ?>
 </form>
-<form action="<?php echo $block->getPreviewUrl() ?>" method="post" id="email_template_preview_form" target="_blank">
+
+<form action="<?php /* @escapeNotVerified */ echo $block->getPreviewUrl() ?>" method="post" id="email_template_preview_form" target="_blank">
     <?php echo $block->getBlockHtml('formkey')?>
     <div class="no-display">
-        <input type="hidden" id="preview_type" name="type" value="<?php echo $block->isTextType() ? 1 : 2 ?>" />
+        <input type="hidden" id="preview_type" name="type" value="<?php /* @escapeNotVerified */ echo $block->isTextType() ? 1 : 2 ?>" />
         <input type="hidden" id="preview_text" name="text" value="" />
         <input type="hidden" id="preview_styles" name="styles" value="" />
     </div>
@@ -56,10 +62,11 @@
 require([
     "jquery",
     "tinymce",
+    "Magento_Ui/js/modal/alert",
     "mage/mage",
     "Magento_Variable/variables",
     "prototype"
-], function(jQuery, tinyMCE){
+], function(jQuery, tinyMCE, alert){
 
 //<![CDATA[
     jQuery('#email_template_edit_form').mage('form').mage('validation');
@@ -86,7 +93,7 @@ require([
 
             this.bindEvents();
 
-            this.renderPaths(<?php echo $block->getCurrentlyUsedForPaths(); ?>, 'currently_used_for');
+            this.renderPaths(<?php /* @escapeNotVerified */ echo $block->getCurrentlyUsedForPaths(); ?>, 'currently_used_for');
         },
 
         bindEvents: function(){
@@ -108,7 +115,7 @@ require([
         },
 
         stripTags: function () {
-            if(!window.confirm("<?php echo __('Are you sure you want to strip tags?') ?>")) {
+            if(!window.confirm("<?php /* @escapeNotVerified */ echo __('Are you sure you want to strip tags?') ?>")) {
                 return false;
             }
             this.unconvertedText = $('template_text').value;
@@ -139,9 +146,9 @@ require([
         },
         preview: function() {
             if (this.typeChange) {
-                $('preview_type').value = 1;
+                $('preview_type').value = <?php /* @escapeNotVerified */ echo TemplateTypesInterface::TYPE_TEXT ?>;
             } else {
-                $('preview_type').value = 2;
+                $('preview_type').value = <?php /* @escapeNotVerified */ echo $block->getTemplateType() ?>;
             }
             if (typeof tinyMCE == 'undefined' || !tinyMCE.getInstanceById('template_text')) {
                 $('preview_text').value = $('template_text').value;
@@ -159,8 +166,8 @@ require([
         },
 
         deleteTemplate: function() {
-            if(window.confirm("<?php echo __('Are you sure you want to delete this template?') ?>")) {
-                   window.location.href = '<?php echo $block->getDeleteUrl() ?>';
+            if(window.confirm("<?php /* @escapeNotVerified */ echo __('Are you sure you want to delete this template?') ?>")) {
+                   window.location.href = '<?php /* @escapeNotVerified */ echo $block->getDeleteUrl() ?>';
             }
         },
 
@@ -204,7 +211,9 @@ require([
                           }
                        }.bind(this));
                    } else {
-                       alert('<?php echo __('The template did not load. Please review the log for details.') ?>');
+                       alert({
+                           content: '<?php /* @escapeNotVerified */ echo __('The template did not load. Please review the log for details.') ?>'
+                       });
                    }
                }.bind(this)
             });
@@ -214,7 +223,7 @@ require([
         renderPaths: function(paths, fieldId) {
             var field = $(fieldId);
             if (field) {
-                field.down('div').update(this.parsePath(paths, '<span class="path-delimiter">&nbsp;-&gt;&nbsp;</span>', '<br />'));
+                field.down('div').down('div').update(this.parsePath(paths, '<span class="path-delimiter">&nbsp;-&gt;&nbsp;</span>', '<br />'));
             }
         },
 

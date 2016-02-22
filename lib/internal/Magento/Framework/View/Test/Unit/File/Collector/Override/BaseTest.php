@@ -3,14 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Framework\View\Test\Unit\File\Collector\Override;
 
-use \Magento\Framework\View\File\Collector\Override\Base;
-
-use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\View\File\Collector\Override\Base;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\Framework\View\File\Factory;
 
@@ -24,42 +20,81 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     /**
      * @var Read | \PHPUnit_Framework_MockObject_MockObject
      */
-    private $directory;
+    private $themeDirectory;
 
     /**
      * @var Factory | \PHPUnit_Framework_MockObject_MockObject
      */
     private $fileFactory;
 
+    /**
+     * @var \Magento\Framework\View\Helper\PathPattern|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $pathPatternHelperMock;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $readDirFactory;
+
+    /**
+     * @var \Magento\Framework\Component\ComponentRegistrarInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $componentRegistrar;
+
     protected function setUp()
     {
-        $this->directory = $this->getMock(
+        $this->themeDirectory = $this->getMock(
             'Magento\Framework\Filesystem\Directory\Read',
-            ['getAbsolutePath', 'search'], [], '', false
+            ['getAbsolutePath', 'search'],
+            [],
+            '',
+            false
         );
-        $filesystem = $this->getMock(
-            'Magento\Framework\Filesystem', ['getDirectoryRead'], [], '', false
-        );
-        $filesystem->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::THEMES)
-            ->will($this->returnValue($this->directory));
+        $this->pathPatternHelperMock = $this->getMockBuilder('Magento\Framework\View\Helper\PathPattern')
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->fileFactory = $this->getMock('Magento\Framework\View\File\Factory', [], [], '', false);
-        $this->model = new \Magento\Framework\View\File\Collector\Override\Base(
-            $filesystem, $this->fileFactory, 'override'
+        $this->readDirFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
+        $this->readDirFactory->expects($this->any())
+            ->method('create')
+            ->will($this->returnValue($this->themeDirectory));
+        $this->componentRegistrar = $this->getMockForAbstractClass(
+            'Magento\Framework\Component\ComponentRegistrarInterface'
         );
+        $this->model = new \Magento\Framework\View\File\Collector\Override\Base(
+            $this->fileFactory,
+            $this->readDirFactory,
+            $this->componentRegistrar,
+            $this->pathPatternHelperMock,
+            'override'
+        );
+    }
+
+    public function testGetFilesWrongTheme()
+    {
+        $this->componentRegistrar->expects($this->once())
+            ->method('getPath')
+            ->will($this->returnValue(''));
+        $theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
+        $theme->expects($this->once())
+            ->method('getFullPath')
+            ->will($this->returnValue('area/Vendor/theme'));
+        $this->assertSame([], $this->model->getFiles($theme, ''));
     }
 
     /**
      * @param array $files
      * @param string $filePath
+     * @param string $pathPattern
      *
-     * @dataProvider dataProvider
+     * @dataProvider getFilesDataProvider
      */
-    public function testGetFiles($files, $filePath)
+    public function testGetFiles($files, $filePath, $pathPattern)
     {
+        $themePath = 'area/theme/path';
         $theme = $this->getMockForAbstractClass('Magento\Framework\View\Design\ThemeInterface');
-        $theme->expects($this->once())->method('getFullPath')->will($this->returnValue('area/theme/path'));
+        $theme->expects($this->once())->method('getFullPath')->willReturn($themePath);
 
         $handlePath = 'design/area/theme/path/%s/override/%s';
         $returnKeys = [];
@@ -67,12 +102,20 @@ class BaseTest extends \PHPUnit_Framework_TestCase
             $returnKeys[] = sprintf($handlePath, $file['module'], $file['handle']);
         }
 
-        $this->directory->expects($this->once())
+        $this->componentRegistrar->expects($this->once())
+            ->method('getPath')
+            ->with(ComponentRegistrar::THEME, $themePath)
+            ->will($this->returnValue('/full/theme/path'));
+        $this->pathPatternHelperMock->expects($this->any())
+            ->method('translatePatternFromGlob')
+            ->with($filePath)
+            ->willReturn($pathPattern);
+        $this->themeDirectory->expects($this->once())
             ->method('search')
-            ->will($this->returnValue($returnKeys));
-        $this->directory->expects($this->any())
+            ->willReturn($returnKeys);
+        $this->themeDirectory->expects($this->any())
             ->method('getAbsolutePath')
-            ->will($this->returnArgument(0));
+            ->willReturnArgument(0);
 
         $checkResult = [];
         foreach ($files as $key => $file) {
@@ -81,7 +124,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                 ->expects($this->at($key))
                 ->method('create')
                 ->with(sprintf($handlePath, $file['module'], $file['handle']), $file['module'])
-                ->will($this->returnValue($checkResult[$key]));
+                ->willReturn($checkResult[$key]);
         }
 
         $this->assertSame($checkResult, $this->model->getFiles($theme, $filePath));
@@ -90,7 +133,7 @@ class BaseTest extends \PHPUnit_Framework_TestCase
     /**
      * @return array
      */
-    public function dataProvider()
+    public function getFilesDataProvider()
     {
         return [
             [
@@ -100,12 +143,14 @@ class BaseTest extends \PHPUnit_Framework_TestCase
                     ['handle' => '3.xml', 'module' => 'Module_Two'],
                 ],
                 '*.xml',
+                '[^/]*\\.xml'
             ],
             [
                 [
                     ['handle' => 'preset/4', 'module' => 'Module_Fourth'],
                 ],
                 'preset/4',
+                'preset/4'
             ],
         ];
     }

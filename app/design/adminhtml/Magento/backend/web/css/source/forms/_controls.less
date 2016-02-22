@@ -21,6 +21,7 @@
     background-color: @field-control__background-color;
     border-radius: @field-control__border-radius;
     border: @field-control__border-width solid @field-control__border-color;
+    box-shadow: @field-control__box-shadow;
     color: @field-control__color;
     font-size: @field-control__font-size;
     font-weight: @font-weight__regular;
@@ -53,12 +54,13 @@
 //  Input text styles
 .admin__control-text {
     &:extend(.abs-form-control-pattern all);
+    min-width: 4rem;
 }
 
 //  Select styles
 .admin__control-select {
     &:extend(.abs-form-control-pattern all);
-    .css(appearance, none, 1);
+    .lib-css(appearance, none, 1);
 
     background-repeat: no-repeat;
     background-image+: url('../images/arrows-bg.svg');
@@ -70,10 +72,14 @@
     background-size+: @field-control__height 100%;
 
     background-image+: linear-gradient(@field-control__border-color,@field-control__border-color);
-    background-position+: ~'calc(100% - 33px)' 0;
+    background-position+: ~'calc(100% - @{field-control__height})' 0;
     background-size+: 1px 100%;
 
+    max-width: 100%;
+    min-width: 8.5rem;
+    padding-bottom: @field-control__padding-bottom - .1rem;
     padding-right: 4.4rem; // Distance between select switch and inner text
+    padding-top: @field-control__padding-top - .1rem;
     transition: @smooth__border-color;
 
     &:hover {
@@ -89,12 +95,14 @@
         background-position+: 100%;
 
         background-image+: linear-gradient(@field-control__focus__border-color, @field-control__focus__border-color);
-        background-position+: ~'calc(100% - 33px)' 0;
+        background-position+: ~'calc(100% - @{field-control__height})' 0;
         border-color: @field-control__focus__border-color;
     }
+
     &::-ms-expand {
         display: none;
     }
+
     .ie9 & {
         background-image: none;
         padding-right: @field-control__padding-horizontal;
@@ -114,7 +122,16 @@ option:empty {
 .admin__control-multiselect {
     &:extend(.abs-form-control-pattern all);
     height: auto;
-    padding: .6rem 1rem;
+    max-width: 100%;
+    min-width: @field-size__s;
+    overflow: auto;
+    padding: 0;
+    resize: both;
+
+    option,
+    optgroup {
+        padding: .5rem 1rem;
+    }
 }
 
 //  File uploader
@@ -134,10 +151,12 @@ option:empty {
         top: 0;
         width: 100%;
         z-index: 0;
+
         .admin__control-file:active + &,
         .admin__control-file:focus + & {
             &:extend(.abs-form-control-pattern:focus);
         }
+
         .admin__control-file[disabled] + & {
             &:extend(.abs-form-control-pattern[disabled]);
         }
@@ -145,11 +164,12 @@ option:empty {
 }
 
 .admin__control-file {
-    position: relative;
-    z-index: 1;
     background: transparent;
     border: 0;
+    padding-top: .7rem;
+    position: relative;
     width: auto;
+    z-index: 1;
 }
 
 //
@@ -163,6 +183,7 @@ option:empty {
     line-height: @field-control__line-height;
     padding-top: @field-control__padding-top;
     padding-bottom: @field-control__padding-bottom;
+
     + [class*='admin__control-'] {
         margin-left: @action__outer-indent;
     }
@@ -172,6 +193,15 @@ option:empty {
     + .admin__control-support-text {
         margin-left: @action__outer-indent;
     }
+}
+
+//
+//  Service text or control. Can be used to add text or "Use Default Value" checkbox
+//  ---------------------------------------------
+
+.admin__control-service {
+    float: left;
+    margin: .8rem 0 0 3rem;
 }
 
 //
@@ -188,44 +218,66 @@ option:empty {
 
 //  Control with additional prefix or suffix label
 .admin__control-addon {
-    .vendor-prefix-display(inline-flex);
-    .vendor-prefix-flex-direction(row);
+    .lib-vendor-prefix-display(inline-flex);
+    .lib-vendor-prefix-flex-direction(row);
     display: inline-flex;
     flex-flow: row nowrap;
     position: relative;
     width: 100%;
     z-index: 1;
+
     > [class*='admin__addon-'],
     > [class*='admin__control-'] {
-        .vendor-prefix-flex-basis(auto);
-        .vendor-prefix-flex-grow(0);
-        .vendor-prefix-flex-shrink(0);
+        .lib-vendor-prefix-flex-basis(auto);
+        .lib-vendor-prefix-flex-grow(0);
+        .lib-vendor-prefix-flex-shrink(0);
         position: relative;
         z-index: 1;
     }
-    [class*='admin__control-'] {
-        .css(appearence,none);
-        .vendor-prefix-flex-grow(1);
+
+    .admin__control-select {
+        width: auto;
+    }
+
+    .admin__control-text {
+        width: 100%;
+    }
+
+    [class*='admin__control-'][class] {
+        .lib-css(appearence,none);
+        .lib-vendor-prefix-flex-grow(1);
+        .lib-vendor-prefix-order(1);
+        .lib-vendor-prefix-flex-shrink(1);
         box-shadow: none;
         background-color: transparent;
         border-color: transparent;
-        order: 1;
         vertical-align: top;
-        width: auto;
+
+        & + [class*='admin__control-'] {
+            border-left-color: @field-control__border-color;
+        }
+
         :focus {
             box-shadow: 0;
         }
-        & + [class*='admin__addon-'] {
+
+        & ~ [class*='admin__addon-']:last-child {
             padding-left: 1rem;
             position: static !important;
             z-index: 0;
+
             > * {
                 position: relative;
                 vertical-align: top;
-                z-index: 2;
+                z-index: 1;
+            }
+
+            &:empty {
+                padding: 0;
             }
         }
-        & + [class*='admin__addon-']:before {
+
+        & ~ [class*='admin__addon-']:last-child:before {
             &:extend(.abs-form-control-pattern);
             bottom: 0;
             box-sizing: border-box;
@@ -234,13 +286,19 @@ option:empty {
             position: absolute;
             top: 0;
             width: 100%;
-            z-index: 0;
+            z-index: -1;
         }
-        &[disabled] + [class*='admin__addon-']:before {
+
+        &[disabled] ~ [class*='admin__addon-']:last-child:before {
             &:extend(.abs-form-control-pattern[disabled]);
         }
-        &:focus + [class*='admin__addon-']:before {
+
+        &:focus ~ [class*='admin__addon-']:last-child:before {
             &:extend(.abs-form-control-pattern:focus);
+        }
+
+        &:hover ~ [class*='admin__addon-']:last-child:before {
+            &:extend(.abs-form-control-pattern:hover);
         }
     }
 }
@@ -258,14 +316,17 @@ option:empty {
         line-height: @field-control__height;
         padding: 0;
     }
+
     &-suffix {
-        order: 3;
+        .lib-vendor-prefix-order(3);
+
         &:last-child {
             padding-right: 1rem;
         }
     }
+
     &-prefix {
-        order: 0;
+        .lib-vendor-prefix-order(0);
     }
 }
 
@@ -279,18 +340,22 @@ option:empty {
             overflow: hidden;
         }
     }
+
     .admin__addon {
         min-width: 0;
         overflow: hidden;
         text-align: right;
         white-space: nowrap;
         width: auto;
+
         [class*='admin__control-'] {
             display: inline;
         }
+
         &-prefix {
             float: left;
         }
+
         &-suffix {
             float: right;
         }

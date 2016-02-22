@@ -12,39 +12,40 @@ use Magento\Mtf\Page\Page;
 
 /**
  * Customer Address Edit page.
- *
  */
 class CustomerAddressEdit extends Page
 {
     /**
-     * URL for Customer Address Edit page
+     * URL for Customer Address Edit page.
      */
     const MCA = 'customer/address/edit';
 
     /**
-     * Customer Address Edit form
+     * Customer Address Edit form.
      *
      * @var string
      */
     protected $editForm = '#form-validate';
 
     /**
-     * Custom constructor
+     * Init page. Set page url.
+     *
+     * @return void
      */
-    protected function _init()
+    protected function initUrl()
     {
-        $this->_url = $_ENV['app_frontend_url'] . self::MCA;
+        $this->url = $_ENV['app_frontend_url'] . self::MCA;
     }
 
     /**
-     * Get Customer Address Edit form
+     * Get Customer Address Edit form.
      *
      * @return \Magento\Customer\Test\Block\Address\Edit
      */
     public function getEditForm()
     {
         return Factory::getBlockFactory()->getMagentoCustomerAddressEdit(
-            $this->_browser->find($this->editForm, Locator::SELECTOR_CSS)
+            $this->browser->find($this->editForm, Locator::SELECTOR_CSS)
         );
     }
 }

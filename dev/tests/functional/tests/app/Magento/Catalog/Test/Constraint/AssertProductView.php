@@ -72,11 +72,6 @@ class AssertProductView extends AbstractConstraint
             $priceComparing = $specialPrice;
         }
 
-        if ($groupPrice = $product->getGroupPrice()) {
-            $groupPrice = reset($groupPrice);
-            $priceComparing = $groupPrice['price'];
-        }
-
         if ($priceComparing && isset($price['price_special_price'])) {
             \PHPUnit_Framework_Assert::assertEquals(
                 number_format($priceComparing, 2),

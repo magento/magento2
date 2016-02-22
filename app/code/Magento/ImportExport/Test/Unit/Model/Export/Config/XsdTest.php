@@ -14,13 +14,17 @@ class XsdTest extends \PHPUnit_Framework_TestCase
     protected $_xsdSchemaPath;
 
     /**
-     * @var \Magento\TestFramework\Utility\XsdValidator
+     * @var \Magento\Framework\TestFramework\Unit\Utility\XsdValidator
      */
     protected $_xsdValidator;
 
     protected function setUp()
     {
-        $this->_xsdSchemaPath = BP . '/app/code/Magento/ImportExport/etc/';
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $this->_xsdSchemaPath = $urnResolver->getRealPath('urn:magento:module:Magento_ImportExport:etc/');
         $this->_xsdValidator = new \Magento\Framework\TestFramework\Unit\Utility\XsdValidator();
     }
 

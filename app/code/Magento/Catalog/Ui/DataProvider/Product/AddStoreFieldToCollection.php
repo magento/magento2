@@ -34,6 +34,7 @@ class AddStoreFieldToCollection implements AddFilterToCollectionInterface
     public function addFilter(Collection $collection, $field, $condition = null)
     {
         if (isset($condition['eq']) && $condition['eq']) {
+            /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection  */
             $collection->addStoreFilter($this->storeManager->getStore($condition['eq']));
         }
     }

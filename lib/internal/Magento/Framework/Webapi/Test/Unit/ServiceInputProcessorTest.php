@@ -36,6 +36,12 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject  */
     protected $objectManagerMock;
 
+    /** @var  \Magento\Framework\Reflection\MethodsMap */
+    protected $methodsMap;
+
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $fieldNamer;
+
     public function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -52,7 +58,7 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Framework\Reflection\TypeProcessor $typeProcessor */
         $typeProcessor = $objectManager->getObject('Magento\Framework\Reflection\TypeProcessor');
-        $cache = $this->getMockBuilder('Magento\Framework\App\Cache\Type\Webapi')
+        $cache = $this->getMockBuilder('Magento\Framework\App\Cache\Type\Reflection')
             ->disableOriginalConstructor()
             ->getMock();
         $cache->expects($this->any())->method('load')->willReturn(false);
@@ -73,14 +79,29 @@ class ServiceInputProcessorTest extends \PHPUnit_Framework_TestCase
                 }
             );
 
+        $this->fieldNamer = $this->getMockBuilder('Magento\Framework\Reflection\FieldNamer')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
+        $this->methodsMap = $objectManager->getObject(
+            'Magento\Framework\Reflection\MethodsMap',
+            [
+                'cache' => $cache,
+                'typeProcessor' => $typeProcessor,
+                'attributeTypeResolver' => $this->attributeValueFactoryMock->create(),
+                'fieldNamer' => $this->fieldNamer
+            ]
+        );
+
         $this->serviceInputProcessor = $objectManager->getObject(
             'Magento\Framework\Webapi\ServiceInputProcessor',
             [
                 'typeProcessor' => $typeProcessor,
                 'objectManager' => $this->objectManagerMock,
-                'cache' => $cache,
                 'customAttributeTypeLocator' => $this->customAttributeTypeLocator,
-                'attributeValueFactory' => $this->attributeValueFactoryMock
+                'attributeValueFactory' => $this->attributeValueFactoryMock,
+                'methodsMap' => $this->methodsMap
             ]
         );
     }

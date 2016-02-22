@@ -17,6 +17,11 @@ class PayflowExpressTest extends \PHPUnit_Framework_TestCase
     protected $_model;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $transactionRepository;
+
+    /**
      * Payflow pro transaction key
      */
     const TRANSPORT_PAYFLOW_TXN_ID = 'Payflow pro transaction key';
@@ -31,20 +36,28 @@ class PayflowExpressTest extends \PHPUnit_Framework_TestCase
         $paypalPro = $this->getMockBuilder(
             'Magento\Paypal\Model\Pro'
         )->disableOriginalConstructor()->setMethods([])->getMock();
+        $this->transactionRepository = $this->getMockBuilder('\Magento\Sales\Api\TransactionRepositoryInterface')
+            ->disableOriginalConstructor()
+            ->setMethods(['getByTransactionType'])
+            ->getMockForAbstractClass();
         $paypalPro->expects($this->any())->method('getApi')->will($this->returnValue($api));
 
         $proFactory->expects($this->once())->method('create')->will($this->returnValue($paypalPro));
 
-        $this->_model = $objectManager->getObject('Magento\Paypal\Model\PayflowExpress', ['proFactory' => $proFactory]);
+        $this->_model = $objectManager->getObject(
+            'Magento\Paypal\Model\PayflowExpress',
+            ['proFactory' => $proFactory, 'transactionRepository' => $this->transactionRepository]
+        );
     }
 
     public function testCanRefundCaptureNotExist()
     {
         $paymentInfo = $this->_getPreparedPaymentInfo();
-
-        $paymentInfo->expects($this->once())->method('lookupTransaction')->with('', Transaction::TYPE_CAPTURE)->will(
-            $this->returnValue(false)
-        );
+        $paymentInfo->expects($this->once())->method('getOrder')->willReturnSelf();
+        $this->transactionRepository->expects($this->once())
+            ->method('getByTransactionType')
+            ->with(Transaction::TYPE_CAPTURE)
+            ->willReturn(false);
         $this->assertFalse($this->_model->canRefund());
     }
 
@@ -55,9 +68,11 @@ class PayflowExpressTest extends \PHPUnit_Framework_TestCase
         $captureTransaction->expects($this->once())->method('getAdditionalInformation')->with(
             Payflow\Pro::TRANSPORT_PAYFLOW_TXN_ID
         )->will($this->returnValue(null));
-        $paymentInfo->expects($this->once())->method('lookupTransaction')->with('', Transaction::TYPE_CAPTURE)->will(
-            $this->returnValue($captureTransaction)
-        );
+        $paymentInfo->expects($this->once())->method('getOrder')->willReturnSelf();
+        $this->transactionRepository->expects($this->once())
+            ->method('getByTransactionType')
+            ->with(Transaction::TYPE_CAPTURE)
+            ->willReturn($captureTransaction);
         $this->assertFalse($this->_model->canRefund());
     }
 
@@ -68,9 +83,11 @@ class PayflowExpressTest extends \PHPUnit_Framework_TestCase
         $captureTransaction->expects($this->once())->method('getAdditionalInformation')->with(
             Payflow\Pro::TRANSPORT_PAYFLOW_TXN_ID
         )->will($this->returnValue(self::TRANSPORT_PAYFLOW_TXN_ID));
-        $paymentInfo->expects($this->once())->method('lookupTransaction')->with('', Transaction::TYPE_CAPTURE)->will(
-            $this->returnValue($captureTransaction)
-        );
+        $paymentInfo->expects($this->once())->method('getOrder')->willReturnSelf();
+        $this->transactionRepository->expects($this->once())
+            ->method('getByTransactionType')
+            ->with(Transaction::TYPE_CAPTURE)
+            ->willReturn($captureTransaction);
         $this->assertTrue($this->_model->canRefund());
     }
 

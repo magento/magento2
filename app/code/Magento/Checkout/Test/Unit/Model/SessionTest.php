@@ -48,9 +48,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $quoteRepository = $this->getMockBuilder('Magento\Quote\Model\QuoteRepository')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $quoteRepository = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
 
         $appState = $this->getMock('\Magento\Framework\App\State', [], [], '', false);
         $appState->expects($this->any())->method('isInstalled')->will($this->returnValue(true));
@@ -160,13 +158,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
         $order->expects($this->once())->method('getId')->will($this->returnValue($hasOrderId ? 'order id' : null));
         $orderFactory = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
         $orderFactory->expects($this->once())->method('create')->will($this->returnValue($order));
-        $quoteRepository = $this->getMock(
-            'Magento\Quote\Model\QuoteRepository',
-            ['get', 'save'],
-            [],
-            '',
-            false
-        );
+        $quoteRepository = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
         $storage = $this->getMock('Magento\Framework\Session\Storage', null);
         $store = $this->getMock('Magento\Store\Model\Store', [], [], '', false);
         $storeManager = $this->getMockForAbstractClass('Magento\Store\Model\StoreManagerInterface');

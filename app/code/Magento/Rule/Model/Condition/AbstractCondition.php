@@ -8,6 +8,8 @@
  * Abstract Rule condition data model
  *
  * @method string getOperator()
+ * @method string getFormName()
+ * @method setFormName()
  */
 namespace Magento\Rule\Model\Condition;
 
@@ -18,7 +20,7 @@ use Magento\Framework\Data\Form\Element\AbstractElement;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-abstract class AbstractCondition extends \Magento\Framework\Object implements ConditionInterface
+abstract class AbstractCondition extends \Magento\Framework\DataObject implements ConditionInterface
 {
     /**
      * Defines which operators will be available for this condition
@@ -496,7 +498,8 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
                 'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][type]',
                 'value' => $this->getType(),
                 'no_span' => true,
-                'class' => 'hidden'
+                'class' => 'hidden',
+                'data-form-part' => $this->getFormName()
             ]
         );
     }
@@ -527,7 +530,8 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
                 'name' => $this->elementName . '[' . $this->getPrefix() . '][' . $this->getId() . '][attribute]',
                 'values' => $this->getAttributeSelectOptions(),
                 'value' => $this->getAttribute(),
-                'value_name' => $this->getAttributeName()
+                'value_name' => $this->getAttributeName(),
+                'data_form_part' => $this->getFormName()
             ]
         )->setRenderer(
             $this->_layout->getBlockSingleton('Magento\Rule\Block\Editable')
@@ -567,7 +571,8 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
                 'name' => $elementName,
                 'values' => $options,
                 'value' => $this->getOperator(),
-                'value_name' => $this->getOperatorName()
+                'value_name' => $this->getOperatorName(),
+                'data-form-part' => $this->getFormName()
             ]
         );
         $element->setRenderer($this->_layout->getBlockSingleton('Magento\Rule\Block\Editable'));
@@ -617,6 +622,7 @@ abstract class AbstractCondition extends \Magento\Framework\Object implements Co
             'value_name' => $this->getValueName(),
             'after_element_html' => $this->getValueAfterElementHtml(),
             'explicit_apply' => $this->getExplicitApply(),
+            'data-form-part' => $this->getFormName()
         ];
         if ($this->getInputType() == 'date') {
             // date format intentionally hard-coded

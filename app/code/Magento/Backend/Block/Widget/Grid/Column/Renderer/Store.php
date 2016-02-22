@@ -82,12 +82,12 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
     /**
      * Render row store views
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return \Magento\Framework\Phrase|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         $out = '';
         $skipAllStoresLabel = $this->_getShowAllStoresLabelFlag();
@@ -134,11 +134,11 @@ class Store extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractR
     /**
      * Render row store views for export
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return \Magento\Framework\Phrase|string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function renderExport(\Magento\Framework\Object $row)
+    public function renderExport(\Magento\Framework\DataObject $row)
     {
         $out = '';
         $skipAllStoresLabel = $this->_getShowAllStoresLabelFlag();

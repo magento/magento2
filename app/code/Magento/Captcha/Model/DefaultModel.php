@@ -52,7 +52,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
     protected $_formId;
 
     /**
-     * @var \Magento\Captcha\Model\Resource\LogFactory
+     * @var \Magento\Captcha\Model\ResourceModel\LogFactory
      */
     protected $_resLogFactory;
 
@@ -71,13 +71,13 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
     /**
      * @param \Magento\Framework\Session\SessionManagerInterface $session
      * @param \Magento\Captcha\Helper\Data $captchaData
-     * @param \Magento\Captcha\Model\Resource\LogFactory $resLogFactory
+     * @param \Magento\Captcha\Model\ResourceModel\LogFactory $resLogFactory
      * @param string $formId
      */
     public function __construct(
         \Magento\Framework\Session\SessionManagerInterface $session,
         \Magento\Captcha\Helper\Data $captchaData,
-        \Magento\Captcha\Model\Resource\LogFactory $resLogFactory,
+        \Magento\Captcha\Model\ResourceModel\LogFactory $resLogFactory,
         $formId
     ) {
         $this->_session = $session;
@@ -333,10 +333,25 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
         if ($this->_isEnabled() && in_array($this->_formId, $this->_getTargetForms())) {
             $this->_getResourceModel()->logAttempt($login);
             if ($this->_isOverLimitLoginAttempts($login)) {
-                $this->_session->setData($this->_getFormIdKey('show_captcha'), 1);
+                $this->setShowCaptchaInSession(true);
             }
         }
         return $this;
+    }
+
+    /**
+     * Set show_captcha flag in session
+     *
+     * @param bool $value
+     * @return void
+     */
+    public function setShowCaptchaInSession($value = true)
+    {
+        if ($value !== true) {
+            $value = false;
+        }
+
+        $this->_session->setData($this->_getFormIdKey('show_captcha'), $value);
     }
 
     /**
@@ -500,7 +515,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
      * @return void
      *
      * Now deleting old captcha images make crontab script
-     * @see \Magento\Captcha\Model\Observer::deleteExpiredImages
+     * @see \Magento\Captcha\Cron\DeleteExpiredImages::execute
      */
     protected function _gc()
     {
@@ -510,7 +525,7 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
     /**
      * Get resource model
      *
-     * @return \Magento\Captcha\Model\Resource\Log
+     * @return \Magento\Captcha\Model\ResourceModel\Log
      */
     protected function _getResourceModel()
     {

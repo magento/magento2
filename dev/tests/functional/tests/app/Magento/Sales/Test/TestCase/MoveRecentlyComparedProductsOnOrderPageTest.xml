@@ -6,14 +6,14 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Sales\Test\TestCase\MoveRecentlyComparedProductsOnOrderPageTest">
+    <testCase name="Magento\Sales\Test\TestCase\MoveRecentlyComparedProductsOnOrderPageTest" summary="Add Products to Order from Recently Compared Products Section" ticketId="MAGETWO-28109">
         <variation name="MoveRecentlyComparedProductsOnOrderPageTestVariation1">
             <data name="products" xsi:type="string">catalogProductSimple::default,catalogProductSimple::default</data>
             <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid" />
         </variation>
-        <variation name="MoveRecentlyComparedProductsOnOrderPageTestVariation2" firstConstraint="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInItemsOrderedGrid" method="test">
-            <data name="products" xsi:type="string">configurableProduct::default,configurableProduct::default</data>
-            <constraint name="Magento\ConfigurableProduct\Test\Constraint\AssertConfigurableProductInItemsOrderedGrid" />
+        <variation name="MoveRecentlyComparedProductsOnOrderPageTestVariation2">
+            <data name="products" xsi:type="string">configurableProduct::configurable_with_qty_1,configurableProduct::configurable_with_qty_1</data>
+            <constraint name="Magento\Sales\Test\Constraint\AssertProductInItemsOrderedGrid" />
         </variation>
     </testCase>
 </config>

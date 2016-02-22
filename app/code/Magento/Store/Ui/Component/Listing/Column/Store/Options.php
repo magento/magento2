@@ -34,6 +34,11 @@ class Options implements OptionSourceInterface
     protected $options;
 
     /**
+     * @var array
+     */
+    protected $currentOptions = [];
+
+    /**
      * Constructor
      *
      * @param SystemStore $systemStore
@@ -55,11 +60,24 @@ class Options implements OptionSourceInterface
         if ($this->options !== null) {
             return $this->options;
         }
+
+        $this->generateCurrentOptions();
+
+        $this->options = array_values($this->currentOptions);
+
+        return $this->options;
+    }
+
+    /**
+     * Generate current options
+     *
+     * @return void
+     */
+    protected function generateCurrentOptions()
+    {
         $websiteCollection = $this->systemStore->getWebsiteCollection();
         $groupCollection = $this->systemStore->getGroupCollection();
         $storeCollection = $this->systemStore->getStoreCollection();
-
-        $currentOptions = [];
         /** @var \Magento\Store\Model\Website $website */
         foreach ($websiteCollection as $website) {
             $groups = [];
@@ -84,12 +102,9 @@ class Options implements OptionSourceInterface
             }
             if (!empty($groups)) {
                 $name = $this->escaper->escapeHtml($website->getName());
-                $currentOptions[$name]['label'] = $name;
-                $currentOptions[$name]['value'] = array_values($groups);
+                $this->currentOptions[$name]['label'] = $name;
+                $this->currentOptions[$name]['value'] = array_values($groups);
             }
         }
-        $this->options = array_values($currentOptions);
-
-        return $this->options;
     }
 }

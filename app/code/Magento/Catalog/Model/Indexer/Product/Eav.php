@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product;
 
-class Eav implements \Magento\Indexer\Model\ActionInterface, \Magento\Framework\Mview\ActionInterface
+class Eav implements \Magento\Framework\Indexer\ActionInterface, \Magento\Framework\Mview\ActionInterface
 {
     /**
      * @var \Magento\Catalog\Model\Indexer\Product\Eav\Action\Row

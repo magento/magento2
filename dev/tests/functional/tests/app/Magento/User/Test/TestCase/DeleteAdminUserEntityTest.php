@@ -120,6 +120,7 @@ class DeleteAdminUserEntityTest extends Injectable
         $this->userIndex->open();
         $this->userIndex->getUserGrid()->searchAndOpen($filter);
         $this->userEdit->getPageActions()->delete();
+        $this->userEdit->getModalBlock()->acceptAlert();
     }
 
     /**

@@ -13,6 +13,7 @@ use Magento\Framework\Backup\Filesystem;
 use Magento\Framework\Backup\Filesystem\Helper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 
@@ -27,6 +28,13 @@ class BackupRollback
      * Default backup directory
      */
     const DEFAULT_BACKUP_DIRECTORY = 'backups';
+
+    /**
+     * Path to backup folder
+     *
+     * @var string
+     */
+    private $backupsDir;
 
     /**
      * Object Manager
@@ -57,23 +65,35 @@ class BackupRollback
     private $file;
 
     /**
+     * Filesystem Helper
+     *
+     * @var Helper
+     */
+    private $fsHelper;
+
+    /**
      * Constructor
      *
      * @param ObjectManagerInterface $objectManager
      * @param LoggerInterface $log
      * @param DirectoryList $directoryList
      * @param File $file
+     * @param Helper $fsHelper
      */
     public function __construct(
         ObjectManagerInterface $objectManager,
         LoggerInterface $log,
         DirectoryList $directoryList,
-        File $file
+        File $file,
+        Helper $fsHelper
     ) {
         $this->objectManager = $objectManager;
         $this->log = $log;
         $this->directoryList = $directoryList;
         $this->file = $file;
+        $this->fsHelper = $fsHelper;
+        $this->backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR)
+            . '/' . self::DEFAULT_BACKUP_DIRECTORY;
     }
 
     /**
@@ -81,7 +101,7 @@ class BackupRollback
      *
      * @param int $time
      * @param string $type
-     * @return void
+     * @return string
      * @throws LocalizedException
      */
     public function codeBackup($time, $type = Factory::TYPE_FILESYSTEM)
@@ -100,11 +120,10 @@ class BackupRollback
         } else {
             throw new LocalizedException(new Phrase("This backup type \'$type\' is not supported."));
         }
-        $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
-        if (!$this->file->isExists($backupsDir)) {
-            $this->file->createDirectory($backupsDir, 0777);
+        if (!$this->file->isExists($this->backupsDir)) {
+            $this->file->createDirectory($this->backupsDir, DriverInterface::WRITEABLE_DIRECTORY_MODE);
         }
-        $fsBackup->setBackupsDir($backupsDir);
+        $fsBackup->setBackupsDir($this->backupsDir);
         $fsBackup->setBackupExtension('tgz');
         $fsBackup->setTime($time);
         $this->log->log($granularType . ' backup is starting...');
@@ -115,6 +134,7 @@ class BackupRollback
         );
         $this->log->log($granularType . ' backup path: ' . $fsBackup->getBackupPath());
         $this->log->logSuccess($granularType . ' backup completed successfully.');
+        return $fsBackup->getBackupPath();
     }
 
     /**
@@ -130,8 +150,7 @@ class BackupRollback
         if (preg_match('/[0-9]_(filesystem)_(code|media)\.(tgz)$/', $rollbackFile) !== 1) {
             throw new LocalizedException(new Phrase('Invalid rollback file.'));
         }
-        $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
-        if (!$this->file->isExists($backupsDir . '/' . $rollbackFile)) {
+        if (!$this->file->isExists($this->backupsDir . '/' . $rollbackFile)) {
             throw new LocalizedException(new Phrase('The rollback file does not exist.'));
         }
         /** @var \Magento\Framework\Backup\Filesystem $fsRollback */
@@ -145,11 +164,9 @@ class BackupRollback
             $granularType = 'Media';
             $fsRollback->setName('media');
         } else {
-            throw new LocalizedException(new Phrase("This backup type \'$type\' is not supported."));
+            throw new LocalizedException(new Phrase("This backup type '$type' is not supported."));
         }
-        /** @var Helper $checkWritable */
-        $checkWritable = $this->objectManager->create('Magento\Framework\Backup\Filesystem\Helper');
-        $filesInfo = $checkWritable->getInfo(
+        $filesInfo = $this->fsHelper->getInfo(
             $this->directoryList->getRoot(),
             Helper::INFO_WRITABLE,
             $ignorePaths
@@ -161,7 +178,7 @@ class BackupRollback
         }
         $fsRollback->setRootDir($this->directoryList->getRoot());
         $fsRollback->addIgnorePaths($ignorePaths);
-        $fsRollback->setBackupsDir($backupsDir);
+        $fsRollback->setBackupsDir($this->backupsDir);
         $fsRollback->setBackupExtension('tgz');
         $time = explode('_', $rollbackFile);
         $fsRollback->setTime($time[0]);
@@ -176,19 +193,17 @@ class BackupRollback
      * Take backup for database
      *
      * @param int $time
-     * @return void
+     * @return string
      */
     public function dbBackup($time)
     {
-        $this->setAreaCode();
         /** @var \Magento\Framework\Backup\Db $dbBackup */
         $dbBackup = $this->objectManager->create('Magento\Framework\Backup\Db');
         $dbBackup->setRootDir($this->directoryList->getRoot());
-        $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
-        if (!$this->file->isExists($backupsDir)) {
-            $this->file->createDirectory($backupsDir, 0777);
+        if (!$this->file->isExists($this->backupsDir)) {
+            $this->file->createDirectory($this->backupsDir, DriverInterface::WRITEABLE_DIRECTORY_MODE);
         }
-        $dbBackup->setBackupsDir($backupsDir);
+        $dbBackup->setBackupsDir($this->backupsDir);
         $dbBackup->setBackupExtension('gz');
         $dbBackup->setTime($time);
         $this->log->log('DB backup is starting...');
@@ -199,6 +214,7 @@ class BackupRollback
         );
         $this->log->log('DB backup path: ' . $dbBackup->getBackupPath());
         $this->log->logSuccess('DB backup completed successfully.');
+        return $dbBackup->getBackupPath();
     }
 
     /**
@@ -210,18 +226,16 @@ class BackupRollback
      */
     public function dbRollback($rollbackFile)
     {
-        if (preg_match('/[0-9]_(db).(gz)$/', $rollbackFile) !== 1) {
+        if (preg_match('/[0-9]_(db)(.*?).(gz)$/', $rollbackFile) !== 1) {
             throw new LocalizedException(new Phrase('Invalid rollback file.'));
         }
-        $backupsDir = $this->directoryList->getPath(DirectoryList::VAR_DIR) . '/' . self::DEFAULT_BACKUP_DIRECTORY;
-        if (!$this->file->isExists($backupsDir . '/' . $rollbackFile)) {
+        if (!$this->file->isExists($this->backupsDir . '/' . $rollbackFile)) {
             throw new LocalizedException(new Phrase('The rollback file does not exist.'));
         }
-        $this->setAreaCode();
         /** @var \Magento\Framework\Backup\Db $dbRollback */
         $dbRollback = $this->objectManager->create('Magento\Framework\Backup\Db');
         $dbRollback->setRootDir($this->directoryList->getRoot());
-        $dbRollback->setBackupsDir($backupsDir);
+        $dbRollback->setBackupsDir($this->backupsDir);
         $dbRollback->setBackupExtension('gz');
         $time = explode('_', $rollbackFile);
         if (count($time) === 3) {
@@ -230,27 +244,11 @@ class BackupRollback
         }
         $dbRollback->setTime($time[0]);
         $this->log->log('DB rollback is starting...');
-        $dbRollback->setResourceModel($this->objectManager->create('Magento\Backup\Model\Resource\Db'));
+        $dbRollback->setResourceModel($this->objectManager->create('Magento\Backup\Model\ResourceModel\Db'));
         $dbRollback->rollback();
         $this->log->log('DB rollback filename: ' . $dbRollback->getBackupFilename());
         $this->log->log('DB rollback path: ' . $dbRollback->getBackupPath());
         $this->log->logSuccess('DB rollback completed successfully.');
-    }
-
-    /**
-     * Sets area code to start a session for database backup and rollback
-     *
-     * @return void
-     */
-    private function setAreaCode()
-    {
-        $areaCode = 'adminhtml';
-        /** @var \Magento\Framework\App\State $appState */
-        $appState = $this->objectManager->get('Magento\Framework\App\State');
-        $appState->setAreaCode($areaCode);
-        /** @var \Magento\Framework\App\ObjectManager\ConfigLoader $configLoader */
-        $configLoader = $this->objectManager->get('Magento\Framework\App\ObjectManager\ConfigLoader');
-        $this->objectManager->configure($configLoader->load($areaCode));
     }
 
     /**
@@ -264,6 +262,9 @@ class BackupRollback
             $this->directoryList->getPath(DirectoryList::MEDIA),
             $this->directoryList->getPath(DirectoryList::STATIC_VIEW),
             $this->directoryList->getPath(DirectoryList::VAR_DIR),
+            $this->directoryList->getRoot() . '/update',
+            $this->directoryList->getRoot() . '/node_modules',
+            $this->directoryList->getRoot() . '/.grunt',
             $this->directoryList->getRoot() . '/.idea',
             $this->directoryList->getRoot() . '/.svn',
             $this->directoryList->getRoot() . '/.git'
@@ -289,5 +290,46 @@ class BackupRollback
             }
         }
         return $ignorePaths;
+    }
+
+    /**
+     * Get disk availability for filesystem backup
+     *
+     * @param string $type
+     * @return int
+     * @throws LocalizedException
+     */
+    public function getFSDiskSpace($type = Factory::TYPE_FILESYSTEM)
+    {
+        $filesystemSize = 0;
+        if ($type === Factory::TYPE_FILESYSTEM) {
+            $ignorePaths = $this->getCodeBackupIgnorePaths();
+        } elseif ($type === Factory::TYPE_MEDIA) {
+            $ignorePaths = $this->getMediaBackupIgnorePaths();
+        } else {
+            throw new LocalizedException(new Phrase("This backup type '$type' is not supported."));
+        }
+        $filesInfo = $this->fsHelper->getInfo(
+            $this->directoryList->getRoot(),
+            Helper::INFO_SIZE,
+            $ignorePaths
+        );
+        if ($filesInfo['size']) {
+            $filesystemSize = $filesInfo['size'];
+        }
+        return $filesystemSize;
+    }
+
+    /**
+     * Get disk availability for database backup
+     *
+     * @return int
+     * @throws LocalizedException
+     */
+    public function getDBDiskSpace()
+    {
+        /** @var \Magento\Framework\Backup\Db $dbBackup */
+        $dbBackup = $this->objectManager->create('Magento\Framework\Backup\Db');
+        return $dbBackup->getDBSize();
     }
 }

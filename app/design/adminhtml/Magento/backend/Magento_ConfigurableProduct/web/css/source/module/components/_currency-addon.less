@@ -43,4 +43,11 @@
         transition: @smooth__border-color;
         width: @currency-addon-symbol__width;
     }
+
+    ._error & {
+        .admin__control-text,
+        .currency-symbol {
+            border-color: @field-error-control__border-color;
+        }
+    }
 }

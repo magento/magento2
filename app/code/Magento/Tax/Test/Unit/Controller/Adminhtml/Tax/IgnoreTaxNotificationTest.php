@@ -46,7 +46,7 @@ class IgnoreTaxNotificationTest extends \PHPUnit_Framework_TestCase
             ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
             ->willReturn($resultRedirect);
 
-        $config = $this->getMockBuilder('\Magento\Config\Model\Resource\Config')
+        $config = $this->getMockBuilder('\Magento\Config\Model\ResourceModel\Config')
             ->disableOriginalConstructor()
             ->setMethods(['saveConfig'])
             ->getMock();

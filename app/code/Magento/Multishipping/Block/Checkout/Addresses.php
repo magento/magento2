@@ -14,7 +14,7 @@ use Magento\Customer\Model\Address\Config as AddressConfig;
 class Addresses extends \Magento\Sales\Block\Items\AbstractItems
 {
     /**
-     * @var \Magento\Framework\Filter\Object\GridFactory
+     * @var \Magento\Framework\Filter\DataObject\GridFactory
      */
     protected $_filterGridFactory;
 
@@ -42,7 +42,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
      * Constructor
      *
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\Framework\Filter\Object\GridFactory $filterGridFactory
+     * @param \Magento\Framework\Filter\DataObject\GridFactory $filterGridFactory
      * @param \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping
      * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      * @param AddressConfig $addressConfig
@@ -51,7 +51,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Filter\Object\GridFactory $filterGridFactory,
+        \Magento\Framework\Filter\DataObject\GridFactory $filterGridFactory,
         \Magento\Multishipping\Model\Checkout\Type\Multishipping $multishipping,
         \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository,
         AddressConfig $addressConfig,
@@ -94,7 +94,7 @@ class Addresses extends \Magento\Sales\Block\Items\AbstractItems
     public function getItems()
     {
         $items = $this->getCheckout()->getQuoteShippingAddressesItems();
-        /** @var \Magento\Framework\Filter\Object\Grid $itemsFilter */
+        /** @var \Magento\Framework\Filter\DataObject\Grid $itemsFilter */
         $itemsFilter = $this->_filterGridFactory->create();
         $itemsFilter->addFilter(new \Magento\Framework\Filter\Sprintf('%d'), 'qty');
         return $itemsFilter->filter($items);

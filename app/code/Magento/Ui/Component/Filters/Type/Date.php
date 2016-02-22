@@ -24,16 +24,6 @@ class Date extends AbstractFilter
     protected $wrappedComponent;
 
     /**
-     * Get component name
-     *
-     * @return string
-     */
-    public function getComponentName()
-    {
-        return static::NAME;
-    }
-
-    /**
      * Prepare component configuration
      *
      * @return void
@@ -73,45 +63,43 @@ class Date extends AbstractFilter
      */
     protected function applyFilter()
     {
-        $condition = $this->getCondition();
-        if ($condition !== null) {
-            $this->getContext()->getDataProvider()->addFilter($condition, $this->getName());
+        if (isset($this->filterData[$this->getName()])) {
+            $value = $this->filterData[$this->getName()];
+
+            if (empty($value)) {
+                return;
+            }
+
+            if (is_array($value)) {
+                if (isset($value['from'])) {
+                    $this->applyFilterByType('gteq', $this->wrappedComponent->convertDate($value['from']));
+                }
+
+                if (isset($value['to'])) {
+                    $this->applyFilterByType('lteq', $this->wrappedComponent->convertDate($value['to'], 23, 59, 59));
+                }
+            } else {
+                $this->applyFilterByType('eq', $this->wrappedComponent->convertDate($value));
+            }
         }
     }
 
     /**
-     * Get condition
+     * Apply filter by its type
      *
-     * @return array|null
+     * @param string $type
+     * @param string $value
+     * @return void
      */
-    protected function getCondition()
+    protected function applyFilterByType($type, $value)
     {
-        $value = isset($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : null;
-        if (!empty($value['from']) || !empty($value['to'])) {
-            if (!empty($value['from'])) {
-                $value['orig_from'] = $value['from'];
-                $value['from'] = $this->wrappedComponent->convertDate(
-                    $value['from'],
-                    $this->wrappedComponent->getLocale()
-                );
-            } else {
-                unset($value['from']);
-            }
-            if (!empty($value['to'])) {
-                $value['orig_to'] = $value['to'];
-                $value['to'] = $this->wrappedComponent->convertDate(
-                    $value['to'],
-                    $this->wrappedComponent->getLocale()
-                );
-            } else {
-                unset($value['to']);
-            }
-            $value['datetime'] = true;
-            $value['locale'] = $this->wrappedComponent->getLocale();
-        } else {
-            $value = null;
-        }
+        if (!empty($value)) {
+            $filter = $this->filterBuilder->setConditionType($type)
+                ->setField($this->getName())
+                ->setValue($value->format('Y-m-d H:i:s'))
+                ->create();
 
-        return $value;
+            $this->getContext()->getDataProvider()->addFilter($filter);
+        }
     }
 }

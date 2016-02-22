@@ -4,21 +4,22 @@
  * See COPYING.txt for license details.
  */
 -->
-
-<div class="admin__data-grid-header">
+<div class="admin__data-grid-header" afterRender="$data.setToolbarNode">
     <div class="admin__data-grid-header-row">
-        <div class="admin__data-grid-actions-wrap">
-            <!-- ko foreach: getRegion('dataGridActions') -->
-                <!-- ko template: getTemplate() --><!-- /ko -->
-            <!-- /ko -->
-        </div>
-        <!-- ko foreach: getRegion('dataGridFilters') -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
-        <!-- /ko -->
+        <div class="admin__data-grid-actions-wrap" each="getRegion('dataGridActions')" render=""/>
+        <each args="getRegion('dataGridFilters')" render=""/>
     </div>
     <div class="admin__data-grid-header-row row row-gutter">
-        <!-- ko foreach: getRegion('bottom') -->
-            <!-- ko template: getTemplate() --><!-- /ko -->
-        <!-- /ko -->
+        <div class="col-xs-2" if="hasChild('listing_massaction')" ko-scope="requestChild('listing_massaction')" render=""/>
+        <div css="
+            'col-xs-10': hasChild('listing_massaction'),
+            'col-xs-12': !hasChild('listing_massaction')">
+            <div class="row" ko-scope="requestChild('listing_paging')">
+                <div class="col-xs-3" render="totalTmpl"/>
+                <div class="col-xs-9" render=""/>
+            </div>
+        </div>
     </div>
 </div>
+
+<render args="stickyTmpl" if="$data.sticky"/>

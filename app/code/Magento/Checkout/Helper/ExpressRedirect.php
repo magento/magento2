@@ -31,6 +31,7 @@ class ExpressRedirect extends \Magento\Framework\App\Helper\AbstractHelper
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\App\Helper\Context $context
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\App\ActionFlag $actionFlag,

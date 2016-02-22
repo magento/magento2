@@ -5,6 +5,8 @@
  */
 namespace Magento\Test\Integrity\Modular;
 
+use Magento\Framework\Module\Dir;
+
 class MenuConfigFilesTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -14,10 +16,8 @@ class MenuConfigFilesTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $moduleReader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Module\Dir\Reader'
-        );
-        $schemaFile = $moduleReader->getModuleDir('etc', 'Magento_Backend') . '/menu.xsd';
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $schemaFile = $urnResolver->getRealPath('urn:magento:module:Magento_Backend:etc/menu.xsd');
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Backend\Model\Menu\Config\Reader',
             ['perFileSchema' => $schemaFile, 'isValidated' => true]

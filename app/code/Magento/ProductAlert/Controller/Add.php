@@ -37,7 +37,7 @@ abstract class Add extends Action
      */
     public function dispatch(RequestInterface $request)
     {
-        if (!$this->customerSession->authenticate($this)) {
+        if (!$this->customerSession->authenticate()) {
             $this->_actionFlag->set('', 'no-dispatch', true);
             if (!$this->customerSession->getBeforeUrl()) {
                 $this->customerSession->setBeforeUrl($this->_redirect->getRefererUrl());

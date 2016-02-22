@@ -6,7 +6,7 @@
  */
 -->
 <xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-    <xs:include schemaLocation="types.xsd"/>
+    <xs:include schemaLocation="urn:magento:module:Magento_Widget:etc/types.xsd"/>
 
     <xs:annotation>
         <xs:documentation>Contains widgets.</xs:documentation>

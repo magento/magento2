@@ -28,6 +28,8 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
 
     const KEY_QUOTE_ID = 'quote_id';
 
+    const KEY_PRODUCT_OPTION = 'product_option';
+
     /**#@-*/
 
     /**
@@ -134,6 +136,21 @@ interface CartItemInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
      * @return $this
      */
     public function setQuoteId($quoteId);
+
+    /**
+     * Returns product option
+     *
+     * @return \Magento\Quote\Api\Data\ProductOptionInterface|null
+     */
+    public function getProductOption();
+
+    /**
+     * Sets product option
+     *
+     * @param \Magento\Quote\Api\Data\ProductOptionInterface $productOption
+     * @return $this
+     */
+    public function setProductOption(\Magento\Quote\Api\Data\ProductOptionInterface $productOption);
 
     /**
      * Retrieve existing extension attributes object or create a new one.

@@ -77,6 +77,8 @@ class CreateSalesRuleStep implements TestStepInterface
      */
     public function cleanup()
     {
-        $this->deleteAllSalesRule->run();
+        if ($this->salesRule !== null) {
+            $this->deleteAllSalesRule->run();
+        }
     }
 }

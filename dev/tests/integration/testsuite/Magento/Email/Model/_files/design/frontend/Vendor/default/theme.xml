@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<theme xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../../../lib/internal/Magento/Framework/Config/etc/theme.xsd">
-    <title>Frontend - Vendor/default</title>
-    <parent>Magento/default</parent>
+<theme xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/theme.xsd">
+    <title>Frontend - Vendor_EmailTest/default</title>
+    <parent>Magento_EmailTest/default</parent>
 </theme>

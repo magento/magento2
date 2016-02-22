@@ -115,7 +115,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid
             $this->_setFilterValues($this->_defaultFilter);
         }
 
-        /** @var $collection \Magento\Reports\Model\Resource\Report\Collection */
+        /** @var $collection \Magento\Reports\Model\ResourceModel\Report\Collection */
         $collection = $this->getCollection();
         if ($collection) {
             $collection->setPeriod($this->getFilter('report_period'));

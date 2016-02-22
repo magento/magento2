@@ -5,21 +5,23 @@
  */
 
 // @codingStandardsIgnoreFile
-
-?>
-<?php
 /**
  * @see \Magento\Paypal\Block\System\Config\Fieldset\Hint
+ * @var \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint $block
  */
+$helpLink = $block->escapeUrl($block->getHelpLink());
 ?>
 <?php
-    if ($block->getHelpLink()):
+if ($helpLink):
 ?>
-<div class="paypal-payment-notice">
-    <?php echo __('Not sure what PayPal payment method to use? Click <a href="%1" target="_blank">here</a> to learn more.', $block->getHelpLink()); ?>
-</div>
+    <div class="paypal-payment-notice">
+        <?php echo $block->escapeHtml(__('Not sure what PayPal payment method to use? Click ')); ?>
+        <a href="<?php /* @noEscape */
+        echo $helpLink; ?>" target="_blank"><?php echo $block->escapeHtml(__('here')); ?></a>
+        <?php echo $block->escapeHtml(__(' to learn more.')); ?>
+    </div>
 <?php
-    endif;
+endif;
 ?>
 <script>
 require(['jquery', 'prototype'], function(jQuery){

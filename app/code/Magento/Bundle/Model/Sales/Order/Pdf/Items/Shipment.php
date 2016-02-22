@@ -11,7 +11,7 @@ namespace Magento\Bundle\Model\Sales\Order\Pdf\Items;
 class Shipment extends AbstractItems
 {
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -21,8 +21,8 @@ class Shipment extends AbstractItems
      * @param \Magento\Tax\Helper\Data $taxData
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Filter\FilterManager $filterManager
-     * @param \Magento\Framework\Stdlib\String $string
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -32,8 +32,8 @@ class Shipment extends AbstractItems
         \Magento\Tax\Helper\Data $taxData,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Filter\FilterManager $filterManager,
-        \Magento\Framework\Stdlib\String $string,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Stdlib\StringUtils $string,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {

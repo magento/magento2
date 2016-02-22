@@ -32,7 +32,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
 
         $this->assertSelectCount(
-            'button[type="button"][title="Update Cart"]',
+            'button[type="submit"][title="Update Cart"]',
             1,
             $response->getBody(),
             'Response for configurable product doesn\'t contain "Update Cart" button'

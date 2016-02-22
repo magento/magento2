@@ -66,7 +66,7 @@ class Attributes extends \Magento\Catalog\Block\Adminhtml\Form
             'boolean' => 'Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Boolean',
         ];
 
-        $response = new \Magento\Framework\Object();
+        $response = new \Magento\Framework\DataObject();
         $response->setTypes([]);
         $this->_eventManager->dispatch('adminhtml_catalog_product_edit_element_types', ['response' => $response]);
 

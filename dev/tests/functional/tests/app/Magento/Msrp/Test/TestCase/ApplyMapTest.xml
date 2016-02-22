@@ -6,18 +6,16 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Msrp\Test\TestCase\ApplyMapTest">
-        <variation name="ApplyMapTestVariation1">
-            <data name="description" xsi:type="string">MAGETWO-12430: Apply Minimum Advertised Price Setting to Simple Product</data>
+    <testCase name="Magento\Msrp\Test\TestCase\ApplyMapTest" summary="Apply Minimum Advertised Price Setting to Simple Product" ticketId="MAGETWO-12430">
+        <variation name="ApplyMapTestVariation1" summary="Apply Minimum Advertised Price Setting to Simple Product" ticketId="MAGETWO-12430">
             <data name="product" xsi:type="string">catalogProductSimple::msrp_on_gesture</data>
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnCategoryPage" />
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnProductView" />
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpInShoppingCart" />
         </variation>
-        <variation name="ApplyMapTestVariation2">
-            <data name="description" xsi:type="string">MAGETWO-12847: Apply Minimum Advertised Price to the Configurable Product</data>
+        <variation name="ApplyMapTestVariation2" summary="Apply Minimum Advertised Price to the Configurable Product" ticketId="MAGETWO-12847">
             <data name="product" xsi:type="string">configurableProduct::msrp_on_gesture_one_variation</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnCategoryPage" />
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpOnProductView" />
             <constraint name="Magento\Msrp\Test\Constraint\AssertMsrpInShoppingCart" />

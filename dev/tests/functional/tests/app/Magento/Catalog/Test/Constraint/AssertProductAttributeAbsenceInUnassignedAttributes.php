@@ -13,45 +13,45 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
  * Class AssertProductAttributeAbsenceInUnassignedAttributes
- * Checks that product attribute isn't displayed in Product template's Unassigned Attributes section
+ * Checks that product attribute isn't displayed in Attribute set's Unassigned Attributes section
  */
 class AssertProductAttributeAbsenceInUnassignedAttributes extends AbstractConstraint
 {
     /**
-     * Assert that deleted attribute isn't displayed in Product template's Unassigned Attributes section
+     * Assert that deleted attribute isn't displayed in Attribute set's Unassigned Attributes section
      *
-     * @param CatalogAttributeSet $productTemplate
+     * @param CatalogAttributeSet $attributeSet
      * @param CatalogProductSetIndex $productSetIndex
      * @param CatalogProductSetEdit $productSetEdit
      * @return void
      */
     public function processAssert(
-        CatalogAttributeSet $productTemplate,
+        CatalogAttributeSet $attributeSet,
         CatalogProductSetIndex $productSetIndex,
         CatalogProductSetEdit $productSetEdit
     ) {
-        $filter = ['set_name' => $productTemplate->getAttributeSetName()];
+        $filter = ['set_name' => $attributeSet->getAttributeSetName()];
         $productSetIndex->open();
         $productSetIndex->getGrid()->searchAndOpen($filter);
 
-        $attributeCode = $productTemplate
+        $attributeCode = $attributeSet
             ->getDataFieldConfig('assigned_attributes')['source']
             ->getAttributes()[0]
             ->getAttributeCode();
 
         \PHPUnit_Framework_Assert::assertFalse(
             $productSetEdit->getAttributeSetEditBlock()->checkUnassignedProductAttribute($attributeCode),
-            "Attribute " . $attributeCode . " is present in Unassigned Product template's section."
+            "Attribute " . $attributeCode . " is present in Unassigned Attribute set's section."
         );
     }
 
     /**
-     * Text absent Product Attribute Unassigned Product template's section
+     * Text absent Product Attribute Unassigned Attribute set's section
      *
      * @return string
      */
     public function toString()
     {
-        return "Product Attribute is absent in Unassigned Product template's section.";
+        return "Product Attribute is absent in Unassigned Attribute set's section.";
     }
 }

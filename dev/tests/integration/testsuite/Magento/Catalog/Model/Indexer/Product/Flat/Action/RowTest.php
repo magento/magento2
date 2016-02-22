@@ -44,6 +44,7 @@ class RowTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/row_fixture.php
      * @magentoConfigFixture current_store catalog/frontend/flat_catalog_product 1
      * @magentoAppArea frontend
@@ -69,7 +70,7 @@ class RowTest extends \Magento\TestFramework\Indexer\TestCase
         $category = $categoryFactory->create()->load(9);
         $layer = $listProduct->getLayer();
         $layer->setCurrentCategory($category);
-        /** @var \Magento\Catalog\Model\Resource\Product\Collection $productCollection */
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection = $layer->getProductCollection();
         $this->assertTrue(
             $productCollection->isEnabledFlat(),

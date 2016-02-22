@@ -8,9 +8,9 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Backend\Test\TestCase\NavigateMenuTest">
         <variation name="NavigateMenuTest96">
-            <data name="menuItem" xsi:type="string">Content > Frontend Apps</data>
-            <data name="pageTitle" xsi:type="string">Frontend Apps</data>
-            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable"/>
+            <data name="menuItem" xsi:type="string">Content > Widgets</data>
+            <data name="pageTitle" xsi:type="string">Widgets</data>
+            <constraint name="Magento\Backend\Test\Constraint\AssertBackendPageIsAvailable" />
         </variation>
     </testCase>
 </config>

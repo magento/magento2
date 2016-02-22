@@ -4,7 +4,7 @@
  */
 define([
     'underscore',
-    'Magento_Ui/js/core/renderer/layout'
+    'uiLayout'
 ], function (_, layout) {
     'use strict';
 

@@ -13,26 +13,39 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Magento Setup Tool</title>
+    <title>{{$state.current.title}}</title>
     <?php echo $this->headLink()
         ->appendStylesheet($this->basePath() . '/pub/styles/setup.css');
     ?>
     <?php echo $this->headScript()
-        ->appendFile('pub/angular/angular.min.js')
-        ->appendFile('pub/angular-ng-storage/angular-ng-storage.min.js')
-        ->appendFile('pub/angular-ui-router/angular-ui-router.min.js')
-        ->appendFile('pub/angular-ui-bootstrap/angular-ui-bootstrap.min.js')
-        ->appendFile('pub/angular-sanitize/angular-sanitize.min.js')
-        ->appendFile('pub/magento/setup/app.js')
-        ->appendFile('pub/magento/setup/main.js')
-        ->appendFile('pub/magento/setup/landing.js')
-        ->appendFile('pub/magento/setup/readiness-check.js')
-        ->appendFile('pub/magento/setup/add-database.js')
-        ->appendFile('pub/magento/setup/web-configuration.js')
-        ->appendFile('pub/magento/setup/customize-your-store.js')
-        ->appendFile('pub/magento/setup/create-admin-account.js')
-        ->appendFile('pub/magento/setup/install.js')
-        ->appendFile('pub/magento/setup/success.js');
+        ->appendFile($this->basePath() . '/pub/angular/angular.min.js')
+        ->appendFile($this->basePath() . '/pub/angular-ng-storage/angular-ng-storage.min.js')
+        ->appendFile($this->basePath() . '/pub/angular-ng-dialog/angular-ng-dialog.min.js')
+        ->appendFile($this->basePath() . '/pub/angular-clickout/angular-clickout.min.js')
+        ->appendFile($this->basePath() . '/pub/angular-ui-router/angular-ui-router.min.js')
+        ->appendFile($this->basePath() . '/pub/angular-ui-bootstrap/angular-ui-bootstrap.min.js')
+        ->appendFile($this->basePath() . '/pub/angular-sanitize/angular-sanitize.min.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/app.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/main.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/landing.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/component-grid.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/readiness-check.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/add-database.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/web-configuration.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/customize-your-store.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/create-admin-account.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/install.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/success.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/create-backup.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/complete-backup.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/data-option.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/start-updater.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/updater-success.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/select-version.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/home.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/auth-dialog.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/system-config.js')
+        ->appendFile($this->basePath() . '/pub/magento/setup/install-extension-grid.js');
     ?>
     <link
         rel="icon"
@@ -55,10 +68,13 @@
         href="<?php echo $this->basePath() ?>/pub/images/favicon/favicon-16x16.png"
         sizes="16x16">
     <?php echo $this->inlineScript() ?>
+    <style>
+        a.white-space-pre-line {
+            white-space: pre-line;
+        }
+    </style>
 </head>
 <body>
-<main class="container">
-    <?php echo $this->content; ?>
-</main>
+<?php echo $this->content; ?>
 </body>
 </html>

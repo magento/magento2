@@ -18,7 +18,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | CookiePathValidator */
     private $validatorMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\Resource */
+    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Module\ModuleResource */
     private $resourceMock;
 
     /** @var \Magento\Cookie\Model\Config\Backend\Path */
@@ -29,7 +29,7 @@ class PathTest extends \PHPUnit_Framework_TestCase
         $this->validatorMock = $this->getMockBuilder('Magento\Framework\Session\Config\Validator\CookiePathValidator')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Module\Resource')
+        $this->resourceMock = $this->getMockBuilder('Magento\Framework\Module\ModuleResource')
             ->disableOriginalConstructor()
             ->getMock();
 

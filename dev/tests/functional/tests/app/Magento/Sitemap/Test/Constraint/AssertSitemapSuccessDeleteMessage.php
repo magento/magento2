@@ -24,7 +24,7 @@ class AssertSitemapSuccessDeleteMessage extends AbstractConstraint
      */
     public function processAssert(SitemapIndex $sitemapPage)
     {
-        $actualMessage = $sitemapPage->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $sitemapPage->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_DELETE_MESSAGE,
             $actualMessage,

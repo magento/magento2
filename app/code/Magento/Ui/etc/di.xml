@@ -5,20 +5,22 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\View\Element\UiComponent\ContainerInterface" type="Magento\Ui\Component\Wrapper\UiComponent" />
     <preference for="Magento\Framework\View\Element\UiComponent\Control\ActionPoolInterface" type="Magento\Ui\Component\Control\ActionPool" />
     <preference for="Magento\Framework\Data\Argument\InterpreterInterface" type="Magento\Framework\Data\Argument\Interpreter\Composite" />
     <preference for="Magento\Framework\Config\ConverterInterface" type="Magento\Framework\View\Element\UiComponent\Config\Converter" />
     <preference for="Magento\Framework\View\Element\UiComponent\Config\ManagerInterface" type="Magento\Ui\Model\Manager" />
     <preference for="Magento\Framework\View\Element\UiComponent\ContextInterface" type="Magento\Framework\View\Element\UiComponent\Context" />
-    <preference for="Magento\Framework\View\Element\UiComponent\LayoutInterface" type="Magento\Ui\Component\Layout\Generic"/>
+    <preference for="Magento\Framework\View\Element\UiComponent\LayoutInterface" type="Magento\Framework\View\Layout\Generic"/>
     <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\User\Model\Authorization\AdminSessionUserContext"/>
     <preference for="Magento\Ui\Api\Data\BookmarkSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
-    <preference for="Magento\Ui\Api\BookmarkRepositoryInterface" type="Magento\Ui\Model\Resource\BookmarkRepository"/>
+    <preference for="Magento\Ui\Api\BookmarkRepositoryInterface" type="Magento\Ui\Model\ResourceModel\BookmarkRepository"/>
     <preference for="Magento\Ui\Api\Data\BookmarkInterface" type="Magento\Ui\Model\Bookmark"/>
+    <preference for="Magento\Ui\Component\Wysiwyg\ConfigInterface" type="Magento\Ui\Component\Wysiwyg\Config"/>
     <preference for="Magento\Ui\Api\BookmarkManagementInterface" type="Magento\Ui\Model\BookmarkManagement"/>
     <preference for="Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface" type="Magento\Ui\TemplateEngine\Xhtml\Result"/>
+    <preference for="Magento\Framework\Api\Search\ReportingInterface" type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting"/>
     <type name="Magento\Ui\TemplateEngine\Xhtml\Result" shared="false"/>
     <type name="Magento\Framework\View\Element\UiComponent\TemplateAdapter" shared="false" />
     <type name="Magento\Framework\View\TemplateEngineFactory">
@@ -78,9 +80,7 @@
     </virtualType>
     <virtualType name="uiConfigurationDomMerger" type="Magento\Framework\View\Element\UiComponent\Config\DomMerger">
         <arguments>
-            <argument name="schemaFileType" xsi:type="string">etc</argument>
-            <argument name="schemaFileModule" xsi:type="string">Magento_Ui</argument>
-            <argument name="schemaFileName" xsi:type="string">ui_configuration.xsd</argument>
+            <argument name="schema" xsi:type="string">urn:magento:module:Magento_Ui:etc/ui_configuration.xsd</argument>
             <argument name="contextXPath" xsi:type="array">
                 <item name="ui_context" xsi:type="string">/</item>
             </argument>
@@ -96,9 +96,7 @@
     </type>
     <virtualType name="uiTemplateDomMerger" type="Magento\Framework\View\Element\UiComponent\Config\DomMerger">
         <arguments>
-            <argument name="schemaFileType" xsi:type="string">etc</argument>
-            <argument name="schemaFileModule" xsi:type="string">Magento_Ui</argument>
-            <argument name="schemaFileName" xsi:type="string">ui_template.xsd</argument>
+            <argument name="schema" xsi:type="string">urn:magento:module:Magento_Ui:etc/ui_template.xsd</argument>
             <argument name="contextXPath" xsi:type="array">
                 <item name="ui_context" xsi:type="string">/</item>
             </argument>
@@ -115,9 +113,7 @@
     </type>
     <virtualType name="uiDefinitionDomMerger" type="Magento\Framework\View\Element\UiComponent\Config\DomMerger">
         <arguments>
-            <argument name="schemaFileType" xsi:type="string">etc</argument>
-            <argument name="schemaFileModule" xsi:type="string">Magento_Ui</argument>
-            <argument name="schemaFileName" xsi:type="string">ui_definition.xsd</argument>
+            <argument name="schema" xsi:type="string">urn:magento:module:Magento_Ui:etc/ui_definition.xsd</argument>
             <argument name="contextXPath" xsi:type="array">
                 <item name="ui_context" xsi:type="string">/components</item>
             </argument>
@@ -153,16 +149,37 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Ui\Component\Layout\LayoutPool">
+    <type name="Magento\Framework\View\Layout\Pool">
         <arguments>
             <argument name="types" xsi:type="array">
                 <item name="generic" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\Ui\Component\Layout\Generic</item>
+                    <item name="class" xsi:type="string">Magento\Framework\View\Layout\Generic</item>
                     <item name="template" xsi:type="string">templates/layout/generic</item>
                 </item>
                 <item name="tabs" xsi:type="array">
                     <item name="class" xsi:type="string">Magento\Ui\Component\Layout\Tabs</item>
                     <item name="template" xsi:type="string">templates/layout/tabs</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Layout\Generic">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/html</item>
+                    <item name="componentName" xsi:type="string">html_content</item>
+                    <item name="panelComponentName" xsi:type="string">fieldset</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\Component\Layout\Tabs">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/html</item>
+                    <item name="componentName" xsi:type="string">html_content</item>
                 </item>
             </argument>
         </arguments>
@@ -185,7 +202,7 @@
                 <item name="array" xsi:type="object">arrayArgumentInterpreterProxy</item>
                 <item name="boolean" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Boolean</item>
                 <item name="number" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\Number</item>
-                <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\String</item>
+                <item name="string" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\StringUtils</item>
                 <item name="null" xsi:type="object">Magento\Framework\Data\Argument\Interpreter\NullType</item>
                 <item name="url" xsi:type="object">Magento\Framework\View\Layout\Argument\Interpreter\Url</item>
             </argument>

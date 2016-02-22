@@ -13,7 +13,7 @@ use Magento\Framework\UrlFactory;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\Search\Model\Resource\Query\CollectionFactory;
+use Magento\Search\Model\ResourceModel\Query\CollectionFactory;
 
 class Term extends Template
 {
@@ -113,7 +113,7 @@ class Term extends Template
     }
 
     /**
-     * @param \Magento\Framework\Object $obj
+     * @param \Magento\Framework\DataObject $obj
      * @return string
      */
     public function getSearchUrl($obj)

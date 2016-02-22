@@ -6,6 +6,7 @@
 namespace Magento\Ui\DataProvider;
 
 use Magento\Framework\View\Element\UiComponent\DataProvider\DataProviderInterface;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
 abstract class AbstractDataProvider implements DataProviderInterface
 {
@@ -43,6 +44,11 @@ abstract class AbstractDataProvider implements DataProviderInterface
     protected $data = [];
 
     /**
+     * @var AbstractCollection
+     */
+    protected $collection;
+
+    /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -64,10 +70,12 @@ abstract class AbstractDataProvider implements DataProviderInterface
     }
 
     /**
-     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @return AbstractCollection
      */
-    abstract protected function getCollection();
-
+    public function getCollection()
+    {
+        return $this->collection;
+    }
     /**
      * Get Data Provider name
      *
@@ -123,7 +131,7 @@ abstract class AbstractDataProvider implements DataProviderInterface
      */
     public function getFieldsMetaInfo($fieldSetName)
     {
-        return isset($this->meta[$fieldSetName]['fields']) ? $this->meta[$fieldSetName]['fields'] : [];
+        return isset($this->meta[$fieldSetName]['children']) ? $this->meta[$fieldSetName]['children'] : [];
     }
 
     /**
@@ -133,17 +141,41 @@ abstract class AbstractDataProvider implements DataProviderInterface
      */
     public function getFieldMetaInfo($fieldSetName, $fieldName)
     {
-        return isset($this->meta[$fieldSetName]['fields'][$fieldName])
-            ? $this->meta[$fieldSetName]['fields'][$fieldName]
+        return isset($this->meta[$fieldSetName]['children'][$fieldName])
+            ? $this->meta[$fieldSetName]['children'][$fieldName]
             : [];
     }
 
     /**
      * @inheritdoc
      */
-    public function addFilter($condition, $field = null, $type = 'regular')
+    public function addFilter(\Magento\Framework\Api\Filter $filter)
     {
-        $this->getCollection()->addFieldToFilter($field, $condition);
+        $this->getCollection()->addFieldToFilter(
+            $filter->getField(),
+            [$filter->getConditionType() => $filter->getValue()]
+        );
+    }
+    /**
+     * Returns search criteria
+     *
+     * @return null
+     */
+    public function getSearchCriteria()
+    {
+        //TODO: Technical dept, should be implemented as part of SearchAPI support for Catalog Grids
+        return null;
+    }
+
+    /**
+     * Returns SearchResult
+     *
+     * @return null
+     */
+    public function getSearchResult()
+    {
+        //TODO: Technical dept, should be implemented as part of SearchAPI support for Catalog Grids
+        return $this->getCollection();
     }
 
     /**

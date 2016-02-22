@@ -7,6 +7,8 @@ namespace Magento\Backend\Helper;
 
 /**
  * @magentoAppArea adminhtml
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  */
 class DataTest extends \PHPUnit_Framework_TestCase
 {

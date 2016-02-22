@@ -114,7 +114,7 @@ class Content extends \Magento\Backend\Block\Widget\Container
      */
     public function getFilebrowserSetupObject()
     {
-        $setupObject = new \Magento\Framework\Object();
+        $setupObject = new \Magento\Framework\DataObject();
 
         $setupObject->setData(
             [

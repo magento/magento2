@@ -7,5 +7,5 @@
 // @codingStandardsIgnoreFile
 
 ?>
-<p><?php echo __('Your current currency is: %1.', $currency->getCode()) ?></p>
-<p><a href="<?php echo $block->getBaseUrl(); ?>" class="action continue"><span><?php echo __('Continue') ?></span></a></p>
+<p><?php /* @escapeNotVerified */ echo __('Your current currency is: %1.', $currency->getCode()) ?></p>
+<p><a href="<?php /* @escapeNotVerified */ echo $block->getBaseUrl(); ?>" class="action continue"><span><?php /* @escapeNotVerified */ echo __('Continue') ?></span></a></p>

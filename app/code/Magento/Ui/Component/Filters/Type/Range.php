@@ -13,16 +13,6 @@ class Range extends AbstractFilter
     const NAME = 'filter_range';
 
     /**
-     * Get component name
-     *
-     * @return string
-     */
-    public function getComponentName()
-    {
-        return static::NAME;
-    }
-
-    /**
      * Prepare component configuration
      *
      * @return void
@@ -41,59 +31,35 @@ class Range extends AbstractFilter
      */
     protected function applyFilter()
     {
-        $condition = $this->getCondition();
-        if ($condition !== null) {
-            $this->getContext()->getDataProvider()->addFilter($condition, $this->getName());
+        if (isset($this->filterData[$this->getName()])) {
+            $value = $this->filterData[$this->getName()];
+
+            if (isset($value['from'])) {
+                $this->applyFilterByType('gteq', $value['from']);
+            }
+
+            if (isset($value['to'])) {
+                $this->applyFilterByType('lteq', $value['to']);
+            }
         }
     }
 
     /**
-     * Get condition by data type
+     * Apply filter by its type
      *
-     * @return array|null
+     * @param string $type
+     * @param string $value
+     * @return void
      */
-    public function getCondition()
+    protected function applyFilterByType($type, $value)
     {
-        $value = isset($this->filterData[$this->getName()]) ? $this->filterData[$this->getName()] : null;
-        if (!empty($value['from']) || !empty($value['to'])) {
-            $value = $this->prepareFrom($value);
-            $value = $this->prepareTo($value);
-        } else {
-            $value = null;
+        if (!empty($value) && $value !== '0') {
+            $filter = $this->filterBuilder->setConditionType($type)
+                ->setField($this->getName())
+                ->setValue($value)
+                ->create();
+
+            $this->getContext()->getDataProvider()->addFilter($filter);
         }
-
-        return $value;
-    }
-
-    /**
-     * Prepare "from" value
-     *
-     * @param array $value
-     * @return array
-     */
-    protected function prepareFrom(array $value)
-    {
-        if (isset($value['from']) && empty($value['from']) && $value['from'] !== '0') {
-            $value['orig_from'] = $value['from'];
-            $value['from'] = null;
-        }
-
-        return $value;
-    }
-
-    /**
-     * Prepare "from" value
-     *
-     * @param array $value
-     * @return array
-     */
-    protected function prepareTo(array $value)
-    {
-        if (isset($value['to']) && empty($value['to']) && $value['to'] !== '0') {
-            $value['orig_to'] = $value['to'];
-            $value['to'] = null;
-        }
-
-        return $value;
     }
 }

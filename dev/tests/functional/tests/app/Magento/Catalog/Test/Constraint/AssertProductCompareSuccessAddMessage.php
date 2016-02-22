@@ -31,7 +31,7 @@ class AssertProductCompareSuccessAddMessage extends AbstractConstraint
     public function processAssert(CatalogProductView $catalogProductView, FixtureInterface $product)
     {
         $successMessage = sprintf(self::SUCCESS_MESSAGE, $product->getName());
-        $actualMessage = $catalogProductView->getMessagesBlock()->getSuccessMessages();
+        $actualMessage = $catalogProductView->getMessagesBlock()->getSuccessMessage();
         \PHPUnit_Framework_Assert::assertEquals(
             $successMessage,
             $actualMessage,

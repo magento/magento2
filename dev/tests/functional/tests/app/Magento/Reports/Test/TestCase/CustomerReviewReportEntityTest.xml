@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Reports\Test\TestCase\CustomerReviewReportEntityTest">
+    <testCase name="Magento\Reports\Test\TestCase\CustomerReviewReportEntityTest" summary="Customer Review Report" ticketId="MAGETWO-27555">
         <variation name="CustomerReviewReportEntityTestVariation1">
             <data name="customerLogin" xsi:type="string">Yes</data>
             <data name="product/dataset" xsi:type="string">default</data>

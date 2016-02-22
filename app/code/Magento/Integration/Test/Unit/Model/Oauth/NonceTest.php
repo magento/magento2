@@ -32,7 +32,7 @@ class NonceTest extends \PHPUnit_Framework_TestCase
     protected $oauthDataMock;
 
     /**
-     * @var \Magento\Framework\Model\Resource\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
 
@@ -77,7 +77,7 @@ class NonceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resourceMock = $this->getMockForAbstractClass(
-            'Magento\Framework\Model\Resource\AbstractResource',
+            'Magento\Framework\Model\ResourceModel\AbstractResource',
             [],
             '',
             false,

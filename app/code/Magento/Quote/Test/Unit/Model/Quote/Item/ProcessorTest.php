@@ -13,7 +13,7 @@ use Magento\Quote\Model\Quote\Item;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Store;
 use Magento\Framework\App\State;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Tests for Magento\Quote\Model\Service\Quote\Processor
@@ -124,7 +124,7 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->objectMock = $this->getMock(
-            'Magento\Framework\Object',
+            'Magento\Framework\DataObject',
             ['getResetCount', 'getId', 'getCustomPrice'],
             [],
             '',

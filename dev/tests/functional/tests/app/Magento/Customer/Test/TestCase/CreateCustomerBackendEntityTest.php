@@ -28,7 +28,7 @@ class CreateCustomerBackendEntityTest extends Injectable
     /* tags */
     const MVP = 'yes';
     const DOMAIN = 'CS';
-    const STABLE = 'no';
+    const TEST_TYPE = 'extended_acceptance_test';
     /* end tags */
 
     /**
@@ -71,15 +71,12 @@ class CreateCustomerBackendEntityTest extends Injectable
      * Create customer on backend.
      *
      * @param Customer $customer
-     * @param Address $address
      * @param string $customerAction
+     * @param Address $address
      * @return void
      */
-    public function test(Customer $customer, Address $address, $customerAction)
+    public function test(Customer $customer, $customerAction, Address $address = null)
     {
-        // Prepare data
-        $address = $address->hasData() ? $address : null;
-
         // Steps
         $this->pageCustomerIndex->open();
         $this->pageCustomerIndex->getPageActionsBlock()->addNew();

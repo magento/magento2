@@ -6,15 +6,12 @@
 
 namespace Magento\CheckoutAgreements\Test\Constraint;
 
-use Magento\Catalog\Test\Page\Product\CatalogProductView;
 use Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage;
-use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Checkout\Test\Page\CheckoutOnepage;
 use Magento\Checkout\Test\Page\CheckoutOnepageSuccess;
-use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Constraint\AbstractConstraint;
-use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Mtf\ObjectManager;
+use Magento\CheckoutAgreements\Test\Fixture\CheckoutAgreement;
 
 /**
  * Class AssertTermOnCheckout
@@ -33,63 +30,47 @@ class AssertTermOnCheckout extends AbstractConstraint
      * Check that after clicking on "Terms and Conditions" checkbox and "Place Order" button success place order message
      * appears.
      *
-     * @param FixtureFactory $fixtureFactory
      * @param ObjectManager $objectManager
-     * @param string $product
-     * @param BrowserInterface $browser
-     * @param CatalogProductView $catalogProductView
-     * @param CheckoutCart $checkoutCart
+     * @param string $products
      * @param CheckoutOnepage $checkoutOnepage
      * @param CheckoutOnepageSuccess $checkoutOnepageSuccess
      * @param AssertOrderSuccessPlacedMessage $assertOrderSuccessPlacedMessage
      * @param array $shipping
      * @param array $payment
+     * @param CheckoutAgreement $agreement
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function processAssert(
-        FixtureFactory $fixtureFactory,
         ObjectManager $objectManager,
-        $product,
-        BrowserInterface $browser,
-        CatalogProductView $catalogProductView,
-        CheckoutCart $checkoutCart,
+        $products,
         CheckoutOnepage $checkoutOnepage,
         CheckoutOnepageSuccess $checkoutOnepageSuccess,
         AssertOrderSuccessPlacedMessage $assertOrderSuccessPlacedMessage,
         $shipping,
-        $payment
+        $payment,
+        CheckoutAgreement $agreement
     ) {
-        $createProductsStep = $objectManager->create(
-            'Magento\Catalog\Test\TestStep\CreateProductsStep',
-            ['products' => $product]
-        );
-        $product = $createProductsStep->run();
+        $paymentBlock = $checkoutOnepage->getPaymentBlock();
+        $shippingAddressData = ['shippingAddress' => ['dataSet' => 'US_address_1']];
+        $productsData = ['products' => $products];
+        $shippingMethodData = ['shipping' => $shipping];
+        $paymentData = ['payment' => $payment];
 
-        $billingAddress = $fixtureFactory->createByCode('address', ['dataset' => 'default']);
+        $products = $objectManager->create('Magento\Catalog\Test\TestStep\CreateProductsStep', $productsData)->run();
+        $objectManager->create('Magento\Checkout\Test\TestStep\AddProductsToTheCartStep', $products)->run();
+        $objectManager->create('Magento\Checkout\Test\TestStep\ProceedToCheckoutStep')->run();
+        $objectManager->create('Magento\Checkout\Test\TestStep\FillShippingAddressStep', $shippingAddressData)->run();
+        $objectManager->create('Magento\Checkout\Test\TestStep\FillShippingMethodStep', $shippingMethodData)->run();
+        $objectManager->create('Magento\Checkout\Test\TestStep\SelectPaymentMethodStep', $paymentData)->run();
 
-        $browser->open($_ENV['app_frontend_url'] . $product['products'][0]->getUrlKey() . '.html');
-        $catalogProductView->getViewBlock()->clickAddToCartButton();
-        $catalogProductView->getMessagesBlock()->waitSuccessMessage();
-        $checkoutCart->open();
-        $checkoutCart->getCartBlock()->getOnepageLinkBlock()->proceedToCheckout();
-        $checkoutOnepage->getLoginBlock()->clickContinue();
-        $checkoutOnepage->getBillingBlock()->fill($billingAddress);
-        $checkoutOnepage->getBillingBlock()->clickContinue();
-        $checkoutOnepage->getShippingMethodBlock()->selectShippingMethod($shipping);
-        $checkoutOnepage->getShippingMethodBlock()->clickContinue();
-        $checkoutOnepage->getPaymentBlock()->selectPaymentMethod($payment);
-        $checkoutOnepage->getPaymentBlock()->getSelectedPaymentMethodBlock()->clickPlaceOrder();
-
+        $paymentBlock->getSelectedPaymentMethodBlock()->clickPlaceOrder();
         \PHPUnit_Framework_Assert::assertEquals(
             self::NOTIFICATION_MESSAGE,
             $checkoutOnepage->getAgreementReview()->getNotificationMassage(),
             'Notification required message of Terms and Conditions is absent.'
         );
-
-        $checkoutOnepage->getAgreementReview()->setAgreement('Yes');
-        $checkoutOnepage->getAgreementReview()->placeOrder();
+        $checkoutOnepage->getAgreementReview()->setAgreement('Yes', $agreement);
+        $paymentBlock->getSelectedPaymentMethodBlock()->clickPlaceOrder();
         $assertOrderSuccessPlacedMessage->processAssert($checkoutOnepageSuccess);
     }
 

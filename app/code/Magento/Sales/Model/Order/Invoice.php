@@ -103,7 +103,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     protected $_calculatorFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Invoice\Item\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory
      */
     protected $_invoiceItemCollectionFactory;
 
@@ -113,7 +113,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     protected $_invoiceCommentFactory;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory
      */
     protected $_commentCollectionFactory;
 
@@ -125,10 +125,10 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      * @param Invoice\Config $invoiceConfig
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\Math\CalculatorFactory $calculatorFactory
-     * @param \Magento\Sales\Model\Resource\Order\Invoice\Item\CollectionFactory $invoiceItemCollectionFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory $invoiceItemCollectionFactory
      * @param Invoice\CommentFactory $invoiceCommentFactory
-     * @param \Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory $commentCollectionFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory $commentCollectionFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -141,10 +141,10 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         \Magento\Sales\Model\Order\Invoice\Config $invoiceConfig,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\Math\CalculatorFactory $calculatorFactory,
-        \Magento\Sales\Model\Resource\Order\Invoice\Item\CollectionFactory $invoiceItemCollectionFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Invoice\Item\CollectionFactory $invoiceItemCollectionFactory,
         \Magento\Sales\Model\Order\Invoice\CommentFactory $invoiceCommentFactory,
-        \Magento\Sales\Model\Resource\Order\Invoice\Comment\CollectionFactory $commentCollectionFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\CollectionFactory $commentCollectionFactory,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -172,7 +172,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
      */
     protected function _construct()
     {
-        $this->_init('Magento\Sales\Model\Resource\Order\Invoice');
+        $this->_init('Magento\Sales\Model\ResourceModel\Order\Invoice');
     }
 
     /**
@@ -357,12 +357,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
         }
         $this->_wasPayCalled = true;
 
-        $invoiceState = self::STATE_PAID;
-        if ($this->getOrder()->getPayment()->hasForcedState()) {
-            $invoiceState = $this->getOrder()->getPayment()->getForcedState();
-        }
-
-        $this->setState($invoiceState);
+        $this->setState(self::STATE_PAID);
 
         $this->getOrder()->getPayment()->pay($this);
         $this->getOrder()->setTotalPaid($this->getOrder()->getTotalPaid() + $this->getGrandTotal());
@@ -481,7 +476,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
     /**
      * Get invoice items collection
      *
-     * @return \Magento\Sales\Model\Resource\Order\Invoice\Item\Collection
+     * @return \Magento\Sales\Model\ResourceModel\Order\Invoice\Item\Collection
      */
     public function getItemsCollection()
     {
@@ -701,7 +696,7 @@ class Invoice extends AbstractModel implements EntityInterface, InvoiceInterface
 
     /**
      * @param bool $reload
-     * @return \Magento\Sales\Model\Resource\Order\Invoice\Comment\Collection
+     * @return \Magento\Sales\Model\ResourceModel\Order\Invoice\Comment\Collection
      */
     public function getCommentsCollection($reload = false)
     {

@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Test\Unit\Action\Stub;
 
 class ActionStub extends \Magento\Framework\App\Action\Action
 {
-    protected function execute()
+    public function execute()
     {
         // Empty method stub for test
     }

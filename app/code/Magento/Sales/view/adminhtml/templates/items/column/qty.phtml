@@ -10,35 +10,35 @@
 <?php if ($_item = $block->getItem()): ?>
 <table class="qty-table">
     <tr>
-        <th><?php echo __('Ordered') ?></th>
-        <td><?php echo $_item->getQtyOrdered()*1 ?></td>
+        <th><?php /* @escapeNotVerified */ echo __('Ordered') ?></th>
+        <td><?php /* @escapeNotVerified */ echo $_item->getQtyOrdered()*1 ?></td>
     </tr>
 
     <?php if ((float) $_item->getQtyInvoiced()): ?>
         <tr>
-            <th><?php echo __('Invoiced') ?></th>
-            <td><?php echo $_item->getQtyInvoiced()*1 ?></td>
+            <th><?php /* @escapeNotVerified */ echo __('Invoiced') ?></th>
+            <td><?php /* @escapeNotVerified */ echo $_item->getQtyInvoiced()*1 ?></td>
         </tr>
     <?php endif; ?>
 
     <?php if ((float) $_item->getQtyShipped()): ?>
         <tr>
-            <th><?php echo __('Shipped') ?></th>
-            <td><?php echo $_item->getQtyShipped()*1 ?></td>
+            <th><?php /* @escapeNotVerified */ echo __('Shipped') ?></th>
+            <td><?php /* @escapeNotVerified */ echo $_item->getQtyShipped()*1 ?></td>
         </tr>
     <?php endif; ?>
 
     <?php if ((float) $_item->getQtyRefunded()): ?>
         <tr>
-            <th><?php echo __('Refunded') ?></th>
-            <td><?php echo $_item->getQtyRefunded()*1 ?></td>
+            <th><?php /* @escapeNotVerified */ echo __('Refunded') ?></th>
+            <td><?php /* @escapeNotVerified */ echo $_item->getQtyRefunded()*1 ?></td>
         </tr>
     <?php endif; ?>
 
     <?php if ((float) $_item->getQtyCanceled()): ?>
         <tr>
-            <th><?php echo __('Canceled') ?></th>
-            <td><?php echo $_item->getQtyCanceled()*1 ?></td>
+            <th><?php /* @escapeNotVerified */ echo __('Canceled') ?></th>
+            <td><?php /* @escapeNotVerified */ echo $_item->getQtyCanceled()*1 ?></td>
         </tr>
     <?php endif; ?>
 

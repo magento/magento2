@@ -59,9 +59,6 @@ Magento/Customer/Controller/Adminhtml/Index
 Magento/Customer/Model/Config/Backend/Show
 Magento/Customer/Model/Metadata
 Magento/Customer/Model/Resource/Customer
-Magento/DesignEditor/Block/Adminhtml/Editor/Tools/Code
-Magento/DesignEditor/Block/Adminhtml/Theme/Selector/Tab
-Magento/DesignEditor/Model/Url
 Magento/Directory/Model
 Magento/GiftMessage/Block/Adminhtml/Sales/Order
 Magento/ImportExport/Model
@@ -107,7 +104,6 @@ Magento/Wishlist/Model
 lib/internal/Magento/Framework/Archive
 lib/internal/Magento/Framework/HTTP/Client
 lib/internal/Magento/Framework/Acl
-lib/internal/phpseclib
 lib/internal/Magento/Framework/Convert
 lib/internal/Magento/Framework/App/Config
 Magento/Cron/Model

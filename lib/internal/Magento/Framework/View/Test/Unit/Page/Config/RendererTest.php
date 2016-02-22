@@ -49,7 +49,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     protected $escaperMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\String|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\StringUtils|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stringMock;
 
@@ -92,7 +92,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->method('escapeHtml')
             ->willReturnArgument(0);
 
-        $this->stringMock = $this->getMockBuilder('Magento\Framework\Stdlib\String')
+        $this->stringMock = $this->getMockBuilder('Magento\Framework\Stdlib\StringUtils')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -179,11 +179,15 @@ class RendererTest extends \PHPUnit_Framework_TestCase
 
         $this->pageConfigMock->expects($this->any())
             ->method('getTitle')
-            ->will($this->returnValue($this->titleMock));
+            ->willReturn($this->titleMock);
 
         $this->titleMock->expects($this->once())
             ->method('get')
-            ->will($this->returnValue($title));
+            ->willReturn($title);
+
+        $this->escaperMock->expects($this->once())
+            ->method('escapeHtml')
+            ->willReturnArgument(0);
 
         $this->assertEquals($expected, $this->renderer->renderTitle());
     }

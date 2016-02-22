@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<div class="opc-estimated-wrapper">
+<div class="opc-estimated-wrapper" data-bind="blockLoader: isLoading">
     <div class="estimated-block">
-        <span class="estimated-label" data-bind="text: $t('Estimated Total')"></span>
+        <span class="estimated-label" data-bind="i18n: 'Estimated Total'"></span>
         <span class="estimated-price" data-bind="text: getValue()"></span>
     </div>
     <div class="minicart-wrapper">

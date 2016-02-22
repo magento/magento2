@@ -75,7 +75,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn('1');
         $this->linkRenderer->setColumn($column);
-        $object = new \Magento\Framework\Object(['id' => '1']);
+        $object = new \Magento\Framework\DataObject(['id' => '1']);
         $actualResult = $this->linkRenderer->render($object);
         $this->assertEquals($expectedResult, $actualResult);
     }

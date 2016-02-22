@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="sales_order_grid_block"/>
     <body>
         <referenceContainer name="admin.scope.col.wrap" htmlClass="admin__old" /> <!-- ToDo UI: remove this wrapper with old styles removal. The class name "admin__old" is for tests only, we shouldn't use it in any way -->
@@ -18,8 +18,8 @@
                 <argument name="grid_url" xsi:type="url" path="*/*/ordersgrid"/>
             </arguments>
         </referenceBlock>
-        <remove name="sales.order.grid.export"/>
-        <remove name="sales.order.grid.massaction"/>
+        <referenceBlock name="sales.order.grid.export" remove="true"/>
+        <referenceBlock name="sales.order.grid.massaction" remove="true"/>
         <referenceContainer name="content">
             <block class="Magento\Paypal\Block\Adminhtml\Billing\Agreement\View" name="paypal.billing.agreement.view"/>
         </referenceContainer>

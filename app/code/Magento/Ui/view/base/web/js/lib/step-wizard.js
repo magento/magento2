@@ -2,144 +2,210 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+// jscs:disable jsDoc
 define([
-    "uiRegistry",
-    "jquery",
-    "underscore",
-    "mage/backend/notification"
-], function (uiRegistry, $, _) {
-    "use strict";
-    var stepComponents;
-    var getStep = _.memoize(function(step) {
-        return _.findWhere(stepComponents, {name: step});
-    });
-    var Wizard = function (steps, element, uiWizard) {
+    'uiRegistry',
+    'uiComponent',
+    'jquery',
+    'underscore',
+    'ko',
+    'mage/backend/notification'
+], function (uiRegistry, Component, $, _, ko) {
+    'use strict';
+
+    var Wizard;
+
+    ko.utils.domNodeDisposal.cleanExternalData = _.wrap(
+        ko.utils.domNodeDisposal.cleanExternalData,
+        function (func, node) {
+            if (!$(node).closest('[data-type=skipKO]').length) {
+                func(node);
+            }
+        }
+    );
+
+    Wizard = function (steps) {
         this.steps = steps;
         this.index = 0;
         this.data = {};
-        this.element = element;
-        this.uiWizard = uiWizard;
-        this.nextLabel = uiWizard.nextLabel.text();
-        this.prevLabel = uiWizard.prevLabel.text();
+        this.element = $('[data-role=steps-wizard-main]');
+        this.nextLabel = '[data-role="step-wizard-next"]';
+        this.prevLabel = '[data-role="step-wizard-prev"]';
+        this.nextLabelText = 'Next';
+        this.prevLabelText = 'Back';
         $(this.element).notification();
         this.move = function (newIndex) {
-            if (newIndex > this.index) {
-                this._next(newIndex);
-            } else if (newIndex < this.index) {
-                this._prev(newIndex);
+            if (!this.preventSwitch(newIndex)) {
+                if (newIndex > this.index) {
+                    this._next(newIndex);
+                } else if (newIndex < this.index) {
+                    this._prev(newIndex);
+                }
             }
-        };
-        this._next = function () {
-            try {
-                this.force();
-            } catch (e) {
-                this.notifyMessage(e.message, true);
-                throw new Error(e);
-            }
-            this.index++;
             this.updateLabels(this.getStep());
+            this.showNotificationMessage();
+
+            return this.getStep().name;
+        };
+        this.next = function () {
+            this.move(this.index + 1);
+
+            return this.getStep().name;
+        };
+        this.prev = function () {
+            this.move(this.index - 1);
+
+            return this.getStep().name;
+        };
+        this.preventSwitch = function (newIndex) {
+            return newIndex < 0 || (newIndex - this.index) > 1;
+        };
+        this._next = function (newIndex) {
+            newIndex = _.isNumber(newIndex) ? newIndex : this.index + 1;
+
+            try {
+                this.getStep().force(this);
+
+                if (newIndex >= steps.length) {
+                    return false;
+                }
+            } catch (e) {
+                this.setNotificationMessage(e.message, true);
+
+                return false;
+            }
+            this.cleanErrorNotificationMessage();
+            this.index = newIndex;
+            this.cleanNotificationMessage();
             this.render();
         };
-        this.getStep = function(stepIndex) {
-            return getStep(this.steps[stepIndex || this.index]);
-        };
-        this.force = function() {
-            this.getStep().force(this);
-        };
         this._prev = function (newIndex) {
-            this.updateLabels(this.getStep(this.index - 1));
+            newIndex = _.isNumber(newIndex) ? newIndex : this.index - 1;
             this.getStep().back(this);
             this.index = newIndex;
+        };
+        this.getStep = function (stepIndex) {
+            return this.steps[stepIndex || this.index] || {};
         };
         this.notifyMessage = function (message, error) {
             $(this.element).notification('clear').notification('add', {
                 error: error,
-                message: $.mage.__(message)
+                message: message
             });
         };
-        this.updateLabels = function(step) {
-            this.uiWizard.nextLabel.text(step.nextLabel || this.nextLabel);
-            this.uiWizard.prevLabel.text(step.prevLabel || this.prevLabel);
+        this.updateLabels = function (step) {
+            this.element.find(this.nextLabel).find('button').text(step.nextLabelText || this.nextLabelText);
+            this.element.find(this.prevLabel).find('button').text(step.prevLabelText || this.prevLabelText);
         };
-        this.render = function() {
+        this.showNotificationMessage = function () {
+            if (!_.isEmpty(this.getStep())) {
+                this.hideNotificationMessage();
+
+                if (this.getStep().notificationMessage.text !== null) {
+                    this.notifyMessage(
+                        this.getStep().notificationMessage.text,
+                        this.getStep().notificationMessage.error
+                    );
+                }
+            }
+        };
+        this.cleanNotificationMessage = function () {
+            this.getStep().notificationMessage.text = null;
+            this.hideNotificationMessage();
+        };
+        this.cleanErrorNotificationMessage = function () {
+            if (this.getStep().notificationMessage.error === true) {
+                this.cleanNotificationMessage();
+            }
+        };
+        this.setNotificationMessage = function (text, error) {
+            error = error !== undefined;
+
+            if (!_.isEmpty(this.getStep())) {
+                this.getStep().notificationMessage.text = text;
+                this.getStep().notificationMessage.error = error;
+                this.showNotificationMessage();
+            }
+        };
+        this.hideNotificationMessage = function () {
             $(this.element).notification('clear');
+        };
+        this.render = function () {
+            this.hideNotificationMessage();
             this.getStep().render(this);
         };
+        this.init = function () {
+            this.updateLabels(this.getStep());
+            this.render();
+        };
+        this.init();
     };
 
-    $.widget('mage.step-wizard', $.ui.tabs, {
-        wizard: undefined,
-        options: {
-            collapsible: false,
-            disabled: [],
-            event: "click",
-            buttonNextElement: '[data-role="step-wizard-next"]',
-            buttonPrevElement: '[data-role="step-wizard-prev"]',
-            stepRegistryComponent: null,
-            steps: null
+    return Component.extend({
+        defaults: {
+            initData: [],
+            stepsNames: [],
+            selectedStep: '',
+            steps: [],
+            disabled: true
         },
-        _create: function () {
-            this._control();
+        initialize: function () {
             this._super();
-            this.options.beforeActivate = this._handlerStep.bind(this);
+            this.selectedStep.subscribe(this.wrapDisabledBackButton.bind(this));
         },
-        _control: function () {
-            var self = this;
-            this.prev = this.element.find(this.options.buttonPrevElement);
-            this.prevLabel = $('button', this.prev);
-            this.next = this.element.find(this.options.buttonNextElement);
-            this.nextLabel = $('button', this.next);
+        initElement: function (step) {
+            step.initData = this.initData;
+            step.mode = _.all(this.initData, _.isEmpty) ? 'create' : 'edit';
+            this.steps[this.getStepIndexByName(step.name)] = step;
+        },
+        initObservable: function () {
+            this._super().observe([
+                'selectedStep',
+                'disabled'
+            ]);
 
-            this.next.on('click.' + this.eventNamespace, function (event) {
-                // TODO: try to avoid ui.tabs for simplify logic
-                if ((self.options.active+1) == (self.options.steps.length)) {
-                    self.wizard.force();
-                }
-                self._activate(self.options.active + 1);
-            });
-            this.prev.on('click.' + this.eventNamespace, function (event) {
-                self._activate(self.options.active - 1);
-            });
+            return this;
         },
-        load: function (index, event) {
-            this._disabledTabs(index);
-            this._actionControl(index);
-            this._super(index, event);
+        wrapDisabledBackButton: function (stepName) {
+            if (_.first(this.stepsNames) === stepName) {
+                this.disabled(true);
+            } else {
+                this.disabled(false);
+            }
         },
-        _handlerStep: function (event, ui) {
-            try {
-                var index = this.tabs.index(ui.newTab[0]);
-                var tab = this.panels.eq(index);
-                var steps =  uiRegistry.async(this.options.stepRegistryComponent);
+        getStepIndexByName: function (stepName) {
+            return _.indexOf(this.stepsNames, stepName);
+        },
+        //controls, todo to another object
+        next: function () {
+            this.selectedStep(this.wizard.next());
+        },
+        back: function () {
+            this.selectedStep(this.wizard.prev());
+        },
+        open: function () {
+            /*
+            var $form = $('[data-form=edit-product]');
 
-                steps(function(component) {
-                    if (this.wizard === undefined) {
-                        this.wizard = new Wizard(this.options.steps, tab, this);
-                        stepComponents = component.steps;
-                    }
-                    this.wizard.move(index);
-                }.bind(this));
-            } catch (e) {
-                return false;
+            if (!$form.valid()) {
+                $form.data('validator').focusInvalid();
+            } else {
+            */
+            require('uiRegistry').get('product_form.product_form').validate();
+            if (!require('uiRegistry').get('product_form.product_form').source.get('params.invalid')) {
+                this.selectedStep(this.stepsNames.first());
+                this.wizard = new Wizard(this.steps);
+                $('[data-role=step-wizard-dialog]').trigger('openModal');
             }
         },
-        _way: function (index) {
-            return this.options.selected > index ? 'back' : 'force';
+        close: function () {
+            $('[data-role=step-wizard-dialog]').trigger('closeModal');
         },
-        _actionControl: function (index) {
-            if (index < 1) {
-                this.prev.find('button').addClass("disabled");
-            }
-            if (index === 1 && this._way(index) === 'force') {
-                this.prev.find('button').removeClass("disabled");
-            }
-        },
-        _disabledTabs: function (index) {
-            this._setupDisabled(_.range(index + 2, this.tabs.length));
+        showSpecificStep: function () {
+            var index = _.indexOf(this.stepsNames, event.target.hash.substr(1)),
+                stepName = this.wizard.move(index);
+
+            this.selectedStep(stepName);
         }
-
     });
-
-    return $.mage["step-wizard"];
-
 });

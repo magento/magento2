@@ -15,9 +15,9 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit_Framework_MockObject_MockObject
      */
-    private $adapter;
+    private $connectionMock;
     /**
-     * @var \Magento\Framework\App\Resource | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection | \PHPUnit_Framework_MockObject_MockObject
      */
     private $resource;
 
@@ -53,13 +53,13 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->resource = $this->getMock(
-            'Magento\Framework\App\Resource',
+            'Magento\Framework\App\ResourceConnection',
             ['getConnection'],
             [],
             '',
             false
         );
-        $this->adapter = $this->getMockForAbstractClass(
+        $this->connectionMock = $this->getMockForAbstractClass(
             'Magento\Framework\DB\Adapter\AdapterInterface',
             [],
             '',
@@ -68,7 +68,7 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
             true,
             ['insert', 'lastInsertId']
         );
-        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->adapter);
+        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->sequence = $helper->getObject('Magento\SalesSequence\Model\Sequence', [
             'meta' => $this->meta,
@@ -97,7 +97,7 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
             ->willReturn(
                 $this->sequenceParameters()->testTable
             );
-        $this->adapter->expects($this->exactly(3))->method('insert')->with(
+        $this->connectionMock->expects($this->exactly(3))->method('insert')->with(
             $this->sequenceParameters()->testTable,
             []
         );
@@ -121,7 +121,7 @@ class SequenceTest extends \PHPUnit_Framework_TestCase
     private function nextIncrementStep($lastInsertId, $sequenceNumber)
     {
         $lastInsertId++;
-        $this->adapter->expects($this->at(1))->method('lastInsertId')->with(
+        $this->connectionMock->expects($this->at(1))->method('lastInsertId')->with(
             $this->sequenceParameters()->testTable
         )->willReturn(
             $lastInsertId

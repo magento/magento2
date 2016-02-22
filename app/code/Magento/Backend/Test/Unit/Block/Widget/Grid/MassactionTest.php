@@ -123,7 +123,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
     /**
      * @param $itemId
      * @param $item
-     * @param $expectedItem \Magento\Framework\Object
+     * @param $expectedItem \Magento\Framework\DataObject
      * @dataProvider itemsDataProvider
      */
     public function testItemsProcessing($itemId, $item, $expectedItem)
@@ -146,7 +146,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(1, $this->_block->getCount());
 
         $actualItem = $this->_block->getItem($itemId);
-        $this->assertInstanceOf('Magento\Framework\Object', $actualItem);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $actualItem);
         $this->assertEquals($expectedItem->getData(), $actualItem->getData());
 
         $this->_block->removeItem($itemId);
@@ -160,7 +160,7 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
             [
                 'test_id1',
                 ["label" => "Test Item One", "url" => "*/*/test1"],
-                new \Magento\Framework\Object(
+                new \Magento\Framework\DataObject(
                     [
                         "label" => "Test Item One",
                         "url" => "http://localhost/index.php/backend/admin/test/test1",
@@ -170,8 +170,8 @@ class MassactionTest extends \PHPUnit_Framework_TestCase
             ],
             [
                 'test_id2',
-                new \Magento\Framework\Object(["label" => "Test Item Two", "url" => "*/*/test2"]),
-                new \Magento\Framework\Object(
+                new \Magento\Framework\DataObject(["label" => "Test Item Two", "url" => "*/*/test2"]),
+                new \Magento\Framework\DataObject(
                     [
                         "label" => "Test Item Two",
                         "url" => "http://localhost/index.php/backend/admin/test/test2",

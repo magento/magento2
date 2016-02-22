@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Bundle\Test\TestCase\UpdateBundleProductEntityTest">
+    <testCase name="Magento\Bundle\Test\TestCase\UpdateBundleProductEntityTest" summary="Update Bundle Product" ticketId="MAGETWO-26195">
         <variation name="UpdateBundleProductEntityTestVariation1">
             <data name="description" xsi:type="string">Update dynamic bundle product</data>
             <data name="originalProduct/dataset" xsi:type="string">bundle_dynamic_product</data>
@@ -54,8 +54,7 @@
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceView" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundlePriceType" />
         </variation>
-        <variation name="UpdateBundleProductEntityTestVariation3">
-            <data name="description" xsi:type="string">MAGETWO-12841: Edit Bundle Product (Fixed Price)</data>
+        <variation name="UpdateBundleProductEntityTestVariation3" summary="Edit Bundle Product (Fixed Price)" ticketId="MAGETWO-12841">
             <data name="originalProduct/dataset" xsi:type="string">bundle_fixed_with_category</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">bundle_fixed_%isolation%</data>
@@ -65,8 +64,7 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Bundle\Test\Constraint\AssertBundleProductPage" />
         </variation>
-        <variation name="UpdateBundleProductEntityTestVariation4">
-            <data name="description" xsi:type="string">MAGETWO-12842: Edit Bundle (dynamic) Product</data>
+        <variation name="UpdateBundleProductEntityTestVariation4" summary="Edit Bundle (dynamic) Product" ticketId="MAGETWO-12842">
             <data name="originalProduct/dataset" xsi:type="string">bundle_dynamic_with_category</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">bundle_dynamic_%isolation%</data>

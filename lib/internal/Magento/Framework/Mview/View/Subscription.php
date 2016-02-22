@@ -8,17 +8,17 @@
 
 namespace Magento\Framework\Mview\View;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Trigger;
 
 class Subscription implements SubscriptionInterface
 {
     /**
-     * Database write connection
+     * Database connection
      *
      * @var \Magento\Framework\DB\Adapter\AdapterInterface
      */
-    protected $write;
+    protected $connection;
 
     /**
      * @var \Magento\Framework\DB\Ddl\TriggerFactory
@@ -58,7 +58,7 @@ class Subscription implements SubscriptionInterface
     protected $resource;
 
     /**
-     * @param Resource $resource
+     * @param ResourceConnection $resource
      * @param \Magento\Framework\DB\Ddl\TriggerFactory $triggerFactory
      * @param \Magento\Framework\Mview\View\CollectionInterface $viewCollection
      * @param \Magento\Framework\Mview\ViewInterface $view
@@ -66,14 +66,14 @@ class Subscription implements SubscriptionInterface
      * @param string $columnName
      */
     public function __construct(
-        Resource $resource,
+        ResourceConnection $resource,
         \Magento\Framework\DB\Ddl\TriggerFactory $triggerFactory,
         \Magento\Framework\Mview\View\CollectionInterface $viewCollection,
         \Magento\Framework\Mview\ViewInterface $view,
         $tableName,
         $columnName
     ) {
-        $this->write = $resource->getConnection('core_write');
+        $this->connection = $resource->getConnection();
         $this->triggerFactory = $triggerFactory;
         $this->viewCollection = $viewCollection;
         $this->view = $view;
@@ -106,8 +106,8 @@ class Subscription implements SubscriptionInterface
                 $trigger->addStatement($this->buildStatement($event, $view->getChangelog()));
             }
 
-            $this->write->dropTrigger($trigger->getName());
-            $this->write->createTrigger($trigger);
+            $this->connection->dropTrigger($trigger->getName());
+            $this->connection->createTrigger($trigger);
         }
 
         return $this;
@@ -135,11 +135,11 @@ class Subscription implements SubscriptionInterface
                 $trigger->addStatement($this->buildStatement($event, $view->getChangelog()));
             }
 
-            $this->write->dropTrigger($trigger->getName());
+            $this->connection->dropTrigger($trigger->getName());
 
             // Re-create trigger if trigger used by linked views
             if ($trigger->getStatements()) {
-                $this->write->createTrigger($trigger);
+                $this->connection->createTrigger($trigger);
             }
         }
 
@@ -188,17 +188,17 @@ class Subscription implements SubscriptionInterface
             case Trigger::EVENT_UPDATE:
                 return sprintf(
                     "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);",
-                    $this->write->quoteIdentifier($this->resource->getTableName($changelog->getName())),
-                    $this->write->quoteIdentifier($changelog->getColumnName()),
-                    $this->write->quoteIdentifier($this->getColumnName())
+                    $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
+                    $this->connection->quoteIdentifier($changelog->getColumnName()),
+                    $this->connection->quoteIdentifier($this->getColumnName())
                 );
 
             case Trigger::EVENT_DELETE:
                 return sprintf(
                     "INSERT IGNORE INTO %s (%s) VALUES (OLD.%s);",
-                    $this->write->quoteIdentifier($this->resource->getTableName($changelog->getName())),
-                    $this->write->quoteIdentifier($changelog->getColumnName()),
-                    $this->write->quoteIdentifier($this->getColumnName())
+                    $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
+                    $this->connection->quoteIdentifier($changelog->getColumnName()),
+                    $this->connection->quoteIdentifier($this->getColumnName())
                 );
 
             default:

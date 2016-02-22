@@ -411,7 +411,6 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
         $addressId,
         $countryId,
         $customerId,
-        $isRegionRequired,
         $regionId,
         $region,
         $regionCode,
@@ -489,11 +488,6 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->with($newAddressData)
             ->willReturn($newAddressData);
 
-        $this->helperData->expects($this->once())
-            ->method('isRegionRequired')
-            ->with($countryId)
-            ->willReturn($isRegionRequired);
-
         $this->region->expects($this->any())
             ->method('load')
             ->with($newRegionId)
@@ -528,7 +522,10 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
                 ],
             ]);
 
-        $this->session->expects($this->once())
+        $this->session->expects($this->atLeastOnce())
+            ->method('getCustomerId')
+            ->willReturn($customerId);
+        $this->addressData->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
 
@@ -578,31 +575,31 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
     public function dataProviderTestExecute()
     {
         return [
-            [1, 1, 1, true, null, '', null, '', null, ''],
-            [1, 1, 1, false, '', null, '', null, '', null],
+            [1, 1, 1, null, '', null, '', null, ''],
+            [1, 1, 1, '', null, '', null, '', null],
 
-            [1, 1, 1, true, null, null, null, 12, null, null],
-            [1, 1, 1, true, null, null, null, 1, 'California', null],
-            [1, 1, 1, true, null, null, null, 1, 'California', 'CA'],
+            [1, 1, 1, null, null, null, 12, null, null],
+            [1, 1, 1, null, null, null, 1, 'California', null],
+            [1, 1, 1, null, null, null, 1, 'California', 'CA'],
 
-            [1, 1, 1, false, null, null, null, 1, null, 'CA'],
-            [1, 1, 1, false, null, null, null, null, null, 'CA'],
+            [1, 1, 1, null, null, null, 1, null, 'CA'],
+            [1, 1, 1, null, null, null, null, null, 'CA'],
 
-            [1, 1, 1, true, 2, null, null, null, null, null],
-            [1, 1, 1, true, 2, 'Alaska', null, null, null, null],
-            [1, 1, 1, true, 2, 'Alaska', 'AK', null, null, null],
+            [1, 1, 1, 2, null, null, null, null, null],
+            [1, 1, 1, 2, 'Alaska', null, null, null, null],
+            [1, 1, 1, 2, 'Alaska', 'AK', null, null, null],
 
-            [1, 1, 1, false, 2, null, null, null, null, null],
-            [1, 1, 1, false, 2, 'Alaska', null, null, null, null],
-            [1, 1, 1, false, 2, 'Alaska', 'AK', null, null, null],
+            [1, 1, 1, 2, null, null, null, null, null],
+            [1, 1, 1, 2, 'Alaska', null, null, null, null],
+            [1, 1, 1, 2, 'Alaska', 'AK', null, null, null],
 
-            [1, 1, 1, true, 2, null, null, 12, null, null],
-            [1, 1, 1, true, 2, 'Alaska', null, 12, null, 'CA'],
-            [1, 1, 1, true, 2, 'Alaska', 'AK', 12, 'California', null],
+            [1, 1, 1, 2, null, null, 12, null, null],
+            [1, 1, 1, 2, 'Alaska', null, 12, null, 'CA'],
+            [1, 1, 1, 2, 'Alaska', 'AK', 12, 'California', null],
 
-            [1, 1, 1, false, 2, null, null, 12, null, null],
-            [1, 1, 1, false, 2, 'Alaska', null, 12, null, 'CA'],
-            [1, 1, 1, false, 2, 'Alaska', 'AK', 12, 'California', null],
+            [1, 1, 1, 2, null, null, 12, null, null],
+            [1, 1, 1, 2, 'Alaska', null, 12, null, 'CA'],
+            [1, 1, 1, 2, 'Alaska', 'AK', 12, 'California', null],
         ];
     }
 
@@ -682,11 +679,11 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->once())
             ->method('isPost')
             ->willReturn(true);
-        $this->request->expects($this->exactly(2))
+        $this->request->expects($this->once())
             ->method('getParam')
             ->with('id')
             ->willReturn($addressId);
-        $this->request->expects($this->once())
+        $this->request->expects($this->never())
             ->method('getPostValue')
             ->willReturn($postValue);
 
@@ -701,7 +698,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->with($exception, __('We can\'t save the address.'))
             ->willReturnSelf();
 
-        $this->session->expects($this->once())
+        $this->session->expects($this->never())
             ->method('setAddressFormData')
             ->with($postValue)
             ->willReturnSelf();
@@ -710,7 +707,7 @@ class FormPostTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
         $urlBuilder->expects($this->once())
             ->method('getUrl')
-            ->with('*/*/edit', ['id' => $addressId])
+            ->with('*/*/index')
             ->willReturn($url);
 
         $this->objectManager->expects($this->once())

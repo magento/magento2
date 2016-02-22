@@ -30,11 +30,12 @@ class AllowedIpsTest extends \PHPUnit_Framework_TestCase
             ->willReturn($eventMangerMock);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
-
+        $escaper = $objectManagerHelper->getObject('\Magento\Framework\Escaper');
         $this->model = $objectManagerHelper->getObject(
             'Magento\Developer\Model\Config\Backend\AllowedIps',
             [
                 'context' => $contextMock,
+                'escaper' => $escaper,
             ]
         );
     }

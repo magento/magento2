@@ -51,7 +51,11 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         ];
         $expect = [
             ['value' => '', 'label' => __('-- Please select --')],
-            ['label' => 'optionLabel', 'value' => [['label' => 'typeLabel', 'value' => 'typeName']]],
+            [
+                'label' => 'optionLabel',
+                'optgroup-name' => 'optionLabel',
+                'value' => [['label' => 'typeLabel', 'value' => 'typeName']]
+            ],
         ];
 
         $this->productOptionConfig->expects($this->any())->method('getAll')->will($this->returnValue($allOptions));

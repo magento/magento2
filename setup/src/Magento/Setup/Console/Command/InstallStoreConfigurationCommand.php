@@ -166,6 +166,7 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
      * @param InputInterface $input
      * @return string[]
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function validate(InputInterface $input)
     {
@@ -255,6 +256,15 @@ class InstallStoreConfigurationCommand extends AbstractSetupCommand
                     $errorMsg = $this->validateBinaryValue(
                         $value,
                         StoreConfigurationDataMapper::KEY_ADMIN_USE_SECURITY_KEY
+                    );
+                    if ($errorMsg !== '') {
+                        $errors[] = $errorMsg;
+                    }
+                    break;
+                case StoreConfigurationDataMapper::KEY_JS_LOGGING:
+                    $errorMsg = $this->validateBinaryValue(
+                        $value,
+                        StoreConfigurationDataMapper::KEY_JS_LOGGING
                     );
                     if ($errorMsg !== '') {
                         $errors[] = $errorMsg;

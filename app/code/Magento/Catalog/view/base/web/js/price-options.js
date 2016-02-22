@@ -5,9 +5,11 @@
 define([
     'jquery',
     'underscore',
+    'mage/template',
     'priceUtils',
+    'priceBox',
     'jquery/ui'
-], function ($, _, utils) {
+], function ($, _, mageTemplate, utils) {
     'use strict';
 
     var globalOptions = {
@@ -16,6 +18,10 @@ define([
         optionsSelector: '.product-custom-option',
         optionConfig: {},
         optionHandlers: {},
+        optionTemplate: '<%- data.label %>' +
+        '<% if (data.finalPrice.value) { %>' +
+        ' +<%- data.finalPrice.formatted %>' +
+        '<% } %>',
         controlContainer: 'dd'
     };
 
@@ -29,7 +35,17 @@ define([
          */
         _create: function createPriceOptions() {
             var form = this.element,
-                options = $(this.options.optionsSelector, form);
+                options = $(this.options.optionsSelector, form),
+                priceBox = $(this.options.priceHolderSelector, $(this.options.optionsSelector).element);
+
+            if (priceBox.data('magePriceBox') && priceBox.priceBox('option') && priceBox.priceBox('option').priceConfig) {
+                if (priceBox.priceBox('option').priceConfig.optionTemplate) {
+                    this._setOption('optionTemplate', priceBox.priceBox('option').priceConfig.optionTemplate);
+                }
+                this._setOption('priceFormat', priceBox.priceBox('option').priceConfig.priceFormat);
+            }
+
+            this._applyOptionNodeFix(options);
 
             options.on('change', this._onOptionChanged.bind(this));
         },
@@ -51,6 +67,64 @@ define([
                 changes = defaultGetOptionValue(option, this.options.optionConfig);
             }
             $(this.options.priceHolderSelector).trigger('updatePrice', changes);
+        },
+
+
+        /**
+         * Helper to fix issue with option nodes:
+         *  - you can't place any html in option ->
+         *    so you can't style it via CSS
+         * @param {jQuery} options
+         * @private
+         */
+        _applyOptionNodeFix: function applyOptionNodeFix(options) {
+            var config = this.options,
+                format = config.priceFormat,
+                template = config.optionTemplate;
+            template = mageTemplate(template);
+            options.filter('select').each(function (index, element) {
+                var $element = $(element),
+                    optionId = utils.findOptionId($element),
+                    optionName = $element.prop('name'),
+                    optionType = $element.prop('type');
+                var  optionConfig = config.optionConfig && config.optionConfig[optionId];
+
+                $element.find('option').each(function (idx, option) {
+                    var $option,
+                        optionValue,
+                        toTemplate,
+                        prices;
+
+                    $option = $(option);
+                    optionValue = $option.val();
+
+                    if (!optionValue && optionValue !== 0) {
+                        return;
+                    }
+
+                    toTemplate = {
+                        data: {
+                            label: optionConfig[optionValue] && optionConfig[optionValue].name
+                        }
+                    };
+                    prices = optionConfig[optionValue] ? optionConfig[optionValue].prices : null;
+
+                    if (prices) {
+                        _.each(prices, function (price, type) {
+                            var value = +(price.amount);
+                            value += _.reduce(price.adjustments, function (sum, x) {
+                                return sum + x;
+                            }, 0);
+                            toTemplate.data[type] = {
+                                value: value,
+                                formatted: utils.formatPrice(value, format)
+                            };
+                        });
+
+                        $option.text(template(toTemplate));
+                    }
+                });
+            });
         },
 
         /**

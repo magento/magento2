@@ -11,7 +11,7 @@ use Magento\Customer\Model\Attribute;
 use Magento\Customer\Model\AttributeMetadataConverter;
 use Magento\Customer\Model\AttributeMetadataDataProvider;
 use Magento\Customer\Model\Metadata\AddressMetadata;
-use Magento\Customer\Model\Resource\Form\Attribute\Collection;
+use Magento\Customer\Model\ResourceModel\Form\Attribute\Collection;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 
 class AddressMetadataTest extends \PHPUnit_Framework_TestCase
@@ -52,7 +52,7 @@ class AddressMetadataTest extends \PHPUnit_Framework_TestCase
         $attributes = [$attributeMock];
 
         /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\Resource\Form\Attribute\Collection')
+        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Form\Attribute\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -93,7 +93,7 @@ class AddressMetadataTest extends \PHPUnit_Framework_TestCase
         $attributes = [];
 
         /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\Resource\Form\Attribute\Collection')
+        $collectionMock = $this->getMockBuilder('Magento\Customer\Model\ResourceModel\Form\Attribute\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 

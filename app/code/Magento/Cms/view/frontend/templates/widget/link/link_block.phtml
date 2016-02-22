@@ -5,7 +5,7 @@
  */
 ?>
 <div class="widget block block-cms-link">
-    <a <?php echo $block->getLinkAttributes() ?>>
+    <a <?php /* @escapeNotVerified */ echo $block->getLinkAttributes() ?>>
         <span><?php echo $block->escapeHtml($block->getLabel()) ?></span>
     </a>
 </div>

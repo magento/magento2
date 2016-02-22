@@ -15,6 +15,10 @@
             <email />
             <endpoint />
             <identity_link_url />
+            <current_password>
+                <selector>[name='current_password']</selector>
+                <strategy>css selector</strategy>
+            </current_password>
             <key>
                 <selector>[name="consumer_key"]</selector>
             </key>
@@ -24,7 +28,7 @@
         </fields>
     </integration_info>
     <api>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <class>\Magento\Integration\Test\Block\Adminhtml\Integration\Edit\Tab\Api</class>
         <selector>#integration_edit_tabs_api_section</selector>
         <strategy>css selector</strategy>
         <fields>

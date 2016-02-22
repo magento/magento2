@@ -47,7 +47,10 @@ abstract class AbstractState implements StateInterface
         $configFilePool = \Magento\Mtf\ObjectManagerFactory::getObjectManager()
             ->get('\Magento\Framework\Config\File\ConfigFilePool');
 
-        $reader = new Reader($dirList, $configFilePool);
+        $driverPool = \Magento\Mtf\ObjectManagerFactory::getObjectManager()
+            ->get('\Magento\Framework\Filesystem\DriverPool');
+
+        $reader = new Reader($dirList, $driverPool, $configFilePool);
         $deploymentConfig = new DeploymentConfig($reader);
         $host = $deploymentConfig->get(
             ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT . '/' . ConfigOptionsListConstants::KEY_HOST

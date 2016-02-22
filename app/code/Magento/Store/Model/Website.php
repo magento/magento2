@@ -5,33 +5,28 @@
  */
 namespace Magento\Store\Model;
 
-use Magento\Store\Model\StoreManagerInterface;
-
 /**
  * Core Website model
  *
- * @method \Magento\Store\Model\Resource\Website _getResource()
- * @method \Magento\Store\Model\Resource\Website getResource()
- * @method \Magento\Store\Model\Website setCode(string $value)
- * @method string getName()
+ * @method \Magento\Store\Model\ResourceModel\Website _getResource()
+ * @method \Magento\Store\Model\ResourceModel\Website getResource()
  * @method string getGroupTitle()
  * @method string getStoreTitle()
  * @method int getStoreId()
  * @method int getGroupId()
  * @method int getWebsiteId()
  * @method bool hasWebsiteId()
- * @method \Magento\Store\Model\Website setName(string $value)
  * @method int getSortOrder()
- * @method \Magento\Store\Model\Website setSortOrder(int $value)
- * @method \Magento\Store\Model\Website setDefaultGroupId(int $value)
+ * @method \Magento\Store\Model\Website setSortOrder($value)
  * @method int getIsDefault()
- * @method \Magento\Store\Model\Website setIsDefault(int $value)
+ * @method \Magento\Store\Model\Website setIsDefault($value)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Website extends \Magento\Framework\Model\AbstractModel implements
-    \Magento\Framework\Object\IdentityInterface,
-    \Magento\Framework\App\ScopeInterface
+class Website extends \Magento\Framework\Model\AbstractExtensibleModel implements
+    \Magento\Framework\DataObject\IdentityInterface,
+    \Magento\Framework\App\ScopeInterface,
+    \Magento\Store\Api\Data\WebsiteInterface
 {
     const ENTITY = 'store_website';
 
@@ -135,14 +130,14 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
     private $_isReadOnly = false;
 
     /**
-     * @var \Magento\Config\Model\Resource\Config\Data
+     * @var \Magento\Config\Model\ResourceModel\Config\Data
      */
     protected $_configDataResource;
 
     /**
-     * @var StoreFactory
+     * @var \Magento\Store\Model\ResourceModel\Store\CollectionFactory
      */
-    protected $_storeFactory;
+    protected $storeListFactory;
 
     /**
      * @var \Magento\Store\Model\GroupFactory
@@ -167,14 +162,16 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Config\Model\Resource\Config\Data $configDataResource
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
+     * @param \Magento\Config\Model\ResourceModel\Config\Data $configDataResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig
-     * @param \Magento\Store\Model\StoreFactory $storeFactory
+     * @param \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeListFactory
      * @param \Magento\Store\Model\GroupFactory $storeGroupFactory
      * @param \Magento\Store\Model\WebsiteFactory $websiteFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -182,21 +179,31 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Config\Model\Resource\Config\Data $configDataResource,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
+        \Magento\Config\Model\ResourceModel\Config\Data $configDataResource,
         \Magento\Framework\App\Config\ScopeConfigInterface $coreConfig,
-        \Magento\Store\Model\StoreFactory $storeFactory,
+        \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeListFactory,
         \Magento\Store\Model\GroupFactory $storeGroupFactory,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
         $this->_configDataResource = $configDataResource;
         $this->_coreConfig = $coreConfig;
-        $this->_storeFactory = $storeFactory;
+        $this->storeListFactory = $storeListFactory;
         $this->_storeGroupFactory = $storeGroupFactory;
         $this->_websiteFactory = $websiteFactory;
         $this->_storeManager = $storeManager;
@@ -210,7 +217,7 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
      */
     protected function _construct()
     {
-        $this->_init('Magento\Store\Model\Resource\Website');
+        $this->_init('Magento\Store\Model\ResourceModel\Website');
     }
 
     /**
@@ -294,11 +301,12 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
     /**
      * Retrieve new (not loaded) Group collection object with website filter
      *
-     * @return \Magento\Store\Model\Resource\Group\Collection
+     * @return \Magento\Store\Model\ResourceModel\Group\Collection
      */
     public function getGroupCollection()
     {
-        return $this->_storeGroupFactory->create()->getCollection()->addWebsiteFilter($this->getId());
+        return $this->_storeGroupFactory->create()->getCollection()->addWebsiteFilter($this->getId())
+            ->setLoadDefault(true);
     }
 
     /**
@@ -400,11 +408,11 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
     /**
      * Retrieve new (not loaded) Store collection object with website filter
      *
-     * @return \Magento\Store\Model\Resource\Store\Collection
+     * @return \Magento\Store\Model\ResourceModel\Store\Collection
      */
     public function getStoreCollection()
     {
-        return $this->_storeFactory->create()->getCollection()->addWebsiteFilter($this->getId());
+        return $this->storeListFactory->create()->addWebsiteFilter($this->getId())->setLoadDefault(true);
     }
 
     /**
@@ -483,7 +491,7 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
      */
     public function getWebsiteGroupStore()
     {
-        return join('-', [$this->getWebsiteId(), $this->getGroupId(), $this->getStoreId()]);
+        return implode('-', [$this->getWebsiteId(), $this->getGroupId(), $this->getStoreId()]);
     }
 
     /**
@@ -495,11 +503,43 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
     }
 
     /**
+     * @inheritdoc
+     */
+    public function setDefaultGroupId($defaultGroupId)
+    {
+        return $this->setData('default_group_id', $defaultGroupId);
+    }
+
+    /**
      * @return mixed
      */
     public function getCode()
     {
         return $this->_getData('code');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setCode($code)
+    {
+        return $this->setData('code', $code);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getName()
+    {
+        return $this->_getData('name');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setName($name)
+    {
+        return $this->setData('name', $name);
     }
 
     /**
@@ -525,7 +565,7 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
      */
     public function afterDelete()
     {
-        $this->_storeManager->clearWebsiteCache($this->getId());
+        $this->_storeManager->reinitStores();
         parent::afterDelete();
         return $this;
     }
@@ -613,5 +653,22 @@ class Website extends \Magento\Framework\Model\AbstractModel implements
     public function getIdentities()
     {
         return [self::CACHE_TAG . '_' . $this->getId()];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getExtensionAttributes()
+    {
+        return $this->_getExtensionAttributes();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExtensionAttributes(
+        \Magento\Store\Api\Data\WebsiteExtensionInterface $extensionAttributes
+    ) {
+        return $this->_setExtensionAttributes($extensionAttributes);
     }
 }

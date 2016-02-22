@@ -148,7 +148,7 @@ class Wishlist implements DataProviderInterface
                 }
 
                 $description = '<table><tr><td><a href="' . $productUrl . '"><img src="'
-                    . $this->imageHelper->init($product, 'thumbnail')->resize(75, 75)
+                    . $this->imageHelper->init($product, 'rss_thumbnail')->getUrl()
                     . '" border="0" align="left" height="75" width="75"></a></td>'
                     . '<td style="text-decoration:none;">'
                     . $this->outputHelper->productAttribute(

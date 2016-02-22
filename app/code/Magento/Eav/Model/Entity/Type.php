@@ -8,8 +8,8 @@ namespace Magento\Eav\Model\Entity;
 /**
  * Entity type model
  *
- * @method \Magento\Eav\Model\Resource\Entity\Type _getResource()
- * @method \Magento\Eav\Model\Resource\Entity\Type getResource()
+ * @method \Magento\Eav\Model\ResourceModel\Entity\Type _getResource()
+ * @method \Magento\Eav\Model\ResourceModel\Entity\Type getResource()
  * @method \Magento\Eav\Model\Entity\Type setEntityTypeCode(string $value)
  * @method string getEntityModel()
  * @method \Magento\Eav\Model\Entity\Type setEntityModel(string $value)
@@ -41,7 +41,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
     /**
      * Collection of attributes
      *
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
     protected $_attributes;
 
@@ -55,7 +55,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
     /**
      * Collection of sets
      *
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection
      */
     protected $_sets;
 
@@ -86,9 +86,10 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $attSetFactory
      * @param \Magento\Eav\Model\Entity\StoreFactory $storeFactory
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -97,7 +98,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
         \Magento\Eav\Model\Entity\Attribute\SetFactory $attSetFactory,
         \Magento\Eav\Model\Entity\StoreFactory $storeFactory,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -112,10 +113,11 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Resource initialization
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
-        $this->_init('Magento\Eav\Model\Resource\Entity\Type');
+        $this->_init('Magento\Eav\Model\ResourceModel\Entity\Type');
     }
 
     /**
@@ -135,7 +137,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      * Retrieve entity type attributes collection
      *
      * @param   int $setId
-     * @return  \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+     * @return  \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
     public function getAttributeCollection($setId = null)
     {
@@ -161,7 +163,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
     /**
      * Init and retrieve attribute collection
      *
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Collection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection
      */
     protected function _getAttributeCollection()
     {
@@ -177,7 +179,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve entity tpe sets collection
      *
-     * @return \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection
+     * @return \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection
      */
     public function getAttributeSetCollection()
     {
@@ -194,6 +196,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $storeId
      * @return string
+     * @throws \Exception
      */
     public function fetchNewIncrementId($storeId = null)
     {
@@ -356,7 +359,7 @@ class Type extends \Magento\Framework\Model\AbstractModel
     /**
      * Retrieve resource entity object
      *
-     * @return \Magento\Framework\Model\Resource\AbstractResource
+     * @return \Magento\Framework\Model\ResourceModel\AbstractResource
      */
     public function getEntity()
     {
@@ -374,6 +377,6 @@ class Type extends \Magento\Framework\Model\AbstractModel
         if ($collection) {
             return $collection;
         }
-        return 'Magento\Eav\Model\Resource\Entity\Attribute\Collection';
+        return 'Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection';
     }
 }

@@ -6,6 +6,7 @@
 namespace Magento\Test\Integrity\App\Language;
 
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Setup\Module\I18n\Dictionary\Options\ResolverFactory;
 use Magento\Setup\Module\I18n\Locale;
 use Magento\Setup\Module\I18n\Pack\Writer\File\Csv;
@@ -51,7 +52,7 @@ class TranslationFilesTest extends TranslationFiles
         $parser = $this->prepareParser();
 
         $optionResolverFactory = new ResolverFactory();
-        $optionResolver = $optionResolverFactory->create(Files::init()->getPathToSource(), true);
+        $optionResolver = $optionResolverFactory->create(BP, true);
 
         $parser->parse($optionResolver->getOptions());
 
@@ -79,8 +80,7 @@ class TranslationFilesTest extends TranslationFiles
     protected function buildFilePath($phrase, $context)
     {
         $path = $this->getContext()->buildPathToLocaleDirectoryByContext($phrase->getContextType(), $context);
-        $sourcePath = Files::init()->getPathToSource();
-        return $sourcePath . '/' . $path . Locale::DEFAULT_SYSTEM_LOCALE . '.' . Csv::FILE_EXTENSION;
+        return $path . Locale::DEFAULT_SYSTEM_LOCALE . '.' . Csv::FILE_EXTENSION;
     }
 
     /**
@@ -89,7 +89,7 @@ class TranslationFilesTest extends TranslationFiles
     protected function getContext()
     {
         if ($this->context === null) {
-            $this->context = new \Magento\Setup\Module\I18n\Context();
+            $this->context = new \Magento\Setup\Module\I18n\Context(new ComponentRegistrar());
         }
         return $this->context;
     }
@@ -114,7 +114,7 @@ class TranslationFilesTest extends TranslationFiles
         $parserContextual = new \Magento\Setup\Module\I18n\Parser\Contextual(
             $filesCollector,
             new \Magento\Setup\Module\I18n\Factory(),
-            new \Magento\Setup\Module\I18n\Context()
+            new \Magento\Setup\Module\I18n\Context(new ComponentRegistrar())
         );
         foreach ($adapters as $type => $adapter) {
             $parserContextual->addAdapter($type, $adapter);

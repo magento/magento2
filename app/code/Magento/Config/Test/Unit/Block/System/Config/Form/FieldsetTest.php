@@ -117,7 +117,17 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
 
         $this->_elementMock = $this->getMock(
             'Magento\Framework\Data\Form\Element\Text',
-            ['getId', 'getHtmlId', 'getName', 'getElements', 'getLegend', 'getComment', 'getIsNested', 'getExpanded'],
+            [
+                'getId',
+                'getHtmlId',
+                'getName',
+                'getElements',
+                'getLegend',
+                'getComment',
+                'getIsNested',
+                'getExpanded',
+                'getForm'
+            ],
             [],
             '',
             false,
@@ -152,6 +162,9 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
     {
         $this->userMock->expects($this->any())->method('getExtra')->willReturn($extra);
         $collection = $this->_testHelper->getObject('Magento\Framework\Data\Form\Element\Collection');
+        $formMock = $this->getMock('Magento\Framework\Data\Form', [], [], '', false);
+        $this->_elementMock->expects($this->any())->method('getForm')->willReturn($formMock);
+        $formMock->expects($this->any())->method('getElements')->willReturn($collection);
         $this->_elementMock->expects($this->any())->method('getElements')->will($this->returnValue($collection));
         $this->_elementMock->expects($this->any())->method('getIsNested')->will($this->returnValue($nested));
         $this->_elementMock->expects($this->any())->method('getExpanded')->will($this->returnValue($expanded));
@@ -210,7 +223,9 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
         );
         $collection->add($fieldMock);
         $collection->add($fieldSetMock);
-
+        $formMock = $this->getMock('Magento\Framework\Data\Form', [], [], '', false);
+        $this->_elementMock->expects($this->any())->method('getForm')->willReturn($formMock);
+        $formMock->expects($this->any())->method('getElements')->willReturn($collection);
         $this->_elementMock->expects($this->any())->method('getElements')->will($this->returnValue($collection));
         $this->_elementMock->expects($this->any())->method('getIsNested')->will($this->returnValue($nested));
         $this->_elementMock->expects($this->any())->method('getExpanded')->will($this->returnValue($expanded));
@@ -260,7 +275,7 @@ class FieldsetTest extends \PHPUnit_Framework_TestCase
                 'extra'    => ['configState' => [$this->testData['htmlId'] => true]],
             ],
             'collapsedNotNestedNoExtra' => [
-                'expanded' => false,
+                'expanded' => true,
                 'nested'   => false,
                 'extra'    => [],
             ],

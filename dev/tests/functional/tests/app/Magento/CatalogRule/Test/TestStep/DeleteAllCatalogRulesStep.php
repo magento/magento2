@@ -55,6 +55,7 @@ class DeleteAllCatalogRulesStep implements TestStepInterface
         while ($this->catalogRuleIndex->getCatalogRuleGrid()->isFirstRowVisible()) {
             $this->catalogRuleIndex->getCatalogRuleGrid()->openFirstRow();
             $this->catalogRuleNew->getFormPageActions()->delete();
+            $this->catalogRuleNew->getModalBlock()->acceptAlert();
             $this->catalogRuleIndex->getSystemMessageDialog()->closePopup();
         }
     }

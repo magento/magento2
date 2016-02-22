@@ -99,28 +99,6 @@ class State
     }
 
     /**
-     * Set update mode flag
-     *
-     * @param bool $value
-     * @return void
-     */
-    public function setUpdateMode($value)
-    {
-        $this->_updateMode = $value;
-    }
-
-    /**
-     * Get update mode flag
-     *
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     */
-    public function getUpdateMode()
-    {
-        return $this->_updateMode;
-    }
-
-    /**
      * Set is downloader flag
      *
      * @param bool $flag

@@ -93,7 +93,7 @@ class Phrase
     }
 
     /**
-     * Get quote type
+     * Get phrase
      *
      * @return string
      */
@@ -116,7 +116,7 @@ class Phrase
     }
 
     /**
-     * Get phrase
+     * Get quote type
      *
      * @return string
      */
@@ -236,5 +236,47 @@ class Phrase
     public function getKey()
     {
         return $this->getPhrase() . '::' . $this->getContextType();
+    }
+
+    /**
+     * Compile PHP string based on quotes type it enclosed with
+     *
+     * @return string
+     */
+    public function getCompiledPhrase()
+    {
+        return $this->getCompiledString($this->getPhrase());
+    }
+
+    /**
+     * Compile PHP string based on quotes type it enclosed with
+     *
+     * @return string
+     */
+    public function getCompiledTranslation()
+    {
+        return $this->getCompiledString($this->getTranslation());
+    }
+
+    /**
+     * Compile PHP string based on quotes type it enclosed with
+     *
+     * @param string $string
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.EvalExpression)
+     */
+    private function getCompiledString($string)
+    {
+        $encloseQuote = $this->getQuote() == Phrase::QUOTE_DOUBLE ? Phrase::QUOTE_DOUBLE : Phrase::QUOTE_SINGLE;
+        //find all occurrences of ' and ", with no \ before it.
+        preg_match_all('/[^\\\\]' . $encloseQuote . '|' . $encloseQuote . '[^\\\\]/', $string, $matches);
+        if (count($matches[0])) {
+            $string = preg_replace('/([^\\\\])' . $encloseQuote . ' ?\. ?' . $encloseQuote . '/', '$1', $string);
+            $string = addslashes($string);
+        }
+        $evalString = 'return ' . $encloseQuote . $string . $encloseQuote . ';';
+        $result = @eval($evalString);
+        return is_string($result) ? $result :  $string;
     }
 }

@@ -5,12 +5,12 @@
  */
 namespace Magento\Theme\Model\View;
 
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * @magentoDataFixture Magento/Theme/Model/_files/design/themes.php
+ * @magentoComponentsDir Magento/Theme/Model/_files/design
+ * @magentoDbIsolation enabled
  */
 class DesignTest extends \PHPUnit_Framework_TestCase
 {
@@ -54,6 +54,11 @@ class DesignTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        /** @var \Magento\Theme\Model\Theme\Registration $registration */
+        $registration = $objectManager->get(
+            'Magento\Theme\Model\Theme\Registration'
+        );
+        $registration->register();
         $this->_model = $objectManager->create('Magento\\Framework\View\DesignInterface');
         $this->_viewFileSystem = $objectManager->create('Magento\Framework\View\FileSystem');
         $this->_viewConfig = $objectManager->create('Magento\Framework\View\ConfigInterface');
@@ -65,17 +70,8 @@ class DesignTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $themePath
      */
-    protected function _emulateFixtureTheme($themePath = 'Test/default')
+    protected function _emulateFixtureTheme($themePath = 'Test_FrameworkThemeTest/default')
     {
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
-            [
-                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
-                    DirectoryList::THEMES => [
-                        'path' => realpath(__DIR__ . '/../_files/design'),
-                    ],
-                ],
-            ]
-        );
         \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('frontend');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get('Magento\Framework\View\DesignInterface')->setDesignTheme($themePath);

@@ -47,14 +47,14 @@
 & when (@media-common = true) {
 
 body {
-    .css(background-color, @page__background-color);
+    .lib-css(background-color, @page__background-color);
 }
 
 //
 //    Header
 //--------------------------------------
 .page-header {
-    .css(background-color, @header__background-color);
+    .lib-css(background-color, @header__background-color);
     border-bottom: 1px solid @border-color__base;
     margin-bottom: @indent__base;
 }
@@ -73,11 +73,11 @@ body {
     float: left;
     max-width: 50%;
     margin: 0 0 @indent__s @indent__xl;
+
     img {
-        max-height: 50px;
-        max-width: 100%;
         display: block;
     }
+
    .page-print & {
         float: none;
     }
@@ -95,6 +95,7 @@ body {
     &:not(:focus) {
         &:extend(.abs-visually-hidden all);
     }
+
     &:focus {
         position: absolute;
         z-index: 15;
@@ -103,8 +104,8 @@ body {
         left: 0;
         top: 0;
         text-align: center;
-        .css(background, @color-gray94);
-        .css(padding, @indent__s);
+        .lib-css(background, @color-gray94);
+        .lib-css(padding, @indent__s);
     }
 }
 
@@ -116,23 +117,27 @@ body {
     p {
         margin: 0;
     }
+
     &.noscript,
     &.cookie {
-        .message(@_message-type: global-note);
+        .lib-message(@_message-type: global-note);
         margin: 0;
     }
+
     &.cookie {
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
         z-index: 3;
+
         .actions {
             margin-top: @indent__s;
         }
     }
+
     &.demo {
-        .message(@_message-type: global-caution);
+        .lib-message(@_message-type: global-caution);
         text-align: center;
         margin-bottom: 0;
     }
@@ -144,7 +149,7 @@ body {
 
 .page-footer {
     margin-top: auto;
-    .css(background-color, @footer__background-color);
+    .lib-css(background-color, @footer__background-color);
 }
 
 .footer {
@@ -153,18 +158,22 @@ body {
         margin-top: 25px;
         padding-bottom: 25px;
         border-top: 1px solid @border-color__base;
+
         ul {
             &:extend(.abs-reset-list all);
         }
+
         .links {
             > li {
                 margin: 0 0 8px;
             }
         }
+
         .switcher-store {
             margin: 0 0 30px;
         }
     }
+
     .copyright,
     .bugs {
         display: block;
@@ -176,8 +185,9 @@ body {
 .page-footer {
     .switcher {
         margin-right: 10px;
+
         .options {
-            .dropdown(
+            .lib-dropdown(
                 @_dropdown-actions-padding: 0,
                 @_dropdown-list-item-padding: 0,
                 @_dropdown-toggle-icon-content: @icon-down,
@@ -187,23 +197,28 @@ body {
                 @_icon-font-line-height: 22px,
                 @_dropdown-list-min-width: 160px
             );
+
             ul.dropdown {
                 a {
                     display: block;
                     padding: 8px;
+
                     &:hover {
                         text-decoration: none;
                     }
                 }
             }
         }
+
         li {
             margin: 0;
             font-size: @font-size__s;
         }
+
         .label {
             &:extend(.abs-visually-hidden all);
         }
+
         strong {
             font-weight: @font-weight__regular;
         }
@@ -240,15 +255,17 @@ body {
     }
 
     .page-wrapper {
-        .vendor-prefix-display(flex);
-        .vendor-prefix-flex-direction(column);
+        .lib-vendor-prefix-display(flex);
+        .lib-vendor-prefix-flex-direction(column);
         min-height: 100%; // stretch content area for sticky footer
+
         > .breadcrumbs,
         > .top-container,
         > .widget {
             width: 100%;
             box-sizing: border-box;
         }
+
         .ie10 &,
         .ie11 & {
             height: 100%;
@@ -264,23 +281,27 @@ body {
             > .header.links {
                 float: right;
                 font-size: 0;
-                .list-inline();
+                .lib-list-inline();
+                margin-left: auto;
+
                 > li {
                     font-size: @font-size__base;
                     margin: 0 0 0 15px;
+
                     &.welcome,
                     a {
                         line-height: 1.4;
                     }
+
                     &.welcome {
                         a {
-                            .css(padding-left, @indent__xs);
+                            .lib-css(padding-left, @indent__xs);
                         }
                     }
                 }
-                margin-left: auto;
             }
         }
+
         &.content {
             padding: @indent__l @indent__base 0;
             &:extend(.abs-add-clearfix-desktop all);
@@ -290,14 +311,17 @@ body {
     .page-header {
         border: 0;
         margin-bottom: 0;
+
         .panel.wrapper {
             border-bottom: 1px solid @secondary__color;
         }
+
         .header.panel {
             padding-top: @indent__s;
             padding-bottom: @indent__s;
             &:extend(.abs-add-clearfix-desktop all);
         }
+
         .switcher {
             display: inline-block;
         }
@@ -308,6 +332,7 @@ body {
             .page-title {
                 display: inline-block;
             }
+
             .page-title + .action {
                 float: right;
                 margin-top: @indent__base;
@@ -317,6 +342,7 @@ body {
 
     .logo {
         margin: -8px auto 25px 0;
+
         img {
             max-height: inherit;
         }
@@ -327,18 +353,21 @@ body {
             .block {
                 float: right;
             }
+
             .links {
                 display: inline-block;
                 vertical-align: top;
                 margin-bottom: 20px;
                 padding: 0 50px 0 0;
             }
+
             .switcher.store {
                 display: inline-block;
                 padding-right: 50px;
                 vertical-align: top;
             }
         }
+
         .copyright {
             &:extend(.abs-add-clearfix all);
         }

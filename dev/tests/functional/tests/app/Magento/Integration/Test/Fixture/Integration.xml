@@ -10,11 +10,11 @@
              module="Magento_Integration"
              type="composite"
              entity_type="integration"
-             collection="Magento\Integration\Model\Resource\Integration\Collection"
+             collection="Magento\Integration\Model\ResourceModel\Integration\Collection"
              repository_class="Magento\Integration\Test\Repository\Integration"
              handler_interface="Magento\Integration\Test\Handler\Integration\IntegrationInterface"
              class="Magento\Integration\Test\Fixture\Integration">
-        <field name="integration_id" is_required="1" />
+        <field name="integration_id" is_required="1" group="null" />
         <field name="name" is_required="" group="integration_info" />
         <field name="email" is_required="" group="integration_info" />
         <field name="endpoint" is_required="" group="integration_info" />
@@ -41,5 +41,6 @@
         <field name="resources" group="api" />
         <field name="token_secret" group="integration_info" />
         <field name="consumer_secret" group="integration_info" />
+        <field name="current_password" group="integration_info" source="Magento\User\Test\Fixture\User\CurrentPassword" />
     </fixture>
 </config>

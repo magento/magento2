@@ -10,8 +10,8 @@ if ($block->hasRequiredOptions()) {
     $required = ' data-hasrequired="' . __('* Required Fields') . '"';
 }
 ?>
-<div class="product-options-wrapper" id="product-options-wrapper"<?php echo $required; ?>>
-    <fieldset class="fieldset" tabindex="0">
+<div class="product-options-wrapper" id="product-options-wrapper"<?php /* @escapeNotVerified */ echo $required; ?>>
+    <div class="fieldset" tabindex="0">
         <?php echo $block->getChildHtml('', true);?>
-    </fieldset>
+    </div>
 </div>

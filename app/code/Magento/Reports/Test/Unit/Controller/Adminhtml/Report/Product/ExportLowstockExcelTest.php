@@ -31,10 +31,14 @@ class ExportLowstockExcelTest extends \Magento\Reports\Test\Unit\Controller\Admi
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->exportLowstockExcel = new ExportLowstockExcel(
-            $this->contextMock,
-            $this->fileFactoryMock,
-            $this->dateMock
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->exportLowstockExcel = $objectManager->getObject(
+            'Magento\Reports\Controller\Adminhtml\Report\Product\ExportLowstockExcel',
+            [
+                'context' => $this->contextMock,
+                'fileFactory' => $this->fileFactoryMock,
+                'dateFilter' => $this->dateMock,
+            ]
         );
     }
 

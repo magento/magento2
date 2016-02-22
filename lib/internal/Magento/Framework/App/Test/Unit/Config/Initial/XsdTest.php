@@ -12,17 +12,21 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      * Path to xsd schema file
      * @var string
      */
-    protected $_xsdSchema;
+    protected $xsdSchema;
 
     /**
-     * @var \Magento\TestFramework\Utility\XsdValidator
+     * @var \Magento\Framework\TestFramework\Unit\Utility\XsdValidator
      */
-    protected $_xsdValidator;
+    protected $xsdValidator;
 
     protected function setUp()
     {
-        $this->_xsdSchema = BP . '/app/code/Magento/Store/etc/config.xsd';
-        $this->_xsdValidator = new \Magento\Framework\TestFramework\Unit\Utility\XsdValidator();
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
+        $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
+        $this->xsdSchema = $urnResolver->getRealPath('urn:magento:module:Magento_Store:etc/config.xsd');
+        $this->xsdValidator = new \Magento\Framework\TestFramework\Unit\Utility\XsdValidator();
     }
 
     /**
@@ -32,14 +36,14 @@ class XsdTest extends \PHPUnit_Framework_TestCase
      */
     public function testSchemaCorrectlyIdentifiesInvalidXml($xmlString, $expectedError)
     {
-        $actualError = $this->_xsdValidator->validate($this->_xsdSchema, $xmlString);
+        $actualError = $this->xsdValidator->validate($this->xsdSchema, $xmlString);
         $this->assertEquals($expectedError, $actualError);
     }
 
     public function testSchemaCorrectlyIdentifiesValidXml()
     {
         $xmlString = file_get_contents(__DIR__ . '/_files/valid_config.xml');
-        $actualResult = $this->_xsdValidator->validate($this->_xsdSchema, $xmlString);
+        $actualResult = $this->xsdValidator->validate($this->xsdSchema, $xmlString);
         $this->assertEmpty($actualResult);
     }
 

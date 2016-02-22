@@ -11,7 +11,7 @@ namespace Magento\CustomerImportExport\Test\Unit\Model\Import;
 
 use Magento\CustomerImportExport\Model\Import\AbstractCustomer;
 
-class AbstractCustomerTest extends \PHPUnit_Framework_TestCase
+class AbstractCustomerTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /**
      * Abstract customer export model
@@ -72,13 +72,20 @@ class AbstractCustomerTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
         );
         foreach ($this->_customers as $customer) {
-            $customerCollection->addItem(new \Magento\Framework\Object($customer));
+            $customerCollection->addItem(new \Magento\Framework\DataObject($customer));
         }
 
         $modelMock = $this->getMockBuilder('Magento\CustomerImportExport\Model\Import\AbstractCustomer')
             ->disableOriginalConstructor()
-            ->setMethods(['_getCustomerCollection', '_validateRowForUpdate', '_validateRowForDelete'])
-            ->getMockForAbstractClass();
+            ->setMethods(
+                [
+                    'getErrorAggregator',
+                    '_getCustomerCollection',
+                    '_validateRowForUpdate',
+                    '_validateRowForDelete'
+                ]
+            )->getMockForAbstractClass();
+        $modelMock->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
 
         $property = new \ReflectionProperty($modelMock, '_websiteCodeToId');
         $property->setAccessible(true);
@@ -165,6 +172,7 @@ class AbstractCustomerTest extends \PHPUnit_Framework_TestCase
      * @param array $rowData
      * @param array $errors
      * @param boolean $isValid
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testCheckUniqueKey(array $rowData, array $errors, $isValid = false)
     {
@@ -179,7 +187,6 @@ class AbstractCustomerTest extends \PHPUnit_Framework_TestCase
         } else {
             $this->assertFalse($checkUniqueKey->invoke($this->_model, $rowData, 0));
         }
-        $this->assertAttributeEquals($errors, '_errors', $this->_model);
     }
 
     public function testValidateRowForUpdate()

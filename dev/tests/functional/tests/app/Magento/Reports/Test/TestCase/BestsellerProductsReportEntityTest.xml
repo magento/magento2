@@ -6,7 +6,7 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Reports\Test\TestCase\BestsellerProductsReportEntityTest">
+    <testCase name="Magento\Reports\Test\TestCase\BestsellerProductsReportEntityTest" summary="Bestseller Products Report" ticketId="MAGETWO-28222">
         <variation name="BestsellerProductsReportEntityTestVariation1">
             <data name="order/dataset" xsi:type="string">simple_big_qty</data>
             <data name="bestsellerReport/period_type" xsi:type="string">Year</data>

@@ -6,25 +6,32 @@
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
+use Magento\Sales\Api\CreditmemoRepositoryInterface;
+use \Magento\Sales\Model\Order\CreditmemoFactory;
 
 /**
  * Class CreditmemoLoader
  *
  * @package Magento\Sales\Controller\Adminhtml\Order
- * @method CreditmemoLoader setCreditmemoId
- * @method CreditmemoLoader setCreditmemo
- * @method CreditmemoLoader setInvoiceId
- * @method CreditmemoLoader setOrderId
- * @method int getCreditmemoId
- * @method string getCreditmemo
- * @method int getInvoiceId
- * @method int getOrderId
+ * @method CreditmemoLoader setCreditmemoId($id)
+ * @method CreditmemoLoader setCreditmemo($creditMemo)
+ * @method CreditmemoLoader setInvoiceId($id)
+ * @method CreditmemoLoader setOrderId($id)
+ * @method int getCreditmemoId()
+ * @method string getCreditmemo()
+ * @method int getInvoiceId()
+ * @method int getOrderId()
  */
-class CreditmemoLoader extends Object
+class CreditmemoLoader extends DataObject
 {
     /**
-     * @var \Magento\Sales\Model\Order\CreditmemoFactory
+     * @var CreditmemoRepositoryInterface;
+     */
+    protected $creditmemoRepository;
+
+    /**
+     * @var CreditmemoFactory;
      */
     protected $creditmemoFactory;
 
@@ -34,14 +41,9 @@ class CreditmemoLoader extends Object
     protected $orderFactory;
 
     /**
-     * @var \Magento\Sales\Model\Order\InvoiceFactory
+     * @var \Magento\Sales\Api\InvoiceRepositoryInterface
      */
-    protected $invoiceFactory;
-
-    /**
-     * @var \Magento\Sales\Model\Service\OrderFactory
-     */
-    protected $orderServiceFactory;
+    protected $invoiceRepository;
 
     /**
      * @var \Magento\Framework\Event\ManagerInterface
@@ -69,10 +71,10 @@ class CreditmemoLoader extends Object
     protected $stockConfiguration;
 
     /**
-     * @param \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory
+     * @param CreditmemoRepositoryInterface $creditmemoRepository
+     * @param CreditmemoFactory $creditmemoFactory
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Sales\Model\Order\InvoiceFactory $invoiceFactory
-     * @param \Magento\Sales\Model\Service\OrderFactory $orderServiceFactory
+     * @param \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Backend\Model\Session $backendSession
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
@@ -82,10 +84,10 @@ class CreditmemoLoader extends Object
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Sales\Model\Order\CreditmemoFactory $creditmemoFactory,
+        CreditmemoRepositoryInterface $creditmemoRepository,
+        CreditmemoFactory $creditmemoFactory,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Sales\Model\Order\InvoiceFactory $invoiceFactory,
-        \Magento\Sales\Model\Service\OrderFactory $orderServiceFactory,
+        \Magento\Sales\Api\InvoiceRepositoryInterface $invoiceRepository,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Backend\Model\Session $backendSession,
         \Magento\Framework\Message\ManagerInterface $messageManager,
@@ -93,10 +95,10 @@ class CreditmemoLoader extends Object
         \Magento\CatalogInventory\Api\StockConfigurationInterface $stockConfiguration,
         array $data = []
     ) {
+        $this->creditmemoRepository = $creditmemoRepository;
         $this->creditmemoFactory = $creditmemoFactory;
         $this->orderFactory = $orderFactory;
-        $this->invoiceFactory = $invoiceFactory;
-        $this->orderServiceFactory = $orderServiceFactory;
+        $this->invoiceRepository = $invoiceRepository;
         $this->eventManager = $eventManager;
         $this->backendSession = $backendSession;
         $this->messageManager = $messageManager;
@@ -158,11 +160,8 @@ class CreditmemoLoader extends Object
     {
         $invoiceId = $this->getInvoiceId();
         if ($invoiceId) {
-            $invoice = $this->invoiceFactory->create()->load(
-                $invoiceId
-            )->setOrder(
-                $order
-            );
+            $invoice = $this->invoiceRepository->get($invoiceId);
+            $invoice->setOrder($order);
             if ($invoice->getId()) {
                 return $invoice;
             }
@@ -182,7 +181,7 @@ class CreditmemoLoader extends Object
         $creditmemoId = $this->getCreditmemoId();
         $orderId = $this->getOrderId();
         if ($creditmemoId) {
-            $creditmemo = $this->creditmemoFactory->create()->load($creditmemoId);
+            $creditmemo = $this->creditmemoRepository->get($creditmemoId);
         } elseif ($orderId) {
             $data = $this->getCreditmemo();
             $order = $this->orderFactory->create()->load($orderId);
@@ -206,11 +205,10 @@ class CreditmemoLoader extends Object
             }
             $data['qtys'] = $qtys;
 
-            $service = $this->orderServiceFactory->create(['order' => $order]);
             if ($invoice) {
-                $creditmemo = $service->prepareInvoiceCreditmemo($invoice, $data);
+                $creditmemo = $this->creditmemoFactory->createByInvoice($invoice, $data);
             } else {
-                $creditmemo = $service->prepareCreditmemo($data);
+                $creditmemo = $this->creditmemoFactory->createByOrder($order, $data);
             }
 
             /**

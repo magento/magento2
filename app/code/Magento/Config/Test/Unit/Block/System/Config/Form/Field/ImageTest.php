@@ -47,7 +47,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             'value'          => 'test_value',
         ];
 
-        $formMock = new \Magento\Framework\Object();
+        $formMock = new \Magento\Framework\DataObject();
         $formMock->setHtmlIdPrefix($this->testData['html_id_prefix']);
         $formMock->setHtmlIdSuffix($this->testData['html_id_suffix']);
         $this->image->setForm($formMock);

@@ -7,7 +7,7 @@
 //  Navigation
 //  _____________________________________________
 
-.main-navigation(
+.lib-main-navigation(
     @_nav__indent-side: 15px,
     @_nav-background-color: @navigation__background,
     @_nav-border: @navigation__border,
@@ -54,135 +54,156 @@
     @_submenu-item-text-decoration-active: @submenu-item__active__text-decoration
 ) {
     .navigation {
-        .css(background, @_nav-background-color);
-        .css(border, @_nav-border);
+        .lib-css(background, @_nav-background-color);
+        .lib-css(border, @_nav-border);
         box-sizing: border-box;
+
         ul {
             margin: 0;
             padding: 0;
         }
+
         li {
             margin: 0;
         }
+
         a {
             display: block;
-            .css(padding-top, @_submenu-item__padding-top);
-            .css(padding-right, @_submenu-item__padding-right);
-            .css(padding-bottom, @_submenu-item__padding-bottom);
-            .css(padding-left, @_submenu-item__padding-left);
+            .lib-css(padding-top, @_submenu-item__padding-top);
+            .lib-css(padding-right, @_submenu-item__padding-right);
+            .lib-css(padding-bottom, @_submenu-item__padding-bottom);
+            .lib-css(padding-left, @_submenu-item__padding-left);
         }
+
         a,
         a:hover {
-            .css(color, @_nav-level0-item-color);
-            .css(text-decoration, @_nav-level0-item-text-decoration);
+            .lib-css(color, @_nav-level0-item-color);
+            .lib-css(text-decoration, @_nav-level0-item-text-decoration);
         }
+
         .level0 {
-            .font-size(@_nav-level0-font-size);
-            .css(border-top, @_nav-level0-item-border);
+            .lib-css(border-top, @_nav-level0-item-border);
+            .lib-font-size(@_nav-level0-font-size);
+
             > .level-top {
-                .css(background, @_nav-level0-item-background-color);
-                .css(font-weight, @_nav-level0-font-weight);
-                .css(line-height, @_nav-level0-item-line-height);
-                .css(padding, @_nav-level0-item-padding);
-                .css(text-transform, @_nav-level0-text-transform);
+                .lib-css(background, @_nav-level0-item-background-color);
+                .lib-css(font-weight, @_nav-level0-font-weight);
+                .lib-css(line-height, @_nav-level0-item-line-height);
+                .lib-css(padding, @_nav-level0-item-padding);
+                .lib-css(text-transform, @_nav-level0-text-transform);
                 word-wrap: break-word;
             }
+
             &.active {
                 .all-category {
                     .ui-state-focus {
-                        .css(background, @_nav-level0-item-background-color-active);
-                        .css(border-color, @_nav-level0-item__active__border-color);
-                        .css(border-style, @_nav-level0-item__active__border-style);
-                        .css(border-width, @_nav-level0-item__active__border-width);
-                        .css(color, @_nav-level0-item-color-active);
-                        .css(padding-left, @_nav__indent-side - @_submenu-item__active__border);
-                        .css(text-decoration, @_nav-level0-item-text-decoration-active);
+                        .lib-css(background, @_nav-level0-item-background-color-active);
+                        .lib-css(border-color, @_nav-level0-item__active__border-color);
+                        .lib-css(border-style, @_nav-level0-item__active__border-style);
+                        .lib-css(border-width, @_nav-level0-item__active__border-width);
+                        .lib-css(color, @_nav-level0-item-color-active);
+                        .lib-css(padding-left, @_nav__indent-side - @_submenu-item__active__border);
+                        .lib-css(text-decoration, @_nav-level0-item-text-decoration-active);
                         display: inline-block;
                     }
                 }
             }
+
             > .level1 {
-                font-weight: @font-weight__semibold;
+                .lib-css(font-weight, @font-weight__semibold);
             }
+
             &.active,
             &.has-active { // ToDo UI: remove "has_active" here, when mobile navigation default open state is implemented
                 > a:not(.ui-state-active) {
-                    .css(background, @_nav-level0-item-background-color-active);
-                    .css(border-color, @_nav-level0-item__active__border-color);
-                    .css(border-style, @_nav-level0-item__active__border-style);
-                    .css(border-width, @_nav-level0-item__active__border-width);
-                    .css(color, @_nav-level0-item-color-active);
-                    .css(text-decoration, @_nav-level0-item-text-decoration-active);
+                    .lib-css(background, @_nav-level0-item-background-color-active);
+                    .lib-css(border-color, @_nav-level0-item__active__border-color);
+                    .lib-css(border-style, @_nav-level0-item__active__border-style);
+                    .lib-css(border-width, @_nav-level0-item__active__border-width);
+                    .lib-css(color, @_nav-level0-item-color-active);
+                    .lib-css(text-decoration, @_nav-level0-item-text-decoration-active);
+
                     span:not(.ui-menu-icon) {
-                        margin-left: -@_submenu-item__active__border;
+                        .lib-css(margin-left, -@_submenu-item__active__border);
                     }
                 }
             }
         }
+
         li.level0 {
             &:last-child {
-                .css(border-bottom, @_nav-level0-item-border);
+                .lib-css(border-bottom, @_nav-level0-item-border);
             }
         }
+
         .submenu {
             > li {
                 word-wrap: break-word;
             }
+
             &:not(:first-child) {
-                .css(background, @_submenu-background-color);
-                .css(border, @_submenu-border);
-                .css(font-size, @_submenu-font-size);
-                .css(font-weight, @_submenu-font-weight);
-                .css(line-height, @_submenu-line-height);
+                .lib-css(background, @_submenu-background-color);
+                .lib-css(border, @_submenu-border);
+                .lib-css(font-size, @_submenu-font-size);
+                .lib-css(font-weight, @_submenu-font-weight);
+                .lib-css(line-height, @_submenu-line-height);
                 left: auto !important;
                 overflow-x: hidden;
                 padding: 0;
                 position: relative;
                 top: auto !important;
                 transition: left .3s ease-out;
+
                 > li {
                     > a {
-                        padding-left: @_nav__indent-side;
+                        .lib-css(padding-left, @_nav__indent-side);
                     }
+
                     &:last-child {
                         margin-bottom: 0;
                     }
                 }
+
                 ul {
                     display: block;
-                    .css(padding-left, @_submenu-item__padding-left);
+                    .lib-css(padding-left, @_submenu-item__padding-left);
+
                     > li {
                         margin: 0;
+
                         a {
-                            .css(background, @_submenu-item-background-color);
-                            .css(border, @_submenu-item-border);
-                            .css(color, @_submenu-item-color);
+                            .lib-css(background, @_submenu-item-background-color);
+                            .lib-css(border, @_submenu-item-border);
+                            .lib-css(color, @_submenu-item-color);
+                            .lib-css(text-decoration, @_submenu-item-text-decoration);
                             display: block;
                             line-height: normal;
-                            .css(text-decoration, @_submenu-item-text-decoration);
                         }
                     }
                 }
+
                 &.expanded {
                     display: block !important;
-                    top: 0 !important;
                     padding-right: 0;
+                    top: 0 !important;
                 }
+
                 .active {
                     > a {
-                        .css(background, @_submenu-item-background-color-active);
-                        .css(border-color, @_submenu-item__active__border-color);
-                        .css(border-style, @_submenu-item__active__border-style);
-                        .css(border-width, @_submenu-item__active__border-width);
-                        .css(color, @_submenu-item-color-active);
-                        .css(padding-left, @_nav__indent-side - @_submenu-item__active__border);
-                        .css(text-decoration, @_submenu-item-text-decoration-active);
+                        .lib-css(background, @_submenu-item-background-color-active);
+                        .lib-css(border-color, @_submenu-item__active__border-color);
+                        .lib-css(border-style, @_submenu-item__active__border-style);
+                        .lib-css(border-width, @_submenu-item__active__border-width);
+                        .lib-css(color, @_submenu-item-color-active);
+                        .lib-css(padding-left, @_nav__indent-side - @_submenu-item__active__border);
+                        .lib-css(text-decoration, @_submenu-item-text-decoration-active);
                     }
                 }
+
                 .level1 {
                     &.active {
                         > a {
-                            padding-left: @_nav__indent-side - @_submenu-item__active__border;
+                            .lib-css(padding-left, @_nav__indent-side - @_submenu-item__active__border);
                         }
                     }
                 }
@@ -193,9 +214,9 @@
 
 //
 //  Desktop
-//  ---------------------------------------------
+//  _____________________________________________
 
-.main-navigation-desktop(
+.lib-main-navigation-desktop(
     @_nav-background-color: @navigation-desktop__background,
     @_nav-border: @navigation-desktop__border,
     @_nav-font-size: @navigation-desktop__font-size,
@@ -256,143 +277,163 @@
 ) {
 
     .navigation {
-        .css(background, @_nav-background-color);
-        .css(border, @_nav-border);
-        .css(font-size, @_nav-font-size);
-        .css(font-weight, @_nav-font-weight);
+        .lib-css(background, @_nav-background-color);
+        .lib-css(border, @_nav-border);
+        .lib-css(font-size, @_nav-font-size);
+        .lib-css(font-weight, @_nav-font-weight);
         height: inherit;
         left: auto;
         overflow: inherit;
+        padding: 0;
         position: relative;
         top: 0;
         width: 100%;
         z-index: 3;
-        padding: 0;
+
         &:empty {
             display: none;
         }
+
         ul {
             margin-top: 0;
             margin-bottom: 0;
             padding: 0;
             position: relative;
         }
+
         li.level0 {
-            .css(border-top, none);
+            .lib-css(border-top, none);
         }
+
         .level0 {
+            .lib-css(margin, @_nav-level0-item-margin);
             display: inline-block;
             position: relative;
-            .css(margin, @_nav-level0-item-margin);
 
             &:last-child {
                 margin-right: 0;
                 padding-right: 0;
             }
+
             > .level-top {
+                .lib-css(background, @_nav-level0-item-background-color);
+                .lib-css(border, @_nav-level0-item-border);
+                .lib-css(color, @_nav-level0-item-color);
+                .lib-css(line-height, @_nav-level0-item-line-height);
+                .lib-css(padding, @_nav-level0-item-padding);
+                .lib-css(text-decoration, @_nav-level0-item-text-decoration);
                 box-sizing: border-box;
-                .css(background, @_nav-level0-item-background-color);
-                .css(border, @_nav-level0-item-border);
-                .css(color, @_nav-level0-item-color);
-                .css(line-height, @_nav-level0-item-line-height);
-                .css(padding, @_nav-level0-item-padding);
-                .css(text-decoration, @_nav-level0-item-text-decoration);
                 position: relative;
+
                 &:hover, &.ui-state-focus {
-                    .css(background, @_nav-level0-item-background-color-hover);
-                    .css(border, @_nav-level0-item-border-hover);
-                    .css(color, @_nav-level0-item-color-hover);
-                    .css(text-decoration, @_nav-level0-item-text-decoration-hover);
+                    .lib-css(background, @_nav-level0-item-background-color-hover);
+                    .lib-css(border, @_nav-level0-item-border-hover);
+                    .lib-css(color, @_nav-level0-item-color-hover);
+                    .lib-css(text-decoration, @_nav-level0-item-text-decoration-hover);
                 }
             }
+
             &.active,
             &.has-active {
                 > .level-top {
-                    .css(background, @_nav-level0-item-background-color-active);
-                    .css(border-color, @_nav-level0-item__active__border-color);
-                    .css(border-style, @_nav-level0-item__active__border-style);
-                    .css(border-width, @_nav-level0-item__active__border-width);
-                    .css(color, @_nav-level0-item-color-active);
-                    .css(text-decoration, @_nav-level0-item-text-decoration-active);
+                    .lib-css(background, @_nav-level0-item-background-color-active);
+                    .lib-css(border-color, @_nav-level0-item__active__border-color);
+                    .lib-css(border-style, @_nav-level0-item__active__border-style);
+                    .lib-css(border-width, @_nav-level0-item__active__border-width);
+                    .lib-css(color, @_nav-level0-item-color-active);
+                    .lib-css(text-decoration, @_nav-level0-item-text-decoration-active);
                     display: inline-block;
                 }
             }
+
             &.parent:hover > .submenu {
                 overflow: visible !important;
             }
+
             .submenu {
-                .css(font-size, @_submenu-font-size);
-                .css(font-weight, @_submenu-font-weight);
-                .css(min-width, @_submenu-min-width);
+                .lib-css(background, @_submenu-background-color);
+                .lib-css(border, @_submenu-border-width @_submenu-border-style @_submenu-border-color);
+                .lib-css(box-shadow, @_submenu-box-shadow);
+                .lib-css(font-size, @_submenu-font-size);
+                .lib-css(font-weight, @_submenu-font-weight);
+                .lib-css(min-width, @_submenu-min-width);
+                .lib-css(padding, @_submenu-padding);
                 display: none;
-                padding: 0;
-                margin: 0 !important;
-                position: absolute;
                 left: 0;
+                margin: 0 !important;
+                padding: 0;
+                position: absolute;
                 z-index: 1;
-                .css(background, @_submenu-background-color);
-                .css(border, @_submenu-border-width @_submenu-border-style @_submenu-border-color);
-                .css(box-shadow, @_submenu-box-shadow);
-                .css(padding, @_submenu-padding);
-                ._submenu-arrow(
+
+                ._lib-submenu-arrow(
                     @_submenu-arrow,
                     @_bg: @_submenu-background-color,
                     @_border: @_submenu-border-color,
                     @_size: @_submenu-arrow-size,
                     @_left: @_submenu-arrow-left
                 );
+
                 a {
                     display: block;
                     line-height: inherit;
-                    .css(background, @_submenu-item-background-color);
-                    .css(border, @_submenu-item-border);
-                    .css(color, @_submenu-item-color);
-                    .css(padding, @_submenu-item-padding);
-                    .css(text-decoration, @_submenu-item-text-decoration);
+                    .lib-css(background, @_submenu-item-background-color);
+                    .lib-css(border, @_submenu-item-border);
+                    .lib-css(color, @_submenu-item-color);
+                    .lib-css(padding, @_submenu-item-padding);
+                    .lib-css(text-decoration, @_submenu-item-text-decoration);
+
                     &:hover,
                     &.ui-state-focus {
-                        .css(background, @_submenu-item__hover__background-color);
-                        .css(border, @_submenu-item-border-hover);
-                        .css(color, @_submenu-item-color-hover);
-                        .css(text-decoration, @_submenu-item-text-decoration-hover);
+                        .lib-css(background, @_submenu-item__hover__background-color);
+                        .lib-css(border, @_submenu-item-border-hover);
+                        .lib-css(color, @_submenu-item-color-hover);
+                        .lib-css(text-decoration, @_submenu-item-text-decoration-hover);
                     }
                 }
+
                 .active > a {
-                    .css(background, @_submenu-item-background-color-active);
-                    .css(border-color, @_submenu-item__active__border-color);
-                    .css(border-style, @_submenu-item__active__border-style);
-                    .css(border-width, @_submenu-item__active__border-width);
-                    .css(color, @_submenu-item-color-active);
-                    .css(text-decoration, @_submenu-item-text-decoration-active);
+                    .lib-css(background, @_submenu-item-background-color-active);
+                    .lib-css(border-color, @_submenu-item__active__border-color);
+                    .lib-css(border-style, @_submenu-item__active__border-style);
+                    .lib-css(border-width, @_submenu-item__active__border-width);
+                    .lib-css(color, @_submenu-item-color-active);
+                    .lib-css(text-decoration, @_submenu-item-text-decoration-active);
                 }
+
                 .submenu {
                     top: 0 !important;
                     left: 100% !important;
                 }
+
                 .submenu-reverse{
                     left: auto !important;
                     right: 100%;
                 }
             }
+
             &.more {
                 position: relative;
-                .icon-font(
+                .lib-icon-font(
                     @icon-pointer-down,
                     @_icon-font-size: 26px,
                     @_icon-font-position: after
                 );
+
                 &:before {
                     display: none;
                 }
+
                 &:after {
                     cursor: pointer;
                     padding: 8px 12px;
                     position: relative;
                     z-index: 1;
                 }
+
                 &:hover > .submenu {
                     overflow: visible !important;
                 }
+
                 li {
                     display: block;
                 }
@@ -402,7 +443,7 @@
 }
 
 //  Submenu arrow
-._submenu-arrow(
+._lib-submenu-arrow(
     @_submenu-arrow,
     @_bg,
     @_border,
@@ -412,63 +453,71 @@
     & when (iscolor(@_bg)) and (iscolor(@_border)) {
         @_outer-size: @_size + 1;
         @_outer-left: @_left - 1;
-        .css(margin-top, @_outer-size);
+        .lib-css(margin-top, @_outer-size);
+
         > ul {
-            .css(margin-top, @_outer-size);
+            .lib-css(margin-top, @_outer-size);
+
             &:before,
             &:after {
                 content: '';
-                overflow: hidden;
                 display: block;
+                overflow: hidden;
                 position: absolute;
             }
+
             &:before {
-                .css(color, @_bg);
-                .css(left, @_left);
-                .css(top, -@_size*2);
-                .arrow(up, @_size, @_bg);
+                .lib-css(color, @_bg);
+                .lib-css(left, @_left);
+                .lib-css(top, -@_size*2);
+                .lib-arrow(up, @_size, @_bg);
                 z-index: 4;
             }
+
             &:after {
-                .arrow(up, @_outer-size, @_border);
-                .css(color, @_border);
-                .css(left, @_outer-left);
-                .css(top, -@_outer-size*2);
+                .lib-arrow(up, @_outer-size, @_border);
+                .lib-css(color, @_border);
+                .lib-css(left, @_outer-left);
+                .lib-css(top, -@_outer-size*2);
                 z-index: 3;
             }
         }
     }
     & when (iscolor(@_bg)) and not (iscolor(@_border)) {
-        .css(margin-top, -@_size);
+        .lib-css(margin-top, -@_size);
+
         > ul {
-            .css(margin-top, @_size);
+            .lib-css(margin-top, @_size);
+
             &:before {
-                .css(color, @_bg);
+                .lib-arrow(up, @_size, @_bg);
+                .lib-css(color, @_bg);
+                .lib-css(left, @_left);
+                .lib-css(top, -@_size*2);
                 content: '';
                 display: block;
                 overflow: hidden;
                 position: absolute;
-                .css(top, -@_size*2);
-                .css(left, @_left);
                 z-index: 4;
-                .arrow(up, @_size, @_bg);
             }
         }
     }
     & when (iscolor(@_border)) and not (iscolor(@_bg)) {
-        .css(margin-top, -@_size);
+        .lib-css(margin-top, -@_size);
+
         > ul {
-            .css(margin-top, @_size);
+            .lib-css(margin-top, @_size);
+
             &:before {
-                .css(color, @_border);
+                .lib-arrow(up, @_size, @_border);
+                .lib-css(color, @_border);
+                .lib-css(left, @_left);
+                .lib-css(top, -@_size*2);
                 content: '';
                 display: block;
                 overflow: hidden;
                 position: absolute;
-                .css(top, -@_size*2);
-                .css(left, @_left);
                 z-index: 4;
-                .arrow(up, @_size, @_border);
             }
         }
     }

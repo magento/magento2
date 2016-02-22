@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Eav;
 
-class Processor extends \Magento\Indexer\Model\Indexer\AbstractProcessor
+class Processor extends \Magento\Framework\Indexer\AbstractProcessor
 {
     /**
      * Indexer ID

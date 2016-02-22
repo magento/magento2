@@ -16,40 +16,29 @@ if(typeof Bundle=='undefined') {
 
 </script>
 
-<div
-    id="bundle_product_container"
-    class="entry-edit form-inline">
-    <div class="fieldset-wrapper admin__collapsible-block-wrapper collapsible-block-wrapper-last" id="bundle_product-wrapper">
-        <div class="fieldset-wrapper-title">
-            <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#bundle_product-content">
-                <span><?php echo $block->getTabLabel() ?></span>
-            </strong>
+<div id="bundle_product_container" class="entry-edit form-inline">
+    <fieldset class="fieldset">
+        <div class="field field-ship-bundle-items">
+            <label for="shipment_type" class="label"><?php /* @escapeNotVerified */ echo __('Ship Bundle Items') ?></label>
+            <div class="control">
+                <select <?php if ($block->isReadonly()): ?>disabled="disabled" <?php endif;?>
+                        id="shipment_type"
+                        name="<?php /* @escapeNotVerified */ echo $block->getFieldSuffix() ?>[shipment_type]"
+                        class="select">
+                    <option value="1"><?php /* @escapeNotVerified */ echo __('Separately') ?></option>
+                    <option value="0"<?php if ($block->getProduct()->getShipmentType() == 0): ?> selected="selected"<?php endif; ?>><?php /* @escapeNotVerified */ echo __('Together') ?></option>
+                </select>
+            </div>
         </div>
-        <div class="fieldset-wrapper-content collapse" id="bundle_product-content">
-            <fieldset class="fieldset">
-                <div class="field field-ship-bundle-items">
-                    <label for="shipment_type" class="label"><?php echo __('Ship Bundle Items') ?></label>
-                    <div class="control">
-                        <select <?php if ($block->isReadonly()): ?>disabled="disabled" <?php endif;?>
-                                id="shipment_type"
-                                name="<?php echo $block->getFieldSuffix() ?>[shipment_type]"
-                                class="select">
-                            <option value="1"><?php echo __('Separately') ?></option>
-                            <option value="0"<?php if ($block->getProduct()->getShipmentType() == 0): ?> selected="selected"<?php endif; ?>><?php echo __('Together') ?></option>
-                        </select>
-                    </div>
-                </div>
 
-                <div
-                    id="product_bundle_container"
-                    class="entry-edit custom-options bundle sortable-wrapper">
-                    <?php echo $block->getOptionsBoxHtml() ?>
-                </div>
-
-                <?php echo $block->getAddButtonHtml() ?>
-            </fieldset>
+        <div
+            id="product_bundle_container"
+            class="entry-edit custom-options bundle sortable-wrapper">
+            <?php echo $block->getOptionsBoxHtml() ?>
         </div>
-    </div>
+
+        <?php echo $block->getAddButtonHtml() ?>
+    </fieldset>
 </div>
 
 <input type="hidden" name="affect_bundle_product_selections" value="1" />

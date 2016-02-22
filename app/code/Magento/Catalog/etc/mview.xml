@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Mview/etc/mview.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Mview/etc/mview.xsd">
     <view id="catalog_category_flat" class="Magento\Catalog\Model\Indexer\Category\Flat" group="indexer">
         <subscriptions>
             <table name="catalog_category_entity" entity_column="entity_id" />
@@ -35,9 +35,8 @@
             <table name="catalog_product_entity_datetime" entity_column="entity_id" />
             <table name="catalog_product_entity_decimal" entity_column="entity_id" />
             <table name="catalog_product_entity_gallery" entity_column="entity_id" />
-            <table name="catalog_product_entity_group_price" entity_column="entity_id" />
             <table name="catalog_product_entity_int" entity_column="entity_id" />
-            <table name="catalog_product_entity_media_gallery" entity_column="entity_id" />
+            <table name="catalog_product_entity_media_gallery" entity_column="value_id" />
             <table name="catalog_product_entity_media_gallery_value" entity_column="entity_id" />
             <table name="catalog_product_entity_text" entity_column="entity_id" />
             <table name="catalog_product_entity_tier_price" entity_column="entity_id" />
@@ -49,7 +48,6 @@
             <table name="catalog_product_entity" entity_column="entity_id" />
             <table name="catalog_product_entity_datetime" entity_column="entity_id" />
             <table name="catalog_product_entity_decimal" entity_column="entity_id" />
-            <table name="catalog_product_entity_group_price" entity_column="entity_id" />
             <table name="catalog_product_entity_int" entity_column="entity_id" />
             <table name="catalog_product_entity_tier_price" entity_column="entity_id" />
         </subscriptions>

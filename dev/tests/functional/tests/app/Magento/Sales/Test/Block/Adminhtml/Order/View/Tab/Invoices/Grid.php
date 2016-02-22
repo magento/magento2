@@ -7,13 +7,12 @@
 namespace Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Invoices;
 
 /**
- * Class Grid
- * Invoices grid on order view page
+ * Invoices grid on order view page.
  */
 class Grid extends \Magento\Backend\Test\Block\Widget\Grid
 {
     /**
-     * Locator value for link in action column
+     * Locator value for link in action column.
      *
      * @var string
      */
@@ -24,10 +23,10 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
      *
      * @var string
      */
-    protected $invoiceId = 'tbody td[data-column="increment_id"]';
+    protected $invoiceId = 'tbody td:nth-child(2)';
 
     /**
-     * Filters array mapping
+     * Filters array mapping.
      *
      * @var array
      */
@@ -40,15 +39,15 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
             'input' => 'select',
         ],
         'amount_from' => [
-            'selector' => 'input[name="base_grand_total[from]"]',
+            'selector' => 'input[name="grand_total[from]"]',
         ],
         'amount_to' => [
-            'selector' => 'input[name="base_grand_total[to]"]',
+            'selector' => 'input[name="grand_total[to]"]',
         ],
     ];
 
     /**
-     * Get invoice ids
+     * Get invoice ids.
      *
      * @return array
      */

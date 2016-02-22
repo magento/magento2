@@ -65,7 +65,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
-    public function testCreatepasswordAction()
+    public function testCreatepasswordActionWithDirectLink()
     {
         /** @var \Magento\Customer\Model\Customer $customer */
         $customer = Bootstrap::getObjectManager()
@@ -80,7 +80,43 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->getRequest()->setParam('id', $customer->getId());
 
         $this->dispatch('customer/account/createPassword');
-        $text = $this->getResponse()->getBody();
+
+        $response = $this->getResponse();
+        $this->assertEquals(302, $response->getHttpResponseCode());
+        $text = $response->getBody();
+        $this->assertFalse((bool)preg_match('/' . $token . '/m', $text));
+        $this->assertRedirect($this->stringContains('customer/account/createpassword'));
+
+        /** @var \Magento\Customer\Model\Session $customer */
+        $session = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Session');
+        $this->assertEquals($token, $session->getRpToken());
+        $this->assertEquals($customer->getId(), $session->getRpCustomerId());
+        $this->assertNotContains($token, $response->getHeader('Location')->getFieldValue());
+    }
+
+    /**
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testCreatepasswordActionWithSession()
+    {
+        /** @var \Magento\Customer\Model\Customer $customer */
+        $customer = Bootstrap::getObjectManager()
+            ->create('Magento\Customer\Model\Customer')->load(1);
+
+        $token = Bootstrap::getObjectManager()->get('Magento\Framework\Math\Random')
+            ->getUniqueHash();
+        $customer->changeResetPasswordLinkToken($token);
+        $customer->save();
+
+        /** @var \Magento\Customer\Model\Session $customer */
+        $session = Bootstrap::getObjectManager()->get('Magento\Customer\Model\Session');
+        $session->setRpToken($token);
+        $session->setRpCustomerId($customer->getId());
+
+        $this->dispatch('customer/account/createPassword');
+
+        $response = $this->getResponse();
+        $text = $response->getBody();
         $this->assertTrue((bool)preg_match('/' . $token . '/m', $text));
     }
 
@@ -139,8 +175,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setParam('lastname', 'lastname1')
             ->setParam('company', '')
             ->setParam('email', 'test1@email.com')
-            ->setParam('password', 'password')
-            ->setParam('password_confirmation', 'password')
+            ->setParam('password', '_Password1')
+            ->setParam('password_confirmation', '_Password1')
             ->setParam('telephone', '5123334444')
             ->setParam('street', ['1234 fake street', ''])
             ->setParam('city', 'Austin')
@@ -176,8 +212,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setParam('lastname', 'lastname2')
             ->setParam('company', '')
             ->setParam('email', $email)
-            ->setParam('password', 'password')
-            ->setParam('password_confirmation', 'password')
+            ->setParam('password', '_Password1')
+            ->setParam('password_confirmation', '_Password1')
             ->setParam('telephone', '5123334444')
             ->setParam('street', ['1234 fake street', ''])
             ->setParam('city', 'Austin')
@@ -214,8 +250,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setParam('lastname', 'lastname')
             ->setParam('company', '')
             ->setParam('email', 'customer@example.com')
-            ->setParam('password', 'password')
-            ->setParam('password_confirmation', 'password')
+            ->setParam('password', '_Password1')
+            ->setParam('password_confirmation', '_Password1')
             ->setParam('telephone', '5123334444')
             ->setParam('street', ['1234 fake street', ''])
             ->setParam('city', 'Austin')
@@ -237,37 +273,6 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
                 ' to get your password and access your account.', ]),
             MessageInterface::TYPE_ERROR
         );
-    }
-
-    /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     */
-    public function testOpenActionCreatePasswordAction()
-    {
-        /** @var \Magento\Customer\Model\Customer $customer */
-        $customer = Bootstrap::getObjectManager()
-            ->create('Magento\Customer\Model\Customer')->load(1);
-
-        $token = Bootstrap::getObjectManager()->get('Magento\Framework\Math\Random')
-            ->getUniqueHash();
-        $customer->changeResetPasswordLinkToken($token);
-        $customer->save();
-
-        $this->getRequest()->setParam('token', $token);
-        $this->getRequest()->setParam('id', $customer->getId());
-
-        $this->dispatch('customer/account/createPassword');
-        $this->assertNotEmpty($this->getResponse()->getBody());
-
-        $headers = $this->getResponse()->getHeaders();
-        $failed = false;
-        foreach ($headers as $header) {
-            if (preg_match('~customer\/account\/login~', $header->getFieldValue())) {
-                $failed = true;
-                break;
-            }
-        }
-        $this->assertFalse($failed, 'Action is closed');
     }
 
     /**
@@ -306,8 +311,21 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         );
     }
 
+    /**
+     * @magentoConfigFixture current_store customer/password/limit_password_reset_requests_method 0
+     * @magentoConfigFixture current_store customer/password/forgot_email_template password_forgot_email_template
+     * @magentoConfigFixture current_store customer/password/forgot_email_identity support
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
     public function testForgotPasswordPostAction()
     {
+        $transportBuilderMock = $this->prepareEmailMock(
+            1,
+            'password_forgot_email_template',
+            'support'
+        );
+        $this->addEmailMockToClass($transportBuilderMock, 'Magento\Customer\Model\AccountManagement');
+
         $email = 'customer@example.com';
 
         $this->getRequest()
@@ -317,10 +335,13 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->dispatch('customer/account/forgotPasswordPost');
         $this->assertRedirect($this->stringContains('customer/account/'));
+
+        $message = __(
+            'If there is an account associated with %1 you will receive an email with a link to reset your password.',
+            $email
+        );
         $this->assertSessionMessages(
-            $this->equalTo([
-                'We\'ll email you a link to reset your password.'
-            ]),
+            $this->equalTo([$message]),
             MessageInterface::TYPE_SUCCESS
         );
     }
@@ -371,8 +392,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setQueryValue('id', 1)
             ->setQueryValue('token', '8ed8677e6c79e68b94e61658bd756ea5')
             ->setPostValue([
-                'password' => 'new-password',
-                'password_confirmation' => 'new-password',
+                'password' => 'new-Password1',
+                'password_confirmation' => 'new-Password1',
             ]);
 
         $this->dispatch('customer/account/resetPasswordPost');
@@ -396,8 +417,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode(), $body);
         $this->assertContains('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is not checked
-        $this->assertContains('<input type="checkbox" name="change_password" id="change-password" value="1" ' .
-            'title="Change Password" class="checkbox"/>', $body);
+        $this->assertContains('<input type="checkbox" name="change_password" id="change-password" '
+            .'data-role="change-password" value="1" title="Change Password" class="checkbox" />', $body);
     }
 
     /**
@@ -413,15 +434,27 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode(), $body);
         $this->assertContains('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is checked
-        $this->assertContains('<input type="checkbox" name="change_password" id="change-password" value="1" ' .
-            'title="Change Password" checked="checked" class="checkbox"/>', $body);
+        $this->assertContains(
+            '<input type="checkbox" name="change_password" id="change-password" '
+            .'data-role="change-password" value="1" title="Change Password" checked="checked" class="checkbox" />',
+            $body
+        );
     }
 
     /**
+     * @magentoConfigFixture current_store customer/account_information/change_email_template change_email_template
+     * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     public function testEditPostAction()
     {
+        $transportBuilderMock = $this->prepareEmailMock(
+            2,
+            'change_email_template',
+            'support'
+        );
+        $this->addEmailMockToClass($transportBuilderMock, 'Magento\Customer\Helper\EmailNotification');
+
         /** @var $customerRepository \Magento\Customer\Api\CustomerRepositoryInterface */
         $customerRepository = Bootstrap::getObjectManager()
             ->get('Magento\Customer\Api\CustomerRepositoryInterface');
@@ -438,6 +471,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
                 'firstname' => 'John',
                 'lastname'  => 'Doe',
                 'email'     => 'johndoe@email.com',
+                'change_email'     => 1,
+                'current_password' => 'password'
             ]);
 
         $this->dispatch('customer/account/editPost');
@@ -455,10 +490,19 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * @magentoConfigFixture current_store customer/account_information/change_email_and_password_template template1
+     * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     public function testChangePasswordEditPostAction()
     {
+        $transportBuilderMock = $this->prepareEmailMock(
+            2,
+            'template1',
+            'support'
+        );
+        $this->addEmailMockToClass($transportBuilderMock, 'Magento\Customer\Helper\EmailNotification');
+
         /** @var $customerRepository \Magento\Customer\Api\CustomerRepositoryInterface */
         $customerRepository = Bootstrap::getObjectManager()
             ->get('Magento\Customer\Api\CustomerRepositoryInterface');
@@ -476,9 +520,10 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
                 'lastname'         => 'Doe',
                 'email'            => 'johndoe@email.com',
                 'change_password'  => 1,
+                'change_email'     => 1,
                 'current_password' => 'password',
-                'password'         => 'new-password',
-                'password_confirmation' => 'new-password',
+                'password'         => 'new-Password1',
+                'password_confirmation' => 'new-Password1',
             ]);
 
         $this->dispatch('customer/account/editPost');
@@ -507,6 +552,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
                 'form_key'  => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
                 'firstname' => 'John',
                 'lastname'  => 'Doe',
+                'change_email'  => 1,
+                'current_password'  => 'password',
                 'email'     => 'bad-email',
             ]);
 
@@ -514,7 +561,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertRedirect($this->stringEndsWith('customer/account/edit/'));
         $this->assertSessionMessages(
-            $this->equalTo(['Invalid input']),
+            $this->equalTo(['Invalid value of "bad-email" provided for the email field.']),
             MessageInterface::TYPE_ERROR
         );
     }
@@ -571,8 +618,76 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertRedirect($this->stringEndsWith('customer/account/edit/'));
         $this->assertSessionMessages(
-            $this->equalTo(['Confirm your new password.']),
+            $this->equalTo(['Password confirmation doesn\'t match entered password.']),
             MessageInterface::TYPE_ERROR
+        );
+    }
+
+    /**
+     * Prepare email mock to test emails
+     *
+     * @param int $occurrenceNumber
+     * @param string $templateId
+     * @param string $sender
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected function prepareEmailMock($occurrenceNumber, $templateId, $sender)
+    {
+        $transportMock = $this->getMock(
+            'Magento\Framework\Mail\TransportInterface',
+            ['sendMessage']
+        );
+        $transportMock->expects($this->exactly($occurrenceNumber))
+            ->method('sendMessage');
+        $transportBuilderMock = $this->getMockBuilder('Magento\Framework\Mail\Template\TransportBuilder')
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'addTo',
+                    'setFrom',
+                    'setTemplateIdentifier',
+                    'setTemplateVars',
+                    'setTemplateOptions',
+                    'getTransport'
+                ]
+            )
+            ->getMock();
+        $transportBuilderMock->method('setTemplateIdentifier')
+            ->with($templateId)
+            ->willReturnSelf();
+        $transportBuilderMock->method('setTemplateOptions')
+            ->willReturnSelf();
+        $transportBuilderMock->method('setTemplateVars')
+            ->willReturnSelf();
+        $transportBuilderMock->method('setFrom')
+            ->with($sender)
+            ->willReturnSelf();
+        $transportBuilderMock->method('addTo')
+            ->willReturnSelf();
+        $transportBuilderMock->expects($this->exactly($occurrenceNumber))
+            ->method('getTransport')
+            ->willReturn($transportMock);
+
+        return $transportBuilderMock;
+    }
+
+    /**
+     * Add mocked object to environment
+     *
+     * @param \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock
+     * @param string $originalClassName
+     */
+    protected function addEmailMockToClass(
+        \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock,
+        $originalClassName
+    ) {
+        $mockedClass = $this->_objectManager->create(
+            $originalClassName,
+            ['transportBuilder' => $transportBuilderMock]
+        );
+        $this->_objectManager->addSharedInstance(
+            $mockedClass,
+            $originalClassName
         );
     }
 }

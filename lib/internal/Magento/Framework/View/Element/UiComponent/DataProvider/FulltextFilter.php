@@ -6,8 +6,9 @@
 
 namespace Magento\Framework\View\Element\UiComponent\DataProvider;
 
-use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
-use \Magento\Framework\Model\Resource\Db\AbstractDb as DbResource;
+use Magento\Framework\Data\Collection;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Api\Filter;
 
 /**
  * Class Fulltext
@@ -17,14 +18,13 @@ class FulltextFilter implements FilterApplierInterface
     /**
      * Returns list of columns from fulltext index (doesn't support more then one FTI per table)
      *
-     * @param DbResource $resource
+     * @param AbstractDb $collection
      * @param string $indexTable
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function getFulltextIndexColumns(DbResource $resource, $indexTable)
+    protected function getFulltextIndexColumns(AbstractDb $collection, $indexTable)
     {
-        $indexes = $resource->getReadConnection()->getIndexList($indexTable);
+        $indexes = $collection->getConnection()->getIndexList($indexTable);
         foreach ($indexes as $index) {
             if (strtoupper($index['INDEX_TYPE']) == 'FULLTEXT') {
                 return $index['COLUMNS_LIST'];
@@ -34,24 +34,58 @@ class FulltextFilter implements FilterApplierInterface
     }
 
     /**
+     * Add table alias to columns
+     *
+     * @param array $columns
+     * @param DbCollection $collection
+     * @param string $indexTable
+     * @return array
+     */
+    protected function addTableAliasToColumns(array $columns, DbCollection $collection, $indexTable)
+    {
+        $alias = '';
+        foreach ($collection->getSelect()->getPart('from') as $tableAlias => $data) {
+            if ($indexTable == $data['tableName']) {
+                $alias = $tableAlias;
+                break;
+            }
+        }
+        if ($alias) {
+            $columns = array_map(
+                function ($column) use ($alias) {
+                    return '`' . $alias . '`.' . $column;
+                },
+                $columns
+            );
+        }
+
+        return $columns;
+    }
+
+    /**
      * Apply fulltext filters
      *
-     * @param DbCollection $collection
-     * @param array $filters
+     * @param Collection $collection
+     * @param Filter $filter
      * @return void
      */
-    public function apply(DbCollection $collection, $filters)
+    public function apply(Collection $collection, Filter $filter)
     {
-        $columns = $this->getFulltextIndexColumns($collection->getResource(), $collection->getMainTable());
+        if (!$collection instanceof AbstractDb) {
+            throw new \InvalidArgumentException('Database collection required.');
+        }
+
+        /** @var AbstractDb $collection */
+        $columns = $this->getFulltextIndexColumns($collection, $collection->getResource()->getMainTable());
         if (!$columns) {
             return;
         }
-        foreach ($filters as $filter) {
-            $collection->getSelect()
-                ->where(
-                    'MATCH(' . implode(',', $columns) . ') AGAINST(?)',
-                    $filter['condition']
-                );
-        }
+
+        $columns = $this->addTableAliasToColumns($columns, $collection, $collection->getMainTable());
+        $collection->getSelect()
+            ->where(
+                'MATCH(' . implode(',', $columns) . ') AGAINST(?)',
+                $filter->getValue()
+            );
     }
 }

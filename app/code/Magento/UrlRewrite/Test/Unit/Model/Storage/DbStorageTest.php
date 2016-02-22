@@ -10,7 +10,7 @@ namespace Magento\UrlRewrite\Test\Unit\Model\Storage;
 
 use \Magento\UrlRewrite\Model\Storage\DbStorage;
 
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
@@ -29,7 +29,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $adapter;
+    protected $connectionMock;
 
     /**
      * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
@@ -37,7 +37,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
     protected $select;
 
     /**
-     * @var \Magento\Framework\App\Resource|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
@@ -53,16 +53,15 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->dataObjectHelper = $this->getMock('Magento\Framework\Api\DataObjectHelper', [], [], '',
             false);
-        $this->adapter = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
+        $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
         $this->select = $this->getMock('Magento\Framework\DB\Select', ['from', 'where', 'deleteFromSelect'], [], '',
             false);
-        $this->resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
 
         $this->resource->expects($this->any())
             ->method('getConnection')
-            ->with(Resource::DEFAULT_WRITE_RESOURCE)
-            ->will($this->returnValue($this->adapter));
-        $this->adapter->expects($this->any())
+            ->will($this->returnValue($this->connectionMock));
+        $this->connectionMock->expects($this->any())
             ->method('select')
             ->will($this->returnValue($this->select));
 
@@ -88,11 +87,11 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
             ->method('where')
             ->with('col2 IN (?)', 'val2');
 
-        $this->adapter->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier')
             ->will($this->returnArgument(0));
 
-        $this->adapter->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('fetchAll')
             ->with($this->select)
             ->will($this->returnValue([['row1'], ['row2']]));
@@ -130,11 +129,11 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
             ->method('where')
             ->with('col2 IN (?)', 'val2');
 
-        $this->adapter->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier')
             ->will($this->returnArgument(0));
 
-        $this->adapter->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('fetchRow')
             ->with($this->select)
             ->will($this->returnValue(['row1']));
@@ -175,7 +174,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
             ]));
         $urlSecond->expects($this->any())->method('getEntityType')->willReturn('category');
 
-        $this->adapter->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier')
             ->will($this->returnArgument(0));
 
@@ -218,7 +217,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
             ->with(DbStorage::TABLE_NAME)
             ->will($this->returnValue('table_name'));
 
-        $this->adapter->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('query')
             ->with('sql delete query');
 
@@ -236,7 +235,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
             ->with(DbStorage::TABLE_NAME)
             ->will($this->returnValue('table_name'));
 
-        $this->adapter->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('insertMultiple')
             ->with('table_name', [['row1'], ['row2']]);
 
@@ -254,7 +253,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
             ->method('toArray')
             ->will($this->returnValue(['row1']));
 
-        $this->adapter->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('insertMultiple')
             ->will(
                 $this->throwException(
@@ -276,7 +275,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
             ->method('toArray')
             ->will($this->returnValue(['row1']));
 
-        $this->adapter->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('insertMultiple')
             ->will($this->throwException(new \RuntimeException()));
 
@@ -287,7 +286,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
     {
         $data = ['col1' => 'val1', 'col2' => 'val2'];
 
-        $this->adapter->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('quoteIdentifier')
             ->will($this->returnArgument(0));
 
@@ -309,7 +308,7 @@ class DbStorageTest extends \PHPUnit_Framework_TestCase
             ->with(DbStorage::TABLE_NAME)
             ->will($this->returnValue('table_name'));
 
-        $this->adapter->expects($this->once())
+        $this->connectionMock->expects($this->once())
             ->method('query')
             ->with('sql delete query');
 

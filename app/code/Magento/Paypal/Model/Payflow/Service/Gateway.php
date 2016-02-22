@@ -5,13 +5,14 @@
  */
 namespace Magento\Paypal\Model\Payflow\Service;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Framework\Math\Random;
 use Magento\Payment\Model\Method\Logger;
 use Magento\Payment\Model\Method\Online\GatewayInterface;
 use Magento\Payment\Model\Method\ConfigInterface;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Gateway Service
@@ -51,15 +52,15 @@ class Gateway implements GatewayInterface
     /**
      * Post request into gateway
      *
-     * @param Object $request
+     * @param DataObject $request
      * @param ConfigInterface $config
      *
-     * @return Object
-     * @throws \Exception
+     * @return DataObject
+     * @throws \Zend_Http_Client_Exception
      */
-    public function postRequest(Object $request, ConfigInterface $config)
+    public function postRequest(DataObject $request, ConfigInterface $config)
     {
-        $result = new Object();
+        $result = new DataObject();
 
         $clientConfig = [
             'maxredirects' => 5,
@@ -104,7 +105,7 @@ class Gateway implements GatewayInterface
             $result->setData(array_change_key_case($responseArray, CASE_LOWER));
             $result->setData('result_code', $result->getData('result'));
 
-        } catch (\Exception $e) {
+        } catch (\Zend_Http_Client_Exception $e) {
             $result->addData(
                 [
                     'response_code' => -1,
@@ -112,7 +113,6 @@ class Gateway implements GatewayInterface
                     'response_reason_text' => $e->getMessage()
                 ]
             );
-
             throw $e;
         } finally {
             $this->logger->debug(

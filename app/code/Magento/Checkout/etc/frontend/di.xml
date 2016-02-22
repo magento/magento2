@@ -6,11 +6,14 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="../../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\Framework\Url\SecurityInfo">
         <arguments>
             <argument name="secureUrlList" xsi:type="array">
                 <item name="checkout_index" xsi:type="string">/checkout</item>
+            </argument>
+            <argument name="excludedUrlList" xsi:type="array">
+                <item name="checkout_sidebar" xsi:type="string">/checkout/sidebar</item>
             </argument>
         </arguments>
     </type>
@@ -18,14 +21,18 @@
         <plugin name="checkout-session-depersonalize"
                 type="Magento\Checkout\Model\Layout\DepersonalizePlugin" sortOrder="20"/>
     </type>
-    <type name="Magento\Customer\Block\Account\AuthenticationPopup">
-        <plugin name="authentication-popup-checkout-url"
-                type="Magento\Checkout\Model\Customer\Autentication\ConfigPlugin" sortOrder="20"/>
-    </type>
     <type name="Magento\Customer\CustomerData\SectionPoolInterface">
         <arguments>
             <argument name="sectionSourceMap" xsi:type="array">
                 <item name="cart" xsi:type="string">Magento\Checkout\CustomerData\Cart</item>
+                <item name="directory-data" xsi:type="string">Magento\Checkout\CustomerData\DirectoryData</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Block\SectionConfig">
+        <arguments>
+            <argument name="clientSideSections" xsi:type="array">
+                <item name="checkout-data" xsi:type="string">checkout-data</item>
             </argument>
         </arguments>
     </type>
@@ -48,6 +55,20 @@
             <argument name="layoutProcessors" xsi:type="array">
                 <item name="addressFormAttributes" xsi:type="object">Magento\Checkout\Block\Checkout\LayoutProcessor</item>
                 <item name="totalsSortOrder" xsi:type="object">Magento\Checkout\Block\Checkout\TotalsProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Block\Cart\Totals">
+        <arguments>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="totalsSortOrder" xsi:type="object">Magento\Checkout\Block\Cart\CartTotalsProcessor</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Block\Cart\Shipping">
+        <arguments>
+            <argument name="layoutProcessors" xsi:type="array">
+                <item name="addressFormAttributes" xsi:type="object">Magento\Checkout\Block\Cart\LayoutProcessor</item>
             </argument>
         </arguments>
     </type>

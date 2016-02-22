@@ -31,10 +31,10 @@ class Id extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRend
     /**
      * Render grid row
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         $imageUrl = $row->getImage() && $row->getImage() != 'no_selection' ? $this->escapeHtml(
             $this->_productHelper->getImageUrl($row)

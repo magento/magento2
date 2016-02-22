@@ -7,48 +7,84 @@ namespace Magento\Sales\Controller\Adminhtml\Order;
 
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Model\Resource\Db\Collection\AbstractCollection;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Magento\Ui\Component\MassAction\Filter;
+use Magento\Sales\Model\Order\Pdf\Creditmemo;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\CollectionFactory;
+use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 
+/**
+ * Class Pdfcreditmemos
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Pdfcreditmemos extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
+    /**
+     * @var FileFactory
+     */
+    protected $fileFactory;
+
+    /**
+     * @var DateTime
+     */
+    protected $dateTime;
+
+    /**
+     * @var Creditmemo
+     */
+    protected $pdfCreditmemo;
+
+    /**
+     * @var CollectionFactory
+     */
+    protected $collectionFactory;
+
+    /**
+     * @param Context $context
+     * @param Filter $filter
+     * @param CollectionFactory $collectionFactory
+     * @param DateTime $dateTime
+     * @param FileFactory $fileFactory
+     * @param Creditmemo $pdfCreditmemo
+     */
+    public function __construct(
+        Context $context,
+        Filter $filter,
+        CollectionFactory $collectionFactory,
+        DateTime $dateTime,
+        FileFactory $fileFactory,
+        Creditmemo $pdfCreditmemo
+    ) {
+        $this->fileFactory = $fileFactory;
+        $this->dateTime = $dateTime;
+        $this->pdfCreditmemo = $pdfCreditmemo;
+        $this->collectionFactory = $collectionFactory;
+        parent::__construct($context, $filter);
+    }
+
     /**
      * Print credit memos for selected orders
      *
      * @param AbstractCollection $collection
-     * @return ResponseInterface|\Magento\Backend\Model\View\Result\Redirect
+     * @return ResponseInterface|ResultInterface
      */
     protected function massAction(AbstractCollection $collection)
     {
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $flag = false;
-        /** @var \Magento\Sales\Model\Order $order */
-        foreach ($collection->getItems() as $order) {
-            $creditmemos = $order->getCreditmemosCollection();
-            if ($creditmemos->getSize()) {
-                $flag = true;
-                if (!isset($pdf)) {
-                    $pdf = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Creditmemo')
-                        ->getPdf($creditmemos);
-                } else {
-                    $pages = $this->_objectManager->create('Magento\Sales\Model\Order\Pdf\Creditmemo')
-                        ->getPdf($creditmemos);
-                    $pdf->pages = array_merge($pdf->pages, $pages->pages);
-                }
-            }
-        }
-        if ($flag) {
-            $date = $this->_objectManager->get('Magento\Framework\Stdlib\DateTime\DateTime')
-                ->date('Y-m-d_H-i-s');
-            return $this->_fileFactory->create(
-                'creditmemo' . $date . '.pdf',
-                $pdf->render(),
-                DirectoryList::VAR_DIR,
-                'application/pdf'
-            );
-        } else {
+
+        $creditmemoCollection = $this->collectionFactory->create()->setOrderFilter(['in' => $collection->getAllIds()]);
+        if (!$creditmemoCollection->getSize()) {
             $this->messageManager->addError(__('There are no printable documents related to selected orders.'));
-            $resultRedirect->setPath('sales/*/');
-            return $resultRedirect;
+            return $this->resultRedirectFactory->create()->setPath($this->getComponentRefererUrl());
         }
+        return $this->fileFactory->create(
+            sprintf('creditmemo%s.pdf', $this->dateTime->date('Y-m-d_H-i-s')),
+            $this->pdfCreditmemo->getPdf($creditmemoCollection->getItems())->render(),
+            DirectoryList::VAR_DIR,
+            'application/pdf'
+        );
     }
 }

@@ -91,7 +91,7 @@ class Switcher extends \Magento\Framework\View\Element\Template
             $stores = [];
             foreach ($websiteStores as $store) {
                 /* @var $store \Magento\Store\Model\Store */
-                if (!$store->getIsActive()) {
+                if (!$store->isActive()) {
                     continue;
                 }
                 $localeCode = $this->_scopeConfig->getValue(
@@ -214,13 +214,15 @@ class Switcher extends \Magento\Framework\View\Element\Template
      * Returns target store post data
      *
      * @param \Magento\Store\Model\Store $store
+     * @param array $data
      * @return string
      */
-    public function getTargetStorePostData(\Magento\Store\Model\Store $store)
+    public function getTargetStorePostData(\Magento\Store\Model\Store $store, $data = [])
     {
+        $data[\Magento\Store\Api\StoreResolverInterface::PARAM_NAME] = $store->getCode();
         return $this->_postDataHelper->getPostData(
             $this->getUrl('stores/store/switch'),
-            ['___store' => $store->getCode(), '___from_store' => $this->getStoreCode()]
+            $data
         );
     }
 }

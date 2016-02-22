@@ -6,8 +6,15 @@
  */
 namespace Magento\Framework\App\Router;
 
+use Magento\Framework\Module\Dir\Reader as ModuleReader;
+
 class ActionList
 {
+    /**
+     * Not allowed string in route's action path to avoid disclosing admin url
+     */
+    const NOT_ALLOWED_IN_NAMESPACE_PATH = 'adminhtml';
+
     /**
      * List of application actions
      *
@@ -30,14 +37,14 @@ class ActionList
 
     /**
      * @param \Magento\Framework\Config\CacheInterface $cache
-     * @param ActionList\Reader $actionReader
+     * @param ModuleReader $moduleReader
      * @param string $actionInterface
      * @param string $cacheKey
      * @param array $reservedWords
      */
     public function __construct(
         \Magento\Framework\Config\CacheInterface $cache,
-        ActionList\Reader $actionReader,
+        ModuleReader $moduleReader,
         $actionInterface = '\Magento\Framework\App\ActionInterface',
         $cacheKey = 'app_action_list',
         $reservedWords = []
@@ -46,7 +53,7 @@ class ActionList
         $this->actionInterface = $actionInterface;
         $data = $cache->load($cacheKey);
         if (!$data) {
-            $this->actions = $actionReader->read();
+            $this->actions = $moduleReader->getActionFiles();
             $cache->save(serialize($this->actions), $cacheKey);
         } else {
             $this->actions = unserialize($data);
@@ -67,6 +74,9 @@ class ActionList
         if ($area) {
             $area = '\\' . $area;
         }
+        if (strpos($namespace, self::NOT_ALLOWED_IN_NAMESPACE_PATH) !== false) {
+            return null;
+        }
         if (in_array(strtolower($action), $this->reservedWords)) {
             $action .= 'action';
         }
@@ -80,7 +90,6 @@ class ActionList
         if (isset($this->actions[$fullPath])) {
             return is_subclass_of($this->actions[$fullPath], $this->actionInterface) ? $this->actions[$fullPath] : null;
         }
-
         return null;
     }
 }

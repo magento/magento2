@@ -95,7 +95,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         $this->setMainFieldsetHtmlId($mainFieldsetHtmlId);
         $fieldset = $this->getForm()->addFieldset(
             $mainFieldsetHtmlId,
-            ['legend' => __('Frontend App Options'), 'class' => 'fieldset-wide']
+            ['legend' => __('Widget Options'), 'class' => 'fieldset-wide fieldset-widget-options']
         );
         $this->setData('main_fieldset', $fieldset);
 
@@ -116,7 +116,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     {
         // get configuration node and translation helper
         if (!$this->getWidgetType()) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify a Frontend App Type.'));
+            throw new \Magento\Framework\Exception\LocalizedException(__('Please specify a Widget Type.'));
         }
         $config = $this->_widget->getConfigAsObject($this->getWidgetType());
         if (!$config->getParameters()) {
@@ -132,7 +132,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
     /**
      * Add field to Options form based on parameter configuration
      *
-     * @param \Magento\Framework\Object $parameter
+     * @param \Magento\Framework\DataObject $parameter
      * @return \Magento\Framework\Data\Form\Element\AbstractElement
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -200,7 +200,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
                 '',
                 ['data' => $helper->getData()]
             );
-            if ($helperBlock instanceof \Magento\Framework\Object) {
+            if ($helperBlock instanceof \Magento\Framework\DataObject) {
                 $helperBlock->setConfig(
                     $helper->getData()
                 )->setFieldsetId(

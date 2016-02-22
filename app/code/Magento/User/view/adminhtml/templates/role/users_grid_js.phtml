@@ -17,7 +17,7 @@ require([
 <!--
 <?php $myBlock = $block->getLayout()->getBlock('roleUsersGrid'); ?>
 <?php if (is_object($myBlock) && $myBlock->getJsObjectName()): ?>
-    var checkBoxes = $H(<?php echo $myBlock->getUsers(true) ?>);
+    var checkBoxes = $H(<?php /* @escapeNotVerified */ echo $myBlock->getUsers(true) ?>);
     var warning = false;
     if (checkBoxes.size() > 0) {
         warning = true;
@@ -44,7 +44,7 @@ require([
             if(checkbox[0]){
                 var checked = isInput ? !checkbox[0].checked : checkbox[0].checked;
                 if (checked) {
-                    if ( confirm("<?php echo __('Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?') ?>") ) {
+                    if ( confirm("<?php /* @escapeNotVerified */ echo __('Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?') ?>") ) {
                         checkbox[0].checked = false;
                         checkBoxes.unset(checkbox[0].value);
                         varienElementMethods.setHasChanges(checkbox[0]);
@@ -80,24 +80,26 @@ require([
     function massSelectUsers(allCheckbox)
     {
         if (!allCheckbox.checked && checkBoxes.size() > 0) {
-            if (!confirm("<?php echo __('Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?') ?>") ) {
+            if (!confirm("<?php /* @escapeNotVerified */ echo __('Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?') ?>") ) {
                 allCheckbox.checked = false;
                 return false;
             }
         }
-        <?php echo $myBlock->getJsObjectName() ?>.rows.each(function(row)
+        <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.rows.each(function(row)
         {
             $(row).getElementsByClassName('checkbox')[0].checked = allCheckbox.checked;
-            roleUsersRowInit(<?php echo $myBlock->getJsObjectName() ?>, row);
+            roleUsersRowInit(<?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>, row);
         });
     }
     Event.observe(window, "load", function(){
-        <?php echo $myBlock->getJsObjectName() ?>.rowClickCallback = roleUsersRowClick;
-        <?php echo $myBlock->getJsObjectName() ?>.initRowCallback = roleUsersRowInit;
-        <?php echo $myBlock->getJsObjectName() ?>.checkboxCheckCallback = registerUserRole;
-        <?php echo $myBlock->getJsObjectName() ?>.checkCheckboxes = massSelectUsers;
-        <?php echo $myBlock->getJsObjectName() ?>.rows.each(function(row){roleUsersRowInit(<?php echo $myBlock->getJsObjectName() ?>, row)});
-        $('in_role_user_old').value = $('in_role_user').value;
+        <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.rowClickCallback = roleUsersRowClick;
+        <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.initRowCallback = roleUsersRowInit;
+        <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.checkboxCheckCallback = registerUserRole;
+        <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.checkCheckboxes = massSelectUsers;
+        <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.rows.each(function(row){roleUsersRowInit(<?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>, row)});
+        if (!$('in_role_user_old').value) {
+            $('in_role_user_old').value = $('in_role_user').value;
+        }
     });
 <?php endif; ?>
 //-->

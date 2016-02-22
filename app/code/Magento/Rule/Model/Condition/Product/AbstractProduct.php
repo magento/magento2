@@ -65,12 +65,12 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     protected $productRepository;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Product
+     * @var \Magento\Catalog\Model\ResourceModel\Product
      */
     protected $_productResource;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection
      */
     protected $_attrSetCollection;
 
@@ -85,8 +85,8 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param \Magento\Catalog\Model\Resource\Product $productResource
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection
+     * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection
      * @param \Magento\Framework\Locale\FormatInterface $localeFormat
      * @param array $data
      */
@@ -96,8 +96,8 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
         \Magento\Eav\Model\Config $config,
         \Magento\Catalog\Model\ProductFactory $productFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        \Magento\Catalog\Model\Resource\Product $productResource,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Set\Collection $attrSetCollection,
+        \Magento\Catalog\Model\ResourceModel\Product $productResource,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection $attrSetCollection,
         \Magento\Framework\Locale\FormatInterface $localeFormat,
         array $data = []
     ) {
@@ -132,14 +132,14 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     /**
      * Retrieve attribute object
      *
-     * @return \Magento\Catalog\Model\Resource\Eav\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Eav\Attribute
      */
     public function getAttributeObject()
     {
         try {
             $obj = $this->_config->getAttribute(\Magento\Catalog\Model\Product::ENTITY, $this->getAttribute());
         } catch (\Exception $e) {
-            $obj = new \Magento\Framework\Object();
+            $obj = new \Magento\Framework\DataObject();
             $obj->setEntity($this->_productFactory->create())->setFrontendInput('text');
         }
         return $obj;
@@ -153,7 +153,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      */
     protected function _addSpecialAttributes(array &$attributes)
     {
-        $attributes['attribute_set_id'] = __('Product Template');
+        $attributes['attribute_set_id'] = __('Attribute Set');
         $attributes['category_ids'] = __('Category');
     }
 
@@ -168,7 +168,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
 
         $attributes = [];
         foreach ($productAttributes as $attribute) {
-            /* @var $attribute \Magento\Catalog\Model\Resource\Eav\Attribute */
+            /* @var $attribute \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
             if (!$attribute->isAllowedForRuleCondition() || !$attribute->getDataUsingMethod(
                 $this->_isUsedForRuleProperty
             )
@@ -332,7 +332,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     /**
      * Collect validated attributes
      *
-     * @param \Magento\Catalog\Model\Resource\Product\Collection $productCollection
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection
      * @return $this
      */
     public function collectValidatedAttributes($productCollection)
@@ -581,7 +581,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
     {
         if ($this->getAttribute() == 'category_ids') {
             return new \Zend_Db_Expr(
-                $this->_productResource->getReadConnection()
+                $this->_productResource->getConnection()
                 ->select()
                 ->from(
                     $this->_productResource->getTable('catalog_category_product'),
@@ -640,9 +640,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      */
     protected function _getAvailableInCategories($productId)
     {
-        return $this->_productResource->getReadConnection()
+        return $this->_productResource->getConnection()
             ->fetchCol(
-                $this->_productResource->getReadConnection()
+                $this->_productResource->getConnection()
                     ->select()
                     ->distinct()
                     ->from(
@@ -663,9 +663,9 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      */
     protected function _getAttributeSetId($productId)
     {
-        return $this->_productResource->getReadConnection()
+        return $this->_productResource->getConnection()
             ->fetchOne(
-                $this->_productResource->getReadConnection()
+                $this->_productResource->getConnection()
                     ->select()
                     ->distinct()
                     ->from(

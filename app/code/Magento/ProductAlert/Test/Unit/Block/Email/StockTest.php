@@ -11,7 +11,7 @@ namespace Magento\ProductAlert\Test\Unit\Block\Email;
 class StockTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Block\Product\View\Stock
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\ProductAlert\Block\Email\Stock
      */
     protected $_block;
 
@@ -19,6 +19,11 @@ class StockTest extends \PHPUnit_Framework_TestCase
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Filter\Input\MaliciousCode
      */
     protected $_filter;
+
+    /**
+     * @var \Magento\Catalog\Block\Product\ImageBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $imageBuilder;
 
     protected function setUp()
     {
@@ -30,9 +35,17 @@ class StockTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->imageBuilder = $this->getMockBuilder('Magento\Catalog\Block\Product\ImageBuilder')
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->_block = $objectManager->getObject(
             'Magento\ProductAlert\Block\Email\Stock',
-            ['maliciousCode' => $this->_filter]
+            [
+                'maliciousCode' => $this->_filter,
+                'imageBuilder' => $this->imageBuilder,
+            ]
         );
     }
 
@@ -54,5 +67,40 @@ class StockTest extends \PHPUnit_Framework_TestCase
             'normal desc' => ['<b>Howdy!</b>', '<b>Howdy!</b>'],
             'malicious desc 1' => ['<javascript>Howdy!</javascript>', 'Howdy!'],
         ];
+    }
+
+    public function testGetImage()
+    {
+        $imageId = 'test_image_id';
+        $attributes = [];
+
+        $productMock = $this->getMockBuilder('Magento\Catalog\Model\Product')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $imageMock = $this->getMockBuilder('Magento\Catalog\Block\Product\Image')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->imageBuilder->expects($this->once())
+            ->method('setProduct')
+            ->with($productMock)
+            ->willReturnSelf();
+        $this->imageBuilder->expects($this->once())
+            ->method('setImageId')
+            ->with($imageId)
+            ->willReturnSelf();
+        $this->imageBuilder->expects($this->once())
+            ->method('setAttributes')
+            ->with($attributes)
+            ->willReturnSelf();
+        $this->imageBuilder->expects($this->once())
+            ->method('create')
+            ->willReturn($imageMock);
+
+        $this->assertInstanceOf(
+            'Magento\Catalog\Block\Product\Image',
+            $this->_block->getImage($productMock, $imageId, $attributes)
+        );
     }
 }

@@ -7,7 +7,7 @@
  */
 namespace Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Integration\Block\Adminhtml\Widget\Grid\Column\Renderer\Link;
 use Magento\Integration\Model\Integration;
 
@@ -18,14 +18,14 @@ class Activate extends Link
      */
     public function getCaption()
     {
-        return $this->_row->getStatus() == Integration::STATUS_INACTIVE ? __('Activate') : __('Reauthorize');
+        return $this->_row->getStatus() != Integration::STATUS_ACTIVE ? __('Activate') : __('Reauthorize');
     }
 
     /**
      * {@inheritDoc}
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function _getUrl(Object $row)
+    protected function _getUrl(DataObject $row)
     {
         return 'javascript:void(0);';
     }

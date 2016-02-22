@@ -13,18 +13,18 @@
     <?php echo($block->getChildHtml('wishlist.rss.link'));?>
     <form class="form-wishlist-items" id="wishlist-view-form"
           data-mage-init='{"wishlist":{
-          "addToCartUrl":<?php echo $block->getItemAddToCartParams("%item%");?>,
-          "confirmRemoveMessage":"<?php echo __("Are you sure you want to remove this product from your Wish List?") ?>",
-          "addAllToCartUrl":<?php echo $block->getAddAllToCartParams(); ?>,
+          "addToCartUrl":<?php /* @escapeNotVerified */ echo $block->getItemAddToCartParams("%item%");?>,
+          "confirmRemoveMessage":"<?php /* @escapeNotVerified */ echo __("Are you sure you want to remove this product from your Wish List?") ?>",
+          "addAllToCartUrl":<?php /* @escapeNotVerified */ echo $block->getAddAllToCartParams(); ?>,
           "commentString":""},
-          "validation": {}}' action="<?php echo $block->getUrl('wishlist/index/update', ['wishlist_id' => $block->getWishlistInstance()->getId()]) ?>" method="post">
+          "validation": {}}' action="<?php /* @escapeNotVerified */ echo $block->getUrl('wishlist/index/update', ['wishlist_id' => $block->getWishlistInstance()->getId()]) ?>" method="post">
         <?php echo $block->getChildHtml('top'); ?>
         <?php if ($block->hasWishlistItems()): ?>
             <?php echo $block->getBlockHtml('formkey');?>
             <?php $block->getChildBlock('items')->setItems($block->getWishlistItems()); ?>
             <?php echo $block->getChildHtml('items');?>
         <?php else: ?>
-            <div class="message info empty"><span><?php echo __('You have no items in your wish list.') ?></span></div>
+            <div class="message info empty"><span><?php /* @escapeNotVerified */ echo __('You have no items in your wish list.') ?></span></div>
         <?php endif ?>
         <?php echo $block->getChildHtml('bottom'); ?>
         <div class="actions-toolbar">
@@ -33,7 +33,7 @@
             </div>
             <div class="secondary">
                 <a href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
-                    <span><?php echo __('Back') ?></span>
+                    <span><?php /* @escapeNotVerified */ echo __('Back') ?></span>
                 </a>
             </div>
         </div>

@@ -107,7 +107,10 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         );
         $result = $model->create(['backend' => 'Zend_Cache_Backend_BlackHole']);
 
-        $this->assertInstanceOf('Magento\Framework\App\Test\Unit\Cache\Frontend\FactoryTest\CacheDecoratorDummy', $result);
+        $this->assertInstanceOf(
+            'Magento\Framework\App\Test\Unit\Cache\Frontend\FactoryTest\CacheDecoratorDummy',
+            $result
+        );
 
         $params = $result->getParams();
         $this->assertArrayHasKey('param', $params);
@@ -148,7 +151,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $filesystem->expects($this->any())->method('getDirectoryRead')->will($this->returnValue($dirMock));
         $filesystem->expects($this->any())->method('getDirectoryWrite')->will($this->returnValue($dirMock));
 
-        $resource = $this->getMock('Magento\Framework\App\Resource', [], [], '', false);
+        $resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
 
         $model = new \Magento\Framework\App\Cache\Frontend\Factory(
             $objectManager,

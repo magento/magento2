@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <virtualType name="Magento\Paypal\Model\PayflowadvancedFactory" type="Magento\Paypal\Model\PayflowlinkFactory">
         <arguments>
             <argument name="instanceName" xsi:type="string">Magento\Paypal\Model\Payflowadvanced</argument>
@@ -37,18 +37,6 @@
         </arguments>
     </type>
     <virtualType name="Magento\Paypal\Block\WpsExpress\Shortcut" type="Magento\Paypal\Block\Express\Shortcut"></virtualType>
-    <virtualType name="Magento\Paypal\Block\Express\ShortcutContainer" type="Magento\Paypal\Block\Express\Shortcut">
-        <arguments>
-            <argument name="alias" xsi:type="string">product.info.addtocart.paypalShortcutContainer</argument>
-            <argument name="shortcutTemplate" xsi:type="string">express/shortcut/container.phtml</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Magento\Paypal\Block\WpsExpress\ShortcutContainer" type="Magento\Paypal\Block\Express\Shortcut">
-        <arguments>
-            <argument name="alias" xsi:type="string">product.info.addtocart.paypalShortcutContainer</argument>
-            <argument name="shortcutTemplate" xsi:type="string">express/shortcut/container.phtml</argument>
-        </arguments>
-    </virtualType>
     <virtualType name="Magento\Paypal\Block\PayflowExpress\Shortcut" type="Magento\Paypal\Block\Express\Shortcut">
         <arguments>
             <argument name="paymentMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS</argument>
@@ -56,13 +44,6 @@
             <argument name="checkoutType" xsi:type="string">Magento\Paypal\Model\PayflowExpress\Checkout</argument>
             <argument name="alias" xsi:type="string">product.info.addtocart.payflow</argument>
             <argument name="shortcutTemplate" xsi:type="string">express/shortcut.phtml</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Magento\Paypal\Block\PayflowExpress\ShortcutContainer" type="Magento\Paypal\Block\Express\Shortcut">
-        <arguments>
-            <argument name="paymentMethodCode" xsi:type="const">Magento\Paypal\Model\Config::METHOD_WPP_PE_EXPRESS</argument>
-            <argument name="alias" xsi:type="string">product.info.addtocart.payflowShortcutContainer</argument>
-            <argument name="shortcutTemplate" xsi:type="string">express/shortcut/container.phtml</argument>
         </arguments>
     </virtualType>
     <type name="Magento\Paypal\Block\Bml\Shortcut">
@@ -143,6 +124,29 @@
             <argument name="handlers" xsi:type="array">
                 <item name="fraudHandler" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Handler\FraudHandler</item>
                 <item name="creditCardHandler" xsi:type="object">Magento\Paypal\Model\Payflow\Service\Response\Handler\CreditCardValidationHandler</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="PayflowproCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="vault_authorize" xsi:type="string">Magento\Paypal\Gateway\Payflowpro\Command\AuthorizationCommand</item>
+                <item name="vault_sale" xsi:type="string">Magento\Paypal\Gateway\Payflowpro\Command\SaleCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="PayflowproCommandManager" type="Magento\Payment\Gateway\Command\CommandManager">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">PayflowproCommandPool</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Payment\Gateway\Command\CommandManagerPool">
+        <arguments>
+            <argument name="executors" xsi:type="array">
+                <item name="payflowpro" xsi:type="string">PayflowproCommandManager</item>
             </argument>
         </arguments>
     </type>

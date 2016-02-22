@@ -36,12 +36,12 @@ interface StockItemCriteriaInterface extends \Magento\Framework\Api\CriteriaInte
     public function setStockFilter($stock);
 
     /**
-     * Add website filter to collection
+     * Add scope filter to collection
      *
-     * @param int $website
+     * @param int $scope
      * @return bool
      */
-    public function setWebsiteFilter($website);
+    public function setScopeFilter($scope);
 
     /**
      * Add product filter to collection

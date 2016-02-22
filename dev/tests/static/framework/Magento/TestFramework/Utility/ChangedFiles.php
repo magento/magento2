@@ -25,13 +25,38 @@ class ChangedFiles
     {
         $fileHelper = \Magento\Framework\App\Utility\Files::init();
         if (isset($_ENV['INCREMENTAL_BUILD'])) {
-            $phpFiles = Files::readLists($changedFilesList);
+            $phpFiles = [];
+            foreach (glob($changedFilesList) as $listFile) {
+                $phpFiles = array_merge($phpFiles, file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
+            }
+            array_walk(
+                $phpFiles,
+                function (&$file) {
+                    $file = BP . '/' . $file;
+                }
+            );
             if (!empty($phpFiles)) {
                 $phpFiles = \Magento\Framework\App\Utility\Files::composeDataSets($phpFiles);
-                $phpFiles = array_intersect_key($phpFiles, $fileHelper->getPhpFiles());
+                $phpFiles = array_intersect_key($phpFiles, $fileHelper->getPhpFiles(
+                    Files::INCLUDE_APP_CODE
+                    | Files::INCLUDE_PUB_CODE
+                    | Files::INCLUDE_LIBS
+                    | Files::INCLUDE_TEMPLATES
+                    | Files::INCLUDE_TESTS
+                    | Files::AS_DATA_SET
+                    | Files::INCLUDE_NON_CLASSES
+                ));
             }
         } else {
-            $phpFiles = $fileHelper->getPhpFiles();
+            $phpFiles = $fileHelper->getPhpFiles(
+                Files::INCLUDE_APP_CODE
+                | Files::INCLUDE_PUB_CODE
+                | Files::INCLUDE_LIBS
+                | Files::INCLUDE_TEMPLATES
+                | Files::INCLUDE_TESTS
+                | Files::AS_DATA_SET
+                | Files::INCLUDE_NON_CLASSES
+            );
         }
 
         return $phpFiles;

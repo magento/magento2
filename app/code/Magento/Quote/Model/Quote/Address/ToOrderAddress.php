@@ -6,9 +6,9 @@
 
 namespace Magento\Quote\Model\Quote\Address;
 
-use Magento\Framework\Object\Copy;
+use Magento\Framework\DataObject\Copy;
 use Magento\Quote\Model\Quote\Address;
-use Magento\Sales\Api\Data\OrderAddressInterfaceFactory as OrderAddressFactory;
+use Magento\Sales\Model\Order\AddressRepository as OrderAddressRepository;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 
 /**
@@ -22,9 +22,9 @@ class ToOrderAddress
     protected $objectCopyService;
 
     /**
-     * @var OrderAddressFactory
+     * @var OrderAddressRepository
      */
-    protected $orderAddressFactory;
+    protected $orderAddressRepository;
 
     /**
      * @var \Magento\Framework\Api\DataObjectHelper
@@ -32,16 +32,16 @@ class ToOrderAddress
     protected $dataObjectHelper;
 
     /**
-     * @param OrderAddressFactory $orderAddressFactory
+     * @param OrderAddressRepository $orderAddressRepository
      * @param Copy $objectCopyService
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
      */
     public function __construct(
-        OrderAddressFactory $orderAddressFactory,
+        OrderAddressRepository $orderAddressRepository,
         Copy $objectCopyService,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
     ) {
-        $this->orderAddressFactory = $orderAddressFactory;
+        $this->orderAddressRepository = $orderAddressRepository;
         $this->objectCopyService = $objectCopyService;
         $this->dataObjectHelper = $dataObjectHelper;
     }
@@ -53,13 +53,14 @@ class ToOrderAddress
      */
     public function convert(Address $object, $data = [])
     {
+        $orderAddress = $this->orderAddressRepository->create();
+
         $orderAddressData = $this->objectCopyService->getDataFromFieldset(
-            'quote_convert_address',
+            'sales_convert_quote_address',
             'to_order_address',
             $object
         );
 
-        $orderAddress = $this->orderAddressFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $orderAddress,
             array_merge($orderAddressData, $data),

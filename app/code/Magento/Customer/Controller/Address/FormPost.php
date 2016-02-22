@@ -106,7 +106,6 @@ class FormPost extends \Magento\Customer\Controller\Address
             array_merge($existingAddressData, $attributeValues),
             '\Magento\Customer\Api\Data\AddressInterface'
         );
-
         $addressDataObject->setCustomerId($this->_getSession()->getCustomerId())
             ->setIsDefaultBilling($this->getRequest()->getParam('default_billing', false))
             ->setIsDefaultShipping($this->getRequest()->getParam('default_shipping', false));
@@ -118,12 +117,16 @@ class FormPost extends \Magento\Customer\Controller\Address
      * Retrieve existing address data
      *
      * @return array
+     * @throws \Exception
      */
     protected function getExistingAddressData()
     {
         $existingAddressData = [];
         if ($addressId = $this->getRequest()->getParam('id')) {
             $existingAddress = $this->_addressRepository->getById($addressId);
+            if ($existingAddress->getCustomerId() !== $this->_getSession()->getCustomerId()) {
+                throw new \Exception();
+            }
             $existingAddressData = $this->_dataProcessor->buildOutputDataArray(
                 $existingAddress,
                 '\Magento\Customer\Api\Data\AddressInterface'
@@ -143,12 +146,10 @@ class FormPost extends \Magento\Customer\Controller\Address
      */
     protected function updateRegionData(&$attributeValues)
     {
-        if ($this->helperData->isRegionRequired($attributeValues['country_id'])) {
+        if (!empty($attributeValues['region_id'])) {
             $newRegion = $this->regionFactory->create()->load($attributeValues['region_id']);
             $attributeValues['region_code'] = $newRegion->getCode();
             $attributeValues['region'] = $newRegion->getDefaultName();
-        } else {
-            $attributeValues['region_id'] = null;
         }
 
         $regionData = [
@@ -175,6 +176,7 @@ class FormPost extends \Magento\Customer\Controller\Address
      */
     public function execute()
     {
+        $redirectUrl = null;
         if (!$this->_formKeyValidator->validate($this->getRequest())) {
             return $this->resultRedirectFactory->create()->setPath('*/*/');
         }
@@ -198,11 +200,16 @@ class FormPost extends \Magento\Customer\Controller\Address
                 $this->messageManager->addError($error->getMessage());
             }
         } catch (\Exception $e) {
+            $redirectUrl = $this->_buildUrl('*/*/index');
             $this->messageManager->addException($e, __('We can\'t save the address.'));
         }
 
-        $this->_getSession()->setAddressFormData($this->getRequest()->getPostValue());
-        $url = $this->_buildUrl('*/*/edit', ['id' => $this->getRequest()->getParam('id')]);
+        $url = $redirectUrl;
+        if (!$redirectUrl) {
+            $this->_getSession()->setAddressFormData($this->getRequest()->getPostValue());
+            $url = $this->_buildUrl('*/*/edit', ['id' => $this->getRequest()->getParam('id')]);
+        }
+
         return $this->resultRedirectFactory->create()->setUrl($this->_redirect->error($url));
     }
 }

@@ -6,8 +6,12 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="../../../../Magento/Customer/etc/sections.xsd">
+    xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Customer:etc/sections.xsd">
     <action name="customer/account/logout"/>
     <action name="customer/account/loginPost"/>
     <action name="customer/account/createPost"/>
+    <action name="customer/ajax/login">
+        <section name="checkout-data"/>
+        <section name="cart"/>
+    </action>
 </config>

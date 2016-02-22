@@ -8,13 +8,13 @@
 
 ?>
 <div class="field gender<?php if ($block->isRequired()) echo ' required' ?>">
-    <label class="label" for="<?php echo $block->getFieldId('gender')?>"><span><?php echo __('Gender') ?></span></label>
+    <label class="label" for="<?php /* @escapeNotVerified */ echo $block->getFieldId('gender')?>"><span><?php /* @escapeNotVerified */ echo __('Gender') ?></span></label>
     <div class="control">
-        <select id="<?php echo $block->getFieldId('gender')?>" name="<?php echo $block->getFieldName('gender')?>" title="<?php echo __('Gender') ?>"<?php if ($block->isRequired()):?> class="validate-select" data-validate="{required:true}"<?php endif; ?> <?php echo $block->getFieldParams() ?>>
+        <select id="<?php /* @escapeNotVerified */ echo $block->getFieldId('gender')?>" name="<?php /* @escapeNotVerified */ echo $block->getFieldName('gender')?>" title="<?php /* @escapeNotVerified */ echo __('Gender') ?>"<?php if ($block->isRequired()):?> class="validate-select" data-validate="{required:true}"<?php endif; ?> <?php /* @escapeNotVerified */ echo $block->getFieldParams() ?>>
             <?php $options = $block->getGenderOptions(); ?>
             <?php $value = $block->getGender();?>
             <?php foreach ($options as $option):?>
-                <option value="<?php echo $option->getValue() ?>"<?php if ($option->getValue() == $value) echo ' selected="selected"' ?>><?php echo $option->getLabel() ?></option>
+                <option value="<?php /* @escapeNotVerified */ echo $option->getValue() ?>"<?php if ($option->getValue() == $value) echo ' selected="selected"' ?>><?php /* @escapeNotVerified */ echo __($option->getLabel()) ?></option>
             <?php endforeach;?>
         </select>
     </div>

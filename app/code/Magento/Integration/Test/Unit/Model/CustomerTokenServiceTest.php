@@ -22,10 +22,10 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
     /** \Magento\Customer\Api\AccountManagementInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_accountManagementMock;
 
-    /** \Magento\Integration\Model\Resource\Oauth\Token\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** \Magento\Integration\Model\ResourceModel\Oauth\Token\Collection|\PHPUnit_Framework_MockObject_MockObject */
     protected $_tokenModelCollectionMock;
 
-    /** \Magento\Integration\Model\Resource\Oauth\Token\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** \PHPUnit_Framework_MockObject_MockObject */
     protected $_tokenModelCollectionFactoryMock;
 
     /** @var \Magento\Integration\Model\CredentialsValidator|\PHPUnit_Framework_MockObject_MockObject */
@@ -52,13 +52,13 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getToken', 'loadByCustomerId', 'setRevoked', 'save', '__wakeup'])->getMock();
 
         $this->_tokenModelCollectionMock = $this->getMockBuilder(
-            'Magento\Integration\Model\Resource\Oauth\Token\Collection'
+            'Magento\Integration\Model\ResourceModel\Oauth\Token\Collection'
         )->disableOriginalConstructor()->setMethods(
             ['addFilterByCustomerId', 'getSize', '__wakeup', '_beforeLoad', '_afterLoad', 'getIterator']
         )->getMock();
 
         $this->_tokenModelCollectionFactoryMock = $this->getMockBuilder(
-            'Magento\Integration\Model\Resource\Oauth\Token\CollectionFactory'
+            'Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory'
         )->setMethods(['create'])->disableOriginalConstructor()->getMock();
 
         $this->_tokenModelCollectionFactoryMock->expects($this->once())

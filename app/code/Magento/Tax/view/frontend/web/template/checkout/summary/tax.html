@@ -6,15 +6,15 @@
 -->
 <!-- ko if: ifShowValue() && !ifShowDetails() -->
 <tr class="totals-tax">
-    <th data-bind="text: $t(title)" class="mark" scope="row"></th>
-    <td data-bind="attr: {'data-th': $t(title) }" class="amount">
+    <th data-bind="text: title" class="mark" scope="row"></th>
+    <td data-bind="attr: {'data-th': title}" class="amount">
         <!-- ko if: isCalculated() -->
             <span class="price"
-                  data-bind="text: $t(getValue())"></span>
+                  data-bind="text: getValue()"></span>
         <!-- /ko -->
         <!-- ko ifnot: isCalculated() -->
             <span class="not-calculated"
-                  data-bind="text: $t(getValue())"></span>
+                  data-bind="text: getValue()"></span>
         <!-- /ko -->
     </td>
 </tr>
@@ -22,15 +22,15 @@
 <!-- ko if: ifShowValue() && ifShowDetails() -->
     <tr class="totals-tax-summary"
         data-bind="mageInit: {'toggleAdvanced':{'selectorsToggleClass': 'shown', 'baseToggleClass': 'expanded', 'toggleContainers': '.totals-tax-details'}}">
-        <th data-bind="text: $t(title)" class="mark" scope="row"></th>
-        <td data-bind="attr: {'data-th': $t(title) }" class="amount">
+        <th data-bind="text: title" class="mark" scope="row"></th>
+        <td data-bind="attr: {'data-th': title }" class="amount">
             <!-- ko if: isCalculated() -->
             <span class="price"
-                  data-bind="text: $t(getValue())"></span>
+                  data-bind="text: getValue()"></span>
             <!-- /ko -->
             <!-- ko ifnot: isCalculated() -->
             <span class="not-calculated"
-                  data-bind="text: $t(getValue())"></span>
+                  data-bind="text: getValue()"></span>
             <!-- /ko -->
         </td>
     </tr>

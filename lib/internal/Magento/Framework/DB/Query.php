@@ -27,7 +27,7 @@ class Query implements QueryInterface
     /**
      * Resource instance
      *
-     * @var \Magento\Framework\Model\Resource\Db\AbstractDb
+     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected $resource;
 
@@ -69,22 +69,22 @@ class Query implements QueryInterface
      * @var array
      */
     protected $countSqlSkipParts = [
-        \Zend_Db_Select::ORDER => true,
-        \Zend_Db_Select::LIMIT_COUNT => true,
-        \Zend_Db_Select::LIMIT_OFFSET => true,
-        \Zend_Db_Select::COLUMNS => true,
+        \Magento\Framework\DB\Select::ORDER => true,
+        \Magento\Framework\DB\Select::LIMIT_COUNT => true,
+        \Magento\Framework\DB\Select::LIMIT_OFFSET => true,
+        \Magento\Framework\DB\Select::COLUMNS => true,
     ];
 
     /**
      * @param \Magento\Framework\DB\Select $select
      * @param \Magento\Framework\Api\CriteriaInterface $criteria
-     * @param \Magento\Framework\Model\Resource\Db\AbstractDb $resource
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      */
     public function __construct(
         \Magento\Framework\DB\Select $select,
         \Magento\Framework\Api\CriteriaInterface $criteria,
-        \Magento\Framework\Model\Resource\Db\AbstractDb $resource,
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
     ) {
         $this->select = $select;
@@ -111,10 +111,10 @@ class Query implements QueryInterface
     public function getAllIds()
     {
         $idsSelect = clone $this->getSelect();
-        $idsSelect->reset(\Zend_Db_Select::ORDER);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_COUNT);
-        $idsSelect->reset(\Zend_Db_Select::LIMIT_OFFSET);
-        $idsSelect->reset(\Zend_Db_Select::COLUMNS);
+        $idsSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $idsSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $idsSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
         $idsSelect->columns($this->getResource()->getIdFieldName(), 'main_table');
         return $this->getConnection()->fetchCol($idsSelect, $this->bindParams);
     }
@@ -218,13 +218,13 @@ class Query implements QueryInterface
      */
     public function getConnection()
     {
-        return $this->getSelect()->getAdapter();
+        return $this->getSelect()->getConnection();
     }
 
     /**
      * Get resource instance
      *
-     * @return \Magento\Framework\Model\Resource\Db\AbstractDb
+     * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function getResource()
     {

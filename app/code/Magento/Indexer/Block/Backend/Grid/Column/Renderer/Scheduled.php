@@ -10,10 +10,10 @@ class Scheduled extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstr
     /**
      * Render whether indexer is scheduled
      *
-     * @param \Magento\Framework\Object $row
+     * @param \Magento\Framework\DataObject $row
      * @return string
      */
-    public function render(\Magento\Framework\Object $row)
+    public function render(\Magento\Framework\DataObject $row)
     {
         if ($this->_getValue($row)) {
             $class = 'grid-severity-notice';

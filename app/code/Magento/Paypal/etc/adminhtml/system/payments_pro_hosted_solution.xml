@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Config/etc/system_include.xsd">
+<include xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_include.xsd">
     <group id="payments_pro_hosted_solution" translate="label comment" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
         <label>Website Payments Pro Hosted Solution</label>
         <fieldset_css>pp-method-general</fieldset_css>
@@ -37,7 +37,7 @@
                 <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\Payment</frontend_model>
                 <requires>
-                    <group id="pphs_required_settings"/>
+                    <group id="pphs_required_settings_pphs"/>
                 </requires>
                 <frontend_class>paypal-enabler paypal-ec-separate</frontend_class>
             </field>

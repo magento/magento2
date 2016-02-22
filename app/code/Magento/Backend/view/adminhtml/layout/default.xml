@@ -5,10 +5,10 @@
  * See COPYING.txt for license details.
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <title>Magento Admin</title>
-        <meta name="viewport" content="width=device-width"/>
+        <meta name="viewport" content="width=1024, initial-scale=1"/>
         <link src="requirejs/require.js"/>
         <css src="extjs/resources/css/ext-all.css"/>
         <css src="extjs/resources/css/ytheme-magento.css"/>
@@ -53,22 +53,23 @@
             <block class="Magento\Framework\View\Element\Template" name="page.actions.toolbar" template="Magento_Backend::pageactions.phtml" after="-"/>
         </referenceContainer>
         <referenceContainer name="footer">
-            <block class="Magento\Backend\Block\Page\Locale" name="locale.switcher" template="Magento_Backend::page/locale.phtml"/>
-            <container name="legal" htmlTag="div" htmlClass="footer-legal col-m-6 col-m-offset-1">
-                <block class="Magento\Backend\Block\Page\Footer" name="version" as="version" />
-                <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright" />
-                <block class="Magento\Framework\View\Element\Template" name="report" as="report" template="Magento_Backend::page/report.phtml">
-                    <arguments>
-                        <argument name="bugreport_url" xsi:type="string">https://github.com/magento/magento2/issues</argument>
-                    </arguments>
-                </block>
+            <container name="legal" htmlTag="div" htmlClass="footer-legal">
+                <container name="legal.copyright" htmlTag="p" htmlClass="copyright col-m-6">
+                    <block class="Magento\Backend\Block\Page\Copyright" name="copyright" as="copyright" />
+                </container>
+                <container name="legal.system" htmlTag="div" htmlClass="footer-legal-system col-m-6">
+                    <block class="Magento\Backend\Block\Page\Footer" name="version" as="version" />
+                    <block class="Magento\Framework\View\Element\Template" name="report" as="report" template="Magento_Backend::page/report.phtml">
+                        <arguments>
+                            <argument name="bugreport_url" xsi:type="string">https://github.com/magento/magento2/issues</argument>
+                        </arguments>
+                    </block>
+                </container>
             </container>
-        </referenceContainer>
-        <referenceContainer name="backend.page">
-            <block class="Magento\Framework\View\Element\Template" name="page.loader" template="Magento_Backend::admin/loader.phtml" after="-"/>
         </referenceContainer>
         <referenceContainer name="after.body.start">
             <block class="Magento\RequireJs\Block\Html\Head\Config" name="requirejs-config"/>
+            <block class="Magento\Translation\Block\Html\Head\Config" name="translate-config"/>
             <block class="Magento\Translation\Block\Js" name="translate" template="Magento_Translation::translate.phtml"/>
             <block class="Magento\Framework\View\Element\Js\Components" name="head.components" as="components" template="Magento_Backend::page/js/components.phtml"/>
             <block class="Magento\Framework\View\Element\Html\Calendar" name="head.calendar" as="calendar" template="Magento_Backend::page/js/calendar.phtml"/>

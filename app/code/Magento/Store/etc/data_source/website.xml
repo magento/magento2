@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Ui/etc/data_source.xsd">
-    <dataSource name="website" label="Website" dataSet="Magento\Store\Model\Resource\Website\Collection">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/data_source.xsd">
+    <dataSource name="website" label="Website" dataSet="Magento\Store\Model\ResourceModel\Website\Collection">
         <fields>
             <field name="website_id" dataType="number" visible="false"/>
             <field name="name" dataType="text"/>

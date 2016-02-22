@@ -10,5 +10,5 @@
 ?>
 
 <?php foreach ($block->getChildNames() as $childName): ?>
-    <?php echo $block->getLayout()->renderElement($childName, false); ?>
+    <?php /* @escapeNotVerified */ echo $block->getLayout()->renderElement($childName, false); ?>
 <?php endforeach;?>

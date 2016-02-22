@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../../../../app/code/Magento/Catalog/etc/product_types.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Catalog:etc/product_types.xsd">
     <type name="type_one" label="Label One" modelInstance="Instance_Type" composite="true" indexPriority="40" canUseQtyDecimals="true" isQty="true" sortOrder="100">
         <priceModel instance="Instance_Type_One" />
         <indexerModel instance="Instance_Type_Two" />

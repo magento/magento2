@@ -32,18 +32,6 @@ class Radios extends AbstractElement
     }
 
     /**
-     * @return mixed
-     */
-    public function getSeparator()
-    {
-        $separator = $this->getData('separator');
-        if ($separator === null) {
-            $separator = '&nbsp;';
-        }
-        return $separator;
-    }
-
-    /**
      * @return string
      */
     public function getElementHtml()
@@ -66,22 +54,23 @@ class Radios extends AbstractElement
      */
     protected function _optionToHtml($option, $selected)
     {
-        $html = '<input type="radio"' . $this->serialize(['name', 'class', 'style']);
+        $html = '<div class="admin__field admin__field-option">' .
+            '<input type="radio"' . $this->getRadioButtonAttributes($option);
         if (is_array($option)) {
             $html .= 'value="' . $this->_escape(
                 $option['value']
-            ) . '"  id="' . $this->getHtmlId() . $option['value'] . '"';
+            ) . '" class="admin__control-radio" id="' . $this->getHtmlId() . $option['value'] . '"';
             if ($option['value'] == $selected) {
                 $html .= ' checked="checked"';
             }
             $html .= ' />';
-            $html .= '<label class="inline" for="' .
+            $html .= '<label class="admin__field-label" for="' .
                 $this->getHtmlId() .
                 $option['value'] .
-                '">' .
+                '"><span>' .
                 $option['label'] .
-                '</label>';
-        } elseif ($option instanceof \Magento\Framework\Object) {
+                '</span></label>';
+        } elseif ($option instanceof \Magento\Framework\DataObject) {
             $html .= 'id="' . $this->getHtmlId() . $option->getValue() . '"' . $option->serialize(
                 ['label', 'title', 'value', 'class', 'style']
             );
@@ -96,7 +85,31 @@ class Radios extends AbstractElement
                 $option->getLabel() .
                 '</label>';
         }
-        $html .= $this->getSeparator() . "\n";
+        $html .= '</div>';
         return $html;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHtmlAttributes()
+    {
+        return array_merge(parent::getHtmlAttributes(), ['name']);
+    }
+
+    /**
+     * @param array $option
+     * @return string
+     */
+    protected function getRadioButtonAttributes($option)
+    {
+        $html = '';
+        foreach ($this->getHtmlAttributes() as $attribute) {
+            if ($value = $this->getDataUsingMethod($attribute, $option['value'])) {
+                $html .= ' ' . $attribute . '="' . $value . '" ';
+            }
+        }
+        return $html;
+
     }
 }

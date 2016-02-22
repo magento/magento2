@@ -29,11 +29,11 @@ class HandlerFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->setExpectedException(
             '\InvalidArgumentException',
-            'Magento\Framework\Object does not implement ' .
+            'Magento\Framework\DataObject does not implement ' .
             'Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface'
         );
         $this->_objectManagerMock->expects($this->never())->method('create');
-        $this->_model->create('Magento\Framework\Object');
+        $this->_model->create('Magento\Framework\DataObject');
     }
 
     public function testCreateWithValidType()

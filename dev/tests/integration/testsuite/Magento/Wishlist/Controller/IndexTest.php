@@ -5,6 +5,8 @@
  */
 namespace Magento\Wishlist\Controller;
 
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
+
 class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     /**
@@ -55,7 +57,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
      * Verify wishlist view action
      *
      * The following is verified:
-     * - \Magento\Wishlist\Model\Resource\Item\Collection
+     * - \Magento\Wishlist\Model\ResourceModel\Item\Collection
      * - \Magento\Wishlist\Block\Customer\Wishlist
      * - \Magento\Wishlist\Block\Customer\Wishlist\Items
      * - \Magento\Wishlist\Block\Customer\Wishlist\Item\Column
@@ -77,17 +79,43 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_simple_xss.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoAppArea frontend
      */
     public function testAddActionProductNameXss()
     {
-        $this->dispatch('wishlist/index/add/product/1?nocookie=1');
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
+        $this->getRequest()->setPostValue([
+            'form_key' => $formKey->getFormKey(),
+        ]);
+
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Catalog\Api\ProductRepositoryInterface');
+
+        $product = $productRepository->get('product-with-xss');
+
+        $this->dispatch('wishlist/index/add/product/' . $product->getId() . '?nocookie=1');
         $messages = $this->_messages->getMessages()->getItems();
         $isProductNamePresent = false;
+
+        /** @var InterpretationStrategyInterface $interpretationStrategy */
+        $interpretationStrategy = $this->_objectManager->create(
+            'Magento\Framework\View\Element\Message\InterpretationStrategyInterface'
+        );
         foreach ($messages as $message) {
-            if (strpos($message->getText(), '&lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;') !== false) {
+            if (
+                strpos(
+                    $interpretationStrategy->interpret($message),
+                    '&lt;script&gt;alert(&quot;xss&quot;);&lt;/script&gt;'
+                ) !== false
+            ) {
                 $isProductNamePresent = true;
             }
-            $this->assertNotContains('<script>alert("xss");</script>', (string)$message->getText());
+            $this->assertNotContains(
+                '<script>alert("xss");</script>',
+                $interpretationStrategy->interpret($message)
+            );
         }
         $this->assertTrue($isProductNamePresent, 'Product name was not found in session messages');
     }

@@ -51,7 +51,7 @@ class PrintInvoice extends \Magento\Sales\Controller\AbstractController\PrintInv
 
         $invoiceId = (int)$this->getRequest()->getParam('invoice_id');
         if ($invoiceId) {
-            $invoice = $this->_objectManager->create('Magento\Sales\Model\Order\Invoice')->load($invoiceId);
+            $invoice = $this->_objectManager->create('Magento\Sales\Api\InvoiceRepositoryInterface')->get($invoiceId);
             $order = $invoice->getOrder();
         } else {
             $order = $this->_coreRegistry->registry('current_order');

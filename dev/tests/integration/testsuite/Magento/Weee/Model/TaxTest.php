@@ -14,6 +14,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 /**
  * @magentoDataFixture Magento/Customer/_files/customer_sample.php
  * @magentoDataFixture Magento/Catalog/_files/products.php
+ * @magentoDataFixture Magento/Weee/_files/product_with_fpt.php
  */
 class TaxTest extends \PHPUnit_Framework_TestCase
 {
@@ -32,9 +33,10 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $objectManager = Bootstrap::getObjectManager();
         $weeeConfig = $this->getMock('Magento\Weee\Model\Config', [], [], '', false);
         $weeeConfig->expects($this->any())->method('isEnabled')->will($this->returnValue(true));
+        $weeeConfig->expects($this->any())->method('isTaxable')->will($this->returnValue(true));
         $attribute = $this->getMock('Magento\Eav\Model\Entity\Attribute', [], [], '', false);
         $attribute->expects($this->any())->method('getAttributeCodesByFrontendType')->will(
-            $this->returnValue(['price'])
+            $this->returnValue(['weee'])
         );
         $attributeFactory = $this->getMock('Magento\Eav\Model\Entity\AttributeFactory', ['create'], [], '', false);
         $attributeFactory->expects($this->any())->method('create')->will($this->returnValue($attribute));
@@ -80,24 +82,15 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $quote->setCustomerGroupId($fixtureGroupId);
         $quote->setCustomerTaxClassId($fixtureTaxClassId);
         $quote->setCustomer($customerDataSet);
-        $shipping = new \Magento\Framework\Object([
+        $shipping = new \Magento\Framework\DataObject([
             'quote' =>  $quote,
         ]);
-        $product = Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-        $product->load(1);
-        $weeeTax = Bootstrap::getObjectManager()->create('Magento\Weee\Model\Tax');
-        $weeeTaxData = [
-            'website_id' => '1',
-            'entity_id' => '1',
-            'country' => 'US',
-            'value' => '12.4',
-            'state' => '0',
-            'attribute_id' => '73',
-            'entity_type_id' => '0',
-        ];
-        $weeeTax->setData($weeeTaxData);
-        $weeeTax->save();
-        $amount = $this->_model->getProductWeeeAttributes($product, $shipping);
-        $this->assertEquals('12.4000', $amount[0]->getAmount());
+        $productRepository = Bootstrap::getObjectManager()->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $product = $productRepository->get('simple-with-ftp');
+
+        $amount = $this->_model->getProductWeeeAttributes($product, $shipping, null, null, true);
+        $this->assertTrue(is_array($amount));
+        $this->assertArrayHasKey(0, $amount);
+        $this->assertEquals(12.70, $amount[0]->getAmount());
     }
 }

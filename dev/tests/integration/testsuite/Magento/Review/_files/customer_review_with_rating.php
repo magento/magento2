@@ -37,7 +37,7 @@ $review
     $review
 );
 
-/** @var \Magento\Review\Model\Resource\Review\Collection $ratingCollection */
+/** @var \Magento\Review\Model\ResourceModel\Review\Collection $ratingCollection */
 $ratingCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     '\Magento\Review\Model\Rating'
 )->getCollection()

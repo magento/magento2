@@ -31,13 +31,6 @@ class StateTest extends \PHPUnit_Framework_TestCase
         $this->model = new \Magento\Framework\App\State($this->scopeMock);
     }
 
-    public function testSetGetUpdateMode()
-    {
-        $this->assertFalse($this->model->getUpdateMode());
-        $this->model->setUpdateMode(true);
-        $this->assertTrue($this->model->getUpdateMode());
-    }
-
     public function testSetAreaCode()
     {
         $areaCode = 'some code';

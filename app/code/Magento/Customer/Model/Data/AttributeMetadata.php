@@ -6,6 +6,8 @@
 
 namespace Magento\Customer\Model\Data;
 
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
+
 /**
  * Customer attribute metadata class.
  */
@@ -333,5 +335,69 @@ class AttributeMetadata extends \Magento\Framework\Api\AbstractSimpleObject impl
     public function setBackendType($backendType)
     {
         return $this->setData(self::BACKEND_TYPE, $backendType);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getIsUsedInGrid()
+    {
+        return $this->_get(self::IS_USED_IN_GRID);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getIsVisibleInGrid()
+    {
+        return $this->_get(self::IS_VISIBLE_IN_GRID);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getIsFilterableInGrid()
+    {
+        return $this->_get(self::IS_FILTERABLE_IN_GRID);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getIsSearchableInGrid()
+    {
+        return $this->_get(self::IS_SEARCHABLE_IN_GRID);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setIsUsedInGrid($isUsedInGrid)
+    {
+        return $this->setData(self::IS_USED_IN_GRID, $isUsedInGrid);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setIsVisibleInGrid($isVisibleInGrid)
+    {
+        return $this->setData(self::IS_VISIBLE_IN_GRID, $isVisibleInGrid);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setIsFilterableInGrid($isFilterableInGrid)
+    {
+        return $this->setData(self::IS_FILTERABLE_IN_GRID, $isFilterableInGrid);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setIsSearchableInGrid($isSearchableInGrid)
+    {
+        return $this->setData(self::IS_SEARCHABLE_IN_GRID, $isSearchableInGrid);
     }
 }

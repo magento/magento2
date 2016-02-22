@@ -21,6 +21,5 @@ return [
     '/lib/web/mage/decorate.js',
     '/lib/web/jquery/jquery.validate.js',
     '/lib/web/jquery/jquery.metadata.js',
-    '/lib/web/mage/translate.js',
-    '/lib/web/mage/requirejs/plugin/id-normalizer.js',
+    '/lib/web/mage/translate.js'
 ];

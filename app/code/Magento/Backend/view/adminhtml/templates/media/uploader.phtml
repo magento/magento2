@@ -4,14 +4,16 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /** @var $block \Magento\Backend\Block\Media\Uploader */
 ?>
 
 <div id="<?php echo $block->getHtmlId() ?>" class="uploader">
     <div class="fileinput-button form-buttons button">
-        <span><?php echo __('Browse Files...') ?></span>
-        <input id="fileupload" type="file" name="<?php echo $block->getConfig()->getFileField() ?>"
-            data-url="<?php echo $block->getConfig()->getUrl() ?>" multiple="multiple" />
+        <span><?php /* @escapeNotVerified */ echo __('Browse Files...') ?></span>
+        <input id="fileupload" type="file" name="<?php /* @escapeNotVerified */ echo $block->getConfig()->getFileField() ?>"
+            data-url="<?php /* @escapeNotVerified */ echo $block->getConfig()->getUrl() ?>" multiple="multiple" />
     </div>
     <div class="clear"></div>
     <script id="<?php echo $block->getHtmlId() ?>-template" type="text/x-magento-template">
@@ -29,16 +31,20 @@
 require([
     "jquery",
     'mage/template',
+    'Magento_Ui/js/modal/alert',
     "mage/translate",
     "jquery/file-uploader"
-], function ($, mageTemplate) {
+], function ($, mageTemplate, alert) {
 
     $('#fileupload').fileupload({
         dataType: 'json',
+        formData: {
+            'form_key': window.FORM_KEY
+        },
         dropZone: '[data-tab-panel=image-management]',
         sequentialUploads: true,
         acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-        maxFileSize: <?php echo $block->getFileSizeService()->getMaxFileSize() ?> ,
+        maxFileSize: <?php /* @escapeNotVerified */ echo $block->getFileSizeService()->getMaxFileSize() ?> ,
         add: function (e, data) {
             var progressTmpl = mageTemplate('#<?php echo $block->getHtmlId(); ?>-template'),
                 fileSize,
@@ -73,7 +79,9 @@ require([
                 $('#' + data.fileId)
                     .delay(2000)
                     .hide('highlight');
-                alert($.mage.__('We don\'t recognize or support this file extension type.'));
+                alert({
+                   content: $.mage.__('We don\'t recognize or support this file extension type.')
+                });
             }
             $('#' + data.fileId).remove();
         },
@@ -96,8 +104,8 @@ require([
             fileTypes: /^image\/(gif|jpeg|png)$/
         }, {
             action: 'resize',
-            maxWidth: <?php echo \Magento\Framework\File\Uploader::MAX_IMAGE_WIDTH ?> ,
-            maxHeight: <?php echo \Magento\Framework\File\Uploader::MAX_IMAGE_HEIGHT ?>
+            maxWidth: <?php /* @escapeNotVerified */ echo \Magento\Framework\File\Uploader::MAX_IMAGE_WIDTH ?> ,
+            maxHeight: <?php /* @escapeNotVerified */ echo \Magento\Framework\File\Uploader::MAX_IMAGE_HEIGHT ?>
         }, {
             action: 'save'
         }]

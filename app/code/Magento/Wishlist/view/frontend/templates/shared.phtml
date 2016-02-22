@@ -7,19 +7,18 @@
 // @codingStandardsIgnoreFile
 
 /* @var $block \Magento\Wishlist\Block\Share\Wishlist */
-$imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\Image');
 ?>
 
 <?php if ($block->hasWishlistItems()): ?>
-    <form class="form shared wishlist" action="<?php echo $block->getUrl('wishlist/index/update') ?>" method="post">
+    <form class="form shared wishlist" action="<?php /* @escapeNotVerified */ echo $block->getUrl('wishlist/index/update') ?>" method="post">
         <div class="wishlist table-wrapper">
             <table class="table data wishlist" id="wishlist-table">
-                <caption class="table-caption"><?php echo __('Wish List'); ?></caption>
+                <caption class="table-caption"><?php /* @escapeNotVerified */ echo __('Wish List'); ?></caption>
                 <thead>
                 <tr>
-                    <th class="col product" scope="col"><?php echo __('Product') ?></th>
-                    <th class="col comment" scope="col"><?php echo __('Comment') ?></th>
-                    <th class="col actions" scope="col"><?php echo __('Add to Cart') ?></th>
+                    <th class="col product" scope="col"><?php /* @escapeNotVerified */ echo __('Product') ?></th>
+                    <th class="col comment" scope="col"><?php /* @escapeNotVerified */ echo __('Comment') ?></th>
+                    <th class="col actions" scope="col"><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -30,11 +29,11 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
                     ?>
                     <tr>
                         <td data-th="<?php echo $block->escapeHtml(__('Product')) ?>" class="col product">
-                            <a class="product photo" href="<?php echo $block->getProductUrl($item) ?>" title="<?php echo $block->escapeHtml($product->getName()) ?>">
-                                <?php echo $imageBlock->init($product, 'customer_shared_wishlist')->toHtml() ?>
+                            <a class="product photo" href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($item) ?>" title="<?php echo $block->escapeHtml($product->getName()) ?>">
+                                <?php echo $block->getImage($product, 'customer_shared_wishlist')->toHtml(); ?>
                             </a>
                             <strong class="product name">
-                                <a href="<?php echo $block->getProductUrl($item) ?>">
+                                <a href="<?php /* @escapeNotVerified */ echo $block->getProductUrl($item) ?>">
                                     <?php echo $block->escapeHtml($product->getName()) ?>
                                 </a>
                             </strong>
@@ -48,20 +47,20 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
                             ?>
                             <?php echo $block->getDetailsHtml($item) ?>
                         </td>
-                        <td data-th="<?php echo $block->escapeHtml(__('Comment')) ?>" class="col comment"><?php echo $block->getEscapedDescription($item) ?></td>
+                        <td data-th="<?php echo $block->escapeHtml(__('Comment')) ?>" class="col comment"><?php /* @escapeNotVerified */ echo $block->getEscapedDescription($item) ?></td>
                         <td data-th="<?php echo $block->escapeHtml(__('Add to Cart')) ?>" class="col actions" data-role="add-to-links">
                             <?php if ($product->isSaleable()): ?>
                                 <?php if ($isVisibleProduct): ?>
                                     <button type="button"
-                                            title="<?php echo __('Add to Cart') ?>"
-                                            data-post='<?php echo $block->getSharedItemAddToCartUrl($item); ?>'
+                                            title="<?php /* @escapeNotVerified */ echo __('Add to Cart') ?>"
+                                            data-post='<?php /* @escapeNotVerified */ echo $block->getSharedItemAddToCartUrl($item); ?>'
                                             class="action tocart">
-                                        <span><?php echo __('Add to Cart') ?></span>
+                                        <span><?php /* @escapeNotVerified */ echo __('Add to Cart') ?></span>
                                     </button>
                                 <?php endif ?>
                             <?php endif; ?>
-                            <a href="#" data-post='<?php echo $block->getAddToWishlistParams($item); ?>'  onclick="location.assign(this.href); return false;" class="action towishlist" data-action="add-to-wishlist">
-                                <span><?php echo __('Add to Wish List') ?></span>
+                            <a href="#" data-post='<?php /* @escapeNotVerified */ echo $block->getAddToWishlistParams($item); ?>'  onclick="location.assign(this.href); return false;" class="action towishlist" data-action="add-to-wishlist">
+                                <span><?php /* @escapeNotVerified */ echo __('Add to Wish List') ?></span>
                             </a>
                         </td>
                     </tr>
@@ -74,20 +73,20 @@ $imageBlock =  $block->getLayout()->createBlock('Magento\Catalog\Block\Product\I
             <?php if ($block->isSaleable()):?>
                 <div class="primary">
                     <button type="button"
-                            title="<?php echo __('Add All to Cart') ?>"
-                            data-post='<?php echo $block->getSharedAddAllToCartUrl(); ?>'
+                            title="<?php /* @escapeNotVerified */ echo __('Add All to Cart') ?>"
+                            data-post='<?php /* @escapeNotVerified */ echo $block->getSharedAddAllToCartUrl(); ?>'
                             class="action tocart primary">
-                        <span><?php echo __('Add All to Cart') ?></span>
+                        <span><?php /* @escapeNotVerified */ echo __('Add All to Cart') ?></span>
                     </button>
                 </div>
             <?php endif;?>
             <div class="secondary">
                 <a href="<?php echo $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
-                    <span><?php echo __('Back') ?></span>
+                    <span><?php /* @escapeNotVerified */ echo __('Back') ?></span>
                 </a>
             </div>
         </div>
     </form>
 <?php else: ?>
-    <div class="message info empty"><div><?php echo __('Wish List is empty now.') ?></div></div>
+    <div class="message info empty"><div><?php /* @escapeNotVerified */ echo __('Wish List is empty now.') ?></div></div>
 <?php endif ?>

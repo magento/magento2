@@ -73,10 +73,26 @@ class RollbackCommandTest extends \PHPUnit_Framework_TestCase
         $this->backupRollbackFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->backupRollback);
+        $appState = $this->getMock(
+            'Magento\Framework\App\State',
+            [],
+            [],
+            '',
+            false
+        );
+        $configLoader = $this->getMockForAbstractClass(
+            'Magento\Framework\ObjectManager\ConfigLoaderInterface',
+            [],
+            '',
+            false
+        );
+        $configLoader->expects($this->any())->method('load')->willReturn([]);
         $this->objectManager->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap([
                 ['Magento\Framework\Setup\BackupRollbackFactory', $this->backupRollbackFactory],
+                ['Magento\Framework\App\State', $appState],
+                ['Magento\Framework\ObjectManager\ConfigLoaderInterface', $configLoader],
             ]));
         $this->helperSet = $this->getMock('Symfony\Component\Console\Helper\HelperSet', [], [], '', false);
         $this->question = $this->getMock('Symfony\Component\Console\Helper\QuestionHelper', [], [], '', false);
@@ -150,9 +166,9 @@ class RollbackCommandTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue(true));
         $this->tester->execute([]);
         $expected = 'Enabling maintenance mode' . PHP_EOL
-            . 'Not enough information provided to roll back.'  . PHP_EOL
-            . 'Disabling maintenance mode';
-        $this->assertStringMatchesFormat($expected, $this->tester->getDisplay());
+            . 'Not enough information provided to roll back.' . PHP_EOL
+            . 'Disabling maintenance mode' . PHP_EOL;
+        $this->assertSame($expected, $this->tester->getDisplay());
     }
 
     public function testInteraction()

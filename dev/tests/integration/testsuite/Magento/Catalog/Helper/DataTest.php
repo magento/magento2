@@ -83,6 +83,8 @@ class DataTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/categories.php
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      */
     public function testGetBreadcrumbPath()
     {
@@ -237,7 +239,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param \Magento\Framework\Object $input
+     * @param \Magento\Framework\DataObject $input
      * @param float $expectOutputPrice
      * @param string[] $configs
      * @param string $productClassName
@@ -255,9 +257,10 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $productClassName = 'DefaultProductClass'
     ) {
         $this->setUpDefaultRules();
-        $fixtureProductId = 1;
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->get('Magento\Catalog\Api\ProductRepositoryInterface');
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product')->load($fixtureProductId);
+        $product = $productRepository->get('simple');
         $product->setTaxClassId($this->taxClasses[$productClassName]);
         $shippingAddress = $this->getCustomerAddress();
         $billingAddress = $shippingAddress;
@@ -290,19 +293,19 @@ class DataTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'price is 0' => [
-                (new \Magento\Framework\Object())->setPrice(0),
+                (new \Magento\Framework\DataObject())->setPrice(0),
                 0,
             ],
             'no price conversion, round' => [
-                (new \Magento\Framework\Object())->setPrice(3.256)->setRoundPrice(true),
+                (new \Magento\Framework\DataObject())->setPrice(3.256)->setRoundPrice(true),
                 '3.26',
             ],
             'no price conversion, no round' => [
-                (new \Magento\Framework\Object())->setPrice(3.256),
+                (new \Magento\Framework\DataObject())->setPrice(3.256),
                 '3.256',
             ],
             'price conversion, display including tax, round' => [
-                (new \Magento\Framework\Object())->setPrice(3.256)->setRoundPrice(true),
+                (new \Magento\Framework\DataObject())->setPrice(3.256)->setRoundPrice(true),
                 '3.5',
                 [
                     [
@@ -316,7 +319,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'price conversion, display including tax, no round' => [
-                (new \Magento\Framework\Object())->setPrice(3.256)->setNotEqual(true),
+                (new \Magento\Framework\DataObject())->setPrice(3.256)->setNotEqual(true),
                 '3.5',  // should be not equal to rounded value (eg, 3.5045009999999999)
                 [
                     [
@@ -330,7 +333,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'price conversion, display including tax, high rate product tax class, cross boarder trade, round' => [
-                (new \Magento\Framework\Object())->setPrice(3.256)->setRoundPrice(true),
+                (new \Magento\Framework\DataObject())->setPrice(3.256)->setRoundPrice(true),
                 '3.98', // rounding issue: old code expects 3.97
                 [
                     [
@@ -349,7 +352,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'HigherProductClass',
             ],
             'price include tax, display including tax, round' => [
-                (new \Magento\Framework\Object())->setPrice(3.256)->setRoundPrice(true),
+                (new \Magento\Framework\DataObject())->setPrice(3.256)->setRoundPrice(true),
                 '3.26',
                 [
                     [
@@ -363,7 +366,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'price include tax, display excluding tax, round' => [
-                (new \Magento\Framework\Object())->setPrice(3.256)->setRoundPrice(true),
+                (new \Magento\Framework\DataObject())->setPrice(3.256)->setRoundPrice(true),
                 '3.03',
                 [
                     [
@@ -377,7 +380,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'price include tax, display excluding tax, request including tax, round' => [
-                (new \Magento\Framework\Object())->setPrice(3.256)
+                (new \Magento\Framework\DataObject())->setPrice(3.256)
                     ->setRoundPrice(true)
                     ->setIncludingTax(true),
                 '3.26',
@@ -393,7 +396,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 ],
             ],
             'price include tax, display excluding tax, high rate product tax class, round' => [
-                (new \Magento\Framework\Object())->setPrice(3.256)->setRoundPrice(true),
+                (new \Magento\Framework\DataObject())->setPrice(3.256)->setRoundPrice(true),
                 '2.67',
                 [
                     [
@@ -408,7 +411,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
                 'HigherProductClass',
             ],
             'price include tax, display excluding tax, high rate product tax class, cross boarder trade, round' => [
-                (new \Magento\Framework\Object())->setPrice(3.256)->setRoundPrice(true),
+                (new \Magento\Framework\DataObject())->setPrice(3.256)->setRoundPrice(true),
                 '2.67',
                 [
                     [

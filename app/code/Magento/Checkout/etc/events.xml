@@ -5,8 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Event/etc/events.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
     <event name="sales_quote_save_after">
-        <observer name="set_checkout_quote_id" instance="Magento\Checkout\Model\Observer" method="salesQuoteSaveAfter" />
+        <observer name="set_checkout_quote_id" instance="Magento\Checkout\Observer\SalesQuoteSaveAfterObserver" />
     </event>
 </config>

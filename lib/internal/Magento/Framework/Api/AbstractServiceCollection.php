@@ -96,6 +96,9 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
      * <pre>
      * $field = ['age', 'name'];
      * $condition = [42, ['like' => 'Mage']];
+     * or
+     * ['rate', 'tax_postcode']
+     * [['from'=>"3",'to'=>'8.25'], ['like' =>'%91000%']];
      * </pre>
      * The above would find where age equal to 42 OR name like %Mage%.
      *
@@ -106,12 +109,91 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
      */
     public function addFieldToFilter($field, $condition)
     {
-        if (is_array($field) && count($field) != count($condition)) {
+        if (is_array($field) && is_array($condition) && count($field) != count($condition)) {
             throw new LocalizedException(
                 new \Magento\Framework\Phrase('When passing in a field array there must be a matching condition array.')
             );
+        } elseif (is_array($field) && !count($field) > 0) {
+            throw new LocalizedException(
+                new \Magento\Framework\Phrase(
+                    'When passing an array of fields there must be at least one field in the array.'
+                )
+            );
         }
+        $this->processFilters($field, $condition);
+        return $this;
+    }
+
+    /**
+     * Pre-process filters to create multiple groups in case of multiple conditions eg: from & to
+     * @param string|array $field
+     * @param string|int|array $condition
+     * @return $this
+     */
+    private function processFilters($field, $condition)
+    {
+        //test if we have multiple conditions per field
+        $requiresMultipleFilterGroups = false;
+        if (is_array($field) && is_array($condition)) {
+            foreach ($condition as $cond) {
+                if (is_array($cond) && count($cond) > 1) {
+                    $requiresMultipleFilterGroups = true;
+                    break;
+                }
+            }
+        } elseif (is_array($condition)) {
+            $requiresMultipleFilterGroups = true;
+        }
+
+        if ($requiresMultipleFilterGroups) {
+            $this->addFilterGroupsForMultipleConditions($field, $condition);
+        } else {
+            $this->addFilterGroupsForSingleConditions($field, $condition);
+        }
+        return $this;
+    }
+
+    /**
+     * Return a single filter group in case of single conditions
+     * @param string|array $field
+     * @param string|int|array $condition
+     * @return $this
+     */
+    private function addFilterGroupsForSingleConditions($field, $condition)
+    {
         $this->fieldFilters[] = ['field' => $field, 'condition' => $condition];
+        return $this;
+    }
+
+    /**
+     * Return multiple filters groups in case of multiple conditions eg: from & to
+     * @param string|array $field
+     * @param array $condition
+     * @return $this
+     */
+    private function addFilterGroupsForMultipleConditions($field, $condition)
+    {
+        if (!is_array($field) && is_array($condition)) {
+            foreach ($condition as $key => $value) {
+                $this->fieldFilters[] = ['field' => $field, 'condition' => [$key => $value]];
+            }
+        } else {
+            $cnt = 0;
+            foreach ($condition as $cond) {
+                if (is_array($cond)) {
+                    //we Do want multiple groups in this case
+                    foreach ($cond as $condKey => $condValue) {
+                        $this->fieldFilters[] = [
+                            'field' => array_slice($field, $cnt, 1, true),
+                            'condition' => [$condKey => $condValue]
+                        ];
+                    }
+                } else {
+                    $this->fieldFilters[] = ['field' => array_slice($field, $cnt, 1, true), 'condition' => $cond];
+                }
+                $cnt++;
+            }
+        }
         return $this;
     }
 
@@ -137,9 +219,9 @@ abstract class AbstractServiceCollection extends \Magento\Framework\Data\Collect
             $this->searchCriteriaBuilder->addFilters($filterGroup);
         }
         foreach ($this->_orders as $field => $direction) {
-            /** @var \Magento\Framework\Api\SortOrder $sortOrder */
+            /** @var SortOrder $sortOrder */
             /** @var string $direction */
-            $direction = ($direction == 'ASC') ? SearchCriteria::SORT_ASC : SearchCriteria::SORT_DESC;
+            $direction = ($direction == 'ASC') ? SortOrder::SORT_ASC : SortOrder::SORT_DESC;
             $sortOrder = $this->sortOrderBuilder->setField($field)->setDirection($direction)->create();
             $this->searchCriteriaBuilder->addSortOrder($sortOrder);
         }

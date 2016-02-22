@@ -3,13 +3,15 @@
  * See COPYING.txt for license details.
  */
 define([
-    'uiComponent'
-], function (Component) {
+    'underscore',
+    'uiCollection'
+], function (_, Collection) {
     'use strict';
 
-    return Component.extend({
+    return Collection.extend({
         defaults: {
-            template: 'ui/grid/filters/chips'
+            template: 'ui/grid/filters/chips',
+            componentType: 'filtersChips'
         },
 
         /**
@@ -17,9 +19,9 @@ define([
          *
          * @returns {Boolean}
          */
-        hasData: function () {
+        hasPreviews: function () {
             return this.elems().some(function (elem) {
-                return !!elem.previews().length;
+                return !!elem.previews.length;
             });
         },
 
@@ -29,7 +31,7 @@ define([
          * @returns {Chips} Chainable.
          */
         clear: function () {
-            this.elems.each('clear');
+            _.invoke(this.elems(), 'clear');
 
             return this;
         }

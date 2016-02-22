@@ -21,7 +21,7 @@
             <button
                 type="submit"
                 class="search-global-action"
-                title="<?php echo __('Search') ?>"
+                title="<?php /* @escapeNotVerified */ echo __('Search') ?>"
                 ></button>
         </div>
     </form>
@@ -40,7 +40,7 @@
         <% } else { %>
             <li>
                 <span class="mage-suggest-no-records">
-                    <?php echo __('No records found.') ?>
+                    <?php /* @escapeNotVerified */ echo __('No records found.') ?>
                 </span>
             </li>
         <% } %>

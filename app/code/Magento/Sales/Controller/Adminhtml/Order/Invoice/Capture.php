@@ -23,7 +23,8 @@ class Capture extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoic
             return $resultForward;
         }
         try {
-            $invoice->capture();
+            $invoiceManagement = $this->_objectManager->get('Magento\Sales\Api\InvoiceManagementInterface');
+            $invoiceManagement->setCapture($invoice->getEntityId());
             $invoice->getOrder()->setIsInProcess(true);
             $this->_objectManager->create(
                 'Magento\Framework\DB\Transaction'

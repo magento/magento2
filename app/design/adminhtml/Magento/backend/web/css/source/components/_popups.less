@@ -39,7 +39,7 @@
 
     .ui-dialog-titlebar-close {
         cursor: pointer;
-        .icon-font(
+        .lib-icon-font(
         @_icon-font-content: @popup-close-icon__content,
         @_icon-font: @popup-close-icon__font,
         @_icon-font-size: @popup-close-icon__font-size,
@@ -49,9 +49,11 @@
         position: absolute;
         right: @popup-close-icon__right;
         top: @popup-close-icon__top - .3;
+
         .ui-icon {
             display: none;
         }
+
         &.ui-state-hover {
             border: none;
         }
@@ -85,9 +87,11 @@
         font-size: @button__large__font-size;
         margin: 0 0 0 @popup__padding__horizontal;
         padding: @button__large__padding-vertical 0;
+
         &:before {
             content: normal;
         }
+
         span {
             position: static;
             overflow: auto;
@@ -112,6 +116,7 @@
     .side-col {
         float: left;
         padding-bottom: 0;
+
         &:after {
             display: none;
         }
@@ -228,9 +233,11 @@
             margin: 0 0 @indent__base;
             padding-bottom: @indent__xs;
         }
+
         .insert-actions {
             float: right;
         }
+
         .title {
             font-size: @font-size__l;
             padding-top: @indent__xs;
@@ -245,9 +252,11 @@
         .breadcrumbs {
             list-style: none;
             padding-left: 0;
+
             li {
                 display: inline-block;
                 margin: 0 @indent__xs @indent__xs 0;
+
                 &:after {
                     content: '';
                     margin: 0 @indent__xs 0 0;
@@ -264,9 +273,11 @@
             display: inline-block;
             float: none;
             vertical-align: middle;
+
             span {
                 display: none;
             }
+
             input {
                 border: none;
                 -moz-transform: none;
@@ -288,9 +299,11 @@
             padding: 3px;
             width: 100px;
             overflow: hidden;
+
             &.selected {
                 border-color: @color-blue-dodger;
             }
+
             p {
                 text-align: center;
             }
@@ -314,8 +327,10 @@
             margin: 0 0 @indent__base @popup-fieldset__margin-left;
             width: auto;
         }
+
         .product-options {
             margin-left: @popup-fieldset__margin-left;
+
             .admin__field-control {
                 margin-bottom: @indent__base;
             }
@@ -331,36 +346,44 @@
         font-weight: @font-weight__bold;
         padding: 2rem 2rem 0 7.5rem;
     }
+
     .ui-dialog-titlebar-close {
         right: 1.5rem;
         top: 1rem;
+
         &:before {
             font-size: 1.4rem;
         }
     }
+
     .ui-dialog-content {
         background: @color-lazy-sun;
         margin-bottom: 0;
         overflow: inherit;
         padding: 0 2rem 2rem;
+
         .messages,
         .message {
             &:last-child {
                 margin-bottom: 0;
             }
         }
+
         .message {
             &:first-child {
                 padding-top: 0;
+
                 &:before {
                     top: 0;
                 }
             }
+
             &:last-child {
                 padding-bottom: 0;
             }
         }
     }
+
     .ui-dialog-buttonpane {
         background: @color-lazy-sun;
         padding: 0 2rem 2rem;
@@ -375,9 +398,11 @@
     list-style: none;
     margin: 0;
     padding: 0;
+
     li {
         margin-top: @indent__xs;
         padding-left: @indent__s;
+
         b {
             margin-left: -@indent__s;
             display: inline-block;
@@ -389,20 +414,23 @@
 //  Attribute Popup
 //  _____________________________________________
 
-.attribute-popup-actions {
-    background: @color-white;
-    border-top: 1px solid @color-gray68;
-    bottom: 0;
-    left: 0;
-    padding: @popup__padding;
-    position: fixed;
-    right: 0;
-    top: auto !important;
+.attribute-popup-actions { // ToDo UI: remove or refactor after New attribute popup refactored to sliding panel
+    &:extend(.abs-clearfix all);
+    background: @page-main-actions__background-color;
+    border-bottom: 1px solid @page-main-actions__border-color;
+    border-top: 1px solid @page-main-actions__border-color;
+    padding: @page-main-actions__padding;
+
+    &.page-actions {
+        float: none;
+    }
+
     &.fixed { // ToDo UI: remove or refactor after New attribute popup refactored to sliding panel
         background: @color-white !important;
         border-bottom: 0 !important;
         left: 0 !important;
         padding: @popup__padding !important;
+
         .page-actions-buttons {
             padding-right: 0;
         }
@@ -429,6 +457,28 @@
     }
 }
 
+.ie9 {
+    .catalog-product-attribute-edit {
+        &.attribute-popup {
+            min-width: 0;
+
+            .menu-wrapper {
+                display: none;
+            }
+
+            .page-actions {
+                button {
+                    float: none;
+                }
+
+                .primary {
+                    float: right;
+                }
+            }
+        }
+    }
+}
+
 //
 //  Prototype popup window
 //  _____________________________________________
@@ -438,6 +488,7 @@
 
 .popup-window {
     background: @popup__background-color;
+
     &.dialog {
         z-index: 900 !important;
     }
@@ -463,6 +514,14 @@
 
     .magento_content {
         height: auto !important;
+
+        .buttons-set {
+            margin: 0 0 15px;
+
+            button {
+                margin-right: 4px;
+            }
+        }
     }
 
     .magento_buttons {
@@ -511,6 +570,7 @@
         top: 5rem;
         text-align: left;
         width: 75%;
+
         .close {
             &:extend(.ui-dialog .ui-dialog-titlebar-close all);
         }
@@ -538,21 +598,26 @@
         &:extend(.abs-clearfix all);
         background: @color-lazy-sun;
         padding: 0 2rem 2rem;
+
         p {
             margin-top: 0;
         }
+
         .messages {
             &:last-child {
                 margin-bottom: 0;
             }
         }
+
         .message {
             &:first-child {
                 padding-top: 0;
+
                 &:before {
                     top: 0;
                 }
             }
+
             &:last-child {
                 padding-bottom: 0;
             }
@@ -584,6 +649,7 @@
             float: right;
             line-height: inherit;
             margin: 0 0 0 @popup__padding__horizontal;
+
             &:hover {
                 box-shadow: none;
             }
@@ -591,6 +657,7 @@
 
         .cancel {
             line-height: inherit;
+
             &:extend(.ui-dialog .action-close all);
             &:hover {
                 box-shadow: none;

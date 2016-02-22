@@ -16,23 +16,19 @@ use Magento\Framework\Filesystem\FileResolver;
 class Populator
 {
     /**
-     * @param AutoloaderInterface $registry
+     * @param AutoloaderInterface $autoloader
      * @param DirectoryList $dirList
      * @return void
      */
     public static function populateMappings(AutoloaderInterface $autoloader, DirectoryList $dirList)
     {
-        $modulesDir = $dirList->getPath(DirectoryList::MODULES);
         $generationDir = $dirList->getPath(DirectoryList::GENERATION);
         $frameworkDir = $dirList->getPath(DirectoryList::LIB_INTERNAL);
 
-        $autoloader->addPsr4('Magento\\', [$modulesDir . '/Magento/', $generationDir . '/Magento/'], true);
+        $autoloader->addPsr4('Magento\\', [$generationDir . '/Magento/'], true);
 
-        $autoloader->addPsr0('Apache_', $frameworkDir, true);
         $autoloader->addPsr0('Cm_', $frameworkDir, true);
         $autoloader->addPsr0('Credis_', $frameworkDir, true);
-        $autoloader->addPsr0('Less_', $frameworkDir, true);
-        $autoloader->addPsr0('Symfony\\', $frameworkDir, true);
 
         /** Required for Zend functionality */
         FileResolver::addIncludePath($frameworkDir);
@@ -41,6 +37,6 @@ class Populator
         FileResolver::addIncludePath($generationDir);
 
         /** Required to autoload custom classes */
-        $autoloader->addPsr0('', [$modulesDir, $generationDir]);
+        $autoloader->addPsr0('', [$generationDir]);
     }
 }

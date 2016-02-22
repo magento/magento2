@@ -95,8 +95,11 @@ class Cookie extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function _getAcceptedSaveCookiesWebsites()
     {
+        $unSerializedList = null;
         $serializedList = $this->_request->getCookie(self::IS_USER_ALLOWED_SAVE_COOKIE, false);
-        $unSerializedList = json_decode($serializedList, true);
+        if ($serializedList) {
+            $unSerializedList = json_decode($serializedList, true);
+        }
         return is_array($unSerializedList) ? $unSerializedList : [];
     }
 

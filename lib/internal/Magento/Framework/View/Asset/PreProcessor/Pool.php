@@ -14,24 +14,51 @@ use Magento\Framework\View\Asset\PreProcessorInterface;
  */
 class Pool
 {
+    const PREPROCESSOR_CLASS = 'class';
+
+    /**
+     * @var array
+     */
+    private $preprocessors;
+
+    /**
+     * @var array
+     */
+    private $instances;
+
+    /**
+     * @var Helper\SortInterface
+     */
+    private $sorter;
+
+    /**
+     * @var string
+     */
+    private $defaultPreprocessor;
+
     /**
      * @var ObjectManagerInterface
      */
     private $objectManager;
 
     /**
-     * @var array
-     */
-    private $preProcessorClasses = [];
-
-    /**
+     * Constructor
+     *
      * @param ObjectManagerInterface $objectManager
-     * @param array $preProcessors
+     * @param Helper\SortInterface $sorter
+     * @param string $defaultPreprocessor
+     * @param array $preprocessors
      */
-    public function __construct(ObjectManagerInterface $objectManager, array $preProcessors = [])
-    {
+    public function __construct(
+        ObjectManagerInterface $objectManager,
+        Helper\SortInterface $sorter,
+        $defaultPreprocessor,
+        array $preprocessors = []
+    ) {
+        $this->preprocessors = $preprocessors;
+        $this->sorter = $sorter;
+        $this->defaultPreprocessor = $defaultPreprocessor;
         $this->objectManager = $objectManager;
-        $this->preProcessorClasses = $preProcessors;
     }
 
     /**
@@ -42,9 +69,8 @@ class Pool
      */
     public function process(Chain $chain)
     {
-        $fromType = $chain->getOrigContentType();
-        $toType = $chain->getTargetContentType();
-        foreach ($this->getPreProcessors($fromType, $toType) as $preProcessor) {
+        $type = $chain->getTargetContentType();
+        foreach ($this->getPreProcessors($type) as $preProcessor) {
             $preProcessor->process($chain);
         }
     }
@@ -52,28 +78,35 @@ class Pool
     /**
      * Retrieve preProcessors by types
      *
-     * @param string $fromType
-     * @param string $toType
+     * @param string $type
      * @return PreProcessorInterface[]
+     * @throws \UnexpectedValueException
      */
-    private function getPreProcessors($fromType, $toType)
+    private function getPreProcessors($type)
     {
-        $preProcessors = [];
-        if (isset($this->preProcessorClasses[$fromType]) && isset($this->preProcessorClasses[$fromType][$toType])) {
-            $preProcessors = $this->preProcessorClasses[$fromType][$toType];
+        if (isset($this->instances[$type])) {
+            return $this->instances[$type];
+        }
+
+        if (isset($this->preprocessors[$type])) {
+            $preprocessors = $this->sorter->sort($this->preprocessors[$type]);
         } else {
-            $preProcessors[] = 'Magento\Framework\View\Asset\PreProcessor\Passthrough';
+            $preprocessors = [
+                'default' => [self::PREPROCESSOR_CLASS => $this->defaultPreprocessor]
+            ];
         }
 
-        $processorInstances = [];
-        foreach ($preProcessors as $preProcessor) {
-            $processorInstance = $this->objectManager->get($preProcessor);
-            if (!$processorInstance instanceof PreProcessorInterface) {
-                throw new \UnexpectedValueException("{$preProcessor} has to implement the PreProcessorInterface.");
+        $this->instances[$type] = [];
+        foreach ($preprocessors as $preprocessor) {
+            $instance = $this->objectManager->get($preprocessor[self::PREPROCESSOR_CLASS]);
+            if (!$instance instanceof PreProcessorInterface) {
+                throw new \UnexpectedValueException(
+                    '"' . $preprocessor[self::PREPROCESSOR_CLASS] . '" has to implement the PreProcessorInterface.'
+                );
             }
-            $processorInstances[] = $processorInstance;
+            $this->instances[$type][] = $instance;
         }
 
-        return $processorInstances;
+        return $this->instances[$type];
     }
 }

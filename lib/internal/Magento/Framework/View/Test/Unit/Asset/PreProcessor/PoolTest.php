@@ -6,124 +6,181 @@
 
 namespace Magento\Framework\View\Test\Unit\Asset\PreProcessor;
 
-use \Magento\Framework\View\Asset\PreProcessor\Pool;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\View\Asset\PreProcessor\Pool;
+use Magento\Framework\View\Asset\PreProcessor\Chain;
+use Magento\Framework\View\Asset\PreProcessorInterface;
+use Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface;
 
+/**
+ * Class PoolTest
+ *
+ * @see \Magento\Framework\View\Asset\PreProcessor\Pool
+ */
 class PoolTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @var \Magento\Framework\View\Asset\PreProcessor\Pool
-     */
-    protected $processorPool;
+    const DEFAULT_PREPROCESSOR = 'defaul/preprocessor';
+
+    const CONTENT_TYPE = 'test-type';
+
+    const PREPROCESSOR_CLASS = 'Magento\Framework\View\Asset\PreProcessorInterface';
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $objectManager;
+    private $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\View\Asset\PreProcessor\Chain|\PHPUnit_Framework_MockObject_MockObject
+     * @var SortInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $processorChain;
+    private $sorterMock;
 
-    protected function setUp()
+    /**
+     * Set up
+     *
+     * @return void
+     */
+    public function setUp()
     {
-        $this->objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface');
+        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+            ->getMockForAbstractClass();
+        $this->sorterMock = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\Helper\SortInterface')
+            ->getMockForAbstractClass();
+    }
 
-        $this->processorChain = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\Chain')
+    /**
+     * @return Chain|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getChainMock($type)
+    {
+        /** @var Chain|\PHPUnit_Framework_MockObject_MockObject $chainMock */
+        $chainMock = $this->getMockBuilder('Magento\Framework\View\Asset\PreProcessor\Chain')
             ->disableOriginalConstructor()
-            ->setMethods([])
             ->getMock();
 
-        $this->processorPool = new Pool(
-            $this->objectManager,
-            [
-                'less' => [
-                    'css' =>
-                        [
-                            'Magento\Framework\Css\PreProcessor\Less',
-                            'Magento\Framework\View\Asset\PreProcessor\VariableNotation',
-                            'Magento\Framework\View\Asset\PreProcessor\ModuleNotation',
-                        ],
-                    'less' =>
-                        [
-                            'Magento\Framework\Less\PreProcessor\Instruction\MagentoImport',
-                            'Magento\Framework\Less\PreProcessor\Instruction\Import',
-                        ],
-                ],
-                'css' => [
-                    'css' => [
-                        'Magento\Framework\View\Asset\PreProcessor\VariableNotation',
-                        'Magento\Framework\View\Asset\PreProcessor\ModuleNotation',
-                    ]
-                ],
-            ]
-        );
+        $chainMock->expects(self::once())
+            ->method('getTargetContentType')
+            ->willReturn($type);
+
+        return $chainMock;
     }
 
     /**
-     * @param string $sourceContentType
-     * @param string $targetContentType
-     * @param array $expectedResult
-     *
-     * @dataProvider getPreProcessorsDataProvider
+     * @param Chain|\PHPUnit_Framework_MockObject_MockObject $chainMock
+     * @return PreProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    public function testProcess($sourceContentType, $targetContentType, array $expectedResult)
+    private function getPreprocessorMock($chainMock)
     {
+        /** @var PreProcessorInterface|\PHPUnit_Framework_MockObject_MockObject $preprocessorMock */
+        $preprocessorMock = $this->getMockBuilder(self::PREPROCESSOR_CLASS)
+            ->getMockForAbstractClass();
 
-        $this->processorChain->expects($this->any())
-            ->method('getOrigContentType')
-            ->willReturn($sourceContentType);
-        $this->processorChain->expects($this->any())
-            ->method('getTargetContentType')
-            ->willReturn($targetContentType);
-        $processorMaps = [];
-        foreach ($expectedResult as $processor) {
-            $processorMock = $this->getMock($processor, ['process'], [], '', false);
-            $processorMock->expects($this->any())
-                ->method('process')
-                ->with($this->processorChain);
-            $processorMaps[] = [$processor, $processorMock];
-        }
-        $this->objectManager->method('get')->willReturnMap($processorMaps);
+        $preprocessorMock->expects(self::once())
+            ->method('process')
+            ->with($chainMock);
 
-        $this->processorPool->process($this->processorChain);
+        return $preprocessorMock;
     }
 
-    public function getPreProcessorsDataProvider()
+    /**
+     * Run test for process method
+     */
+    public function testProcess()
     {
-        return [
-            'css => css' => [
-                'css', 'css',
-                [
-                    'Magento\Framework\View\Asset\PreProcessor\VariableNotation',
-                    'Magento\Framework\View\Asset\PreProcessor\ModuleNotation',
-                ],
-            ],
-            //all undefined types will be processed by Passthrough preprocessor
-            'css => less' => [
-                'css', 'less',
-                ['Magento\Framework\View\Asset\PreProcessor\Passthrough'],
-            ],
-            'less => css' => [
-                'less', 'css',
-                [
-                    'Magento\Framework\Css\PreProcessor\Less',
-                    'Magento\Framework\View\Asset\PreProcessor\VariableNotation',
-                    'Magento\Framework\View\Asset\PreProcessor\ModuleNotation',
-                ],
-            ],
-            'less => less' => [
-                'less', 'less',
-                [
-                    'Magento\Framework\Less\PreProcessor\Instruction\MagentoImport',
-                    'Magento\Framework\Less\PreProcessor\Instruction\Import',
-                ],
-            ],
-            //all undefined types will be processed by Passthrough preprocessor
-            'txt => log (undefined)' => [
-                'txt', 'log',
-                ['Magento\Framework\View\Asset\PreProcessor\Passthrough'],
-            ],
+        $preprocessors = [
+            self::CONTENT_TYPE => [
+                'test' => [
+                    Pool::PREPROCESSOR_CLASS => self::PREPROCESSOR_CLASS
+                ]
+            ]
         ];
+
+        $pool = new Pool(
+            $this->objectManagerMock,
+            $this->sorterMock,
+            self::DEFAULT_PREPROCESSOR,
+            $preprocessors
+        );
+
+        $this->sorterMock->expects(self::once())
+            ->method('sort')
+            ->with($preprocessors[self::CONTENT_TYPE])
+            ->willReturn($preprocessors[self::CONTENT_TYPE]);
+
+        $chainMock = $this->getChainMock(self::CONTENT_TYPE);
+
+        $this->objectManagerMock->expects(self::once())
+            ->method('get')
+            ->with(self::PREPROCESSOR_CLASS)
+            ->willReturn($this->getPreprocessorMock($chainMock));
+
+        $pool->process($chainMock);
+    }
+
+    /**
+     * Run test for process method (default preprocessor)
+     */
+    public function testProcessDefault()
+    {
+        $preprocessors = [
+            'bad-type' => [],
+        ];
+
+        $pool = new Pool(
+            $this->objectManagerMock,
+            $this->sorterMock,
+            self::DEFAULT_PREPROCESSOR,
+            $preprocessors
+        );
+
+        $this->sorterMock->expects(self::never())
+            ->method('sort');
+
+        $chainMock = $this->getChainMock(self::CONTENT_TYPE);
+
+        $this->objectManagerMock->expects(self::once())
+            ->method('get')
+            ->with(self::DEFAULT_PREPROCESSOR)
+            ->willReturn($this->getPreprocessorMock($chainMock));
+
+        $pool->process($chainMock);
+    }
+
+    /**
+     * Run test for process method (exception)
+     *
+     * @expectedException \UnexpectedValueException
+     * @expectedExceptionMessage "stdClass" has to implement the PreProcessorInterface.
+     */
+    public function testProcessBadInterface()
+    {
+        $preprocessors = [
+            self::CONTENT_TYPE => [
+                'test' => [
+                    Pool::PREPROCESSOR_CLASS => 'stdClass'
+                ]
+            ]
+        ];
+
+        $pool = new Pool(
+            $this->objectManagerMock,
+            $this->sorterMock,
+            self::DEFAULT_PREPROCESSOR,
+            $preprocessors
+        );
+
+        $this->sorterMock->expects(self::once())
+            ->method('sort')
+            ->with($preprocessors[self::CONTENT_TYPE])
+            ->willReturn($preprocessors[self::CONTENT_TYPE]);
+
+        $chainMock = $this->getChainMock(self::CONTENT_TYPE);
+
+        $this->objectManagerMock->expects(self::once())
+            ->method('get')
+            ->with('stdClass')
+            ->willReturn(new \stdClass());
+
+        $pool->process($chainMock);
     }
 }

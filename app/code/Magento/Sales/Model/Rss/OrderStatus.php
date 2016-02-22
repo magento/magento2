@@ -26,7 +26,7 @@ class OrderStatus implements DataProviderInterface
     protected $order;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Rss\OrderStatusFactory
+     * @var \Magento\Sales\Model\ResourceModel\Order\Rss\OrderStatusFactory
      */
     protected $orderResourceFactory;
 
@@ -59,7 +59,7 @@ class OrderStatus implements DataProviderInterface
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Sales\Model\Resource\Order\Rss\OrderStatusFactory $orderResourceFactory
+     * @param \Magento\Sales\Model\ResourceModel\Order\Rss\OrderStatusFactory $orderResourceFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -68,7 +68,7 @@ class OrderStatus implements DataProviderInterface
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Framework\App\RequestInterface $request,
-        \Magento\Sales\Model\Resource\Order\Rss\OrderStatusFactory $orderResourceFactory,
+        \Magento\Sales\Model\ResourceModel\Order\Rss\OrderStatusFactory $orderResourceFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Sales\Model\OrderFactory $orderFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -113,7 +113,11 @@ class OrderStatus implements DataProviderInterface
     public function getCacheKey()
     {
         $order = $this->getOrder();
-        return 'rss_order_status_data_' . md5($order->getId() . $order->getIncrementId() . $order->getCustomerId());
+        $key = '';
+        if ($order !== null) {
+            $key = md5($order->getId() . $order->getIncrementId() . $order->getCustomerId());
+        }
+        return 'rss_order_status_data_' . $key;
     }
 
     /**
@@ -133,7 +137,11 @@ class OrderStatus implements DataProviderInterface
             return $this->order;
         }
 
-        $data = json_decode(base64_decode((string)$this->request->getParam('data')), true);
+        $data = null;
+        $json = base64_decode((string)$this->request->getParam('data'));
+        if ($json) {
+            $data = json_decode($json, true);
+        }
         if (!is_array($data)) {
             return null;
         }
@@ -146,7 +154,7 @@ class OrderStatus implements DataProviderInterface
         $order = $this->orderFactory->create();
         $order->load($data['order_id']);
 
-        if ($order->getIncrementId() != $data['increment_id'] || $order->getCustomerId() != $data['customer_id']) {
+        if ($order->getIncrementId() !== $data['increment_id'] || $order->getCustomerId() !== $data['customer_id']) {
             $order = null;
         }
         $this->order = $order;
@@ -161,7 +169,7 @@ class OrderStatus implements DataProviderInterface
      */
     protected function getEntries()
     {
-        /** @var $resourceModel \Magento\Sales\Model\Resource\Order\Rss\OrderStatus */
+        /** @var $resourceModel \Magento\Sales\Model\ResourceModel\Order\Rss\OrderStatus */
         $resourceModel = $this->orderResourceFactory->create();
         $results = $resourceModel->getAllCommentCollection($this->order->getId());
         $entries = [];

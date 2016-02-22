@@ -13,7 +13,7 @@ use Magento\Framework\Exception\StateException;
 class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterface
 {
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Group
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group
      */
     protected $groupResource;
 
@@ -28,7 +28,7 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
     protected $setRepository;
 
     /**
-     * @var \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory
+     * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory
      */
     protected $groupListFactory;
 
@@ -43,16 +43,17 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
     protected $joinProcessor;
 
     /**
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group $groupResource
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupListFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group $groupResource
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $groupListFactory
      * @param \Magento\Eav\Model\Entity\Attribute\GroupFactory $groupFactory
      * @param \Magento\Eav\Api\AttributeSetRepositoryInterface $setRepository
      * @param \Magento\Eav\Api\Data\AttributeGroupSearchResultsInterfaceFactory $searchResultsFactory
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $joinProcessor
+     * @codeCoverageIgnore
      */
     public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute\Group $groupResource,
-        \Magento\Eav\Model\Resource\Entity\Attribute\Group\CollectionFactory $groupListFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group $groupResource,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory $groupListFactory,
         \Magento\Eav\Model\Entity\Attribute\GroupFactory $groupFactory,
         \Magento\Eav\Api\AttributeSetRepositoryInterface $setRepository,
         \Magento\Eav\Api\Data\AttributeGroupSearchResultsInterfaceFactory $searchResultsFactory,

@@ -11,6 +11,8 @@ namespace Magento\Catalog\Model;
  *
  * @see \Magento\Catalog\Model\CategoryTest
  * @magentoDataFixture Magento/Catalog/_files/categories.php
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  */
 class CategoryTreeTest extends \PHPUnit_Framework_TestCase
 {
@@ -161,7 +163,7 @@ class CategoryTreeTest extends \PHPUnit_Framework_TestCase
     public function testGetAnchorsAbove()
     {
         $this->_model->load(4);
-        $this->assertEmpty($this->_model->getAnchorsAbove());
+        $this->assertContains(3, $this->_model->getAnchorsAbove());
         $this->_model->load(5);
         $this->assertContains(4, $this->_model->getAnchorsAbove());
     }

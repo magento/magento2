@@ -5,13 +5,14 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
-    <preference for="Magento\Framework\Mview\View\State\CollectionInterface" type="Magento\Indexer\Model\Resource\Mview\View\State\Collection" />
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\Mview\View\State\CollectionInterface" type="Magento\Indexer\Model\ResourceModel\Mview\View\State\Collection" />
     <preference for="Magento\Framework\Mview\View\StateInterface" type="Magento\Indexer\Model\Mview\View\State" />
-    <preference for="Magento\Indexer\Model\ConfigInterface" type="Magento\Indexer\Model\Config" />
-    <preference for="Magento\Indexer\Model\IndexerInterface" type="Magento\Indexer\Model\Indexer" />
-    <preference for="Magento\Indexer\Model\Indexer\Table\StrategyInterface" type="Magento\Indexer\Model\Indexer\Table\Strategy" />
-    <type name="Magento\Indexer\Model\Indexer\Table\StrategyInterface" shared="false" />
+    <preference for="Magento\Framework\Indexer\ConfigInterface" type="Magento\Indexer\Model\Config" />
+    <preference for="Magento\Framework\Indexer\IndexerInterface" type="Magento\Indexer\Model\Indexer" />
+    <preference for="Magento\Framework\Indexer\Table\StrategyInterface" type="Magento\Framework\Indexer\Table\Strategy" />
+    <preference for="Magento\Framework\Indexer\StateInterface" type="Magento\Indexer\Model\Indexer\State" />
+    <type name="Magento\Framework\Indexer\Table\StrategyInterface" shared="false" />
     <type name="Magento\Indexer\Model\Indexer">
         <arguments>
             <argument name="view" xsi:type="object" shared="false">Magento\Framework\Mview\View</argument>
@@ -29,7 +30,7 @@
     </type>
     <type name="Magento\Indexer\Model\Config\Data">
         <arguments>
-            <argument name="stateCollection" xsi:type="object" shared="false">Magento\Indexer\Model\Resource\Indexer\State\Collection</argument>
+            <argument name="stateCollection" xsi:type="object" shared="false">Magento\Indexer\Model\ResourceModel\Indexer\State\Collection</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Mview\View\Subscription">

@@ -5,6 +5,8 @@
  */
 namespace Magento\Checkout\Test\Unit\Model;
 
+use Magento\Framework\Exception\CouldNotSaveException;
+
 class GuestPaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -23,6 +25,16 @@ class GuestPaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
     protected $cartManagementMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cartRepositoryMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $quoteIdMaskFactoryMock;
+
+    /**
      * @var \Magento\Checkout\Model\GuestPaymentInformationManagement
      */
     protected $model;
@@ -37,13 +49,23 @@ class GuestPaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
             '\Magento\Quote\Api\GuestPaymentMethodManagementInterface'
         );
         $this->cartManagementMock = $this->getMock('\Magento\Quote\Api\GuestCartManagementInterface');
+        $this->cartRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
 
+        $this->quoteIdMaskFactoryMock = $this->getMock(
+            'Magento\Quote\Model\QuoteIdMaskFactory',
+            ['create'],
+            [],
+            '',
+            false
+        );
         $this->model = $objectManager->getObject(
             'Magento\Checkout\Model\GuestPaymentInformationManagement',
             [
                 'billingAddressManagement' => $this->billingAddressManagementMock,
                 'paymentMethodManagement' => $this->paymentMethodManagementMock,
-                'cartManagement' => $this->cartManagementMock
+                'cartManagement' => $this->cartManagementMock,
+                'cartRepository' => $this->cartRepositoryMock,
+                'quoteIdMaskFactory' => $this->quoteIdMaskFactoryMock
             ]
         );
     }
@@ -70,6 +92,29 @@ class GuestPaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * @expectedExceptionMessage Cannot place order
+     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
+     */
+    public function testSavePaymentInformationAndPlaceOrderException()
+    {
+        $cartId = 100;
+        $email = 'email@magento.com';
+        $paymentMock = $this->getMock('\Magento\Quote\Api\Data\PaymentInterface');
+        $billingAddressMock = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
+
+        $billingAddressMock->expects($this->once())->method('setEmail')->with($email)->willReturnSelf();
+
+        $this->billingAddressManagementMock->expects($this->once())
+            ->method('assign')
+            ->with($cartId, $billingAddressMock);
+        $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
+        $exception = new CouldNotSaveException(__('DB exception'));
+        $this->cartManagementMock->expects($this->once())->method('placeOrder')->willThrowException($exception);
+
+        $this->model->savePaymentInformationAndPlaceOrder($cartId, $email, $paymentMock, $billingAddressMock);
+    }
+
     public function testSavePaymentInformation()
     {
         $cartId = 100;
@@ -84,5 +129,27 @@ class GuestPaymentInformationManagementTest extends \PHPUnit_Framework_TestCase
         $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
 
         $this->assertTrue($this->model->savePaymentInformation($cartId, $email, $paymentMock, $billingAddressMock));
+    }
+
+    public function testSavePaymentInformationWithoutBillingAddress()
+    {
+        $cartId = 100;
+        $email = 'email@magento.com';
+        $paymentMock = $this->getMock('\Magento\Quote\Api\Data\PaymentInterface');
+        $billingAddressMock = $this->getMock('\Magento\Quote\Api\Data\AddressInterface');
+        $quoteMock = $this->getMock('Magento\Quote\Model\Quote', [], [], '', false);
+
+        $billingAddressMock->expects($this->once())->method('setEmail')->with($email)->willReturnSelf();
+
+        $this->billingAddressManagementMock->expects($this->never())->method('assign');
+        $this->paymentMethodManagementMock->expects($this->once())->method('set')->with($cartId, $paymentMock);
+        $quoteIdMaskMock = $this->getMock('Magento\Quote\Model\QuoteIdMask', ['getQuoteId', 'load'], [], '', false);
+        $this->quoteIdMaskFactoryMock->expects($this->once())->method('create')->willReturn($quoteIdMaskMock);
+        $quoteIdMaskMock->expects($this->once())->method('load')->with($cartId, 'masked_id')->willReturnSelf();
+        $quoteIdMaskMock->expects($this->once())->method('getQuoteId')->willReturn($cartId);
+        $this->cartRepositoryMock->expects($this->once())->method('getActive')->with($cartId)->willReturn($quoteMock);
+        $quoteMock->expects($this->once())->method('getBillingAddress')->willReturn($billingAddressMock);
+        $billingAddressMock->expects($this->once())->method('setEmail')->with($email);
+        $this->assertTrue($this->model->savePaymentInformation($cartId, $email, $paymentMock));
     }
 }

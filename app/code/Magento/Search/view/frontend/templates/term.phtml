@@ -11,8 +11,8 @@
     <ul class="search-terms">
         <?php foreach ($block->getTerms() as $_term): ?>
             <li class="item">
-                <a href="<?php echo $block->getSearchUrl($_term) ?>"
-                   style="font-size:<?php echo $_term->getRatio()*70+75 ?>%;">
+                <a href="<?php /* @escapeNotVerified */ echo $block->getSearchUrl($_term) ?>"
+                   style="font-size:<?php /* @escapeNotVerified */ echo $_term->getRatio()*70+75 ?>%;">
                     <?php echo $block->escapeHtml($_term->getName()) ?>
                 </a>
             </li>
@@ -20,6 +20,6 @@
     </ul>
 <?php else: ?>
     <div class="message notice">
-        <div><?php echo __('There are no search terms available.'); ?></div>
+        <div><?php /* @escapeNotVerified */ echo __('There are no search terms available.'); ?></div>
     </div>
 <?php endif; ?>

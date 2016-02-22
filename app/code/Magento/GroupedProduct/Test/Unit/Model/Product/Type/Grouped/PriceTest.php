@@ -64,7 +64,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
         $expectedFinalPrice
     ) {
         $rawFinalPrice = 10;
-        $rawPriceCheckStep = 10;
+        $rawPriceCheckStep = 6;
 
         $this->productMock->expects(
             $this->any()
@@ -167,7 +167,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
             'custom_option_null' => [
                 'associatedProducts' => [],
                 'options' => [[], []],
-                'expectedPriceCall' => 14, /* product call number to check final price formed correctly */
+                'expectedPriceCall' => 6, /* product call number to check final price formed correctly */
                 'expectedFinalPrice' => 10, /* 10(product price) + 2(options count) * 5(qty) * 5(option price) */
             ],
             'custom_option_exist' => [
@@ -177,7 +177,7 @@ class PriceTest extends \PHPUnit_Framework_TestCase
                     ['associated_product_2', $optionMock],
                     ['associated_product_3', $optionMock],
                 ],
-                'expectedPriceCall' => 17, /* product call number to check final price formed correctly */
+                'expectedPriceCall' => 16, /* product call number to check final price formed correctly */
                 'expectedFinalPrice' => 35, /* 10(product price) + 2(options count) * 5(qty) * 5(option price) */
             ]
         ];

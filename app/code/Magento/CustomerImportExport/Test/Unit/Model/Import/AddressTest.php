@@ -96,7 +96,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected $_customBehaviour = ['update_id' => 1, 'delete_id' => 2];
 
     /**
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $_stringLib;
 
@@ -106,12 +106,18 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected $_objectManagerMock;
 
     /**
+     * @var \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface
+     * |\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $errorAggregator;
+
+    /**
      * Init entity adapter model
      */
     protected function setUp()
     {
         $this->_objectManagerMock = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_stringLib = new \Magento\Framework\Stdlib\String();
+        $this->_stringLib = new \Magento\Framework\Stdlib\StringUtils();
         $this->_storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManager')
             ->disableOriginalConstructor()
             ->setMethods(['getWebsites'])
@@ -120,6 +126,13 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->method('getWebsites')
             ->will($this->returnCallback([$this, 'getWebsites']));
         $this->_model = $this->_getModelMock();
+        $this->errorAggregator = $this->getMock(
+            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator',
+            ['hasToBeTerminated'],
+            [],
+            '',
+            false
+        );
     }
 
     /**
@@ -146,14 +159,14 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
         );
         foreach ($this->_addresses as $address) {
-            $addressCollection->addItem(new \Magento\Framework\Object($address));
+            $addressCollection->addItem(new \Magento\Framework\DataObject($address));
         }
 
         $regionCollection = new \Magento\Framework\Data\Collection(
             $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false)
         );
         foreach ($this->_regions as $region) {
-            $regionCollection->addItem(new \Magento\Framework\Object($region));
+            $regionCollection->addItem(new \Magento\Framework\DataObject($region));
         }
 
         $data = [
@@ -196,7 +209,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                     $this->getMock('Magento\Eav\Model\Config', [], [], '', false, false),
                     $this->getMock('Magento\Eav\Model\Entity\TypeFactory', [], [], '', false),
                     $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false, false),
-                    $this->getMock('Magento\Eav\Model\Resource\Helper', [], [], '', false, false),
+                    $this->getMock('Magento\Eav\Model\ResourceModel\Helper', [], [], '', false, false),
                     $this->getMock('Magento\Framework\Validator\UniversalFactory', [], [], '', false, false)
                 ]
             );
@@ -225,14 +238,14 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected function _createCustomerStorageMock()
     {
         $customerStorage = $this->getMock(
-            'Magento\CustomerImportExport\Model\Resource\Import\Customer\Storage',
+            'Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage',
             ['load'],
             [],
             '',
             false
         );
         $resourceMock = $this->getMock(
-            'Magento\Customer\Model\Resource\Customer',
+            'Magento\Customer\Model\ResourceModel\Customer',
             ['getIdFieldName'],
             [],
             '',
@@ -246,7 +259,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Customer\Model\Config\Share', [], [], '', false),
                 $this->getMock('Magento\Customer\Model\AddressFactory', [], [], '', false),
                 $this->getMock(
-                    'Magento\Customer\Model\Resource\Address\CollectionFactory',
+                    'Magento\Customer\Model\ResourceModel\Address\CollectionFactory',
                     [],
                     [],
                     '',
@@ -292,7 +305,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 continue;
             }
             $websiteData = ['id' => $id, 'code' => $code];
-            $websites[$id] = new \Magento\Framework\Object($websiteData);
+            $websites[$id] = new \Magento\Framework\DataObject($websiteData);
         }
 
         return $websites;
@@ -351,7 +364,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 '_saveAddressAttributes',
                 '_saveCustomerDefaults',
                 '_deleteAddressEntities',
-                '_mergeEntityAttributes'
+                '_mergeEntityAttributes',
+                'getErrorAggregator'
             ],
             [],
             '',
@@ -366,7 +380,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         // mock to imitate data source model
         $dataSourceMock = $this->getMock(
-            'Magento\ImportExport\Model\Resource\Import\Data',
+            'Magento\ImportExport\Model\ResourceModel\Import\Data',
             ['getNextBunch', '__wakeup'],
             [],
             '',
@@ -384,6 +398,9 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         // mock expects for entity adapter
         $modelMock->expects($this->any())->method('validateRow')->will($this->returnValue(true));
+        $modelMock->expects($this->any())
+            ->method('getErrorAggregator')
+            ->will($this->returnValue($this->errorAggregator));
 
         $modelMock->expects($this->any())->method('_prepareDataForUpdate')->will($this->returnValue($updateResult));
 
@@ -424,30 +441,38 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->_stringLib,
             $scopeConfig,
             $this->getMock('Magento\ImportExport\Model\ImportFactory', [], [], '', false),
-            $this->getMock('Magento\ImportExport\Model\Resource\Helper', [], [], '', false),
-            $this->getMock('Magento\Framework\App\Resource', [], [], '', false),
+            $this->getMock('Magento\ImportExport\Model\ResourceModel\Helper', [], [], '', false),
+            $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false),
+            $this->getMock(
+                'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface',
+                [],
+                [],
+                '',
+                false
+            ),
             $this->_storeManager,
             $this->getMock('Magento\ImportExport\Model\Export\Factory', [], [], '', false),
             $this->getMock('Magento\Eav\Model\Config', [], [], '', false),
             $this->getMock(
-                'Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory',
+                'Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory',
                 [],
                 [],
                 '',
                 false
             ),
             $this->getMock('Magento\Customer\Model\AddressFactory', [], [], '', false),
-            $this->getMock('Magento\Directory\Model\Resource\Region\CollectionFactory', [], [], '', false),
+            $this->getMock('Magento\Directory\Model\ResourceModel\Region\CollectionFactory', [], [], '', false),
             $this->getMock('Magento\Customer\Model\CustomerFactory', [], [], '', false),
-            $this->getMock('Magento\Customer\Model\Resource\Address\CollectionFactory', [], [], '', false),
+            $this->getMock('Magento\Customer\Model\ResourceModel\Address\CollectionFactory', [], [], '', false),
             $this->getMock(
-                'Magento\Customer\Model\Resource\Address\Attribute\CollectionFactory',
+                'Magento\Customer\Model\ResourceModel\Address\Attribute\CollectionFactory',
                 [],
                 [],
                 '',
                 false
             ),
             new \Magento\Framework\Stdlib\DateTime(),
+            $this->getMock('Magento\Customer\Model\Address\Validator\Postcode', [], [], '', false),
             $this->_getModelDependencies()
         );
 
@@ -476,30 +501,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 '$errors' => [],
                 '$isValid' => true,
             ],
-            'no customer' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_address_update_no_customer.php',
-                '$errors' => [
-                    Address::ERROR_CUSTOMER_NOT_FOUND => [
-                        [1, null],
-                    ],
-                ],
-            ],
-            'absent required attribute' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_address_update_absent_required_attribute.php',
-                '$errors' => [
-                    Address::ERROR_VALUE_IS_REQUIRED => [
-                        [1, Address::COLUMN_COUNTRY_ID],
-                    ],
-                ],
-            ],
-            'invalid region' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_address_update_invalid_region.php',
-                '$errors' => [
-                    Address::ERROR_INVALID_REGION => [
-                        [1, Address::COLUMN_REGION],
-                    ],
-                ],
-            ]
         ];
     }
 
@@ -516,30 +517,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 '$errors' => [],
                 '$isValid' => true,
             ],
-            'empty address id' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_address_delete_empty_address_id.php',
-                '$errors' => [
-                    Address::ERROR_ADDRESS_ID_IS_EMPTY => [
-                        [1, null],
-                    ],
-                ],
-            ],
-            'invalid address' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_address_delete_address_not_found.php',
-                '$errors' => [
-                    Address::ERROR_ADDRESS_NOT_FOUND => [
-                        [1, null],
-                    ],
-                ],
-            ],
-            'no customer' => [
-                '$rowData' => include __DIR__ . '/_files/row_data_address_delete_no_customer.php',
-                '$errors' => [
-                    Address::ERROR_CUSTOMER_NOT_FOUND => [
-                        [1, null],
-                    ],
-                ],
-            ]
         ];
     }
 
@@ -549,6 +526,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      * @param array $rowData
      * @param array $errors
      * @param boolean $isValid
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testValidateRowForUpdate(array $rowData, array $errors, $isValid = false)
     {
@@ -559,7 +537,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         } else {
             $this->assertFalse($this->_model->validateRow($rowData, 0));
         }
-        $this->assertAttributeEquals($errors, '_errors', $this->_model);
     }
 
     /**
@@ -575,7 +552,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         $this->_model->setParameters(['behavior' => $behavior]);
 
-        $secondRow = $firstRow = [
+        $firstRow = [
             '_website' => 'website1',
             '_email' => 'test1@email.com',
             '_entity_id' => '1',
@@ -601,16 +578,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             '_address_default_billing_' => '1',
             '_address_default_shipping_' => '1',
         ];
-        $secondRow['postcode'] = '90210';
-
-        $errors = [
-            Address::ERROR_DUPLICATE_PK => [[2, null]],
-        ];
-
         $this->assertTrue($this->_model->validateRow($firstRow, 0));
-        $this->assertFalse($this->_model->validateRow($secondRow, 1));
-
-        $this->assertAttributeEquals($errors, '_errors', $this->_model);
     }
 
     /**
@@ -622,6 +590,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      * @param array $rowData
      * @param array $errors
      * @param boolean $isValid
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testValidateRowForDelete(array $rowData, array $errors, $isValid = false)
     {
@@ -632,7 +601,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         } else {
             $this->assertFalse($this->_model->validateRow($rowData, 0));
         }
-        $this->assertAttributeEquals($errors, '_errors', $this->_model);
     }
 
     /**

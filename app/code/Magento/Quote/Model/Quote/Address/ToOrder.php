@@ -6,7 +6,7 @@
 
 namespace Magento\Quote\Model\Quote\Address;
 
-use Magento\Framework\Object\Copy;
+use Magento\Framework\DataObject\Copy;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Api\Data\OrderInterfaceFactory as OrderFactory;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -63,11 +63,13 @@ class ToOrder
     public function convert(Address $object, $data = [])
     {
         $orderData = $this->objectCopyService->getDataFromFieldset(
-            'quote_convert_address',
+            'sales_convert_quote_address',
             'to_order',
             $object
         );
-
+        /**
+         * @var $order \Magento\Sales\Model\Order
+         */
         $order = $this->orderFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $order,
@@ -77,7 +79,6 @@ class ToOrder
         $order->setStoreId($object->getQuote()->getStoreId())
             ->setQuoteId($object->getQuote()->getId())
             ->setIncrementId($object->getQuote()->getReservedOrderId());
-
         $this->objectCopyService->copyFieldsetToTarget('sales_convert_quote', 'to_order', $object->getQuote(), $order);
         $this->eventManager->dispatch(
             'sales_convert_quote_to_order',

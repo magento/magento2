@@ -10,7 +10,7 @@
              module="Magento_UrlRewrite"
              type="virtual"
              entity_type="url_rewrite"
-             collection="Magento\UrlRewrite\Model\Resource\UrlRewriteCollection"
+             collection="Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection"
              identifier="request_path"
              repository_class="Magento\UrlRewrite\Test\Repository\UrlRewrite"
              handler_interface="Magento\UrlRewrite\Test\Handler\UrlRewrite\UrlRewriteInterface"

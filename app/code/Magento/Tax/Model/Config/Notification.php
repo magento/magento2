@@ -13,7 +13,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 class Notification extends \Magento\Framework\App\Config\Value
 {
     /**
-     * @var \Magento\Config\Model\Resource\Config
+     * @var \Magento\Config\Model\ResourceModel\Config
      */
     protected $resourceConfig;
 
@@ -21,8 +21,9 @@ class Notification extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Config\Model\Resource\Config $resourceConfig
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Config\Model\ResourceModel\Config $resourceConfig
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
      */
@@ -30,19 +31,20 @@ class Notification extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Config\Model\Resource\Config $resourceConfig,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
+        \Magento\Config\Model\ResourceModel\Config $resourceConfig,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->resourceConfig = $resourceConfig;
-        parent::__construct($context, $registry, $config, $resource, $resourceCollection, $data);
+        parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
     }
 
     /**
      * Prepare and store cron settings after save
      *
-     * @return \Magento\Tax\Model\Config\Notification
+     * @return $this
      */
     public function afterSave()
     {
@@ -50,7 +52,7 @@ class Notification extends \Magento\Framework\App\Config\Value
             $this->_resetNotificationFlag(\Magento\Tax\Model\Config::XML_PATH_TAX_NOTIFICATION_IGNORE_DISCOUNT);
             $this->_resetNotificationFlag(\Magento\Tax\Model\Config::XML_PATH_TAX_NOTIFICATION_IGNORE_PRICE_DISPLAY);
         }
-        return parent::afterSave($this);
+        return parent::afterSave();
     }
 
     /**

@@ -9,18 +9,15 @@
  */
 namespace Magento\Test\Legacy;
 
+use Magento\Framework\Component\ComponentRegistrar;
+
 class ObsoleteThemeLocalXmlTest extends \PHPUnit_Framework_TestCase
 {
     public function testLocalXmlFilesAbsent()
     {
-        $area = '*';
-        $package = '*';
-        $theme = '*';
-        $this->assertEmpty(
-            glob(
-                \Magento\Framework\App\Utility\Files::init()->getPathToSource() .
-                "/app/design/{$area}/{$package}/{$theme}/local.xml"
-            )
-        );
+        $componentRegistrar = new ComponentRegistrar();
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
+            $this->assertEmpty(glob($themeDir . '/local.xml'));
+        }
     }
 }

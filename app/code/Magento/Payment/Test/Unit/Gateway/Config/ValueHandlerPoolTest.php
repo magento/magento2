@@ -5,6 +5,7 @@
  */
 namespace Magento\Payment\Test\Unit\Gateway\Config;
 
+use Magento\Payment\Gateway\Config\ValueHandlerInterface;
 use Magento\Payment\Gateway\Config\ValueHandlerPool;
 
 class ValueHandlerPoolTest extends \PHPUnit_Framework_TestCase
@@ -19,7 +20,7 @@ class ValueHandlerPoolTest extends \PHPUnit_Framework_TestCase
 
         $tMapFactory->expects(static::never())
             ->method('create');
-        new ValueHandlerPool([], $tMapFactory);
+        new ValueHandlerPool($tMapFactory, []);
     }
 
     public function testGet()
@@ -46,7 +47,7 @@ class ValueHandlerPoolTest extends \PHPUnit_Framework_TestCase
                         ValueHandlerPool::DEFAULT_HANDLER => 'Magento\Payment\Gateway\Config\ValueHandlerInterface',
                         'some_value' => 'Magento\Payment\Gateway\Config\ValueHandlerInterface'
                     ],
-                    'type' => 'Magento\Payment\Gateway\Config\ValueHandlerInterface'
+                    'type' => ValueHandlerInterface::class
                 ]
             )
             ->willReturn($tMap);
@@ -68,11 +69,11 @@ class ValueHandlerPoolTest extends \PHPUnit_Framework_TestCase
             );
 
         $pool = new ValueHandlerPool(
+            $tMapFactory,
             [
                 ValueHandlerPool::DEFAULT_HANDLER => 'Magento\Payment\Gateway\Config\ValueHandlerInterface',
                 'some_value' => 'Magento\Payment\Gateway\Config\ValueHandlerInterface'
-            ],
-            $tMapFactory
+            ]
         );
         static::assertSame($someValueHandler, $pool->get('some_value'));
         static::assertSame($defaultHandler, $pool->get(ValueHandlerPool::DEFAULT_HANDLER));

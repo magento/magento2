@@ -8,9 +8,6 @@ namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute;
 
 use Magento\Backend\Test\Block\Widget\FormTabs;
 use Magento\Backend\Test\Block\Widget\Tab;
-use Magento\Mtf\Block\BlockFactory;
-use Magento\Mtf\Block\Mapper;
-use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
@@ -43,21 +40,13 @@ class AttributeForm extends FormTabs
     protected $isTabOpened = '.opened ';
 
     /**
-     * @constructor
-     * @param SimpleElement $element
-     * @param Mapper $mapper
-     * @param BlockFactory $blockFactory
-     * @param BrowserInterface $browser
-     * @param array $config
+     * Initialize block. Switch to frame.
+     *
+     * @return void
      */
-    public function __construct(
-        SimpleElement $element,
-        Mapper $mapper,
-        BlockFactory $blockFactory,
-        BrowserInterface $browser,
-        array $config = []
-    ) {
-        parent::__construct($element, $mapper, $blockFactory, $browser, $config);
+    protected function init()
+    {
+        parent::init();
         $this->browser->switchToFrame(new Locator($this->iFrame));
     }
 
@@ -82,16 +71,16 @@ class AttributeForm extends FormTabs
     }
 
     /**
-     * Open tab
+     * Open tab.
      *
      * @param string $tabName
      * @return Tab
      */
     public function openTab($tabName)
     {
-        $selector = $this->tabs[$tabName]['selector'];
-        $strategy = isset($this->tabs[$tabName]['strategy'])
-            ? $this->tabs[$tabName]['strategy']
+        $selector = $this->getTabs()[$tabName]['selector'];
+        $strategy = isset($this->getTabs()[$tabName]['strategy'])
+            ? $this->getTabs()[$tabName]['strategy']
             : Locator::SELECTOR_CSS;
 
         $isTabOpened = $this->_rootElement->find($this->isTabOpened . $selector, $strategy);

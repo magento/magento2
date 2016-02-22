@@ -20,6 +20,7 @@
     background: @dashboard-tabs__background-color;
     font-size: @dashboard__font-size__base;
     width: 100%;
+
     th,
     td {
         padding: 1rem 0 1rem 1rem;
@@ -27,6 +28,7 @@
             padding-left: 0;
         }
     }
+
     &.admin__table-primary {
         th {
             border-top: 0;
@@ -35,7 +37,6 @@
 
     //  Primary column
     .dashboard-main & {
-
         @dashboard-table__width-px: 560px;
         @dashboard-table-col-product__width-px: 392px;
         @dashboard-table-col-name__width-px: 308px;
@@ -51,14 +52,17 @@
             white-space: nowrap;
             width: @dashboard-table-col-value__width-pct;
         }
+
         .col-name {
             text-align: left;
             white-space: normal;
             width: @dashboard-table-col-name__width-pct;
         }
+
         .col-product {
             width: @dashboard-table-col-product__width-pct;
         }
+
         .col-orders_count {
             text-align: left;
         }
@@ -79,6 +83,7 @@
             text-align: right;
             width: @dashboard-secondary-table-col-value__width-pct;
         }
+
         .col-customer,
         .col-search_query {
             width: @dashboard-secondary-table-col-name__width-pct;
@@ -91,6 +96,7 @@
         background: @dashboard-tabs__background-color;
         font-size: @dashboard__font-size__base;
     }
+
     .ui-tabs-panel {
         border-top: 1px solid @color-gray68;
     }
@@ -112,6 +118,7 @@
 //  Range switcher
 .dashboard-diagram-switcher {
     margin-bottom: 2rem;
+
     .label {
         .extend__visually-hidden();
     }
@@ -141,6 +148,7 @@
     display: table-cell;
     padding: 0 1rem 0 0;
     width: 25%;
+
     &:first-child {
         .price {
             color: @color-phoenix;
@@ -168,8 +176,9 @@
         &:extend(.abs-clearfix all);
         margin-bottom: 0;
         position: relative;
+
         &:before {
-            .background-gradient(
+            .lib-background-gradient(
             @_background-gradient: true,
             @_background-gradient-direction: horizontal,
             @_background-gradient-color-start: rgba(255,255,255,0),
@@ -188,7 +197,7 @@
     .ui-tabs-panel {
         //  ToDo UI: change the picture to html after loaders refactoring
         background: url(../images/ajax-loader-small.gif) no-repeat 50% 50%;
-        min-height: 6rem;
+        min-height: 4.5rem;
     }
 
     .tabs-horiz {
@@ -197,6 +206,7 @@
         overflow-x: auto;
         white-space: nowrap;
         width: 100%; // IE9 fix
+
         .ui-state-default {
             display: inline-block;
             float: none;

@@ -8,7 +8,7 @@
 
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Total;
 
-use Magento\Framework\Object as MagentoObject;
+use Magento\Framework\DataObject as MagentoObject;
 
 class TaxTest extends \PHPUnit_Framework_TestCase
 {

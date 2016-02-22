@@ -91,7 +91,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     /**
      * Retrieve identifier of block item
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return int
      */
     public function getIdentifierId($item)
@@ -102,7 +102,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     /**
      * Retrieve item identifier of block item
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return int
      */
     public function getItemId($item)
@@ -113,7 +113,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     /**
      * Retrieve product identifier linked with item
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return int
      */
     public function getProductId($item)
@@ -167,7 +167,7 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
                 } else {
                     $type = '';
                     // Maybe some item, that can give us product via getProduct()
-                    if ($item instanceof \Magento\Framework\Object || method_exists($item, 'getProduct')) {
+                    if ($item instanceof \Magento\Framework\DataObject || method_exists($item, 'getProduct')) {
                         $product = $item->getProduct();
                         if ($product && $product instanceof \Magento\Catalog\Model\Product) {
                             $type = $product->getTypeId();
@@ -206,10 +206,10 @@ class AbstractSidebar extends \Magento\Sales\Block\Adminhtml\Order\Create\Abstra
     /**
      * Get item qty
      *
-     * @param \Magento\Framework\Object $item
+     * @param \Magento\Framework\DataObject $item
      * @return int
      */
-    public function getItemQty(\Magento\Framework\Object $item)
+    public function getItemQty(\Magento\Framework\DataObject $item)
     {
         return $item->getQty() * 1 ? $item->getQty() * 1 : 1;
     }

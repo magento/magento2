@@ -32,6 +32,7 @@ class PayPal implements ConfigProviderInterface
      * @var \Magento\Framework\Locale\ResolverInterface
      */
     protected $localeResolver;
+
     /**
      * @param PayPalConfig $config
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver

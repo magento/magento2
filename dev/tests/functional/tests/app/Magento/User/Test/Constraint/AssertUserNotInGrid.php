@@ -19,18 +19,18 @@ class AssertUserNotInGrid extends AbstractConstraint
      * Asserts that User is not present in User Grid.
      *
      * @param UserIndex $userIndex
-     * @param User $adminUser
+     * @param User $user
      * @return void
      */
     public function processAssert(
         UserIndex $userIndex,
-        User $adminUser
+        User $user
     ) {
-        $filter = ['username' => $adminUser->getUsername()];
+        $filter = ['username' => $user->getUsername()];
         $userIndex->open();
         \PHPUnit_Framework_Assert::assertFalse(
             $userIndex->getUserGrid()->isRowVisible($filter),
-            'User with name \'' . $adminUser->getUsername() . '\' is present in Users grid.'
+            'User with name \'' . $user->getUsername() . '\' is present in Users grid.'
         );
     }
 

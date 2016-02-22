@@ -91,6 +91,15 @@ class Report extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * @param string $fileName
+     * @return string
+     */
+    public function getReportAbsolutePath($fileName)
+    {
+        return $this->varDirectory->getAbsolutePath(Import::IMPORT_HISTORY_DIR . $fileName);
+    }
+
+    /**
      * Retrieve report file size
      *
      * @param string $filename

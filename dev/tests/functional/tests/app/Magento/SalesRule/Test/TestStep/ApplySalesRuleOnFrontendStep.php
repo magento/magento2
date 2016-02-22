@@ -49,6 +49,7 @@ class ApplySalesRuleOnFrontendStep implements TestStepInterface
     {
         if ($this->salesRule !== null) {
             $this->checkoutCart->getDiscountCodesBlock()->applyCouponCode($this->salesRule->getCouponCode());
+            $this->checkoutCart->getTotalsBlock()->waitForUpdatedTotals();
         }
     }
 }

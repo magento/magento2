@@ -5,7 +5,8 @@
  */
 namespace Magento\CustomerImportExport\Model\Import;
 
-use Magento\CustomerImportExport\Model\Resource\Import\Customer\Storage;
+use Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\Storage;
+use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
  * Import entity abstract customer model
@@ -22,6 +23,11 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     const COLUMN_WEBSITE = '_website';
 
     const COLUMN_EMAIL = '_email';
+
+    const COLUMN_DEFAULT_BILLING = 'default_billing';
+
+    const COLUMN_DEFAULT_SHIPPING = 'default_shipping';
+
 
     /**#@-*/
 
@@ -49,7 +55,8 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
      *
      * @var string[]
      */
-    protected $_ignoredAttributes = ['website_id', 'store_id', 'default_billing', 'default_shipping'];
+    protected $_ignoredAttributes = ['website_id', 'store_id',
+        self::COLUMN_DEFAULT_BILLING, self::COLUMN_DEFAULT_SHIPPING];
 
     /**
      * Customer collection wrapper
@@ -59,9 +66,16 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     protected $_customerStorage;
 
     /**
-     * @var \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory
+     * @var \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory
      */
     protected $_storageFactory;
+
+    /**
+     * If we should check column names
+     *
+     * @var bool
+     */
+    protected $needColumnCheck = true;
 
     /**
      * {@inheritdoc}
@@ -69,28 +83,30 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     protected $masterAttributeCode = '_email';
 
     /**
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\ImportExport\Model\ImportFactory $importFactory
-     * @param \Magento\ImportExport\Model\Resource\Helper $resourceHelper
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\ImportExport\Model\Export\Factory $collectionFactory
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory
+     * @param \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\ImportExport\Model\ImportFactory $importFactory,
-        \Magento\ImportExport\Model\Resource\Helper $resourceHelper,
-        \Magento\Framework\App\Resource $resource,
+        \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
+        \Magento\Framework\App\ResourceConnection $resource,
+        ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\ImportExport\Model\Export\Factory $collectionFactory,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\CustomerImportExport\Model\Resource\Import\Customer\StorageFactory $storageFactory,
+        \Magento\CustomerImportExport\Model\ResourceModel\Import\Customer\StorageFactory $storageFactory,
         array $data = []
     ) {
         $this->_storageFactory = $storageFactory;
@@ -100,6 +116,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $importFactory,
             $resourceHelper,
             $resource,
+            $errorAggregator,
             $storeManager,
             $collectionFactory,
             $eavConfig,
@@ -168,7 +185,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
     {
         if (isset($this->_validatedRows[$rowNumber])) {
             // check that row is already validated
-            return !isset($this->_invalidRows[$rowNumber]);
+            return !$this->getErrorAggregator()->isRowInvalid($rowNumber);
         }
         $this->_validatedRows[$rowNumber] = true;
         $this->_processedEntitiesCount++;
@@ -178,7 +195,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
             $this->_validateRowForDelete($rowData, $rowNumber);
         }
 
-        return !isset($this->_invalidRows[$rowNumber]);
+        return !$this->getErrorAggregator()->isRowInvalid($rowNumber);
     }
 
     /**
@@ -222,7 +239,7 @@ abstract class AbstractCustomer extends \Magento\ImportExport\Model\Import\Entit
                 $this->addRowError(static::ERROR_INVALID_WEBSITE, $rowNumber, static::COLUMN_WEBSITE);
             }
         }
-        return !isset($this->_invalidRows[$rowNumber]);
+        return !$this->getErrorAggregator()->isRowInvalid($rowNumber);
     }
 
     /**

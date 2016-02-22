@@ -62,7 +62,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             'Magento\ConfigurableProduct\Api\OptionRepositoryInterface'
         );
         $this->configurableTypeFactoryMock = $this->getMock(
-            '\Magento\ConfigurableProduct\Model\Resource\Product\Type\ConfigurableFactory',
+            '\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\ConfigurableFactory',
             ['create'],
             [],
             '',
@@ -198,7 +198,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             )->setMethods(['getProductAttribute'])
                 ->disableOriginalConstructor()
                 ->getMock();
-            $productAttributeMock = $this->getMockBuilder('\Magento\Catalog\Model\Resource\Eav\Attribute')
+            $productAttributeMock = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Eav\Attribute')
                 ->disableOriginalConstructor()
                 ->getMock();
             $productAttributeMock->expects($this->once())
@@ -238,7 +238,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
         $this->setupProducts($links, $configurableAttributeCode);
 
         $configurableTypeMock = $this->getMockBuilder(
-            '\Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable'
+            '\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable'
         )->disableOriginalConstructor()->getMock();
         $this->configurableTypeFactoryMock->expects($this->once())
             ->method('create')
@@ -290,7 +290,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->willReturn($links);
 
         $configurableTypeMock = $this->getMockBuilder(
-            '\Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable'
+            '\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable'
         )->disableOriginalConstructor()->getMock();
         $this->configurableTypeFactoryMock->expects($this->once())
             ->method('create')
@@ -338,7 +338,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->willReturn($links);
 
         $configurableTypeMock = $this->getMockBuilder(
-            '\Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable'
+            '\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable'
         )->disableOriginalConstructor()->getMock();
         $this->configurableTypeFactoryMock->expects($this->once())
             ->method('create')
@@ -386,7 +386,7 @@ class AroundProductRepositorySaveTest extends \PHPUnit_Framework_TestCase
             ->willReturn($links);
 
         $configurableTypeMock = $this->getMockBuilder(
-            '\Magento\ConfigurableProduct\Model\Resource\Product\Type\Configurable'
+            '\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable'
         )->disableOriginalConstructor()->getMock();
         $this->configurableTypeFactoryMock->expects($this->once())
             ->method('create')

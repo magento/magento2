@@ -8,6 +8,9 @@
  */
 namespace Magento\Test\Integrity;
 
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\App\Utility\Files;
+
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
@@ -129,11 +132,28 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     protected static $_rulesInstances = [];
 
     /**
+     * White list for libraries
+     *
+     * @var array
+     */
+    private static $whiteList = [];
+
+    /**
      * Sets up data
      */
     public static function setUpBeforeClass()
     {
-        self::$_namespaces = implode('|', \Magento\Framework\App\Utility\Files::init()->getNamespaces());
+        $root = BP;
+        $rootJson = json_decode(file_get_contents($root . '/composer.json'), true);
+        if (preg_match('/magento\/project-*/', $rootJson['name']) == 1) {
+
+            // The Dependency test is skipped for vendor/magento build
+            self::markTestSkipped(
+                'MAGETWO-43654: The build is running from vendor/magento. DependencyTest is skipped.'
+            );
+        }
+
+        self::$_namespaces = implode('|', Files::init()->getNamespaces());
 
         self::_prepareListConfigXml();
         self::_prepareListRoutesXml();
@@ -142,9 +162,26 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         self::_prepareMapLayoutBlocks();
         self::_prepareMapLayoutHandles();
 
+        self::getLibraryWhiteLists();
+
         self::_initDependencies();
         self::_initThemes();
         self::_initRules();
+    }
+
+    /**
+     * Initialize library white list
+     */
+    private static function getLibraryWhiteLists()
+    {
+        $componentRegistrar = new ComponentRegistrar();
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::LIBRARY) as $library) {
+            $library = str_replace('\\', '/', $library);
+            if (strpos($library, 'Framework/')) {
+                $partOfLibraryPath = explode('/', $library);
+                self::$whiteList[] = implode('\\', array_slice($partOfLibraryPath, -3));
+            }
+        }
     }
 
     /**
@@ -237,23 +274,28 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
              */
             function ($fileType, $file) {
                 // Validates file when it is belonged to default themes
-                $filename = self::_getRelativeFilename($file);
-                $isThemeFile = (bool)preg_match(self::$_defaultThemes, $filename);
+                $componentRegistrar = new ComponentRegistrar();
+                foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
+                    if (strpos($file, $themeDir . '/') !== false) {
+                        return;
+                    }
+                }
 
-                if (strpos($file, 'app/code') === false && !$isThemeFile) {
+                $foundModuleName = '';
+                foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+                    if (strpos($file, $moduleDir . '/') !== false) {
+                        $foundModuleName = str_replace('_', '\\', $moduleName);
+                        break;
+                    }
+                }
+                if (empty($foundModuleName)) {
                     return;
                 }
 
-                $module = $this->_getModuleName($file);
+                $module = $foundModuleName;
                 $contents = $this->_getCleanedFileContents($fileType, $file);
 
-                // Apply rules
-                $dependencies = [];
-                foreach (self::$_rulesInstances as $rule) {
-                    /** @var \Magento\TestFramework\Dependency\RuleInterface $rule */
-                    $newDependencies = $rule->getDependencyInfo($module, $fileType, $file, $contents);
-                    $dependencies = array_merge($dependencies, $newDependencies);
-                }
+                $dependencies = $this->getDependenciesFromFiles($module, $fileType, $file, $contents);
 
                 // Collect dependencies
                 $undeclaredDependency = $this->_collectDependencies($module, $dependencies);
@@ -273,6 +315,35 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
             },
             $this->getAllFiles()
         );
+    }
+
+    /**
+     * Retrieve dependencies from files
+     *
+     * @param string $module
+     * @param string $fileType
+     * @param string $file
+     * @param string $contents
+     * @return string[]
+     */
+    protected function getDependenciesFromFiles($module, $fileType, $file, $contents)
+    {
+        // Apply rules
+        $dependencies = [];
+        foreach (self::$_rulesInstances as $rule) {
+            /** @var \Magento\TestFramework\Dependency\RuleInterface $rule */
+            $newDependencies = $rule->getDependencyInfo($module, $fileType, $file, $contents);
+            $dependencies = array_merge($dependencies, $newDependencies);
+        }
+        foreach ($dependencies as $key => $dependency) {
+            foreach (self::$whiteList as $namespace) {
+                if (strpos($dependency['source'], $namespace) !== false) {
+                    $dependency['module'] = $namespace;
+                    $dependencies[$key] = $dependency;
+                }
+            }
+        }
+        return $dependencies;
     }
 
     /**
@@ -366,34 +437,6 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Extract Magento relative filename from absolute filename
-     *
-     * @param string $absoluteFilename
-     * @return string
-     */
-    protected static function _getRelativeFilename($absoluteFilename)
-    {
-        $pathToSource = \Magento\Framework\App\Utility\Files::init()->getPathToSource();
-        $relativeFileName = str_replace($pathToSource, '', $absoluteFilename);
-        return trim(str_replace('\\', '/', $relativeFileName), '/');
-    }
-
-    /**
-     * Extract module name from file path
-     *
-     * @param $absoluteFilename
-     * @return string
-     */
-    protected function _getModuleName($absoluteFilename)
-    {
-        $file = self::_getRelativeFilename($absoluteFilename);
-        if (preg_match('/\/(?<namespace>' . self::$_namespaces . ')[\/_\\\\]?(?<module>[^\/]+)\//', $file, $matches)) {
-            return $matches['namespace'] . '\\' . $matches['module'];
-        }
-        return '';
-    }
-
-    /**
      * Convert file list to data provider structure
      *
      * @param string $fileType
@@ -428,7 +471,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
             $files,
             $this->_prepareFiles(
                 'php',
-                \Magento\Framework\App\Utility\Files::init()->getPhpFiles(true, false, false, true, false),
+                Files::init()->getPhpFiles(Files::INCLUDE_APP_CODE | Files::AS_DATA_SET | Files::INCLUDE_NON_CLASSES),
                 true
             )
         );
@@ -436,19 +479,19 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         // Get all configuration files
         $files = array_merge(
             $files,
-            $this->_prepareFiles('config', \Magento\Framework\App\Utility\Files::init()->getConfigFiles())
+            $this->_prepareFiles('config', Files::init()->getConfigFiles())
         );
 
         //Get all layout updates files
         $files = array_merge(
             $files,
-            $this->_prepareFiles('layout', \Magento\Framework\App\Utility\Files::init()->getLayoutFiles())
+            $this->_prepareFiles('layout', Files::init()->getLayoutFiles())
         );
 
         // Get all template files
         $files = array_merge(
             $files,
-            $this->_prepareFiles('template', \Magento\Framework\App\Utility\Files::init()->getPhtmlFiles())
+            $this->_prepareFiles('template', Files::init()->getPhtmlFiles())
         );
 
         return $files;
@@ -459,7 +502,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _prepareListConfigXml()
     {
-        $files = \Magento\Framework\App\Utility\Files::init()->getConfigFiles('config.xml', [], false);
+        $files = Files::init()->getConfigFiles('config.xml', [], false);
         foreach ($files as $file) {
             if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];
@@ -473,7 +516,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _prepareListRoutesXml()
     {
-        $files = \Magento\Framework\App\Utility\Files::init()->getConfigFiles('*/routes.xml', [], false);
+        $files = Files::init()->getConfigFiles('*/routes.xml', [], false);
         foreach ($files as $file) {
             if (preg_match('/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)/', $file, $matches)) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];
@@ -490,7 +533,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
         $pattern = '/(?<namespace>[A-Z][a-z]+)[_\/\\\\](?<module>[A-Z][a-zA-Z]+)\/Controller\/' .
             '(?<path>[\/\w]*).php/';
 
-        $files = \Magento\Framework\App\Utility\Files::init()->getPhpFiles(true, false, false, false, false);
+        $files = Files::init()->getPhpFiles(Files::INCLUDE_APP_CODE | Files::INCLUDE_NON_CLASSES);
         foreach ($files as $file) {
             if (preg_match($pattern, $file, $matches)) {
                 $module = $matches['namespace'] . '\\' . $matches['module'];
@@ -536,7 +579,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _prepareMapLayoutBlocks()
     {
-        $files = \Magento\Framework\App\Utility\Files::init()->getLayoutFiles([], false);
+        $files = Files::init()->getLayoutFiles([], false);
         foreach ($files as $file) {
             $area = 'default';
             if (preg_match('/[\/](?<area>adminhtml|frontend)[\/]/', $file, $matches)) {
@@ -564,7 +607,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _prepareMapLayoutHandles()
     {
-        $files = \Magento\Framework\App\Utility\Files::init()->getLayoutFiles([], false);
+        $files = Files::init()->getLayoutFiles([], false);
         foreach ($files as $file) {
             $area = 'default';
             if (preg_match('/\/(?<area>adminhtml|frontend)\//', $file, $matches)) {
@@ -612,6 +655,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
             return $moduleName;
         } elseif (strpos($jsonName, 'magento/magento') !== false || strpos($jsonName, 'magento/framework') !== false) {
             $moduleName = str_replace('/', "\t", $jsonName);
+            $moduleName = str_replace('framework-', "Framework\t", $moduleName);
             $moduleName = str_replace('-', ' ', $moduleName);
             $moduleName = ucwords($moduleName);
             $moduleName = str_replace("\t", '\\', $moduleName);
@@ -629,7 +673,7 @@ class DependencyTest extends \PHPUnit_Framework_TestCase
      */
     protected static function _initDependencies()
     {
-        $jsonFiles = \Magento\Framework\App\Utility\Files::init()->getComposerFiles('code/Magento/*/', false);
+        $jsonFiles = Files::init()->getComposerFiles(ComponentRegistrar::MODULE, false);
         foreach ($jsonFiles as $file) {
             $contents = file_get_contents($file);
             $decodedJson = json_decode($contents);

@@ -18,7 +18,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     protected $salesConfig;
 
     /**
-     * @var \Magento\Sales\Model\Resource\Order\Status\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderStatusCollectionFactoryMock;
 
@@ -26,7 +26,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $orderStatusFactory = $this->getMock('Magento\Sales\Model\Order\StatusFactory', [], [], '', false, false);
         $this->orderStatusCollectionFactoryMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Status\CollectionFactory',
+            'Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory',
             ['create'],
             [],
             '',
@@ -46,28 +46,28 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetInvisibleOnFrontStatuses()
     {
         $statuses = [
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'status' => 'canceled',
                     'is_default' => 1,
                     'visible_on_front' => 1,
                 ]
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'status' => 'complete',
                     'is_default' => 1,
                     'visible_on_front' => 0,
                 ]
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'status' => 'processing',
                     'is_default' => 1,
                     'visible_on_front' => 1,
                 ]
             ),
-            new \Magento\Framework\Object(
+            new \Magento\Framework\DataObject(
                 [
                     'status' => 'pending_payment',
                     'is_default' => 1,
@@ -78,7 +78,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $expectedResult = ['complete', 'pending_payment'];
 
         $collectionMock = $this->getMock(
-            'Magento\Sales\Model\Resource\Order\Status\Collection',
+            'Magento\Sales\Model\ResourceModel\Order\Status\Collection',
             ['create', 'joinStates'],
             [],
             '',

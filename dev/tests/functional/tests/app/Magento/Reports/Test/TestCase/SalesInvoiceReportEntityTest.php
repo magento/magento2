@@ -52,7 +52,7 @@ class SalesInvoiceReportEntityTest extends Injectable
     {
         // Preconditions
         $salesInvoiceReport->open();
-        $salesInvoiceReport->getMessagesBlock()->clickLinkInMessages('notice', 'here');
+        $salesInvoiceReport->getMessagesBlock()->clickLinkInMessage('notice', 'here');
         $salesInvoiceReport->getFilterForm()->viewsReport($invoiceReport);
         $salesInvoiceReport->getActionBlock()->showReport();
         $initialInvoiceResult = $salesInvoiceReport->getGridBlock()->getLastResult();

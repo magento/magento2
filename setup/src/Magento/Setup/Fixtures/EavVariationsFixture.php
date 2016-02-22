@@ -29,8 +29,8 @@ class EavVariationsFixture extends Fixture
         }
         $this->fixtureModel->resetObjectManager();
 
-        /* @var $model \Magento\Catalog\Model\Resource\Eav\Attribute */
-        $model = $this->fixtureModel->getObjectManager()->create('Magento\Catalog\Model\Resource\Eav\Attribute');
+        /* @var $model \Magento\Catalog\Model\ResourceModel\Eav\Attribute */
+        $model = $this->fixtureModel->getObjectManager()->create('Magento\Catalog\Model\ResourceModel\Eav\Attribute');
         /** @var \Magento\Store\Model\StoreManager $storeManager */
         $storeManager = $this->fixtureModel->getObjectManager()->create('Magento\Store\Model\StoreManager');
         $stores = $storeManager->getStores();

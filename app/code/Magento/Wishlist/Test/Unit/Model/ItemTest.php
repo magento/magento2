@@ -19,7 +19,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected $registry;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Url|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $catalogUrl;
 
@@ -29,12 +29,12 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected $productTypeConfig;
 
     /**
-     * @var \Magento\Wishlist\Model\Resource\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\ResourceModel\Item|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resource;
 
     /**
-     * @var \Magento\Wishlist\Model\Resource\Item\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $collection;
 
@@ -54,7 +54,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     protected $optionFactory;
 
     /**
-     * @var \Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $itemOptFactory;
 
@@ -81,24 +81,25 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $this->date = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateTime')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->catalogUrl = $this->getMockBuilder('Magento\Catalog\Model\Resource\Url')
+        $this->catalogUrl = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Url')
             ->disableOriginalConstructor()
             ->getMock();
         $this->optionFactory = $this->getMockBuilder('Magento\Wishlist\Model\Item\OptionFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->itemOptFactory = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Item\Option\CollectionFactory')
+        $this->itemOptFactory =
+            $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\Option\CollectionFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->productTypeConfig = $this->getMockBuilder('Magento\Catalog\Model\ProductTypes\ConfigInterface')
             ->getMock();
         $this->productRepository = $this->getMock('Magento\Catalog\Api\ProductRepositoryInterface');
-        $this->resource = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Item')
+        $this->resource = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->collection = $this->getMockBuilder('Magento\Wishlist\Model\Resource\Item\Collection')
+        $this->collection = $this->getMockBuilder('Magento\Wishlist\Model\ResourceModel\Item\Collection')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -186,7 +187,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         return [
             ['first_key', ['code' => 'first_key', 'value' => 'first_data']],
             ['second_key', $optionMock],
-            ['third_key', new \Magento\Framework\Object(['code' => 'third_key', 'product' => $productMock])],
+            ['third_key', new \Magento\Framework\DataObject(['code' => 'third_key', 'product' => $productMock])],
         ];
     }
 
@@ -318,6 +319,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
             ->with([]);
         $this->productRepository->expects($this->once())
             ->method('getById')
+            ->with($productId, false, $storeId, true)
             ->willReturn($productMock);
         $this->assertEquals($productMock, $this->model->getProduct());
     }

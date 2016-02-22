@@ -6,17 +6,21 @@
  */
 namespace Magento\Webapi\Model\Soap\Wsdl;
 
+use Magento\Webapi\Model\AbstractSchemaGenerator;
 use Magento\Webapi\Model\Soap\Fault;
 use Magento\Webapi\Model\Soap\Wsdl;
 use Magento\Webapi\Model\Soap\WsdlFactory;
+use Magento\Framework\Webapi\Authorization;
+use Magento\Webapi\Model\ServiceMetadata;
 
 /**
  * WSDL generator.
  */
-class Generator
+class Generator extends AbstractSchemaGenerator
 {
+    /** WSDL name */
     const WSDL_NAME = 'MagentoWSDL';
-    const WSDL_CACHE_ID = 'WSDL';
+
     /**
      * WSDL factory instance.
      *
@@ -25,117 +29,44 @@ class Generator
     protected $_wsdlFactory;
 
     /**
-     * @var \Magento\Framework\App\Cache\Type\Webapi
-     */
-    protected $_cache;
-
-    /**
-     * @var \Magento\Webapi\Model\Soap\Config
-     */
-    protected $_apiConfig;
-
-    /** @var \Magento\Framework\Reflection\TypeProcessor */
-    protected $_typeProcessor;
-
-    /**
-     * The list of registered complex types.
-     *
-     * @var string[]
-     */
-    protected $_registeredTypes = [];
-
-    /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
-     * @var \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface
-     */
-    protected $customAttributeTypeLocator = null;
-
-    /**
      * Initialize dependencies.
      *
-     * @param \Magento\Webapi\Model\Soap\Config $apiConfig
-     * @param WsdlFactory $wsdlFactory
-     * @param \Magento\Framework\App\Cache\Type\Webapi $cache
+     * @param \Magento\Webapi\Model\Cache\Type\Webapi $cache
      * @param \Magento\Framework\Reflection\TypeProcessor $typeProcessor
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
+     * @param \Magento\Webapi\Model\ServiceMetadata $serviceMetadata
+     * @param Authorization $authorization
+     * @param WsdlFactory $wsdlFactory
      */
     public function __construct(
-        \Magento\Webapi\Model\Soap\Config $apiConfig,
-        WsdlFactory $wsdlFactory,
-        \Magento\Framework\App\Cache\Type\Webapi $cache,
+        \Magento\Webapi\Model\Cache\Type\Webapi $cache,
         \Magento\Framework\Reflection\TypeProcessor $typeProcessor,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator
+        \Magento\Framework\Webapi\CustomAttributeTypeLocatorInterface $customAttributeTypeLocator,
+        \Magento\Webapi\Model\ServiceMetadata $serviceMetadata,
+        Authorization $authorization,
+        WsdlFactory $wsdlFactory
     ) {
-        $this->_apiConfig = $apiConfig;
         $this->_wsdlFactory = $wsdlFactory;
-        $this->_cache = $cache;
-        $this->_typeProcessor = $typeProcessor;
-        $this->storeManager = $storeManager;
-        $this->customAttributeTypeLocator = $customAttributeTypeLocator;
+        parent::__construct(
+            $cache,
+            $typeProcessor,
+            $customAttributeTypeLocator,
+            $serviceMetadata,
+            $authorization
+        );
     }
 
     /**
-     * Retrieve an array of services
-     *
-     * @return array
+     * {@inheritdoc}
      */
-    public function getListOfServices()
+    protected function generateSchema($requestedServiceMetadata, $requestScheme, $requestHost, $endPointUrl)
     {
-        return $this->_apiConfig->getSoapServicesConfig();
-    }
-
-    /**
-     * Generate WSDL file based on requested services (uses cache)
-     *
-     * @param array $requestedServices
-     * @param string $endPointUrl
-     * @return string
-     * @throws \Exception
-     */
-    public function generate($requestedServices, $endPointUrl)
-    {
-        /** Sort requested services by names to prevent caching of the same wsdl file more than once. */
-        ksort($requestedServices);
-        $currentStore = $this->storeManager->getStore();
-        $cacheId = self::WSDL_CACHE_ID . hash('md5', serialize($requestedServices) . $currentStore->getCode());
-        $cachedWsdlContent = $this->_cache->load($cacheId);
-        if ($cachedWsdlContent !== false) {
-            return $cachedWsdlContent;
-        }
-        $services = [];
-        foreach ($requestedServices as $serviceName) {
-            $services[$serviceName] = $this->_apiConfig->getServiceMetadata($serviceName);
-        }
-
-        $wsdlContent = $this->_generate($services, $endPointUrl);
-        $this->_cache->save($wsdlContent, $cacheId, [\Magento\Framework\App\Cache\Type\Webapi::CACHE_TAG]);
-
-        return $wsdlContent;
-    }
-
-    /**
-     * Generate WSDL file based on requested services.
-     *
-     * @param array $requestedServices
-     * @param string $endPointUrl
-     * @return string
-     * @throws \Magento\Framework\Webapi\Exception
-     */
-    protected function _generate($requestedServices, $endPointUrl)
-    {
-        $this->_collectCallInfo($requestedServices);
         $wsdl = $this->_wsdlFactory->create(self::WSDL_NAME, $endPointUrl);
         $wsdl->addSchemaTypeSection();
         $faultMessageName = $this->_addGenericFaultComplexTypeNodes($wsdl);
         $wsdl = $this->addCustomAttributeTypes($wsdl);
 
-        foreach ($requestedServices as $serviceClass => $serviceData) {
+        foreach ($requestedServiceMetadata as $serviceClass => &$serviceData) {
             $portTypeName = $this->getPortTypeName($serviceClass);
             $bindingName = $this->getBindingName($serviceClass);
             $portType = $wsdl->addPortType($portTypeName);
@@ -145,8 +76,8 @@ class Generator
             $serviceName = $this->getServiceName($serviceClass);
             $wsdl->addService($serviceName, $portName, Wsdl::TYPES_NS . ':' . $bindingName, $endPointUrl, SOAP_1_2);
 
-            foreach ($serviceData['methods'] as $methodName => $methodData) {
-                $operationName = $this->getOperationName($serviceClass, $methodName);
+            foreach ($serviceData[ServiceMetadata::KEY_SERVICE_METHODS] as $methodName => $methodData) {
+                $operationName = $this->typeProcessor->getOperationName($serviceClass, $methodName);
                 $bindingDataPrototype = ['use' => 'literal'];
                 $inputBinding = $bindingDataPrototype;
                 $inputMessageName = $this->_createOperationInput($wsdl, $operationName, $methodData);
@@ -189,8 +120,8 @@ class Generator
     protected function addCustomAttributeTypes($wsdl)
     {
         foreach ($this->customAttributeTypeLocator->getAllServiceDataInterfaces() as $customAttributeClass) {
-            $typeName = $this->_typeProcessor->register($customAttributeClass);
-            $wsdl->addComplexType($this->_typeProcessor->getArrayItemType($typeName));
+            $typeName = $this->typeProcessor->register($customAttributeClass);
+            $wsdl->addComplexType($this->typeProcessor->getArrayItemType($typeName));
         }
         return $wsdl;
     }
@@ -225,7 +156,7 @@ class Generator
             'parameters' => $inputParameters,
             'callInfo' => $callInfo,
         ];
-        $this->_typeProcessor->setTypeData($complexTypeName, $typeData);
+        $this->typeProcessor->setTypeData($complexTypeName, $typeData);
         $wsdl->addComplexType($complexTypeName);
         $wsdl->addMessage(
             $inputMessageName,
@@ -263,7 +194,7 @@ class Generator
             'parameters' => $methodData['interface']['out']['parameters'],
             'callInfo' => $callInfo,
         ];
-        $this->_typeProcessor->setTypeData($complexTypeName, $typeData);
+        $this->typeProcessor->setTypeData($complexTypeName, $typeData);
         $wsdl->addComplexType($complexTypeName);
         $wsdl->addMessage(
             $outputMessageName,
@@ -274,17 +205,6 @@ class Generator
             ]
         );
         return Wsdl::TYPES_NS . ':' . $outputMessageName;
-    }
-
-    /**
-     * Get name of complexType for message element.
-     *
-     * @param string $messageName
-     * @return string
-     */
-    public function getElementComplexTypeName($messageName)
-    {
-        return ucfirst($messageName);
     }
 
     /**
@@ -332,18 +252,6 @@ class Generator
     }
 
     /**
-     * Get name of operation based on service and method names.
-     *
-     * @param string $serviceName
-     * @param string $methodName
-     * @return string
-     */
-    public function getOperationName($serviceName, $methodName)
-    {
-        return $serviceName . ucfirst($methodName);
-    }
-
-    /**
      * Get input message node name for operation.
      *
      * @param string $operationName
@@ -363,54 +271,6 @@ class Generator
     public function getOutputMessageName($operationName)
     {
         return $operationName . 'Response';
-    }
-
-    /**
-     * Collect data about complex types call info.
-     *
-     * Walks through all requested services and checks all methods 'in' and 'out' parameters.
-     *
-     * @param array $requestedServices
-     * @return void
-     */
-    protected function _collectCallInfo($requestedServices)
-    {
-        foreach ($requestedServices as $serviceName => $serviceData) {
-            foreach ($serviceData['methods'] as $methodName => $methodData) {
-                $this->_processInterfaceCallInfo($methodData['interface'], $serviceName, $methodName);
-            }
-        }
-    }
-
-    /**
-     * Process call info data from interface.
-     *
-     * @param array $interface
-     * @param string $serviceName
-     * @param string $methodName
-     * @return void
-     */
-    protected function _processInterfaceCallInfo($interface, $serviceName, $methodName)
-    {
-        foreach ($interface as $direction => $interfaceData) {
-            $direction = ($direction == 'in') ? 'requiredInput' : 'returned';
-            foreach ($interfaceData['parameters'] as $parameterData) {
-                $parameterType = $parameterData['type'];
-                if (!$this->_typeProcessor->isTypeSimple($parameterType)
-                    && !$this->_typeProcessor->isTypeAny($parameterType)
-                ) {
-                    $operation = $this->getOperationName($serviceName, $methodName);
-                    if ($parameterData['required']) {
-                        $condition = ($direction == 'requiredInput') ? 'yes' : 'always';
-                    } else {
-                        $condition = ($direction == 'requiredInput') ? 'no' : 'conditionally';
-                    }
-                    $callInfo = [];
-                    $callInfo[$direction][$condition]['calls'][] = $operation;
-                    $this->_typeProcessor->setTypeData($parameterType, ['callInfo' => $callInfo]);
-                }
-            }
-        }
     }
 
     /**
@@ -478,9 +338,9 @@ class Generator
                 ],
             ],
         ];
-        $this->_typeProcessor->setTypeData($faultParamsComplexType, $faultParamsData);
-        $this->_typeProcessor->setTypeData($wrappedErrorComplexType, $wrappedErrorData);
-        $this->_typeProcessor->setTypeData($complexTypeName, $genericFaultTypeData);
+        $this->typeProcessor->setTypeData($faultParamsComplexType, $faultParamsData);
+        $this->typeProcessor->setTypeData($wrappedErrorComplexType, $wrappedErrorData);
+        $this->typeProcessor->setTypeData($complexTypeName, $genericFaultTypeData);
         $wsdl->addComplexType($complexTypeName);
         $wsdl->addMessage(
             $faultMessageName,
@@ -492,5 +352,16 @@ class Generator
         );
 
         return Wsdl::TYPES_NS . ':' . $faultMessageName;
+    }
+
+    /**
+     * Get service metadata
+     *
+     * @param string $serviceName
+     * @return array
+     */
+    protected function getServiceMetadata($serviceName)
+    {
+        return $this->serviceMetadata->getServiceMetadata($serviceName);
     }
 }

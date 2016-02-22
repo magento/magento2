@@ -20,22 +20,26 @@
     <div class="control">
         <div class="nested options-list">
             <?php if ($block->showSingle()): ?>
-                <?php echo $block->getSelectionTitlePrice($_selections[0]) ?>
+                <?php /* @escapeNotVerified */ echo $block->getSelectionTitlePrice($_selections[0]) ?>
                 <input type="hidden"
-                       class="bundle-option-<?php echo $_option->getId() ?>  product bundle option"
-                       name="bundle_option[<?php echo $_option->getId() ?>]"
-                       value="<?php echo $_selections[0]->getSelectionId() ?>" />
+                    class="bundle-option-<?php echo (int)$_option->getId() ?>  product bundle option"
+                    name="bundle_option[<?php echo (int)$_option->getId() ?>]"
+                    value="<?php echo (int)$_selections[0]->getSelectionId() ?>"
+                    id="bundle-option-<?php echo (int)$_option->getId() ?>-<?php echo (int)$_selections[0]->getSelectionId() ?>"
+                    checked="checked"
+                />
             <?php else:?>
                 <?php if (!$_option->getRequired()): ?>
                     <div class="field choice">
                         <input type="radio"
                                class="radio product bundle option"
-                               id="bundle-option-<?php echo $_option->getId() ?>"
-                               name="bundle_option[<?php echo $_option->getId() ?>]"
+                               id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>"
+                               name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
+                               data-selector="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                                <?php echo ($_default && $_default->isSalable())?'':' checked="checked" ' ?>
                                value=""/>
-                        <label class="label" for="bundle-option-<?php echo $_option->getId() ?>">
-                            <span><?php echo __('None') ?></span>
+                        <label class="label" for="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>">
+                            <span><?php /* @escapeNotVerified */ echo __('None') ?></span>
                         </label>
                     </div>
                 <?php endif; ?>
@@ -43,31 +47,33 @@
                     <div class="field choice">
                         <input type="radio"
                                class="radio product bundle option change-container-classname"
-                               id="bundle-option-<?php echo $_option->getId() ?>-<?php echo $_selection->getSelectionId() ?>"
+                               id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>"
                                <?php if ($_option->getRequired()) echo 'data-validate="{\'validate-one-required-by-name\':true}"'?>
-                               name="bundle_option[<?php echo $_option->getId() ?>]"
+                               name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
+                               data-selector="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                                <?php if ($block->isSelected($_selection)) echo ' checked="checked"' ?>
                                <?php if (!$_selection->isSaleable()) echo ' disabled="disabled"' ?>
-                               value="<?php echo $_selection->getSelectionId() ?>"/>
+                               value="<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>"/>
                         <label class="label"
-                               for="bundle-option-<?php echo $_option->getId() ?>-<?php echo $_selection->getSelectionId() ?>">
-                            <span><?php echo $block->getSelectionTitlePrice($_selection) ?></span>
+                               for="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-<?php /* @escapeNotVerified */ echo $_selection->getSelectionId() ?>">
+                            <span><?php /* @escapeNotVerified */ echo $block->getSelectionTitlePrice($_selection) ?></span>
                         </label>
                     </div>
                 <?php endforeach; ?>
-                <div id="bundle-option-<?php echo $_option->getId() ?>-container"></div>
+                <div id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-container"></div>
             <?php endif; ?>
             <div class="field qty qty-holder">
-                <label class="label" for="bundle-option-<?php echo $_option->getId() ?>-qty-input">
-                    <span><?php echo __('Quantity') ?></span>
+                <label class="label" for="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-qty-input">
+                    <span><?php /* @escapeNotVerified */ echo __('Quantity') ?></span>
                 </label>
                 <div class="control">
                     <input <?php if (!$_canChangeQty) echo ' disabled="disabled"' ?>
-                           id="bundle-option-<?php echo $_option->getId() ?>-qty-input"
+                           id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>-qty-input"
                            class="input-text qty<?php if (!$_canChangeQty) echo ' qty-disabled' ?>"
                            type="number"
-                           name="bundle_option_qty[<?php echo $_option->getId() ?>]"
-                           value="<?php echo $_defaultQty ?>"/>
+                           name="bundle_option_qty[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
+                           data-selector="bundle_option_qty[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
+                           value="<?php /* @escapeNotVerified */ echo $_defaultQty ?>"/>
                 </div>
             </div>
         </div>

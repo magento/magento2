@@ -8,6 +8,6 @@
 
 ?>
 <p class="magento-version">
-    <strong><?php echo __('Magento'); ?></strong>
-    <?php echo __('ver. %1', \Magento\Framework\AppInterface::VERSION) ?>
+    <strong><?php /* @escapeNotVerified */ echo __('Magento'); ?></strong>
+    <?php /* @escapeNotVerified */ echo __('ver. %1', $block->getMagentoVersion()) ?>
 </p>

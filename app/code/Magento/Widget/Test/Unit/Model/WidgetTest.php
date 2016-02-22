@@ -75,14 +75,6 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->widget->getWidgetByClassType('type2'));
     }
 
-    public function testGetWidgetDeclarationTypeWithBackslashes()
-    {
-        $this->assertContains(
-            'Magento\\\\Widget\\\\Backslashed\\\\ClassName',
-            $this->widget->getWidgetDeclaration('Magento\Widget\Backslashed\ClassName')
-        );
-    }
-
     public function testGetConfigAsObject()
     {
         $configFile = __DIR__ . '/_files/mappedConfigArrayAll.php';
@@ -92,7 +84,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             ->willReturn($widgets);
 
         $resultObject = $this->widget->getConfigAsObject('Magento\Cms\Block\Widget\Page\Link');
-        $this->assertInstanceOf('Magento\Framework\Object', $resultObject);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $resultObject);
 
         $this->assertSame('CMS Page Link', $resultObject->getName());
         $this->assertSame('Link to a CMS Page', $resultObject->getDescription());
@@ -100,9 +92,9 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('Magento_Cms::images/widget_page_link.png', $resultObject->getPlaceholderImage());
 
         $resultParameters = $resultObject->getParameters();
-        $this->assertInstanceOf('Magento\Framework\Object', $resultParameters['page_id' ]);
-        $this->assertInstanceOf('Magento\Framework\Object', $resultParameters['anchor_text']);
-        $this->assertInstanceOf('Magento\Framework\Object', $resultParameters['template']);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['page_id' ]);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['anchor_text']);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $resultParameters['template']);
 
         $supportedContainersExpected = [
             '0' => [
@@ -124,7 +116,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             ->willReturn([]);
 
         $resultObject = $this->widget->getConfigAsObject('Magento\Cms\Block\Widget\Page\Link');
-        $this->assertInstanceOf('Magento\Framework\Object', $resultObject);
+        $this->assertInstanceOf('Magento\Framework\DataObject', $resultObject);
         $this->assertSame([], $resultObject->getData());
     }
 }

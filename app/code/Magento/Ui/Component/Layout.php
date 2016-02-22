@@ -5,7 +5,7 @@
  */
 namespace Magento\Ui\Component;
 
-use Magento\Ui\Component\Layout\LayoutPool;
+use Magento\Framework\View\Layout\Pool as LayoutPool;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\UiComponent\LayoutInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;

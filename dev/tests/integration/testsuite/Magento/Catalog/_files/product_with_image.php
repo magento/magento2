@@ -7,10 +7,12 @@
 require __DIR__ . '/product_image.php';
 require __DIR__ . '/product_simple.php';
 
+$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+$product = $productRepository->get('simple');
+
 /** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-$product->load(1)
-    ->setStoreId(0)
+$product->setStoreId(0)
     ->setImage('/m/a/magento_image.jpg')
     ->setSmallImage('/m/a/magento_image.jpg')
     ->setThumbnail('/m/a/magento_image.jpg')
@@ -20,5 +22,8 @@ $product->load(1)
             'position' => 1,
             'label' => 'Image Alt Text',
             'disabled' => 0,
+            'media_type' => 'image'
         ],
-    ]])->save();
+    ]])
+    ->setCanSaveCustomOptions(true)
+    ->save();

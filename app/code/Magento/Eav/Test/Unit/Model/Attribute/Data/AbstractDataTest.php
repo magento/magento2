@@ -22,7 +22,7 @@ class AbstractDataTest extends \PHPUnit_Framework_TestCase
         $timezoneMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $loggerMock = $this->getMock('\Psr\Log\LoggerInterface', [], [], '', false);
         $localeResolverMock = $this->getMock('\Magento\Framework\Locale\ResolverInterface');
-        $stringMock = $this->getMock('\Magento\Framework\Stdlib\String', [], [], '', false);
+        $stringMock = $this->getMock('\Magento\Framework\Stdlib\StringUtils', [], [], '', false);
 
         /* testing abstract model through its child */
         $this->model = new Text($timezoneMock, $loggerMock, $localeResolverMock, $stringMock);

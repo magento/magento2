@@ -116,7 +116,7 @@ class NewProducts extends \Magento\Framework\View\Element\AbstractBlock implemen
             $description = sprintf(
                 $description,
                 $item->getProductUrl(),
-                $this->imageHelper->init($item, 'thumbnail')->resize(75, 75),
+                $this->imageHelper->init($item, 'rss_thumbnail')->getUrl(),
                 $item->getDescription(),
                 $allowedPriceInRss ? $this->renderPriceHtml($item) : ''
             );

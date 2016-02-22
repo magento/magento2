@@ -9,19 +9,26 @@ namespace Magento\Catalog\Test\Block\Product\Grouped\AssociatedProducts\Search;
 use Magento\Backend\Test\Block\Widget\Grid as GridInterface;
 
 /**
- * Class Grid
+ * Associated products grid.
  */
 class Grid extends GridInterface
 {
     /**
-     * 'Add Selected Products' button
+     * 'Add Selected Products' button.
      *
      * @var string
      */
     protected $addProducts = 'button.add';
 
     /**
-     * Filters array mapping
+     * An element locator which allows to select entities in grid.
+     *
+     * @var string
+     */
+    protected $selectItem = '[data-column=entity_id] input';
+
+    /**
+     * Filters array mapping.
      *
      * @var array
      */
@@ -35,18 +42,7 @@ class Grid extends GridInterface
     ];
 
     /**
-     * Initialize block elements
-     * 
-     * @return void
-     */
-    protected function _init()
-    {
-        parent::_init();
-        $this->selectItem = "[data-column=entity_id] input";
-    }
-
-    /**
-     * Press 'Add Selected Products' button
+     * Press 'Add Selected Products' button.
      * 
      * @return void
      */

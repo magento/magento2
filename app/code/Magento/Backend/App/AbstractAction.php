@@ -102,7 +102,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed(self::ADMIN_RESOURCE);
+        return $this->_authorization->isAllowed(static::ADMIN_RESOURCE);
     }
 
     /**
@@ -300,7 +300,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     /**
      * Set redirect into response
      *
-     * @deprecated
      * @TODO MAGETWO-28356: Refactor controller actions to new ResultInterface
      * @param   string $path
      * @param   array $arguments
@@ -316,7 +315,6 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
     /**
      * Forward to action
      *
-     * @deprecated
      * @TODO MAGETWO-28356: Refactor controller actions to new ResultInterface
      * @param string $action
      * @param string|null $controller

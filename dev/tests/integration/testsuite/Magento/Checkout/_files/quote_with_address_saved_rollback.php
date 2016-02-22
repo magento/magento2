@@ -14,3 +14,5 @@ $quote->load('test_order_1', 'reserved_order_id')->delete();
 /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
 $quoteIdMask = $objectManager->create('Magento\Quote\Model\QuoteIdMask');
 $quoteIdMask->delete($quote->getId());
+
+require __DIR__ . '/../../Checkout/_files/quote_with_address_rollback.php';

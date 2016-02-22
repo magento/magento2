@@ -20,21 +20,21 @@ class Group extends \Magento\Eav\Model\Entity\Attribute\Source\Table
     protected $_groupManagement;
 
     /**
-     * @var \Magento\Framework\Convert\Object
+     * @var \Magento\Framework\Convert\DataObject
      */
     protected $_converter;
 
     /**
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
-     * @param \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
+     * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory
      * @param GroupManagementInterface $groupManagement
-     * @param \Magento\Framework\Convert\Object $converter
+     * @param \Magento\Framework\Convert\DataObject $converter
      */
     public function __construct(
-        \Magento\Eav\Model\Resource\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
-        \Magento\Eav\Model\Resource\Entity\Attribute\OptionFactory $attrOptionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory,
+        \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory $attrOptionFactory,
         GroupManagementInterface $groupManagement,
-        \Magento\Framework\Convert\Object $converter
+        \Magento\Framework\Convert\DataObject $converter
     ) {
         $this->_groupManagement = $groupManagement;
         $this->_converter = $converter;

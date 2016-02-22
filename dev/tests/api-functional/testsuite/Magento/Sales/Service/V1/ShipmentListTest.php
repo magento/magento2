@@ -46,7 +46,7 @@ class ShipmentListTest extends WebapiAbstract
         $searchCriteriaBuilder->addFilters([$filterBuilder->setField('shipment_status')->setValue(1)->create()]);
         $searchData = $searchCriteriaBuilder->create()->__toArray();
 
-        $requestData = ['criteria' => $searchData];
+        $requestData = ['searchCriteria' => $searchData];
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($requestData),

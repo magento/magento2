@@ -180,7 +180,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->image->setBaseFile('/somefile.png');
         $this->assertEquals('catalog/product/somefile.png', $this->image->getBaseFile());
         $this->assertEquals(
-            'catalog/product/cache/1//a4e40ebdc3e371adff845072e1c73f37/somefile.png',
+            'catalog/product/cache/1//beff4985b56e3afdbeabfc89641a4582/somefile.png',
             $this->image->getNewFile()
         );
     }
@@ -300,7 +300,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $this->testSetGetBaseFile();
         $url = $this->image->getUrl();
         $this->assertEquals(
-            'http://magento.com/media/catalog/product/cache/1//a4e40ebdc3e371adff845072e1c73f37/somefile.png',
+            'http://magento.com/media/catalog/product/cache/1//beff4985b56e3afdbeabfc89641a4582/somefile.png',
             $url
         );
     }
@@ -342,5 +342,10 @@ class ImageTest extends \PHPUnit_Framework_TestCase
         $imageProcessor = $this->getMockBuilder('\Magento\Framework\Image')->disableOriginalConstructor()->getMock();
         $this->factory->expects($this->once())->method('create')->will($this->returnValue($imageProcessor));
         $this->assertSame($imageProcessor, $this->image->getImageProcessor());
+    }
+
+    public function testIsBaseFilePlaceholder()
+    {
+        $this->assertFalse($this->image->isBaseFilePlaceholder());
     }
 }

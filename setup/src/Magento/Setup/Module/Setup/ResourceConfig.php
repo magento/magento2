@@ -8,13 +8,13 @@ namespace Magento\Setup\Module\Setup;
 /**
  * Simplified resource config for Setup tools
  */
-class ResourceConfig implements \Magento\Framework\App\Resource\ConfigInterface
+class ResourceConfig implements \Magento\Framework\App\ResourceConnection\ConfigInterface
 {
     /**
      * {@inheritdoc}
      */
     public function getConnectionName($resourceName)
     {
-        return \Magento\Framework\App\Resource\Config::DEFAULT_SETUP_CONNECTION;
+        return \Magento\Framework\App\ResourceConnection::DEFAULT_CONNECTION;
     }
 }

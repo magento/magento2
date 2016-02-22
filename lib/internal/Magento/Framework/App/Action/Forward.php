@@ -19,7 +19,15 @@ class Forward extends AbstractAction
      */
     public function dispatch(RequestInterface $request)
     {
-        $request->setDispatched(false);
+        return $this->execute();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function execute()
+    {
+        $this->_request->setDispatched(false);
         return $this->_response;
     }
 }

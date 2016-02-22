@@ -21,7 +21,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Category\Tree
+     * @var \Magento\Catalog\Model\ResourceModel\Category\Tree
      */
     protected $_categoryTree;
 
@@ -37,14 +37,14 @@ class AbstractCategory extends \Magento\Backend\Block\Template
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Catalog\Model\Resource\Category\Tree $categoryTree
+     * @param \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Catalog\Model\Resource\Category\Tree $categoryTree,
+        \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTree,
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         array $data = []
@@ -170,7 +170,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getCategoryCollection()
     {
@@ -279,7 +279,7 @@ class AbstractCategory extends \Magento\Backend\Block\Template
     {
         $ids = $this->getData('root_ids');
         if ($ids === null) {
-            $ids = [];
+            $ids = [\Magento\Catalog\Model\Category::TREE_ROOT_ID];
             foreach ($this->_storeManager->getGroups() as $store) {
                 $ids[] = $store->getRootCategoryId();
             }

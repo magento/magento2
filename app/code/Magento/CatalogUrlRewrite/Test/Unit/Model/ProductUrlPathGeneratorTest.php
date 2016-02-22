@@ -85,11 +85,11 @@ class ProductUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider getUrlPathDataProvider
-     * @param $urlKey
-     * @param $productName
-     * @param $result
+     * @param string|null|bool $urlKey
+     * @param string|null|bool $productName
+     * @param string $result
      */
-    public function testGenerateUrlPath($urlKey, $productName, $result)
+    public function testGetUrlPath($urlKey, $productName, $result)
     {
         $this->product->expects($this->once())->method('getData')->with('url_path')
             ->will($this->returnValue(null));
@@ -101,19 +101,21 @@ class ProductUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param $productUrlKey
-     * @param $expectedUrlKey
-     *
-     * @dataProvider generateUrlKeyDataProvider
+     * @param string|bool $productUrlKey
+     * @param string|bool $expectedUrlKey
+     * @dataProvider getUrlKeyDataProvider
      */
-    public function testGenerateUrlKey($productUrlKey, $expectedUrlKey)
+    public function testGetUrlKey($productUrlKey, $expectedUrlKey)
     {
         $this->product->expects($this->any())->method('getUrlKey')->will($this->returnValue($productUrlKey));
         $this->product->expects($this->any())->method('formatUrlKey')->will($this->returnValue($productUrlKey));
-        $this->assertEquals($expectedUrlKey, $this->productUrlPathGenerator->generateUrlKey($this->product));
+        $this->assertEquals($expectedUrlKey, $this->productUrlPathGenerator->getUrlKey($this->product));
     }
 
-    public function generateUrlKeyDataProvider()
+    /**
+     * @return array
+     */
+    public function getUrlKeyDataProvider()
     {
         return [
             'URL Key use default' => [false, false],
@@ -121,17 +123,10 @@ class ProductUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testGetUrlPath()
-    {
-        $this->product->expects($this->once())->method('getData')->with('url_path')
-            ->will($this->returnValue('url-path'));
-        $this->product->expects($this->never())->method('getUrlKey');
-
-        $this->assertEquals('url-path', $this->productUrlPathGenerator->getUrlPath($this->product, null));
-    }
-
     /**
-     *
+     * @param string|null|bool $storedUrlKey
+     * @param string|null|bool $productName
+     * @param string $expectedUrlKey
      * @dataProvider getUrlPathDefaultUrlKeyDataProvider
      */
     public function testGetUrlPathDefaultUrlKey($storedUrlKey, $productName, $expectedUrlKey)
@@ -144,13 +139,15 @@ class ProductUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedUrlKey, $this->productUrlPathGenerator->getUrlPath($this->product, null));
     }
 
+    /**
+     * @return array
+     */
     public function getUrlPathDefaultUrlKeyDataProvider()
     {
         return [
             ['default-store-view-url-key', null, 'default-store-view-url-key'],
             [false, 'default-store-view-product-name', 'default-store-view-product-name']
         ];
-
     }
 
     public function testGetUrlPathWithCategory()

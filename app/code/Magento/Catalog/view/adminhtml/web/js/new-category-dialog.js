@@ -32,7 +32,6 @@ define([
                 .on('suggestbeforeselect', function (event) {
                     clearParentCategory();
                     $(event.target).treeSuggest('close');
-                    $('#new_category_name').focus();
                 });
 
             $.validator.addMethod('validate-parent-category', function () {
@@ -88,12 +87,10 @@ define([
                             type: 'POST',
                             url: widget.options.saveCategoryUrl,
                             data: {
-                                general: {
-                                    name: $('#new_category_name').val(),
-                                    is_active: 1,
-                                    include_in_menu: 1
-                                },
+                                name: $('#new_category_name').val(),
                                 parent: $('#new_category_parent').val(),
+                                is_active: 1,
+                                include_in_menu: 1,
                                 use_config: ['available_sort_by', 'default_sort_by'],
                                 form_key: FORM_KEY,
                                 return_session_messages_only: 1

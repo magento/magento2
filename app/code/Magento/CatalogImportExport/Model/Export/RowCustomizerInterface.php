@@ -14,7 +14,7 @@ interface RowCustomizerInterface
      * Prepare data for export
      *
      * @param mixed $collection
-     * @param int $productIds
+     * @param int[] $productIds
      * @return mixed
      */
     public function prepareData($collection, $productIds);

@@ -19,24 +19,20 @@ use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\TestCase\Injectable;
 
 /**
- * Test Creation for ManageProductReviewFromCustomerPage
- *
- * Test Flow:
- *
  * Preconditions:
- * 1. Create Customer
- * 2. Create simple product
- * 3. Create Product review on the front
+ * 1. Create Customer.
+ * 2. Create simple product.
+ * 3. Create Product review on the front.
  *
  * Steps:
- * 1. Open backend
- * 2. Go to Customers->All Customers
- * 3. Open customer from preconditions
- * 4. Open Product Review tab
- * 5. Open Review created in preconditions
- * 6. Fill data according to dataset
- * 7. Click "Submit review"
- * 8. Perform all assertions
+ * 1. Open backend.
+ * 2. Go to Customers -> All Customers.
+ * 3. Open customer from preconditions.
+ * 4. Open Product Review tab.
+ * 5. Open Review created in preconditions.
+ * 6. Fill data according to dataset.
+ * 7. Click "Submit review".
+ * 8. Perform all assertions.
  *
  * @group Reviews_and_Ratings_(MX)
  * @ZephyrId MAGETWO-27625
@@ -48,67 +44,66 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
     /* tags */
     const MVP = 'no';
     const DOMAIN = 'MX';
-    const STABLE = 'no';
     /* end tags */
 
     /**
-     * Customer index page
+     * Customer index page.
      *
      * @var CustomerIndex
      */
     protected $customerIndex;
 
     /**
-     * Customer edit page
+     * Customer edit page.
      *
      * @var CustomerIndexEdit
      */
     protected $customerIndexEdit;
 
     /**
-     * Catalog product view page
+     * Catalog product view page.
      *
      * @var CatalogProductView
      */
     protected $catalogProductView;
 
     /**
-     * Browser
+     * Browser.
      *
      * @var BrowserInterface
      */
     protected $browser;
 
     /**
-     * Backend rating grid page
+     * Backend rating grid page.
      *
      * @var RatingIndex
      */
     protected $ratingIndex;
 
     /**
-     * Backend rating edit page
+     * Backend rating edit page.
      *
      * @var RatingEdit
      */
     protected $ratingEdit;
 
     /**
-     * Review fixture
+     * Review fixture.
      *
      * @var Review
      */
     protected $reviewInitial;
 
     /**
-     * Review edit page
+     * Review edit page.
      *
      * @var ReviewEdit
      */
     protected $reviewEdit;
 
     /**
-     * Prepare data
+     * Prepare data.
      *
      * @param Customer $customer
      * @return array
@@ -120,7 +115,7 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
     }
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param CustomerIndexEdit $customerIndexEdit
      * @param CustomerIndex $customerIndex
@@ -150,7 +145,7 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
     }
 
     /**
-     * Run manage product review test
+     * Run manage product review test.
      *
      * @param Review $reviewInitial
      * @param Review $review
@@ -188,7 +183,7 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
     }
 
     /**
-     * Login customer on frontend
+     * Login customer on frontend.
      *
      * @param Customer $customer
      * @return void
@@ -202,7 +197,7 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
     }
 
     /**
-     * Clear data after test
+     * Clear data after test.
      *
      * @return void
      */
@@ -213,6 +208,7 @@ class ManageProductReviewFromCustomerPageTest extends Injectable
             foreach ($this->reviewInitial->getRatings() as $rating) {
                 $this->ratingIndex->getRatingGrid()->searchAndOpen(['rating_code' => $rating['title']]);
                 $this->ratingEdit->getPageActions()->delete();
+                $this->ratingEdit->getModalBlock()->acceptAlert();
             }
         }
     }

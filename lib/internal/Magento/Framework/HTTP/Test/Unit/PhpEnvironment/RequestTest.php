@@ -27,6 +27,11 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     private $cookieReader;
 
     /**
+     * @var \Magento\Framework\Stdlib\StringUtils | \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $converter;
+
+    /**
      * @var array
      */
     private $serverArray;
@@ -35,6 +40,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->cookieReader = $this->getMock('Magento\Framework\Stdlib\Cookie\CookieReaderInterface');
+        $this->converter = $this->getMock('Magento\Framework\Stdlib\StringUtils');
         // Stash the $_SERVER array to protect it from modification in test
         $this->serverArray = $_SERVER;
     }
@@ -46,7 +52,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
     private function getModel($uri = null)
     {
-        return new Request($this->cookieReader, $uri);
+        return new Request($this->cookieReader, $this->converter, $uri);
     }
 
     public function testSetPathInfoWithNullValue()

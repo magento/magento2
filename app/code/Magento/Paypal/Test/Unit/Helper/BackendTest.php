@@ -5,49 +5,80 @@
  */
 namespace Magento\Paypal\Test\Unit\Helper;
 
+use Magento\Config\Model\Config;
+use Magento\Config\Model\Config\ScopeDefiner;
+use Magento\Directory\Helper\Data;
+use Magento\Framework\App\Helper\Context;
+use Magento\Paypal\Helper\Backend;
+use Magento\Paypal\Model\Config\StructurePlugin;
+
 class BackendTest extends \PHPUnit_Framework_TestCase
 {
+    const SCOPE = 'website';
+
+    const SCOPE_ID = 1;
+
+    /**
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $context;
+
     /**
      * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_request;
+    private $request;
 
     /**
-     * @var \Magento\Directory\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $directoryHelperMock;
+    private $directoryHelperMock;
 
     /**
-     * @var \Magento\Config\Model\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_backendConfig;
+    private $backendConfig;
 
     /**
-     * @var \Magento\Paypal\Helper\Backend
+     * @var ScopeDefiner|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $_helper;
+    private $scopeDefiner;
+
+    /**
+     * @var Backend
+     */
+    private $helper;
 
     public function setUp()
     {
-        $this->_request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface');
-        $this->directoryHelperMock = $this->getMock('Magento\Directory\Helper\Data', [], [], '', false);
-        $this->_backendConfig = $this->getMock('Magento\Config\Model\Config', [], [], '', false);
+        $this->context = $this->getMockBuilder('Magento\Framework\App\Helper\Context')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->request = $this->getMock('Magento\Framework\App\RequestInterface');
+        $this->context->expects(static::once())
+            ->method('getRequest')
+            ->willReturn($this->request);
+        $this->directoryHelperMock = $this->getMockBuilder('Magento\Directory\Helper\Data')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->backendConfig = $this->getMockBuilder('Magento\Config\Model\Config')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->scopeDefiner = $this->getMockBuilder('Magento\Config\Model\Config\ScopeDefiner')
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->_helper = $objectManager->getObject(
-            'Magento\Paypal\Helper\Backend',
-            [
-                'httpRequest' => $this->_request,
-                'directoryHelper' => $this->directoryHelperMock,
-                'backendConfig' => $this->_backendConfig
-            ]
+        $this->helper = new Backend(
+            $this->context,
+            $this->directoryHelperMock,
+            $this->backendConfig,
+            $this->scopeDefiner
         );
     }
 
     public function testGetConfigurationCountryCodeFromRequest()
     {
-        $this->_configurationCountryCodePrepareRequest('US');
-        $this->_configurationCountryCodeAssertResult('US');
+        $this->configurationCountryCodePrepareRequest('US');
+        $this->configurationCountryCodeAssertResult('US');
     }
 
     /**
@@ -56,9 +87,9 @@ class BackendTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConfigurationCountryCodeFromConfig($request)
     {
-        $this->_configurationCountryCodePrepareRequest($request);
-        $this->_configurationCountryCodePrepareConfig('GB');
-        $this->_configurationCountryCodeAssertResult('GB');
+        $this->configurationCountryCodePrepareRequest($request);
+        $this->configurationCountryCodePrepareConfig('GB');
+        $this->configurationCountryCodeAssertResult('GB');
     }
 
     public function getConfigurationCountryCodeFromConfigDataProvider()
@@ -77,12 +108,12 @@ class BackendTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConfigurationCountryCodeFromDefault($request, $config, $default)
     {
-        $this->_configurationCountryCodePrepareRequest($request);
-        $this->_configurationCountryCodePrepareConfig($config);
+        $this->configurationCountryCodePrepareRequest($request);
+        $this->configurationCountryCodePrepareConfig($config);
         $this->directoryHelperMock->expects($this->once())
             ->method('getDefaultCountry')
             ->will($this->returnValue($default));
-        $this->_configurationCountryCodeAssertResult($default);
+        $this->configurationCountryCodeAssertResult($default);
     }
 
     public function getConfigurationCountryCodeFromDefaultDataProvider()
@@ -99,12 +130,16 @@ class BackendTest extends \PHPUnit_Framework_TestCase
      *
      * @param string|null $request
      */
-    private function _configurationCountryCodePrepareRequest($request)
+    private function configurationCountryCodePrepareRequest($request)
     {
-        $this->_request->expects($this->once())
+        $this->request->expects($this->atLeastOnce())
             ->method('getParam')
-            ->with(\Magento\Paypal\Model\Config\StructurePlugin::REQUEST_PARAM_COUNTRY)
-            ->will($this->returnValue($request));
+            ->willReturnMap(
+                [
+                    [StructurePlugin::REQUEST_PARAM_COUNTRY, null, $request],
+                    [self::SCOPE, null, self::SCOPE_ID]
+                ]
+            );
     }
 
     /**
@@ -112,12 +147,21 @@ class BackendTest extends \PHPUnit_Framework_TestCase
      *
      * @param string|null|false $config
      */
-    private function _configurationCountryCodePrepareConfig($config)
+    private function configurationCountryCodePrepareConfig($config)
     {
-        $this->_backendConfig->expects($this->once())
+
+        $this->scopeDefiner->expects($this->once())
+            ->method('getScope')
+            ->willReturn(self::SCOPE);
+
+        $this->backendConfig->expects($this->once())
+            ->method('setData')
+            ->with(self::SCOPE, self::SCOPE_ID);
+
+        $this->backendConfig->expects($this->once())
             ->method('getConfigDataValue')
             ->with(\Magento\Paypal\Block\Adminhtml\System\Config\Field\Country::FIELD_CONFIG_PATH)
-            ->will($this->returnValue($config));
+            ->willReturn($config);
     }
 
     /**
@@ -125,8 +169,8 @@ class BackendTest extends \PHPUnit_Framework_TestCase
      *
      * @param string $expected
      */
-    private function _configurationCountryCodeAssertResult($expected)
+    private function configurationCountryCodeAssertResult($expected)
     {
-        $this->assertEquals($expected, $this->_helper->getConfigurationCountryCode());
+        $this->assertEquals($expected, $this->helper->getConfigurationCountryCode());
     }
 }

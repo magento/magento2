@@ -5,28 +5,40 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="payment">
-            <group id="braintree_section" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="braintree_section" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Braintree</label>
-                <comment><![CDATA[Add Braintree as additional payment method to your checkout page.]]></comment>
+                <comment><![CDATA[Accept credit/debit cards and PayPal in your Magento store. No setup or monthly fees and your customers never leave your store to complete the purchase.]]></comment>
                 <attribute type="expanded">1</attribute>
-                <fieldset_css>complex</fieldset_css>
+                <fieldset_css>complex braintree-section</fieldset_css>
                 <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Group</frontend_model>
                 <group id="braintree" translate="label" type="text" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label><![CDATA[&nbsp;]]></label>
                     <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Payment</frontend_model>
-                    <comment><![CDATA[<a href="https://www.braintreegateway.com/login" target="_blank">Click here to login to your existing Braintree account</a>. Or to setup a new account and accept payments on your website, <a href="https://apply.braintreegateway.com/signup/us" target="_blank">click here to signup for a Braintree account</a>.]]></comment>
                     <attribute type="activity_path">payment/braintree/active</attribute>
+                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enable this Solution</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/braintree/active</config_path>
+                        <requires>
+                            <group id="braintree_required"/>
+                        </requires>
+                    </field>
+                    <field id="active_braintree_pay_pal" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enable PayPal through Braintree</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/braintree_paypal/active</config_path>
+                        <requires>
+                            <group id="braintree_required"/>
+                        </requires>
+                    </field>
                     <group id="braintree_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="5">
+                        <comment><![CDATA[<a href="https://www.braintreegateway.com/login" target="_blank">Click here to login to your existing Braintree account</a>. Or to setup a new account and accept payments on your website, <a href="https://apply.braintreegateway.com/signup/us" target="_blank">click here to signup for a Braintree account</a>.]]></comment>
                         <label>Basic Braintree Settings</label>
                         <attribute type="expanded">1</attribute>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                        <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Enabled</label>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>payment/braintree/active</config_path>
-                        </field>
                         <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Title</label>
                             <config_path>payment/braintree/title</config_path>
@@ -49,18 +61,15 @@
                             <label>Merchant ID</label>
                             <config_path>payment/braintree/merchant_id</config_path>
                         </field>
-                        <field id="public_key" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="public_key" translate="label" type="obscure" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Public Key</label>
                             <config_path>payment/braintree/public_key</config_path>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         </field>
-                        <field id="private_key" translate="label" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <field id="private_key" translate="label" type="obscure" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Private Key</label>
                             <config_path>payment/braintree/private_key</config_path>
-                        </field>
-                        <field id="sort_order" translate="label" type="text" sortOrder="230" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Sort Order</label>
-                            <frontend_class>validate-number</frontend_class>
-                            <config_path>payment/braintree/sort_order</config_path>
+                            <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                         </field>
                     </group>
                     <group id="braintree_advanced" translate="label" showInDefault="1" showInWebsite="1" sortOrder="20">
@@ -72,7 +81,7 @@
                             <config_path>payment/braintree/debug</config_path>
                         </field>
                         <field id="capture_action" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Capture action</label>
+                            <label>Capture Action</label>
                             <source_model>Magento\Braintree\Model\Source\CaptureAction</source_model>
                             <config_path>payment/braintree/capture_action</config_path>
                         </field>
@@ -126,6 +135,11 @@
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree/usecache</config_path>
                         </field>
+                        <field id="sort_order" translate="label" type="text" sortOrder="230" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <frontend_class>validate-number</frontend_class>
+                            <config_path>payment/braintree/sort_order</config_path>
+                        </field>
                     </group>
                     <group id="braintree_country_specific" translate="label" showInDefault="1" showInWebsite="1" sortOrder="30">
                         <label>Country Specific Settings</label>
@@ -151,11 +165,6 @@
                     <group id="braintree_paypal" translate="label" showInDefault="1" showInWebsite="1" sortOrder="40">
                         <label>PayPal through Braintree</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
-                        <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>Enabled</label>
-                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                            <config_path>payment/braintree_paypal/active</config_path>
-                        </field>
                         <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Title</label>
                             <config_path>payment/braintree_paypal/title</config_path>
@@ -212,10 +221,10 @@
                         </field>
                     </group>
                     <group id="braintree_3dsecure" translate="label" showInDefault="1" showInWebsite="1" sortOrder="41">
-                        <label>3d Secure Verification Settings</label>
+                        <label>3D Secure Verification Settings</label>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="verify_3dsecure" translate="label" type="select" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="0">
-                            <label>3d Secure Verification</label>
+                            <label>3D Secure Verification</label>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                             <config_path>payment/braintree/verify_3dsecure</config_path>
                         </field>

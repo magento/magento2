@@ -6,9 +6,7 @@
 
 namespace Magento\Framework\View\Design\FileResolution\Fallback\Resolver;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Design\Fallback\Rule\RuleInterface;
 use Magento\Framework\View\Design\Fallback\RulePool;
 use Magento\Framework\View\Design\FileResolution\Fallback;
@@ -20,9 +18,11 @@ use Magento\Framework\View\Design\ThemeInterface;
 class Simple implements Fallback\ResolverInterface
 {
     /**
-     * @var ReadInterface
+     * Directory read factory
+     *
+     * @var ReadFactory
      */
-    protected $rootDirectory;
+    protected $readFactory;
 
     /**
      * Fallback factory
@@ -34,12 +34,12 @@ class Simple implements Fallback\ResolverInterface
     /**
      * Constructor
      *
-     * @param Filesystem $filesystem
+     * @param ReadFactory $readFactory
      * @param RulePool $rulePool
      */
-    public function __construct(Filesystem $filesystem, RulePool $rulePool)
+    public function __construct(ReadFactory $readFactory, RulePool $rulePool)
     {
-        $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->readFactory = $readFactory;
         $this->rulePool = $rulePool;
     }
 
@@ -57,7 +57,7 @@ class Simple implements Fallback\ResolverInterface
             }
         }
         if (!empty($module)) {
-            list($params['namespace'], $params['module']) = explode('_', $module, 2);
+            $params['module_name'] = $module;
         }
         $path = $this->resolveFile($this->rulePool->getRule($type), $file, $params);
 
@@ -90,7 +90,8 @@ class Simple implements Fallback\ResolverInterface
     {
         foreach ($fallbackRule->getPatternDirs($params) as $dir) {
             $path = "{$dir}/{$file}";
-            if ($this->rootDirectory->isExist($this->rootDirectory->getRelativePath($path))) {
+            $dirRead = $this->readFactory->create($dir);
+            if ($dirRead->isExist($file)) {
                 return $path;
             }
         }

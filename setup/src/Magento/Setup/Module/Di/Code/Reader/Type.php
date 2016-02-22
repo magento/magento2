@@ -17,7 +17,11 @@ class Type
      */
     public function isConcrete($type)
     {
-        $instance = new \ReflectionClass($type);
+        try {
+            $instance = new \ReflectionClass($type);
+        } catch (\ReflectionException $e) {
+            return false;
+        }
         return !$instance->isAbstract() && !$instance->isInterface();
     }
 }

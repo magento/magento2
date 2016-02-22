@@ -5,7 +5,7 @@
  */
 namespace Magento\Paypal\Model\Payflow\Service\Response\Handler;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Paypal\Model\Info;
 use Magento\Paypal\Model\Payflowpro;
@@ -54,7 +54,7 @@ class FraudHandler implements HandlerInterface
     /**
      * {inheritdoc}
      */
-    public function handle(InfoInterface $payment, Object $response)
+    public function handle(InfoInterface $payment, DataObject $response)
     {
         if (
         !in_array(

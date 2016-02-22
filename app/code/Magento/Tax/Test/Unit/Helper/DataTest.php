@@ -8,7 +8,7 @@
 
 namespace Magento\Tax\Test\Unit\Helper;
 
-use Magento\Framework\Object as MagentoObject;
+use Magento\Framework\DataObject as MagentoObject;
 
 /**
  * Class DataTest

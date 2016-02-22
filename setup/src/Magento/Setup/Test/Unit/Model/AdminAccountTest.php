@@ -21,9 +21,9 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
     private $dbAdapterMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Math\Random
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Encryption\EncryptorInterface
      */
-    private $randomMock;
+    private $encryptor;
 
     /**
      * @var AdminAccount
@@ -50,8 +50,8 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
                 }
             ));
 
-        $this->randomMock = $this->getMock('Magento\Framework\Math\Random');
-        $this->randomMock->expects($this->any())->method('getRandomString')->will($this->returnValue('salt'));
+        $this->encryptor = $this->getMockBuilder('Magento\Framework\Encryption\EncryptorInterface')
+            ->getMockForAbstractClass();
 
         $data = [
             AdminAccount::KEY_FIRST_NAME => 'John',
@@ -61,7 +61,7 @@ class AdminAccountTest extends \PHPUnit_Framework_TestCase
             AdminAccount::KEY_USER => 'admin',
         ];
 
-        $this->adminAccount = new AdminAccount($this->setUpMock, $this->randomMock, $data);
+        $this->adminAccount = new AdminAccount($this->setUpMock, $this->encryptor, $data);
     }
 
     public function testSaveUserExistsAdminRoleExists()

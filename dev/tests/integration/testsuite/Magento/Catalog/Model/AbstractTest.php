@@ -35,11 +35,11 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
 
         $resourceProperty = new \ReflectionProperty(get_class($this->_model), '_resourceName');
         $resourceProperty->setAccessible(true);
-        $resourceProperty->setValue($this->_model, 'Magento\Catalog\Model\Resource\Product');
+        $resourceProperty->setValue($this->_model, 'Magento\Catalog\Model\ResourceModel\Product');
 
         $collectionProperty = new \ReflectionProperty(get_class($this->_model), '_collectionName');
         $collectionProperty->setAccessible(true);
-        $collectionProperty->setValue($this->_model, 'Magento\Catalog\Model\Resource\Product\Collection');
+        $collectionProperty->setValue($this->_model, 'Magento\Catalog\Model\ResourceModel\Product\Collection');
     }
 
     /**
@@ -112,7 +112,7 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $this->_model->setStoreId(99);
         $collection = $this->_model->getResourceCollection();
-        $this->assertInstanceOf('Magento\Catalog\Model\Resource\Collection\AbstractCollection', $collection);
+        $this->assertInstanceOf('Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection', $collection);
         $this->assertEquals(99, $collection->getStoreId());
     }
 
@@ -123,7 +123,6 @@ class AbstractTest extends \PHPUnit_Framework_TestCase
     {
         $object = $this->_model->loadByAttribute('sku', 'simple');
         $this->assertNotSame($object, $this->_model);
-        $this->assertEquals(1, $object->getId());
         // fixture
 
         $result = $this->_model->loadByAttribute('sku', uniqid());

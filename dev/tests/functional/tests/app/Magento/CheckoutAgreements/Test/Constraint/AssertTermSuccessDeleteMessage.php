@@ -30,7 +30,7 @@ class AssertTermSuccessDeleteMessage extends AbstractConstraint
     {
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_DELETE_MESSAGE,
-            $agreementIndex->getMessagesBlock()->getSuccessMessages(),
+            $agreementIndex->getMessagesBlock()->getSuccessMessage(),
             'Wrong success delete message is displayed.'
         );
     }

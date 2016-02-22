@@ -7,11 +7,12 @@ namespace Magento\Authorization\Model\Acl\Loader;
 
 use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\Acl\Role\User as RoleUser;
+use Magento\Framework\App\ResourceConnection;
 
 class Role implements \Magento\Framework\Acl\LoaderInterface
 {
     /**
-     * @var \Magento\Framework\App\Resource
+     * @var \Magento\Framework\App\ResourceConnection
      */
     protected $_resource;
 
@@ -28,12 +29,12 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
     /**
      * @param \Magento\Authorization\Model\Acl\Role\GroupFactory $groupFactory
      * @param \Magento\Authorization\Model\Acl\Role\UserFactory $roleFactory
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
      */
     public function __construct(
         \Magento\Authorization\Model\Acl\Role\GroupFactory $groupFactory,
         \Magento\Authorization\Model\Acl\Role\UserFactory $roleFactory,
-        \Magento\Framework\App\Resource $resource
+        \Magento\Framework\App\ResourceConnection $resource
     ) {
         $this->_resource = $resource;
         $this->_groupFactory = $groupFactory;
@@ -49,11 +50,11 @@ class Role implements \Magento\Framework\Acl\LoaderInterface
     public function populateAcl(\Magento\Framework\Acl $acl)
     {
         $roleTableName = $this->_resource->getTableName('authorization_role');
-        $adapter = $this->_resource->getConnection('core_read');
+        $connection = $this->_resource->getConnection();
 
-        $select = $adapter->select()->from($roleTableName)->order('tree_level');
+        $select = $connection->select()->from($roleTableName)->order('tree_level');
 
-        foreach ($adapter->fetchAll($select) as $role) {
+        foreach ($connection->fetchAll($select) as $role) {
             $parent = $role['parent_id'] > 0 ? $role['parent_id'] : null;
             switch ($role['role_type']) {
                 case RoleGroup::ROLE_TYPE:

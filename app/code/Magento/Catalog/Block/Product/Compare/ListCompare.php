@@ -19,7 +19,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Product Compare items collection
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Compare\Item\Collection
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection
      */
     protected $_items;
 
@@ -66,7 +66,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Item collection factory
      *
-     * @var \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory
+     * @var \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory
      */
     protected $_itemCollectionFactory;
 
@@ -83,7 +83,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * @param \Magento\Catalog\Block\Product\Context $context
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
-     * @param \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory $itemCollectionFactory
      * @param Product\Visibility $catalogProductVisibility
      * @param \Magento\Customer\Model\Visitor $customerVisitor
      * @param \Magento\Framework\App\Http\Context $httpContext
@@ -93,7 +93,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
     public function __construct(
         \Magento\Catalog\Block\Product\Context $context,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
-        \Magento\Catalog\Model\Resource\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
+        \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\CollectionFactory $itemCollectionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
         \Magento\Customer\Model\Visitor $customerVisitor,
         \Magento\Framework\App\Http\Context $httpContext,
@@ -144,7 +144,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
     /**
      * Retrieve Product Compare items collection
      *
-     * @return \Magento\Catalog\Model\Resource\Product\Compare\Item\Collection
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection
      */
     public function getItems()
     {
@@ -190,7 +190,7 @@ class ListCompare extends \Magento\Catalog\Block\Product\AbstractProduct
      * Retrieve Product Attribute Value
      *
      * @param Product $product
-     * @param \Magento\Catalog\Model\Resource\Eav\Attribute $attribute
+     * @param \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute
      * @return \Magento\Framework\Phrase|string
      */
     public function getProductAttributeValue($product, $attribute)

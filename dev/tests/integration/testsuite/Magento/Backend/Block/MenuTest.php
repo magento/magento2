@@ -5,9 +5,8 @@
  */
 namespace Magento\Backend\Block;
 
-use Magento\Framework\App\Bootstrap;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State;
+use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * Test class for \Magento\Backend\Block\Menu
@@ -22,6 +21,11 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\Cache\Type\Config $configCacheType */
     protected $configCacheType;
 
+    /**
+     * @var array
+     */
+    protected $backupRegistrar;
+
     protected function setUp()
     {
         $this->configCacheType = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -32,16 +36,41 @@ class MenuTest extends \PHPUnit_Framework_TestCase
         $this->blockMenu = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Backend\Block\Menu'
         );
+
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        $this->backupRegistrar = $paths->getValue();
+        $paths->setAccessible(false);
     }
 
+    /**
+     * Verify that Admin Navigation Menu elements have correct titles & are located on correct levels
+     */
     public function testRenderNavigation()
     {
         $menuConfig = $this->prepareMenuConfig();
+        $menuHtml = $this->blockMenu->renderNavigation($menuConfig->getMenu());
+        $menu = new \SimpleXMLElement($menuHtml);
 
-        $this->assertStringEqualsFile(
-            __DIR__ . '/_files/menu/expected.txt',
-            $this->blockMenu->renderNavigation($menuConfig->getMenu())
-        );
+        $item = $menu->xpath('/ul/li/a/span')[0];
+        $this->assertEquals('System', (string)$item, '"System" item is absent or located on wrong menu level.');
+
+        $item = $menu->xpath('/ul//ul/li/strong/span')[0];
+        $this->assertEquals('Report', (string)$item, '"Report" item is absent or located on wrong menu level.');
+
+        $liTitles = [
+            'Private Sales',
+            'Invite',
+            'Invited Customers',
+        ];
+        foreach ($menu->xpath('/ul//ul//ul/li/a/span') as $sortOrder => $item) {
+            $this->assertEquals(
+                $liTitles[$sortOrder],
+                (string)$item,
+                '"' . $liTitles[$sortOrder] . '" item is absent or located on wrong menu level.'
+            );
+        }
     }
 
     /**
@@ -51,12 +80,18 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     {
         $this->loginAdminUser();
 
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()->reinitialize(
-            [
-                Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS => [
-                    DirectoryList::MODULES => ['path' => __DIR__ . '/_files/menu'],
-                ],
-            ]
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        $paths->setValue(
+            [ComponentRegistrar::MODULE => [], ComponentRegistrar::THEME => [], ComponentRegistrar::LANGUAGE => []]
+        );
+        $paths->setAccessible(false);
+
+        ComponentRegistrar::register(
+            ComponentRegistrar::MODULE,
+            'Magento_Backend',
+            __DIR__ . '/_files/menu/Magento/Backend'
         );
 
         /* @var $validationState \Magento\Framework\App\Arguments\ValidationState */
@@ -99,5 +134,10 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         $this->configCacheType->save('', \Magento\Backend\Model\Menu\Config::CACHE_MENU_OBJECT);
+        $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
+        $paths = $reflection->getProperty('paths');
+        $paths->setAccessible(true);
+        $paths->setValue($this->backupRegistrar);
+        $paths->setAccessible(false);
     }
 }

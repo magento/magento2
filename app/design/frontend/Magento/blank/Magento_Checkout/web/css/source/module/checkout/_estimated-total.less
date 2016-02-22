@@ -16,13 +16,13 @@
     .opc-estimated-wrapper {
         &:extend(.abs-add-clearfix all);
         &:extend(.abs-no-display-desktop all);
-        .css(border-bottom, @border-width__base solid @color-gray80);
+        .lib-css(border-bottom, @border-width__base solid @color-gray80);
         margin: 0 0 15px;
         padding: 18px 15px;
 
         .estimated-block {
-            .css(font-size, @checkout-step-title-mobile__font-size);
-            .css(font-weight, @font-weight__bold);
+            .lib-css(font-size, @checkout-step-title-mobile__font-size);
+            .lib-css(font-weight, @font-weight__bold);
             float: left;
 
             .estimated-label {
@@ -35,7 +35,7 @@
             .action {
                 &.showcart {
                     &:before {
-                        .css(color, @primary__color);
+                        .lib-css(color, @primary__color);
                     }
                 }
             }

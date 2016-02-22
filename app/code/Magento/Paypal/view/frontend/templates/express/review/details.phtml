@@ -5,28 +5,26 @@
  */
 
 // @codingStandardsIgnoreFile
-
 /**
  * @see \Magento\Paypal\Block\Express\Review\Details
+ * @var \Magento\Paypal\Block\Express\Review\Details $block
  */
 ?>
-<div class="table-wrapper">
-    <table id="details-table" class="data table table-paypal-review-items">
-        <caption class="table-caption"><?php echo __('Items in Your Shopping Cart') ?></caption>
+<div id="details-reload" class="table-wrapper order-items cart">
+    <table id="details-table" class="cart items data table table-paypal-review-items">
+        <caption class="table-caption"><?php echo $block->escapeHtml(__('Items in Your Shopping Cart')); ?></caption>
         <thead>
         <tr>
-            <th class="col name" scope="col"><?php echo __('Product Name') ?></th>
-            <th class="col price" scope="col"><?php echo __('Price') ?></th>
-            <th class="col qty" scope="col"><?php echo __('Qty') ?></th>
-            <th class="col subtotal" scope="col"><?php echo __('Subtotal') ?></th>
+            <th class="col name" scope="col"><?php echo $block->escapeHtml(__('Item')); ?></th>
+            <th class="col price" scope="col"><?php echo $block->escapeHtml(__('Price')); ?></th>
+            <th class="col qty" scope="col"><?php echo $block->escapeHtml(__('Qty')); ?></th>
+            <th class="col subtotal" scope="col"><?php echo $block->escapeHtml(__('Subtotal')); ?></th>
         </tr>
         </thead>
-        <tbody>
-        <?php foreach ($block->getItems() as $_item): ?>
-            <?php echo $block->getItemHtml($_item) ?>
-        <?php endforeach ?>
-        </tbody>
-        <tfoot>
+            <?php foreach ($block->getItems() as $item): ?>
+                <?php echo $block->getItemHtml($item) ?>
+            <?php endforeach ?>
+        <tfoot class="opc-block-summary">
             <?php echo $block->getChildHtml('totals'); ?>
         </tfoot>
     </table>

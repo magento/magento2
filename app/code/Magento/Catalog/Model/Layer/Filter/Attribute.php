@@ -15,14 +15,14 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     /**
      * Resource instance
      *
-     * @var \Magento\Catalog\Model\Resource\Layer\Filter\Attribute
+     * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Attribute
      */
     protected $_resource;
 
     /**
      * Magento string lib
      *
-     * @var \Magento\Framework\Stdlib\String
+     * @var \Magento\Framework\Stdlib\StringUtils
      */
     protected $string;
 
@@ -36,8 +36,8 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Layer $layer
      * @param \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder
-     * @param \Magento\Catalog\Model\Resource\Layer\Filter\AttributeFactory $filterAttributeFactory
-     * @param \Magento\Framework\Stdlib\String $string
+     * @param \Magento\Catalog\Model\ResourceModel\Layer\Filter\AttributeFactory $filterAttributeFactory
+     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\Filter\StripTags $tagFilter
      * @param array $data
      */
@@ -46,8 +46,8 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer $layer,
         \Magento\Catalog\Model\Layer\Filter\Item\DataBuilder $itemDataBuilder,
-        \Magento\Catalog\Model\Resource\Layer\Filter\AttributeFactory $filterAttributeFactory,
-        \Magento\Framework\Stdlib\String $string,
+        \Magento\Catalog\Model\ResourceModel\Layer\Filter\AttributeFactory $filterAttributeFactory,
+        \Magento\Framework\Stdlib\StringUtils $string,
         \Magento\Framework\Filter\StripTags $tagFilter,
         array $data = []
     ) {
@@ -61,7 +61,7 @@ class Attribute extends \Magento\Catalog\Model\Layer\Filter\AbstractFilter
     /**
      * Retrieve resource instance
      *
-     * @return \Magento\Catalog\Model\Resource\Layer\Filter\Attribute
+     * @return \Magento\Catalog\Model\ResourceModel\Layer\Filter\Attribute
      */
     protected function _getResource()
     {

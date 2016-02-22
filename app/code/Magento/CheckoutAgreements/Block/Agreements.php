@@ -11,18 +11,19 @@ use Magento\Store\Model\ScopeInterface;
 class Agreements extends \Magento\Framework\View\Element\Template
 {
     /**
-     * @var \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory
+     * @var \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory
      */
     protected $_agreementCollectionFactory;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
-     * @param \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory
+     * @param \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory $agreementCollectionFactory
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\CheckoutAgreements\Model\Resource\Agreement\CollectionFactory $agreementCollectionFactory,
+        \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\CollectionFactory $agreementCollectionFactory,
         array $data = []
     ) {
         $this->_agreementCollectionFactory = $agreementCollectionFactory;
@@ -37,7 +38,7 @@ class Agreements extends \Magento\Framework\View\Element\Template
         if (!$this->hasAgreements()) {
             $agreements = [];
             if ($this->_scopeConfig->isSetFlag('checkout/options/enable_agreements', ScopeInterface::SCOPE_STORE)) {
-                /** @var \Magento\CheckoutAgreements\Model\Resource\Agreement\Collection $agreements */
+                /** @var \Magento\CheckoutAgreements\Model\ResourceModel\Agreement\Collection $agreements */
                 $agreements = $this->_agreementCollectionFactory->create();
                 $agreements->addStoreFilter($this->_storeManager->getStore()->getId());
                 $agreements->addFieldToFilter('is_active', 1);

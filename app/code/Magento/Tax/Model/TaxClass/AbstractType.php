@@ -9,7 +9,7 @@
  */
 namespace Magento\Tax\Model\TaxClass;
 
-abstract class AbstractType extends \Magento\Framework\Object implements \Magento\Tax\Model\TaxClass\Type\TypeInterface
+abstract class AbstractType extends \Magento\Framework\DataObject implements Type\TypeInterface
 {
     /**
      * @var \Magento\Tax\Model\Calculation\Rule
@@ -36,7 +36,7 @@ abstract class AbstractType extends \Magento\Framework\Object implements \Magent
     /**
      * Get Collection of Tax Rules that are assigned to this tax class
      *
-     * @return \Magento\Framework\Model\Resource\Db\Collection\AbstractCollection
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getAssignedToRules()
     {

@@ -16,7 +16,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         /** @var Fulltext $select */
         $select = (new ObjectManager($this))->getObject(
             'Magento\Framework\DB\Helper\Mysql\Fulltext',
-            ['resource' => $this->getAdapter()]
+            ['resource' => $this->getResourceMock()]
         );
 
         $result = $select->getMatchQuery(
@@ -37,7 +37,7 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     {
         $fullCondition = "MATCH (title, description) AGAINST ('some searchable text' IN NATURAL LANGUAGE MODE)";
 
-        $resource = $this->getAdapter();
+        $resource = $this->getResourceMock();
 
         /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject $select */
         $select = $this->getMockBuilder('Magento\Framework\DB\Select')
@@ -72,22 +72,22 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    protected function getAdapter()
+    protected function getResourceMock()
     {
-        $adapter = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+        $connection = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $adapter->expects($this->at(0))
+        $connection->expects($this->at(0))
             ->method('quote')
             ->with($this->equalTo('some searchable text'))
             ->will($this->returnValue("'some searchable text'"));
 
-        $resource = $this->getMockBuilder('Magento\Framework\App\Resource')
+        $resource = $this->getMockBuilder('Magento\Framework\App\ResourceConnection')
             ->disableOriginalConstructor()
             ->getMock();
         $resource->expects($this->any())
             ->method('getConnection')
-            ->willReturn($adapter);
+            ->willReturn($connection);
 
         return $resource;
     }

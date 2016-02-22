@@ -41,9 +41,9 @@ class PathInfoProcessor implements \Magento\Framework\App\Request\PathInfoProces
     public function process(\Magento\Framework\App\RequestInterface $request, $pathInfo)
     {
         $pathParts = explode('/', ltrim($pathInfo, '/'), 2);
-        $storeCode = $pathParts[0];
+        $firstPart = $pathParts[0];
 
-        if ($storeCode != $this->_helper->getAreaFrontName()) {
+        if ($firstPart != $this->_helper->getAreaFrontName()) {
             return $this->_subject->process($request, $pathInfo);
         }
         return $pathInfo;

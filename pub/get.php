@@ -27,7 +27,12 @@ $isAllowed = function ($resource, array $allowedResources) {
     return $isResourceAllowed;
 };
 
-$request = new \Magento\MediaStorage\Model\File\Storage\Request(new Request(new PhpCookieReader()));
+$request = new \Magento\MediaStorage\Model\File\Storage\Request(
+    new Request(
+        new PhpCookieReader(),
+        new Magento\Framework\Stdlib\StringUtils()
+    )
+);
 $relativePath = $request->getPathInfo();
 if (file_exists($configCacheFile) && is_readable($configCacheFile)) {
     $config = json_decode(file_get_contents($configCacheFile), true);

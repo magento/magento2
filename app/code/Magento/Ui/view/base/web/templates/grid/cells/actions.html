@@ -4,49 +4,19 @@
  * See COPYING.txt for license details.
  */
 -->
+<a
+    class="action-menu-item"
+    if="$col.isSingle($row()._rowIndex)"
+    repeat="foreach: $col.getVisibleActions($row()._rowIndex), item: '$action'"
+    click="$col.getActionHandler($action())"
+    text="$action().label"
+    attr="href: $action().href"/>
 
-<td data-bind="visible: visible" class="data-grid-actions-cell">
-    <!-- ko if: isSingle($parentContext.$index()) -->
-        <!-- ko foreach: getVisibleActions($parentContext.$index()) -->
-    <a
-        class="action-menu-item"
-        data-bind="
-            attr: {
-                href: $data.href
-            },
-            click: $parent.applyAction.bind($parent, index, rowIndex),
-            text: $data.label"></a>
-        <!-- /ko -->
-    <!-- /ko -->
-
-    <!-- ko if: isMultiple($parentContext.$index()) -->
-    <div
-        class="action-select-wrap"
-        data-bind="
-            css : {
-                '_active' : opened() === $parentContext.$index()
-            },
-            outerClick: closeList.bind($data, $parentContext.$index())">
-        <button class="action-select" data-bind="click: toggleList.bind($data, $parentContext.$index())">
-            <span data-bind="text: $t('Select')"></span>
-        </button>
-        <ul
-            class="action-menu"
-            data-bind="
-                css: {'_active': opened() === $parentContext.$index()}">
-            <!-- ko foreach: getVisibleActions($parentContext.$index()) -->
-            <li>
-                <a
-                    class="action-menu-item"
-                    data-bind="
-                        attr: {
-                            href: $data.href
-                        },
-                        click: $parent.applyAction.bind($parent, index, rowIndex),
-                        text: $data.label"></a>
-            </li>
-            <!-- /ko -->
-        </ul>
-    </div>
-    <!-- /ko -->
-</td>
+<div class="action-select-wrap" if="$col.isMultiple($row()._rowIndex)" collapsible>
+    <button class="action-select" translate="'Select'" toggleCollapsible/>
+    <ul class="action-menu" css="_active: $collapsible.opened">
+        <li repeat="foreach: $col.getVisibleActions($row()._rowIndex), item: '$action'">
+            <a class="action-menu-item" click="$col.getActionHandler($action())" text="$action().label" attr="href: $action().href, 'data-action': 'item-' + $action().index"/>
+        </li>
+    </ul>
+</div>

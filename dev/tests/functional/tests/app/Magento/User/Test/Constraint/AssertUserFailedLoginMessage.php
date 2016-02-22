@@ -15,7 +15,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertUserFailedLoginMessage extends AbstractConstraint
 {
-    const FAILED_LOGIN_MESSAGE = 'This account is inactive.';
+    const FAILED_LOGIN_MESSAGE = 'You did not sign in correctly or your account is temporarily disabled.';
 
     /**
      * Verify incorrect credentials message while login to admin
@@ -34,7 +34,7 @@ class AssertUserFailedLoginMessage extends AbstractConstraint
 
         \PHPUnit_Framework_Assert::assertEquals(
             self::FAILED_LOGIN_MESSAGE,
-            $adminAuth->getMessagesBlock()->getErrorMessages(),
+            $adminAuth->getMessagesBlock()->getErrorMessage(),
             'Message "' . self::FAILED_LOGIN_MESSAGE . '" is not visible.'
         );
     }

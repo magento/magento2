@@ -8,6 +8,18 @@
  * Modules that were refactored
  */
 return [
-   // example '/app/code/Magento/Catalog',
-    '/app/code/Magento/Ups',
+    'Magento_AdminNotification',
+    'Magento_AdvancedPricingImportExport',
+    'Magento_Authorization',
+    'Magento_Authorizenet',
+    'Magento_Backend',
+    'Magento_Captcha',
+    'Magento_Catalog',
+    'Magento_CatalogImportExport',
+    'Magento_CatalogInventory',
+    'Magento_CatalogRule',
+    'Magento_CatalogSearch',
+    'Magento_CatalogUrlRewrite',
+    'Magento_CatalogWidget',
+   // example 'Magento_Catalog',
 ];

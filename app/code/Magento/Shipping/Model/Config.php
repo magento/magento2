@@ -8,7 +8,7 @@
 
 namespace Magento\Shipping\Model;
 
-class Config extends \Magento\Framework\Object
+class Config extends \Magento\Framework\DataObject
 {
     /**
      * Shipping origin settings

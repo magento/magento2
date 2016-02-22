@@ -6,22 +6,22 @@
  */
 namespace Magento\Shipping\Controller\Adminhtml\Order;
 
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 
 /**
  * Class ShipmentLoader
  *
  * @package Magento\Shipping\Controller\Adminhtml\Order
- * @method ShipmentLoader setOrderId
- * @method ShipmentLoader setShipmentId
- * @method ShipmentLoader setShipment
- * @method ShipmentLoader setTracking
- * @method int getOrderId
- * @method int getShipmentId
- * @method array getShipment
- * @method array getTracking
+ * @method ShipmentLoader setOrderId($id)
+ * @method ShipmentLoader setShipmentId($id)
+ * @method ShipmentLoader setShipment($shipment)
+ * @method ShipmentLoader setTracking($tracking)
+ * @method int getOrderId()
+ * @method int getShipmentId()
+ * @method array getShipment()
+ * @method array getTracking()
  */
-class ShipmentLoader extends Object
+class ShipmentLoader extends DataObject
 {
     /**
      * @var \Magento\Framework\Message\ManagerInterface
@@ -34,19 +34,14 @@ class ShipmentLoader extends Object
     protected $registry;
 
     /**
+     * @var \Magento\Sales\Api\ShipmentRepositoryInterface
+     */
+    protected $shipmentRepository;
+
+    /**
      * @var \Magento\Sales\Model\Order\ShipmentFactory
      */
     protected $shipmentFactory;
-
-    /**
-     * @var \Magento\Sales\Model\OrderFactory
-     */
-    protected $orderFactory;
-
-    /**
-     * @var \Magento\Sales\Model\Service\OrderFactory
-     */
-    protected $orderServiceFactory;
 
     /**
      * @var \Magento\Sales\Model\Order\Shipment\TrackFactory
@@ -54,29 +49,34 @@ class ShipmentLoader extends Object
     protected $trackFactory;
 
     /**
+     * @var \Magento\Sales\Api\OrderRepositoryInterface
+     */
+    protected $orderRepository;
+
+    /**
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository
      * @param \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory
-     * @param \Magento\Sales\Model\OrderFactory $orderFactory
-     * @param \Magento\Sales\Model\Service\OrderFactory $orderServiceFactory
      * @param \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory
+     * @param \Magento\Sales\Api\OrderRepositoryInterface $orderRepository
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\Registry $registry,
+        \Magento\Sales\Api\ShipmentRepositoryInterface $shipmentRepository,
         \Magento\Sales\Model\Order\ShipmentFactory $shipmentFactory,
-        \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Sales\Model\Service\OrderFactory $orderServiceFactory,
         \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory,
+        \Magento\Sales\Api\OrderRepositoryInterface $orderRepository,
         array $data = []
     ) {
         $this->messageManager = $messageManager;
         $this->registry = $registry;
+        $this->shipmentRepository = $shipmentRepository;
         $this->shipmentFactory = $shipmentFactory;
-        $this->orderFactory = $orderFactory;
-        $this->orderServiceFactory = $orderServiceFactory;
         $this->trackFactory = $trackFactory;
+        $this->orderRepository = $orderRepository;
         parent::__construct($data);
     }
 
@@ -88,12 +88,8 @@ class ShipmentLoader extends Object
     protected function getItemQtys()
     {
         $data = $this->getShipment();
-        if (isset($data['items'])) {
-            $qtys = $data['items'];
-        } else {
-            $qtys = [];
-        }
-        return $qtys;
+
+        return isset($data['items']) ? $data['items'] : [];
     }
 
     /**
@@ -108,9 +104,9 @@ class ShipmentLoader extends Object
         $orderId = $this->getOrderId();
         $shipmentId = $this->getShipmentId();
         if ($shipmentId) {
-            $shipment = $this->shipmentFactory->create()->load($shipmentId);
+            $shipment = $this->shipmentRepository->get($shipmentId);
         } elseif ($orderId) {
-            $order = $this->orderFactory->create()->load($orderId);
+            $order = $this->orderRepository->get($orderId);
 
             /**
              * Check order existing
@@ -134,19 +130,11 @@ class ShipmentLoader extends Object
                 return false;
             }
 
-            $savedQtys = $this->getItemQtys();
-            $shipment = $this->orderServiceFactory->create(['order' => $order])->prepareShipment($savedQtys);
-            if ($this->getTracking()) {
-                foreach ((array)$this->getTracking() as $data) {
-                    if (empty($data['number'])) {
-                        throw new \Magento\Framework\Exception\LocalizedException(
-                            __('Please enter a tracking number.')
-                        );
-                    }
-                    $track = $this->trackFactory->create()->addData($data);
-                    $shipment->addTrack($track);
-                }
-            }
+            $shipment = $this->shipmentFactory->create(
+                $order,
+                $this->getItemQtys(),
+                $this->getTracking()
+            );
         }
 
         $this->registry->register('current_shipment', $shipment);

@@ -12,11 +12,11 @@ namespace Magento\CatalogInventory\Api;
 interface StockConfigurationInterface
 {
     /**
-     * Retrieve Default Website ID
+     * Retrieve Default Scope ID
      *
      * @return int
      */
-    public function getDefaultWebsiteId();
+    public function getDefaultScopeId();
 
     /**
      * @param int $filter

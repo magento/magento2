@@ -25,7 +25,8 @@ class OptionManagementTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->attributeRepositoryMock = $this->getMock('\Magento\Eav\Model\AttributeRepository', [], [], '', false);
-        $this->resourceModelMock = $this->getMock('\Magento\Eav\Model\Resource\Entity\Attribute', [], [], '', false);
+        $this->resourceModelMock =
+            $this->getMock('\Magento\Eav\Model\ResourceModel\Entity\Attribute', [], [], '', false);
         $this->model = new \Magento\Eav\Model\Entity\Attribute\OptionManagement(
             $this->attributeRepositoryMock,
             $this->resourceModelMock

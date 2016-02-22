@@ -6,7 +6,9 @@
 namespace Magento\CatalogUrlRewrite\Service\V1;
 
 use Magento\Eav\Model\Config;
-use Magento\Framework\App\Resource;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Store view service
@@ -24,15 +26,23 @@ class StoreViewService
     protected $connection;
 
     /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * @param Config $eavConfig
-     * @param \Magento\Framework\App\Resource $resource
+     * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         Config $eavConfig,
-        Resource $resource
+        ResourceConnection $resource,
+        MetadataPool $metadataPool
     ) {
         $this->eavConfig = $eavConfig;
-        $this->connection = $resource->getConnection(Resource::DEFAULT_READ_RESOURCE);
+        $this->connection = $resource->getConnection();
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -46,14 +56,51 @@ class StoreViewService
      */
     public function doesEntityHaveOverriddenUrlKeyForStore($storeId, $entityId, $entityType)
     {
-        $attribute = $this->eavConfig->getAttribute($entityType, 'url_key');
+        return $this->doesEntityHaveOverriddenUrlAttributeForStore($storeId, $entityId, $entityType, 'url_key');
+    }
+
+    /**
+     * Check that entity has overridden url path for specific store
+     *
+     * @param int $storeId
+     * @param int $entityId
+     * @param string $entityType
+     * @throws \InvalidArgumentException
+     * @return bool
+     */
+    public function doesEntityHaveOverriddenUrlPathForStore($storeId, $entityId, $entityType)
+    {
+        return $this->doesEntityHaveOverriddenUrlAttributeForStore($storeId, $entityId, $entityType, 'url_path');
+    }
+
+    /**
+     * Check that entity has overridden url attribute for specific store
+     *
+     * @param int $storeId
+     * @param int $entityId
+     * @param string $entityType
+     * @param mixed $attributeName
+     * @throws \InvalidArgumentException
+     * @return bool
+     */
+    protected function doesEntityHaveOverriddenUrlAttributeForStore($storeId, $entityId, $entityType, $attributeName)
+    {
+        $attribute = $this->eavConfig->getAttribute($entityType, $attributeName);
         if (!$attribute) {
             throw new \InvalidArgumentException(sprintf('Cannot retrieve attribute for entity type "%s"', $entityType));
         }
+        $linkFieldName = $attribute->getEntity()->getLinkField();
+        if (!$linkFieldName) {
+            $linkFieldName = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        }
         $select = $this->connection->select()
-        ->from($attribute->getBackendTable(), 'store_id')
-        ->where('attribute_id = ?', $attribute->getId())
-        ->where('entity_id = ?', $entityId);
+            ->from(['e' => $attribute->getEntity()->getEntityTable()], [])
+            ->join(
+                ['e_attr' => $attribute->getBackendTable()],
+                "e.{$linkFieldName} = e_attr.{$linkFieldName}",
+                'store_id'
+            )->where('e_attr.attribute_id = ?', $attribute->getId())
+            ->where('e.entity_id = ?', $entityId);
 
         return in_array($storeId, $this->connection->fetchCol($select));
     }

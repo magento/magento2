@@ -50,21 +50,23 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Config\Model\Config\BackendFactory $backendFactory
      * @param \Magento\Config\Model\Config\SourceFactory $sourceFactory
      * @param \Magento\Config\Model\Config\CommentFactory $commentFactory
      * @param \Magento\Framework\View\Element\BlockFactory $blockFactory
-     * @param \Magento\Config\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
+     * @param Dependency\Mapper $dependencyMapper
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Config\Model\Config\BackendFactory $backendFactory,
         \Magento\Config\Model\Config\SourceFactory $sourceFactory,
         \Magento\Config\Model\Config\CommentFactory $commentFactory,
         \Magento\Framework\View\Element\BlockFactory $blockFactory,
         \Magento\Config\Model\Config\Structure\Element\Dependency\Mapper $dependencyMapper
     ) {
-        parent::__construct($storeManager);
+        parent::__construct($storeManager, $moduleManager);
         $this->_backendFactory = $backendFactory;
         $this->_sourceFactory = $sourceFactory;
         $this->_commentFactory = $commentFactory;
@@ -421,7 +423,7 @@ class Field extends \Magento\Config\Model\Config\Structure\AbstractElement
         }
 
         $sourceModel = $this->_sourceFactory->create($sourceModel);
-        if ($sourceModel instanceof \Magento\Framework\Object) {
+        if ($sourceModel instanceof \Magento\Framework\DataObject) {
             $sourceModel->setPath($this->getPath());
         }
         if ($method) {

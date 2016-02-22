@@ -21,21 +21,21 @@ class ValidatorFile extends Validator
      *
      * @var string
      */
-    protected $path = '/custom_options';
+    protected $path = 'custom_options';
 
     /**
      * Relative path for quote folder
      *
      * @var string
      */
-    protected $quotePath = '/custom_options/quote';
+    protected $quotePath = 'custom_options/quote';
 
     /**
      * Relative path for order folder
      *
      * @var string
      */
-    protected $orderPath = '/custom_options/order';
+    protected $orderPath = 'custom_options/order';
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface
@@ -58,21 +58,29 @@ class ValidatorFile extends Validator
     protected $product;
 
     /**
+     * @var \Magento\Framework\Validator\File\IsImage
+     */
+    protected $isImageValidator;
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\File\Size $fileSize
      * @param \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory
+     * @param \Magento\Framework\Validator\File\IsImage $isImageValidator
      * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\File\Size $fileSize,
-        \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory
+        \Magento\Framework\HTTP\Adapter\FileTransferFactory $httpFactory,
+        \Magento\Framework\Validator\File\IsImage $isImageValidator
     ) {
         $this->mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $this->filesystem = $filesystem;
         $this->httpFactory = $httpFactory;
+        $this->isImageValidator = $isImageValidator;
         parent::__construct($scopeConfig, $filesystem, $fileSize);
     }
 
@@ -87,7 +95,7 @@ class ValidatorFile extends Validator
     }
 
     /**
-     * @param \Magento\Framework\Object $processingParams
+     * @param \Magento\Framework\DataObject $processingParams
      * @param \Magento\Catalog\Model\Product\Option $option
      * @return array
      * @throws LocalizedException
@@ -169,18 +177,25 @@ class ValidatorFile extends Validator
             $_height = 0;
 
             if ($tmpDirectory->isReadable($tmpDirectory->getRelativePath($fileInfo['tmp_name']))) {
-                $imageSize = getimagesize($fileInfo['tmp_name']);
-                if ($imageSize) {
+                if (filesize($fileInfo['tmp_name'])) {
+                    if ($this->isImageValidator->isValid($fileInfo['tmp_name'])) {
+                        $imageSize = getimagesize($fileInfo['tmp_name']);
+                    }
+                } else {
+                    throw new LocalizedException(__('The file is empty. Please choose another one'));
+                }
+
+                if (!empty($imageSize)) {
                     $_width = $imageSize[0];
                     $_height = $imageSize[1];
                 }
             }
-            $uri = $this->filesystem->getUri(DirectoryList::MEDIA);
+
             $userValue = [
                 'type' => $fileInfo['type'],
                 'title' => $fileInfo['name'],
-                'quote_path' => $uri . $this->quotePath . $filePath,
-                'order_path' => $uri . $this->orderPath . $filePath,
+                'quote_path' => $this->quotePath . $filePath,
+                'order_path' => $this->orderPath . $filePath,
                 'fullpath' => $fileFullPath,
                 'size' => $fileInfo['size'],
                 'width' => $_width,

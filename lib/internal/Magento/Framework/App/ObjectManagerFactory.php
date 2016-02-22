@@ -120,10 +120,10 @@ class ObjectManagerFactory
         $definitions = $definitionFactory->createClassDefinition($deploymentConfig->get('definitions'));
         $relations = $definitionFactory->createRelations();
 
-        /** @var EnvironmentFactory $enFactory */
-        $enFactory = new $this->envFactoryClassName($relations, $definitions);
+        /** @var EnvironmentFactory $envFactory */
+        $envFactory = new $this->envFactoryClassName($relations, $definitions);
         /** @var EnvironmentInterface $env */
-        $env =  $enFactory->createEnvironment();
+        $env =  $envFactory->createEnvironment();
 
         /** @var ConfigInterface $diConfig */
         $diConfig = $env->getDiConfig();
@@ -176,7 +176,15 @@ class ObjectManagerFactory
 
         $this->factory->setObjectManager($objectManager);
         ObjectManager::setInstance($objectManager);
-        $definitionFactory->getCodeGenerator()->setObjectManager($objectManager);
+
+        $generatorParams = $diConfig->getArguments('Magento\Framework\Code\Generator');
+        /** Arguments are stored in different format when DI config is compiled, thus require custom processing */
+        $generatedEntities = isset($generatorParams['generatedEntities']['_v_'])
+            ? $generatorParams['generatedEntities']['_v_']
+            : (isset($generatorParams['generatedEntities']) ? $generatorParams['generatedEntities'] : []);
+        $definitionFactory->getCodeGenerator()
+            ->setObjectManager($objectManager)
+            ->setGeneratedEntities($generatedEntities);
 
         $env->configureObjectManager($diConfig, $sharedInstances);
 
@@ -202,7 +210,7 @@ class ObjectManagerFactory
         $customData = isset($arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG])
             ? $arguments[self::INIT_PARAM_DEPLOYMENT_CONFIG]
             : [];
-        $reader = new DeploymentConfig\Reader($directoryList, $configFilePool, $customFile);
+        $reader = new DeploymentConfig\Reader($directoryList, $this->driverPool, $configFilePool, $customFile);
         return new DeploymentConfig($reader, $customData);
     }
 
@@ -219,10 +227,10 @@ class ObjectManagerFactory
         $result = new \Magento\Framework\Data\Argument\Interpreter\Composite(
             [
                 'boolean' => new \Magento\Framework\Data\Argument\Interpreter\Boolean($booleanUtils),
-                'string' => new \Magento\Framework\Data\Argument\Interpreter\String($booleanUtils),
+                'string' => new \Magento\Framework\Data\Argument\Interpreter\StringUtils($booleanUtils),
                 'number' => new \Magento\Framework\Data\Argument\Interpreter\Number(),
                 'null' => new \Magento\Framework\Data\Argument\Interpreter\NullType(),
-                'object' => new \Magento\Framework\Data\Argument\Interpreter\Object($booleanUtils),
+                'object' => new \Magento\Framework\Data\Argument\Interpreter\DataObject($booleanUtils),
                 'const' => $constInterpreter,
                 'init_parameter' => new \Magento\Framework\App\Arguments\ArgumentInterpreter($constInterpreter),
             ],
@@ -253,7 +261,9 @@ class ObjectManagerFactory
                     new \Magento\Framework\Filesystem\Directory\ReadFactory($driverPool),
                     new \Magento\Framework\Filesystem\Directory\WriteFactory($driverPool)
                 ),
-                new \Magento\Framework\Config\FileIteratorFactory()
+                new \Magento\Framework\Config\FileIteratorFactory(
+                    new \Magento\Framework\Filesystem\File\ReadFactory(new \Magento\Framework\Filesystem\DriverPool())
+                )
             );
             $schemaLocator = new \Magento\Framework\ObjectManager\Config\SchemaLocator();
             $validationState = new \Magento\Framework\App\Arguments\ValidationState($appMode);

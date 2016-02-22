@@ -7,7 +7,7 @@
 namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Product;
 
 use Magento\Reports\Controller\Adminhtml\Report\Product\Sold;
-use Magento\Framework\Object;
+use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
 
 class SoldTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\AbstractControllerTest
@@ -33,10 +33,14 @@ class SoldTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Ab
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->sold = new Sold(
-            $this->contextMock,
-            $this->fileFactoryMock,
-            $this->dateMock
+        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->sold = $objectManager->getObject(
+            'Magento\Reports\Controller\Adminhtml\Report\Product\Sold',
+            [
+                'context' => $this->contextMock,
+                'fileFactory' => $this->fileFactoryMock,
+                'dateFilter' => $this->dateMock,
+            ]
         );
     }
 
@@ -58,8 +62,8 @@ class SoldTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\Report\Ab
             ->expects($this->once())
             ->method('getPage')
             ->willReturn(
-                new Object(
-                    ['config' => new Object(
+                new DataObject(
+                    ['config' => new DataObject(
                         ['title' => $titleMock]
                     )]
                 )

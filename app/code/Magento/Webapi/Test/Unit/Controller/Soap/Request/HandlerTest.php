@@ -9,7 +9,7 @@
 namespace Magento\Webapi\Test\Unit\Controller\Soap\Request;
 
 use Magento\Framework\Api\SimpleDataObjectConverter;
-use Magento\Webapi\Model\Soap\Config as SoapConfig;
+use Magento\Webapi\Model\ServiceMetadata;
 
 /**
  * Test for \Magento\Webapi\Controller\Soap\Request\Handler.
@@ -25,7 +25,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_apiConfigMock;
 
-    /** @var \Magento\Webapi\Controller\Soap\Request */
+    /** @var \Magento\Framework\Webapi\Request */
     protected $_requestMock;
 
     /** @var \PHPUnit_Framework_MockObject_MockObject */
@@ -51,9 +51,9 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
         /** Prepare mocks for SUT constructor. */
         $this->_apiConfigMock = $this->getMockBuilder('Magento\Webapi\Model\Soap\Config')
             ->setMethods(['getServiceMethodInfo'])->disableOriginalConstructor()->getMock();
-        $this->_requestMock = $this->getMock('Magento\Webapi\Controller\Soap\Request', [], [], '', false);
+        $this->_requestMock = $this->getMock('Magento\Framework\Webapi\Request', [], [], '', false);
         $this->_objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
-        $this->_authorizationMock = $this->getMock('Magento\Framework\AuthorizationInterface', [], [], '', false);
+        $this->_authorizationMock = $this->getMock('Magento\Framework\Webapi\Authorization', [], [], '', false);
         $this->_dataObjectConverter = $this->getMock(
             'Magento\Framework\Api\SimpleDataObjectConverter',
             ['convertStdObjectToArray'],
@@ -105,7 +105,7 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             ->method('convertStdObjectToArray')
             ->will($this->returnValue(['field' => 1]));
         $operationName = 'soapOperation';
-        $className = 'Magento\Framework\Object';
+        $className = 'Magento\Framework\DataObject';
         $methodName = 'testMethod';
         $isSecure = false;
         $aclResources = [['Magento_TestModule::resourceA']];
@@ -115,10 +115,10 @@ class HandlerTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValue(
                     [
-                        SoapConfig::KEY_CLASS => $className,
-                        SoapConfig::KEY_METHOD => $methodName,
-                        SoapConfig::KEY_IS_SECURE => $isSecure,
-                        SoapConfig::KEY_ACL_RESOURCES => $aclResources,
+                        ServiceMetadata::KEY_CLASS => $className,
+                        ServiceMetadata::KEY_METHOD => $methodName,
+                        ServiceMetadata::KEY_IS_SECURE => $isSecure,
+                        ServiceMetadata::KEY_ACL_RESOURCES => $aclResources,
                     ]
                 )
             );

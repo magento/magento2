@@ -895,7 +895,7 @@ class InstallSchema implements InstallSchemaInterface
             'attribute_group_code',
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             255,
-            ['default' => null],
+            ['nullable' => false],
             'Attribute Group Code'
         )->addColumn(
             'tab_group_code',

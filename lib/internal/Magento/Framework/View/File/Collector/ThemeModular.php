@@ -3,15 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\View\File\Collector;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 use Magento\Framework\View\Design\ThemeInterface;
 use Magento\Framework\View\File\CollectorInterface;
-use Magento\Framework\View\File\Factory;
+use Magento\Framework\View\File\Factory as FileFactory;
+use Magento\Framework\View\Helper\PathPattern;
 
 /**
  * Source of modular view files introduced by a theme
@@ -19,58 +19,78 @@ use Magento\Framework\View\File\Factory;
 class ThemeModular implements CollectorInterface
 {
     /**
-     * File factory
-     *
-     * @var Factory
+     * @var PathPattern
+     */
+    private $pathPatternHelper;
+
+    /**
+     * @var FileFactory
      */
     private $fileFactory;
 
     /**
-     * Themes directory
-     *
-     * @var ReadInterface
+     * @var ReadFactory
      */
-    protected $themesDirectory;
+    private $readDirFactory;
+
+    /**
+     * @var ComponentRegistrarInterface
+     */
+    private $componentRegistrar;
 
     /**
      * @var string
      */
-    protected $subDir;
+    private $subDir;
 
     /**
      * Constructor
      *
-     * @param Filesystem $filesystem
-     * @param Factory $fileFactory
+     * @param FileFactory $fileFactory
+     * @param ReadFactory $readDirFactory
+     * @param ComponentRegistrarInterface $componentRegistrar
+     * @param PathPattern $pathPatternHelper
      * @param string $subDir
      */
     public function __construct(
-        Filesystem $filesystem,
-        Factory $fileFactory,
+        FileFactory $fileFactory,
+        ReadFactory $readDirFactory,
+        ComponentRegistrarInterface $componentRegistrar,
+        PathPattern $pathPatternHelper,
         $subDir = ''
     ) {
-        $this->themesDirectory = $filesystem->getDirectoryRead(DirectoryList::THEMES);
+        $this->pathPatternHelper = $pathPatternHelper;
         $this->fileFactory = $fileFactory;
+        $this->readDirFactory = $readDirFactory;
+        $this->componentRegistrar = $componentRegistrar;
         $this->subDir = $subDir ? $subDir . '/' : '';
     }
 
     /**
      * Retrieve files
      *
-     * @param ThemeInterface $theme
+     * @param \Magento\Framework\View\Design\ThemeInterface $theme
      * @param string $filePath
-     * @return array|\Magento\Framework\View\File[]
+     * @return \Magento\Framework\View\File[]
      */
     public function getFiles(ThemeInterface $theme, $filePath)
     {
         $namespace = $module = '*';
         $themePath = $theme->getFullPath();
-        $files = $this->themesDirectory->search("{$themePath}/{$namespace}_{$module}/{$this->subDir}{$filePath}");
+        if (empty($themePath)) {
+            return [];
+        }
+        $themeAbsolutePath = $this->componentRegistrar->getPath(ComponentRegistrar::THEME, $themePath);
+        if (!$themeAbsolutePath) {
+            return [];
+        }
+        $themeDir = $this->readDirFactory->create($themeAbsolutePath);
+        $files = $themeDir->search("{$namespace}_{$module}/{$this->subDir}$filePath");
         $result = [];
         $pattern = "#/(?<moduleName>[^/]+)/{$this->subDir}"
-            . strtr(preg_quote($filePath), ['\*' => '[^/]+']) . "$#i";
+            . $this->pathPatternHelper->translatePatternFromGlob($filePath) . "$#i";
         foreach ($files as $file) {
-            $filename = $this->themesDirectory->getAbsolutePath($file);
+            $filename = $themeDir->getAbsolutePath($file);
             if (!preg_match($pattern, $filename, $matches)) {
                 continue;
             }

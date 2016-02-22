@@ -36,7 +36,7 @@ class HandlerCompositeTest extends \PHPUnit_Framework_TestCase
     {
         $paymentMock = $this->getMockBuilder('Magento\Payment\Model\InfoInterface')
             ->getMock();
-        $responseMock = $this->getMockBuilder('Magento\Framework\Object')
+        $responseMock = $this->getMockBuilder('Magento\Framework\DataObject')
             ->disableOriginalConstructor()
             ->getMock();
 

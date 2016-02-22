@@ -33,7 +33,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     /**
      * Format total value based on order currency
      *
-     * @param \Magento\Framework\Object $total
+     * @param \Magento\Framework\DataObject $total
      * @return string
      */
     public function formatValue($total)
@@ -52,7 +52,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     protected function _initTotals()
     {
         $this->_totals = [];
-        $this->_totals['subtotal'] = new \Magento\Framework\Object(
+        $this->_totals['subtotal'] = new \Magento\Framework\DataObject(
             [
                 'code' => 'subtotal',
                 'value' => $this->getSource()->getSubtotal(),
@@ -67,7 +67,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
         if (!$this->getSource()->getIsVirtual() && ((double)$this->getSource()->getShippingAmount() ||
             $this->getSource()->getShippingDescription())
         ) {
-            $this->_totals['shipping'] = new \Magento\Framework\Object(
+            $this->_totals['shipping'] = new \Magento\Framework\DataObject(
                 [
                     'code' => 'shipping',
                     'value' => $this->getSource()->getShippingAmount(),
@@ -86,7 +86,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
             } else {
                 $discountLabel = __('Discount');
             }
-            $this->_totals['discount'] = new \Magento\Framework\Object(
+            $this->_totals['discount'] = new \Magento\Framework\DataObject(
                 [
                     'code' => 'discount',
                     'value' => $this->getSource()->getDiscountAmount(),
@@ -96,7 +96,7 @@ class Totals extends \Magento\Sales\Block\Order\Totals
             );
         }
 
-        $this->_totals['grand_total'] = new \Magento\Framework\Object(
+        $this->_totals['grand_total'] = new \Magento\Framework\DataObject(
             [
                 'code' => 'grand_total',
                 'strong' => true,

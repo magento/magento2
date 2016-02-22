@@ -11,7 +11,7 @@ use Magento\Customer\CustomerData\SectionSourceInterface;
 /**
  * Cart source
  */
-class Cart extends \Magento\Framework\Object implements SectionSourceInterface
+class Cart extends \Magento\Framework\DataObject implements SectionSourceInterface
 {
     /**
      * @var \Magento\Customer\Model\Session
@@ -24,7 +24,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
     protected $checkoutCart;
 
     /**
-     * @var \Magento\Catalog\Model\Resource\Url
+     * @var \Magento\Catalog\Model\ResourceModel\Url
      */
     protected $catalogUrl;
 
@@ -55,16 +55,17 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
 
     /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Catalog\Model\Resource\Url $catalogUrl
+     * @param \Magento\Catalog\Model\ResourceModel\Url $catalogUrl
      * @param \Magento\Checkout\Model\Cart $checkoutCart
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param ItemPoolInterface $itemPoolInterface
      * @param \Magento\Framework\View\LayoutInterface $layout
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Catalog\Model\Resource\Url $catalogUrl,
+        \Magento\Catalog\Model\ResourceModel\Url $catalogUrl,
         \Magento\Checkout\Model\Cart $checkoutCart,
         \Magento\Checkout\Helper\Data $checkoutHelper,
         ItemPoolInterface $itemPoolInterface,
@@ -154,7 +155,7 @@ class Cart extends \Magento\Framework\Object implements SectionSourceInterface
                 if (!isset($products[$productId])) {
                     continue;
                 }
-                $urlDataObject = new \Magento\Framework\Object($products[$productId]);
+                $urlDataObject = new \Magento\Framework\DataObject($products[$productId]);
                 $item->getProduct()->setUrlDataObject($urlDataObject);
             }
             $items[] = $this->itemPoolInterface->getItemData($item);

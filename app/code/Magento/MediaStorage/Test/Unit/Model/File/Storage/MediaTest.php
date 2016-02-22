@@ -31,7 +31,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     protected $_mediaHelperMock;
 
     /**
-     * @var \Magento\MediaStorage\Model\Resource\File\Storage\File
+     * @var \Magento\MediaStorage\Model\ResourceModel\File\Storage\File
      */
     protected $_fileUtilityMock;
 
@@ -47,7 +47,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
         );
         $this->_mediaHelperMock = $this->getMock('Magento\MediaStorage\Helper\File\Media', [], [], '', false);
         $this->_fileUtilityMock = $this->getMock(
-            'Magento\MediaStorage\Model\Resource\File\Storage\File',
+            'Magento\MediaStorage\Model\ResourceModel\File\Storage\File',
             [],
             [],
             '',

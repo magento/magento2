@@ -5,24 +5,29 @@
  */
 namespace Magento\Framework\View\Test\Unit\Layout;
 
+use \Magento\Framework\View\Layout\ScheduledStructure;
+
 /**
  * Test class for \Magento\Framework\View\Layout\ScheduledStructure
  */
 class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\View\Layout\ScheduledStructure
+     * @var ScheduledStructure
      */
-    protected $_model;
+    protected $model;
 
     /**
      * @var array
      */
-    protected $_scheduledData = [];
+    protected $scheduledData = [];
 
+    /**
+     * @return void
+     */
     protected function setUp()
     {
-        $this->_scheduledData = [
+        $this->scheduledData = [
             'scheduledStructure' => [
                 'element1' => ['data', 'of', 'element', '1'],
                 'element2' => ['data', 'of', 'element', '2'],
@@ -62,11 +67,16 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
                 'path4' => 'path 4',
             ],
         ];
-        $this->_model = new \Magento\Framework\View\Layout\ScheduledStructure($this->_scheduledData);
+
+        $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->model = $helperObjectManager->getObject(
+            'Magento\Framework\View\Layout\ScheduledStructure',
+            ['data' => $this->scheduledData]
+        );
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::getListToMove
+     * @return void
      */
     public function testGetListToMove()
     {
@@ -74,11 +84,11 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
          * Only elements that are present in elements list and specified in list to move can be moved
          */
         $expected = ['element1', 'element4'];
-        $this->assertEquals($expected, $this->_model->getListToMove());
+        $this->assertEquals($expected, $this->model->getListToMove());
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::getListToRemove
+     * @return void
      */
     public function testGetListToRemove()
     {
@@ -86,320 +96,400 @@ class ScheduledStructureTest extends \PHPUnit_Framework_TestCase
          * Only elements that are present in elements list and specified in list to remove can be removed
          */
         $expected = ['element2', 'element3'];
-        $this->assertEquals($expected, $this->_model->getListToRemove());
+        $this->assertEquals($expected, $this->model->getListToRemove());
     }
 
     public function testGetIfconfigList()
     {
         $expected = ['element1', 'element4'];
-        $this->assertEquals($expected, $this->_model->getIfconfigList());
+        $this->assertEquals($expected, $this->model->getIfconfigList());
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::getElements
+     * @return void
      */
     public function testGetElements()
     {
-        $this->assertEquals($this->_scheduledData['scheduledElements'], $this->_model->getElements());
+        $this->assertEquals($this->scheduledData['scheduledElements'], $this->model->getElements());
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::getElement
+     * @return void
      */
     public function testGetElement()
     {
-        $expected = $this->_scheduledData['scheduledElements']['element2'];
-        $this->assertEquals($expected, $this->_model->getElement('element2'));
+        $expected = $this->scheduledData['scheduledElements']['element2'];
+        $this->assertEquals($expected, $this->model->getElement('element2'));
 
         $default = ['some', 'default', 'value'];
-        $this->assertEquals($default, $this->_model->getElement('not_existing_element', $default));
+        $this->assertEquals($default, $this->model->getElement('not_existing_element', $default));
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::isElementsEmpty
+     * @return void
      */
     public function testIsElementsEmpty()
     {
-        $this->assertFalse($this->_model->isElementsEmpty());
-        $this->_model->flushScheduledStructure();
-        $this->assertTrue($this->_model->isElementsEmpty());
+        $this->assertFalse($this->model->isElementsEmpty());
+        $this->model->flushScheduledStructure();
+        $this->assertTrue($this->model->isElementsEmpty());
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::setElement
+     * @return void
      */
     public function testSetElement()
     {
         $data = ['some', 'new', 'data'];
 
         /** Test add new element */
-        $this->assertFalse($this->_model->hasElement('new_element'));
-        $this->_model->setElement('new_element', $data);
-        $this->assertEquals($data, $this->_model->getElement('new_element'));
+        $this->assertFalse($this->model->hasElement('new_element'));
+        $this->model->setElement('new_element', $data);
+        $this->assertEquals($data, $this->model->getElement('new_element'));
 
         /** Test override existing element */
-        $this->assertTrue($this->_model->hasElement('element1'));
-        $this->_model->setElement('element1', $data);
-        $this->assertEquals($data, $this->_model->getElement('element1'));
+        $this->assertTrue($this->model->hasElement('element1'));
+        $this->model->setElement('element1', $data);
+        $this->assertEquals($data, $this->model->getElement('element1'));
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::hasElement
+     * @return void
      */
     public function testHasElement()
     {
-        $this->assertFalse($this->_model->hasElement('not_existing_element'));
-        $this->assertTrue($this->_model->hasElement('element1'));
+        $this->assertFalse($this->model->hasElement('not_existing_element'));
+        $this->assertTrue($this->model->hasElement('element1'));
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::unsetElement
+     * @return void
      */
     public function testUnsetElement()
     {
-        $this->assertTrue($this->_model->hasElement('element1'));
-        $this->_model->unsetElement('element1');
-        $this->assertFalse($this->_model->hasElement('element1'));
+        $this->assertTrue($this->model->hasElement('element1'));
+        $this->model->unsetElement('element1');
+        $this->assertFalse($this->model->hasElement('element1'));
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::getElementToMove
+     * @return void
      */
     public function testGetElementToMove()
     {
         $this->assertEquals(
-            $this->_scheduledData['scheduledMoves']['element1'],
-            $this->_model->getElementToMove('element1')
+            $this->scheduledData['scheduledMoves']['element1'],
+            $this->model->getElementToMove('element1')
         );
         $default = ['some', 'data'];
-        $this->assertEquals($default, $this->_model->getElementToMove('not_existing_element', $default));
-    }
-
-    public function getIfconfigElement()
-    {
-        $this->assertEquals(
-            $this->_scheduledData['scheduledIfconfig']['element1'],
-            $this->_model->getIfconfigElement('element1')
-        );
-        $default = ['some', 'data'];
-        $this->assertEquals($default, $this->_model->getIfconfigElement('not_existing_element', $default));
+        $this->assertEquals($default, $this->model->getElementToMove('not_existing_element', $default));
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::setElementToMove
+     * @return void
+     */
+    public function getIfconfigElement()
+    {
+        $this->assertEquals(
+            $this->scheduledData['scheduledIfconfig']['element1'],
+            $this->model->getIfconfigElement('element1')
+        );
+        $default = ['some', 'data'];
+        $this->assertEquals($default, $this->model->getIfconfigElement('not_existing_element', $default));
+    }
+
+    /**
+     * @return void
      */
     public function testSetElementToMove()
     {
         $data = ['some', 'new', 'data', 'element', 'to', 'move'];
 
         /** Test add new element */
-        $this->assertFalse($this->_model->hasElement('new_element'));
-        $this->_model->setElementToMove('new_element', $data);
-        $this->assertEquals($data, $this->_model->getElementToMove('new_element'));
+        $this->assertFalse($this->model->hasElement('new_element'));
+        $this->model->setElementToMove('new_element', $data);
+        $this->assertEquals($data, $this->model->getElementToMove('new_element'));
 
         /** Test override existing element */
-        $this->assertNotEquals($data, $this->_model->getElementToMove('element1'));
-        $this->_model->setElementToMove('element1', $data);
-        $this->assertEquals($data, $this->_model->getElementToMove('element1'));
+        $this->assertNotEquals($data, $this->model->getElementToMove('element1'));
+        $this->model->setElementToMove('element1', $data);
+        $this->assertEquals($data, $this->model->getElementToMove('element1'));
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::unsetElementFromListToRemove
+     * @return void
      */
     public function testUnsetElementFromListToRemove()
     {
-        $this->assertContains('element2', $this->_model->getListToRemove());
-        $this->_model->unsetElementFromListToRemove('element2');
-        $this->assertNotContains('element2', $this->_model->getListToRemove());
+        $this->assertContains('element2', $this->model->getListToRemove());
+        $this->model->unsetElementFromListToRemove('element2');
+        $this->assertNotContains('element2', $this->model->getListToRemove());
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::setElementToRemoveList
+     * @return void
      */
     public function testSetElementToRemoveList()
     {
-        $this->assertNotContains('element1', $this->_model->getListToRemove());
-        $this->_model->setElementToRemoveList('element1');
-        $this->assertContains('element1', $this->_model->getListToRemove());
-    }
-
-    public function testUnsetElementFromIfconfigList()
-    {
-        $this->assertContains('element4', $this->_model->getIfconfigList());
-        $this->_model->unsetElementFromIfconfigList('element4');
-        $this->assertNotContains('element4', $this->_model->getIfconfigList());
-    }
-
-    public function testSetElementToIfconfigList()
-    {
-        $this->assertNotContains('element5', $this->_model->getIfconfigList());
-        $this->_model->setElementToIfconfigList('element5', 'config_path', 'scope');
-        $this->assertContains('element5', $this->_model->getIfconfigList());
+        $this->assertNotContains('element1', $this->model->getListToRemove());
+        $this->model->setElementToRemoveList('element1');
+        $this->assertContains('element1', $this->model->getListToRemove());
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::getStructure
+     * @return void
+     */
+    public function testUnsetElementFromIfconfigList()
+    {
+        $this->assertContains('element4', $this->model->getIfconfigList());
+        $this->model->unsetElementFromIfconfigList('element4');
+        $this->assertNotContains('element4', $this->model->getIfconfigList());
+    }
+
+    /**
+     * @return void
+     */
+    public function testSetElementToIfconfigList()
+    {
+        $this->assertNotContains('element5', $this->model->getIfconfigList());
+        $this->model->setElementToIfconfigList('element5', 'config_path', 'scope');
+        $this->assertContains('element5', $this->model->getIfconfigList());
+    }
+
+    /**
+     * @return void
      */
     public function testGetStructure()
     {
-        $this->assertEquals($this->_scheduledData['scheduledStructure'], $this->_model->getStructure());
+        $this->assertEquals($this->scheduledData['scheduledStructure'], $this->model->getStructure());
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::getStructureElement
+     * @return void
      */
     public function testGetStructureElement()
     {
-        $expected = $this->_scheduledData['scheduledStructure']['element2'];
-        $this->assertEquals($expected, $this->_model->getStructureElement('element2'));
+        $expected = $this->scheduledData['scheduledStructure']['element2'];
+        $this->assertEquals($expected, $this->model->getStructureElement('element2'));
 
         $default = ['some', 'default', 'value'];
-        $this->assertEquals($default, $this->_model->getStructureElement('not_existing_element', $default));
+        $this->assertEquals($default, $this->model->getStructureElement('not_existing_element', $default));
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::isStructureEmpty
+     * @return void
      */
     public function testIsStructureEmpty()
     {
-        $this->assertFalse($this->_model->isStructureEmpty());
-        $this->_model->flushScheduledStructure();
-        $this->assertTrue($this->_model->isStructureEmpty());
+        $this->assertFalse($this->model->isStructureEmpty());
+        $this->model->flushScheduledStructure();
+        $this->assertTrue($this->model->isStructureEmpty());
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::hasStructureElement
+     * @return void
      */
     public function testHasStructureElement()
     {
-        $this->assertTrue($this->_model->hasStructureElement('element1'));
-        $this->assertFalse($this->_model->hasStructureElement('not_existing_element'));
+        $this->assertTrue($this->model->hasStructureElement('element1'));
+        $this->assertFalse($this->model->hasStructureElement('not_existing_element'));
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::setStructureElement
+     * @return void
      */
     public function testSetStructureElement()
     {
         $data = ['some', 'new', 'data', 'structure', 'element'];
 
         /** Test add new structure element */
-        $this->assertFalse($this->_model->hasStructureElement('new_element'));
-        $this->_model->setStructureElement('new_element', $data);
-        $this->assertEquals($data, $this->_model->getStructureElement('new_element'));
+        $this->assertFalse($this->model->hasStructureElement('new_element'));
+        $this->model->setStructureElement('new_element', $data);
+        $this->assertEquals($data, $this->model->getStructureElement('new_element'));
 
         /** Test override existing structure element */
-        $this->assertTrue($this->_model->hasStructureElement('element1'));
-        $this->_model->setStructureElement('element1', $data);
-        $this->assertEquals($data, $this->_model->getStructureElement('element1'));
+        $this->assertTrue($this->model->hasStructureElement('element1'));
+        $this->model->setStructureElement('element1', $data);
+        $this->assertEquals($data, $this->model->getStructureElement('element1'));
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::unsetStructureElement
+     * @return void
      */
     public function testUnsetStructureElement()
     {
-        $this->assertTrue($this->_model->hasStructureElement('element1'));
-        $this->_model->unsetStructureElement('element1');
-        $this->assertFalse($this->_model->hasStructureElement('element1'));
+        $this->assertTrue($this->model->hasStructureElement('element1'));
+        $this->model->unsetStructureElement('element1');
+        $this->assertFalse($this->model->hasStructureElement('element1'));
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::getPaths
+     * @return void
      */
     public function testGetPaths()
     {
-        $this->assertEquals($this->_scheduledData['scheduledPaths'], $this->_model->getPaths());
+        $this->assertEquals($this->scheduledData['scheduledPaths'], $this->model->getPaths());
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::getPath
+     * @return void
      */
     public function testGetPath()
     {
-        $this->assertEquals($this->_scheduledData['scheduledPaths']['path1'], $this->_model->getPath('path1'));
+        $this->assertEquals($this->scheduledData['scheduledPaths']['path1'], $this->model->getPath('path1'));
         $default = ['some', 'data'];
-        $this->assertEquals($default, $this->_model->getPath('not_existing_element', $default));
+        $this->assertEquals($default, $this->model->getPath('not_existing_element', $default));
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::hasPath
+     * @return void
      */
     public function testHasPath()
     {
-        $this->assertTrue($this->_model->hasPath('path1'));
-        $this->assertFalse($this->_model->hasPath('not_existing_element'));
+        $this->assertTrue($this->model->hasPath('path1'));
+        $this->assertFalse($this->model->hasPath('not_existing_element'));
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::setPathElement
+     * @return void
      */
     public function testSetPathElement()
     {
         $data = ['some', 'new', 'data', 'path'];
 
         /** Test add new structure element */
-        $this->assertFalse($this->_model->hasPath('new_element'));
-        $this->_model->setPathElement('new_element', $data);
-        $this->assertEquals($data, $this->_model->getPath('new_element'));
+        $this->assertFalse($this->model->hasPath('new_element'));
+        $this->model->setPathElement('new_element', $data);
+        $this->assertEquals($data, $this->model->getPath('new_element'));
 
         /** Test override existing structure element */
-        $this->assertTrue($this->_model->hasPath('path1'));
-        $this->_model->setPathElement('path1', $data);
-        $this->assertEquals($data, $this->_model->getPath('path1'));
+        $this->assertTrue($this->model->hasPath('path1'));
+        $this->model->setPathElement('path1', $data);
+        $this->assertEquals($data, $this->model->getPath('path1'));
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::unsetPathElement
+     * @return void
      */
     public function testUnsetPathElement()
     {
-        $this->assertTrue($this->_model->hasPath('path1'));
-        $this->_model->unsetPathElement('path1');
-        $this->assertFalse($this->_model->hasPath('path1'));
+        $this->assertTrue($this->model->hasPath('path1'));
+        $this->model->unsetPathElement('path1');
+        $this->assertFalse($this->model->hasPath('path1'));
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::flushPaths
+     * @return void
      */
     public function testFlushPaths()
     {
-        $this->assertNotEmpty($this->_model->getPaths());
-        $this->_model->flushPaths();
-        $this->assertEmpty($this->_model->getPaths());
+        $this->assertNotEmpty($this->model->getPaths());
+        $this->model->flushPaths();
+        $this->assertEmpty($this->model->getPaths());
     }
 
     /**
-     * @covers \Magento\Framework\View\Layout\ScheduledStructure::flushScheduledStructure
+     * @return void
      */
     public function testFlushScheduledStructure()
     {
-        $this->assertNotEmpty($this->_model->getPaths());
-        $this->assertNotEmpty($this->_model->getElements());
-        $this->assertNotEmpty($this->_model->getStructure());
+        $this->assertNotEmpty($this->model->getPaths());
+        $this->assertNotEmpty($this->model->getElements());
+        $this->assertNotEmpty($this->model->getStructure());
 
-        $this->_model->flushScheduledStructure();
+        $this->model->flushScheduledStructure();
 
-        $this->assertEmpty($this->_model->getPaths());
-        $this->assertEmpty($this->_model->getElements());
-        $this->assertEmpty($this->_model->getStructure());
+        $this->assertEmpty($this->model->getPaths());
+        $this->assertEmpty($this->model->getElements());
+        $this->assertEmpty($this->model->getStructure());
     }
 
     /**
-     * covers \Magento\Framework\View\Layout\ScheduledStructure::setElementToBrokenParentList
-     * covers \Magento\Framework\View\Layout\ScheduledStructure::unsetElementFromBrokenParentList
+     * @return void
      */
     public function testSetElementToBrokenParentList()
     {
         $element = 'element9';
         $expectedToRemove = ['element2', 'element3'];
-        $expectedToRemoveWithBroken = ['element2', 'element3'];
-        $this->assertEquals($expectedToRemove, $this->_model->getListToRemove());
+        $expectedToRemoveWithBroken = ['element2', 'element3', 'element9'];
+        $this->assertEquals($expectedToRemove, $this->model->getListToRemove());
 
-        $this->_model->setElementToBrokenParentList($element);
-        $this->assertEquals($expectedToRemoveWithBroken, $this->_model->getListToRemove());
+        $this->model->setElementToBrokenParentList($element);
+        $this->assertEquals($expectedToRemoveWithBroken, $this->model->getListToRemove());
 
-        $this->_model->unsetElementFromBrokenParentList($element);
-        $this->assertEquals($expectedToRemove, $this->_model->getListToRemove());
+        $this->model->unsetElementFromBrokenParentList($element);
+        $this->assertEquals($expectedToRemove, $this->model->getListToRemove());
+    }
+
+    /**
+     * @return void
+     */
+    public function testSetElementToSortList()
+    {
+        list($parentName, $name, $sibling, $isAfter, $element) = $this->getDataSort();
+        $elementsList = [$name => $element];
+        $this->assertArrayNotHasKey($name, $this->model->getListToSort());
+        $this->model->setElementToSortList($parentName, $name, $sibling, $isAfter);
+        $this->assertEquals($elementsList, $this->model->getListToSort());
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetElementToSortEmpty()
+    {
+        $this->assertEmpty($this->model->getElementToSort('test'));
+    }
+
+    /**
+     * @return void
+     */
+    public function testGetElementToSort()
+    {
+        list($parentName, $name, $sibling, $isAfter, $element) = $this->getDataSort();
+        $this->model->setElementToSortList($parentName, $name, $sibling, $isAfter);
+        $this->assertEquals($element, $this->model->getElementToSort($name));
+    }
+
+    /**
+     * @return void
+     */
+    public function testUnsetElementToSort()
+    {
+        list($parentName, $name, $sibling, $isAfter) = $this->getDataSort();
+        $this->model->setElementToSortList($parentName, $name, $sibling, $isAfter);
+        $this->assertArrayHasKey($name, $this->model->getListToSort());
+        $this->model->unsetElementToSort($name);
+        $this->assertArrayNotHasKey($name, $this->model->getListToSort());
+    }
+
+    /**
+     * @return void
+     */
+    public function testIsListToSortEmpty()
+    {
+        list($parentName, $name, $sibling, $isAfter) = $this->getDataSort();
+        $this->assertTrue($this->model->isListToSortEmpty());
+        $this->model->setElementToSortList($parentName, $name, $sibling, $isAfter);
+        $this->assertFalse($this->model->isListToSortEmpty());
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDataSort()
+    {
+        return [
+            'parent name',
+            'element name',
+            'sibling',
+            false,
+            [
+                ScheduledStructure::ELEMENT_NAME => 'element name',
+                ScheduledStructure::ELEMENT_PARENT_NAME => 'parent name',
+                ScheduledStructure::ELEMENT_OFFSET_OR_SIBLING => 'sibling',
+                ScheduledStructure::ELEMENT_IS_AFTER => false
+            ]
+        ];
     }
 }

@@ -3,9 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 namespace Magento\Quote\Model;
 
 use Magento\Customer\Api\Data\CustomerInterface;
@@ -13,7 +10,7 @@ use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address;
-use Magento\Sales\Model\Resource;
+use Magento\Sales\Model\ResourceModel;
 use Magento\Sales\Model\Status;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
@@ -217,7 +214,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $groupRepository;
 
     /**
-     * @var \Magento\Quote\Model\Resource\Quote\Item\CollectionFactory
+     * @var \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory
      */
     protected $_quoteItemCollectionFactory;
 
@@ -247,12 +244,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $_quotePaymentFactory;
 
     /**
-     * @var \Magento\Quote\Model\Resource\Quote\Payment\CollectionFactory
+     * @var \Magento\Quote\Model\ResourceModel\Quote\Payment\CollectionFactory
      */
     protected $_quotePaymentCollectionFactory;
 
     /**
-     * @var \Magento\Framework\Object\Copy
+     * @var \Magento\Framework\DataObject\Copy
      */
     protected $_objectCopyService;
 
@@ -288,7 +285,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $itemProcessor;
 
     /**
-     * @var \Magento\Framework\Object\Factory
+     * @var \Magento\Framework\DataObject\Factory
      */
     protected $objectFactory;
 
@@ -328,6 +325,33 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     protected $extensionAttributesJoinProcessor;
 
     /**
+     * @var \Magento\Quote\Model\Quote\TotalsCollector
+     */
+    protected $totalsCollector;
+
+    /**
+     * @var \\Magento\Quote\Model\Quote\TotalsReader
+     */
+    protected $totalsReader;
+
+    /**
+     * @var \Magento\Quote\Model\ShippingFactory
+     */
+    protected $shippingFactory;
+
+    /**
+     * @var \Magento\Quote\Model\ShippingAssignmentFactory
+     */
+    protected $shippingAssignmentFactory;
+
+    /**
+     * Quote shipping addresses items cache
+     *
+     * @var array
+     */
+    protected $shippingAddressesItems;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -340,17 +364,17 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param Quote\AddressFactory $quoteAddressFactory
      * @param \Magento\Customer\Model\CustomerFactory $customerFactory
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
-     * @param Resource\Quote\Item\CollectionFactory $quoteItemCollectionFactory
+     * @param \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory $quoteItemCollectionFactory
      * @param Quote\ItemFactory $quoteItemFactory
      * @param \Magento\Framework\Message\Factory $messageFactory
      * @param Status\ListFactory $statusListFactory
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param Quote\PaymentFactory $quotePaymentFactory
-     * @param Resource\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory
-     * @param \Magento\Framework\Object\Copy $objectCopyService
+     * @param \Magento\Quote\Model\ResourceModel\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory
+     * @param \Magento\Framework\DataObject\Copy $objectCopyService
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param Quote\Item\Processor $itemProcessor
-     * @param \Magento\Framework\Object\Factory $objectFactory
+     * @param \Magento\Framework\DataObject\Factory $objectFactory
      * @param \Magento\Customer\Api\AddressRepositoryInterface $addressRepository
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
@@ -361,8 +385,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param Cart\CurrencyFactory $currencyFactory
      * @param JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @param \Magento\Framework\Model\Resource\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param Quote\TotalsCollector $totalsCollector
+     * @param Quote\TotalsReader $totalsReader
+     * @param ShippingFactory $shippingFactory
+     * @param ShippingAssignmentFactory $shippingAssignmentFactory
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -379,17 +407,17 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Quote\Model\Quote\AddressFactory $quoteAddressFactory,
         \Magento\Customer\Model\CustomerFactory $customerFactory,
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
-        \Magento\Quote\Model\Resource\Quote\Item\CollectionFactory $quoteItemCollectionFactory,
+        \Magento\Quote\Model\ResourceModel\Quote\Item\CollectionFactory $quoteItemCollectionFactory,
         \Magento\Quote\Model\Quote\ItemFactory $quoteItemFactory,
         \Magento\Framework\Message\Factory $messageFactory,
         \Magento\Sales\Model\Status\ListFactory $statusListFactory,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Quote\Model\Quote\PaymentFactory $quotePaymentFactory,
-        \Magento\Quote\Model\Resource\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory,
-        \Magento\Framework\Object\Copy $objectCopyService,
+        \Magento\Quote\Model\ResourceModel\Quote\Payment\CollectionFactory $quotePaymentCollectionFactory,
+        \Magento\Framework\DataObject\Copy $objectCopyService,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         \Magento\Quote\Model\Quote\Item\Processor $itemProcessor,
-        \Magento\Framework\Object\Factory $objectFactory,
+        \Magento\Framework\DataObject\Factory $objectFactory,
         \Magento\Customer\Api\AddressRepositoryInterface $addressRepository,
         \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
@@ -400,7 +428,11 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
         \Magento\Quote\Model\Cart\CurrencyFactory $currencyFactory,
         JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\Framework\Model\Resource\AbstractResource $resource = null,
+        Quote\TotalsCollector $totalsCollector,
+        Quote\TotalsReader $totalsReader,
+        \Magento\Quote\Model\ShippingFactory $shippingFactory,
+        \Magento\Quote\Model\ShippingAssignmentFactory $shippingAssignmentFactory,
+        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
@@ -433,6 +465,10 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
         $this->currencyFactory = $currencyFactory;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
+        $this->totalsCollector = $totalsCollector;
+        $this->totalsReader = $totalsReader;
+        $this->shippingFactory = $shippingFactory;
+        $this->shippingAssignmentFactory = $shippingAssignmentFactory;
         parent::__construct(
             $context,
             $registry,
@@ -451,7 +487,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     protected function _construct()
     {
-        $this->_init('Magento\Quote\Model\Resource\Quote');
+        $this->_init('Magento\Quote\Model\ResourceModel\Quote');
     }
 
     /**
@@ -735,7 +771,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     public function getSharedStoreIds()
     {
         $ids = $this->_getData('shared_store_ids');
-        if (is_null($ids) || !is_array($ids)) {
+        if ($ids === null || !is_array($ids)) {
             $website = $this->getWebsite();
             if ($website) {
                 return $website->getStoreIds();
@@ -1032,7 +1068,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
          */
         //if (!$this->getData('customer_group_id') && !$this->getData('customer_tax_class_id')) {
         $groupId = $this->getCustomerGroupId();
-        if (!is_null($groupId)) {
+        if ($groupId !== null) {
             $taxClassId = $this->groupRepository->getById($this->getCustomerGroupId())->getTaxClassId();
             $this->setCustomerTaxClassId($taxClassId);
         }
@@ -1326,7 +1362,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     {
         $items = [];
         foreach ($this->getItemsCollection() as $item) {
-            /** @var \Magento\Quote\Model\Resource\Quote\Item $item */
+            /** @var \Magento\Quote\Model\ResourceModel\Quote\Item $item */
             if (!$item->isDeleted()) {
                 $items[] = $item;
             }
@@ -1479,7 +1515,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     public function removeAllItems()
     {
         foreach ($this->getItemsCollection() as $itemId => $item) {
-            if (is_null($item->getId())) {
+            if ($item->getId() === null) {
                 $this->getItemsCollection()->removeItemByKey($itemId);
             } else {
                 $item->isDeleted(true);
@@ -1510,7 +1546,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * Returns error message if product type instance can't prepare product.
      *
      * @param mixed $product
-     * @param null|float|\Magento\Framework\Object $request
+     * @param null|float|\Magento\Framework\DataObject $request
      * @param null|string $processMode
      * @return \Magento\Quote\Model\Quote\Item|string
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -1528,7 +1564,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         if (is_numeric($request)) {
             $request = $this->objectFactory->create(['qty' => $request]);
         }
-        if (!$request instanceof \Magento\Framework\Object) {
+        if (!$request instanceof \Magento\Framework\DataObject) {
             throw new \Magento\Framework\Exception\LocalizedException(
                 __('We found an invalid request for adding product to quote.')
             );
@@ -1594,7 +1630,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
         $this->_eventManager->dispatch('sales_quote_product_add_after', ['items' => $items]);
 
-        return $item;
+        return $parentItem;
     }
 
     /**
@@ -1644,16 +1680,16 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * It's passed to \Magento\Catalog\Helper\Product->addParamsToBuyRequest() to compose resulting buyRequest.
      *
      * Basically it can hold
-     * - 'current_config', \Magento\Framework\Object or array - current buyRequest that configures product in this item,
-     *   used to restore currently attached files
+     * - 'current_config', \Magento\Framework\DataObject or array - current buyRequest that configures product in this
+     * item, used to restore currently attached files
      * - 'files_prefix': string[a-z0-9_] - prefix that was added at frontend to names of file options (file inputs),
      *   so they won't intersect with other submitted options
      *
      * For more options see \Magento\Catalog\Helper\Product->addParamsToBuyRequest()
      *
      * @param int $itemId
-     * @param \Magento\Framework\Object $buyRequest
-     * @param null|array|\Magento\Framework\Object $params
+     * @param \Magento\Framework\DataObject $buyRequest
+     * @param null|array|\Magento\Framework\DataObject $params
      * @return \Magento\Quote\Model\Quote\Item
      * @throws \Magento\Framework\Exception\LocalizedException
      *
@@ -1675,9 +1711,9 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $product = clone $this->productRepository->getById($productId, false, $this->getStore()->getId());
 
         if (!$params) {
-            $params = new \Magento\Framework\Object();
+            $params = new \Magento\Framework\DataObject();
         } elseif (is_array($params)) {
-            $params = new \Magento\Framework\Object($params);
+            $params = new \Magento\Framework\DataObject($params);
         }
         $params->setCurrentConfig($item->getBuyRequest());
         $buyRequest = $this->_catalogProduct->addParamsToBuyRequest($buyRequest, $params);
@@ -1833,27 +1869,12 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /**
-     * @param string $paymentId
-     * @return bool
-     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
-     */
-    public function getPaymentById($paymentId)
-    {
-        foreach ($this->getPaymentsCollection() as $payment) {
-            if ($payment->getId() == $paymentId) {
-                return $payment;
-            }
-        }
-        return false;
-    }
-
-    /**
      * Adds a payment to quote
      *
      * @param PaymentInterface $payment
      * @return $this
      */
-    public function addPayment(PaymentInterface $payment)
+    protected function addPayment(PaymentInterface $payment)
     {
         $payment->setQuote($this);
         if (!$payment->getId()) {
@@ -1894,141 +1915,25 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      */
     public function collectTotals()
     {
-        /**
-         * Protect double totals collection
-         */
         if ($this->getTotalsCollectedFlag()) {
             return $this;
         }
-        $this->_eventManager->dispatch(
-            $this->_eventPrefix . '_collect_totals_before',
-            [$this->_eventObject => $this]
-        );
 
-        $this->_collectItemsQtys();
-
-        $this->setSubtotal(0);
-        $this->setBaseSubtotal(0);
-
-        $this->setSubtotalWithDiscount(0);
-        $this->setBaseSubtotalWithDiscount(0);
-
-        $this->setGrandTotal(0);
-        $this->setBaseGrandTotal(0);
-
-        foreach ($this->getAllAddresses() as $address) {
-            $address->setSubtotal(0);
-            $address->setBaseSubtotal(0);
-
-            $address->setGrandTotal(0);
-            $address->setBaseGrandTotal(0);
-
-            $address->collectTotals();
-
-            $this->setSubtotal((float)$this->getSubtotal() + $address->getSubtotal());
-            $this->setBaseSubtotal((float)$this->getBaseSubtotal() + $address->getBaseSubtotal());
-
-            $this->setSubtotalWithDiscount(
-                (float)$this->getSubtotalWithDiscount() + $address->getSubtotalWithDiscount()
-            );
-            $this->setBaseSubtotalWithDiscount(
-                (float)$this->getBaseSubtotalWithDiscount() + $address->getBaseSubtotalWithDiscount()
-            );
-
-            $this->setGrandTotal((float)$this->getGrandTotal() + $address->getGrandTotal());
-            $this->setBaseGrandTotal((float)$this->getBaseGrandTotal() + $address->getBaseGrandTotal());
-        }
-
-        $this->quoteValidator->validateQuoteAmount($this, $this->getGrandTotal());
-        $this->quoteValidator->validateQuoteAmount($this, $this->getBaseGrandTotal());
-
-        $this->setData('trigger_recollect', 0);
-        $this->_validateCouponCode();
-
-        $this->_eventManager->dispatch(
-            $this->_eventPrefix . '_collect_totals_after',
-            [$this->_eventObject => $this]
-        );
+        $total = $this->totalsCollector->collect($this);
+        $this->addData($total->getData());
 
         $this->setTotalsCollectedFlag(true);
         return $this;
     }
 
     /**
-     * Collect items qty
-     *
-     * @return $this
-     */
-    protected function _collectItemsQtys()
-    {
-        $this->setItemsCount(0);
-        $this->setItemsQty(0);
-        $this->setVirtualItemsQty(0);
-
-        foreach ($this->getAllVisibleItems() as $item) {
-            if ($item->getParentItem()) {
-                continue;
-            }
-
-            $children = $item->getChildren();
-            if ($children && $item->isShipSeparately()) {
-                foreach ($children as $child) {
-                    if ($child->getProduct()->getIsVirtual()) {
-                        $this->setVirtualItemsQty($this->getVirtualItemsQty() + $child->getQty() * $item->getQty());
-                    }
-                }
-            }
-
-            if ($item->getProduct()->getIsVirtual()) {
-                $this->setVirtualItemsQty($this->getVirtualItemsQty() + $item->getQty());
-            }
-            $this->setItemsCount($this->getItemsCount() + 1);
-            $this->setItemsQty((float)$this->getItemsQty() + $item->getQty());
-        }
-
-        return $this;
-    }
-
-    /**
      * Get all quote totals (sorted by priority)
-     * Method process quote states isVirtual and isMultiShipping
      *
      * @return array
      */
     public function getTotals()
     {
-        /**
-         * If quote is virtual we are using totals of billing address because
-         * all items assigned to it
-         */
-        if ($this->isVirtual()) {
-            return $this->getBillingAddress()->getTotals();
-        }
-
-        $shippingAddress = $this->getShippingAddress();
-        $totals = $shippingAddress->getTotals();
-        // Going through all quote addresses and merge their totals
-        foreach ($this->getAddressesCollection() as $address) {
-            if ($address->isDeleted() || $address === $shippingAddress) {
-                continue;
-            }
-            foreach ($address->getTotals() as $code => $total) {
-                if (isset($totals[$code])) {
-                    $totals[$code]->merge($total);
-                } else {
-                    $totals[$code] = $total;
-                }
-            }
-        }
-
-        $sortedTotals = [];
-        foreach ($this->getBillingAddress()->getTotalCollector()->getRetrievers() as $total) {
-            /* @var $total \Magento\Quote\Model\Quote\Address\Total\AbstractTotal */
-            if (isset($totals[$total->getCode()])) {
-                $sortedTotals[$total->getCode()] = $totals[$total->getCode()];
-            }
-        }
-        return $sortedTotals;
+        return $this->totalsReader->fetch($this, $this->getData());
     }
 
     /**
@@ -2140,7 +2045,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
      * @param string|null $origin Usually a name of module, that embeds error
      * @param int|null $code Error code, unique for origin, that sets it
      * @param string|null $message Error message
-     * @param \Magento\Framework\Object|null $additionalData Any additional data, that caller would like to store
+     * @param \Magento\Framework\DataObject|null $additionalData Any additional data, that caller would like to store
      * @return $this
      */
     public function addErrorInfo(
@@ -2433,29 +2338,6 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
     }
 
     /**
-     * @return $this
-     */
-    protected function _validateCouponCode()
-    {
-        $code = $this->_getData('coupon_code');
-        if (strlen($code)) {
-            $addressHasCoupon = false;
-            $addresses = $this->getAllAddresses();
-            if (count($addresses) > 0) {
-                foreach ($addresses as $address) {
-                    if ($address->hasCouponCode()) {
-                        $addressHasCoupon = true;
-                    }
-                }
-                if (!$addressHasCoupon) {
-                    $this->setCouponCode('');
-                }
-            }
-        }
-        return $this;
-    }
-
-    /**
      * Trigger collect totals after loading, if required
      *
      * @return $this
@@ -2521,6 +2403,48 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             return self::CHECKOUT_METHOD_LOGIN_IN;
         }
         return $this->_getData(self::KEY_CHECKOUT_METHOD);
+    }
+
+    /**
+     * Get quote items assigned to different quote addresses populated per item qty.
+     * Based on result array we can display each item separately
+     *
+     * @return array
+     */
+    public function getShippingAddressesItems()
+    {
+        if ($this->shippingAddressesItems !== null) {
+            return $this->shippingAddressesItems;
+        }
+        $items = [];
+        $addresses = $this->getAllAddresses();
+        foreach ($addresses as $address) {
+            foreach ($address->getAllItems() as $item) {
+                if ($item->getParentItemId()) {
+                    continue;
+                }
+                if ($item->getProduct()->getIsVirtual()) {
+                    $items[] = $item;
+                    continue;
+                }
+                if ($item->getQty() > 1) {
+                    for ($itemIndex = 0, $itemQty = $item->getQty(); $itemIndex < $itemQty; $itemIndex++) {
+                        if ($itemIndex == 0) {
+                            $addressItem = $item;
+                        } else {
+                            $addressItem = clone $item;
+                        }
+                        $addressItem->setQty(1)->setCustomerAddressId($address->getCustomerAddressId())->save();
+                        $items[] = $addressItem;
+                    }
+                } else {
+                    $item->setCustomerAddressId($address->getCustomerAddressId());
+                    $items[] = $item;
+                }
+            }
+        }
+        $this->shippingAddressesItems = $items;
+        return $items;
     }
 
     /**

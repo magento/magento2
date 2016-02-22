@@ -134,11 +134,11 @@ class LinksTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test that getConfig method retrieve \Magento\Framework\Object object
+     * Test that getConfig method retrieve \Magento\Framework\DataObject object
      */
     public function testGetConfig()
     {
-        $this->assertInstanceOf('Magento\Framework\Object', $this->block->getConfig());
+        $this->assertInstanceOf('Magento\Framework\DataObject', $this->block->getConfig());
     }
 
     public function testGetLinkData()

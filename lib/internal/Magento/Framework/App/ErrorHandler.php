@@ -51,17 +51,11 @@ class ErrorHandler
             return false;
         }
 
-        if (strpos($errorStr, 'Automatically populating $HTTP_RAW_POST_DATA is deprecated') !== false) {
-            // this warning should be suppressed as it is a known bug in php 5.6.0 https://bugs.php.net/bug.php?id=66763
-            // and workaround suggested here (http://php.net/manual/en/ini.core.php#ini.always-populate-raw-post-data)
-            // is not compatible with HHVM
-            return false;
-        }
-
         $errorNo = $errorNo & error_reporting();
         if ($errorNo == 0) {
             return false;
         }
+
         $msg = isset($this->errorPhrases[$errorNo]) ? $this->errorPhrases[$errorNo] : "Unknown error ({$errorNo})";
         $msg .= ": {$errorStr} in {$errorFile} on line {$errorLine}";
         throw new \Exception($msg);

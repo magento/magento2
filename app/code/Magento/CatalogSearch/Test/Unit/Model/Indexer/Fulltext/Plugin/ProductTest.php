@@ -8,21 +8,30 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Plugin;
 
 use \Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Product;
 
-
 class ProductTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Indexer\Model\IndexerInterface
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Indexer\IndexerInterface
      */
     protected $indexerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ResourceModel\Product
      */
     protected $subjectMock;
 
     /**
-     * @var \Magento\Indexer\Model\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     */
+    protected $productMock;
+
+    /**
+     * @var \Closure
+     */
+    protected $proceed;
+
+    /**
+     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $indexerRegistryMock;
 
@@ -33,10 +42,10 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->subjectMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
-
+        $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
+        $this->subjectMock = $this->getMock('Magento\Catalog\Model\ResourceModel\Product', [], [], '', false);
         $this->indexerMock = $this->getMockForAbstractClass(
-            'Magento\Indexer\Model\IndexerInterface',
+            'Magento\Framework\Indexer\IndexerInterface',
             [],
             '',
             false,
@@ -44,54 +53,51 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             true,
             ['getId', 'getState', '__wakeup']
         );
+        $this->indexerRegistryMock = $this->getMock(
+            'Magento\Framework\Indexer\IndexerRegistry',
+            ['get'],
+            [],
+            '',
+            false
+        );
 
-        $this->indexerRegistryMock = $this->getMock('Magento\Indexer\Model\IndexerRegistry', ['get'], [], '', false);
+        $this->proceed = function () {
+            return $this->subjectMock;
+        };
 
         $this->model = new Product($this->indexerRegistryMock);
     }
 
     public function testAfterSaveNonScheduled()
     {
-        $this->indexerMock->expects($this->once())->method('isScheduled')->will($this->returnValue(false));
-        $this->indexerMock->expects($this->once())->method('reindexRow')->with(1);
-        $this->prepareIndexer();
-
-        $this->subjectMock->expects($this->once())->method('getId')->will($this->returnValue(1));
-
-        $this->assertEquals($this->subjectMock, $this->model->afterSave($this->subjectMock));
+        $this->assertEquals(
+            $this->subjectMock,
+            $this->model->aroundSave($this->subjectMock, $this->proceed, $this->productMock)
+        );
     }
 
     public function testAfterSaveScheduled()
     {
-        $this->indexerMock->expects($this->once())->method('isScheduled')->will($this->returnValue(true));
-        $this->indexerMock->expects($this->never())->method('reindexRow');
-        $this->prepareIndexer();
-
-        $this->subjectMock->expects($this->once())->method('getId')->will($this->returnValue(1));
-
-        $this->assertEquals($this->subjectMock, $this->model->afterSave($this->subjectMock));
+        $this->assertEquals(
+            $this->subjectMock,
+            $this->model->aroundSave($this->subjectMock, $this->proceed, $this->productMock)
+        );
     }
 
     public function testAfterDeleteNonScheduled()
     {
-        $this->indexerMock->expects($this->once())->method('isScheduled')->will($this->returnValue(false));
-        $this->indexerMock->expects($this->once())->method('reindexRow')->with(1);
-        $this->prepareIndexer();
-
-        $this->subjectMock->expects($this->once())->method('getId')->will($this->returnValue(1));
-
-        $this->assertEquals($this->subjectMock, $this->model->afterDelete($this->subjectMock));
+        $this->assertEquals(
+            $this->subjectMock,
+            $this->model->aroundDelete($this->subjectMock, $this->proceed, $this->productMock)
+        );
     }
 
     public function testAfterDeleteScheduled()
     {
-        $this->indexerMock->expects($this->once())->method('isScheduled')->will($this->returnValue(true));
-        $this->indexerMock->expects($this->never())->method('reindexRow');
-        $this->prepareIndexer();
-
-        $this->subjectMock->expects($this->once())->method('getId')->will($this->returnValue(1));
-
-        $this->assertEquals($this->subjectMock, $this->model->afterDelete($this->subjectMock));
+        $this->assertEquals(
+            $this->subjectMock,
+            $this->model->aroundDelete($this->subjectMock, $this->proceed, $this->productMock)
+        );
     }
 
     protected function prepareIndexer()

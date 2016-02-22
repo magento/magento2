@@ -30,7 +30,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
     public function testInit()
     {
-        $result = $this->media->init();
+        $result = $this->media->init(null);
         $this->assertEquals($this->media, $result);
     }
 

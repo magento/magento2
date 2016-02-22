@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Directory/etc/zip_codes.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Directory:etc/zip_codes.xsd">
     <zip countryCode="DZ">
         <codes>
             <code id="pattern_1" active="true" example="12345">^[0-9]{5}$</code>
@@ -455,12 +455,12 @@
     </zip>
     <zip countryCode="GB">
         <codes>
-            <code id="pattern_1" active="true" example="AB12 3CD">^[a-zA-Z]{2}[0-9]{2}\s[0-9]{1}[a-zA-Z]{2}$</code>
-            <code id="pattern_2" active="true" example="A1B 2CD">^[a-zA-Z]{1}[0-9]{1}[a-zA-Z]{1}\s[0-9]{1}[a-zA-Z]{2}$</code>
-            <code id="pattern_3" active="true" example="AB1 2CD">^[a-zA-Z]{2}[0-9]{1}\s[0-9]{1}[a-zA-Z]{2}$</code>
-            <code id="pattern_4" active="true" example="AB1C 2DF">^[a-zA-Z]{2}[0-9]{1}[a-zA-Z]{1}\s[0-9]{1}[a-zA-Z]{2}$</code>
-            <code id="pattern_5" active="true" example="A12 3BC">^[a-zA-Z]{1}[0-9]{2}\s[0-9]{1}[a-zA-Z]{2}$</code>
-            <code id="pattern_6" active="true" example="A1 2BC">^[a-zA-Z]{1}[0-9]{1}\s[0-9]{1}[a-zA-Z]{2}$</code>
+            <code id="pattern_1" active="true" example="AB12 3CD">^[a-zA-Z]{2}[0-9]{2}\s?[0-9]{1}[a-zA-Z]{2}$</code>
+            <code id="pattern_2" active="true" example="A1B 2CD">^[a-zA-Z]{1}[0-9]{1}[a-zA-Z]{1}\s?[0-9]{1}[a-zA-Z]{2}$</code>
+            <code id="pattern_3" active="true" example="AB1 2CD">^[a-zA-Z]{2}[0-9]{1}\s?[0-9]{1}[a-zA-Z]{2}$</code>
+            <code id="pattern_4" active="true" example="AB1C 2DF">^[a-zA-Z]{2}[0-9]{1}[a-zA-Z]{1}\s?[0-9]{1}[a-zA-Z]{2}$</code>
+            <code id="pattern_5" active="true" example="A12 3BC">^[a-zA-Z]{1}[0-9]{2}\s?[0-9]{1}[a-zA-Z]{2}$</code>
+            <code id="pattern_6" active="true" example="A1 2BC">^[a-zA-Z]{1}[0-9]{1}\s?[0-9]{1}[a-zA-Z]{2}$</code>
         </codes>
     </zip>
     <zip countryCode="US">

@@ -12,10 +12,10 @@
     <ul class="dashboard-totals-list">
         <?php foreach ($block->getTotals() as $_total): ?>
             <li class="dashboard-totals-item">
-                <span class="dashboard-totals-label"><?php echo $_total['label'] ?></span>
+                <span class="dashboard-totals-label"><?php /* @escapeNotVerified */ echo $_total['label'] ?></span>
                 <strong class="dashboard-totals-value">
-                    <?php echo $_total['value'] ?>
-                    <span class="dashboard-totals-decimals"><?php echo $_total['decimals'] ?></span>
+                    <?php /* @escapeNotVerified */ echo $_total['value'] ?>
+                    <span class="dashboard-totals-decimals"><?php /* @escapeNotVerified */ echo $_total['decimals'] ?></span>
                 </strong>
             </li>
         <?php endforeach; ?>

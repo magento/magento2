@@ -24,6 +24,11 @@ class Preview extends \Magento\Backend\Block\Widget
     protected $_emailFactory;
 
     /**
+     * @var string
+     */
+    protected $profilerName = 'email_template_proccessing';
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Filter\Input\MaliciousCode $maliciousCode
      * @param \Magento\Email\Model\TemplateFactory $emailFactory
@@ -48,16 +53,10 @@ class Preview extends \Magento\Backend\Block\Widget
     protected function _toHtml()
     {
         $storeId = $this->getAnyStoreView()->getId();
-
         /** @var $template \Magento\Email\Model\Template */
-        $template = $this->_emailFactory->create(
-            ['data' => [
-                'area' => \Magento\Framework\App\Area::AREA_FRONTEND,
-                'store' => $storeId
-            ]]
-        );
-        $id = (int) $this->getRequest()->getParam('id');
-        if ($id) {
+        $template = $this->_emailFactory->create();
+
+        if ($id = (int)$this->getRequest()->getParam('id')) {
             $template->load($id);
         } else {
             $template->setTemplateType($this->getRequest()->getParam('type'));
@@ -67,7 +66,7 @@ class Preview extends \Magento\Backend\Block\Widget
 
         $template->setTemplateText($this->_maliciousCode->filter($template->getTemplateText()));
 
-        \Magento\Framework\Profiler::start("email_template_proccessing");
+        \Magento\Framework\Profiler::start($this->profilerName);
 
         $template->emulateDesign($storeId);
         $templateProcessed = $this->_appState->emulateAreaCode(
@@ -80,7 +79,7 @@ class Preview extends \Magento\Backend\Block\Widget
             $templateProcessed = "<pre>" . htmlspecialchars($templateProcessed) . "</pre>";
         }
 
-        \Magento\Framework\Profiler::stop("email_template_proccessing");
+        \Magento\Framework\Profiler::stop($this->profilerName);
 
         return $templateProcessed;
     }

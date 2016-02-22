@@ -33,6 +33,11 @@ class InterceptionConfigurationBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $cacheManager;
 
+    /**
+     * @var \Magento\Framework\ObjectManager\InterceptableValidator|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $interceptableValidator;
+
     protected function setUp()
     {
         $this->interceptionConfig = $this->getMock(
@@ -56,13 +61,21 @@ class InterceptionConfigurationBuilderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->interceptableValidator = $this->getMock(
+            'Magento\Framework\ObjectManager\InterceptableValidator',
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->typeReader = $this->getMock('Magento\Setup\Module\Di\Code\Reader\Type', ['isConcrete'], [], '', false);
         $this->model = new \Magento\Setup\Module\Di\Code\Generator\InterceptionConfigurationBuilder(
             $this->interceptionConfig,
             $this->pluginList,
             $this->typeReader,
-            $this->cacheManager
+            $this->cacheManager,
+            $this->interceptableValidator
         );
     }
 
@@ -82,6 +95,11 @@ class InterceptionConfigurationBuilderTest extends \PHPUnit_Framework_TestCase
                 ['Class1', true],
                 ['instance', true],
             ]);
+        $this->interceptableValidator->expects($this->any())
+            ->method('validate')
+            ->with('Class1')
+            ->willReturn(true);
+
         $this->cacheManager->expects($this->once())
             ->method('setEnabled')
             ->with([CompiledConfig::TYPE_IDENTIFIER], true);

@@ -6,8 +6,6 @@
 
 namespace Magento\Braintree\Test\Unit\Model\ConfigProvider;
 
-use Magento\Braintree\Model\Observer;
-use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Braintree\Model\PaymentMethod;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 

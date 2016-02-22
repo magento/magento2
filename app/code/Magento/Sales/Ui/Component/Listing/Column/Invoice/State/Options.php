@@ -6,7 +6,7 @@
 namespace Magento\Sales\Ui\Component\Listing\Column\Invoice\State;
 
 use Magento\Framework\Data\OptionSourceInterface;
-use Magento\Sales\Model\Order\InvoiceFactory;
+use Magento\Sales\Api\InvoiceRepositoryInterface;
 
 /**
  * Class Options
@@ -19,18 +19,18 @@ class Options implements OptionSourceInterface
     protected $options;
 
     /**
-     * @var InvoiceFactory
+     * @var InvoiceRepositoryInterface
      */
-    protected $invoiceFactory;
+    protected $invoiceRepository;
 
     /**
      * Constructor
      *
-     * @param InvoiceFactory $invoiceFactory
+     * @param InvoiceRepositoryInterface $invoiceRepository
      */
-    public function __construct(InvoiceFactory $invoiceFactory)
+    public function __construct(InvoiceRepositoryInterface $invoiceRepository)
     {
-        $this->invoiceFactory = $invoiceFactory;
+        $this->invoiceRepository = $invoiceRepository;
     }
 
     /**
@@ -44,7 +44,7 @@ class Options implements OptionSourceInterface
             $this->options = [];
 
             /** @var \Magento\Framework\Phrase $state */
-            foreach ($this->invoiceFactory->create()->getStates() as $id => $state) {
+            foreach ($this->invoiceRepository->create()->getStates() as $id => $state) {
                 $this->options[] = [
                     'value' => $id,
                     'label' => $state->render()

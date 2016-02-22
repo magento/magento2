@@ -4,23 +4,32 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+use \Magento\Framework\App\ProductMetadata;
+use \Magento\Framework\Composer\ComposerJsonFinder;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
-use Magento\Framework\AppInterface;
+if (PHP_SAPI !== 'cli') {
+    echo 'bin/magento must be run as a CLI application';
+    exit(1);
+}
 
 try {
     require __DIR__ . '/../app/bootstrap.php';
-    if (PHP_SAPI == 'cli') {
-        // For Cli we are using our customized error handler
-        $handler = new \Magento\Framework\App\ErrorHandler();
-        set_error_handler([$handler, 'handler']);
-
-        $application = new Magento\Framework\Console\Cli('Magento CLI', AppInterface::VERSION);
-        $application->run();
-    }
-
 } catch (\Exception $e) {
-    if (PHP_SAPI == 'cli') {
-        echo 'Autoload error: ' . $e->getMessage();
-    }
+    echo 'Autoload error: ' . $e->getMessage();
     exit(1);
+}
+try {
+    $handler = new \Magento\Framework\App\ErrorHandler();
+    set_error_handler([$handler, 'handler']);
+    $productMetadata = new ProductMetadata(new ComposerJsonFinder(new DirectoryList(BP)));
+    $application = new Magento\Framework\Console\Cli('Magento CLI', $productMetadata->getVersion());
+    $application->run();
+} catch (\Exception $e) {
+    while ($e) {
+        echo $e->getMessage();
+        echo $e->getTraceAsString();
+        echo "\n\n";
+        $e = $e->getPrevious();
+    }
 }

@@ -12,7 +12,7 @@ use Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Api\StockItemRepositoryInterface as StockItemRepositoryInterface;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
-use Magento\CatalogInventory\Model\Resource\Stock\Item as StockItemResource;
+use Magento\CatalogInventory\Model\ResourceModel\Stock\Item as StockItemResource;
 use Magento\CatalogInventory\Model\Spi\StockStateProviderInterface;
 use Magento\Framework\DB\MapperFactory;
 use Magento\Framework\DB\QueryBuilderFactory;
@@ -20,6 +20,7 @@ use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 
 /**
  * Class StockItemRepository
@@ -78,6 +79,11 @@ class StockItemRepository implements StockItemRepositoryInterface
     protected $indexProcessor;
 
     /**
+     * @var DateTime
+     */
+    protected $dateTime;
+
+    /**
      * @param StockConfigurationInterface $stockConfiguration
      * @param StockStateProviderInterface $stockStateProvider
      * @param StockItemResource $resource
@@ -88,6 +94,7 @@ class StockItemRepository implements StockItemRepositoryInterface
      * @param MapperFactory $mapperFactory
      * @param TimezoneInterface $localeDate
      * @param Processor $indexProcessor
+     * @param DateTime $dateTime
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -100,7 +107,8 @@ class StockItemRepository implements StockItemRepositoryInterface
         QueryBuilderFactory $queryBuilderFactory,
         MapperFactory $mapperFactory,
         TimezoneInterface $localeDate,
-        Processor $indexProcessor
+        Processor $indexProcessor,
+        DateTime $dateTime
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->stockStateProvider = $stockStateProvider;
@@ -113,6 +121,7 @@ class StockItemRepository implements StockItemRepositoryInterface
         $this->mapperFactory = $mapperFactory;
         $this->localeDate = $localeDate;
         $this->indexProcessor = $indexProcessor;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -137,9 +146,7 @@ class StockItemRepository implements StockItemRepositoryInterface
                 // if qty is below notify qty, update the low stock date to today date otherwise set null
                 $stockItem->setLowStockDate(null);
                 if ($this->stockStateProvider->verifyNotification($stockItem)) {
-                    $stockItem->setLowStockDate(
-                        (new \DateTime())->format('Y-m-d H:i:s')
-                    );
+                    $stockItem->setLowStockDate($this->dateTime->gmtDate());
                 }
                 $stockItem->setStockStatusChangedAuto(0);
                 if ($stockItem->hasStockStatusChangedAutomaticallyFlag()) {

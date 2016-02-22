@@ -69,6 +69,11 @@ class SourceTest extends \PHPUnit_Framework_TestCase
      */
     private $chain;
 
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $readFactory;
+
     protected function setUp()
     {
         $this->preProcessorPool = $this->getMock(
@@ -94,42 +99,48 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $themeList->expects($this->any())
             ->method('getThemeByFullPath')
             ->with('frontend/magento_theme')
-            ->will($this->returnValue($this->theme));
+            ->willReturn($this->theme);
+
+        $this->readFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
 
         $this->initFilesystem();
 
         $this->object = new Source(
-            $this->filesystem, $this->preProcessorPool, $this->viewFileResolution, $themeList, $this->chainFactory
+            $this->filesystem,
+            $this->readFactory,
+            $this->preProcessorPool,
+            $this->viewFileResolution,
+            $themeList,
+            $this->chainFactory
         );
     }
 
     /**
-     * @param $origFile
-     * @param $origPath
-     * @param $origContent
-     * @param $isMaterialization
+     * @param string $origFile
+     * @param string $origPath
+     * @param string $origContent
+     * @param bool $isMaterialization
+     * @param bool $isExist
      *
      * @dataProvider getFileDataProvider
      */
-    public function testGetFile($origFile, $origPath, $origContent, $isMaterialization)
+    public function testGetFile($origFile, $origPath, $origContent, $isMaterialization, $isExist)
     {
         $filePath = 'some/file.ext';
+        $read = $this->getMock('Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
+        $read->expects($this->at(0))->method('readFile')->with($origPath)->willReturn($origContent);
+        $this->readFactory->expects($this->atLeastOnce())->method('create')->willReturn($read);
         $this->viewFileResolution->expects($this->once())
             ->method('getFile')
             ->with('frontend', $this->theme, 'en_US', $filePath, 'Magento_Module')
-            ->will($this->returnValue($origFile));
-        $this->rootDirRead->expects($this->once())
-            ->method('getRelativePath')
-            ->with($origFile)
-            ->will($this->returnValue($origPath));
-        $this->rootDirRead->expects($this->once())
-            ->method('readFile')
-            ->with($origPath)
-            ->will($this->returnValue($origContent));
+            ->willReturn($origFile);
         $this->preProcessorPool->expects($this->once())
             ->method('process')
             ->with($this->chain);
-        if ($isMaterialization) {
+        $this->staticDirRead->expects($this->any())
+            ->method('isExist')
+            ->willReturn($isExist);
+        if ($isMaterialization || !$isExist) {
             $this->chain
                 ->expects($this->once())
                 ->method('isChanged')
@@ -147,13 +158,17 @@ class SourceTest extends \PHPUnit_Framework_TestCase
                 ->with('view_preprocessed/source/some/file.ext', 'processed');
             $this->varDir->expects($this->once())
                 ->method('getAbsolutePath')
-                ->with('view_preprocessed/source/some/file.ext')->will($this->returnValue('result'));
+                ->willReturn('var');
+            $read->expects($this->once())
+                ->method('getAbsolutePath')
+                ->with('view_preprocessed/source/some/file.ext')
+                ->willReturn('result');
         } else {
             $this->varDir->expects($this->never())->method('writeFile');
-            $this->rootDirRead->expects($this->once())
+            $read->expects($this->at(1))
                 ->method('getAbsolutePath')
-                ->with('source/some/file.ext')
-                ->will($this->returnValue('result'));
+                ->with('file.ext')
+                ->willReturn('result');
         }
         $this->assertSame('result', $this->object->getFile($this->getAsset()));
     }
@@ -197,10 +212,10 @@ class SourceTest extends \PHPUnit_Framework_TestCase
     public function getFileDataProvider()
     {
         return [
-            ['/root/some/file.ext', 'source/some/file.ext', 'processed', false],
-            ['/root/some/file.ext', 'source/some/file.ext', 'not_processed', true],
-            ['/root/some/file.ext2', 'source/some/file.ext2', 'processed', true],
-            ['/root/some/file.ext2', 'source/some/file.ext2', 'not_processed', true],
+            ['/root/some/file.ext', 'file.ext', 'processed', false, true],
+            ['/root/some/file.ext', 'file.ext', 'not_processed', true, false],
+            ['/root/some/file.ext2', 'file.ext2', 'processed', true, true],
+            ['/root/some/file.ext2', 'file.ext2', 'not_processed', true, false],
         ];
     }
 
@@ -219,11 +234,11 @@ class SourceTest extends \PHPUnit_Framework_TestCase
 
         $this->filesystem->expects($this->any())
             ->method('getDirectoryRead')
-            ->will($this->returnValueMap($readDirMap));
+            ->willReturnMap($readDirMap);
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::VAR_DIR)
-            ->will($this->returnValue($this->varDir));
+            ->willReturn($this->varDir);
     }
 
     /**
@@ -252,19 +267,19 @@ class SourceTest extends \PHPUnit_Framework_TestCase
         $asset = $this->getMock('Magento\Framework\View\Asset\File', [], [], '', false);
         $asset->expects($this->any())
             ->method('getContext')
-            ->will($this->returnValue($context));
+            ->willReturn($context);
         $asset->expects($this->any())
             ->method('getFilePath')
-            ->will($this->returnValue('some/file.ext'));
+            ->willReturn('some/file.ext');
         $asset->expects($this->any())
             ->method('getPath')
-            ->will($this->returnValue('some/file.ext'));
+            ->willReturn('some/file.ext');
         $asset->expects($this->any())
             ->method('getModule')
-            ->will($this->returnValue('Magento_Module'));
+            ->willReturn('Magento_Module');
         $asset->expects($this->any())
             ->method('getContentType')
-            ->will($this->returnValue('ext'));
+            ->willReturn('ext');
 
         return $asset;
     }
