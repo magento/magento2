@@ -8,6 +8,7 @@ namespace Magento\Config\Model\Config\Backend;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
+use Magento\MediaStorage\Model\File\Uploader;
 
 /**
  * System config file field backend model
@@ -84,18 +85,11 @@ class File extends \Magento\Framework\App\Config\Value
     public function beforeSave()
     {
         $value = $this->getValue();
-        $tmpName = $this->_requestData->getTmpName($this->getPath());
-        $file = [];
-        if ($tmpName) {
-            $file['tmp_name'] = $tmpName;
-            $file['name'] = $this->_requestData->getName($this->getPath());
-        } elseif (!empty($value['tmp_name'])) {
-            $file['tmp_name'] = $value['tmp_name'];
-            $file['name'] = $value['value'];
-        }
+        $file = $this->getFileData();
         if (!empty($file)) {
             $uploadDir = $this->_getUploadDir();
             try {
+                /** @var Uploader $uploader */
                 $uploader = $this->_uploaderFactory->create(['fileId' => $file]);
                 $uploader->setAllowedExtensions($this->_getAllowedExtensions());
                 $uploader->setAllowRenameFiles(true);
@@ -121,6 +115,27 @@ class File extends \Magento\Framework\App\Config\Value
         }
 
         return $this;
+    }
+
+    /**
+     * Receiving uploaded file data
+     *
+     * @return array
+     */
+    protected function getFileData()
+    {
+        $file = [];
+        $value = $this->getValue();
+        $tmpName = $this->_requestData->getTmpName($this->getPath());
+        if ($tmpName) {
+            $file['tmp_name'] = $tmpName;
+            $file['name'] = $this->_requestData->getName($this->getPath());
+        } elseif (!empty($value['tmp_name'])) {
+            $file['tmp_name'] = $value['tmp_name'];
+            $file['name'] = isset($value['value']) ? $value['value'] : $value['name'];
+        }
+
+        return $file;
     }
 
     /**

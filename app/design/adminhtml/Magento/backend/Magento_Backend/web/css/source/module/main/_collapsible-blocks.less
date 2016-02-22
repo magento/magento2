@@ -167,12 +167,35 @@
         transform: none;
         visibility: visible;
     }
+
+    .admin__collapsible-title {
+        font-size: 1.6rem;
+        padding-left: (@collapsible-title-icon__size + 1rem);
+
+        &:before {
+            left: 0;
+            right: auto;
+            top: 2rem;
+        }
+
+        &._loading {
+            .admin__page-nav-item-message-loader {
+                left: 0;
+                right: auto;
+            }
+        }
+    }
+
+    .admin__collapsible-block-wrapper {
+        margin-left: @collapsible-sub-block__indent;
+    }
 }
 
 .fieldset-wrapper {
     .admin__collapsible-block-wrapper {
         .fieldset-wrapper-title {
             .lib-css(user-select, none, 1);
+
             .actions {
                 position: absolute;
                 right: 1.3rem;
@@ -181,24 +204,6 @@
 
             .draggable-handle {
                 top: 2.4rem;
-            }
-        }
-
-        .admin__collapsible-title {
-            font-size: 1.6rem;
-            padding-left: (@collapsible-title-icon__size + 1rem);
-
-            &:before {
-                left: 0;
-                right: auto;
-                top: 2rem;
-            }
-
-            &._loading {
-                .admin__page-nav-item-message-loader {
-                    left: 0;
-                    right: auto;
-                }
             }
         }
     }
