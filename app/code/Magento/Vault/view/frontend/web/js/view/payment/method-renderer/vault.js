@@ -46,14 +46,14 @@ define(
              * @returns {String}
              */
             getTitle: function () {
-                return this.title;
+                return '';
             },
 
             /**
              * @returns {String}
              */
             getToken: function () {
-                return this.token;
+                return '';
             },
 
             /**
@@ -71,15 +71,51 @@ define(
             },
 
             /**
+             * Get last 4 digits of card
+             * @returns {String}
+             */
+            getMaskedCard: function () {
+                return '';
+            },
+
+            /**
+             * Get expiration date
+             * @returns {String}
+             */
+            getExpirationDate: function () {
+                return '';
+            },
+
+            /**
+             * Get card type
+             * @returns {String}
+             */
+            getCardType: function () {
+                return '';
+            },
+
+            /**
+             * @param {String} type
+             * @returns {Boolean}
+             */
+            getIcons: function (type) {
+                return window.checkoutConfig.payment.ccform.icons.hasOwnProperty(type) ?
+                    window.checkoutConfig.payment.ccform.icons[type]
+                    : false;
+            },
+
+            /**
              * @returns {*}
              */
             getData: function () {
-                return {
-                    method: this.getCode(),
-                    'additional_data': {
-                        token: this.getToken()
-                    }
+                var data = {
+                    method: this.getCode()
                 };
+
+                data['additional_data'] = {};
+                data['additional_data']['public_hash'] = this.getToken();
+
+                return data;
             }
         });
     }

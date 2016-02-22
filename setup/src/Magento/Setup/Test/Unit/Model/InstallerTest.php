@@ -306,20 +306,20 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     {
         $this->filePermissions
             ->expects($this->once())
-            ->method('getMissingWritableDirectoriesForInstallation')
+            ->method('getMissingWritablePathsForInstallation')
             ->willReturn([]);
         $this->object->checkInstallationFilePermissions();
     }
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Missing write permissions to the following directories: 'foo' 'bar'
+     * @expectedExceptionMessage Missing write permissions to the following paths: 'foo' 'bar'
      */
     public function testCheckInstallationFilePermissionsError()
     {
         $this->filePermissions
             ->expects($this->once())
-            ->method('getMissingWritableDirectoriesForInstallation')
+            ->method('getMissingWritablePathsForInstallation')
             ->willReturn(['foo', 'bar']);
         $this->object->checkInstallationFilePermissions();
     }
@@ -338,7 +338,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateModulesSequence()
     {
-        $this->cleanupFiles->expects($this->once())->method('clearCodeGeneratedClasses')->will(
+        $this->cleanupFiles->expects($this->once())->method('clearCodeGeneratedFiles')->will(
             $this->returnValue(
                 [
                     "The directory '/generation' doesn't exist - skipping cleanup",

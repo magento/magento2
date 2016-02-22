@@ -35,9 +35,9 @@
         }
 
         .product-item-name {
+            display: inline-block;
             font-weight: @font-weight__regular;
             margin-bottom: @indent__s;
-            display: inline-block;
         }
 
         .price-box {
@@ -57,18 +57,26 @@
         }
 
         .stock.unavailable {
-            margin: 0;
-            white-space: nowrap;
-            text-transform: none;
             font-weight: normal;
+            margin: 0;
+            text-transform: none;
+            white-space: nowrap;
         }
     }
 
-    .page-product-grouped .product-info-price {
-        float: right;
-        display: block;
-        width: auto;
-        border: 0;
+    .page-product-grouped {
+        .product-info-price {
+            border: 0;
+            display: block;
+            float: right;
+            width: auto;
+        }
+
+        .product-info-main {
+            .alert {
+                clear: left;
+            }
+        }
     }
 }
 
@@ -111,6 +119,16 @@
                         }
                     }
                 }
+            }
+        }
+    }
+
+    .page-product-grouped {
+        .product-info-main {
+            .product-info-stock-sku {
+                display: block;
+                padding-left: @indent__s;
+                text-align: left;
             }
         }
     }

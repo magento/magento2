@@ -54,15 +54,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \LogicException
-     * @expectedExceptionMessage "handler" element must be declared for topic "customerUpdated", because it has
-     */
-    public function testGetTopicsExceptionMissingHandler()
-    {
-        $this->getConfigInstance(__DIR__ . '/_files/communication_missing_handler.xml')->getTopics();
-    }
-
-    /**
-     * @expectedException \LogicException
      * @expectedExceptionMessage Service method specified in the definition of topic "customerRetrieved" is not
      */
     public function testGetTopicsExceptionNotExistingServiceMethod()
@@ -304,12 +295,20 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 'methodsMap' => $methodsMap
             ]
         );
+        $readersConfig = [
+            'xmlReader' => ['reader' => $xmlReader, 'sortOrder' => 10],
+            'envReader' => ['reader' => $envReader, 'sortOrder' => 20]
+        ];
+        /** @var \Magento\Framework\Communication\Config\CompositeReader $reader */
+        $reader = $objectManager->create(
+            'Magento\Framework\Communication\Config\CompositeReader',
+            ['readers' => $readersConfig]
+        );
         /** @var \Magento\Framework\Communication\Config $config */
         $configData = $objectManager->create(
             'Magento\Framework\Communication\Config\Data',
             [
-                'reader' => $xmlReader,
-                'envReader' => $envReader
+                'reader' => $reader
             ]
         );
         return $objectManager->create(

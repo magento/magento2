@@ -41,6 +41,7 @@
             <data name="attribute/data/is_global" xsi:type="string">Global</data>
             <data name="attribute/data/is_filterable" xsi:type="string">Filterable (with results)</data>
             <data name="attribute/data/is_filterable_in_search" xsi:type="string">Yes</data>
+            <data name="attributeValue" xsi:type="string">white</data>
             <data name="assertProduct/data/name" xsi:type="string">Product name</data>
             <data name="assertProduct/data/sku" xsi:type="string">product-sku</data>
             <data name="assertProduct/data/price" xsi:type="string">35</data>

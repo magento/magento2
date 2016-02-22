@@ -8,6 +8,7 @@ namespace Magento\Ui\Test\Block\Adminhtml;
 
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Client\ElementInterface;
+use Magento\Mtf\Fixture\InjectableFixture;
 
 /**
  * Is used to represent a new unified form with collapsible sections on the page.
@@ -35,6 +36,13 @@ class FormSections extends AbstractFormContainers
      */
     protected $collapsible =
         'div[contains(@class,"fieldset-wrapper")][contains(@class,"admin__collapsible-block-wrapper")]';
+
+    /**
+     * Locator for opened collapsible tab.
+     *
+     * @var string
+     */
+    protected $opened = '._show';
 
     /**
      * Get Section class.
@@ -76,9 +84,11 @@ class FormSections extends AbstractFormContainers
      */
     public function openSection($sectionName)
     {
-        $this->browser->find($this->header)->hover();
-        if ($this->isCollapsible($sectionName)) {
+        if ($this->isCollapsible($sectionName) && !$this->isCollapsed($sectionName)) {
             $this->getSectionTitleElement($sectionName)->click();
+        } else {
+            //Scroll to the top of the page so that the page actions header does not overlap any controls
+            $this->browser->find($this->header)->hover();
         }
         return $this;
     }
@@ -96,5 +106,38 @@ class FormSections extends AbstractFormContainers
             return false;
         };
         return $title->find('parent::' . $this->collapsible, Locator::SELECTOR_XPATH)->isVisible();
+    }
+
+    /**
+     * Check if collapsible section is opened.
+     *
+     * @param string $sectionName
+     * @return bool
+     */
+    public function isCollapsed($sectionName)
+    {
+        return $this->getContainerElement($sectionName)->find($this->opened)->isVisible();
+    }
+
+    /**
+     * Get Require Notice Attributes.
+     *
+     * @param InjectableFixture $product
+     * @return array
+     */
+    public function getRequireNoticeAttributes(InjectableFixture $product)
+    {
+        $data = [];
+        $tabs = $this->getFixtureFieldsByContainers($product);
+        foreach (array_keys($tabs) as $tabName) {
+            $tab = $this->getSection($tabName);
+            $this->openSection($tabName);
+            $errors = $tab->getJsErrors();
+            if (!empty($errors)) {
+                $data[$tabName] = $errors;
+            }
+        }
+
+        return $data;
     }
 }

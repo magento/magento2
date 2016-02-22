@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b69b31db9306befcb77bfd832e05697f",
-    "content-hash": "1c2956e41c0b5e2d3a52783a07f4564a",
+    "hash": "ac56596efe7d8aa9a070776885b20938",
+    "content-hash": "cedec14d2f9b4094b7aca6bdbbfc17c9",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -53,6 +53,83 @@
             ],
             "description": "Braintree PHP Client Library",
             "time": "2015-11-19 19:14:47"
+        },
+        {
+            "name": "colinmollenhour/credis",
+            "version": "1.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/colinmollenhour/credis.git",
+                "reference": "409edfd0ea81f5cb74afbdb86df54890c207b5e4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/colinmollenhour/credis/zipball/409edfd0ea81f5cb74afbdb86df54890c207b5e4",
+                "reference": "409edfd0ea81f5cb74afbdb86df54890c207b5e4",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "Client.php",
+                    "Cluster.php",
+                    "Sentinel.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Colin Mollenhour",
+                    "email": "colin@mollenhour.com"
+                }
+            ],
+            "description": "Credis is a lightweight interface to the Redis key-value store which wraps the phpredis library when available for better performance.",
+            "homepage": "https://github.com/colinmollenhour/credis",
+            "time": "2015-11-28 01:20:04"
+        },
+        {
+            "name": "colinmollenhour/php-redis-session-abstract",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/colinmollenhour/php-redis-session-abstract.git",
+                "reference": "1308ddc08e2adbe303f7f8b8ead9beb5f2f2adf9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/colinmollenhour/php-redis-session-abstract/zipball/1308ddc08e2adbe303f7f8b8ead9beb5f2f2adf9",
+                "reference": "1308ddc08e2adbe303f7f8b8ead9beb5f2f2adf9",
+                "shasum": ""
+            },
+            "require": {
+                "colinmollenhour/credis": "1.6",
+                "magento/zendframework1": "1.12.16",
+                "php": "~5.5.0|~5.6.0|~7.0.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Cm\\RedisSession\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Colin Mollenhour"
+                }
+            ],
+            "description": "A Redis-based session handler with optimistic locking",
+            "homepage": "https://github.com/colinmollenhour/php-redis-session-abstract",
+            "time": "2016-01-14 16:04:27"
         },
         {
             "name": "composer/composer",
@@ -124,20 +201,20 @@
         },
         {
             "name": "justinrainbow/json-schema",
-            "version": "1.5.0",
+            "version": "1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/justinrainbow/json-schema.git",
-                "reference": "a4bee9f4b344b66e0a0d96c7afae1e92edf385fe"
+                "reference": "cc84765fb7317f6b07bd8ac78364747f95b86341"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/a4bee9f4b344b66e0a0d96c7afae1e92edf385fe",
-                "reference": "a4bee9f4b344b66e0a0d96c7afae1e92edf385fe",
+                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/cc84765fb7317f6b07bd8ac78364747f95b86341",
+                "reference": "cc84765fb7317f6b07bd8ac78364747f95b86341",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.2"
+                "php": ">=5.3.29"
             },
             "require-dev": {
                 "json-schema/json-schema-test-suite": "1.1.0",
@@ -150,7 +227,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4.x-dev"
+                    "dev-master": "1.6.x-dev"
                 }
             },
             "autoload": {
@@ -186,7 +263,7 @@
                 "json",
                 "schema"
             ],
-            "time": "2015-09-08 22:28:04"
+            "time": "2016-01-25 15:43:01"
         },
         {
             "name": "magento/composer",
@@ -778,7 +855,7 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.0",
+            "version": "v2.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
@@ -838,16 +915,16 @@
         },
         {
             "name": "symfony/finder",
-            "version": "v2.8.0",
+            "version": "v2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/finder.git",
-                "reference": "ead9b07af4ba77b6507bee697396a5c79e633f08"
+                "reference": "c90fabdd97e431ee19b6383999cf35334dff27da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/finder/zipball/ead9b07af4ba77b6507bee697396a5c79e633f08",
-                "reference": "ead9b07af4ba77b6507bee697396a5c79e633f08",
+                "url": "https://api.github.com/repos/symfony/finder/zipball/c90fabdd97e431ee19b6383999cf35334dff27da",
+                "reference": "c90fabdd97e431ee19b6383999cf35334dff27da",
                 "shasum": ""
             },
             "require": {
@@ -883,20 +960,20 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
-            "time": "2015-10-30 20:15:42"
+            "time": "2016-01-14 08:26:52"
         },
         {
             "name": "symfony/process",
-            "version": "v2.8.0",
+            "version": "v2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/process.git",
-                "reference": "1b988a88e3551102f3c2d9e1d47a18c3a78d6312"
+                "reference": "6f1979c3b0f4c22c77a8a8971afaa7dd07f082ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/process/zipball/1b988a88e3551102f3c2d9e1d47a18c3a78d6312",
-                "reference": "1b988a88e3551102f3c2d9e1d47a18c3a78d6312",
+                "url": "https://api.github.com/repos/symfony/process/zipball/6f1979c3b0f4c22c77a8a8971afaa7dd07f082ac",
+                "reference": "6f1979c3b0f4c22c77a8a8971afaa7dd07f082ac",
                 "shasum": ""
             },
             "require": {
@@ -932,7 +1009,7 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
-            "time": "2015-11-30 12:35:10"
+            "time": "2016-01-06 09:59:23"
         },
         {
             "name": "tedivm/jshrink",
@@ -2581,16 +2658,16 @@
         },
         {
             "name": "fabpot/php-cs-fixer",
-            "version": "v1.11",
+            "version": "v1.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfPHP/PHP-CS-Fixer.git",
-                "reference": "bd3ec2c2b774e0e127ac2c737ec646d9cf2f9eef"
+                "reference": "2c9f8298181f059c5077abda78019b9a0c9a7cc0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/bd3ec2c2b774e0e127ac2c737ec646d9cf2f9eef",
-                "reference": "bd3ec2c2b774e0e127ac2c737ec646d9cf2f9eef",
+                "url": "https://api.github.com/repos/FriendsOfPHP/PHP-CS-Fixer/zipball/2c9f8298181f059c5077abda78019b9a0c9a7cc0",
+                "reference": "2c9f8298181f059c5077abda78019b9a0c9a7cc0",
                 "shasum": ""
             },
             "require": {
@@ -2631,7 +2708,7 @@
                 }
             ],
             "description": "A tool to automatically fix PHP code style",
-            "time": "2015-12-01 22:34:33"
+            "time": "2016-01-20 19:00:28"
         },
         {
             "name": "league/climate",
@@ -3672,16 +3749,16 @@
         },
         {
             "name": "symfony/config",
-            "version": "v2.8.0",
+            "version": "v2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
-                "reference": "f21c97aec1b5302d2dc0d17047ea8f4e4ff93aae"
+                "reference": "41ee6c70758f40fa1dbf90d019ae0a66c4a09e74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/config/zipball/f21c97aec1b5302d2dc0d17047ea8f4e4ff93aae",
-                "reference": "f21c97aec1b5302d2dc0d17047ea8f4e4ff93aae",
+                "url": "https://api.github.com/repos/symfony/config/zipball/41ee6c70758f40fa1dbf90d019ae0a66c4a09e74",
+                "reference": "41ee6c70758f40fa1dbf90d019ae0a66c4a09e74",
                 "shasum": ""
             },
             "require": {
@@ -3718,20 +3795,20 @@
             ],
             "description": "Symfony Config Component",
             "homepage": "https://symfony.com",
-            "time": "2015-11-23 20:38:01"
+            "time": "2016-01-03 15:33:41"
         },
         {
             "name": "symfony/dependency-injection",
-            "version": "v2.8.0",
+            "version": "v2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/dependency-injection.git",
-                "reference": "1ac8ce1a1cff7ff9467d44bc71b0f71dfa751ba4"
+                "reference": "ba94a914e244e0d05f0aaef460d5558d5541d2b1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/1ac8ce1a1cff7ff9467d44bc71b0f71dfa751ba4",
-                "reference": "1ac8ce1a1cff7ff9467d44bc71b0f71dfa751ba4",
+                "url": "https://api.github.com/repos/symfony/dependency-injection/zipball/ba94a914e244e0d05f0aaef460d5558d5541d2b1",
+                "reference": "ba94a914e244e0d05f0aaef460d5558d5541d2b1",
                 "shasum": ""
             },
             "require": {
@@ -3780,20 +3857,20 @@
             ],
             "description": "Symfony DependencyInjection Component",
             "homepage": "https://symfony.com",
-            "time": "2015-11-30 06:56:28"
+            "time": "2016-01-12 17:46:01"
         },
         {
             "name": "symfony/filesystem",
-            "version": "v2.8.0",
+            "version": "v2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
-                "reference": "3e661a0d521ac67496515fa6e6704bd61bcfff60"
+                "reference": "637b64d0ee10f44ae98dbad651b1ecdf35a11e8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/filesystem/zipball/3e661a0d521ac67496515fa6e6704bd61bcfff60",
-                "reference": "3e661a0d521ac67496515fa6e6704bd61bcfff60",
+                "url": "https://api.github.com/repos/symfony/filesystem/zipball/637b64d0ee10f44ae98dbad651b1ecdf35a11e8c",
+                "reference": "637b64d0ee10f44ae98dbad651b1ecdf35a11e8c",
                 "shasum": ""
             },
             "require": {
@@ -3829,11 +3906,11 @@
             ],
             "description": "Symfony Filesystem Component",
             "homepage": "https://symfony.com",
-            "time": "2015-11-23 10:19:46"
+            "time": "2016-01-13 10:28:07"
         },
         {
             "name": "symfony/stopwatch",
-            "version": "v3.0.0",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stopwatch.git",
@@ -3882,16 +3959,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.8.0",
+            "version": "v2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "f79824187de95064a2f5038904c4d7f0227fedb5"
+                "reference": "34c8a4b51e751e7ea869b8262f883d008a2b81b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/f79824187de95064a2f5038904c4d7f0227fedb5",
-                "reference": "f79824187de95064a2f5038904c4d7f0227fedb5",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/34c8a4b51e751e7ea869b8262f883d008a2b81b8",
+                "reference": "34c8a4b51e751e7ea869b8262f883d008a2b81b8",
                 "shasum": ""
             },
             "require": {
@@ -3927,7 +4004,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2015-11-30 12:35:10"
+            "time": "2016-01-13 10:28:07"
         }
     ],
     "aliases": [],
@@ -3953,7 +4030,8 @@
         "ext-intl": "*",
         "ext-xsl": "*",
         "ext-mbstring": "*",
-        "ext-openssl": "*"
+        "ext-openssl": "*",
+        "ext-zip": "*"
     },
     "platform-dev": []
 }

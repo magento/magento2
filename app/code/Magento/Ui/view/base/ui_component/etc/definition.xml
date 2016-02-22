@@ -179,6 +179,24 @@
     <field class="Magento\Ui\Component\Form\Field"/>
 
     <!-- Form elements -->
+    <radioset class="Magento\Ui\Component\Form\Element\RadioSet">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/checkbox-set</item>
+                <item name="template" xsi:type="string">ui/form/element/checkbox-set</item>
+                <item name="isMultiselect" xsi:type="boolean">false</item>
+            </item>
+        </argument>
+    </radioset>
+    <checkboxset class="Magento\Ui\Component\Form\Element\CheckboxSet">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/checkbox-set</item>
+                <item name="template" xsi:type="string">ui/form/element/checkbox-set</item>
+                <item name="isMultiselect" xsi:type="boolean">true</item>
+            </item>
+        </argument>
+    </checkboxset>
     <wysiwyg class="Magento\Ui\Component\Form\Element\Wysiwyg">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
@@ -188,6 +206,15 @@
             </item>
         </argument>
     </wysiwyg>
+    <actionDelete class="Magento\Ui\Component\Form\Element\ActionDelete">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
+                <item name="elementTmpl" xsi:type="string">ui/dynamic-rows/cells/action-delete</item>
+                <item name="template" xsi:type="string">ui/dynamic-rows/cells/action-delete</item>
+            </item>
+        </argument>
+    </actionDelete>
     <input class="Magento\Ui\Component\Form\Element\Input">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
@@ -196,7 +223,7 @@
             </item>
         </argument>
     </input>
-    <hidden class="Magento\Ui\Component\Form\Element\Input">
+    <hidden class="Magento\Ui\Component\Form\Element\Hidden">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/form/element/abstract</item>
@@ -207,9 +234,8 @@
     <checkbox class="Magento\Ui\Component\Form\Element\Checkbox">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/form/element/boolean</item>
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/single-checkbox</item>
                 <item name="template" xsi:type="string">ui/form/field</item>
-                <item name="elementTmpl" xsi:type="string">ui/form/element/checkbox</item>
             </item>
         </argument>
     </checkbox>
@@ -246,6 +272,21 @@
             </item>
         </argument>
     </multiline>
+    <range class="Magento\Ui\Component\Form\Element\Range">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/filters/range</item>
+            </item>
+        </argument>
+    </range>
+    <fileUploader class="Magento\Ui\Component\Form\Element\DataType\Media">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/element/file-uploader</item>
+                <item name="template" xsi:type="string">ui/form/element/uploader/uploader</item>
+            </item>
+        </argument>
+    </fileUploader>
     <!-- Form elements -->
 
     <!-- Form element data types -->
@@ -305,6 +346,36 @@
             </item>
         </argument>
     </email>
+    <insertForm class="Magento\Ui\Component\Container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/components/insert-form</item>
+                <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                <item name="render_url" xsi:type="url" path="mui/index/render"/>
+                <item name="autoRender" xsi:type="boolean">false</item>
+                <item name="dataLinks" xsi:type="array">
+                    <item name="imports" xsi:type="boolean">false</item>
+                    <item name="exports" xsi:type="boolean">false</item>
+                </item>
+                <item name="realTimeLink" xsi:type="boolean">false</item>
+            </item>
+        </argument>
+    </insertForm>
+    <insertListing class="Magento\Ui\Component\Container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/components/insert-listing</item>
+                <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                <item name="render_url" xsi:type="url" path="mui/index/render"/>
+                <item name="autoRender" xsi:type="boolean">false</item>
+                <item name="dataLinks" xsi:type="array">
+                    <item name="imports" xsi:type="boolean">true</item>
+                    <item name="exports" xsi:type="boolean">false</item>
+                </item>
+                <item name="realTimeLink" xsi:type="boolean">true</item>
+            </item>
+        </argument>
+    </insertListing>
     <!-- Form element data types -->
 
 
@@ -359,6 +430,16 @@
             </item>
         </argument>
     </exportButton>
+    <modal class="Magento\Ui\Component\Container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/modal/modal-component</item>
+                <item name="options" xsi:type="array">
+                    <item name="type" xsi:type="string">slide</item>
+                </item>
+            </item>
+        </argument>
+    </modal>
     <columnsControls class="Magento\Ui\Component\Container">
          <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
@@ -373,6 +454,14 @@
             </item>
         </argument>
     </listingToolbar>
+    <dynamicRows class="Magento\Ui\Component\Container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/dynamic-rows</item>
+                <item name="template" xsi:type="string">ui/dynamic-rows/templates/default</item>
+            </item>
+        </argument>
+    </dynamicRows>
     <htmlContent class="Magento\Ui\Component\HtmlContent">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
@@ -380,4 +469,11 @@
             </item>
         </argument>
     </htmlContent>
+    <button class="Magento\Ui\Component\Container">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/components/button</item>
+            </item>
+        </argument>
+    </button>
 </components>
