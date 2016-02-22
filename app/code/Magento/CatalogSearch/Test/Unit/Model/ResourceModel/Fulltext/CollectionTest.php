@@ -38,10 +38,14 @@ class CollectionTest extends BaseCollectionTest
                 'storeManager' => $storeManager,
                 'universalFactory' => $universalFactory,
                 'scopeConfig' => $scopeConfig,
-                'searchCriteriaBuilder' => $criteriaBuilder,
-                'filterBuilder' => $filterBuilder,
             ]
         );
+
+        $search = $this->getMockForAbstractClass('\Magento\Search\Api\SearchInterface');
+        $this->model->setSearchCriteriaBuilder($criteriaBuilder);
+        $this->model->setSearch($search);
+        $this->model->setFilterBuilder($filterBuilder);
+
     }
 
     /**
