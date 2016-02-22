@@ -188,29 +188,7 @@ class Attributes extends AbstractModifier
                             'dataScope' => '',
                             'provider' => 'product_form.product_form_data_source',
                             'options' => [
-                                'title' => __('New Attribute'),
-                                'buttons' => [
-                                    [
-                                        'text' => 'Cancel',
-                                        'class' => 'action-secondary',
-                                        'actions' => [
-                                            [
-                                                'targetName' => '${ $.name }',
-                                                'actionName' => 'actionCancel'
-                                            ]
-                                        ]
-                                    ],
-                                    [
-                                        'text' => 'Save Attribute',
-                                        'class' => 'action-primary',
-                                        'actions' => [
-                                            [
-                                                'targetName' => '${ $.name }.product_attribute_add_form',
-                                                'actionName' => 'submit'
-                                            ]
-                                        ]
-                                    ],
-                                ]
+                                'title' => __('New Attribute')
                             ],
                         ]
                     ]
@@ -228,7 +206,8 @@ class Attributes extends AbstractModifier
                                     'render_url' => $this->urlBuilder->getUrl(
                                         'mui/index/render_handle',
                                         [
-                                            'handle' => 'catalog_product_attribute_edit_form'
+                                            'handle' => 'catalog_product_attribute_edit_form',
+                                            'buttons' => 1
                                         ]
                                     ),
                                     'autoRender' => false,
