@@ -143,28 +143,41 @@ class Attributes extends AbstractModifier
                         'config' => [
                             'formElement' => Container::NAME,
                             'componentType' => Container::NAME,
-                            'component' => 'Magento_Ui/js/form/components/button',
-                            'additionalClasses' => 'admin_field-complex',
-                            'template' => 'ui/form/components/button/container',
-                            'actions' => [
-                                [
-                                    'targetName' => 'product_form.product_form.add_attribute_modal.create_new_attribute_modal',
-                                    'actionName' => 'toggleModal',
+                            'content' => __('Select Attribute'),
+                            'label' => false,
+                            'template' => 'ui/form/components/complex',
+                        ],
+                    ],
+                ],
+                'children' => [
+                    'add_new_attribute_button' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'formElement' => Container::NAME,
+                                    'componentType' => Container::NAME,
+                                    'component' => 'Magento_Ui/js/form/components/button',
+                                    'additionalClasses' => '',
+                                    'actions' => [
+                                        [
+                                            'targetName' => 'product_form.product_form.add_attribute_modal'
+                                                . '.create_new_attribute_modal',
+                                            'actionName' => 'toggleModal',
+                                        ],
+                                        [
+                                            'targetName'
+                                            => 'product_form.product_form.add_attribute_modal'
+                                                . '.create_new_attribute_modal.product_attribute_add_form',
+                                            'actionName' => 'render'
+                                        ]
+                                    ],
+                                    'title' => __('Create New Attribute'),
+                                    'provider' => null,
                                 ],
-                                [
-                                    'targetName'
-                                    => 'product_form.product_form.add_attribute_modal.create_new_attribute_modal.product_attribute_add_form',
-                                    'actionName' => 'render'
-                                ]
                             ],
-                            'title' => __('Create New Attribute'),
-                            'additionalForGroup' => true,
-                            'provider' => false,
-                            'source' => 'add_attribute_modal',
-                            'displayArea' => 'insideGroup',
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
             ],
             'create_new_attribute_modal' => [
                 'arguments' => [
@@ -184,6 +197,16 @@ class Attributes extends AbstractModifier
                                             [
                                                 'targetName' => '${ $.name }',
                                                 'actionName' => 'actionCancel'
+                                            ]
+                                        ]
+                                    ],
+                                    [
+                                        'text' => 'Save Attribute',
+                                        'class' => 'action-primary',
+                                        'actions' => [
+                                            [
+                                                'targetName' => '${ $.name }.product_attribute_add_form',
+                                                'actionName' => 'submit'
                                             ]
                                         ]
                                     ],
@@ -210,7 +233,8 @@ class Attributes extends AbstractModifier
                                     ),
                                     'autoRender' => false,
                                     'ns' => 'product_attribute_add_form',
-                                    'externalProvider' => 'product_attribute_add_form.product_attribute_add_form_data_source',
+                                    'externalProvider' => 'product_attribute_add_form'
+                                        . '.product_attribute_add_form_data_source',
                                     'toolbarContainer' => '${ $.parentName }',
                                     'formSubmitType' => 'ajax',
                                 ]
@@ -235,7 +259,6 @@ class Attributes extends AbstractModifier
                             'behaviourType' => 'edit',
                             'externalFilterMode' => true,
                             'dataLinks' => ['imports' => false, 'exports' => true],
-
                             'formProvider' => 'ns = ${ $.namespace }, index = product_form',
                             'groupCode' => static::GROUP_CODE,
                             'groupName' => static::GROUP_NAME,
