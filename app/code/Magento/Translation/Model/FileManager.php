@@ -89,4 +89,13 @@ class FileManager
     {
         return $this->assetRepo->getStaticViewFileContext()->getPath();
     }
+
+    /**
+     * @param string $content
+     * @return void
+     */
+    public function updateTranslationFileContent($content)
+    {
+        $this->driverFile->filePutContents($this->getTranslationFileFullPath(), $content);
+    }
 }

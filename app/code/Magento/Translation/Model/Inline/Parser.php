@@ -9,6 +9,8 @@ namespace Magento\Translation\Model\Inline;
 /**
  * This class is responsible for parsing content and applying necessary html element
  * wrapping and client scripts for inline translation.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
 {
@@ -120,6 +122,41 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     protected $_appCache;
 
     /**
+     * @var \Magento\Translation\Model\Inline\CacheManager
+     */
+    private $cacheManager;
+
+    /**
+     * @return \Magento\Translation\Model\Inline\CacheManager
+     *
+     * @deprecated
+     */
+    private function getCacheManger()
+    {
+        if (!$this->cacheManager instanceof \Magento\Translation\Model\Inline\CacheManager) {
+            $this->cacheManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Translation\Model\Inline\CacheManager'
+            );
+        }
+        return $this->cacheManager;
+    }
+
+    /**
+     * For unit testing purpose only
+     *
+     * @param \Magento\Translation\Model\Inline\CacheManager $cacheManager
+     * @return void
+     * @deprecated
+     */
+    public function setCacheManager(\Magento\Translation\Model\Inline\CacheManager $cacheManager)
+    {
+        if ($this->cacheManager != null) {
+            throw new \LogicException(__('cacheManager is already set'));
+        }
+        $this->cacheManager = $cacheManager;
+    }
+
+    /**
      * Initialize base inline translation model
      *
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -179,7 +216,8 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
             }
             $resource->saveTranslate($param['original'], $param['custom'], null, $storeId);
         }
-        return $this;
+
+        return $this->getCacheManger()->updateAndGetTranslations();
     }
 
     /**
