@@ -61,9 +61,9 @@
 }
 
 .data-grid-cell-content {
+    display: inline-block;
     overflow: hidden;
     width: 100%;
-    display: inline-block;
 }
 
 body._in-resize {
@@ -118,6 +118,10 @@ body._in-resize {
         }
     }
 
+    &._dragged {
+        outline: 1px solid @data-grid-dragging-copy__outline-color;
+    }
+
     thead {
         background-color: transparent;
     }
@@ -158,6 +162,24 @@ body._in-resize {
             }
         }
 
+        &._dragged {
+            td {
+                background: @data-grid-td__dragging__background-color;
+            }
+        }
+
+        &._dragover-top {
+            td {
+                box-shadow: inset 0 @data-grid-horizontal-dragover-mark__width 0 0 @data-grid-horizontal-dragover-mark__color;
+            }
+        }
+
+        &._dragover-bottom {
+            td {
+                box-shadow: inset 0 -@data-grid-horizontal-dragover-mark__width 0 0 @data-grid-horizontal-dragover-mark__color;
+            }
+        }
+
         &:not(.data-grid-editable-row) {
             &:last-child {
                 td {
@@ -182,6 +204,14 @@ body._in-resize {
         &._resizing {
             border-left: 1px solid @color-blue-pure;
             border-right: 1px solid @color-blue-pure;
+        }
+
+        &._hidden {
+            display: none;
+        }
+
+        &._fit {
+            width: 1%;
         }
     }
 
@@ -348,10 +378,9 @@ body._in-resize {
         vertical-align: middle;
     }
 
-    .data-grid-onoff-label {
-        > span {
-            .lib-visually-hidden();
-        }
+    .data-grid-onoff-cell {
+        text-align: center;
+        width: 12rem;
     }
 
     .data-grid-actions-cell {
@@ -662,6 +691,20 @@ body._in-resize {
             min-width: 9rem;
         }
     }
+
+    //  Draggable row
+    .data-grid-draggable-row-cell {
+        width: 1%;
+
+        .draggable-handle {
+            &:extend(.abs-draggable-handle all);
+            padding: 0;
+        }
+    }
+
+    .action-delete {
+        &:extend(.abs-action-button-as-link all);
+    }
 }
 
 //  Ascend & Descend sort marker
@@ -701,6 +744,19 @@ body._in-resize {
 
     &:hover {
         cursor: pointer;
+    }
+}
+
+//  State actions column
+.data-grid-state-cell-inner {
+    display: block;
+    padding: @data-grid-checkbox-cell-inner__padding-top @data-grid-checkbox-cell-inner__padding-horizontal .9rem;
+    text-align: center;
+
+    > span {
+        display: inline-block;
+        font-style: @font-style__emphasis;
+        padding: .6rem 0;
     }
 }
 
@@ -744,14 +800,22 @@ body._in-resize {
 .data-grid-info-panel {
     box-shadow: 0 0 5px rgba(0, 0, 0, .5);
     margin: @data-grid-header-row__indent .1rem -(@data-grid-header-row__indent);
-    padding: @data-grid-th__padding-vertical;
 
     .messages {
-        margin-bottom: @indent__s;
+        overflow: hidden;
+
+        .message {
+            margin: @data-grid-th__padding-vertical;
+
+            &:last-child {
+                margin-bottom: @data-grid-th__padding-vertical;
+            }
+        }
     }
 }
 
 .data-grid-info-panel-actions {
+    padding: @data-grid-th__padding-vertical;
     text-align: right;
 }
 

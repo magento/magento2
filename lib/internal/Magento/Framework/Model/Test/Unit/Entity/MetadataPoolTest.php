@@ -26,6 +26,11 @@ class MetadataPoolTest extends \PHPUnit_Framework_TestCase
     protected $entityHydratorFactoryMock;
 
     /**
+     * @var \Magento\Framework\Model\Entity\SequenceFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $sequenceFactoryMock;
+
+    /**
      * @var EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entityMetadataMock;
@@ -42,6 +47,11 @@ class MetadataPoolTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+        $this->sequenceFactoryMock = $this->getMockBuilder(
+            'Magento\Framework\Model\Entity\SequenceFactory'
+        )->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
         $this->entityMetadataMock = $this->getMockBuilder(EntityMetadata::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -55,20 +65,33 @@ class MetadataPoolTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetMetadata($entityType, $metadata)
     {
+        $sequence = $this->getMockBuilder(
+            'Magento\Framework\DB\Sequence\SequenceInterface'
+        )->disableOriginalConstructor();
+
         $defaults = [
             'connectionName' => 'default',
             'eavEntityType' => null,
-            'sequence' => null,
             'entityContext' => [],
+            'sequence' => $sequence,
             'fields' => null
         ];
+
+        $finalMetadata = $metadata;
+        $finalMetadata[$entityType]['connectionName'] = 'default';
+
         $this->entityMetadataFactoryMock->expects($this->once())
             ->method('create')
             ->with(array_merge($defaults, $metadata[$entityType]))
             ->willReturn($this->entityMetadataMock);
+        $this->sequenceFactoryMock->expects($this->once())
+            ->method('create')
+            ->with($entityType, $finalMetadata)
+            ->willReturn($sequence);
         $metadataPool = new MetadataPool(
             $this->entityMetadataFactoryMock,
             $this->entityHydratorFactoryMock,
+            $this->sequenceFactoryMock,
             $metadata
         );
         $this->assertEquals($this->entityMetadataMock, $metadataPool->getMetadata($entityType));
@@ -83,6 +106,7 @@ class MetadataPoolTest extends \PHPUnit_Framework_TestCase
         $metadataPool = new MetadataPool(
             $this->entityMetadataFactoryMock,
             $this->entityHydratorFactoryMock,
+            $this->sequenceFactoryMock,
             []
         );
         $this->assertNotEquals($this->entityMetadataMock, $metadataPool->getMetadata('testType'));
@@ -93,6 +117,7 @@ class MetadataPoolTest extends \PHPUnit_Framework_TestCase
         $metadataPool = new MetadataPool(
             $this->entityMetadataFactoryMock,
             $this->entityHydratorFactoryMock,
+            $this->sequenceFactoryMock,
             []
         );
         $entityHydrator = $this->getMockBuilder(EntityHydrator::class)
@@ -126,8 +151,7 @@ class MetadataPoolTest extends \PHPUnit_Framework_TestCase
                         'entityContext' => ['store_id']
                     ]
                 ]
-            ]
-            ,
+            ],
             [
                 'SomeNameSpace\TestInterface',
                 [
@@ -136,8 +160,7 @@ class MetadataPoolTest extends \PHPUnit_Framework_TestCase
                         'identifierField' => 'testId',
                         'entityContext' => ['store_id'],
                         'eavEntityType' => 'SomeEavType',
-                        'fields' => ['field1'],
-                        'sequence' => 'sq1'
+                        'fields' => ['field1']
                     ]
                 ]
             ]

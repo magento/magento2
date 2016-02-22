@@ -16,6 +16,30 @@ define([
     };
 
     /**
+     * Checks if element sis visible.
+     *
+     * @param {Element} el
+     * @returns {Boolean}
+     */
+    function isVisible(el) {
+        var style = window.getComputedStyle(el),
+            visibility = {
+                display: 'none',
+                visibility: 'hidden',
+                opacity: '0'
+            },
+            visible = true;
+
+        _.each(visibility, function (val, key) {
+            if (style[key] === val) {
+                visible = false;
+            }
+        });
+
+        return visible;
+    }
+
+    /**
      * Document click handler which in case if event target is not
      * a descendant of provided container element,
      * invokes specfied in configuration callback.
@@ -33,7 +57,7 @@ define([
         }
 
         if (config.onlyIfVisible) {
-            if (!_.isNull(container.offsetParent)) {
+            if (!_.isNull(container.offsetParent) && isVisible(container)) {
                 callback();
             }
         } else {

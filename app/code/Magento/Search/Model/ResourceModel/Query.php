@@ -107,8 +107,8 @@ class Query extends AbstractDb
         $connection = $this->getConnection();
         $select = $connection->select();
 
-        $synonymSelect = $this->getQuerySelect($object, 'query_text', $value);
-        $querySelect = $this->getQuerySelect($object, 'synonym_for', $value);
+        $querySelect = $this->getQuerySelect($object, 'query_text', $value);
+        $synonymSelect = $this->getQuerySelect($object, 'synonym_for', $value);
 
         $select->union(["($synonymSelect)", "($querySelect)"], Select::SQL_UNION_ALL)
             ->limit(1);
