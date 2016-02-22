@@ -11,16 +11,24 @@ namespace Magento\Translation\Model\Inline;
  */
 class CacheManager
 {
-    /** @var \Magento\Framework\Event\ManagerInterface */
+    /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
     protected $eventManager;
 
-    /** @var \Magento\Framework\Translate\ResourceInterface */
+    /**
+     * @var \Magento\Framework\Translate\ResourceInterface
+     */
     protected $translateResource;
 
-    /** @var \Magento\Framework\Locale\ResolverInterface */
+    /**
+     * @var \Magento\Framework\Locale\ResolverInterface
+     */
     protected $localeResolver;
 
-    /** @var \Magento\Translation\Model\FileManager $fileManager */
+    /**
+     * @var \Magento\Translation\Model\FileManager
+     */
     protected $fileManager;
 
     /**
