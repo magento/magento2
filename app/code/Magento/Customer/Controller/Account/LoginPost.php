@@ -13,6 +13,8 @@ use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -36,6 +38,11 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
     protected $session;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param AccountManagementInterface $customerAccountManagement
@@ -57,6 +64,35 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
         $this->formKeyValidator = $formKeyValidator;
         $this->accountRedirect = $accountRedirect;
         parent::__construct($context);
+    }
+
+    /**
+     * Set scope config
+     *
+     * @param ScopeConfigInterface $scopeConfig
+     * @return void
+     * @deprecated
+     */
+    public function setScopeConfig(ScopeConfigInterface $scopeConfig)
+    {
+        $this->scopeConfig = $scopeConfig;
+    }
+
+    /**
+     * Get scope config
+     *
+     * @return ScopeConfigInterface
+     * @deprecated
+     */
+    public function getScopeConfig()
+    {
+        if (!($this->scopeConfig instanceof \Magento\Framework\App\Config\ScopeConfigInterface)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Framework\App\Config\ScopeConfigInterface'
+            );
+        } else {
+            return $this->scopeConfig;
+        }
     }
 
     /**
@@ -86,6 +122,13 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
                     $message = __(
                         'This account is not confirmed. <a href="%1">Click here</a> to resend confirmation email.',
                         $value
+                    );
+                    $this->messageManager->addError($message);
+                    $this->session->setUsername($login['username']);
+                } catch (UserLockedException $e) {
+                    $message = __(
+                        'The account is locked. Please wait and try again or contact %1.',
+                        $this->getScopeConfig()->getValue('contact/email/recipient_email')
                     );
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);
