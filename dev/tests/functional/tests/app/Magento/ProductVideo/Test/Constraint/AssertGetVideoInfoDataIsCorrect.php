@@ -30,8 +30,8 @@ class AssertGetVideoInfoDataIsCorrect extends AbstractAssertForm
     ) {
 
         $editProductPage->open(['id' => $initialProduct->getId()]);
-        $editProductPage->getProductForm()->openTab('images-and-videos');
-        $imagesTab = $editProductPage->getProductForm()->getTab('images-and-videos');
+        $editProductPage->getProductForm()->openSection('images-and-videos');
+        $imagesTab = $editProductPage->getProductForm()->getSection('images-and-videos');
         $result = $imagesTab->clickFirstVideo()->getVideoDialog()->validate($video);
 
         \PHPUnit_Framework_Assert::assertTrue(

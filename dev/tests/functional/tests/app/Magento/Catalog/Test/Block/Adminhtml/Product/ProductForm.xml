@@ -27,8 +27,7 @@
                 <input>select</input>
             </tax_class_id>
             <product_has_weight>
-                <selector>[data-role="weight-switcher"]</selector>
-                <input>radiobutton</input>
+                <input>select</input>
             </product_has_weight>
             <category_ids>
                 <selector>[data-index='container_category_ids']</selector>
