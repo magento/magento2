@@ -14,13 +14,17 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
 {
     public function testConstruct()
     {
-        $translateCache = $this->getMock('Magento\Framework\App\Cache\Type\Translate', [], [], '', false, false);
+        $frontendCache = $this->getMock('Magento\Framework\Cache\FrontendInterface', [], [], '', false, false);
         $lowLevelFrontend = $this->getMock('Zend_Cache_Core', [], [], '', false, false);
-        /** @var \Magento\Framework\App\Cache\Type\Translate|\PHPUnit_Framework_MockObject_MockObject $appCache */
-        $translateCache->expects($this->once())->method('getLowLevelFrontend')->willReturn($lowLevelFrontend);
+        /** @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject $appCache */
+        $appCache = $this->getMock('Magento\Framework\App\CacheInterface', [], [], '', false, false);
+        $frontendCache->expects($this->once())->method('getLowLevelFrontend')->willReturn($lowLevelFrontend);
+        $appCache->expects($this->once())
+            ->method('getFrontend')
+            ->willReturn($frontendCache);
 
         // Create new currency object
-        $currency = new Currency($translateCache, null, 'en_US');
+        $currency = new Currency($appCache, null, 'en_US');
         $this->assertEquals($lowLevelFrontend, $currency->getCache());
         $this->assertEquals('USD', $currency->getShortName());
     }
