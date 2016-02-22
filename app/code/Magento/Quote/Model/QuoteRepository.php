@@ -179,14 +179,14 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
      * Get quote collection
      * Temporary method to support release backward compatibility.
      *
+     * @deprecated
      * @return QuoteCollection
      */
-    protected function resetQuoteCollection()
+    protected function getQuoteCollection()
     {
+        /** @var \Magento\Quote\Model\ResourceModel\Quote\CollectionFactory $collectionFactory */
         $collectionFactory = ObjectManager::getInstance()->get(QuoteCollectionFactory::class);
-        $this->quoteCollection = $collectionFactory->create();
-
-        return $this->quoteCollection;
+        return $collectionFactory->create();
     }
 
     /**
@@ -194,7 +194,7 @@ class QuoteRepository implements \Magento\Quote\Api\CartRepositoryInterface
      */
     public function getList(\Magento\Framework\Api\SearchCriteria $searchCriteria)
     {
-        $this->quoteCollection = $this->resetQuoteCollection();
+        $this->quoteCollection = $this->getQuoteCollection();
         /** @var \Magento\Quote\Api\Data\CartSearchResultsInterface $searchData */
         $searchData = $this->searchResultsDataFactory->create();
         $searchData->setSearchCriteria($searchCriteria);
