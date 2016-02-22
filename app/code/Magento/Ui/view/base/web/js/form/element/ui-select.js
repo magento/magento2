@@ -55,7 +55,9 @@ define([
      */
     function setProperty(array, separator, level, path) {
         var i = 0,
-            length;
+            length,
+            nextLevel,
+            nextPath;
 
         array = _.compact(array);
         length = array.length;
@@ -71,9 +73,9 @@ define([
             }
 
             if (array[i].hasOwnProperty(separator)) {
-                level++;
-                path = path ? path + '.' + array[i].label : array[i].label;
-                setProperty.call(this, array[i][separator], separator, level, path);
+                nextLevel = level + 1;
+                nextPath = path ? path + '.' + array[i].label : array[i].label;
+                setProperty.call(this, array[i][separator], separator, nextLevel, nextPath);
             }
         }
 
@@ -225,7 +227,10 @@ define([
         addLastElement: function (data) {
             if (!data.hasOwnProperty(this.separator)) {
                 !this.cacheOptions.lastOptions ? this.cacheOptions.lastOptions = [] : false;
-                this.cacheOptions.lastOptions.push(data);
+
+                if (!_.findWhere(this.cacheOptions.lastOptions, {value: data.value})) {
+                    this.cacheOptions.lastOptions.push(data);
+                }
 
                 return true;
             }
@@ -369,10 +374,8 @@ define([
          * Filtered options list by value from filter options list
          */
         filterOptionsList: function () {
-            var i = 0,
-                array = [],
-                curOption,
-                value = this.filterInputValue().trim().toLowerCase();
+            var value = this.filterInputValue().trim().toLowerCase(),
+                array = [];
 
             if (value === '') {
                 this.renderPath = false;
@@ -383,16 +386,12 @@ define([
             }
 
             this.showPath ? this.renderPath = true : false;
-            this.options(this.cacheOptions.plain);
 
             if (this.filterInputValue()) {
-                for (i; i < this.options().length; i++) {
-                    curOption = this.options()[i].label.toLowerCase();
 
-                    if (curOption.indexOf(value) > -1) {
-                        array.push(this.options()[i]); /*eslint max-depth: [2, 4]*/
-                    }
-                }
+                array = this.selectType === 'optgroup' ?
+                    this._getFilteredArray(this.cacheOptions.lastOptions, value) :
+                    this._getFilteredArray(this.cacheOptions.plain, value);
 
                 if (!value.length) {
                     this.options(this.cacheOptions.plain);
@@ -402,11 +401,39 @@ define([
                     this._setItemsQuantity(array.length);
                 }
                 this.cleanHoveredElement();
+
+                return false;
             }
+
+            this.options(this.cacheOptions.plain);
         },
 
         /**
-         * Get path to current oprion
+         * Filtered options list by value from filter options list
+         *
+         * @param {Array} list - option list
+         * @param {String} value
+         *
+         * @returns {Array} filters result
+         */
+        _getFilteredArray: function (list, value) {
+            var i = 0,
+                array = [],
+                curOption;
+
+            for (i; i < list.length; i++) {
+                curOption = list[i].label.toLowerCase();
+
+                if (curOption.indexOf(value) > -1) {
+                    array.push(list[i]); /*eslint max-depth: [2, 4]*/
+                }
+            }
+
+            return array;
+        },
+
+        /**
+         * Get path to current option
          *
          * @param {Object} data - option data
          * @returns {String} path
@@ -708,6 +735,26 @@ define([
          * selected first option in list
          */
         pageDownKeyHandler: function () {
+            var el,
+                nextEl,
+                nextData,
+                nextIndex;
+
+            if (!this.listVisible()) {
+                return false;
+            }
+
+            if (this.filterInputValue()) {
+                el = !_.isNull(this.hoverElIndex()) ?
+                    this._getElemByData(this.cacheOptions.plain[this.hoverElIndex()]) : false;
+                nextEl = el ? el.next() : $(this.cacheUiSelect).find('li:visible').eq(0);
+                nextIndex = nextEl.length ? nextEl.index() : 0;
+                nextData = this.options()[nextIndex];
+                this.hoverElIndex(this.getOptionIndex(nextData));
+
+                return false;
+            }
+
             if (!_.isNull(this.hoverElIndex()) && this.hoverElIndex() !== this.cacheOptions.plain.length - 1) {
                 this._setHoverToElement(1);
                 this._scrollTo(this.hoverElIndex());
@@ -720,6 +767,28 @@ define([
         },
 
         /**
+         * Get jQuery element by option data
+         *
+         * @param {Object} data - option data
+         *
+         * @returns {Object} jQuery element
+         */
+        _getElemByData: function (data) {
+            var i = 0,
+                list = $(this.cacheUiSelect).find('li'),
+                length = this.options().length,
+                result;
+
+            for (i; i < length; i++) {
+                if (this.options()[i].value === data.value) {
+                    result = $(list[i]);
+                }
+            }
+
+            return result;
+        },
+
+        /**
          * Set hover to visible element
          *
          * @param {Number} direction - iterator
@@ -727,13 +796,21 @@ define([
          * @param {Array} list - collection items
          */
         _setHoverToElement: function (direction, index, list) {
-            var modifiedIndex;
+            var modifiedIndex,
+                curData,
+                canBeHovered = true;
 
             list = list || $(this.cacheUiSelect).find('li');
-            index = index || this.hoverElIndex();
+            index = index || _.isNumber(index) ? index : this.hoverElIndex();
             modifiedIndex = index + direction;
+            modifiedIndex < 0 ? modifiedIndex = this.cacheOptions.plain.length - 1 : false;
+            curData = this.cacheOptions.plain[modifiedIndex];
 
-            if (list.eq(modifiedIndex).is(':visible')) {
+            if (this.selectType === 'optgroup' && !_.findWhere(this.cacheOptions.lastOptions, {value: curData.value})) {
+                canBeHovered = false;
+            }
+
+            if (list.eq(modifiedIndex).is(':visible') && canBeHovered) {
                 this.hoverElIndex(modifiedIndex);
             } else {
                 this._setHoverToElement(direction, modifiedIndex, list);
@@ -773,6 +850,38 @@ define([
          * selected last option in list
          */
         pageUpKeyHandler: function () {
+            var el,
+                nextEl,
+                nextIndex,
+                nextData;
+
+            if (!this.listVisible()) {
+                return false;
+            }
+
+            if (this.filterInputValue()) {
+                el = !_.isNull(this.hoverElIndex()) ?
+                    this._getElemByData(this.cacheOptions.plain[this.hoverElIndex()]) : false;
+                nextEl = el ? el.prev() : $(this.cacheUiSelect).find('li:visible').eq(this.options().length-1);
+                nextIndex = nextEl.length ? nextEl.index() : this.options().length-1;
+                nextData = this.options()[nextIndex];
+                this.hoverElIndex(this.getOptionIndex(nextData));
+
+                return false;
+            }
+
+
+            if (this.filterInputValue()) {
+                el = !_.isNull(this.hoverElIndex()) ?
+                    this._getElemByData(this.cacheOptions.plain[this.hoverElIndex()]) : false;
+                nextEl = el ? el.next() : $(this.cacheUiSelect).find('li:visible').eq(0);
+                nextIndex = nextEl.length ? nextEl.index() : 0;
+                nextData = this.options()[nextIndex];
+                this.hoverElIndex(this.getOptionIndex(nextData));
+
+                return false;
+            }
+
             if (this.hoverElIndex()) {
                 this._setHoverToElement(-1);
                 this._scrollTo(this.hoverElIndex());

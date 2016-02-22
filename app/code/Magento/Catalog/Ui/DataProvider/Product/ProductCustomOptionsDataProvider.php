@@ -13,6 +13,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Option as ProductOption;
 use Magento\Framework\DataObject;
 
+/**
+ * DataProvider for grid on Import Custom Options modal panel
+ */
 class ProductCustomOptionsDataProvider extends ProductDataProvider
 {
     /**
@@ -31,8 +34,6 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
     protected $productOptionValueModel;
 
     /**
-     * Construct
-     *
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
@@ -44,6 +45,7 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
      * @param \Magento\Ui\DataProvider\AddFilterToCollectionInterface[] $addFilterStrategies
      * @param array $meta
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $name,
@@ -75,9 +77,7 @@ class ProductCustomOptionsDataProvider extends ProductDataProvider
     }
 
     /**
-     * Get data
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getData()
     {
