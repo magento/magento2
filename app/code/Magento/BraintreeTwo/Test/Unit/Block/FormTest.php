@@ -9,8 +9,11 @@ use Magento\Backend\Model\Session\Quote;
 use Magento\BraintreeTwo\Block\Form;
 use Magento\BraintreeTwo\Gateway\Config\Config as GatewayConfig;
 use Magento\BraintreeTwo\Model\Adminhtml\Source\CcType;
+use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\Config;
+use Magento\Vault\Model\Ui\VaultConfigProvider;
+use Magento\Vault\Model\VaultPaymentInterface;
 
 /**
  * Class FormTest
@@ -32,24 +35,29 @@ class FormTest extends \PHPUnit_Framework_TestCase
     ];
 
     /**
-     * @var \Magento\BraintreeTwo\Block\Form
+     * @var Form
      */
     private $block;
 
     /**
-     * @var \Magento\Backend\Model\Session\Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     private $sessionQuote;
 
     /**
-     * @var \Magento\BraintreeTwo\Gateway\Config\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|\PHPUnit_Framework_MockObject_MockObject
      */
     private $gatewayConfig;
 
     /**
-     * @var \Magento\BraintreeTwo\Model\Adminhtml\Source\CcType|\PHPUnit_Framework_MockObject_MockObject
+     * @var CcType|\PHPUnit_Framework_MockObject_MockObject
      */
     private $ccType;
+
+    /**
+     * @var VaultPaymentInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $vaultService;
 
 
     protected function setUp()
@@ -58,12 +66,15 @@ class FormTest extends \PHPUnit_Framework_TestCase
         $this->initSessionQuoteMock();
         $this->initGatewayConfigMock();
 
+        $this->vaultService = $this->getMock(VaultPaymentInterface::class);
+
         $managerHelper = new ObjectManager($this);
         $this->block = $managerHelper->getObject(Form::class, [
             'paymentConfig' => $managerHelper->getObject(Config::class),
             'sessionQuote' => $this->sessionQuote,
             'gatewayConfig' => $this->gatewayConfig,
-            'ccType' => $this->ccType
+            'ccType' => $this->ccType,
+            'vaultService' => $this->vaultService
         ]);
     }
 
@@ -107,6 +118,16 @@ class FormTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
+    public function testIsVaultEnabled()
+    {
+        $this->vaultService->expects(static::once())
+            ->method('isActiveForPayment')
+            ->with(ConfigProvider::CODE)
+            ->willReturn(true);
+
+        static::assertTrue($this->block->isVaultEnabled());
+    }
+
     /**
      * Create mock for credit card type
      */
@@ -117,7 +138,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getCcTypeLabelMap'])
             ->getMock();
 
-        $this->ccType->expects(static::once())
+        $this->ccType->expects(static::any())
             ->method('getCcTypeLabelMap')
             ->willReturn(self::$baseCardTypes);
     }
@@ -132,10 +153,10 @@ class FormTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getQuote', 'getBillingAddress', 'getCountryId', '__wakeup'])
             ->getMock();
 
-        $this->sessionQuote->expects(static::once())
+        $this->sessionQuote->expects(static::any())
             ->method('getQuote')
             ->willReturnSelf();
-        $this->sessionQuote->expects(static::once())
+        $this->sessionQuote->expects(static::any())
             ->method('getBillingAddress')
             ->willReturnSelf();
     }

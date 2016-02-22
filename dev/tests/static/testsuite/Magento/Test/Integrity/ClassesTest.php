@@ -556,45 +556,28 @@ class ClassesTest extends \PHPUnit_Framework_TestCase
     {
         // Remove usage of classes that do NOT using fully-qualified class names (possibly under same namespace)
         $directories = [
-            '/dev/tools/',
-            '/dev/tests/api-functional/framework/',
-            '/dev/tests/functional/',
-            '/dev/tests/integration/framework/',
-            '/dev/tests/integration/framework/tests/unit/testsuite/',
-            '/dev/tests/integration/testsuite/',
-            '/dev/tests/integration/testsuite/Magento/Test/Integrity/',
-            '/dev/tests/static/framework/',
-            '/dev/tests/static/testsuite/',
-            '/setup/src/',
+            BP . '/dev/tools/',
+            BP . '/dev/tests/api-functional/framework/',
+            BP . '/dev/tests/functional/',
+            BP . '/dev/tests/integration/framework/',
+            BP . '/dev/tests/integration/framework/tests/unit/testsuite/',
+            BP . '/dev/tests/integration/testsuite/',
+            BP . '/dev/tests/integration/testsuite/Magento/Test/Integrity/',
+            BP . '/dev/tests/static/framework/',
+            BP . '/dev/tests/static/testsuite/',
+            BP . '/setup/src/',
         ];
-        $pathToSource = BP;
-        $libraryPaths = $this->getLibraryPaths($componentRegistrar, $pathToSource);
+        $libraryPaths = $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
         $directories = array_merge($directories, $libraryPaths);
         // Full list of directories where there may be namespace classes
         foreach ($directories as $directory) {
-            $fullPath = $pathToSource . $directory . $namespacePath . '/' . str_replace('\\', '/', $badClass) . '.php';
+            $fullPath = $directory . $namespacePath . '/' . str_replace('\\', '/', $badClass) . '.php';
             if (file_exists($fullPath)) {
                 unset($badClasses[array_search($badClass, $badClasses)]);
                 return true;
             }
         }
-    }
-
-    /**
-     * @param ComponentRegistrar $componentRegistrar
-     * @param string $pathToSource
-     * @return array
-     */
-    private function getLibraryPaths($componentRegistrar, $pathToSource)
-    {
-        $libraryPaths = $componentRegistrar->getPaths(ComponentRegistrar::LIBRARY);
-        foreach ($libraryPaths as $key => $libraryPath) {
-            $libraryPath = str_replace($pathToSource, '', $libraryPath);
-            $partsOfLibraryPath = explode('/', $libraryPath);
-            $libraryPaths[$key] = implode('/', array_slice($partsOfLibraryPath, 0, sizeof($partsOfLibraryPath)-2));
-            $libraryPaths[$key] .=  '/';
-        }
-        return $libraryPaths;
+        return false;
     }
 
     /**

@@ -10,23 +10,27 @@ class Batch
     /**
      * @param \Traversable $documents
      * @param int $size
-     * @return \Generator
+     * @return array
      */
     public function getItems(\Traversable $documents, $size)
     {
-        $i = 0;
-        $batch = [];
+        if (count($documents) == 0) {
+            return [];
+        }
 
+        $i = 0;
+        $batch = $items = [];
         foreach ($documents as $documentName => $documentValue) {
             $batch[$documentName] = $documentValue;
-            if ($i++ >= $size) {
-                yield $batch;
+            if (++$i >= $size) {
+                $items[] = $batch;
                 $i = 0;
                 $batch = [];
             }
         }
         if (count($batch) > 0) {
-            yield $batch;
+            $items[] = $batch;
         }
+        return $items;
     }
 }

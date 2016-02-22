@@ -9,6 +9,8 @@ namespace Magento\Catalog\Model\Layer;
  * Test class for \Magento\Catalog\Model\Layer.
  *
  * @magentoDataFixture Magento/Catalog/_files/categories.php
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  */
 class CategoryTest extends \PHPUnit_Framework_TestCase
 {

@@ -7,6 +7,10 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\HandlerInterface" type="Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Handler\Composite" />
+    <preference for="Magento\Catalog\Model\Locator\LocatorInterface" type="Magento\Catalog\Model\Locator\RegistryLocator"/>
+    <!--<preference for="Magento\Catalog\Ui\DataProvider\Product\Form\Container\MetaInterface" type="Magento\Catalog\Ui\DataProvider\Product\Form\Container\Meta"/>-->
+    <!--<preference for="Magento\Catalog\Ui\DataProvider\Product\Form\Container\DataInterface" type="Magento\Catalog\Ui\DataProvider\Product\Form\Container\Data"/>-->
+    <!--<preference for="Magento\Catalog\Ui\DataProvider\Product\Form\Container\LocatorInterface" type="Magento\Catalog\Ui\DataProvider\Product\Form\Container\RegistryLocator"/>-->
     <type name="Magento\Catalog\Controller\Adminhtml\Product\Attribute">
         <arguments>
             <argument name="attributeLabelCache" xsi:type="object">Magento\Framework\App\Cache\Type\Translate</argument>
@@ -81,4 +85,59 @@
         <plugin name="invalidate_pagecache_after_update_product_attributes" type="Magento\Catalog\Plugin\Model\Product\Action\UpdateAttributesFlushCache"/>
     </type>
     <preference for="Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface" type="Magento\Catalog\Ui\Component\Listing\Attribute\Repository"/>
+    <preference for="Magento\Ui\DataProvider\Modifier\Pool" type="Magento\Catalog\Ui\DataProvider\Product\Form\ModifierPool"/>
+    <type name="Magento\Ui\DataProvider\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="eav" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
+                <item name="attribute_set_id" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AttributeSet</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                </item>
+                <item name="websites" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Websites</item>
+                    <item name="sortOrder" xsi:type="number">30</item>
+                </item>
+                <item name="system" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\System</item>
+                    <item name="sortOrder" xsi:type="number">40</item>
+                </item>
+                <item name="general" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\General</item>
+                    <item name="sortOrder" xsi:type="number">50</item>
+                </item>
+                <item name="categories" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories</item>
+                    <item name="sortOrder" xsi:type="number">60</item>
+                </item>
+                <item name="schedule-design-update" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions</item>
+                    <item name="sortOrder" xsi:type="number">70</item>
+                </item>
+                <item name="custom-options" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\ScheduleDesignUpdate</item>
+                    <item name="sortOrder" xsi:type="number">80</item>
+                </item>
+                <item name="advanced-pricing" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AdvancedPricing</item>
+                    <item name="sortOrder" xsi:type="number">90</item>
+                </item>
+                <item name="image-management" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Images</item>
+                    <item name="sortOrder" xsi:type="number">100</item>
+                </item>
+                <item name="related" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Related</item>
+                    <item name="sortOrder" xsi:type="number">110</item>
+                </item>
+                <item name="attributes" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Attributes</item>
+                    <item name="sortOrder" xsi:type="number">120</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

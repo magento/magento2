@@ -7,7 +7,7 @@ namespace Magento\Payment\Helper;
 
 /**
  * Class Formatter
- * @package Magento\Paypal\Helper
+ * @api
  */
 trait Formatter
 {

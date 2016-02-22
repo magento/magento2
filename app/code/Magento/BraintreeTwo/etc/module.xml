@@ -12,6 +12,11 @@
             <module name="Magento_Payment"/>
             <module name="Magento_Checkout"/>
             <module name="Magento_Vault"/>
+            <module name="Magento_Catalog"/>
+            <module name="Magento_Quote"/>
+            <module name="Magento_Paypal"/>
+            <module name="Magento_CheckoutAgreements"/>
+            <module name="Magento_Theme"/>
         </sequence>
     </module>
 </config>
