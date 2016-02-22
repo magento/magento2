@@ -14,9 +14,6 @@
         </item>
         <item name="label" xsi:type="string" translate="true">New Attribute</item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
-        <item name="buttons" xsi:type="array">
-            <!--TODO: Add buttons-->
-        </item>
         <item name="config" xsi:type="array">
             <item name="dataScope" xsi:type="string">data</item>
             <item name="namespace" xsi:type="string">product_attribute_add_form</item>
@@ -31,7 +28,7 @@
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <!--TODO: Add submit and validate URLs-->
+                    <item name="submit_url" xsi:type="url" path="catalog/product_attribute/save"/>
                 </item>
             </argument>
         </argument>
@@ -108,7 +105,6 @@
                 <item name="label" xsi:type="string" translate="true">Values</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="sortOrder" xsi:type="number">15</item>
-                <item name="dataScope" xsi:type="string"></item>
                 <item name="valuesForOptions" xsi:type="array">
                     <item name="select" xsi:type="string">select</item>
                     <item name="multiselect" xsi:type="string">multiselect</item>
@@ -119,8 +115,10 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="componentType" xsi:type="string">dynamicRows</item>
-                    <item name="dataScope" xsi:type="string"></item>
                     <item name="addButtonLabel" xsi:type="string" translate="true">Add Value</item>
+                    <item name="additionalClasses" xsi:type="array">
+                        <item name="admin__field-wide" xsi:type="boolean">true</item>
+                    </item>
                 </item>
             </argument>
             <container name="record">
@@ -131,7 +129,6 @@
                         <item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/record</item>
                         <item name="componentType" xsi:type="string">container</item>
                         <item name="positionProvider" xsi:type="string">attribute_options.position</item>
-                        <item name="dataScope" xsi:type="string"></item>
                     </item>
                 </argument>
                 <field name="is_default">
@@ -144,26 +141,27 @@
                             <item name="prefer" xsi:type="string">radio</item>
                             <item name="value" xsi:type="string">1</item>
                             <item name="sortOrder" xsi:type="string">0</item>
+                            <item name="fit" xsi:type="boolean">true</item>
                         </item>
                     </argument>
                 </field>
-                <field name="1">
+                <field name="value.option_1">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="label" xsi:type="string" translate="true">Default Store View</item>
-                            <item name="dataScope" xsi:type="string">value.option_1</item>
+                            <item name="sortOrder" xsi:type="string">1</item>
                         </item>
                     </argument>
                 </field>
-                <field name="0">
+                <field name="value.option_0">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="label" xsi:type="string" translate="true">Admin</item>
-                            <item name="dataScope" xsi:type="string">value.option_0</item>
+                            <item name="sortOrder" xsi:type="string">2</item>
                         </item>
                     </argument>
                 </field>
