@@ -25,6 +25,7 @@ define([
         toggleVisibility: function (selected) {
             var isShown = this.visibilityState = selected in this.valuesForOptions;
             this.visible(isShown);
+            this.opened(isShown);
             this.elems.each(function (child) {
                child.set('visible', isShown);
             });

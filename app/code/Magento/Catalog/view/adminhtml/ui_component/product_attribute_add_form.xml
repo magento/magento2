@@ -12,6 +12,10 @@
             <item name="provider" xsi:type="string">product_attribute_add_form.product_attribute_add_form_data_source</item>
             <item name="deps" xsi:type="string">product_attribute_add_form.product_attribute_add_form_data_source</item>
         </item>
+        <item name="buttons" xsi:type="array">
+            <item name="cancel" xsi:type="string">Magento\Catalog\Block\Adminhtml\Product\Attribute\Button\Cancel</item>
+            <item name="save" xsi:type="string">Magento\Catalog\Block\Adminhtml\Product\Attribute\Button\Save</item>
+        </item>
         <item name="label" xsi:type="string" translate="true">New Attribute</item>
         <item name="template" xsi:type="string">templates/form/collapsible</item>
         <item name="config" xsi:type="array">
@@ -29,6 +33,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="submit_url" xsi:type="url" path="catalog/product_attribute/save"/>
+                    <item name="validate_url" xsi:type="url" path="catalog/product_attribute/validate"/>
                 </item>
             </argument>
         </argument>
