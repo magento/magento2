@@ -10,6 +10,7 @@
 @import 'fields/_control-collapsible.less';
 @import 'fields/_control-table.less';
 @import 'fields/_field-tooltips.less';
+@import 'fields/_field-reset.less';
 
 //
 //  Extends
@@ -305,6 +306,27 @@
 
         .admin__field-option {
             display: inline-block;
+        }
+    }
+
+    //  If there is a fallback reset button
+    &._with-reset {
+        > .admin__control-text,
+        > .admin__control-textarea {
+            width: ~'calc(100% - @{field-fallback-reset__width} - 4px)'; // Minus space size
+        }
+
+        .admin__field-fallback-reset {
+            margin-top: @field-fallback-reset__margin-top;
+            vertical-align: top;
+        }
+
+        //  If both
+        &._with-tooltip {
+            > .admin__control-text,
+            > .admin__control-textarea {
+                width: ~'calc(100% - @{field-fallback-reset__width} - @{field-tooltip__width} - 8px)'; // Minus 2 space sizes
+            }
         }
     }
 }

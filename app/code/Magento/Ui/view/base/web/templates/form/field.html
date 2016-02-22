@@ -12,7 +12,7 @@
         <span text="label"/>
     </label>
     <div class="admin__field-control"
-         css="'_with-tooltip': $data.tooltip">
+         css="'_with-tooltip': $data.tooltip, '_with-reset': $data.showFallbackReset && $data.isDifferedFromDefault">
         <render args="elementTmpl" ifnot="hasAddons()"/>
 
         <div class="admin__control-addon" if="hasAddons()">
@@ -27,6 +27,8 @@
         </div>
 
         <render args="tooltipTpl" if="$data.tooltip"/>
+
+        <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
 
         <div class="admin__field-note" if="$data.notice" attr="id: noticeId">
             <span text="notice"/>

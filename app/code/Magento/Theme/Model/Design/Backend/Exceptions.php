@@ -54,16 +54,14 @@ class Exceptions extends ArraySerialized
         $design = clone $this->_design;
         // For value validations
         $exceptions = $this->getValue();
-        foreach ($exceptions as $rowKey => $row) {
-            if ($rowKey === '__empty') {
-                continue;
-            }
 
+        foreach ($exceptions as $rowKey => &$row) {
+            unset($row['record_id']);
             // Validate that all values have come
             foreach (['search', 'value'] as $fieldName) {
                 if (!isset($row[$fieldName])) {
                     throw new \Magento\Framework\Exception\LocalizedException(
-                        __('Exception does not contain field \'%1\'', $fieldName)
+                        __($this->getData('field_config/fieldset') . ' does not contain field \'%1\'', $fieldName)
                     );
                 }
             }
@@ -134,5 +132,13 @@ class Exceptions extends ArraySerialized
         }
 
         return false;
+    }
+
+    /**
+     * @return array
+     */
+    public function getValue()
+    {
+        return $this->getData('value') ?: [];
     }
 }

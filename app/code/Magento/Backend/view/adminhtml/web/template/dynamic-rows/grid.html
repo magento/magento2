@@ -1,0 +1,63 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="admin__field"
+     visible="visible"
+     disabled="disabled"
+     css="element.setClasses(element)"
+     attr="'data-index': index">
+    <label if="element.label" class="admin__field-label" attr="for: element.uid">
+        <span text="element.label"/>
+    </label>
+
+    <div class="admin__field-control" data-role="grid-wrapper">
+        <div class="admin__control-table-wrapper">
+            <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
+            <div class="admin__control-table-action" if="element.addButton">
+                <button attr="{disabled: disabled}"
+                        type="button"
+                        click="addChild.bind($data, false, false)">
+                    <span text="addButtonLabel"/>
+                </button>
+            </div>
+            <table class="admin__dynamic-rows data-grid" data-role="grid">
+                <thead if="element.columnsHeader">
+                <tr>
+                    <th if="dndConfig.enabled"
+                        class="data-grid-draggable-row-cell"/>
+
+                    <!-- ko foreach: {data: labels, as: 'item'}  -->
+                    <th class="data-grid-th"
+                        text="item.label"
+                        visible="item.visible"
+                        disabled="item.disabled"
+                        css="$parent.setClasses(item)">
+                    </th>
+                    <!-- /ko -->
+                </tr>
+                </thead>
+
+                <tbody data-bind="foreach: elems">
+                <tr class="data-row"
+                    css="'_odd-row': $index() % 2">
+                    <td if="$parent.dndConfig.enabled"
+                        class="data-grid-draggable-row-cell"
+                        template="name: $parent.dndConfig.template, data: $parent.dnd"/>
+
+                    <!-- ko foreach: { data: elems, as: 'elem'}  -->
+                    <td if="elem.template"
+                        visible="elem.visible"
+                        disabled="elem.disabled"
+                        css="$parents[1].setClasses(elem)"
+                        template="elem.template"
+                        attr="'data-index': index"/>
+                    <!-- /ko -->
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

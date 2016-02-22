@@ -1,0 +1,43 @@
+// /**
+//  * Copyright © 2015 Magento. All rights reserved.
+//  * See COPYING.txt for license details.
+//  */
+
+//
+//  Variables
+//  _____________________________________________
+
+@field-fallback-reset-icon__margin-left: @field-tooltip-action__margin-left;
+@field-fallback-reset-icon__size: @field-tooltip-icon__size;
+@field-fallback-reset__margin-top: @field-tooltip__margin-top;
+@field-fallback-reset__width: @field-tooltip__width;
+
+//
+//  Form Fields
+//  _____________________________________________
+
+.admin__field-fallback-reset {
+    &:extend(.abs-action-reset all);
+    width: @field-fallback-reset__width;
+
+    > span {
+        .hidden();
+    }
+
+    &:active {
+        .scale();
+    }
+
+    &:before {
+        &:extend(.abs-icon all);
+        .transition(color);
+        content: @icon-reset__content;
+        font-size: @field-fallback-reset-icon__size;
+        margin-left: @field-fallback-reset-icon__margin-left;
+    }
+
+    &:hover {
+        cursor: pointer;
+        text-decoration: none;
+    }
+}
