@@ -867,23 +867,31 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $productEntityTable = $this->_resourceFactory->create()->getEntityTable();
 
         while ($bunch = $this->_dataSourceModel->getNextBunch()) {
-            $idToDelete = [];
+            $idsToDelete = [];
 
             foreach ($bunch as $rowNum => $rowData) {
                 if ($this->validateRow($rowData, $rowNum) && self::SCOPE_DEFAULT == $this->getRowScope($rowData)) {
-                    $idToDelete[] = $this->_oldSku[$rowData[self::COL_SKU]]['entity_id'];
+                    $idsToDelete[] = $this->_oldSku[$rowData[self::COL_SKU]]['entity_id'];
                 }
             }
-            if ($idToDelete) {
-                $this->countItemsDeleted += count($idToDelete);
+            if ($idsToDelete) {
+                $this->countItemsDeleted += count($idsToDelete);
                 $this->transactionManager->start($this->_connection);
                 try {
                     $this->objectRelationProcessor->delete(
                         $this->transactionManager,
                         $this->_connection,
                         $productEntityTable,
-                        $this->_connection->quoteInto('entity_id IN (?)', $idToDelete),
-                        ['entity_id' => $idToDelete]
+                        $this->_connection->quoteInto('entity_id IN (?)', $idsToDelete),
+                        ['entity_id' => $idsToDelete]
+                    );
+                    $this->_eventManager->dispatch(
+                        'catalog_product_import_bunch_delete_commit_before',
+                        [
+                            'adapter' => $this,
+                            'bunch' => $bunch,
+                            'ids_to_delete' => $idsToDelete
+                        ]
                     );
                     $this->transactionManager->commit();
                 } catch (\Exception $e) {
