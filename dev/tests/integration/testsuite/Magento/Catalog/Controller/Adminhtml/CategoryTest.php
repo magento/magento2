@@ -147,7 +147,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     public function saveActionDataProvider()
     {
         return [
-//            'default values' removed from here. Should be fixed in MAGETWO-49481
+            //'default values' removed from here. Should be fixed in MAGETWO-49481
             'custom values' => [
                 [
                     'id' => '2',
