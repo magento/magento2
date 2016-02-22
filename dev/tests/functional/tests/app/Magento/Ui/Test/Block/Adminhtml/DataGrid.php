@@ -286,8 +286,8 @@ class DataGrid extends Grid
     {
         //Checks which dropdown is visible and uses it.
         for ($i=1; $i<=2; $i++) {
-            $massActionButton = $this->massActionToggleButton . "[$i]";
-            $massActionList = $this->massActionToggleList . "[$i]";
+            $massActionButton = '(' . $this->massActionToggleButton . ")[$i]";
+            $massActionList = '(' . $this->massActionToggleList . ")[$i]";
             if ($this->_rootElement->find($massActionButton, Locator::SELECTOR_XPATH)->isVisible()) {
                 $this->_rootElement->find($massActionButton, Locator::SELECTOR_XPATH)->click();
                 $this->_rootElement
