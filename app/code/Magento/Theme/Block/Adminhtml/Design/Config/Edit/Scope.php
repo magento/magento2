@@ -47,4 +47,16 @@ class Scope extends Template
 
         return __('Default');
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function toHtml()
+    {
+        if ($this->_storeManager->isSingleStoreMode()) {
+            return '';
+        }
+        return parent::toHtml();
+    }
+
 }
