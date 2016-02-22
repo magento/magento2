@@ -185,6 +185,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * @deprecated
      * @param \Magento\Search\Api\SearchInterface $object
+     * @return void
      */
     public function setSearch(\Magento\Search\Api\SearchInterface $object)
     {
@@ -207,6 +208,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * @deprecated
      * @param \Magento\Framework\Api\Search\SearchCriteriaBuilder $object
+     * @return void
      */
     public function setSearchCriteriaBuilder(\Magento\Framework\Api\Search\SearchCriteriaBuilder $object)
     {
@@ -228,6 +230,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * @deprecated
      * @param \Magento\Framework\Api\FilterBuilder $object
+     * @return void
      */
     public function setFilterBuilder(\Magento\Framework\Api\FilterBuilder $object)
     {
