@@ -112,7 +112,7 @@ class Storage
                 )
             ) {
                 $saveTransaction->addObject($backendModel);
-            } else {
+            } elseif (!$backendModel->isObjectNew()) {
                 $deleteTransaction->addObject($backendModel);
             }
         }
