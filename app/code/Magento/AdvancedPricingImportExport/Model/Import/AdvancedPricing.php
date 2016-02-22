@@ -529,7 +529,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function retrieveOldSkus()
     {
-        if ($this->_oldSkus != null) {
+        if ($this->_oldSkus === null) {
             $this->_oldSkus = $this->_connection->fetchPairs(
                 $this->_connection->select()->from(
                     $this->_catalogProductEntity,
