@@ -258,16 +258,7 @@ class DataGrid extends Grid
         if ($massActionSelection) {
             $this->selectMassAction($massActionSelection);
         }
-        $actionType = is_array($action) ? key($action) : $action;
-        $this->_rootElement->find($this->actionButton)->click();
-        $this->_rootElement
-            ->find(sprintf($this->actionList, $actionType), Locator::SELECTOR_XPATH)
-            ->click();
-        if (is_array($action)) {
-            $this->_rootElement
-                ->find(sprintf($this->actionList, end($action)), Locator::SELECTOR_XPATH)
-                ->click();
-        }
+        $this->selectAction($action);
         if ($acceptAlert) {
             $element = $this->browser->find($this->alertModal);
             /** @var \Magento\Ui\Test\Block\Adminhtml\Modal $modal */
@@ -280,7 +271,7 @@ class DataGrid extends Grid
      * Do mass select/deselect using the dropdown in the grid.
      *
      * @param string $massActionSelection
-     * @return $this
+     * @return void
      */
     public function selectMassAction($massActionSelection)
     {
@@ -293,8 +284,28 @@ class DataGrid extends Grid
                 $this->_rootElement
                     ->find(sprintf($massActionList, $massActionSelection), Locator::SELECTOR_XPATH)
                     ->click();
-                return $this;
+                break;
             }
+        }
+    }
+
+    /**
+     * Peform action using the dropdown above the grid.
+     *
+     * @param array|string $action [array -> key = value from first select; value => value from subselect]
+     * @return void
+     */
+    public function selectAction($action)
+    {
+        $actionType = is_array($action) ? key($action) : $action;
+        $this->_rootElement->find($this->actionButton)->click();
+        $this->_rootElement
+            ->find(sprintf($this->actionList, $actionType), Locator::SELECTOR_XPATH)
+            ->click();
+        if (is_array($action)) {
+            $this->_rootElement
+                ->find(sprintf($this->actionList, end($action)), Locator::SELECTOR_XPATH)
+                ->click();
         }
     }
 
