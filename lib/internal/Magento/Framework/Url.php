@@ -163,6 +163,11 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
     protected $_scopeConfig;
 
     /**
+     * @var \Magento\Framework\Url\RouteParamsPreprocessorInterface
+     */
+    protected $routeParamsPreprocessor;
+
+    /**
      * @param \Magento\Framework\App\Route\ConfigInterface $routeConfig
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Url\SecurityInfoInterface $urlSecurityInfo
@@ -172,6 +177,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      * @param \Magento\Framework\Url\RouteParamsResolverFactory $routeParamsResolverFactory
      * @param \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param \Magento\Framework\Url\RouteParamsPreprocessorInterface $routeParamsPreprocessor
      * @param string $scopeType
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -186,6 +192,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         \Magento\Framework\Url\RouteParamsResolverFactory $routeParamsResolverFactory,
         \Magento\Framework\Url\QueryParamsResolverInterface $queryParamsResolver,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Url\RouteParamsPreprocessorInterface $routeParamsPreprocessor,
         $scopeType,
         array $data = []
     ) {
@@ -198,6 +205,7 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         $this->_routeParamsResolverFactory = $routeParamsResolverFactory;
         $this->_queryParamsResolver = $queryParamsResolver;
         $this->_scopeConfig = $scopeConfig;
+        $this->routeParamsPreprocessor = $routeParamsPreprocessor;
         $this->_scopeType = $scopeType;
         parent::__construct($data);
     }
@@ -791,6 +799,8 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
         if (filter_var($routePath, FILTER_VALIDATE_URL)) {
             return $routePath;
         }
+
+        $routeParams = $this->routeParamsPreprocessor->execute($routePath, $routeParams);
 
         $isCached = true;
         $isArray = is_array($routeParams);
