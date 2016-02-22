@@ -108,13 +108,13 @@ class TrackAdminNewPasswordObserverTest extends \PHPUnit_Framework_TestCase
         /** @var \Magento\User\Model\User|\PHPUnit_Framework_MockObject_MockObject $userMock */
         $userMock = $this->getMockBuilder('Magento\User\Model\User')
             ->disableOriginalConstructor()
-            ->setMethods(['getId', 'getNewPassword', 'getForceNewPassword'])
+            ->setMethods(['getId', 'getCurrentPassword', 'getForceNewPassword'])
             ->getMock();
 
         $eventObserverMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
         $eventMock->expects($this->once())->method('getObject')->willReturn($userMock);
         $userMock->expects($this->once())->method('getId')->willReturn($uid);
-        $userMock->expects($this->once())->method('getNewPassword')->willReturn($newPW);
+        $userMock->expects($this->once())->method('getCurrentPassword')->willReturn($newPW);
         $this->configInterfaceMock
             ->expects($this->atLeastOnce())
             ->method('getValue')

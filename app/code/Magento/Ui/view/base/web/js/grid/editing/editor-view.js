@@ -29,7 +29,7 @@ define([
                         '<!-- ko with: getRecord($row()._rowIndex, true) -->' +
                             '<!-- ko template: rowTmpl --><!-- /ko -->' +
                         '<!-- /ko -->' +
-                        '<!-- ko if: isSingleEditing -->' +
+                        '<!-- ko if: isSingleEditing && singleEditingButtons -->' +
                             '<!-- ko template: rowButtonsTmpl --><!-- /ko -->' +
                         '<!-- /ko -->' +
                     '<!-- /ko -->' +
@@ -159,7 +159,7 @@ define([
             return {
                 css: {
                     '_in-edit': ko.computed(function () {
-                        return model.hasActive();
+                        return model.hasActive() && !model.permanentlyActive;
                     })
                 }
             };

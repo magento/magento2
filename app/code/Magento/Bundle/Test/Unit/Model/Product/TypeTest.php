@@ -2458,7 +2458,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
                     'getData',
                     'hasData',
                     'setData',
-                    'getId'
+                    'getEntityId'
                 ]
             )
             ->getMock();
@@ -2481,7 +2481,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
         $this->bundleOptionFactory->expects($this->once())->method('create')->willReturn($option);
         $option->expects($this->once())->method('getResourceCollection')->willReturn($dbResourceMock);
-        $product->expects($this->once())->method('getId')->willReturn('prod_id');
+        $product->expects($this->once())->method('getEntityId')->willReturn('prod_id');
         $dbResourceMock->expects($this->once())->method('setProductIdFilter')->with('prod_id')->willReturnSelf();
         $product->expects($this->once())->method('getStoreId')->willReturn('store_id');
         $product->expects($this->at(3))->method('setData')->willReturnSelf();

@@ -10,6 +10,7 @@ use Magento\Framework\ObjectManager\TMapFactory;
 
 /**
  * Class BuilderComposite
+ * @api
  */
 class BuilderComposite implements BuilderInterface
 {

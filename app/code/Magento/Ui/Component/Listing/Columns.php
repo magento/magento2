@@ -26,25 +26,4 @@ class Columns extends AbstractComponent
     {
         return static::NAME;
     }
-
-    /**
-     * Prepare component configuration
-     *
-     * @return void
-     */
-    public function prepare()
-    {
-        foreach ($this->getChildComponents() as $column) {
-            if ($column instanceof Column) {
-                $meta = $this->getContext()->getDataProvider()->getFieldMetaInfo($this->getName(), $column->getName());
-                if ($meta) {
-                    $config = $column->getData('config');
-                    $config = array_replace_recursive($config, $meta);
-                    $column->setData('config', $config);
-                }
-            }
-        }
-
-        parent::prepare();
-    }
 }

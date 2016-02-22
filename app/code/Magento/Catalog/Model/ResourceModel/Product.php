@@ -295,12 +295,41 @@ class Product extends AbstractResource
      */
     public function delete($object)
     {
-        $result = parent::delete($object);
+        try {
+            $this->transactionManager->start($this->getConnection());
+            if (is_numeric($object)) {
+                //$id = (int) $object;
+            } elseif ($object instanceof \Magento\Framework\Model\AbstractModel) {
+                $object->beforeDelete();
+                //$id = (int) $object->getData($this->getLinkField());
+            }
+            $this->_beforeDelete($object);
+            $this->entityManager->delete(\Magento\Catalog\Api\Data\ProductInterface::class, $object);
+            //$this->evaluateDelete(
+            //    $object,
+            //    $id,
+            //    $connection
+            //);
+
+            $this->_afterDelete($object);
+
+            if ($object instanceof \Magento\Framework\Model\AbstractModel) {
+                $object->isDeleted(true);
+                $object->afterDelete();
+            }
+            $this->transactionManager->commit();
+            if ($object instanceof \Magento\Framework\Model\AbstractModel) {
+                $object->afterDeleteCommit();
+            }
+        } catch (\Exception $e) {
+            $this->transactionManager->rollBack();
+            throw $e;
+        }
         $this->eventManager->dispatch(
             'catalog_product_delete_after_done',
             ['product' => $object]
         );
-        return $result;
+        return $this;
     }
 
     /**
@@ -569,7 +598,7 @@ class Product extends AbstractResource
     {
         $select = $this->getConnection()->select()->from(
             $this->getTable('catalog_product_entity'),
-            ['sku', $this->getLinkField()]
+            ['sku', 'entity_id']
         )->where(
             'sku IN (?)',
             $productSkuList
@@ -577,7 +606,7 @@ class Product extends AbstractResource
 
         $result = [];
         foreach ($this->getConnection()->fetchAll($select) as $row) {
-            $result[$row['sku']] = $row[$this->getLinkField()];
+            $result[$row['sku']] = $row['entity_id'];
         }
         return $result;
     }
@@ -643,9 +672,7 @@ class Product extends AbstractResource
     public function load($object, $entityId, $attributes = [])
     {
         $this->loadAttributesMetadata($attributes);
-
-        $this->entityManager->load('Magento\Catalog\Api\Data\ProductInterface', $object, $entityId);
-
+        $this->entityManager->load(\Magento\Catalog\Api\Data\ProductInterface::class, $object, $entityId);
         $this->_afterLoad($object);
 
         return $this;
