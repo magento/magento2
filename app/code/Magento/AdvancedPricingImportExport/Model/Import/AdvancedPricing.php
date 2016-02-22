@@ -15,6 +15,7 @@ use Magento\Framework\App\ResourceConnection;
  *
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 {
@@ -126,7 +127,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     /**
      * @var array
      */
-    protected $_oldSkus;
+    protected $_oldSkus = null;
 
     /**
      * Permanent entity columns.
@@ -153,7 +154,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @var \Magento\Framework\Model\Entity\MetadataPool
      */
     private $metadataPool;
-
 
     /**
      * Product entity link field
@@ -424,9 +424,10 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             $tableName = $this->_resourceFactory->create()->getTable($table);
             $priceIn = [];
             $entityIds = [];
+            $oldSkus = $this->retrieveOldSkus();
             foreach ($priceData as $sku => $priceRows) {
-                if (isset($this->_oldSkus[$sku])) {
-                    $productId = $this->_oldSkus[$sku];
+                if (isset($oldSkus[$sku])) {
+                    $productId = $oldSkus[$sku];
                     foreach ($priceRows as $row) {
                         $row[$this->getProductEntityLinkField()] = $productId;
                         $priceIn[] = $row;
@@ -446,7 +447,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      *
      * @param array $listSku
      * @param string $table
-     * @return bool
+     * @return boolean
      */
     protected function deleteProductTierPrices(array $listSku, $table)
     {
@@ -528,13 +529,15 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      */
     protected function retrieveOldSkus()
     {
-        $oldSkus = $this->_connection->fetchPairs(
-            $this->_connection->select()->from(
-                $this->_catalogProductEntity,
-                ['sku', $this->getProductEntityLinkField()]
-            )
-        );
-        return $oldSkus;
+        if ($this->_oldSkus != null) {
+            $this->_oldSkus = $this->_connection->fetchPairs(
+                $this->_connection->select()->from(
+                    $this->_catalogProductEntity,
+                    ['sku', $this->getProductEntityLinkField()]
+                )
+            );
+        }
+        return $this->_oldSkus;
     }
 
     /**
@@ -554,8 +557,9 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
                 ['value_id', $productEntityLinkField, 'all_groups', 'customer_group_id']
             )
         );
+        $oldSkus = $this->retrieveOldSkus();
         foreach ($existingPrices as $existingPrice) {
-            foreach ($this->_oldSkus as $sku => $productId) {
+            foreach ($oldSkus as $sku => $productId) {
                 if ($existingPrice[$productEntityLinkField] == $productId && isset($prices[$sku])) {
                     $this->incrementCounterUpdated($prices[$sku], $existingPrice);
                 }
@@ -599,7 +603,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         return $this;
     }
 
-
     /**
      * Get product metadata pool
      *
@@ -619,7 +622,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * Set product Metadata pool
      *
      * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
-     * @return void
+     * @return $this
      * @throws \LogicException
      * @deprecated
      */
@@ -629,6 +632,7 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
             throw new \LogicException("Metadata pool is already set");
         }
         $this->metadataPool = $metadataPool;
+        return $this;
     }
 
     /**

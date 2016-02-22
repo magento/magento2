@@ -132,7 +132,6 @@ class RowCustomizer implements RowCustomizerInterface
         return $additionalRowsCount;
     }
 
-
     /**
      * Get product metadata pool
      *

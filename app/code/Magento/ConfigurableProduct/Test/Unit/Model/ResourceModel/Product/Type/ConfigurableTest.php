@@ -75,13 +75,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testSaveProductsForDuplicate()
     {
         $mainProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->setMethods(['getIsDuplicate', '__sleep', '__wakeup', 'getTypeInstance', 'getConnection'])
+            ->setMethods(['__sleep', '__wakeup', 'getConnection'])
             ->disableOriginalConstructor()
             ->getMock();
-
-        $mainProduct->expects($this->once())->method('getIsDuplicate')->will($this->returnValue(true));
-        $mainProduct->expects($this->never())->method('getTypeInstance')->will($this->returnSelf());
-
         $this->configurable->saveProducts($mainProduct, [1, 2, 3]);
     }
 
@@ -102,7 +98,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 $this->relation
             ]
         );
-        $configurable->setMetadataPool($this->metadataPool);
+        $configurable->setMetadataPool($this->metadataPoolMock);
 
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
             ->setMethods(

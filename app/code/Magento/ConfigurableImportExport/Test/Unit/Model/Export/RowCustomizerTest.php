@@ -250,7 +250,6 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
             ->method('fetchItem')
             ->will($this->returnValue(false));
 
-
         $this->model->prepareData($this->_collectionMock, $productIds);
 
         $configurableData = $this->getPropertyValue($this->model, 'configurableData');
