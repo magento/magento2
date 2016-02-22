@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Export;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
@@ -14,6 +15,22 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\CatalogImportExport\Model\Export\Product
      */
     protected $_model;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $objectManager;
+
+    /**
+     * skipped attributes
+     *
+     * @var array
+     */
+    public static $skippedAttributes = [
+        'options',
+        'updated_at',
+        'extension_attributes',
+    ];
 
     /**
      * Stock item attributes which must be exported
@@ -47,7 +64,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->_model = $this->objectManager->create(
             'Magento\CatalogImportExport\Model\Export\Product'
         );
     }
@@ -57,12 +75,72 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testExport()
     {
+        $productRepository = $this->objectManager->create(
+            'Magento\Catalog\Api\ProductRepositoryInterface'
+        );
+        $id1 = $productRepository->get('simple_ms_1')->getId();
+        $origProduct1Data = $this->objectManager->create('Magento\Catalog\Model\Product')->load($id1)->getData();
+        $id2 = $productRepository->get('simple_ms_2')->getId();
+        $origProduct2Data = $this->objectManager->create('Magento\Catalog\Model\Product')->load($id2)->getData();
+        $id3 = $productRepository->get('simple')->getId();
+        $origProduct3Data = $this->objectManager->create('Magento\Catalog\Model\Product')->load($id3)->getData();
+
+        $fileSystem = $this->objectManager->get('Magento\Framework\Filesystem');
+        $csvfile = uniqid('importexport_');
+
         $this->_model->setWriter(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\ImportExport\Model\Export\Adapter\Csv'
+                'Magento\ImportExport\Model\Export\Adapter\Csv',
+                ['fileSystem' => $fileSystem, 'destination' => $csvfile]
             )
         );
         $this->assertNotEmpty($this->_model->export());
+
+        /** @var \Magento\CatalogImportExport\Model\Import\Product $importModel */
+        $importModel = $this->objectManager->create(
+            'Magento\CatalogImportExport\Model\Import\Product'
+        );
+        $directory = $fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $source = $this->objectManager->create(
+            '\Magento\ImportExport\Model\Import\Source\Csv',
+            [
+                'file' => $csvfile,
+                'directory' => $directory
+            ]
+        );
+        $errors = $importModel->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $importModel->importData();
+        $newProduct1Data = $this->objectManager->create('Magento\Catalog\Model\Product')->load($id1)->getData();
+        $newProduct2Data = $this->objectManager->create('Magento\Catalog\Model\Product')->load($id2)->getData();
+        $newProduct3Data = $this->objectManager->create('Magento\Catalog\Model\Product')->load($id3)->getData();
+
+        $this->assertEquals(count($origProduct1Data), count($newProduct1Data));
+        $this->assertEquals(count($origProduct2Data), count($newProduct2Data));
+        $this->assertEquals(count($origProduct3Data), count($newProduct3Data));
+        $this->assertEqualsOtherThanUpdatedAt($origProduct1Data, $newProduct1Data);
+        $this->assertEqualsOtherThanUpdatedAt($origProduct2Data, $newProduct2Data);
+        $this->assertEqualsOtherThanUpdatedAt($origProduct3Data, $newProduct3Data);
+    }
+
+    private function assertEqualsOtherThanUpdatedAt($expected, $actual)
+    {
+        foreach ($expected as $key => $value) {
+            if (in_array($key, self::$skippedAttributes)) {
+                continue;
+            } else {
+                $this->assertEquals(
+                    $value,
+                    $actual[$key],
+                    'Assert value at key - ' . $key . ' failed'
+                );
+            }
+        }
     }
 
     /**
