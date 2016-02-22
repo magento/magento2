@@ -52,7 +52,7 @@ class Options extends Section
      *
      * @var string
      */
-    protected $importGrid = ".product_form_product_form_custom_options_import_options_modal";
+    protected $importGrid = ".product_form_product_form_import_options_modal";
 
     /**
      * Locator for 'Add Value' button.
@@ -144,7 +144,7 @@ class Options extends Section
     {
         return $this->blockFactory->create(
             'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Search\Grid',
-            ['element' => $this->_rootElement->find($this->importGrid)]
+            ['element' => $this->browser->find($this->importGrid)]
         );
     }
 
