@@ -16,7 +16,6 @@ define([
         defaults: {
             dataProvider: '',
             insertData: [],
-            insertOptions: [],
             listens: {
                 'insertData': 'processingInsertData'
             }
