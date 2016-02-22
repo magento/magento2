@@ -23,21 +23,21 @@ interface ShippingInterface extends \Magento\Framework\Api\ExtensibleDataInterfa
     /**
      * Gets shipping address
      *
-     * @return \Magento\Sales\Api\Data\OrderAddressInterface
+     * @return \Magento\Sales\Api\Data\OrderAddressInterface|null
      */
     public function getAddress();
 
     /**
      * Gets shipping method
      *
-     * @return string
+     * @return string|null
      */
     public function getMethod();
 
     /**
      * Gets object with shipping totals
      *
-     * @return \Magento\Sales\Api\Data\TotalInterface
+     * @return \Magento\Sales\Api\Data\TotalInterface|null
      */
     public function getTotal();
 
