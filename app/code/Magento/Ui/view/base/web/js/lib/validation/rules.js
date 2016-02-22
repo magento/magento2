@@ -397,7 +397,7 @@ define([
                 }
                 return !(pass.length > 0 && pass.length < 6);
             },
-            $.mage.__('Please enter 6 or more characters. Leading or trailing spaces will be ignored.')
+            $.mage.__('Please enter 6 or more characters. Leading and trailing spaces will be ignored.')
         ],
         "validate-admin-password": [
             function(value) {
@@ -418,6 +418,46 @@ define([
                 return true;
             },
             $.mage.__('Please enter 7 or more characters, using both numeric and alphabetic.')
+        ],
+        "validate-customer-password": [
+            function (v, elm) {
+                var validator = this,
+                    length = 0,
+                    counter = 0;
+                var passwordMinLength = $(elm).data('password-min-length');
+                var passwordMinCharacterSets = $(elm).data('password-min-character-sets');
+                var pass = $.trim(v);
+                var result = pass.length >= passwordMinLength;
+                if (result == false) {
+                    validator.passwordErrorMessage = $.mage.__(
+                        "Minimum length of this field must be equal or greater than %1 symbols." +
+                        " Leading and trailing spaces will be ignored."
+                    ).replace('%1', passwordMinLength);
+                    return result;
+                }
+                if (pass.match(/\d+/)) {
+                    counter ++;
+                }
+                if (pass.match(/[a-z]+/)) {
+                    counter ++;
+                }
+                if (pass.match(/[A-Z]+/)) {
+                    counter ++;
+                }
+                if (pass.match(/[^a-zA-Z0-9]+/)) {
+                    counter ++;
+                }
+                if (counter < passwordMinCharacterSets) {
+                    result = false;
+                    validator.passwordErrorMessage = $.mage.__(
+                        "Minimum of different classes of characters in password is %1." +
+                        " Classes of characters: Lower Case, Upper Case, Digits, Special Characters."
+                    ).replace('%1', passwordMinCharacterSets);
+                }
+                return result;
+            }, function () {
+                return this.passwordErrorMessage;
+            }
         ],
         "validate-url": [
             function(value) {
@@ -766,7 +806,7 @@ define([
                 }
                 return true;
             },
-            $.mage.__('Please enter 6 or more characters. Leading or trailing spaces will be ignored.')
+            $.mage.__('Please enter 6 or more characters. Leading and trailing spaces will be ignored.')
         ],
         'validate-item-quantity': [
             function (value, params) {
@@ -787,6 +827,24 @@ define([
                 return value === $(param).val();
             },
             $.validator.messages.equalTo
+        ],
+        'validate-file-type': [
+            function (name, types) {
+                var extension = name.split('.').pop();
+
+                if (types && typeof types === 'string') {
+                    types = types.split(' ');
+                }
+
+                return !types || !types.length || ~types.indexOf(extension);
+            },
+            $.mage.__('We don\'t recognize or support this file extension type.')
+        ],
+        'validate-max-size': [
+            function (size, maxSize) {
+                return maxSize === false || size < maxSize;
+            },
+            $.mage.__('File you are trying to upload exceeds maximum file size limit.')
         ]
     }, function (data) {
         return {

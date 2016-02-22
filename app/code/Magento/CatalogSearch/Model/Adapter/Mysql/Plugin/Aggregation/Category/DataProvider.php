@@ -34,6 +34,7 @@ class DataProvider
     protected $categoryFactory;
 
     /**
+     * DataProvider constructor.
      * @param ResourceConnection $resource
      * @param ScopeResolverInterface $scopeResolver
      * @param Resolver $layerResolver

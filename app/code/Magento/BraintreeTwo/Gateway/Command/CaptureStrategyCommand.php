@@ -32,6 +32,11 @@ class CaptureStrategyCommand implements CommandInterface
     const CAPTURE = 'settlement';
 
     /**
+     * Braintree vault capture command
+     */
+    const VAULT_CAPTURE = 'vault_capture';
+
+    /**
      * Braintree clone transaction command
      */
     const CLONE_TRANSACTION = 'clone';
@@ -108,15 +113,18 @@ class CaptureStrategyCommand implements CommandInterface
     private function getCommand(OrderPaymentInterface $payment)
     {
         // if auth transaction is not exists execute authorize&capture command
-        if (!$payment->getAuthorizationTransaction()) {
+        $existsCapture = $this->isExistsCaptureTransaction($payment);
+        if (!$payment->getAuthorizationTransaction() && !$existsCapture) {
             return self::SALE;
         }
 
-        if (!$this->isExistsCaptureTransaction($payment)) {
+        // do capture for authorization transaction
+        if (!$existsCapture) {
             return self::CAPTURE;
         }
 
-        return self::CLONE_TRANSACTION;
+        // process capture for payment via Vault
+        return self::VAULT_CAPTURE;
     }
 
     /**

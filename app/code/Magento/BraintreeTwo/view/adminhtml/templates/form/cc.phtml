@@ -77,6 +77,18 @@ $ccType = $block->getInfoData('cc_type');
         </div>
     <?php endif; ?>
 
+    <?php if($block->isVaultEnabled()): ?>
+        <div class="field-tooltip-content">
+            <input type="checkbox"
+                   id="<?php /* @noEscape */ echo $code; ?>_vault"
+                   name="payment[is_active_payment_token_enabler]"
+                   class="admin__control-checkbox"/>
+            <label class="label" for="<?php /* @noEscape */ echo $code; ?>_vault">
+                <span><?php echo $block->escapeHtml('Save for later use.'); ?></span>
+            </label>
+        </div>
+    <?php endif; ?>
+
     <input type="hidden" id="<?php /* @noEscape */ echo $code; ?>_payment_method_nonce"
            name="payment[payment_method_nonce]"/>
     <input type="submit" name="Submit" style="display: none;">

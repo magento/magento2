@@ -35,11 +35,7 @@ class ComposerJsonFinder
      */
     public function findComposerJson()
     {
-        // composer.json is in same directory as vendor
-        $vendorPath = $this->directoryList->getPath(DirectoryList::CONFIG) . '/vendor_path.php';
-        $vendorDir = require "{$vendorPath}";
-
-        $composerJson = $this->directoryList->getPath(DirectoryList::ROOT) . "/{$vendorDir}/../composer.json";
+        $composerJson = $this->directoryList->getPath(DirectoryList::ROOT) . '/composer.json';
 
         $composerJson = realpath($composerJson);
 

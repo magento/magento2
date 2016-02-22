@@ -46,7 +46,7 @@
     <fieldset name="general">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="label" xsi:type="string" translate="true">General Information</item>
+                <item name="label" xsi:type="string"/>
             </item>
         </argument>
         <field name="block_id">
@@ -66,10 +66,15 @@
                     <item name="dataType" xsi:type="string">boolean</item>
                     <item name="label" xsi:type="string" translate="true">Enable Block</item>
                     <item name="formElement" xsi:type="string">checkbox</item>
-                    <item name="elementTmpl" xsi:type="string">ui/form/element/switcher</item>
                     <item name="source" xsi:type="string">block</item>
                     <item name="sortOrder" xsi:type="number">10</item>
                     <item name="dataScope" xsi:type="string">is_active</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="default" xsi:type="number">1</item>
                 </item>
             </argument>
         </field>
@@ -126,6 +131,7 @@
                     <item name="source" xsi:type="string">block</item>
                     <item name="wysiwyg" xsi:type="boolean">true</item>
                     <item name="dataScope" xsi:type="string">content</item>
+                    <item name="additionalClasses" xsi:type="string">admin__field-wide</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
