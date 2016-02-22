@@ -30,7 +30,7 @@
         <strategy>xpath</strategy>
         <fields>
             <conditions>
-                <selector>#catalog_rule_formrule_conditions_fieldset_</selector>
+                <selector>[id^="catalog_rule_formrule_conditions_fieldset_"]</selector>
                 <input>conditions</input>
             </conditions>
         </fields>
