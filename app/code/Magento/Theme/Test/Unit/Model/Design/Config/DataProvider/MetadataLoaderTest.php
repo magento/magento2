@@ -46,6 +46,11 @@ class MetadataLoaderTest extends \PHPUnit_Framework_TestCase
      */
     protected $designConfigExtension;
 
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $storeManager;
+
     protected function setUp()
     {
         $this->request = $this->getMockBuilder('Magento\Framework\App\Request\Http')
@@ -64,11 +69,14 @@ class MetadataLoaderTest extends \PHPUnit_Framework_TestCase
         $this->designConfigExtension = $this->getMockBuilder('Magento\Theme\Api\Data\DesignConfigExtensionInterface')
             ->setMethods(['getDesignConfigData'])
             ->getMockForAbstractClass();
+        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+            ->getMockForAbstractClass();
 
         $this->model = new MetadataLoader(
             $this->request,
             $this->scopeFallbackResolver,
-            $this->designConfigRepository
+            $this->designConfigRepository,
+            $this->storeManager
         );
     }
 
@@ -90,10 +98,13 @@ class MetadataLoaderTest extends \PHPUnit_Framework_TestCase
                 ['scope_id', null, $scopeId],
             ]);
 
-        $this->scopeFallbackResolver->expects($this->once())
+        $this->scopeFallbackResolver->expects($this->atLeastOnce())
             ->method('getFallbackScope')
             ->with($scope, $scopeId)
             ->willReturn([$scope, $scopeId]);
+        $this->storeManager->expects($this->once())
+            ->method('isSingleStoreMode')
+            ->willReturn(false);
 
         $this->designConfigRepository->expects($this->once())
             ->method('getByScope')

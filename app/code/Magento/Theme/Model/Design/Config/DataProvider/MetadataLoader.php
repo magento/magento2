@@ -8,6 +8,7 @@ namespace Magento\Theme\Model\Design\Config\DataProvider;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ScopeFallbackResolverInterface;
 use Magento\Theme\Api\DesignConfigRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class MetadataLoader
 {
@@ -27,18 +28,44 @@ class MetadataLoader
     protected $designConfigRepository;
 
     /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
      * @param RequestInterface $request
      * @param ScopeFallbackResolverInterface $scopeFallbackResolver
      * @param DesignConfigRepositoryInterface $designConfigRepository
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         RequestInterface $request,
         ScopeFallbackResolverInterface $scopeFallbackResolver,
-        DesignConfigRepositoryInterface $designConfigRepository
+        DesignConfigRepositoryInterface $designConfigRepository,
+        StoreManagerInterface $storeManager
     ) {
         $this->request = $request;
         $this->scopeFallbackResolver = $scopeFallbackResolver;
         $this->designConfigRepository = $designConfigRepository;
+        $this->storeManager = $storeManager;
+    }
+
+    /**
+     * Show fallback button
+     *
+     * @param string $scope
+     * @param string $scopeId
+     * @return bool
+     */
+    protected function showFallbackButton($scope, $scopeId)
+    {
+        $fallbackButton = true;
+        list($fallbackScope, $fallbackScopeId) = $this->scopeFallbackResolver->getFallbackScope($scope, $scopeId);
+        if ($this->storeManager->isSingleStoreMode() || !$fallbackScope) {
+            $fallbackButton = false;
+        }
+
+        return $fallbackButton;
     }
 
     /**
@@ -53,12 +80,10 @@ class MetadataLoader
 
         $data = [];
         if ($scope) {
-            $showFallbackReset = false;
             list($fallbackScope, $fallbackScopeId) = $this->scopeFallbackResolver->getFallbackScope($scope, $scopeId);
             if ($fallbackScope) {
                 $scope = $fallbackScope;
                 $scopeId = $fallbackScopeId;
-                $showFallbackReset = true;
             }
 
             $designConfig = $this->designConfigRepository->getByScope($scope, $scopeId);
@@ -73,7 +98,9 @@ class MetadataLoader
                 }
                 $fieldName = $fieldData->getFieldConfig()['field'];
                 $element[$fieldName]['arguments']['data']['config']['default'] = $fieldData->getValue();
-                $element[$fieldName]['arguments']['data']['config']['showFallbackReset'] = $showFallbackReset;
+                $element[$fieldName]['arguments']['data']['config']['showFallbackReset'] = $this->showFallbackButton(
+                    $scope, $scopeId
+                );
             }
         }
         return $data;

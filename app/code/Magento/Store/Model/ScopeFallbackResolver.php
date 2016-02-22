@@ -16,6 +16,11 @@ class ScopeFallbackResolver implements ScopeFallbackResolverInterface
     protected $storeManager;
 
     /**
+     * @var array
+     */
+    protected $fallback = [];
+
+    /**
      * @param StoreManagerInterface $storeManager
      */
     public function __construct(
@@ -29,21 +34,24 @@ class ScopeFallbackResolver implements ScopeFallbackResolverInterface
      */
     public function getFallbackScope($scope, $scopeId, $forConfig = true)
     {
-        $fallback = [null, null];
-        switch ($scope) {
-            case ScopeInterface::SCOPE_WEBSITE:
-            case ScopeInterface::SCOPE_WEBSITES:
-                $fallback = [ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null];
-                break;
-            case ScopeInterface::SCOPE_GROUP:
-                $fallback = [ScopeInterface::SCOPE_WEBSITES, $this->storeManager->getGroup($scopeId)->getWebsiteId()];
-                break;
-            case ScopeInterface::SCOPE_STORE:
-            case ScopeInterface::SCOPE_STORES:
-                $fallback = $forConfig
-                    ? [ScopeInterface::SCOPE_WEBSITES, $this->storeManager->getStore($scopeId)->getWebsiteId()]
-                    : [ScopeInterface::SCOPE_GROUP, $this->storeManager->getStore($scopeId)->getStoreGroupId()];
+        if (!isset($this->fallback[$scope][$scopeId][$forConfig])) {
+            $fallback = [null, null];
+            switch ($scope) {
+                case ScopeInterface::SCOPE_WEBSITE:
+                case ScopeInterface::SCOPE_WEBSITES:
+                    $fallback = [ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null];
+                    break;
+                case ScopeInterface::SCOPE_GROUP:
+                    $fallback = [ScopeInterface::SCOPE_WEBSITES, $this->storeManager->getGroup($scopeId)->getWebsiteId()];
+                    break;
+                case ScopeInterface::SCOPE_STORE:
+                case ScopeInterface::SCOPE_STORES:
+                    $fallback = $forConfig
+                        ? [ScopeInterface::SCOPE_WEBSITES, $this->storeManager->getStore($scopeId)->getWebsiteId()]
+                        : [ScopeInterface::SCOPE_GROUP, $this->storeManager->getStore($scopeId)->getStoreGroupId()];
+            }
+            $this->fallback[$scope][$scopeId][$forConfig] = $fallback;
         }
-        return $fallback;
+        return $this->fallback[$scope][$scopeId][$forConfig];
     }
 }
