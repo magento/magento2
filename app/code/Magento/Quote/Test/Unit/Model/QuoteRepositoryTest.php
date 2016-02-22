@@ -366,7 +366,6 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $sortOrderMock->expects($this->once())->method('getDirection')->will($this->returnValue($direction));
         $this->quoteCollectionMock->expects($this->once())->method('addOrder')->with('id', $expectedDirection);
 
-
         $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->will($this->returnValue(1));
         $searchCriteriaMock->expects($this->once())->method('getPageSize')->will($this->returnValue(10));
         $this->quoteCollectionMock->expects($this->once())->method('setCurPage')->with(1);
