@@ -801,7 +801,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
         $exceptionInDelete,
         $result
     ) {
-        $this->advancedPricing = $this->getAdvancedPricingMock(['addRowError']);
+        $this->advancedPricing = $this->getAdvancedPricingMock(['addRowError', 'retrieveOldSkus']);
         $dbSelectMock = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         if ($listSku) {
             $this->connection->expects($this->once())
