@@ -17,8 +17,6 @@ use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\OrderItemSearchResultInterface;
 use Magento\Sales\Api\Data\OrderItemSearchResultInterfaceFactory;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
-use Magento\Sales\Api\Data\OrderItemExtension;
-use Magento\Sales\Api\Data\OrderItemExtensionInterface;
 use Magento\Sales\Model\ResourceModel\Metadata;
 
 /**
@@ -50,17 +48,7 @@ class ItemRepository implements OrderItemRepositoryInterface
     /**
      * @var ProductOptionExtensionFactory
      */
-    protected $productOptionExtensionFactory;
-
-    /**
-     * @var OrderItemExtension
-     */
-    private $orderItemExtension;
-
-    /**
-     * @var ShippingBuilder
-     */
-    private $shippingBuilder;
+    protected $extensionFactory;
 
     /**
      * @var ProductOptionProcessorInterface[]
@@ -77,7 +65,7 @@ class ItemRepository implements OrderItemRepositoryInterface
      * @param Metadata $metadata
      * @param OrderItemSearchResultInterfaceFactory $searchResultFactory
      * @param ProductOptionFactory $productOptionFactory
-     * @param ProductOptionExtensionFactory $productOptionExtensionFactory
+     * @param ProductOptionExtensionFactory $extensionFactory
      * @param array $processorPool
      */
     public function __construct(
@@ -85,14 +73,14 @@ class ItemRepository implements OrderItemRepositoryInterface
         Metadata $metadata,
         OrderItemSearchResultInterfaceFactory $searchResultFactory,
         ProductOptionFactory $productOptionFactory,
-        ProductOptionExtensionFactory $productOptionExtensionFactory,
+        ProductOptionExtensionFactory $extensionFactory,
         array $processorPool = []
     ) {
         $this->objectFactory = $objectFactory;
         $this->metadata = $metadata;
         $this->searchResultFactory = $searchResultFactory;
         $this->productOptionFactory = $productOptionFactory;
-        $this->productOptionExtensionFactory = $productOptionExtensionFactory;
+        $this->extensionFactory = $extensionFactory;
         $this->processorPool = $processorPool;
     }
 
@@ -117,7 +105,6 @@ class ItemRepository implements OrderItemRepositoryInterface
             }
 
             $this->addProductOption($orderItem);
-            $this->addShipping($orderItem);
             $this->registry[$id] = $orderItem;
         }
         return $this->registry[$id];
@@ -145,7 +132,6 @@ class ItemRepository implements OrderItemRepositoryInterface
         /** @var OrderItemInterface $orderItem */
         foreach ($searchResult->getItems() as $orderItem) {
             $this->addProductOption($orderItem);
-            $this->addShipping($orderItem);
         }
 
         return $searchResult;
@@ -242,7 +228,7 @@ class ItemRepository implements OrderItemRepositoryInterface
 
         $extensionAttributes = $productOption->getExtensionAttributes();
         if (!$extensionAttributes) {
-            $extensionAttributes = $this->productOptionExtensionFactory->create();
+            $extensionAttributes = $this->extensionFactory->create();
             $productOption->setExtensionAttributes($extensionAttributes);
         }
 
@@ -281,81 +267,5 @@ class ItemRepository implements OrderItemRepositoryInterface
         }
 
         return $request;
-    }
-
-    /**
-     * Sets shipping address to quote item as extension attribute
-     *
-     * @param OrderItemInterface $orderItem
-     * @return void
-     */
-    private function addShipping(OrderItemInterface $orderItem)
-    {
-        /** @var OrderItemExtensionInterface $extensionAttributes */
-        $extensionAttributes = $orderItem->getExtensionAttributes();
-        if ($extensionAttributes === null) {
-            $extensionAttributes = $this->getOrderItemExtensionDependency();
-        }
-        /** @var ShippingBuilder $shipping */
-        $shipping = $this->getShippingBuilderDependency();
-        $shipping->setOrderId($orderItem->getOrderId());
-        $extensionAttributes->setShipping($shipping->create());
-        $orderItem->setExtensionAttributes($extensionAttributes);
-    }
-
-    /**
-     * Get the new OrderItemExtension dependency for application code
-     *
-     * @return OrderItemExtension
-     * @deprecated
-     */
-    private function getOrderItemExtensionDependency()
-    {
-        if (!$this->orderItemExtension instanceof OrderItemExtension) {
-            $this->orderItemExtension = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                '\Magento\Sales\Api\Data\OrderItemExtension'
-            );
-        }
-        return $this->orderItemExtension;
-    }
-
-    /**
-     * The setter function to inject the mocked dependency during unit test
-     *
-     * @param OrderItemExtension $orderItemExtension
-     * @return void
-     * @deprecated
-     */
-    public function setOrderItemExtensionDependency(OrderItemExtension $orderItemExtension)
-    {
-        $this->orderItemExtension = $orderItemExtension;
-    }
-
-    /**
-     * Get the new ShippingBuilder dependency for application code
-     *
-     * @return \Magento\Sales\Model\Order\ShippingBuilder
-     * @deprecated
-     */
-    private function getShippingBuilderDependency()
-    {
-        if (!$this->shippingBuilder instanceof \Magento\Sales\Model\Order\ShippingBuilder) {
-            $this->shippingBuilder = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                '\Magento\Sales\Model\Order\ShippingBuilder'
-            );
-        }
-        return $this->shippingBuilder;
-    }
-
-    /**
-     * The setter function to inject the mocked dependency during unit test
-     *
-     * @param \Magento\Sales\Model\Order\ShippingBuilder shippingBuilder
-     * @return void
-     * @deprecated
-     */
-    public function setShippingBuilderDependency(\Magento\Sales\Model\Order\ShippingBuilder $shippingBuilder)
-    {
-        $this->shippingBuilder = $shippingBuilder;
     }
 }
