@@ -9,6 +9,7 @@ use Magento\CatalogRule\Api\Data;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
+use \Magento\Framework\Exception\ValidatorException;
 
 class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepositoryInterface
 {
@@ -51,7 +52,10 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
         try {
             $this->ruleResource->save($rule);
             unset($this->rules[$rule->getId()]);
-        } catch (\Exception $e) {
+        } catch (ValidatorException $e) {
+            throw new CouldNotSaveException(__($e->getMessage()));
+        }
+        catch (\Exception $e) {
             throw new CouldNotSaveException(__('Unable to save rule %1', $rule->getRuleId()));
         }
         return $rule;
@@ -63,7 +67,7 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
     public function get($ruleId)
     {
         if (!isset($this->rules[$ruleId])) {
-            /** @var \Magento\CatalogRule\Model\RuleFactory $rule */
+            /** @var \Magento\CatalogRule\Model\Rule $rule */
             $rule = $this->ruleFactory->create();
 
             /* TODO: change to resource model after entity manager will be fixed */
@@ -84,6 +88,8 @@ class CatalogRuleRepository implements \Magento\CatalogRule\Api\CatalogRuleRepos
         try {
             $this->ruleResource->delete($rule);
             unset($this->rules[$rule->getId()]);
+        } catch (ValidatorException $e) {
+            throw new CouldNotSaveException(__($e->getMessage()));
         } catch (\Exception $e) {
             throw new CouldNotDeleteException(__('Unable to remove rule %1', $rule->getRuleId()));
         }
