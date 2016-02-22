@@ -9,6 +9,8 @@ namespace Magento\Translation\Model\Inline;
 /**
  * This class is responsible for parsing content and applying necessary html element
  * wrapping and client scripts for inline translation.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
 {
