@@ -173,6 +173,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @deprecated
+     * @return \Magento\Search\Api\SearchInterface
      */
     private function getSearch()
     {
@@ -186,7 +187,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @deprecated
      * @param \Magento\Search\Api\SearchInterface $object
      */
-    public function setSearch($object)
+    public function setSearch(\Magento\Search\Api\SearchInterface $object)
     {
         $this->search = $object;
     }

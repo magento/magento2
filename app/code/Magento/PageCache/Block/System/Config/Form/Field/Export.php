@@ -29,8 +29,8 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
 
         $data = [
             'id' => 'system_full_page_cache_varnish_export_button_version' . $this->getVarnishVersion(),
-            'label' => $this->_getLabel(),
-            'onclick' => "setLocation('" . $this->_getUrl($params) . "')",
+            'label' => $this->getLabel(),
+            'onclick' => "setLocation('" . $this->getVarnishUrl($params) . "')",
         ];
 
         $html = $buttonBlock->setData($data)->toHtml();
@@ -50,7 +50,7 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * @return \Magento\Framework\Phrase
      */
-    protected function _getLabel()
+    private function getLabel()
     {
         return  __('Export VCL for Varnish %1', $this->getVarnishVersion());
     }
@@ -60,7 +60,7 @@ class Export extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @return string
      */
-    protected function _getUrl($params = [])
+    private function getVarnishUrl($params = [])
     {
         return $this->getUrl('*/PageCache/exportVarnishConfig', $params);
     }
