@@ -5,6 +5,8 @@
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
+use Magento\Framework\App\ObjectManager;
+
 class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Ui\Component\Layout\Tabs\TabInterface
 {
@@ -19,6 +21,12 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @var \Magento\Rule\Block\Actions
      */
     protected $_ruleActions;
+
+    /**
+     * @var \Magento\Config\Model\Config\Source\Yesno
+     * @deprecated
+     */
+    protected $_sourceYesno;
 
     /**
      * @var string
@@ -36,24 +44,35 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
+     * @param \Magento\Config\Model\Config\Source\Yesno $sourceYesno
      * @param \Magento\Rule\Block\Actions $ruleActions
      * @param \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset
-     * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param array $data
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
+        \Magento\Config\Model\Config\Source\Yesno $sourceYesno,
         \Magento\Rule\Block\Actions $ruleActions,
         \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset,
-        \Magento\SalesRule\Model\RuleFactory $ruleFactory,
         array $data = []
     ) {
-        $this->ruleFactory = $ruleFactory;
         $this->_rendererFieldset = $rendererFieldset;
         $this->_ruleActions = $ruleActions;
+        $this->_sourceYesno = $sourceYesno;
         parent::__construct($context, $registry, $formFactory, $data);
+    }
+
+    /**
+     * @return \Magento\SalesRule\Model\RuleFactory
+     * @deprecated
+     */
+    public function getRuleFactory()
+    {
+        if ($this->ruleFactory instanceof \Magento\SalesRule\Model\RuleFactory) {
+            $this->ruleFactory = ObjectManager::getInstance()->get('\Magento\SalesRule\Model\RuleFactory');
+        }
     }
 
     /**

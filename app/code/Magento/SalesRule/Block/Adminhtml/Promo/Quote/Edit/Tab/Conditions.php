@@ -5,6 +5,8 @@
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
 
+use Magento\Framework\App\ObjectManager;
+
 class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     \Magento\Ui\Component\Layout\Tabs\TabInterface
 {
@@ -38,7 +40,6 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Rule\Block\Conditions $conditions
      * @param \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset
-     * @param \Magento\SalesRule\Model\RuleFactory $ruleFactory
      * @param array $data
      */
     public function __construct(
@@ -47,13 +48,22 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Rule\Block\Conditions $conditions,
         \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $rendererFieldset,
-        \Magento\SalesRule\Model\RuleFactory $ruleFactory,
         array $data = []
     ) {
-        $this->ruleFactory = $ruleFactory;
         $this->_rendererFieldset = $rendererFieldset;
         $this->_conditions = $conditions;
         parent::__construct($context, $registry, $formFactory, $data);
+    }
+
+    /**
+     * @return \Magento\SalesRule\Model\RuleFactory
+     * @deprecated
+     */
+    public function getRuleFactory()
+    {
+        if ($this->ruleFactory instanceof \Magento\SalesRule\Model\RuleFactory) {
+            $this->ruleFactory = ObjectManager::getInstance()->get('\Magento\SalesRule\Model\RuleFactory');
+        }
     }
 
     /**
