@@ -80,10 +80,7 @@ class ShippingBuilder
             if ($this->order->getEntityId()) {
                 /** @var ShippingInterface $shipping */
                 $shipping = $this->shippingFactory->create();
-                $shippingAddress = $this->order->getShippingAddress();
-                if ($shippingAddress) {
-                    $shipping->setAddress($shippingAddress);
-                }
+                $shipping->setAddress($this->order->getShippingAddress());
                 $shipping->setMethod($this->order->getShippingMethod());
                 $shipping->setTotal($this->getTotal());
             }
