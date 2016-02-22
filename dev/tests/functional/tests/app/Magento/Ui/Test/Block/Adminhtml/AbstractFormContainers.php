@@ -37,7 +37,7 @@ abstract class AbstractFormContainers extends Form
      *
      * @var string
      */
-    protected $header = 'header';
+    protected $header = 'header.page-header';
 
     /**
      * Initialize.
@@ -90,6 +90,7 @@ abstract class AbstractFormContainers extends Form
 
         if (null === $fixture) {
             foreach ($this->containers as $containerName => $containerData) {
+                $this->openContainer($containerName);
                 $containerData = $this->getContainer($containerName)->getFieldsData();
                 $data = array_merge($data, $containerData);
             }

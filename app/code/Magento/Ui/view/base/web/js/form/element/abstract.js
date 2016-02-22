@@ -6,9 +6,10 @@
 define([
     'underscore',
     'mageUtils',
+    'uiLayout',
     'uiElement',
     'Magento_Ui/js/lib/validation/validator'
-], function (_, utils, Element, validator) {
+], function (_, utils, layout, Element, validator) {
     'use strict';
 
     return Element.extend({
@@ -18,22 +19,34 @@ define([
             focused: false,
             required: false,
             disabled: false,
+            valueChangedByUser: false,
             elementTmpl: 'ui/form/element/input',
             tooltipTpl: 'ui/form/element/helper/tooltip',
             'input_type': 'input',
             placeholder: '',
             description: '',
+            labelVisible: true,
             label: '',
             error: '',
             warn: '',
             notice: '',
             customScope: '',
             additionalClasses: {},
+            isUseDefault: '',
+            valueUpdate: false, // ko binding valueUpdate
 
+            switcherConfig: {
+                component: 'Magento_Ui/js/form/switcher',
+                name: '${ $.name }_switcher',
+                target: '${ $.name }',
+                property: 'value'
+            },
             listens: {
                 visible: 'setPreview',
                 '${ $.provider }:data.reset': 'reset',
-                '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate'
+                '${ $.provider }:data.overload': 'overload',
+                '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate',
+                'isUseDefault': 'toggleUseDefault'
             },
 
             links: {
@@ -50,7 +63,8 @@ define([
 
             this._super()
                 .setInitialValue()
-                ._setClasses();
+                ._setClasses()
+                .initSwicher();
 
             return this;
         },
@@ -65,7 +79,7 @@ define([
 
             this._super();
 
-            this.observe('error disabled focused preview visible value warn')
+            this.observe('error disabled focused preview visible value warn isUseDefault')
                 .observe({
                     'required': !!rules['required-entry']
                 });
@@ -85,7 +99,7 @@ define([
 
             this._super();
 
-            scope   = this.dataScope,
+            scope   = this.dataScope;
             name    = scope.split('.').slice(1);
 
             _.extend(this, {
@@ -98,6 +112,19 @@ define([
         },
 
         /**
+         * Initializes switcher element instance.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        initSwicher: function () {
+            if (this.switcherConfig.enabled) {
+                layout([this.switcherConfig]);
+            }
+
+            return this;
+        },
+
+        /**
          * Sets initial value of the element and subscribes to it's changes.
          *
          * @returns {Abstract} Chainable.
@@ -105,8 +132,12 @@ define([
         setInitialValue: function () {
             this.initialValue = this.getInitialValue();
 
-            this.value(this.initialValue);
+            if (this.value.peek() !== this.initialValue) {
+                this.value(this.initialValue);
+            }
+
             this.on('value', this.onUpdate.bind(this));
+            this.isUseDefault(this.disabled());
 
             return this;
         },
@@ -130,7 +161,7 @@ define([
             }
 
             _.extend(this.additionalClasses, {
-                required: this.required,
+                _required: this.required,
                 _error: this.error,
                 _warn: this.warn,
                 _disabled: this.disabled
@@ -169,7 +200,77 @@ define([
         },
 
         /**
-         * Returnes unwrapped preview observable.
+         * Show element.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        show: function () {
+            this.visible(true);
+
+            return this;
+        },
+
+        /**
+         * Hide element.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        hide: function () {
+            this.visible(false);
+
+            return this;
+        },
+
+        /**
+         * Disable element.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        disable: function() {
+            this.disabled(true);
+
+            return this;
+        },
+
+        /**
+         * Enable element.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        enable: function() {
+            this.disabled(false);
+
+            return this;
+        },
+
+        /**
+         *
+         * @param {(String|Object)} rule
+         * @param {(Object|Boolean)} [options]
+         * @returns {Abstract} Chainable.
+         */
+        setValidation: function (rule, options) {
+            var rules =  utils.copy(this.validation),
+                changed;
+
+            if (_.isObject(rule)) {
+                _.extend(this.validation, rule)
+            } else {
+                this.validation[rule] = options;
+            }
+
+            changed = utils.compare(rules, this.validation).equal;
+
+            if (changed) {
+                this.required(!!rules['required-entry']);
+                this.validate();
+            }
+
+            return this;
+        },
+
+        /**
+         * Returns unwrapped preview observable.
          *
          * @returns {String} Value of the preview observable.
          */
@@ -178,12 +279,21 @@ define([
         },
 
         /**
-         * Checkes if element has addons
+         * Checks if element has addons
          *
          * @returns {Boolean}
          */
         hasAddons: function () {
             return this.addbefore || this.addafter;
+        },
+
+        /**
+         * Checks if element has service setting
+         *
+         * @returns {Boolean}
+         */
+        hasService: function() {
+            return this.service && this.service.template;
         },
 
         /**
@@ -211,6 +321,15 @@ define([
          */
         reset: function () {
             this.value(this.initialValue);
+            this.error(false);
+        },
+
+        /**
+         * Sets current state as initial.
+         */
+        overload: function () {
+            this.setInitialValue();
+            this.bubble('update', this.hasChanged());
         },
 
         /**
@@ -244,8 +363,8 @@ define([
         validate: function () {
             var value   = this.value(),
                 result  = validator(this.validation, value),
-                message = result.message,
-                isValid = !this.visible() || result.passed;
+                message = !this.disabled() && this.visible() ? result.message : '',
+                isValid = this.disabled() || !this.visible() || result.passed;
 
             this.error(message);
 
@@ -267,6 +386,17 @@ define([
             this.bubble('update', this.hasChanged());
 
             this.validate();
+        },
+
+        toggleUseDefault: function (state) {
+            this.disabled(state);
+        },
+
+        /**
+         *  Callback when value is changed by user
+         */
+        userChanges: function() {
+            this.valueChangedByUser = true;
         }
     });
 });

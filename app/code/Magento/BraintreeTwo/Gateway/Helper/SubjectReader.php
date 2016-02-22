@@ -5,7 +5,10 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Helper;
 
+use Braintree\Transaction;
+use Magento\Quote\Model\Quote;
 use Magento\Payment\Gateway\Helper;
+use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 
 /**
@@ -53,7 +56,7 @@ class SubjectReader
         }
 
         if (!isset($subject['object']->transaction)
-            && !$subject['object']->transaction instanceof \Braintree\Transaction
+            && !$subject['object']->transaction instanceof Transaction
         ) {
             throw new \InvalidArgumentException('The object is not a class \Braintree\Transaction.');
         }
@@ -74,16 +77,17 @@ class SubjectReader
 
     /**
      * Reads customer id from subject
+     *
      * @param array $subject
      * @return int
      */
     public function readCustomerId(array $subject)
     {
-        if (empty($subject['customerId'])) {
+        if (empty($subject['customer_id'])) {
             throw new \InvalidArgumentException('The "customerId" field does not exists');
         }
 
-        return (int)$subject['customerId'];
+        return (int) $subject['customer_id'];
     }
 
     /**
@@ -94,10 +98,25 @@ class SubjectReader
      */
     public function readPublicHash(array $subject)
     {
-        if (empty($subject['publicHash'])) {
-            throw new \InvalidArgumentException('The "publicHash" field does not exists');
+        if (empty($subject[PaymentTokenInterface::PUBLIC_HASH])) {
+            throw new \InvalidArgumentException('The "public_hash" field does not exists');
         }
 
-        return $subject['publicHash'];
+        return $subject[PaymentTokenInterface::PUBLIC_HASH];
+    }
+
+    /**
+     * Reads PayPal details from transaction object
+     *
+     * @param Transaction $transaction
+     * @return array
+     */
+    public function readPayPal(Transaction $transaction)
+    {
+        if (!isset($transaction->paypal)) {
+            throw new \InvalidArgumentException('Transaction has\'t paypal attribute');
+        }
+
+        return $transaction->paypal;
     }
 }

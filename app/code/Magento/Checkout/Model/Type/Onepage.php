@@ -445,7 +445,9 @@ class Onepage
                 if (!isset($data[$attributeCode])) {
                     $address->setData($attributeCode, null);
                 } else {
-                    $address->setDataUsingMethod($attributeCode, $compactedData[$attributeCode]);
+                    if (isset($compactedData[$attributeCode])) {
+                        $address->setDataUsingMethod($attributeCode, $compactedData[$attributeCode]);
+                    }
                 }
             }
 

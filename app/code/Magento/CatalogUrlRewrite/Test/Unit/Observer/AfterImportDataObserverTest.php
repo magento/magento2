@@ -71,11 +71,6 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $connection;
-
-    /**
      * @var \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $objectRegistryFactory;
@@ -89,21 +84,6 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $storeViewService;
-
-    /**
-     * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $eavConfig;
-
-    /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $resource;
-
-    /**
-     * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $select;
 
     /**
      * @var \Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory|\PHPUnit_Framework_MockObject_MockObject
@@ -214,66 +194,6 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->eavConfig = $this->getMock(
-            '\Magento\Eav\Model\Config',
-            [
-                'getAttribute',
-            ],
-            [],
-            '',
-            false
-        );
-        $attribute = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
-            ->setMethods([
-                'getBackendTable',
-            ])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $beTable = 'backend table';
-        $attribute->expects($this->any())
-            ->method('getBackendTable')
-            ->willReturn($beTable);
-        $this->eavConfig->expects($this->any())
-            ->method('getAttribute')
-            ->with(
-                \Magento\Catalog\Model\Product::ENTITY,
-                \Magento\CatalogUrlRewrite\Observer\AfterImportDataObserver::URL_KEY_ATTRIBUTE_CODE
-            )
-            ->willReturn($attribute);
-
-        $this->resource = $this->getMock(
-            '\Magento\Framework\App\ResourceConnection',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->connection = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
-            ->disableOriginalConstructor()
-            ->setMethods([
-                'quoteInto',
-                'select',
-                'fetchAll',
-            ])
-            ->getMockForAbstractClass();
-        $this->resource
-            ->expects($this->any())
-            ->method('getConnection')
-            ->willReturn($this->connection);
-        $this->select = $this->getMock(
-            '\Magento\Framework\DB\Select',
-            [
-                'from',
-                'where',
-            ],
-            [],
-            '',
-            false
-        );
-        $this->connection
-            ->expects($this->any())
-            ->method('select')
-            ->willReturn($this->select);
         $this->objectRegistryFactory = $this->getMock(
             '\Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory',
             [],
@@ -364,10 +284,8 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
             '\Magento\CatalogUrlRewrite\Observer\AfterImportDataObserver',
             [
                 'catalogProductFactory' => $this->catalogProductFactory,
-                'eavConfig' => $this->eavConfig,
                 'objectRegistryFactory' => $this->objectRegistryFactory,
                 'productUrlPathGenerator' => $this->productUrlPathGenerator,
-                'resource' => $this->resource,
                 'storeViewService' => $this->storeViewService,
                 'storeManager'=> $this->storeManager,
                 'urlPersist' => $this->urlPersist,
@@ -471,7 +389,6 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
                 $newSku[0]['entity_id'],
                 $newSku[0]['entity_id'],
                 $newSku[0]['entity_id'],
-                $newSku[0]['entity_id'],
                 $newSku[1]['entity_id'],
                 $newSku[1]['entity_id'],
                 $newSku[1]['entity_id']
@@ -501,33 +418,6 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
             ->expects($this->exactly($productsCount))
             ->method('create')
             ->willReturn($product);
-        $this->connection
-            ->expects($this->exactly(4))
-            ->method('quoteInto')
-            ->withConsecutive(
-                [
-                    '(store_id = ?',
-                    $storeIds[0],
-                ],
-                [
-                    ' AND entity_id = ?)',
-                    $newSku[0]['entity_id'],
-                ],
-                [
-                    '(store_id = ?',
-                    $storeIds[0],
-                ],
-                [
-                    ' AND entity_id = ?)',
-                    $newSku[1]['entity_id'],
-                ]
-            );
-        $this->connection
-            ->expects($this->once())
-            ->method('fetchAll')
-            ->willReturn([]);
-        $this->select->expects($this->any())->method('from')->willReturnSelf();
-        $this->select->expects($this->any())->method('where')->willReturnSelf();
 
         $this->urlFinder->expects($this->any())->method('findAllByData')->willReturn([]);
 
@@ -560,78 +450,6 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
             ->with($productUrls);
 
         $this->import->execute($this->observer);
-    }
-
-    /**
-     * Cover cleanOverriddenUrlKey().
-     */
-    public function testCleanOverriddenUrlKey()
-    {
-        $urlKeyAttributeBackendTable = 'table value';
-        $urlKeyAttributeId = 'id value';
-        $entityStoresToCheckOverridden = [1,2,3];
-        $this->import->urlKeyAttributeBackendTable = $urlKeyAttributeBackendTable;
-        $this->import->urlKeyAttributeId = $urlKeyAttributeId;
-        $this->setPropertyValue($this->import, 'entityStoresToCheckOverridden', $entityStoresToCheckOverridden);
-        $this->select
-            ->expects($this->once())
-            ->method('from')
-            ->with(
-                $urlKeyAttributeBackendTable,
-                ['store_id', 'entity_id']
-            )
-            ->will($this->returnSelf());
-        $this->select
-            ->expects($this->exactly(2))
-            ->method('where')
-            ->withConsecutive(
-                [
-                    'attribute_id = ?',
-                    $urlKeyAttributeId,
-                ],
-                [
-                    implode(' OR ', $entityStoresToCheckOverridden)
-                ]
-            )
-            ->will($this->returnSelf());
-
-        $entityIdVal = 'entity id value';
-        $storeIdVal = 'store id value';
-        $entityStore = [
-            'entity_id' => $entityIdVal,
-            'store_id' => $storeIdVal,
-        ];
-        $entityStoresToClean = [$entityStore];
-        $products = [
-            $entityIdVal => [
-                $storeIdVal => 'value',
-            ]
-        ];
-        $this->setPropertyValue($this->import, 'products', $products);
-        $this->connection
-            ->expects($this->once())
-            ->method('fetchAll')
-            ->willReturn($entityStoresToClean);
-
-        $actualResult = $this->invokeMethod($this->import, 'cleanOverriddenUrlKey');
-        $this->assertEquals($this->import, $actualResult);
-    }
-
-    /**
-     * Cover cleanOverriddenUrlKey() method with empty entityStoresToCheckOverridden property.
-     */
-    public function testCleanOverriddenUrlKeyEmptyEntityStoresToCheckOverridden()
-    {
-        $this->setPropertyValue($this->import, 'entityStoresToCheckOverridden', null);
-        $this->select
-            ->expects($this->never())
-            ->method('from');
-        $this->select
-            ->expects($this->never())
-            ->method('where');
-
-        $actualResult = $this->invokeMethod($this->import, 'cleanOverriddenUrlKey');
-        $this->assertEquals($this->import, $actualResult);
     }
 
     /**
@@ -846,30 +664,6 @@ class AfterImportDataObserverTest extends \PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         return $method->invokeArgs($object, $parameters);
-    }
-
-    /**
-     * Get mock of Import class instance with defined methods and called constructor.
-     */
-    protected function getImportMock($methods = [])
-    {
-        return $this->getMock(
-            '\Magento\CatalogUrlRewrite\Observer\AfterImportDataObserver',
-            $methods,
-            [
-                $this->catalogProductFactory,
-                $this->eavConfig,
-                $this->objectRegistryFactory,
-                $this->productUrlPathGenerator,
-                $this->resource,
-                $this->storeViewService,
-                $this->storeManager,
-                $this->urlPersist,
-                $this->urlRewriteFactory,
-                $this->urlFinder,
-            ],
-            ''
-        );
     }
 
     /**

@@ -6,7 +6,7 @@
 namespace Magento\Search\Model;
 
 use Magento\Search\Api\SynonymAnalyzerInterface;
-use Magento\Search\Model\SynonymsReader;
+use Magento\Search\Model\SynonymReader;
 
 class SynonymAnalyzer implements SynonymAnalyzerInterface
 {
@@ -28,6 +28,16 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
     /**
      * Returns an array of arrays consisting of the synonyms found for each word in the input phrase
      *
+     * For phrase: "Elizabeth is the English queen" correct output is an array of arrays containing synonyms for each
+     * word in the phrase:
+     *
+     * [
+     *   0 => [ 0 => "elizabeth" ],
+     *   1 => [ 0 => "is" ],
+     *   2 => [ 0 => "the" ],
+     *   3 => [ 0 => "british", 1 => "english" ],
+     *   4 => [ 0 => "queen", 1 => "monarch" ]
+     * ]
      * @param string $phrase
      * @return array
      */
