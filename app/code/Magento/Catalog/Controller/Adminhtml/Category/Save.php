@@ -100,7 +100,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
         $data['general'] = $this->getRequest()->getPostValue();
         $isNewCategory = !isset($data['general']['entity_id']);
-        $data = $this->stringToBoolConverting($this->stringToBoolInputs, $data);
+        $data = $this->stringToBoolConverting($data);
         $data = $this->imagePreprocessing($data);
         $storeId = isset($data['general']['store_id']) ? $data['general']['store_id'] : null;
         $parentId = isset($data['general']['parent']) ? $data['general']['parent'] : null;
@@ -234,8 +234,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     {
         if (!isset($_FILES) || (isset($_FILES['image']) && $_FILES['image']['name'] === '' )) {
             unset($data['general']['image']);
-            if (
-                isset($data['general']['savedImage']['delete']) &&
+            if (isset($data['general']['savedImage']['delete']) &&
                 $data['general']['savedImage']['delete']
             ) {
                 $data['general']['image']['delete'] = $data['general']['savedImage']['delete'];
@@ -247,17 +246,20 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     /**
      * Converting inputs from string to boolean
      *
-     * @param array $stringToBoolInputs
      * @param array $data
+     * @param array $stringToBoolInputs
      *
      * @return array
      */
-    public function stringToBoolConverting($stringToBoolInputs, $data)
+    public function stringToBoolConverting($data, $stringToBoolInputs = null)
     {
+        if (null === $stringToBoolInputs) {
+            $stringToBoolInputs = $this->stringToBoolInputs;
+        }
         foreach ($stringToBoolInputs as $key => $value) {
             if (is_array($value)) {
                 if (isset($data[$key])) {
-                    $data[$key] = $this->stringToBoolConverting($value, $data[$key]);
+                    $data[$key] = $this->stringToBoolConverting($data[$key], $value);
                 }
             } else {
                 if (isset($data[$value])) {
