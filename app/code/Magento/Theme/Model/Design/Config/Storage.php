@@ -139,7 +139,9 @@ class Storage
                 'scopeId' => $designConfig->getScopeId(),
                 'config' => $fieldData->getFieldConfig()
             ]);
-            $deleteTransaction->addObject($backendModel);
+            if (!$backendModel->isObjectNew()) {
+                $deleteTransaction->addObject($backendModel);
+            }
         }
         $deleteTransaction->delete();
     }
