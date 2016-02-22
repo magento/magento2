@@ -4,12 +4,8 @@
  */
 
 define([
-    'mageUtils',
-    'underscore',
-    'uiLayout',
-    'uiRegistry',
     'Magento_Ui/js/dynamic-rows/dynamic-rows'
-], function (utils, _, layout, registry, dynamicRows) {
+], function (dynamicRows) {
     'use strict';
 
     return dynamicRows.extend({
@@ -42,18 +38,25 @@ define([
          * about selected records
          */
         processingInsertData: function (data) {
-
             if (!data.length) {
-                this.elems([]);
+                return false;
             }
 
             data.each(function (options) {
                 options.options.each(function (option) {
                     var path = this.dataScope + '.' + this.index + '.' + this.recordIterator;
+
                     this.source.set(path, option);
                     this.addChild(option, false);
                 }, this);
             }, this);
+        },
+
+        /**
+         * Set empty array to dataProvider
+         */
+        clearDataProvider: function () {
+            this.source.set(this.dataProvider, []);
         }
     });
 });

@@ -84,6 +84,7 @@ class CustomOptions extends AbstractModifier
      * Import options values
      */
     const IMPORT_OPTIONS_MODAL = 'import_options_modal';
+    const CUSTOM_OPTIONS_LISTING = 'product_custom_options_listing';
     /**#@-*/
 
     /**
@@ -293,15 +294,16 @@ class CustomOptions extends AbstractModifier
                                 'component' => 'Magento_Ui/js/form/components/button',
                                 'actions' => [
                                     [
-                                        'targetName' => 'product_form.product_form.'
-                                            . static::IMPORT_OPTIONS_MODAL,
+                                        'targetName' => 'ns=product_form, index=options',
+                                        'actionName' => 'clearDataProvider'
+                                    ],
+                                    [
+                                        'targetName' => 'ns=product_form, index=' . static::IMPORT_OPTIONS_MODAL,
                                         'actionName' => 'openModal',
                                     ],
                                     [
-                                        'targetName' =>
-                                            'product_form.product_form.'
-                                            . static::IMPORT_OPTIONS_MODAL
-                                            . '.product_custom_options_listing',
+                                        'targetName' => 'ns=' . static::CUSTOM_OPTIONS_LISTING
+                                            . ', index=' . static::CUSTOM_OPTIONS_LISTING,
                                         'actionName' => 'render',
                                     ],
                                 ],
@@ -359,7 +361,7 @@ class CustomOptions extends AbstractModifier
                         'columnsHeader' => false,
                         'collapsibleHeader' => true,
                         'sortOrder' => $sortOrder,
-                        'dataProvider' => 'product_custom_options_listing',
+                        'dataProvider' => static::CUSTOM_OPTIONS_LISTING,
                         'links' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
                     ],
                 ],
@@ -449,7 +451,7 @@ class CustomOptions extends AbstractModifier
                                     'class' => 'action-primary',
                                     'actions' => [
                                         [
-                                            'targetName' => 'index = product_custom_options_listing',
+                                            'targetName' => 'index = ' . static::CUSTOM_OPTIONS_LISTING,
                                             'actionName' => 'save'
                                         ],
                                         'closeModal'
@@ -461,20 +463,21 @@ class CustomOptions extends AbstractModifier
                 ],
             ],
             'children' => [
-                'product_custom_options_listing' => [
+                static::CUSTOM_OPTIONS_LISTING => [
                     'arguments' => [
                         'data' => [
                             'config' => [
                                 'autoRender' => false,
                                 'componentType' => 'insertListing',
-                                'dataScope' => 'product_custom_options_listing',
-                                'externalProvider' =>
-                                    'product_custom_options_listing.product_custom_options_listing_data_source',
-                                'selectionsProvider' => 'product_custom_options_listing.product_custom_options_listing.product_columns.ids',
-                                'ns' => 'product_custom_options_listing',
+                                'dataScope' => static::CUSTOM_OPTIONS_LISTING,
+                                'externalProvider' => static::CUSTOM_OPTIONS_LISTING . '.'
+                                    . static::CUSTOM_OPTIONS_LISTING . '_data_source',
+                                'selectionsProvider' => static::CUSTOM_OPTIONS_LISTING . '.'
+                                    . static::CUSTOM_OPTIONS_LISTING . '.product_columns.ids',
+                                'ns' => static::CUSTOM_OPTIONS_LISTING,
                                 'render_url' => $this->urlBuilder->getUrl('mui/index/render'),
                                 'realTimeLink' => true,
-                                'behaviourType' => 'simple',
+                                'behaviourType' => 'edit',
                                 'externalFilterMode' => true,
                                 'currentProductId' => $this->locator->getProduct()->getId(),
                                 'dataLinks' => [
