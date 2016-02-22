@@ -382,7 +382,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->model = $this->getMock(
             'Magento\Quote\Model\QuoteRepository',
-            ['resetQuoteCollection'],
+            ['getQuoteCollection'],
             [
                 'quoteFactory' => $this->quoteFactoryMock,
                 'storeManager' => $this->storeManagerMock,
@@ -391,7 +391,7 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
                 'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock
             ]
         );
-        $this->model->expects($this->once())->method('resetQuoteCollection')->willReturn($this->quoteCollectionMock);
+        $this->model->expects($this->once())->method('getQuoteCollection')->willReturn($this->quoteCollectionMock);
         $this->assertEquals($searchResult, $this->model->getList($searchCriteriaMock));
     }
 
