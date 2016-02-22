@@ -118,6 +118,10 @@ body._in-resize {
         }
     }
 
+    &._dragged {
+        outline: 1px solid @data-grid-dragging-copy__outline-color;
+    }
+
     thead {
         background-color: transparent;
     }
@@ -155,6 +159,24 @@ body._in-resize {
         &:hover {
             td {
                 background-color: @data-grid-tr__hover__background-color;
+            }
+        }
+
+        &._dragged {
+            td {
+                background: @data-grid-td__dragging__background-color;
+            }
+        }
+
+        &._dragover-top {
+            td {
+                box-shadow: inset 0 @data-grid-horizontal-dragover-mark__width 0 0 @data-grid-horizontal-dragover-mark__color;
+            }
+        }
+
+        &._dragover-bottom {
+            td {
+                box-shadow: inset 0 -@data-grid-horizontal-dragover-mark__width 0 0 @data-grid-horizontal-dragover-mark__color;
             }
         }
 
