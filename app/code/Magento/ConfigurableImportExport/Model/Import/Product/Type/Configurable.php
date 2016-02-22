@@ -18,6 +18,7 @@ use \Magento\Catalog\Api\Data\ProductInterface;
  * @package Magento\ConfigurableImportExport\Model\Import\Product\Type
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType
 {
@@ -690,7 +691,7 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
                 $superProductRowId = $oldSku[$data['_super_products_sku']][$this->getProductEntityLinkField()];
                 $superProductEntityId = $oldSku[$data['_super_products_sku']][$this->getProductEntityIdentifierField()];
             }
-            if ($superProductRowId) {
+            if (isset($superProductRowId)) {
                 if (isset($data['display']) && $data['display'] == 0) {
                     $this->_simpleIdsToDelete[] = $superProductRowId;
                 } else {

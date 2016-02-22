@@ -6,6 +6,11 @@
 
 namespace Magento\BundleImportExport\Test\Unit\Model\Import\Product\Type;
 
+/**
+ * Class BundleTest
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ */
 class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /**
@@ -103,6 +108,12 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ));
     }
 
+    /**
+     * Set up
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -273,7 +284,6 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         ]));
         $this->bundle->saveData();
     }
-
 
     /**
      * Data provider for saveData()
