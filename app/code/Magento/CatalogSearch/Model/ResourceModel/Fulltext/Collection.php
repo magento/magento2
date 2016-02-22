@@ -170,14 +170,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->searchRequestName = $searchRequestName;
     }
 
-
     /**
      * @deprecated
      * @return \Magento\Search\Api\SearchInterface
      */
     private function getSearch()
     {
-        if ($this->search !== null) {
+        if ($this->search === null) {
             $this->search = ObjectManager::getInstance()->get('\Magento\Search\Api\SearchInterface');
         }
         return $this->search;
@@ -194,10 +193,11 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @deprecated
+     * @return \Magento\Framework\Api\Search\SearchCriteriaBuilder
      */
     private function getSearchCriteriaBuilder()
     {
-        if ($this->searchCriteriaBuilder !== null) {
+        if ($this->searchCriteriaBuilder === null) {
             $this->searchCriteriaBuilder = ObjectManager::getInstance()
                 ->get('\Magento\Framework\Api\Search\SearchCriteriaBuilder');
         }
@@ -208,18 +208,18 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @deprecated
      * @param \Magento\Framework\Api\Search\SearchCriteriaBuilder $object
      */
-    public function setSearchCriteriaBuilder($object)
+    public function setSearchCriteriaBuilder(\Magento\Framework\Api\Search\SearchCriteriaBuilder $object)
     {
         $this->searchCriteriaBuilder = $object;
     }
 
-
     /**
      * @deprecated
+     * @return \Magento\Framework\Api\FilterBuilder
      */
     private function getFilterBuilder()
     {
-        if ($this->filterBuilder !== null) {
+        if ($this->filterBuilder === null) {
             $this->filterBuilder = ObjectManager::getInstance()->get('\Magento\Framework\Api\FilterBuilder');
         }
         return $this->filterBuilder;
@@ -229,7 +229,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @deprecated
      * @param \Magento\Framework\Api\FilterBuilder $object
      */
-    public function setFilterBuilder($object)
+    public function setFilterBuilder(\Magento\Framework\Api\FilterBuilder $object)
     {
         $this->filterBuilder = $object;
     }
