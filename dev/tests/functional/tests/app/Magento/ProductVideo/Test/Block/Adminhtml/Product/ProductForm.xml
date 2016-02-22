@@ -5,7 +5,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<tabs>
+<sections>
     <images-and-videos>
         <class>\Magento\ProductVideo\Test\Block\Adminhtml\Product\Edit\Tab\ImagesAndVideos</class>
         <selector>[data-index="block_gallery"]</selector>
@@ -26,4 +26,4 @@
             <role />
         </fields>
     </images-and-videos>
-</tabs>
+</sections>
