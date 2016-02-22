@@ -96,7 +96,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      */
     protected $request;
 
-
     /**
      * @var Config
      */
@@ -379,7 +378,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     public function getDefaultMetaData($result)
     {
         $result['parent']['default'] = (int)$this->request->getParam('parent');
-        $result['is_anchor']['default'] = false;
         $result['use_config.available_sort_by']['default'] = true;
         $result['use_config.default_sort_by']['default'] = true;
         $result['use_config.filter_price_range']['default'] = true;
