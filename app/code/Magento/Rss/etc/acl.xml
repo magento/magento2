@@ -12,7 +12,7 @@
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">
-                            <resource id="Magento_Rss::rss" title="RSS Feeds Section" sortOrder="135" />
+                            <resource id="Magento_Rss::rss" title="RSS Feeds Section" translate="title" sortOrder="135" />
                         </resource>
                     </resource>
                 </resource>

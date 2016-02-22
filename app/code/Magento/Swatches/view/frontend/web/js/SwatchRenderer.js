@@ -6,48 +6,10 @@
 define([
     'jquery',
     'underscore',
-    'jquery/ui'
+    'jquery/ui',
+    'jquery/jquery.parsequery'
 ], function ($, _) {
     'use strict';
-
-    /**
-     * Parse params
-     * @param {String} query
-     * @returns {{}}
-     */
-    function parseParams(query) {
-        var re = /([^&=]+)=?([^&]*)/g,
-            decodeRE = /\+/g,  // Regex for replacing addition symbol with a space
-
-            /**
-             * Return decoded URI component
-             *
-             * @param {String} str
-             * @returns {String}
-             */
-            decode = function (str) {
-                return decodeURIComponent(str.replace(decodeRE, ' '));
-            },
-            params = {},
-            e,
-            k,
-            v;
-
-        while ((e = re.exec(query)) != null) {
-
-            k = decode(e[1]);
-            v = decode(e[2]);
-
-            if (k.substring(k.length - 2) === '[]') {
-                k = k.substring(0, k.length - 2);
-                (params[k] || (params[k] = [])).push(v);
-            } else {
-                params[k] = v;
-            }
-        }
-
-        return params;
-    }
 
     /**
      * Render tooltips by attributes (only to up).
@@ -341,7 +303,8 @@ define([
             $widget._Rewind(container);
 
             //Emulate click on all swatches from Request
-            $widget._EmulateSelected();
+            $widget._EmulateSelected($.parseQuery());
+            $widget._EmulateSelected($widget._getSelectedAttributes());
         },
 
         /**
@@ -747,7 +710,7 @@ define([
                     .find('.price-box.price-final_price').attr('data-product-id');
             }
 
-            additional = parseParams(window.location.search.substring(1));
+            additional = $.parseQuery();
 
             $widget._XhrKiller();
             $widget._EnableProductMediaLoader($this);
@@ -893,18 +856,36 @@ define([
 
         /**
          * Emulate mouse click on all swatches that should be selected
-         *
+         * @param {Object} [selectedAttributes]
          * @private
          */
-        _EmulateSelected: function () {
-            var $widget = this,
-                $this = $widget.element,
-                request = parseParams(window.location.search.substring(1));
+        _EmulateSelected: function (selectedAttributes) {
+            $.each(selectedAttributes, $.proxy(function (attributeCode, optionId) {
+                this.element.find('.' + this.options.classes.attributeClass +
+                    '[attribute-code="' + attributeCode + '"] [option-id="' + optionId + '"]').trigger('click');
+            }, this));
+        },
 
-            $.each(request, function (key, value) {
-                $this.find('.' + $widget.options.classes.attributeClass +
-                    '[attribute-code="' + key + '"] [option-id="' + value + '"]').trigger('click');
-            });
+        /**
+         * Get default options values settings with either URL query parameters
+         * @private
+         */
+        _getSelectedAttributes: function () {
+            var hashIndex = window.location.href.indexOf('#'),
+                selectedAttributes = {},
+                params;
+
+            if (hashIndex !== -1) {
+                params = $.parseQuery(window.location.href.substr(hashIndex + 1));
+
+                selectedAttributes = _.invert(_.mapObject(_.invert(params), function (attributeId) {
+                    var attribute = this.options.jsonConfig.attributes[attributeId];
+
+                    return attribute ? attribute.code : attributeId;
+                }.bind(this)));
+            }
+
+            return selectedAttributes;
         }
     });
 });

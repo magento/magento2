@@ -14,7 +14,7 @@ interface SynonymAnalyzerInterface
     /**
      * Get synonyms for specified phrase
      *
-     * For phrase: "Elizabeth is the English queen" correct output is an array of arrays containing synonyms for each
+     * For phrase: "Elizabeth is the English queen" example output is an array of arrays containing synonyms for each
      * word in the phrase:
      *
      * [

@@ -28,10 +28,10 @@ foreach ($productsToDelete as $sku) {
 //Remove categories
 /** @var Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
 $collection = $objectManager->create('Magento\Catalog\Model\ResourceModel\Category\Collection');
-$collection
-    ->addAttributeToFilter('level', 2)
-    ->load()
-    ->delete();
+foreach ($collection->addAttributeToFilter('level', ['in' => [2, 3, 4]]) as $category) {
+    /** @var \Magento\Catalog\Model\Category $category */
+    $category->delete();
+}
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

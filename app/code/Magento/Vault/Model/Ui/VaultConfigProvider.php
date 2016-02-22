@@ -6,7 +6,7 @@
 namespace Magento\Vault\Model\Ui;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
-use Magento\Customer\Model\Session;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Model\VaultPaymentInterface;
 
@@ -25,7 +25,7 @@ class VaultConfigProvider implements ConfigProviderInterface
     private $vault;
 
     /**
-     * @var Session
+     * @var SessionManagerInterface
      */
     private $session;
 
@@ -33,12 +33,12 @@ class VaultConfigProvider implements ConfigProviderInterface
      * VaultConfigProvider constructor.
      * @param StoreManagerInterface $storeManager
      * @param VaultPaymentInterface $vault
-     * @param Session $session
+     * @param SessionManagerInterface $session
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         VaultPaymentInterface $vault,
-        Session $session
+        SessionManagerInterface $session
     ) {
         $this->storeManager = $storeManager;
         $this->vault = $vault;
@@ -53,11 +53,12 @@ class VaultConfigProvider implements ConfigProviderInterface
     public function getConfig()
     {
         $storeId = $this->storeManager->getStore()->getId();
+        $customerId = $this->session->getCustomerId();
 
         return [
             VaultPaymentInterface::CODE => [
                 'vault_provider_code' => $this->vault->getProviderCode($storeId),
-                'is_enabled' => $this->session->getCustomerId() !== null && $this->vault->isActive($storeId)
+                'is_enabled' => $customerId !== null && $this->vault->isActive($storeId)
             ]
         ];
     }
