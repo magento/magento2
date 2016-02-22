@@ -6,12 +6,15 @@
 /*global define*/
 define([
     'jquery',
-    'braintree'
-], function ($, braintree) {
+    'braintree',
+    'Magento_Ui/js/model/messageList',
+    'mage/translate'
+], function ($, braintree, globalMessageList, $t) {
     'use strict';
 
     return {
         apiClient: null,
+        config: {},
 
         /**
          * Get Braintree api client
@@ -28,11 +31,22 @@ define([
         },
 
         /**
-         * Get Braintree SDK client
-         * @returns {Object}
+         * Set configuration
+         * @param {Object} config
          */
-        getSdkClient: function () {
-            return braintree;
+        setConfig: function (config) {
+            this.config = config;
+        },
+
+        /**
+         * Setup Braintree SDK
+         */
+        setup: function () {
+            if (!this.getClientToken()) {
+                this.showError($t('Sorry, but something went wrong.'));
+            }
+
+            braintree.setup(this.getClientToken(), 'custom', this.config);
         },
 
         /**
@@ -50,6 +64,17 @@ define([
         getClientToken: function () {
 
             return window.checkoutConfig.payment[this.getCode()].clientToken;
+        },
+
+        /**
+         * Show error message
+         *
+         * @param {String} errorMessage
+         */
+        showError: function (errorMessage) {
+            globalMessageList.addErrorMessage({
+                message: errorMessage
+            });
         }
     };
 });

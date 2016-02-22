@@ -11,7 +11,6 @@ namespace Magento\Framework\Model\Entity;
  */
 class MetadataPool
 {
-
     /**
      * @var array
      */
@@ -37,19 +36,27 @@ class MetadataPool
     protected $registry;
 
     /**
+     * @var SequenceFactory
+     */
+    protected $sequenceFactory;
+
+    /**
      * @param EntityMetadataFactory $metadataFactory
      * @param EntityHydratorFactory $hydratorFactory
+     * @param SequenceFactory $sequenceFactory
      * @param array $metadata
      * @param array $eavMapping
      */
     public function __construct(
         EntityMetadataFactory $metadataFactory,
         EntityHydratorFactory $hydratorFactory,
+        SequenceFactory $sequenceFactory,
         array $metadata,
         array $eavMapping = []
     ) {
         $this->metadataFactory = $metadataFactory;
         $this->hydratorFactory = $hydratorFactory;
+        $this->sequenceFactory = $sequenceFactory;
         $this->metadata = $metadata;
         $this->eavMapping = $eavMapping;
     }
@@ -66,6 +73,7 @@ class MetadataPool
             throw new \Exception('Not enough configuration');
         }
         if (!isset($this->registry[$entityType])) {
+            $this->metadata[$entityType]['connectionName'] = 'default';
             $this->registry[$entityType] = $this->metadataFactory->create(
                 [
                     'entityTableName' => $this->metadata[$entityType]['entityTableName'],
@@ -73,11 +81,9 @@ class MetadataPool
                         ? $this->metadata[$entityType]['eavEntityType']
                         : null,
                         //isset($this->eavMapping[$entityType]) ? $this->eavMapping[$entityType] : null,
-                    'connectionName' => 'default',
+                    'connectionName' => $this->metadata[$entityType]['connectionName'],
                     'identifierField' => $this->metadata[$entityType]['identifierField'],
-                    'sequence' => isset($this->metadata[$entityType]['sequence'])
-                        ? $this->metadata[$entityType]['sequence']
-                        : null,
+                    'sequence' => $this->sequenceFactory->create($entityType, $this->metadata),
                     'entityContext' => isset($this->metadata[$entityType]['entityContext'])
                         ? $this->metadata[$entityType]['entityContext']
                         : [],

@@ -62,8 +62,8 @@ class Configurable extends \Magento\CatalogInventory\Model\ResourceModel\Indexer
         )->group(
             ['e.entity_id', 'cw.website_id', 'cis.stock_id']
         );
-
-        $psExpr = $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id');
+        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $psExpr = $this->_addAttributeToSelect($select, 'status', 'e.' . $metadata->getLinkField(), 'cs.store_id');
         $psCond = $connection->quoteInto($psExpr . '=?', ProductStatus::STATUS_ENABLED);
 
         if ($this->_isManageStock()) {
