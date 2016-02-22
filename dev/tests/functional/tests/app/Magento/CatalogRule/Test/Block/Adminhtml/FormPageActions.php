@@ -19,7 +19,7 @@ class FormPageActions extends PageActions
      *
      * @var string
      */
-    protected $saveAndApplyButton = '#save_apply';
+    protected $saveAndApplyButton = '#save_and_apply';
 
     /**
      * Click on "Save and Apply" button

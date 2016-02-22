@@ -15,7 +15,7 @@
                     <item name="0" xsi:type="string">all_store_views</item>
                 </item>
             </field>
-            <field name="is_active" xsi:type="string">Enabled</field>
+            <field name="is_active" xsi:type="string">Yes</field>
             <field name="content" xsi:type="string">description_%isolation%</field>
         </dataset>
     </repository>

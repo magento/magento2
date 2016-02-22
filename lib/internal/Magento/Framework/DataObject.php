@@ -394,7 +394,7 @@ class DataObject implements \ArrayAccess
                 return isset($this->_data[$key]);
         }
         throw new \Magento\Framework\Exception\LocalizedException(
-            new \Magento\Framework\Phrase('Invalid method %1::%2(%3)', [get_class($this), $method, print_r($args, 1)])
+            new \Magento\Framework\Phrase('Invalid method %1::%2', [get_class($this), $method])
         );
     }
 

@@ -5,8 +5,9 @@
  */
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Helper;
 
-use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
+use Braintree\Transaction;
 use InvalidArgumentException;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 
 /**
  * Class SubjectReaderTest
@@ -39,13 +40,13 @@ class SubjectReaderTest extends \PHPUnit_Framework_TestCase
     public function testReadCustomerId()
     {
         $customerId = 1;
-        static::assertEquals($customerId, $this->subjectReader->readCustomerId(['customerId' => $customerId]));
+        static::assertEquals($customerId, $this->subjectReader->readCustomerId(['customer_id' => $customerId]));
     }
 
     /**
      * @covers \Magento\BraintreeTwo\Gateway\Helper\SubjectReader::readPublicHash
      * @expectedException InvalidArgumentException
-     * @expectedExceptionMessage The "publicHash" field does not exists
+     * @expectedExceptionMessage The "public_hash" field does not exists
      */
     public function testReadPublicHashWithException()
     {
@@ -58,6 +59,36 @@ class SubjectReaderTest extends \PHPUnit_Framework_TestCase
     public function testReadPublicHash()
     {
         $hash = 'fj23djf2o1fd';
-        static::assertEquals($hash, $this->subjectReader->readPublicHash(['publicHash' => $hash]));
+        static::assertEquals($hash, $this->subjectReader->readPublicHash(['public_hash' => $hash]));
+    }
+
+    /**
+     * @covers \Magento\BraintreeTwo\Gateway\Helper\SubjectReader::readPayPal
+     * @expectedException \InvalidArgumentException
+     * @expectedExceptionMessage Transaction has't paypal attribute
+     */
+    public function testReadPayPalWithException()
+    {
+        $transaction = Transaction::factory([
+            'id' => 'u38rf8kg6vn'
+        ]);
+        $this->subjectReader->readPayPal($transaction);
+    }
+
+    /**
+     * @covers \Magento\BraintreeTwo\Gateway\Helper\SubjectReader::readPayPal
+     */
+    public function testReadPayPal()
+    {
+        $paypal = [
+            'paymentId' => '3ek7dk7fn0vi1',
+            'payerEmail' => 'payer@example.com'
+        ];
+        $transaction = Transaction::factory([
+            'id' => '4yr95vb',
+            'paypal' => $paypal
+        ]);
+
+        static::assertEquals($paypal, $this->subjectReader->readPayPal($transaction));
     }
 }

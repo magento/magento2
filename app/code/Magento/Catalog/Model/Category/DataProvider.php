@@ -11,8 +11,12 @@ use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class DataProvider
@@ -21,6 +25,11 @@ use Magento\Ui\DataProvider\EavValidationRules;
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
+    /**
+     * @var string
+     */
+    protected $requestScopeFieldName = 'store';
+
     /**
      * @var array
      */
@@ -85,8 +94,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * @var \Magento\Framework\App\RequestInterface
      */
-    private $request;
-
+    protected $request;
 
     /**
      * @var Config
@@ -99,7 +107,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     private $storeManager;
 
     /**
-     * Constructor
+     * @var CategoryFactory
+     */
+    private $categoryFactory;
+
+    /**
+     * DataProvider constructor
      *
      * @param string $name
      * @param string $primaryFieldName
@@ -110,9 +123,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * @param \Magento\Framework\Registry $registry
      * @param Config $eavConfig
      * @param \Magento\Framework\App\RequestInterface $request
+     * @param CategoryFactory $categoryFactory
      * @param array $meta
      * @param array $data
-     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -125,6 +138,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         \Magento\Framework\Registry $registry,
         Config $eavConfig,
         \Magento\Framework\App\RequestInterface $request,
+        CategoryFactory $categoryFactory,
         array $meta = [],
         array $data = []
     ) {
@@ -135,6 +149,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $this->registry = $registry;
         $this->storeManager = $storeManager;
         $this->request = $request;
+        $this->categoryFactory = $categoryFactory;
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->meta = $this->prepareMeta($this->meta);
     }
@@ -168,7 +183,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         foreach ($fieldsMap as $fieldSet => $fields) {
             foreach ($fields as $field) {
                 if (isset($fieldsMeta[$field])) {
-                    $result[$fieldSet]['fields'][$field] = $fieldsMeta[$field];
+                    $result[$fieldSet]['children'][$field]['arguments']['data']['config'] = $fieldsMeta[$field];
                 }
             }
         }
@@ -237,6 +252,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             }
 
             $meta[$code]['scope_label'] = $this->getScopeLabel($attribute);
+            $meta[$code]['componentType'] = Field::NAME;
         }
 
         $result = [];
@@ -280,7 +296,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected function addUseDefaultSettings($category, $categoryData)
     {
         if ($category->getExistsStoreValueFlag('url_key') ||
-            $category->getStoreId() === \Magento\Store\Model\Store::DEFAULT_STORE_ID
+            $category->getStoreId() === Store::DEFAULT_STORE_ID
         ) {
             $categoryData['use_default']['url_key'] = false;
         } else {
@@ -294,10 +310,25 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      * Get current category
      *
      * @return Category
+     * @throws NoSuchEntityException
      */
     public function getCurrentCategory()
     {
-        return $this->registry->registry('category');
+        $category = $this->registry->registry('category');
+        if ($category) {
+            return $category;
+        }
+        $requestId = $this->request->getParam($this->requestFieldName);
+        $requestScope = $this->request->getParam($this->requestScopeFieldName, Store::DEFAULT_STORE_ID);
+        if ($requestId) {
+            $category = $this->categoryFactory->create();
+            $category->setStoreId($requestScope);
+            $category->load($requestId);
+            if (!$category->getId()) {
+                throw NoSuchEntityException::singleField('id', $requestId);
+            }
+        }
+        return $category;
     }
 
     /**
@@ -347,7 +378,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     public function getDefaultMetaData($result)
     {
         $result['parent']['default'] = (int)$this->request->getParam('parent');
-        $result['is_anchor']['default'] = false;
         $result['use_config.available_sort_by']['default'] = true;
         $result['use_config.default_sort_by']['default'] = true;
         $result['use_config.filter_price_range']['default'] = true;
@@ -416,6 +446,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 [
                     'custom_use_parent_settings',
                     'custom_apply_to_products',
+                    'custom_design',
                     'page_layout',
                     'custom_layout_update',
                 ],
@@ -423,7 +454,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 [
                     'custom_design_from',
                     'custom_design_to',
-                    'custom_design',
                 ],
             'category_view_optimization' =>
                 [

@@ -8,7 +8,7 @@ namespace Magento\Newsletter\Test\Unit\Model\Queue;
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Mail\MessageInterface;
 
-class TransportBuilderTest extends \Magento\Framework\Mail\Test\Unit\Template\TransportBuilderTest
+class TransportBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var string
@@ -21,19 +21,67 @@ class TransportBuilderTest extends \Magento\Framework\Mail\Test\Unit\Template\Tr
     protected $builder;
 
     /**
+     * @var \Magento\Framework\Mail\Template\FactoryInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $templateFactoryMock;
+
+    /**
+     * @var \Magento\Framework\Mail\Message | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $messageMock;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $objectManagerMock;
+
+    /**
+     * @var \Magento\Framework\Mail\Template\SenderResolverInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $senderResolverMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $mailTransportFactoryMock;
+
+    /**
+     * @return void
+     */
+    public function setUp()
+    {
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->templateFactoryMock = $this->getMock('Magento\Framework\Mail\Template\FactoryInterface');
+        $this->messageMock = $this->getMock('Magento\Framework\Mail\Message');
+        $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $this->senderResolverMock = $this->getMock('Magento\Framework\Mail\Template\SenderResolverInterface');
+        $this->mailTransportFactoryMock = $this->getMockBuilder('Magento\Framework\Mail\TransportInterfaceFactory')
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
+        $this->builder = $objectManagerHelper->getObject(
+            $this->builderClassName,
+            [
+                'templateFactory' => $this->templateFactoryMock,
+                'message' => $this->messageMock,
+                'objectManager' => $this->objectManagerMock,
+                'senderResolver' => $this->senderResolverMock,
+                'mailTransportFactory' => $this->mailTransportFactoryMock
+            ]
+        );
+    }
+
+    /**
      * @param int $templateType
      * @param string $messageType
      * @param string $bodyText
-     * @param string $templateNamespace
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testGetTransport(
         $templateType = TemplateTypesInterface::TYPE_HTML,
         $messageType = MessageInterface::TYPE_HTML,
-        $bodyText = '<h1>Html message</h1>',
-        $templateNamespace = ''
+        $bodyText = '<h1>Html message</h1>'
     ) {
         $filter = $this->getMock('Magento\Email\Model\Template\Filter', [], [], '', false);
         $data = [
