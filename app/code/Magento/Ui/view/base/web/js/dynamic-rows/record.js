@@ -5,9 +5,8 @@
 
 define([
     'underscore',
-    'uiRegistry',
     'uiCollection'
-], function (_, registry, uiCollection) {
+], function (_, uiCollection) {
     'use strict';
 
     return uiCollection.extend({
@@ -118,11 +117,7 @@ define([
                 nameIsEqual = this.name + '.' + this.positionProvider === elem.name;
                 dataScopeIsEqual = this.dataScope === elem.dataScope;
 
-                if (nameIsEqual || dataScopeIsEqual) {
-                    return false;
-                }
-
-                if (_.isFunction(elem.reset)) {
+                if (!(nameIsEqual || dataScopeIsEqual) && _.isFunction(elem.reset)) {
                     elem.reset();
                 }
             }, this);
@@ -136,14 +131,15 @@ define([
          * @returns {Collection} Chainable.
          */
         clear: function () {
-            var elems = this.elems();
+            var elems = this.elems(),
+                nameIsEqual,
+                dataScopeIsEqual;
 
             _.each(elems, function (elem) {
-                if (this.name + '.' + this.positionProvider === elem.name || this.dataScope === elem.dataScope) {
-                    return false;
-                }
+                nameIsEqual = this.name + '.' + this.positionProvider === elem.name;
+                dataScopeIsEqual = this.dataScope === elem.dataScope;
 
-                if (_.isFunction(elem.clear)) {
+                if (!(nameIsEqual || dataScopeIsEqual) && _.isFunction(elem.reset)) {
                     elem.clear();
                 }
             }, this);

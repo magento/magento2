@@ -79,6 +79,35 @@ class UpgradeSchema implements UpgradeSchemaInterface
             );
         }
 
+        if (version_compare($context->getVersion(), '2.0.7', '<')) {
+            $setup->getConnection()->addColumn(
+                $setup->getTable('customer_entity'),
+                'failures_num',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                    'nullable' => true,
+                    'default' => '0',
+                    'comment' => 'Failure Number'
+                ]
+            );
+            $setup->getConnection()->addColumn(
+                $setup->getTable('customer_entity'),
+                'first_failure',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                    'comment' => 'First Failure'
+                ]
+            );
+            $setup->getConnection()->addColumn(
+                $setup->getTable('customer_entity'),
+                'lock_expires',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                    'comment' => 'Lock Expiration Date'
+                ]
+            );
+        }
+
         $setup->endSetup();
     }
 }
