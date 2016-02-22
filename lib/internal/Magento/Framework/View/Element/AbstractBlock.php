@@ -25,6 +25,11 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     const CACHE_GROUP = \Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER;
 
     /**
+     * Prefix for cache key of block
+     */
+    const CACHE_KEY_PREFIX = 'BLOCK_';
+
+    /**
      * Design
      *
      * @var \Magento\Framework\View\DesignInterface
@@ -958,7 +963,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
     public function getCacheKey()
     {
         if ($this->hasData('cache_key')) {
-            return $this->getData('cache_key');
+            return static::CACHE_KEY_PREFIX . $this->getData('cache_key');
         }
         /**
          * don't prevent recalculation by saving generated cache key
@@ -970,7 +975,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         // ignore array keys
         $key = implode('|', $key);
         $key = sha1($key);
-        return $key;
+        return static::CACHE_KEY_PREFIX . $key;
     }
 
     /**

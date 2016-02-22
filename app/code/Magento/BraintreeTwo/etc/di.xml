@@ -17,11 +17,24 @@
             <argument name="commandPool" xsi:type="object">BraintreeTwoCommandPool</argument>
         </arguments>
     </virtualType>
+    <virtualType name="BraintreeTwoPayPalFacade" type="BraintreeTwoFacade">
+        <arguments>
+            <argument name="code" xsi:type="const">Magento\BraintreeTwo\Model\Ui\ConfigProvider::PAYPAL_CODE</argument>
+            <argument name="infoBlockType" xsi:type="string">BraintreeTwoPayPalInfo</argument>
+            <argument name="valueHandlerPool" xsi:type="object">BraintreeTwoPayPalValueHandlerPool</argument>
+            <argument name="commandPool" xsi:type="object">BraintreeTwoPayPalCommandPool</argument>
+        </arguments>
+    </virtualType>
 
     <!-- Configuration reader -->
     <type name="Magento\BraintreeTwo\Gateway\Config\Config">
         <arguments>
-            <argument name="methodCode" xsi:type="const">\Magento\BraintreeTwo\Model\Ui\ConfigProvider::CODE</argument>
+            <argument name="methodCode" xsi:type="const">Magento\BraintreeTwo\Model\Ui\ConfigProvider::CODE</argument>
+        </arguments>
+    </type>
+    <type name="Magento\BraintreeTwo\Gateway\Config\PayPal\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="const">Magento\BraintreeTwo\Model\Ui\ConfigProvider::PAYPAL_CODE</argument>
         </arguments>
     </type>
 
@@ -36,32 +49,69 @@
     <virtualType name="BraintreeTwoCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="authorize" xsi:type="string">BraintreeTwoAuthorizeGatewayCommand</item>
-                <item name="sale" xsi:type="string">BraintreeTwoSaleGatewayCommand</item>
-                <item name="capture" xsi:type="string">BraintreeTwoCaptureStrategyGatewayCommand</item>
-                <item name="settlement" xsi:type="string">BraintreeTwoCaptureGatewayCommand</item>
-                <item name="clone" xsi:type="string">BraintreeTwoCloneGatewayCommand</item>
+                <item name="authorize" xsi:type="string">BraintreeTwoAuthorizeCommand</item>
+                <item name="sale" xsi:type="string">BraintreeTwoSaleCommand</item>
+                <item name="capture" xsi:type="string">BraintreeTwoCaptureStrategyCommand</item>
+                <item name="settlement" xsi:type="string">BraintreeTwoCaptureCommand</item>
+                <item name="vault_authorize" xsi:type="string">BraintreeTwoVaultAuthorizeCommand</item>
+                <item name="vault_sale" xsi:type="string">BraintreeTwoVaultSaleCommand</item>
+                <item name="vault_capture" xsi:type="string">BraintreeTwoVaultCaptureCommand</item>
+                <item name="void" xsi:type="string">BraintreeTwoVoidCommand</item>
+                <item name="refund" xsi:type="string">BraintreeTwoRefundCommand</item>
+                <item name="cancel" xsi:type="string">BraintreeTwoVoidCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeTwoPayPalCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="authorize" xsi:type="string">BraintreeTwoPayPalAuthorizeCommand</item>
+                <item name="sale" xsi:type="string">BraintreeTwoPayPalSaleCommand</item>
+                <item name="capture" xsi:type="string">BraintreeTwoPayPalCaptureStrategyCommand</item>
+                <item name="settlement" xsi:type="string">BraintreeTwoCaptureCommand</item>
+                <item name="void" xsi:type="string">BraintreeTwoVoidCommand</item>
+                <item name="refund" xsi:type="string">BraintreeTwoRefundCommand</item>
+                <item name="cancel" xsi:type="string">BraintreeTwoVoidCommand</item>
             </argument>
         </arguments>
     </virtualType>
 
-    <virtualType name="BraintreeTwoCaptureStrategyGatewayCommand" type="Magento\BraintreeTwo\Gateway\Command\CaptureStrategyCommand">
+    <virtualType name="BraintreeTwoCommandManager" type="Magento\Payment\Gateway\Command\CommandManager">
         <arguments>
             <argument name="commandPool" xsi:type="object">BraintreeTwoCommandPool</argument>
         </arguments>
     </virtualType>
 
-    <!-- Authorization command  -->
-    <virtualType name="BraintreeTwoAuthorizeGatewayCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+    <type name="Magento\Payment\Gateway\Command\CommandManagerPool">
         <arguments>
-            <argument name="requestBuilder" xsi:type="object">BraintreeTwoAuthorizeDataBuilder</argument>
+            <argument name="executors" xsi:type="array">
+                <item name="braintreetwo" xsi:type="string">BraintreeTwoCommandManager</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <virtualType name="BraintreeTwoCaptureStrategyCommand" type="Magento\BraintreeTwo\Gateway\Command\CaptureStrategyCommand">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">BraintreeTwoCommandPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeTwoPayPalCaptureStrategyCommand" type="Magento\BraintreeTwo\Gateway\Command\CaptureStrategyCommand">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">BraintreeTwoPayPalCommandPool</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Authorization command  -->
+    <virtualType name="BraintreeTwoAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">BraintreeTwoAuthorizeRequest</argument>
             <argument name="transferFactory" xsi:type="object">Magento\BraintreeTwo\Gateway\Http\TransferFactory</argument>
             <argument name="client" xsi:type="object">Magento\BraintreeTwo\Gateway\Http\Client\TransactionSale</argument>
-            <argument name="handler" xsi:type="object">BraintreeTwoResponseHandler</argument>
+            <argument name="handler" xsi:type="object">BraintreeTwoAuthorizationHandler</argument>
             <argument name="validator" xsi:type="object">Magento\BraintreeTwo\Gateway\Validator\ResponseValidator</argument>
         </arguments>
     </virtualType>
-    <virtualType name="BraintreeTwoAuthorizeDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+    <virtualType name="BraintreeTwoAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
                 <item name="customer" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\CustomerDataBuilder</item>
@@ -73,6 +123,45 @@
             </argument>
         </arguments>
     </virtualType>
+
+    <!-- Vault Authorization command -->
+    <virtualType name="BraintreeTwoVaultAuthorizeCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">BraintreeTwoVaultAuthorizeRequest</argument>
+            <argument name="transferFactory" xsi:type="object">Magento\BraintreeTwo\Gateway\Http\TransferFactory</argument>
+            <argument name="client" xsi:type="object">Magento\BraintreeTwo\Gateway\Http\Client\TransactionSale</argument>
+            <argument name="handler" xsi:type="object">BraintreeTwoVaultResponseHandler</argument>
+            <argument name="validator" xsi:type="object">Magento\BraintreeTwo\Gateway\Validator\ResponseValidator</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeTwoVaultAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="customer" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\CustomerDataBuilder</item>
+                <item name="payment" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\PaymentDataBuilder</item>
+                <item name="address" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\AddressDataBuilder</item>
+                <item name="3dsecure" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\ThreeDSecureDataBuilder</item>
+                <item name="kount" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\KountPaymentDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- PayPal Authorization command -->
+    <virtualType name="BraintreeTwoPayPalAuthorizeCommand" type="BraintreeTwoAuthorizeCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">BraintreeTwoPayPalAuthorizeRequest</argument>
+            <argument name="handler" xsi:type="object">BraintreeTwoPayPalResponseHandler</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeTwoPayPalAuthorizeRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="customer" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\CustomerDataBuilder</item>
+                <item name="payment" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\PaymentDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
     <type name="Magento\BraintreeTwo\Gateway\Http\Client\TransactionSale">
         <arguments>
             <argument name="customLogger" xsi:type="object">BraintreeTwoLogger</argument>
@@ -83,39 +172,71 @@
             <argument name="customLogger" xsi:type="object">BraintreeTwoLogger</argument>
         </arguments>
     </type>
-    <type name="Magento\BraintreeTwo\Gateway\Http\Client\TransactionClone">
+    <type name="Magento\BraintreeTwo\Gateway\Http\Client\TransactionRefund">
+        <arguments>
+            <argument name="customLogger" xsi:type="object">BraintreeTwoLogger</argument>
+        </arguments>
+    </type>
+    <type name="Magento\BraintreeTwo\Gateway\Http\Client\TransactionVoid">
         <arguments>
             <argument name="customLogger" xsi:type="object">BraintreeTwoLogger</argument>
         </arguments>
     </type>
 
     <!-- Authorization&Capture command  -->
-    <virtualType name="BraintreeTwoSaleGatewayCommand" type="BraintreeTwoAuthorizeGatewayCommand">
+    <virtualType name="BraintreeTwoSaleCommand" type="BraintreeTwoAuthorizeCommand">
         <arguments>
-            <argument name="requestBuilder" xsi:type="object">BraintreeTwoSaleDataBuilder</argument>
+            <argument name="requestBuilder" xsi:type="object">BraintreeTwoSaleRequest</argument>
         </arguments>
     </virtualType>
-    <virtualType name="BraintreeTwoSaleDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+    <virtualType name="BraintreeTwoSaleRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
-                <item name="authorize" xsi:type="string">BraintreeTwoAuthorizeDataBuilder</item>
+                <item name="authorize" xsi:type="string">BraintreeTwoAuthorizeRequest</item>
+                <item name="settlement" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\SettlementDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- Vault Authorization&Capture command -->
+    <virtualType name="BraintreeTwoVaultSaleCommand" type="BraintreeTwoVaultAuthorizeCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">BraintreeTwoVaultSaleRequest</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeTwoVaultSaleRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="authorize" xsi:type="string">BraintreeTwoVaultAuthorizeRequest</item>
+                <item name="settlement" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\SettlementDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- PayPal Authorization&Capture command -->
+    <virtualType name="BraintreeTwoPayPalSaleCommand" type="BraintreeTwoPayPalAuthorizeCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">BraintreeTwoPayPalSaleRequest</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeTwoPayPalSaleRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="authorize" xsi:type="string">BraintreeTwoPayPalAuthorizeRequest</item>
                 <item name="settlement" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\SettlementDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
 
     <!-- Capture command  -->
-    <virtualType name="BraintreeTwoCaptureGatewayCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+    <virtualType name="BraintreeTwoCaptureCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
-            <argument name="requestBuilder" xsi:type="object">BraintreeTwoCaptureDataBuilder</argument>
+            <argument name="requestBuilder" xsi:type="object">BraintreeTwoCaptureRequest</argument>
             <argument name="transferFactory" xsi:type="object">Magento\BraintreeTwo\Gateway\Http\TransferFactory</argument>
             <argument name="client" xsi:type="object">Magento\BraintreeTwo\Gateway\Http\Client\TransactionSubmitForSettlement</argument>
-            <argument name="handler" xsi:type="object">Magento\BraintreeTwo\Gateway\Response\CaptureDetailsHandler</argument>
+            <argument name="handler" xsi:type="object">Magento\BraintreeTwo\Gateway\Response\TransactionIdHandler</argument>
             <argument name="validator" xsi:type="object">Magento\BraintreeTwo\Gateway\Validator\ResponseValidator</argument>
         </arguments>
     </virtualType>
-
-    <virtualType name="BraintreeTwoCaptureDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+    <virtualType name="BraintreeTwoCaptureRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
                 <item name="capture" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\CaptureDataBuilder</item>
@@ -123,30 +244,32 @@
         </arguments>
     </virtualType>
 
-    <!-- Clone command -->
-    <virtualType name="BraintreeTwoCloneGatewayCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+    <!-- Vault Capture (Sale actually) command -->
+    <virtualType name="BraintreeTwoVaultCaptureCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
-            <argument name="requestBuilder" xsi:type="object">BraintreeTwoCloneDataBuilder</argument>
+            <argument name="requestBuilder" xsi:type="object">BraintreeTwoVaultCaptureRequest</argument>
             <argument name="transferFactory" xsi:type="object">Magento\BraintreeTwo\Gateway\Http\TransferFactory</argument>
-            <argument name="client" xsi:type="object">Magento\BraintreeTwo\Gateway\Http\Client\TransactionClone</argument>
-            <argument name="handler" xsi:type="object">BraintreeTwoCloneResponseHandler</argument>
+            <argument name="client" xsi:type="object">Magento\BraintreeTwo\Gateway\Http\Client\TransactionSale</argument>
+            <argument name="handler" xsi:type="object">Magento\BraintreeTwo\Gateway\Response\TransactionIdHandler</argument>
             <argument name="validator" xsi:type="object">Magento\BraintreeTwo\Gateway\Validator\ResponseValidator</argument>
         </arguments>
     </virtualType>
-    <virtualType name="BraintreeTwoCloneDataBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+    <virtualType name="BraintreeTwoVaultCaptureRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
         <arguments>
             <argument name="builders" xsi:type="array">
-                <item name="capture" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\CaptureDataBuilder</item>
+                <item name="vault_capture" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\VaultCaptureDataBuilder</item>
                 <item name="settlement" xsi:type="string">Magento\BraintreeTwo\Gateway\Request\SettlementDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
-
+    
     <!-- Value handlers infrastructure -->
     <virtualType name="BraintreeTwoValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
         <arguments>
             <argument name="handlers" xsi:type="array">
                 <item name="default" xsi:type="string">BraintreeTwoConfigValueHandler</item>
+                <item name="can_void" xsi:type="string">Magento\BraintreeTwo\Gateway\Config\CanVoidHandler</item>
+                <item name="can_cancel" xsi:type="string">Magento\BraintreeTwo\Gateway\Config\CanVoidHandler</item>
             </argument>
         </arguments>
     </virtualType>
@@ -155,10 +278,11 @@
             <argument name="configInterface" xsi:type="object">Magento\BraintreeTwo\Gateway\Config\Config</argument>
         </arguments>
     </virtualType>
-    <virtualType name="BraintreeTwoResponseHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+    <virtualType name="BraintreeTwoAuthorizationHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
         <arguments>
             <argument name="handlers" xsi:type="array">
                 <item name="payment_details" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler</item>
+                <item name="txn_id" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\TransactionIdHandler</item>
                 <item name="card_details" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\CardDetailsHandler</item>
                 <item name="risk_data" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\RiskDataHandler</item>
                 <item name="vault_details" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\VaultDetailsHandler</item>
@@ -166,12 +290,63 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="BraintreeTwoCloneResponseHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+    <virtualType name="BraintreeTwoVaultResponseHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="capture_details" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\CaptureDetailsHandler</item>
-                <item name="clone_details" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\CloneDetailsHandler</item>
+                <item name="payment_details" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler</item>
+                <item name="txn_id" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\TransactionIdHandler</item>
+                <item name="card_details" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\CardDetailsHandler</item>
+                <item name="risk_data" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\RiskDataHandler</item>
+                <item name="3d_secure" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\ThreeDSecureDetailsHandler</item>
             </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeTwoPayPalResponseHandler" type="Magento\Payment\Gateway\Response\HandlerChain">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="payment_details" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler</item>
+                <item name="txn_id" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\TransactionIdHandler</item>
+                <item name="paypal_details" xsi:type="string">Magento\BraintreeTwo\Gateway\Response\PayPalDetailsHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <!-- PayPal value handlers infrastructure -->
+    <virtualType name="BraintreeTwoPayPalValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
+        <arguments>
+            <argument name="handlers" xsi:type="array">
+                <item name="default" xsi:type="string">BraintreeTwoPayPalConfigValueHandler</item>
+                <item name="can_void" xsi:type="string">Magento\BraintreeTwo\Gateway\Config\CanVoidHandler</item>
+                <item name="can_cancel" xsi:type="string">Magento\BraintreeTwo\Gateway\Config\CanVoidHandler</item>
+                <item name="can_capture" xsi:type="string">Magento\BraintreeTwo\Gateway\Config\CanVoidHandler</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="BraintreeTwoPayPalConfigValueHandler" type="Magento\Payment\Gateway\Config\ConfigValueHandler">
+        <arguments>
+            <argument name="configInterface" xsi:type="object">Magento\BraintreeTwo\Gateway\Config\PayPal\Config</argument>
+        </arguments>
+    </virtualType>
+    
+    <!-- Void Command -->
+    <virtualType name="BraintreeTwoVoidCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="client" xsi:type="object">Magento\BraintreeTwo\Gateway\Http\Client\TransactionVoid</argument>
+            <argument name="requestBuilder" xsi:type="object">Magento\BraintreeTwo\Gateway\Request\VoidDataBuilder</argument>
+            <argument name="handler" xsi:type="object">Magento\BraintreeTwo\Gateway\Response\VoidHandler</argument>
+            <argument name="validator" xsi:type="object">Magento\BraintreeTwo\Gateway\Validator\GeneralResponseValidator</argument>
+            <argument name="transferFactory" xsi:type="object">Magento\BraintreeTwo\Gateway\Http\TransferFactory</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Refund Command -->
+    <virtualType name="BraintreeTwoRefundCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="client" xsi:type="object">Magento\BraintreeTwo\Gateway\Http\Client\TransactionRefund</argument>
+            <argument name="requestBuilder" xsi:type="object">Magento\BraintreeTwo\Gateway\Request\RefundDataBuilder</argument>
+            <argument name="validator" xsi:type="object">Magento\BraintreeTwo\Gateway\Validator\GeneralResponseValidator</argument>
+            <argument name="handler" xsi:type="object">Magento\BraintreeTwo\Gateway\Response\RefundHandler</argument>
+            <argument name="transferFactory" xsi:type="object">Magento\BraintreeTwo\Gateway\Http\TransferFactory</argument>
         </arguments>
     </virtualType>
 
@@ -194,11 +369,40 @@
             <argument name="config" xsi:type="object">Magento\BraintreeTwo\Gateway\Config\Config</argument>
         </arguments>
     </type>
-    <type name="Magento\Vault\Model\PaymentTokenRepositoryProxy">
+    <virtualType name="BraintreeTwoPayPalInfo" type="Magento\BraintreeTwo\Block\Info">
         <arguments>
-            <argument name="repositories" xsi:type="array">
-                <item name="braintreetwo" xsi:type="string">Magento\Vault\Model\PaymentTokenRepository</item>
+            <argument name="config" xsi:type="object">Magento\BraintreeTwo\Gateway\Config\PayPal\Config</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="BraintreeTransactionsCollectionFactory" type="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="braintreetwo_report_data_source" xsi:type="string">Magento\BraintreeTwo\Model\Report\TransactionsCollection</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="BraintreeTransactionsReporting" type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting">
+        <arguments>
+            <argument name="collectionFactory" xsi:type="object">BraintreeTransactionsCollectionFactory</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="BraintreeTransactionsDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="reporting" xsi:type="object">BraintreeTransactionsReporting</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\BraintreeTwo\Model\Report\ConditionAppliers\AppliersPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="Braintree\TextNode" xsi:type="object">Magento\BraintreeTwo\Model\Report\ConditionAppliers\Text</item>
+                <item name="Braintree\RangeNode" xsi:type="object">Magento\BraintreeTwo\Model\Report\ConditionAppliers\Range</item>
+                <item name="Braintree\MultipleValueNode" xsi:type="object">Magento\BraintreeTwo\Model\Report\ConditionAppliers\MultipleValue</item>
             </argument>
         </arguments>
     </type>
+
 </config>

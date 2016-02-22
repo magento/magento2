@@ -318,23 +318,6 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteWrongThemeFormat($themePath)
     {
-        $this->themePackageInfo->expects($this->once())
-            ->method('getPackageName')
-            ->willReturn('dummy');
-
-        $themeMock = $this->getMockBuilder('Magento\Framework\View\Design\ThemeInterface')
-            ->getMockForAbstractClass();
-
-        $this->collection->expects($this->once())
-            ->method('getThemeByFullPath')
-            ->with($themePath)
-            ->willReturn($themeMock);
-
-        $this->collection->expects($this->once())
-            ->method('hasTheme')
-            ->with($themeMock)
-            ->willReturn(false);
-
         $this->tester->execute(['theme' => [$themePath]]);
         $this->assertContains(
             'Theme path should be specified as full path which is area/vendor/name.',

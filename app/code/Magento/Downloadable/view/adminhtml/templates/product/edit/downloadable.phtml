@@ -245,3 +245,23 @@ var uploaderTemplate = '<div class="no-display" id="[[idName]]-template">' +
         }
     }
 </script>
+
+<script>
+    /**
+     * @todo get rid of this after automatic binding of js that comes from config for UI component will be implemented
+     */
+    require([
+        'jquery',
+        'Magento_Catalog/catalog/type-events',
+        'Magento_Downloadable/downloadable-type-handler',
+        'Magento_Ui/js/lib/view/utils/async'
+    ], function ($, typeProducts) {
+
+        $('body').trigger('changeTypeProduct');
+        $('body').trigger('contentUpdated');
+        $.async('[name=type]', function() {
+            typeProducts.init();
+        });
+
+    });
+</script>

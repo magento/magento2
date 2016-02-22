@@ -14,7 +14,8 @@
         "magento/module-media-storage": "100.0.*",
         "magento/module-msrp": "100.0.*",
         "magento/module-quote": "100.0.*",
-        "magento/framework": "100.0.*"
+        "magento/framework": "100.0.*",
+        "magento/module-ui": "100.0.*"
     },
     "suggest": {
         "magento/module-grouped-product-sample-data": "Sample Data version:100.0.*"

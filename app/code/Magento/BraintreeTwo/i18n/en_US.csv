@@ -10,4 +10,6 @@
 "liabilityShifted", "Liability Shifted"
 "liabilityShiftPossible", "Liability Shift Possible"
 "riskDataId", "Risk ID"
-"riskDataDecision", "Risk Decision"
+"riskDataDecision", "Risk Decision",
+"paymentId", "Payment Id",
+"payerEmail", "Payer Email",

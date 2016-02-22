@@ -60,7 +60,9 @@ class SampleDataDeployCommandTest extends \PHPUnit_Framework_TestCase
         $application->expects($this->any())->method('run')
             ->with($commandInput, $this->anything())
             ->willReturn($appRunResult);
-
+        if (($appRunResult !== 0) && !empty($sampleDataPackages)) {
+            $application->expects($this->once())->method('resetComposer')->willReturnSelf();
+        }
         $applicationFactory = $this->getMock('Composer\Console\ApplicationFactory', ['create'], [], '', false);
         $applicationFactory->expects($this->any())->method('create')->willReturn($application);
 
@@ -80,22 +82,23 @@ class SampleDataDeployCommandTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 'sampleDataPackages' => [],
-                'appRunResult'       => 1,
-                'expectedMsg'        => 'There is no sample data for current set of modules.' . PHP_EOL,
+                'appRunResult' => 1,
+                'expectedMsg' => 'There is no sample data for current set of modules.' . PHP_EOL,
             ],
             [
                 'sampleDataPackages' => [
                     'magento/module-cms-sample-data' => '1.0.0-beta',
                 ],
-                'appRunResult'       => 1,
-                'expectedMsg'        => 'There is an error during sample data deployment.' . PHP_EOL,
+                'appRunResult' => 1,
+                'expectedMsg' => 'There is an error during sample data deployment. Composer file will be reverted.'
+                    . PHP_EOL,
             ],
             [
                 'sampleDataPackages' => [
                     'magento/module-cms-sample-data' => '1.0.0-beta',
                 ],
-                'appRunResult'       => 0,
-                'expectedMsg'        => '',
+                'appRunResult' => 0,
+                'expectedMsg' => '',
             ],
         ];
     }

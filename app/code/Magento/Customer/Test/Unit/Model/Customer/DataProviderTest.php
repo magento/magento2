@@ -8,6 +8,7 @@ namespace Magento\Customer\Test\Unit\Model\Customer;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Customer\Model\Customer\DataProvider;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
@@ -100,37 +101,51 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             [
                 'expected' => [
                     'customer' => [
-                        'fields' => [
+                        'children' => [
                             self::ATTRIBUTE_CODE => [
-                                'dataType' => 'frontend_input',
-                                'formElement' => 'frontend_input',
-                                'options' => 'test-options',
-                                'visible' => 'is_visible',
-                                'required' => 'is_required',
-                                'label' => 'frontend_label',
-                                'sortOrder' => 'sort_order',
-                                'notice' => 'note',
-                                'default' => 'default_value',
-                                'size' => 'multiline_count',
-                            ]
-                        ]
+                                'arguments' => [
+                                    'data' => [
+                                        'config' => [
+                                            'dataType' => 'frontend_input',
+                                            'formElement' => 'frontend_input',
+                                            'options' => 'test-options',
+                                            'visible' => 'is_visible',
+                                            'required' => 'is_required',
+                                            'label' => 'frontend_label',
+                                            'sortOrder' => 'sort_order',
+                                            'notice' => 'note',
+                                            'default' => 'default_value',
+                                            'size' => 'multiline_count',
+                                            'componentType' => Field::NAME,
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
                     ],
                     'address' => [
-                        'fields' => [
+                        'children' => [
                             self::ATTRIBUTE_CODE => [
-                                'dataType' => 'frontend_input',
-                                'formElement' => 'frontend_input',
-                                'options' => 'test-options',
-                                'visible' => 'is_visible',
-                                'required' => 'is_required',
-                                'label' => 'frontend_label',
-                                'sortOrder' => 'sort_order',
-                                'notice' => 'note',
-                                'default' => 'default_value',
-                                'size' => 'multiline_count',
-                            ]
-                        ]
-                    ]
+                                'arguments' => [
+                                    'data' => [
+                                        'config' => [
+                                            'dataType' => 'frontend_input',
+                                            'formElement' => 'frontend_input',
+                                            'options' => 'test-options',
+                                            'visible' => 'is_visible',
+                                            'required' => 'is_required',
+                                            'label' => 'frontend_label',
+                                            'sortOrder' => 'sort_order',
+                                            'notice' => 'note',
+                                            'default' => 'default_value',
+                                            'size' => 'multiline_count',
+                                            'componentType' => Field::NAME,
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ]
             ]
         ];

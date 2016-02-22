@@ -52,14 +52,6 @@ class AddCatalogToTopmenuItemsObserverTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->_categoryFlatState = $this->getMock(
-            '\Magento\Catalog\Model\Indexer\Category\Flat\State',
-            ['isFlatEnabled'],
-            [],
-            '',
-            false
-        );
-
         $this->menuCategoryData = $this->getMock(
             'Magento\Catalog\Observer\MenuCategoryData',
             ['getMenuCategoryData'],
@@ -67,12 +59,44 @@ class AddCatalogToTopmenuItemsObserverTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->store = $this->getMockBuilder('Magento\Store\Model\Store')
+            ->setMethods(['getRootCategoryId', 'getFilters', '__wakeup'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->storeManager = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+            ->setMethods(['getStore'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->storeManager->expects($this->any())->method('getStore')
+            ->will($this->returnValue($this->store));
+
+        $this->store->expects($this->any())->method('getRootCategoryId')
+            ->will($this->returnValue(1));
+
+        $collectionFactory = $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Category\CollectionFactory')
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $collection =  $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Category\Collection')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $collectionFactory->expects($this->once())->method('create')
+            ->willReturn($collection);
+
+        $collection->expects($this->once())->method('getIterator')
+            ->willReturn(new \ArrayIterator([]));
+
         $this->_observer = (new ObjectManager($this))->getObject(
             'Magento\Catalog\Observer\AddCatalogToTopmenuItemsObserver',
             [
                 'catalogCategory' => $this->_catalogCategory,
                 'menuCategoryData' => $this->menuCategoryData,
-                'categoryFlatState' => $this->_categoryFlatState,
+                'storeManager' => $this->storeManager,
+                'categoryCollectionFactory' => $collectionFactory,
             ]
         );
     }
@@ -97,9 +121,7 @@ class AddCatalogToTopmenuItemsObserverTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_childrenCategory->expects($this->once())
-            ->method('getIsActive')
-            ->will($this->returnValue(false));
+
 
         $this->_category = $this->getMock(
             '\Magento\Catalog\Model\Category',
@@ -108,25 +130,8 @@ class AddCatalogToTopmenuItemsObserverTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->_category->expects($this->once())
-            ->method('getIsActive')
-            ->will($this->returnValue(true));
-
-        $this->_catalogCategory->expects($this->once())
-            ->method('getStoreCategories')
-            ->will($this->returnValue([$this->_category]));
-        $this->menuCategoryData->expects($this->once())
-            ->method('getMenuCategoryData')
-            ->with($this->_category);
 
         $blockMock = $this->_getCleanMock('\Magento\Theme\Block\Html\Topmenu');
-
-        $treeMock = $this->_getCleanMock('\Magento\Framework\Data\Tree');
-
-        $menuMock = $this->getMock('\Magento\Framework\Data\Tree\Node', ['getTree', 'addChild'], [], '', false);
-        $menuMock->expects($this->once())
-            ->method('getTree')
-            ->will($this->returnValue($treeMock));
 
         $eventMock = $this->getMock('\Magento\Framework\Event', ['getBlock'], [], '', false);
         $eventMock->expects($this->once())
@@ -134,43 +139,18 @@ class AddCatalogToTopmenuItemsObserverTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($blockMock));
 
         $observerMock = $this->getMock('\Magento\Framework\Event\Observer', ['getEvent', 'getMenu'], [], '', false);
-        $observerMock->expects($this->once())
+        $observerMock->expects($this->any())
             ->method('getEvent')
             ->will($this->returnValue($eventMock));
-        $observerMock->expects($this->once())
-            ->method('getMenu')
-            ->will($this->returnValue($menuMock));
 
         return $observerMock;
     }
 
-    public function testAddCatalogToTopMenuItemsWithoutFlat()
+    public function testAddCatalogToTopMenuItems()
     {
         $observer = $this->_preparationData();
-
-        $this->_category->expects($this->once())
-            ->method('getChildren')
-            ->will($this->returnValue([$this->_childrenCategory]));
-
         $this->_observer->execute($observer);
     }
 
-    public function testAddCatalogToTopMenuItemsWithFlat()
-    {
-        $observer = $this->_preparationData();
 
-        $this->_category->expects($this->once())
-            ->method('getChildrenNodes')
-            ->will($this->returnValue([$this->_childrenCategory]));
-
-        $this->_category->expects($this->once())
-            ->method('getUseFlatResource')
-            ->will($this->returnValue(true));
-
-        $this->_categoryFlatState->expects($this->once())
-            ->method('isFlatEnabled')
-            ->will($this->returnValue(true));
-
-        $this->_observer->execute($observer);
-    }
 }

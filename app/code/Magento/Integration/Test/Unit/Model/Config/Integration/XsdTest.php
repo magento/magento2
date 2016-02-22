@@ -13,7 +13,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected $_schemaFile;
+    protected $schemaFile;
 
     protected function setUp()
     {
@@ -21,7 +21,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
         $urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
-        $this->_schemaFile = $urnResolver->getRealPath(
+        $this->schemaFile = $urnResolver->getRealPath(
             'urn:magento:module:Magento_Integration:etc/integration/api.xsd'
         );
     }
@@ -38,7 +38,7 @@ class XsdTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $messageFormat = '%message%';
         $dom = new \Magento\Framework\Config\Dom($fixtureXml, $validationStateMock, [], null, null, $messageFormat);
-        $actualResult = $dom->validate($this->_schemaFile, $actualErrors);
+        $actualResult = $dom->validate($this->schemaFile, $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult, "Validation result is invalid.");
         $this->assertEquals($expectedErrors, $actualErrors, "Validation errors does not match.");
     }
