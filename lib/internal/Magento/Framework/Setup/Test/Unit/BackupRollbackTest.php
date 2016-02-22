@@ -107,7 +107,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
         $this->filesystem->expects($this->once())
             ->method('create');
         $this->file->expects($this->once())->method('isExists')->with($this->path . '/backups')->willReturn(false);
-        $this->file->expects($this->once())->method('createDirectory')->with($this->path . '/backups', 0770);
+        $this->file->expects($this->once())->method('createDirectory')->with($this->path . '/backups', 0711);
         $this->model->codeBackup(time());
     }
 
@@ -158,7 +158,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
         $this->filesystem->expects($this->once())
             ->method('create');
         $this->file->expects($this->once())->method('isExists')->with($this->path . '/backups')->willReturn(false);
-        $this->file->expects($this->once())->method('createDirectory')->with($this->path . '/backups', 0770);
+        $this->file->expects($this->once())->method('createDirectory')->with($this->path . '/backups', 0711);
         $this->model->codeBackup(time(), Factory::TYPE_MEDIA);
     }
 

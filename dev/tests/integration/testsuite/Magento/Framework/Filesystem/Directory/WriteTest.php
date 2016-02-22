@@ -28,7 +28,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     public function testInstance()
     {
-        $dir = $this->getDirectoryInstance('newDir1', 0770);
+        $dir = $this->getDirectoryInstance('newDir1', 0711);
         $this->assertTrue($dir instanceof ReadInterface);
         $this->assertTrue($dir instanceof WriteInterface);
     }
@@ -56,10 +56,10 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     public function createProvider()
     {
         return [
-            ['newDir1', 0770, "newDir1"],
-            ['newDir1', 0770, "root_dir1/subdir1/subdir2"],
-            ['newDir2', 0750, "root_dir2/subdir"],
-            ['newDir1', 0770, "."]
+            ['newDir1', 0711, "newDir1"],
+            ['newDir1', 0711, "root_dir1/subdir1/subdir2"],
+            ['newDir2', 0711, "root_dir2/subdir"],
+            ['newDir1', 0711, "."]
         ];
     }
 
@@ -71,7 +71,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     public function testDelete($path)
     {
-        $directory = $this->getDirectoryInstance('newDir', 0770);
+        $directory = $this->getDirectoryInstance('newDir', 0711);
         $directory->create($path);
         $this->assertTrue($directory->isExist($path));
         $directory->delete($path);
@@ -116,7 +116,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     public function renameProvider()
     {
-        return [['newDir1', 0770, 'first_name.txt', 'second_name.txt']];
+        return [['newDir1', 0711, 'first_name.txt', 'second_name.txt']];
     }
 
     /**
@@ -150,7 +150,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     public function renameTargetDirProvider()
     {
-        return [['dir1', 'dir2', 0770, 'first_name.txt', 'second_name.txt']];
+        return [['dir1', 'dir2', 0711, 'first_name.txt', 'second_name.txt']];
     }
 
     /**
@@ -180,8 +180,8 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     public function copyProvider()
     {
         return [
-            ['newDir1', 0770, 'first_name.txt', 'second_name.txt'],
-            ['newDir1', 0770, 'subdir/first_name.txt', 'subdir/second_name.txt']
+            ['newDir1', 0711, 'first_name.txt', 'second_name.txt'],
+            ['newDir1', 0711, 'subdir/first_name.txt', 'subdir/second_name.txt']
         ];
     }
 
@@ -216,8 +216,8 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     public function copyTargetDirProvider()
     {
         return [
-            ['dir1', 'dir2', 0770, 'first_name.txt', 'second_name.txt'],
-            ['dir1', 'dir2', 0770, 'subdir/first_name.txt', 'subdir/second_name.txt']
+            ['dir1', 'dir2', 0711, 'first_name.txt', 'second_name.txt'],
+            ['dir1', 'dir2', 0711, 'subdir/first_name.txt', 'subdir/second_name.txt']
         ];
     }
 
@@ -226,9 +226,9 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     public function testChangePermissions()
     {
-        $directory = $this->getDirectoryInstance('newDir1', 0770);
+        $directory = $this->getDirectoryInstance('newDir1', 0711);
         $directory->create('test_directory');
-        $this->assertTrue($directory->changePermissions('test_directory', 0640));
+        $this->assertTrue($directory->changePermissions('test_directory', 0644));
     }
 
     /**
@@ -241,7 +241,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
         $directory->create('test_directory/subdirectory');
         $directory->writeFile('test_directory/subdirectory/test_file.txt', 'Test Content');
 
-        $this->assertTrue($directory->changePermissionsRecursively('test_directory', 0750, 0640));
+        $this->assertTrue($directory->changePermissionsRecursively('test_directory', 0711, 0644));
     }
 
     /**
@@ -269,8 +269,8 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     public function touchProvider()
     {
         return [
-            ['test_directory', 0770, 'touch_file.txt', time() - 3600],
-            ['test_directory', 0770, 'subdirectory/touch_file.txt', time() - 3600]
+            ['test_directory', 0711, 'touch_file.txt', time() - 3600],
+            ['test_directory', 0711, 'subdirectory/touch_file.txt', time() - 3600]
         ];
     }
 
@@ -279,7 +279,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     public function testIsWritable()
     {
-        $directory = $this->getDirectoryInstance('newDir1', 0770);
+        $directory = $this->getDirectoryInstance('newDir1', 0711);
         $directory->create('bar');
         $this->assertFalse($directory->isWritable('not_existing_dir'));
         $this->assertTrue($directory->isWritable('bar'));
@@ -310,8 +310,8 @@ class WriteTest extends \PHPUnit_Framework_TestCase
     public function openFileProvider()
     {
         return [
-            ['newDir1', 0770, 'newFile.txt', 'w+'],
-            ['newDir1', 0770, 'subdirectory/newFile.txt', 'w+']
+            ['newDir1', 0711, 'newFile.txt', 'w+'],
+            ['newDir1', 0711, 'subdirectory/newFile.txt', 'w+']
         ];
     }
 
@@ -325,7 +325,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     public function testWriteFile($path, $content, $extraContent)
     {
-        $directory = $this->getDirectoryInstance('writeFileDir', 0770);
+        $directory = $this->getDirectoryInstance('writeFileDir', 0711);
         $directory->writeFile($path, $content);
         $this->assertEquals($content, $directory->readFile($path));
         $directory->writeFile($path, $extraContent);
@@ -342,7 +342,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     public function testWriteFileAppend($path, $content, $extraContent)
     {
-        $directory = $this->getDirectoryInstance('writeFileDir', 0770);
+        $directory = $this->getDirectoryInstance('writeFileDir', 0711);
         $directory->writeFile($path, $content, 'a+');
         $this->assertEquals($content, $directory->readFile($path));
         $directory->writeFile($path, $extraContent, 'a+');

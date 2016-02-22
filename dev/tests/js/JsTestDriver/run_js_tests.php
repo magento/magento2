@@ -166,7 +166,7 @@ if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
 
     fwrite($fh, $shellCommand . PHP_EOL);
     fclose($fh);
-    chmod($commandFile, 0750);
+    chmod($commandFile, 0711);
 
     exec($commandFile);
 }

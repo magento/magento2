@@ -60,7 +60,7 @@ class LiveCodeTest extends \PHPUnit_Framework_TestCase
     {
         $reportDir = BP . '/dev/tests/static/report';
         if (!is_dir($reportDir)) {
-            mkdir($reportDir, 0770);
+            mkdir($reportDir, 0711);
         }
         self::$_reportFile = $reportDir . '/js_report.txt';
         @unlink(self::$_reportFile);

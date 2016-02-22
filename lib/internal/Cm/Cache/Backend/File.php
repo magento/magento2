@@ -47,8 +47,8 @@ class Cm_Cache_Backend_File extends Zend_Cache_Backend_File
         'read_control_type' => 'crc32',    // If read_control is enabled, which checksum algorithm to use
         'hashed_directory_level' => 2,     // How many characters should be used to create sub-directories
         'use_chmod' => FALSE,              // Do not use chmod on files and directories (should use umask() to control permissions)
-        'directory_mode' => 0770,          // Filesystem permissions for created directories (requires use_chmod)
-        'file_mode' => 0660,               // Filesystem permissions for created files (requires use_chmod)
+        'directory_mode' => 0711,          // Filesystem permissions for created directories (requires use_chmod)
+        'file_mode' => 0644,               // Filesystem permissions for created files (requires use_chmod)
     );
 
     /** @var bool */

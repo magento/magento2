@@ -19,12 +19,12 @@ class Filesystem
     /**
      * File access permissions
      */
-    const PERMISSIONS_FILE = 0640;
+    const PERMISSIONS_FILE = 0644;
 
     /**
      * Directory access permissions
      */
-    const PERMISSIONS_DIR = 0750;
+    const PERMISSIONS_DIR = 0711;
 
     /**
      * Default theme when no theme is stored in configuration
@@ -112,7 +112,7 @@ class Filesystem
                 DirectoryList::STATIC_VIEW
             ],
             self::PERMISSIONS_DIR,
-            self::PERMISSIONS_DIR
+            self::PERMISSIONS_FILE
         );
 
         // Trigger static assets compilation and deployment
