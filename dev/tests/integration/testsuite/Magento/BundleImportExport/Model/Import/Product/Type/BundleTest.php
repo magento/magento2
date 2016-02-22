@@ -35,7 +35,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
-     *
+     * List of Bundle options SKU
      *
      * @var array
      */
