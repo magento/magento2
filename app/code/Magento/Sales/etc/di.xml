@@ -777,12 +777,6 @@
             <argument name="state" xsi:type="object">Magento\Framework\App\State\Proxy</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">sales_order_grid</argument>
-            <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\ResourceModel\Order</argument>
-        </arguments>
-    </virtualType>
     <virtualType name="Magento\Sales\Model\ResourceModel\Order\Invoice\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <arguments>
             <argument name="mainTable" xsi:type="string">sales_invoice_grid</argument>
