@@ -13,6 +13,7 @@
         "magento/module-quote": "100.0.*",
         "magento/module-catalog": "100.0.*",
         "magento/module-user": "100.0.*",
+        "magento/module-security": "100.0.*",
         "magento/module-backup": "100.0.*",
         "magento/module-customer": "100.0.*",
         "magento/module-translation": "100.0.*",
