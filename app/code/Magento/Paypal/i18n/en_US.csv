@@ -467,6 +467,10 @@ Continue,Continue
 "Publisher ID","Publisher ID"
 "Required to display a banner","Required to display a banner"
 "Get Publisher ID from PayPal","Get Publisher ID from PayPal"
+"It is recommended to set this value to ""PayPal"" per store views.","It is recommended to set this value to ""PayPal"" per store views."
+"Shortcut on Shopping Cart","Shortcut on Shopping Cart"
+"Also affects mini-shopping cart.","Also affects mini-shopping cart."
+"Shortcut on Product View","Shortcut on Product View"
 "Home Page","Home Page"
 Display,Display
 Position,Position
@@ -476,7 +480,6 @@ Size,Size
 "Checkout Cart Page","Checkout Cart Page"
 "Basic Settings - PayPal Express Checkout","Basic Settings - PayPal Express Checkout"
 Title,Title
-"It is recommended to set this value to ""Magento_Paypal"" per store views.","It is recommended to set this value to ""Magento_Paypal"" per store views."
 "Sort Order","Sort Order"
 "Payment Action","Payment Action"
 "Display on Product Details Page","Display on Product Details Page"
@@ -656,3 +659,17 @@ User,User
                                 The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
                                 or more. <a href=\"https:/financing.paypal.com/ppfinportal/content/forrester\" target=\"_blank\">See Details</a>.
                 "
+"Accept credit cards, debit cards and PayPal payments securely.","Accept credit cards, debit cards and PayPal payments securely."
+"Accept payments with a completely customizable checkout page.","Accept payments with a completely customizable checkout page."
+"Website Payments Pro Hosted Solution (Includes Express Checkout)","Website Payments Pro Hosted Solution (Includes Express Checkout)"
+"Website Payments Pro Hosted Solution and Express Checkout","Website Payments Pro Hosted Solution and Express Checkout"
+"Basic Settings - PayPal Website Payments Pro Hosted Solution","Basic Settings - PayPal Website Payments Pro Hosted Solution"
+"PayPal Payment Solutions","PayPal Payment Solutions"
+"Display on Product Details Page","Display on Product Details Page"
+verified,verified
+unverified,unverified
+Eligible,Eligible
+Ineligible,Inligible
+"PayPal Express Checkout","PayPal Express Checkout"
+"payflowpro", "PayflowPro"
+"Requested payment method does not match with order.","Requested payment method does not match with order."
