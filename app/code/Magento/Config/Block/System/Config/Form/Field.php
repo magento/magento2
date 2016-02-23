@@ -47,7 +47,7 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
         }
 
         $html = '<td class="label"><label for="' .
-            $element->getHtmlId() . '"><span ' .
+            $element->getHtmlId() . '"><span' .
             $this->_renderScopeLabel($element) . '>' .
             $element->getLabel() .
             '</span></label></td>';
@@ -151,7 +151,7 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
     {
         $scopeString = '';
         if ($element->getScope() && false == $this->_storeManager->isSingleStoreMode()) {
-            $scopeString .= 'data-config-scope="' . $element->getScopeLabel() . '"';
+            $scopeString .= ' data-config-scope="' . $element->getScopeLabel() . '"';
         }
 
         return $scopeString;
