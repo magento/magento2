@@ -6,6 +6,7 @@
 namespace Magento\Elasticsearch\SearchAdapter\Query\Preprocessor;
 
 use Magento\Search\Api\SynonymAnalyzerInterface;
+use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
 class Synonyms implements PreprocessorInterface
 {

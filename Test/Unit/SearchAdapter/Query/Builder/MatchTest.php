@@ -9,7 +9,7 @@ use Magento\Elasticsearch\SearchAdapter\Query\Builder\Match;
 use Magento\Framework\Search\Request\QueryInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
-use Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\PreprocessorInterface;
+use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 
 class MatchTest extends \PHPUnit_Framework_TestCase
 {
@@ -49,7 +49,7 @@ class MatchTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $this->preprocessorInterface = $this
-            ->getMockBuilder('Magento\Elasticsearch\SearchAdapter\Query\Preprocessor\PreprocessorInterface')
+            ->getMockBuilder('Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface')
             ->disableOriginalConstructor()
             ->getMock();
 
