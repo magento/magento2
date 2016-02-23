@@ -51,18 +51,23 @@ class AbstractProductExportTestCase extends \PHPUnit_Framework_TestCase
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
+     *
+     * @param string $fixture
+     * @param string[] $skus
+     * @param string[] $skippedAttributes
      * @dataProvider exportDataProvider
      */
-    public function testExport($fixture, $skus)
+    public function testExport($fixture, $skus, $skippedAttributes = [])
     {
         $fixturePath = $this->fileSystem->getDirectoryRead(DirectoryList::ROOT)
             ->getAbsolutePath('/dev/tests/integration/testsuite/' . $fixture);
         include $fixturePath;
 
-        $this->executeExportTest($skus);
+        $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
+        $this->executeExportTest($skus, $skippedAttributes);
     }
 
-    protected function executeExportTest($skus)
+    protected function executeExportTest($skus, $skippedAttributes)
     {
         $productRepository = $this->objectManager->create(
             'Magento\Catalog\Api\ProductRepositoryInterface'
@@ -111,14 +116,14 @@ class AbstractProductExportTestCase extends \PHPUnit_Framework_TestCase
             $index--;
             $newProductData = $this->objectManager->create('Magento\Catalog\Model\Product')->load($ids[$index])->getData();
             $this->assertEquals(count($origProductData[$index]), count($newProductData));
-            $this->assertEqualsOtherThanUpdatedAt($origProductData[$index], $newProductData);
+            $this->assertEqualsOtherThanUpdatedAt($origProductData[$index], $newProductData, $skippedAttributes);
         }
     }
 
-    private function assertEqualsOtherThanUpdatedAt($expected, $actual)
+    private function assertEqualsOtherThanUpdatedAt($expected, $actual, $skippedAttributes)
     {
         foreach ($expected as $key => $value) {
-            if (in_array($key, self::$skippedAttributes)) {
+            if (in_array($key, $skippedAttributes)) {
                 continue;
             } else {
                 $this->assertEquals(
