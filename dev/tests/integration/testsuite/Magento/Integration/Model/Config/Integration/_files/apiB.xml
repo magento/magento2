@@ -14,6 +14,7 @@
     </integration>
     <integration name="TestIntegration3">
         <resources>
+            <resource name="Magento_Catalog::product_read" />
             <resource name="Magento_Sales::create" />
             <resource name="Magento_SalesRule::quote" />
         </resources>

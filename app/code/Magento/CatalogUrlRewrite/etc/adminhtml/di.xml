@@ -25,4 +25,14 @@
     <type name="Magento\Catalog\Model\Category\DataProvider">
         <plugin name="category_ui_form_url_key_plugin" type="Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Category\Tab\Attributes"/>
     </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\ModifierPool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="ProductUrlRewrite" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\CatalogUrlRewrite\Ui\DataProvider\Product\Form\Modifier\ProductUrlRewrite</item>
+                    <item name="sortOrder" xsi:type="number">90</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

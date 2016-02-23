@@ -13,6 +13,8 @@
 
 @modal-title__color: @text__color;
 
+@modal-title-span__font-size: @font-size__base;
+
 @modal-popup-title__font-size: 2.4rem;
 
 @modal-slide-title__font-size: 2.1rem;
@@ -239,4 +241,10 @@
     font-weight: @font-weight__regular;
     margin-bottom: 0;
     min-height: 1em;
+
+    span {
+        font-size: @modal-title-span__font-size;
+        font-style: @font-style__emphasis;
+        margin-left: @indent__s;
+    }
 }

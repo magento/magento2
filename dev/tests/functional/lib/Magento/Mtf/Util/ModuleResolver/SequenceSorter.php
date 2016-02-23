@@ -63,7 +63,8 @@ class SequenceSorter implements SequenceSorterInterface
         $modules = array_keys($this->getModuleSequence());
         foreach ($modules as $module) {
             foreach ($paths as $key => $path) {
-                $modulePath = realpath(MTF_TESTS_PATH . str_replace('_', '/', $module));
+                $modulePath = realpath(MTF_TESTS_PATH . str_replace('_', DIRECTORY_SEPARATOR, $module));
+                $path = realpath($path);
                 if (strpos($path, $modulePath) !== false) {
                     $sortedPaths[] = $path;
                     unset($paths[$key]);

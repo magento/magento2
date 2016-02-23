@@ -10,7 +10,11 @@ namespace Magento\Catalog\Model;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
+use Magento\Catalog\Api\Data\CategoryInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInterface
 {
     /**
@@ -34,6 +38,11 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     protected $categoryResource;
 
     /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * List of fields that can used config values in case when value does not defined directly
      *
      * @var array
@@ -44,15 +53,21 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
+        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
     ) {
         $this->categoryFactory = $categoryFactory;
         $this->categoryResource = $categoryResource;
         $this->storeManager = $storeManager;
+        $this->metadataPool = $metadataPool;
+        $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
     }
 
     /**
@@ -60,31 +75,33 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      */
     public function save(\Magento\Catalog\Api\Data\CategoryInterface $category)
     {
-        $existingData = $category->toFlatArray();
-        /** 'available_sort_by' should be set separately because fields of array type are destroyed by toFlatArray() */
-        $existingData['available_sort_by'] = $category->getAvailableSortBy();
+        $storeId = (int)$this->storeManager->getStore()->getId();
+        $existingData = $this->extensibleDataObjectConverter
+            ->toNestedArray($category, [], 'Magento\Catalog\Api\Data\CategoryInterface');
+        $existingData = array_diff_key($existingData, array_flip(['path', 'level', 'parent_id']));
+        $existingData['store_id'] = $storeId;
+
         if ($category->getId()) {
-            $existingCategory = $this->get($category->getId());
+            $metadata = $this->metadataPool->getMetadata(
+                CategoryInterface::class
+            );
+
+            $category = $this->get($category->getId(), $storeId);
+            $existingData[$metadata->getLinkField()] = $category->getData(
+                $metadata->getLinkField()
+            );
+
             if (isset($existingData['image']) && is_array($existingData['image'])) {
                 $existingData['image_additional_data'] = $existingData['image'];
                 unset($existingData['image']);
             }
-            $existingData['id'] = $existingCategory->getId();
-            $existingData['parent_id'] = $existingCategory->getParentId();
-            $existingData['path'] = $existingCategory->getPath();
-            $existingData['is_active'] = $existingCategory->getIsActive();
-            $existingData['include_in_menu'] =
-                isset($existingData['include_in_menu']) ? (bool)$existingData['include_in_menu'] : false;
-            $category->setData($existingData);
         } else {
             $parentId = $category->getParentId() ?: $this->storeManager->getStore()->getRootCategoryId();
-            $parentCategory = $this->get($parentId);
-            $existingData['include_in_menu'] =
-                isset($existingData['include_in_menu']) ? (bool)$existingData['include_in_menu'] : false;
-            /** @var  $category Category */
-            $category->setData($existingData);
-            $category->setPath($parentCategory->getPath());
+            $parentCategory = $this->get($parentId, $storeId);
+            $existingData['path'] = $parentCategory->getPath();
+            $existingData['parent_id'] = $parentId;
         }
+        $category->addData($existingData);
         try {
             $this->validateCategory($category);
             $this->categoryResource->save($category);
@@ -98,7 +115,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             );
         }
         unset($this->instances[$category->getId()]);
-        return $category;
+        return $this->get($category->getId(), $storeId);
     }
 
     /**

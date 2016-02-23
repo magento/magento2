@@ -20,12 +20,14 @@
             <item name="back" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\BackButton</item>
             <item name="delete" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\DeleteButton</item>
             <item name="invalidateToken" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\InvalidateTokenButton</item>
+            <item name="unlock" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\UnlockButton</item>
             <item name="resetPassword" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\ResetPasswordButton</item>
             <item name="order" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\OrderButton</item>
             <item name="reset" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\ResetButton</item>
             <item name="save" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\SaveButton</item>
             <item name="save_and_continue" xsi:type="string">Magento\Customer\Block\Adminhtml\Edit\SaveAndContinueButton</item>
         </item>
+        <item name="reverseMetadataMerge" xsi:type="boolean">true</item>
     </argument>
     <dataSource name="customer_form_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
@@ -146,6 +148,12 @@
                         <item name="dataType" xsi:type="string">boolean</item>
                         <item name="formElement" xsi:type="string">checkbox</item>
                         <item name="source" xsi:type="string">customer</item>
+                        <item name="description" xsi:type="string" translate="true">Disable Automatic Group Change Based on VAT ID</item>
+                        <item name="valueMap" xsi:type="array">
+                            <item name="true" xsi:type="string">1</item>
+                            <item name="false" xsi:type="string">0</item>
+                        </item>
+                        <item name="default" xsi:type="string">0</item>
                     </item>
                 </argument>
             </field>
@@ -454,6 +462,10 @@
                         <item name="targetField" xsi:type="string">default_billing</item>
                         <item name="referencedField" xsi:type="string">entity_id</item>
                     </item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="boolean">true</item>
+                        <item name="false" xsi:type="string"/>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -470,6 +482,10 @@
                         <item name="target" xsi:type="string">customer</item>
                         <item name="targetField" xsi:type="string">default_shipping</item>
                         <item name="referencedField" xsi:type="string">entity_id</item>
+                    </item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="boolean">true</item>
+                        <item name="false" xsi:type="string"/>
                     </item>
                 </item>
             </argument>
