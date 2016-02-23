@@ -286,7 +286,7 @@ class ArrayManager
     ) {
         $paths = $this->findPaths($indexes, $data, $startPath, $internalPath, 1, $delimiter);
 
-        return !empty($paths) ? $paths[0] : null;
+        return $paths ? reset($paths) : null;
     }
 
     /**
