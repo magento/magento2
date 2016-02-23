@@ -166,7 +166,7 @@ class Configurable extends AbstractModifier
      *
      * @return array
      */
-    /*protected function getGrid()
+    protected function getGrid()
     {
         return [
             'arguments' => [
@@ -196,7 +196,7 @@ class Configurable extends AbstractModifier
             ],
             'children' => $this->getRows(),
         ];
-    }*/
+    }
 
     /**
      * Returns Dynamic rows records configuration

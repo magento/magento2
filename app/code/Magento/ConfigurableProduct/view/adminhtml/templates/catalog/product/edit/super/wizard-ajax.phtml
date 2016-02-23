@@ -7,8 +7,7 @@
 // @codingStandardsIgnoreFile
 
 /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix */
-?>
-<?php
+
 $productMatrix = $block->getProductMatrix();
 $attributes = $block->getProductAttributes();
 
@@ -19,6 +18,8 @@ $attributes = $block->getProductAttributes();
 ?>
 <script>
     require(['jquery'], function ($) {
+        $('body').trigger('contentUpdated');
         $('[data-role=steps-wizard-main]').applyBindings();
-    })
+    });
+
 </script>
