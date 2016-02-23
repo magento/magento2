@@ -503,3 +503,17 @@
         vertical-align: middle;
     }
 }
+
+//
+//  Global border-box
+//  ---------------------------------------------
+
+.lib-borderbox() {
+    html {
+        box-sizing: border-box;
+    }
+
+    *, *:before, *:after {
+        box-sizing: inherit;
+    }
+}
