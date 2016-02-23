@@ -27,11 +27,12 @@ class BundleWeightTest extends AbstractModifierTest
      */
     public function testModifyMeta()
     {
-        $weightTypePath = 'bundle-items/children/' . BundleWeight::CODE_WEIGHT_TYPE . BundleWeight::META_CONFIG_PATH;
-        $weightPath = 'product-details/children/' . ProductAttributeInterface::CODE_WEIGHT
-            . BundleWeight::META_CONFIG_PATH;
-        $hasWeightPath = 'product-details/children/' . ProductAttributeInterface::CODE_HAS_WEIGHT
-            . BundleWeight::META_CONFIG_PATH;
+        $weightTypePath = 'bundle-items/children/' . BundleWeight::CODE_WEIGHT_TYPE;
+        $weightTypeConfigPath = $weightTypePath . BundleWeight::META_CONFIG_PATH;
+        $weightPath = 'product-details/children/' . ProductAttributeInterface::CODE_WEIGHT;
+        $weightConfigPath = $weightPath . BundleWeight::META_CONFIG_PATH;
+        $hasWeightPath = 'product-details/children/' . ProductAttributeInterface::CODE_HAS_WEIGHT;
+        $hasWeightConfigPath = $hasWeightPath . BundleWeight::META_CONFIG_PATH;
         $sourceMeta = [
             'product-details' => [
                 'children' => [
@@ -103,26 +104,56 @@ class BundleWeightTest extends AbstractModifierTest
             ]
         ];
 
+        $this->arrayManagerMock->expects(static::any())
+            ->method('findPath')
+            ->willReturnMap(
+                [
+                    [
+                        BundleWeight::CODE_WEIGHT_TYPE,
+                        $sourceMeta,
+                        null,
+                        'children',
+                        ArrayManager::DEFAULT_PATH_DELIMITER,
+                        $weightTypePath
+                    ],
+                    [
+                        ProductAttributeInterface::CODE_HAS_WEIGHT,
+                        $weightTypeMeta,
+                        null,
+                        'children',
+                        ArrayManager::DEFAULT_PATH_DELIMITER,
+                        $hasWeightPath
+                    ],
+                    [
+                        ProductAttributeInterface::CODE_WEIGHT,
+                        $hasWeightMeta,
+                        null,
+                        'children',
+                        ArrayManager::DEFAULT_PATH_DELIMITER,
+                        $weightPath
+                    ]
+                ]
+            );
         $this->arrayManagerMock->expects($this->exactly(3))
             ->method('merge')
             ->willReturnMap(
                 [
                     [
-                        $weightTypePath,
+                        $weightTypeConfigPath,
                         $sourceMeta,
                         $weightTypeParams,
                         ArrayManager::DEFAULT_PATH_DELIMITER,
                         $weightTypeMeta
                     ],
                     [
-                        $hasWeightPath,
+                        $hasWeightConfigPath,
                         $weightTypeMeta,
                         $hasWeightParams,
                         ArrayManager::DEFAULT_PATH_DELIMITER,
                         $hasWeightMeta
                     ],
                     [
-                        $weightPath,
+                        $weightConfigPath,
                         $hasWeightMeta,
                         $weightParams,
                         ArrayManager::DEFAULT_PATH_DELIMITER,

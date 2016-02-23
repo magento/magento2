@@ -6,6 +6,7 @@
 namespace Magento\Bundle\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundleSku;
+use Magento\Framework\Stdlib\ArrayManager;
 
 class BundleSkuTest extends AbstractModifierTest
 {
@@ -22,7 +23,8 @@ class BundleSkuTest extends AbstractModifierTest
 
     public function testModifyMeta()
     {
-        $skuTypePath = 'bundle-items/children/' . BundleSku::CODE_SKU_TYPE . BundleSku::META_CONFIG_PATH;
+        $skuTypePath = 'bundle-items/children/' . BundleSku::CODE_SKU_TYPE;
+        $skuTypeConfigPath = $skuTypePath . BundleSku::META_CONFIG_PATH;
         $sourceMeta = [
             'bundle-items' => [
                 'children' => [
@@ -47,9 +49,23 @@ class BundleSkuTest extends AbstractModifierTest
             ]
         ];
 
+        $this->arrayManagerMock->expects(static::any())
+            ->method('findPath')
+            ->willReturnMap(
+                [
+                    [
+                        BundleSku::CODE_SKU_TYPE,
+                        $sourceMeta,
+                        null,
+                        'children',
+                        ArrayManager::DEFAULT_PATH_DELIMITER,
+                        $skuTypePath
+                    ]
+                ]
+            );
         $this->arrayManagerMock->expects($this->once())
             ->method('merge')
-            ->with($skuTypePath, $sourceMeta, $skuTypeParams)
+            ->with($skuTypeConfigPath, $sourceMeta, $skuTypeParams)
             ->willReturn($skuTypeMeta);
 
         $this->assertSame($skuTypeMeta, $this->getModel()->modifyMeta($sourceMeta));
