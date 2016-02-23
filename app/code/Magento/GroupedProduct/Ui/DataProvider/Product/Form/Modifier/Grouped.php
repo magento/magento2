@@ -488,7 +488,6 @@ class Grouped extends AbstractModifier
                                     'sortOrder' => 80,
                                     'validation' => [
                                         'validate-number' => true,
-                                        'validate-digits' => true,
                                     ],
                                 ],
                             ],
