@@ -91,6 +91,7 @@ class Related extends AbstractModifier
      * @param ImageHelper $imageHelper
      * @param Status $status
      * @param AttributeSetRepositoryInterface $attributeSetRepository
+     * @param string $scopeName
      */
     public function __construct(
         LocatorInterface $locator,
