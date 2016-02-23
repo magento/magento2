@@ -18,5 +18,5 @@ class ShippingoptgroupElement extends OptgroupselectElement
      *
      * @var string
      */
-    protected $optionGroupValue = ".//optgroup[@label = '%s']/option[contains(text(), '%s')]";
+    protected $optGroupValue = ".//optgroup[@label = '%s']/option[contains(text(), '%s')]";
 }

@@ -16,7 +16,7 @@
     <type name="Magento\Payment\Model\CcGenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
-                <item name="braintreetwo" xsi:type="const">\Magento\BraintreeTwo\Model\Ui\ConfigProvider::CODE</item>
+                <item name="braintreetwo" xsi:type="const">Magento\BraintreeTwo\Model\Ui\ConfigProvider::CODE</item>
             </argument>
         </arguments>
     </type>
@@ -39,6 +39,17 @@
     <type name="Magento\BraintreeTwo\Controller\Payment\GetNonce">
         <arguments>
             <argument name="session" xsi:type="object">Magento\Customer\Model\Session</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\BraintreeTwo\Block\Paypal\Button">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="template" xsi:type="string">Magento_BraintreeTwo::paypal/button.phtml</item>
+                <item name="alias" xsi:type="string">braintree.paypal.mini-cart</item>
+                <item name="button_id" xsi:type="string">braintree-paypal-mini-cart</item>
+            </argument>
+            <argument name="payment" xsi:type="object">BraintreeTwoPayPalFacade</argument>
         </arguments>
     </type>
 </config>
