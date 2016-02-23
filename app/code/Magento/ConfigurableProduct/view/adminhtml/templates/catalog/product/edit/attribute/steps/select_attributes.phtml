@@ -36,3 +36,9 @@
         }
     }
 </script>
+<script>
+    require(['jquery'], function ($) {
+        $('div.select-attributes-block').applyBindings();
+        $('body').trigger('contentUpdated');
+    })
+</script>
