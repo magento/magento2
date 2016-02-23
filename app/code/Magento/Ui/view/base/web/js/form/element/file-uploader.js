@@ -29,7 +29,6 @@ define([
                     'form_key': window.FORM_KEY
                 }
             },
-
             tracks: {
                 isLoading: true
             }
@@ -361,6 +360,14 @@ define([
 
             file.previewWidth = img.naturalHeight;
             file.previewHeight = img.naturalWidth;
+        },
+
+        /**
+         * Update whether value differs from default value
+         */
+        setDifferedFromDefault: function () {
+            var value = utils.copy(this.value());
+            this.isDifferedFromDefault(!_.isEqual(value, this.default));
         }
     });
 });
