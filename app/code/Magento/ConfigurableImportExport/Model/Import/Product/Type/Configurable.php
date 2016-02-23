@@ -10,8 +10,8 @@
 
 namespace Magento\ConfigurableImportExport\Model\Import\Product\Type;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogImportExport\Model\Import\Product as ImportProduct;
-use \Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Importing configurable products
@@ -632,16 +632,16 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
      */
     protected function _collectSuperData($rowData)
     {
-        $rowId = $this->_productData[$this->getProductEntityLinkField()];
         $entityId = $this->_productData[$this->getProductEntityIdentifierField()];
+        $linkId = $this->_productData[$this->getProductEntityLinkField()];
 
         $this->_processSuperData();
 
         $this->_productSuperData = [
-            'product_id' => $rowId,
+            'product_id' => $linkId,
             'entity_id' => $entityId,
             'attr_set_code' => $this->_productData['attr_set_code'],
-            'used_attributes' => empty($this->_skuSuperData[$rowId]) ? [] : $this->_skuSuperData[$rowId],
+            'used_attributes' => empty($this->_skuSuperData[$linkId]) ? [] : $this->_skuSuperData[$linkId],
             'assoc_ids' => [],
         ];
 
@@ -657,15 +657,15 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $attrParams = $this->_superAttributes[$data['_super_attribute_code']];
 
             // @todo understand why do we need this condition
-            if ($this->_getSuperAttributeId($rowId, $attrParams['id'])) {
-                $productSuperAttrId = $this->_getSuperAttributeId($rowId, $attrParams['id']);
-            } elseif (isset($this->_superAttributesData['attributes'][$rowId][$attrParams['id']])) {
+            if ($this->_getSuperAttributeId($linkId, $attrParams['id'])) {
+                $productSuperAttrId = $this->_getSuperAttributeId($linkId, $attrParams['id']);
+            } elseif (isset($this->_superAttributesData['attributes'][$linkId][$attrParams['id']])) {
                 $attributes = $this->_superAttributesData['attributes'];
-                $productSuperAttrId = $attributes[$rowId][$attrParams['id']]['product_super_attribute_id'];
-                $this->_collectSuperDataLabels($data, $productSuperAttrId, $rowId, $variationLabels);
+                $productSuperAttrId = $attributes[$linkId][$attrParams['id']]['product_super_attribute_id'];
+                $this->_collectSuperDataLabels($data, $productSuperAttrId, $linkId, $variationLabels);
             } else {
                 $productSuperAttrId = $this->_getNextAttrId();
-                $this->_collectSuperDataLabels($data, $productSuperAttrId, $rowId, $variationLabels);
+                $this->_collectSuperDataLabels($data, $productSuperAttrId, $linkId, $variationLabels);
             }
         }
         //@codingStandardsIgnoreEnd
