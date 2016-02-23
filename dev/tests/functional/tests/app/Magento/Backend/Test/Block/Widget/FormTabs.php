@@ -91,8 +91,22 @@ class FormTabs extends AbstractFormContainers
                 'Tab "' . $tabName . '" is not visible.'
             );
         }
-        $this->getContainerElement($tabName)->click();
+        $this->browser->find($this->header)->hover();
+        $this->clickOnTabName($tabName);
+        $this->browser->find($this->header)->hover();
+
         return $this;
+    }
+
+    /**
+     * Click on tab name.
+     *
+     * @param string $tabName
+     * @return void
+     */
+    protected function clickOnTabName($tabName)
+    {
+        $this->getContainerElement($tabName)->click();
     }
 
     /**
