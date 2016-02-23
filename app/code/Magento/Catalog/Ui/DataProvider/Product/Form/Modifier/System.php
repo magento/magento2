@@ -18,7 +18,7 @@ class System extends AbstractModifier
     const KEY_SUBMIT_URL = 'submit_url';
     const KEY_VALIDATE_URL = 'validate_url';
     const KEY_RELOAD_URL = 'reloadUrl';
-    const URL_SUBMIT = 'catalogstaging/product/save';
+    const URL_SUBMIT = 'catalog/product/save';
     const URL_VALIDATE = 'catalog/product/validate';
     const URL_RELOAD = 'catalog/product/reload';
 
