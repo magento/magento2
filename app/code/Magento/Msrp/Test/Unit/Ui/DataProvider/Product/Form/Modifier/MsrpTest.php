@@ -7,7 +7,6 @@ namespace Magento\Msrp\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
 use Magento\Msrp\Ui\DataProvider\Product\Form\Modifier\Msrp;
-use Magento\Catalog\Ui\DataProvider\Grouper;
 use Magento\Msrp\Model\Config as MsrpConfig;
 
 /**
@@ -16,20 +15,12 @@ use Magento\Msrp\Model\Config as MsrpConfig;
 class MsrpTest extends AbstractModifierTest
 {
     /**
-     * @var Grouper|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $grouperMock;
-
-    /**
      * @var MsrpConfig|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $msrpConfigMock;
 
     protected function setUp()
     {
-        $this->grouperMock = $this->getMockBuilder(Grouper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->msrpConfigMock = $this->getMockBuilder(MsrpConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -43,7 +34,6 @@ class MsrpTest extends AbstractModifierTest
     {
         return $this->objectManager->getObject(Msrp::class, [
             'locator' => $this->locatorMock,
-            'grouper' => $this->grouperMock,
             'msrpConfig' => $this->msrpConfigMock,
         ]);
     }
