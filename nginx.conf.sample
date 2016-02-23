@@ -162,7 +162,6 @@ gzip_disable "msie6";
 
 gzip_comp_level 6;
 gzip_min_length 1100;
-gzip_buffers 16 8k;
 gzip_proxied any;
 gzip_types
     text/plain
