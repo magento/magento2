@@ -6,8 +6,6 @@
 
 namespace Magento\Translation\Controller;
 
-use Magento\Rma\Block\Adminhtml\Rma\Item\Attribute\Edit\Js;
-
 class AjaxTest extends \Magento\TestFramework\TestCase\AbstractController
 {
     protected function setUp()
@@ -30,7 +28,6 @@ class AjaxTest extends \Magento\TestFramework\TestCase\AbstractController
         );
         parent::setUp();
     }
-
 
     /**
      * @dataProvider indexActionDataProvider
