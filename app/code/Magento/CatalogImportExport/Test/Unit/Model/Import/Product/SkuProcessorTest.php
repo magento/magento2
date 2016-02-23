@@ -22,23 +22,11 @@ class SkuProcessorTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->productFactory = $this->getMock('Magento\Catalog\Model\ProductFactory', [], [], '', false);
-
-        $metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
-        $entityMetadataMock = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
-        $metadataPoolMock->expects($this->any())
-            ->method('getMetadata')
-            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
-            ->willReturn($entityMetadataMock);
-        $entityMetadataMock->expects($this->any())
-            ->method('getLinkField')
-            ->willReturn('entity_id');
-
         $this->skuProcessor = $this->getMock(
             'Magento\CatalogImportExport\Model\Import\Product\SkuProcessor',
             ['_getSkus'],
             [
                 $this->productFactory,
-                $metadataPoolMock
             ],
             ''
         );
