@@ -19,7 +19,17 @@ class DataProvider extends \Magento\Framework\View\Element\UiComponent\DataProvi
     protected $storeManager;
 
     /**
-     * @inheritDoc
+     * @param string $name
+     * @param string $primaryFieldName
+     * @param string $requestFieldName
+     * @param ReportingInterface $reporting
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param RequestInterface $request
+     * @param FilterBuilder $filterBuilder
+     * @param StoreManagerInterface $storeManager
+     * @param array $meta
+     * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         $name,

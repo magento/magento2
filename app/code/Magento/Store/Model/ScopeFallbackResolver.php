@@ -42,7 +42,10 @@ class ScopeFallbackResolver implements ScopeFallbackResolverInterface
                     $fallback = [ScopeConfigInterface::SCOPE_TYPE_DEFAULT, null];
                     break;
                 case ScopeInterface::SCOPE_GROUP:
-                    $fallback = [ScopeInterface::SCOPE_WEBSITES, $this->storeManager->getGroup($scopeId)->getWebsiteId()];
+                    $fallback = [
+                        ScopeInterface::SCOPE_WEBSITES,
+                        $this->storeManager->getGroup($scopeId)->getWebsiteId()
+                    ];
                     break;
                 case ScopeInterface::SCOPE_STORE:
                 case ScopeInterface::SCOPE_STORES:

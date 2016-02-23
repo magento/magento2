@@ -60,7 +60,7 @@ class MetadataLoader
     protected function showFallbackButton($scope, $scopeId)
     {
         $fallbackButton = true;
-        list($fallbackScope, $fallbackScopeId) = $this->scopeFallbackResolver->getFallbackScope($scope, $scopeId);
+        list($fallbackScope) = $this->scopeFallbackResolver->getFallbackScope($scope, $scopeId);
         if ($this->storeManager->isSingleStoreMode() || !$fallbackScope) {
             $fallbackButton = false;
         }
@@ -99,7 +99,8 @@ class MetadataLoader
                 $fieldName = $fieldData->getFieldConfig()['field'];
                 $element[$fieldName]['arguments']['data']['config']['default'] = $fieldData->getValue();
                 $element[$fieldName]['arguments']['data']['config']['showFallbackReset'] = $this->showFallbackButton(
-                    $scope, $scopeId
+                    $scope,
+                    $scopeId
                 );
             }
         }
