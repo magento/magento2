@@ -66,7 +66,7 @@
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="dataScope" xsi:type="string">search</item>
-                            <item name="fit" xsi:type="boolean">true</item>
+                            <item name="fit" xsi:type="boolean">false</item>
                             <item name="label" xsi:type="string">Search String</item>
                             <item name="showFallbackReset" xsi:type="boolean">false</item>
                         </item>
@@ -79,7 +79,7 @@
                             <item name="formElement" xsi:type="string">select</item>
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="dataScope" xsi:type="string">value</item>
-                            <item name="fit" xsi:type="boolean">true</item>
+                            <item name="fit" xsi:type="boolean">false</item>
                             <item name="label" xsi:type="string">Theme Name</item>
                             <item name="showFallbackReset" xsi:type="boolean">false</item>
                         </item>
@@ -90,7 +90,7 @@
                         <item name="config" xsi:type="array">
                             <item name="componentType" xsi:type="string">actionDelete</item>
                             <item name="dataType" xsi:type="string">text</item>
-                            <item name="fit" xsi:type="boolean">true</item>
+                            <item name="fit" xsi:type="boolean">false</item>
                             <item name="label" xsi:type="string">Actions</item>
                             <item name="sortOrder" xsi:type="string">50</item>
                             <item name="additionalClasses" xsi:type="string">data-grid-actions-cell</item>

@@ -416,6 +416,24 @@
             label {
                 padding-top: 7px;
             }
+
+            span {
+                &[data-config-scope] {
+                    position: relative;
+
+                    &:before {
+                        bottom: -1.3rem;
+                        color: @field-scope__color;
+                        content: attr(data-config-scope);
+                        font-size: 1.1rem;
+                        font-weight: @font-weight__regular;
+                        min-width: 15rem;
+                        position: absolute;
+                        right: 0;
+                        text-transform: lowercase;
+                    }
+                }
+            }
         }
 
         .scope-label {

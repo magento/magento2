@@ -47,17 +47,16 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
         }
 
         $html = '<td class="label"><label for="' .
-            $element->getHtmlId() .
-            '">' .
+            $element->getHtmlId() . '"><span ' .
+            $this->_renderScopeLabel($element) . '>' .
             $element->getLabel() .
-            '</label></td>';
+            '</span></label></td>';
         $html .= $this->_renderValue($element);
 
         if ($isCheckboxRequired) {
             $html .= $this->_renderInheritCheckbox($element);
         }
 
-        $html .= $this->_renderScopeLabel($element);
         $html .= $this->_renderHint($element);
 
         return $this->_decorateRowHtml($element, $html);
@@ -150,12 +149,12 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
      */
     protected function _renderScopeLabel(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
-        $html = '<td class="scope-label">';
+        $scopeString = '';
         if ($element->getScope() && false == $this->_storeManager->isSingleStoreMode()) {
-            $html .= $element->getScopeLabel();
+            $scopeString .= 'data-config-scope="' . $element->getScopeLabel() . '"';
         }
-        $html .= '</td>';
-        return $html;
+
+        return $scopeString;
     }
 
     /**
