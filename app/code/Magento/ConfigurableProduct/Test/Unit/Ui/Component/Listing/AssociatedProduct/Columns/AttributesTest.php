@@ -16,6 +16,9 @@ use Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AttributesTest extends \PHPUnit_Framework_TestCase
 {
     /**
