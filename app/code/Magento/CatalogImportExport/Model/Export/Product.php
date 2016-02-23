@@ -876,6 +876,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
              */
             foreach ($collection as $itemId => $item) {
                 $additionalAttributes = [];
+                $productLinkId = $item->getData($this->getProductEntityLinkField());
                 foreach ($this->_getExportAttrCodes() as $code) {
                     $attrValue = $item->getData($code);
                     if (!$this->isValidAttributeValue($code, $attrValue)) {
@@ -912,11 +913,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                         }
                     } else {
                         $this->collectMultiselectValues($item, $code, $storeId);
-                        if (!empty($this->collectedMultiselectsData[$storeId][$itemId][$code])) {
+                        if (!empty($this->collectedMultiselectsData[$storeId][$productLinkId][$code])) {
                             $additionalAttributes[$code] = $fieldName .
                                 ImportProduct::PAIR_NAME_VALUE_SEPARATOR . implode(
                                     ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR,
-                                    $this->collectedMultiselectsData[$storeId][$itemId][$code]
+                                    $this->collectedMultiselectsData[$storeId][$productLinkId][$code]
                                 );
                         }
                     }
@@ -938,8 +939,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $data[$itemId][$storeId][self::COL_SKU] = $item->getSku();
                 $data[$itemId][$storeId]['store_id'] = $storeId;
                 $data[$itemId][$storeId]['product_id'] = $itemId;
-                $data[$itemId][$storeId]['product_link_id']
-                    = $item->getData($this->getProductEntityLinkField());
+                $data[$itemId][$storeId]['product_link_id'] = $productLinkId;
             }
             $collection->clear();
         }
@@ -995,7 +995,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      */
     protected function hasMultiselectData($item, $storeId)
     {
-        return !empty($this->collectedMultiselectsData[$storeId][$item->getId()]);
+        $linkId = $item->getData($this->getProductEntityLinkField());
+        return !empty($this->collectedMultiselectsData[$storeId][$linkId]);
     }
 
     /**
@@ -1012,10 +1013,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             $this->_attributeValues[$attrCode],
             array_flip($optionIds)
         );
-        if (!(isset($this->collectedMultiselectsData[Store::DEFAULT_STORE_ID][$item->getId()][$attrCode])
-            && $this->collectedMultiselectsData[Store::DEFAULT_STORE_ID][$item->getId()][$attrCode] == $options)
+        $linkId = $item->getData($this->getProductEntityLinkField());
+        if (!(isset($this->collectedMultiselectsData[Store::DEFAULT_STORE_ID][$linkId][$attrCode])
+            && $this->collectedMultiselectsData[Store::DEFAULT_STORE_ID][$linkId][$attrCode] == $options)
         ) {
-            $this->collectedMultiselectsData[$storeId][$item->getId()][$attrCode] = $options;
+            $this->collectedMultiselectsData[$storeId][$linkId][$attrCode] = $options;
         }
 
         return $this;
@@ -1127,9 +1129,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
         }
 
-        if (!empty($multiRawData['customOptionsData'][$productId][$storeId])) {
-            $customOptionsRows = $multiRawData['customOptionsData'][$productId][$storeId];
-            $multiRawData['customOptionsData'][$productId][$storeId] = [];
+        if (!empty($multiRawData['customOptionsData'][$productLinkId][$storeId])) {
+            $customOptionsRows = $multiRawData['customOptionsData'][$productLinkId][$storeId];
+            $multiRawData['customOptionsData'][$productLinkId][$storeId] = [];
             $customOptions = implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $customOptionsRows);
 
             $dataRow = array_merge($dataRow, ['custom_options' => $customOptions]);
