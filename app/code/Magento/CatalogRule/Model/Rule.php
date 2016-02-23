@@ -582,6 +582,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * {@inheritdoc}
      */

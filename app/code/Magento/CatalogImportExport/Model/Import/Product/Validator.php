@@ -216,13 +216,14 @@ class Validator extends AbstractValidator implements RowValidatorInterface
 
     /**
      * @param string|null $attribute
+     * @return void
      */
     protected function setInvalidAttribute($attribute)
     {
         $this->invalidAttribute = $attribute;
     }
 
-    /*
+    /**
      * @return string
      */
     public function getInvalidAttribute()
