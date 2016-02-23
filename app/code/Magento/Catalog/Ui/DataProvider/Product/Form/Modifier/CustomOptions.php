@@ -294,11 +294,12 @@ class CustomOptions extends AbstractModifier
                                 'component' => 'Magento_Ui/js/form/components/button',
                                 'actions' => [
                                     [
-                                        'targetName' => 'ns=product_form, index=options',
+                                        'targetName' => 'ns=' . static::FORM_NAME . ', index=options',
                                         'actionName' => 'clearDataProvider'
                                     ],
                                     [
-                                        'targetName' => 'ns=product_form, index=' . static::IMPORT_OPTIONS_MODAL,
+                                        'targetName' => 'ns=' . static::FORM_NAME . ', index='
+                                            . static::IMPORT_OPTIONS_MODAL,
                                         'actionName' => 'openModal',
                                     ],
                                     [
@@ -324,7 +325,7 @@ class CustomOptions extends AbstractModifier
                                 'sortOrder' => 20,
                                 'actions' => [
                                     [
-                                        'targetName' => 'product_form.product_form.'
+                                        'targetName' => static::FORM_NAME . '.' . static::FORM_NAME . '.'
                                             . static::GROUP_CUSTOM_OPTIONS_NAME . '.' . static::GRID_OPTIONS_NAME,
                                         'actionName' => 'addChild',
                                     ]
@@ -442,7 +443,7 @@ class CustomOptions extends AbstractModifier
                     'config' => [
                         'componentType' => Modal::NAME,
                         'dataScope' => '',
-                        'provider' => 'product_form.product_form_data_source',
+                        'provider' => static::FORM_NAME . '.product_form_data_source',
                         'options' => [
                             'title' => __('Select Product'),
                             'buttons' => [
