@@ -316,6 +316,13 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     protected $metadataPool;
 
     /**
+     * Product entity link field
+     *
+     * @var string
+     */
+    private $productEntityLinkField;
+
+    /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -332,7 +339,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @param Product\Type\Factory $_typeFactory
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -351,8 +357,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory $attributeColFactory,
         \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
-        \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+        \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
     ) {
         $this->_entityCollectionFactory = $collectionFactory;
         $this->_exportConfig = $exportConfig;
@@ -367,7 +372,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $this->_typeFactory = $_typeFactory;
         $this->_linkTypeProvider = $linkTypeProvider;
         $this->rowCustomizer = $rowCustomizer;
-        $this->metadataPool = $metadataPool;
 
         parent::__construct($localeDate, $config, $resource, $storeManager);
 
@@ -486,13 +490,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         if (empty($productIds)) {
             return [];
         }
-        $linkField = $this->metadataPool
-            ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
-            ->getLinkField();
         $select = $this->_connection->select()->from(
             ['mgvte' => $this->_resourceModel->getTableName('catalog_product_entity_media_gallery_value_to_entity')],
             [
-                'mgvte.' . $linkField,
+                "mgvte.{$this->getProductEntityLinkField()}",
                 'mgvte.value_id'
             ]
         )->joinLeft(
@@ -511,14 +512,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 'mgv.disabled'
             ]
         )->where(
-            'mgvte.' . $linkField . ' IN(?)',
+            "mgvte.{$this->getProductEntityLinkField()} IN (?)",
             $productIds
         );
 
         $rowMediaGallery = [];
         $stmt = $this->_connection->query($select);
         while ($mediaRow = $stmt->fetch()) {
-            $rowMediaGallery[$mediaRow[$linkField]][] = [
+            $rowMediaGallery[$mediaRow[$this->getProductEntityLinkField()]][] = [
                 '_media_attribute_id' => $mediaRow['attribute_id'],
                 '_media_image' => $mediaRow['filename'],
                 '_media_label' => $mediaRow['label'],
@@ -937,6 +938,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $data[$itemId][$storeId][self::COL_SKU] = $item->getSku();
                 $data[$itemId][$storeId]['store_id'] = $storeId;
                 $data[$itemId][$storeId]['product_id'] = $itemId;
+                $data[$itemId][$storeId]['product_link_id']
+                    = $item->getData($this->getProductEntityLinkField());
             }
             $collection->clear();
         }
@@ -959,6 +962,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $collection->addCategoryIds()->addWebsiteNamesToResult();
         /** @var \Magento\Catalog\Model\Product $item */
         foreach ($collection as $item) {
+            $productLinkIds[] = $item->getData($this->getProductEntityLinkField());
             $productIds[] = $item->getId();
             $rowWebsites[$item->getId()] = array_intersect(
                 array_keys($this->_websiteIdToCode),
@@ -976,10 +980,10 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
 
         $data['rowWebsites'] = $rowWebsites;
         $data['rowCategories'] = $rowCategories;
-        $data['mediaGalery'] = $this->getMediaGallery($productIds);
-        $data['linksRows'] = $this->prepareLinks($productIds);
+        $data['mediaGalery'] = $this->getMediaGallery($productLinkIds);
+        $data['linksRows'] = $this->prepareLinks($productLinkIds);
 
-        $data['customOptionsData'] = $this->getCustomOptionsData($productIds);
+        $data['customOptionsData'] = $this->getCustomOptionsData($productLinkIds);
 
         return $data;
     }
@@ -1047,10 +1051,12 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     {
         $result = [];
         $productId = $dataRow['product_id'];
+        $productLinkId = $dataRow['product_link_id'];
         $storeId = $dataRow['store_id'];
         $sku = $dataRow[self::COL_SKU];
 
         unset($dataRow['product_id']);
+        unset($dataRow['product_link_id']);
         unset($dataRow['store_id']);
         unset($dataRow[self::COL_SKU]);
 
@@ -1066,11 +1072,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $websiteCodes);
                 $multiRawData['rowWebsites'][$productId] = [];
             }
-            if (!empty($multiRawData['mediaGalery'][$productId])) {
+            if (!empty($multiRawData['mediaGalery'][$productLinkId])) {
                 $additionalImages = [];
                 $additionalImageLabels = [];
                 $additionalImageIsDisabled = [];
-                foreach ($multiRawData['mediaGalery'][$productId] as $mediaItem) {
+                foreach ($multiRawData['mediaGalery'][$productLinkId] as $mediaItem) {
                     $additionalImages[] = $mediaItem['_media_image'];
                     $additionalImageLabels[] = $mediaItem['_media_label'];
 
@@ -1084,14 +1090,14 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImageLabels);
                 $dataRow['hide_from_product_page'] =
                     implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, $additionalImageIsDisabled);
-                $multiRawData['mediaGalery'][$productId] = [];
+                $multiRawData['mediaGalery'][$productLinkId] = [];
             }
             foreach ($this->_linkTypeProvider->getLinkTypes() as $linkTypeName => $linkId) {
-                if (!empty($multiRawData['linksRows'][$productId][$linkId])) {
+                if (!empty($multiRawData['linksRows'][$productLinkId][$linkId])) {
                     $colPrefix = $linkTypeName . '_';
 
                     $associations = [];
-                    foreach ($multiRawData['linksRows'][$productId][$linkId] as $linkData) {
+                    foreach ($multiRawData['linksRows'][$productLinkId][$linkId] as $linkData) {
                         if ($linkData['default_qty'] !== null) {
                             $skuItem = $linkData['sku'] . ImportProduct::PAIR_NAME_VALUE_SEPARATOR .
                                 $linkData['default_qty'];
@@ -1100,7 +1106,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                         }
                         $associations[$skuItem] = $linkData['position'];
                     }
-                    $multiRawData['linksRows'][$productId][$linkId] = [];
+                    $multiRawData['linksRows'][$productLinkId][$linkId] = [];
                     asort($associations);
                     $dataRow[$colPrefix . 'skus'] =
                         implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, array_keys($associations));
@@ -1321,5 +1327,34 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 \Magento\ImportExport\Model\Import::getAttributeType($attribute);
         }
         return $this;
+    }
+
+    /**
+     * Get product metadata pool
+     *
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
+    }
+
+    /**
+     * Get product entity link field
+     *
+     * @return string
+     */
+    private function getProductEntityLinkField()
+    {
+        if (!$this->productEntityLinkField) {
+            $this->productEntityLinkField = $this->getMetadataPool()
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getLinkField();
+        }
+        return $this->productEntityLinkField;
     }
 }
