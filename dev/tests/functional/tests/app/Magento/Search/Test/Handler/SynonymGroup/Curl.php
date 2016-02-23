@@ -58,7 +58,7 @@ class Curl extends AbstractCurl implements SynonymGroupInterface
         $curl->close();
         if (!strpos($response, 'data-ui-id="messages-message-success"')) {
             throw new \Exception(
-                "Synonym Group entity creating by curl handler was not successful! Response: $response"
+                "Synonym Group entity creation by curl handler was not successful! Response: $response"
             );
         }
 
