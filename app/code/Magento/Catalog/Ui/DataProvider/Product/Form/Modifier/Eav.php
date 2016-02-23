@@ -235,6 +235,8 @@ class Eav extends AbstractModifier
      * @param string $groupCode
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getAttributesMeta(array $attributes, $groupCode)
     {
@@ -246,8 +248,8 @@ class Eav extends AbstractModifier
             }
 
             $code = $attribute->getAttributeCode();
-           if (in_array($code, $this->attributesToEliminate)) {
-               continue;
+            if (in_array($code, $this->attributesToEliminate)) {
+                continue;
             }
             $canDisplayService = $this->canDisplayUseDefault($attribute);
             $usedDefault = $this->usedDefault($attribute);
@@ -606,7 +608,6 @@ class Eav extends AbstractModifier
 
         return $product->getData($attributeCode);
     }
-
 
     /**
      * Retrieve scope label
