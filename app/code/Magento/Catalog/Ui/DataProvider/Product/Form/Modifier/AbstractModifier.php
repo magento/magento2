@@ -50,8 +50,8 @@ abstract class AbstractModifier implements ModifierInterface
         $groupCodes = (array)$groupCodes;
 
         foreach ($groupCodes as $groupCode) {
-            if (isset($meta[$groupCode]['sortOrder'])) {
-                return $meta[$groupCode]['sortOrder'] + $iteration;
+            if (isset($meta[$groupCode]['arguments']['data']['config']['sortOrder'])) {
+                return $meta[$groupCode]['arguments']['data']['config']['sortOrder'] + $iteration;
             }
         }
 
