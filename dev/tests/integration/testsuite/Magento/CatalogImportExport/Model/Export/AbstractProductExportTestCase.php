@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Export;
+
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 class AbstractProductExportTestCase extends \PHPUnit_Framework_TestCase
@@ -17,6 +18,11 @@ class AbstractProductExportTestCase extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
+
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
+    protected $fileSystem;
 
     /**
      * skipped attributes
@@ -35,12 +41,28 @@ class AbstractProductExportTestCase extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->fileSystem = $this->objectManager->get('Magento\Framework\Filesystem');
         $this->model = $this->objectManager->create(
             'Magento\CatalogImportExport\Model\Export\Product'
         );
     }
 
-    protected function executeExportTest($productNames)
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @dataProvider exportDataProvider
+     */
+    public function testExport($fixture, $skus)
+    {
+        $fixturePath = $this->fileSystem->getDirectoryRead(DirectoryList::ROOT)
+            ->getAbsolutePath('/dev/tests/integration/testsuite/' . $fixture);
+        include $fixturePath;
+
+        $this->executeExportTest($skus);
+    }
+
+    protected function executeExportTest($skus)
     {
         $productRepository = $this->objectManager->create(
             'Magento\Catalog\Api\ProductRepositoryInterface'
@@ -48,19 +70,18 @@ class AbstractProductExportTestCase extends \PHPUnit_Framework_TestCase
         $index = 0;
         $ids = [];
         $origProductData = [];
-        while (isset($productNames[$index])) {
-            $ids[$index] = $productRepository->get($productNames[$index])->getId();
+        while (isset($skus[$index])) {
+            $ids[$index] = $productRepository->get($skus[$index])->getId();
             $origProductData[$index] = $this->objectManager->create('Magento\Catalog\Model\Product')->load($ids[$index])->getData();
             $index++;
         }
 
-        $fileSystem = $this->objectManager->get('Magento\Framework\Filesystem');
-        $csvfile = uniqid('importexport_');
+        $csvfile = uniqid('importexport_') . '.csv';
 
         $this->model->setWriter(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
                 'Magento\ImportExport\Model\Export\Adapter\Csv',
-                ['fileSystem' => $fileSystem, 'destination' => $csvfile]
+                ['fileSystem' => $this->fileSystem, 'destination' => $csvfile]
             )
         );
         $this->assertNotEmpty($this->model->export());
@@ -69,7 +90,7 @@ class AbstractProductExportTestCase extends \PHPUnit_Framework_TestCase
         $importModel = $this->objectManager->create(
             'Magento\CatalogImportExport\Model\Import\Product'
         );
-        $directory = $fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $source = $this->objectManager->create(
             '\Magento\ImportExport\Model\Import\Source\Csv',
             [
@@ -83,7 +104,7 @@ class AbstractProductExportTestCase extends \PHPUnit_Framework_TestCase
             $source
         )->validateData();
 
-        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->assertTrue($errors->getErrorsCount() == 0, 'Product import error, imported from file:' . $csvfile);
         $importModel->importData();
 
         while ($index > 0) {
