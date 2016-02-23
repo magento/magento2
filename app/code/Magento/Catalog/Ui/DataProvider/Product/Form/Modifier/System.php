@@ -38,10 +38,9 @@ class System extends AbstractModifier
     protected $urlSubmit;
 
     /**
-     * System constructor.
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
-     * @param array $urlSubmit
+     * @param string $urlSubmit
      */
     public function __construct(
         LocatorInterface $locator,
