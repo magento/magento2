@@ -8,7 +8,8 @@
 //  _____________________________________________
 
 @field-fallback-reset-icon__margin-left: @field-tooltip-action__margin-left;
-@field-fallback-reset-icon__size: @field-tooltip-icon__size;
+@field-fallback-reset-icon__size: 1.3rem;
+@field-fallback-reset-text__size: 1.25rem;
 @field-fallback-reset__margin-top: @field-tooltip__margin-top;
 @field-fallback-reset__width: @field-tooltip__width;
 
@@ -18,10 +19,12 @@
 
 .admin__field-fallback-reset {
     &:extend(.abs-action-reset all);
+    font-size: @field-fallback-reset-text__size;
     width: @field-fallback-reset__width;
+    white-space: nowrap;
 
     > span {
-        .hidden();
+        margin-left: @indent__xs;
     }
 
     &:active {

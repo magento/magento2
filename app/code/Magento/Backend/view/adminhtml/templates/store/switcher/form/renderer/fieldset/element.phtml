@@ -31,10 +31,10 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
     <div<?php /* @escapeNotVerified */ echo $fieldAttributes ?>>
         <?php if ($elementBeforeLabel): ?>
             <?php echo $element->getElementHtml() ?>
-            <?php echo $element->getLabelHtml() ?>
+            <?php echo $element->getLabelHtml('', $element->getScopeLabel()) ?>
             <?php /* @escapeNotVerified */ echo $note ?>
         <?php else: ?>
-            <?php echo $element->getLabelHtml() ?>
+            <?php echo $element->getLabelHtml('', $element->getScopeLabel()) ?>
             <div class="admin__field-control control">
                 <?php /* @escapeNotVerified */ echo($addOn) ? '<div class="addon">' . $element->getElementHtml() . '</div>' : $element->getElementHtml(); ?>
                 <?php echo $block->getHintHtml() ?>
@@ -42,7 +42,7 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
             </div>
         <?php endif; ?>
         <?php if ($element->getScopeLabel()): ?>
-            <div class="field-service" value-scope="<?php /* @escapeNotVerified */ echo $element->getScopeLabel()?>">
+            <div class="field-service">
             </div>
         <?php endif;?>
     </div>
