@@ -58,5 +58,4 @@ class Scope extends Template
         }
         return parent::toHtml();
     }
-
 }
