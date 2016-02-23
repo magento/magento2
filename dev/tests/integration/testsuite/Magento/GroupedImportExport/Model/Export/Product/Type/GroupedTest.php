@@ -6,20 +6,18 @@
 namespace Magento\GroupedImportExport\Model\Export\Product\Type;
 
 use Magento\CatalogImportExport\Model\Export\AbstractProductExportTestCase;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\ImportExport\Model\Import;
 
 class GroupedTest extends AbstractProductExportTestCase
 {
-    /**
-     * @magentoAppArea adminhtml
-     * @magentoDbIsolation enabled
-     * @magentoAppIsolation enabled
-     *
-     * @magentoDataFixture Magento/GroupedProduct/_files/product_grouped.php
-     */
-    public function testExport()
+    public function exportDataProvider()
     {
-        $this->executeExportTest(['grouped-product']);
+        return [
+            'grouped-product' => [
+                'Magento/GroupedProduct/_files/product_grouped.php',
+                [
+                    'grouped-product',
+                ]
+            ],
+        ];
     }
 }
