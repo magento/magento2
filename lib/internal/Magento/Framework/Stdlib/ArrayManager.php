@@ -235,7 +235,7 @@ class ArrayManager
         $checkList = [$startPath => ['start' => $startPath === null, 'children' => $data]];
         $paths = [];
 
-        while (!empty($checkList)) {
+        while ($checkList) {
             $nextCheckList = [];
 
             foreach ($checkList as $path => $config) {
