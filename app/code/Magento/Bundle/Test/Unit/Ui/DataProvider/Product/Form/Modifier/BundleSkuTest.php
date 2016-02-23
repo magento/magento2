@@ -6,11 +6,7 @@
 namespace Magento\Bundle\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundleSku;
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 
-/**
- * Class BundleSkuTest
- */
 class BundleSkuTest extends AbstractModifierTest
 {
     /**
@@ -18,32 +14,47 @@ class BundleSkuTest extends AbstractModifierTest
      */
     protected function createModel()
     {
-        return $this->objectManager->getObject(BundleSku::class, [
-            'arrayManager' => $this->arrayManagerMock,
-        ]);
+        return $this->objectManager->getObject(
+            BundleSku::class,
+            ['arrayManager' => $this->arrayManagerMock]
+        );
     }
 
-    /**
-     * @return void
-     */
     public function testModifyMeta()
     {
+        $skuTypePath = 'bundle-items/children/' . BundleSku::CODE_SKU_TYPE . BundleSku::META_CONFIG_PATH;
         $sourceMeta = [
-            'testGroup' => [
+            'bundle-items' => [
                 'children' => [
-                    ProductAttributeInterface::CODE_SKU => [
-                        'componentType' => 'testComponent',
-                    ],
+                    BundleSku::CODE_SKU_TYPE => []
                 ]
-            ],
+            ]
         ];
-        $modifiedMeta = $this->getModel()->modifyMeta($sourceMeta);
-        $this->assertArrayHasKey(BundleSku::CODE_SKU_TYPE, $modifiedMeta['testGroup']['children']);
+        $skuTypeParams = [
+            'valueMap' => [
+                'false' => '1',
+                'true' => '0'
+            ],
+            'validation' => [
+                'required-entry' => false
+            ]
+        ];
+        $skuTypeMeta = [
+            'bundle-items' => [
+                'children' => [
+                    BundleSku::CODE_SKU_TYPE => $skuTypeParams
+                ]
+            ]
+        ];
+
+        $this->arrayManagerMock->expects($this->once())
+            ->method('merge')
+            ->with($skuTypePath, $sourceMeta, $skuTypeParams)
+            ->willReturn($skuTypeMeta);
+
+        $this->assertSame($skuTypeMeta, $this->getModel()->modifyMeta($sourceMeta));
     }
 
-    /**
-     * @return void
-     */
     public function testModifyData()
     {
         $expectedData = [];
