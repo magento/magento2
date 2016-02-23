@@ -22,7 +22,6 @@ use Magento\Ui\Component\Form\Element\Input;
 use Magento\Ui\Component\Form\Element\Select;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Modal;
-use Magento\Catalog\Ui\DataProvider\Grouper;
 use Magento\Framework\Stdlib\ArrayManager;
 
 /**
@@ -36,11 +35,6 @@ class AdvancedPricing extends AbstractModifier
      * @var LocatorInterface
      */
     protected $locator;
-
-    /**
-     * @var Grouper
-     */
-    protected $grouper;
 
     /**
      * @var ModuleManager
@@ -84,7 +78,6 @@ class AdvancedPricing extends AbstractModifier
 
     /**
      * @param LocatorInterface $locator
-     * @param Grouper $grouper
      * @param StoreManagerInterface $storeManager
      * @param GroupRepositoryInterface $groupRepository
      * @param GroupManagementInterface $groupManagement
@@ -96,7 +89,6 @@ class AdvancedPricing extends AbstractModifier
      */
     public function __construct(
         LocatorInterface $locator,
-        Grouper $grouper,
         StoreManagerInterface $storeManager,
         GroupRepositoryInterface $groupRepository,
         GroupManagementInterface $groupManagement,
@@ -106,7 +98,6 @@ class AdvancedPricing extends AbstractModifier
         ArrayManager $arrayManager
     ) {
         $this->locator = $locator;
-        $this->grouper = $grouper;
         $this->storeManager = $storeManager;
         $this->groupRepository = $groupRepository;
         $this->groupManagement = $groupManagement;
