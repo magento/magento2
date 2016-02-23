@@ -137,7 +137,7 @@ class Recommendations extends \Magento\Framework\Model\ResourceModel\Db\Abstract
      */
     public function getRecommendationsByQuery($query, $params, $searchRecommendationsCount)
     {
-        $this->_searchQueryModel->loadByQuery($query);
+        $this->_searchQueryModel->loadByQueryText($query);
 
         if (isset($params['store_id'])) {
             $this->_searchQueryModel->setStoreId($params['store_id']);
