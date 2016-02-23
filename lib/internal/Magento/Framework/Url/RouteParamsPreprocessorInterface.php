@@ -13,9 +13,10 @@ interface RouteParamsPreprocessorInterface
     /**
      * Processes route params.
      *
+     * @param string $areaCode
      * @param string|null $routePath
      * @param array|null $routeParams
      * @return array|null
      */
-    public function execute($routePath, $routeParams);
+    public function execute($areaCode, $routePath, $routeParams);
 }

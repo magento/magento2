@@ -800,7 +800,8 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
             return $routePath;
         }
 
-        $routeParams = $this->routeParamsPreprocessor->execute($routePath, $routeParams);
+        $routeParams = $this->routeParamsPreprocessor
+            ->execute($this->_scopeResolver->getAreaCode(), $routePath, $routeParams);
 
         $isCached = true;
         $isArray = is_array($routeParams);
