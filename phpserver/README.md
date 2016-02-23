@@ -3,7 +3,7 @@ PHP Built-in webserver
 
 PHP has had a <a href="https://secure.php.net/manual/en/features.commandline.webserver.php" target="_blank">built-in web sever</a> since version 5.4.
 
-PHP's web server provides a router script for use with server rewrites. Magento, like many other applications and frameworks, requires server rewrites.The router script either:
+PHP's web server provides a router script for use with server rewrites. Magento, like many other applications and frameworks, requires server rewrites. The router script either:
 - The web server executes the requested PHP script using a server-side include
 - Returns `false`, which means the web server returns the file using file system lookup
 
