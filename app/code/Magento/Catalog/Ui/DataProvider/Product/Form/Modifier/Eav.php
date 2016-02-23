@@ -23,10 +23,10 @@ use Magento\Framework\Filter\Translit;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Form\Fieldset;
-use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
 use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
+use Magento\Catalog\Ui\DataProvider\CatalogEavValidationRules;
 
 /**
  * Class Eav
@@ -49,9 +49,9 @@ class Eav extends AbstractModifier
     protected $eavConfig;
 
     /**
-     * @var EavValidationRules
+     * @var CatalogEavValidationRules
      */
-    protected $eavValidationRules;
+    protected $catalogEavValidationRules;
 
     /**
      * @var RequestInterface
@@ -142,7 +142,7 @@ class Eav extends AbstractModifier
      * Initialize dependencies
      *
      * @param LocatorInterface $locator
-     * @param EavValidationRules $eavValidationRules
+     * @param CatalogEavValidationRules $catalogEavValidationRules
      * @param Config $eavConfig
      * @param RequestInterface $request
      * @param GroupCollectionFactory $groupCollectionFactory
@@ -159,7 +159,7 @@ class Eav extends AbstractModifier
      */
     public function __construct(
         LocatorInterface $locator,
-        EavValidationRules $eavValidationRules,
+        CatalogEavValidationRules $catalogEavValidationRules,
         Config $eavConfig,
         RequestInterface $request,
         GroupCollectionFactory $groupCollectionFactory,
@@ -174,7 +174,7 @@ class Eav extends AbstractModifier
         Translit $translitFilter
     ) {
         $this->locator = $locator;
-        $this->eavValidationRules = $eavValidationRules;
+        $this->catalogEavValidationRules = $catalogEavValidationRules;
         $this->eavConfig = $eavConfig;
         $this->request = $request;
         $this->groupCollectionFactory = $groupCollectionFactory;
@@ -277,54 +277,14 @@ class Eav extends AbstractModifier
             }
 
             // TODO: getAttributeModel() should not be used when MAGETWO-48284 is complete
-            if (($rules = $this->eavValidationRules->build($this->getAttributeModel($attribute), $child))) {
+            if (($rules = $this->catalogEavValidationRules->build($this->getAttributeModel($attribute), $child))) {
                 $child['arguments']['data']['config']['validation'] = $rules;
             }
-
-            $child['arguments']['data']['config']['validation'] = $this->mapValidations($attribute, $child);
 
             $meta[static::CONTAINER_PREFIX . $code]['children'][$code] = $child;
         }
 
         return $meta;
-    }
-
-    /**
-     * @param ProductAttributeInterface $attribute
-     * @param array $data
-     * @return array
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    private function mapValidations(ProductAttributeInterface $attribute, array $data)
-    {
-        $rules = isset($data['arguments']['data']['config']['validation'])
-            ? $data['arguments']['data']['config']['validation'] : [];
-
-        $validationClasses = explode(' ', $attribute->getFrontendClass());
-
-        foreach ($validationClasses as $class) {
-            if (preg_match('/^maximum-length-(\d+)$/', $class, $matches)) {
-                $rules = array_merge($rules, ['max_text_length' => $matches[1]]);
-                continue;
-            }
-            if (preg_match('/^minimum-length-(\d+)$/', $class, $matches)) {
-                $rules = array_merge($rules, ['min_text_length' => $matches[1]]);
-                continue;
-            }
-
-            switch ($class) {
-                case 'validate-number':
-                case 'validate-digits':
-                case 'validate-email':
-                case 'validate-url':
-                case 'validate-alpha':
-                case 'validate-alphanum':
-                    $rules = array_merge($rules, [$class => true]);
-                    break;
-            }
-        }
-
-        return $rules;
     }
 
     /**
