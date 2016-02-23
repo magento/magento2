@@ -37,6 +37,7 @@ class SystemTest extends AbstractModifierTest
         return $this->objectManager->getObject(System::class, [
             'locator' => $this->locatorMock,
             'urlBuilder' => $this->urlBuilderMock,
+            'urlSubmit' => 'http://submit.url'
         ]);
     }
 
@@ -80,7 +81,7 @@ class SystemTest extends AbstractModifierTest
         $this->urlBuilderMock->expects($this->exactly(3))
             ->method('getUrl')
             ->willReturnMap([
-                [System::URL_SUBMIT, $actionParameters, $submitUrl],
+                [$submitUrl, $actionParameters, $submitUrl],
                 [System::URL_VALIDATE, $actionParameters, $validateUrl],
                 [System::URL_RELOAD, $reloadParameters, $reloadUrl],
             ]);
