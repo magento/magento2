@@ -12,13 +12,10 @@
             <field name="url_key_create_redirect">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
-                        <item name="label" xsi:type="string" translate="true">Create Permanent Redirect for old URL</item>
+                        <item name="description" xsi:type="string" translate="true">Create Permanent Redirect for old URL</item>
                         <item name="dataType" xsi:type="string">boolean</item>
                         <item name="formElement" xsi:type="string">checkbox</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="handleChanges" xsi:type="string">${ $.provider }:data.url_key</item>
-                        </item>
-                        <item name="component" xsi:type="string">Magento_Catalog/js/components/url-key-handle-changes</item>
+                        <item name="disabled" xsi:type="boolean">true</item>
                         <item name="sortOrder" xsi:type="number">15</item>
                     </item>
                 </argument>

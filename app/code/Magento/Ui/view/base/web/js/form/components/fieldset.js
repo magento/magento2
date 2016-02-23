@@ -15,7 +15,10 @@ define([
             changed: false,
             loading: false,
             error: false,
-            opened: false
+            opened: false,
+            visible: true,
+            disabled: false,
+            additionalClasses: {}
         },
 
         /**
@@ -25,7 +28,8 @@ define([
         initialize: function () {
             _.bindAll(this, 'onChildrenUpdate', 'onChildrenError', 'onContentLoading');
 
-            return this._super();
+            return this._super()
+                       ._setClasses();
         },
 
         /**
@@ -35,7 +39,7 @@ define([
          */
         initObservable: function () {
             this._super()
-                .observe('changed loading error');
+                .observe(['changed', 'loading', 'error', 'visible']);
 
             return this;
         },
@@ -46,14 +50,24 @@ define([
          * @param  {Object} elem
          * @return {Object} - reference to instance
          */
+
         initElement: function (elem) {
-            this._super();
+            elem.initContainer(this);
 
             elem.on({
                 'update':   this.onChildrenUpdate,
                 'loading':  this.onContentLoading,
                 'error':  this.onChildrenError
             });
+
+            if (this.disabled) {
+                try {
+                    elem.disabled(true);
+                }
+                catch (e) {
+
+                }
+            }
 
             return this;
         },
@@ -70,6 +84,34 @@ define([
             }
 
             this.changed(hasChanged);
+        },
+
+        /**
+         * Extends 'additionalClasses' object.
+         *
+         * @returns {Group} Chainable.
+         */
+        _setClasses: function () {
+            var addtional = this.additionalClasses,
+                classes;
+
+            if (_.isString(addtional)) {
+                addtional = this.additionalClasses.split(' ');
+                classes = this.additionalClasses = {};
+
+                addtional.forEach(function (name) {
+                    classes[name] = true;
+                }, this);
+            }
+
+            _.extend(this.additionalClasses, {
+                'admin__collapsible-block-wrapper': this.collapsible,
+                _show: this.opened,
+                _hide: !this.opened,
+                _disabled: this.disabled
+            });
+
+            return this;
         },
 
         /**
