@@ -26,10 +26,10 @@ class RouteParamsPreprocessorComposite implements RouteParamsPreprocessorInterfa
     /**
      * {@inheritdoc}
      */
-    public function execute($routePath, $routeParams)
+    public function execute($areaCode, $routePath, $routeParams)
     {
         foreach ($this->routeParamsPreprocessors as $preprocessor) {
-            $routeParams = $preprocessor->execute($routePath, $routeParams);
+            $routeParams = $preprocessor->execute($areaCode, $routePath, $routeParams);
         }
 
         return $routeParams;
