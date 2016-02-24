@@ -74,6 +74,11 @@ class Category extends AbstractResource
     protected $entityManager;
 
     /**
+     * @var Category\AggregateCount
+     */
+    protected $aggregateCount;
+
+    /**
      * Category constructor.
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -82,6 +87,7 @@ class Category extends AbstractResource
      * @param Category\TreeFactory $categoryTreeFactory
      * @param Category\CollectionFactory $categoryCollectionFactory
      * @param EntityManager $entityManager
+     * @param Category\AggregateCount $aggregateCount
      * @param array $data
      */
     public function __construct(
@@ -92,6 +98,7 @@ class Category extends AbstractResource
         \Magento\Catalog\Model\ResourceModel\Category\TreeFactory $categoryTreeFactory,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
         EntityManager $entityManager,
+        Category\AggregateCount $aggregateCount,
         $data = []
     ) {
         parent::__construct(
@@ -104,8 +111,8 @@ class Category extends AbstractResource
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_eventManager = $eventManager;
         $this->entityManager = $entityManager;
-
         $this->connectionName  = 'catalog';
+        $this->aggregateCount = $aggregateCount;
     }
 
     /**
@@ -184,20 +191,8 @@ class Category extends AbstractResource
     protected function _beforeDelete(\Magento\Framework\DataObject $object)
     {
         parent::_beforeDelete($object);
-
-        /**
-         * Update children count for all parent categories
-         */
-        $parentIds = $object->getParentIds();
-        if ($parentIds) {
-            $childDecrease = $object->getChildrenCount() + 1;
-            // +1 is itself
-            $data = ['children_count' => new \Zend_Db_Expr('children_count - ' . $childDecrease)];
-            $where = ['entity_id IN(?)' => $parentIds];
-            $this->getConnection()->update($this->getEntityTable(), $data, $where);
-        }
+        $this->aggregateCount->processDelete($object);
         $this->deleteChildren($object);
-        return $this;
     }
 
     /**
@@ -1008,7 +1003,6 @@ class Category extends AbstractResource
          * Load object base row data
          */
         $this->entityManager->load(CategoryInterface::class, $object, $entityId);
-
 
         if (!$this->entityManager->has(\Magento\Catalog\Api\Data\CategoryInterface::class, $entityId)) {
             $object->isObjectNew(true);

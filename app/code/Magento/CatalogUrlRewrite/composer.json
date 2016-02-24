@@ -10,7 +10,8 @@
         "magento/module-import-export": "100.0.*",
         "magento/module-store": "100.0.*",
         "magento/module-url-rewrite": "100.0.*",
-        "magento/framework": "100.0.*"
+        "magento/framework": "100.0.*",
+        "magento/module-ui": "100.0.*"
     },
     "type": "magento2-module",
     "version": "100.0.2",

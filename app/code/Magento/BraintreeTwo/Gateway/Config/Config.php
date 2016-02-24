@@ -160,4 +160,13 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     {
         return (bool) $this->getValue(Config::FRAUD_PROTECTION);
     }
+
+    /**
+     * Get Payment configuration status
+     * @return bool
+     */
+    public function isActive()
+    {
+        return (bool) $this->getValue(self::KEY_ACTIVE);
+    }
 }
