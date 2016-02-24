@@ -42,6 +42,30 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
     }
 
     /**
+     * {@inheritdoc}
+     * @deprecated
+     */
+    public function prepareDataSource(array $dataSource)
+    {
+        $websiteNames = [];
+        foreach ($this->getData('options') as $website) {
+            $websiteNames[$website->getWebsiteId()] = $website->getName();
+        }
+        if (isset($dataSource['data']['items'])) {
+            $fieldName = $this->getData('name');
+            foreach ($dataSource['data']['items'] as & $item) {
+                $websites = [];
+                foreach ($item[$fieldName] as $websiteId) {
+                    $websites[] = $websiteNames[$websiteId];
+                }
+                $item[$fieldName] = implode(', ', $websites);
+            }
+        }
+
+        return $dataSource;
+    }
+    
+    /**
      * Prepare component configuration
      * @return void
      */
