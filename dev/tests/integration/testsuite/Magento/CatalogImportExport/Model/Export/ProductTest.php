@@ -50,6 +50,8 @@ class ProductTest extends AbstractProductExportTestCase
                     'simple',
                 ]
             ],
+            // @todo uncomment after resolving MAGETWO-49676
+            /*
             'custom-design-simple-product' => [
                 'Magento/Catalog/_files/products.php',
                 [
@@ -57,6 +59,7 @@ class ProductTest extends AbstractProductExportTestCase
                     'custom-design-simple-product',
                 ]
             ],
+            */
             'simple-product' => [
                 'Magento/Catalog/_files/product_simple.php',
                 [
@@ -105,6 +108,8 @@ class ProductTest extends AbstractProductExportTestCase
                     'simple',
                 ]
             ],
+            // @todo uncomment after resolving MAGETWO-49676
+            /*
             'simple-product-crosssell' => [
                 'Magento/Catalog/_files/products_crosssell.php',
                 [
@@ -123,6 +128,7 @@ class ProductTest extends AbstractProductExportTestCase
                     'simple',
                 ]
             ],
+            */
         ];
     }
 
