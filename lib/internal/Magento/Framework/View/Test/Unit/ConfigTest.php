@@ -6,7 +6,6 @@
 
 namespace Magento\Framework\View\Test\Unit;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
@@ -41,6 +40,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetViewConfig()
     {
+        $themeCode = 2;
+
         $themeMock = $this->getMock(
             'Magento\Theme\Model\Theme',
             ['getCode'],
@@ -50,8 +51,11 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
         $themeMock->expects($this->atLeastOnce())
             ->method('getCode')
-            ->will($this->returnValue(2));
-        $params = ['themeModel' => $themeMock];
+            ->will($this->returnValue($themeCode));
+        $params = [
+            'themeModel' => $themeMock,
+            'area'       => 'frontend'
+        ];
         $this->repositoryMock->expects($this->atLeastOnce())
             ->method('updateDesignParams')
             ->with($this->equalTo($params))

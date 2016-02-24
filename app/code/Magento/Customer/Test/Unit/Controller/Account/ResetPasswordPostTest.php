@@ -211,6 +211,75 @@ class ResetPasswordPostTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($redirectMock, $this->model->execute());
     }
 
+    /**
+     * Test for InputException
+     */
+    public function testExecuteWithInputException()
+    {
+        $token = 'token';
+        $customerId = '11';
+        $password = 'password';
+        $passwordConfirmation = 'password';
+        $email = 'email@email.com';
+
+        $this->requestMock->expects($this->exactly(2))
+            ->method('getQuery')
+            ->willReturnMap(
+                [
+                    ['token', $token],
+                    ['id', $customerId],
+                ]
+            );
+        $this->requestMock->expects($this->exactly(2))
+            ->method('getPost')
+            ->willReturnMap(
+                [
+                    ['password', $password],
+                    ['password_confirmation', $passwordConfirmation],
+                ]
+            );
+
+        /** @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit_Framework_MockObject_MockObject $customerMock */
+        $customerMock = $this->getMockBuilder('\Magento\Customer\Api\Data\CustomerInterface')
+            ->getMockForAbstractClass();
+
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customerMock);
+
+        $customerMock->expects($this->once())
+            ->method('getEmail')
+            ->willReturn($email);
+
+        $this->accountManagementMock->expects($this->once())
+            ->method('resetPassword')
+            ->with($email, $token, $password)
+            ->willThrowException(new \Magento\Framework\Exception\InputException(__('InputException.')));
+
+        $this->messageManagerMock->expects($this->once())
+            ->method('addError')
+            ->with(__('InputException.'))
+            ->willReturnSelf();
+
+        /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $redirectMock */
+        $redirectMock = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->redirectFactoryMock->expects($this->once())
+            ->method('create')
+            ->with([])
+            ->willReturn($redirectMock);
+
+        $redirectMock->expects($this->once())
+            ->method('setPath')
+            ->with('*/*/createPassword', ['id' => $customerId, 'token' => $token])
+            ->willReturnSelf();
+
+        $this->assertEquals($redirectMock, $this->model->execute());
+    }
+
     public function testExecuteWithWrongConfirmation()
     {
         $token = 'token';
