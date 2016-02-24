@@ -34,16 +34,13 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
     /**
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
      */
     public function __construct(
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\HTTP\ZendClientFactory $httpClientFactory
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         parent::__construct($currencyFactory);
         $this->scopeConfig = $scopeConfig;
-        $this->httpClientFactory = $httpClientFactory;
     }
 
     /**
@@ -57,7 +54,7 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
         $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, self::CURRENCY_CONVERTER_URL);
         $url = str_replace('{{CURRENCY_TO}}', $currencyTo, $url);
         /** @var \Magento\Framework\HTTP\ZendClient $httpClient */
-        $httpClient = $this->httpClientFactory->create();
+        $httpClient = $this->getHttpClientFactory()->create();
 
         try {
             $response = $httpClient->setUri(
@@ -86,5 +83,21 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
                 $this->_messages[] = __('We can\'t retrieve a rate from %1.', $url);
             }
         }
+    }
+
+    /**
+     * Get HttpClientFactory dependency
+     *
+     * @return \Magento\Framework\HTTP\ZendClientFactory
+     *
+     * @deprecated
+     */
+    private function getHttpClientFactory()
+    {
+        if ($this->httpClientFactory === null) {
+            $this->httpClientFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\HTTP\ZendClientFactory');
+        }
+        return $this->httpClientFactory;
     }
 }
