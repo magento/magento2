@@ -30,6 +30,12 @@ class EditTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Integration\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
     protected $integrationDataMock;
 
+    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    protected $coreRegistryMock;
+
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    protected $objectManagerHelper;
+
     protected function setUp()
     {
         $this->rootResourceMock = $this->getMockBuilder('Magento\Framework\Acl\RootResource')
@@ -58,17 +64,23 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->model = $objectManagerHelper->getObject(
+        $this->coreRegistryMock = $this->getMockBuilder('Magento\Framework\Registry')
+            ->disableOriginalConstructor()
+            ->setMethods(['registry'])
+            ->getMock();
+
+        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->model = $this->objectManagerHelper->getObject(
             'Magento\User\Block\Role\Tab\Edit',
             [
                 'aclRetriever' => $this->aclRetrieverMock,
                 'rootResource' => $this->rootResourceMock,
                 'rulesCollectionFactory' => $this->rulesCollectionFactoryMock,
                 'aclResourceProvider' => $this->aclResourceProviderMock,
-                'integrationData' => $this->integrationDataMock
+                'integrationData' => $this->integrationDataMock,
             ]
         );
+        $this->model->setCoreRegistry($this->coreRegistryMock);
     }
 
     public function testGetTree()
@@ -79,5 +91,39 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->integrationDataMock->expects($this->once())->method('mapResources')->willReturn($mappedResources);
 
         $this->assertEquals($mappedResources, $this->model->getTree());
+    }
+
+    /**
+     * @param bool $isAllowed
+     * @dataProvider dataProviderBoolValues
+     */
+    public function testIsEverythingAllowed($isAllowed)
+    {
+        $id = 10;
+
+        $this->coreRegistryMock->expects($this->once())
+            ->method('registry')
+            ->with(\Magento\User\Controller\Adminhtml\User\Role\SaveRole::RESOURCE_ALL_FORM_DATA_SESSION_KEY)
+            ->willReturn(true);
+
+        if ($isAllowed) {
+            $this->rootResourceMock->expects($this->exactly(2))
+                ->method('getId')
+                ->willReturnOnConsecutiveCalls($id, $id);
+        } else {
+            $this->rootResourceMock->expects($this->exactly(2))
+                ->method('getId')
+                ->willReturnOnConsecutiveCalls(11, $id);
+        }
+
+        $this->assertEquals($isAllowed, $this->model->isEverythingAllowed());
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderBoolValues()
+    {
+        return [[true], [false]];
     }
 }
