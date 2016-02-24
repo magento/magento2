@@ -251,7 +251,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 $meta[$code]['validation'] = $rules;
             }
 
-            $meta[$code]['scope_label'] = $this->getScopeLabel($attribute);
+            $meta[$code]['scopeLabel'] = $this->getScopeLabel($attribute);
             $meta[$code]['componentType'] = Field::NAME;
         }
 
