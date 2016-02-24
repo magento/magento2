@@ -29,20 +29,23 @@ define([
             fullAttributes: [],
             rowIndexToEdit: false,
             productAttributesMap: null,
+            value: {},
             modules: {
                 associatedProductGrid: '${ $.configurableProductGrid }'
+            },
+            links: {
+                value: '${ $.provider }:${ $.dataScope }'
             }
         },
         initialize: function () {
             this._super();
-
             if (this.variations.length) {
                 this.render(this.variations, this.productAttributes);
             }
             this.initProductAttributesMap();
         },
         initObservable: function () {
-            this._super().observe('actions opened attributes productMatrix');
+            this._super().observe('actions opened attributes productMatrix value');
 
             return this;
         },
@@ -169,11 +172,16 @@ define([
             this.initImageUpload();
             this.disableConfigurableAttributes(attributes);
             this.showPrice();
+            this.handleValue();
         },
         changeButtonWizard: function () {
             var $button = $('[data-action=open-steps-wizard] [data-role=button-label]');
             $button.text($button.attr('data-edit-label'));
         },
+        handleValue: function () {
+            this.value = {};
+        },
+
 
         /**
          * Get attributes options
