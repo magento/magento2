@@ -287,6 +287,7 @@ class Configurable extends AbstractModifier
                             'name' => 'name',
                             'sku' => 'sku',
                             'price' => 'price',
+                            'quantity_and_stock_status.qty' => 'qty'
                         ],
                         'links' => ['insertDataFromGrid' => '${$.provider}:${$.dataProviderFromGrid}'],
                         'sortOrder' => 20,
@@ -323,7 +324,7 @@ class Configurable extends AbstractModifier
                     'name_container' => $this->getColumn('name', __('Name'), 'name'),
                     'sku_container' => $this->getColumn('sku', __('SKU'), 'sku'),
                     'price_container' => $this->getColumn('price', __('Price'), 'price'),
-                    //'quantity_container' => $this->getColumn('quantity', __('Quantity'), 'quantity'),
+                    'quantity_container' => $this->getColumn('quantity', __('Quantity'), 'quantity_and_stock_status.qty'),
                 ],
             ],
         ];
@@ -338,6 +339,7 @@ class Configurable extends AbstractModifier
     protected function getColumn($name, \Magento\Framework\Phrase $label, $dataScope = '')
     {
         $fieldEdit['arguments']['data']['config'] = [
+            'component' => 'Magento_ConfigurableProduct/js/components/field-configurable',
             'dataType' => Form\Element\DataType\Number::NAME,
             'formElement' => Form\Element\Input::NAME,
             'componentType' => Form\Field::NAME,
@@ -345,17 +347,19 @@ class Configurable extends AbstractModifier
             'fit' => true,
             'additionalClasses' => 'admin__field-small',
             'imports' => [
-                'visible' => '${$.provider}:${$.parentScope}.canEdit',
+                'parentComponentScope' => '${$.parentName}:dataScope',
             ],
         ];
         $fieldText['arguments']['data']['config'] = [
+            'component' => 'Magento_ConfigurableProduct/js/components/field-configurable',
             'componentType' => Form\Field::NAME,
             'formElement' => Form\Element\Input::NAME,
             'elementTmpl' => 'ui/dynamic-rows/cells/text',
             'dataType' => Form\Element\DataType\Text::NAME,
             'dataScope' => $dataScope,
             'imports' => [
-                'visible' => '!${$.provider}:${$.parentScope}.canEdit',
+                'parentComponentScope' => '${$.parentName}:dataScope',
+                //'visible' => '!${$.provider}:${$.someData}.canEdit',
             ],
         ];
         $container['arguments']['data']['config'] = [
