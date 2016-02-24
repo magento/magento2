@@ -142,21 +142,6 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
     }
 
     /**
-     * For unit testing purpose only
-     *
-     * @param \Magento\Translation\Model\Inline\CacheManager $cacheManager
-     * @return void
-     * @deprecated
-     */
-    public function setCacheManager(\Magento\Translation\Model\Inline\CacheManager $cacheManager)
-    {
-        if ($this->cacheManager != null) {
-            throw new \LogicException(__('cacheManager is already set'));
-        }
-        $this->cacheManager = $cacheManager;
-    }
-
-    /**
      * Initialize base inline translation model
      *
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -186,12 +171,12 @@ class Parser implements \Magento\Framework\Translate\Inline\ParserInterface
      * Parse and save edited translation
      *
      * @param array $translateParams
-     * @return $this
+     * @return array
      */
     public function processAjaxPost(array $translateParams)
     {
         if (!$this->_translateInline->isAllowed()) {
-            return $this;
+            return ['inline' => 'not allowed'];
         }
         $this->_appCache->invalidate(\Magento\Framework\App\Cache\Type\Translate::TYPE_IDENTIFIER);
 

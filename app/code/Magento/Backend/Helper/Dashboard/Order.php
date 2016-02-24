@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Helper\Dashboard;
 
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Adminhtml dashboard helper for orders
  */
