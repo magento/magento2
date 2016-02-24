@@ -37,8 +37,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             'include_in_menu',
             'is_anchor',
             'use_default' => ['url_key'],
-            'use_config' => ['available_sort_by', 'filter_price_range', 'default_sort_by'],
-            'savedImage' => ['delete']
+            'use_config' => ['available_sort_by', 'filter_price_range', 'default_sort_by']
         ]
     ];
 
@@ -230,13 +229,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      */
     public function imagePreprocessing($data)
     {
-        if (!isset($_FILES) || (isset($_FILES['image']) && $_FILES['image']['name'] === '' )) {
+        if (!isset($data['general']['image']) || (empty($data['general']['image']))) {
             unset($data['general']['image']);
-            if (isset($data['general']['savedImage']['delete']) &&
-                $data['general']['savedImage']['delete']
-            ) {
-                $data['general']['image']['delete'] = $data['general']['savedImage']['delete'];
-            }
+            $data['general']['image']['delete'] = true;
         }
         return $data;
     }
