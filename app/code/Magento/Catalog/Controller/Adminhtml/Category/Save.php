@@ -162,6 +162,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 if ($category->hasCustomDesignTo()) {
                     $categoryResource->getAttribute('custom_design_from')->setMaxValue($category->getCustomDesignTo());
                 }
+//                Skipped due to MAGETWO-48956
                 $validate = $category->validate();
                 if ($validate !== true) {
                     foreach ($validate as $code => $error) {
