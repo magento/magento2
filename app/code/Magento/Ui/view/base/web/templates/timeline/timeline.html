@@ -1,0 +1,86 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<svg
+    version="1.1"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    style="position: absolute; width: 0; height: 0;"
+    width="0"
+    height="0">
+    <defs>
+        <symbol id="svg-ending" viewBox="0 0 28 36">
+            <path
+                class="g__timeline-ending"
+                d="
+                    M2.864,0.456
+                    h1.189 l14.625,17.55
+                    L4.054,35.557
+                    H2.681"/>
+            <path
+                class="g__timeline-arrow"
+                fill="currentColor"
+                d="
+                    M9.175,0.04
+                    h4.002l15.006,18.007
+                    L13.177,36.055
+                    H9.175 l15.006-18.008
+                    L9.175,0.04z"/>
+        </symbol>
+    </defs>
+</svg>
+
+<div class="timeline">
+    <div class="timeline-content" css="'_from-now': hasToday()">
+        <div class="timeline-past" if="hasToday()">
+            <time class="timeline-date" translate="'Past'"/>
+        </div>
+        <ul class="timeline-units">
+            <li class="timeline-unit" repeat="foreach: updateRange().days, item: '$date'">
+                <time class="timeline-date">
+
+                    <!-- NOTE: needs to be replaced by the date binding -->
+                    <text args="isToday($date()) ? $t('Today') \: formatHeader($date())"/>
+                </time>
+            </li>
+        </ul>
+        <ul class="timeline-items" style="position: relative;">
+            <if args="hasData()">
+                <li class="timeline-item"
+                    repeat="foreach: rows, item: '$row'"
+                    css="
+                        _active: isActive($row()),
+                        _permanent: isPermanent($row())
+                    "
+                    render="recordTmpl"/>
+            </if>
+
+            <ifnot args="hasData()">
+                <!-- TODO: needs refactoring by the webdev team -->
+                <li class="timeline-item _permanent _active" data-role="no-data-msg"
+                    style="
+                        position: absolute;
+                        top: calc(50% - 3.6rem);
+                        width: 100%;
+                    "
+                >
+                    <div class="timeline-event"
+                        style="
+                            margin-right: 0;
+                            background-color: #fffbbb;
+                            color: #333333;
+                        "
+                    >
+                        <strong
+                            class="timeline-event-title"
+                            translate="'We couldn\'t find any records.'"/>
+                        <div class="timeline-event-info"/>
+                    </div>
+                </li>
+            </ifnot>
+        </ul>
+    </div>
+</div>
