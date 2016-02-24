@@ -407,13 +407,13 @@ abstract class AbstractElement extends AbstractForm
      */
     public function getLabelHtml($idSuffix = '', $scopeLabel = '')
     {
-        $scopeLabel = $scopeLabel ? 'data-config-scope="' . $scopeLabel . '"' : '';
+        $scopeLabel = $scopeLabel ? ' data-config-scope="' . $scopeLabel . '"' : '';
 
         if ($this->getLabel() !== null) {
             $html = '<label class="label admin__field-label" for="' .
                 $this->getHtmlId() . $idSuffix . '"' . $this->_getUiId(
                     'label'
-                ) . '><span ' . $scopeLabel . '>' . $this->_escape(
+                ) . '><span' . $scopeLabel . '>' . $this->_escape(
                     $this->getLabel()
                 ) . '</span></label>' . "\n";
         } else {
