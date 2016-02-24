@@ -44,6 +44,12 @@ define([
                 return v && !!v.length;
             });
 
+            if (_.isArray(value)) {
+                value = utils.copy(value);
+            } else {
+                value = [];
+            }
+
             return utils.copy(value);
         },
 
