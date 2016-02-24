@@ -137,4 +137,12 @@ class Image extends File
     {
         return ['jpg', 'jpeg', 'gif', 'png'];
     }
+
+    /**
+     * @return array
+     */
+    public function getValue()
+    {
+        return $this->getData('value') ?: [];
+    }
 }
