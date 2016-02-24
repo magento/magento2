@@ -50,7 +50,7 @@ class ProductTest extends AbstractProductExportTestCase
                     'simple',
                 ]
             ],
-            // @todo uncomment after resolving MAGETWO-49676
+            // @todo uncomment after resolving MAGETWO-49677
             /*
             'custom-design-simple-product' => [
                 'Magento/Catalog/_files/products.php',
