@@ -245,6 +245,7 @@ class Eav extends AbstractModifier
                             'label' => __($attribute->getDefaultFrontendLabel()),
                             'sortOrder' => $sortKey * self::SORT_ORDER_MULTIPLIER,
                             'required' => $attribute->getIsRequired(),
+                            'scopeLabel' => $this->getScopeLabel($attribute),
                         ],
                     ],
                 ],
