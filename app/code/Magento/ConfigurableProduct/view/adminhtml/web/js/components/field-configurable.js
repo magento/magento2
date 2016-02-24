@@ -4,23 +4,30 @@
  */
 
 define([
-    'uiRegistry',
     'Magento_Ui/js/form/element/abstract'
-], function (registry, Abstract) {
+], function (Abstract) {
     'use strict';
 
     return Abstract.extend({
         defaults: {
             parentComponentScope: '',
             canEditField: 'canEdit',
+            visibleIfCanEdit: true,
             listens: {
                 'parentComponentScope': 'setVisibility'
             }
         },
 
+        /**
+         * Set visibility for current component
+         *
+         * @param {String} parentScope
+         */
         setVisibility: function (parentScope) {
-            var canEdit = registry.get(this.provider + ':' + parentScope + '.' + this.canEditField);
-            //this.visible(canEdit);
+            var canEdit = this.source.get(parentScope + '.' + this.canEditField);
+            var visible = this.visibleIfCanEdit ? canEdit : !canEdit;
+
+            this.visible(visible);
         }
     });
 });
