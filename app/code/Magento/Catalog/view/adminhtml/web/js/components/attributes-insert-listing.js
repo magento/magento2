@@ -68,6 +68,7 @@ define([
                     };
                     this.form().reload();
                     this.modal().state(false);
+                    this.reload();
                 }.bind(this)
             });
         }
