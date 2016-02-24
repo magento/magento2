@@ -22,7 +22,7 @@
                         <item name="formElement" xsi:type="string">fileUploader</item>
                         <item name="componentType" xsi:type="string">fileUploader</item>
                         <item name="notice" xsi:type="string" translate="true">Allowed file types: jpg, jpeg, gif, png. To optimize logo for high-resolution displays, upload an image that is 3x normal size and then specify 1x dimensions in width/height fields below.</item>
-                        <item name="maxFileSize" xsi:type="number">982000</item>
+                        <item name="maxFileSize" xsi:type="number">2097152</item>
                         <item name="allowedExtensions" xsi:type="string">jpg jpeg gif png svg</item>
                         <item name="uploaderConfig" xsi:type="array">
                             <item name="url" xsi:type="string">theme/design_config_fileUploader/save</item>
