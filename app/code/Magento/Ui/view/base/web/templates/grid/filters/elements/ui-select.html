@@ -67,15 +67,15 @@
                 <span data-bind="text: label">
                 </span>
                 <button
-                    class="action-close"
-                    type="button"
-                    data-action="remove-selected-item"
-                    tabindex="-1"
-                    data-bind="click: $parent.removeSelected.bind($parent, value)
+                        class="action-close"
+                        type="button"
+                        data-action="remove-selected-item"
+                        tabindex="-1"
+                        data-bind="click: $parent.removeSelected.bind($parent, value)
                 ">
                     <span
-                        class="action-close-text"
-                        data-bind="text: 'Close'
+                            class="action-close-text"
+                            data-bind="text: 'Close'
                     ">
                     </span>
                 </button>
@@ -89,10 +89,10 @@
         <!-- ko if: filterOptions -->
         <div class="admin__action-multiselect-search-wrap">
             <input
-                class="admin__control-text admin__action-multiselect-search"
-                data-role="advanced-select-text"
-                type="text"
-                data-bind="
+                    class="admin__control-text admin__action-multiselect-search"
+                    data-role="advanced-select-text"
+                    type="text"
+                    data-bind="
                 event: {
                     keydown: filterOptionsKeydown
                 },
@@ -102,18 +102,18 @@
                 hasFocus: filterOptionsFocus
                 ">
             <label
-                class="admin__action-multiselect-search-label"
-                data-action="advanced-select-search"
-                data-bind="attr: {for: uid+2}
+                    class="admin__action-multiselect-search-label"
+                    data-action="advanced-select-search"
+                    data-bind="attr: {for: uid+2}
             ">
             </label>
-            <div
-                data-bind="text: itemsQuantity"
-                class="admin__action-multiselect-search-count">
+            <div if="itemsQuantity"
+                 data-bind="text: itemsQuantity"
+                 class="admin__action-multiselect-search-count">
             </div>
         </div>
         <!-- /ko -->
-        <ul class="admin__action-multiselect-menu-inner"
+        <ul class="admin__action-multiselect-menu-inner _root"
             data-bind="
                 event: {
                     mousemove: function(data, event){onMousemove($data, $index(), event)}
@@ -149,17 +149,17 @@
                     <!-- /ko-->
                     <!--ko if: $parent.showCheckbox-->
                     <input
-                        class="admin__control-checkbox"
-                        type="checkbox"
-                        tabindex="-1"
-                        data-bind="attr: { 'checked': $parent.isSelected(option.value) }">
+                            class="admin__control-checkbox"
+                            type="checkbox"
+                            tabindex="-1"
+                            data-bind="attr: { 'checked': $parent.isSelected(option.value) }">
                     <!-- /ko-->
                     <label class="admin__action-multiselect-label">
                         <span data-bind="text: option.label"></span>
                         <span
                                 if="$parent.getPath(option)"
                                 class="admin__action-multiselect-item-path"
-                             data-bind="text: $parent.getPath(option)"></span>
+                                data-bind="text: $parent.getPath(option)"></span>
                     </label>
                 </div>
                 <!-- ko if: $data.optgroup -->
