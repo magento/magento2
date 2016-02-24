@@ -112,10 +112,13 @@ class DefaultStockqtyTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($product));
 
             if ($productId) {
-                $this->stockState->expects($this->once())
-                    ->method('getStockQty')
+                $stockStatus = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockStatusInterface::class)
+                    ->getMockForAbstractClass();
+                $stockStatus->expects($this->any())->method('getQty')->willReturn($productStockQty);
+                $this->stockRegistryMock->expects($this->once())
+                    ->method('getStockStatus')
                     ->with($this->equalTo($productId), $this->equalTo($websiteId))
-                    ->will($this->returnValue($productStockQty));
+                    ->will($this->returnValue($stockStatus));
             }
         }
         $this->assertSame($expectedQty, $this->block->getStockQty());
