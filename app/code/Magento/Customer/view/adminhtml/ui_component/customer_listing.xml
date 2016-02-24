@@ -418,6 +418,15 @@
                 </item>
             </argument>
         </column>
+        <column name="lock_expires" class="Magento\Customer\Ui\Component\Listing\Column\AccountLock">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="label" xsi:type="string" translate="true">Account Lock</item>
+                    <item name="sortOrder" xsi:type="number">270</item>
+                </item>
+            </argument>
+        </column>
         <actionsColumn name="actions" class="Magento\Customer\Ui\Component\Listing\Column\Actions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

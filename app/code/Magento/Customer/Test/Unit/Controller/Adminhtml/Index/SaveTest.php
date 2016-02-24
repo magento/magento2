@@ -121,7 +121,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected $redirectFactoryMock;
 
     /**
-     * @var \Magento\Customer\Api\AccountManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\AccountManagement|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $managementMock;
 
@@ -129,6 +129,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Customer\Api\Data\AddressInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $addressDataFactoryMock;
+
+    /**
+     * @var \Magento\Customer\Helper\EmailNotification | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $emailNotification;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -199,12 +204,17 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->managementMock = $this->getMockBuilder('Magento\Customer\Api\AccountManagementInterface')
+        $this->managementMock = $this->getMockBuilder('Magento\Customer\Model\AccountManagement')
             ->disableOriginalConstructor()
+            ->setMethods(['createAccount'])
             ->getMock();
         $this->addressDataFactoryMock = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterfaceFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
+            ->getMock();
+        $this->emailNotification = $this->getMockBuilder('Magento\Customer\Helper\EmailNotification')
+            ->disableOriginalConstructor()
+            ->setMethods(['sendNotificationEmailsIfRequired'])
             ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -234,6 +244,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'coreRegistry' => $this->registryMock,
                 'customerAccountManagement' => $this->managementMock,
                 'addressDataFactory' => $this->addressDataFactoryMock,
+                'emailNotification' => $this->emailNotification
             ]
         );
     }
@@ -457,6 +468,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->customerRepositoryMock->expects($this->once())
             ->method('save')
             ->with($customerMock)
+            ->willReturnSelf();
+
+        $this->emailNotification->expects($this->once())
+            ->method('sendNotificationEmailsIfRequired')
+            ->with($customerMock, $customerMock)
             ->willReturnSelf();
 
         $this->authorizationMock->expects($this->once())
