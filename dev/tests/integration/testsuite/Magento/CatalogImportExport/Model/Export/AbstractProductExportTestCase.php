@@ -25,11 +25,6 @@ class AbstractProductExportTestCase extends \PHPUnit_Framework_TestCase
     protected $fileSystem;
 
     /**
-     * @var \Magento\Framework\Model\Entity\EntityMetadata
-     */
-    protected $productMetadata;
-
-    /**
      * skipped attributes
      *
      * @var array
@@ -39,6 +34,10 @@ class AbstractProductExportTestCase extends \PHPUnit_Framework_TestCase
         'updated_at',
         'extension_attributes',
         'category_ids',
+        'special_from_date',
+        'news_from_date',
+        'weight',
+        'custom_design_from',
     ];
 
     protected function setUp()
@@ -50,9 +49,6 @@ class AbstractProductExportTestCase extends \PHPUnit_Framework_TestCase
         $this->model = $this->objectManager->create(
             'Magento\CatalogImportExport\Model\Export\Product'
         );
-        /** @var \Magento\Framework\Model\Entity\MetadataPool $metadataPool */
-        $metadataPool = $this->objectManager->get('Magento\Framework\Model\Entity\MetadataPool');
-        $this->productMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
     }
 
     /**
@@ -84,7 +80,7 @@ class AbstractProductExportTestCase extends \PHPUnit_Framework_TestCase
         $ids = [];
         $origProductData = [];
         while (isset($skus[$index])) {
-            $ids[$index] = $productRepository->get($skus[$index])->getData($this->productMetadata->getLinkField());
+            $ids[$index] = $productRepository->get($skus[$index])->getEntityId();
             $origProductData[$index] = $this->objectManager->create('Magento\Catalog\Model\Product')->load($ids[$index])->getData();
             $index++;
         }
