@@ -153,6 +153,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
                     //Add new option
                     [
                         "label" => "Green",
+                        "value" => "",
                         "sort_order" => 200,
                         "is_default" => true,
                         "store_labels" => [
@@ -168,7 +169,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
                     ]
                 ],
                 'is_required' => false,
-                'frontend_input' => 'text',
+                'frontend_input' => 'select',
             ],
         ];
         $result = $this->updateAttribute($attributeCode, $attributeData);
@@ -193,6 +194,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $attributeData = [
             'attribute' => [
                 'attribute_id' => $attribute['attribute_id'],
+                'is_required' => true,
                 'frontend_labels' => [
                     ['store_id' => 0, 'label' => 'front_lbl_new'],
                 ],
@@ -207,7 +209,8 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
                             ]
                         ]
                     ],
-                ]
+                ],
+                'frontend_input' => 'select',
             ]
         ];
 
@@ -296,6 +299,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
                 "options" => [
                     [
                         "label" => "Red",
+                        "value" => "",
                         "sort_order" => 100,
                         "is_default" => false,
                         "store_labels" => [
@@ -311,6 +315,7 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
                     ],
                     [
                         "label" => "Blue",
+                        "value" => "",
                         "sort_order" => 0,
                         "is_default" => true,
                         "store_labels" => [
