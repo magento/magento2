@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+namespace Magento\BraintreeTwo\Observer;
+
+use Magento\Framework\Event\Observer;
+use Magento\Catalog\Block\ShortcutButtons;
+use Magento\Framework\Event\ObserverInterface;
+
+/**
+ * Class AddPaypalShortcuts
+ */
+class AddPaypalShortcuts implements ObserverInterface
+{
+    /**
+     * Block class
+     */
+    const PAYPAL_SHORTCUT_BLOCK = 'Magento\BraintreeTwo\Block\Paypal\Button';
+
+    /**
+     * Add Braintree PayPal shortcut buttons
+     *
+     * @param Observer $observer
+     * @return void
+     */
+    public function execute(Observer $observer)
+    {
+        // Remove button from catalog pages
+        if ($observer->getData('is_catalog_product')) {
+            return;
+        }
+
+        /** @var ShortcutButtons $shortcutButtons */
+        $shortcutButtons = $observer->getEvent()->getContainer();
+
+        $shortcut = $shortcutButtons->getLayout()->createBlock(self::PAYPAL_SHORTCUT_BLOCK);
+
+        $shortcutButtons->addShortcut($shortcut);
+    }
+}
