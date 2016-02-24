@@ -113,7 +113,7 @@ class Image extends File
     public function afterLoad()
     {
         $value = $this->getValue();
-        if ($value) {
+        if ($value && !is_array($value)) {
             $fileName = '/' . $this->uploadDir . '/' . $value;
             $stat = $this->_mediaDirectory->stat($fileName);
             $this->setValue([
