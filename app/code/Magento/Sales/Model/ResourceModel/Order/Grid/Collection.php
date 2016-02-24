@@ -17,7 +17,14 @@ use Psr\Log\LoggerInterface as Logger;
 class Collection extends \Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult
 {
     /**
-     * @inheritDoc
+     * Initialize dependencies.
+     *
+     * @param EntityFactory $entityFactory
+     * @param Logger $logger
+     * @param FetchStrategy $fetchStrategy
+     * @param EventManager $eventManager
+     * @param string $mainTable
+     * @param string $resourceModel
      */
     public function __construct(
         EntityFactory $entityFactory,
