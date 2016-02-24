@@ -1110,7 +1110,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $sku = $rowData[self::COL_SKU];
 
                 foreach ($this->_linkNameToId as $linkName => $linkId) {
-                    $productId = $this->skuProcessor->getNewSku($sku)['entity_id'];
+                    $productId = $this->skuProcessor->getNewSku($sku)[$this->getProductEntityLinkField()];
                     $productIds[] = $productId;
                     if (isset($rowData[$linkName . 'sku'])) {
                         $linkSkus = explode($this->getMultipleValueSeparator(), $rowData[$linkName . 'sku']);
