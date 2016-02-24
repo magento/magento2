@@ -242,4 +242,26 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         ]);
         $this->_model->sendNewAccountEmail('registered');
     }
+
+    /**
+     * @param $lockExpires
+     * @param $expectedResult
+     * @dataProvider isCustomerLockedDataProvider
+     */
+    public function testIsCustomerLocked($lockExpires, $expectedResult)
+    {
+        $this->_model->setLockExpires($lockExpires);
+        $this->assertEquals($expectedResult, $this->_model->isCustomerLocked());
+    }
+
+    /**
+     * @return array
+     */
+    public function isCustomerLockedDataProvider()
+    {
+        return [
+            ['lockExpirationDate' => date("F j, Y", strtotime('-1 days')), 'expectedResult' => false],
+            ['lockExpirationDate' => date("F j, Y", strtotime('+1 days')), 'expectedResult' => true]
+        ];
+    }
 }

@@ -216,6 +216,15 @@ class Attributes extends AbstractModifier
                                         . '.product_attribute_add_form_data_source',
                                     'toolbarContainer' => '${ $.parentName }',
                                     'formSubmitType' => 'ajax',
+                                    'group' => $this->urlBuilder->getUrl(
+                                        'catalog/product_attribute/save',
+                                        [
+                                            'group' => $this->getGeneralPanelName($meta)
+                                        ]
+                                    ),
+                                    'exports' => [
+                                        'group' => '${ $.externalProvider }:client.urls.save'
+                                    ]
                                 ]
                             ]
                         ]
