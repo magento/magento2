@@ -153,7 +153,7 @@ class SynonymReader extends AbstractDb
     private function isSynRowForWebsite($row)
     {
         $websiteId = $this->storeManager->getStore()->getWebsiteId();
-        return ($row['website_id'] === $websiteId);
+        return (($row['website_id'] === $websiteId) && ($row['store_id'] == 0));
     }
 
     /**
