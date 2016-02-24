@@ -17,7 +17,16 @@ define([
         defaults: {
             template: 'ui/grid/listing',
             stickyTmpl: 'ui/grid/sticky/listing',
+            viewSwitcherTmpl: 'ui/grid/view-switcher',
             positions: false,
+            displayMode: 'grid',
+            displayModes: {
+                grid: {
+                    value: 'grid',
+                    label: 'Grid',
+                    template: '${ $.template }'
+                }
+            },
             dndConfig: {
                 name: '${ $.name }_dnd',
                 component: 'Magento_Ui/js/grid/dnd',
@@ -48,6 +57,9 @@ define([
             modules: {
                 dnd: '${ $.dndConfig.name }',
                 resize: '${ $.resizeConfig.name }'
+            },
+            tracks: {
+                displayMode: true
             }
         },
 
@@ -96,7 +108,7 @@ define([
         },
 
         /**
-         * Inititalizes resize component.
+         * Initializes resize component.
          *
          * @returns {Listing} Chainable.
          */
@@ -170,7 +182,7 @@ define([
         },
 
         /**
-         * Reseorts child elements array according to provided positions.
+         * Resorts child elements array according to provided positions.
          *
          * @param {Object} positions - Object where key represents child
          *      index and value is its' position.
@@ -200,6 +212,41 @@ define([
             var observable = ko.getObservable(this, 'visibleColumns');
 
             return observable || this.visibleColumns;
+        },
+
+        /**
+         * Returns path to the template
+         * defined for a current display mode.
+         *
+         * @returns {String} Path to the template.
+         */
+        getTemplate: function () {
+            var mode = this.displayModes[this.displayMode];
+
+            return mode.template;
+        },
+
+        /**
+         * Returns an array of available display modes.
+         *
+         * @returns {Array<Object>}
+         */
+        getDisplayModes: function () {
+            var modes = this.displayModes;
+
+            return _.values(modes);
+        },
+
+        /**
+         * Sets display mode to provided value.
+         *
+         * @param {String} index
+         * @returns {Listing} Chainable
+         */
+        setDisplayMode: function (index) {
+            this.displayMode = index;
+
+            return this;
         },
 
         /**

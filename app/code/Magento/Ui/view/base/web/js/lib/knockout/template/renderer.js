@@ -462,8 +462,10 @@ define([
             'textInput',
             'component',
             'uniqueName',
+            'optionsText',
+            'optionsValue',
             'checkedValue',
-            'selectedOptions'
+            'selectedOptions',
         ], Array.prototype)
     };
 
