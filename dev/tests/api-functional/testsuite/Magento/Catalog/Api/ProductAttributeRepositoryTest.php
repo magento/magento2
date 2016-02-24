@@ -393,6 +393,9 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
      */
     protected function updateAttribute($attributeCode, $attributeData)
     {
+        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+            $attributeData['attribute']['attributeCode'] = $attributeCode;
+        }
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $attributeCode,
