@@ -150,6 +150,7 @@ class AddCatalogToTopmenuItemsObserver implements ObserverInterface
         $collection->addFieldToFilter('path', ['like' => '1/' . $rootId . '/%']); //load only from store root
         $collection->addAttributeToFilter('include_in_menu', 1);
         $collection->addAttributeToFilter('is_active', 1);
+        $collection->addIsActiveFilter();
         $collection->addUrlRewriteToResult();
         $collection->addOrder('level', Collection::SORT_ORDER_ASC);
         $collection->addOrder('position', Collection::SORT_ORDER_ASC);
