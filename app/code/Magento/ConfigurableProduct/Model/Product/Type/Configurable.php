@@ -133,6 +133,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     protected $extensionAttributesJoinProcessor;
 
     /**
+     * @var \Magento\Framework\Cache\FrontendInterface
+     */
+    private $cache;
+
+    /**
      * @codingStandardsIgnoreStart/End
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -152,6 +157,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $catalogProductTypeConfigurable
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+     * @param \Magento\Framework\Cache\FrontendInterface $cache
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -172,7 +178,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\CollectionFactory $attributeCollectionFactory,
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable $catalogProductTypeConfigurable,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
+        \Magento\Framework\Cache\FrontendInterface $cache
     ) {
         $this->_typeConfigurableFactory = $typeConfigurableFactory;
         $this->_eavAttributeFactory = $eavAttributeFactory;
@@ -182,7 +189,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         $this->_catalogProductTypeConfigurable = $catalogProductTypeConfigurable;
         $this->_scopeConfig = $scopeConfig;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
-
+        $this->cache = $cache;
         parent::__construct(
             $catalogProductOption,
             $eavConfig,
@@ -194,6 +201,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $logger,
             $productRepository
         );
+
     }
 
     /**
@@ -334,9 +342,20 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             ['group' => 'CONFIGURABLE', 'method' => __METHOD__]
         );
         if (!$product->hasData($this->_configurableAttributes)) {
-            $configurableAttributes = $this->getConfigurableAttributeCollection($product);
-            $this->extensionAttributesJoinProcessor->process($configurableAttributes);
-            $configurableAttributes->orderByPosition()->load();
+            $cacheId =  __CLASS__ . $product->getId();
+            $configurableAttributes = $this->cache->load($cacheId);
+            if ($configurableAttributes) {
+                $configurableAttributes = unserialize($configurableAttributes);
+            } else {
+                $configurableAttributes = $this->getConfigurableAttributeCollection($product);
+                $this->extensionAttributesJoinProcessor->process($configurableAttributes);
+                $configurableAttributes->orderByPosition()->load();
+                $this->cache->save(
+                    serialize($configurableAttributes),
+                    $cacheId,
+                    $product->getIdentities()
+                );
+            }
             $product->setData($this->_configurableAttributes, $configurableAttributes);
         }
         \Magento\Framework\Profiler::stop('CONFIGURABLE:' . __METHOD__);
@@ -347,6 +366,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Reset the cached configurable attributes of a product
      *
      * @param \Magento\Catalog\Model\Product $product
+     * @return $this
      * @return $this
      */
     public function resetConfigurableAttributes($product)
@@ -533,6 +553,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     public function save($product)
     {
         parent::save($product);
+        $cacheId =  __CLASS__ . $product->getId();
+        $this->cache->remove($cacheId);
 
         /* Save attributes information */
         $data = $product->getConfigurableAttributesData();
