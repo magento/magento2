@@ -226,6 +226,22 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test logged exception is the same as the thrown one in production mode
+     */
+    public function testCriticalExceptionStackTrace()
+    {
+        $thrownException = new \Exception('', 0);
+
+        $this->_loggerMock->expects($this->once())
+            ->method('critical')
+            ->will($this->returnCallback(function(\Exception $loggedException) use($thrownException) {
+                $this->assertSame($thrownException, $loggedException->getPrevious());
+            }));
+
+        $this->_errorProcessor->maskException($thrownException);
+    }
+
+    /**
      * @return array
      */
     public function dataProviderForSendResponseExceptions()
