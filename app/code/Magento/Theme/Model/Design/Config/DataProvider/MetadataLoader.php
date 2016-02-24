@@ -51,24 +51,6 @@ class MetadataLoader
     }
 
     /**
-     * Show fallback button
-     *
-     * @param string $scope
-     * @param string $scopeId
-     * @return bool
-     */
-    protected function showFallbackButton($scope, $scopeId)
-    {
-        $fallbackButton = true;
-        list($fallbackScope) = $this->scopeFallbackResolver->getFallbackScope($scope, $scopeId);
-        if ($this->storeManager->isSingleStoreMode() || !$fallbackScope) {
-            $fallbackButton = false;
-        }
-
-        return $fallbackButton;
-    }
-
-    /**
      * Retrieve configuration metadata
      *
      * @return array
@@ -80,10 +62,12 @@ class MetadataLoader
 
         $data = [];
         if ($scope) {
+            $showFallbackReset = false;
             list($fallbackScope, $fallbackScopeId) = $this->scopeFallbackResolver->getFallbackScope($scope, $scopeId);
-            if ($fallbackScope) {
+            if ($fallbackScope && !$this->storeManager->isSingleStoreMode()) {
                 $scope = $fallbackScope;
                 $scopeId = $fallbackScopeId;
+                $showFallbackReset = true;
             }
 
             $designConfig = $this->designConfigRepository->getByScope($scope, $scopeId);
@@ -98,10 +82,7 @@ class MetadataLoader
                 }
                 $fieldName = $fieldData->getFieldConfig()['field'];
                 $element[$fieldName]['arguments']['data']['config']['default'] = $fieldData->getValue();
-                $element[$fieldName]['arguments']['data']['config']['showFallbackReset'] = $this->showFallbackButton(
-                    $scope,
-                    $scopeId
-                );
+                $element[$fieldName]['arguments']['data']['config']['showFallbackReset'] = $showFallbackReset;
             }
         }
         return $data;
