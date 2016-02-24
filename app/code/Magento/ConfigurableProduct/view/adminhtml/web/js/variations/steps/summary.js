@@ -15,7 +15,8 @@ define([
     return Component.extend({
         defaults: {
             modules: {
-                variationsComponent: '${ $.variationsComponent }'
+                variationsComponent: '${ $.variationsComponent }',
+                modalComponent: '${ $.modalComponent }'
             },
             notificationMessage: {
                 text: null,
@@ -159,7 +160,7 @@ define([
         },
         force: function () {
             this.variationsComponent().render(this.variations, this.attributes());
-            $('[data-role=step-wizard-dialog]').trigger('closeModal');
+            this.modalComponent().closeModal();
         },
         back: function () {
         }
