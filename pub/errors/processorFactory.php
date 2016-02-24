@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Error;
 
-require_once __DIR__ . '/../../app/bootstrap.php';
+require_once realpath(__DIR__) . '/../../app/bootstrap.php';
 require_once 'processor.php';
 
 /**
