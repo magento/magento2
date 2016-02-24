@@ -15,14 +15,13 @@ define([
                 targetWizard: '${ $.wizardName }'
             }
         },
-
+        
         /**
          * Open modal
          */
         'openModal': function () {
-            this.trigger('active', true);
             this.form().validate();
-            if (this.form().source.get('params.invalid') === false) {
+            if (this.form().source.get('params.invalid') === false && this.targetWizard()) {
                 this._super();
                 this.targetWizard().open();
             }

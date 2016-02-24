@@ -16,6 +16,9 @@ $currencySymbol = $block->getCurrencySymbol();
 <div data-role="step-wizard-dialog" data-bind="scope: 'product_form.product_form.configurableModal'">
     <!-- ko template: getTemplate() --><!-- /ko -->
 </div>
+<div id="product-variations-matrix" data-role="product-variations-matrix">
+    <div data-bind="scope: 'configurableVariations'"></div>
+</div>
 <script type="text/x-magento-init">
     {
         "*": {
@@ -36,6 +39,8 @@ $currencySymbol = $block->getCurrencySymbol();
                     },
                     "configurableVariations": {
                         "component": "Magento_ConfigurableProduct/js/variations/variations",
+                        "provider": "product_form.product_form_data_source",
+                        "dataScope": "data.variations",
                         "variations": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($productMatrix) ?>,
                         "productAttributes": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributes) ?>,
                         "productUrl": "<?= /* @noEscape */ $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>",
@@ -50,5 +55,6 @@ $currencySymbol = $block->getCurrencySymbol();
 <script>
     require(['jquery'], function ($) {
         $('[data-role=step-wizard-dialog]').applyBindings();
+        $('[data-role=product-variations-matrix]').applyBindings();
     })
 </script>

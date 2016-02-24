@@ -383,7 +383,11 @@ define([
                 this.dialogTmpl = mageTemplate(template.html().trim());
             }
 
-            this.dialogContainerTmpl = mageTemplate(containerTmpl.html().trim());
+            if (containerTmpl.length) {
+                this.dialogContainerTmpl = mageTemplate(containerTmpl.html().trim());
+            } else {
+                this.dialogContainerTmpl = mageTemplate('');
+            }
 
             this._initDialog();
         },
