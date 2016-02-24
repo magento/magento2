@@ -24,7 +24,7 @@ class ResetPasswordButton extends GenericButton implements ButtonProviderInterfa
                 'label' => __('Reset Password'),
                 'class' => 'reset reset-password',
                 'on_click' => sprintf("location.href = '%s';", $this->getResetPasswordUrl()),
-                'sort_order' => 40,
+                'sort_order' => 60,
             ];
         }
         return $data;
