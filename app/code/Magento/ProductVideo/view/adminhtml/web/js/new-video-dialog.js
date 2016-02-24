@@ -726,33 +726,27 @@ define([
                 videoLoaded = true;
 
             this._blockActionButtons(true);
-            this._videoUrlWidget.on('finish_update_information.validation', $.proxy(
-                function (event, status) {
-                    videoForm.mage('validation', {
 
-                        /**
-                         * @param {jQuery} error
-                         * @param {jQuery} element
-                         */
-                        errorPlacement: function (error, element) {
-                            error.insertAfter(element);
-                        }
-                    }).on('highlight.validate', function () {
-                        $(this).validation('option');
-                    });
-                    videoForm.validation();
+            this._videoUrlWidget.trigger('validate_video_url', $.proxy(function () {
 
-                    if (this._videoRequestComplete === false) {
-                        videoLoaded = false;
+                videoForm.mage('validation', {
+                    errorPlacement: function (error, element) {
+                        error.insertAfter(element);
                     }
+                }).on('highlight.validate', function () {
+                    $(this).validation('option');
+                });
 
-                    callback(status && videoForm.valid() && videoLoaded);
-                    this._videoUrlWidget.off('finish_update_information.validation');
-                    this._blockActionButtons(false);
-                }, this
-            ));
+                videoForm.validation();
 
-            this._videoUrlWidget.trigger('update_video_information');
+                if (this._videoRequestComplete === false) {
+                    videoLoaded = false;
+                }
+
+                callback(videoForm.valid() && videoLoaded);
+            }, this));
+
+            this._blockActionButtons(false);
         },
 
         /**
