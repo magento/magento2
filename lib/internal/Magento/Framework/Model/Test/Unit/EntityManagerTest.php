@@ -49,6 +49,7 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->markTestSkipped('Due to MAGETWO-48956');
         $this->metadata = $this->getMock(
             'Magento\Framework\Model\Entity\EntityMetadata',
             [],
