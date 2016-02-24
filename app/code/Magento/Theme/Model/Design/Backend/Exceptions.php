@@ -135,6 +135,22 @@ class Exceptions extends ArraySerialized
     }
 
     /**
+     * @inheritDoc
+     */
+    public function afterLoad()
+    {
+        parent::afterLoad();
+        $values = $this->getValue();
+        foreach ($values as &$value) {
+            if (isset($value['record_id'])) {
+                unset($value['record_id']);
+            }
+        }
+        $this->setValue($values);
+        return $this;
+    }
+
+    /**
      * @return array
      */
     public function getValue()
