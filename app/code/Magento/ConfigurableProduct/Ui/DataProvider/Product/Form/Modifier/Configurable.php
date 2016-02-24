@@ -9,8 +9,11 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\Catalog\Model\Product\Type;
+use Magento\Ui\Component\Container;
 use Magento\Ui\Component\Form;
 use Magento\Ui\Component\DynamicRows;
+use Magento\Ui\Component\Modal;
+use Magento\Framework\UrlInterface;
 
 /**
  * Data provider for Configurable products
@@ -18,6 +21,8 @@ use Magento\Ui\Component\DynamicRows;
 class Configurable extends AbstractModifier
 {
     const GROUP_CONFIGURABLE = 'configurable';
+    const ASSOCIATED_PRODUCT_MODAL = 'configurable_associated_product_modal';
+    const ASSOCIATED_PRODUCT_LISTING = 'configurable_associated_product_listing';
 
     /**
      * @var array
@@ -44,12 +49,20 @@ class Configurable extends AbstractModifier
     protected $locator;
 
     /**
+     * @var UrlInterface
+     */
+    protected $urlBuilder;
+
+    /**
      * @param LocatorInterface $locator
+     * @param UrlInterface $urlBuilder
      */
     public function __construct(
-        LocatorInterface $locator
+        LocatorInterface $locator,
+        UrlInterface $urlBuilder
     ) {
         $this->locator = $locator;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -89,6 +102,63 @@ class Configurable extends AbstractModifier
                         ],
                         'children' => $this->getPanelChildren(),
                     ],
+                    static::ASSOCIATED_PRODUCT_MODAL => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'componentType' => Modal::NAME,
+                                    'dataScope' => '',
+                                    'provider' => static::FORM_NAME . '.product_form_data_source',
+                                    'options' => [
+                                        'title' => __('Select Associated Product'),
+                                        'buttons' => [
+                                            [
+                                                'text' => __('Done'),
+                                                'class' => 'action-primary',
+                                                'actions' => [
+                                                    [
+                                                        'targetName' => 'index=' . static::ASSOCIATED_PRODUCT_LISTING,
+                                                        'actionName' => 'save'
+                                                    ],
+                                                    'closeModal'
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'children' => [
+                            static::ASSOCIATED_PRODUCT_LISTING => [
+                                'arguments' => [
+                                    'data' => [
+                                        'config' => [
+                                            'autoRender' => false,
+                                            'componentType' => 'insertListing',
+                                            'dataScope' => static::ASSOCIATED_PRODUCT_LISTING,
+                                            'externalProvider' => static::ASSOCIATED_PRODUCT_LISTING . '.'
+                                                . static::ASSOCIATED_PRODUCT_LISTING . '_data_source',
+                                            'selectionsProvider' => static::ASSOCIATED_PRODUCT_LISTING . '.'
+                                                . static::ASSOCIATED_PRODUCT_LISTING . '.product_columns.ids',
+                                            'ns' => static::ASSOCIATED_PRODUCT_LISTING,
+                                            'render_url' => $this->urlBuilder->getUrl('mui/index/render'),
+                                            'realTimeLink' => true,
+                                            'behaviourType' => 'simple',
+                                            'externalFilterMode' => true,
+                                            'currentProductId' => $this->locator->getProduct()->getId(),
+                                            'dataLinks' => [
+                                                'imports' => false,
+                                                'exports' => true
+                                            ],
+//                                            'exports' => [
+//                                                'currentProductId' => '${ $.externalProvider }:params.current_product_id'
+//                                            ]
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
                 ]
             );
         }
@@ -104,6 +174,7 @@ class Configurable extends AbstractModifier
     protected function getPanelChildren() {
         return [
             'configurable_products_button_set' => $this->getButtonSet(),
+            'variations-matrix' => $this->getGrid(),
         ];
     }
 
@@ -131,6 +202,32 @@ class Configurable extends AbstractModifier
                 ],
             ],
             'children' => [
+                'add_products_manually_button' => [
+                    'arguments' => [
+                        'data' => [
+                            'config' => [
+                                'formElement' => 'container',
+                                'componentType' => 'container',
+                                'component' => 'Magento_Ui/js/form/components/button',
+                                'displayAsLink' => true,
+                                'actions' => [
+                                    [
+                                        'targetName' => 'ns=' . static::FORM_NAME . ', index='
+                                            . static::ASSOCIATED_PRODUCT_MODAL,
+                                        'actionName' => 'openModal',
+                                    ],
+                                    [
+                                        'targetName' => 'ns=' . static::ASSOCIATED_PRODUCT_LISTING
+                                            . ', index=' . static::ASSOCIATED_PRODUCT_LISTING,
+                                        'actionName' => 'render',
+                                    ],
+                                ],
+                                'title' => __('Add Products Manually'),
+                                'sortOrder' => 10,
+                            ],
+                        ],
+                    ],
+                ],
                 'create_configurable_products_button' => [
                     'arguments' => [
                         'data' => [
@@ -152,11 +249,11 @@ class Configurable extends AbstractModifier
                                     ],
                                 ],
                                 'title' => __('Create Configurations'),
+                                'sortOrder' => 20,
                             ],
                         ],
                     ],
                 ],
-                //'variations' => $this->getGrid(),
             ],
         ];
     }
@@ -174,23 +271,27 @@ class Configurable extends AbstractModifier
                     'config' => [
                         'additionalClasses' => 'admin__field-wide',
                         'componentType' => DynamicRows::NAME,
+                        'dndConfig' => [
+                            'enabled' => false,
+                        ],
                         'label' => __('Current Variations'),
-                        'renderDefaultRecord' => true,
+                        'renderDefaultRecord' => false,
                         'template' => 'ui/dynamic-rows/templates/grid',
-                        'component' => 'Magento_Ui/js/dynamic-rows/dynamic-rows-grid',
+                        'component' => 'Magento_ConfigurableProduct/js/components/dynamic-rows-configurable',
                         'addButton' => false,
                         'itemTemplate' => 'record',
-                        'dataScope' => 'data.links',
-                        'deleteButtonLabel' => __('Remove'),
-                        'dataProvider' => 'grouped_product_listing',
+                        'dataScope' => 'data',
+                        'dataProviderFromGrid' => static::ASSOCIATED_PRODUCT_LISTING,
                         'map' => [
                             'id' => 'entity_id',
                             'name' => 'name',
+                            'sku' => 'sku',
+                            'price' => 'price',
                         ],
-                        'links' => ['insertData' => '${ $.provider }:${ $.dataProvider }'],
+                        'links' => ['insertDataFromGrid' => '${$.provider}:${$.dataProviderFromGrid}'],
                         'sortOrder' => 20,
                         'columnsHeader' => true,
-                        'columnsHeaderAfterRender' => false,
+                        'columnsHeaderAfterRender' => true,
                     ],
                 ],
             ],
@@ -210,8 +311,8 @@ class Configurable extends AbstractModifier
                 'arguments' => [
                     'data' => [
                         'config' => [
-                            'componentType' => 'container',
-                            'isTemplate' => false,
+                            'componentType' => Container::NAME,
+                            'isTemplate' => true,
                             'is_collection' => true,
                             'component' => 'Magento_Ui/js/dynamic-rows/record',
                             'dataScope' => '',
@@ -219,52 +320,57 @@ class Configurable extends AbstractModifier
                     ],
                 ],
                 'children' => [
-                    'id' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'dataType' => Form\Element\DataType\Number::NAME,
-                                    'formElement' => Form\Element\Input::NAME,
-                                    'componentType' => Form\Field::NAME,
-                                    'dataScope' => 'qty',
-                                    'label' => __('Default Quantity'),
-                                    'fit' => true,
-                                    'additionalClasses' => 'admin__field-small',
-                                    'sortOrder' => 80,
-                                ],
-                            ],
-                        ],
-                    ],
-                    'actionDelete' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'additionalClasses' => 'data-grid-actions-cell',
-                                    'componentType' => 'actionDelete',
-                                    'dataType' => Form\Element\DataType\Text::NAME,
-                                    'label' => __('Actions'),
-                                    'sortOrder' => 90,
-                                    'fit' => true,
-                                ],
-                            ],
-                        ],
-                    ],
-                    'position' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'dataType' => Form\Element\DataType\Number::NAME,
-                                    'formElement' => Form\Element\Input::NAME,
-                                    'componentType' => Form\Field::NAME,
-                                    'dataScope' => 'position',
-                                    'sortOrder' => 100,
-                                    'visible' => false,
-                                ],
-                            ],
-                        ],
-                    ],
+                    'name_container' => $this->getColumn('name', __('Name'), 'name'),
+                    'sku_container' => $this->getColumn('sku', __('SKU'), 'sku'),
+                    'price_container' => $this->getColumn('price', __('Price'), 'price'),
+                    //'quantity_container' => $this->getColumn('quantity', __('Quantity'), 'quantity'),
                 ],
             ],
         ];
+    }
+
+    /**
+     * @param string $name
+     * @param \Magento\Framework\Phrase $label
+     * @param string $dataScope
+     * @return array
+     */
+    protected function getColumn($name, \Magento\Framework\Phrase $label, $dataScope = '')
+    {
+        $fieldEdit['arguments']['data']['config'] = [
+            'dataType' => Form\Element\DataType\Number::NAME,
+            'formElement' => Form\Element\Input::NAME,
+            'componentType' => Form\Field::NAME,
+            'dataScope' => $dataScope,
+            'fit' => true,
+            'additionalClasses' => 'admin__field-small',
+            'imports' => [
+                'visible' => '${$.provider}:${$.parentScope}.canEdit',
+            ],
+        ];
+        $fieldText['arguments']['data']['config'] = [
+            'componentType' => Form\Field::NAME,
+            'formElement' => Form\Element\Input::NAME,
+            'elementTmpl' => 'ui/dynamic-rows/cells/text',
+            'dataType' => Form\Element\DataType\Text::NAME,
+            'dataScope' => $dataScope,
+            'imports' => [
+                'visible' => '!${$.provider}:${$.parentScope}.canEdit',
+            ],
+        ];
+        $container['arguments']['data']['config'] = [
+            'additionalClasses' => 'admin__field',
+            'componentType' => Container::NAME,
+            'formElement' => Container::NAME,
+            'component' => 'Magento_Ui/js/form/components/group',
+            'label' => $label,
+            'dataScope' => '',
+        ];
+        $container['children'] = [
+            $name . '_edit' => $fieldEdit,
+            $name . '_text' => $fieldText,
+        ];
+
+        return $container;
     }
 }
