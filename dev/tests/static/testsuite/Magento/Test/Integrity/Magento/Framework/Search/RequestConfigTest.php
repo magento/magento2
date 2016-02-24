@@ -7,7 +7,7 @@
  */
 namespace Magento\Test\Integrity\Magento\Framework\Search;
 
-class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
+class RequestConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
 {
     /** @var \Magento\Framework\Config\Dom\UrnResolver */
     protected $urnResolver;
@@ -44,7 +44,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getKnownValidXml()
     {
-        return __DIR__ . '/_files/valid.xml';
+        return __DIR__ . '/_files/request/valid.xml';
     }
 
     /**
@@ -54,7 +54,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getKnownInvalidXml()
     {
-        return __DIR__ . '/_files/invalid.xml';
+        return __DIR__ . '/_files/request/invalid.xml';
     }
 
     /**
@@ -64,7 +64,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
      */
     protected function _getKnownValidPartialXml()
     {
-        return __DIR__ . '/_files/valid_partial.xml';
+        return __DIR__ . '/_files/request/valid_partial.xml';
     }
 
     /**
@@ -76,7 +76,7 @@ class ConfigTest extends \Magento\TestFramework\Integrity\AbstractConfig
             explode(
                 "\n",
                 "
-No match found for key-sequence ['sugegsted_search_container'] of keyref 'requestQueryReference'.
+No match found for key-sequence ['suggested_search_container'] of keyref 'requestQueryReference'.
 Element 'queryReference': No match found for key-sequence ['fulltext_search_query4'] of keyref 'queryReference'.
 "
             )
@@ -126,7 +126,7 @@ Element 'request': Missing child element(s). Expected is ( from )."
      */
     protected function _getKnownInvalidPartialXml()
     {
-        return __DIR__ . '/_files/invalid_partial.xml';
+        return __DIR__ . '/_files/request/invalid_partial.xml';
     }
 
     public function testSchemaUsingValidXml()
