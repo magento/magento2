@@ -346,6 +346,7 @@ class Configurable extends AbstractModifier
             'dataScope' => $dataScope,
             'fit' => true,
             'additionalClasses' => 'admin__field-small',
+            'visibleIfCanEdit' => true,
             'imports' => [
                 'parentComponentScope' => '${$.parentName}:dataScope',
             ],
@@ -357,9 +358,9 @@ class Configurable extends AbstractModifier
             'elementTmpl' => 'ui/dynamic-rows/cells/text',
             'dataType' => Form\Element\DataType\Text::NAME,
             'dataScope' => $dataScope,
+            'visibleIfCanEdit' => false,
             'imports' => [
                 'parentComponentScope' => '${$.parentName}:dataScope',
-                //'visible' => '!${$.provider}:${$.someData}.canEdit',
             ],
         ];
         $container['arguments']['data']['config'] = [
