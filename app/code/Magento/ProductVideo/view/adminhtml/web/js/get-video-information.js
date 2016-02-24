@@ -335,6 +335,8 @@ define([
 
             _FINISH_UPDATE_INFORMATION_TRIGGER: 'finish_update_information',
 
+            _VIDEO_URL_VALIDATE_TRIGGER: 'validate_video_url',
+
             _videoInformation: null,
 
             _currentVideoUrl: null,
@@ -345,6 +347,28 @@ define([
             _init: function () {
                 this.element.on(this._START_UPDATE_INFORMATION_TRIGGER, $.proxy(this._onRequestHandler, this));
                 this.element.on(this._ERROR_UPDATE_INFORMATION_TRIGGER, $.proxy(this._onVideoInvalid, this));
+                this.element.on(this._FINISH_UPDATE_INFORMATION_TRIGGER, $.proxy(
+                    function () {
+                        this._currentVideoUrl = null;
+                    }, this
+                ));
+                this.element.on(this._VIDEO_URL_VALIDATE_TRIGGER, $.proxy(this._onUrlValidateHandler, this));
+            },
+
+            /**
+             * @private
+             */
+            _onUrlValidateHandler: function (event, callback, forceVideo) {
+                var url = this.element.val(),
+                    videoInfo;
+
+                videoInfo = this._validateURL(url, forceVideo);
+
+                if (videoInfo) {
+                    callback();
+                } else {
+                    this._onRequestError($.mage.__('Invalid video url'));
+                }
             },
 
             /**
@@ -359,8 +383,6 @@ define([
                     googleapisUrl;
 
                 if (this._currentVideoUrl === url) {
-                    this.element.trigger(this._FINISH_UPDATE_INFORMATION_TRIGGER, true);
-
                     return;
                 }
 
