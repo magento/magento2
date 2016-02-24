@@ -234,10 +234,13 @@ class ErrorProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->_loggerMock->expects($this->once())
             ->method('critical')
-            ->will($this->returnCallback(function(\Exception $loggedException) use($thrownException) {
-                $this->assertSame($thrownException, $loggedException->getPrevious());
-            }));
-
+            ->will(
+                $this->returnCallback(
+                    function (\Exception $loggedException) use ($thrownException) {
+                        $this->assertSame($thrownException, $loggedException->getPrevious());
+                    }
+                )
+            );
         $this->_errorProcessor->maskException($thrownException);
     }
 
