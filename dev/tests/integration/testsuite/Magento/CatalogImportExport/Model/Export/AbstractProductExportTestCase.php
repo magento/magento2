@@ -120,11 +120,11 @@ class AbstractProductExportTestCase extends \PHPUnit_Framework_TestCase
             $index--;
             $newProductData = $this->objectManager->create('Magento\Catalog\Model\Product')->load($ids[$index])->getData();
             $this->assertEquals(count($origProductData[$index]), count($newProductData));
-            $this->assertEqualsOtherThanUpdatedAt($origProductData[$index], $newProductData, $skippedAttributes);
+            $this->assertEqualsOtherThanSkippedAttributes($origProductData[$index], $newProductData, $skippedAttributes);
         }
     }
 
-    private function assertEqualsOtherThanUpdatedAt($expected, $actual, $skippedAttributes)
+    private function assertEqualsOtherThanSkippedAttributes($expected, $actual, $skippedAttributes)
     {
         foreach ($expected as $key => $value) {
             if (in_array($key, $skippedAttributes)) {
