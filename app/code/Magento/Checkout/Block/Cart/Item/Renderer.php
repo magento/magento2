@@ -336,7 +336,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
                 ];
             }
         }
-        $this->messageManager->getMessages('quote_item' . $quoteItem->getId())->clear();
+        $this->messageManager->getMessages(true, 'quote_item' . $quoteItem->getId())->clear();
 
         return $messages;
     }
