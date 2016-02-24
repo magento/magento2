@@ -121,10 +121,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 foreach ($generalPost['use_config'] as $attributeCode => $attributeValue) {
                     if ($attributeValue) {
                         $useConfig[] = $attributeCode;
+                        $category->setData($attributeCode, null);
                     }
-                }
-                foreach ($useConfig as $attributeCode) {
-                    $category->setData($attributeCode, null);
                 }
             }
 
@@ -148,7 +146,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             if (isset($generalPost['use_default']) && !empty($generalPost['use_default'])) {
                 foreach ($generalPost['use_default'] as $attributeCode => $attributeValue) {
                     if ($attributeValue) {
-                        $category->setData($attributeCode, false);
+                        $category->setData($attributeCode, null);
                     }
                 }
             }

@@ -190,22 +190,46 @@
             line-height: @field-label__line-height;
             vertical-align: middle;
             white-space: normal;
+
+            &[data-config-scope] {
+                position: relative;
+
+                &:before {
+                    bottom: -1.3rem;
+                    color: @field-scope__color;
+                    content: attr(data-config-scope);
+                    font-size: 1.1rem;
+                    font-weight: @font-weight__regular;
+                    min-width: 15rem;
+                    position: absolute;
+                    right: 0;
+                    text-transform: lowercase;
+                }
+            }
         }
     }
 
     .required > &, //  ToDo UI: change classes "required" to "_required".
     ._required > & {
-        span:after {
-            color: @field-label__required__color;
-            content: '*';
-            display: inline-block;
-            font-size: @font-size__l;
-            font-weight: @font-weight__heavier;
-            line-height: 1;
-            margin-left: 10px;
-            position: absolute;
-            top: 1.2rem;
-            z-index: 1;
+        span {
+            &:after {
+                color: @field-label__required__color;
+                content: '*';
+                display: inline-block;
+                font-size: @font-size__l;
+                font-weight: @font-weight__heavier;
+                line-height: 1;
+                margin-left: 10px;
+                position: absolute;
+                top: 1.2rem;
+                z-index: 1;
+            }
+
+            &[data-config-scope] {
+                &:after {
+                    top: .2rem;
+                }
+            }
         }
     }
 
@@ -243,6 +267,9 @@
         position: relative;
     }
 
+    //  ToDo UI: Scope Labels must be moved from right side of each control to the place under the label of the control.
+    //  This code must be removed after Scope Labels are moved completely.
+    //  Till that time they'll be disabled by commenting pseudo-element content property.
     &[data-config-scope] {
         &:before {
             #mix-grid .return_length(@field-label-grid__column + @field-control-grid__column, @field-grid__columns);
@@ -318,7 +345,6 @@
 
         .admin__field-fallback-reset {
             margin-top: @field-fallback-reset__margin-top;
-            vertical-align: top;
         }
 
         //  If both

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
-<span class="action-delete"
+<button class="action-delete"
         data-bind="
             click: function(){ $parents[1].deleteRecord($parent.index, $parent.recordId); },
             attr: {
@@ -12,4 +12,4 @@
             }
         ">
     <span data-bind="text: $parents[1].deleteButtonLabel"></span>
-</span>
+</button>
