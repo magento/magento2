@@ -160,6 +160,7 @@ class XmlCatalogGenerateCommand extends Command
      */
     private function getFormatters($format)
     {
+        $format = strtolower($format);
         if (!isset($this->formats[$format])) {
             return false;
         }
