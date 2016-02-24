@@ -26,7 +26,7 @@
             <data name="category/data/default_product_listing_config" xsi:type="string">No</data>
             <data name="category/data/default_sort_by" xsi:type="string">Name</data>
             <data name="category/data/available_product_listing_config" xsi:type="string">No</data>
-            <data name="category/data/available_sort_by/sort_2" xsi:type="string">Name</data>
+            <data name="category/data/available_sort_by/sort_2" xsi:type="string">Product Name</data>
             <data name="category/data/available_sort_by/sort_1" xsi:type="string">Price</data>
             <data name="category/data/category_products/dataset" xsi:type="string">catalogProductSimple::default</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertCategorySaveMessage" />
