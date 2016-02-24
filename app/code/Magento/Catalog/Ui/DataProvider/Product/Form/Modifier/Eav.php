@@ -586,7 +586,6 @@ class Eav extends AbstractModifier
         return $product->getData($attributeCode);
     }
 
-
     /**
      * Retrieve scope label
      *
