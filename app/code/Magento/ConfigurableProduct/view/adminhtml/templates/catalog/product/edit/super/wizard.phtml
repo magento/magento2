@@ -24,6 +24,9 @@ $currencySymbol = $block->getCurrencySymbol();
                     "product_form.product_form.configurableModal": {
                         "component": "Magento_ConfigurableProduct/js/components/modal-configurable",
                         "options": {"type": "slide", "title": "<?= /* @escapeNotVerified */  __('Create Product Configurations') ?>"},
+                        "formName": "product_form.product_form",
+                        "isTemplate": false,
+                        "wizardName": "variation-steps-wizard",
                         "children": {
                             "wizard": {
                                 "url": "<?= /* @noEscape */ $block->getUrl('catalog/product/wizard', ['id' => $block->getProduct()->getId()]) ?>",

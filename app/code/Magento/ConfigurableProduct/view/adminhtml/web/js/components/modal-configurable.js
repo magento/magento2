@@ -4,25 +4,27 @@
  */
 
 define([
-    'Magento_Ui/js/modal/modal-component',
-    'uiRegistry'
-], function (Modal, registry) {
+    'Magento_Ui/js/modal/modal-component'
+], function (Modal) {
     'use strict';
 
     return Modal.extend({
+        defaults: {
+            modules: {
+                form: '${ $.formName }',
+                wizard: '${ $.wizardName }'
+            }
+        },
 
         /**
          * Open modal
          */
         'openModal': function () {
             this.trigger('active', true);
-            var form = registry.get('product_form.product_form');
-            form.source.trigger('data.validate');
-            var validated = form.source.get('params.invalid');
-            //if (!validated && typeof(registry.get('variation-steps-wizard')) !== "undefined") {
-            if (typeof(registry.get('variation-steps-wizard')) !== "undefined") {
-                registry.get('variation-steps-wizard').open();
+            this.form().validate();
+            if (this.form().source.get('params.invalid') === false) {
                 this._super();
+                this.wizard().open();
             }
         }
     });
