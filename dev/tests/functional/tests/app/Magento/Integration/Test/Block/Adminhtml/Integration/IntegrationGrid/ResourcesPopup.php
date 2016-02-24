@@ -6,11 +6,7 @@
 
 namespace Magento\Integration\Test\Block\Adminhtml\Integration\IntegrationGrid;
 
-use Magento\Mtf\Block\BlockFactory;
 use Magento\Mtf\Block\Form;
-use Magento\Mtf\Block\Mapper;
-use Magento\Mtf\Client\BrowserInterface;
-use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 
 /**
@@ -47,19 +43,13 @@ class ResourcesPopup extends Form
     protected $tree = '[data-role="tree-resources-container"]';
 
     /**
-     * @constructor
-     * @param SimpleElement $element
-     * @param BlockFactory $blockFactory
-     * @param Mapper $mapper
-     * @param BrowserInterface $browser
+     * Initialize block. Wait popup to load.
+     *
+     * @return void
      */
-    public function __construct(
-        SimpleElement $element,
-        BlockFactory $blockFactory,
-        Mapper $mapper,
-        BrowserInterface $browser
-    ) {
-        parent::__construct($element, $blockFactory, $mapper, $browser);
+    protected function init()
+    {
+        parent::init();
         $this->waitPopupToLoad();
     }
 
