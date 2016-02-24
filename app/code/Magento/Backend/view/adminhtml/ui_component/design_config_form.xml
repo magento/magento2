@@ -43,7 +43,7 @@
                     <item name="componentType" xsi:type="string">dynamicRows</item>
                     <item name="recordTemplate" xsi:type="string">record</item>
                     <item name="deleteButtonLabel" xsi:type="string">Remove</item>
-                    <item name="addButtonLabel" xsi:type="string">New User Agent Rule</item>
+                    <item name="addButtonLabel" xsi:type="string">Add New User Agent Rule</item>
                     <item name="deleteProperty" xsi:type="boolean">false</item>
                     <item name="dndConfig" xsi:type="array">
                         <item name="enabled" xsi:type="boolean">false</item>
