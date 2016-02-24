@@ -26,6 +26,11 @@ class SelectFactory
     protected $parts;
 
     /**
+     * @var Select
+     */
+    protected $prototype;
+
+    /**
      * @param SelectRenderer $selectRenderer
      * @param array $parts
      */
@@ -43,6 +48,9 @@ class SelectFactory
      */
     public function create(AdapterInterface $adapter)
     {
-        return new Select($adapter, $this->selectRenderer, $this->parts);
+        if (!$this->prototype) {
+            $this->prototype = new Select($adapter, $this->selectRenderer, $this->parts);
+        }
+        return clone $this->prototype;
     }
 }

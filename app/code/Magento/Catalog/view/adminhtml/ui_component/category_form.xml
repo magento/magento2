@@ -96,13 +96,13 @@
                     <item name="prefer" xsi:type="string">toggle</item>
                     <item name="label" xsi:type="string" translate="true">Enable Category</item>
                     <item name="valueMap" xsi:type="array">
-                        <item name="true" xsi:type="number">1</item>
-                        <item name="false" xsi:type="number">0</item>
+                        <item name="true" xsi:type="string">1</item>
+                        <item name="false" xsi:type="string">0</item>
                     </item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">false</item>
                     </item>
-                    <item name="default" xsi:type="number">1</item>
+                    <item name="default" xsi:type="string">1</item>
                 </item>
             </argument>
         </field>
@@ -115,13 +115,13 @@
                     <item name="source" xsi:type="string">category</item>
                     <item name="prefer" xsi:type="string">toggle</item>
                     <item name="valueMap" xsi:type="array">
-                        <item name="true" xsi:type="number">1</item>
-                        <item name="false" xsi:type="number">0</item>
+                        <item name="true" xsi:type="string">1</item>
+                        <item name="false" xsi:type="string">0</item>
                     </item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">false</item>
                     </item>
-                    <item name="default" xsi:type="number">1</item>
+                    <item name="default" xsi:type="string">1</item>
                     <item name="label" xsi:type="string" translate="true">Include in Menu</item>
                 </item>
             </argument>
@@ -286,8 +286,8 @@
                         <item name="dataType" xsi:type="string">boolean</item>
                         <item name="formElement" xsi:type="string">checkbox</item>
                         <item name="valueMap" xsi:type="array">
-                            <item name="true" xsi:type="boolean">true</item>
-                            <item name="false" xsi:type="boolean">false</item>
+                            <item name="true" xsi:type="string">true</item>
+                            <item name="false" xsi:type="string">false</item>
                         </item>
                         <item name="exports" xsi:type="array">
                             <item name="checked" xsi:type="string">ns = ${ $.ns }, index = available_sort_by :disabled</item>
@@ -481,10 +481,10 @@
                     <item name="dataType" xsi:type="string">boolean</item>
                     <item name="formElement" xsi:type="string">checkbox</item>
                     <item name="valueMap" xsi:type="array">
-                        <item name="true" xsi:type="number">1</item>
-                        <item name="false" xsi:type="number">0</item>
+                        <item name="true" xsi:type="string">1</item>
+                        <item name="false" xsi:type="string">0</item>
                     </item>
-                    <item name="default" xsi:type="number">0</item>
+                    <item name="default" xsi:type="string">0</item>
                 </item>
             </argument>
         </field>
@@ -540,10 +540,10 @@
                         <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
                     </item>
                     <item name="valueMap" xsi:type="array">
-                        <item name="true" xsi:type="number">1</item>
-                        <item name="false" xsi:type="number">0</item>
+                        <item name="true" xsi:type="string">1</item>
+                        <item name="false" xsi:type="string">0</item>
                     </item>
-                    <item name="default" xsi:type="number">0</item>
+                    <item name="default" xsi:type="string">0</item>
                 </item>
             </argument>
         </field>
