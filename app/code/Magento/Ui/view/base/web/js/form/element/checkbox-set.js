@@ -99,7 +99,13 @@ define([
                 return v && !!v.length;
             });
 
-            return utils.copy(value);
+            if (_.isArray(value)) {
+                value = utils.copy(value);
+            } else {
+                value = [];
+            }
+
+            return value;
         },
 
         /**
