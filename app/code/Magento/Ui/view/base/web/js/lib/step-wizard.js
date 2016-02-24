@@ -184,15 +184,10 @@ define([
             this.selectedStep(this.wizard.prev());
         },
         open: function () {
-            //require('uiRegistry').get('product_form.product_form').validate();
-            //if (!require('uiRegistry').get('product_form.product_form').source.get('params.invalid')) {
-                this.selectedStep(this.stepsNames.first());
-                this.wizard = new Wizard(this.steps);
-                //$('[data-role=step-wizard-dialog]').trigger('openModal');
-            //}
+            this.selectedStep(this.stepsNames.first());
+            this.wizard = new Wizard(this.steps);
         },
         close: function () {
-            //$('[data-role=step-wizard-dialog]').trigger('closeModal');
             require('uiRegistry').get('product_form.product_form.configurableModal').closeModal();
         },
         showSpecificStep: function () {
