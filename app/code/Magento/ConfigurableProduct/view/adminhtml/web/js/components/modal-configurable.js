@@ -12,7 +12,7 @@ define([
         defaults: {
             modules: {
                 form: '${ $.formName }',
-                wizard: '${ $.wizardName }'
+                targetWizard: '${ $.wizardName }'
             }
         },
 
@@ -24,7 +24,7 @@ define([
             this.form().validate();
             if (this.form().source.get('params.invalid') === false) {
                 this._super();
-                this.wizard().open();
+                this.targetWizard().open();
             }
         }
     });
