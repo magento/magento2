@@ -48,7 +48,6 @@ class Store extends Column
      * @param UiComponentFactory $uiComponentFactory
      * @param SystemStore $systemStore
      * @param Escaper $escaper
-     * @param StoreManager $storeManager
      * @param array $components
      * @param array $data
      * @param string $storeKey
@@ -58,7 +57,6 @@ class Store extends Column
         UiComponentFactory $uiComponentFactory,
         SystemStore $systemStore,
         Escaper $escaper,
-        StoreManager $storeManager,
         array $components = [],
         array $data = [],
         $storeKey = 'store_id'
@@ -66,7 +64,6 @@ class Store extends Column
         $this->systemStore = $systemStore;
         $this->escaper = $escaper;
         $this->storeKey = $storeKey;
-        $this->storeManager = $storeManager;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 
@@ -125,13 +122,30 @@ class Store extends Column
 
     /**
      * Prepare component configuration
+     *
      * @return void
      */
     public function prepare()
     {
         parent::prepare();
-        if ($this->storeManager->isSingleStoreMode()) {
+        if ($this->getStoreManager()->isSingleStoreMode()) {
             $this->_data['config']['componentDisabled'] = true;
         }
+    }
+
+    /**
+     * Get StoreManager dependency
+     *
+     * @return StoreManager
+     *
+     * @deprecated
+     */
+    private function getStoreManager()
+    {
+        if ($this->storeManager === null) {
+            $this->storeManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Store\Model\StoreManagerInterface');
+        }
+        return $this->storeManager;
     }
 }
