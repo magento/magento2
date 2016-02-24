@@ -178,7 +178,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                 ],
                 [
                     'name' => true,
-                    'default_sort_by' => true,
+                    'default_sort_by' => false,
                     'display_mode' => true,
                     'meta_title' => true,
                     'custom_design' => true,
@@ -187,14 +187,14 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
                     'include_in_menu' => true,
                     'landing_page' => true,
                     'custom_apply_to_products' => true,
-                    'available_sort_by' => true,
+                    'available_sort_by' => false,
                     'description' => true,
                     'meta_keywords' => true,
                     'meta_description' => true,
                     'custom_layout_update' => true,
                     'custom_design_from' => true,
                     'custom_design_to' => true,
-                    'filter_price_range' => true
+                    'filter_price_range' => false
                 ],
                 [
                     'name' => 'Custom Name',
