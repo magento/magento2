@@ -25,7 +25,7 @@ class Fault
     const NODE_DETAIL_PARAMETERS = 'Parameters';
     const NODE_DETAIL_WRAPPED_ERRORS = 'WrappedErrors';
     const NODE_DETAIL_WRAPPED_EXCEPTION = 'WrappedException';
-    /** Note that parameter node must be unique in scope of all complex types declared in WSDL */
+    /* Note that parameter node must be unique in scope of all complex types declared in WSDL */
     const NODE_DETAIL_PARAMETER = 'GenericFaultParameter';
     const NODE_DETAIL_PARAMETER_KEY = 'key';
     const NODE_DETAIL_PARAMETER_VALUE = 'value';
