@@ -14,18 +14,9 @@ class Save extends Generic
             'label' => __('Save Attribute'),
             'class' => 'save primary',
             'data_attribute' => [
-                'mage-init' => [
-                    'Magento_Ui/js/form/button-adapter' => [
-                        'actions' => [
-                            [
-                                'targetName' => 'product_attribute_add_form.product_attribute_add_form',
-                                'actionName' => 'save'
-                            ],
-                        ]
-                    ]
-                ]
-            ],
-            'on_click' => ''
+                'mage-init' => ['button' => ['event' => 'save']],
+                'form-role' => 'save',
+            ]
         ];
     }
 }
