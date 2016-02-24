@@ -24,18 +24,6 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
      */
     protected $fileSystem;
 
-    /**
-     * skipped attributes
-     *
-     * @var array
-     */
-    public static $skippedAttributes = [
-        'options',
-        'updated_at',
-        'extension_attributes',
-        'category_ids',
-    ];
-
     protected function setUp()
     {
         parent::setUp();
@@ -60,11 +48,10 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             ->getAbsolutePath('/dev/tests/integration/testsuite/' . $fixture);
         include $fixturePath;
 
-        $skippedAttributes = self::$skippedAttributes;
-        $this->executeExportTest($skus, $skippedAttributes);
+        $this->executeExportTest($skus);
     }
 
-    protected function executeExportTest($skus, $skippedAttributes)
+    protected function executeExportTest($skus)
     {
         $productRepository = $this->objectManager->create(
             'Magento\Catalog\Api\ProductRepositoryInterface'
@@ -116,7 +103,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             $index--;
             $newPricingData = $this->objectManager->create('Magento\Catalog\Model\Product')->load($ids[$index])->getTierPrices();
             $this->assertEquals(count($origPricingData[$index]), count($newPricingData));
-            $this->assertEqualsOtherThanSkippedAttributes($origPricingData[$index], $newPricingData, $skippedAttributes);
+            $this->assertEqualsOtherThanSkippedAttributes($origPricingData[$index], $newPricingData, []);
         }
     }
 
