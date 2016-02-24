@@ -78,12 +78,11 @@ class ValueChecker
     protected function isEqual ($value, $defaultValue)
     {
         switch (gettype($value)) {
-            case 'string':
-                return $value === $defaultValue;
             case 'array':
                 return $this->isEqualArrays($value, $defaultValue);
+            default:
+                return $value === $defaultValue;
         }
-        return false;
     }
 
     /**
