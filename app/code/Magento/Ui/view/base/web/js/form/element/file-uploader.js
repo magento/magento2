@@ -363,6 +363,15 @@ define([
         },
 
         /**
+         * Restore value to default
+         */
+        restoreToDefault: function () {
+            var defaultValue = utils.copy(this.default);
+            defaultValue.map(this.processFile, this);
+            this.value(defaultValue);
+        },
+
+        /**
          * Update whether value differs from default value
          */
         setDifferedFromDefault: function () {
