@@ -36,7 +36,7 @@ class ProductTest extends AbstractProductExportTestCase
         'qty_increments',
         'use_config_enable_qty_inc',
         'enable_qty_increments',
-        'is_decimal_divided',
+        'is_decimal_divided'
     ];
 
     public function exportDataProvider()
