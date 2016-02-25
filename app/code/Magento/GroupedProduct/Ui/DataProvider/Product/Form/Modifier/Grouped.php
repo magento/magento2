@@ -470,11 +470,11 @@ class Grouped extends AbstractModifier
                             ],
                         ],
                     ],
-                    'name' => $this->getTextColumn('name', false, 'Name', 30),
-                    'attribute_set' => $this->getTextColumn('attribute_set', false, 'Attribute Set', 40),
-                    'status' => $this->getTextColumn('status', true, 'Status', 50),
-                    'sku' => $this->getTextColumn('sku', false, 'SKU', 60),
-                    'price' => $this->getTextColumn('price', true, 'Price', 70),
+                    'name' => $this->getTextColumn('name', false, __('Name'), 30),
+                    'attribute_set' => $this->getTextColumn('attribute_set', false, __('Attribute Set'), 40),
+                    'status' => $this->getTextColumn('status', true, __('Status'), 50),
+                    'sku' => $this->getTextColumn('sku', false, __('SKU'), 60),
+                    'price' => $this->getTextColumn('price', true, __('Price'), 70),
                     'qty' => [
                         'arguments' => [
                             'data' => [
@@ -530,13 +530,13 @@ class Grouped extends AbstractModifier
     /**
      * Returns text column configuration for the dynamic grid
      *
-     * @param string $dataScope
-     * @param boolean $fit
-     * @param string $label
-     * @param int $sortOrder
+     * @param $dataScope
+     * @param $fit
+     * @param Phrase $label
+     * @param $sortOrder
      * @return array
      */
-    protected function getTextColumn($dataScope, $fit, $label, $sortOrder)
+    protected function getTextColumn($dataScope, $fit, Phrase $label, $sortOrder)
     {
         $column = [
             'arguments' => [
@@ -548,7 +548,7 @@ class Grouped extends AbstractModifier
                         'dataType' => Form\Element\DataType\Text::NAME,
                         'dataScope' => $dataScope,
                         'fit' => $fit,
-                        'label' => new Phrase($label),
+                        'label' => $label,
                         'sortOrder' => $sortOrder,
                     ],
                 ],
