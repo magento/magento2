@@ -12,6 +12,8 @@ class BundleTest extends AbstractProductExportImportTestCase
     public function exportImportDataProvider()
     {
         return [
+            // @todo uncomment after MAGETWO-49677 resolved
+            /*
             'bundle-product' => [
                 [
                     'Magento/Bundle/_files/product.php'
@@ -20,6 +22,7 @@ class BundleTest extends AbstractProductExportImportTestCase
                     'bundle-product',
                 ]
             ],
+            */
             'bundle-product-multi-options' => [
                 [
                     'Magento/Bundle/_files/product_with_multiple_options.php'
@@ -28,14 +31,17 @@ class BundleTest extends AbstractProductExportImportTestCase
                     'bundle-product',
                 ]
             ],
-            'bundle-product-tie-pricing' => [
+            // @todo uncomment after MAGETWO-49677 resolved
+            /*
+            'bundle-product-tier-pricing' => [
                 [
                     'Magento/Bundle/_files/product_with_tier_pricing.php'
                 ],
                 [
                     'bundle-product',
                 ]
-            ],
+            ]
+            */
         ];
     }
 }
