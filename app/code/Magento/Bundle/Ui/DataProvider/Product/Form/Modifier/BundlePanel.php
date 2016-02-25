@@ -364,7 +364,6 @@ class BundlePanel extends AbstractModifier
         ];
     }
 
-
     /**
      * Get configuration for the modal set: modal and trigger button
      *
