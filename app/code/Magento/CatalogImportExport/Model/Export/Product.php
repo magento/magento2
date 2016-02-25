@@ -1350,7 +1350,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      *
      * @return string
      */
-    private function getProductEntityLinkField()
+    protected function getProductEntityLinkField()
     {
         if (!$this->productEntityLinkField) {
             $this->productEntityLinkField = $this->getMetadataPool()
