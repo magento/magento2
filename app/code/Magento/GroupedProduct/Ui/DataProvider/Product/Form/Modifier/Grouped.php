@@ -530,10 +530,10 @@ class Grouped extends AbstractModifier
     /**
      * Returns text column configuration for the dynamic grid
      *
-     * @param $dataScope
-     * @param $fit
+     * @param string $dataScope
+     * @param bool $fit
      * @param Phrase $label
-     * @param $sortOrder
+     * @param int $sortOrder
      * @return array
      */
     protected function getTextColumn($dataScope, $fit, Phrase $label, $sortOrder)
