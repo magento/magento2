@@ -284,10 +284,14 @@ class Configurable extends AbstractModifier
                         'dataProviderFromGrid' => static::ASSOCIATED_PRODUCT_LISTING,
                         'map' => [
                             'id' => 'entity_id',
+                            'product_link' => 'product_link',
                             'name' => 'name',
                             'sku' => 'sku',
-                            'price' => 'price',
-                            'quantity_and_stock_status.qty' => 'qty'
+                            'price' => 'price_number',
+                            'price_string' => 'price',
+                            'price_currency' => 'price_currency',
+                            'quantity_and_stock_status.qty' => 'qty',
+                            'weight' => 'weight',
                         ],
                         'links' => ['insertDataFromGrid' => '${$.provider}:${$.dataProviderFromGrid}'],
                         'sortOrder' => 20,
@@ -321,10 +325,29 @@ class Configurable extends AbstractModifier
                     ],
                 ],
                 'children' => [
-                    'name_container' => $this->getColumn('name', __('Name'), 'name'),
-                    'sku_container' => $this->getColumn('sku', __('SKU'), 'sku'),
-                    'price_container' => $this->getColumn('price', __('Price'), 'price'),
-                    'quantity_container' => $this->getColumn('quantity', __('Quantity'), 'quantity_and_stock_status.qty'),
+                    'name_container' => $this->getColumn(
+                        'name',
+                        __('Name'),
+                        [],
+                        ['dataScope' => 'product_link']
+                    ),
+                    'sku_container' => $this->getColumn('sku', __('SKU')),
+                    'price_container' => $this->getColumn(
+                        'price',
+                        __('Price'),
+                        [
+                            'imports' => ['addbefore' => '${$.provider}:${$.parentScope}.price_currency'],
+                            'validation' => ['validate-zero-or-greater' => true]
+                        ],
+                        ['dataScope' => 'price_string']
+                    ),
+                    'quantity_container' => $this->getColumn(
+                        'quantity',
+                        __('Quantity'),
+                        ['dataScope' => 'quantity_and_stock_status.qty'],
+                        ['dataScope' => 'quantity_and_stock_status.qty']
+                    ),
+                    'price_weight' => $this->getColumn('weight', __('Weight')),
                 ],
             ],
         ];
@@ -333,17 +356,22 @@ class Configurable extends AbstractModifier
     /**
      * @param string $name
      * @param \Magento\Framework\Phrase $label
-     * @param string $dataScope
+     * @param array $editConfig
+     * @param array $textConfig
      * @return array
      */
-    protected function getColumn($name, \Magento\Framework\Phrase $label, $dataScope = '')
-    {
+    protected function getColumn(
+        $name,
+        \Magento\Framework\Phrase $label,
+        $editConfig = [],
+        $textConfig = []
+    ) {
         $fieldEdit['arguments']['data']['config'] = [
             'component' => 'Magento_ConfigurableProduct/js/components/field-configurable',
             'dataType' => Form\Element\DataType\Number::NAME,
             'formElement' => Form\Element\Input::NAME,
             'componentType' => Form\Field::NAME,
-            'dataScope' => $dataScope,
+            'dataScope' => $name,
             'fit' => true,
             'additionalClasses' => 'admin__field-small',
             'visibleIfCanEdit' => true,
@@ -355,14 +383,22 @@ class Configurable extends AbstractModifier
             'component' => 'Magento_ConfigurableProduct/js/components/field-configurable',
             'componentType' => Form\Field::NAME,
             'formElement' => Form\Element\Input::NAME,
-            'elementTmpl' => 'ui/dynamic-rows/cells/text',
+            'elementTmpl' => 'Magento_ConfigurableProduct/components/cell-html',
             'dataType' => Form\Element\DataType\Text::NAME,
-            'dataScope' => $dataScope,
+            'dataScope' => $name,
             'visibleIfCanEdit' => false,
             'imports' => [
                 'parentComponentScope' => '${$.parentName}:dataScope',
             ],
         ];
+        $fieldEdit['arguments']['data']['config'] = array_replace_recursive(
+            $fieldEdit['arguments']['data']['config'],
+            $editConfig
+        );
+        $fieldText['arguments']['data']['config'] = array_replace_recursive(
+            $fieldText['arguments']['data']['config'],
+            $textConfig
+        );
         $container['arguments']['data']['config'] = [
             'additionalClasses' => 'admin__field',
             'componentType' => Container::NAME,
