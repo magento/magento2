@@ -259,12 +259,10 @@ class Phrase
     }
 
     /**
-     * Compile PHP string based on quotes type it enclosed with
+     * Compile PHP string (escaping unescaped quotes and processing concatenation)
      *
      * @param string $string
      * @return string
-     *
-     * @SuppressWarnings(PHPMD.EvalExpression)
      */
     private function getCompiledString($string)
     {
