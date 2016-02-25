@@ -150,7 +150,7 @@ class Http implements \Magento\Framework\AppInterface
      */
     private function handleDeveloperMode(Bootstrap $bootstrap, \Exception $exception)
     {
-        if (!$bootstrap->isDeveloperMode()) {
+        if ($bootstrap->isDeveloperMode()) {
             if (Bootstrap::ERR_IS_INSTALLED == $bootstrap->getErrorCode()) {
                 try {
                     $this->redirectToSetup($bootstrap, $exception);
@@ -169,7 +169,7 @@ class Http implements \Magento\Framework\AppInterface
     }
 
     /**
-     * build content based on an exception
+     * Build content based on an exception
      *
      * @param \Exception $exception
      * @return string
@@ -190,7 +190,10 @@ class Http implements \Magento\Framework\AppInterface
 
         foreach ($exceptions as $index => $exception) {
             $buffer .= sprintf(
-                "\nException #%d (%s): %s\n%s\n", $index, get_class($exception), $exception->getMessage(),
+                "\nException #%d (%s): %s\n%s\n",
+                $index,
+                get_class($exception),
+                $exception->getMessage(),
                 $exception->getTraceAsString()
             );
         }
