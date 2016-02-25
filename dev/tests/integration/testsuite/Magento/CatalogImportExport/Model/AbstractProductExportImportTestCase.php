@@ -56,16 +56,18 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      *
-     * @param string $fixture
+     * @param array $fixtures
      * @param string[] $skus
      * @param string[] $skippedAttributes
      * @dataProvider exportImportDataProvider
      */
-    public function testExport($fixture, $skus, $skippedAttributes = [])
+    public function testExport($fixtures, $skus, $skippedAttributes = [])
     {
-        $fixturePath = $this->fileSystem->getDirectoryRead(DirectoryList::ROOT)
-            ->getAbsolutePath('/dev/tests/integration/testsuite/' . $fixture);
-        include $fixturePath;
+        foreach ($fixtures as $fixture) {
+            $fixturePath = $this->fileSystem->getDirectoryRead(DirectoryList::ROOT)
+                ->getAbsolutePath('/dev/tests/integration/testsuite/' . $fixture);
+            include $fixturePath;
+        }
 
         $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
         $this->executeExportTest($skus, $skippedAttributes);
@@ -152,15 +154,17 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      *
-     * @param string $fixture
+     * @param array $fixture
      * @param string[] $skus
      * @dataProvider exportImportDataProvider
      */
-    public function testImportDelete($fixture, $skus)
+    public function testImportDelete($fixtures, $skus)
     {
-        $fixturePath = $this->fileSystem->getDirectoryRead(DirectoryList::ROOT)
-            ->getAbsolutePath('/dev/tests/integration/testsuite/' . $fixture);
-        include $fixturePath;
+        foreach ($fixtures as $fixture) {
+            $fixturePath = $this->fileSystem->getDirectoryRead(DirectoryList::ROOT)
+                ->getAbsolutePath('/dev/tests/integration/testsuite/' . $fixture);
+            include $fixturePath;
+        }
 
         $this->executeImportDeleteTest($skus);
     }

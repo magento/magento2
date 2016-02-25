@@ -4,42 +4,14 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Export;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
  */
-class ProductStagingTest extends AbstractProductExportTestCase
+class ProductStagingTest extends \Magento\CatalogImportExport\Model\AbstractProductExportImportTestCase
 {
-    /**
-     * Stock item attributes which must be exported
-     *
-     * @var array
-     */
-    public static $stockItemAttributes = [
-        'qty',
-        'min_qty',
-        'use_config_min_qty',
-        'is_qty_decimal',
-        'backorders',
-        'use_config_backorders',
-        'min_sale_qty',
-        'use_config_min_sale_qty',
-        'max_sale_qty',
-        'use_config_max_sale_qty',
-        'is_in_stock',
-        'notify_stock_qty',
-        'use_config_notify_stock_qty',
-        'manage_stock',
-        'use_config_manage_stock',
-        'use_config_qty_increments',
-        'qty_increments',
-        'use_config_enable_qty_inc',
-        'enable_qty_increments',
-        'is_decimal_divided'
-    ];
 
-    public function exportDataProvider()
+    public function exportImportDataProvider()
     {
         return [
             'product_export_data' => [

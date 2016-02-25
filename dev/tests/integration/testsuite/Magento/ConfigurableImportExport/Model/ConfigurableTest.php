@@ -13,7 +13,9 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
     {
         return [
             'configurable-product' => [
-                'Magento/ConfigurableProduct/_files/product_configurable.php',
+                [
+                    'Magento/ConfigurableProduct/_files/product_configurable.php'
+                ],
                 [
                     'configurable',
                 ],

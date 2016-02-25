@@ -13,19 +13,25 @@ class BundleTest extends AbstractProductExportImportTestCase
     {
         return [
             'bundle-product' => [
-                'Magento/Bundle/_files/product.php',
+                [
+                    'Magento/Bundle/_files/product.php'
+                ],
                 [
                     'bundle-product',
                 ]
             ],
             'bundle-product-multi-options' => [
-                'Magento/Bundle/_files/product_with_multiple_options.php',
+                [
+                    'Magento/Bundle/_files/product_with_multiple_options.php'
+                ],
                 [
                     'bundle-product',
                 ]
             ],
             'bundle-product-tie-pricing' => [
-                'Magento/Bundle/_files/product_with_tier_pricing.php',
+                [
+                    'Magento/Bundle/_files/product_with_tier_pricing.php'
+                ],
                 [
                     'bundle-product',
                 ]
