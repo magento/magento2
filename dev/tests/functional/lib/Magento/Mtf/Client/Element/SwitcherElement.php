@@ -17,7 +17,7 @@ class SwitcherElement extends SimpleElement
      *
      * @var string
      */
-    protected $parentContainer = 'parent::div[@class="switcher"]';
+    protected $parentContainer = 'parent::div[@data-role="switcher"]';
 
     /**
      * Set value to Yes or No.
