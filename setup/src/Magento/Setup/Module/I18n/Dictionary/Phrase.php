@@ -274,8 +274,6 @@ class Phrase
         if (count($matches[0]) % 2 !== 0) {
             $string = addslashes($string);
         }
-        $evalString = 'return ' . $encloseQuote . $string . $encloseQuote . ';';
-        $result = @eval($evalString);
-        return is_string($result) ? $result :  $string;
+        return $string;
     }
 }
