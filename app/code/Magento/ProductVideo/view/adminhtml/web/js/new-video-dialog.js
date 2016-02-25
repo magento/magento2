@@ -730,6 +730,11 @@ define([
             this._videoUrlWidget.trigger('validate_video_url', $.proxy(function () {
 
                 videoForm.mage('validation', {
+
+                    /**
+                     * @param {jQuery} error
+                     * @param {jQuery} element
+                     */
                     errorPlacement: function (error, element) {
                         error.insertAfter(element);
                     }
