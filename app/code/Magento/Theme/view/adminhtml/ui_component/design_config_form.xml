@@ -231,7 +231,7 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">textarea</item>
                         <item name="dataScope" xsi:type="string">footer_absolute_footer</item>
-                        <item name="notice" xsi:type="string" translate="true">This will be displayed just before body closing tag.</item>
+                        <item name="notice" xsi:type="string" translate="true">This will be displayed just before the body closing tag.</item>
                     </item>
                 </argument>
             </field>
