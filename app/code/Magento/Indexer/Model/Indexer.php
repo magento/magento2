@@ -138,7 +138,7 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
     }
 
     /**
-     * Return indexer action class
+     * Return indexer shared index
      *
      * @return string
      */
