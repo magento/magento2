@@ -95,11 +95,13 @@ define([
          * @param {Object} paymentMethodData
          */
         createRenderer: function (paymentMethodData) {
-            _.find(rendererList(), function (renderer) {
-                var isRendererForMethod = false;
+            var isRendererForMethod = false;
 
-                if (renderer.hasOwnProperty('typeComparatorCallback')
-                    && typeof renderer.typeComparatorCallback == 'function') {
+            _.find(rendererList(), function (renderer) {
+
+                if (renderer.hasOwnProperty('typeComparatorCallback') &&
+                    typeof renderer.typeComparatorCallback == 'function'
+                ) {
                     isRendererForMethod = renderer.typeComparatorCallback(renderer.type, paymentMethodData.method);
                 } else {
                     isRendererForMethod = renderer.type === paymentMethodData.method;
@@ -134,7 +136,7 @@ define([
             _.find(items(), function (value) {
                 if (value.item.method.indexOf(paymentMethodCode) === 0) {
                     value.disposeSubscriptions();
-                    this.removeChild(value);
+                    value.destroy();
                 }
             }, this);
         }
