@@ -149,20 +149,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $dateTime;
 
     /**
-     * Product metadata pool
-     *
-     * @var \Magento\Framework\Model\Entity\MetadataPool
-     */
-    private $metadataPool;
-
-    /**
-     * Product entity link field
-     *
-     * @var string
-     */
-    private $productEntityLinkField;
-
-    /**
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
@@ -601,52 +587,5 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->countItemsCreated -= $this->countItemsUpdated;
 
         return $this;
-    }
-
-    /**
-     * Get product metadata pool
-     *
-     * @return \Magento\Framework\Model\Entity\MetadataPool
-     * @deprecated
-     */
-    private function getMetadataPool()
-    {
-        if (!$this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\Entity\MetadataPool');
-        }
-        return $this->metadataPool;
-    }
-
-    /**
-     * Set product Metadata pool
-     *
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
-     * @return $this
-     * @throws \LogicException
-     * @deprecated
-     */
-    public function setMetadataPool(\Magento\Framework\Model\Entity\MetadataPool $metadataPool)
-    {
-        if ($this->metadataPool) {
-            throw new \LogicException("Metadata pool is already set");
-        }
-        $this->metadataPool = $metadataPool;
-        return $this;
-    }
-
-    /**
-     * Get product entity link field
-     *
-     * @return string
-     */
-    private function getProductEntityLinkField()
-    {
-        if (!$this->productEntityLinkField) {
-            $this->productEntityLinkField = $this->getMetadataPool()
-                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
-                ->getLinkField();
-        }
-        return $this->productEntityLinkField;
     }
 }
