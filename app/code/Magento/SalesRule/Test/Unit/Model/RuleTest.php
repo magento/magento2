@@ -48,11 +48,13 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->conditionCombineFactoryMock = $this->getMockBuilder(
             '\Magento\SalesRule\Model\Rule\Condition\CombineFactory'
         )->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
 
         $this->condProdCombineFactoryMock = $this->getMockBuilder(
             '\Magento\SalesRule\Model\Rule\Condition\Product\CombineFactory'
         )->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
 
         $this->model = $objectManager->getObject(
@@ -149,5 +151,21 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->willReturn([]);
 
         return $conditionMock;
+    }
+
+    public function testGetConditionsFieldSetId()
+    {
+        $formName = 'form_name';
+        $this->model->setId(100);
+        $expectedResult = 'form_namerule_conditions_fieldset_100';
+        $this->assertEquals($expectedResult, $this->model->getConditionsFieldSetId($formName));
+    }
+
+    public function testGetActionsFieldSetId()
+    {
+        $formName = 'form_name';
+        $this->model->setId(100);
+        $expectedResult = 'form_namerule_actions_fieldset_100';
+        $this->assertEquals($expectedResult, $this->model->getActionsFieldSetId($formName));
     }
 }
