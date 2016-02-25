@@ -6,7 +6,6 @@
 namespace Magento\Usps\Test\Unit\Model;
 
 use Magento\Quote\Model\Quote\Address\RateRequest;
-use Magento\Store\Model\StoreManager;
 
 class CarrierTest extends \PHPUnit_Framework_TestCase
 {
@@ -179,12 +178,31 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
             $this->returnValue(file_get_contents(__DIR__ . '/_files/success_usps_response_rates.xml'))
         );
         // for setRequest
+        $data = require __DIR__ . '/_files/rates_request_data.php';
         $request = $this->helper->getObject(
             'Magento\Quote\Model\Quote\Address\RateRequest',
-            require __DIR__ . '/_files/rates_request_data.php'
+            ['data' => $data[0]]
         );
 
         $this->assertNotEmpty($this->carrier->collectRates($request)->getAllRates());
+    }
+
+    public function testCollectRatesWithUnavailableService()
+    {
+        $expectedCount = 5;
+
+        $this->scope->expects(static::once())
+            ->method('isSetFlag')
+            ->willReturn(true);
+
+        $this->httpResponse->expects(static::once())
+            ->method('getBody')
+            ->willReturn(file_get_contents(__DIR__ . '/_files/response_rates.xml'));
+
+        $data = require __DIR__ . '/_files/rates_request_data.php';
+        $request = $this->helper->getObject(RateRequest::class, ['data' => $data[1]]);
+        $rates = $this->carrier->collectRates($request)->getAllRates();
+        static::assertEquals($expectedCount, count($rates));
     }
 
     public function testReturnOfShipment()
