@@ -96,8 +96,8 @@ class ConfigFactory
             $configDataObject = $this->designConfigDataFactory->create();
             $configDataObject->setPath($metadata['path']);
             $configDataObject->setFieldConfig($metadata);
-            if (isset($data[$name])) {
-                $configDataObject->setValue($data[$name]);
+            if (isset($data[$name]) || isset($metadata['default'])) {
+                $configDataObject->setValue(isset($data[$name]) ? $data[$name] : $metadata['default']);
             }
             $configData[] = $configDataObject;
         }
