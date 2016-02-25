@@ -171,7 +171,7 @@ define([
             this.attributes(attributes);
             this.initImageUpload();
             this.disableConfigurableAttributes(attributes);
-            this.showPrice();
+            //this.showPrice();
             this.handleValue(variations);
         },
         changeButtonWizard: function () {
