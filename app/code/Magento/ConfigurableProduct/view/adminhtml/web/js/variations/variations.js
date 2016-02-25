@@ -29,7 +29,7 @@ define([
             fullAttributes: [],
             rowIndexToEdit: false,
             productAttributesMap: null,
-            value: {},
+            value: [],
             modules: {
                 associatedProductGrid: '${ $.configurableProductGrid }'
             },
@@ -166,20 +166,38 @@ define([
                 option.value + '][' + field + ']';
         },
         render: function (variations, attributes) {
-            this.changeButtonWizard();
+            //this.changeButtonWizard();
             this.populateVariationMatrix(variations);
             this.attributes(attributes);
             this.initImageUpload();
             this.disableConfigurableAttributes(attributes);
             this.showPrice();
-            this.handleValue();
+            this.handleValue(variations);
         },
         changeButtonWizard: function () {
             var $button = $('[data-action=open-steps-wizard] [data-role=button-label]');
             $button.text($button.attr('data-edit-label'));
         },
-        handleValue: function () {
-            this.value = {};
+        handleValue: function (variations) {
+            this.value([]);
+            _.each(variations, function (variation) {
+                var attributes = _.reduce(variation.options, function (memo, option) {
+                    var attribute = {};
+                    attribute[option['attribute_code']] = option.value;
+
+                    return _.extend(memo, attribute);
+                }, {});
+                this.value.push(_.extend(variation, {
+                    productId: variation.productId || null,
+                    name: variation.name || variation.sku,
+                    weight: variation.weight,
+                    attribute: JSON.stringify(attributes),
+                    variationKey: this.getVariationKey(variation.options),
+                    editable: variation.editable === undefined ? !variation.productId : variation.editable,
+                    productUrl: this.buildProductUrl(variation.productId),
+                    status: variation.status === undefined ? 1 : parseInt(variation.status, 10)
+                }));
+            }, this);
         },
 
 
