@@ -102,16 +102,4 @@ class Kernel
         }
         return $this->fullPageCache;
     }
-
-    /**
-     * @param \Magento\PageCache\Model\Cache\Type $cache
-     * @throws LocalizedException
-     */
-    public function setCache(\Magento\PageCache\Model\Cache\Type $cache)
-    {
-        if ($this->fullPageCache) {
-            throw new LocalizedException(new Phrase('fullPageCache is already set'));
-        }
-        $this->fullPageCache = $cache;
-    }
 }
