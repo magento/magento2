@@ -14,37 +14,30 @@ namespace Magento\Catalog\Model\Category\Attribute\Backend;
 class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
+     * Logger
+     *
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
     /**
-     * Core file storage database
+     * Image uploader helper
      *
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @var \Magento\Catalog\Helper\ImageUploader
      */
-    protected $coreFileStorageDatabase = null;
-
-    /**
-     * Media Directory object (writable).
-     *
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
-     */
-    protected $mediaDirectory;
+    protected $imageUploaderHelper;
 
     /**
      * Image constructor.
+     *
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
-     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\Catalog\Helper\ImageUploader $imageUploaderHelper
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
-        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
-        \Magento\Framework\Filesystem $filesystem
+        \Magento\Catalog\Helper\ImageUploader $imageUploaderHelper
     ) {
-        $this->coreFileStorageDatabase = $coreFileStorageDatabase;
-        $this->mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
+        $this->imageUploaderHelper = $imageUploaderHelper;
         $this->logger = $logger;
     }
 
@@ -56,9 +49,6 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
      */
     public function afterSave($object)
     {
-        $realPath = 'catalog/category/';
-        $tmpPath = 'catalog/tmp/category/';
-
         $value = $object->getData($this->getAttribute()->getName() . '_additional_data');
 
         if (is_array($value) && !empty($value['delete'])) {
@@ -69,20 +59,9 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         if (isset($value[0]['name']) && isset($value[0]['tmp_name'])) {
             try {
-                $tmpImagePath = rtrim($tmpPath, '/') . '/' . ltrim($value[0]['name'], '/');
-                $newImagePath = rtrim($realPath, '/') . '/' . ltrim($value[0]['name'], '/');
+                $result = $this->imageUploaderHelper->moveFileFromTmp($value[0]['name']);
 
-                $this->coreFileStorageDatabase->copyFile(
-                    $tmpImagePath,
-                    $newImagePath
-                );
-
-                $this->mediaDirectory->renameFile(
-                    $tmpImagePath,
-                    $newImagePath
-                );
-
-                $object->setData($this->getAttribute()->getName(), $value[0]['name']);
+                $object->setData($this->getAttribute()->getName(), $result);
                 $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getName());
             } catch (\Exception $e) {
                 if ($e->getCode() != \Magento\MediaStorage\Model\File\Uploader::TMP_NAME_EMPTY) {
