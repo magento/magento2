@@ -3,13 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\DownloadableImportExport\Model\Export\Product\Type;
+namespace Magento\DownloadableImportExport\Model;
 
-use Magento\CatalogImportExport\Model\Export\AbstractProductExportTestCase;
+use Magento\CatalogImportExport\Model\AbstractProductExportImportTestCase;
 
-class DownloadableTest extends AbstractProductExportTestCase
+class DownloadableTest extends AbstractProductExportImportTestCase
 {
-    public function exportDataProvider()
+    public function exportImportDataProvider()
     {
         return [
             'downloadable-product' => [

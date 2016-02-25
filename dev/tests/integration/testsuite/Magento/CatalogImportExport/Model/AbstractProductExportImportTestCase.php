@@ -3,11 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogImportExport\Model\Export;
+namespace Magento\CatalogImportExport\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class AbstractProductExportTestCase extends \PHPUnit_Framework_TestCase
+class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\CatalogImportExport\Model\Export\Product
@@ -59,7 +59,7 @@ class AbstractProductExportTestCase extends \PHPUnit_Framework_TestCase
      * @param string $fixture
      * @param string[] $skus
      * @param string[] $skippedAttributes
-     * @dataProvider exportDataProvider
+     * @dataProvider exportImportDataProvider
      */
     public function testExport($fixture, $skus, $skippedAttributes = [])
     {
@@ -81,7 +81,9 @@ class AbstractProductExportTestCase extends \PHPUnit_Framework_TestCase
         $origProductData = [];
         while (isset($skus[$index])) {
             $ids[$index] = $productRepository->get($skus[$index])->getEntityId();
-            $origProductData[$index] = $this->objectManager->create('Magento\Catalog\Model\Product')->load($ids[$index])->getData();
+            $origProductData[$index] = $this->objectManager->create('Magento\Catalog\Model\Product')
+                ->load($ids[$index])
+                ->getData();
             $index++;
         }
 
@@ -118,9 +120,15 @@ class AbstractProductExportTestCase extends \PHPUnit_Framework_TestCase
 
         while ($index > 0) {
             $index--;
-            $newProductData = $this->objectManager->create('Magento\Catalog\Model\Product')->load($ids[$index])->getData();
+            $newProductData = $this->objectManager->create('Magento\Catalog\Model\Product')
+                ->load($ids[$index])
+                ->getData();
             $this->assertEquals(count($origProductData[$index]), count($newProductData));
-            $this->assertEqualsOtherThanSkippedAttributes($origProductData[$index], $newProductData, $skippedAttributes);
+            $this->assertEqualsOtherThanSkippedAttributes(
+                $origProductData[$index],
+                $newProductData,
+                $skippedAttributes
+            );
         }
     }
 
@@ -136,6 +144,82 @@ class AbstractProductExportTestCase extends \PHPUnit_Framework_TestCase
                     'Assert value at key - ' . $key . ' failed'
                 );
             }
+        }
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     *
+     * @param string $fixture
+     * @param string[] $skus
+     * @dataProvider exportImportDataProvider
+     */
+    public function testImportDelete($fixture, $skus)
+    {
+        $fixturePath = $this->fileSystem->getDirectoryRead(DirectoryList::ROOT)
+            ->getAbsolutePath('/dev/tests/integration/testsuite/' . $fixture);
+        include $fixturePath;
+
+        $this->executeImportDeleteTest($skus);
+    }
+
+    protected function executeImportDeleteTest($skus)
+    {
+        $defaultProductData = $this->objectManager->create('Magento\Catalog\Model\Product')
+            ->load(100)
+            ->getData();
+        $productRepository = $this->objectManager->create(
+            'Magento\Catalog\Api\ProductRepositoryInterface'
+        );
+        $index = 0;
+        $ids = [];
+        $origProductData = [];
+        while (isset($skus[$index])) {
+            $ids[$index] = $productRepository->get($skus[$index])->getEntityId();
+            $origProductData[$index] = $this->objectManager->create('Magento\Catalog\Model\Product')
+                ->load($ids[$index])
+                ->getData();
+            $index++;
+        }
+
+        $csvfile = uniqid('importdelete_') . '.csv';
+
+        $this->model->setWriter(
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                'Magento\ImportExport\Model\Export\Adapter\Csv',
+                ['fileSystem' => $this->fileSystem, 'destination' => $csvfile]
+            )
+        );
+        $this->assertNotEmpty($this->model->export());
+
+        /** @var \Magento\CatalogImportExport\Model\Import\Product $importModel */
+        $importModel = $this->objectManager->create(
+            'Magento\CatalogImportExport\Model\Import\Product'
+        );
+        $directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $source = $this->objectManager->create(
+            '\Magento\ImportExport\Model\Import\Source\Csv',
+            [
+                'file' => $csvfile,
+                'directory' => $directory
+            ]
+        );
+        $errors = $importModel->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE, 'entity' => 'catalog_product']
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0, 'Product import error, imported from file:' . $csvfile);
+        $importModel->importData();
+
+        while ($index > 0) {
+            $index--;
+            $newProduct = $this->objectManager->create('Magento\Catalog\Model\Product')->load($ids[$index]);
+            $newProductData = $newProduct->getData();
+            $this->assertEquals($defaultProductData, $newProductData);
         }
     }
 }
