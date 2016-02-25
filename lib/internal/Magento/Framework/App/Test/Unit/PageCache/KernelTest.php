@@ -38,7 +38,12 @@ class KernelTest extends \PHPUnit_Framework_TestCase
             $this->getMock('Magento\Framework\App\PageCache\Identifier', [], [], '', false);
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
         $this->kernel = new Kernel($this->cacheMock, $this->identifierMock, $this->requestMock);
-        $this->kernel->setCache($this->fullPageCacheMock);
+
+        $reflection = new \ReflectionClass('\Magento\Framework\App\PageCache\Kernel');
+        $reflectionProperty = $reflection->getProperty('fullPageCache');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->kernel, $this->fullPageCacheMock);
+
         $this->responseMock = $this->getMockBuilder(
             'Magento\Framework\App\Response\Http'
         )->setMethods(

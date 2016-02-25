@@ -46,7 +46,11 @@ class FlushAllCacheTest extends \PHPUnit_Framework_TestCase
             $this->_configMock,
             $this->_cacheMock
         );
-        $this->_model->setCache($this->fullPageCacheMock);
+
+        $reflection = new \ReflectionClass('\Magento\PageCache\Observer\FlushAllCache');
+        $reflectionProperty = $reflection->getProperty('fullPageCache');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->_model, $this->fullPageCacheMock);
     }
 
     /**
