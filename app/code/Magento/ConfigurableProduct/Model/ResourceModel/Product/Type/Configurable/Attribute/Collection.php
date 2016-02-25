@@ -314,10 +314,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * @inheritdoc
      */
-    function __sleep()
+    public function __sleep()
     {
         return array_diff(
-             parent::__sleep(),
+            parent::__sleep(),
             [
                 '_product',
                 '_catalogData',
@@ -331,7 +331,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * @inheritdoc
      */
-    function __wakeup()
+    public function __wakeup()
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
