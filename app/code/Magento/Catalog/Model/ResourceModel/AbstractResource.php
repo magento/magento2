@@ -99,7 +99,7 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
     protected function _isCallableAttributeInstance($instance, $method, $args)
     {
         if ($instance instanceof \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
-            && ($method == 'beforeSave' || $method = 'afterSave')
+            && ($method == 'beforeSave' || $method == 'afterSave')
         ) {
             $attributeCode = $instance->getAttribute()->getAttributeCode();
             if (isset($args[0]) && $args[0] instanceof \Magento\Framework\DataObject && $args[0]->getData($attributeCode) === false) {
@@ -465,19 +465,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         $this->load($origObject, $object->getData($this->getEntityIdField()));
 
         return $origObject;
-    }
-
-    /**
-     * Check is attribute value empty
-     *
-     * @param AbstractAttribute $attribute
-     * @param mixed $value
-     * @return bool
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    protected function _isAttributeValueEmpty(AbstractAttribute $attribute, $value)
-    {
-        return $value === false;
     }
 
     /**
