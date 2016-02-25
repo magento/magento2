@@ -60,6 +60,9 @@ define([
             },
             tracks: {
                 displayMode: true
+            },
+            statefull: {
+                displayMode: true
             }
         },
 

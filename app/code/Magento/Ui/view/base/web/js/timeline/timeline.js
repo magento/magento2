@@ -19,7 +19,8 @@ define([
             dateFormat: 'YYYY-MM-DD hh:mm:ss',
             headerFormat: 'ddd MM/DD',
             detailsFormat: 'DD/MM/YYYY hh:mm:ss',
-            minDays: 4 * 7,
+            scale: 1,
+            minDays: 28,
             displayMode: 'timeline',
             displayModes: {
                 timeline: {
@@ -32,6 +33,12 @@ define([
                 component: 'Magento_Ui/js/timeline/timeline-view',
                 name: '${ $.name }_view',
                 model: '${ $.name }'
+            },
+            tracks: {
+                scale: true
+            },
+            statefull: {
+                scale: true
             },
             range: {}
         },
@@ -200,7 +207,7 @@ define([
                 i           = -1;
 
             if (totalDays < this.minDays) {
-                totalDays += this.minDays - totalDays;
+                totalDays += this.minDays - totalDays - 1;
             }
 
             while (++i <= totalDays) {

@@ -16,6 +16,7 @@ define([
         defaults: {
             selectors: {
                 content: '.timeline-content',
+                timeUnit: '.timeline-unit',
                 item: '.timeline-item:not([data-role=no-data-msg])',
                 event: '.timeline-event'
             }
@@ -31,7 +32,10 @@ define([
                 this,
                 'initContent',
                 'initItem',
+                'initTimeUnit',
                 'getItemBindings',
+                'updateItemsPosition',
+                'onScaleChange',
                 'onEventElementRender',
                 'onWindowResize',
                 'onContentScroll',
@@ -40,24 +44,46 @@ define([
                 'onToEndClick'
             );
 
-            this._super();
-
-            this.model = registry.get(this.model);
-
-            this.model.source.on('reloaded', this.onDataReloaded);
-
-            $.async({
-                selector: this.selectors.content,
-                component: this.model
-            }, this.initContent);
-
-            $(window).on('resize', this.onWindowResize);
+            this._super()
+                .initModel()
+                .waitContent();
 
             return this;
         },
 
         /**
-         * Initializes timelines' content container element.
+         * Applies listeners for the model properties changes.
+         *
+         * @returns {TimelineView} Chainable.
+         */
+        initModel: function () {
+            var model = registry.get(this.model);
+
+            model.on('scale', this.onScaleChange);
+            model.source.on('reloaded', this.onDataReloaded);
+
+            this.model = model;
+
+            return this;
+        },
+
+        /**
+         * Applies DOM watcher for the
+         * content element rendering.
+         *
+         * @returns {TimelineView} Chainable.
+         */
+        waitContent: function () {
+            $.async({
+                selector: this.selectors.content,
+                component: this.model
+            }, this.initContent);
+
+            return this;
+        },
+
+        /**
+         * Initializes timelines' content element.
          *
          * @param {HTMLElement} content
          * @returns {TimelineView} Chainable.
@@ -66,9 +92,11 @@ define([
             this.$content = $(content);
 
             this.$content.on('scroll', this.onContentScroll);
+            $(window).on('resize', this.onWindowResize);
 
             $.async(this.selectors.item, content, this.initItem);
             $.async(this.selectors.event, content, this.onEventElementRender);
+            $.async(this.selectors.timeUnit, content, this.initTimeUnit);
 
             return this;
         },
@@ -90,8 +118,36 @@ define([
         },
 
         /**
+         * Initializes timeline unit element.
+         *
+         * @param {HTMLElement} elem
+         * @returns {TimelineView} Chainable.
+         */
+        initTimeUnit: function (elem) {
+            $(elem).bindings(this.getTimeUnitBindings());
+
+            return this;
+        },
+
+        /**
+         * Returns object width additional bindings
+         * for a timeline unit element.
+         *
+         * @returns {Object}
+         */
+        getTimeUnitBindings: function () {
+            return {
+                style: {
+                    width: ko.computed(function () {
+                        return this.getTimeUnitWidth() + '%';
+                    }.bind(this))
+                }
+            };
+        },
+
+        /**
          * Returns object with additional
-         * bindings for timeline item.
+         * bindings for a timeline item element.
          *
          * @param {Object} ctx
          * @returns {Object}
@@ -100,18 +156,23 @@ define([
             return {
                 style: {
                     width: ko.computed(function () {
-                        var record = ctx.$row();
-
-                        return this.getItemWidth(record);
+                        return this.getItemWidth(ctx.$row()) + '%';
                     }.bind(this)),
 
                     'margin-left': ko.computed(function () {
-                        var record = ctx.$row();
-
-                        return this.getItemMargin(record);
+                        return this.getItemMargin(ctx.$row()) + '%';
                     }.bind(this))
                 }
             };
+        },
+
+        /**
+         * Calculates width in percents of a timeline unit element.
+         *
+         * @returns {Number}
+         */
+        getTimeUnitWidth: function () {
+            return 100 / 7 / this.model.scale;
         },
 
         /**
@@ -127,7 +188,7 @@ define([
                 days = this.model.getDaysLength(record);
             }
 
-            return 100 / 7 * days + '%';
+            return this.getTimeUnitWidth()  * days;
         },
 
         /**
@@ -143,7 +204,7 @@ define([
                 offset = this.model.getStartDelta(record);
             }
 
-            return 100 / 7 * offset + '%';
+            return this.getTimeUnitWidth() * offset;
         },
 
         /**
@@ -268,6 +329,13 @@ define([
             var elem = event.originalEvent.currentTarget;
 
             this.toEndOf(elem);
+        },
+
+        /**
+         * Handler of the scale value 'change' event.
+         */
+        onScaleChange: function () {
+            _.defer(this.updateItemsPosition);
         },
 
         /**
