@@ -579,7 +579,6 @@ class BundlePanel extends AbstractModifier
                                 'sortOrder' => 100,
                                 'validation' => [
                                     'validate-number' => true,
-                                    'validate-digits' => true,
                                 ],
                             ],
                         ],
