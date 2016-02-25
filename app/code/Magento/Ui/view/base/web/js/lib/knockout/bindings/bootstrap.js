@@ -32,6 +32,7 @@ define(function (require) {
         collapsible:    require('./collapsible'),
         staticChecked:  require('./staticChecked'),
         simpleChecked:  require('./simple-checked'),
+        bindHtml:       require('./bind-html'),
         repeat:         require('knockoutjs/knockout-repeat'),
         fastForEach:    require('knockoutjs/knockout-fast-foreach')
     };
