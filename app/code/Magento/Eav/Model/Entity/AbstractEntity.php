@@ -206,20 +206,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     protected $objectRelationProcessor;
 
     /**
-     * Product metadata pool
-     *
-     * @var \Magento\Framework\Model\Entity\MetadataPool
-     */
-    private $metadataPool;
-
-    /**
-     * Product entity link field
-     *
-     * @var string
-     */
-    private $productEntityLinkField;
-
-    /**
      * @param Context $context
      * @param array $data
      */
@@ -1913,50 +1899,5 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     protected function _isAttributeValueEmpty(AbstractAttribute $attribute, $value)
     {
         return $attribute->isValueEmpty($value);
-    }
-
-    /**
-     * Get product metadata pool
-     *
-     * @return \Magento\Framework\Model\Entity\MetadataPool
-     */
-    protected function getMetadataPool()
-    {
-        if (!$this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\Entity\MetadataPool');
-        }
-        return $this->metadataPool;
-    }
-
-    /**
-     * Set product Metadata pool
-     *
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
-     * @return void
-     * @throws \LogicException
-     * @deprecated
-     */
-    public function setMetadataPool(\Magento\Framework\Model\Entity\MetadataPool $metadataPool)
-    {
-        if ($this->metadataPool) {
-            throw new \LogicException("Metadata pool is already set");
-        }
-        $this->metadataPool = $metadataPool;
-    }
-
-    /**
-     * Get product entity link field
-     *
-     * @return string
-     */
-    protected function getProductEntityLinkField()
-    {
-        if (!$this->productEntityLinkField) {
-            $this->productEntityLinkField = $this->getMetadataPool()
-                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
-                ->getLinkField();
-        }
-        return $this->productEntityLinkField;
     }
 }
