@@ -61,16 +61,12 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      * @param string[] $skippedAttributes
      * @dataProvider exportImportDataProvider
      */
-    public function testExport($fixtures, $skus, $skippedAttributes = [])
+    public function testExport($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
-        foreach ($fixtures as $fixture) {
-            $fixturePath = $this->fileSystem->getDirectoryRead(DirectoryList::ROOT)
-                ->getAbsolutePath('/dev/tests/integration/testsuite/' . $fixture);
-            include $fixturePath;
-        }
-
+        $this->executeFixtures($fixtures);
         $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
         $this->executeExportTest($skus, $skippedAttributes);
+        $this->executeFixtures($rollbackFixtures);
     }
 
     protected function executeExportTest($skus, $skippedAttributes)
@@ -158,15 +154,11 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      * @param string[] $skus
      * @dataProvider exportImportDataProvider
      */
-    public function testImportDelete($fixtures, $skus)
+    public function testImportDelete($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
-        foreach ($fixtures as $fixture) {
-            $fixturePath = $this->fileSystem->getDirectoryRead(DirectoryList::ROOT)
-                ->getAbsolutePath('/dev/tests/integration/testsuite/' . $fixture);
-            include $fixturePath;
-        }
-
+        $this->executeFixtures($fixtures);
         $this->executeImportDeleteTest($skus);
+        $this->executeFixtures($rollbackFixtures);
     }
 
     protected function executeImportDeleteTest($skus)
@@ -224,6 +216,21 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
             $newProduct = $this->objectManager->create('Magento\Catalog\Model\Product')->load($ids[$index]);
             $newProductData = $newProduct->getData();
             $this->assertEquals($defaultProductData, $newProductData);
+        }
+    }
+
+    /**
+     * Execute fixtures
+     *
+     * @param array $fixtures
+     * @return void
+     */
+    private function executeFixtures($fixtures)
+    {
+        foreach ($fixtures as $fixture) {
+            $fixturePath = $this->fileSystem->getDirectoryRead(DirectoryList::ROOT)
+                ->getAbsolutePath('/dev/tests/integration/testsuite/' . $fixture);
+            include $fixturePath;
         }
     }
 }
