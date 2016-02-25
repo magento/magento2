@@ -6,7 +6,7 @@
 namespace Magento\Bundle\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\BundleSku;
-use Magento\Catalog\Model\AttributeConstantsInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 
 /**
  * Class BundleSkuTest
@@ -31,7 +31,7 @@ class BundleSkuTest extends AbstractModifierTest
         $sourceMeta = [
             'testGroup' => [
                 'children' => [
-                    AttributeConstantsInterface::CODE_SKU => [
+                    ProductAttributeInterface::CODE_SKU => [
                         'componentType' => 'testComponent',
                     ],
                 ]

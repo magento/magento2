@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Model\AttributeConstantsInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Ui\Component\Form;
 use Magento\Catalog\Ui\DataProvider\Grouper;
@@ -55,8 +55,8 @@ class General extends AbstractModifier
         $data = $this->customizeAdvancedPriceFormat($data);
         $modelId = $this->locator->getProduct()->getId();
 
-        if (!isset($data[$modelId][static::DATA_SOURCE_DEFAULT][AttributeConstantsInterface::CODE_STATUS])) {
-            $data[$modelId][static::DATA_SOURCE_DEFAULT][AttributeConstantsInterface::CODE_STATUS] = '1';
+        if (!isset($data[$modelId][static::DATA_SOURCE_DEFAULT][ProductAttributeInterface::CODE_STATUS])) {
+            $data[$modelId][static::DATA_SOURCE_DEFAULT][ProductAttributeInterface::CODE_STATUS] = '1';
         }
 
         return $data;
@@ -73,10 +73,10 @@ class General extends AbstractModifier
         $model = $this->locator->getProduct();
         $modelId = $model->getId();
         $numberFields = [
-            AttributeConstantsInterface::CODE_PRICE,
-            AttributeConstantsInterface::CODE_WEIGHT,
-            AttributeConstantsInterface::CODE_SPECIAL_PRICE,
-            AttributeConstantsInterface::CODE_COST,
+            ProductAttributeInterface::CODE_PRICE,
+            ProductAttributeInterface::CODE_WEIGHT,
+            ProductAttributeInterface::CODE_SPECIAL_PRICE,
+            ProductAttributeInterface::CODE_COST,
         ];
 
         foreach ($numberFields as $fieldCode) {
@@ -113,14 +113,14 @@ class General extends AbstractModifier
     protected function customizeAdvancedPriceFormat(array $data)
     {
         $modelId = $this->locator->getProduct()->getId();
-        $fieldCode = AttributeConstantsInterface::CODE_TIER_PRICE;
+        $fieldCode = ProductAttributeInterface::CODE_TIER_PRICE;
 
         if (isset($data[$modelId][self::DATA_SOURCE_DEFAULT][$fieldCode])) {
             foreach ($data[$modelId][self::DATA_SOURCE_DEFAULT][$fieldCode] as &$value) {
-                $value[AttributeConstantsInterface::CODE_TIER_PRICE_FIELD_PRICE] =
-                    $this->formatNumber($value[AttributeConstantsInterface::CODE_TIER_PRICE_FIELD_PRICE]);
-                $value[AttributeConstantsInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY] =
-                    (int)$value[AttributeConstantsInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
+                $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE] =
+                    $this->formatNumber($value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE]);
+                $value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY] =
+                    (int)$value[ProductAttributeInterface::CODE_TIER_PRICE_FIELD_PRICE_QTY];
             }
         }
 
@@ -182,7 +182,7 @@ class General extends AbstractModifier
             ],
         ];
 
-        $path = $this->getElementArrayPath($meta, AttributeConstantsInterface::CODE_STATUS);
+        $path = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_STATUS);
         $meta = $this->arrayManager->merge($path, $meta, $switcherConfig);
 
         return $meta;
@@ -196,9 +196,9 @@ class General extends AbstractModifier
      */
     protected function customizeWeightField(array $meta)
     {
-        if ($weightPath = $this->getElementArrayPath($meta, AttributeConstantsInterface::CODE_WEIGHT)) {
+        if ($weightPath = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_WEIGHT)) {
             if ($this->locator->getProduct()->getTypeId() !== \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL) {
-                $weightPath = $this->getElementArrayPath($meta, AttributeConstantsInterface::CODE_WEIGHT);
+                $weightPath = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_WEIGHT);
                 $meta = $this->arrayManager->merge(
                     $weightPath,
                     $meta,
@@ -206,7 +206,7 @@ class General extends AbstractModifier
                         'arguments' => [
                             'data' => [
                                 'config' => [
-                                    'dataScope' => AttributeConstantsInterface::CODE_WEIGHT,
+                                    'dataScope' => ProductAttributeInterface::CODE_WEIGHT,
                                     'validation' => [
                                         'validate-number' => true,
                                     ],
@@ -224,7 +224,7 @@ class General extends AbstractModifier
 
                 $containerPath = $this->getElementArrayPath(
                     $meta,
-                    static::CONTAINER_PREFIX . AttributeConstantsInterface::CODE_WEIGHT
+                    static::CONTAINER_PREFIX . ProductAttributeInterface::CODE_WEIGHT
                 );
                 $meta = $this->arrayManager->merge($containerPath, $meta, [
                     'arguments' => [
@@ -237,7 +237,7 @@ class General extends AbstractModifier
                 ]);
 
                 $hasWeightPath = $this->arrayManager->slicePath($weightPath, 0, -1) . '/'
-                    . AttributeConstantsInterface::CODE_HAS_WEIGHT;
+                    . ProductAttributeInterface::CODE_HAS_WEIGHT;
                 $meta = $this->arrayManager->set(
                     $hasWeightPath,
                     $meta,
@@ -269,7 +269,7 @@ class General extends AbstractModifier
 
                 $meta = $this->grouper->groupMetaElements(
                     $meta,
-                    [AttributeConstantsInterface::CODE_WEIGHT, AttributeConstantsInterface::CODE_HAS_WEIGHT],
+                    [ProductAttributeInterface::CODE_WEIGHT, ProductAttributeInterface::CODE_HAS_WEIGHT],
                     [
                         'meta' => [
                             'arguments' => [
@@ -282,7 +282,7 @@ class General extends AbstractModifier
                                 ],
                             ],
                         ],
-                        'targetCode' => 'container_' . AttributeConstantsInterface::CODE_WEIGHT
+                        'targetCode' => 'container_' . ProductAttributeInterface::CODE_WEIGHT
                     ]
                 );
             }
@@ -360,10 +360,10 @@ class General extends AbstractModifier
     protected function customizeNameListeners(array $meta)
     {
         $listeners = [
-            AttributeConstantsInterface::CODE_SKU,
-            AttributeConstantsInterface::CODE_SEO_FIELD_META_TITLE,
-            AttributeConstantsInterface::CODE_SEO_FIELD_META_KEYWORD,
-            AttributeConstantsInterface::CODE_SEO_FIELD_META_DESCRIPTION,
+            ProductAttributeInterface::CODE_SKU,
+            ProductAttributeInterface::CODE_SEO_FIELD_META_TITLE,
+            ProductAttributeInterface::CODE_SEO_FIELD_META_KEYWORD,
+            ProductAttributeInterface::CODE_SEO_FIELD_META_DESCRIPTION,
         ];
         foreach ($listeners as $listener) {
             $listenerPath = $this->getElementArrayPath($meta, $listener);
@@ -383,7 +383,7 @@ class General extends AbstractModifier
             $meta = $this->arrayManager->merge($listenerPath, $meta, $importsConfig);
         }
 
-        $skuPath = $this->getElementArrayPath($meta, AttributeConstantsInterface::CODE_SKU);
+        $skuPath = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_SKU);
         $meta = $this->arrayManager->merge(
             $skuPath,
             $meta,
@@ -399,7 +399,7 @@ class General extends AbstractModifier
             ]
         );
 
-        $namePath = $this->getElementArrayPath($meta, AttributeConstantsInterface::CODE_NAME);
+        $namePath = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_NAME);
 
         return $this->arrayManager->merge(
             $namePath,

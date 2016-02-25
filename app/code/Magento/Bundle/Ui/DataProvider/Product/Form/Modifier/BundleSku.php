@@ -5,8 +5,8 @@
  */
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Catalog\Model\AttributeConstantsInterface;
 use Magento\Ui\Component\Form;
 use Magento\Framework\Stdlib\ArrayManager;
 
@@ -36,15 +36,15 @@ class BundleSku extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        if ($groupCode = $this->getGroupCodeByField($meta, AttributeConstantsInterface::CODE_SKU)) {
-            $skuPath = $this->getElementArrayPath($meta, AttributeConstantsInterface::CODE_SKU);
+        if ($groupCode = $this->getGroupCodeByField($meta, ProductAttributeInterface::CODE_SKU)) {
+            $skuPath = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_SKU);
             $meta[$groupCode]['children'][self::CODE_SKU_TYPE] = [
                 'arguments' => [
                     'data' => [
                         'config' => [
                             'sortOrder' => $this->getNextAttributeSortOrder(
                                 $meta,
-                                [AttributeConstantsInterface::CODE_SKU],
+                                [ProductAttributeInterface::CODE_SKU],
                                 self::SORT_ORDER
                             ),
                             'formElement' => Form\Element\Checkbox::NAME,
