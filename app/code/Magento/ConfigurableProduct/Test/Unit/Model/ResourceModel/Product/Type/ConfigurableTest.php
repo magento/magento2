@@ -78,6 +78,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->willReturn(3);
         $this->configurable->saveProducts($mainProduct, [1, 2, 3]);
     }
+
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
