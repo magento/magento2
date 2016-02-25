@@ -170,9 +170,12 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
                     '0'
                 );
             });
-        } catch (\Exception $e) {
+        } catch (\LocalizedException $e) {
             $response->setError(true);
             $response->setMessage($e->getMessage());
+        } catch (\Exception $e) {
+            $response->setError(true);
+            $response->setMessage(__('Unable to add attribute'));
         }
 
         return $this->resultJsonFactory->create()->setJsonData($response->toJson());
@@ -188,12 +191,12 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
     private function addBasicAttributeSearchFilters(
         SearchCriteriaBuilder $attributeSearchCriteriaBuilder
     ) {
-        $attributesIds = (array)$this->getRequest()->getParam('attributesIds', []);
+        $attributeIds = (array)$this->getRequest()->getParam('attributeIds', []);
 
-        if (!empty($attributesIds['selected'])) {
+        if (!empty($attributeIds['selected'])) {
             return $attributeSearchCriteriaBuilder->addFilter(
                 'attribute_id',
-                [$attributesIds['selected']],
+                [$attributeIds['selected']],
                 'in'
             );
         }
