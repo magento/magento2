@@ -276,7 +276,7 @@ class DataGrid extends Grid
     public function selectMassAction($massActionSelection)
     {
         //Checks which dropdown is visible and uses it.
-        for ($i=1; $i<=2; $i++) {
+        for ($i = 1; $i <= 2; $i++) {
             $massActionButton = '(' . $this->massActionToggleButton . ")[$i]";
             $massActionList = '(' . $this->massActionToggleList . ")[$i]";
             if ($this->_rootElement->find($massActionButton, Locator::SELECTOR_XPATH)->isVisible()) {
