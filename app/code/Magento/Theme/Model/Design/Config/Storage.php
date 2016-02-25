@@ -75,8 +75,13 @@ class Storage
         $designConfig = $this->configFactory->create($scope, $scopeId);
         $fieldsData = $designConfig->getExtensionAttributes()->getDesignConfigData();
         foreach ($fieldsData as &$fieldData) {
-            $value = $this->scopeConfig->getValue($fieldData->getPath(), $scope, $scopeId);
-            $fieldData->setValue($this->valueProcessor->process($value, $fieldData->getPath()));
+            $value = $this->valueProcessor->process(
+                $this->scopeConfig->getValue($fieldData->getPath(), $scope, $scopeId),
+                $fieldData->getPath()
+            );
+            if ($value !== null) {
+                $fieldData->setValue($value);
+            }
         }
         return $designConfig;
     }
