@@ -21,7 +21,7 @@
 @media print {
     * {
         background: transparent !important;
-        color: black !important;
+        color: @color-black !important;
         text-shadow: none !important;
         -webkit-filter: none !important; // Use in 41 Chrome
         filter: none !important;
@@ -112,16 +112,16 @@
         .order-items {
             .order-gift-message {
                 &:not(.expanded-content) {
-                    visibility: visible;
                     height: auto;
+                    visibility: visible;
                 }
             }
         }
     }
 
     .column.main {
-        width: 100% !important;
         float: none !important;
+        width: 100% !important;
     }
 
     .breadcrumbs {
