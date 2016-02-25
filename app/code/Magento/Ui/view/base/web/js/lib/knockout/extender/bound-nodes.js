@@ -83,6 +83,32 @@ define([
         }
     }
 
+    /**
+     * Returns node's first sibling of 'element' type within the common component scope
+     *
+     * @param {HTMLElement} node
+     * @returns {HTMLElement}
+     */
+    function getElement(node) {
+        var elem,
+            ctx = ko.dataFor(node);
+
+        while (node.nextSibling) {
+            node = node.nextSibling;
+
+            if (ko.dataFor(node) !== ctx) {
+                break;
+            }
+
+            if (node.nodeType === 1) {
+                elem = node;
+                break;
+            }
+        }
+
+        return elem;
+    }
+
     wrapper.extend(ko, {
 
         /**
@@ -94,6 +120,10 @@ define([
         applyBindings: function (orig, ctx, node) {
             var result = orig(),
                 data;
+
+            if (node && node.nodeType === 8) {
+                node = getElement(node);
+            }
 
             if (!node || node.nodeType !== 1) {
                 return result;
