@@ -91,12 +91,12 @@ class SortbyTest extends \PHPUnit_Framework_TestCase
             'attribute does not exist' => [
                 self::DEFAULT_ATTRIBUTE_CODE,
                 [],
-                false,
+                null,
             ],
             'attribute sort by empty' => [
                 'available_sort_by',
                 ['available_sort_by' => null],
-                '',
+                null,
             ],
             'attribute sort by' => [
                 'available_sort_by',

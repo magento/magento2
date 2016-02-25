@@ -43,6 +43,11 @@ class PaymentDataBuilder implements BuilderInterface
     const MERCHANT_ACCOUNT_ID = 'merchantAccountId';
 
     /**
+     * Order ID
+     */
+    const ORDER_ID = 'orderId';
+
+    /**
      * @var Config
      */
     private $config;
@@ -72,12 +77,14 @@ class PaymentDataBuilder implements BuilderInterface
         $paymentDO = $this->subjectReader->readPayment($buildSubject);
 
         $payment = $paymentDO->getPayment();
+        $order = $paymentDO->getOrder();
 
         $result = [
             self::AMOUNT => $this->formatPrice($this->subjectReader->readAmount($buildSubject)),
             self::PAYMENT_METHOD_NONCE => $payment->getAdditionalInformation(
                 DataAssignObserver::PAYMENT_METHOD_NONCE
             ),
+            self::ORDER_ID => $order->getOrderIncrementId()
         ];
 
         $merchantAccountId = $this->config->getValue(Config::KEY_MERCHANT_ACCOUNT_ID);

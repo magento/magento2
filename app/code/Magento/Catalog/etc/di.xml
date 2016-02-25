@@ -477,6 +477,9 @@
     <type name="Magento\Catalog\Api\ProductRepositoryInterface">
         <plugin name="transactionWrapper" type="Magento\Catalog\Model\Plugin\ProductRepository\TransactionWrapper" sortOrder="-1"/>
     </type>
+    <type name="Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend">
+        <plugin name="attributeValidation" type="Magento\Catalog\Plugin\Model\Attribute\Backend\AttributeValidation"/>
+    </type>
     <type name="Magento\Catalog\Model\CategoryRepository">
         <arguments>
             <argument name="categoryResource" xsi:type="object">Magento\Catalog\Model\ResourceModel\Category\Proxy</argument>
@@ -600,4 +603,5 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation"  shared="false"/>
 </config>
