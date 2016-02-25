@@ -830,7 +830,7 @@ define([
         ],
         'validate-file-type': [
             function (name, types) {
-                var extension = name.split('.').pop();
+                var extension = name.split('.').pop().toLowerCase();
 
                 if (types && typeof types === 'string') {
                     types = types.split(' ');

@@ -34,6 +34,11 @@ class BackendModelFactory extends ValueFactory
     protected $collectionFactory;
 
     /**
+     * @var array
+     */
+    protected $backendTypes = [];
+
+    /**
      * @param ObjectManagerInterface $objectManager
      * @param MetadataProvider $metadataProvider
      * @param CollectionFactory $collectionFactory
@@ -106,13 +111,16 @@ class BackendModelFactory extends ValueFactory
      */
     protected function getBackendTypeByPath($path)
     {
-        $metadata = $this->metadataProvider->get();
-        $index = array_search($path, array_column($metadata, 'path'));
-        $backendType = $this->_instanceName;
-        if ($index !== false && isset(array_values($metadata)[$index]['backend_model'])) {
-            $backendType = array_values($metadata)[$index]['backend_model'];
+        if (!isset($this->backendTypes[$path])) {
+            $metadata = $this->metadataProvider->get();
+            $index = array_search($path, array_column($metadata, 'path'));
+            $backendType = $this->_instanceName;
+            if ($index !== false && isset(array_values($metadata)[$index]['backend_model'])) {
+                $backendType = array_values($metadata)[$index]['backend_model'];
+            }
+            $this->backendTypes[$path] = $backendType;
         }
-        return $backendType;
+        return $this->backendTypes[$path];
     }
 
     /**

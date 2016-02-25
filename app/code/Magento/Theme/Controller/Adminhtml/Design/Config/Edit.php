@@ -67,7 +67,7 @@ class Edit extends Action
         /** @var ResultPage $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Theme::design_config');
-        $resultPage->getConfig()->getTitle()->prepend(__($this->getScopeTitle()));
+        $resultPage->getConfig()->getTitle()->prepend(__('%1', $this->getScopeTitle()));
         return $resultPage;
     }
 
@@ -84,7 +84,7 @@ class Edit extends Action
         if ($scope != ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
             $scopeResolver = $this->scopeResolverPool->get($scope);
             $scopeObject = $scopeResolver->getScope($scopeId);
-            return __($scopeObject->getName());
+            return __('%1', $scopeObject->getName());
         }
 
         return __('Global');

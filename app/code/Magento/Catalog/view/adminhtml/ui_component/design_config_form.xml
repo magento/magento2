@@ -30,7 +30,7 @@
                             <item name="formElement" xsi:type="string">fileUploader</item>
                             <item name="componentType" xsi:type="string">fileUploader</item>
                             <item name="notice" xsi:type="string" translate="true">Allowed file types: jpeg, gif, png.</item>
-                            <item name="maxFileSize" xsi:type="number">982000</item>
+                            <item name="maxFileSize" xsi:type="number">2097152</item>
                             <item name="allowedExtensions" xsi:type="string">jpg jpeg gif png svg</item>
                             <item name="uploaderConfig" xsi:type="array">
                                 <item name="url" xsi:type="string">theme/design_config_fileUploader/save</item>
@@ -88,7 +88,7 @@
                             <item name="formElement" xsi:type="string">fileUploader</item>
                             <item name="componentType" xsi:type="string">fileUploader</item>
                             <item name="notice" xsi:type="string" translate="true">Allowed file types: jpeg, gif, png.</item>
-                            <item name="maxFileSize" xsi:type="number">982000</item>
+                            <item name="maxFileSize" xsi:type="number">2097152</item>
                             <item name="allowedExtensions" xsi:type="string">jpg jpeg gif png svg</item>
                             <item name="uploaderConfig" xsi:type="array">
                                 <item name="url" xsi:type="string">theme/design_config_fileUploader/save</item>
@@ -146,7 +146,7 @@
                             <item name="formElement" xsi:type="string">fileUploader</item>
                             <item name="componentType" xsi:type="string">fileUploader</item>
                             <item name="notice" xsi:type="string" translate="true">Allowed file types: jpeg, gif, png.</item>
-                            <item name="maxFileSize" xsi:type="number">982000</item>
+                            <item name="maxFileSize" xsi:type="number">2097152</item>
                             <item name="allowedExtensions" xsi:type="string">jpg jpeg gif png svg</item>
                             <item name="uploaderConfig" xsi:type="array">
                                 <item name="url" xsi:type="string">theme/design_config_fileUploader/save</item>

@@ -146,7 +146,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with($this->designConfig);
         $this->messageManager->expects($this->once())
             ->method('addSuccess')
-            ->with(__('Configuration has been saved'));
+            ->with(__('You saved the configuration.'));
         $this->dataPersistor->expects($this->once())
             ->method('clear')
             ->with('theme_design_config');

@@ -367,6 +367,7 @@ define([
          */
         restoreToDefault: function () {
             var defaultValue = utils.copy(this.default);
+
             defaultValue.map(this.processFile, this);
             this.value(defaultValue);
         },
@@ -376,6 +377,7 @@ define([
          */
         setDifferedFromDefault: function () {
             var value = utils.copy(this.value());
+
             this.isDifferedFromDefault(!_.isEqual(value, this.default));
         }
     });

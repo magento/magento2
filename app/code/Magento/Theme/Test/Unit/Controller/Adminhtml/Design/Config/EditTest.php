@@ -134,7 +134,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $pageTitle->expects($this->once())
             ->method('prepend')
-            ->with(__($scopeName))
+            ->with(__('%1', $scopeName))
             ->willReturnSelf();
 
         $pageConfig = $this->getMockBuilder('Magento\Framework\View\Page\Config')
@@ -196,7 +196,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $pageTitle->expects($this->once())
             ->method('prepend')
-            ->with(__($scopeName))
+            ->with(__('%1', $scopeName))
             ->willReturnSelf();
 
         $pageConfig = $this->getMockBuilder('Magento\Framework\View\Page\Config')
