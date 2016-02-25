@@ -5,7 +5,6 @@
  */
 namespace Magento\AdvancedPricingImportExport\Model\Import;
 
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Import;
 
@@ -25,6 +24,11 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
+     * @var \Magento\Framework\Filesystem
+     */
+    protected $fileSystem;
+
+    /**
      * Expected Product Tier Price mapping with data
      *
      * @var array
@@ -34,6 +38,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->fileSystem = $this->objectManager->get('Magento\Framework\Filesystem');
         $this->model = $this->objectManager->create('Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing');
         $this->expectedTierPrice = [
             'AdvancedPricingSimple 1' => [
@@ -118,6 +123,68 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             foreach ($tierPriceCollection as $tierPrice) {
                 $this->assertContains($tierPrice->getData(), $this->expectedTierPrice[$sku]);
             }
+        }
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     */
+    public function testImportDelete()
+    {
+        $skus = ['simple'];
+        $productRepository = $this->objectManager->create(
+            'Magento\Catalog\Api\ProductRepositoryInterface'
+        );
+        $index = 0;
+        $ids = [];
+        $origPricingData = [];
+        while (isset($skus[$index])) {
+            $ids[$index] = $productRepository->get($skus[$index])->getId();
+            $origPricingData[$index] = $this->objectManager->create('Magento\Catalog\Model\Product')->load($ids[$index])->getTierPrices();
+            $index++;
+        }
+
+        $csvfile = uniqid('importexport_') . '.csv';
+
+        /** @var \Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing $exportModel */
+        $exportModel = $this->objectManager->create(
+            'Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing'
+        );
+        $exportModel->setWriter(
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                'Magento\ImportExport\Model\Export\Adapter\Csv',
+                ['fileSystem' => $this->fileSystem, 'destination' => $csvfile]
+            )
+        );
+        $this->assertNotEmpty($exportModel->export());
+
+        $directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $source = $this->objectManager->create(
+            '\Magento\ImportExport\Model\Import\Source\Csv',
+            [
+                'file' => $csvfile,
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->model->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE,
+                'entity' => 'advanced_pricing'
+            ]
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0, 'Advanced Pricing import error, imported from file:' . $csvfile);
+        $this->model->importData();
+
+        while ($index > 0) {
+            $index--;
+            $newPricingData = $this->objectManager->create('Magento\Catalog\Model\Product')->load($ids[$index])->getTierPrices();
+            $this->assertEquals(0, count($newPricingData));
         }
     }
 }

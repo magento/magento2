@@ -39,20 +39,11 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      */
     public function testExport()
     {
-        $fixture = 'Magento/Catalog/_files/product_simple.php';
         $skus = ['simple'];
-        $fixturePath = $this->fileSystem->getDirectoryRead(DirectoryList::ROOT)
-            ->getAbsolutePath('/dev/tests/integration/testsuite/' . $fixture);
-        include $fixturePath;
-
-        $this->executeExportTest($skus);
-    }
-
-    protected function executeExportTest($skus)
-    {
         $productRepository = $this->objectManager->create(
             'Magento\Catalog\Api\ProductRepositoryInterface'
         );
@@ -75,7 +66,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertNotEmpty($this->model->export());
 
-        /** @var \Magento\CatalogImportExport\Model\Import\Product $importModel */
+        /** @var \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing $importModel */
         $importModel = $this->objectManager->create(
             'Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing'
         );

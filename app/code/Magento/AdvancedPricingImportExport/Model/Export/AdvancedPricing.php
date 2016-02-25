@@ -142,8 +142,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             $attributeColFactory,
             $_typeFactory,
             $linkTypeProvider,
-            $rowCustomizer,
-            $metadataPool
+            $rowCustomizer
         );
     }
 
