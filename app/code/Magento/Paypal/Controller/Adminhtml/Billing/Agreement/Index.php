@@ -27,5 +27,4 @@ class Index extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
         $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Billing Agreements'));
         $this->_view->renderLayout();
     }
-
 }

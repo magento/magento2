@@ -28,5 +28,4 @@ abstract class Term extends Action
             ->addBreadcrumb(__('Search'), __('Search'));
         return $resultPage;
     }
-
 }
