@@ -93,7 +93,7 @@ class ScopeTest extends \PHPUnit_Framework_TestCase
                 ['scope_id', null, $scopeId],
             ]);
 
-        $this->assertEquals(__('%1', $scopeTypeName), $this->block->getScopeTitle());
+        $this->assertEquals($scopeTypeName, $this->block->getScopeTitle()->render());
     }
 
     protected function initContext()

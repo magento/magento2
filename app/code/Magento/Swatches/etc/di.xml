@@ -58,6 +58,7 @@
                 <item name="watermark_swatch_image_position" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/swatch_image_position</item>
                     <item name="fieldset" xsi:type="string">other_settings/watermark/swatch_image</item>
+                    <item name="default" xsi:type="string">stretch</item>
                 </item>
             </argument>
         </arguments>

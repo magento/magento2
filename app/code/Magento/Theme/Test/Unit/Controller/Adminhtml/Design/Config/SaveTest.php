@@ -199,7 +199,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('Exception message')));
         $this->messageManager->expects($this->once())
             ->method('addError')
-            ->with(__('Exception message'));
+            ->with(__('Exception message')->render());
 
         $this->dataPersistor->expects($this->once())
             ->method('set')
