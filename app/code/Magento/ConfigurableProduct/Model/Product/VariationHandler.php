@@ -5,8 +5,8 @@
  */
 namespace Magento\ConfigurableProduct\Model\Product;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Catalog\Model\Product\Type as ProductType;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Variation Handler
