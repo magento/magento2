@@ -5,8 +5,8 @@
  */
 namespace Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Catalog\Model\AttributeConstantsInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Framework\Stdlib\ArrayManager;
@@ -50,7 +50,7 @@ class DownloadablePanel extends AbstractModifier
     {
         $model = $this->locator->getProduct();
 
-        $data[$model->getId()][AttributeConstantsInterface::CODE_IS_DOWNLOADABLE] =
+        $data[$model->getId()][ProductAttributeInterface::CODE_IS_DOWNLOADABLE] =
             ($model->getTypeId() === Type::TYPE_DOWNLOADABLE) ? '1' : '0';
 
         return $data;
@@ -95,7 +95,7 @@ class DownloadablePanel extends AbstractModifier
             'visible' => false,
             'imports' => [
                 'visible' => '${$.provider}:' . self::DATA_SCOPE_PRODUCT . '.'
-                    . AttributeConstantsInterface::CODE_HAS_WEIGHT
+                    . ProductAttributeInterface::CODE_HAS_WEIGHT
             ],
         ];
 
@@ -109,18 +109,18 @@ class DownloadablePanel extends AbstractModifier
      */
     protected function addCheckboxIsDownloadable()
     {
-        $checkboxPath = Composite::CHILDREN_PATH . '/' . AttributeConstantsInterface::CODE_IS_DOWNLOADABLE;
+        $checkboxPath = Composite::CHILDREN_PATH . '/' . ProductAttributeInterface::CODE_IS_DOWNLOADABLE;
         $checkboxConfig['arguments']['data']['config'] = [
             'dataType' => Form\Element\DataType\Number::NAME,
             'formElement' => Form\Element\Checkbox::NAME,
             'componentType' => Form\Field::NAME,
             'component' => 'Magento_Downloadable/js/components/is-downloadable-handler',
             'description' => __('Is this downloadable Product?'),
-            'dataScope' => AttributeConstantsInterface::CODE_IS_DOWNLOADABLE,
+            'dataScope' => ProductAttributeInterface::CODE_IS_DOWNLOADABLE,
             'sortOrder' => 10,
             'imports' => [
                 'disabled' => '${$.provider}:' . self::DATA_SCOPE_PRODUCT . '.'
-                    . AttributeConstantsInterface::CODE_HAS_WEIGHT
+                    . ProductAttributeInterface::CODE_HAS_WEIGHT
             ],
             'valueMap' => [
                 'false' => '0',
@@ -134,7 +134,7 @@ class DownloadablePanel extends AbstractModifier
             'formElement' => Form\Element\Hidden::NAME,
             'componentType' => Form\Field::NAME,
             'value' => '1',
-            'dataScope' => AttributeConstantsInterface::CODE_IS_DOWNLOADABLE,
+            'dataScope' => ProductAttributeInterface::CODE_IS_DOWNLOADABLE,
             'sortOrder' => 10,
         ];
 

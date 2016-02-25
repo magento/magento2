@@ -11,9 +11,6 @@ use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\DownloadablePanel
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Model\AttributeConstantsInterface;
-use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\Composite;
-use Magento\Ui\Component\Container;
 use Magento\Ui\Component\Form;
 
 /**
@@ -85,7 +82,7 @@ class DownloadablePanelTest extends \PHPUnit_Framework_TestCase
             ->willReturn($typeId);
         $resultData = [
             $productId => [
-                AttributeConstantsInterface::CODE_IS_DOWNLOADABLE => $isDownloadable
+                ObjectManagerHelper::CODE_IS_DOWNLOADABLE => $isDownloadable
             ]
         ];
 
