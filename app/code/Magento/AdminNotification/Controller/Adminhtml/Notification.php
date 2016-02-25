@@ -9,7 +9,6 @@ namespace Magento\AdminNotification\Controller\Adminhtml;
 
 abstract class Notification extends \Magento\Backend\App\AbstractAction
 {
-
     /**
      * Authorization level of a basic admin session
      */
