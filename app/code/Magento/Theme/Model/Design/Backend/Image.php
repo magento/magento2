@@ -84,7 +84,7 @@ class Image extends File
         $value = reset($values) ?: [];
         if (!isset($value['file'])) {
              throw new LocalizedException(
-                 __('%1 does not contain field \'file\'', $this->getData('field_config/field') )
+                 __('%1 does not contain field \'file\'', $this->getData('field_config/field'))
              );
         }
         if (isset($value['exists'])) {
