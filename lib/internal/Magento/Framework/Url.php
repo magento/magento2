@@ -57,6 +57,7 @@ namespace Magento\Framework;
  * - H: route_url
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class Url extends \Magento\Framework\DataObject implements \Magento\Framework\UrlInterface
 {
