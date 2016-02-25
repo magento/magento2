@@ -106,6 +106,16 @@
                     <item name="source" xsi:type="string">catalog_rule</item>
                     <item name="dataScope" xsi:type="string">is_active</item>
                 </item>
+                <item name="options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="value" xsi:type="number">1</item>
+                        <item name="label" xsi:type="string" translate="true">Active</item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="value" xsi:type="number">0</item>
+                        <item name="label" xsi:type="string" translate="true">Inactive</item>
+                    </item>
+                </item>
             </argument>
         </field>
         <field name="website_ids">
@@ -124,6 +134,7 @@
                         <item name="description" xsi:type="string">What is this?</item>
                     </item>
                 </item>
+                <item name="options" xsi:type="object">Magento\CatalogRule\Model\Rule\WebsitesOptionsProvider</item>
             </argument>
         </field>
         <field name="customer_group_ids">
@@ -138,6 +149,7 @@
                     <item name="source" xsi:type="string">catalog_rule</item>
                     <item name="dataScope" xsi:type="string">customer_group_ids</item>
                 </item>
+                <item name="options" xsi:type="object">Magento\CatalogRule\Model\Rule\CustomerGroupsOptionsProvider</item>
             </argument>
         </field>
         <field name="from_date">
@@ -256,6 +268,7 @@
                         </item>
                     </item>
                 </item>
+                <item name="options" xsi:type="object">Magento\CatalogRule\Model\Rule\Action\SimpleActionOptionsProvider</item>
             </argument>
         </field>
         <field name="discount_amount">
@@ -282,6 +295,16 @@
                     <item name="value" xsi:type="string">0</item>
                     <item name="source" xsi:type="string">catalog_rule</item>
                     <item name="dataScope" xsi:type="string">stop_rules_processing</item>
+                </item>
+                <item name="options" xsi:type="array">
+                    <item name="0" xsi:type="array">
+                        <item name="value" xsi:type="number">1</item>
+                        <item name="label" xsi:type="string" translate="true">Yes</item>
+                    </item>
+                    <item name="1" xsi:type="array">
+                        <item name="value" xsi:type="number">0</item>
+                        <item name="label" xsi:type="string" translate="true">No</item>
+                    </item>
                 </item>
             </argument>
         </field>
