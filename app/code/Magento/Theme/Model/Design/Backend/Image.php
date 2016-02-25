@@ -84,7 +84,7 @@ class Image extends File
         $value = reset($values) ?: [];
         if (!isset($value['file'])) {
              throw new LocalizedException(
-                 __($this->getData('field_config/field') . ' does not contain field \'file\'')
+                 __('%1 does not contain field \'file\'', $this->getData('field_config/field') )
              );
         }
         if (isset($value['exists'])) {
@@ -113,7 +113,7 @@ class Image extends File
     public function afterLoad()
     {
         $value = $this->getValue();
-        if ($value) {
+        if ($value && !is_array($value)) {
             $fileName = '/' . $this->uploadDir . '/' . $value;
             $stat = $this->_mediaDirectory->stat($fileName);
             $this->setValue([

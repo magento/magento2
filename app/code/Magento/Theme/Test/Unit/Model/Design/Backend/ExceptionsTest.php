@@ -62,4 +62,27 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
         $this->model->setValue($value);
         $this->model->beforeSave();
     }
+
+    public function testAfterLoad()
+    {
+        $this->model->setValue(
+            [
+                [
+                    'value' => 'value',
+                    'search' => 'qwe',
+                    'record_id' => 1
+                ],
+            ]
+        );
+        $this->model->afterLoad();
+        $this->assertEquals(
+            [
+                [
+                    'value' => 'value',
+                    'search' => 'qwe',
+                ],
+            ],
+            $this->model->getValue()
+        );
+    }
 }

@@ -61,7 +61,7 @@ class Exceptions extends ArraySerialized
             foreach (['search', 'value'] as $fieldName) {
                 if (!isset($row[$fieldName])) {
                     throw new \Magento\Framework\Exception\LocalizedException(
-                        __($this->getData('field_config/fieldset') . ' does not contain field \'%1\'', $fieldName)
+                        __('%1 does not contain field \'%2\'', $this->getData('field_config/fieldset'), $fieldName)
                     );
                 }
             }
@@ -132,6 +132,22 @@ class Exceptions extends ArraySerialized
         }
 
         return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function afterLoad()
+    {
+        parent::afterLoad();
+        $values = $this->getValue();
+        foreach ($values as &$value) {
+            if (isset($value['record_id'])) {
+                unset($value['record_id']);
+            }
+        }
+        $this->setValue($values);
+        return $this;
     }
 
     /**

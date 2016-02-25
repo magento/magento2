@@ -42,7 +42,7 @@ class Scope extends Template
         if ($scope != ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
             $scopeResolver = $this->scopeResolverPool->get($scope);
             $scopeObject = $scopeResolver->getScope($scopeId);
-            return __($scopeObject->getScopeTypeName());
+            return __('%1', $scopeObject->getScopeTypeName());
         }
 
         return __('Default');

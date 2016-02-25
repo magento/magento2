@@ -70,7 +70,7 @@ class Save extends Action
         try {
             $designConfigData = $this->configFactory->create($scope, $scopeId, $data);
             $this->designConfigRepository->save($designConfigData);
-            $this->messageManager->addSuccess(__('Configuration has been saved'));
+            $this->messageManager->addSuccess(__('You saved the configuration.'));
 
             $this->dataPersistor->clear('theme_design_config');
 
@@ -79,7 +79,7 @@ class Save extends Action
         } catch (LocalizedException $e) {
             $messages = explode("\n", $e->getMessage());
             foreach ($messages as $message) {
-                $this->messageManager->addError(__($message));
+                $this->messageManager->addError(__('%1', $message));
             }
         } catch (\Exception $e) {
             $this->messageManager->addException(

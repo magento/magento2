@@ -11,9 +11,8 @@ namespace Magento\SalesRule\Model\ResourceModel\Rule;
 use Magento\Quote\Model\Quote\Address;
 
 /**
- * Sales Rules resource collection model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * Sales Rules resource collection model.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\AbstractCollection
 {
@@ -71,6 +70,52 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     {
         $this->_init('Magento\SalesRule\Model\Rule', 'Magento\SalesRule\Model\ResourceModel\Rule');
         $this->_map['fields']['rule_id'] = 'main_table.rule_id';
+    }
+
+    /**
+     * @param string $entityType
+     * @param string $objectField
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return void
+     */
+    protected function mapAssociatedEntities($entityType, $objectField)
+    {
+        if (!$this->_items) {
+            return;
+        }
+
+        $entityInfo = $this->_getAssociatedEntityInfo($entityType);
+        $ruleIdField = $entityInfo['rule_id_field'];
+        $entityIds = $this->getColumnValues($ruleIdField);
+
+        $select = $this->getConnection()->select()->from(
+            $this->getTable($entityInfo['associations_table'])
+        )->where(
+            $ruleIdField . ' IN (?)',
+            $entityIds
+        );
+
+        $associatedEntities = $this->getConnection()->fetchAll($select);
+
+        array_map(function ($associatedEntity) use ($entityInfo, $ruleIdField, $objectField) {
+            $item = $this->getItemByColumnValue($ruleIdField, $associatedEntity[$ruleIdField]);
+            $itemAssociatedValue = $item->getData($objectField) === null ? [] : $item->getData($objectField);
+            $itemAssociatedValue[] = $associatedEntity[$entityInfo['entity_id_field']];
+            $item->setData($objectField, $itemAssociatedValue);
+        }, $associatedEntities);
+    }
+
+    /**
+     * @return $this
+     * @throws \Exception
+     */
+    protected function _afterLoad()
+    {
+        $this->mapAssociatedEntities('website', 'website_ids');
+        $this->mapAssociatedEntities('customer_group', 'customer_group_ids');
+
+        $this->setFlag('add_websites_to_result', false);
+        return parent::_afterLoad();
     }
 
     /**
@@ -251,6 +296,29 @@ class Collection extends \Magento\Rule\Model\ResourceModel\Rule\Collection\Abstr
     {
         $this->addFieldToFilter('main_table.use_auto_generation', ['neq' => 1]);
 
+        return $this;
+    }
+
+    /**
+     * Limit rules collection by specific customer group
+     *
+     * @param int $customerGroupId
+     * @return $this
+     */
+    public function addCustomerGroupFilter($customerGroupId)
+    {
+        $entityInfo = $this->_getAssociatedEntityInfo('customer_group');
+        if (!$this->getFlag('is_customer_group_joined')) {
+            $this->setFlag('is_customer_group_joined', true);
+            $this->getSelect()->join(
+                ['customer_group' => $this->getTable($entityInfo['associations_table'])],
+                $this->getConnection()
+                    ->quoteInto('customer_group.' . $entityInfo['entity_id_field'] . ' = ?', $customerGroupId)
+                . ' AND main_table.' . $entityInfo['rule_id_field'] . ' = customer_group.'
+                . $entityInfo['rule_id_field'],
+                []
+            );
+        }
         return $this;
     }
 }

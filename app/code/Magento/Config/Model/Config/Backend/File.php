@@ -96,7 +96,7 @@ class File extends \Magento\Framework\App\Config\Value
                 $uploader->addValidateCallback('size', $this, 'validateMaxSize');
                 $result = $uploader->save($uploadDir);
             } catch (\Exception $e) {
-                throw new \Magento\Framework\Exception\LocalizedException(__($e->getMessage()));
+                throw new \Magento\Framework\Exception\LocalizedException(__('%1', $e->getMessage()));
             }
 
             $filename = $result['file'];
