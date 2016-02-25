@@ -81,7 +81,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         $methods = [$construct];
         $methods[] = [
             'name' => '__sleep',
-            'body' => 'return array(\'_subject\', \'_isShared\');',
+            'body' => 'return [\'_subject\', \'_isShared\', \'_instanceName\'];',
             'docblock' => ['tags' => [['name' => 'return', 'description' => 'array']]],
         ];
         $methods[] = [

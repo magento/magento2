@@ -267,4 +267,24 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
         return $this->setData(self::KEY_PRODUCT_ID, $value);
     }
     //@codeCoverageIgnoreEnd
+
+    /**
+     * @inheritdoc
+     */
+    public function __sleep()
+    {
+        return array_diff(
+            parent::__sleep(),
+            ['metadataPool']
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __wakeup()
+    {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->metadataPool = $objectManager->get(MetadataPool::class);
+    }
 }
