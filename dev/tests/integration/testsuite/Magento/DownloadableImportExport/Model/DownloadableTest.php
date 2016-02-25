@@ -13,13 +13,17 @@ class DownloadableTest extends AbstractProductExportImportTestCase
     {
         return [
             'downloadable-product' => [
-                'Magento/Downloadable/_files/product_downloadable.php',
+                [
+                    'Magento/Downloadable/_files/product_downloadable.php'
+                ],
                 [
                     'downloadable-product',
                 ],
             ],
             'downloadable-product-with-files' => [
-                'Magento/Downloadable/_files/product_downloadable_with_files.php',
+                [
+                    'Magento/Downloadable/_files/product_downloadable_with_files.php'
+                ],
                 [
                     'downloadable-product',
                 ],

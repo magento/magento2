@@ -13,7 +13,9 @@ class GroupedTest extends AbstractProductExportImportTestCase
     {
         return [
             'grouped-product' => [
-                'Magento/GroupedProduct/_files/product_grouped.php',
+                [
+                    'Magento/GroupedProduct/_files/product_grouped.php'
+                ],
                 [
                     'grouped-product',
                 ]
