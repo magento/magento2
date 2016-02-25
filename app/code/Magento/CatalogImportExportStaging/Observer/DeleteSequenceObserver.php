@@ -50,6 +50,7 @@ class DeleteSequenceObserver implements \Magento\Framework\Event\ObserverInterfa
      * Delete sequence
      *
      * @param \Magento\Framework\Event\Observer $observer
+     * @return void
      * @throws LocalizedException
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
