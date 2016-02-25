@@ -161,11 +161,41 @@ class Http implements \Magento\Framework\AppInterface
             }
             $this->_response->setHttpResponseCode(500);
             $this->_response->setHeader('Content-Type', 'text/plain');
-            $this->_response->setBody($exception->getMessage() . "\n" . $exception->getTraceAsString());
+            $this->_response->setBody($this->buildContentFromException($exception));
             $this->_response->sendResponse();
             return true;
         }
         return false;
+    }
+
+    /**
+     * build content based on an exception
+     *
+     * @param \Exception $exception
+     * @return string
+     */
+    private function buildContentFromException(\Exception $exception)
+    {
+        /** @var \Exception[] $exceptions */
+        $exceptions = [];
+        do {
+            $exceptions[] = $exception;
+        } while ($exception = $exception->getPrevious());
+
+        $buffer = sprintf("%d exception(s):\n", count($exceptions));
+
+        foreach ($exceptions as $index => $exception) {
+            $buffer .= sprintf("Exception #%d (%s): %s\n", $index, get_class($exception), $exception->getMessage());
+        }
+
+        foreach ($exceptions as $index => $exception) {
+            $buffer .= sprintf(
+                "\nException #%d (%s): %s\n%s\n", $index, get_class($exception), $exception->getMessage(),
+                $exception->getTraceAsString()
+            );
+        }
+
+        return $buffer;
     }
 
     /**
