@@ -6,7 +6,7 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="controller_action_predispatch_customer_account_loginPost">
+    <event name="controller_action_predispatch_customer_account_loginpost">
         <observer name="captcha" instance="Magento\Captcha\Observer\CheckUserLoginObserver" />
     </event>
     <event name="controller_action_predispatch_customer_account_createpost">
@@ -18,7 +18,7 @@
     <event name="admin_user_authenticate_before">
         <observer name="captcha" instance="Magento\Captcha\Observer\CheckUserLoginBackendObserver" />
     </event>
-    <event name="controller_action_predispatch_checkout_onepage_saveBilling">
+    <event name="controller_action_predispatch_checkout_onepage_savebilling">
         <observer name="captcha_guest" instance="Magento\Captcha\Observer\CheckGuestCheckoutObserver" />
         <observer name="captcha_register" instance="Magento\Captcha\Observer\CheckRegisterCheckoutObserver" />
     </event>

@@ -38,7 +38,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 $config['name'] = $observerNameNode->nodeValue;
                 $eventObservers[$observerNameNode->nodeValue] = $config;
             }
-            $output[mb_strtolower($eventName)] = $eventObservers;
+            $output[$eventName] = $eventObservers;
         }
         return $output;
     }
