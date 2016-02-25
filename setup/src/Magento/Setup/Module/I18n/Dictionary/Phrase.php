@@ -275,8 +275,6 @@ class Phrase
             $string = preg_replace('/([^\\\\])' . $encloseQuote . ' ?\. ?' . $encloseQuote . '/', '$1', $string);
             $string = addslashes($string);
         }
-        $evalString = 'return ' . $encloseQuote . $string . $encloseQuote . ';';
-        $result = @eval($evalString);
-        return is_string($result) ? $result :  $string;
+        return $string;
     }
 }
