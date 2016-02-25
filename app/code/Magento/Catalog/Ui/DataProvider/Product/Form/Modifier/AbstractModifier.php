@@ -182,7 +182,10 @@ abstract class AbstractModifier implements ModifierInterface
     protected function getGroupCodeByField(array $meta, $field)
     {
         foreach ($meta as $groupCode => $groupData) {
-            if (isset($groupData['children'][$field]) || isset($groupData['children'][static::CONTAINER_PREFIX . $field])) {
+            if (
+                isset($groupData['children'][$field])
+                || isset($groupData['children'][static::CONTAINER_PREFIX . $field])
+            ) {
                 return $groupCode;
             }
         }
