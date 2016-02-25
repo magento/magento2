@@ -32,11 +32,9 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
     public static $skippedAttributes = [
         'options',
         'updated_at',
-        'extension_attributes',
         'category_ids',
         'special_from_date',
         'news_from_date',
-        'weight',
         'custom_design_from',
     ];
 
@@ -121,7 +119,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
             $newProductData = $this->objectManager->create('Magento\Catalog\Model\Product')
                 ->load($ids[$index])
                 ->getData();
-            // @todo Uncomment or remove after MAGETWO-49806 resolved
+            // @todo uncomment or remove after MAGETWO-49806 resolved
             //$this->assertEquals(count($origProductData[$index]), count($newProductData));
             $this->assertEqualsOtherThanSkippedAttributes(
                 $origProductData[$index],
@@ -134,15 +132,15 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
     private function assertEqualsOtherThanSkippedAttributes($expected, $actual, $skippedAttributes)
     {
         foreach ($expected as $key => $value) {
-            if (in_array($key, $skippedAttributes)) {
+            if (is_object($value) || in_array($key, $skippedAttributes)) {
                 continue;
-            } else {
-                $this->assertEquals(
-                    $value,
-                    $actual[$key],
-                    'Assert value at key - ' . $key . ' failed'
-                );
             }
+
+            $this->assertEquals(
+                $value,
+                $actual[$key],
+                'Assert value at key - ' . $key . ' failed'
+            );
         }
     }
 
