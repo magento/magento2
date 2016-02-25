@@ -104,7 +104,7 @@ class ValueChecker
                 }
             } else {
                 if (isset($defaultValue[$key])) {
-                    $result = $result && ($defaultValue[$key] === $elem);
+                    $result = $result && ($defaultValue[$key] == $elem);
                 } else {
                     return false;
                 }
