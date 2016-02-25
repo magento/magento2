@@ -27,11 +27,11 @@ class Product extends \Magento\Rule\Model\Condition\Product\AbstractProduct
             return $this->validateAttribute($model->getAvailableInCategories());
         }
 
-        if (!$model->hasData($attrCode) || $model->getData($attrCode) === null) {
+        $oldAttrValue = $model->getData($attrCode);
+        if ($oldAttrValue === null) {
             return false;
         }
 
-        $oldAttrValue = $model->hasData($attrCode) ? $model->getData($attrCode) : null;
         $this->_setAttributeValue($model);
 
         $result = $this->validateAttribute($model->getData($attrCode));

@@ -166,10 +166,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->product->setData('operator', '!=');
 
         $this->productModel->expects($this->once())
-            ->method('hasData')
-            ->with('color')
-            ->willReturn(true);
-        $this->productModel->expects($this->once())
             ->method('getData')
             ->with('color')
             ->willReturn(null);
