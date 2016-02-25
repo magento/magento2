@@ -333,11 +333,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function __wakeup()
     {
+        parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
         $this->_productTypeConfigurable = $objectManager->get(Configurable::class);
         $this->_catalogData = $objectManager->get(\Magento\Catalog\Helper\Data::class);
         $this->metadataPool = $objectManager->get(MetadataPool::class);
     }
-
 }

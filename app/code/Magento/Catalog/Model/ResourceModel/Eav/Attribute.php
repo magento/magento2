@@ -835,6 +835,7 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute implements
      */
     public function __wakeup()
     {
+        parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_indexerEavProcessor = $objectManager->get(\Magento\Catalog\Model\Indexer\Product\Flat\Processor::class);
         $this->_productFlatIndexerProcessor = $objectManager->get(
