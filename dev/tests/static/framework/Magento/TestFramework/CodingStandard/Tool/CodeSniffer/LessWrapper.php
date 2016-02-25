@@ -32,7 +32,6 @@ namespace Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
  * $codeSniffer->setExtensions('less/CSS');
  * ...
  *
- *
  */
 class LessWrapper extends Wrapper
 {
@@ -46,6 +45,11 @@ class LessWrapper extends Wrapper
      * @param array $values
      * @return int
      * @throws \PHP_CodeSniffer_Exception
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function process($values = [])
     {
