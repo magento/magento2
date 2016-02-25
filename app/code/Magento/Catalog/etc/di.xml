@@ -633,6 +633,7 @@
                 <item name="watermark_image_position" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/image_position</item>
                     <item name="fieldset" xsi:type="string">other_settings/watermark/image</item>
+                    <item name="default" xsi:type="string">stretch</item>
                 </item>
                 <item name="watermark_small_image_size" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/small_image_size</item>
@@ -660,10 +661,12 @@
                 <item name="watermark_small_image_position" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/small_image_position</item>
                     <item name="fieldset" xsi:type="string">other_settings/watermark/small_image</item>
+                    <item name="default" xsi:type="string">stretch</item>
                 </item>
                 <item name="watermark_thumbnail_size" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/thumbnail_size</item>
                     <item name="fieldset" xsi:type="string">other_settings/watermark/thumbnail</item>
+                    <item name="default" xsi:type="string">stretch</item>
                 </item>
                 <item name="watermark_thumbnail_imageOpacity" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/thumbnail_imageOpacity</item>
@@ -687,6 +690,7 @@
                 <item name="watermark_thumbnail_position" xsi:type="array">
                     <item name="path" xsi:type="string">design/watermark/thumbnail_position</item>
                     <item name="fieldset" xsi:type="string">other_settings/watermark/thumbnail</item>
+                    <item name="default" xsi:type="string">stretch</item>
                 </item>
             </argument>
         </arguments>
