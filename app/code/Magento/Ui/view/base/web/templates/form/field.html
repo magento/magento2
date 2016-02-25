@@ -30,11 +30,11 @@
 
         <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
 
+        <label class="admin__field-error" if="error" attr="for: uid" text="error"/>
+
         <div class="admin__field-note" if="$data.notice" attr="id: noticeId">
             <span text="notice"/>
         </div>
-
-        <label class="admin__field-error" if="error" attr="for: uid" text="error"/>
         
         <div class="admin__additional-info" if="$data.additionalInfo" html="$data.additionalInfo"></div>
 

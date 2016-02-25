@@ -10,7 +10,7 @@
 @field-fallback-reset-icon__margin-left: @field-tooltip-action__margin-left;
 @field-fallback-reset-icon__size: 1.3rem;
 @field-fallback-reset-text__font-size: 1.25rem;
-@field-fallback-reset__margin-top: @field-tooltip__margin-top;
+@field-fallback-reset__margin-top: 1rem;
 @field-fallback-reset__width: @field-tooltip__width;
 
 //
@@ -25,10 +25,11 @@
 
     > span {
         margin-left: @indent__xs;
+        position: relative;
     }
 
     &:active {
-        .scale();
+        .scale(.98);
     }
 
     &:before {
@@ -42,5 +43,9 @@
     &:hover {
         cursor: pointer;
         text-decoration: none;
+    }
+
+    &:focus {
+        background: transparent;
     }
 }
