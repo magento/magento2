@@ -137,8 +137,9 @@ define([
                 $widget.videoData = $widget.options.VideoData;
             }
 
-            $('#product-options-wrapper').find('[option-selected]').each(function (item) {
+            $('#product-options-wrapper').find('[option-selected]').each(function () {
                 var key = $(this).attr('attribute-code') + '_' + $(this).attr('option-selected');
+
                 if ($widget.options.OptionsVideoData && $widget.options.OptionsVideoData[key]) {
                     $widget.options.VideoData = $widget.options.OptionsVideoData[key];
                 } else {

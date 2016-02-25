@@ -303,7 +303,7 @@ class Matrix extends \Magento\Backend\Block\Template
                             ];
                             foreach ($attribute->getOptions() as $option) {
                                 if (!empty($option->getValue())) {
-                                    $attributes[$attribute->getAttributeId()]['options'][$option->getValue()] = [
+                                    $attributes[$attribute->getAttributeId()]['options'][] = [
                                         'attribute_code' => $attribute->getAttributeCode(),
                                         'attribute_label' => $attribute->getStoreLabel(0),
                                         'id' => $option->getValue(),
@@ -322,7 +322,7 @@ class Matrix extends \Magento\Backend\Block\Template
                             'value' => $optionId,
                         ];
                         $variationOptions[] = $variationOption;
-                        $attributes[$attribute->getAttributeId()]['chosen'][$optionId] = $variationOption;
+                        $attributes[$attribute->getAttributeId()]['chosen'][] = $variationOption;
                     }
 
                     $productMatrix[] = [
