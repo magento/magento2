@@ -71,8 +71,8 @@ class ValueChecker
     /**
      * Compare two variables
      *
-     * @param $value
-     * @param $defaultValue
+     * @param mixed $value
+     * @param mixed $defaultValue
      * @return bool
      */
     protected function isEqual ($value, $defaultValue)
