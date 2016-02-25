@@ -239,6 +239,7 @@ class Options extends Section
      * @param array|null $tabFields
      * @param SimpleElement|null $element
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getFieldsData($tabFields = null, SimpleElement $element = null)
     {
