@@ -149,10 +149,10 @@ class General extends AbstractModifier
      */
     protected function prepareFirstPanel(array $meta)
     {
-        $generalPanelName = $this->getGeneralPanelName($meta);
-
-        $meta[$generalPanelName]['arguments']['data']['config']['label'] = '';
-        $meta[$generalPanelName]['arguments']['data']['config']['collapsible'] = false;
+        if ($generalPanelCode = $this->getFirstPanelCode($meta)) {
+            $meta[$generalPanelCode]['arguments']['data']['config']['label'] = '';
+            $meta[$generalPanelCode]['arguments']['data']['config']['collapsible'] = false;
+        }
 
         return $meta;
     }
