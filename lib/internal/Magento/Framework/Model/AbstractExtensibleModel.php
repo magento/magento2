@@ -343,6 +343,7 @@ abstract class AbstractExtensibleModel extends AbstractModel implements
      */
     public function __wakeup()
     {
+        parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->extensionAttributesFactory = $objectManager->get(ExtensionAttributesFactory::class);
         $this->customAttributeFactory = $objectManager->get(AttributeValueFactory::class);

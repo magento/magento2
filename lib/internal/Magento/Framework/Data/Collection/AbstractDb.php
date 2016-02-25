@@ -892,6 +892,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
      */
     public function __wakeup()
     {
+        parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_fetchStrategy = $objectManager->get(Logger::class);
         $this->_logger = $objectManager->get(FetchStrategyInterface::class);

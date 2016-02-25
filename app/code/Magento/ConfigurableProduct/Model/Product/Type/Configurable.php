@@ -375,6 +375,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $configurableAttributes = $this->cache->load($cacheId);
             if ($configurableAttributes) {
                 $configurableAttributes = unserialize($configurableAttributes);
+                $configurableAttributes->setProductFilter($product);
             } else {
                 $configurableAttributes = $this->getConfigurableAttributeCollection($product);
                 $this->extensionAttributesJoinProcessor->process($configurableAttributes);
@@ -480,14 +481,6 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             ['group' => 'CONFIGURABLE', 'method' => __METHOD__]
         );
         if (!$product->hasData($this->_usedProducts)) {
-            if (is_null($requiredAttributeIds) && is_null($product->getData($this->_configurableAttributes))) {
-                // If used products load before attributes, we will load attributes.
-                $this->getConfigurableAttributes($product);
-                // After attributes loading products loaded too.
-                \Magento\Framework\Profiler::stop('CONFIGURABLE:' . __METHOD__);
-                return $product->getData($this->_usedProducts);
-            }
-
             $usedProducts = [];
             $collection = $this->getUsedProductCollection($product)
                 ->addAttributeToSelect('*')

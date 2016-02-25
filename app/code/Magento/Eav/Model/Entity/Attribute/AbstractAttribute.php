@@ -1266,6 +1266,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
      */
     public function __wakeup()
     {
+        parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_eavConfig = $objectManager->get(\Magento\Eav\Model\Config::class);
         $this->_eavTypeFactory = $objectManager->get(\Magento\Eav\Model\Entity\TypeFactory::class);

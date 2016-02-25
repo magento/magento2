@@ -284,6 +284,7 @@ class Attribute extends \Magento\Framework\Model\AbstractExtensibleModel impleme
      */
     public function __wakeup()
     {
+        parent::__wakeup();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->metadataPool = $objectManager->get(MetadataPool::class);
     }
