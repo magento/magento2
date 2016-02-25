@@ -44,5 +44,4 @@ abstract class Block extends \Magento\Backend\App\Action
             ->addBreadcrumb(__('Static Blocks'), __('Static Blocks'));
         return $resultPage;
     }
-
 }
