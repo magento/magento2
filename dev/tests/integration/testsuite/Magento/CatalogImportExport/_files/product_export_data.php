@@ -15,8 +15,8 @@ $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $productModel = $objectManager->create('Magento\Catalog\Model\Product');
 
 $customOptions = [
-    1 => [
-        'id' => '1',
+    [
+        'id' => 'test_option_code_1',
         'option_id' => '0',
         'sort_order' => '0',
         'title' => 'Option 1',
@@ -26,7 +26,17 @@ $customOptions = [
             1 => ['option_type_id' => -1, 'title' => 'Option 1 Value 1', 'price' => '1.00', 'price_type' => 'fixed'],
             2 => ['option_type_id' => -1, 'title' => 'Option 1 Value 2', 'price' => '2.00', 'price_type' => 'fixed']
         ]
-    ]
+    ],
+    [
+        'title' => 'test_option_code_2',
+        'type' => 'field',
+        'is_require' => true,
+        'sort_order' => 1,
+        'price' => 10.0,
+        'price_type' => 'fixed',
+        'sku' => 'sku1',
+        'max_characters' => 10,
+    ],
 ];
 
 $productModel->setTypeId(
