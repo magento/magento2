@@ -7,6 +7,7 @@ namespace Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
+use Magento\Framework\Phrase;
 use Magento\Ui\Component\Modal;
 use Magento\Ui\Component\Form;
 use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedProductType;
@@ -547,7 +548,7 @@ class Grouped extends AbstractModifier
                         'dataType' => Form\Element\DataType\Text::NAME,
                         'dataScope' => $dataScope,
                         'fit' => $fit,
-                        'label' => __($label),
+                        'label' => new Phrase($label),
                         'sortOrder' => $sortOrder,
                     ],
                 ],
