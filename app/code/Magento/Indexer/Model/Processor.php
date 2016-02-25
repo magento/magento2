@@ -52,7 +52,6 @@ class Processor
         $this->indexerFactory = $indexerFactory;
         $this->indexersFactory = $indexersFactory;
         $this->mviewProcessor = $mviewProcessor;
-        $config = $this->config->getIndexers();
     }
 
     /**
