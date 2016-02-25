@@ -89,18 +89,13 @@ define([
      * @param {HTMLElement} node
      * @returns {HTMLElement}
      */
-    function getElement(node) {
-        var elem,
-            ctx = ko.dataFor(node);
+    function getElement(node, data) {
+        var elem;
 
-        while (node.nextSibling) {
-            node = node.nextSibling;
+        while (node.nextElementSibling) {
+            node = node.nextElementSibling;
 
-            if (ko.dataFor(node) !== ctx) {
-                break;
-            }
-
-            if (node.nodeType === 1) {
+            if (node.nodeType === 1 && ko.dataFor(node) === data) {
                 elem = node;
                 break;
             }
@@ -119,17 +114,15 @@ define([
          */
         applyBindings: function (orig, ctx, node) {
             var result = orig(),
-                data;
+                data = ctx && (ctx.$data || ctx);
 
             if (node && node.nodeType === 8) {
-                node = getElement(node);
+                node = getElement(node, data);
             }
 
             if (!node || node.nodeType !== 1) {
                 return result;
             }
-
-            data = ctx && (ctx.$data || ctx);
 
             if (data && data.registerNodes) {
                 addBounded(data, node);
