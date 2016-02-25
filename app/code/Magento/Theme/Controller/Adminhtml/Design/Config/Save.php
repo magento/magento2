@@ -79,7 +79,7 @@ class Save extends Action
         } catch (LocalizedException $e) {
             $messages = explode("\n", $e->getMessage());
             foreach ($messages as $message) {
-                $this->messageManager->addError(__($message));
+                $this->messageManager->addError(__('%1', $message));
             }
         } catch (\Exception $e) {
             $this->messageManager->addException(
