@@ -112,7 +112,7 @@
                 </item>
             </argument>
         </column>
-        <column name="name">
+        <column name="name" class="Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns\Name">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
@@ -131,7 +131,7 @@
                 </item>
             </argument>
         </column>
-        <column name="price" class="Magento\Catalog\Ui\Component\Listing\Columns\Price">
+        <column name="price" class="Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns\Price">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">textRange</item>
