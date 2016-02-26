@@ -430,6 +430,16 @@ define([
          */
         userChanges: function() {
             this.valueChangedByUser = true;
+        },
+
+        /**
+         * Getter for parent name. Split string by provided parent name.
+         *
+         * @param {String} parent - parent name.
+         * @returns {String}
+         */
+        getParentName: function (parent) {
+            return this.name.split(parent)[0] + parent;
         }
     });
 });
