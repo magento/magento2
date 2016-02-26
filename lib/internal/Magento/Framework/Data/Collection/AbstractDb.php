@@ -883,7 +883,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     {
         return array_diff(
             parent::__sleep(),
-            ['_fetchStrategy', '_logger', '_select', '_conn']
+            ['_fetchStrategy', '_logger', '_select', '_conn', 'extensionAttributesJoinProcessor']
         );
     }
 
