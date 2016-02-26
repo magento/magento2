@@ -247,13 +247,6 @@ abstract class AbstractEntity
     private $metadataPool;
 
     /**
-     * Product entity link field
-     *
-     * @var string
-     */
-    private $productEntityLinkField;
-
-    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -873,20 +866,5 @@ abstract class AbstractEntity
         }
         $this->metadataPool = $metadataPool;
         return $this;
-    }
-
-    /**
-     * Get product entity link field
-     *
-     * @return string
-     */
-    protected function getProductEntityLinkField()
-    {
-        if (!$this->productEntityLinkField) {
-            $this->productEntityLinkField = $this->getMetadataPool()
-                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
-                ->getLinkField();
-        }
-        return $this->productEntityLinkField;
     }
 }

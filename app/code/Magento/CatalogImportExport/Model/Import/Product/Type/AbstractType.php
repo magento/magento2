@@ -13,6 +13,7 @@ use Magento\CatalogImportExport\Model\Import\Product;
  * Import entity abstract product type model
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractType
 {

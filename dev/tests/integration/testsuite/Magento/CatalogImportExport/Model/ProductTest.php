@@ -10,6 +10,9 @@ namespace Magento\CatalogImportExport\Model;
  */
 class ProductTest extends AbstractProductExportImportTestCase
 {
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function exportImportDataProvider()
     {
         return [
