@@ -332,7 +332,7 @@
     &._with-reset {
         > .admin__control-text,
         > .admin__control-textarea {
-            width: ~'calc(100% - @{field-fallback-reset__width} - 4px)'; // Minus space size
+            width: ~'calc(100% - @{field-fallback-reset__width} - @{field-fallback-reset-icon__margin-left} - 4px)'; // Minus space size
         }
 
         .admin__field-fallback-reset {
@@ -345,7 +345,7 @@
         &._with-tooltip {
             > .admin__control-text,
             > .admin__control-textarea {
-                width: ~'calc(100% - @{field-fallback-reset__width} - @{field-tooltip__width} - 8px)'; // Minus 2 space sizes
+                width: ~'calc(100% - @{field-fallback-reset__width} - @{field-fallback-reset-icon__margin-left} - @{field-tooltip__width} - 8px)'; // Minus 2 space sizes
             }
         }
     }

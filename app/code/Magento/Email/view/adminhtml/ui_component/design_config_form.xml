@@ -37,6 +37,9 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">email_logo_alt</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
+                        </item>
                     </item>
                 </argument>
             </field>
@@ -48,7 +51,7 @@
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">email_logo_width</item>
                         <item name="validation" xsi:type="array">
-                            <item name="validate-number" xsi:type="boolean">true</item>
+                            <item name="validate-digits" xsi:type="boolean">true</item>
                         </item>
                         <item name="notice" xsi:type="string" translate="true">Necessary only if an image has been uploaded above. Enter number of pixels, without appending "px".</item>
                     </item>
@@ -62,7 +65,7 @@
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">email_logo_height</item>
                         <item name="validation" xsi:type="array">
-                            <item name="validate-number" xsi:type="boolean">true</item>
+                            <item name="validate-digits" xsi:type="boolean">true</item>
                         </item>
                         <item name="notice" xsi:type="string" translate="true">Necessary only if an image has been uploaded above. Enter image height size in pixels without appending "px".</item>
                     </item>

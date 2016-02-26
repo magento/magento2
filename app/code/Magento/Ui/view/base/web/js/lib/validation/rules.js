@@ -845,6 +845,12 @@ define([
                 return maxSize === false || size < maxSize;
             },
             $.mage.__('File you are trying to upload exceeds maximum file size limit.')
+        ],
+        'include-java-script': [
+            function (value) {
+                return (/<script\b[^>]*>([\s\S]*?)<\/script>$/ig).test(value);
+            },
+            $.mage.__('Please use correct format to include JavaScript to the document.')
         ]
     }, function (data) {
         return {
