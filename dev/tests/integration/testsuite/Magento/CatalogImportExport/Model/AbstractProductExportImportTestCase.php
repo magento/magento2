@@ -154,6 +154,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      * @param array $fixtures
      * @param string[] $skus
      * @dataProvider exportImportDataProvider
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function testImportDelete($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {

@@ -143,7 +143,9 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $origPricingData = [];
         while (isset($skus[$index])) {
             $ids[$index] = $productRepository->get($skus[$index])->getId();
-            $origPricingData[$index] = $this->objectManager->create('Magento\Catalog\Model\Product')->load($ids[$index])->getTierPrices();
+            $origPricingData[$index] = $this->objectManager->create('Magento\Catalog\Model\Product')
+                ->load($ids[$index])
+                ->getTierPrices();
             $index++;
         }
 
@@ -178,12 +180,17 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             $source
         )->validateData();
 
-        $this->assertTrue($errors->getErrorsCount() == 0, 'Advanced Pricing import error, imported from file:' . $csvfile);
+        $this->assertTrue(
+            $errors->getErrorsCount() == 0,
+            'Advanced Pricing import error, imported from file:' . $csvfile
+        );
         $this->model->importData();
 
         while ($index > 0) {
             $index--;
-            $newPricingData = $this->objectManager->create('Magento\Catalog\Model\Product')->load($ids[$index])->getTierPrices();
+            $newPricingData = $this->objectManager->create('Magento\Catalog\Model\Product')
+                ->load($ids[$index])
+                ->getTierPrices();
             $this->assertEquals(0, count($newPricingData));
         }
     }
