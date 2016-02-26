@@ -91,7 +91,8 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue(
             $errors->getErrorsCount() == 0,
-            'Advanced Pricing import error, imported from file:' . $csvfile);
+            'Advanced Pricing import error, imported from file:' . $csvfile
+        );
         $importModel->importData();
 
         while ($index > 0) {
