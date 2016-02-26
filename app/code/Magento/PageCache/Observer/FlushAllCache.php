@@ -8,8 +8,6 @@ namespace Magento\PageCache\Observer;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Phrase;
 
 class FlushAllCache implements ObserverInterface
 {
