@@ -293,6 +293,6 @@ class InlineEdit extends \Magento\Backend\App\Action
      */
     protected function getErrorWithCustomerId($errorText)
     {
-        return '[Customer ID: ' . $this->getCustomer()->getId() . '] ' . $errorText;
+        return '[Customer ID: ' . $this->getCustomer()->getId() . '] ' . __($errorText);
     }
 }
