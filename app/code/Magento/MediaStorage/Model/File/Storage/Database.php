@@ -46,7 +46,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      *
      * @var string
      */
-    protected $_mediaBaseDirectory = null;
+    protected $mediaBaseDirectory = null;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -367,9 +367,9 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      */
     public function getMediaBaseDirectory()
     {
-        if (is_null($this->_mediaBaseDirectory)) {
-            $this->_mediaBaseDirectory = $this->_coreFileStorageDb->getMediaBaseDir();
+        if (is_null($this->mediaBaseDirectory)) {
+            $this->mediaBaseDirectory = $this->_coreFileStorageDb->getMediaBaseDir();
         }
-        return $this->_mediaBaseDirectory;
+        return $this->mediaBaseDirectory;
     }
 }
