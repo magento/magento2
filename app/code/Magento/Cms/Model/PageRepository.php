@@ -109,7 +109,10 @@ class PageRepository implements PageRepositoryInterface
         try {
             $this->resource->save($page);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__($exception->getMessage()));
+            throw new CouldNotSaveException(__(
+                'Could not save the page: %1',
+                $exception->getMessage()
+            ));
         }
         return $page;
     }
@@ -198,7 +201,10 @@ class PageRepository implements PageRepositoryInterface
         try {
             $this->resource->delete($page);
         } catch (\Exception $exception) {
-            throw new CouldNotDeleteException(__($exception->getMessage()));
+            throw new CouldNotDeleteException(__(
+                'Could not delete the page: %1',
+                $exception->getMessage()
+            ));
         }
         return true;
     }
