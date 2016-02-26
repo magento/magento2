@@ -41,6 +41,13 @@ class ImageUploader extends AbstractHelper
     protected $storeManager;
 
     /**
+     * Logger
+     *
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * Base tmp path
      *
      * @var string
@@ -69,6 +76,7 @@ class ImageUploader extends AbstractHelper
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Psr\Log\LoggerInterface $logger
      * @param string $baseTmpPath
      * @param string $basePath
      * @param string[] $allowedExtensions
@@ -79,6 +87,7 @@ class ImageUploader extends AbstractHelper
         \Magento\Framework\Filesystem $filesystem,
         \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Psr\Log\LoggerInterface $logger,
         $baseTmpPath,
         $basePath,
         $allowedExtensions
@@ -88,6 +97,7 @@ class ImageUploader extends AbstractHelper
         $this->mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
         $this->uploaderFactory = $uploaderFactory;
         $this->storeManager = $storeManager;
+        $this->logger = $logger;
         $this->baseTmpPath = $baseTmpPath;
         $this->basePath = $basePath;
         $this->allowedExtensions = $allowedExtensions;
@@ -228,7 +238,7 @@ class ImageUploader extends AbstractHelper
 
         if (!$result) {
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('File can not be moved from temporary folder to the destination folder.')
+                __('File can not be saved to the destination folder.')
             );
         }
 
@@ -248,6 +258,7 @@ class ImageUploader extends AbstractHelper
                 $relativePath = rtrim($baseTmpPath, '/') . '/' . ltrim($result['file'], '/');
                 $this->coreFileStorageDatabase->saveFile($relativePath);
             } catch (\Exception $e) {
+                $this->logger->critical($e);
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Something went wrong while saving the file(s).')
                 );

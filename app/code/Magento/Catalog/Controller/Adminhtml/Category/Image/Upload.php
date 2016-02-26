@@ -7,6 +7,9 @@ namespace Magento\Catalog\Controller\Adminhtml\Category\Image;
 
 use Magento\Framework\Controller\ResultFactory;
 
+/**
+ * Class Upload
+ */
 class Upload extends \Magento\Backend\App\Action
 {
     /**
