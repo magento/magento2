@@ -13,7 +13,7 @@
     <preference for="Magento\Framework\View\Element\UiComponent\Config\ManagerInterface" type="Magento\Ui\Model\Manager" />
     <preference for="Magento\Framework\View\Element\UiComponent\ContextInterface" type="Magento\Framework\View\Element\UiComponent\Context" />
     <preference for="Magento\Framework\View\Element\UiComponent\LayoutInterface" type="Magento\Framework\View\Layout\Generic"/>
-    <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\User\Model\Authorization\AdminSessionUserContext"/>
+    <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\Authorization\Model\CompositeUserContext"/>
     <preference for="Magento\Ui\Api\Data\BookmarkSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Ui\Api\BookmarkRepositoryInterface" type="Magento\Ui\Model\ResourceModel\BookmarkRepository"/>
     <preference for="Magento\Ui\Api\Data\BookmarkInterface" type="Magento\Ui\Model\Bookmark"/>
@@ -282,4 +282,14 @@
             <argument name="subject" xsi:type="object">uiComponentAggregatedSourceOverrideThemeFiltered</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Authorization\Model\CompositeUserContext">
+        <arguments>
+            <argument name="userContexts" xsi:type="array">
+                <item name="adminSessionUserContext" xsi:type="array">
+                    <item name="type" xsi:type="object">Magento\User\Model\Authorization\AdminSessionUserContext</item>
+                    <item name="sortOrder" xsi:type="string">30</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
