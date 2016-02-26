@@ -39,7 +39,7 @@ define([
             this._isOverflowed();
         },
 
-        _initContent: function() {
+        _initContent: function () {
             var self = this,
                 events = {};
 
@@ -47,7 +47,7 @@ define([
 
             events['click ' + this.options.button.close] = function (event) {
                 event.stopPropagation();
-                $(self.options.targetElement).dropdownDialog("close");
+                $(self.options.targetElement).dropdownDialog('close');
             };
             events['click ' + this.options.button.checkout] = $.proxy(function () {
                 var cart = customerData.get('cart'),
@@ -64,7 +64,7 @@ define([
                 }
                 location.href = this.options.url.checkout;
             }, this);
-            events['click ' + this.options.button.remove] =  function(event) {
+            events['click ' + this.options.button.remove] =  function (event) {
                 event.stopPropagation();
                 confirm({
                     content: self.options.confirmMessage,
@@ -78,14 +78,14 @@ define([
                     }
                 });
             };
-            events['keyup ' + this.options.item.qty] = function(event) {
+            events['keyup ' + this.options.item.qty] = function (event) {
                 self._showItemButton($(event.target));
             };
-            events['click ' + this.options.item.button] = function(event) {
+            events['click ' + this.options.item.button] = function (event) {
                 event.stopPropagation();
                 self._updateItemQty($(event.currentTarget));
             };
-            events['focusout ' + this.options.item.qty] = function(event) {
+            events['focusout ' + this.options.item.qty] = function (event) {
                 self._validateQty($(event.currentTarget));
             };
 
@@ -99,7 +99,7 @@ define([
          *
          * @private
          */
-        _isOverflowed: function() {
+        _isOverflowed: function () {
             var list = $(this.options.minicart.list),
                 cssOverflowClass = 'overflowed';
 
@@ -113,6 +113,7 @@ define([
         _showItemButton: function (elem) {
             var itemId = elem.data('cart-item'),
                 itemQty = elem.data('item-qty');
+
             if (this._isValidQty(itemQty, elem.val())) {
                 $('#update-cart-item-' + itemId).show('fade', 300);
             } else if (elem.val() == 0) {
@@ -128,18 +129,18 @@ define([
          * @returns {boolean}
          * @private
          */
-        _isValidQty: function(origin, changed) {
-            return (origin != changed)
-                && (changed.length > 0)
-                && (changed - 0 == changed)
-                && (changed - 0 > 0);
+        _isValidQty: function (origin, changed) {
+            return (origin != changed) &&
+                (changed.length > 0) &&
+                (changed - 0 == changed) &&
+                (changed - 0 > 0);
         },
 
         /**
          * @param {Object} elem
          * @private
          */
-        _validateQty: function(elem) {
+        _validateQty: function (elem) {
             var itemQty = elem.data('item-qty');
 
             if (!this._isValidQty(itemQty, elem.val())) {
@@ -147,12 +148,12 @@ define([
             }
         },
 
-        _hideItemButton: function(elem) {
+        _hideItemButton: function (elem) {
             var itemId = elem.data('cart-item');
             $('#update-cart-item-' + itemId).hide('fade', 300);
         },
 
-        _updateItemQty: function(elem) {
+        _updateItemQty: function (elem) {
             var itemId = elem.data('cart-item');
             this._ajax(this.options.url.update, {
                 item_id: itemId,
@@ -165,11 +166,11 @@ define([
          *
          * @param elem
          */
-        _updateItemQtyAfter: function(elem) {
+        _updateItemQtyAfter: function (elem) {
             this._hideItemButton(elem);
         },
 
-        _removeItem: function(elem) {
+        _removeItem: function (elem) {
             var itemId = elem.data('cart-item');
             this._ajax(this.options.url.remove, {
                 item_id: itemId
@@ -183,15 +184,16 @@ define([
          * @param response
          * @private
          */
-        _removeItemAfter: function(elem, response) {
+        _removeItemAfter: function (elem, response) {
         },
+
         /**
          * @param url - ajax url
          * @param data - post data for ajax call
          * @param elem - element that initiated the event
          * @param callback - callback method to execute after AJAX success
          */
-        _ajax: function(url, data, elem, callback) {
+        _ajax: function (url, data, elem, callback) {
             $.ajax({
                 url: url,
                 data: data,
@@ -205,11 +207,12 @@ define([
                     elem.attr('disabled', null);
                 }
             })
-                .done(function(response) {
+                .done(function (response) {
                     if (response.success) {
                         callback.call(this, elem, response);
                     } else {
                         var msg = response.error_message;
+
                         if (msg) {
                             alert({
                                 content: $.mage.__(msg)
@@ -217,7 +220,7 @@ define([
                         }
                     }
                 })
-                .fail(function(error) {
+                .fail(function (error) {
                     console.log(JSON.stringify(error));
                 });
         },
@@ -231,11 +234,15 @@ define([
             var self = this,
                 height = 0,
                 counter = this.options.maxItemsVisible,
-                target = $(this.options.minicart.list);
+                target = $(this.options.minicart.list),
+                outerHeight;
 
             target.children().each(function () {
-                $(this).collapsible();
-                var outerHeight = $(this).outerHeight();
+
+                if ($(this).find('.options').length > 0) {
+                    $(this).collapsible();
+                }
+                outerHeight = $(this).outerHeight();
 
                 if (counter-- > 0) {
                     height += outerHeight;
