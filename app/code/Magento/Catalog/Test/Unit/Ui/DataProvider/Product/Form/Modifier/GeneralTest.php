@@ -30,6 +30,16 @@ class GeneralTest extends AbstractModifierTest
 
     public function testModifyMeta()
     {
-        $this->assertNotEmpty($this->getModel()->modifyMeta([]));
+        $this->assertNotEmpty($this->getModel()->modifyMeta([
+            'first_panel_code' => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'label' => 'Test label',
+                        ]
+                    ],
+                ]
+            ]
+        ]));
     }
 }
