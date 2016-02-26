@@ -60,11 +60,12 @@ class MessageController
     }
 
     /**
+     * Get current date
+     *
      * @return int
      */
     private function getCurrentDate()
     {
         return (new \DateTime())->getTimestamp();
     }
-
 }

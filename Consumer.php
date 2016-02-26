@@ -108,6 +108,8 @@ class Consumer implements ConsumerInterface
     }
 
     /**
+     * Get transaction callback
+     *
      * @param QueueInterface $queue
      * @return \Closure
      */
@@ -118,20 +120,16 @@ class Consumer implements ConsumerInterface
                 $topicName = $message->getProperties()['topic_name'];
                 $allowedTopics = $this->configuration->getTopicNames();
                 $this->resource->getConnection()->beginTransaction();
-                try {
-                    $this->messageController->lock($message, $this->configuration->getConsumerName());
-                    if (in_array($topicName, $allowedTopics)) {
-                        $this->dispatchMessage($message);
-                        $this->resource->getConnection()->commit();
-                        $queue->acknowledge($message);
-                    } else {
-                        //push message back to the queue
-                        $queue->reject($message);
-                    }
-                } catch (MessageLockException $exception) {
+                $this->messageController->lock($message, $this->configuration->getConsumerName());
+                if (in_array($topicName, $allowedTopics)) {
+                    $this->dispatchMessage($message);
+                    $this->resource->getConnection()->commit();
                     $queue->acknowledge($message);
+                } else {
+                    $queue->reject($message); //push message back to the queue
                 }
-
+            } catch (MessageLockException $exception) {
+                $queue->acknowledge($message);
             } catch (\Magento\Framework\MessageQueue\ConnectionLostException $e) {
                 $this->resource->getConnection()->rollBack();
             } catch (\Exception $e) {
