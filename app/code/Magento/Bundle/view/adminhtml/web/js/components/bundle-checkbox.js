@@ -12,9 +12,9 @@ define([
     return Checkbox.extend({
         defaults: {
             clearing: false,
-            parentContainer: 'product_bundle_container',
-            parentSelections: 'bundle_selections',
-            changer: 'option_info.type'
+            parentContainer: undefined,
+            parentSelections: undefined,
+            changer: undefined
         },
 
         /**
@@ -41,23 +41,11 @@ define([
          * @inheritdoc
          */
         onUpdate: function () {
-            if (this.prefer === 'radio' && !this.clearing) {
+            if (this.prefer === 'radio' && this.checked() && !this.clearing) {
                 this.clearValues();
-            } else if (this.prefer === 'radio') {
-                this.clearing = false;
             }
 
             this._super();
-        },
-
-        /**
-         * Getter for parent name. Split string by provided parent name.
-         *
-         * @param {String} parent - parent name.
-         * @returns {String}
-         */
-        getParentName: function (parent) {
-            return this.name.split(parent)[0] + parent;
         },
 
         /**
@@ -66,16 +54,10 @@ define([
          * @param {String} type - type to change.
          */
         changeType: function (type) {
-            if (type === 'select') {
-                type = 'radio';
-            } else if (type === 'multi') {
-                type = 'checkbox';
-            }
+            var typeMap = registry.get(this.getParentName(this.parentContainer) + '.' + this.changer).typeMap;
 
-            this.prefer = type;
-            this.clear();
-            this.elementTmpl(this.templates[type]);
-            this.clearing = false;
+            this.prefer = typeMap[type];
+            this.elementTmpl(this.templates[typeMap[type]]);
         },
 
         /**
@@ -86,12 +68,13 @@ define([
                 index = this.index,
                 uid = this.uid;
 
-            this.clearing = true;
             records.elems.each(function (record) {
                 record.elems.filter(function (comp) {
                     return comp.index === index && comp.uid !== uid;
                 }).each(function (comp) {
+                    comp.clearing = true;
                     comp.clear();
+                    comp.clearing = false;
                 });
             });
         }
