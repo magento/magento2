@@ -156,9 +156,8 @@ class ExtensionAttributesGenerator extends \Magento\Framework\Code\Generator\Ent
                 $attributeType = $attributeMetadata[Converter::DATA_TYPE];
                 if (strpos($attributeType, '\\') !== false) {
                     /** Add preceding slash to class names, while leaving primitive types as is */
-                    $attributeType = $this->_getFullyQualifiedClassName($attributeType);
-                    $this->allCustomAttributes[$dataInterface][$attributeName][Converter::DATA_TYPE] =
-                        $this->_getFullyQualifiedClassName($attributeType);
+                    $attributeType = "\\" . $this->_getFullyQualifiedClassName($attributeType);
+                    $this->allCustomAttributes[$dataInterface][$attributeName][Converter::DATA_TYPE] = $attributeType;
                 }
             }
             return $this->allCustomAttributes[$dataInterface];

@@ -21,6 +21,7 @@ class DefinedClasses
      */
     public function isClassLoadable($className)
     {
+        $className = ltrim($className, "\\");
         return $this->isClassLoadableFromMemory($className) || $this->isClassLoadableFromDisc($className);
     }
 
