@@ -31,7 +31,8 @@ define([
             productAttributesMap: null,
             value: [],
             modules: {
-                associatedProductGrid: '${ $.configurableProductGrid }'
+                associatedProductGrid: '${ $.configurableProductGrid }',
+                wizardButtonElement: '${ $.wizardModalButtonName }'
             },
             links: {
                 value: '${ $.provider }:${ $.dataScopeVariations }',
@@ -167,7 +168,7 @@ define([
                 option.value + '][' + field + ']';
         },
         render: function (variations, attributes) {
-            //this.changeButtonWizard();
+            this.changeButtonWizard();
             this.populateVariationMatrix(variations);
             this.attributes(attributes);
             this.initImageUpload();
@@ -176,8 +177,7 @@ define([
             this.handleValue(variations);
         },
         changeButtonWizard: function () {
-            var $button = $('[data-action=open-steps-wizard] [data-role=button-label]');
-            $button.text($button.attr('data-edit-label'));
+            this.wizardButtonElement().title(this.wizardModalButtonTitle);
         },
         handleValue: function (variations) {
             this.value([]);
