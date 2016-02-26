@@ -30,6 +30,10 @@ matrix:
       env: TEST_SUITE=static_phpcs
     - php: 5.6
       env: TEST_SUITE=static_annotation
+    - php: 7.0
+      env: TEST_SUITE=static_phpcs
+    - php: 7.0
+      env: TEST_SUITE=static_annotation
 before_install:
   - sh -c 'if [ "$CASHER_DIR" ]; then
          if [ -x $HOME/.cache/bin/composer ]; then
