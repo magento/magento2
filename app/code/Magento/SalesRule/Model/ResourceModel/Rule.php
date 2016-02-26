@@ -401,4 +401,30 @@ class Rule extends AbstractResource
         }
         return $this;
     }
+
+    /**
+     * Delete the object
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     * @throws \Exception
+     */
+    public function delete(AbstractModel $object)
+    {
+        $this->transactionManager->start($this->getConnection());
+        try {
+            $object->beforeDelete();
+            $this->_beforeDelete($object);
+            $this->entityManager->delete('Magento\SalesRule\Api\Data\RuleInterface', $object);
+            $this->_afterDelete($object);
+            $object->isDeleted(true);
+            $object->afterDelete();
+            $this->transactionManager->commit();
+            $object->afterDeleteCommit();
+        } catch (\Exception $exception) {
+            $this->transactionManager->rollBack();
+            throw $exception;
+        }
+        return $this;
+    }
 }
