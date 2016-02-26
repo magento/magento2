@@ -9,7 +9,7 @@
     <repository class="Magento\SalesRule\Test\Repository\SalesRule">
         <dataset name="default">
             <field name="name" xsi:type="string">Default price rule %isolation%</field>
-            <field name="is_active" xsi:type="string">Active</field>
+            <field name="is_active" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -27,7 +27,7 @@
         <dataset name="active_sales_rule_with_percent_price_discount_coupon">
             <field name="name" xsi:type="string">Cart Price Rule with Specific Coupon %isolation%</field>
             <field name="description" xsi:type="string">Description for Cart Price Rule</field>
-            <field name="is_active" xsi:type="string">Active</field>
+            <field name="is_active" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -46,7 +46,7 @@
 
         <dataset name="active_sales_rule_with_coupon_10">
             <field name="name" xsi:type="string">10% Off Coupon</field>
-            <field name="is_active" xsi:type="string">Active</field>
+            <field name="is_active" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -62,7 +62,7 @@
         <dataset name="active_sales_rule_with_fixed_price_discount_coupon">
             <field name="name" xsi:type="string">Cart Price Rule with Specific Coupon %isolation%</field>
             <field name="description" xsi:type="string">Description for Cart Price Rule</field>
-            <field name="is_active" xsi:type="string">Active</field>
+            <field name="is_active" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -83,7 +83,7 @@
         <dataset name="active_sales_rule_for_retailer">
             <field name="name" xsi:type="string">Cart Price Rule %isolation%</field>
             <field name="description" xsi:type="string">Description for Cart Price Rule</field>
-            <field name="is_active" xsi:type="string">Active</field>
+            <field name="is_active" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -99,7 +99,7 @@
         <dataset name="active_sales_rule_with_complex_conditions">
             <field name="name" xsi:type="string">Cart Price Rule with with complex conditions %isolation%</field>
             <field name="description" xsi:type="string">Cart Price Rule with with complex conditions</field>
-            <field name="is_active" xsi:type="string">Active</field>
+            <field name="is_active" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -137,7 +137,7 @@
 
         <dataset name="inactive_sales_rule">
             <field name="name" xsi:type="string">Inactive Cart Price Rule %isolation%</field>
-            <field name="is_active" xsi:type="string">Inactive</field>
+            <field name="is_active" xsi:type="string">No</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -152,7 +152,7 @@
         <dataset name="active_sales_rule_for_all_groups">
             <field name="name" xsi:type="string">Cart Price Rule with Specific Coupon %isolation%</field>
             <field name="description" xsi:type="string">Description for Cart Price Rule</field>
-            <field name="is_active" xsi:type="string">Active</field>
+            <field name="is_active" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -175,7 +175,7 @@
         <dataset name="active_sales_rule_for_all_groups_no_coupon">
             <field name="name" xsi:type="string">Cart Price Rule without Coupon %isolation%</field>
             <field name="description" xsi:type="string">Description for Cart Price Rule</field>
-            <field name="is_active" xsi:type="string">Active</field>
+            <field name="is_active" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -193,7 +193,7 @@
         <dataset name="active_sales_rule_product_subselection">
             <field name="name" xsi:type="string">Cart Price Rule with product subselection %isolation%</field>
             <field name="description" xsi:type="string">Cart Price Rule with product subselection</field>
-            <field name="is_active" xsi:type="string">Active</field>
+            <field name="is_active" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -220,7 +220,7 @@
 
         <dataset name="active_sales_rule_product_attribute">
             <field name="name" xsi:type="string">Cart price rule with attribute conditions %isolation%</field>
-            <field name="is_active" xsi:type="string">Active</field>
+            <field name="is_active" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -241,7 +241,7 @@
 
         <dataset name="active_sales_rule_row_total">
             <field name="name" xsi:type="string">Cart price rule with row total condition %isolation%</field>
-            <field name="is_active" xsi:type="string">Active</field>
+            <field name="is_active" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -262,7 +262,7 @@
 
         <dataset name="active_sales_total_items">
             <field name="name" xsi:type="string">Cart price rule with total items %isolation%</field>
-            <field name="is_active" xsi:type="string">Active</field>
+            <field name="is_active" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
