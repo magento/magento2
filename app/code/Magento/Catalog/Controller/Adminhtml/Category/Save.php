@@ -5,11 +5,10 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
-use Magento\Framework\View\Asset\ContentProcessorException;
-use Magento\Framework\Phrase;
-
 /**
  * Class Save
+ * 
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 {
@@ -173,7 +172,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                                 __('Attribute "%1" is required.', $attribute)
                             );
                         } else {
-                            throw new ContentProcessorException(new Phrase($error));
+                            throw new \Exception($error);
                         }
                     }
                 }

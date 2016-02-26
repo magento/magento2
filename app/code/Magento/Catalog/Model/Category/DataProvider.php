@@ -237,7 +237,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
             foreach ($this->metaProperties as $metaName => $origName) {
                 $value = $attribute->getDataUsingMethod($origName);
-                $meta[$code][$metaName] = ($metaName === 'label') ? __($value) : $value;
+                $meta[$code][$metaName] = $value;
                 if ('frontend_input' === $origName) {
                     $meta[$code]['formElement'] = isset($this->formElement[$value])
                         ? $this->formElement[$value]
