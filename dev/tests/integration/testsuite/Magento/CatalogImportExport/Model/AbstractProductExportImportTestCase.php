@@ -74,12 +74,11 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
         );
         $index = 0;
         $ids = [];
-        $origProductData = [];
+        $origProducts = [];
         while (isset($skus[$index])) {
             $ids[$index] = $productRepository->get($skus[$index])->getEntityId();
-            $origProductData[$index] = $this->objectManager->create('Magento\Catalog\Model\Product')
-                ->load($ids[$index])
-                ->getData();
+            $origProducts[$index] = $this->objectManager->create('Magento\Catalog\Model\Product')
+                ->load($ids[$index]);
             $index++;
         }
 
@@ -116,16 +115,19 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
         while ($index > 0) {
             $index--;
-            $newProductData = $this->objectManager->create('Magento\Catalog\Model\Product')
-                ->load($ids[$index])
-                ->getData();
+            $newProduct = $this->objectManager->create('Magento\Catalog\Model\Product')
+                ->load($ids[$index]);
+
             // @todo uncomment or remove after MAGETWO-49806 resolved
             //$this->assertEquals(count($origProductData[$index]), count($newProductData));
+
             $this->assertEqualsOtherThanSkippedAttributes(
-                $origProductData[$index],
-                $newProductData,
+                $origProducts[$index]->getData(),
+                $newProduct->getData(),
                 $skippedAttributes
             );
+
+            $this->assertEqualsSpecificAttributes($origProducts[$index], $newProduct);
         }
     }
 
@@ -233,5 +235,14 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
                 ->getAbsolutePath('/dev/tests/integration/testsuite/' . $fixture);
             include $fixturePath;
         }
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $origProduct
+     * @param \Magento\Catalog\Model\Product $newProduct
+     */
+    protected function assertEqualsSpecificAttributes($origProduct, $newProduct)
+    {
+        // check custom options
     }
 }
