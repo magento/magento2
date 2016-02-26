@@ -180,7 +180,8 @@ define([
             this.wizardButtonElement().title(this.wizardModalButtonTitle);
         },
         handleValue: function (variations) {
-            this.value([]);
+            var tmpArray = [];
+
             _.each(variations, function (variation) {
                 var attributes = _.reduce(variation.options, function (memo, option) {
                     var attribute = {};
@@ -188,7 +189,7 @@ define([
 
                     return _.extend(memo, attribute);
                 }, {});
-                this.value.push(_.extend(variation, {
+                tmpArray.push(_.extend(variation, {
                     productId: variation.productId || null,
                     name: variation.name || variation.sku,
                     priceCurrency: this.currencySymbol,
@@ -200,6 +201,8 @@ define([
                     status: variation.status === undefined ? 1 : parseInt(variation.status, 10)
                 }));
             }, this);
+
+            this.value(tmpArray);
         },
 
 
