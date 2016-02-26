@@ -23,10 +23,10 @@ class InstallSchema implements InstallSchemaInterface
         $installer->startSetup();
 
         /**
-         * Create table 'queue_log'
+         * Create table 'queue_lock'
          */
         $table = $installer->getConnection()->newTable(
-            $installer->getTable('queue_log')
+            $installer->getTable('queue_lock')
         )->addColumn(
             'id',
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -47,14 +47,14 @@ class InstallSchema implements InstallSchemaInterface
             'Created At'
         )->addIndex(
             $installer->getIdxName(
-                'queue_log',
+                'queue_lock',
                 'message_code',
                 \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
             ),
             'message_code',
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->setComment(
-            'Table to log queue messages for execution control'
+            'Messages that were processed are inserted here to be locked.'
         );
         $installer->getConnection()->createTable($table);
     }
