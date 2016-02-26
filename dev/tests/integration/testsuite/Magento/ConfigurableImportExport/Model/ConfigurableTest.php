@@ -26,4 +26,19 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
             ],
         ];
     }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $origProduct
+     * @param \Magento\Catalog\Model\Product $newProduct
+     */
+    protected function assertEqualsSpecificAttributes($origProduct, $newProduct)
+    {
+        $origProductExtensionAttributes = $origProduct->getExtensionAttributes();
+        $newProductExtensionAttributes = $newProduct->getExtensionAttributes();
+
+        $this->assertEquals(
+            $origProductExtensionAttributes,
+            $newProductExtensionAttributes
+        );
+    }
 }
