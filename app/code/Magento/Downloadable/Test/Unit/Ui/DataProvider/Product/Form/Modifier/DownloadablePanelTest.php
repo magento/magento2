@@ -5,6 +5,7 @@
  */
 namespace Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Downloadable\Api\Data\ProductAttributeInterface;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\DownloadablePanel;
@@ -82,7 +83,7 @@ class DownloadablePanelTest extends \PHPUnit_Framework_TestCase
             ->willReturn($typeId);
         $resultData = [
             $productId => [
-                ObjectManagerHelper::CODE_IS_DOWNLOADABLE => $isDownloadable
+                ProductAttributeInterface::CODE_IS_DOWNLOADABLE => $isDownloadable
             ]
         ];
 

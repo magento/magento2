@@ -111,7 +111,8 @@ class ProductUrlRewrite extends AbstractModifier
                     'true' => $urlKey
                 ],
                 'imports' => [
-                    'handleChanges' => '${ $.provider }:data.product.' . ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
+                    'handleChanges' => '${ $.provider }:data.product.'
+                        . ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
                 ],
                 'description' => __('Create Permanent Redirect for old URL'),
                 'dataScope' => 'url_key_create_redirect',
