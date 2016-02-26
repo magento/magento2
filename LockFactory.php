@@ -6,23 +6,23 @@
 namespace Magento\Framework\MessageQueue;
 
 /**
- * Factory class for @see \Magento\Framework\MessageQueue\Log
+ * Factory class for @see \Magento\Framework\MessageQueue\Lock
  */
-class LogFactory
+class LockFactory
 {
     /**
      * Object Manager instance
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    protected $_objectManager = null;
+    protected $objectManager = null;
 
     /**
      * Instance name to create
      *
      * @var string
      */
-    protected $_instanceName = null;
+    protected $instanceName = null;
 
     /**
      * Factory constructor
@@ -32,20 +32,20 @@ class LogFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = '\Magento\Framework\MessageQueue\Log'
+        $instanceName = '\Magento\Framework\MessageQueue\Lock'
     ) {
-        $this->_objectManager = $objectManager;
-        $this->_instanceName = $instanceName;
+        $this->objectManager = $objectManager;
+        $this->instanceName = $instanceName;
     }
 
     /**
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return \Magento\Framework\MessageQueue\Log
+     * @return \Magento\Framework\MessageQueue\Lock
      */
     public function create(array $data = array())
     {
-        return $this->_objectManager->create($this->_instanceName, $data);
+        return $this->objectManager->create($this->instanceName, $data);
     }
 }

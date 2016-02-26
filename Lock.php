@@ -6,11 +6,8 @@
 
 namespace Magento\Framework\MessageQueue;
 
-class Log extends \Magento\Framework\Model\AbstractModel
+class Lock extends \Magento\Framework\Model\AbstractModel
 {
-    const STATUS_PROCESSING = 1;
-    const STATUS_COMPLETED = 2;
-
     /**
      * Class constructor
      *
@@ -18,7 +15,7 @@ class Log extends \Magento\Framework\Model\AbstractModel
      */
     protected function _construct()
     {
-        $this->_init('Magento\Framework\MessageQueue\ResourceModel\Log');
+        $this->_init('Magento\Framework\MessageQueue\ResourceModel\Lock');
     }
 
     /**
@@ -43,7 +40,7 @@ class Log extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Get message status
+     * Get lock date
      *
      * @return string
      */
@@ -53,7 +50,7 @@ class Log extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
-     * Set message status
+     * Set lock date
      *
      * @param string $value
      * @return $this

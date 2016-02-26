@@ -21,13 +21,20 @@ class MessageController
     private $registry = [];
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    private $dateTime;
+
+    /**
      * Initialize dependencies.
      *
      * @param LogFactory $logFactory
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      */
-    public function __construct(LogFactory $logFactory)
+    public function __construct(LogFactory $logFactory, \Magento\Framework\Stdlib\DateTime\DateTime $dateTime)
     {
         $this->logFactory = $logFactory;
+        $this->dateTime = $dateTime;
     }
 
      /**
@@ -52,19 +59,10 @@ class MessageController
             throw new MessageLockException(new Phrase('Message code %1 already processed', [$code]));
         }
         $log->setMessageCode($code);
-        $log->setCreatedAt($this->getCurrentDate());
+        $log->setCreatedAt($this->dateTime->gmtTimestamp());
         $log->save();
 
         $this->registry[$code] = true;
         return $log;
     }
-
-    /**
-     * @return int
-     */
-    private function getCurrentDate()
-    {
-        return (new \DateTime())->getTimestamp();
-    }
-
 }
