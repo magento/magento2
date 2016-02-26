@@ -52,12 +52,20 @@ class BatchConsumer implements ConsumerInterface
     private $resource;
 
     /**
+     * @var MessageRegistry
+     */
+    private $messageRegistry;
+
+    /**
+     * Initialize dependencies.
+     *
      * @param ConfigInterface $messageQueueConfig
      * @param MessageEncoder $messageEncoder
      * @param QueueRepository $queueRepository
      * @param MergerFactory $mergerFactory
      * @param ResourceConnection $resource
      * @param ConsumerConfigurationInterface $configuration
+     * @param MessageRegistry $messageRegistry
      * @param int $interval
      */
     public function __construct(
@@ -67,6 +75,7 @@ class BatchConsumer implements ConsumerInterface
         MergerFactory $mergerFactory,
         ResourceConnection $resource,
         ConsumerConfigurationInterface $configuration,
+        MessageRegistry $messageRegistry,
         $interval = 5
     ) {
         $this->messageQueueConfig = $messageQueueConfig;
@@ -76,6 +85,7 @@ class BatchConsumer implements ConsumerInterface
         $this->interval = $interval;
         $this->resource = $resource;
         $this->configuration = $configuration;
+        $this->messageRegistry = $messageRegistry;
     }
 
     /**
@@ -100,18 +110,18 @@ class BatchConsumer implements ConsumerInterface
     /**
      * Decode message and invoke callbacks method
      *
-     * @param EnvelopeInterface[] $messages
+     * @param array $messageList
      * @return void
      * @throws LocalizedException
      */
-    private function dispatchMessage(array $messages)
+    private function dispatchMessage(array $messageList)
     {
-        foreach ($messages as $message) {
-            $properties = $message->getProperties();
-            $topicName = $properties['topic_name'];
-            $callbacks = $this->configuration->getHandlers($message[$topicName]);
-            foreach ($callbacks as $callback) {
-                call_user_func($callback, $message);
+        foreach ($messageList as $topicName => $messages) {
+            foreach ($messages as $message) {
+                $callbacks = $this->configuration->getHandlers($topicName);
+                foreach ($callbacks as $callback) {
+                    call_user_func($callback, $message);
+                }
             }
         }
     }
@@ -221,7 +231,7 @@ class BatchConsumer implements ConsumerInterface
             $properties = $message->getProperties();
             $topicName = $properties['topic_name'];
 
-            $decodedMessages[] = $this->messageEncoder->decode($topicName, $message->getBody());
+            $decodedMessages[$topicName][] = $this->messageEncoder->decode($topicName, $message->getBody());
         }
 
         return $decodedMessages;
@@ -236,12 +246,15 @@ class BatchConsumer implements ConsumerInterface
     {
         return function (array $messages) use ($queue, $merger) {
             try {
-                $this->resource->getConnection()->beginTransaction();
-                $decodedMessages = $this->decodeMessages($messages);
-                $mergedMessages = $merger->merge($decodedMessages);
-                $this->dispatchMessage($mergedMessages);
-                $this->acknowledgeAll($queue, $messages);
-                $this->resource->getConnection()->commit();
+                $messages = $this->_logMessage($messages);
+                if (count($messages)) {
+                    $this->resource->getConnection()->beginTransaction();
+                    $decodedMessages = $this->decodeMessages($messages);
+                    $mergedMessages = $merger->merge($decodedMessages);
+                    $this->dispatchMessage($mergedMessages);
+                    $this->acknowledgeAll($queue, $messages);
+                    $this->resource->getConnection()->commit();
+                }
             } catch (ConnectionLostException $e) {
                 $this->resource->getConnection()->rollBack();
             } catch (\Exception $e) {
@@ -249,5 +262,22 @@ class BatchConsumer implements ConsumerInterface
                 $this->rejectAll($queue, $messages);
             }
         };
+    }
+
+    /**
+     * Log messages
+     *
+     * @param array $messages
+     * @return array
+     */
+    private function _logMessage(array $messages)
+    {
+        $output = [];
+        foreach ($messages as $message) {
+            if ($this->messageRegistry->register($message, $this->configuration->getConsumerName())) {
+                $output[] = $message;
+            }
+        }
+        return $output;
     }
 }

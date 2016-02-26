@@ -20,14 +20,30 @@ class Envelope implements EnvelopeInterface
     private $body;
 
     /**
+     * @var string
+     */
+    private $messageId;
+
+    /**
      * @param string $body
      * @param array $properties
      */
-    public function __construct($body, array $properties = [])
+    public function __construct(\Magento\Framework\Json\DecoderInterface $jsonDecoder, $body, array $properties = [])
     {
+        $data = $jsonDecoder->decode($body);
         $this->body = $body;
         $this->properties = $properties;
+        $this->messageId = $data['message_id'];
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMessageId()
+    {
+        return $this->messageId;
+    }
+
 
     /**
      * {@inheritdoc}
