@@ -54,6 +54,8 @@ define([
                     customer = customerData.get('customer');
 
                 if (!customer().firstname && !cart().isGuestCheckoutAllowed) {
+                    // set URL for redirect on successful login/registration. It's postprocessed on backend.
+                    $.cookie('login_redirect', this.options.url.checkout);
                     if (this.options.url.isRedirectRequired) {
                         location.href = this.options.url.loginUrl;
                     } else {
