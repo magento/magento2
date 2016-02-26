@@ -28,67 +28,67 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product $origProduct
-     * @param \Magento\Catalog\Model\Product $newProduct
+     * @param \Magento\Catalog\Model\Product $expectedProduct
+     * @param \Magento\Catalog\Model\Product $actualProduct
      */
-    protected function assertEqualsSpecificAttributes($origProduct, $newProduct)
+    protected function assertEqualsSpecificAttributes($expectedProduct, $actualProduct)
     {
-        $origAssociatedProducts = $origProduct->getTypeInstance()->getAssociatedProducts($origProduct);
-        $newAssociatedProducts = $newProduct->getTypeInstance()->getAssociatedProducts($newProduct);
+        $expectedAssociatedProducts = $expectedProduct->getTypeInstance()->getAssociatedProducts($expectedProduct);
+        $actualAssociatedProducts = $actualProduct->getTypeInstance()->getAssociatedProducts($actualProduct);
 
-        $origAssociatedProductSkus = [];
-        $newAssociatedProductSkus = [];
+        $expectedAssociatedProductSkus = [];
+        $actualAssociatedProductSkus = [];
         $i = 0;
-        foreach ($origAssociatedProducts as $associatedProduct) {
-            $origAssociatedProductSkus[] = $associatedProduct->getSku();
-            $newAssociatedProductSkus[] = $newAssociatedProducts[$i]->getSku();
+        foreach ($expectedAssociatedProducts as $associatedProduct) {
+            $expectedAssociatedProductSkus[] = $associatedProduct->getSku();
+            $actualAssociatedProductSkus[] = $actualAssociatedProducts[$i]->getSku();
             $i++;
         }
 
-        sort($origAssociatedProductSkus);
-        sort($newAssociatedProductSkus);
+        sort($expectedAssociatedProductSkus);
+        sort($actualAssociatedProductSkus);
 
-        $this->assertEquals($origAssociatedProductSkus, $newAssociatedProductSkus);
+        $this->assertEquals($expectedAssociatedProductSkus, $actualAssociatedProductSkus);
 
-        $origProductExtensionAttributes = $origProduct->getExtensionAttributes();
-        $newProductExtensionAttributes = $newProduct->getExtensionAttributes();
+        $expectedProductExtensionAttributes = $expectedProduct->getExtensionAttributes();
+        $actualProductExtensionAttributes = $actualProduct->getExtensionAttributes();
 
         $this->assertEquals(
-            count($origProductExtensionAttributes->getConfigurableProductLinks()),
-            count($newProductExtensionAttributes->getConfigurableProductLinks())
+            count($expectedProductExtensionAttributes->getConfigurableProductLinks()),
+            count($actualProductExtensionAttributes->getConfigurableProductLinks())
         );
 
-        $origConfigurableProductOptions = $origProductExtensionAttributes->getConfigurableProductOptions();
-        $newConfigurableProductOptions = $newProductExtensionAttributes->getConfigurableProductOptions();
+        $expectedConfigurableProductOptions = $expectedProductExtensionAttributes->getConfigurableProductOptions();
+        $actualConfigurableProductOptions = $actualProductExtensionAttributes->getConfigurableProductOptions();
 
-        $this->assertEquals(count($origConfigurableProductOptions), count($newConfigurableProductOptions));
+        $this->assertEquals(count($expectedConfigurableProductOptions), count($actualConfigurableProductOptions));
 
-        $origConfigurableProductOptionsToCompare = [];
-        foreach ($origConfigurableProductOptions as $origConfigurableProductOption) {
-            foreach ($origConfigurableProductOption->getOptions() as $optionValue) {
-                $origConfigurableProductOptionsToCompare[$origConfigurableProductOption->getLabel()][]
+        $expectedConfigurableProductOptionsToCompare = [];
+        foreach ($expectedConfigurableProductOptions as $expectedConfigurableProductOption) {
+            foreach ($expectedConfigurableProductOption->getOptions() as $optionValue) {
+                $expectedConfigurableProductOptionsToCompare[$expectedConfigurableProductOption->getLabel()][]
                     = $optionValue['label'];
             }
         }
 
-        $newConfigurableProductOptionsToCompare = [];
-        foreach ($newConfigurableProductOptions as $newConfigurableProductOption) {
-            foreach ($newConfigurableProductOption->getOptions() as $optionValue) {
-                $newConfigurableProductOptionsToCompare[$newConfigurableProductOption->getLabel()][]
+        $actualConfigurableProductOptionsToCompare = [];
+        foreach ($actualConfigurableProductOptions as $actualConfigurableProductOption) {
+            foreach ($actualConfigurableProductOption->getOptions() as $optionValue) {
+                $actualConfigurableProductOptionsToCompare[$actualConfigurableProductOption->getLabel()][]
                     = $optionValue['label'];
             }
         }
 
         $this->assertEquals(
-            count($origConfigurableProductOptionsToCompare),
-            count($newConfigurableProductOptionsToCompare)
+            count($expectedConfigurableProductOptionsToCompare),
+            count($actualConfigurableProductOptionsToCompare)
         );
 
-        foreach ($origConfigurableProductOptionsToCompare as $key => $origOptionValues) {
-            $newOptionValues = $newConfigurableProductOptionsToCompare[$key];
-            sort($origOptionValues);
-            sort($newOptionValues);
-            $this->assertEquals($origOptionValues, $newOptionValues);
+        foreach ($expectedConfigurableProductOptionsToCompare as $key => $expectedOptionValues) {
+            $actualOptionValues = $actualConfigurableProductOptionsToCompare[$key];
+            sort($expectedOptionValues);
+            sort($actualOptionValues);
+            $this->assertEquals($expectedOptionValues, $actualOptionValues);
         }
     }
 }
