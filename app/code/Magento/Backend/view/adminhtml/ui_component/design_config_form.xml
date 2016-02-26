@@ -118,7 +118,7 @@
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">pagination_pagination_frame</item>
                         <item name="validation" xsi:type="array">
-                            <item name="validate-number" xsi:type="boolean">true</item>
+                            <item name="validate-digits" xsi:type="boolean">true</item>
                         </item>
                         <item name="notice" xsi:type="string" translate="true">How many links to display at once.</item>
                     </item>
@@ -132,7 +132,7 @@
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">pagination_pagination_frame_skip</item>
                         <item name="validation" xsi:type="array">
-                            <item name="validate-number" xsi:type="boolean">true</item>
+                            <item name="validate-digits" xsi:type="boolean">true</item>
                         </item>
                         <item name="notice" xsi:type="string" translate="true">If current frame position does not cover utmost pages, it renders the link to current position plus/minus this value.</item>
                     </item>
@@ -146,6 +146,9 @@
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">pagination_anchor_text_for_previous</item>
                         <item name="notice" xsi:type="string" translate="true">Alternative text for the previous pages link in the pagination menu. If empty, the default arrow image is used.</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
+                        </item>
                     </item>
                 </argument>
             </field>
@@ -157,6 +160,9 @@
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">pagination_anchor_text_for_next</item>
                         <item name="notice" xsi:type="string" translate="true">Alternative text for the next pages link in the pagination menu. If empty, default arrow image is used.</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
+                        </item>
                     </item>
                 </argument>
             </field>
