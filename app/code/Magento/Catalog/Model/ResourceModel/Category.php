@@ -1002,7 +1002,6 @@ class Category extends AbstractResource
      */
     public function load($object, $entityId, $attributes = [])
     {
-        $this->_attributes = [];
         \Magento\Framework\Profiler::start('EAV:load_entity');
         /**
          * Load object base row data
