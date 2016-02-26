@@ -18,6 +18,8 @@ use Magento\Framework\MessageQueue\QueueInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
 use Magento\Framework\MessageQueue\MessageValidator;
+use Magento\Framework\MessageQueue\MessageController;
+use Magento\Framework\MessageQueue\MessageLockException;
 
 /**
  * A MessageQueue Consumer to handle receiving, processing and replying to an RPC message.
@@ -66,6 +68,11 @@ class Consumer implements ConsumerInterface
     private $messageValidator;
 
     /**
+     * @var MessageController
+     */
+    private $messageController;
+
+    /**
      * Initialize dependencies.
      *
      * @param CallbackInvoker $invoker
@@ -73,9 +80,10 @@ class Consumer implements ConsumerInterface
      * @param ResourceConnection $resource
      * @param ConsumerConfigurationInterface $configuration
      * @param \Magento\Framework\MessageQueue\QueueRepository $queueRepository
-     * @param \Magento\Framework\MessageQueue\ConfigInterface $queueConfig
+     * @param QueueConfig $queueConfig
      * @param EnvelopeFactory $envelopeFactory
      * @param MessageValidator $messageValidator
+     * @param MessageController $messageController
      */
     public function __construct(
         CallbackInvoker $invoker,
@@ -85,7 +93,8 @@ class Consumer implements ConsumerInterface
         \Magento\Framework\MessageQueue\QueueRepository $queueRepository,
         \Magento\Framework\MessageQueue\ConfigInterface $queueConfig,
         EnvelopeFactory $envelopeFactory,
-        MessageValidator $messageValidator
+        MessageValidator $messageValidator,
+        MessageController $messageController
     ) {
         $this->invoker = $invoker;
         $this->messageEncoder = $messageEncoder;
@@ -95,6 +104,7 @@ class Consumer implements ConsumerInterface
         $this->queueConfig = $queueConfig;
         $this->envelopeFactory = $envelopeFactory;
         $this->messageValidator = $messageValidator;
+        $this->messageController = $messageController;
     }
 
     /**
@@ -176,13 +186,16 @@ class Consumer implements ConsumerInterface
         return function (EnvelopeInterface $message) use ($queue) {
             try {
                 $this->resource->getConnection()->beginTransaction();
+                $this->messageController->lock($message, $this->configuration->getConsumerName());
                 $responseBody = $this->dispatchMessage($message);
                 $responseMessage = $this->envelopeFactory->create(
                     ['body' => $responseBody, 'properties' => $message->getProperties()]
                 );
                 $this->sendResponse($responseMessage);
-                $queue->acknowledge($message);
                 $this->resource->getConnection()->commit();
+                $queue->acknowledge($message);
+            } catch (MessageLockException $exception) {
+                $queue->acknowledge($message);
             } catch (\Magento\Framework\MessageQueue\ConnectionLostException $e) {
                 $this->resource->getConnection()->rollBack();
             } catch (\Exception $e) {
