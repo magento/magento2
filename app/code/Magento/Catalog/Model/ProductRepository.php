@@ -494,6 +494,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $this->processMediaGallery($product, $productDataArray['media_gallery_entries']);
         }
 
+        if (!$product->getOptionsReadonly()) {
+            $product->setCanSaveCustomOptions(true);
+        }
+
         $validationResult = $this->resourceModel->validate($product);
         if (true !== $validationResult) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(

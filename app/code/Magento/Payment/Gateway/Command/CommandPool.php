@@ -10,6 +10,10 @@ use Magento\Payment\Gateway\CommandInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\ObjectManager\TMapFactory;
 
+/**
+ * Class CommandPool
+ * @api
+ */
 class CommandPool implements CommandPoolInterface
 {
     /**

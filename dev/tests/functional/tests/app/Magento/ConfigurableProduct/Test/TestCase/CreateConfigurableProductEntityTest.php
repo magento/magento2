@@ -79,6 +79,7 @@ class CreateConfigurableProductEntityTest extends Injectable
      */
     public function test(ConfigurableProduct $product)
     {
+        $this->markTestIncomplete('MAGETWO-48724');
         // Steps
         $this->productIndex->open();
         $this->productIndex->getGridPageActionBlock()->addProduct('configurable');
