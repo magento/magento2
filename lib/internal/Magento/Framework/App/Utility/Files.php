@@ -805,6 +805,7 @@ class Files
             if ($keyInfo[0] == $namespace || $namespace == '*') {
                 if ($keyInfo[1] == $module || $module == '*') {
                     $moduleTemplatePaths[] = $moduleDir . "/view/{$area}/web/template";
+                    $moduleTemplatePaths[] = $moduleDir . "/view/{$area}/web/templates";
                 }
             }
         }
