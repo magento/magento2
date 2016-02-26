@@ -5,9 +5,9 @@
  */
 namespace Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Downloadable\Api\Data\ProductAttributeInterface;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Ui\Component\Container;
@@ -15,6 +15,7 @@ use Magento\Ui\Component\Form;
 
 /**
  * Class adds Downloadable collapsible panel
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DownloadablePanel extends AbstractModifier
 {

@@ -23,7 +23,6 @@ interface ProductAttributeInterface extends \Magento\Catalog\Api\Data\EavAttribu
     const CODE_NAME = 'name';
     const CODE_SKU = 'sku';
     const CODE_SEO_FIELD_META_KEYWORD = 'meta_keyword';
-    const CODE_IS_DOWNLOADABLE = 'is_downloadable';
     const CODE_DESCRIPTION = 'description';
     const CODE_COST = 'cost';
     const CODE_SEO_FIELD_URL_KEY = 'url_key';
