@@ -46,7 +46,8 @@ class UpdateConfigurations
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,
         \Magento\Catalog\Model\Product $configurableProduct
     ) {
-        $configurations = $this->request->getParam('configurations', []);
+        //$configurations = $this->request->getParam('configurations', []);
+        $configurations = $this->getConfigurations();
         $configurations = $this->variationHandler->duplicateImagesForVariations($configurations);
         foreach ($configurations as $productId => $productData) {
             /** @var \Magento\Catalog\Model\Product $product */
@@ -58,5 +59,33 @@ class UpdateConfigurations
             }
         }
         return $configurableProduct;
+    }
+
+    /**
+     * Get configurations from request
+     *
+     * @return array
+     */
+    protected function getConfigurations()
+    {
+        $result = [];
+        $configurableMatrix = $this->request->getParam('configurable-matrix', []);
+        foreach ($configurableMatrix as $configurations) {
+            if (!$configurations['newProduct']) {
+                $result[$item['id']] = [
+                    'status' => isset($item['status']) ? $item['status'] : '',
+                    'sku' => isset($item['sku']) ? $item['sku'] : '',
+                    'name' => isset($item['name']) ? $item['name'] : '',
+                    'price' => isset($item['price']) ? $item['price'] : '',
+                    'configurable_attribute' => isset($item['configurable_attribute'])
+                        ? $item['configurable_attribute'] : '',
+                    'quantity_and_stock_status' => isset($item['quantity_and_stock_status'])
+                        ? $item['quantity_and_stock_status'] : '',
+                    'weight' => isset($item['weight']) ? $item['weight'] : '',
+                ];
+            }
+        }
+
+        return $result;
     }
 }

@@ -12,17 +12,36 @@ define([
     return dynamicRows.extend({
         defaults: {
             canEditField: 'canEdit',
+            newProductField: 'newProduct',
+            dataScopeAssociatedProduct: 'data.associated_product_ids',
+            associatedProductIncrement: 0,
             dataProviderFromGrid: '',
             insertDataFromGrid: [],
+            dataProviderFromWizard: '',
+            insertDataFromWizard: [],
             map: null,
             cacheGridData: [],
+            unionInsertData: [],
             deleteProperty: false,
             dataLength: 0,
             identificationProperty: 'id',
+            attribute_set_id: '',
             listens: {
-                'insertDataFromGrid': 'processingInsertData',
-                'elems': 'mappingValue'
+                'insertDataFromGrid': 'processingInsertDataFromGrid',
+                'insertDataFromWizard': 'processingInsertDataFromWizard',
+                'unionInsertData': 'processingUnionInsertData'
+            },
+            imports: {
+                'attribute_set_id': '${$.provider}:data.product.attribute_set_id'
+            },
+            'exports': {
+                'attribute_set_id': '${$.provider}:data.new-variations-attribute-set-id'
             }
+        },
+
+        addAssociatedProduct: function (productId) {
+            this.source.set(this.dataScopeAssociatedProduct + '.' + this.associatedProductIncrement, productId);
+            ++this.associatedProductIncrement;
         },
 
         /**
@@ -33,54 +52,24 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
-                    'insertDataFromGrid'
+                    'insertDataFromGrid', 'unionInsertData'
                 ]);
 
             return this;
         },
 
-        /**
-         * Initialize children,
-         * set data from server to grid dataScope
-         */
-        initChildren: function () {
-            var insertData = [];
+        processingUnionInsertData: function (data) {
+            this.clear();
+            this.source.set(this.dataScope + '.' + this.index, []);
 
-            if (this.recordData().length) {
-                this.recordData.each(function (recordData) {
-                    var unmappingValue = this.unmappingValue(recordData);
-                    unmappingValue[this.canEditField] = false;
-                    insertData.push(unmappingValue);
+            _.each(data, function (row) {
+                _.each(row, function (value, key) {
+                    var path = this.dataScope + '.' + this.index + '.' + this.recordIterator + '.' + key;
+                    this.source.set(path, value);
                 }, this);
 
-                this.source.set(this.dataProviderFromGrid, insertData);
-            }
-
-            return this;
-        },
-
-        /**
-         * Unmapping value,
-         * unmapping data from server to grid dataScope
-         *
-         * @param {Object} data - data object
-         */
-        unmappingValue: function (data) {
-            var obj = {};
-
-            _.each(this.map, function (prop, index) {
-                obj[prop] = data[index];
+                this.addChild(data, false);
             }, this);
-
-            return obj;
-        },
-
-        /**
-         * Rerender dynamic-rows elems
-         */
-        reload: function () {
-            this.cacheGridData = [];
-            this._super();
         },
 
         /**
@@ -89,36 +78,68 @@ define([
          * @param {Array} data - array with data
          * about selected records
          */
-        processingInsertData: function (data) {
+        processingInsertDataFromGrid: function (data) {
             var changes;
 
             if (!data.length) {
-                this.elems([]);
+                return;
             }
+
+            var tmpArray = this.unionInsertData();
 
             changes = this._checkGridData(data);
             this.cacheGridData = data;
 
             changes.each(function (changedObject) {
-                this.addChild(changedObject, false, parseInt(changedObject[this.map.id], 10));
+                this.addAssociatedProduct(changedObject[this.map.id]);
+
+                var mappedData = this.mappingValue(changedObject);
+                mappedData[this.canEditField] = 0;
+                mappedData[this.newProductField] = 0;
+                tmpArray.push(mappedData);
             }, this);
+
+            this.unionInsertData(tmpArray);
         },
 
-        /**
-         * Delete record instance
-         * update data provider dataScope
-         *
-         * @param {String|Number} index - record index
-         */
-        deleteRecord: function (index, recordId) {
-            var data = this.getElementData(this.insertDataFromGrid(), recordId);
+        processingInsertDataFromWizard: function (data) {
+            var tmpArray = this.unionInsertData();
+            tmpArray = this.unsetArrayItem(tmpArray, {'id': null});
 
-            this.mapping = true;
-            this._super();
-            this.insertDataFromGrid(_.reject(this.source.get(this.dataProviderFromGrid), function (recordData) {
-                return parseInt(recordData[this.map.id], 10) === parseInt(data[this.map.id], 10);
-            }, this));
-            this.mapping = false;
+            _.each(data, function (row) {
+                var product = {
+                    'id': row.productId,
+                    'name': row.name,
+                    'sku': row.sku,
+                    'status': row.status,
+                    'price': row.price,
+                    'price_currency': row.priceCurrency,
+                    'price_string': row.priceCurrency + row.price,
+                    'weight': row.weight,
+                    'quantity_and_stock_status.qty': row.quantity,
+                    'variationKey': row.variationKey,
+                    'configurable_attribute': row.attribute
+                };
+                product[this.canEditField] = 1;
+                product[this.newProductField] = 1;
+
+                tmpArray.push(product);
+            }, this);
+
+            this.unionInsertData(tmpArray);
+        },
+
+        unsetArrayItem: function (data, condition) {
+            var objs = _.where(data, condition);
+
+            _.each(objs, function (obj) {
+                var index = _.indexOf(data, obj);
+                if (index > -1) {
+                    data.splice(index, 1);
+                }
+            });
+
+            return data;
         },
 
         /**
@@ -148,43 +169,11 @@ define([
         /**
          * Mapped value
          */
-        mappingValue: function () {
-            var path,
-                data,
-                elements = this.elems();
-
-            if (this.mapping) {
-                return false;
-            }
-
-            elements.each(function (record) {
-                data = this.getElementData(this.insertDataFromGrid(), record.recordId);
-                _.each(this.map, function (prop, index) {
-                    path = record.dataScope + '.' + index;
-                    this.source.set(path, data[prop]);
-                }, this);
-                path = record.dataScope + '.' + this.canEditField;
-                this.source.set(path, false);
-            }, this);
-        },
-
-        /**
-         * Find data object by index
-         *
-         * @param {Array} array - data collection
-         * @param {Number} index - element index
-         * @param {String} property - to find by property
-         *
-         * @returns {Object} data object
-         */
-        getElementData: function (array, index, property) {
-            var obj = {},
-                result;
-
-            property ? obj[property] = index : obj[this.map.id] = index;
-            result = _.findWhere(array, obj);
-            !result ? property ? obj[property] = index.toString() : obj[this.map.id] = index.toString() : false;
-            result = _.findWhere(array, obj);
+        mappingValue: function (data) {
+            var result = {};
+            _.each(this.map, function (prop, index) {
+                result[index] = data[prop];
+            });
 
             return result;
         }
