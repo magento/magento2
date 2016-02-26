@@ -205,7 +205,6 @@ define([
             this.value(tmpArray);
         },
 
-
         /**
          * Get attributes options
          * @see use in matrix.phtml
