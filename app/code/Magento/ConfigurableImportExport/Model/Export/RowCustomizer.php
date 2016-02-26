@@ -147,21 +147,6 @@ class RowCustomizer implements RowCustomizerInterface
     }
 
     /**
-     * Set product Metadata pool
-     *
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
-     * @return void
-     * @throws \LogicException
-     */
-    public function setMetadataPool(\Magento\Framework\Model\Entity\MetadataPool $metadataPool)
-    {
-        if ($this->metadataPool) {
-            throw new \LogicException("Metadata pool is already set");
-        }
-        $this->metadataPool = $metadataPool;
-    }
-
-    /**
      * Get product entity link field
      *
      * @return string

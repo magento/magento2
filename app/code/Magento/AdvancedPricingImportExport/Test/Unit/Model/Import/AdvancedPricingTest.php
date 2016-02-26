@@ -123,9 +123,6 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
      */
     protected $errorAggregator;
 
-    /** @var  \Magento\Framework\Model\Entity\EntityMetadata | \PHPUnit_Framework_MockObject_MockObject */
-    protected $metadataMock;
-
     public function setUp()
     {
         parent::setUp();
@@ -262,17 +259,6 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             false
         );
         $this->dateTime->expects($this->any())->method('date')->willReturnSelf();
-
-        $this->metadataMock = $this->getMock(
-            'Magento\Framework\Model\Entity\EntityMetadata',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->metadataMock->expects($this->any())
-            ->method('getLinkField')
-            ->willReturn(self::LINK_FIELD);
 
         $this->advancedPricing = $this->getAdvancedPricingMock(
             [
@@ -1005,11 +991,21 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             '',
             false
         );
+        $metadataMock = $this->getMock(
+            'Magento\Framework\Model\Entity\EntityMetadata',
+            [],
+            [],
+            '',
+            false
+        );
+        $metadataMock->expects($this->any())
+            ->method('getLinkField')
+            ->willReturn(self::LINK_FIELD);
         $metadataPoolMock->expects($this->any())
             ->method('getMetaData')
             ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
-            ->willReturn($this->metadataMock);
-        return $this->getMock(
+            ->willReturn($metadataMock);
+        $advancedPricingMock = $this->getMock(
             '\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing',
             $methods,
             [
@@ -1032,6 +1028,12 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
                 $this->tierPriceValidator
             ],
             ''
-        )->setMetadataPool($metadataPoolMock);
+        );
+        $reflection = new \ReflectionClass('\Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing');
+        $reflectionProperty = $reflection->getProperty('metadataPool');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($advancedPricingMock, $metadataPoolMock);
+
+        return $advancedPricingMock;
     }
 }
