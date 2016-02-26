@@ -4,9 +4,8 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\PageCache;
+
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Phrase;
 
 /**
  * Builtin cache processor
