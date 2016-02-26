@@ -153,7 +153,7 @@ class Conditions extends Generic implements TabInterface
 
         $renderer = $this->_rendererFieldset->setTemplate('Magento_CatalogRule::promo/fieldset.phtml')
             ->setNewChildUrl($newChildUrl)
-            ->setConditionsFieldSetId($model->getConditionsFieldSetId($formName));
+            ->setFieldSetId($model->getConditionsFieldSetId($formName));
 
         $fieldset = $form->addFieldset(
             $fieldsetId,
