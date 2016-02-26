@@ -23,6 +23,7 @@ define([
         defaults: {
             opened: false,
             attributes: [],
+            usedAttributes: [],
             productMatrix: [],
             variations: [],
             productAttributes: [],
@@ -36,7 +37,7 @@ define([
             },
             links: {
                 value: '${ $.provider }:${ $.dataScopeVariations }',
-                attributes: '${ $.provider }:${ $.dataScopeAttributes }'
+                usedAttributes: '${ $.provider }:${ $.dataScopeAttributes }'
             }
         },
         initialize: function () {
@@ -47,7 +48,7 @@ define([
             this.initProductAttributesMap();
         },
         initObservable: function () {
-            this._super().observe('actions opened attributes productMatrix value');
+            this._super().observe('actions opened attributes productMatrix value usedAttributes');
 
             return this;
         },
@@ -175,6 +176,7 @@ define([
             //this.disableConfigurableAttributes(attributes);
             //this.showPrice();
             this.handleValue(variations);
+            this.handleAttributes();
         },
         changeButtonWizard: function () {
             this.wizardButtonElement().title(this.wizardModalButtonTitle);
@@ -203,6 +205,15 @@ define([
             }, this);
 
             this.value(tmpArray);
+        },
+        handleAttributes: function () {
+            var tmpArray = [];
+
+            _.each(this.attributes(), function (attribute) {
+                tmpArray.push(attribute.id);
+            }, this);
+
+            this.usedAttributes(tmpArray);
         },
 
         /**
