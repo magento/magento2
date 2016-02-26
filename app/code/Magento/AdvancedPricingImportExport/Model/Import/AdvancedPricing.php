@@ -149,13 +149,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
     protected $dateTime;
 
     /**
-     * Product metadata pool
-     *
-     * @var \Magento\Framework\Model\Entity\MetadataPool
-     */
-    private $metadataPool;
-
-    /**
      * Product entity link field
      *
      * @var string
@@ -601,20 +594,6 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         $this->countItemsCreated -= $this->countItemsUpdated;
 
         return $this;
-    }
-
-    /**
-     * Get product metadata pool
-     *
-     * @return \Magento\Framework\Model\Entity\MetadataPool
-     */
-    private function getMetadataPool()
-    {
-        if (!$this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\Entity\MetadataPool');
-        }
-        return $this->metadataPool;
     }
 
     /**

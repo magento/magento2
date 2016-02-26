@@ -186,20 +186,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
     protected $_nextAttrId;
 
     /**
-     * Product metadata pool
-     *
-     * @var \Magento\Framework\Model\Entity\MetadataPool
-     */
-    private $metadataPool;
-
-    /**
-     * Product entity link field
-     *
-     * @var string
-     */
-    private $productEntityLinkField;
-
-    /**
      * Product entity identifier field
      *
      * @var string
@@ -846,35 +832,6 @@ class Configurable extends \Magento\CatalogImportExport\Model\Import\Product\Typ
             $error |= !parent::isRowValid($option, $rowNum, $isNewProduct);
         }
         return !$error;
-    }
-
-    /**
-     * Get product metadata pool
-     *
-     * @return \Magento\Framework\Model\Entity\MetadataPool
-     */
-    private function getMetadataPool()
-    {
-        if (!$this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\Entity\MetadataPool');
-        }
-        return $this->metadataPool;
-    }
-
-    /**
-     * Get product entity link field
-     *
-     * @return string
-     */
-    private function getProductEntityLinkField()
-    {
-        if (!$this->productEntityLinkField) {
-            $this->productEntityLinkField = $this->getMetadataPool()
-                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
-                ->getLinkField();
-        }
-        return $this->productEntityLinkField;
     }
 
     /**
