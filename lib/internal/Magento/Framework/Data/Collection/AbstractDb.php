@@ -883,7 +883,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
     {
         return array_diff(
             parent::__sleep(),
-            ['_fetchStrategy', '_logger', '_select', '_conn', 'extensionAttributesJoinProcessor']
+            ['_fetchStrategy', '_logger', '_conn', 'extensionAttributesJoinProcessor']
         );
     }
 
@@ -896,6 +896,6 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $this->_fetchStrategy = $objectManager->get(Logger::class);
         $this->_logger = $objectManager->get(FetchStrategyInterface::class);
-        $this->setConnection($objectManager->get(ResourceConnection::class)->getConnection());
+        $this->_conn = $objectManager->get(ResourceConnection::class)->getConnection();
     }
 }

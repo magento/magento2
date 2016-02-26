@@ -1257,6 +1257,7 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
                 '_entity',
                 '_backend',
                 '_source',
+                '_frontend',
             ]
         );
     }
