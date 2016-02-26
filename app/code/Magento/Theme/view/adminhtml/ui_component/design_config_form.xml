@@ -147,7 +147,7 @@
                         <item name="dataScope" xsi:type="string">head_includes</item>
                         <item name="notice" xsi:type="string" translate="true">This will be included before head closing tag in page HTML.</item>
                         <item name="validation" xsi:type="array">
-                            <item name="validate-script" xsi:type="boolean">true</item>
+                            <item name="validate-if-tag-script-exist" xsi:type="boolean">true</item>
                         </item>
                     </item>
                 </argument>

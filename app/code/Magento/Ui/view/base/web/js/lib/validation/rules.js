@@ -846,7 +846,7 @@ define([
             },
             $.mage.__('File you are trying to upload exceeds maximum file size limit.')
         ],
-        'validate-script': [
+        'validate-if-tag-script-exist': [
             function (value) {
                 return !value || (/<script\b[^>]*>([\s\S]*?)<\/script>$/ig).test(value);
             },
