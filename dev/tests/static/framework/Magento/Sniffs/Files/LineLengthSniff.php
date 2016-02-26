@@ -27,7 +27,6 @@ class LineLengthSniff extends \Generic_Sniffs_Files_LineLengthSniff
         $currentLineMatch = preg_match($currentLineRegexp, $lineContent) !== 0;
         $previousLineMatch = preg_match($previousLineRegexp, $this->previousLineContent) !== 0;
         $this->previousLineContent = $lineContent;
-        $error = 'Variable is not allowed as the first argument of translation function, use string literal instead';
         if (! $currentLineMatch && !$previousLineMatch) {
             parent::checkLineLength($phpcsFile, $stackPtr, $lineContent);
         }
