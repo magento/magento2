@@ -117,6 +117,14 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
                     $customer = $this->customerAccountManagement->authenticate($login['username'], $login['password']);
                     $this->session->setCustomerDataAsLoggedIn($customer);
                     $this->session->regenerateId();
+                    $redirectUrl = $this->accountRedirect->getRedirectCookie();
+                    if (!$this->getScopeConfig()->getValue('customer/startup/redirect_dashboard') && $redirectUrl) {
+                        $this->accountRedirect->clearRedirectCookie();
+                        $resultRedirect = $this->resultRedirectFactory->create();
+                        // URL is checked to be internal in $this->_redirect->success()
+                        $resultRedirect->setUrl($this->_redirect->success($redirectUrl));
+                        return $resultRedirect;
+                    }
                 } catch (EmailNotConfirmedException $e) {
                     $value = $this->customerUrl->getEmailConfirmationUrl($login['username']);
                     $message = __(
