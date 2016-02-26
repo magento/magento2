@@ -862,7 +862,7 @@ abstract class AbstractEntity
      * Set product Metadata pool
      *
      * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
-     * @return void
+     * @return $this
      * @throws \LogicException
      * @deprecated
      */
@@ -872,6 +872,7 @@ abstract class AbstractEntity
             throw new \LogicException("Metadata pool is already set");
         }
         $this->metadataPool = $metadataPool;
+        return $this;
     }
 
     /**
