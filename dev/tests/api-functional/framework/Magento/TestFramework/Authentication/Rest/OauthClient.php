@@ -40,7 +40,7 @@ class OauthClient extends AbstractService
         UriInterface $baseApiUri = null
     ) {
         if (!isset($httpClient)) {
-            $httpClient = new \OAuth\Common\Http\Client\StreamClient();
+            $httpClient = new \OAuth\Common\Http\Client\CurlClient();
             $httpClient->setTimeout(self::DEFAULT_TIMEOUT);
         }
         if (!isset($storage)) {
