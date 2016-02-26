@@ -1,11 +1,8 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: dsikkema
- * Date: 2/25/16
- * Time: 3:32 PM
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
-
 namespace Magento\Cms\Setup;
 
 use Magento\Cms\Model\Page;
