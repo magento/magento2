@@ -848,9 +848,9 @@ define([
         ],
         'validate-script': [
             function (value) {
-                return (/<script\b[^>]*>([\s\S]*?)<\/script>$/ig).test(value);
+                return !value || (/<script\b[^>]*>([\s\S]*?)<\/script>$/ig).test(value);
             },
-            $.mage.__('Please use correct format to include JavaScript to the document.')
+            $.mage.__('Please use tag SCRIPT with SRC attribute or with proper content to include JavaScript to the document.')
         ]
     }, function (data) {
         return {
