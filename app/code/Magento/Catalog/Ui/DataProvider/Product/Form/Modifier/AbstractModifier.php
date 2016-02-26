@@ -152,7 +152,7 @@ abstract class AbstractModifier implements ModifierInterface
      * Retrieve first panel name
      *
      * @param array $meta
-     * @return null|string
+     * @return string|null
      */
     protected function getFirstPanelCode(array $meta)
     {

@@ -150,8 +150,14 @@ class General extends AbstractModifier
     protected function prepareFirstPanel(array $meta)
     {
         if ($generalPanelCode = $this->getFirstPanelCode($meta)) {
-            $meta[$generalPanelCode]['arguments']['data']['config']['label'] = '';
-            $meta[$generalPanelCode]['arguments']['data']['config']['collapsible'] = false;
+            $meta[$generalPanelCode] = $this->arrayManager->merge(
+                'arguments/data/config',
+                $meta[$generalPanelCode],
+                [
+                    'label' => '',
+                    'collapsible' => false,
+                ]
+            );
         }
 
         return $meta;
@@ -345,7 +351,7 @@ class General extends AbstractModifier
                 $this->arrayManager->get($toFieldPath, $meta)
             );
 
-            $meta =  $this->arrayManager->remove($toContainerPath, $meta);
+            $meta = $this->arrayManager->remove($toContainerPath, $meta);
         }
 
         return $meta;
