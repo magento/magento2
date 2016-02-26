@@ -6,6 +6,7 @@ addons:
     - mysql-server-5.6
     - mysql-client-core-5.6
     - mysql-client-5.6
+    - postfix
 language: php
 php:
   - 5.5
@@ -30,8 +31,6 @@ matrix:
     - php: 5.6
       env: TEST_SUITE=static_annotation
 before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y -qq postfix
   - sh -c 'if [ "$CASHER_DIR" ]; then
          if [ -x $HOME/.cache/bin/composer ]; then
            $HOME/.cache/bin/composer self-update; echo '';
