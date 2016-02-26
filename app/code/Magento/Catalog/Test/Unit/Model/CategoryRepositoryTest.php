@@ -252,7 +252,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
         )->method('create')->willReturn(
             $categoryMock
         );
-        $categoryMock->expects($this->once())->method('validate')->willReturn(false);
+        $categoryMock->expects($this->once())->method('validate')->willReturn([42 => 'Testing an exception.']);
         $this->model->save($categoryMock);
     }
 
