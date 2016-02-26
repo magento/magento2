@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+use Magento\Framework\View\Asset\ContentProcessorException;
+use Magento\Framework\Phrase;
+
 /**
  * Class Save
  */
@@ -170,7 +173,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                                 __('Attribute "%1" is required.', $attribute)
                             );
                         } else {
-                            throw new \Magento\Framework\Exception\LocalizedException(__($error));
+                            throw new ContentProcessorException(new Phrase($error));
                         }
                     }
                 }
@@ -229,7 +232,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      */
     public function imagePreprocessing($data)
     {
-        if (!isset($data['general']['image']) || (empty($data['general']['image']))) {
+        if (empty($data['general']['image'])) {
             unset($data['general']['image']);
             $data['general']['image']['delete'] = true;
         }
