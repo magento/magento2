@@ -937,6 +937,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $data[$itemId][$storeId][self::COL_SKU] = $item->getSku();
                 $data[$itemId][$storeId]['store_id'] = $storeId;
                 $data[$itemId][$storeId]['product_id'] = $itemId;
+                $data[$itemId][$storeId]['row_id'] = $item->getRowId();
             }
             $collection->clear();
         }
@@ -951,6 +952,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     {
         $data = [];
         $productIds = [];
+        $productRowIds = [];
         $rowWebsites = [];
         $rowCategories = [];
 
@@ -960,6 +962,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         /** @var \Magento\Catalog\Model\Product $item */
         foreach ($collection as $item) {
             $productIds[] = $item->getId();
+            $productRowIds[] = $item->getData('row_id');
             $rowWebsites[$item->getId()] = array_intersect(
                 array_keys($this->_websiteIdToCode),
                 $item->getWebsites()
@@ -979,7 +982,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
         $data['mediaGalery'] = $this->getMediaGallery($productIds);
         $data['linksRows'] = $this->prepareLinks($productIds);
 
-        $data['customOptionsData'] = $this->getCustomOptionsData($productIds);
+        $data['customOptionsData'] = $this->getCustomOptionsData($productRowIds);
 
         return $data;
     }
@@ -1047,10 +1050,12 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     {
         $result = [];
         $productId = $dataRow['product_id'];
+        $productRowId = $dataRow['row_id'];
         $storeId = $dataRow['store_id'];
         $sku = $dataRow[self::COL_SKU];
 
         unset($dataRow['product_id']);
+        unset($dataRow['row_id']);
         unset($dataRow['store_id']);
         unset($dataRow[self::COL_SKU]);
 
@@ -1089,7 +1094,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             foreach ($this->_linkTypeProvider->getLinkTypes() as $linkTypeName => $linkId) {
                 if (!empty($multiRawData['linksRows'][$productId][$linkId])) {
                     $colPrefix = $linkTypeName . '_';
-
                     $associations = [];
                     foreach ($multiRawData['linksRows'][$productId][$linkId] as $linkData) {
                         if ($linkData['default_qty'] !== null) {
@@ -1107,7 +1111,6 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 }
             }
             $dataRow = $this->rowCustomizer->addData($dataRow, $productId);
-
         }
 
         if (!empty($this->collectedMultiselectsData[$storeId][$productId])) {
@@ -1121,9 +1124,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
             }
         }
 
-        if (!empty($multiRawData['customOptionsData'][$productId][$storeId])) {
-            $customOptionsRows = $multiRawData['customOptionsData'][$productId][$storeId];
-            $multiRawData['customOptionsData'][$productId][$storeId] = [];
+        if (!empty($multiRawData['customOptionsData'][$productRowId][$storeId])) {
+            $customOptionsRows = $multiRawData['customOptionsData'][$productRowId][$storeId];
+            $multiRawData['customOptionsData'][$productRowId][$storeId] = [];
             $customOptions = implode(ImportProduct::PSEUDO_MULTI_LINE_SEPARATOR, $customOptionsRows);
 
             $dataRow = array_merge($dataRow, ['custom_options' => $customOptions]);
