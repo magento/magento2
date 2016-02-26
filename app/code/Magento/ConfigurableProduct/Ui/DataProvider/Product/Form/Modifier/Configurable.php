@@ -70,6 +70,12 @@ class Configurable extends AbstractModifier
      */
     public function modifyData(array $data)
     {
+        if (in_array($this->locator->getProduct()->getTypeId(), self::$availableProductTypes)) {
+            $model = $this->locator->getProduct();
+            $data[$model->getId()]['affect_configurable_product_attributes'] = '1';
+            //$data[$model->getId()]['configurable-matrix'] = $this->getConfigurableMatrix();
+        }
+
         return $data;
     }
 
@@ -174,7 +180,7 @@ class Configurable extends AbstractModifier
     protected function getPanelChildren() {
         return [
             'configurable_products_button_set' => $this->getButtonSet(),
-            'variations-matrix' => $this->getGrid(),
+            'configurable-matrix' => $this->getGrid(),
         ];
     }
 
@@ -282,6 +288,7 @@ class Configurable extends AbstractModifier
                         'itemTemplate' => 'record',
                         'dataScope' => 'data',
                         'dataProviderFromGrid' => static::ASSOCIATED_PRODUCT_LISTING,
+                        'dataProviderFromWizard' => 'variations',
                         'map' => [
                             'id' => 'entity_id',
                             'product_link' => 'product_link',
@@ -293,7 +300,10 @@ class Configurable extends AbstractModifier
                             'quantity_and_stock_status.qty' => 'qty',
                             'weight' => 'weight',
                         ],
-                        'links' => ['insertDataFromGrid' => '${$.provider}:${$.dataProviderFromGrid}'],
+                        'links' => [
+                            'insertDataFromGrid' => '${$.provider}:${$.dataProviderFromGrid}',
+                            'insertDataFromWizard' => '${$.provider}:${$.dataProviderFromWizard}',
+                        ],
                         'sortOrder' => 20,
                         'columnsHeader' => true,
                         'columnsHeaderAfterRender' => true,
