@@ -52,9 +52,9 @@ class BatchConsumer implements ConsumerInterface
     private $resource;
 
     /**
-     * @var MessageRegistry
+     * @var MessageController
      */
-    private $messageRegistry;
+    private $messageController;
 
     /**
      * Initialize dependencies.
@@ -65,7 +65,7 @@ class BatchConsumer implements ConsumerInterface
      * @param MergerFactory $mergerFactory
      * @param ResourceConnection $resource
      * @param ConsumerConfigurationInterface $configuration
-     * @param MessageRegistry $messageRegistry
+     * @param MessageController $messageController
      * @param int $interval
      */
     public function __construct(
@@ -75,7 +75,7 @@ class BatchConsumer implements ConsumerInterface
         MergerFactory $mergerFactory,
         ResourceConnection $resource,
         ConsumerConfigurationInterface $configuration,
-        MessageRegistry $messageRegistry,
+        MessageController $messageController,
         $interval = 5
     ) {
         $this->messageQueueConfig = $messageQueueConfig;
@@ -85,7 +85,7 @@ class BatchConsumer implements ConsumerInterface
         $this->interval = $interval;
         $this->resource = $resource;
         $this->configuration = $configuration;
-        $this->messageRegistry = $messageRegistry;
+        $this->messageController = $messageController;
     }
 
     /**
@@ -163,6 +163,8 @@ class BatchConsumer implements ConsumerInterface
     }
 
     /**
+     * Acknowledge all given messages
+     *
      * @param QueueInterface $queue
      * @param EnvelopeInterface[] $messages
      * @return void
@@ -175,6 +177,8 @@ class BatchConsumer implements ConsumerInterface
     }
 
     /**
+     * Get all messages from queue
+     *
      * @param QueueInterface $queue
      * @return EnvelopeInterface[]
      */
@@ -189,6 +193,8 @@ class BatchConsumer implements ConsumerInterface
     }
 
     /**
+     * Get N messages from queue
+     *
      * @param QueueInterface $queue
      * @param int $count
      * @return EnvelopeInterface[]
@@ -208,6 +214,8 @@ class BatchConsumer implements ConsumerInterface
     }
 
     /**
+     * Reject all given messages
+     *
      * @param QueueInterface $queue
      * @param EnvelopeInterface[] $messages
      * @return void
@@ -219,8 +227,9 @@ class BatchConsumer implements ConsumerInterface
         }
     }
 
-
     /**
+     * Decode message
+     *
      * @param EnvelopeInterface[] $messages
      * @return object[]
      */
@@ -230,7 +239,6 @@ class BatchConsumer implements ConsumerInterface
         foreach ($messages as $message) {
             $properties = $message->getProperties();
             $topicName = $properties['topic_name'];
-
             $decodedMessages[$topicName][] = $this->messageEncoder->decode($topicName, $message->getBody());
         }
 
@@ -238,6 +246,8 @@ class BatchConsumer implements ConsumerInterface
     }
 
     /**
+     * Get transaction callback
+     *
      * @param QueueInterface $queue
      * @param MergerInterface $merger
      * @return \Closure
@@ -246,15 +256,14 @@ class BatchConsumer implements ConsumerInterface
     {
         return function (array $messages) use ($queue, $merger) {
             try {
-                $messages = $this->_logMessage($messages);
-                if (count($messages)) {
-                    $this->resource->getConnection()->beginTransaction();
-                    $decodedMessages = $this->decodeMessages($messages);
-                    $mergedMessages = $merger->merge($decodedMessages);
-                    $this->dispatchMessage($mergedMessages);
-                    $this->acknowledgeAll($queue, $messages);
-                    $this->resource->getConnection()->commit();
-                }
+                $this->resource->getConnection()->beginTransaction();
+                list($messages, $toAcknowledge) = $this->lockMessages($messages);
+                $this->acknowledgeAll($queue, $toAcknowledge); //acknowledge already processed messages if needed
+                $decodedMessages = $this->decodeMessages($messages);
+                $mergedMessages = $merger->merge($decodedMessages);
+                $this->dispatchMessage($mergedMessages);
+                $this->resource->getConnection()->commit();
+                $this->acknowledgeAll($queue, $messages);
             } catch (ConnectionLostException $e) {
                 $this->resource->getConnection()->rollBack();
             } catch (\Exception $e) {
@@ -265,19 +274,23 @@ class BatchConsumer implements ConsumerInterface
     }
 
     /**
-     * Log messages
+     * Lock messages
      *
      * @param array $messages
      * @return array
      */
-    private function _logMessage(array $messages)
+    private function lockMessages(array $messages)
     {
-        $output = [];
+        $toProcess = [];
+        $toAcknowledge = [];
         foreach ($messages as $message) {
-            if ($this->messageRegistry->register($message, $this->configuration->getConsumerName())) {
-                $output[] = $message;
+            try {
+                $this->messageController->lock($message, $this->configuration->getConsumerName());
+                $toProcess[] = $message;
+            } catch (MessageLockException $exception) {
+                $toAcknowledge[] = $message;
             }
         }
-        return $output;
+        return [$toProcess, $toAcknowledge];
     }
 }

@@ -8,6 +8,9 @@ namespace Magento\Framework\MessageQueue;
 
 class Log extends \Magento\Framework\Model\AbstractModel
 {
+    const STATUS_PROCESSING = 1;
+    const STATUS_COMPLETED = 2;
+
     /**
      * Class constructor
      *
@@ -32,10 +35,31 @@ class Log extends \Magento\Framework\Model\AbstractModel
      * Set message code
      *
      * @param string $value
-     * @return string
+     * @return $this
      */
     public function setMessageCode($value)
     {
         return $this->setData('message_code', $value);
+    }
+
+    /**
+     * Get message status
+     *
+     * @return string
+     */
+    public function getCreatedAt()
+    {
+        return $this->_getData('created_at');
+    }
+
+    /**
+     * Set message status
+     *
+     * @param string $value
+     * @return $this
+     */
+    public function setCreatedAt($value)
+    {
+        return $this->setData('created_at', $value);
     }
 }
