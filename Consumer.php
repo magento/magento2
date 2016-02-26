@@ -37,23 +37,31 @@ class Consumer implements ConsumerInterface
     private $invoker;
 
     /**
+     * @var MessageController
+     */
+    private $messageController;
+
+    /**
      * Initialize dependencies.
      *
      * @param CallbackInvoker $invoker
      * @param MessageEncoder $messageEncoder
      * @param ResourceConnection $resource
      * @param ConsumerConfigurationInterface $configuration
+     * @param MessageController $messageController
      */
     public function __construct(
         CallbackInvoker $invoker,
         MessageEncoder $messageEncoder,
         ResourceConnection $resource,
-        ConsumerConfigurationInterface $configuration
+        ConsumerConfigurationInterface $configuration,
+        MessageController $messageController
     ) {
         $this->invoker = $invoker;
         $this->messageEncoder = $messageEncoder;
         $this->resource = $resource;
         $this->configuration = $configuration;
+        $this->messageController = $messageController;
     }
 
     /**
@@ -110,14 +118,20 @@ class Consumer implements ConsumerInterface
                 $topicName = $message->getProperties()['topic_name'];
                 $allowedTopics = $this->configuration->getTopicNames();
                 $this->resource->getConnection()->beginTransaction();
-                if (in_array($topicName, $allowedTopics)) {
-                    $this->dispatchMessage($message);
+                try {
+                    $this->messageController->lock($message, $this->configuration->getConsumerName());
+                    if (in_array($topicName, $allowedTopics)) {
+                        $this->dispatchMessage($message);
+                        $this->resource->getConnection()->commit();
+                        $queue->acknowledge($message);
+                    } else {
+                        //push message back to the queue
+                        $queue->reject($message);
+                    }
+                } catch (MessageLockException $exception) {
                     $queue->acknowledge($message);
-                } else {
-                    //push message back to the queue
-                    $queue->reject($message);
                 }
-                $this->resource->getConnection()->commit();
+
             } catch (\Magento\Framework\MessageQueue\ConnectionLostException $e) {
                 $this->resource->getConnection()->rollBack();
             } catch (\Exception $e) {
