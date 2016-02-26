@@ -44,4 +44,53 @@ class BundleTest extends AbstractProductExportImportTestCase
             */
         ];
     }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $origProduct
+     * @param \Magento\Catalog\Model\Product $newProduct
+     */
+    protected function assertEqualsSpecificAttributes($origProduct, $newProduct)
+    {
+        $origBundleProductOptions = $origProduct->getExtensionAttributes()->getBundleProductOptions();
+        $newBundleProductOptions = $newProduct->getExtensionAttributes()->getBundleProductOptions();
+
+        $this->assertEquals(count($origBundleProductOptions), count($newBundleProductOptions));
+
+        $origBundleProductOptionsToCompare = [];
+        foreach ($origBundleProductOptions as $origBundleProductOption) {
+            $origBundleProductOptionsToCompare[$origBundleProductOption->getTitle()]['type']
+                = $origBundleProductOption->getType();
+            foreach ($origBundleProductOption->getProductLinks() as $productLink) {
+                $origBundleProductOptionsToCompare[$origBundleProductOption->getTitle()]['product_links'][]
+                    = $productLink->getSku();
+            }
+        }
+
+        $newBundleProductOptionsToCompare = [];
+        foreach ($newBundleProductOptions as $newBundleProductOption) {
+            $newBundleProductOptionsToCompare[$newBundleProductOption->getTitle()]['type']
+                = $newBundleProductOption->getType();
+            foreach ($newBundleProductOption->getProductLinks() as $productLink) {
+                $newBundleProductOptionsToCompare[$newBundleProductOption->getTitle()]['product_links'][]
+                    = $productLink->getSku();
+            }
+        }
+
+        $this->assertEquals(count($origBundleProductOptions), count($newBundleProductOptions));
+
+        foreach ($origBundleProductOptionsToCompare as $key => $origBundleProductOption) {
+            $this->assertEquals(
+                $origBundleProductOption['type'],
+                $newBundleProductOptionsToCompare[$key]['type']
+            );
+
+            $origProductLinks = $origBundleProductOption['product_links'];
+            $newProductLinks = $newBundleProductOptionsToCompare[$key]['product_links'];
+
+            sort($origProductLinks);
+            sort($newProductLinks);
+
+            $this->assertEquals($origProductLinks, $newProductLinks);
+        }
+    }
 }
