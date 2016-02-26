@@ -673,8 +673,6 @@ class Product extends AbstractResource
     {
         $this->loadAttributesMetadata($attributes);
         $this->entityManager->load(\Magento\Catalog\Api\Data\ProductInterface::class, $object, $entityId);
-        $this->_loadModelAttributes($object);
-        $object->setOrigData();
         $this->_afterLoad($object);
 
         return $this;
