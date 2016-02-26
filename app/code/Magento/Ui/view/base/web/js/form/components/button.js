@@ -19,7 +19,8 @@ define([
             elementTmpl: 'ui/form/element/button',
             template: 'ui/form/components/button/simple',
             visible: true,
-            disabled: false
+            disabled: false,
+            title: ''
         },
 
         /**
@@ -37,7 +38,8 @@ define([
             return this._super()
                 .observe([
                     'visible',
-                    'disabled'
+                    'disabled',
+                    'title'
                 ]);
         },
 
