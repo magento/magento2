@@ -58,11 +58,6 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     protected $setCollection;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $metadataPoolMock;
-
-    /**
      *
      * @return void
      */
@@ -210,12 +205,15 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $metadataMock->expects($this->any())
             ->method('getLinkField')
             ->willReturn('entity_id');
-        $this->metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
-        $this->metadataPoolMock->expects($this->any())
+        $metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $metadataPoolMock->expects($this->any())
             ->method('getMetadata')
             ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
             ->willReturn($metadataMock);
-        $this->bundle->setMetadataPool($this->metadataPoolMock);
+        $reflection = new \ReflectionClass('\Magento\BundleImportExport\Model\Import\Product\Type\Bundle');
+        $reflectionProperty = $reflection->getProperty('metadataPool');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->bundle, $metadataPoolMock);
     }
 
     /**
