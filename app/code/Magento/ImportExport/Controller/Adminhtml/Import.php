@@ -19,5 +19,5 @@ abstract class Import extends Action
      *
      * @see _isAllowed()
      */
-    const ADMIN_RESOURCE = 'Magento_Customer::import';
+    const ADMIN_RESOURCE = 'Magento_ImportExport::import';
 }
