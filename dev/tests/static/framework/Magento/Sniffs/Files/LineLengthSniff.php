@@ -22,8 +22,8 @@ class LineLengthSniff extends \Generic_Sniffs_Files_LineLengthSniff
      */
     protected function checkLineLength(\PHP_CodeSniffer_File $phpcsFile, $stackPtr, $lineContent)
     {
-        $previousLineRegexp = '~__\($|Phrase\($~';
-        $currentLineRegexp = '~__\(.+\)|Phrase\(.+\)~';
+        $previousLineRegexp = '~__\($|\bPhrase\($~';
+        $currentLineRegexp = '~__\(.+\)|\bPhrase\(.+\)~';
         $currentLineMatch = preg_match($currentLineRegexp, $lineContent) !== 0;
         $previousLineMatch = preg_match($previousLineRegexp, $this->previousLineContent) !== 0;
         $this->previousLineContent = $lineContent;
