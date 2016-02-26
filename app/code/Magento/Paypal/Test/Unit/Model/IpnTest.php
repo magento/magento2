@@ -78,8 +78,8 @@ class IpnTest extends \PHPUnit_Framework_TestCase
         $configMock->expects($this->any())->method('isMethodActive')->will($this->returnValue(true));
         $configMock->expects($this->any())->method('isMethodAvailable')->will($this->returnValue(true));
         $configMock->expects($this->any())->method('getValue')->will($this->returnValue(null));
-        $configMock->expects($this->any())->method('getPaypalUrl')
-            ->will($this->returnValue('http://paypal_url'));
+        $configMock->expects($this->any())->method('getPayPalIpnUrl')
+            ->will($this->returnValue('https://ipnpb_paypal_url'));
 
         $this->curlFactory = $this->getMock(
             'Magento\Framework\HTTP\Adapter\CurlFactory',

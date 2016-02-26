@@ -2517,4 +2517,6 @@ return [
     ['getFieldsByTabs', 'Magento\Backend\Test\Block\Widget\FormTabs', 'Magento\Ui\Test\Block\Adminhtml\AbstractFormContainers::getFixtureFieldsByContainers'],
     ['fillFormTab', 'Magento\Backend\Test\Block\Widget\Tab', 'Magento\Ui\Test\Block\Adminhtml\AbstractContainer::setFieldsData'],
     ['getDataFormTab', 'Magento\Backend\Test\Block\Widget\Tab', 'Magento\Ui\Test\Block\Adminhtml\AbstractContainer::getFieldsData'],
+    ['getBunchImages', 'Magento\CatalogImportExport\Model\Import\Product'],
+    ['_isAttributeValueEmpty', 'Magento\Catalog\Model\ResourceModel\AbstractResource'],
 ];

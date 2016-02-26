@@ -18,19 +18,22 @@ define(
         return function (messageContainer) {
             var serviceUrl,
                 payload,
+                method = 'put',
                 paymentData = quote.paymentMethod();
 
             /**
              * Checkout for guest and registered customer.
              */
             if (!customer.isLoggedIn()) {
-                serviceUrl = urlBuilder.createUrl('/guest-carts/:cartId/selected-payment-method', {
+                serviceUrl = urlBuilder.createUrl('/guest-carts/:cartId/set-payment-information', {
                     cartId: quote.getQuoteId()
                 });
                 payload = {
                     cartId: quote.getQuoteId(),
-                    method: paymentData
+                    email: quote.guestEmail,
+                    paymentMethod: paymentData
                 };
+                method = 'post';
             } else {
                 serviceUrl = urlBuilder.createUrl('/carts/mine/selected-payment-method', {});
                 payload = {
@@ -40,12 +43,8 @@ define(
             }
             fullScreenLoader.startLoader();
 
-            return storage.put(
+            return storage[method](
                 serviceUrl, JSON.stringify(payload)
-            ).done(
-                function () {
-                    $.mage.redirect(window.checkoutConfig.payment.paypalExpress.redirectUrl[quote.paymentMethod().method]);
-                }
             ).fail(
                 function (response) {
                     errorProcessor.process(response, messageContainer);

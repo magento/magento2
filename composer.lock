@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "14cde9a911c97dfb8b8d65aa2fc37a9f",
-    "content-hash": "3ca6f21142f50665ed50595bfb546c41",
+    "hash": "ac56596efe7d8aa9a070776885b20938",
+    "content-hash": "cedec14d2f9b4094b7aca6bdbbfc17c9",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -201,20 +201,20 @@
         },
         {
             "name": "justinrainbow/json-schema",
-            "version": "v1.6.0",
+            "version": "1.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/justinrainbow/json-schema.git",
-                "reference": "f9e27c3e202faf14fd581ef41355d83bb4b7eb7d"
+                "reference": "cc84765fb7317f6b07bd8ac78364747f95b86341"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/f9e27c3e202faf14fd581ef41355d83bb4b7eb7d",
-                "reference": "f9e27c3e202faf14fd581ef41355d83bb4b7eb7d",
+                "url": "https://api.github.com/repos/justinrainbow/json-schema/zipball/cc84765fb7317f6b07bd8ac78364747f95b86341",
+                "reference": "cc84765fb7317f6b07bd8ac78364747f95b86341",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.2"
+                "php": ">=5.3.29"
             },
             "require-dev": {
                 "json-schema/json-schema-test-suite": "1.1.0",
@@ -227,7 +227,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4.x-dev"
+                    "dev-master": "1.6.x-dev"
                 }
             },
             "autoload": {
@@ -263,7 +263,7 @@
                 "json",
                 "schema"
             ],
-            "time": "2016-01-06 14:37:04"
+            "time": "2016-01-25 15:43:01"
         },
         {
             "name": "magento/composer",
@@ -277,7 +277,7 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/magento/composer/zipball/1be267e71debac6e0d9fae4e5144f6095cffbe89",
                 "reference": null,
-                "shasum": "79156c3e7317af1ff64a482ba90ec81c66b82c73"
+                "shasum": "6bfdbff4c23aace1e6d14ab598c81c790375aba0"
             },
             "require": {
                 "composer/composer": "1.0.0-alpha10",
@@ -381,12 +381,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/zf1.git",
-                "reference": "dbdf178992bfa52d6e978e62131162301ff6b76f"
+                "reference": "c9d607bfd9454bc18b9deff737ccd5d044e2ab10"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/magento/zf1/zipball/c9d607bfd9454bc18b9deff737ccd5d044e2ab10",
-                "reference": "dbdf178992bfa52d6e978e62131162301ff6b76f",
+                "reference": "c9d607bfd9454bc18b9deff737ccd5d044e2ab10",
                 "shasum": ""
             },
             "require": {
@@ -420,7 +420,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2015-09-30 13:04:03"
+            "time": "2015-10-29 14:34:55"
         },
         {
             "name": "monolog/monolog",
@@ -797,7 +797,7 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.6.13",
+            "version": "v2.6.12",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
@@ -855,16 +855,16 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.2",
+            "version": "v2.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "ee278f7c851533e58ca307f66305ccb9188aceda"
+                "reference": "a5eb815363c0388e83247e7e9853e5dbc14999cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/ee278f7c851533e58ca307f66305ccb9188aceda",
-                "reference": "ee278f7c851533e58ca307f66305ccb9188aceda",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/a5eb815363c0388e83247e7e9853e5dbc14999cc",
+                "reference": "a5eb815363c0388e83247e7e9853e5dbc14999cc",
                 "shasum": ""
             },
             "require": {
@@ -911,7 +911,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2016-01-13 10:28:07"
+            "time": "2015-10-30 20:15:42"
         },
         {
             "name": "symfony/finder",

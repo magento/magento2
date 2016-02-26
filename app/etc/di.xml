@@ -119,7 +119,9 @@
     <preference for="Magento\Framework\Translate\InlineInterface" type="Magento\Framework\Translate\Inline" />
     <preference for="Magento\Framework\Session\ValidatorInterface" type="Magento\Framework\Session\Validator" />
     <preference for="Magento\Framework\Session\StorageInterface" type="Magento\Framework\Session\Storage" />
+    <preference for="Magento\Framework\App\Request\DataPersistorInterface" type="Magento\Framework\App\Request\DataPersistor" />
     <preference for="Magento\Framework\Url\RouteParamsResolverInterface" type="Magento\Framework\Url\RouteParamsResolver" />
+    <preference for="Magento\Framework\Url\RouteParamsPreprocessorInterface" type="Magento\Framework\Url\RouteParamsPreprocessorComposite" />
     <preference for="Magento\Framework\Url\QueryParamsResolverInterface" type="Magento\Framework\Url\QueryParamsResolver" />
     <preference for="Magento\Framework\Url\ScopeResolverInterface" type="Magento\Framework\Url\ScopeResolver" />
     <preference for="Magento\Framework\Url\SecurityInfoInterface" type="Magento\Framework\Url\SecurityInfo\Proxy" />
@@ -1100,6 +1102,11 @@
             <argument name="selectRenderer" xsi:type="object">Magento\Framework\DB\Select\RendererProxy</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Data\Form\Filter\Date">
+        <arguments>
+            <argument name="localeResolver" xsi:type="object">Magento\Framework\Locale\ResolverInterface</argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\DB\Select\SelectRenderer">
         <arguments>
             <argument name="renderers" xsi:type="array">
@@ -1167,5 +1174,15 @@
                 </item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Framework\App\Cache\FlushCacheByTags">
+        <arguments>
+            <argument name="cacheList" xsi:type="array">
+                <item name="block_html" xsi:type="const">Magento\Framework\App\Cache\Type\Block::TYPE_IDENTIFIER</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Model\ResourceModel\Db\AbstractDb">
+        <plugin name="clean_cache" type="Magento\Framework\App\Cache\FlushCacheByTags" />
     </type>
 </config>
