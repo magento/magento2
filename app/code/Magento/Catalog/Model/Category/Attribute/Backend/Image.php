@@ -64,9 +64,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
                 $object->setData($this->getAttribute()->getName(), $result);
                 $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getName());
             } catch (\Exception $e) {
-                if ($e->getCode() != \Magento\MediaStorage\Model\File\Uploader::TMP_NAME_EMPTY) {
-                    $this->logger->critical($e);
-                }
+                $this->logger->critical($e);
             }
         }
         return $this;
