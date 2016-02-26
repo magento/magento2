@@ -11,49 +11,34 @@
  */
 namespace Magento\Catalog\Model\Category\Attribute\Backend;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-
 class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
-     * @var \Magento\MediaStorage\Model\File\UploaderFactory
-     */
-    protected $_uploaderFactory;
-
-    /**
-     * Filesystem facade
+     * Logger
      *
-     * @var \Magento\Framework\Filesystem
-     */
-    protected $_filesystem;
-
-    /**
-     * File Uploader factory
-     *
-     * @var \Magento\MediaStorage\Model\File\UploaderFactory
-     */
-    protected $_fileUploaderFactory;
-
-    /**
      * @var \Psr\Log\LoggerInterface
      */
-    protected $_logger;
+    protected $logger;
 
     /**
-     * Construct
+     * Image uploader helper
+     *
+     * @var \Magento\Catalog\Helper\ImageUploader
+     */
+    protected $imageUploaderHelper;
+
+    /**
+     * Image constructor.
      *
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
+     * @param \Magento\Catalog\Helper\ImageUploader $imageUploaderHelper
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Filesystem $filesystem,
-        \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
+        \Magento\Catalog\Helper\ImageUploader $imageUploaderHelper
     ) {
-        $this->_filesystem = $filesystem;
-        $this->_fileUploaderFactory = $fileUploaderFactory;
-        $this->_logger = $logger;
+        $this->imageUploaderHelper = $imageUploaderHelper;
+        $this->logger = $logger;
     }
 
     /**
@@ -66,35 +51,20 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     {
         $value = $object->getData($this->getAttribute()->getName() . '_additional_data');
 
-        // if no image was set - nothing to do
-        if (empty($value) && empty($_FILES)) {
-            return $this;
-        }
-
         if (is_array($value) && !empty($value['delete'])) {
             $object->setData($this->getAttribute()->getName(), '');
             $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getName());
             return $this;
         }
 
-        $path = $this->_filesystem->getDirectoryRead(
-            DirectoryList::MEDIA
-        )->getAbsolutePath(
-            'catalog/category/'
-        );
+        if (isset($value[0]['name']) && isset($value[0]['tmp_name'])) {
+            try {
+                $result = $this->imageUploaderHelper->moveFileFromTmp($value[0]['name']);
 
-        try {
-            /** @var $uploader \Magento\MediaStorage\Model\File\Uploader */
-            $uploader = $this->_fileUploaderFactory->create(['fileId' => $this->getAttribute()->getName()]);
-            $uploader->setAllowedExtensions(['jpg', 'jpeg', 'gif', 'png']);
-            $uploader->setAllowRenameFiles(true);
-            $result = $uploader->save($path);
-
-            $object->setData($this->getAttribute()->getName(), $result['file']);
-            $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getName());
-        } catch (\Exception $e) {
-            if ($e->getCode() != \Magento\MediaStorage\Model\File\Uploader::TMP_NAME_EMPTY) {
-                $this->_logger->critical($e);
+                $object->setData($this->getAttribute()->getName(), $result);
+                $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getName());
+            } catch (\Exception $e) {
+                $this->logger->critical($e);
             }
         }
         return $this;
