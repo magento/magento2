@@ -201,6 +201,8 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
             );
         }
 
+        $attributeSearchCriteriaBuilder->addFilter('attribute_set_id', null);
+
         throw new \Magento\Framework\Exception\LocalizedException(__('Please, specify attributes'));
     }
 }
