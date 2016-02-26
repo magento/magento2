@@ -42,10 +42,10 @@
             <li class="timeline-unit" repeat="foreach: updateRange().days, item: '$date'">
                 <div tooltip="
                     trigger: '[data-tooltip-trigger=' + $index + ']',
-                    action: 'click',
+                    action: 'hover',
                     delay: 200,
                     track: true,
-                    position: 'right'
+                    position: 'top'
                 ">
                     <text args="isToday($date()) ? $t('Today') \: formatHeader($date())"/>
                 </div>
