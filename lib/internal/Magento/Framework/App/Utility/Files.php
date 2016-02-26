@@ -35,7 +35,6 @@ class Files
      */
     const AS_DATA_SET = 1024;
 
-
     /**
      * Component registrar
      *
