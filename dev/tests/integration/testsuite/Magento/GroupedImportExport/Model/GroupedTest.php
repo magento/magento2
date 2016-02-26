@@ -24,23 +24,23 @@ class GroupedTest extends AbstractProductExportImportTestCase
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product $origProduct
-     * @param \Magento\Catalog\Model\Product $newProduct
+     * @param \Magento\Catalog\Model\Product $expectedProduct
+     * @param \Magento\Catalog\Model\Product $actualProduct
      */
-    protected function assertEqualsSpecificAttributes($origProduct, $newProduct)
+    protected function assertEqualsSpecificAttributes($expectedProduct, $actualProduct)
     {
-        $origAssociatedProducts = $origProduct->getTypeInstance()->getAssociatedProducts($origProduct);
-        $newAssociatedProducts = $newProduct->getTypeInstance()->getAssociatedProducts($newProduct);
+        $expectedAssociatedProducts = $expectedProduct->getTypeInstance()->getAssociatedProducts($expectedProduct);
+        $actualAssociatedProducts = $actualProduct->getTypeInstance()->getAssociatedProducts($actualProduct);
 
-        $origAssociatedProductSkus = [];
-        $newAssociatedProductSkus = [];
+        $expectedAssociatedProductSkus = [];
+        $actualAssociatedProductSkus = [];
         $i = 0;
-        foreach ($origAssociatedProducts as $associatedProduct) {
-            $origAssociatedProductSkus[] = $associatedProduct->getSku();
-            $newAssociatedProductSkus[] = $newAssociatedProducts[$i]->getSku();
+        foreach ($expectedAssociatedProducts as $associatedProduct) {
+            $expectedAssociatedProductSkus[] = $associatedProduct->getSku();
+            $actualAssociatedProductSkus[] = $actualAssociatedProducts[$i]->getSku();
             $i++;
         }
 
-        $this->assertEquals($origAssociatedProductSkus, $newAssociatedProductSkus);
+        $this->assertEquals($expectedAssociatedProductSkus, $actualAssociatedProductSkus);
     }
 }

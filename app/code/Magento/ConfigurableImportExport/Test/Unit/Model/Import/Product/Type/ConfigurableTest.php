@@ -315,7 +315,10 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 'productColFac' => $this->productCollectionFactory
             ]
         );
-        $this->configurable->setMetadataPool($metadataPoolMock);
+        $reflection = new \ReflectionClass('\Magento\ConfigurableImportExport\Model\Import\Product\Type\Configurable');
+        $reflectionProperty = $reflection->getProperty('metadataPool');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->configurable, $metadataPoolMock);
     }
 
     /**

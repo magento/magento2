@@ -171,7 +171,10 @@ class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $entityMetadataMock->expects($this->any())
             ->method('getIdentifierField')
             ->willReturn('entity_id');
-        $this->grouped->setMetadataPool($metadataPoolMock);
+        $reflection = new \ReflectionClass('\Magento\GroupedImportExport\Model\Import\Product\Type\Grouped');
+        $reflectionProperty = $reflection->getProperty('metadataPool');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->grouped, $metadataPoolMock);
     }
 
     /**

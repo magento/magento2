@@ -291,6 +291,10 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             setConstructorArgs($modelClassArgs)->
             setMethods(['_getMultiRowFormat'])->
             getMock();
+        $reflection = new \ReflectionClass('\Magento\CatalogImportExport\Model\Import\Product\Option');
+        $reflectionProperty = $reflection->getProperty('metadataPool');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->modelMock, $this->metadataPoolMock);
     }
 
     /**
@@ -413,7 +417,10 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             false
         );
         $this->productEntity->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
-        $this->productEntity->setMetadataPool($this->metadataPoolMock);
+        $reflection = new \ReflectionClass('\Magento\CatalogImportExport\Model\Import\Product');
+        $reflectionProperty = $reflection->getProperty('metadataPool');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->productEntity, $this->metadataPoolMock);
 
         $productModelMock = $this->getMock('stdClass', ['getProductEntitiesInfo']);
         $productModelMock->expects(
@@ -921,15 +928,18 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $productModel = $this->getMock('stdClass', ['getProductEntitiesInfo']);
         $productModel->expects($this->any())->method('getProductEntitiesInfo')->will($this->returnValue([]));
 
-        /** @var \Magento\CatalogImportExport\Model\Import\Product $productEntity */
-        $productEntity = $this->getMock(
+        /** @var \Magento\CatalogImportExport\Model\Import\Product $productEntityMock */
+        $productEntityMock = $this->getMock(
             '\Magento\CatalogImportExport\Model\Import\Product',
             [],
             [],
             '',
             false
         );
-        $productEntity->setMetadataPool($this->metadataPoolMock);
+        $reflection = new \ReflectionClass('\Magento\CatalogImportExport\Model\Import\Product');
+        $reflectionProperty = $reflection->getProperty('metadataPool');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($productEntityMock, $this->metadataPoolMock);
 
         /** @var \Magento\CatalogImportExport\Model\Import\Product\Option $model */
         $model = $this->objectManagerHelper->getObject(
@@ -939,14 +949,17 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                     'data_source_model' => $modelData,
                     'product_model' => $productModel,
                     'option_collection' => $this->objectManagerHelper->getObject('stdClass'),
-                    'product_entity' => $productEntity,
+                    'product_entity' => $productEntityMock,
                     'collection_by_pages_iterator' => $this->objectManagerHelper->getObject('stdClass'),
                     'page_size' => 5000,
                     'stores' => []
                 ]
             ]
         );
-        $model->setMetadataPool($this->metadataPoolMock);
+        $reflection = new \ReflectionClass('\Magento\CatalogImportExport\Model\Import\Product\Option');
+        $reflectionProperty = $reflection->getProperty('metadataPool');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($model, $this->metadataPoolMock);
 
         $this->assertTrue($model->importData());
     }
