@@ -40,12 +40,6 @@ class InstallSchema implements InstallSchemaInterface
             ['default' => '', 'nullable' => false],
             'Message Code'
         )->addColumn(
-            'status',
-            \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
-            null,
-            ['default' => 0, 'nullable' => false],
-            'Message Status'
-        )->addColumn(
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
@@ -60,7 +54,7 @@ class InstallSchema implements InstallSchemaInterface
             'message_code',
             ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
         )->setComment(
-            'Table logging queue messages status to control flow'
+            'Table to log queue messages for execution control'
         );
         $installer->getConnection()->createTable($table);
     }
