@@ -67,4 +67,21 @@
     </type>
     <preference for="Magento\Search\Api\Data\SynonymGroupInterface" type="Magento\Search\Model\SynonymGroup" />
     <preference for="Magento\Search\Api\SynonymGroupRepositoryInterface" type="Magento\Search\Model\SynonymGroupRepository" />
+    <preference for="Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface" type="Magento\Search\Adapter\Mysql\Query\Preprocessor\Synonyms" />
+    <type name="Magento\Framework\Search\Adapter\Mysql\Query\Builder\Match">
+        <arguments>
+            <argument name="preprocessors" xsi:type="array">
+                <item name="synonymsPreprocessor" xsi:type="object">Magento\Search\Adapter\Mysql\Query\Preprocessor\Synonyms</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\Search\SearchEngine\ConfigInterface" type="Magento\Search\Model\SearchEngine\Config" />
+    <type name="Magento\Search\Model\SearchEngine\Config">
+        <arguments>
+            <argument name="dataStorage" xsi:type="object">Magento\Search\Model\SearchEngine\Config\Data</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Backend\Model\Menu\Builder">
+        <plugin name="SearchTermMenuBuilder" type="Magento\Search\Model\SearchEngine\MenuBuilder" />
+    </type>
 </config>
