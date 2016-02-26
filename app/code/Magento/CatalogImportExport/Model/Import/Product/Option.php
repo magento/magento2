@@ -306,13 +306,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $dateTime;
 
     /**
-     * Product metadata pool
-     *
-     * @var \Magento\Framework\Model\Entity\MetadataPool
-     */
-    private $metadataPool;
-
-    /**
      * Product entity link field
      *
      * @var string
@@ -379,10 +372,10 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
 
         /**
-         * TODO: Make metadataPool a direct constructor dependency
+         * TODO: Make metadataPool a direct constructor dependency, and eliminate its setter & getter
          */
         if (isset($data['metadata_pool'])) {
-            $this->metadataPool = $data['metadata_pool'];
+            $this->setMetadataPool($data['metadata_pool']);
         }
 
         $this->errorAggregator = $errorAggregator;
@@ -1816,20 +1809,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $this->_productsSkuToId = null;
         return $this;
-    }
-
-    /**
-     * Get product metadata pool
-     *
-     * @return \Magento\Framework\Model\Entity\MetadataPool
-     */
-    private function getMetadataPool()
-    {
-        if (!$this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\Entity\MetadataPool');
-        }
-        return $this->metadataPool;
     }
 
     /**

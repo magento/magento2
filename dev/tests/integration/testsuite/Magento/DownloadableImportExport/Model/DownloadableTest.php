@@ -30,4 +30,31 @@ class DownloadableTest extends AbstractProductExportImportTestCase
             ],
         ];
     }
+
+    /**
+     * @param array $fixtures
+     * @param string[] $skus
+     * @param string[] $skippedAttributes
+     * @dataProvider exportImportDataProvider
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
+     * @todo remove after MAGETWO-49467 resolved
+     */
+    public function testExport($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
+    {
+        $this->markTestSkipped('Uncomment after MAGETWO-49467 resolved');
+    }
+
+    /**
+     * @param array $fixtures
+     * @param string[] $skus
+     * @dataProvider exportImportDataProvider
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
+     * @todo remove after MAGETWO-49467 resolved
+     */
+    public function testImportDelete($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
+    {
+        $this->markTestSkipped('Uncomment after MAGETWO-49467 resolved');
+    }
 }
