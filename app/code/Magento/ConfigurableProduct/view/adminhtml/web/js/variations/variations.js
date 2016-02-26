@@ -34,7 +34,8 @@ define([
                 associatedProductGrid: '${ $.configurableProductGrid }'
             },
             links: {
-                value: '${ $.provider }:${ $.dataScope }'
+                value: '${ $.provider }:${ $.dataScopeVariations }',
+                attributes: '${ $.provider }:${ $.dataScopeAttributes }'
             }
         },
         initialize: function () {
@@ -170,7 +171,7 @@ define([
             this.populateVariationMatrix(variations);
             this.attributes(attributes);
             this.initImageUpload();
-            this.disableConfigurableAttributes(attributes);
+            //this.disableConfigurableAttributes(attributes);
             //this.showPrice();
             this.handleValue(variations);
         },
@@ -190,6 +191,7 @@ define([
                 this.value.push(_.extend(variation, {
                     productId: variation.productId || null,
                     name: variation.name || variation.sku,
+                    priceCurrency: this.currencySymbol,
                     weight: variation.weight,
                     attribute: JSON.stringify(attributes),
                     variationKey: this.getVariationKey(variation.options),
