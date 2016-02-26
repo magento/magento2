@@ -1093,13 +1093,25 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
                 $sku = $rowData[self::COL_SKU];
 
+                $productId = $this->skuProcessor->getNewSku($sku)['entity_id'];
+                $productLinkKeys = [];
+                $select = $this->_connection->select()->from(
+                    $resource->getTable('catalog_product_link'),
+                    ['id' => 'link_id', 'linked_id' => 'linked_product_id', 'link_type_id' => 'link_type_id']
+                )->where(
+                    'product_id = :product_id'
+                );
+                $bind = [':product_id' => $productId];
+                foreach ($this->_connection->fetchAll($select, $bind) as $linkData) {
+                    $linkKey = "{$productId}-{$linkData['linked_id']}-{$linkData['link_type_id']}";
+                    $productLinkKeys[$linkKey] = $linkData['id'];
+                }
                 foreach ($this->_linkNameToId as $linkName => $linkId) {
-                    $productId = $this->skuProcessor->getNewSku($sku)['entity_id'];
                     $productIds[] = $productId;
                     if (isset($rowData[$linkName . 'sku'])) {
                         $linkSkus = explode($this->getMultipleValueSeparator(), $rowData[$linkName . 'sku']);
-
-                        foreach ($linkSkus as $linkedSku) {
+                        $linkPositions = explode($this->getMultipleValueSeparator(), $rowData[$linkName . 'position']);
+                        foreach ($linkSkus as $linkedKey => $linkedSku) {
                             $linkedSku = trim($linkedSku);
                             if ((!is_null(
                                         $this->skuProcessor->getNewSku($linkedSku)
@@ -1134,19 +1146,21 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                                 }
 
                                 $linkKey = "{$productId}-{$linkedId}-{$linkId}";
-
+                                if(empty($productLinkKeys[$linkKey])) {
+                                    $productLinkKeys[$linkKey] = $nextLinkId;
+                                }
                                 if (!isset($linkRows[$linkKey])) {
                                     $linkRows[$linkKey] = [
-                                        'link_id' => $nextLinkId,
+                                        'link_id' => $productLinkKeys[$linkKey],
                                         'product_id' => $productId,
                                         'linked_product_id' => $linkedId,
                                         'link_type_id' => $linkId,
                                     ];
-                                    if (!empty($rowData[$linkName . 'position'])) {
+                                    if (!empty($linkPositions[$linkedKey])) {
                                         $positionRows[] = [
-                                            'link_id' => $nextLinkId,
+                                            'link_id' => $productLinkKeys[$linkKey],
                                             'product_link_attribute_id' => $positionAttrId[$linkId],
-                                            'value' => $rowData[$linkName . 'position'],
+                                            'value' => $linkPositions[$linkedKey],
                                         ];
                                     }
                                     $nextLinkId++;
@@ -1167,7 +1181,10 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             }
             if ($positionRows) {
                 // process linked product positions
-                $this->_connection->insertOnDuplicate($resource->getAttributeTypeTable('int'), $positionRows, ['value']);
+                $this->_connection->insertOnDuplicate(
+                    $resource->getAttributeTypeTable('int'),
+                    $positionRows, ['value']
+                );
             }
         }
         return $this;
