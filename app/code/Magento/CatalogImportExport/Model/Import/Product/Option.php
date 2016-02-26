@@ -379,10 +379,10 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
 
         /**
-         * TODO: Make metadataPool a direct constructor dependency, and eliminate its setter & getter
+         * TODO: Make metadataPool a direct constructor dependency
          */
         if (isset($data['metadata_pool'])) {
-            $this->setMetadataPool($data['metadata_pool']);
+            $this->metadataPool = $data['metadata_pool'];
         }
 
         $this->errorAggregator = $errorAggregator;
@@ -1830,21 +1830,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 ->get('Magento\Framework\Model\Entity\MetadataPool');
         }
         return $this->metadataPool;
-    }
-
-    /**
-     * Set product Metadata pool
-     *
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
-     * @return void
-     * @throws \LogicException
-     */
-    public function setMetadataPool(\Magento\Framework\Model\Entity\MetadataPool $metadataPool)
-    {
-        if ($this->metadataPool) {
-            throw new \LogicException("Metadata pool is already set");
-        }
-        $this->metadataPool = $metadataPool;
     }
 
     /**

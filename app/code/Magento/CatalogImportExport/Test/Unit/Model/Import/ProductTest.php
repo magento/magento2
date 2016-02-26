@@ -309,7 +309,11 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\SkuProcessor')
                 ->disableOriginalConstructor()
                 ->getMock();
-        $this->skuProcessor->setMetadataPool($metadataPoolMock);
+        $reflection = new \ReflectionClass('\Magento\CatalogImportExport\Model\Import\Product\SkuProcessor');
+        $reflectionProperty = $reflection->getProperty('metadataPool');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->skuProcessor, $metadataPoolMock);
+
         $this->categoryProcessor =
             $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor')
                 ->disableOriginalConstructor()
@@ -394,7 +398,10 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 'data' => $this->data
             ]
         );
-        $this->importProduct->setMetadataPool($metadataPoolMock);
+        $reflection = new \ReflectionClass('\Magento\CatalogImportExport\Model\Import\Product');
+        $reflectionProperty = $reflection->getProperty('metadataPool');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->importProduct, $metadataPoolMock);
     }
 
     /**

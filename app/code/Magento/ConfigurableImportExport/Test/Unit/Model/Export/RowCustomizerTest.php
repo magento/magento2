@@ -47,8 +47,10 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
             ->method('getLinkField')
             ->willReturn('entity_id');
         $this->model = new \Magento\ConfigurableImportExport\Model\Export\RowCustomizer();
-        $this->model->setMetadataPool($metadataPoolMock);
-
+        $reflection = new \ReflectionClass('\Magento\ConfigurableImportExport\Model\Export\RowCustomizer');
+        $reflectionProperty = $reflection->getProperty('metadataPool');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->model, $metadataPoolMock);
     }
 
     public function testPrepareData()
