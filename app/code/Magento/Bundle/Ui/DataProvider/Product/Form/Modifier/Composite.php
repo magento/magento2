@@ -103,6 +103,12 @@ class Composite extends AbstractModifier
                 /** @var \Magento\Bundle\Api\Data\LinkInterface $productLink */
                 foreach ($option->getProductLinks() as $productLink) {
                     $linkedProduct = $this->productRepository->get($productLink->getSku());
+                    $integerQty = 1;
+                    if ($linkedProduct->getExtensionAttributes()->getStockItem()) {
+                        if ($linkedProduct->getExtensionAttributes()->getStockItem()->getIsQtyDecimal()) {
+                            $integerQty = 0;
+                        }
+                    }
                     $selections[] = [
                         'selection_id' => $productLink->getId(),
                         'option_id' => $productLink->getOptionId(),
@@ -112,8 +118,9 @@ class Composite extends AbstractModifier
                         'is_default' => ($productLink->getIsDefault()) ? '1' : '0',
                         'selection_price_value' => $productLink->getPrice(),
                         'selection_price_type' => $productLink->getPriceType(),
-                        'selection_qty' => $productLink->getQty(),
+                        'selection_qty' => (bool)$integerQty ? (int)$productLink->getQty() : $productLink->getQty(),
                         'selection_can_change_qty' => $productLink->getCanChangeQuantity(),
+                        'selection_qty_is_decimal' => (bool)$integerQty,
                         'position' => $productLink->getPosition(),
                     ];
                 }
