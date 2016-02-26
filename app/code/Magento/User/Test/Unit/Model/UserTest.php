@@ -713,7 +713,6 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $validatorMock->expects($this->once())->method('isValid')->willReturn(true);
 
         $newPassword = "NEWmYn3wpassw0rd";
-        $newPasswordHash = "new password hash";
         $oldPassword = "OLDmYn3wpassw0rd";
         $this->model->setPassword($newPassword)
             ->setId(1)
