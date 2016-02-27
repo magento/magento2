@@ -14,8 +14,8 @@ php:
   - 7.0
 env:
   - TEST_SUITE=unit
-  - TEST_SUITE=integration_part_1
-  - TEST_SUITE=integration_part_2
+  - TEST_SUITE=integration INTEGRATION_INDEX=1 INTEGRATION_SETS=2
+  - TEST_SUITE=integration INTEGRATION_INDEX=2 INTEGRATION_SETS=2
   - TEST_SUITE=integration_integrity
   - TEST_SUITE=static_phpcs
   - TEST_SUITE=static_annotation
@@ -32,7 +32,7 @@ matrix:
       env: TEST_SUITE=static_annotation
     - php: 7.0
       env: TEST_SUITE=static_phpcs
-    - php: 
+    - php: 7.0
       env: TEST_SUITE=static_annotation
 before_install: ./dev/travis/before_install.sh
 before_script: ./dev/travis/before_script.sh
