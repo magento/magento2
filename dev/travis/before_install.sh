@@ -4,6 +4,7 @@
 # See COPYING.txt for license details.
 
 set -e
+export PATH="$HOME/.cache/bin:$PATH"
 
 # install or update composer in casher dir
 if [ "$CASHER_DIR" ]; then
