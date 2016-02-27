@@ -35,6 +35,7 @@
     padding-top: 1.2rem;
     position: relative;
     width: @data-slider-track__width;
+    background: none;
 
     &:before {
         background: @data-slider-track__background-color;
@@ -45,6 +46,10 @@
         top: 0;
         width: 100%;
         z-index: @data-slider-track__z-index;
+    }
+
+    .ui-slider-handle {
+        .data-slider-handle;
     }
 }
 
@@ -67,7 +72,9 @@
     position: absolute;
     top: -@data-slider-handle__height / 2;
     width: @data-slider-handle__width;
-    z-index: @data-slider-track__z-index + 1;
+    z-index: @data-slider-track__z-index + 1 !important;
+    margin-left: -@data-slider-handle__width / 2 !important;
+
 
     &:before {
         .lib-background-gradient(

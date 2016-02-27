@@ -159,10 +159,6 @@
         border-color: @timeline-event__active__border-color;
     }
 
-    ._from-now ._scroll-end & {
-        margin-right: -50px;
-    }
-
     ._scroll-start:not(._active) & {
         padding-left: @indent__l;
     }
@@ -174,10 +170,6 @@
     ._permanent & {
         margin-right: 23px;
         overflow: visible;
-    }
-
-    ._from-now ._permanent._scroll-end & {
-        margin-right: -28px;
     }
 }
 
@@ -201,12 +193,6 @@
 
 .timeline-event-details {
     display: none;
-}
-
-.timeline-event-actions {
-    .timeline-item._permanent & {
-        display: none;
-    }
 }
 
 .timeline-action {
@@ -261,6 +247,10 @@
     &._toend {
         .timeline-item._scroll-end & {
             display: block;
+        }
+
+        .timeline-item._permanent & {
+            display: none;
         }
     }
 }

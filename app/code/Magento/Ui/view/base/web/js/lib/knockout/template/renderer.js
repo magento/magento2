@@ -465,7 +465,7 @@ define([
             'optionsText',
             'optionsValue',
             'checkedValue',
-            'selectedOptions',
+            'selectedOptions'
         ], Array.prototype)
     };
 
