@@ -19,11 +19,11 @@ define([
             dateFormat: 'YYYY-MM-DD hh:mm:ss',
             headerFormat: 'ddd MM/DD',
             detailsFormat: 'DD/MM/YYYY hh:mm:ss',
-            scale: 1,
+            scale: 7,
+            scaleStep: 1,
+            minScale: 5,
+            maxScale: 28,
             minDays: 28,
-            minScale: 1,
-            maxScale: 4,
-            scaleStep: 1 / 7,
             displayMode: 'timeline',
             displayModes: {
                 timeline: {
@@ -55,6 +55,20 @@ define([
             this._super()
                 .initView()
                 .updateRange();
+
+            return this;
+        },
+
+        /**
+         * Initializes components configuration.
+         *
+         * @returns {Timeline} Chainable.
+         */
+        initConfig: function () {
+            this._super();
+
+            this.maxScale = Math.min(this.minDays, this.maxScale);
+            this.minScale = Math.min(this.maxScale, this.minScale);
 
             return this;
         },
@@ -195,6 +209,21 @@ define([
             return moment(dateStr, this.dateFormat);
         },
 
+        /**
+         * Converts days to weeks.
+         *
+         * @param {Number} days
+         * @returns {Number}
+         */
+        daysToWeeks: function (days) {
+            var weeks = days / 7;
+
+            if (weeks % 1) {
+                weeks = weeks.toFixed(1);
+            }
+
+            return weeks;
+        },
 
         /**
          * Updates data of a range object,

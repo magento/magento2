@@ -7,10 +7,29 @@ define([
     'ko',
     'Magento_Ui/js/lib/view/utils/async',
     'underscore',
+    'Magento_Ui/js/lib/view/utils/raf',
     'uiRegistry',
     'uiClass'
-], function (ko, $, _, registry, Class) {
+], function (ko, $, _, raf, registry, Class) {
     'use strict';
+
+    /**
+     * Polyfill of the 'classList.toggle' method.
+     *
+     * @param {HTMLElement} elem
+     */
+    function toggleClass(elem) {
+        var classList   = elem.classList,
+            args        = Array.prototype.slice.call(arguments, 1),
+            $elem;
+
+        if (classList) {
+            classList.toggle.apply(classList, args);
+        } else {
+            $elem = $(elem);
+            $elem.toggleClass.apply($elem, args);
+        }
+    }
 
     return Class.extend({
         defaults: {
@@ -30,6 +49,7 @@ define([
         initialize: function () {
             _.bindAll(
                 this,
+                'refresh',
                 'initContent',
                 'initItem',
                 'initTimeUnit',
@@ -89,14 +109,16 @@ define([
          * @returns {TimelineView} Chainable.
          */
         initContent: function (content) {
-            this.$content = $(content);
+            this.$content = content;
 
-            this.$content.on('scroll', this.onContentScroll);
+            $(content).on('scroll', this.onContentScroll);
             $(window).on('resize', this.onWindowResize);
 
             $.async(this.selectors.item, content, this.initItem);
             $.async(this.selectors.event, content, this.onEventElementRender);
             $.async(this.selectors.timeUnit, content, this.initTimeUnit);
+
+            this.refresh();
 
             return this;
         },
@@ -127,6 +149,20 @@ define([
             $(elem).bindings(this.getTimeUnitBindings());
 
             return this;
+        },
+
+        /**
+         * Updates items positions in a
+         * loop if state of a view has changed.
+         */
+        refresh: function () {
+            raf(this.refresh);
+
+            if (this._update) {
+                this._update = false;
+
+                this.updateItemsPosition();
+            }
         },
 
         /**
@@ -172,7 +208,7 @@ define([
          * @returns {Number}
          */
         getTimeUnitWidth: function () {
-            return 100 / 7 / this.model.scale;
+            return 100 / this.model.scale;
         },
 
         /**
@@ -214,7 +250,9 @@ define([
          * @returns {Array<HTMLElement>}
          */
         getItems: function () {
-            return $(this.selectors.item, this.$content).toArray();
+            var items = this.$content.querySelectorAll(this.selectors.item);
+
+            return _.toArray(items);
         },
 
         /**
@@ -232,22 +270,21 @@ define([
         /**
          * Updates position of provided timeline element.
          *
-         * @param {HTMLElement} elem
+         * @param {HTMLElement} $elem
          * @returns {TimelineView} Chainable.
          */
-        updatePositionFor: function (elem) {
-            var $elem       = $(elem),
-                $event      = $(this.selectors.event, $elem),
-                leftEdge    = this.getLeftEdgeFor(elem),
-                rightEdge   = this.getRightEdgeFor(elem);
+        updatePositionFor: function ($elem) {
+            var $event      = $elem.querySelector(this.selectors.event),
+                leftEdge    = this.getLeftEdgeFor($elem),
+                rightEdge   = this.getRightEdgeFor($elem);
 
-            $event.css({
-                left: leftEdge < 0 ? -leftEdge : 0,
-                right: rightEdge > 0 ? rightEdge : 0
-            });
+            if ($event) {
+                $event.style.left = (leftEdge < 0 ? -leftEdge : 0) + 'px';
+                $event.style.right = (rightEdge > 0 ? rightEdge : 0) + 'px';
+            }
 
-            $elem.toggleClass('_scroll-start', leftEdge < 0)
-                .toggleClass('_scroll-end', rightEdge > 0);
+            toggleClass($elem, '_scroll-start', leftEdge < 0);
+            toggleClass($elem, '_scroll-end', rightEdge > 0);
 
             return this;
         },
@@ -259,10 +296,9 @@ define([
          * @returns {TimelineView}
          */
         toStartOf: function (elem) {
-            var leftEdge    = this.getLeftEdgeFor(elem),
-                scroll      = this.$content.scrollLeft();
+            var leftEdge = this.getLeftEdgeFor(elem);
 
-            this.$content.scrollLeft(scroll + leftEdge);
+            this.$content.scrollLeft += leftEdge;
 
             return this;
         },
@@ -274,10 +310,9 @@ define([
          * @returns {TimelineView}
          */
         toEndOf: function (elem) {
-            var rightEdge   = this.getRightEdgeFor(elem),
-                scroll      = this.$content.scrollLeft();
+            var rightEdge = this.getRightEdgeFor(elem);
 
-            this.$content.scrollLeft(scroll + rightEdge + 1);
+            this.$content.scrollLeft += rightEdge + 1;
 
             return this;
         },
@@ -290,9 +325,9 @@ define([
          * @returns {Number}
          */
         getLeftEdgeFor: function (elem) {
-            var leftOffset = $(elem).offset().left;
+            var leftOffset = elem.getBoundingClientRect().left;
 
-            return leftOffset - this.$content.offset().left;
+            return leftOffset - this.$content.getBoundingClientRect().left;
         },
 
         /**
@@ -303,10 +338,10 @@ define([
          * @returns {Number}
          */
         getRightEdgeFor: function (elem) {
-            var elemWidth   = $(elem).width(),
+            var elemWidth   = elem.offsetWidth,
                 leftEdge    = this.getLeftEdgeFor(elem);
 
-            return leftEdge + elemWidth - this.$content.width();
+            return leftEdge + elemWidth - this.$content.offsetWidth;
         },
 
         /**
@@ -335,7 +370,7 @@ define([
          * Handler of the scale value 'change' event.
          */
         onScaleChange: function () {
-            _.defer(this.updateItemsPosition);
+            this._update = true;
         },
 
         /**
@@ -343,28 +378,28 @@ define([
          * when event element was rendered.
          */
         onEventElementRender: function () {
-            this.updateItemsPosition();
+            this._update = true;
         },
 
         /**
          * Window 'resize' event handler.
          */
         onWindowResize: function () {
-            this.updateItemsPosition();
+            this._update = true;
         },
 
         /**
          * Content container 'scroll' event handler.
          */
         onContentScroll: function () {
-            this.updateItemsPosition();
+            this._update = true;
         },
 
         /**
          * Data 'reload' event handler.
          */
         onDataReloaded: function () {
-            this.updateItemsPosition();
+            this._update = true;
         }
     });
 });

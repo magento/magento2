@@ -21,6 +21,7 @@ define(function (require) {
     return {
         i18n:           require('./i18n'),
         scope:          require('./scope'),
+        range:          require('./range'),
         mageInit:       require('./mage-init'),
         keyboard:       require('./keyboard'),
         optgroup:       require('./optgroup'),
