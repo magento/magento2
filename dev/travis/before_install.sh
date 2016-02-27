@@ -3,6 +3,8 @@
 # Copyright © 2015 Magento. All rights reserved.
 # See COPYING.txt for license details.
 
+set -e
+
 # install or update composer in casher dir
 if [ "$CASHER_DIR" ]; then
     if [ -x $HOME/.cache/bin/composer ]; then

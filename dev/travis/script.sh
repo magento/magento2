@@ -3,6 +3,7 @@
 # Copyright © 2015 Magento. All rights reserved.
 # See COPYING.txt for license details.
 
+set -e
 PATH="./../../../vendor/bin:$PATH"
 
 case $TEST_SUITE in
@@ -10,13 +11,9 @@ case $TEST_SUITE in
         cd dev/tests/unit
         phpunit -c phpunit.xml.dist
         ;;
-    integration_part_1)
+    integration)
         cd dev/tests/integration
-        phpunit -c phpunit.xml.travis1
-        ;;
-    integration_part_2)
-        cd dev/tests/integration
-        phpunit -c phpunit.xml.travis2
+        phpunit -c phpunit.xml.travis$INTEGRATION_INDEX
         ;;
     integration_integrity)
         cd dev/tests/integration
