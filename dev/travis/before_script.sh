@@ -19,7 +19,7 @@ case $TEST_SUITE in
     integration)
         cd dev/tests/integration
 
-        test_set_list=$(find -s testsuite/* -maxdepth 1 -mindepth 1 -type d)
+        test_set_list=$(find testsuite/* -maxdepth 1 -mindepth 1 -type d | sort)
         test_set_size=$(($(printf "$test_set_list" | wc -l)/INTEGRATION_SETS))
 
         echo "==> preparing integration testsuite on index $INTEGRATION_INDEX of set size $INTEGRATION_SETS"
