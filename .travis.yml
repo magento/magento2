@@ -16,8 +16,7 @@ env:
   - TEST_SUITE=unit
   - TEST_SUITE=integration INTEGRATION_INDEX=1 INTEGRATION_SETS=2
   - TEST_SUITE=integration INTEGRATION_INDEX=2 INTEGRATION_SETS=2
-  - TEST_SUITE=static_phpcs
-  - TEST_SUITE=static_annotation
+  - TEST_SUITE=static
 cache:
   apt: true
   directories:

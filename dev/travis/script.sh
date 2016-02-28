@@ -15,12 +15,8 @@ case $TEST_SUITE in
         cd dev/tests/integration
         phpunit -c phpunit.xml.travis$INTEGRATION_INDEX
         ;;
-    static_phpcs)
+    static)
         cd dev/tests/static
-        phpunit -c phpunit.xml.dist --filter 'Magento\\Test\\Php\\LiveCodeTest::testCodeStyle'
-        ;;
-    static_annotation)
-        cd dev/tests/static
-        phpunit -c phpunit.xml.dist --filter 'Magento\\Test\\Php\\LiveCodeTest::testAnnotationStandard'
+        phpunit -c phpunit.xml.dist --filter 'Magento\\Test\\Php\\LiveCodeTest::(testCodeStyle|testAnnotationStandard)'
         ;;
 esac
