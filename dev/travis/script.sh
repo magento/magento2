@@ -15,10 +15,6 @@ case $TEST_SUITE in
         cd dev/tests/integration
         phpunit -c phpunit.xml.travis$INTEGRATION_INDEX
         ;;
-    integration_integrity)
-        cd dev/tests/integration
-        phpunit -c phpunit.xml.dist testsuite/Magento/Test/Integrity
-        ;;
     static_phpcs)
         cd dev/tests/static
         phpunit -c phpunit.xml.dist --filter 'Magento\\Test\\Php\\LiveCodeTest::testCodeStyle'

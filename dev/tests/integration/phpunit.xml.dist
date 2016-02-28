@@ -19,7 +19,6 @@
         <testsuite name="Magento Integration Tests">
             <directory suffix="Test.php">testsuite</directory>
             <directory suffix="Test.php">../../../update/dev/tests/integration/testsuite</directory>
-            <exclude>testsuite/Magento/Test/Integrity</exclude>
             <exclude>testsuite/Magento/MemoryUsageTest.php</exclude>
         </testsuite>
     </testsuites>

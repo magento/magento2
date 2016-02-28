@@ -16,7 +16,6 @@ env:
   - TEST_SUITE=unit
   - TEST_SUITE=integration INTEGRATION_INDEX=1 INTEGRATION_SETS=2
   - TEST_SUITE=integration INTEGRATION_INDEX=2 INTEGRATION_SETS=2
-  - TEST_SUITE=integration_integrity
   - TEST_SUITE=static_phpcs
   - TEST_SUITE=static_annotation
 cache:
