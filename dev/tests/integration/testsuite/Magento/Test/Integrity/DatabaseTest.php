@@ -3,7 +3,8 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento;
+
+namespace Magento\Test\Integrity;
 
 use Magento\TestFramework\Helper\Bootstrap;
 
