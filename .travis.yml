@@ -25,13 +25,9 @@ cache:
 matrix:
   exclude:
     - php: 5.6
-      env: TEST_SUITE=static_phpcs
-    - php: 5.6
-      env: TEST_SUITE=static_annotation
+      env: TEST_SUITE=static
     - php: 7.0
-      env: TEST_SUITE=static_phpcs
-    - php: 7.0
-      env: TEST_SUITE=static_annotation
+      env: TEST_SUITE=static
 before_install: ./dev/travis/before_install.sh
 before_script: ./dev/travis/before_script.sh
 script: ./dev/travis/script.sh
