@@ -8,6 +8,7 @@ export PATH="$HOME/.cache/bin:$PATH"
 
 # mock mail
 sudo service postfix stop
+echo # print a newline
 smtp-sink -d "%d.%H.%M.%S" localhost:2500 1000 &
 echo 'sendmail_path = "/usr/sbin/sendmail -t -i "' > ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/sendmail.ini
 
@@ -22,15 +23,15 @@ case $TEST_SUITE in
         test_set_list=$(find testsuite/* -maxdepth 1 -mindepth 1 -type d | sort)
         test_set_size=$(($(printf "$test_set_list" | wc -l)/INTEGRATION_SETS))
 
-        echo "==> preparing integration testsuite on index $INTEGRATION_INDEX of set size $INTEGRATION_SETS"
+        echo "==> preparing integration testsuite on index $INTEGRATION_INDEX with set size of $test_set_size"
         cp phpunit.xml.dist phpunit.xml
 
         # remove memory usage and update integration tests if not set 1
         if [[ $INTEGRATION_INDEX > 1 ]]; then
-            echo "  - excluding testsuite/Magento/MemoryUsageTest.php"
+            echo "  - removing testsuite/Magento/MemoryUsageTest.php"
             perl -pi -0e 's#^\s+<!-- Memory(.*?)</testsuite>\n##ims' phpunit.xml
             
-            echo "  - excluding ../../../update/dev/tests/integration/testsuite"
+            echo "  - removing ../../../update/dev/tests/integration/testsuite"
             perl -pi -e 's#\s+<directory.*>../../../update/dev/tests.*</directory>\n##g' phpunit.xml
         fi
 
