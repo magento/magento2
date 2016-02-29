@@ -214,7 +214,6 @@ class General extends AbstractModifier
         );
         $meta = $this->arrayManager->merge($containerPath . static::META_CONFIG_PATH, $meta, [
             'component' => 'Magento_Ui/js/form/components/group',
-
         ]);
 
         $hasWeightPath = $this->arrayManager->slicePath($weightPath, 0, -1) . '/'
