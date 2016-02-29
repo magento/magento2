@@ -9,6 +9,12 @@ use Magento\Backend\App\Action;
 
 class Cancel extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
 
     /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
@@ -25,14 +31,6 @@ class Cancel extends \Magento\Backend\App\Action
     ) {
         $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_creditmemo');
     }
 
     /**
