@@ -45,6 +45,11 @@ class BundleTest extends AbstractProductExportImportTestCase
         ];
     }
 
+    public function importReplaceDataProvider()
+    {
+        return $this->exportImportDataProvider();
+    }
+
     /**
      * @param \Magento\Catalog\Model\Product $expectedProduct
      * @param \Magento\Catalog\Model\Product $actualProduct
