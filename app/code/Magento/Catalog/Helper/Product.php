@@ -8,7 +8,6 @@ namespace Magento\Catalog\Helper;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product as ModelProduct;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\Store;
 
