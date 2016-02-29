@@ -26,8 +26,8 @@ class AssertGlobalSearchPreview extends AbstractConstraint
     public function processAssert(Dashboard $dashboard, GlobalSearch $search)
     {
         $types = ['Products', 'Customers', 'Orders', 'Pages'];
-        foreach($types as $type) {
-           $this->adminSearchAssert($dashboard, $search, $type);
+        foreach ($types as $type) {
+            $this->adminSearchAssert($dashboard, $search, $type);
         }
     }
 
