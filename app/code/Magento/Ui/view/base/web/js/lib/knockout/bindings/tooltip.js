@@ -7,7 +7,7 @@ define([
     'ko',
     'underscore',
     'mage/template',
-    'text!ui/template/tooltip.html',
+    'text!ui/template/tooltip/tooltip.html',
     '../template/renderer'
 ], function ($, ko, _, template, tooltipTmpl, renderer) {
     'use strict';
@@ -480,8 +480,8 @@ define([
         /**
          * Initialize tooltip
          *
-         * @param {Object} element - tooltip element
-         * @param {Function} valueAccessor - tooltip data
+         * @param {Object} element - tooltip DOM element
+         * @param {Function} valueAccessor - ko observable property, tooltip data
          * @param {Object} allBindings - all bindings on current element
          * @param {Object} viewModel - current element viewModel
          * @param {Object} bindingCtx - current element binding context
