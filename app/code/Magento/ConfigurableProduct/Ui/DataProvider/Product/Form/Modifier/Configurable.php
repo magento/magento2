@@ -14,6 +14,7 @@ use Magento\Ui\Component\Form;
 use Magento\Ui\Component\DynamicRows;
 use Magento\Ui\Component\Modal;
 use Magento\Framework\UrlInterface;
+use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data\AssociatedProducts;
 
 /**
  * Data provider for Configurable products
@@ -54,15 +55,23 @@ class Configurable extends AbstractModifier
     protected $urlBuilder;
 
     /**
+     * @var AssociatedProducts
+     */
+    protected $associatedProducts;
+
+    /**
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
+     * @param AssociatedProducts $associatedProducts
      */
     public function __construct(
         LocatorInterface $locator,
-        UrlInterface $urlBuilder
+        UrlInterface $urlBuilder,
+        AssociatedProducts $associatedProducts
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
+        $this->associatedProducts = $associatedProducts;
     }
 
     /**
@@ -73,7 +82,11 @@ class Configurable extends AbstractModifier
         if (in_array($this->locator->getProduct()->getTypeId(), self::$availableProductTypes)) {
             $model = $this->locator->getProduct();
             $data[$model->getId()]['affect_configurable_product_attributes'] = '1';
-            //$data[$model->getId()]['configurable-matrix'] = $this->getConfigurableMatrix();
+
+            if ($this->locator->getProduct()->getTypeId() === ConfigurableType::TYPE_CODE) {
+                $data[$model->getId()]['configurable-matrix'] = $this->associatedProducts->getProductMatrix();
+                $data[$model->getId()]['attributes'] = $this->associatedProducts->getProductAttributesIds();
+            }
         }
 
         return $data;
