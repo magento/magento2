@@ -8,7 +8,6 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Model\AttributeConstantsInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Ui\Component\Form;
-use Magento\Catalog\Ui\DataProvider\Grouper;
 use Magento\Framework\Stdlib\ArrayManager;
 
 /**
@@ -22,27 +21,19 @@ class General extends AbstractModifier
     protected $locator;
 
     /**
-     * @var Grouper
-     */
-    protected $grouper;
-
-    /**
      * @var ArrayManager
      */
     protected $arrayManager;
 
     /**
      * @param LocatorInterface $locator
-     * @param Grouper $grouper
      * @param ArrayManager $arrayManager
      */
     public function __construct(
         LocatorInterface $locator,
-        Grouper $grouper,
         ArrayManager $arrayManager
     ) {
         $this->locator = $locator;
-        $this->grouper = $grouper;
         $this->arrayManager = $arrayManager;
     }
 
@@ -196,97 +187,60 @@ class General extends AbstractModifier
      */
     protected function customizeWeightField(array $meta)
     {
-        if ($weightPath = $this->getElementArrayPath($meta, AttributeConstantsInterface::CODE_WEIGHT)) {
-            if ($this->locator->getProduct()->getTypeId() !== \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL) {
-                $weightPath = $this->getElementArrayPath($meta, AttributeConstantsInterface::CODE_WEIGHT);
-                $meta = $this->arrayManager->merge(
-                    $weightPath,
-                    $meta,
-                    [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'dataScope' => AttributeConstantsInterface::CODE_WEIGHT,
-                                    'validation' => [
-                                        'validate-number' => true,
-                                    ],
-                                    'additionalClasses' => 'admin__field-small',
-                                    'addafter' => $this->locator->getStore()->getConfig('general/locale/weight_unit'),
-                                    'imports' => [
-                                        'disabled' => '!${$.provider}:' . self::DATA_SCOPE_PRODUCT
-                                            . '.product_has_weight:value'
-                                    ]
-                                ],
-                            ],
-                        ],
-                    ]
-                );
-
-                $containerPath = $this->getElementArrayPath(
-                    $meta,
-                    static::CONTAINER_PREFIX . AttributeConstantsInterface::CODE_WEIGHT
-                );
-                $meta = $this->arrayManager->merge($containerPath, $meta, [
-                    'arguments' => [
-                        'data' => [
-                            'config' => [
-                                'component' => 'Magento_Ui/js/form/components/group',
-                            ],
-                        ],
-                    ],
-                ]);
-
-                $hasWeightPath = $this->arrayManager->slicePath($weightPath, 0, -1) . '/'
-                    . AttributeConstantsInterface::CODE_HAS_WEIGHT;
-                $meta = $this->arrayManager->set(
-                    $hasWeightPath,
-                    $meta,
-                    [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'dataType' => 'boolean',
-                                    'formElement' => Form\Element\Select::NAME,
-                                    'componentType' => Form\Field::NAME,
-                                    'dataScope' => 'product_has_weight',
-                                    'label' => '',
-                                    'options' => [
-                                        [
-                                            'label' => __('This item has weight'),
-                                            'value' => 1
-                                        ],
-                                        [
-                                            'label' => __('This item has no weight'),
-                                            'value' => 0
-                                        ],
-                                    ],
-                                    'value' => (int)$this->locator->getProduct()->getTypeInstance()->hasWeight(),
-                                ],
-                            ],
-                        ]
-                    ]
-                );
-
-                $meta = $this->grouper->groupMetaElements(
-                    $meta,
-                    [AttributeConstantsInterface::CODE_WEIGHT, AttributeConstantsInterface::CODE_HAS_WEIGHT],
-                    [
-                        'meta' => [
-                            'arguments' => [
-                                'data' => [
-                                    'config' => [
-                                        'dataScope' => '',
-                                        'breakLine' => false,
-                                        'scopeLabel' => $this->arrayManager->get($weightPath . '/scopeLabel', $meta)
-                                    ],
-                                ],
-                            ],
-                        ],
-                        'targetCode' => 'container_' . AttributeConstantsInterface::CODE_WEIGHT
-                    ]
-                );
-            }
+        if (!($weightPath = $this->getElementArrayPath($meta, AttributeConstantsInterface::CODE_WEIGHT))) {
+            return $meta;
         }
+
+        $meta = $this->arrayManager->merge(
+            $weightPath . static::META_CONFIG_PATH,
+            $meta,
+            [
+                'dataScope' => AttributeConstantsInterface::CODE_WEIGHT,
+                'validation' => [
+                    'validate-number' => true,
+                ],
+                'additionalClasses' => 'admin__field-small',
+                'addafter' => $this->locator->getStore()->getConfig('general/locale/weight_unit'),
+                'imports' => [
+                    'disabled' => '!${$.provider}:' . self::DATA_SCOPE_PRODUCT
+                        . '.product_has_weight:value'
+                ]
+            ]
+        );
+
+        $containerPath = $this->getElementArrayPath(
+            $meta,
+            static::CONTAINER_PREFIX . AttributeConstantsInterface::CODE_WEIGHT
+        );
+        $meta = $this->arrayManager->merge($containerPath . static::META_CONFIG_PATH, $meta, [
+            'component' => 'Magento_Ui/js/form/components/group',
+
+        ]);
+
+        $hasWeightPath = $this->arrayManager->slicePath($weightPath, 0, -1) . '/'
+            . AttributeConstantsInterface::CODE_HAS_WEIGHT;
+        $meta = $this->arrayManager->set(
+            $hasWeightPath . static::META_CONFIG_PATH,
+            $meta,
+            [
+                'dataType' => 'boolean',
+                'formElement' => Form\Element\Select::NAME,
+                'componentType' => Form\Field::NAME,
+                'dataScope' => 'product_has_weight',
+                'label' => '',
+                'options' => [
+                    [
+                        'label' => __('This item has weight'),
+                        'value' => 1
+                    ],
+                    [
+                        'label' => __('This item has no weight'),
+                        'value' => 0
+                    ],
+                ],
+                'value' => (int)$this->locator->getProduct()->getTypeInstance()->hasWeight(),
+            ]
+        );
 
         return $meta;
     }
@@ -345,7 +299,7 @@ class General extends AbstractModifier
                 $this->arrayManager->get($toFieldPath, $meta)
             );
 
-            $meta =  $this->arrayManager->remove($toContainerPath, $meta);
+            $meta = $this->arrayManager->remove($toContainerPath, $meta);
         }
 
         return $meta;
