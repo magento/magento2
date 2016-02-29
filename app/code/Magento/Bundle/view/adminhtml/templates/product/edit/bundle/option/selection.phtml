@@ -164,7 +164,7 @@ Bundle.Selection.prototype = {
         if (data.can_read_price != undefined && !data.can_read_price) {
             data.selection_price_value = '';
         } else {
-            data.selection_price_value = Number(data.selection_price_value).toFixed(2);
+            data.selection_price_value = Number(Math.round(data.selection_price_value + "e+2") + "e-2").toFixed(2);
         }
 
         data.index = this.itemsCount++;
