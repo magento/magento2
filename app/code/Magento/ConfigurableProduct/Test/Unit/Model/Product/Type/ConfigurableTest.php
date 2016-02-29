@@ -8,7 +8,11 @@
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Type;
 
+use Magento\Catalog\Api\Data\ProductExtensionInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Framework\Model\Entity\EntityMetadata;
+use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
  * Class \Magento\ConfigurableProduct\Test\Unit\Model\Product\Type\ConfigurableTest
@@ -69,6 +73,16 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected $extensionAttributesJoinProcessorMock;
 
     /**
+     * @var MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPool;
+
+    /**
+     * @var EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $entityMetadata;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -120,6 +134,16 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->entityMetadata = $this->getMockBuilder(EntityMetadata::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->metadataPool = $this->getMockBuilder(MetadataPool::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->metadataPool->expects($this->any())
+            ->method('getMetadata')
+            ->with(ProductInterface::class)
+            ->willReturn($this->entityMetadata);
 
         $this->_model = $this->_objectHelper->getObject(
             'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
@@ -135,6 +159,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'logger' => $logger,
                 'productRepository' => $this->productRepository,
                 'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
+                'metadataPool' => $this->metadataPool,
             ]
         );
     }
@@ -170,13 +195,26 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->attributeData));
         $product->expects($this->once())->method('getIsDuplicate')->will($this->returnValue(true));
         $product->expects($this->any())->method('getStoreId')->will($this->returnValue(1));
-        $product->expects($this->any())->method('getId')->will($this->returnValue(1));
         $product->expects($this->any())->method('getAssociatedProductIds')->will($this->returnValue([2]));
         $product->expects($this->any())->method('hasData')->with('_cache_instance_used_product_attribute_ids')
             ->will($this->returnValue(true));
-        $product->expects($this->any())->method('getData')->with('_cache_instance_used_product_attribute_ids')
-            ->will($this->returnValue([1]));
-
+        $extensionAttributes = $this->getMockBuilder(ProductExtensionInterface::class)
+            ->setMethods([
+                'getConfigurableProductOptions',
+                'getConfigurableProductLinks'
+            ])
+            ->getMockForAbstractClass();
+        $this->entityMetadata->expects(static::once())
+            ->method('getLinkField')
+            ->willReturn('link');
+        $dataMap = [
+            ['extension_attributes', null, $extensionAttributes],
+            ['_cache_instance_used_product_attribute_ids', null, 1],
+            ['link', null, 1],
+        ];
+        $product->expects($this->any())
+            ->method('getData')
+            ->willReturnMap($dataMap);
         $attribute = $this->getMockBuilder('\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute')
             ->disableOriginalConstructor()
             ->setMethods(['addData', 'setStoreId', 'setProductId', 'save', '__wakeup', '__sleep'])
@@ -644,18 +682,16 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $productCollection->expects($this->any())->method('addAttributeToSelect')->will($this->returnSelf());
         $productCollection->expects($this->any())->method('addAttributeToFilter')->will($this->returnSelf());
         $productCollection->expects($this->once())->method('getFirstItem')->willReturn($firstItemMock);
-        $firstItemMock->expects($this->once())->method('getId')->willReturn(false);
-        $productMock->expects($this->at(0))
-            ->method('getData')
-            ->with('_cache_instance_store_filter')
-            ->willReturn('some_filter');
+        $firstItemMock->expects(static::once())
+            ->method('getId')
+            ->willReturn(false);
+        $dataMap = [
+            ['_cache_instance_store_filter', null, 'some_filter'],
+            ['_cache_instance_products', null, [$usedProductMock]],
+            ['_cache_instance_product_set_attributes', null, [$eavAttributeMock]],
+        ];
+        $productMock->expects($this->any())->method('getData')->willReturnMap($dataMap);
         $productMock->expects($this->any())->method('hasData')->willReturn(true);
-        $productMock->expects($this->at(3))->method('getData')
-            ->with('_cache_instance_products')
-            ->willReturn([$usedProductMock]);
-        $productMock->expects($this->at(5))->method('getData')
-            ->with('_cache_instance_product_set_attributes')
-            ->willReturn([$eavAttributeMock]);
         $eavAttributeMock->expects($this->once())->method('getId')->willReturn(1);
         $eavAttributeMock->expects($this->once())->method('getAttributeCode')->willReturn('attr_code');
         $usedProductMock->expects($this->once())
@@ -701,8 +737,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $productCollection->expects($this->any())->method('addAttributeToSelect')->will($this->returnSelf());
         $productCollection->expects($this->any())->method('addAttributeToFilter')->will($this->returnSelf());
         $productCollection->expects($this->once())->method('getFirstItem')->willReturn($firstItemMock);
-        $firstItemMock->expects($this->any())->method('getId')->willReturn(3);
+        $firstItemMock->expects(static::once())
+            ->method('getId')
+            ->willReturn(3);
         $this->productRepository->expects($this->once())->method('getById')->with(3)->willReturn($firstItemMock);
+
 
         $this->assertEquals(
             $firstItemMock,

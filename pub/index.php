@@ -10,7 +10,7 @@ use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 try {
-    require __DIR__ . '/../app/bootstrap.php';
+    require realpath(__DIR__) . '/../app/bootstrap.php';
 } catch (\Exception $e) {
     echo <<<HTML
 <div style="font:12px/1.35em arial, helvetica, sans-serif;">

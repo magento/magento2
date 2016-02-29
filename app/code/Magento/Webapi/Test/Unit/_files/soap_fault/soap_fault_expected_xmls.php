@@ -27,6 +27,10 @@ return [
                                 <m:key>key2</m:key>
                                 <m:value>value2</m:value>
                             </m:GenericFaultParameter>
+                            <m:GenericFaultParameter>
+                                <m:key>1</m:key>
+                                <m:value>value3</m:value>
+                            </m:GenericFaultParameter>
                         </m:Parameters>
                         <m:Trace>Trace</m:Trace>
                     </m:GenericFault>
