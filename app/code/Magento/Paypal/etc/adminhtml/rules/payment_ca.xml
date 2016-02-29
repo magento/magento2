@@ -36,8 +36,8 @@
             <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target=":self">
-            <rule type="simple/mark-enable" event="activate-rule"/>
-            <rule type="simple/disable" event="deactivate-rule"/>
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="simpleDisable" event="deactivate-rule"/>
             <rule type="conflict" event=":load">
                 <argument name="wpp_ca">wpp_ca</argument>
                 <argument name="paypal_payflowpro_ca">paypal_payflowpro_ca</argument>
@@ -71,8 +71,8 @@
             <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target=":self">
-            <rule type="simple/mark-enable" event="activate-rule"/>
-            <rule type="simple/disable" event="deactivate-rule"/>
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="simpleDisable" event="deactivate-rule"/>
             <rule type="conflict" event=":load">
                 <argument name="wps_other">wps_other</argument>
                 <argument name="paypal_payflowpro_ca">paypal_payflowpro_ca</argument>
@@ -105,8 +105,8 @@
             <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target=":self">
-            <rule type="simple/mark-enable" event="activate-rule"/>
-            <rule type="simple/disable" event="deactivate-rule"/>
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="simpleDisable" event="deactivate-rule"/>
             <rule type="conflict" event=":load">
                 <argument name="wps_other">wps_other</argument>
                 <argument name="wpp_ca">wpp_ca</argument>
@@ -139,22 +139,22 @@
             <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target="express_checkout_other">
-            <rule type="simple/mark-enable" event="activate-rule"/>
-            <rule type="paypal/express/disable" event="activate-rule"/>
-            <rule type="paypal/express/lock-configuration" event="activate-rule"/>
-            <rule type="paypal/express/mark-disable" event="deactivate-rule">
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="paypalExpressDisable" event="activate-rule"/>
+            <rule type="paypalExpressLockConfiguration" event="activate-rule"/>
+            <rule type="paypalExpressMarkDisable" event="deactivate-rule">
                 <argument name="payflow_link_ca">payflow_link_ca</argument>
             </rule>
-            <rule type="paypal/express/unlock-configuration" event="deactivate-rule">
+            <rule type="paypalExpressUnlockConfiguration" event="deactivate-rule">
                 <argument name="payflow_link_ca">payflow_link_ca</argument>
             </rule>
         </relation>
         <relation target=":self">
-            <rule type="simple/mark-enable" event="activate-rule"/>
-            <rule type="simple/disable" event="deactivate-rule"/>
-            <rule type="payflow/express/enable" event="activate-rule"/>
-            <rule type="payflow/express/disable" event="deactivate-rule"/>
-            <rule type="payflow/express/lock-conditional" event=":load"/>
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="simpleDisable" event="deactivate-rule"/>
+            <rule type="payflowExpressEnable" event="activate-rule"/>
+            <rule type="payflowExpressDisable" event="deactivate-rule"/>
+            <rule type="payflowExpressLockConditional" event=":load"/>
             <rule type="conflict" event=":load">
                 <argument name="wps_other">wps_other</argument>
                 <argument name="wpp_ca">wpp_ca</argument>
@@ -184,8 +184,8 @@
             <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target=":self">
-            <rule type="simple/mark-enable" event="activate-rule"/>
-            <rule type="paypal/express/mark-disable" event="deactivate-rule">
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="paypalExpressMarkDisable" event="deactivate-rule">
                 <argument name="wps_other">wps_other</argument>
                 <argument name="payflow_link_ca">payflow_link_ca</argument>
             </rule>
@@ -200,7 +200,7 @@
                 <argument name="wps_other">wps_other</argument>
                 <argument name="payflow_link_ca">payflow_link_ca</argument>
             </rule>
-            <rule type="paypal/express/lock-configuration-conditional" event=":load">
+            <rule type="paypalExpressLockConfigurationConditional" event=":load">
                 <argument name="payflow_link_ca">payflow_link_ca</argument>
             </rule>
         </relation>
