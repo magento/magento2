@@ -58,7 +58,7 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
                 $parameters
             ) ? "parent::__construct({$this->_getParameterList(
                 $parameters
-            )});" : '')
+            )});" : 'parent::__construct();')
         ];
     }
 
