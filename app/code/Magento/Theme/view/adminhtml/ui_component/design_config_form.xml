@@ -64,7 +64,7 @@
                         <item name="label" xsi:type="string" translate="true">Favicon Icon</item>
                         <item name="formElement" xsi:type="string">fileUploader</item>
                         <item name="componentType" xsi:type="string">fileUploader</item>
-                        <item name="notice" xsi:type="string" translate="true">Allowed file types: ICO, PNG, GIF, JPG, JPEG, APNG, SVG. Not all browsers support all these formats!</item>
+                        <item name="notice" xsi:type="string" translate="true">Allowed file types: ico, png, gif, jpg, jpeg, apng, svg. Not all browsers support all these formats!</item>
                         <item name="maxFileSize" xsi:type="number">2097152</item>
                         <item name="allowedExtensions" xsi:type="string">jpg jpeg gif png svg</item>
                         <item name="uploaderConfig" xsi:type="array">
@@ -80,6 +80,9 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">head_default_title</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
+                        </item>
                     </item>
                 </argument>
             </field>
@@ -90,6 +93,9 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">head_title_prefix</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
+                        </item>
                     </item>
                 </argument>
             </field>
@@ -100,6 +106,9 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">head_title_suffix</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
+                        </item>
                     </item>
                 </argument>
             </field>
@@ -110,6 +119,9 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">textarea</item>
                         <item name="dataScope" xsi:type="string">head_default_description</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
+                        </item>
                     </item>
                 </argument>
             </field>
@@ -120,6 +132,9 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">textarea</item>
                         <item name="dataScope" xsi:type="string">head_default_keywords</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
+                        </item>
                     </item>
                 </argument>
             </field>
@@ -131,6 +146,9 @@
                         <item name="formElement" xsi:type="string">textarea</item>
                         <item name="dataScope" xsi:type="string">head_includes</item>
                         <item name="notice" xsi:type="string" translate="true">This will be included before head closing tag in page HTML.</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-if-tag-script-exist" xsi:type="boolean">true</item>
+                        </item>
                     </item>
                 </argument>
             </field>
@@ -160,7 +178,7 @@
                         <item name="label" xsi:type="string" translate="true">Logo Image</item>
                         <item name="formElement" xsi:type="string">fileUploader</item>
                         <item name="componentType" xsi:type="string">fileUploader</item>
-                        <item name="notice" xsi:type="string" translate="true">Allowed file types:PNG, GIF, JPG, JPEG, SVG.</item>
+                        <item name="notice" xsi:type="string" translate="true">Allowed file types: png, gif, jpg, jpeg, svg.</item>
                         <item name="maxFileSize" xsi:type="number">2097152</item>
                         <item name="allowedExtensions" xsi:type="string">jpg jpeg gif png svg</item>
                         <item name="uploaderConfig" xsi:type="array">
@@ -177,7 +195,7 @@
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">header_logo_width</item>
                         <item name="validation" xsi:type="array">
-                            <item name="validate-number" xsi:type="boolean">true</item>
+                            <item name="validate-digits" xsi:type="boolean">true</item>
                         </item>
                     </item>
                 </argument>
@@ -190,7 +208,7 @@
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">header_logo_height</item>
                         <item name="validation" xsi:type="array">
-                            <item name="validate-number" xsi:type="boolean">true</item>
+                            <item name="validate-digits" xsi:type="boolean">true</item>
                         </item>
                     </item>
                 </argument>
@@ -202,6 +220,9 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">header_welcome</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
+                        </item>
                     </item>
                 </argument>
             </field>
@@ -212,6 +233,9 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">input</item>
                         <item name="dataScope" xsi:type="string">header_logo_alt</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
+                        </item>
                     </item>
                 </argument>
             </field>
@@ -231,7 +255,7 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">textarea</item>
                         <item name="dataScope" xsi:type="string">footer_absolute_footer</item>
-                        <item name="notice" xsi:type="string" translate="true">This will be displayed just before body closing tag.</item>
+                        <item name="notice" xsi:type="string" translate="true">This will be displayed just before the body closing tag.</item>
                     </item>
                 </argument>
             </field>
@@ -242,6 +266,9 @@
                         <item name="dataType" xsi:type="string">text</item>
                         <item name="formElement" xsi:type="string">textarea</item>
                         <item name="dataScope" xsi:type="string">footer_copyright</item>
+                        <item name="validation" xsi:type="array">
+                            <item name="validate-no-html-tags" xsi:type="boolean">true</item>
+                        </item>
                     </item>
                 </argument>
             </field>
