@@ -26,11 +26,6 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
     protected $_coreRegistry;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockStateInterface
-     */
-    protected $stockState;
-
-    /**
      * @var \Magento\CatalogInventory\Api\StockRegistryInterface
      */
     protected $stockRegistry;
@@ -38,19 +33,16 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\CatalogInventory\Api\StockStateInterface $stockState
      * @param \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Template\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\CatalogInventory\Api\StockStateInterface $stockState,
         \Magento\CatalogInventory\Api\StockRegistryInterface $stockRegistry,
         array $data = []
     ) {
         $this->_coreRegistry = $registry;
-        $this->stockState = $stockState;
         $this->stockRegistry = $stockRegistry;
 
         parent::__construct($context, $data);
