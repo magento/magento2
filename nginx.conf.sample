@@ -80,6 +80,12 @@ location /static/ {
     if ($MAGE_MODE = "production") {
         expires max;
     }
+    
+    # Remove signature of the static files that is used to overcome the browser cache
+    location ~ ^/static/version {
+        rewrite ^/static/(version\d*/)?(.*)$ /static/$2 last;
+    }
+    
     location ~* \.(ico|jpg|jpeg|png|gif|svg|js|css|swf|eot|ttf|otf|woff|woff2)$ {
         add_header Cache-Control "public";
         add_header X-Frame-Options "SAMEORIGIN";
