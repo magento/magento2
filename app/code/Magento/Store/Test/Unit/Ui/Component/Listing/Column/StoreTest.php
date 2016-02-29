@@ -39,6 +39,11 @@ class StoreTest extends \PHPUnit_Framework_TestCase
     protected $escaperMock;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $storeManagerMock;
+
+    /**
      * @var string
      */
     protected $name = 'anyname';
@@ -68,6 +73,10 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($this->processorMock);
         $this->processorMock->expects($this->atLeastOnce())->method('register');
+        $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
         $this->model = $objectManager->getObject(
             'Magento\Store\Ui\Component\Listing\Column\Store',
             [
@@ -79,10 +88,48 @@ class StoreTest extends \PHPUnit_Framework_TestCase
                 'data' => ['name' => $this->name]
             ]
         );
+
+        $this->injectMockedDependency($this->storeManagerMock, 'storeManager');
+    }
+
+    /**
+     * Inject mocked object dependency
+     *
+     * @param \PHPUnit_Framework_MockObject_MockObject $mockObject
+     * @param string $propertyName
+     * @return void
+     *
+     * @deprecated
+     */
+    private function injectMockedDependency($mockObject, $propertyName)
+    {
+        $reflection = new \ReflectionClass(get_class($this->model));
+        $reflectionProperty = $reflection->getProperty($propertyName);
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->model, $mockObject);
+    }
+
+    public function testPrepare()
+    {
+        $this->storeManagerMock->expects($this->atLeastOnce())->method('isSingleStoreMode')->willReturn(false);
+        $this->model->prepare();
+        $config = $this->model->getDataByKey('config');
+        $this->assertEmpty($config);
+    }
+
+    public function testPrepareWithSingleStore()
+    {
+        $this->storeManagerMock->expects($this->atLeastOnce())->method('isSingleStoreMode')->willReturn(true);
+        $this->model->prepare();
+        $config = $this->model->getDataByKey('config');
+        $this->assertNotEmpty($config);
+        $this->assertArrayHasKey('componentDisabled', $config);
+        $this->assertTrue($config['componentDisabled']);
     }
 
     /**
      * @dataProvider prepareDataSourceDataProvider
+     * @deprecated
      */
     public function testPrepareDataSource($dataSource, $expectedResult)
     {
@@ -112,6 +159,9 @@ class StoreTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->model->prepareDataSource($dataSource), $expectedResult);
     }
 
+    /**
+     * @deprecated
+     */
     public function prepareDataSourceDataProvider()
     {
         $content = "website<br/>&nbsp;&nbsp;&nbsp;group<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;store<br/>";
