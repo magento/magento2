@@ -51,6 +51,13 @@ class SkuProcessor
     private $productEntityLinkField;
 
     /**
+     * Product entity identifier field
+     *
+     * @var string
+     */
+    private $productEntityIdentifierField;
+
+    /**
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
      */
     public function __construct(
@@ -140,6 +147,9 @@ class SkuProcessor
     {
         $oldSkus = [];
         $columns = ['entity_id', 'type_id', 'attribute_set_id', 'sku'];
+        if ($this->getProductEntityLinkField() != $this->getProductIdentifierField()) {
+            $columns[] = $this->getProductEntityLinkField();
+        }
         foreach ($this->productFactory->create()->getProductEntitiesInfo($columns) as $info) {
             $typeId = $info['type_id'];
             $sku = $info['sku'];
@@ -181,5 +191,20 @@ class SkuProcessor
                 ->getLinkField();
         }
         return $this->productEntityLinkField;
+    }
+
+    /**
+     * Get product entity identifier field
+     *
+     * @return string
+     */
+    private function getProductIdentifierField()
+    {
+        if (!$this->productEntityIdentifierField) {
+            $this->productEntityIdentifierField = $this->getMetadataPool()
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getIdentifierField();
+        }
+        return $this->productEntityIdentifierField;
     }
 }
