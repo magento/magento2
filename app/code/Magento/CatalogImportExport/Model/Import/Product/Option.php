@@ -382,7 +382,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
          * TODO: Make metadataPool a direct constructor dependency, and eliminate its setter & getter
          */
         if (isset($data['metadata_pool'])) {
-            $this->setMetadataPool($data['metadata_pool']);
+            $this->metadataPool = $data['metadata_pool'];
         }
 
         $this->errorAggregator = $errorAggregator;

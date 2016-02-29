@@ -5,45 +5,25 @@
  */
 namespace Magento\CatalogImportExportStaging\Observer;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Model\Entity\MetadataPool;
-use Magento\Framework\Model\Entity\SequenceRegistry;
-use Magento\Framework\Phrase;
+use Magento\Framework\Event\ObserverInterface;
+use Magento\CatalogStaging\Model\ResourceModel\ProductSequence\Collection;
 
-class DeleteSequenceObserver implements \Magento\Framework\Event\ObserverInterface
+class DeleteSequenceObserver implements ObserverInterface
 {
     /**
-     * @var MetadataPool
+     * @var Collection
      */
-    private $metadataPool;
-
-    /**
-     * @var ResourceConnection
-     */
-    private $resource;
-
-    /**
-     * @var SequenceRegistry
-     */
-    private $sequenceRegistry;
+    private $productSequenceCollection;
 
     /**
      * Constructor
      *
-     * @param MetadataPool $metadataPool
-     * @param ResourceConnection $resource
-     * @param SequenceRegistry $sequenceRegistry
+     * @param Collection $productSequenceCollection
      */
     public function __construct(
-        MetadataPool $metadataPool,
-        ResourceConnection $resource,
-        SequenceRegistry $sequenceRegistry
+        Collection $productSequenceCollection
     ) {
-        $this->metadataPool = $metadataPool;
-        $this->resource = $resource;
-        $this->sequenceRegistry = $sequenceRegistry;
+        $this->productSequenceCollection = $productSequenceCollection;
     }
 
     /**
@@ -51,20 +31,11 @@ class DeleteSequenceObserver implements \Magento\Framework\Event\ObserverInterfa
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
-     * @throws LocalizedException
+     * @throws \LogicException
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
         $ids = $observer->getIdsToDelete();
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
-        $sequenceInfo = $this->sequenceRegistry->retrieve(ProductInterface::class);
-        if (!isset($sequenceInfo['sequenceTable'])) {
-            throw new LocalizedException(__('Sequence table doesn\'t exist'));
-        }
-
-        $metadata->getEntityConnection()->delete(
-            $this->resource->getTableName($sequenceInfo['sequenceTable']),
-            ['sequence_value IN (?)' => $ids]
-        );
+        $this->productSequenceCollection->deleteSequence($ids);
     }
 }

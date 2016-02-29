@@ -79,4 +79,36 @@ class DownloadableTest extends AbstractProductExportImportTestCase
     {
         $this->markTestSkipped('Uncomment after MAGETWO-49467 resolved');
     }
+
+    /**
+     * @param \Magento\Catalog\Model\Product $expectedProduct
+     * @param \Magento\Catalog\Model\Product $actualProduct
+     */
+    protected function assertEqualsSpecificAttributes($expectedProduct, $actualProduct)
+    {
+        $expectedProductLinks   = $expectedProduct->getExtensionAttributes()->getDownloadableProductLinks();
+        $expectedProductSamples = $expectedProduct->getExtensionAttributes()->getDownloadableProductSamples();
+
+        $actualProductLinks   = $actualProduct->getExtensionAttributes()->getDownloadableProductLinks();
+        $actualProductSamples = $actualProduct->getExtensionAttributes()->getDownloadableProductSamples();
+
+        $this->assertEquals(count($expectedProductLinks), count($actualProductLinks));
+        $this->assertEquals(count($expectedProductSamples), count($actualProductSamples));
+
+        $expectedLinksArray = [];
+        foreach ($expectedProductLinks as $link) {
+            $expectedLinksArray[] = $link->getData();
+        }
+        foreach ($actualProductLinks as $link) {
+            $this->assertContains($link->getData(), $expectedLinksArray);
+        }
+
+        $expectedSamplesArray = [];
+        foreach ($expectedProductSamples as $sample) {
+            $expectedSamplesArray[] = $sample->getData();
+        }
+        foreach ($actualProductSamples as $sample) {
+            $this->assertContains($sample->getData(), $expectedSamplesArray);
+        }
+    }
 }

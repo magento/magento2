@@ -132,7 +132,7 @@ abstract class AbstractType
      *
      * @var \Magento\Framework\Model\Entity\MetadataPool
      */
-    private $metadataPool;
+    protected $metadataPool;
 
     /**
      * Product entity link field
@@ -551,22 +551,6 @@ abstract class AbstractType
                 ->get('Magento\Framework\Model\Entity\MetadataPool');
         }
         return $this->metadataPool;
-    }
-
-    /**
-     * Set product Metadata pool
-     *
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
-     * @return void
-     * @throws \LogicException
-     * @deprecated
-     */
-    public function setMetadataPool(\Magento\Framework\Model\Entity\MetadataPool $metadataPool)
-    {
-        if ($this->metadataPool) {
-            throw new \LogicException("Metadata pool is already set");
-        }
-        $this->metadataPool = $metadataPool;
     }
 
     /**

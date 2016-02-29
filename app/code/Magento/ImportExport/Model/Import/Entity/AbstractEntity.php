@@ -244,7 +244,7 @@ abstract class AbstractEntity
      *
      * @var \Magento\Framework\Model\Entity\MetadataPool
      */
-    private $metadataPool;
+    protected $metadataPool;
 
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
@@ -849,22 +849,5 @@ abstract class AbstractEntity
                 ->get('Magento\Framework\Model\Entity\MetadataPool');
         }
         return $this->metadataPool;
-    }
-
-    /**
-     * Set product Metadata pool
-     *
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
-     * @return $this
-     * @throws \LogicException
-     * @deprecated
-     */
-    public function setMetadataPool(\Magento\Framework\Model\Entity\MetadataPool $metadataPool)
-    {
-        if ($this->metadataPool) {
-            throw new \LogicException("Metadata pool is already set");
-        }
-        $this->metadataPool = $metadataPool;
-        return $this;
     }
 }
