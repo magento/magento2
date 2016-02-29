@@ -201,10 +201,11 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
     {
         $this->executeFixtures($fixtures);
         $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
-        $this->executeImportReplaceTest($skus, $skippedAttributes, $rollbackFixtures);
+        $this->executeImportReplaceTest($skus, $skippedAttributes);
+        $this->executeFixtures($rollbackFixtures);
     }
 
-    protected function executeImportReplaceTest($skus, $skippedAttributes, $rollbackFixtures)
+    protected function executeImportReplaceTest($skus, $skippedAttributes)
     {
         $defaultProductData = $this->getDefaultProductData();
         $replacedAttributes = [
