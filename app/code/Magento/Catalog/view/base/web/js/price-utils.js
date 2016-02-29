@@ -53,9 +53,8 @@ define([
         pattern = pattern.indexOf('{sign}') < 0 ? s + pattern : pattern.replace('{sign}', s);
 
         // we're avoiding the usage of to fixed, and using round instead with the e representation to address
-        // numbers like 1.005 = 1.01
-
-        i = parseInt(amount = +(Math.round(Math.abs(+amount || 0) + 'e+' + precision) + ('e-' + precision)) , 10) + '';
+        // numbers like 1.005 = 1.01. Using ToFixed to only provide trailig zeroes in case we have a whole number
+        i = parseInt(amount = Number(Math.round(Math.abs(+amount || 0) + 'e+' + precision) + ('e-' + precision)) , 10) + '';
         pad = (i.length < integerRequired) ? (integerRequired - i.length) : 0;
 
         i = stringPad('0', pad) + i;
@@ -68,10 +67,10 @@ define([
         // Result is '0.-0' :(
 
 
-        am = +(Math.round(Math.abs(amount - i) + 'e+' + precision) + ('e-' + precision));
+        am = Number(Math.round(Math.abs(amount - i) + 'e+' + precision) + ('e-' + precision));
         r = (j ? i.substr(0, j) + groupSymbol : '') +
             i.substr(j).replace(re, '$1' + groupSymbol) +
-            (precision ? decimalSymbol + am.toString().replace(/-/, 0).slice(2) : '');
+            (precision ? decimalSymbol + am.toFixed(2).replace(/-/, 0).slice(2) : '');
 
         return pattern.replace('%s', r).replace(/^\s\s*/, '').replace(/\s\s*$/, '');
     }

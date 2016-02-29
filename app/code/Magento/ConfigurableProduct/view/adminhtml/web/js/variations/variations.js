@@ -124,7 +124,7 @@ define([
                 },
                 name: product.name || product.sku,
                 options: options,
-                price: parseFloat(product.price.replace(/[^\d.]+/g, '')).toFixed(4),
+                price: parseFloat(Math.round(product.price.replace(/[^\d.]+/g, '') + "e+4") + "e-4").toFixed(4),
                 productId: productId,
                 productUrl: this.buildProductUrl(productId),
                 quantity: product.quantity || null,
