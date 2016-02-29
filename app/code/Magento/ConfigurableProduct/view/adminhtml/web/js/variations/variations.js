@@ -174,7 +174,6 @@ define([
             this.attributes(attributes);
             this.initImageUpload();
             //this.disableConfigurableAttributes(attributes);
-            //this.showPrice();
             this.handleValue(variations);
             this.handleAttributes();
         },
@@ -215,6 +214,7 @@ define([
 
             this.usedAttributes(tmpArray);
         },
+
 
         /**
          * Get attributes options
@@ -420,16 +420,6 @@ define([
                     .addClass('disabled-configurable-elements')
                     .prop('disabled', true);
             });
-        },
-        showPrice: function () {
-            var priceContainer = $('[id="attribute-price-container"]');
-            if (this.productMatrix().length !== 0) {
-                priceContainer.hide();
-                priceContainer.find('input').prop('disabled', true);
-            } else {
-                priceContainer.show();
-                priceContainer.find('input').prop('disabled', false);
-            }
         },
 
         /**
