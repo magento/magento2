@@ -299,12 +299,13 @@ define([
             var html = $(elem).html(),
                 tooltipElement;
 
-            tooltip.destroy(config);
+            if (tooltip.showed && tooltip.trigger && tooltip.trigger[0] === event.target && config.action === 'click') {
+                tooltip.destroy(config);
 
-            if (tooltip.trigger && tooltip.trigger[0] === event.target && config.action === 'click') {
                 return tooltip.trigger = false;
             }
 
+            tooltip.destroy(config);
             tooltip.trigger = $(event.target);
             tooltip.targetElement = false;
             $(document).on('mousemove', tooltip.setTargetData);
