@@ -11,6 +11,13 @@ use Magento\Framework\Exception\LocalizedException;
 abstract class Cache extends Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::cache';
+
+    /**
      * @var \Magento\Framework\App\Cache\TypeListInterface
      */
     protected $_cacheTypeList;
@@ -68,15 +75,5 @@ abstract class Cache extends Action
         if (count($invalidTypes) > 0) {
             throw new LocalizedException(__('Specified cache type(s) don\'t exist: %1', join(', ', $invalidTypes)));
         }
-    }
-
-    /**
-     * Check if cache management is allowed
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Backend::cache');
     }
 }

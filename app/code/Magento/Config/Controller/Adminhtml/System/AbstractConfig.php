@@ -14,6 +14,13 @@ use Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker;
 abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Config::config';
+
+    /**
      * @var \Magento\Config\Model\Config\Structure
      */
     protected $_configStructure;
