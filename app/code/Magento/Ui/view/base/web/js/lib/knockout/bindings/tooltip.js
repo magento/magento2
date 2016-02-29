@@ -32,7 +32,7 @@ define([
     };
 
     /**
-     * Polyfill for css pransform
+     * Polyfill for css transform
      */
     transformProp = (function () {
         var style = document.createElement('div').style,
@@ -80,7 +80,7 @@ define([
             checkedPositions.top = true;
 
             return positions._topLeftChecker(winSize, wrapSize, elemSize, elemPos, scrollPos, 'vertical', 'horizontal',
-                                            'right', 'left', '_bottom', 'top', positions.map);
+                'right', 'left', '_bottom', 'top', positions.map);
         },
 
         /**
@@ -97,7 +97,7 @@ define([
             checkedPositions.right = true;
 
             return positions._bottomRightChecker(winSize, wrapSize, elemSize, elemPos, scrollPos, 'horizontal',
-                                                'vertical', 'bottom', 'top', '_left', 'right', positions.map);
+                'vertical', 'bottom', 'top', '_left', 'right', positions.map);
         },
 
         /**
@@ -114,7 +114,7 @@ define([
             checkedPositions.bottom = true;
 
             return positions._bottomRightChecker(winSize, wrapSize, elemSize, elemPos, scrollPos, 'vertical',
-                                                'horizontal', 'left', 'right', '_top', 'bottom', positions.map);
+                'horizontal', 'left', 'right', '_top', 'bottom', positions.map);
         },
 
         /**
@@ -131,7 +131,7 @@ define([
             checkedPositions.left = true;
 
             return positions._topLeftChecker(winSize, wrapSize, elemSize, elemPos, scrollPos,
-                                            'horizontal', 'vertical', 'top', 'bottom', '_right', 'left', positions.map);
+                'horizontal', 'vertical', 'top', 'bottom', '_right', 'left', positions.map);
         },
 
         /**
@@ -161,11 +161,11 @@ define([
                 winSize[map[direction].s] + scrollPos[map[direction].p]) {
                 // If tooltip can be setted in left position
                 result.position[map[direction].p] = elemPos[map[direction].p] + elemSize[map[direction].s] +
-                                                    defaults.step;
+                    defaults.step;
                 result.className = className;
                 result.side = side;
                 result = positions._normalize(winSize, wrapSize, elemSize, elemPos, scrollPos, directionDep,
-                                              delegateFirst, delegateSecond, result, map);
+                    delegateFirst, delegateSecond, result, map);
             } else if (!checkedPositions[delegateFirst]) {
                 result = positions[delegateFirst].apply(null, arguments);
             } else {
@@ -201,11 +201,11 @@ define([
             if (elemPos[map[direction].p] - wrapSize[map[direction].s] > scrollPos[map[direction].p]) {
                 // If tooltip can be setted in left position
                 result.position[map[direction].p] = elemPos[map[direction].p] - wrapSize[map[direction].s] -
-                                                    defaults.step;
+                    defaults.step;
                 result.className = className;
                 result.side = side;
                 result = positions._normalize(winSize, wrapSize, elemSize, elemPos, scrollPos, directionDep,
-                                              delegateFirst, delegateSecond, result, map);
+                    delegateFirst, delegateSecond, result, map);
             } else if (!checkedPositions[delegateFirst]) {
                 result = positions[delegateFirst].apply(null, arguments);
             } else {
@@ -241,8 +241,8 @@ define([
                 data.position[map[direction].p] = (elemSize[map[direction].s] -
                     wrapSize[map[direction].s]) / 2 + elemPos[map[direction].p];
             } else if (centerPosition + wrapSize[map[direction].s] <
-                       winSize[map[direction].s] + scrollPos[map[direction].p] &&
-                       centerPosition > scrollPos[map[direction].p]) {
+                winSize[map[direction].s] + scrollPos[map[direction].p] &&
+                centerPosition > scrollPos[map[direction].p]) {
                 // If tooltip width more then handler width but placed in viewport
                 data.position[map[direction].p] = centerPosition;
             } else {
@@ -308,7 +308,8 @@ define([
             tooltip.trigger = $(event.target);
             tooltip.targetElement = false;
             $(document).on('mousemove', tooltip.setTargetData);
-            tooltip.timeout = setTimeout(function () {
+
+            tooltip.timeout = _.delay(function () {
                 $(document).off('mousemove', tooltip.setTargetData);
 
                 if (!tooltip.targetElement || tooltip.trigger[0] === tooltip.targetElement) {
@@ -437,15 +438,23 @@ define([
             _.extend(tooltip,
                 positions[config.position](windowSize, wrapperSize, elementSize, elementPosition, scrollPosition));
             checkedPositions = {};
+            tooltip._setPositionShift(config, elementSize);
+            tooltipElement.css(tooltip.position);
+            tooltipElement.addClass(tooltip.className);
+        },
 
+        /**
+         * Set shift to position if track is enabled
+         *
+         * @param {Object} config - tooltip config
+         * @param {Object} elementSize - handler size
+         */
+        _setPositionShift: function (config, elementSize) {
             if (config.track && tooltip.event && (tooltip.side === 'bottom' || tooltip.side === 'top')) {
                 tooltip.position.left -= (elementSize.w / 2 - tooltip.event.offsetX);
             } else if (config.track && tooltip.event && (tooltip.side === 'left' || tooltip.side === 'right')) {
                 tooltip.position.top -= (elementSize.h / 2 - tooltip.event.offsetY);
             }
-
-            tooltipElement.css(tooltip.position);
-            tooltipElement.addClass(tooltip.className);
         },
 
         /**
