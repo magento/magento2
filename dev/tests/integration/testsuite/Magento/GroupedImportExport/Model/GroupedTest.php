@@ -18,9 +18,17 @@ class GroupedTest extends AbstractProductExportImportTestCase
                 ],
                 [
                     'grouped-product',
-                ]
+                ],
+                [
+                    'Magento/GroupedProduct/_files/product_grouped_rollback.php'
+                ],
             ],
         ];
+    }
+
+    public function importReplaceDataProvider()
+    {
+        return $this->exportImportDataProvider();
     }
 
     /**

@@ -91,4 +91,13 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
             $this->assertEquals($expectedOptionValues, $actualOptionValues);
         }
     }
+
+    public function importReplaceDataProvider()
+    {
+        $data = $this->exportImportDataProvider();
+        foreach ($data as $key => $value) {
+            $data[$key][2] = array_merge($value[2], ['_cache_instance_product_set_attributes']);
+        }
+        return $data;
+    }
 }
