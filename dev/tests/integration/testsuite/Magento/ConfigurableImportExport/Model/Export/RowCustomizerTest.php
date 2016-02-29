@@ -33,10 +33,20 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareData()
     {
-        $this->markTestSkipped('Skipped till implementation MAGETWO-47395');
+        /** @var \Magento\Catalog\Model\ResourceModel\Product $productResource */
+        $productResource = $this->objectManager->create('Magento\Catalog\Model\ResourceModel\Product');
+        $productId = $productResource->getIdBySku('configurable');
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->objectManager->create('Magento\Catalog\Model\Product');
+        $product->load($productId);
+        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Product\Collection');
+        /** @var \Magento\Framework\Model\Entity\MetadataPool $metadataPool */
+        $metadataPool = $this->objectManager->get('Magento\Framework\Model\Entity\MetadataPool');
+        /** @var \Magento\Framework\Model\Entity\EntityMetadata $productMetadata */
+        $productMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $select = (string)$collection->getSelect();
-        $this->model->prepareData($collection, [1, 2, 3, 4]);
+        $this->model->prepareData($collection, [$product->getData($productMetadata->getLinkField()), 2, 3, 4]);
         $this->assertEquals($select, (string)$collection->getSelect());
         $result = $this->model->addData([], 1);
         $this->assertArrayHasKey('configurable_variations', $result);
