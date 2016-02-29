@@ -85,4 +85,23 @@ class Header extends Block
         $search = $this->_rootElement->find($this->searchSelector, Locator::SELECTOR_CSS, 'globalsearch');
         return $search->isExistValueInSearchResult($query);
     }
+
+    /**
+     * Is admin search preview is visible in suggestion dropdown.
+     *
+     * @param string $query
+     * @param string $type
+     * @return bool
+     */
+    public function isAdminSearchPreviewVisible($query, $type)
+    {
+        /** @var GlobalsearchElement $search */
+        $search = $this->_rootElement->find('searchPreview' . $type, Locator::SELECTOR_ID);
+        return $search->getText() === $query;
+    }
+
+    public function navigateToGrid($type)
+    {
+        $this->_rootElement->find('searchPreview' . $type, Locator::SELECTOR_ID)->click();
+    }
 }
