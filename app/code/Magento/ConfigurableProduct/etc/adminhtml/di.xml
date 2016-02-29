@@ -39,13 +39,17 @@
         <arguments>
             <argument name="modifiers" xsi:type="array">
                 <item name="configurable" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Configurable</item>
+                    <item name="class" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Composite</item>
                     <item name="sortOrder" xsi:type="number">140</item>
                 </item>
-                <item name="configurablePrice" xsi:type="array">
-                    <item name="class" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Price</item>
-                    <item name="sortOrder" xsi:type="number">141</item>
-                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Composite">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="configurablePanel" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePanel</item>
+                <item name="configurablePrice" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePrice</item>
             </argument>
         </arguments>
     </type>
