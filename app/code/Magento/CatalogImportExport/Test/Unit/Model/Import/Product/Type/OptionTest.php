@@ -952,7 +952,8 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                     'product_entity' => $productEntityMock,
                     'collection_by_pages_iterator' => $this->objectManagerHelper->getObject('stdClass'),
                     'page_size' => 5000,
-                    'stores' => []
+                    'stores' => [],
+                    'metadata_pool' => $this->metadataPoolMock
                 ]
             ]
         );
