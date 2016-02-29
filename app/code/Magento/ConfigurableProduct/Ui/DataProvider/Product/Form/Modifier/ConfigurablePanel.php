@@ -5,34 +5,22 @@
  */
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
-use Magento\Catalog\Model\Product\Type;
 use Magento\Ui\Component\Container;
 use Magento\Ui\Component\Form;
 use Magento\Ui\Component\DynamicRows;
 use Magento\Ui\Component\Modal;
 use Magento\Framework\UrlInterface;
-use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data\AssociatedProducts;
+use Magento\Catalog\Model\Locator\LocatorInterface;
 
 /**
- * Data provider for Configurable products
+ * Data provider for Configurable panel
  */
-class Configurable extends AbstractModifier
+class ConfigurablePanel extends AbstractModifier
 {
     const GROUP_CONFIGURABLE = 'configurable';
     const ASSOCIATED_PRODUCT_MODAL = 'configurable_associated_product_modal';
     const ASSOCIATED_PRODUCT_LISTING = 'configurable_associated_product_listing';
-
-    /**
-     * @var array
-     */
-    private static $availableProductTypes = [
-        ConfigurableType::TYPE_CODE,
-        Type::TYPE_SIMPLE,
-        Type::TYPE_VIRTUAL
-    ];
 
     /**
      * @var string
@@ -45,33 +33,25 @@ class Configurable extends AbstractModifier
     private static $sortOrder = 30;
 
     /**
-     * @var LocatorInterface
-     */
-    protected $locator;
-
-    /**
      * @var UrlInterface
      */
     protected $urlBuilder;
 
     /**
-     * @var AssociatedProducts
+     * @var LocatorInterface
      */
-    protected $associatedProducts;
+    protected $locator;
 
     /**
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
-     * @param AssociatedProducts $associatedProducts
      */
     public function __construct(
         LocatorInterface $locator,
-        UrlInterface $urlBuilder,
-        AssociatedProducts $associatedProducts
+        UrlInterface $urlBuilder
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
-        $this->associatedProducts = $associatedProducts;
     }
 
     /**
@@ -79,17 +59,6 @@ class Configurable extends AbstractModifier
      */
     public function modifyData(array $data)
     {
-        if (in_array($this->locator->getProduct()->getTypeId(), self::$availableProductTypes)) {
-            $model = $this->locator->getProduct();
-            $data[$model->getId()]['affect_configurable_product_attributes'] = '1';
-
-            if ($this->locator->getProduct()->getTypeId() === ConfigurableType::TYPE_CODE) {
-                $data[$model->getId()]['configurable-matrix'] = $this->associatedProducts->getProductMatrix();
-                $data[$model->getId()]['attributes'] = $this->associatedProducts->getProductAttributesIds();
-                $data[$model->getId()]['associated_product_ids'] = $this->associatedProducts->getProductIds();
-            }
-        }
-
         return $data;
     }
 
@@ -98,88 +67,86 @@ class Configurable extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        if (in_array($this->locator->getProduct()->getTypeId(), self::$availableProductTypes)) {
-            $meta = array_merge_recursive(
-                $meta,
-                [
-                    static::GROUP_CONFIGURABLE => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'label' => __('Configurations'),
-                                    'collapsible' => true,
-                                    'opened' => true,
-                                    'componentType' => Form\Fieldset::NAME,
-                                    'sortOrder' => $this->getNextGroupSortOrder(
-                                        $meta,
-                                        self::$groupContent,
-                                        self::$sortOrder
-                                    ),
-                                ],
+        $meta = array_merge_recursive(
+            $meta,
+            [
+                static::GROUP_CONFIGURABLE => [
+                    'arguments' => [
+                        'data' => [
+                            'config' => [
+                                'label' => __('Configurations'),
+                                'collapsible' => true,
+                                'opened' => true,
+                                'componentType' => Form\Fieldset::NAME,
+                                'sortOrder' => $this->getNextGroupSortOrder(
+                                    $meta,
+                                    self::$groupContent,
+                                    self::$sortOrder
+                                ),
                             ],
                         ],
-                        'children' => $this->getPanelChildren(),
                     ],
-                    static::ASSOCIATED_PRODUCT_MODAL => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'componentType' => Modal::NAME,
-                                    'dataScope' => '',
-                                    'provider' => static::FORM_NAME . '.product_form_data_source',
-                                    'options' => [
-                                        'title' => __('Select Associated Product'),
-                                        'buttons' => [
-                                            [
-                                                'text' => __('Done'),
-                                                'class' => 'action-primary',
-                                                'actions' => [
-                                                    [
-                                                        'targetName' => 'index=' . static::ASSOCIATED_PRODUCT_LISTING,
-                                                        'actionName' => 'save'
-                                                    ],
-                                                    'closeModal'
+                    'children' => $this->getPanelChildren(),
+                ],
+                static::ASSOCIATED_PRODUCT_MODAL => [
+                    'arguments' => [
+                        'data' => [
+                            'config' => [
+                                'componentType' => Modal::NAME,
+                                'dataScope' => '',
+                                'provider' => static::FORM_NAME . '.product_form_data_source',
+                                'options' => [
+                                    'title' => __('Select Associated Product'),
+                                    'buttons' => [
+                                        [
+                                            'text' => __('Done'),
+                                            'class' => 'action-primary',
+                                            'actions' => [
+                                                [
+                                                    'targetName' => 'index=' . static::ASSOCIATED_PRODUCT_LISTING,
+                                                    'actionName' => 'save'
                                                 ],
+                                                'closeModal'
                                             ],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                        'children' => [
-                            static::ASSOCIATED_PRODUCT_LISTING => [
-                                'arguments' => [
-                                    'data' => [
-                                        'config' => [
-                                            'autoRender' => false,
-                                            'componentType' => 'insertListing',
-                                            'dataScope' => static::ASSOCIATED_PRODUCT_LISTING,
-                                            'externalProvider' => static::ASSOCIATED_PRODUCT_LISTING . '.'
-                                                . static::ASSOCIATED_PRODUCT_LISTING . '_data_source',
-                                            'selectionsProvider' => static::ASSOCIATED_PRODUCT_LISTING . '.'
-                                                . static::ASSOCIATED_PRODUCT_LISTING . '.product_columns.ids',
-                                            'ns' => static::ASSOCIATED_PRODUCT_LISTING,
-                                            'render_url' => $this->urlBuilder->getUrl('mui/index/render'),
-                                            'realTimeLink' => true,
-                                            'behaviourType' => 'simple',
-                                            'externalFilterMode' => true,
-                                            'currentProductId' => $this->locator->getProduct()->getId(),
-                                            'dataLinks' => [
-                                                'imports' => false,
-                                                'exports' => true
-                                            ],
-//                                            'exports' => [
-//                                                'currentProductId' => '${ $.externalProvider }:params.current_product_id'
-//                                            ]
                                         ],
                                     ],
                                 ],
                             ],
                         ],
                     ],
-                ]
-            );
-        }
+                    'children' => [
+                        static::ASSOCIATED_PRODUCT_LISTING => [
+                            'arguments' => [
+                                'data' => [
+                                    'config' => [
+                                        'autoRender' => false,
+                                        'componentType' => 'insertListing',
+                                        'dataScope' => static::ASSOCIATED_PRODUCT_LISTING,
+                                        'externalProvider' => static::ASSOCIATED_PRODUCT_LISTING . '.'
+                                            . static::ASSOCIATED_PRODUCT_LISTING . '_data_source',
+                                        'selectionsProvider' => static::ASSOCIATED_PRODUCT_LISTING . '.'
+                                            . static::ASSOCIATED_PRODUCT_LISTING . '.product_columns.ids',
+                                        'ns' => static::ASSOCIATED_PRODUCT_LISTING,
+                                        'render_url' => $this->urlBuilder->getUrl('mui/index/render'),
+                                        'realTimeLink' => true,
+                                        'behaviourType' => 'simple',
+                                        'externalFilterMode' => true,
+                                        'currentProductId' => $this->locator->getProduct()->getId(),
+                                        'dataLinks' => [
+                                            'imports' => false,
+                                            'exports' => true
+                                        ],
+//                                      'exports' => [
+//                                          'currentProductId' => '${ $.externalProvider }:params.current_product_id'
+//                                      ]
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ]
+        );
 
         return $meta;
     }
