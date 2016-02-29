@@ -465,7 +465,9 @@ class Application
 
         // enable only specified list of caches
         $initParamsQuery = $this->getInitParamsQuery();
-        $this->_shell->execute(PHP_BINARY . ' -f %s cache:disable --bootstrap=%s', [BP . '/bin/magento', $initParamsQuery]);
+        $this->_shell->execute(
+            PHP_BINARY . ' -f %s cache:disable --bootstrap=%s', [BP . '/bin/magento', $initParamsQuery]
+        );
         $this->_shell->execute(
             PHP_BINARY . ' -f %s cache:enable %s %s %s %s --bootstrap=%s',
             [
