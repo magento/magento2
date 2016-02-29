@@ -15,6 +15,13 @@ use Magento\Framework\View\Result\PageFactory;
 abstract class Attribute extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::attributes_attributes';
+
+    /**
      * @var \Magento\Framework\Cache\FrontendInterface
      */
     protected $_attributeLabelCache;
@@ -122,15 +129,5 @@ abstract class Attribute extends \Magento\Backend\App\Action
             $code = 'attr_' . ($code ?: substr(md5(time()), 0, 8));
         }
         return $code;
-    }
-
-    /**
-     * ACL check
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Catalog::attributes_attributes');
     }
 }
