@@ -70,6 +70,9 @@ class DownloadableTest extends AbstractProductExportImportTestCase
         $actualProductLinks   = $actualProduct->getExtensionAttributes()->getDownloadableProductLinks();
         $actualProductSamples = $actualProduct->getExtensionAttributes()->getDownloadableProductSamples();
 
+        $this->assertEquals(count($expectedProductLinks), count($actualProductLinks));
+        $this->assertEquals(count($expectedProductSamples), count($actualProductSamples));
+
         $expectedLinksArray = [];
         foreach ($expectedProductLinks as $link) {
             $expectedLinksArray[] = $link->getData();
