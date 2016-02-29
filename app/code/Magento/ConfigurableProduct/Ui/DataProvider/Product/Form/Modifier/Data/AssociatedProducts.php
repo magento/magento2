@@ -15,6 +15,7 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Locale\CurrencyInterface;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 
 class AssociatedProducts
 {
@@ -41,12 +42,17 @@ class AssociatedProducts
     /**
      * @var array
      */
-    private $productMatrix = [];
+    protected $productMatrix = [];
 
     /**
      * @var array
      */
-    private $productAttributes = [];
+    protected $productAttributes = [];
+
+    /**
+     * @var array
+     */
+    protected $productIds = [];
 
     /**
      * @var VariationMatrix
@@ -64,6 +70,11 @@ class AssociatedProducts
     protected $localeCurrency;
 
     /**
+     * @var JsonHelper
+     */
+    protected $jsonHelper;
+
+    /**
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
      * @param ConfigurableType $configurableType
@@ -71,6 +82,7 @@ class AssociatedProducts
      * @param StockRegistryInterface $stockRegistry
      * @param VariationMatrix $variationMatrix
      * @param CurrencyInterface $localeCurrency
+     * @param JsonHelper $jsonHelper
      */
     public function __construct(
         LocatorInterface $locator,
@@ -79,7 +91,8 @@ class AssociatedProducts
         ProductRepositoryInterface $productRepository,
         StockRegistryInterface $stockRegistry,
         VariationMatrix $variationMatrix,
-        CurrencyInterface $localeCurrency
+        CurrencyInterface $localeCurrency,
+        JsonHelper $jsonHelper
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
@@ -88,6 +101,7 @@ class AssociatedProducts
         $this->stockRegistry = $stockRegistry;
         $this->variationMatrix = $variationMatrix;
         $this->localeCurrency = $localeCurrency;
+        $this->jsonHelper = $jsonHelper;
     }
 
     /**
@@ -115,6 +129,17 @@ class AssociatedProducts
     /**
      * @return array
      */
+    public function getProductIds()
+    {
+        if ($this->productIds === []) {
+            $this->prepareVariations();
+        }
+        return $this->productIds;
+    }
+
+    /**
+     * @return array
+     */
     public function getProductAttributesIds()
     {
         $result = [];
@@ -131,6 +156,7 @@ class AssociatedProducts
         $variations = $this->getVariations();
         $productMatrix = [];
         $attributes = [];
+        $productIds = [];
         if ($variations) {
             $usedProductAttributes = $this->getUsedAttributes();
             $productByUsedAttributes = $this->getAssociatedProducts();
@@ -190,18 +216,35 @@ class AssociatedProducts
                         'price' => $currency->toCurrency(sprintf("%f", $price), ['display' => false]),
                         'price_string' => $currency->toCurrency(sprintf("%f", $price)),
                         'price_currency' => $this->locator->getStore()->getBaseCurrency()->getCurrencySymbol(),
-                        'options' => $variationOptions,
+                        'configurable_attribute' => $this->getJsonConfigurableAttributes($variationOptions),
                         'weight' => $product->getWeight(),
                         'status' => $product->getStatus(),
                         'canEdit' => 0,
                         'newProduct' => 0,
                     ];
+                    $productIds[] = $product->getId();
                 }
             }
         }
 
         $this->productMatrix = $productMatrix;
+        $this->productIds = $productIds;
         $this->productAttributes = array_values($attributes);
+    }
+
+    /**
+     * @param array $options
+     * @return string
+     */
+    protected function getJsonConfigurableAttributes(array $options = [])
+    {
+        $result = [];
+
+        foreach ($options as $option) {
+            $result[$option['attribute_code']] = $option['value'];
+        }
+
+        return $this->jsonHelper->jsonEncode($result);
     }
 
     /**

@@ -86,6 +86,7 @@ class Configurable extends AbstractModifier
             if ($this->locator->getProduct()->getTypeId() === ConfigurableType::TYPE_CODE) {
                 $data[$model->getId()]['configurable-matrix'] = $this->associatedProducts->getProductMatrix();
                 $data[$model->getId()]['attributes'] = $this->associatedProducts->getProductAttributesIds();
+                $data[$model->getId()]['associated_product_ids'] = $this->associatedProducts->getProductIds();
             }
         }
 
