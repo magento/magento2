@@ -52,7 +52,7 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
         $themeCollection = $this->collectionFactory->create();
         $item = $themeCollection->getThemeByFullPath($fullPath);
         $this->cache->save(serialize($item), 'theme'. $fullPath);
-        $this->cache->load('theme-by-id-' . $item->getId());
+        $this->cache->save(serialize($item), 'theme-by-id-' . $item->getId());
         return $item;
     }
 
