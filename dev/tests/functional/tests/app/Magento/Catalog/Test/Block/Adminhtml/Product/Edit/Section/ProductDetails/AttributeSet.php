@@ -29,6 +29,13 @@ class AttributeSet extends SuggestElement
     protected $attributeSetValue = '[data-role="selected-option"]';
 
     /**
+     * Selector item of search result.
+     *
+     * @var string
+     */
+    protected $resultItem = './/label[contains(@class, "admin__action-multiselect-label")]/span[text() = "%s"]';
+
+    /**
      * Set value.
      *
      * @param string $value
@@ -36,7 +43,7 @@ class AttributeSet extends SuggestElement
      */
     public function setValue($value)
     {
-        if (!$this->context->find(sprintf($this->attributeSet, $value), Locator::SELECTOR_XPATH)) {
+        if (!$this->find(sprintf($this->attributeSet, $value), Locator::SELECTOR_XPATH)->isVisible()) {
             parent::setValue($value);
         }
     }
@@ -48,6 +55,6 @@ class AttributeSet extends SuggestElement
      */
     public function getValue()
     {
-        return $this->context->find($this->attributeSetValue)->getText();
+        return $this->find($this->attributeSetValue)->getText();
     }
 }
