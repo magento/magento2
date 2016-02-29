@@ -102,7 +102,6 @@ class ScopeOverriddenValue
      * @param string $entityType
      * @param \Magento\Catalog\Model\AbstractModel $entity
      * @param int $storeId
-     * @throws \Exception
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
      */
@@ -150,7 +149,6 @@ class ScopeOverriddenValue
     /**
      * @param string $entityType
      * @return \Magento\Eav\Api\Data\AttributeInterface[]
-     * @throws \Exception
      */
     private function getAttributes($entityType)
     {
