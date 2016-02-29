@@ -39,6 +39,22 @@ define([
             }
         },
 
+        /**
+         * Initialize children
+         */
+        initChildren: function () {
+            var tmpArray = [];
+
+            this.recordData.each(function (recordData) {
+                tmpArray.push(recordData);
+                this.addAssociatedProduct(recordData.id);
+            }, this);
+
+            this.unionInsertData(tmpArray);
+
+            return this;
+        },
+
         addAssociatedProduct: function (productId) {
             this.source.set(this.dataScopeAssociatedProduct + '.' + this.associatedProductIncrement, productId);
             ++this.associatedProductIncrement;
