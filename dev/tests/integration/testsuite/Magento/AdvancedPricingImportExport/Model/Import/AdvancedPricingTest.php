@@ -82,7 +82,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
      * @magentoDataFixture Magento/AdvancedPricingImportExport/_files/create_products.php
      * @magentoAppArea adminhtml
      */
-    public function testAdvancedPricingImport()
+    public function testImportAddUpdate()
     {
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/import_advanced_pricing.csv';
@@ -192,6 +192,54 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
                 ->load($ids[$index])
                 ->getTierPrices();
             $this->assertEquals(0, count($newPricingData));
+        }
+    }
+
+    /**
+     * @magentoDataFixture Magento/AdvancedPricingImportExport/_files/create_products.php
+     * @magentoAppArea adminhtml
+     */
+    public function testImportReplace()
+    {
+        // import data from CSV file
+        $pathToFile = __DIR__ . '/_files/import_advanced_pricing.csv';
+        $filesystem = $this->objectManager->create(
+            'Magento\Framework\Filesystem'
+        );
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            '\Magento\ImportExport\Model\Import\Source\Csv',
+            [
+                'file' => $pathToFile,
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->model->setSource(
+            $source
+        )->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE,
+                'entity' => 'advanced_pricing'
+            ]
+        )->validateData();
+
+        $this->assertEquals(0, $errors->getErrorsCount(), 'Advanced pricing import validation error');
+        $this->model->importData();
+
+        /** @var \Magento\Catalog\Model\ResourceModel\Product $resource */
+        $resource = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Product');
+        $productIdList = $resource->getProductsIdsBySkus(array_keys($this->expectedTierPrice));
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->objectManager->create('Magento\Catalog\Model\Product');
+        foreach ($productIdList as $sku => $productId) {
+            $product->load($productId);
+            $tierPriceCollection = $product->getTierPrices();
+            $this->assertEquals(3, count($tierPriceCollection));
+            /** @var \Magento\Catalog\Model\Product\TierPrice $tierPrice */
+            foreach ($tierPriceCollection as $tierPrice) {
+                $this->assertContains($tierPrice->getData(), $this->expectedTierPrice[$sku]);
+            }
         }
     }
 }

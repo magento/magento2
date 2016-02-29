@@ -142,7 +142,6 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
     protected function executeImportDeleteTest($skus)
     {
-        $defaultProductData = $this->getDefaultProductData();
         $index = 0;
         $ids = [];
         while (isset($skus[$index])) {
@@ -156,8 +155,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
         while ($index > 0) {
             $index--;
             $newProduct = $this->objectManager->create('Magento\Catalog\Model\Product')->load($ids[$index]);
-            $newProductData = $newProduct->getData();
-            $this->assertEquals($defaultProductData, $newProductData);
+            $this->assertNull($newProduct->getId());
         }
     }
 
@@ -207,7 +205,6 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
     protected function executeImportReplaceTest($skus, $skippedAttributes)
     {
-        $defaultProductData = $this->getDefaultProductData();
         $replacedAttributes = [
             'row_id',
             'entity_id',
@@ -239,7 +236,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
             // check original product is deleted
             $origProduct = $this->objectManager->create('Magento\Catalog\Model\Product')->load($ids[$index]);
-            $this->assertEquals($defaultProductData, $origProduct->getData());
+            $this->assertNull($origProduct->getId());
 
             // check new product data
             // @todo uncomment or remove after MAGETWO-49806 resolved
@@ -309,16 +306,5 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($errors->getErrorsCount() == 0, 'Product import error, imported from file:' . $csvfile);
         $importModel->importData();
-    }
-
-    /**
-     * @return mixed
-     */
-    private function getDefaultProductData()
-    {
-        $defaultProductData = $this->objectManager->create('Magento\Catalog\Model\Product')
-            ->load(100)
-            ->getData();
-        return $defaultProductData;
     }
 }
