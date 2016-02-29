@@ -17,6 +17,8 @@ use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Api\Data\AttributeSetInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\Exception\LocalizedException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class AddAttributeToTemplate
@@ -66,6 +68,11 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
     protected $attributeManagement;
 
     /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param Builder $productBuilder
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
@@ -76,6 +83,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SortOrderBuilder $sortOrderBuilder
      * @param AttributeManagementInterface $attributeManagement
+     * @param LoggerInterface $logger
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -88,7 +96,8 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
         AttributeGroupInterfaceFactory $attributeGroupFactory,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SortOrderBuilder $sortOrderBuilder,
-        AttributeManagementInterface $attributeManagement
+        AttributeManagementInterface $attributeManagement,
+        LoggerInterface $logger
     ) {
         parent::__construct($context, $productBuilder);
         $this->resultJsonFactory = $resultJsonFactory;
@@ -99,6 +108,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->sortOrderBuilder = $sortOrderBuilder;
         $this->attributeManagement = $attributeManagement;
+        $this->logger = $logger;
     }
 
     /**
@@ -112,9 +122,6 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
         $response = new \Magento\Framework\DataObject();
         $response->setError(false);
 
-        $attributeSearchCriteriaBuilder = clone $this->searchCriteriaBuilder;
-        $groupSearchCriteriaBuilder = clone $this->searchCriteriaBuilder;
-
         try {
             /** @var AttributeSetInterface $attributeSet */
             $attributeSet = $this->attributeSetRepository->get($request->getParam('templateId'));
@@ -122,10 +129,8 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
             $groupName = $request->getParam('groupName');
             $groupSortOrder = $request->getParam('groupSortOrder');
 
-            $attributeSearchCriteriaBuilder = $this->addBasicAttributeSearchFilters($attributeSearchCriteriaBuilder);
-
-            $attributeSearchCriteria = $attributeSearchCriteriaBuilder->create();
-            $attributeGroupSearchCriteria = $groupSearchCriteriaBuilder
+            $attributeSearchCriteria = $this->getBasicAttributeSearchCriteriaBuilder()->create();
+            $attributeGroupSearchCriteria = $this->searchCriteriaBuilder
                 ->addFilter('attribute_set_id', $attributeSet->getAttributeSetId())
                 ->addFilter('attribute_group_code', $groupCode)
                 ->addSortOrder($this->sortOrderBuilder->setAscendingDirection()->create())
@@ -170,10 +175,11 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
                     '0'
                 );
             });
-        } catch (\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $response->setError(true);
             $response->setMessage($e->getMessage());
         } catch (\Exception $e) {
+            $this->logger->critical($e);
             $response->setError(true);
             $response->setMessage(__('Unable to add attribute'));
         }
@@ -184,25 +190,19 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
     /**
      * Adding basic filters
      *
-     * @param SearchCriteriaBuilder $attributeSearchCriteriaBuilder
      * @return SearchCriteriaBuilder
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    private function addBasicAttributeSearchFilters(
-        SearchCriteriaBuilder $attributeSearchCriteriaBuilder
-    ) {
+    private function getBasicAttributeSearchCriteriaBuilder()
+    {
         $attributeIds = (array)$this->getRequest()->getParam('attributeIds', []);
 
-        if (!empty($attributeIds['selected'])) {
-            return $attributeSearchCriteriaBuilder->addFilter(
-                'attribute_id',
-                [$attributeIds['selected']],
-                'in'
-            );
+        if (empty($attributeIds['selected'])) {
+            throw new LocalizedException(__('Please, specify attributes'));
         }
 
-        $attributeSearchCriteriaBuilder->addFilter('attribute_set_id', null);
-
-        throw new \Magento\Framework\Exception\LocalizedException(__('Please, specify attributes'));
+        return $this->searchCriteriaBuilder
+            ->addFilter('attribute_set_id', new \Zend_Db_Expr('null'), 'is')
+            ->addFilter('attribute_id', [$attributeIds['selected']], 'in');
     }
 }
