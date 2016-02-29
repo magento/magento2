@@ -345,7 +345,6 @@
         <xs:anyAttribute processContents="lax"/>
     </xs:attributeGroup>
 
-
     <xs:element name="depends">
         <xs:annotation>
             <xs:documentation>
