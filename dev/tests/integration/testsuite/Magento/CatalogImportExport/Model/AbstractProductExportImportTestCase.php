@@ -25,6 +25,11 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
     protected $fileSystem;
 
     /**
+     * @var \Magento\Catalog\Model\ResourceModel\Product
+     */
+    protected $productResource;
+
+    /**
      * skipped attributes
      *
      * @var array
@@ -46,6 +51,9 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
         $this->fileSystem = $this->objectManager->get('Magento\Framework\Filesystem');
         $this->model = $this->objectManager->create(
             'Magento\CatalogImportExport\Model\Export\Product'
+        );
+        $this->productResource = $this->objectManager->create(
+            'Magento\Catalog\Model\ResourceModel\Product'
         );
     }
 
@@ -69,14 +77,11 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
     protected function executeExportTest($skus, $skippedAttributes)
     {
-        $productRepository = $this->objectManager->create(
-            'Magento\Catalog\Api\ProductRepositoryInterface'
-        );
         $index = 0;
         $ids = [];
         $origProducts = [];
         while (isset($skus[$index])) {
-            $ids[$index] = $productRepository->get($skus[$index])->getEntityId();
+            $ids[$index] = $this->productResource->getIdBySku($skus[$index]);
             $origProducts[$index] = $this->objectManager->create('Magento\Catalog\Model\Product')
                 ->load($ids[$index]);
             $index++;
@@ -137,16 +142,11 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
     protected function executeImportDeleteTest($skus)
     {
-        $defaultProductData = $this->objectManager->create('Magento\Catalog\Model\Product')
-            ->load(100)
-            ->getData();
-        $productRepository = $this->objectManager->create(
-            'Magento\Catalog\Api\ProductRepositoryInterface'
-        );
+        $defaultProductData = $this->getDefaultProductData();
         $index = 0;
         $ids = [];
         while (isset($skus[$index])) {
-            $ids[$index] = $productRepository->get($skus[$index])->getEntityId();
+            $ids[$index] = $this->productResource->getIdBySku($skus[$index]);
             $index++;
         }
 
@@ -184,6 +184,79 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
     protected function assertEqualsSpecificAttributes($expectedProduct, $actualProduct)
     {
         // check custom options
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     *
+     * @param array $fixtures
+     * @param string[] $skus
+     * @param string[] $skippedAttributes
+     * @dataProvider importReplaceDataProvider
+     */
+    public function testImportReplace($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
+    {
+        $this->executeFixtures($fixtures);
+        $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
+        $this->executeImportReplaceTest($skus, $skippedAttributes, $rollbackFixtures);
+    }
+
+    protected function executeImportReplaceTest($skus, $skippedAttributes, $rollbackFixtures)
+    {
+        $defaultProductData = $this->getDefaultProductData();
+        $replacedAttributes = [
+            'row_id',
+            'entity_id',
+            'created_at',
+            'tier_price',
+            'is_salable',
+            'multiselect_attribute',
+        ];
+        $skippedAttributes = array_merge($replacedAttributes, $skippedAttributes);
+
+        $index = 0;
+        $ids = [];
+        $origProducts = [];
+        while (isset($skus[$index])) {
+            $ids[$index] = $this->productResource->getIdBySku($skus[$index]);
+            $origProducts[$index] = $this->objectManager->create('Magento\Catalog\Model\Product')
+                ->load($ids[$index]);
+            $index++;
+        }
+
+        $csvfile = $this->exportProducts();
+        $this->importProducts($csvfile, \Magento\ImportExport\Model\Import::BEHAVIOR_REPLACE);
+
+        while ($index > 0) {
+            $index--;
+
+            $id = $this->productResource->getIdBySku($skus[$index]);
+            $newProduct = $this->objectManager->create('Magento\Catalog\Model\Product')->load($id);
+
+            // check original product is deleted
+            $origProduct = $this->objectManager->create('Magento\Catalog\Model\Product')->load($ids[$index]);
+            $this->assertEquals($defaultProductData, $origProduct->getData());
+
+            // check new product data
+            // @todo uncomment or remove after MAGETWO-49806 resolved
+            //$this->assertEquals(count($origProductData[$index]), count($newProductData));
+
+            $origProductData = $origProducts[$index]->getData();
+            $newProductData = $newProduct->getData();
+            $this->assertEqualsOtherThanSkippedAttributes($origProductData, $newProductData, $skippedAttributes);
+
+            $this->assertEqualsSpecificAttributes($origProducts[$index], $newProduct);
+
+            foreach ($replacedAttributes as $attribute) {
+                if (isset($origProductData[$attribute]) && !empty($origProductData[$attribute])) {
+                    $expected = $origProductData[$attribute];
+                    $actual = isset($newProductData[$attribute]) ? $newProductData[$attribute] : null;
+                    $this->assertNotEquals($expected, $actual, $attribute . ' is expected to be changed');
+                }
+            }
+        }
     }
 
     /**
@@ -234,5 +307,16 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($errors->getErrorsCount() == 0, 'Product import error, imported from file:' . $csvfile);
         $importModel->importData();
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getDefaultProductData()
+    {
+        $defaultProductData = $this->objectManager->create('Magento\Catalog\Model\Product')
+            ->load(100)
+            ->getData();
+        return $defaultProductData;
     }
 }

@@ -131,4 +131,9 @@ class ProductTest extends AbstractProductExportImportTestCase
             */
         ];
     }
+
+    public function importReplaceDataProvider()
+    {
+        return $this->exportImportDataProvider();
+    }
 }
