@@ -367,7 +367,7 @@ class Database extends \Magento\MediaStorage\Model\File\Storage\Database\Abstrac
      */
     public function getMediaBaseDirectory()
     {
-        if ($this->mediaBaseDirectory == null) {
+        if ($this->mediaBaseDirectory === null) {
             $this->mediaBaseDirectory = $this->_coreFileStorageDb->getMediaBaseDir();
         }
         return $this->mediaBaseDirectory;
