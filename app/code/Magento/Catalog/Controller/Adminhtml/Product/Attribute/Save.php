@@ -250,9 +250,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                     if (!is_null($attributeSet)) {
                         $requestParams['new_attribute_set_id'] = $attributeSet->getId();
                     }
-                    $this->returnResult('catalog/product/addAttribute', $requestParams, ['error' => false]);
+                    return $this->returnResult('catalog/product/addAttribute', $requestParams, ['error' => false]);
                 } elseif ($this->getRequest()->getParam('back', false)) {
-                    $this->returnResult(
+                    return $this->returnResult(
                         'catalog/*/edit',
                         ['attribute_id' => $model->getId(), '_current' => true],
                         ['error' => false]
