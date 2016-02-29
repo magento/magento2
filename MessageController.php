@@ -11,9 +11,9 @@ use Magento\Framework\Phrase;
 class MessageController
 {
     /**
-     * @var \Magento\Framework\MessageQueue\LogFactory
+     * @var \Magento\Framework\MessageQueue\LockFactory
      */
-    private $logFactory;
+    private $lockFactory;
 
     /**
      * @var array
@@ -28,12 +28,12 @@ class MessageController
     /**
      * Initialize dependencies.
      *
-     * @param LogFactory $logFactory
+     * @param LockFactory $lockFactory
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      */
-    public function __construct(LogFactory $logFactory, \Magento\Framework\Stdlib\DateTime\DateTime $dateTime)
+    public function __construct(LockFactory $lockFactory, \Magento\Framework\Stdlib\DateTime\DateTime $dateTime)
     {
-        $this->logFactory = $logFactory;
+        $this->lockFactory = $lockFactory;
         $this->dateTime = $dateTime;
     }
 
@@ -47,22 +47,22 @@ class MessageController
      */
     public function lock(EnvelopeInterface $envelope, $consumerName)
     {
-        $log = $this->logFactory->create();
+        $lock = $this->lockFactory->create();
         $code = $consumerName . '-' . $envelope->getMessageId();
         $code = md5($code);
         if (isset($this->registry[$code])) {
             throw new MessageLockException(new Phrase('Message code %1 already processed', [$code]));
         }
 
-        $log->load($code, 'message_code');
-        if ($log->getId()) {
+        $lock->load($code, 'message_code');
+        if ($lock->getId()) {
             throw new MessageLockException(new Phrase('Message code %1 already processed', [$code]));
         }
-        $log->setMessageCode($code);
-        $log->setCreatedAt($this->dateTime->gmtTimestamp());
-        $log->save();
+        $lock->setMessageCode($code);
+        $lock->setCreatedAt($this->dateTime->gmtTimestamp());
+        $lock->save();
 
         $this->registry[$code] = true;
-        return $log;
+        return $lock;
     }
 }
