@@ -180,6 +180,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @param \Magento\Catalog\Model\Product $expectedProduct
      * @param \Magento\Catalog\Model\Product $actualProduct
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function assertEqualsSpecificAttributes($expectedProduct, $actualProduct)
     {
