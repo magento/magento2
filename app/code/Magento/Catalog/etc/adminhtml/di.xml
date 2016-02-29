@@ -144,17 +144,12 @@
             <argument name="pool" xsi:type="object">Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\System" shared="false">
-        <arguments>
-            <argument name="urlSubmit" xsi:type="string">catalog/product/save</argument>
-        </arguments>
-    </type>
-    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions" shared="false">
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions">
         <arguments>
             <argument name="scopeName" xsi:type="string">product_form.product_form</argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Related" shared="false">
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Related">
         <arguments>
             <argument name="scopeName" xsi:type="string">product_form.product_form</argument>
         </arguments>
