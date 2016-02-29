@@ -196,7 +196,8 @@ class Attributes extends AbstractModifier
             'store' => $this->locator->getStore()->getId(),
             'product' => $this->locator->getProduct()->getId(),
             'type' => $this->locator->getProduct()->getTypeId(),
-            'set' => $this->locator->getProduct()->getAttributeSetId()
+            'set' => $this->locator->getProduct()->getAttributeSetId(),
+            'message_key' => 'messages'
         ];
 
         $meta['add_attribute_modal']['children']['create_new_attribute_modal'] = [
