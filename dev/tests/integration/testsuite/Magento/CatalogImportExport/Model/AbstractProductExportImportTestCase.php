@@ -61,10 +61,10 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      */
     public function testExport($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
-        $this->executeFixtures($fixtures);
+        $this->executeFixtures($skus, $fixtures);
         $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
         $this->executeExportTest($skus, $skippedAttributes);
-        $this->executeFixtures($rollbackFixtures);
+        $this->executeFixtures($skus, $rollbackFixtures);
     }
 
     protected function executeExportTest($skus, $skippedAttributes)
@@ -84,7 +84,6 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
         $csvfile = $this->exportProducts();
         $this->importProducts($csvfile, \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND);
-
 
         while ($index > 0) {
             $index--;
@@ -131,9 +130,9 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      */
     public function testImportDelete($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
-        $this->executeFixtures($fixtures);
+        $this->executeFixtures($skus, $fixtures);
         $this->executeImportDeleteTest($skus);
-        $this->executeFixtures($rollbackFixtures);
+        $this->executeFixtures($skus, $rollbackFixtures);
     }
 
     protected function executeImportDeleteTest($skus)
@@ -165,11 +164,11 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
     /**
      * Execute fixtures
      *
+     * @param array $skus
      * @param array $fixtures
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    private function executeFixtures($fixtures)
+    private function executeFixtures($skus, $fixtures)
     {
         foreach ($fixtures as $fixture) {
             $fixturePath = $this->fileSystem->getDirectoryRead(DirectoryList::ROOT)
@@ -213,7 +212,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      * @param string $behavior
      * @return void
      */
-    protected function importProducts($csvfile, $behavior)
+    private function importProducts($csvfile, $behavior)
     {
         /** @var \Magento\CatalogImportExport\Model\Import\Product $importModel */
         $importModel = $this->objectManager->create(
