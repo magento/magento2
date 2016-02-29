@@ -15,7 +15,7 @@ class Runtime implements \Magento\Framework\ObjectManager\DefinitionInterface
     protected $_definitions = [];
 
     /**
-     * @param \Magento\Framework\Code\Reader\ClassReader $reader
+     * @param \Magento\Framework\Code\Reader\ClassReaderInterface $reader
      */
     public function __construct(\Magento\Framework\Code\Reader\ClassReaderInterface $reader = null)
     {
