@@ -31,6 +31,11 @@ class DownloadableTest extends AbstractProductExportImportTestCase
         ];
     }
 
+    public function importReplaceDataProvider()
+    {
+        return $this->exportImportDataProvider();
+    }
+
     /**
      * @param array $fixtures
      * @param string[] $skus
@@ -54,6 +59,23 @@ class DownloadableTest extends AbstractProductExportImportTestCase
      * @todo remove after MAGETWO-49467 resolved
      */
     public function testImportDelete($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
+    {
+        $this->markTestSkipped('Uncomment after MAGETWO-49467 resolved');
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     *
+     * @param array $fixtures
+     * @param string[] $skus
+     * @param string[] $skippedAttributes
+     * @dataProvider importReplaceDataProvider
+     *
+     * @todo remove after MAGETWO-49467 resolved
+     */
+    public function testImportReplace($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
         $this->markTestSkipped('Uncomment after MAGETWO-49467 resolved');
     }
