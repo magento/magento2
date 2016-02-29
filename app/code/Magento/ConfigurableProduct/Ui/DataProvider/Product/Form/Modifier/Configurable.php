@@ -70,9 +70,12 @@ class Configurable extends AbstractModifier
      */
     public function modifyData(array $data)
     {
-        if (in_array($this->locator->getProduct()->getTypeId(), self::$availableProductTypes)) {
-            $model = $this->locator->getProduct();
-            $data[$model->getId()]['affect_configurable_product_attributes'] = '1';
+        /** @var \Magento\Catalog\Api\Data\ProductInterface $model */
+        $model = $this->locator->getProduct();
+        $productTypeId = $model->getTypeId();
+        if (in_array($productTypeId, self::$availableProductTypes)) {
+            $productId = $model->getId();
+            $data[$productId]['affect_configurable_product_attributes'] = '1';
             //$data[$model->getId()]['configurable-matrix'] = $this->getConfigurableMatrix();
         }
 
@@ -84,8 +87,6 @@ class Configurable extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        //return $meta;
-
         if (in_array($this->locator->getProduct()->getTypeId(), self::$availableProductTypes)) {
             $meta = array_merge_recursive(
                 $meta,
