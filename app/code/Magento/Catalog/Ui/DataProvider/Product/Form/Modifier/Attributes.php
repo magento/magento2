@@ -192,11 +192,11 @@ class Attributes extends AbstractModifier
     private function customizeCreateAttributeModal(array $meta)
     {
         $params = [
-            'group' => $this->getGeneralPanelName($meta),
+            'group' => static::GROUP_CODE,
             'store' => $this->locator->getStore()->getId(),
             'product' => $this->locator->getProduct()->getId(),
             'type' => $this->locator->getProduct()->getTypeId(),
-            'popup' => 1
+            'set' => $this->locator->getProduct()->getAttributeSetId()
         ];
 
         $meta['add_attribute_modal']['children']['create_new_attribute_modal'] = [
@@ -205,10 +205,13 @@ class Attributes extends AbstractModifier
                     'config' => [
                         'isTemplate' => false,
                         'componentType' => Component\Modal::NAME,
-                        'dataScope' => '',
+                        'dataScope' => 'data.new_attribute',
                         'provider' => 'product_form.product_form_data_source',
                         'options' => [
                             'title' => __('New Attribute')
+                        ],
+                        'imports' => [
+                            'state' => '!index=product_attribute_add_form:responseStatus'
                         ],
                     ]
                 ]
