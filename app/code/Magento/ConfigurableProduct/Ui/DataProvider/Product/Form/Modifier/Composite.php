@@ -11,6 +11,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableT
 use Magento\Catalog\Model\Product\Type;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data\AssociatedProducts;
 
 /**
  * Data provider for Configurable products
@@ -42,17 +43,25 @@ class Composite extends AbstractModifier
     private $objectManager;
 
     /**
+     * @var AssociatedProducts
+     */
+    private $associatedProducts;
+
+    /**
      * @param LocatorInterface $locator
      * @param ObjectManagerInterface $objectManager
+     * @param AssociatedProducts $associatedProducts
      * @param array $modifiers
      */
     public function __construct(
         LocatorInterface $locator,
         ObjectManagerInterface $objectManager,
+        AssociatedProducts $associatedProducts,
         array $modifiers = []
     ) {
         $this->locator = $locator;
         $this->objectManager = $objectManager;
+        $this->associatedProducts = $associatedProducts;
         $this->modifiers = $modifiers;
     }
 
@@ -67,7 +76,11 @@ class Composite extends AbstractModifier
         if (in_array($productTypeId, self::$availableProductTypes)) {
             $productId = $model->getId();
             $data[$productId]['affect_configurable_product_attributes'] = '1';
-            //$data[$model->getId()]['configurable-matrix'] = $this->getConfigurableMatrix();
+
+            if ($productTypeId === ConfigurableType::TYPE_CODE) {
+                $data[$productId]['configurable-matrix'] = $this->associatedProducts->getProductMatrix();
+                $data[$productId]['attributes'] = $this->associatedProducts->getProductAttributesIds();
+            }
         }
 
         return $data;
