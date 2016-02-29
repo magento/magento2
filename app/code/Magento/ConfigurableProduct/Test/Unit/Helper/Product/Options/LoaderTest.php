@@ -52,7 +52,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->configurable = $this->getMockBuilder(Configurable::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConfigurableAttributes'])
+            ->setMethods(['getConfigurableAttributeCollection'])
             ->getMock();
 
         $this->loader = new Loader($this->optionValueFactory);
@@ -78,7 +78,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
         $attributes = [$attribute];
 
         $this->configurable->expects(static::once())
-            ->method('getConfigurableAttributes')
+            ->method('getConfigurableAttributeCollection')
             ->with($this->product)
             ->willReturn($attributes);
 
