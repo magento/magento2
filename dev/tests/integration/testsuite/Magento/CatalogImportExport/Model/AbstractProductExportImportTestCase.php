@@ -36,11 +36,13 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      */
     public static $skippedAttributes = [
         'options',
+        'created_at',
         'updated_at',
         'category_ids',
         'special_from_date',
         'news_from_date',
         'custom_design_from',
+        'updated_in',
     ];
 
     protected function setUp()
@@ -69,7 +71,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      */
     public function testExport($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
-        $this->executeFixtures($fixtures);
+        $this->executeFixtures($fixtures, $skus);
         $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
         $this->executeExportTest($skus, $skippedAttributes);
         $this->executeFixtures($rollbackFixtures);
@@ -135,29 +137,21 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      */
     public function testImportDelete($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
-        $this->executeFixtures($fixtures);
+        $this->executeFixtures($fixtures, $skus);
         $this->executeImportDeleteTest($skus);
         $this->executeFixtures($rollbackFixtures);
     }
 
     protected function executeImportDeleteTest($skus)
     {
-        $defaultProductData = $this->getDefaultProductData();
-        $index = 0;
-        $ids = [];
-        while (isset($skus[$index])) {
-            $ids[$index] = $this->productResource->getIdBySku($skus[$index]);
-            $index++;
-        }
-
         $csvfile = $this->exportProducts();
         $this->importProducts($csvfile, \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE);
-
-        while ($index > 0) {
-            $index--;
-            $newProduct = $this->objectManager->create('Magento\Catalog\Model\Product')->load($ids[$index]);
-            $newProductData = $newProduct->getData();
-            $this->assertEquals($defaultProductData, $newProductData);
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = $this->objectManager->create('Magento\Catalog\Model\Product');
+        foreach ($skus as $sku) {
+            $productId = $this->productResource->getIdBySku($sku);
+            $product->load($productId);
+            $this->assertNull($product->getId());
         }
     }
 
@@ -167,8 +161,9 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      * @param array $skus
      * @param array $fixtures
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    private function executeFixtures($fixtures)
+    private function executeFixtures($fixtures, $skus = [])
     {
         foreach ($fixtures as $fixture) {
             $fixturePath = $this->fileSystem->getDirectoryRead(DirectoryList::ROOT)
@@ -199,7 +194,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      */
     public function testImportReplace($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
-        $this->executeFixtures($fixtures);
+        $this->executeFixtures($fixtures, $skus);
         $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
         $this->executeImportReplaceTest($skus, $skippedAttributes);
         $this->executeFixtures($rollbackFixtures);
@@ -207,7 +202,6 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
     protected function executeImportReplaceTest($skus, $skippedAttributes)
     {
-        $defaultProductData = $this->getDefaultProductData();
         $replacedAttributes = [
             'row_id',
             'entity_id',
@@ -239,7 +233,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
             // check original product is deleted
             $origProduct = $this->objectManager->create('Magento\Catalog\Model\Product')->load($ids[$index]);
-            $this->assertEquals($defaultProductData, $origProduct->getData());
+            $this->assertNull($origProduct->getId());
 
             // check new product data
             // @todo uncomment or remove after MAGETWO-49806 resolved
@@ -309,16 +303,5 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($errors->getErrorsCount() == 0, 'Product import error, imported from file:' . $csvfile);
         $importModel->importData();
-    }
-
-    /**
-     * @return mixed
-     */
-    private function getDefaultProductData()
-    {
-        $defaultProductData = $this->objectManager->create('Magento\Catalog\Model\Product')
-            ->load(100)
-            ->getData();
-        return $defaultProductData;
     }
 }
