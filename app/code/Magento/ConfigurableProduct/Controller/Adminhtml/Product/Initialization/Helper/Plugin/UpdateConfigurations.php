@@ -70,8 +70,8 @@ class UpdateConfigurations
     {
         $result = [];
         $configurableMatrix = $this->request->getParam('configurable-matrix', []);
-        foreach ($configurableMatrix as $configurations) {
-            if (!$configurations['newProduct']) {
+        foreach ($configurableMatrix as $item) {
+            if (!$item['newProduct']) {
                 $result[$item['id']] = [
                     'status' => isset($item['status']) ? $item['status'] : '',
                     'sku' => isset($item['sku']) ? $item['sku'] : '',
