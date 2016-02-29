@@ -108,7 +108,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                 ['apply_to' => ['expected_product_type']],
                 ['product_type' => 'not_expected_product_type'],
                 true, //validation skipped in such case, so it means attribute is valid
-                'any_attibute_code',
+                'any_attribute_code',
             ],
             [
                 'any_behavior',
