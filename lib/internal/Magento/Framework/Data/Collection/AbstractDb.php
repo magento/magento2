@@ -234,7 +234,7 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
         $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
         $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
 
-        if(!count($this->getSelect()->getPart(\Magento\Framework\DB\Select::GROUP))) {
+        if (!count($this->getSelect()->getPart(\Magento\Framework\DB\Select::GROUP))) {
             $countSelect->columns(new \Zend_Db_Expr('COUNT(*)'));
             return $countSelect;
         }
