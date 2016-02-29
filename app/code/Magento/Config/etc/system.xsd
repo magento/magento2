@@ -163,7 +163,7 @@
             <xs:sequence>
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element name="label" type="xs:string" />
-                    <xs:element name="comment" type="xs:string" />
+                    <xs:element ref="comment" />
                     <xs:element name="tooltip" type="xs:string" />
                     <xs:element name="hint" type="xs:string" />
                     <xs:element name="frontend_class" type="xs:string" />
@@ -340,6 +340,12 @@
         <xs:anyAttribute processContents="lax"/>
     </xs:attributeGroup>
 
+    <xs:attributeGroup name="commentAttributeGroup">
+        <xs:attribute name="model" type="xs:string" use="optional" />
+        <xs:anyAttribute processContents="lax"/>
+    </xs:attributeGroup>
+
+
     <xs:element name="depends">
         <xs:annotation>
             <xs:documentation>
@@ -442,6 +448,21 @@
             <xs:minLength value="5" />
         </xs:restriction>
     </xs:simpleType>
+
+    <xs:element name="comment">
+        <xs:annotation>
+            <xs:documentation>
+                Comment type
+            </xs:documentation>
+        </xs:annotation>
+
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:any minOccurs="0" maxOccurs="1" processContents="lax" />
+            </xs:sequence>
+            <xs:attributeGroup ref="commentAttributeGroup"/>
+        </xs:complexType>
+    </xs:element>
 
     <xs:simpleType name="typeConfigPath">
         <xs:annotation>
