@@ -15,7 +15,7 @@ interface AttributeGroupInterface extends ExtensibleDataInterface
     const SORT_ORDER = 'sort_order';
     const DEFAULT_ID = 'default_id';
     const ATTRIBUTE_GROUP_CODE = 'attribute_group_code';
-    const TAB_GROUP_CODE = 'tab_group_code';
+    const SCOPE_CODE = 'tab_group_code';
 
     /**
      * Retrieve id
@@ -108,19 +108,19 @@ interface AttributeGroupInterface extends ExtensibleDataInterface
     public function setAttributeGroupCode($attributeGroupCode);
 
     /**
-     * Retrieve tab group code
+     * Retrieve scope code
      *
      * @return string
      */
-    public function getTabGroupCode();
+    public function getScopeCode();
 
     /**
-     * Set tab group code
+     * Set scope code
      *
-     * @param string $tabGroupCode
+     * @param string $scopeCode
      * @return $this
      */
-    public function setTabGroupCode($tabGroupCode);
+    public function setScopeCode($scopeCode);
 
     /**
      * Retrieve existing extension attributes object.

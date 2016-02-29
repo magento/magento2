@@ -215,17 +215,17 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     /**
      * {@inheritdoc}
      */
-    public function getTabGroupCode()
+    public function getScopeCode()
     {
-        return $this->getData(self::TAB_GROUP_CODE);
+        return $this->getData(self::SCOPE_CODE);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function setTabGroupCode($tabGroupCode)
+    public function setScopeCode($scopeCode)
     {
-        return $this->setData(self::TAB_GROUP_CODE, $tabGroupCode);
+        return $this->setData(self::SCOPE_CODE, $scopeCode);
     }
 
     /**

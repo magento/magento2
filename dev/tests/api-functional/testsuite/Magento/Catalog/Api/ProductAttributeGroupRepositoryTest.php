@@ -169,7 +169,7 @@ class ProductAttributeGroupRepositoryTest extends \Magento\TestFramework\TestCas
             'sort_order' => 10,
             'default_id' => 5,
             'attribute_group_code' => 'empty_attribute_group',
-            'tab_group_code' => 'default_tab',
+            'scope_code' => 'default_tab',
         ];
     }
 
