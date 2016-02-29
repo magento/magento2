@@ -85,7 +85,6 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
         $csvfile = $this->exportProducts();
         $this->importProducts($csvfile, \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND);
 
-
         while ($index > 0) {
             $index--;
             $newProduct = $this->objectManager->create('Magento\Catalog\Model\Product')
@@ -167,7 +166,6 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      *
      * @param array $fixtures
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     private function executeFixtures($fixtures)
     {
@@ -213,7 +211,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      * @param string $behavior
      * @return void
      */
-    protected function importProducts($csvfile, $behavior)
+    private function importProducts($csvfile, $behavior)
     {
         /** @var \Magento\CatalogImportExport\Model\Import\Product $importModel */
         $importModel = $this->objectManager->create(
