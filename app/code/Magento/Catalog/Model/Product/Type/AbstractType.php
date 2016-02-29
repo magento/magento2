@@ -26,8 +26,8 @@ abstract class AbstractType
     protected $_typeId;
 
     /**
-    * @var array
-    */
+     * @var array
+     */
     protected $_editableAttributes;
 
     /**
@@ -287,11 +287,11 @@ abstract class AbstractType
     }
 
     /**
-    * Retrieve product type attributes
-    *
-    * @param \Magento\Catalog\Model\Product $product
-    * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
-    */
+     * Retrieve product type attributes
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute[]
+     */
     public function getEditableAttributes($product)
     {
         return $this->getSetAttributes($product);
