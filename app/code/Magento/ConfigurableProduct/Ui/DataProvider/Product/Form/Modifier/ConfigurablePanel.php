@@ -11,6 +11,7 @@ use Magento\Ui\Component\Form;
 use Magento\Ui\Component\DynamicRows;
 use Magento\Ui\Component\Modal;
 use Magento\Framework\UrlInterface;
+use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data\AssociatedProducts;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 
 /**
@@ -43,15 +44,23 @@ class ConfigurablePanel extends AbstractModifier
     private $locator;
 
     /**
+     * @var AssociatedProducts
+     */
+    protected $associatedProducts;
+
+    /**
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
+     * @param AssociatedProducts $associatedProducts
      */
     public function __construct(
         LocatorInterface $locator,
-        UrlInterface $urlBuilder
+        UrlInterface $urlBuilder,
+        AssociatedProducts $associatedProducts
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
+        $this->associatedProducts = $associatedProducts;
     }
 
     /**

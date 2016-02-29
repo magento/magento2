@@ -109,6 +109,7 @@ define([
             _.each(data, function (row) {
                 var product = {
                     'id': row.productId,
+                    'product_link': row.productUrl,
                     'name': row.name,
                     'sku': row.sku,
                     'status': row.status,
