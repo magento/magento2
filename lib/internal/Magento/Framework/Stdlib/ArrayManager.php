@@ -89,6 +89,33 @@ class ArrayManager
     }
 
     /**
+     * Move value from one location to another
+     *
+     * @param string $path
+     * @param string $targetPath
+     * @param array $data
+     * @param bool $overwrite
+     * @param string $delimiter
+     * @return array
+     */
+    public function move($path, $targetPath, array $data, $overwrite = false, $delimiter = self::DEFAULT_PATH_DELIMITER)
+    {
+        if ($this->find($path, $data, $delimiter)) {
+            $parentNode = &$this->parentNode;
+            $nodeIndex = &$this->nodeIndex;
+
+            if ((!$this->find($targetPath, $data, $delimiter) || $overwrite)
+                && $this->find($targetPath, $data, $delimiter, true)
+            ) {
+                $this->parentNode[$this->nodeIndex] = $parentNode[$nodeIndex];
+                unset($parentNode[$nodeIndex]);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
      * Merge value with node and return modified data
      *
      * @param string $path

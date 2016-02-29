@@ -184,6 +184,56 @@ class ArrayManagerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $path
+     * @param string $targetPath
+     * @param array $data
+     * @param bool $overwrite
+     * @param array $result
+     * @dataProvider moveDataProvider
+     */
+    public function testMove($path, $targetPath, array $data, $overwrite, array $result)
+    {
+        $this->assertSame($result, $this->arrayManager->move($path, $targetPath, $data, $overwrite));
+    }
+
+    /**
+     * @return array
+     */
+    public function moveDataProvider()
+    {
+        return [
+            0 => [
+                'path' => 'not/valid/path',
+                'targetPath' => 'target/path',
+                'data' => ['valid' => ['path' => 'value']],
+                'overwrite' => false,
+                'result' => ['valid' => ['path' => 'value']]
+            ],
+            1 => [
+                'path' => 'valid/path',
+                'targetPath' => 'target/path',
+                'data' => ['valid' => ['path' => 'value']],
+                'overwrite' => false,
+                'result' => ['valid' => [], 'target' => ['path' => 'value']]
+            ],
+            2 => [
+                'path' => 'valid/path',
+                'targetPath' => 'target/path',
+                'data' => ['valid' => ['path' => 'value'], 'target' => ['path' => 'exists']],
+                'overwrite' => false,
+                'result' => ['valid' => ['path' => 'value'], 'target' => ['path' => 'exists']]
+            ],
+            3 => [
+                'path' => 'valid/path',
+                'targetPath' => 'target/path',
+                'data' => ['valid' => ['path' => 'value'], 'target' => ['path' => 'exists']],
+                'overwrite' => true,
+                'result' => ['valid' => [], 'target' => ['path' => 'value']]
+            ]
+        ];
+    }
+
+    /**
+     * @param string $path
      * @param array $data
      * @param array $value
      * @param array $result
