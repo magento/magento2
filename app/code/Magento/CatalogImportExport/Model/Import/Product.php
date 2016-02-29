@@ -614,6 +614,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private $productEntityLinkField;
 
     /**
+     * Product entity identifier field
+     *
+     * @var string
+     */
+    private $productEntityIdentifierField;
+
+    /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
@@ -1300,9 +1307,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @return array
      */
-    public function getNewSkuFieldsForSelect()
+    private function getNewSkuFieldsForSelect()
     {
-        return ['sku', $this->getProductEntityLinkField()];
+        $fields = ['sku', $this->getProductEntityLinkField()];
+        if ($this->getProductEntityLinkField() != $this->getProductIdentifierField()) {
+            $fields[] = $this->getProductIdentifierField();
+        }
+        return $fields;
     }
 
     /**
@@ -2291,25 +2302,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     private function prepareNewSkuData($sku)
     {
         $data = [];
-        foreach ($this->getNewSkuFields() as $field) {
-            if ($field == 'attr_set_code') {
-                $data[$field] = $this->_attrSetIdToName[$this->_oldSku[$sku]['attr_set_id']];
-                continue;
-            }
-            $data[$field] = $this->_oldSku[$sku][$field];
+        foreach ($this->_oldSku[$sku] as $key => $value) {
+            $data[$key] = $value;
         }
 
-        return $data;
-    }
+        $data['attr_set_code'] = $this->_attrSetIdToName[$this->_oldSku[$sku]['attr_set_id']];
 
-    /**
-     * Get new SKU fields
-     *
-     * @return array
-     */
-    public function getNewSkuFields()
-    {
-        return ['entity_id', 'type_id', 'attr_set_id', 'attr_set_code'];
+        return $data;
     }
 
     /**
@@ -2502,5 +2501,20 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 ->getLinkField();
         }
         return $this->productEntityLinkField;
+    }
+
+    /**
+     * Get product entity identifier field
+     *
+     * @return string
+     */
+    private function getProductIdentifierField()
+    {
+        if (!$this->productEntityIdentifierField) {
+            $this->productEntityIdentifierField = $this->getMetadataPool()
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getIdentifierField();
+        }
+        return $this->productEntityIdentifierField;
     }
 }
