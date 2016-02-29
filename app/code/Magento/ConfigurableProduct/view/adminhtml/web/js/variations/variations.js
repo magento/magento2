@@ -24,6 +24,7 @@ define([
             opened: false,
             attributes: [],
             usedAttributes: [],
+            attributesData: {},
             productMatrix: [],
             variations: [],
             productAttributes: [],
@@ -33,11 +34,13 @@ define([
             value: [],
             modules: {
                 associatedProductGrid: '${ $.configurableProductGrid }',
-                wizardButtonElement: '${ $.wizardModalButtonName }'
+                wizardButtonElement: '${ $.wizardModalButtonName }',
             },
             links: {
                 value: '${ $.provider }:${ $.dataScopeVariations }',
-                usedAttributes: '${ $.provider }:${ $.dataScopeAttributes }'
+                usedAttributes: '${ $.provider }:${ $.dataScopeAttributes }',
+                attributesData: '${ $.provider }:${ $.dataScopeAttributesData }'
+
             }
         },
         initialize: function () {
@@ -48,7 +51,7 @@ define([
             this.initProductAttributesMap();
         },
         initObservable: function () {
-            this._super().observe('actions opened attributes productMatrix value usedAttributes');
+            this._super().observe('actions opened attributes productMatrix value usedAttributes attributesData');
 
             return this;
         },
@@ -174,7 +177,6 @@ define([
             this.attributes(attributes);
             this.initImageUpload();
             //this.disableConfigurableAttributes(attributes);
-            //this.showPrice();
             this.handleValue(variations);
             this.handleAttributes();
         },
@@ -208,13 +210,35 @@ define([
         },
         handleAttributes: function () {
             var tmpArray = [];
+            var tmpOptions = {};
+            var option = {};
+            var position = 0;
+            var values = {};
 
             _.each(this.attributes(), function (attribute) {
                 tmpArray.push(attribute.id);
+                values = {};
+                _.each(attribute.chosen, function (row) {
+                    values[row.value] = {
+                        "include": "1",
+                        "value_index": row.value
+                    };
+                }, this);
+                option = {
+                    "attribute_id": attribute.id,
+                    "code": attribute.code,
+                    "label": attribute.label,
+                    "position": position,
+                    "values": values
+                };
+                tmpOptions[attribute.id] = option;
+                position++;
             }, this);
 
+            this.attributesData(tmpOptions);
             this.usedAttributes(tmpArray);
         },
+
 
         /**
          * Get attributes options
@@ -420,16 +444,6 @@ define([
                     .addClass('disabled-configurable-elements')
                     .prop('disabled', true);
             });
-        },
-        showPrice: function () {
-            var priceContainer = $('[id="attribute-price-container"]');
-            if (this.productMatrix().length !== 0) {
-                priceContainer.hide();
-                priceContainer.find('input').prop('disabled', true);
-            } else {
-                priceContainer.show();
-                priceContainer.find('input').prop('disabled', false);
-            }
         },
 
         /**

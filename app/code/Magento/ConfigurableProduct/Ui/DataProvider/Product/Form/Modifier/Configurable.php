@@ -97,8 +97,6 @@ class Configurable extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        //return $meta;
-
         if (in_array($this->locator->getProduct()->getTypeId(), self::$availableProductTypes)) {
             $meta = array_merge_recursive(
                 $meta,
