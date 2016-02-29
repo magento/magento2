@@ -1,0 +1,28 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<input type="hidden" data-bind="attr: {name: 'swatchvisual[value][' + elementName + ']', id: 'swatch_visual_value_' + elementName, value: value}"/>
+<div class="swatch_window" data-bind="attr: {id: 'swatch_window_option_' + elementName}"></div>
+<div class="swatch_sub-menu_container" data-bind="attr: {id: 'swatch_container_option_' + elementName}">
+    <div class="swatch_row position-relative">
+        <div class="swatch_row_name colorpicker_handler">
+            <p>Choose a color</p>
+        </div>
+    </div>
+    <div class="swatch_row">
+        <div class="swatch_row_name btn_choose_file_upload"
+             data-bind="attr: {id: 'swatch_choose_file_option_' + elementName}">
+            <p>Upload a file</p>
+        </div>
+    </div>
+    <div class="swatch_row">
+        <div class="swatch_row_name btn_remove_swatch">
+            <p>Clear</p>
+        </div>
+    </div>
+</div>
+
