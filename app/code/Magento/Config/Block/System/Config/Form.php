@@ -312,15 +312,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             
             if ($field->hasBackendModel()) {
                 $backendModel = $field->getBackendModel();
-                $backendModel->setPath(
-                    $path
-                )->setValue(
-                    $data
-                )->setWebsite(
-                    $this->getWebsiteCode()
-                )->setStore(
-                    $this->getStoreCode()
-                )->afterLoad();
+                $backendModel->setPath($path)
+                    ->setValue($data)
+                    ->setWebsite($this->getWebsiteCode())
+                    ->setStore($this->getStoreCode())
+                    ->afterLoad();
                 $data = $backendModel->getValue();
             }
             
@@ -608,6 +604,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Temporary moved those $this->getRequest()->getParam('blabla') from the code accross this block
      * to getBlala() methods to be later set from controller with setters
      */
+
     /**
      * Enter description here...
      *
