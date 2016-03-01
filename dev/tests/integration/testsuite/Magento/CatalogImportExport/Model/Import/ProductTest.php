@@ -592,6 +592,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $this->assertTrue($errors->getErrorsCount() == 0);
         $this->_model->importData();
+        $this->assertTrue($this->_model->getErrorAggregator()->getErrorsCount() == 0);
 
         $resource = $objectManager->get('Magento\Catalog\Model\ResourceModel\Product');
         $productId = $resource->getIdBySku('simple_new');

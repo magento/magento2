@@ -32,7 +32,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
     /**
      * @var string[]
      */
-    protected $rollbackFixtures;
+    protected $fixtures;
 
     /**
      * skipped attributes
@@ -64,7 +64,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
     protected function tearDown()
     {
-        $this->executeFixtures($this->rollbackFixtures);
+        $this->executeRollbackFixtures($this->fixtures);
     }
 
     /**
@@ -79,7 +79,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      */
     public function testExport($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
-        $this->rollbackFixtures = $rollbackFixtures;
+        $this->fixtures = $fixtures;
         $this->executeFixtures($fixtures, $skus);
         $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
         $this->executeExportTest($skus, $skippedAttributes);
@@ -145,7 +145,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      */
     public function testImportDelete($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
-        $this->rollbackFixtures = $rollbackFixtures;
+        $this->fixtures = $fixtures;
         $this->executeFixtures($fixtures, $skus);
         $this->executeImportDeleteTest($skus);
     }
@@ -181,6 +181,30 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Execute rollback fixtures
+     *
+     * @param array $fixtures
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    private function executeRollbackFixtures($fixtures)
+    {
+        foreach ($fixtures as $fixture) {
+            $fixturePath = $this->fileSystem->getDirectoryRead(DirectoryList::ROOT)
+                ->getAbsolutePath('/dev/tests/integration/testsuite/' . $fixture);
+            $fileInfo = pathinfo($fixturePath);
+            $extension = '';
+            if (isset($fileInfo['extension'])) {
+                $extension = '.' . $fileInfo['extension'];
+            }
+            $rollbackfixturePath = $fileInfo['dirname'] . '/' . $fileInfo['filename'] . '_rollback' . $extension;
+            if (file_exists($rollbackfixturePath)) {
+                include $rollbackfixturePath;
+            }
+        }
+    }
+
+    /**
      * @param \Magento\Catalog\Model\Product $expectedProduct
      * @param \Magento\Catalog\Model\Product $actualProduct
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -202,7 +226,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      */
     public function testImportReplace($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
-        $this->rollbackFixtures = $rollbackFixtures;
+        $this->fixtures = $fixtures;
         $this->executeFixtures($fixtures, $skus);
         $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
         $this->executeImportReplaceTest($skus, $skippedAttributes);
@@ -215,7 +239,6 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
             'entity_id',
             'tier_price',
             'is_salable',
-            'multiselect_attribute',
         ];
         $skippedAttributes = array_merge($replacedAttributes, $skippedAttributes);
 
@@ -312,14 +335,14 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
         $this->assertEmpty(
             $errorMessage,
-            'Product import from file' . $csvfile . ' validation errors: ' . $errorMessage
+            'Product import from file ' . $csvfile . ' validation errors: ' . $errorMessage
         );
         $importModel->importData();
         $importErrors = $importModel->getErrorAggregator()->getAllErrors();
         $importErrorMessage = $this->extractErrorMessage($importErrors);
         $this->assertEmpty(
             $importErrorMessage,
-            'Product import from file' . $csvfile . ' errors: ' . $importErrorMessage
+            'Product import from file ' . $csvfile . ' errors: ' . $importErrorMessage
         );
     }
 
