@@ -1288,6 +1288,40 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     }
 
     /**
+     * Retrieving images from all columns and rows
+     *
+     * @deprecated since 2.0.3
+     * @param array $bunch
+     * @return array
+     */
+    protected function getBunchImages($bunch)
+    {
+        $images = [];
+        foreach ($bunch as $row) {
+            $row = $this->_customFieldsMapping($row);
+            foreach ($this->_imagesArrayKeys as $imageColumn) {
+                if (empty($row[$imageColumn])) {
+                    continue;
+                }
+
+                $rowImages = explode($this->getMultipleValueSeparator(), $row[$imageColumn]);
+                foreach ($rowImages as $rowImage) {
+                    $destinationPath = str_replace('\\', '/', $rowImage);
+                    $destinationPath = explode('/', $destinationPath);
+                    $destinationPath = array_pop($destinationPath);
+                    $destinationPath = preg_replace('/[^a-z0-9\._-]+/i', '', $destinationPath);
+
+                    $dispersion = \Magento\Framework\File\Uploader::getDispretionPath($destinationPath);
+                    $destinationPath = mb_strtolower($dispersion . '/' . $destinationPath);
+
+                    $images[$rowImage] = $destinationPath;
+                }
+            }
+        }
+        return $images;
+    }
+
+    /**
      * Init media gallery resources
      * @return void
      */
