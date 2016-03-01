@@ -3,12 +3,12 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Model\Report;
+namespace Magento\Braintree\Test\Unit\Model\Report;
 
 use Braintree\Transaction;
 use Braintree\Transaction\PayPalDetails;
 use DateTime;
-use Magento\BraintreeTwo\Model\Report\Row\TransactionMap;
+use Magento\Braintree\Model\Report\Row\TransactionMap;
 use Magento\Framework\Api\AttributeValue;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -16,7 +16,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class TransactionMapTest
  *
- * Test for class \Magento\BraintreeTwo\Model\Report\\Row\TransactionMap
+ * Test for class \Magento\Braintree\Model\Report\\Row\TransactionMap
  */
 class TransactionMapTest extends \PHPUnit_Framework_TestCase
 {

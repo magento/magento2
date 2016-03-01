@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Block;
+namespace Magento\Braintree\Block;
 
-use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
+use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Checkout\Model\ConfigProviderInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;

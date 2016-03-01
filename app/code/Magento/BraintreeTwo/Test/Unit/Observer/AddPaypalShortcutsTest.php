@@ -3,19 +3,19 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Observer;
+namespace Magento\Braintree\Test\Unit\Observer;
 
-use Magento\BraintreeTwo\Block\Paypal\Button;
+use Magento\Braintree\Block\Paypal\Button;
 use Magento\Catalog\Block\ShortcutButtons;
 use Magento\Framework\Event;
 use Magento\Framework\Event\Observer;
-use Magento\BraintreeTwo\Observer\AddPaypalShortcuts;
+use Magento\Braintree\Observer\AddPaypalShortcuts;
 use Magento\Framework\View\LayoutInterface;
 
 /**
  * Class AddPaypalShortcutsTest
  *
- * @see \Magento\BraintreeTwo\Observer\AddPaypalShortcuts
+ * @see \Magento\Braintree\Observer\AddPaypalShortcuts
  */
 class AddPaypalShortcutsTest extends \PHPUnit_Framework_TestCase
 {

@@ -8,7 +8,7 @@ define([
     'jquery',
     'underscore',
     'Magento_Checkout/js/view/payment/default',
-    'Magento_BraintreeTwo/js/view/payment/adapter',
+    'Magento_Braintree/js/view/payment/adapter',
     'Magento_Checkout/js/model/quote',
     'Magento_Checkout/js/model/full-screen-loader'
 ], function ($, _, Component, Braintree, quote, fullScreenLoader) {
@@ -18,7 +18,7 @@ define([
 
     return Component.extend({
         defaults: {
-            template: 'Magento_BraintreeTwo/payment/paypal',
+            template: 'Magento_Braintree/payment/paypal',
             code: 'braintree_paypal',
             active: false,
             paymentMethodNonce: null,

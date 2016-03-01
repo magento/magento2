@@ -3,13 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Observer;
+namespace Magento\Braintree\Test\Unit\Observer;
 
 use Magento\Framework\DataObject;
 use Magento\Framework\Event;
 use Magento\Payment\Model\InfoInterface;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
-use Magento\BraintreeTwo\Observer\DataAssignObserver;
+use Magento\Braintree\Observer\DataAssignObserver;
 
 /**
  * Class DataAssignObserverTest

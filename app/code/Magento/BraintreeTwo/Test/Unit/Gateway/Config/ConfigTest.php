@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\BraintreeTwo\Test\Unit\Gateway\Config;
+namespace Magento\Braintree\Test\Unit\Gateway\Config;
 
-use Magento\BraintreeTwo\Gateway\Config\Config;
+use Magento\Braintree\Gateway\Config\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 
@@ -145,7 +145,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers       \Magento\BraintreeTwo\Gateway\Config\Config::getCountryAvailableCardTypes
+     * @covers       \Magento\Braintree\Gateway\Config\Config::getCountryAvailableCardTypes
      * @dataProvider getCountrySpecificCardTypeConfigDataProvider
      */
     public function testCountryAvailableCardTypes($data, $countryData)
@@ -162,7 +162,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Config\Config::isCvvEnabled
+     * @covers \Magento\Braintree\Gateway\Config\Config::isCvvEnabled
      */
     public function testUseCvv()
     {
@@ -178,7 +178,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * @param mixed $data
      * @param boolean $expected
      * @dataProvider verify3DSecureDataProvider
-     * @covers \Magento\BraintreeTwo\Gateway\Config\Config::isVerify3DSecure
+     * @covers \Magento\Braintree\Gateway\Config\Config::isVerify3DSecure
      */
     public function testIsVerify3DSecure($data, $expected)
     {
@@ -208,7 +208,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @param mixed $data
      * @param double $expected
-     * @covers \Magento\BraintreeTwo\Gateway\Config\Config::getThresholdAmount
+     * @covers \Magento\Braintree\Gateway\Config\Config::getThresholdAmount
      * @dataProvider thresholdAmountDataProvider
      */
     public function testGetThresholdAmount($data, $expected)
@@ -241,7 +241,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @param int $value
      * @param array $expected
-     * @covers \Magento\BraintreeTwo\Gateway\Config\Config::get3DSecureSpecificCountries
+     * @covers \Magento\Braintree\Gateway\Config\Config::get3DSecureSpecificCountries
      * @dataProvider threeDSecureSpecificCountriesDataProvider
      */
     public function testGet3DSecureSpecificCountries($value, array $expected)

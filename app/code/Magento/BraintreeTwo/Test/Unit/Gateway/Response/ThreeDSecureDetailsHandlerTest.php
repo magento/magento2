@@ -3,14 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
+namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
 use Braintree\Transaction;
-use Magento\BraintreeTwo\Gateway\Response\ThreeDSecureDetailsHandler;
+use Magento\Braintree\Gateway\Response\ThreeDSecureDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
-use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\Helper\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -22,7 +22,7 @@ class ThreeDSecureDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     const TRANSACTION_ID = '432er5ww3e';
 
     /**
-     * @var \Magento\BraintreeTwo\Gateway\Response\ThreeDSecureDetailsHandler
+     * @var \Magento\Braintree\Gateway\Response\ThreeDSecureDetailsHandler
      */
     private $handler;
 
@@ -55,7 +55,7 @@ class ThreeDSecureDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Response\ThreeDSecureDetailsHandler::handle
+     * @covers \Magento\Braintree\Gateway\Response\ThreeDSecureDetailsHandler::handle
      */
     public function testHandle()
     {

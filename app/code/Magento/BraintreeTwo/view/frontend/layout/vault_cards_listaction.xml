@@ -9,7 +9,7 @@
     <body>
         <referenceContainer name="content">
             <referenceBlock name="vault.cards.list">
-                <block class="Magento\BraintreeTwo\Block\Customer\CardRenderer" name="braintree.card.renderer" template="Magento_Vault::customer_account/credit_card.phtml"/>
+                <block class="Magento\Braintree\Block\Customer\CardRenderer" name="braintree.card.renderer" template="Magento_Vault::customer_account/credit_card.phtml"/>
             </referenceBlock>
         </referenceContainer>
     </body>

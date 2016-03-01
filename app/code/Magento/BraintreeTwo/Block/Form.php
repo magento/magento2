@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Block;
+namespace Magento\Braintree\Block;
 
 use Magento\Backend\Model\Session\Quote;
-use Magento\BraintreeTwo\Gateway\Config\Config as GatewayConfig;
-use Magento\BraintreeTwo\Model\Adminhtml\Source\CcType;
-use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
+use Magento\Braintree\Gateway\Config\Config as GatewayConfig;
+use Magento\Braintree\Model\Adminhtml\Source\CcType;
+use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Payment\Block\Form\Cc;
 use Magento\Payment\Model\Config;

@@ -3,11 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
+namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
 use Braintree\Transaction;
 use Braintree\Transaction\CreditCardDetails;
-use Magento\BraintreeTwo\Gateway\Response\VaultDetailsHandler;
+use Magento\Braintree\Gateway\Response\VaultDetailsHandler;
 use Magento\Framework\DataObject;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Api\Data\OrderPaymentExtensionInterfaceFactory;
@@ -16,9 +16,9 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
-use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\Helper\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\BraintreeTwo\Gateway\Config\Config;
+use Magento\Braintree\Gateway\Config\Config;
 
 /**
  * VaultDetailsHandler Test
@@ -30,7 +30,7 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     const TRANSACTION_ID = '432erwwe';
 
     /**
-     * @var \Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler
+     * @var \Magento\Braintree\Gateway\Response\PaymentDetailsHandler
      */
     private $paymentHandler;
 
@@ -131,7 +131,7 @@ class VaultDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Response\VaultDetailsHandler::handle
+     * @covers \Magento\Braintree\Gateway\Response\VaultDetailsHandler::handle
      */
     public function testHandle()
     {

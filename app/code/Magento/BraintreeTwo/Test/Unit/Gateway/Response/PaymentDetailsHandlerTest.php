@@ -3,14 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
+namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
 use Braintree\Transaction;
-use Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler;
+use Magento\Braintree\Gateway\Response\PaymentDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Payment;
-use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\Helper\SubjectReader;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -21,7 +21,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     const TRANSACTION_ID = '432erwwe';
 
     /**
-     * @var \Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler
+     * @var \Magento\Braintree\Gateway\Response\PaymentDetailsHandler
      */
     private $paymentHandler;
 
@@ -60,7 +60,7 @@ class PaymentDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Response\PaymentDetailsHandler::handle
+     * @covers \Magento\Braintree\Gateway\Response\PaymentDetailsHandler::handle
      */
     public function testHandle()
     {

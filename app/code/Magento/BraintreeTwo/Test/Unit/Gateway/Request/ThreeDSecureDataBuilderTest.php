@@ -3,14 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Gateway\Request;
+namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
-use Magento\BraintreeTwo\Gateway\Config\Config;
-use Magento\BraintreeTwo\Gateway\Request\ThreeDSecureDataBuilder;
+use Magento\Braintree\Gateway\Config\Config;
+use Magento\Braintree\Gateway\Request\ThreeDSecureDataBuilder;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Payment\Gateway\Data\Order\OrderAdapter;
 use Magento\Payment\Gateway\Data\Order\AddressAdapter;
-use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\Helper\SubjectReader;
 
 /**
  * Class ThreeDSecureDataBuilderTest
@@ -76,7 +76,7 @@ class ThreeDSecureDataBuilderTest extends \PHPUnit_Framework_TestCase
      * @param string $countryId
      * @param array $countries
      * @param array $expected
-     * @covers \Magento\BraintreeTwo\Gateway\Request\ThreeDSecureDataBuilder::build
+     * @covers \Magento\Braintree\Gateway\Request\ThreeDSecureDataBuilder::build
      * @dataProvider buildDataProvider
      */
     public function testBuild($verify, $thresholdAmount, $countryId, array $countries, array $expected)

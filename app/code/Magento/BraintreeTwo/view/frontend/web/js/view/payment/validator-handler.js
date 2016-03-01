@@ -8,7 +8,7 @@
 define([
     'jquery',
     'Magento_Ui/js/model/messageList',
-    'Magento_BraintreeTwo/js/view/payment/3d-secure'
+    'Magento_Braintree/js/view/payment/3d-secure'
 ], function ($, globalMessageList, verify3DSecure) {
     'use strict';
 

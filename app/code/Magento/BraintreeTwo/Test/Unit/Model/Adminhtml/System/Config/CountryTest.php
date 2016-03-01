@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Model\Adminhtml\System\Config;
+namespace Magento\Braintree\Test\Unit\Model\Adminhtml\System\Config;
 
-use Magento\BraintreeTwo\Model\Adminhtml\System\Config\Country;
+use Magento\Braintree\Model\Adminhtml\System\Config\Country;
 use Magento\Directory\Model\ResourceModel\Country\Collection;
 use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -17,7 +17,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class CountryTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\BraintreeTwo\Model\Adminhtml\System\Config\Country
+     * @var \Magento\Braintree\Model\Adminhtml\System\Config\Country
      */
     protected $model;
 
@@ -47,7 +47,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Model\Adminhtml\System\Config\Country::toOptionArray
+     * @covers \Magento\Braintree\Model\Adminhtml\System\Config\Country::toOptionArray
      */
     public function testToOptionArrayMultiSelect()
     {
@@ -67,7 +67,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Model\Adminhtml\System\Config\Country::toOptionArray
+     * @covers \Magento\Braintree\Model\Adminhtml\System\Config\Country::toOptionArray
      */
     public function testToOptionArray()
     {
@@ -90,7 +90,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Model\Adminhtml\System\Config\Country::isCountryRestricted
+     * @covers \Magento\Braintree\Model\Adminhtml\System\Config\Country::isCountryRestricted
      * @param string $countryId
      * @dataProvider countryDataProvider
      */

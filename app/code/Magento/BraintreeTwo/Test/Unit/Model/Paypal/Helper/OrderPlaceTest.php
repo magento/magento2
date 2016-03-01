@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Model\Paypal\Helper;
+namespace Magento\Braintree\Test\Unit\Model\Paypal\Helper;
 
-use Magento\BraintreeTwo\Model\Paypal\Helper\OrderPlace;
+use Magento\Braintree\Model\Paypal\Helper\OrderPlace;
 use Magento\Checkout\Api\AgreementsValidatorInterface;
 use Magento\Checkout\Helper\Data;
 use Magento\Checkout\Model\Type\Onepage;
@@ -18,7 +18,7 @@ use Magento\Quote\Model\Quote\Address;
 /**
  * Class OrderPlaceTest
  *
- * @see \Magento\BraintreeTwo\Model\Paypal\Helper\OrderPlace
+ * @see \Magento\Braintree\Model\Paypal\Helper\OrderPlace
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

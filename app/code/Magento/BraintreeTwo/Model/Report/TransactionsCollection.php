@@ -3,9 +3,9 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Model\Report;
+namespace Magento\Braintree\Model\Report;
 
-use Magento\BraintreeTwo\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Data\Collection;
@@ -26,7 +26,7 @@ class TransactionsCollection extends Collection implements SearchResultInterface
      *
      * @var string
      */
-    protected $_itemObjectClass = 'Magento\BraintreeTwo\Model\Report\Row\TransactionMap';
+    protected $_itemObjectClass = 'Magento\Braintree\Model\Report\Row\TransactionMap';
 
     /**
      * @var array

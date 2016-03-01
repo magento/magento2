@@ -3,14 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Gateway\Validator;
+namespace Magento\Braintree\Test\Unit\Gateway\Validator;
 
 use Braintree\Transaction;
 use Magento\Framework\Phrase;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
-use Magento\BraintreeTwo\Gateway\Validator\GeneralResponseValidator;
-use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\Validator\GeneralResponseValidator;
+use Magento\Braintree\Gateway\Helper\SubjectReader;
 
 class GeneralResponseValidatorTest extends \PHPUnit_Framework_TestCase
 {

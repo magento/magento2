@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Controller\Payment;
+namespace Magento\Braintree\Test\Unit\Controller\Payment;
 
-use Magento\BraintreeTwo\Controller\Payment\GetNonce;
-use Magento\BraintreeTwo\Gateway\Command\GetPaymentNonceCommand;
+use Magento\Braintree\Controller\Payment\GetNonce;
+use Magento\Braintree\Gateway\Command\GetPaymentNonceCommand;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Request\Http;
@@ -109,7 +109,7 @@ class GetNonceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Controller\Payment\GetNonce::execute
+     * @covers \Magento\Braintree\Controller\Payment\GetNonce::execute
      */
     public function testExecuteWithException()
     {
@@ -142,7 +142,7 @@ class GetNonceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Controller\Payment\GetNonce::execute
+     * @covers \Magento\Braintree\Controller\Payment\GetNonce::execute
      */
     public function testExecute()
     {

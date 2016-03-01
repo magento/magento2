@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\BraintreeTwo\Test\Unit\Model\Adminhtml\System\Config;
+namespace Magento\Braintree\Test\Unit\Model\Adminhtml\System\Config;
 
-use Magento\BraintreeTwo\Model\Adminhtml\System\Config\CountryCreditCard;
+use Magento\Braintree\Model\Adminhtml\System\Config\CountryCreditCard;
 use Magento\Framework\Math\Random;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -18,7 +18,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class CountryCreditCardTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\BraintreeTwo\Model\Adminhtml\System\Config\CountryCreditCard
+     * @var \Magento\Braintree\Model\Adminhtml\System\Config\CountryCreditCard
      */
     protected $model;
 

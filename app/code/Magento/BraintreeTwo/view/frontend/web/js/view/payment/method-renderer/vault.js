@@ -6,7 +6,7 @@
 /*global define*/
 define([
     'jquery',
-    'Magento_BraintreeTwo/js/view/payment/method-renderer/cc-form',
+    'Magento_Braintree/js/view/payment/method-renderer/cc-form',
     'Magento_Vault/js/view/payment/method-renderer/vault',
     'Magento_Ui/js/model/messageList',
     'Magento_Checkout/js/model/full-screen-loader'

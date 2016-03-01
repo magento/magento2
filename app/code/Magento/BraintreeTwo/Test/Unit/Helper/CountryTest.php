@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Helper;
+namespace Magento\Braintree\Test\Unit\Helper;
 
-use Magento\BraintreeTwo\Helper\Country;
+use Magento\Braintree\Helper\Country;
 use Magento\Directory\Model\ResourceModel\Country\CollectionFactory;
 use Magento\Directory\Model\ResourceModel\Country\Collection;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -21,7 +21,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     private $collection;
 
     /**
-     * @var \Magento\BraintreeTwo\Helper\Country
+     * @var \Magento\Braintree\Helper\Country
      */
     private $helper;
 
@@ -42,7 +42,7 @@ class CountryTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Helper\Country::getCountries
+     * @covers \Magento\Braintree\Helper\Country::getCountries
      */
     public function testGetCountries()
     {

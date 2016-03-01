@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Gateway\Command;
+namespace Magento\Braintree\Test\Unit\Gateway\Command;
 
-use Magento\BraintreeTwo\Gateway\Command\CaptureStrategyCommand;
-use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\Command\CaptureStrategyCommand;
+use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\SearchCriteria;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -27,7 +27,7 @@ use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactor
 class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\BraintreeTwo\Gateway\Command\CaptureStrategyCommand
+     * @var \Magento\Braintree\Gateway\Command\CaptureStrategyCommand
      */
     private $strategyCommand;
 
@@ -92,7 +92,7 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Command\CaptureStrategyCommand::execute
+     * @covers \Magento\Braintree\Gateway\Command\CaptureStrategyCommand::execute
      */
     public function testSaleExecute()
     {
@@ -127,7 +127,7 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Command\CaptureStrategyCommand::execute
+     * @covers \Magento\Braintree\Gateway\Command\CaptureStrategyCommand::execute
      */
     public function testCaptureExecute()
     {
@@ -162,7 +162,7 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Command\CaptureStrategyCommand::execute
+     * @covers \Magento\Braintree\Gateway\Command\CaptureStrategyCommand::execute
      */
     public function testVaultCaptureExecute()
     {

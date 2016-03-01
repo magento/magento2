@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Gateway\Request;
+namespace Magento\Braintree\Gateway\Request;
 
 use Magento\Payment\Gateway\Request\BuilderInterface;
-use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\Helper\SubjectReader;
 
 /**
  * Class CustomerDataBuilder

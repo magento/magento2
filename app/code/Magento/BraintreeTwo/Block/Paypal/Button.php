@@ -3,15 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Block\Paypal;
+namespace Magento\Braintree\Block\Paypal;
 
 use Magento\Checkout\Model\Session;
 use Magento\Catalog\Block\ShortcutInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Locale\ResolverInterface;
-use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
+use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Framework\View\Element\Template\Context;
-use Magento\BraintreeTwo\Gateway\Config\PayPal\Config;
+use Magento\Braintree\Gateway\Config\PayPal\Config;
 
 /**
  * Class Button

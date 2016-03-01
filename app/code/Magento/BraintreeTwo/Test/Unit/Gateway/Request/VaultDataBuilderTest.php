@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Gateway\Request;
+namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
-use Magento\BraintreeTwo\Gateway\Request\VaultDataBuilder;
+use Magento\Braintree\Gateway\Request\VaultDataBuilder;
 
 class VaultDataBuilderTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Controller\Adminhtml\Report;
+namespace Magento\Braintree\Controller\Adminhtml\Report;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
@@ -20,7 +20,7 @@ class Index extends Action
      */
     protected $resultPageFactory;
 
-    const ADMIN_RESOURCE = 'Magento_BraintreeTwo::settlement_report';
+    const ADMIN_RESOURCE = 'Magento_Braintree::settlement_report';
 
     /**
      * @param Context $context

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Controller\Paypal;
+namespace Magento\Braintree\Controller\Paypal;
 
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\Action\Action;
@@ -11,7 +11,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Redirect;
-use Magento\BraintreeTwo\Gateway\Config\PayPal\Config;
+use Magento\Braintree\Gateway\Config\PayPal\Config;
 
 /**
  * Abstract class AbstractAction

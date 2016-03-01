@@ -3,13 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Gateway\Validator;
+namespace Magento\Braintree\Test\Unit\Gateway\Validator;
 
 use Braintree\Transaction;
-use Magento\BraintreeTwo\Gateway\Validator\PaymentNonceResponseValidator;
+use Magento\Braintree\Gateway\Validator\PaymentNonceResponseValidator;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
-use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\Helper\SubjectReader;
 
 /**
  * Class PaymentNonceResponseValidatorTest
@@ -49,7 +49,7 @@ class PaymentNonceResponseValidatorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Validator\PaymentNonceResponseValidator::validate
+     * @covers \Magento\Braintree\Gateway\Validator\PaymentNonceResponseValidator::validate
      */
     public function testFailedValidate()
     {

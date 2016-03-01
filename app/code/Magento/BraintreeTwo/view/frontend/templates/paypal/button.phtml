@@ -5,13 +5,13 @@
  */
 
 /**
- * @var \Magento\BraintreeTwo\Block\Paypal\Button $block
+ * @var \Magento\Braintree\Block\Paypal\Button $block
  */
 
 $id = $block->getContainerId() . mt_rand();
 
 $config = [
-    'Magento_BraintreeTwo/js/paypal/button' => [
+    'Magento_Braintree/js/paypal/button' => [
         'id' => $id,
         'clientToken' => $block->getClientToken(),
         'displayName' => $block->getMerchantName(),

@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
+namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
-use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
-use Magento\BraintreeTwo\Gateway\Response\VoidHandler;
+use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\Response\VoidHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
 

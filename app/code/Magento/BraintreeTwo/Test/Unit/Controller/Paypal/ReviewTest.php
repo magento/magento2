@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Controller\Paypal;
+namespace Magento\Braintree\Test\Unit\Controller\Paypal;
 
 use Magento\Quote\Model\Quote;
 use Magento\Framework\View\Layout;
@@ -15,15 +15,15 @@ use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\View\Element\AbstractBlock;
-use Magento\BraintreeTwo\Controller\Paypal\Review;
-use Magento\BraintreeTwo\Gateway\Config\PayPal\Config;
-use Magento\BraintreeTwo\Model\Paypal\Helper\QuoteUpdater;
-use Magento\BraintreeTwo\Block\Paypal\Checkout\Review as CheckoutReview;
+use Magento\Braintree\Controller\Paypal\Review;
+use Magento\Braintree\Gateway\Config\PayPal\Config;
+use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
+use Magento\Braintree\Block\Paypal\Checkout\Review as CheckoutReview;
 
 /**
  * Class ReviewTest
  *
- * @see \Magento\BraintreeTwo\Controller\Paypal\Review
+ * @see \Magento\Braintree\Controller\Paypal\Review
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

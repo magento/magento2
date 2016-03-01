@@ -7,8 +7,8 @@
 
 define([
     'jquery',
-    'Magento_BraintreeTwo/js/view/payment/method-renderer/cc-form',
-    'Magento_BraintreeTwo/js/validator',
+    'Magento_Braintree/js/view/payment/method-renderer/cc-form',
+    'Magento_Braintree/js/validator',
     'Magento_Vault/js/view/payment/vault-enabler',
     'mage/translate'
 ], function ($, Component, validator, vaultEnabler, $t) {
@@ -17,7 +17,7 @@ define([
     return Component.extend({
 
         defaults: {
-            template: 'Magento_BraintreeTwo/payment/form',
+            template: 'Magento_Braintree/payment/form',
             clientConfig: {
 
                 /**

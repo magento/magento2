@@ -3,17 +3,17 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Model\Report;
+namespace Magento\Braintree\Test\Unit\Model\Report;
 
-use Magento\BraintreeTwo\Model\Adapter\BraintreeSearchAdapter;
-use Magento\BraintreeTwo\Model\Report\ConditionAppliers\ApplierInterface;
-use Magento\BraintreeTwo\Model\Report\ConditionAppliers\AppliersPool;
-use Magento\BraintreeTwo\Model\Report\FilterMapper;
+use Magento\Braintree\Model\Adapter\BraintreeSearchAdapter;
+use Magento\Braintree\Model\Report\ConditionAppliers\ApplierInterface;
+use Magento\Braintree\Model\Report\ConditionAppliers\AppliersPool;
+use Magento\Braintree\Model\Report\FilterMapper;
 
 /**
  * Class FilterMapperTest
  *
- * Test for class \Magento\BraintreeTwo\Model\Report\FilterMapper
+ * Test for class \Magento\Braintree\Model\Report\FilterMapper
  */
 class FilterMapperTest extends \PHPUnit_Framework_TestCase
 {

@@ -3,16 +3,16 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Model\Paypal\Helper;
+namespace Magento\Braintree\Model\Paypal\Helper;
 
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
+use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\BraintreeTwo\Observer\DataAssignObserver;
-use Magento\BraintreeTwo\Gateway\Config\PayPal\Config;
+use Magento\Braintree\Observer\DataAssignObserver;
+use Magento\Braintree\Gateway\Config\PayPal\Config;
 
 /**
  * Class QuoteUpdater

@@ -7,7 +7,7 @@
 
 define([
     'jquery',
-    'Magento_BraintreeTwo/js/view/payment/adapter',
+    'Magento_Braintree/js/view/payment/adapter',
     'Magento_Checkout/js/model/quote',
     'mage/translate'
 ], function ($, braintree, quote, $t) {

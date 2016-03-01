@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Model\Adminhtml\Source;
+namespace Magento\Braintree\Model\Adminhtml\Source;
 
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Framework\Option\ArrayInterface;
