@@ -196,6 +196,8 @@ class Attributes extends AbstractModifier
     {
         $params = [
             'group' => static::GROUP_CODE,
+            'groupName' => self::GROUP_NAME,
+            'groupSortOrder' => self::GROUP_SORT_ORDER,
             'store' => $this->locator->getStore()->getId(),
             'product' => $this->locator->getProduct()->getId(),
             'type' => $this->locator->getProduct()->getTypeId(),
