@@ -50,7 +50,6 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
      */
     private $composerInformation;
 
-
     public function setUp()
     {
         $this->composerAppFactory = $this->getMock(
@@ -178,7 +177,36 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \RuntimeException
-     * @expectedExceptionMessage System package not found
+     * @expectedExceptionMessage no components are available because you cloned the Magento 2 GitHub repository
+     */
+    public function testGetPackageVersionGitCloned()
+    {
+        $package = $this->getMock('\Composer\Package\Package', [], [], '', false);
+        $this->repository
+            ->expects($this->once())
+            ->method('getPackages')
+            ->willReturn([$package]);
+
+        $this->locker->expects($this->once())->method('getLockedRepository')->willReturn($this->repository);
+        $this->composerInformation->expects($this->any())->method('isSystemPackage')->willReturn(false);
+        $this->composer->expects($this->once())->method('getLocker')->willReturn($this->locker);
+        $this->magentoComposerApp->expects($this->once())->method('createComposer')->willReturn($this->composer);
+
+        $this->composerAppFactory->expects($this->once())
+            ->method('create')
+            ->willReturn($this->magentoComposerApp);
+
+        $this->composerAppFactory->expects($this->once())
+            ->method('createInfoCommand')
+            ->willReturn($this->infoCommand);
+
+        $this->systemPackage = new SystemPackage($this->composerAppFactory, $this->composerInformation);
+        $this->systemPackage->getPackageVersions();
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage We cannot retrieve information on magento/product-community-edition.
      */
     public function testGetPackageVersionsFailed()
     {
@@ -199,10 +227,6 @@ class SystemPackageTest extends \PHPUnit_Framework_TestCase
 
         $this->composer->expects($this->once())->method('getLocker')->willReturn($this->locker);
         $this->magentoComposerApp->expects($this->once())->method('createComposer')->willReturn($this->composer);
-
-        $this->composerAppFactory->expects($this->once())
-            ->method('createInfoCommand')
-            ->willReturn($this->infoCommand);
 
         $this->composerAppFactory->expects($this->once())
             ->method('create')

@@ -32,9 +32,13 @@ class EavValidationRules
     public function build(AbstractAttribute $attribute, array $data)
     {
         $rules = [];
-        if (isset($data['required']) && $data['required'] == 1) {
+        if (!empty($data['arguments']['data']['config']['required'])) {
             $rules['required-entry'] = true;
         }
+        if ($attribute->getFrontendInput() === 'price') {
+            $rules['validate-zero-or-greater'] = true;
+        }
+
         $validation = $attribute->getValidateRules();
         if (!empty($validation)) {
             foreach ($validation as $type => $ruleName) {
