@@ -39,7 +39,7 @@ class AbstractProductTest extends \PHPUnit_Framework_TestCase
      */
     protected $_configProperty;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_condition = $this->getMockForAbstractClass(
             '\Magento\Rule\Model\Condition\Product\AbstractProduct',

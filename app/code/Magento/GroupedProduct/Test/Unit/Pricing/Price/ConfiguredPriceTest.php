@@ -43,7 +43,7 @@ class ConfiguredPriceTest extends \PHPUnit_Framework_TestCase
     protected $priceInfo;
 
 
-    public function setUp()
+    protected function setUp()
     {
         $this->price = $this->getMockBuilder('Magento\Framework\Pricing\Price\PriceInterface')
             ->getMock();

@@ -29,7 +29,7 @@ class TransferFactoryTest extends \PHPUnit_Framework_TestCase
      */
     private $transferBuilder;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->transferBuilder = $this->getMock(TransferBuilder::class);
         $this->transferMock = $this->getMock(TransferInterface::class);

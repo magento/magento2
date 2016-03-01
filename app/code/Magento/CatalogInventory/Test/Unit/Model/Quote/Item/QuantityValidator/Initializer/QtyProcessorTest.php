@@ -24,7 +24,7 @@ class QtyProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected $itemMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->quoteItemQtyList = $this->getMockBuilder(
             'Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList'

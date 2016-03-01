@@ -46,7 +46,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $attributeRepository;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->reporting = $this->getMockBuilder('Magento\Framework\View\Element\UiComponent\DataProvider\Reporting')
             ->disableOriginalConstructor()

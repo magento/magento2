@@ -39,7 +39,7 @@ class IndexerTest extends \PHPUnit_Framework_TestCase
      */
     protected $_changelogMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $contextMock = $this->getMock('Magento\Framework\App\Helper\Context', [], [], '', false);
 

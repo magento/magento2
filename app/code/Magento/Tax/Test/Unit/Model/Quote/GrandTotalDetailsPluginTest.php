@@ -50,7 +50,7 @@ class GrandTotalDetailsPluginTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->subjectMock = $this->getMockBuilder('\Magento\Quote\Model\Cart\TotalsConverter')
             ->disableOriginalConstructor()

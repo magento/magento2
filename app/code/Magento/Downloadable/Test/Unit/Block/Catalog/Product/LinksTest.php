@@ -38,7 +38,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
      */
     protected $jsonEncoder;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->layout = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);

@@ -25,7 +25,7 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
      */
     protected $entitySnapshot;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

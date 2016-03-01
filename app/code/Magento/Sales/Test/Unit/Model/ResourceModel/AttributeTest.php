@@ -31,7 +31,7 @@ class AttributeTest extends \PHPUnit_Framework_TestCase
      */
     protected $connectionMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->appResourceMock = $this->getMock(
             'Magento\Framework\App\ResourceConnection',

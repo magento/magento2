@@ -18,7 +18,7 @@ class ProxyTest extends \PHPUnit_Framework_TestCase
      */
     protected $_object;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_object = $this->getMock(
             '\Magento\Framework\App\Route\ConfigInterface',

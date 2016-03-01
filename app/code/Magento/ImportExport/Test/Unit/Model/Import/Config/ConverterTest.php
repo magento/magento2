@@ -22,7 +22,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     protected $moduleManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->filePath = realpath(__DIR__) . '/_files/';
         $this->moduleManager = $this->getMock('Magento\Framework\Module\Manager', ['isOutputEnabled'], [], '', false);

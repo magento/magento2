@@ -28,7 +28,7 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
      */
     protected $itemsFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $contextMock = $this->getMockBuilder('Magento\Backend\Block\Template\Context')

@@ -51,7 +51,7 @@ class ConvertToCsvTest extends \PHPUnit_Framework_TestCase
      */
     protected $component;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->directory = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
             ->getMockForAbstractClass();

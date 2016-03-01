@@ -29,7 +29,7 @@ class ViewActionTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
         $this->urlBuilder = $this->getMockForAbstractClass('Magento\Framework\UrlInterface');

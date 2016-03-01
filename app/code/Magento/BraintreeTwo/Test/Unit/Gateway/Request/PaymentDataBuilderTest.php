@@ -51,7 +51,7 @@ class PaymentDataBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $orderMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->paymentDO = $this->getMock(PaymentDataObjectInterface::class);
         $this->configMock = $this->getMockBuilder(Config::class)

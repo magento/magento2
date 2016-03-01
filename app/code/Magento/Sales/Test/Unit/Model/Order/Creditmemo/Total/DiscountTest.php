@@ -32,7 +32,7 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
      */
     protected $orderItemMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->orderMock = $this->getMock(
             'Magento\Sales\Model\Order',

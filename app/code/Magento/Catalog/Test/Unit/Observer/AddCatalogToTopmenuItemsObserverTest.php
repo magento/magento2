@@ -42,7 +42,7 @@ class AddCatalogToTopmenuItemsObserverTest extends \PHPUnit_Framework_TestCase
      */
     protected $_categoryFlatState;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_catalogCategory = $this->getMock(
             '\Magento\Catalog\Helper\Category',

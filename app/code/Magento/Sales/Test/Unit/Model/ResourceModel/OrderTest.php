@@ -75,7 +75,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     /**
      * Mock class dependencies
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->resourceMock = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->orderMock = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);

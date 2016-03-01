@@ -27,7 +27,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      */
     protected $config;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->dataContainerMock = $this->getMock('Magento\Framework\Event\Config\Data', ['get'], [], '', false, false);
         $this->config = new Config($this->dataContainerMock);

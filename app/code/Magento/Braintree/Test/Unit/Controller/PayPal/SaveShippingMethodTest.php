@@ -61,7 +61,7 @@ class SaveShippingMethodTest extends \PHPUnit_Framework_TestCase
     /**
      * test setup
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->checkoutSessionMock = $this->getMockBuilder('\Magento\Checkout\Model\Session')
             ->disableOriginalConstructor()

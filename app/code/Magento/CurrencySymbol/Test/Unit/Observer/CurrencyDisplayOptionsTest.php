@@ -37,7 +37,7 @@ class CurrencyDisplayOptionsTest extends \PHPUnit_Framework_TestCase
      */
     private $mockEvent;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->mockSymbolFactory = $this->getMock(
             'Magento\CurrencySymbol\Model\System\CurrencysymbolFactory',

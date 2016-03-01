@@ -47,7 +47,7 @@ class DownloadTest extends \PHPUnit_Framework_TestCase
 
     const URL = 'http://example.com';
 
-    public function setUp()
+    protected function setUp()
     {
         require_once __DIR__ . '/../_files/download_mock.php';
 

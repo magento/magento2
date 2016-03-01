@@ -28,7 +28,7 @@ class FlushAllCacheTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up all mocks and data for test
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->_configMock = $this->getMock(
             'Magento\PageCache\Model\Config',

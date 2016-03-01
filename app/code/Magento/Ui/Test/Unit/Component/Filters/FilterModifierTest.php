@@ -35,7 +35,7 @@ class FilterModifierTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface');
         $this->dataProvider = $this->getMockForAbstractClass(

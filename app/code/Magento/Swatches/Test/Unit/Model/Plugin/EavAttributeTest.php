@@ -54,7 +54,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
     /** @var array */
     private $dependencyArray = [];
 
-    public function setUp()
+    protected function setUp()
     {
         $this->attribute = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $this->swatchFactory = $this->getMock('\Magento\Swatches\Model\SwatchFactory', ['create'], [], '', false);

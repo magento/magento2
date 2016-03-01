@@ -17,7 +17,7 @@ class ConfigPluginTest extends \PHPUnit_Framework_TestCase
      */
     protected $configProviderMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->configProviderMock = $this->getMock('\Magento\Captcha\Model\Checkout\ConfigProvider', [], [], '', false);
         $this->model = new \Magento\Captcha\Model\Cart\ConfigPlugin(

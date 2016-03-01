@@ -39,7 +39,7 @@ class WriteTest extends \PHPUnit_Framework_TestCase
      */
     protected $driver;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->driver = $this->getMockForAbstractClass('Magento\Framework\Filesystem\DriverInterface');
         $this->resource = $this->getMock('resource');

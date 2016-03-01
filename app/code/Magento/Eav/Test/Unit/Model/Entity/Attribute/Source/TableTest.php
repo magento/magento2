@@ -20,7 +20,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
      */
     protected $collectionFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
 

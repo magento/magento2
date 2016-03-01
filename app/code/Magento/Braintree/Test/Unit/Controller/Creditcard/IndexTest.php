@@ -40,7 +40,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     /**
      * test setup
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->pageConfig = $this->getMockBuilder('\Magento\Framework\View\Page\Config')
             ->disableOriginalConstructor()

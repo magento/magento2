@@ -14,7 +14,7 @@ class VisibilityTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
         $this->_model = $objectManager->getObject('Magento\Catalog\Model\Product\Visibility');

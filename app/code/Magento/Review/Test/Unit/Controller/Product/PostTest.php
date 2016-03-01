@@ -101,7 +101,7 @@ class PostTest extends \PHPUnit_Framework_TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->redirect = $this->getMock('\Magento\Framework\App\Response\RedirectInterface');
         $this->request = $this->getMock('\Magento\Framework\App\Request\Http', ['getParam'], [], '', false);

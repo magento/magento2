@@ -43,7 +43,7 @@ class FinalPriceTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up function
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->saleableMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $this->priceInfoMock = $this->basePriceMock = $this->getMock(

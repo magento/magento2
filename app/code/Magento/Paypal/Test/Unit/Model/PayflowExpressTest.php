@@ -26,7 +26,7 @@ class PayflowExpressTest extends \PHPUnit_Framework_TestCase
      */
     const TRANSPORT_PAYFLOW_TXN_ID = 'Payflow pro transaction key';
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $proFactory = $this->getMockBuilder(

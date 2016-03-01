@@ -48,7 +48,7 @@ class NewVideoTest extends \PHPUnit_Framework_TestCase
      */
     protected $block;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMock('\Magento\Backend\Block\Template\Context', [], [], '', false);
         $this->mediaHelper = $this->getMock('\Magento\ProductVideo\Helper\Media', [], [], '', false);

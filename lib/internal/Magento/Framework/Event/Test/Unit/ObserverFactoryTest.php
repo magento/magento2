@@ -25,7 +25,7 @@ class ObserverFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $observerFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerMock = $this->getMock(
             'Magento\Framework\ObjectManager\ObjectManager',

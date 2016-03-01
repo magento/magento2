@@ -19,7 +19,7 @@ class ActionPoolTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManagerMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
             ->disableOriginalConstructor()

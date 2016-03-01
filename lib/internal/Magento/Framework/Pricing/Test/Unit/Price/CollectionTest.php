@@ -47,7 +47,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * Test setUp
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->pool = new Pool(
             [

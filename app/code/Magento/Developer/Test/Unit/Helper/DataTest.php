@@ -27,7 +27,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected $httpHeaderMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $className = 'Magento\Developer\Helper\Data';

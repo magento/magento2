@@ -68,7 +68,7 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
     /**
      * Test setup
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);

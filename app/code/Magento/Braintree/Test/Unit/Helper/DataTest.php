@@ -46,7 +46,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /**
      * test setup
      */
-    public function setUp()
+    protected function setUp()
     {
 
         $this->paymentConfig = $this->getMockBuilder('\Magento\Payment\Model\Config')

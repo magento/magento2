@@ -56,7 +56,7 @@ class DobTest extends \PHPUnit_Framework_TestCase
      */
     protected $filterFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $zendCacheCore = new \Zend_Cache_Core();
         $zendCacheCore->setBackend(new \Zend_Cache_Backend_BlackHole());

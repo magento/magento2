@@ -47,7 +47,7 @@ class ActionTest extends \PHPUnit_Framework_TestCase
      */
     protected $indexerRegistryMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $this->productWebsiteFactory = $this->getMock(

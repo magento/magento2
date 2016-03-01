@@ -88,7 +88,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     private $filterFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->context = $this->getMockBuilder('Magento\Framework\Model\Context')
             ->disableOriginalConstructor()

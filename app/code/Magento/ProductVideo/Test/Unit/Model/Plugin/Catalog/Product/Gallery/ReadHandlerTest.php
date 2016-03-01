@@ -38,7 +38,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected $mediaGalleryReadHandler;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->product = $this->getMock(
             'Magento\Catalog\Model\Product',

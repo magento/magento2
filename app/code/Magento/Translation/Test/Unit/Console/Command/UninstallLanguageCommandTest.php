@@ -51,7 +51,7 @@ class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $tester;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->dependencyChecker = $this->getMock(
             'Magento\Framework\Composer\DependencyChecker',

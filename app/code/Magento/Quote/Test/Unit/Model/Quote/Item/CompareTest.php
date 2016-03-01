@@ -36,7 +36,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
     /**
      * test setUp
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->itemMock = $this->getMock(
             'Magento\Quote\Model\Quote\Item',

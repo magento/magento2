@@ -42,7 +42,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
     const TEST_EXCEPTION_CURRENCY = 'ZZZ';
     const TEST_EXCEPTION_CURRENCY_LOCALE = 'es_ES';
 
-    public function setUp()
+    protected function setUp()
     {
         $this->mockEventManager = $this
             ->getMockBuilder('\Magento\Framework\Event\Manager')

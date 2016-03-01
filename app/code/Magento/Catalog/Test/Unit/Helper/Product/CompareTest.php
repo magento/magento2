@@ -48,7 +48,7 @@ class CompareTest extends \PHPUnit_Framework_TestCase
      */
     protected $catalogSessionMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

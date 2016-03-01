@@ -40,7 +40,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
      */
     protected $dataObjectHelperMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->productRepository = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface');
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
