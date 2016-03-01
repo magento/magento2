@@ -210,6 +210,10 @@ class ConfigurablePanel extends AbstractModifier
                                 ],
                                 'title' => __('Add Products Manually'),
                                 'sortOrder' => 10,
+                                'imports' => [
+                                    'visible' => '!ns = ${ $.ns }, index = '
+                                        . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                                ],
                             ],
                         ],
                     ],
