@@ -229,7 +229,7 @@ class ArrayManager
         $indexes = (array)$indexes;
         $startPath = is_array($startPath) ? implode($delimiter, $startPath) : $startPath;
         $internalPath = is_array($internalPath) ? implode($delimiter, $internalPath) : $internalPath;
-        $data = $startPath !== null ? $this->get($startPath, $data, $delimiter, []) : $data;
+        $data = $startPath !== null ? $this->get($startPath, $data, [], $delimiter) : $data;
         $checkList = [$startPath => ['start' => $startPath === null, 'children' => $data]];
         $paths = [];
 
@@ -249,7 +249,7 @@ class ArrayManager
                     }
 
                     $searchData = $internalPath !== null && is_array($childData)
-                        ? $this->get($internalPath, $childData, $delimiter)
+                        ? $this->get($internalPath, $childData, null, $delimiter)
                         : $childData;
 
                     if (!empty($searchData) && is_array($searchData)) {
