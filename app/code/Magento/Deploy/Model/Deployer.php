@@ -135,10 +135,6 @@ class Deployer
                     $this->count = 0;
                     $this->errorCount = 0;
 
-                    /** @var \Magento\Framework\Locale\Resolver */
-                    $localeResolver = $this->objectManager->get('Magento\Framework\Locale\ResolverInterface');
-                    $localeResolver->setLocale($locale);
-
                     /** @var \Magento\Theme\Model\View\Design $design */
                     $design = $this->objectManager->create('Magento\Theme\Model\View\Design');
                     $design->setDesignTheme($themePath, $area);
@@ -289,6 +285,9 @@ class Deployer
         $translator = $this->objectManager->get('Magento\Framework\TranslateInterface');
         $translator->setLocale($locale);
         $translator->loadData($area, true);
+        /** @var \Magento\Framework\Locale\ResolverInterface $localeResolver */
+        $localeResolver = $this->objectManager->get('Magento\Framework\Locale\ResolverInterface');
+        $localeResolver->setLocale($locale);
     }
 
     /**
