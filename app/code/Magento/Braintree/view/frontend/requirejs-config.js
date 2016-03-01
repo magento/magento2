@@ -6,12 +6,7 @@
 var config = {
     map: {
         '*': {
-            braintree:                  'https://js.braintreegateway.com/v2/braintree.js',
-            braintreeDataJs:            'Magento_Braintree/js/cc-data',
-            braintreeForm:              'Magento_Braintree/js/cc-form',
-            braintreeEditForm:          'Magento_Braintree/js/cc-edit-form',
-            braintreePayPalMinicart:    'Magento_Braintree/js/button/braintree-paypal-minicart',
-            transparent:                'Magento_Payment/transparent'
+            braintree: 'https://js.braintreegateway.com/js/braintree-2.17.6.min.js'
         }
     }
 };

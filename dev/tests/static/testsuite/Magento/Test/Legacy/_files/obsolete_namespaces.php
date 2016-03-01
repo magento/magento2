@@ -198,4 +198,5 @@ return [
         'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Super',
         'Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations',
     ],
+    ['Magento\BraintreeTwo', 'Magento\Braintree']
 ];
