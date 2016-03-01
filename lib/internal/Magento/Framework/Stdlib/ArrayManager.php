@@ -217,6 +217,8 @@ class ArrayManager
      * @param int|null $maxResults
      * @param string $delimiter
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function findPaths(
         $indexes,
