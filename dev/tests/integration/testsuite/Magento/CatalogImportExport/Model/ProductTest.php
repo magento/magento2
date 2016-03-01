@@ -94,6 +94,15 @@ class ProductTest extends AbstractProductExportImportTestCase
                     'simple_dropdown_option',
                 ]
             ],
+            'simple-product-image' => [
+                [
+                    'Magento/CatalogImportExport/Model/Import/_files/media_import_image.php',
+                    'Magento/Catalog/_files/product_with_image.php'
+                ],
+                [
+                    'simple',
+                ]
+            ],
             // @todo uncomment after resolving MAGETWO-49676
             /*
             'simple-product-crosssell' => [
