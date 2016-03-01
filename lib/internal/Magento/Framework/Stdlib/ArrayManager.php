@@ -43,11 +43,11 @@ class ArrayManager
      *
      * @param string $path
      * @param array $data
-     * @param string $delimiter
      * @param null $defaultValue
+     * @param string $delimiter
      * @return mixed|null
      */
-    public function get($path, array $data, $delimiter = self::DEFAULT_PATH_DELIMITER, $defaultValue = null)
+    public function get($path, array $data, $defaultValue = null, $delimiter = self::DEFAULT_PATH_DELIMITER)
     {
         return $this->find($path, $data, $delimiter) ? $this->parentNode[$this->nodeIndex] : $defaultValue;
     }
@@ -89,6 +89,33 @@ class ArrayManager
     }
 
     /**
+     * Move value from one location to another
+     *
+     * @param string $path
+     * @param string $targetPath
+     * @param array $data
+     * @param bool $overwrite
+     * @param string $delimiter
+     * @return array
+     */
+    public function move($path, $targetPath, array $data, $overwrite = false, $delimiter = self::DEFAULT_PATH_DELIMITER)
+    {
+        if ($this->find($path, $data, $delimiter)) {
+            $parentNode = &$this->parentNode;
+            $nodeIndex = &$this->nodeIndex;
+
+            if ((!$this->find($targetPath, $data, $delimiter) || $overwrite)
+                && $this->find($targetPath, $data, $delimiter, true)
+            ) {
+                $this->parentNode[$this->nodeIndex] = $parentNode[$nodeIndex];
+                unset($parentNode[$nodeIndex]);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
      * Merge value with node and return modified data
      *
      * @param string $path
@@ -105,6 +132,21 @@ class ArrayManager
                 $value
             );
         }
+
+        return $data;
+    }
+
+    /**
+     * Populate nested array if possible and needed
+     *
+     * @param string $path
+     * @param array $data
+     * @param string $delimiter
+     * @return array
+     */
+    public function populate($path, array $data, $delimiter = self::DEFAULT_PATH_DELIMITER)
+    {
+        $this->find($path, $data, $delimiter, true);
 
         return $data;
     }
