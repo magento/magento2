@@ -13,24 +13,24 @@ use Magento\Framework\Controller\ResultFactory;
 class Upload extends \Magento\Backend\App\Action
 {
     /**
-     * Image uploader helper
+     * Image uploader
      *
-     * @var \Magento\Catalog\Helper\ImageUploader
+     * @var \Magento\Catalog\Model\ImageUploader
      */
-    protected $imageUploaderHelper;
+    protected $imageUploader;
 
     /**
      * Upload constructor.
      *
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Catalog\Helper\ImageUploader $imageUploaderHelper
+     * @param \Magento\Catalog\Model\ImageUploader $imageUploader
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-        \Magento\Catalog\Helper\ImageUploader $imageUploaderHelper
+        \Magento\Catalog\Model\ImageUploader $imageUploader
     ) {
         parent::__construct($context);
-        $this->imageUploaderHelper = $imageUploaderHelper;
+        $this->imageUploader = $imageUploader;
     }
 
     /**
@@ -51,7 +51,7 @@ class Upload extends \Magento\Backend\App\Action
     public function execute()
     {
         try {
-            $result = $this->imageUploaderHelper->saveFileToTmpDir('image');
+            $result = $this->imageUploader->saveFileToTmpDir('image');
 
             $result['cookie'] = [
                 'name' => $this->_getSession()->getName(),

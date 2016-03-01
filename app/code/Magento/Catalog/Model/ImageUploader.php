@@ -3,14 +3,12 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Helper;
-
-use Magento\Framework\App\Helper\AbstractHelper;
+namespace Magento\Catalog\Model;
 
 /**
- * Catalog image uploader helper
+ * Catalog image uploader
  */
-class ImageUploader extends AbstractHelper
+class ImageUploader
 {
     /**
      * Core file storage database
@@ -41,6 +39,11 @@ class ImageUploader extends AbstractHelper
     protected $storeManager;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
      * Base tmp path
      *
      * @var string
@@ -64,30 +67,30 @@ class ImageUploader extends AbstractHelper
     /**
      * ImageUploader constructor
      *
-     * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Psr\Log\LoggerInterface $logger
      * @param string $baseTmpPath
      * @param string $basePath
      * @param string[] $allowedExtensions
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
         \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\MediaStorage\Model\File\UploaderFactory $uploaderFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Psr\Log\LoggerInterface $logger,
         $baseTmpPath,
         $basePath,
         $allowedExtensions
     ) {
-        parent::__construct($context);
         $this->coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->mediaDirectory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::MEDIA);
         $this->uploaderFactory = $uploaderFactory;
         $this->storeManager = $storeManager;
+        $this->logger = $logger;
         $this->baseTmpPath = $baseTmpPath;
         $this->basePath = $basePath;
         $this->allowedExtensions = $allowedExtensions;
@@ -248,7 +251,7 @@ class ImageUploader extends AbstractHelper
                 $relativePath = rtrim($baseTmpPath, '/') . '/' . ltrim($result['file'], '/');
                 $this->coreFileStorageDatabase->saveFile($relativePath);
             } catch (\Exception $e) {
-                $this->_logger->critical($e);
+                $this->logger->critical($e);
                 throw new \Magento\Framework\Exception\LocalizedException(
                     __('Something went wrong while saving the file(s).')
                 );
