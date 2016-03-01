@@ -6,7 +6,6 @@
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\Catalog\Model\AttributeConstantsInterface;
 
 /**
@@ -70,7 +69,7 @@ class ConfigurablePrice extends AbstractModifier
                                             'imports' => [
                                                 'disabled' => '!ns = ${ $.ns }, index = '
                                                     . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
-                                                'visible' => '!ns = ${ $.ns }, index = '
+                                                'visible' => 'ns = ${ $.ns }, index = '
                                                     . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
                                             ],
                                         ],
