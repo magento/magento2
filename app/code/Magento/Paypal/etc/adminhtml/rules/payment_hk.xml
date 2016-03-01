@@ -85,13 +85,13 @@
             <rule type="paypalExpressMarkDisable" event="deactivate-rule">
                 <argument name="wps_other">wps_other</argument>
             </rule>
-            <rule type="paypal/in-context/enable" event="activate-rule"/>
-            <rule type="paypal/in-context/disable" event="deactivate-rule"/>
-            <rule type="paypal/in-context/show-merchant-id" event="activate-rule"/>
-            <rule type="paypal/in-context/hide-merchant-id" event="deactivate-rule"/>
-            <rule type="paypal/in-context/activate" event="activate-in-context-api"/>
-            <rule type="paypal/in-context/deactivate" event="deactivate-in-context-api"/>
-            <rule type="paypal/in-context/disable-conditional" event=":load"/>
+            <rule type="inContextEnable" event="activate-rule"/>
+            <rule type="inContextDisable" event="deactivate-rule"/>
+            <rule type="inContextShowMerchantId" event="activate-rule"/>
+            <rule type="inContextHideMerchantId" event="deactivate-rule"/>
+            <rule type="inContextActivate" event="activate-in-context-api"/>
+            <rule type="inContextDeactivate" event="deactivate-in-context-api"/>
+            <rule type="inContextDisableConditional" event=":load"/>
             <rule type="conflict" event=":load">
                 <argument name="wps_other">wps_other</argument>
             </rule>
