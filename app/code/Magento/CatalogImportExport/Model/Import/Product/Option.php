@@ -47,6 +47,8 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     const COLUMN_ROW_SKU = '_custom_option_row_sku';
 
+    const COLUMN_MAX_CHARACTERS = '_custom_option_max_characters';
+
     const COLUMN_ROW_SORT = '_custom_option_row_sort';
 
     /**#@-*/
@@ -1076,6 +1078,9 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
                 $percent_suffix = isset($optionRow['price_type']) && ($optionRow['price_type'] == 'percent') ? '%' : '';
                 $row[self::COLUMN_ROW_PRICE] = isset($optionRow['price']) ? $optionRow['price'] . $percent_suffix : '';
                 $row[self::COLUMN_PREFIX . 'price'] = $row[self::COLUMN_ROW_PRICE];
+                if (isset($optionRow['max_characters'])) {
+                    $row[self::COLUMN_MAX_CHARACTERS] = $optionRow['max_characters'];
+                }
 
                 $name = '';
 
