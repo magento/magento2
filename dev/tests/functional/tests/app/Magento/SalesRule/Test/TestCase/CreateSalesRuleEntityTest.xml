@@ -10,7 +10,7 @@
         <variation name="CreateSalesRuleEntityTestVariation1">
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule1 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
-            <data name="salesRule/data/is_active" xsi:type="string">Active</data>
+            <data name="salesRule/data/is_active" xsi:type="string">Yes</data>
             <data name="salesRule/data/website_ids/0" xsi:type="string">Main Website</data>
             <data name="salesRule/data/customer_group_ids/0" xsi:type="string">NOT LOGGED IN</data>
             <data name="salesRule/data/coupon_type" xsi:type="string">No Coupon</data>
@@ -31,7 +31,7 @@
         <variation name="CreateSalesRuleEntityTestVariation2">
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule2 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
-            <data name="salesRule/data/is_active" xsi:type="string">Active</data>
+            <data name="salesRule/data/is_active" xsi:type="string">Yes</data>
             <data name="salesRule/data/website_ids/0" xsi:type="string">Main Website</data>
             <data name="salesRule/data/customer_group_ids/0" xsi:type="string">NOT LOGGED IN</data>
             <data name="salesRule/data/coupon_type" xsi:type="string">Specific Coupon</data>
@@ -53,7 +53,7 @@
         <variation name="CreateSalesRuleEntityTestVariation3">
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule3 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
-            <data name="salesRule/data/is_active" xsi:type="string">Active</data>
+            <data name="salesRule/data/is_active" xsi:type="string">Yes</data>
             <data name="salesRule/data/website_ids/0" xsi:type="string">Main Website</data>
             <data name="salesRule/data/customer_group_ids/0" xsi:type="string">NOT LOGGED IN</data>
             <data name="salesRule/data/coupon_type" xsi:type="string">Specific Coupon</data>
@@ -75,7 +75,7 @@
         <variation name="CreateSalesRuleEntityTestVariation4">
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule4 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
-            <data name="salesRule/data/is_active" xsi:type="string">Active</data>
+            <data name="salesRule/data/is_active" xsi:type="string">Yes</data>
             <data name="salesRule/data/website_ids/0" xsi:type="string">Main Website</data>
             <data name="salesRule/data/customer_group_ids/0" xsi:type="string">NOT LOGGED IN</data>
             <data name="salesRule/data/coupon_type" xsi:type="string">Specific Coupon</data>
@@ -101,7 +101,7 @@
             <data name="customer/dataset" xsi:type="string">default</data>
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule5 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
-            <data name="salesRule/data/is_active" xsi:type="string">Active</data>
+            <data name="salesRule/data/is_active" xsi:type="string">Yes</data>
             <data name="salesRule/data/website_ids/0" xsi:type="string">Main Website</data>
             <data name="salesRule/data/customer_group_ids/0" xsi:type="string">General</data>
             <data name="salesRule/data/coupon_type" xsi:type="string">No Coupon</data>
@@ -127,7 +127,7 @@
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule6 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
-            <data name="salesRule/data/is_active" xsi:type="string">Active</data>
+            <data name="salesRule/data/is_active" xsi:type="string">Yes</data>
             <data name="salesRule/data/website_ids/0" xsi:type="string">Main Website</data>
             <data name="salesRule/data/customer_group_ids/0" xsi:type="string">NOT LOGGED IN</data>
             <data name="salesRule/data/coupon_type" xsi:type="string">No Coupon</data>
@@ -155,7 +155,7 @@
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule7 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
-            <data name="salesRule/data/is_active" xsi:type="string">Active</data>
+            <data name="salesRule/data/is_active" xsi:type="string">Yes</data>
             <data name="salesRule/data/website_ids/0" xsi:type="string">Main Website</data>
             <data name="salesRule/data/customer_group_ids/0" xsi:type="string">NOT LOGGED IN</data>
             <data name="salesRule/data/coupon_type" xsi:type="string">No Coupon</data>
@@ -184,7 +184,7 @@
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule8 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
-            <data name="salesRule/data/is_active" xsi:type="string">Active</data>
+            <data name="salesRule/data/is_active" xsi:type="string">Yes</data>
             <data name="salesRule/data/website_ids/0" xsi:type="string">Main Website</data>
             <data name="salesRule/data/customer_group_ids/0" xsi:type="string">NOT LOGGED IN</data>
             <data name="salesRule/data/coupon_type" xsi:type="string">No Coupon</data>
@@ -208,7 +208,7 @@
         <variation name="CreateSalesRuleEntityTestVariation9">
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule9 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
-            <data name="salesRule/data/is_active" xsi:type="string">Active</data>
+            <data name="salesRule/data/is_active" xsi:type="string">Yes</data>
             <data name="salesRule/data/website_ids/0" xsi:type="string">Main Website</data>
             <data name="salesRule/data/customer_group_ids/0" xsi:type="string">NOT LOGGED IN</data>
             <data name="salesRule/data/coupon_type" xsi:type="string">No Coupon</data>
@@ -227,7 +227,7 @@
         <variation name="CreateSalesRuleEntityTestVariation10">
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule10 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
-            <data name="salesRule/data/is_active" xsi:type="string">Active</data>
+            <data name="salesRule/data/is_active" xsi:type="string">Yes</data>
             <data name="salesRule/data/website_ids/0" xsi:type="string">Main Website</data>
             <data name="salesRule/data/customer_group_ids/0" xsi:type="string">NOT LOGGED IN</data>
             <data name="salesRule/data/coupon_type" xsi:type="string">No Coupon</data>
@@ -252,7 +252,7 @@
         <variation name="CreateSalesRuleEntityTestVariation11">
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule11 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
-            <data name="salesRule/data/is_active" xsi:type="string">Active</data>
+            <data name="salesRule/data/is_active" xsi:type="string">Yes</data>
             <data name="salesRule/data/website_ids/0" xsi:type="string">Main Website</data>
             <data name="salesRule/data/customer_group_ids/0" xsi:type="string">NOT LOGGED IN</data>
             <data name="salesRule/data/coupon_type" xsi:type="string">No Coupon</data>
@@ -281,7 +281,7 @@
             <data name="shipping/shipping_method" xsi:type="string">Fixed</data>
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule12 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
-            <data name="salesRule/data/is_active" xsi:type="string">Active</data>
+            <data name="salesRule/data/is_active" xsi:type="string">Yes</data>
             <data name="salesRule/data/website_ids/0" xsi:type="string">Main Website</data>
             <data name="salesRule/data/customer_group_ids/0" xsi:type="string">NOT LOGGED IN</data>
             <data name="salesRule/data/coupon_type" xsi:type="string">No Coupon</data>
@@ -306,7 +306,7 @@
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule13 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
-            <data name="salesRule/data/is_active" xsi:type="string">Active</data>
+            <data name="salesRule/data/is_active" xsi:type="string">Yes</data>
             <data name="salesRule/data/website_ids/0" xsi:type="string">Main Website</data>
             <data name="salesRule/data/customer_group_ids/0" xsi:type="string">NOT LOGGED IN</data>
             <data name="salesRule/data/coupon_type" xsi:type="string">No Coupon</data>
@@ -328,7 +328,7 @@
         <variation name="CreateSalesRuleEntityTestVariation14">
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule14 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
-            <data name="salesRule/data/is_active" xsi:type="string">Active</data>
+            <data name="salesRule/data/is_active" xsi:type="string">Yes</data>
             <data name="salesRule/data/website_ids/0" xsi:type="string">Main Website</data>
             <data name="salesRule/data/customer_group_ids/0" xsi:type="string">NOT LOGGED IN</data>
             <data name="salesRule/data/coupon_type" xsi:type="string">No Coupon</data>
@@ -352,7 +352,7 @@
         <variation name="CreateSalesRuleEntityTestVariation15">
             <data name="salesRule/data/name" xsi:type="string">Cart Price Rule15 %isolation%</data>
             <data name="salesRule/data/description" xsi:type="string">Cart Price Rule Description %isolation%</data>
-            <data name="salesRule/data/is_active" xsi:type="string">Active</data>
+            <data name="salesRule/data/is_active" xsi:type="string">Yes</data>
             <data name="salesRule/data/website_ids/0" xsi:type="string">Main Website</data>
             <data name="salesRule/data/customer_group_ids/0" xsi:type="string">NOT LOGGED IN</data>
             <data name="salesRule/data/coupon_type" xsi:type="string">No Coupon</data>
