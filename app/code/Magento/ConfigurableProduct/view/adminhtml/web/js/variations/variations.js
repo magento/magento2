@@ -166,20 +166,10 @@ define([
 
             return result;
         },
-        /*
-        getAttributeRowName: function (attribute, field) {
-            return 'product[configurable_attributes_data][' + attribute.id + '][' + field + ']';
-        },
-        getOptionRowName: function (attribute, option, field) {
-            return 'product[configurable_attributes_data][' + attribute.id + '][values][' +
-                option.value + '][' + field + ']';
-        },
-        */
         render: function (variations, attributes) {
             this.changeButtonWizard();
             this.populateVariationMatrix(variations);
             this.attributes(attributes);
-            //this.initImageUpload();
             this.disableConfigurableAttributes(attributes);
             this.handleValue(variations);
             this.handleAttributes();
@@ -380,6 +370,7 @@ define([
                 registry.get('index = ${$.' + attribute + '}').disabled(false);
             });
             this.disabledAttributes = [];
+
             _.each(attributes, function (attribute) {
                 element = registry.get('index = ${$.' + attribute.code + '}');
                 if (!_.isUndefined(element)) {
