@@ -142,7 +142,7 @@ class AdvancedInventory extends AbstractModifier
     private function prepareMeta()
     {
         $fieldCode = 'quantity_and_stock_status';
-        $pathField = $this->getElementArrayPath($this->meta, $fieldCode);
+        $pathField = $this->arrayManager->findPath($fieldCode, $this->meta, null, 'children');
 
         if ($pathField) {
             $labelField = $this->arrayManager->get(

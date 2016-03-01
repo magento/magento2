@@ -37,7 +37,7 @@ class BundleSku extends AbstractModifier
     public function modifyMeta(array $meta)
     {
         if ($groupCode = $this->getGroupCodeByField($meta, AttributeConstantsInterface::CODE_SKU)) {
-            $skuPath = $this->getElementArrayPath($meta, AttributeConstantsInterface::CODE_SKU);
+            $skuPath = $this->arrayManager->findPath(AttributeConstantsInterface::CODE_SKU, $meta, null, 'children');
             $meta[$groupCode]['children'][self::CODE_SKU_TYPE] = [
                 'arguments' => [
                     'data' => [

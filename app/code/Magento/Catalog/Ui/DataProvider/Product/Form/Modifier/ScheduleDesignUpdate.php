@@ -64,8 +64,8 @@ class ScheduleDesignUpdate extends AbstractModifier
             return $meta;
         }
 
-        $fromFieldPath = $this->getElementArrayPath($meta, self::CODE_CUSTOM_DESIGN_FROM);
-        $toFieldPath = $this->getElementArrayPath($meta, self::CODE_CUSTOM_DESIGN_TO);
+        $fromFieldPath = $this->arrayManager->findPath(self::CODE_CUSTOM_DESIGN_FROM, $meta, null, 'children');
+        $toFieldPath = $this->arrayManager->findPath(self::CODE_CUSTOM_DESIGN_TO, $meta, null, 'children');
         $fromContainerPath = $this->arrayManager->slicePath($fromFieldPath, 0, -2);
         $toContainerPath = $this->arrayManager->slicePath($toFieldPath, 0, -2);
         $scopeLabel = $this->arrayManager->get($fromFieldPath . self::META_CONFIG_PATH . '/scopeLabel', $meta);
