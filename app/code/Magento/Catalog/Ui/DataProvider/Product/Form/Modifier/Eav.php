@@ -277,7 +277,8 @@ class Eav extends AbstractModifier
             }
 
             // TODO: getAttributeModel() should not be used when MAGETWO-48284 is complete
-            if (($rules = $this->eavValidationRules->build($this->getAttributeModel($attribute), $child))) {
+            $childData = $child['arguments']['data']['config'];
+            if (($rules = $this->eavValidationRules->build($this->getAttributeModel($attribute), $childData))) {
                 $child['arguments']['data']['config']['validation'] = $rules;
             }
 
@@ -584,7 +585,6 @@ class Eav extends AbstractModifier
 
         return $product->getData($attributeCode);
     }
-
 
     /**
      * Retrieve scope label
