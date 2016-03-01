@@ -592,4 +592,25 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
         }
         return $this;
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function __sleep()
+    {
+        return array_diff(
+            parent::__sleep(),
+            ['_resource', '_eventManager']
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_eventManager = $objectManager->get(\Magento\Framework\Event\ManagerInterface::class);
+    }
 }

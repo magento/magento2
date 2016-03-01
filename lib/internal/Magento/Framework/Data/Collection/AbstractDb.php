@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Data\Collection;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
@@ -873,5 +874,28 @@ abstract class AbstractDb extends \Magento\Framework\Data\Collection
             }
         }
         throw new \LogicException("Main table cannot be identified.");
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __sleep()
+    {
+        return array_diff(
+            parent::__sleep(),
+            ['_fetchStrategy', '_logger', '_conn', 'extensionAttributesJoinProcessor']
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_fetchStrategy = $objectManager->get(Logger::class);
+        $this->_logger = $objectManager->get(FetchStrategyInterface::class);
+        $this->_conn = $objectManager->get(ResourceConnection::class)->getConnection();
     }
 }

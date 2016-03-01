@@ -82,6 +82,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
      */
     protected $entityMetadata;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    private $cache;
+
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -144,6 +147,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('getMetadata')
             ->with(ProductInterface::class)
             ->willReturn($this->entityMetadata);
+        $this->cache = $this->getMockBuilder(\Magento\Framework\Cache\FrontendInterface::class)
+            ->getMockForAbstractClass();
 
         $this->_model = $this->_objectHelper->getObject(
             'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
@@ -159,6 +164,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'logger' => $logger,
                 'productRepository' => $this->productRepository,
                 'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
+                'cache' => $this->cache,
                 'metadataPool' => $this->metadataPool,
             ]
         );
@@ -440,13 +446,15 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->setMethods(['getData', 'hasData', 'setData'])
+            ->setMethods(['getData', 'hasData', 'setData', 'getIdentities', 'getId'])
             ->disableOriginalConstructor()
             ->getMock();
         $product->expects($this->once())->method('hasData')->with($configurableAttributes)->willReturn(false);
         $product->expects($this->once())->method('setData')->willReturnSelf();
         $product->expects($this->once())->method('getData')->with($configurableAttributes)->willReturn($expectedData);
+        $product->expects($this->once())->method('getIdentities')->willReturn([1,2,3]);
 
+        
         $attributeCollection = $this->getMockBuilder(
             'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection'
         )
