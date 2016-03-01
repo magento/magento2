@@ -5,6 +5,7 @@
  */
 namespace Magento\CatalogImportExport\Model;
 
+use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
@@ -77,7 +78,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      * @param string[] $skippedAttributes
      * @dataProvider exportImportDataProvider
      */
-    public function testExport($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
+    public function testExport($fixtures, $skus, $skippedAttributes = [])
     {
         $this->fixtures = $fixtures;
         $this->executeFixtures($fixtures, $skus);
@@ -143,7 +144,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      * @dataProvider exportImportDataProvider
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function testImportDelete($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
+    public function testImportDelete($fixtures, $skus, $skippedAttributes = [])
     {
         $this->fixtures = $fixtures;
         $this->executeFixtures($fixtures, $skus);
@@ -224,7 +225,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      * @param string[] $skippedAttributes
      * @dataProvider importReplaceDataProvider
      */
-    public function testImportReplace($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
+    public function testImportReplace($fixtures, $skus, $skippedAttributes = [])
     {
         $this->fixtures = $fixtures;
         $this->executeFixtures($fixtures, $skus);
@@ -239,6 +240,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
             'entity_id',
             'tier_price',
             'is_salable',
+            'media_gallery'
         ];
         $skippedAttributes = array_merge($replacedAttributes, $skippedAttributes);
 
@@ -276,10 +278,15 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
             $this->assertEqualsSpecificAttributes($origProducts[$index], $newProduct);
 
             foreach ($replacedAttributes as $attribute) {
-                if (isset($origProductData[$attribute]) && !empty($origProductData[$attribute])) {
-                    $expected = $origProductData[$attribute];
-                    $actual = isset($newProductData[$attribute]) ? $newProductData[$attribute] : null;
-                    $this->assertNotEquals($expected, $actual, $attribute . ' is expected to be changed');
+                if (isset($origProductData[$attribute])) {
+                    $expected = is_array($origProductData[$attribute]) ?
+                        array_filter($origProductData[$attribute]) :
+                        $origProductData[$attribute];
+                    if (!empty($expected)) {
+                        $actual = isset($newProductData[$attribute]) ? $newProductData[$attribute] : null;
+                        $actual = is_array($actual) ? array_filter($actual) : $actual;
+                        $this->assertNotEquals($expected, $actual, $attribute . ' is expected to be changed');
+                    }
                 }
             }
         }
@@ -326,8 +333,23 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
                 'directory' => $directory
             ]
         );
+
+        $appParams = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()->getApplication()->getInitParams()[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
+        $uploader = $importModel->getUploader();
+        $rootDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::ROOT);
+        $destDir = $rootDirectory->getRelativePath($appParams[DirectoryList::MEDIA][DirectoryList::PATH] . '/catalog/product');
+        $tmpDir = $rootDirectory->getRelativePath($appParams[DirectoryList::MEDIA][DirectoryList::PATH] . '/import');
+
+        $rootDirectory->create($destDir);
+        $rootDirectory->create($tmpDir);
+        $this->assertTrue($uploader->setDestDir($destDir));
+        $this->assertTrue($uploader->setTmpDir($tmpDir));
+
         $errors = $importModel->setParameters(
-            ['behavior' => $behavior, 'entity' => 'catalog_product']
+            [
+                'behavior' => $behavior,
+                'entity' => 'catalog_product',
+            ]
         )->setSource(
             $source
         )->validateData();
