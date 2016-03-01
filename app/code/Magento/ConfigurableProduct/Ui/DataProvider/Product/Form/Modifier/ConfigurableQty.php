@@ -39,9 +39,11 @@ class ConfigurableQty extends AbstractModifier
                             self::CODE_QUANTITY => [
                                 'arguments' => [
                                     'data' => [
-                                        'imports' => [
-                                            'disabled' => '!ns = ${ $.ns }, index = '
-                                                . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                                        'config' => [
+                                            'imports' => [
+                                                'disabled' => '!ns = ${ $.ns }, index = '
+                                                    . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                                            ],
                                         ],
                                     ],
                                 ],
