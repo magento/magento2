@@ -8,6 +8,13 @@ namespace Magento\Cms\Controller\Adminhtml;
 abstract class Block extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Cms::block';
+
+    /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
@@ -36,15 +43,5 @@ abstract class Block extends \Magento\Backend\App\Action
             ->addBreadcrumb(__('CMS'), __('CMS'))
             ->addBreadcrumb(__('Static Blocks'), __('Static Blocks'));
         return $resultPage;
-    }
-
-    /**
-     * Check the permission to run it
-     *
-     * @return boolean
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Cms::block');
     }
 }
