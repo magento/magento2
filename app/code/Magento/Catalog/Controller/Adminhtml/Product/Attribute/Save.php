@@ -221,17 +221,23 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             if ($setId && $groupCode) {
                 // For creating product attribute on product page we need specify attribute set and group
                 $attributeSetId = $attributeSet ? $attributeSet->getId() : $setId;
-                $groupCollection = $attributeSet
-                    ? $attributeSet->getGroups()
-                    : $this->groupCollectionFactory->create()->setAttributeSetFilter($attributeSetId)->load();
-                foreach ($groupCollection as $group) {
-                    if ($group->getAttributeGroupCode() == $groupCode) {
-                        $attributeGroupId = $group->getAttributeGroupId();
-                        break;
-                    }
+                $groupCollection = $this->groupCollectionFactory->create()
+                    ->setAttributeSetFilter($attributeSetId)
+                    ->addFieldToFilter('attribute_group_code', $groupCode)
+                    ->setPageSize(1)
+                    ->load();
+
+                $group = $groupCollection->getFirstItem();
+                if (!$group->getId()) {
+                    $group->setAttributeGroupCode($groupCode);
+                    $group->setSortOrder($this->getRequest()->getParam('groupSortOrder'));
+                    $group->setAttributeGroupName($this->getRequest()->getParam('groupName'));
+                    $group->setAttributeSetId($attributeSetId);
+                    $group->save();
                 }
+
                 $model->setAttributeSetId($attributeSetId);
-                $model->setAttributeGroupId($attributeGroupId);
+                $model->setAttributeGroupId($group->getId());
             }
 
             try {
@@ -284,7 +290,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             $layout = $this->layoutFactory->create();
             $layout->initMessages();
 
-            $response['html_message'] = $layout->getMessagesBlock()->getGroupedHtml();
+            $response['messages'] = [$layout->getMessagesBlock()->getGroupedHtml()];
             return $this->resultFactory->create(ResultFactory::TYPE_JSON)
                     ->setData($response);
         } else {
