@@ -193,6 +193,13 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     protected $_httpClientFactory;
 
     /**
+     * @inheritdoc
+     */
+    protected $_debugReplacePrivateDataKeys = [
+        'SiteID', 'Password'
+    ];
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -904,17 +911,15 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
     {
         $responseBody = '';
         try {
-            $debugData = [];
             for ($offset = 0; $offset <= self::UNAVAILABLE_DATE_LOOK_FORWARD; $offset++) {
-                $debugData['try-' . $offset] = [];
-                $debugPoint = &$debugData['try-' . $offset];
+                $debugPoint = [];
 
                 $requestXml = $this->_buildQuotesRequestXml();
                 $date = date(self::REQUEST_DATE_FORMAT, strtotime($this->_getShipDate() . " +{$offset} days"));
                 $this->_setQuotesRequestXmlDate($requestXml, $date);
 
                 $request = $requestXml->asXML();
-                $debugPoint['request'] = $request;
+                $debugPoint['request'] = $this->filterDebugData($request);
                 $responseBody = $this->_getCachedQuotes($request);
                 $debugPoint['from_cache'] = $responseBody === null;
 
@@ -933,8 +938,8 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                 }
 
                 $this->_setCachedQuotes($request, $responseBody);
+                $this->_debug($debugPoint);
             }
-            $this->_debug($debugData);
         } catch (\Exception $e) {
             $this->_errors[$e->getCode()] = $e->getMessage();
         }
