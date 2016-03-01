@@ -26,13 +26,13 @@
                                                         <item name="renders" xsi:type="array">
                                                             <!-- merge payment method renders here -->
                                                             <item name="children" xsi:type="array">
-                                                                <item name="braintreetwo" xsi:type="array">
+                                                                <item name="braintree" xsi:type="array">
                                                                     <item name="component" xsi:type="string">Magento_BraintreeTwo/js/view/payment/braintree</item>
                                                                     <item name="methods" xsi:type="array">
-                                                                        <item name="braintreetwo" xsi:type="array">
+                                                                        <item name="braintree" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">true</item>
                                                                         </item>
-                                                                        <item name="braintreetwo_paypal" xsi:type="array">
+                                                                        <item name="braintree_paypal" xsi:type="array">
                                                                             <item name="isBillingAddressRequired" xsi:type="boolean">false</item>
                                                                         </item>
                                                                     </item>

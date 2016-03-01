@@ -16,9 +16,9 @@ use Magento\Framework\Locale\ResolverInterface;
  */
 final class ConfigProvider implements ConfigProviderInterface
 {
-    const CODE = 'braintreetwo';
+    const CODE = 'braintree';
 
-    const PAYPAL_CODE = 'braintreetwo_paypal';
+    const PAYPAL_CODE = 'braintree_paypal';
 
     /**
      * @var ResolverInterface

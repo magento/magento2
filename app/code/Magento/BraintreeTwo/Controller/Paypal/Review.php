@@ -64,7 +64,7 @@ class Review extends AbstractAction
             $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
 
             /** @var \Magento\BraintreeTwo\Block\Paypal\Checkout\Review $reviewBlock */
-            $reviewBlock = $resultPage->getLayout()->getBlock('braintreetwo.paypal.review');
+            $reviewBlock = $resultPage->getLayout()->getBlock('braintree.paypal.review');
 
             $reviewBlock->setQuote($quote);
             $reviewBlock->getChildBlock('shipping_method')->setData('quote', $quote);

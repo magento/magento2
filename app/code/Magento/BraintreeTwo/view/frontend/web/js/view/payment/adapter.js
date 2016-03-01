@@ -54,7 +54,7 @@ define([
          * @returns {String}
          */
         getCode: function () {
-            return 'braintreetwo';
+            return 'braintree';
         },
 
         /**

@@ -19,7 +19,7 @@ define([
     return Component.extend({
         defaults: {
             template: 'Magento_BraintreeTwo/payment/paypal',
-            code: 'braintreetwo_paypal',
+            code: 'braintree_paypal',
             active: false,
             paymentMethodNonce: null,
             grandTotalAmount: null,

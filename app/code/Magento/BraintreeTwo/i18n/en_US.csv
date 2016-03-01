@@ -6,7 +6,7 @@
 "processorAuthorizationCode","Processor Authorization Code"
 "processorResponseCode","Processor Response Code"
 "processorResponseText","Processor Response Text"
-"braintreetwo", "Braintree"
+"braintree", "Braintree"
 "liabilityShifted", "Liability Shifted"
 "liabilityShiftPossible", "Liability Shift Possible"
 "riskDataId", "Risk ID"

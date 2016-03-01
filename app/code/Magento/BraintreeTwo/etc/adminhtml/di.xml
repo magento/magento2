@@ -49,7 +49,7 @@
     <type name="Magento\Vault\Model\Ui\Adminhtml\TokensConfigProvider">
         <arguments>
             <argument name="tokenUiComponentProviders" xsi:type="array">
-                <item name="braintreetwo" xsi:type="object">Magento\BraintreeTwo\Model\Ui\Adminhtml\TokenUiComponentProvider</item>
+                <item name="braintree" xsi:type="object">Magento\BraintreeTwo\Model\Ui\Adminhtml\TokenUiComponentProvider</item>
             </argument>
         </arguments>
     </type>

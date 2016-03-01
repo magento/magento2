@@ -19,7 +19,7 @@ define([
         defaults: {
             $selector: null,
             selector: 'edit_form',
-            container: 'payment_form_braintreetwo',
+            container: 'payment_form_braintree',
             active: false,
             scriptLoaded: false,
             braintree: null,
@@ -79,7 +79,7 @@ define([
          */
         onActiveChange: function (isActive) {
             if (!isActive) {
-                this.$selector.off('submitOrder.braintreetwo');
+                this.$selector.off('submitOrder.braintree');
 
                 return;
             }
@@ -245,7 +245,7 @@ define([
          * Enable form event listeners
          */
         enableEventListeners: function () {
-            this.$selector.on('submitOrder.braintreetwo', this.submitOrder.bind(this));
+            this.$selector.on('submitOrder.braintree', this.submitOrder.bind(this));
         },
 
         /**

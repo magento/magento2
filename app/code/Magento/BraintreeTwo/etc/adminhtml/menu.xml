@@ -13,7 +13,7 @@
                 module="Magento_BraintreeTwo"
                 sortOrder="80"
                 parent="Magento_Reports::report_salesroot"
-                action="braintreetwo/report"
+                action="braintree/report"
                 resource="Magento_BraintreeTwo::settlement_report"/>
     </menu>
 </config>

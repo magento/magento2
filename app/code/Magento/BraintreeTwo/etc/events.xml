@@ -7,10 +7,10 @@
 -->
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="payment_method_assign_data_braintreetwo">
-        <observer name="braintreetwo_gateway_data_assign" instance="Magento\BraintreeTwo\Observer\DataAssignObserver" />
+    <event name="payment_method_assign_data_braintree">
+        <observer name="braintree_gateway_data_assign" instance="Magento\BraintreeTwo\Observer\DataAssignObserver" />
     </event>
-    <event name="payment_method_assign_data_braintreetwo_paypal">
-        <observer name="braintreetwo_paypal_gateway_data_assign" instance="Magento\BraintreeTwo\Observer\DataAssignObserver" />
+    <event name="payment_method_assign_data_braintree_paypal">
+        <observer name="braintree_paypal_gateway_data_assign" instance="Magento\BraintreeTwo\Observer\DataAssignObserver" />
     </event>
 </config>
