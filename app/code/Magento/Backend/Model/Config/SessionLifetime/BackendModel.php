@@ -8,7 +8,9 @@ namespace Magento\Backend\Model\Config\SessionLifetime;
 use Magento\Framework\App\Config\Value;
 use Magento\Framework\Exception\LocalizedException;
 
-
+/**
+ * Backend model for the admin/security/session_lifetime configuration field. Validates session lifetime.
+ */
 class BackendModel extends Value
 {
     /** Maximum dmin session lifetime; 1 year*/
