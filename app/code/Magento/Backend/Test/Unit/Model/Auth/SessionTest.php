@@ -162,63 +162,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
     public function testProlong()
     {
-        $name = session_name();
-        $cookie = 'cookie';
-        $lifetime = 900;
-        $path = '/';
-        $domain = 'magento2';
-        $secure = true;
-        $httpOnly = true;
-
-        $cookieMetadata = $this->getMock('Magento\Framework\Stdlib\Cookie\PublicCookieMetadata');
-        $cookieMetadata->expects($this->once())
-            ->method('setPath')
-            ->with($path)
-            ->will($this->returnSelf());
-        $cookieMetadata->expects($this->once())
-            ->method('setDomain')
-            ->with($domain)
-            ->will($this->returnSelf());
-        $cookieMetadata->expects($this->once())
-            ->method('setSecure')
-            ->with($secure)
-            ->will($this->returnSelf());
-        $cookieMetadata->expects($this->once())
-            ->method('setHttpOnly')
-            ->with($httpOnly)
-            ->will($this->returnSelf());
-
-        $this->cookieMetadataFactory->expects($this->once())
-            ->method('createPublicCookieMetadata')
-            ->will($this->returnValue($cookieMetadata));
-
-        $this->cookieManager->expects($this->once())
-            ->method('getCookie')
-            ->with($name)
-            ->will($this->returnValue($cookie));
-        $this->cookieManager->expects($this->once())
-            ->method('setPublicCookie')
-            ->with($name, $cookie, $cookieMetadata);
-
-        $this->config->expects($this->once())
-            ->method('getValue')
-            ->with(\Magento\Backend\Model\Auth\Session::XML_PATH_SESSION_LIFETIME)
-            ->will($this->returnValue($lifetime));
-        $this->sessionConfig->expects($this->once())
-            ->method('getCookiePath')
-            ->will($this->returnValue($path));
-        $this->sessionConfig->expects($this->once())
-            ->method('getCookieDomain')
-            ->will($this->returnValue($domain));
-        $this->sessionConfig->expects($this->once())
-            ->method('getCookieSecure')
-            ->will($this->returnValue($secure));
-        $this->sessionConfig->expects($this->once())
-            ->method('getCookieHttpOnly')
-            ->will($this->returnValue($httpOnly));
-
         $this->session->prolong();
-
         $this->assertLessThanOrEqual(time(), $this->session->getUpdatedAt());
     }
 
