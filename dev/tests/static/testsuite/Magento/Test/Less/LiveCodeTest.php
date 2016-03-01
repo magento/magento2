@@ -12,7 +12,7 @@ use Magento\Framework\App\Utility;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\LessWrapper;
 use PHPUnit_Framework_TestCase;
-use Magento\Framework\App\Utility\Files;
+use Magento\Test\Php\LiveCodeTest as PHPCodeTest;
 
 /**
  * Set of tests for static code style
@@ -60,7 +60,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
 
         $codeSniffer->setExtensions([LessWrapper::LESS_FILE_EXTENSION]);
 
-        $whiteList = $this->getWhitelist(LessWrapper::LESS_FILE_EXTENSION);
+        $whiteList = PHPCodeTest::getWhitelist([LessWrapper::LESS_FILE_EXTENSION], __DIR__);
 
         $result = $codeSniffer->run($whiteList);
 
@@ -69,44 +69,5 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
             $result,
             "PHP Code Sniffer has found {$result} error(s): See detailed report in {$reportFile}"
         );
-    }
-
-    /**
-     * @param $extension
-     * @return array
-     * @throws \Exception
-     */
-    private function getWhiteList($extension)
-    {
-        $whiteList = Files::init()->readLists(__DIR__ . '/_files/whitelist/*.txt');
-        $whiteListFiles = [];
-
-        foreach ($whiteList as $listFiles) {
-            $whiteListFiles = array_merge($whiteListFiles, $this->scanFiles($listFiles, $extension));
-        }
-
-        return $whiteListFiles;
-    }
-
-    /**
-     * @static Return all files under a path
-     * @param string $path
-     * @param string $extension
-     *
-     * @return array
-     */
-    private static function scanFiles($path, $extension)
-    {
-        if (is_file($path)) {
-            return [$path];
-        }
-        $path = $path == '' ? __DIR__ : $path;
-        $iterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
-        $regexIterator = new \RegexIterator($iterator, '/\\.'. $extension . '$/');
-        $filePaths = [];
-        foreach ($regexIterator as $filePath) {
-            $filePaths[] = $filePath->getPathname();
-        }
-        return $filePaths;
     }
 }
