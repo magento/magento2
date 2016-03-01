@@ -3,13 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Category\Tab;
+namespace Magento\Catalog\Model\Category;
 
 use Magento\Catalog\Model\Category\DataProvider;
 use Magento\Eav\Model\Config as EavConfig;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class AttributesTest extends \PHPUnit_Framework_TestCase
+class DataProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var DataProvider
@@ -41,18 +41,22 @@ class AttributesTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * test \Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Category\Tab\Attributes::afterGetAttributesMeta
      * @return void
      */
-    public function testGetAttributesMeta()
+    public function testGetMetaRequiredAttributes()
     {
+        $requiredAttributes = [
+            'general' => ['name'],
+            'display_settings' => ['available_sort_by', 'default_sort_by'],
+        ];
         $meta = $this->dataProvider->getMeta();
         $this->assertArrayHasKey('url_key', $meta['search_engine_optimization']['children']);
-        $urlKeyData = $meta['search_engine_optimization']['children']['url_key']['arguments']['data']['config'];
-        $this->assertEquals('text', $urlKeyData['dataType']);
-        $this->assertEquals('input', $urlKeyData['formElement']);
-        $this->assertEquals('1', $urlKeyData['visible']);
-        $this->assertEquals('0', $urlKeyData['required']);
-        $this->assertEquals('[STORE VIEW]', $urlKeyData['scopeLabel']);
+        foreach ($requiredAttributes as $scope => $attributes) {
+            foreach ($attributes as $attribute) {
+                $this->assertArrayHasKey($attribute, $meta[$scope]['children']);
+                $data = $meta[$scope]['children'][$attribute];
+                $this->assertTrue($data['arguments']['data']['config']['validation']['required-entry']);
+            }
+        }
     }
 }
