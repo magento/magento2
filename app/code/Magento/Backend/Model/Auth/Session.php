@@ -171,25 +171,13 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
     }
 
     /**
-     * Set session UpdatedAt to current time and update cookie expiration time
+     * Set session UpdatedAt to current time
      *
      * @return void
      */
     public function prolong()
     {
-        $lifetime = $this->_config->getValue(self::XML_PATH_SESSION_LIFETIME);
-        $currentTime = time();
-
-        $this->setUpdatedAt($currentTime);
-        $cookieValue = $this->cookieManager->getCookie($this->getName());
-        if ($cookieValue) {
-            $cookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
-                ->setPath($this->sessionConfig->getCookiePath())
-                ->setDomain($this->sessionConfig->getCookieDomain())
-                ->setSecure($this->sessionConfig->getCookieSecure())
-                ->setHttpOnly($this->sessionConfig->getCookieHttpOnly());
-            $this->cookieManager->setPublicCookie($this->getName(), $cookieValue, $cookieMetadata);
-        }
+        $this->setUpdatedAt(time());
     }
 
     /**
