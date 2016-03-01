@@ -64,21 +64,28 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $massActionToggleList = '//span[contains(@class, "action-menu-item") and .= "%s"]';
+    protected $massActionList = '//div[position()=5]//span[contains(@class, "action-menu-item") and .= "%s"]';
+
+    /**
+     * Mass action toggle list for table head.
+     *
+     * @var string
+     */
+    protected $headMassActionList = '//span[contains(@class, "action-menu-item") and .= "%s"]';
 
     /**
      * Mass action toggle button.
      *
      * @var string
      */
-    protected $massActionToggleButton = 'th [data-toggle="dropdown"]';
+    protected $massActionButton = 'div:nth-child(5) .action-multicheck-toggle';
 
     /**
      * Mass action button.
      *
      * @var string
      */
-    protected $massActionButton = '.action-select';
+    protected $headMassActionButton = '//button[@class="action-select"]';
 
     /**
      * Locator fo action button.
@@ -133,7 +140,7 @@ class DataGrid extends Grid
      *
      * @var string
      */
-    protected $sortLink = "//th[contains(@class, '%s')]/span[contains(text(), '%s')]";
+    protected $sortLink = "//div[position()=5]//th[contains(@class, '%s')]/span[contains(text(), '%s')]";
 
     /**
      * Current page input.
@@ -141,6 +148,13 @@ class DataGrid extends Grid
      * @var string
      */
     protected $currentPage = '[data-ui-id="current-page-input"]';
+
+    /**
+     * Grid header.
+     *
+     * @var string
+     */
+    protected $header = '//div[contains(@data-bind,"setToolbarNode")]';
 
     /**
      * Clear all applied Filters.
@@ -256,19 +270,23 @@ class DataGrid extends Grid
         }
         $this->selectItems($items);
         if ($massActionSelection) {
-            $this->_rootElement->find($this->massActionToggleButton)->click();
+            $this->_rootElement->find($this->massActionButton)->click();
             $this->_rootElement
-                ->find(sprintf($this->massActionToggleList, $massActionSelection), Locator::SELECTOR_XPATH)
+                ->find(sprintf($this->massActionList, $massActionSelection), Locator::SELECTOR_XPATH)
                 ->click();
         }
         $actionType = is_array($action) ? key($action) : $action;
-        $this->_rootElement->find($this->massActionButton)->click();
         $this->_rootElement
-            ->find(sprintf($this->massActionToggleList, $actionType), Locator::SELECTOR_XPATH)
+            ->find($this->header, Locator::SELECTOR_XPATH)
+            ->find($this->headMassActionButton, Locator::SELECTOR_XPATH)->click();
+        $this->_rootElement
+            ->find($this->header, Locator::SELECTOR_XPATH)
+            ->find(sprintf($this->headMassActionList, $actionType), Locator::SELECTOR_XPATH)
             ->click();
         if (is_array($action)) {
             $this->_rootElement
-                ->find(sprintf($this->massActionToggleList, end($action)), Locator::SELECTOR_XPATH)
+                ->find($this->header, Locator::SELECTOR_XPATH)
+                ->find(sprintf($this->headMassActionList, end($action)), Locator::SELECTOR_XPATH)
                 ->click();
         }
         if ($acceptAlert) {
@@ -320,7 +338,8 @@ class DataGrid extends Grid
     public function sortGridByField($field, $sort = "desc")
     {
         $reverseSort = $sort == 'desc' ? 'asc' : 'desc';
-        $sortBlock = $this->_rootElement->find(sprintf($this->sortLink, $reverseSort, $field), Locator::SELECTOR_XPATH);
+        $sortBlock = $this->_rootElement
+            ->find(sprintf($this->sortLink, $reverseSort, $field), Locator::SELECTOR_XPATH);
         if ($sortBlock->isVisible()) {
             $sortBlock->click();
             $this->waitLoader();
