@@ -14,31 +14,76 @@ namespace Magento\Catalog\Model\Category\Attribute\Backend;
 class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 {
     /**
-     * Logger
+     * @var \Magento\MediaStorage\Model\File\UploaderFactory
      *
-     * @var \Psr\Log\LoggerInterface
+     * @deprecated
      */
-    protected $logger;
+    protected $_uploaderFactory;
+
+    /**
+     * Filesystem facade
+     *
+     * @var \Magento\Framework\Filesystem
+     *
+     * @deprecated
+     */
+    protected $_filesystem;
+
+    /**
+     * File Uploader factory
+     *
+     * @var \Magento\MediaStorage\Model\File\UploaderFactory
+     *
+     * @deprecated
+     */
+    protected $_fileUploaderFactory;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     *
+     * @deprecated
+     */
+    protected $_logger;
 
     /**
      * Image uploader
      *
      * @var \Magento\Catalog\Model\ImageUploader
      */
-    protected $imageUploader;
+    private $imageUploader;
 
     /**
      * Image constructor.
      *
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Catalog\Model\ImageUploader $imageUploader
+     * @param \Magento\Framework\Filesystem $filesystem
+     * @param \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Catalog\Model\ImageUploader $imageUploader
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\MediaStorage\Model\File\UploaderFactory $fileUploaderFactory
     ) {
-        $this->imageUploader = $imageUploader;
-        $this->logger = $logger;
+        $this->_filesystem = $filesystem;
+        $this->_fileUploaderFactory = $fileUploaderFactory;
+        $this->_logger = $logger;
+    }
+
+    /**
+     * Get image uploader
+     *
+     * @return \Magento\Catalog\Model\ImageUploader
+     *
+     * @deprecated
+     */
+    private function getImageUploader()
+    {
+        if ($this->imageUploader === null) {
+            $this->imageUploader = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Catalog\CategoryImageUpload'
+            );
+        }
+        return $this->imageUploader;
     }
 
     /**
@@ -59,12 +104,12 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         if (isset($value[0]['name']) && isset($value[0]['tmp_name'])) {
             try {
-                $result = $this->imageUploader->moveFileFromTmp($value[0]['name']);
+                $result = $this->getImageUploader()->moveFileFromTmp($value[0]['name']);
 
                 $object->setData($this->getAttribute()->getName(), $result);
                 $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getName());
             } catch (\Exception $e) {
-                $this->logger->critical($e);
+                $this->_logger->critical($e);
             }
         }
         return $this;
