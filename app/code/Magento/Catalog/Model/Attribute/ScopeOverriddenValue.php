@@ -12,9 +12,11 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
 use Magento\Store\Model\Store;
+use Magento\Framework\App\ResourceConnection;
 
 /**
  * Class ScopeOverriddenValue
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ScopeOverriddenValue
 {
@@ -39,22 +41,30 @@ class ScopeOverriddenValue
     private $attributesValues;
 
     /**
+     * @var ResourceConnection
+     */
+    private $resourceConnection;
+
+    /**
      * ScopeOverriddenValue constructor.
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param FilterBuilder $filterBuilder
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         AttributeRepository $attributeRepository,
         MetadataPool $metadataPool,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        FilterBuilder $filterBuilder
+        FilterBuilder $filterBuilder,
+        ResourceConnection $resourceConnection
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->filterBuilder = $filterBuilder;
+        $this->resourceConnection = $resourceConnection;
     }
 
     /**
@@ -125,7 +135,7 @@ class ScopeOverriddenValue
                 $select = $metadata->getEntityConnection()->select()
                     ->from(['t' => $attributeTable], ['value' => 't.value', 'store_id' => 't.store_id'])
                     ->join(
-                        ['a' => $metadata->getEntityConnection()->getTableName('eav_attribute')],
+                        ['a' => $this->resourceConnection->getTableName('eav_attribute')],
                         'a.attribute_id = t.attribute_id',
                         ['attribute_code' => 'a.attribute_code']
                     )
