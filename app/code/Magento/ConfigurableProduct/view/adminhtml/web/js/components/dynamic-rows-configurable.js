@@ -11,6 +11,7 @@ define([
 
     return dynamicRows.extend({
         defaults: {
+            actionsListOpened: false,
             canEditField: 'canEdit',
             newProductField: 'newProduct',
             dataScopeAssociatedProduct: 'data.associated_product_ids',
@@ -90,7 +91,7 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
-                    'insertDataFromGrid', 'unionInsertData', 'isEmpty'
+                    'insertDataFromGrid', 'unionInsertData', 'isEmpty', 'actionsListOpened'
                 ]);
 
             return this;
@@ -239,6 +240,38 @@ define([
             });
 
             return result;
+        },
+
+        toggleActionsList: function (rowIndex) {
+            var state = false;
+
+            if (rowIndex !== this.actionsListOpened()) {
+                state = rowIndex;
+            }
+            this.actionsListOpened(state);
+
+            return this;
+        },
+
+        closeList: function (rowIndex) {
+            if (this.actionsListOpened() === rowIndex) {
+                this.actionsListOpened(false);
+            }
+
+            return this;
+        },
+
+        toggleStatusProduct: function (rowIndex) {
+            var tmpArray = this.unionInsertData();
+            var status = tmpArray[rowIndex]['status'];
+
+            if (status == 1) {
+                tmpArray[rowIndex]['status'] = 2;
+            } else {
+                tmpArray[rowIndex]['status'] = 1;
+            }
+
+            this.unionInsertData(tmpArray);
         }
     });
 });
