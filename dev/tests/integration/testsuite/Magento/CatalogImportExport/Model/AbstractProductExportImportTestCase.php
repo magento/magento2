@@ -30,6 +30,11 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
     protected $productResource;
 
     /**
+     * @var string[]
+     */
+    protected $rollbackFixtures;
+
+    /**
      * skipped attributes
      *
      * @var array
@@ -60,6 +65,11 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
         );
     }
 
+    protected function tearDown()
+    {
+        $this->executeFixtures($this->rollbackFixtures);
+    }
+
     /**
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
@@ -72,10 +82,10 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      */
     public function testExport($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
+        $this->rollbackFixtures = $rollbackFixtures;
         $this->executeFixtures($fixtures, $skus);
         $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
         $this->executeExportTest($skus, $skippedAttributes);
-        $this->executeFixtures($rollbackFixtures);
     }
 
     protected function executeExportTest($skus, $skippedAttributes)
@@ -138,9 +148,9 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      */
     public function testImportDelete($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
+        $this->rollbackFixtures = $rollbackFixtures;
         $this->executeFixtures($fixtures, $skus);
         $this->executeImportDeleteTest($skus);
-        $this->executeFixtures($rollbackFixtures);
     }
 
     protected function executeImportDeleteTest($skus)
@@ -195,10 +205,10 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      */
     public function testImportReplace($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
+        $this->rollbackFixtures = $rollbackFixtures;
         $this->executeFixtures($fixtures, $skus);
         $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
         $this->executeImportReplaceTest($skus, $skippedAttributes);
-        $this->executeFixtures($rollbackFixtures);
     }
 
     protected function executeImportReplaceTest($skus, $skippedAttributes)
