@@ -69,7 +69,7 @@ class ConfigurablePrice extends AbstractModifier
                                             'imports' => [
                                                 'disabled' => '!ns = ${ $.ns }, index = '
                                                     . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
-                                                'visible' => '!ns = ${ $.ns }, index = '
+                                                'visible' => 'ns = ${ $.ns }, index = '
                                                     . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
                                             ],
                                         ],
