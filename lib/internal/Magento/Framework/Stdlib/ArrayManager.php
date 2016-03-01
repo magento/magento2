@@ -166,6 +166,86 @@ class ArrayManager
     }
 
     /**
+     * Get matching paths for elements with specified indexes
+     *
+     * @param array|mixed $indexes
+     * @param array $data
+     * @param string|array|null $startPath
+     * @param string|array|null $internalPath
+     * @param int|null $maxResults
+     * @param string $delimiter
+     * @return array
+     */
+    public function findPaths(
+        $indexes,
+        array $data,
+        $startPath = null,
+        $internalPath = null,
+        $maxResults = null,
+        $delimiter = self::DEFAULT_PATH_DELIMITER
+    ) {
+        $indexes = (array)$indexes;
+        $startPath = is_array($startPath) ? implode($delimiter, $startPath) : $startPath;
+        $internalPath = is_array($internalPath) ? implode($delimiter, $internalPath) : $internalPath;
+        $data = $startPath !== null ? $this->get($startPath, $data, $delimiter, []) : $data;
+        $checkList = [$startPath => ['start' => $startPath === null, 'children' => $data]];
+        $paths = [];
+
+        while (!empty($checkList)) {
+            $nextCheckList = [];
+
+            foreach ($checkList as $path => $config) {
+                foreach ($config['children'] as $childIndex => $childData) {
+                    $childPath = $path . (!$config['start'] ? $delimiter : '') . $childIndex;
+
+                    if (in_array($childIndex, $indexes, true)) {
+                        $paths[] = $childPath;
+
+                        if ($maxResults !== null && count($paths) >= $maxResults) {
+                            return $paths;
+                        }
+                    }
+
+                    $searchData = $internalPath !== null && is_array($childData)
+                        ? $this->get($internalPath, $childData, $delimiter)
+                        : $childData;
+
+                    if (!empty($searchData) && is_array($searchData)) {
+                        $searchPath = $childPath . ($internalPath !== null ? $delimiter . $internalPath : '');
+                        $nextCheckList[$searchPath] = ['start' => false, 'children' => $searchData];
+                    }
+                }
+            }
+
+            $checkList = $nextCheckList;
+        }
+
+        return $paths;
+    }
+
+    /**
+     * Get first matching path for elements with specified indexes
+     *
+     * @param array|mixed $indexes
+     * @param array $data
+     * @param string|array|null $startPath
+     * @param string|array|null $internalPath
+     * @param string $delimiter
+     * @return string|null
+     */
+    public function findPath(
+        $indexes,
+        array $data,
+        $startPath = null,
+        $internalPath = null,
+        $delimiter = self::DEFAULT_PATH_DELIMITER
+    ) {
+        $paths = $this->findPaths($indexes, $data, $startPath, $internalPath, 1, $delimiter);
+
+        return !empty($paths) ? $paths[0] : null;
+    }
+
+    /**
      * Retrieve slice of specified path
      *
      * @param string $path

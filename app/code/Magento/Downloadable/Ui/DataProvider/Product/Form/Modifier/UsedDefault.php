@@ -90,7 +90,8 @@ class UsedDefault extends AbstractModifier
                     'template' => 'ui/form/element/helper/service',
                 ]
             ];
-            $linksTitlePath = $this->getElementArrayPath($this->meta, $titleIndex) . '/arguments/data/config';
+            $linksTitlePath = $this->arrayManager->findPath($titleIndex, $this->meta, null, 'children')
+                . static::META_CONFIG_PATH;
             $this->meta = $this->arrayManager->merge($linksTitlePath, $this->meta, $useDefaultConfig);
         }
 
@@ -109,7 +110,7 @@ class UsedDefault extends AbstractModifier
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
         if ($scope == \Magento\Store\Model\Store::PRICE_SCOPE_WEBSITE && $this->locator->getProduct()->getStoreId()) {
-            $linkPricePath = $this->getElementArrayPath($this->meta, 'container_link_price');
+            $linkPricePath = $this->arrayManager->findPath('container_link_price', $this->meta, null, 'children');
             $checkboxPath = $linkPricePath . '/children/use_default_price/arguments/data/config';
             $useDefaultConfig = [
                 'componentType' => Form\Element\Checkbox::NAME,
@@ -140,7 +141,12 @@ class UsedDefault extends AbstractModifier
     protected function titleUsedDefaultInGrid($indexTitle)
     {
         if ($this->locator->getProduct()->getStoreId()) {
-            $linkTitleGroupPath = $this->getElementArrayPath($this->meta, 'container_' . $indexTitle);
+            $linkTitleGroupPath = $this->arrayManager->findPath(
+                'container_' . $indexTitle,
+                $this->meta,
+                null,
+                'children'
+            );
             $checkboxPath = $linkTitleGroupPath . '/children/use_default_title/arguments/data/config';
             $useDefaultConfig = [
                 'componentType' => Form\Element\Checkbox::NAME,

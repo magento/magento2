@@ -53,8 +53,8 @@ class BundlePrice extends AbstractModifier
             ?: $this->getGroupCodeByField($meta, self::CODE_GROUP_PRICE)
         ) {
             $isNewProduct = ($this->locator->getProduct()->getId()) ? false : true;
-            $pricePath = $this->getElementArrayPath($meta, AttributeConstantsInterface::CODE_PRICE)
-                ?: $this->getElementArrayPath($meta, self::CODE_GROUP_PRICE);
+            $pricePath = $this->arrayManager->findPath(AttributeConstantsInterface::CODE_PRICE, $meta, null, 'children')
+                ?: $this->arrayManager->findPath(static::CODE_GROUP_PRICE, $meta, null, 'children');
 
             $meta[$groupCode]['children'][self::CODE_PRICE_TYPE] = [
                 'arguments' => [

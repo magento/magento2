@@ -81,15 +81,6 @@ class CustomOptionsTest extends AbstractModifierTest
         ]);
     }
 
-    public function testModifyDataForGroupedProduct()
-    {
-        $this->productMock->expects($this->once())
-            ->method('getTypeId')
-            ->willReturn('grouped');
-
-        $this->assertSame($this->getSampleData(), $this->getModel()->modifyData($this->getSampleData()));
-    }
-
     public function testModifyData()
     {
         $productId = 111;
@@ -140,19 +131,6 @@ class CustomOptionsTest extends AbstractModifierTest
             ->willReturn($options);
 
         $this->assertSame($resultData, $this->getModel()->modifyData($originalData));
-    }
-
-    public function testModifyMetaForGroupedProduct()
-    {
-        $meta = [
-            'sample' => 'meta'
-        ];
-
-        $this->productMock->expects($this->once())
-            ->method('getTypeId')
-            ->willReturn('grouped');
-
-        $this->assertEquals($meta, $this->getModel()->modifyMeta($meta));
     }
 
     public function testModifyMeta()

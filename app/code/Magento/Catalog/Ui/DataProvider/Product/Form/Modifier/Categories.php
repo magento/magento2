@@ -155,8 +155,8 @@ class Categories extends AbstractModifier
     protected function customizeCategoriesField(array $meta)
     {
         $fieldCode = 'category_ids';
-        $elementPath = $this->getElementArrayPath($meta, $fieldCode);
-        $containerPath = $this->getElementArrayPath($meta, static::CONTAINER_PREFIX . $fieldCode);
+        $elementPath = $this->arrayManager->findPath($fieldCode, $meta, null, 'children');
+        $containerPath = $this->arrayManager->findPath(static::CONTAINER_PREFIX . $fieldCode, $meta, null, 'children');
 
         if (!$elementPath) {
             return $meta;

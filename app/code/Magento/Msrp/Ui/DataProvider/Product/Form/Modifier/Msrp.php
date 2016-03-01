@@ -109,7 +109,7 @@ class Msrp extends AbstractModifier
      */
     protected function customizeMsrp()
     {
-        $msrpPath = $this->getElementArrayPath($this->meta, self::FIELD_MSRP);
+        $msrpPath = $this->arrayManager->findPath(static::FIELD_MSRP, $this->meta, null, 'children');
 
         if ($msrpPath) {
             if ($this->msrpConfig->isEnabled()) {
@@ -139,7 +139,12 @@ class Msrp extends AbstractModifier
      */
     protected function customizeMsrpDisplayActualPrice()
     {
-        $msrpDisplayPath = $this->getElementArrayPath($this->meta, self::FIELD_MSRP_DISPLAY_ACTUAL_PRICE);
+        $msrpDisplayPath = $this->arrayManager->findPath(
+            static::FIELD_MSRP_DISPLAY_ACTUAL_PRICE,
+            $this->meta,
+            null,
+            'children'
+        );
 
         if ($msrpDisplayPath) {
             if (!$this->msrpConfig->isEnabled()) {
