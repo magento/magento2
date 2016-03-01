@@ -159,7 +159,7 @@
             <argument name="instanceName" xsi:type="string">Magento\Catalog\Model\System\Config\Source\Inputtype</argument>
         </arguments>
     </virtualType>
-    <virtualType name="categoryImageUpload" type="Magento\Catalog\Model\ImageUploader">
+    <virtualType name="Magento\Catalog\CategoryImageUpload" type="Magento\Catalog\Model\ImageUploader">
         <arguments>
             <argument name="baseTmpPath" xsi:type="string">catalog/tmp/category</argument>
             <argument name="basePath" xsi:type="string">catalog/category</argument>
@@ -171,14 +171,9 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Catalog\Model\Category\Attribute\Backend\Image">
-        <arguments>
-            <argument name="imageUploader" xsi:type="object">categoryImageUpload</argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Controller\Adminhtml\Category\Image\Upload">
         <arguments>
-            <argument name="imageUploader" xsi:type="object">categoryImageUpload</argument>
+            <argument name="imageUploader" xsi:type="object">Magento\Catalog\CategoryImageUpload</argument>
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\Session">
