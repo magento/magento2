@@ -12,20 +12,6 @@ use Magento\ImportExport\Model\Import;
 class RowCustomizer implements RowCustomizerInterface
 {
     /**
-     * Product metadata pool
-     *
-     * @var \Magento\Framework\Model\Entity\MetadataPool
-     */
-    private $metadataPool;
-
-    /**
-     * Product entity link field
-     *
-     * @var string
-     */
-    private $productEntityLinkField;
-
-    /**
      * @var array
      */
     protected $configurableData = [];
@@ -41,7 +27,7 @@ class RowCustomizer implements RowCustomizerInterface
     {
         $productCollection = clone $collection;
         $productCollection->addAttributeToFilter(
-            $this->getProductEntityLinkField(),
+            'entity_id',
             ['in' => $productIds]
         )->addAttributeToFilter(
             'type_id',
@@ -130,34 +116,5 @@ class RowCustomizer implements RowCustomizerInterface
             $additionalRowsCount = max($additionalRowsCount, count($this->configurableData[$productId]));
         }
         return $additionalRowsCount;
-    }
-
-    /**
-     * Get product metadata pool
-     *
-     * @return \Magento\Framework\Model\Entity\MetadataPool
-     */
-    private function getMetadataPool()
-    {
-        if (!$this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\Entity\MetadataPool');
-        }
-        return $this->metadataPool;
-    }
-
-    /**
-     * Get product entity link field
-     *
-     * @return string
-     */
-    private function getProductEntityLinkField()
-    {
-        if (!$this->productEntityLinkField) {
-            $this->productEntityLinkField = $this->getMetadataPool()
-                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
-                ->getLinkField();
-        }
-        return $this->productEntityLinkField;
     }
 }

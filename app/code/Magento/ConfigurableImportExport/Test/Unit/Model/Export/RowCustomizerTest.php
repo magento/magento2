@@ -21,7 +21,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\ConfigurableImportExport\Model\Export\RowCustomizer
      */
-    protected $model;
+    protected $_model;
 
     /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Collection|\PHPUnit_Framework_MockObject_MockObject
@@ -37,20 +37,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
-        $entityMetadataMock = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
-        $metadataPoolMock->expects($this->any())
-            ->method('getMetadata')
-            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
-            ->willReturn($entityMetadataMock);
-        $entityMetadataMock->expects($this->any())
-            ->method('getLinkField')
-            ->willReturn('entity_id');
-        $this->model = new \Magento\ConfigurableImportExport\Model\Export\RowCustomizer();
-        $reflection = new \ReflectionClass('\Magento\ConfigurableImportExport\Model\Export\RowCustomizer');
-        $reflectionProperty = $reflection->getProperty('metadataPool');
-        $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->model, $metadataPoolMock);
+        $this->_model = new \Magento\ConfigurableImportExport\Model\Export\RowCustomizer();
     }
 
     public function testPrepareData()
@@ -69,7 +56,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
                 'configurable_variations',
                 'configurable_variation_labels',
             ],
-            $this->model->addHeaderColumns(
+            $this->_model->addHeaderColumns(
                 ['column_1', 'column_2', 'column_3']
             )
         );
@@ -85,7 +72,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->_initConfigurableData();
         $this->assertEquals(
             $expected,
-            $this->model->addData($data['data_row'], $data['product_id'])
+            $this->_model->addData($data['data_row'], $data['product_id'])
         );
     }
 
@@ -99,7 +86,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->_initConfigurableData();
         $this->assertEquals(
             $expected,
-            $this->model->getAdditionalRowsCount($data['row_count'], $data['product_id'])
+            $this->_model->getAdditionalRowsCount($data['row_count'], $data['product_id'])
         );
     }
 
@@ -252,9 +239,10 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
             ->method('fetchItem')
             ->will($this->returnValue(false));
 
-        $this->model->prepareData($this->_collectionMock, $productIds);
 
-        $configurableData = $this->getPropertyValue($this->model, 'configurableData');
+        $this->_model->prepareData($this->_collectionMock, $productIds);
+
+        $configurableData = $this->getPropertyValue($this->_model, 'configurableData');
 
         $this->assertEquals($expectedConfigurableData, $configurableData);
     }
