@@ -160,7 +160,7 @@ class ConfigurablePanel extends AbstractModifier
     protected function getPanelChildren() {
         return [
             'configurable_products_button_set' => $this->getButtonSet(),
-            self::CONFIGURABLE_MATRIX => $this->getGrid(),
+            'configurable-matrix' => $this->getGrid(),
         ];
     }
 
@@ -210,6 +210,10 @@ class ConfigurablePanel extends AbstractModifier
                                 ],
                                 'title' => __('Add Products Manually'),
                                 'sortOrder' => 10,
+                                'imports' => [
+                                    'visible' => '!ns = ${ $.ns }, index = '
+                                        . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                                ],
                             ],
                         ],
                     ],
@@ -266,6 +270,7 @@ class ConfigurablePanel extends AbstractModifier
                         'component' => 'Magento_ConfigurableProduct/js/components/dynamic-rows-configurable',
                         'addButton' => false,
                         'isEmpty' => true,
+                        'deleteButtonLabel' => __('Remove'),
                         'itemTemplate' => 'record',
                         'dataScope' => 'data',
                         'dataProviderFromGrid' => static::ASSOCIATED_PRODUCT_LISTING,
@@ -339,6 +344,19 @@ class ConfigurablePanel extends AbstractModifier
                         ['dataScope' => 'quantity_and_stock_status.qty']
                     ),
                     'price_weight' => $this->getColumn('weight', __('Weight')),
+                    'actionDelete' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'additionalClasses' => 'data-grid-actions-cell',
+                                    'componentType' => 'actionDelete',
+                                    'dataType' => Form\Element\DataType\Text::NAME,
+                                    'label' => __('Actions'),
+                                    'fit' => true,
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ];
