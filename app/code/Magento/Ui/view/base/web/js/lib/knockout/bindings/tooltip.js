@@ -276,6 +276,8 @@ define([
         createTooltip: function (config) {
             var body = $('body');
 
+            config = _.extend(defaults, config);
+
             $(template(tooltipTmpl, {
                 data: config
             })).appendTo(body);
@@ -299,14 +301,20 @@ define([
             var html = $(elem).html(),
                 tooltipElement;
 
-            if (tooltip.showed && tooltip.trigger && tooltip.trigger[0] === event.target && config.action === 'click') {
+            config = _.extend(defaults, config);
+
+            if (tooltip.showed && tooltip.trigger && tooltip.trigger[0] === event.currentTarget && config.action === 'click') {
                 tooltip.destroy(config);
 
                 return tooltip.trigger = false;
             }
 
+            if (config.action === 'click') {
+                tooltip.event = event;
+            }
+
             tooltip.destroy(config);
-            tooltip.trigger = $(event.target);
+            tooltip.trigger = $(event.currentTarget);
             tooltip.targetElement = false;
             $(document).on('mousemove', tooltip.setTargetData);
 
@@ -341,7 +349,7 @@ define([
          */
         setHandlers: function (config) {
 
-            if (config.track) {
+            if (config.track && config.action === 'hover') {
                 tooltip.trigger.on('mousemove', tooltip.track);
             }
 
@@ -366,9 +374,25 @@ define([
 
             if (tooltip.side === 'bottom' || tooltip.side === 'top') {
                 inequality.x = event.pageX - (tooltip.position.left + tooltip.element.outerWidth()/2);
+
+                if (tooltip.position.left + inequality.x + tooltip.sizeData.wrapperSize.w >
+                    tooltip.sizeData.windowSize.w + tooltip.sizeData.scrollPosition.left ||
+                    inequality.x + tooltip.position.left < tooltip.sizeData.scrollPosition.left) {
+
+                    return false;
+                }
+
                 tooltip.element[0].style[transformProp] = 'translateX(' + inequality.x + 'px)';
             } else if (tooltip.side === 'left' || tooltip.side === 'right' ) {
                 inequality.y = event.pageY - (tooltip.position.top + tooltip.element.outerHeight()/2);
+
+                if (tooltip.position.top + inequality.x + tooltip.sizeData.wrapperSize.h >
+                    tooltip.sizeData.windowSize.h + tooltip.sizeData.scrollPosition.top ||
+                    inequality.h + tooltip.position.top < tooltip.sizeData.scrollPosition.top) {
+
+                    return false;
+                }
+
                 tooltip.element[0].style[transformProp] = 'translateY(' + inequality.y + 'px)';
             }
         },
@@ -416,30 +440,33 @@ define([
          * @param {Object} config - tooltip config
          * @param {Object} event - current event
          */
-        setPosition: function (element, tooltipElement, config, event) {
-            var handler = $(event.target),
-                windowSize = {
+        setPosition: function (element, tooltipElement, config) {
+            tooltip.sizeData = {
+                windowSize: {
                     h: $(window).outerHeight(),
                     w: $(window).outerWidth()
                 },
-                scrollPosition = {
+                scrollPosition: {
                     top: $(window).scrollTop(),
                     left: $(window).scrollLeft()
                 },
-                wrapperSize = {
+                wrapperSize: {
                     h: tooltipElement.outerHeight(),
                     w: tooltipElement.outerWidth()
                 },
-                elementSize = {
-                    h: handler.outerHeight(),
-                    w: handler.outerWidth()
+                elementSize: {
+                    h: tooltip.trigger.outerHeight(),
+                    w: tooltip.trigger.outerWidth()
                 },
-                elementPosition = handler.offset();
+                elementPosition: tooltip.trigger.offset()
+            };
 
             _.extend(tooltip,
-                positions[config.position](windowSize, wrapperSize, elementSize, elementPosition, scrollPosition));
+                positions[config.position](tooltip.sizeData.windowSize, tooltip.sizeData.wrapperSize,
+                    tooltip.sizeData.elementSize, tooltip.sizeData.elementPosition, tooltip.sizeData.scrollPosition));
             checkedPositions = {};
-            tooltip._setPositionShift(config, elementSize);
+            tooltip._setPositionShift(config, tooltip.sizeData.windowSize, tooltip.sizeData.wrapperSize,
+                tooltip.sizeData.elementSize, tooltip.sizeData.elementPosition, tooltip.sizeData.scrollPosition);
             tooltipElement.css(tooltip.position);
             tooltipElement.addClass(tooltip.className);
         },
@@ -448,13 +475,36 @@ define([
          * Set shift to position if track is enabled
          *
          * @param {Object} config - tooltip config
-         * @param {Object} elementSize - handler size
+         * @param {Object} windowSize - window size
+         * @param {Object} wrapperSize - tooltip size
+         * @param {Object} elementSize - trigger size
+         * @param {Object} elementPosition - trigger position
+         * @param {Object} scrollPosition - scroll position
          */
-        _setPositionShift: function (config, elementSize) {
+        _setPositionShift: function (config, windowSize, wrapperSize, elementSize, elementPosition, scrollPosition) {
+            var shift;
+
             if (config.track && tooltip.event && (tooltip.side === 'bottom' || tooltip.side === 'top')) {
-                tooltip.position.left -= (elementSize.w / 2 - tooltip.event.offsetX);
+                shift = tooltip.position.left - (elementSize.w / 2 -
+                    ($(tooltip.event.target).offset().left - tooltip.trigger.offset().left + tooltip.event.offsetX));
+
+                if (shift + wrapperSize.w > windowSize.w + scrollPosition.left) {
+                    shift = windowSize.w + scrollPosition.left - wrapperSize.w;
+                } else if (shift < scrollPosition.left) {
+                    shift = scrollPosition.left;
+                }
+                tooltip.position.left = shift;
             } else if (config.track && tooltip.event && (tooltip.side === 'left' || tooltip.side === 'right')) {
-                tooltip.position.top -= (elementSize.h / 2 - tooltip.event.offsetY);
+                shift = tooltip.position.top - (elementSize.h / 2 -
+                    ($(tooltip.event.target).offset().top - tooltip.trigger.offset().top + tooltip.event.offsetY));
+
+                if (shift + wrapperSize.h > windowSize.h + scrollPosition.top) {
+                    shift = windowSize.h + scrollPosition.top - wrapperSize.h;
+                } else if (shift < scrollPosition.top) {
+                    shift = scrollPosition.top;
+                }
+
+                tooltip.position.top = shift;
             }
         },
 
@@ -493,13 +543,17 @@ define([
                 action = config.action,
                 $parentScope =  $(element).addClass('hidden').parent();
 
+            if (config.parentScope) {
+                $parentScope = $(config.parentScope);
+            }
+
             if (action === 'hover') {
                 $parentScope.on('mouseenter', trigger,
-                    tooltip.setContent.bind(null, element, viewModel, config, bindingCtx));
+                    tooltip.setContent.bind(null, element, viewModel, valueAccessor(), bindingCtx));
                 $parentScope.on('mouseleave', trigger, tooltip.destroy.bind(null, config));
             } else if (action === 'click') {
                 $parentScope.on('click', trigger,
-                    tooltip.setContent.bind(null, element, viewModel, config, bindingCtx));
+                    tooltip.setContent.bind(null, element, viewModel, valueAccessor(), bindingCtx));
             }
 
             return {
