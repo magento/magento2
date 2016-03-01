@@ -20,6 +20,13 @@ use Magento\Framework\Filesystem;
 abstract class Store extends Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Backend::store';
+
+    /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
@@ -75,14 +82,6 @@ abstract class Store extends Action
             ->addBreadcrumb(__('System'), __('System'))
             ->addBreadcrumb(__('Manage Stores'), __('Manage Stores'));
         return $resultPage;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Backend::store');
     }
 
     /**

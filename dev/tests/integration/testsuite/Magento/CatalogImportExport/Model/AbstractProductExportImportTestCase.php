@@ -30,6 +30,11 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
     protected $productResource;
 
     /**
+     * @var string[]
+     */
+    protected $rollbackFixtures;
+
+    /**
      * skipped attributes
      *
      * @var array
@@ -52,14 +57,17 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->fileSystem = $this->objectManager->get('Magento\Framework\Filesystem');
+        $this->model = $this->objectManager->create(
+            'Magento\CatalogImportExport\Model\Export\Product'
+        );
         $this->productResource = $this->objectManager->create(
             'Magento\Catalog\Model\ResourceModel\Product'
         );
     }
 
-    protected function initExportModel()
+    protected function tearDown()
     {
-        $this->model = $this->objectManager->create('Magento\CatalogImportExport\Model\Export\Product');
+        $this->executeFixtures($this->rollbackFixtures);
     }
 
     /**
@@ -74,11 +82,10 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      */
     public function testExport($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
+        $this->rollbackFixtures = $rollbackFixtures;
         $this->executeFixtures($fixtures, $skus);
-        $this->initExportModel();
         $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
         $this->executeExportTest($skus, $skippedAttributes);
-        $this->executeFixtures($rollbackFixtures);
     }
 
     protected function executeExportTest($skus, $skippedAttributes)
@@ -141,15 +148,13 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      */
     public function testImportDelete($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
+        $this->rollbackFixtures = $rollbackFixtures;
         $this->executeFixtures($fixtures, $skus);
-        $this->initExportModel();
         $this->executeImportDeleteTest($skus);
-        $this->executeFixtures($rollbackFixtures);
     }
 
     protected function executeImportDeleteTest($skus)
     {
-        $this->initExportModel();
         $csvfile = $this->exportProducts();
         $this->importProducts($csvfile, \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE);
         /** @var \Magento\Catalog\Model\Product $product */
@@ -200,11 +205,10 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      */
     public function testImportReplace($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
+        $this->rollbackFixtures = $rollbackFixtures;
         $this->executeFixtures($fixtures, $skus);
-        $this->initExportModel();
         $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
         $this->executeImportReplaceTest($skus, $skippedAttributes);
-        $this->executeFixtures($rollbackFixtures);
     }
 
     protected function executeImportReplaceTest($skus, $skippedAttributes)
@@ -306,8 +310,31 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
         )->setSource(
             $source
         )->validateData();
+        $errorMessage = $this->extractErrorMessage($errors->getAllErrors());
 
-        $this->assertTrue($errors->getErrorsCount() == 0, 'Product import error, imported from file:' . $csvfile);
+        $this->assertEmpty(
+            $errorMessage,
+            'Product import from file' . $csvfile . ' validation errors: ' . $errorMessage
+        );
         $importModel->importData();
+        $importErrors = $importModel->getErrorAggregator()->getAllErrors();
+        $importErrorMessage = $this->extractErrorMessage($importErrors);
+        $this->assertEmpty(
+            $importErrorMessage,
+            'Product import from file' . $csvfile . ' errors: ' . $importErrorMessage
+        );
+    }
+
+    /**
+     * @param \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError[] $errors
+     * @return string
+     */
+    private function extractErrorMessage($errors)
+    {
+        $errorMessage = '';
+        foreach ($errors as $error) {
+            $errorMessage = "\n" . $error->getErrorMessage();
+        }
+        return $errorMessage;
     }
 }
