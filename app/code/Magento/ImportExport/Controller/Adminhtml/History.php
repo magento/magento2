@@ -13,12 +13,9 @@ use Magento\Backend\App\Action;
 abstract class History extends Action
 {
     /**
-     * Check access (in the ACL) for current user
+     * Authorization level of a basic admin session
      *
-     * @return bool
+     * @see _isAllowed()
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_ImportExport::history');
-    }
+    const ADMIN_RESOURCE = 'Magento_ImportExport::history';
 }
