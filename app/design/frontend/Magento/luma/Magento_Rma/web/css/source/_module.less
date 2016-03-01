@@ -4,91 +4,91 @@
 //  */
 
 //
-//    Common
-//--------------------------------------
+//  Common
+//  _____________________________________________
 
 & when (@media-common = true) {
-
-.order-details-items.rma {
-    .order-title {
-        display: none;
-
-        + .toolbar {
+    .order-details-items.rma {
+        .order-title {
             display: none;
-        }
-    }
-}
 
-.form-create-return {
-    &:extend(.abs-add-fields all);
-
-    .additional {
-        &:first-child {
-            margin-top: 0;
-        }
-    }
-
-    .field.comment {
-        margin-top: 55px;
-    }
-
-    .actions-toolbar {
-        &:extend(.abs-add-clearfix all);
-    }
-}
-
-.return-status {
-    &:extend(.abs-status all);
-}
-
-.block-returns-comments {
-    .returns-comments {
-        dt,
-        dd {
-            margin: 0;
-        }
-
-        dt {
-            font-weight: @font-weight__regular;
-        }
-
-        dd {
-            margin-bottom: 15px;
-
-            &:last-child {
-                margin-bottom: 0;
+            + .toolbar {
+                display: none;
             }
         }
     }
 
-    .fieldset {
-        margin-bottom: @indent__base;
-    }
-}
+    .form-create-return {
+        &:extend(.abs-add-fields all);
 
-.magento-rma-returns-returns,
-.magento-rma-returns-view {
-    &:extend(.abs-title-orders all);
-}
+        .additional {
+            &:first-child {
+                margin-top: 0;
+            }
+        }
 
-//
-//    Guest return view page
-//--------------------------------------
-.magento-rma-guest-returns {
-    .column.main {
-        .block:not(.widget) {
-            &:extend(.abs-account-blocks all);
+        .field.comment {
+            margin-top: 55px;
+        }
+
+        .actions-toolbar {
+            &:extend(.abs-add-clearfix all);
         }
     }
 
-    &:extend(.abs-title-orders all);
-}
+    .return-status {
+        &:extend(.abs-status all);
+    }
 
+    .block-returns-comments {
+        .returns-comments {
+            dt,
+            dd {
+                margin: 0;
+            }
+
+            dt {
+                font-weight: @font-weight__regular;
+            }
+
+            dd {
+                margin-bottom: 15px;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+
+        .fieldset {
+            margin-bottom: @indent__base;
+        }
+    }
+
+    .magento-rma-returns-returns,
+    .magento-rma-returns-view {
+        &:extend(.abs-title-orders all);
+    }
+
+    //
+    //  Guest return view page
+    //  ---------------------------------------------
+
+    .magento-rma-guest-returns {
+        .column.main {
+            .block:not(.widget) {
+                &:extend(.abs-account-blocks all);
+            }
+        }
+
+        &:extend(.abs-title-orders all);
+    }
 }
 
 //
-//    Mobile
-//--------------------------------------
+//  Mobile
+//  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .form-create-return {
         .additional {
@@ -113,8 +113,8 @@
                 .block-returns-tracking {
                     .block-title {
                         > .action.track {
-                            float: none;
                             display: block;
+                            float: none;
                             margin: @indent__s 0 0;
                         }
                     }
@@ -129,8 +129,9 @@
 }
 
 //
-//    Desktop
-//--------------------------------------
+//  Desktop
+//  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .form-create-return {
         &:extend(.abs-add-fields-desktop all);

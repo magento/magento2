@@ -4,95 +4,99 @@
 //  */
 
 //
-//    Common
-//--------------------------------------
+//  Common
+//  _____________________________________________
 
 & when (@media-common = true) {
 
-.form-create-return {
-    &:extend(.abs-add-fields all);
-    .field {
-        .control > span,
-        address {
-            display: inline-block;
-            padding-top: @form-field-type-label-inline__padding-top;
-        }
-    }
+    .form-create-return {
+        &:extend(.abs-add-fields all);
 
-    .additional {
-        &:first-child {
-            margin-top: 0;
+        .field {
+            .control > span,
+            address {
+                display: inline-block;
+                padding-top: @form-field-type-label-inline__padding-top;
+            }
         }
 
-        .field:nth-last-child(2) {
-            margin-bottom: 0;
-        }
+        .additional {
+            &:first-child {
+                margin-top: 0;
+            }
 
-        .field:last-child {
-            margin-top: @form-field__vertical-indent;
-        }
-    }
-
-    .field.comment {
-        margin-top: 55px;
-    }
-}
-
-.block-returns-comments {
-    .returns-comments {
-        dt,
-        dd {
-            margin: 0;
-        }
-
-        dt {
-            font-weight: @font-weight__regular;
-        }
-
-        dd {
-            margin-bottom: 15px;
-
-            &:last-child {
+            .field:nth-last-child(2) {
                 margin-bottom: 0;
+            }
+
+            .field {
+                &:last-child {
+                    margin-top: @form-field__vertical-indent;
+                }
+            }
+        }
+
+        .field.comment {
+            margin-top: 55px;
+        }
+    }
+
+    .block-returns-comments {
+        .returns-comments {
+            dt,
+            dd {
+                margin: 0;
+            }
+
+            dt {
+                font-weight: @font-weight__regular;
+            }
+
+            dd {
+                margin-bottom: 15px;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+
+        .fieldset {
+            margin-bottom: 20px;
+        }
+    }
+
+    .return-status {
+        &:extend(.abs-status all);
+    }
+
+    .magento-rma-returns-returns,
+    .magento-rma-guest-returns,
+    .magento-rma-returns-view {
+        .page-title-wrapper {
+            .page-title {
+                margin-right: 25px;
             }
         }
     }
 
-    .fieldset {
-        margin-bottom: 20px;
-    }
-}
+    //
+    //  Guest return view page
+    //  ---------------------------------------------
 
-.return-status {
-    &:extend(.abs-status all);
-}
-
-.magento-rma-returns-returns,
-.magento-rma-guest-returns,
-.magento-rma-returns-view {
-    .page-title-wrapper {
-        .page-title {
-            margin-right: 25px;
+    .magento-rma-guest-returns {
+        .column.main {
+            .block:not(.widget) {
+                &:extend(.abs-account-blocks all);
+            }
         }
     }
 }
 
 //
-//    Guest return view page
-//--------------------------------------
-.magento-rma-guest-returns {
-    .column.main {
-        .block:not(.widget) {
-            &:extend(.abs-account-blocks all);
-        }
-    }
-}
+//  Mobile
+//  _____________________________________________
 
-}
-
-//
-//    Mobile
-//--------------------------------------
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .form-create-return {
         .fieldset {
@@ -108,8 +112,8 @@
                 .block-returns-tracking {
                     .block-title {
                         > .action.track {
-                            float: none;
                             display: block;
+                            float: none;
                             margin: @indent__s 0 0;
                         }
                     }
@@ -120,8 +124,9 @@
 }
 
 //
-//    Desktop
-//--------------------------------------
+//  Desktop
+//  _____________________________________________
+
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .form-create-return {
         &:extend(.abs-add-fields-desktop all);
@@ -131,9 +136,11 @@
             }
         }
     }
+
     //
-    //    Guest return view page
-    //--------------------------------------
+    //  Guest return view page
+    //  ---------------------------------------------
+
     .magento-rma-guest-returns  {
         .column.main {
             .block:not(.widget) {
@@ -148,6 +155,7 @@
             }
         }
     }
+
     .block-returns-tracking {
         .block-title {
             .action {
