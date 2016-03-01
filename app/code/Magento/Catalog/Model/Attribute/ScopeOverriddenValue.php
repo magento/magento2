@@ -165,7 +165,8 @@ class ScopeOverriddenValue
         $metadata = $this->metadataPool->getMetadata($entityType);
         $searchResult = $this->attributeRepository->getList(
             $metadata->getEavEntityType(),
-            $this->searchCriteriaBuilder->addFilters([
+            $this->searchCriteriaBuilder->addFilters(
+                [
                     $this->filterBuilder
                         ->setField('is_global')
                         ->setConditionType('in')
