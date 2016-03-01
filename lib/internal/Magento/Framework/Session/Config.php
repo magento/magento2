@@ -82,7 +82,6 @@ class Config implements ConfigInterface
     /** @var \Magento\Framework\ValidatorFactory */
     protected $_validatorFactory;
 
-
     /**
      * @param \Magento\Framework\ValidatorFactory $validatorFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -566,6 +565,7 @@ class Config implements ConfigInterface
      */
     protected function configureCookieLifetime()
     {
-        return $this->setCookieLifetime($this->lifetimePath, self::COOKIE_LIFETIME_DEFAULT);
+        $lifetime = $this->_scopeConfig->getValue($this->lifetimePath, $this->_scopeType);
+        return $this->setCookieLifetime($lifetime, self::COOKIE_LIFETIME_DEFAULT);
     }
 }
