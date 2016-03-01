@@ -9,8 +9,9 @@ define([
     'jquery',
     'ko',
     'underscore',
-    'Magento_Ui/js/modal/alert'
-], function (Component, $, ko, _, alert) {
+    'Magento_Ui/js/modal/alert',
+    'uiRegistry'
+], function (Component, $, ko, _, alert, registry) {
     'use strict';
 
     function UserException(message) {
@@ -28,6 +29,7 @@ define([
             productMatrix: [],
             variations: [],
             productAttributes: [],
+            disabledAttributes: [],
             fullAttributes: [],
             rowIndexToEdit: false,
             productAttributesMap: null,
@@ -164,6 +166,7 @@ define([
 
             return result;
         },
+        /*
         getAttributeRowName: function (attribute, field) {
             return 'product[configurable_attributes_data][' + attribute.id + '][' + field + ']';
         },
@@ -171,12 +174,13 @@ define([
             return 'product[configurable_attributes_data][' + attribute.id + '][values][' +
                 option.value + '][' + field + ']';
         },
+        */
         render: function (variations, attributes) {
             this.changeButtonWizard();
             this.populateVariationMatrix(variations);
             this.attributes(attributes);
-            this.initImageUpload();
-            //this.disableConfigurableAttributes(attributes);
+            //this.initImageUpload();
+            this.disableConfigurableAttributes(attributes);
             this.handleValue(variations);
             this.handleAttributes();
         },
@@ -370,80 +374,22 @@ define([
 
             return gallery.join('\n');
         },
-        initImageUpload: function () {
-            require([
-                'mage/template',
-                'jquery/file-uploader',
-                'mage/mage',
-                'mage/translate',
-                'domReady!'
-            ], function (mageTemplate) {
-
-                var matrix = $('[data-role=product-variations-matrix]');
-                matrix.find('[data-action=upload-image]').find('[name=image]').each(function () {
-                    var imageColumn = $(this).closest('[data-column=image]');
-
-                    if (imageColumn.find('[data-role=image]').length) {
-                        imageColumn.find('[data-toggle=dropdown]').dropdown().show();
-                    }
-                    $(this).fileupload({
-                        dataType: 'json',
-                        dropZone: $(this).closest('[data-role=row]'),
-                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-                        done: function (event, data) {
-                            var tmpl, parentElement, uploaderControl, imageElement;
-
-                            if (!data.result) {
-                                return;
-                            }
-
-                            if (!data.result.error) {
-                                parentElement = $(event.target).closest('[data-column=image]');
-                                uploaderControl = parentElement.find('[data-action=upload-image]');
-                                imageElement = parentElement.find('[data-role=image]');
-
-                                if (imageElement.length) {
-                                    imageElement.attr('src', data.result.url);
-                                } else {
-                                    tmpl = mageTemplate(matrix.find('[data-template-for=variation-image]').html());
-
-                                    $(tmpl({
-                                        data: data.result
-                                    })).prependTo(uploaderControl);
-                                }
-                                parentElement.find('[name$="[image]"]').val(data.result.file);
-                                parentElement.find('[data-toggle=dropdown]').dropdown().show();
-                            } else {
-                                alert({
-                                    content: $.mage.__('We don\'t recognize or support this file extension type.')
-                                });
-                            }
-                        },
-                        start: function (event) {
-                            $(event.target).closest('[data-action=upload-image]').addClass('loading');
-                        },
-                        stop: function (event) {
-                            $(event.target).closest('[data-action=upload-image]').removeClass('loading');
-                        }
-                    });
-                });
-                matrix.find('[data-action=no-image]').click(function (event) {
-                    var parentElement = $(event.target).closest('[data-column=image]');
-                    parentElement.find('[data-role=image]').remove();
-                    parentElement.find('[name$="[image]"]').val('');
-                    parentElement.find('[data-toggle=dropdown]').trigger('close.dropdown').hide();
-                });
-            });
-        },
         disableConfigurableAttributes: function (attributes) {
-            $('[data-attribute-code] select.disabled-configurable-elements')
-                .removeClass('disabled-configurable-elements')
-                .prop('disabled', false);
-            _.each(attributes, function (attribute) {
-                $('[data-attribute-code="' + attribute.code + '"] select')
-                    .addClass('disabled-configurable-elements')
-                    .prop('disabled', true);
+            var element;
+            _.each(this.disabledAttributes, function (attribute) {
+                element = registry.get('index = ${$.' + attribute.code + '}');
+                if (!_.isUndefined(element)) {
+                    element.disabled(false);
+                }
             });
+            this.disabledAttributes = [];
+            _.each(attributes, function (attribute) {
+                element = registry.get('index = ${$.' + attribute.code + '}');
+                if (!_.isUndefined(element)) {
+                    element.disabled(true);
+                    this.disabledAttributes.push(attribute.code);
+                }
+            }, this);
         },
 
         /**
