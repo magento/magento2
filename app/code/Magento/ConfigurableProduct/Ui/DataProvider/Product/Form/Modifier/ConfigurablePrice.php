@@ -47,7 +47,7 @@ class ConfigurablePrice extends AbstractModifier
                                     'data' => [
                                         'config' => [
                                             'imports' => [
-                                                'disabled' => 'ns = ${ $.ns }, index = '
+                                                'disabled' => '!ns = ${ $.ns }, index = '
                                                     . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
                                             ],
                                         ],
@@ -68,9 +68,9 @@ class ConfigurablePrice extends AbstractModifier
                                     'data' => [
                                         'config' => [
                                             'imports' => [
-                                                'disabled' => 'ns = ${ $.ns }, index = '
+                                                'disabled' => '!ns = ${ $.ns }, index = '
                                                     . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
-                                                'visible' => 'ns = ${ $.ns }, index = '
+                                                'visible' => '!ns = ${ $.ns }, index = '
                                                     . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
                                             ],
                                         ],

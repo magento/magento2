@@ -20,6 +20,7 @@ define([
             dataProviderFromWizard: '',
             insertDataFromWizard: [],
             map: null,
+            isEmpty: true,
             cacheGridData: [],
             unionInsertData: [],
             deleteProperty: false,
@@ -86,6 +87,8 @@ define([
 
                 this.addChild(data, false);
             }, this);
+
+            //this.set('isEmpty', true);
         },
 
         /**
