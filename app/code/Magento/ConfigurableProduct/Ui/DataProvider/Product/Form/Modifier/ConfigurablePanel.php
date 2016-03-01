@@ -21,6 +21,7 @@ class ConfigurablePanel extends AbstractModifier
     const GROUP_CONFIGURABLE = 'configurable';
     const ASSOCIATED_PRODUCT_MODAL = 'configurable_associated_product_modal';
     const ASSOCIATED_PRODUCT_LISTING = 'configurable_associated_product_listing';
+    const CONFIGURABLE_MATRIX = 'configurable-matrix';
 
     /**
      * @var string
@@ -35,12 +36,12 @@ class ConfigurablePanel extends AbstractModifier
     /**
      * @var UrlInterface
      */
-    protected $urlBuilder;
+    private $urlBuilder;
 
     /**
      * @var LocatorInterface
      */
-    protected $locator;
+    private $locator;
 
     /**
      * @param LocatorInterface $locator
@@ -159,7 +160,7 @@ class ConfigurablePanel extends AbstractModifier
     protected function getPanelChildren() {
         return [
             'configurable_products_button_set' => $this->getButtonSet(),
-            'configurable-matrix' => $this->getGrid(),
+            self::CONFIGURABLE_MATRIX => $this->getGrid(),
         ];
     }
 
