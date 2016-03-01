@@ -14,18 +14,6 @@ use Magento\Framework\Event\Observer as EventObserver;
  */
 class AddStockStatusToCollectionObserver implements ObserverInterface
 {
-    /**
-     * @var \Magento\CatalogInventory\Helper\Stock
-     */
-    protected $stockHelper;
-
-    /**
-     * @param \Magento\CatalogInventory\Helper\Stock $stockHelper
-     */
-    public function __construct(\Magento\CatalogInventory\Helper\Stock $stockHelper)
-    {
-        $this->stockHelper = $stockHelper;
-    }
 
     /**
      * Add information about product stock status to collection
@@ -36,7 +24,13 @@ class AddStockStatusToCollectionObserver implements ObserverInterface
      */
     public function execute(EventObserver $observer)
     {
+        /** @var \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection $productCollection */
         $productCollection = $observer->getEvent()->getCollection();
-        $this->stockHelper->addStockStatusToProducts($productCollection);
+        $productCollection->getSelect()
+            ->join(
+                ['css' => $productCollection->getResource()->getTable('cataloginventory_stock_status')],
+                'main_table.entity_id = css.entity_id AND css.website_id = 1 AND stock_id = 1',
+                ['is_salable' => 'css.stock_status']
+            );
     }
 }
