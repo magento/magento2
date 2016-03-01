@@ -38,8 +38,16 @@
         </relation>
         <relation target="payflow_link_us">
             <rule type="disable" event="activate-rule"/>
-            <rule type="payflowExpressDisableConditional" event="deactivate-rule"/>
-            <rule type="payflowBmlDisableConditional" event="deactivate-rule"/>
+            <rule type="payflowExpressDisableConditional" event="deactivate-rule">
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
+            <rule type="payflowBmlDisableConditional" event="deactivate-rule">
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
             <rule type="payflowBmlEnableConditional" event="activate-bml">
                 <argument name="payflow_advanced">payflow_advanced</argument>
             </rule>
@@ -111,10 +119,18 @@
         </relation>
         <relation target="payflow_link_us">
             <rule type="disable" event="activate-rule"/>
-            <rule type="payflowExpressDisableConditional" event="deactivate-rule"/>
+            <rule type="payflowExpressDisableConditional" event="deactivate-rule">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
             <rule type="payflowExpressUsedefaultDisable" event="usedefault-off"/>
             <rule type="payflowExpressUsedefaultEnable" event="usedefault-on"/>
-            <rule type="payflowBmlDisableConditional" event="deactivate-rule"/>
+            <rule type="payflowBmlDisableConditional" event="deactivate-rule">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
             <rule type="payflowBmlEnableConditional" event="activate-bml">
                 <argument name="wpp_usuk">wpp_usuk</argument>
             </rule>
@@ -229,8 +245,16 @@
         </relation>
         <relation target="payflow_link_us">
             <rule type="disable" event="activate-rule"/>
-            <rule type="payflowExpressDisableConditional" event="deactivate-rule"/>
-            <rule type="payflowBmlDisableConditional" event="deactivate-rule"/>
+            <rule type="payflowExpressDisableConditional" event="deactivate-rule">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
+            <rule type="payflowBmlDisableConditional" event="deactivate-rule">
+                <argument name="payflow_advanced">payflow_advanced</argument>
+                <argument name="wpp_usuk">wpp_usuk</argument>
+                <argument name="payflow_link_us">payflow_link_us</argument>
+            </rule>
             <rule type="payflowBmlEnableConditional" event="activate-bml">
                 <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
             </rule>
