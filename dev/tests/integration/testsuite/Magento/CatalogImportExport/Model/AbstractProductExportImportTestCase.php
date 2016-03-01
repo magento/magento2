@@ -43,6 +43,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
         'news_from_date',
         'custom_design_from',
         'updated_in',
+        'tax_class_id',
     ];
 
     protected function setUp()
@@ -205,7 +206,6 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
         $replacedAttributes = [
             'row_id',
             'entity_id',
-            'created_at',
             'tier_price',
             'is_salable',
             'multiselect_attribute',
