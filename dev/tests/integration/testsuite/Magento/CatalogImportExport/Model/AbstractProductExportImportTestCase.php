@@ -52,12 +52,14 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->fileSystem = $this->objectManager->get('Magento\Framework\Filesystem');
-        $this->model = $this->objectManager->create(
-            'Magento\CatalogImportExport\Model\Export\Product'
-        );
         $this->productResource = $this->objectManager->create(
             'Magento\Catalog\Model\ResourceModel\Product'
         );
+    }
+
+    protected function initExportModel()
+    {
+        $this->model = $this->objectManager->create('Magento\CatalogImportExport\Model\Export\Product');
     }
 
     /**
@@ -73,6 +75,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
     public function testExport($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
         $this->executeFixtures($fixtures, $skus);
+        $this->initExportModel();
         $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
         $this->executeExportTest($skus, $skippedAttributes);
         $this->executeFixtures($rollbackFixtures);
@@ -139,12 +142,14 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
     public function testImportDelete($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
         $this->executeFixtures($fixtures, $skus);
+        $this->initExportModel();
         $this->executeImportDeleteTest($skus);
         $this->executeFixtures($rollbackFixtures);
     }
 
     protected function executeImportDeleteTest($skus)
     {
+        $this->initExportModel();
         $csvfile = $this->exportProducts();
         $this->importProducts($csvfile, \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE);
         /** @var \Magento\Catalog\Model\Product $product */
@@ -196,6 +201,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
     public function testImportReplace($fixtures, $skus, $skippedAttributes = [], $rollbackFixtures = [])
     {
         $this->executeFixtures($fixtures, $skus);
+        $this->initExportModel();
         $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
         $this->executeImportReplaceTest($skus, $skippedAttributes);
         $this->executeFixtures($rollbackFixtures);
