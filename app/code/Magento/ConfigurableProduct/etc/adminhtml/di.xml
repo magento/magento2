@@ -50,6 +50,7 @@
             <argument name="modifiers" xsi:type="array">
                 <item name="configurablePanel" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePanel</item>
                 <item name="configurablePrice" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePrice</item>
+                <item name="configurableQty" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurableQty</item>
             </argument>
         </arguments>
     </type>
