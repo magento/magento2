@@ -10,6 +10,8 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 
 /**
+ * Initializes lock table to lock messages that were processed already.
+ *
  * @codeCoverageIgnore
  */
 class InstallSchema implements InstallSchemaInterface
