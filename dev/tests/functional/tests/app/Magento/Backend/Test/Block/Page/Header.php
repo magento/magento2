@@ -87,7 +87,7 @@ class Header extends Block
     }
 
     /**
-     * Is admin search preview is visible in suggestion dropdown.
+     * Is admin search preview visible in suggestion dropdown.
      *
      * @param string $query
      * @param string $type
@@ -100,6 +100,11 @@ class Header extends Block
         return $search->getText() === $query;
     }
 
+    /**
+     * Navigate to grid of specified type
+     *
+     * @param string $type
+     */
     public function navigateToGrid($type)
     {
         $this->_rootElement->find('searchPreview' . $type, Locator::SELECTOR_ID)->click();
