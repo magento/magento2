@@ -8,6 +8,9 @@
 
 namespace Magento\Catalog\Model\Product\Media;
 
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Catalog product media config
  *
@@ -18,16 +21,26 @@ class Config implements ConfigInterface
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @var Attribute
      */
-    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
+    private $attributeHelper;
+
+    /**
+     * @param StoreManagerInterface $storeManager
+     * @param Attribute $attributeHelper
+     */
+    public function __construct(
+        StoreManagerInterface $storeManager,
+        Attribute $attributeHelper
+    )
     {
         $this->storeManager = $storeManager;
+        $this->attributeHelper = $attributeHelper;
     }
 
     /**
@@ -155,5 +168,13 @@ class Config implements ConfigInterface
     protected function _prepareFile($file)
     {
         return ltrim(str_replace('\\', '/', $file), '/');
+    }
+
+    /**
+     * @return array
+     */
+    public function getMediaAttributeCodes()
+    {
+        return $this->attributeHelper->getAttributeCodesByFrontendType('media_image');
     }
 }
