@@ -22,6 +22,7 @@ class AssertGlobalSearchOrderId extends AbstractConstraint
      *
      * @param Dashboard $dashboard
      * @param GlobalSearch $search
+     * @param OrderIndex $orderIndex
      * @return void
      */
     public function processAssert(Dashboard $dashboard, GlobalSearch $search, OrderIndex $orderIndex)
