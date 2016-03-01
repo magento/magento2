@@ -13,6 +13,13 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg;
 abstract class Images extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
+
+    /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
@@ -52,15 +59,5 @@ abstract class Images extends \Magento\Backend\App\Action
             $this->_coreRegistry->register('storage', $storage);
         }
         return $this->_coreRegistry->registry('storage');
-    }
-
-    /**
-     * Check current user permission on resource and privilege
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Cms::media_gallery');
     }
 }
