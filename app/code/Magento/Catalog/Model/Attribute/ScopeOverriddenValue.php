@@ -85,7 +85,8 @@ class ScopeOverriddenValue
             $this->initAttributeValues($entityType, $entity, (int)$storeId);
         }
 
-        return isset($this->attributesValues[$storeId][$attributeCode]);
+        return isset($this->attributesValues[$storeId])
+            && array_key_exists($attributeCode, $this->attributesValues[$storeId]);
     }
 
     /**
