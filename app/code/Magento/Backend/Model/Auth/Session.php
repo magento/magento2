@@ -184,7 +184,6 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
         $cookieValue = $this->cookieManager->getCookie($this->getName());
         if ($cookieValue) {
             $cookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
-                ->setDuration($lifetime)
                 ->setPath($this->sessionConfig->getCookiePath())
                 ->setDomain($this->sessionConfig->getCookieDomain())
                 ->setSecure($this->sessionConfig->getCookieSecure())

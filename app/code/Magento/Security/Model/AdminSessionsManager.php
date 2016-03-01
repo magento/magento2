@@ -147,7 +147,7 @@ class AdminSessionsManager
     {
         switch ((int)$statusCode) {
             case AdminSessionInfo::LOGGED_IN:
-                $reasonMessage = '';
+                $reasonMessage = null;
                 break;
             case AdminSessionInfo::LOGGED_OUT_BY_LOGIN:
                 $reasonMessage = __(
