@@ -1045,9 +1045,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Get multiRow format from one line data.
      *
      * @param array $rowData
-     *
      * @return array
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getMultiRowFormat($rowData)
     {
@@ -1059,37 +1057,61 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
 
         $i = 0;
-
         foreach ($rowData['custom_options'] as $name => $customOption) {
             $i++;
             foreach ($customOption as $rowOrder => $optionRow) {
-                $row = [
-                    self::COLUMN_STORE => '',
-                    self::COLUMN_TYPE => $name ? $optionRow['type'] : '',
-                    self::COLUMN_TITLE => $name,
-                    self::COLUMN_IS_REQUIRED => $optionRow['required'],
-                    self::COLUMN_SORT_ORDER => $i,
-                    self::COLUMN_ROW_TITLE => isset($optionRow['option_title']) ? $optionRow['option_title'] : '',
-                    self::COLUMN_ROW_SKU => $optionRow['sku'],
-                    self::COLUMN_ROW_SORT => $rowOrder,
-                    self::COLUMN_PREFIX . 'sku' => $optionRow['sku']
-                ];
-
-                $percent_suffix = isset($optionRow['price_type']) && ($optionRow['price_type'] == 'percent') ? '%' : '';
-                $row[self::COLUMN_ROW_PRICE] = isset($optionRow['price']) ? $optionRow['price'] . $percent_suffix : '';
-                $row[self::COLUMN_PREFIX . 'price'] = $row[self::COLUMN_ROW_PRICE];
-                if (isset($optionRow['max_characters'])) {
-                    $row[self::COLUMN_MAX_CHARACTERS] = $optionRow['max_characters'];
-                }
-
+                $row = array_merge(
+                    [
+                        self::COLUMN_STORE => '',
+                        self::COLUMN_TITLE => $name,
+                        self::COLUMN_SORT_ORDER => $i,
+                        self::COLUMN_ROW_SORT => $rowOrder
+                    ],
+                    $this->processOptionRow($name, $optionRow)
+                );
                 $name = '';
-
                 $multiRow[] = $row;
             }
-
         }
 
         return $multiRow;
+    }
+
+    /**
+     * @param string $name
+     * @param array $optionRow
+     * @return array
+     */
+    private function processOptionRow($name, $optionRow)
+    {
+        $result = [
+            self::COLUMN_TYPE => $name ? $optionRow['type'] : '',
+            self::COLUMN_IS_REQUIRED => $optionRow['required'],
+            self::COLUMN_ROW_SKU => $optionRow['sku'],
+            self::COLUMN_PREFIX . 'sku' => $optionRow['sku'],
+            self::COLUMN_ROW_TITLE => '',
+            self::COLUMN_ROW_PRICE => ''
+        ];
+
+        if (isset($optionRow['option_title'])) {
+            $result[self::COLUMN_ROW_TITLE] = $optionRow['option_title'];
+        }
+
+        if (isset($optionRow['price'])) {
+            $percent_suffix = '';
+            if (isset($optionRow['price_type']) && $optionRow['price_type'] == 'percent') {
+                $percent_suffix =  '%';
+            }
+            $result[self::COLUMN_ROW_PRICE] = $optionRow['price'] . $percent_suffix;
+        }
+
+        $result[self::COLUMN_PREFIX . 'price'] = $result[self::COLUMN_ROW_PRICE];
+
+        if (isset($optionRow['max_characters'])) {
+            $result[self::COLUMN_MAX_CHARACTERS] = $optionRow['max_characters'];
+        }
+
+        return $result;
     }
 
     /**
