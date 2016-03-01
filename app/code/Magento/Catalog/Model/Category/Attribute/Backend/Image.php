@@ -21,23 +21,23 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
     protected $logger;
 
     /**
-     * Image uploader helper
+     * Image uploader
      *
-     * @var \Magento\Catalog\Helper\ImageUploader
+     * @var \Magento\Catalog\Model\ImageUploader
      */
-    protected $imageUploaderHelper;
+    protected $imageUploader;
 
     /**
      * Image constructor.
      *
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Catalog\Helper\ImageUploader $imageUploaderHelper
+     * @param \Magento\Catalog\Model\ImageUploader $imageUploader
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
-        \Magento\Catalog\Helper\ImageUploader $imageUploaderHelper
+        \Magento\Catalog\Model\ImageUploader $imageUploader
     ) {
-        $this->imageUploaderHelper = $imageUploaderHelper;
+        $this->imageUploader = $imageUploader;
         $this->logger = $logger;
     }
 
@@ -59,7 +59,7 @@ class Image extends \Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend
 
         if (isset($value[0]['name']) && isset($value[0]['tmp_name'])) {
             try {
-                $result = $this->imageUploaderHelper->moveFileFromTmp($value[0]['name']);
+                $result = $this->imageUploader->moveFileFromTmp($value[0]['name']);
 
                 $object->setData($this->getAttribute()->getName(), $result);
                 $this->getAttribute()->getEntity()->saveAttribute($object, $this->getAttribute()->getName());
