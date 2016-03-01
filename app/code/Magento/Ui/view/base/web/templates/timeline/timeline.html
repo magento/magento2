@@ -45,7 +45,8 @@
                     action: 'hover',
                     delay: 200,
                     track: true,
-                    position: 'top'
+                    position: 'top',
+                    closeButton: false
                 ">
                     <text args="isToday($date()) ? $t('Today') \: formatHeader($date())"/>
                 </div>
@@ -60,6 +61,7 @@
             <if args="hasData()">
                 <li class="timeline-item"
                     repeat="foreach: rows, item: '$row'"
+                    attr="'data-tooltip-search-scope': 'search-scope-' + $index"
                     css="
                         _active: isActive($row()),
                         _permanent: isPermanent($row())
