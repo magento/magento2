@@ -30,8 +30,8 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
      */
     protected function assertEqualsSpecificAttributes($expectedProduct, $actualProduct)
     {
-        $expectedAssociatedProducts = $expectedProduct->getTypeInstance()->getAssociatedProducts($expectedProduct);
-        $actualAssociatedProducts = $actualProduct->getTypeInstance()->getAssociatedProducts($actualProduct);
+        $expectedAssociatedProducts = $expectedProduct->getTypeInstance()->getUsedProducts($expectedProduct);
+        $actualAssociatedProducts = $actualProduct->getTypeInstance()->getUsedProducts($actualProduct);
 
         $expectedAssociatedProductSkus = [];
         $actualAssociatedProductSkus = [];
