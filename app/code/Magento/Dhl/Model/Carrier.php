@@ -927,13 +927,14 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
                     $responseBody = $this->_getQuotesFromServer($request);
                 }
 
-                $debugPoint['response'] = $responseBody;
+                $debugPoint['response'] = $this->filterDebugData($responseBody);
 
                 $bodyXml = $this->_xmlElFactory->create(['data' => $responseBody]);
                 $code = $bodyXml->xpath('//GetQuoteResponse/Note/Condition/ConditionCode');
                 if (isset($code[0]) && (int)$code[0] == self::CONDITION_CODE_SERVICE_DATE_UNAVAILABLE) {
                     $debugPoint['info'] = sprintf(__("DHL service is not available at %s date"), $date);
                 } else {
+                    $this->_debug($debugPoint);
                     break;
                 }
 
@@ -1312,7 +1313,6 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
 
         return $this;
     }
-
 
     /**
      * Return container types of carrier
