@@ -62,7 +62,7 @@ class SubscriberTest extends \PHPUnit_Framework_TestCase
      */
     protected $subscriber;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->newsletterData = $this->getMock('Magento\Newsletter\Helper\Data', [], [], '', false);
         $this->scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');

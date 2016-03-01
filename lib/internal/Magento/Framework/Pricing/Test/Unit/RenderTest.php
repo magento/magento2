@@ -42,7 +42,7 @@ class RenderTest extends \PHPUnit_Framework_TestCase
      */
     protected $renderPool;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->priceLayout = $this->getMockBuilder('Magento\Framework\Pricing\Render\Layout')
             ->disableOriginalConstructor()

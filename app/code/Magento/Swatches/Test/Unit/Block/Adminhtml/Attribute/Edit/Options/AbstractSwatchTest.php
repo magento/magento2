@@ -45,7 +45,7 @@ class AbstractSwatchTest extends \PHPUnit_Framework_TestCase
      */
     protected $block;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMock('\Magento\Backend\Block\Template\Context', [], [], '', false);
         $this->registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);

@@ -16,7 +16,7 @@ class ProcessingErrorTest extends \PHPUnit_Framework_TestCase
     /**
      * Preparing mock objects
      */
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject('\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError');

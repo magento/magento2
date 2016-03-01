@@ -30,7 +30,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     /**
      * test setup
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->request = $this->getMockBuilder('\Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()

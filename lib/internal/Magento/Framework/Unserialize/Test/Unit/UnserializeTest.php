@@ -13,7 +13,7 @@ class UnserializeTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Unserialize\Unserialize */
     protected $unserialize;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->unserialize = new \Magento\Framework\Unserialize\Unserialize();
     }

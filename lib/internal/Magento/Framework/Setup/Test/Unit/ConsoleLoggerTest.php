@@ -20,7 +20,7 @@ class ConsoleLoggerTest extends \PHPUnit_Framework_TestCase
      */
     private $consoleLoggerModel;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->console = $this->getMock('Symfony\Component\Console\Output\OutputInterface', [], [], '', false);
         $outputFormatter = $this->getMock(

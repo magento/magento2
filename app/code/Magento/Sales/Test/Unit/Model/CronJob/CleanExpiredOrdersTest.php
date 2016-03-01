@@ -41,7 +41,7 @@ class CleanExpiredOrdersTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->storesConfigMock = $this->getMock(
             '\Magento\Store\Model\StoresConfig',

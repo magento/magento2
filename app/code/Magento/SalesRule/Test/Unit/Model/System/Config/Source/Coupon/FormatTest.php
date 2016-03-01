@@ -18,7 +18,7 @@ class FormatTest extends \PHPUnit_Framework_TestCase
      */
     protected $salesRuleCoupon;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

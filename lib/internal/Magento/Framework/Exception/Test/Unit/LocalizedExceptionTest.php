@@ -24,7 +24,7 @@ class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->defaultRenderer = \Magento\Framework\Phrase::getRenderer();
         $rendererMock = $this->getMockBuilder('Magento\Framework\Phrase\Renderer\Placeholder')

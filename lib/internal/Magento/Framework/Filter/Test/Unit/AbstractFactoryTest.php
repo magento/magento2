@@ -34,7 +34,7 @@ class AbstractFactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $_objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
 

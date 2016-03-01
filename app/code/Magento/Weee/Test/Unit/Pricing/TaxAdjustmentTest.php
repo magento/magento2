@@ -38,7 +38,7 @@ class TaxAdjustmentTest extends \PHPUnit_Framework_TestCase
      */
     protected $sortOrder = 5;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->weeeHelperMock = $this->getMock('Magento\Weee\Helper\Data', [], [], '', false);
         $this->taxHelperMock = $this->getMock('Magento\Tax\Helper\Data', [], [], '', false);

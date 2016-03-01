@@ -31,7 +31,7 @@ class FilterRendererTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $closureMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->layoutMock = $this->getMock(
             '\Magento\Framework\View\Layout',

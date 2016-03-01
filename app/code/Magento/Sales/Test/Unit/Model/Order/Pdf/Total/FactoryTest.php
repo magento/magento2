@@ -17,7 +17,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $_factory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_factory = new \Magento\Sales\Model\Order\Pdf\Total\Factory($this->_objectManager);

@@ -43,7 +43,7 @@ class CctypeTest extends \PHPUnit_Framework_TestCase
      */
     protected $_expectedToOptionsArray = [['value' => 'allowed_cc_type', 'label' => 'name']];
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_paymentConfig = $this->getMockBuilder(
             'Magento\Payment\Model\Config'

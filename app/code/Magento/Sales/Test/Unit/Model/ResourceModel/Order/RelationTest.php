@@ -60,7 +60,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
      */
     protected $orderInvoiceMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->addressHandlerMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Handler\Address')
             ->disableOriginalConstructor()

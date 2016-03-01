@@ -24,7 +24,7 @@ class AbstractWidgetTest extends \PHPUnit_Framework_TestCase
     /** @var AbstractWidget */
     private $_block;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_addressHelper = $this->getMock('Magento\Customer\Helper\Address', [], [], '', false);
 

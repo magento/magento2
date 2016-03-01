@@ -80,7 +80,7 @@ class ThemeUninstallCommandTest extends \PHPUnit_Framework_TestCase
      */
     private $tester;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->maintenanceMode = $this->getMock('Magento\Framework\App\MaintenanceMode', [], [], '', false);
         $composerInformation = $this->getMock('Magento\Framework\Composer\ComposerInformation', [], [], '', false);

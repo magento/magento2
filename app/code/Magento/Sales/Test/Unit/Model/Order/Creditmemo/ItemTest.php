@@ -17,7 +17,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Sales\Model\Order\Creditmemo\Item */
     protected $item;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->orderItemFactoryMock = $this->getMockBuilder('Magento\Sales\Model\Order\ItemFactory')

@@ -33,7 +33,7 @@ class PartnersTest extends \PHPUnit_Framework_TestCase
                     }
                  }';
 
-    public function setUp()
+    protected function setUp()
     {
         $this->partnersModelMock = $this->getPartnersModelMock(
             [

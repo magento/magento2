@@ -44,7 +44,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
      */
     protected $consolidatedConfigMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->subjectMock = $this->getMock('Magento\Integration\Model\IntegrationService', [], [], '', false);
         $this->integrationAuthServiceMock = $this->getMock(

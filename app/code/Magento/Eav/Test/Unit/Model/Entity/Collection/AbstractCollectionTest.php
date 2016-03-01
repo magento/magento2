@@ -69,7 +69,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $statementMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->coreEntityFactoryMock = $this->getMock(
             'Magento\Framework\Data\Collection\EntityFactory',

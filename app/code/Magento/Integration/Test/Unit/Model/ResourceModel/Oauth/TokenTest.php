@@ -25,7 +25,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
      */
     protected $tokenResource;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);

@@ -21,7 +21,7 @@ class CalculatorTest extends \PHPUnit_Framework_TestCase
      */
     protected $amountFactoryMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->amountFactoryMock = $this->getMockBuilder('Magento\Framework\Pricing\Amount\AmountFactory')
             ->disableOriginalConstructor()

@@ -33,7 +33,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     /**
      * Mock order address model
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->addressMock = $this->getMock(
             'Magento\Sales\Model\Order\Address',

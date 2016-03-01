@@ -43,7 +43,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
      */
     protected $storeManagerMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->stringMock = $this->getMock('Magento\Framework\Stdlib\StringUtils');
         $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');

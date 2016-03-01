@@ -86,7 +86,7 @@ class ContextTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->sessionMock = $this->getMock(
             'Magento\Framework\Session\Generic',

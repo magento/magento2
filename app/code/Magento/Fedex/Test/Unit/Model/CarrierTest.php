@@ -46,7 +46,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->scope = $this->getMockBuilder(
             '\Magento\Framework\App\Config\ScopeConfigInterface'

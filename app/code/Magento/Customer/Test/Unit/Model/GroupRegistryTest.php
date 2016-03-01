@@ -20,7 +20,7 @@ class GroupRegistryTest extends \PHPUnit_Framework_TestCase
      */
     private $groupFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->groupFactory = $this->getMockBuilder('\Magento\Customer\Model\GroupFactory')
             ->disableOriginalConstructor()

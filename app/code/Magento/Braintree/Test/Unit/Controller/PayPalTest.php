@@ -58,7 +58,7 @@ class PayPalTest extends \PHPUnit_Framework_TestCase
     /**
      * test setup
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->customerSessionMock = $this->getMockBuilder('\Magento\Customer\Model\Session')
             ->disableOriginalConstructor()

@@ -69,7 +69,7 @@ class NameTest extends \PHPUnit_Framework_TestCase
      */
     protected $_objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_escaper = $this->getMock('Magento\Framework\Escaper', [], [], '', false);

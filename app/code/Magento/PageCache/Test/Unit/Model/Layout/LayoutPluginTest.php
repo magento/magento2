@@ -27,7 +27,7 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
      */
     protected $configMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->layoutMock = $this->getMockForAbstractClass(
             'Magento\Framework\View\Layout',

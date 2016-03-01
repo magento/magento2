@@ -20,7 +20,7 @@ class FieldNamerTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up helper.
      */
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject('Magento\Framework\Reflection\FieldNamer');

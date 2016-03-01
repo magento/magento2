@@ -66,7 +66,7 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
      */
     protected $orderTaxDetailsDataObject;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->orderMock = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
         $this->orderFactoryMock = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);

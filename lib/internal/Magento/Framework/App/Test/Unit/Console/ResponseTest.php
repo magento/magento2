@@ -13,7 +13,7 @@ class ResponseTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->model = new \Magento\Framework\App\Console\Response();
         $this->model->terminateOnSend(false);

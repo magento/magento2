@@ -16,7 +16,7 @@ class TypeTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\App\Cache\Type\FrontendPool */
     protected $cacheFrontendPoolMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->eventManagerMock = $this->getMockBuilder('Magento\Framework\Event\ManagerInterface')
             ->disableOriginalConstructor()

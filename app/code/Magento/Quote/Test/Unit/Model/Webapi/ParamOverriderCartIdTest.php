@@ -27,7 +27,7 @@ class ParamOverriderCartIdTest extends \PHPUnit_Framework_TestCase
      */
     private $userContext;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->userContext = $this->getMockBuilder('Magento\Authorization\Model\UserContextInterface')
             ->getMockForAbstractClass();

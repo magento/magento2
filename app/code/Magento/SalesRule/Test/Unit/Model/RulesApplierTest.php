@@ -28,7 +28,7 @@ class RulesApplierTest extends \PHPUnit_Framework_TestCase
      */
     protected $validatorUtility;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->calculatorFactory = $this->getMock(
             'Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory',
