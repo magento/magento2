@@ -17,7 +17,7 @@ class Review extends Express\Review
      *
      * @var string
      */
-    protected $_controllerPath = 'braintreetwo/paypal';
+    protected $_controllerPath = 'braintree/paypal';
 
     /**
      * Does not allow editing payment information as customer has gone through paypal flow already

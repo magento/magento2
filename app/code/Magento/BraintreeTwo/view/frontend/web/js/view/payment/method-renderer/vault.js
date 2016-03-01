@@ -17,7 +17,7 @@ define([
         defaults: {
             template: 'Magento_Vault/payment/form',
             modules: {
-                hostedFields: '${ $.parentName }.braintreetwo'
+                hostedFields: '${ $.parentName }.braintree'
             }
         },
 
@@ -26,7 +26,7 @@ define([
          * @returns {String}
          */
         getId: function () {
-            return 'braintreetwo_' + this.index;
+            return 'braintree_' + this.index;
         },
 
         /**

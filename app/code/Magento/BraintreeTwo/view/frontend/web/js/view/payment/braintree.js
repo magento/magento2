@@ -20,8 +20,8 @@ define(
         'use strict';
 
         var config = window.checkoutConfig.payment,
-            braintreeType = 'braintreetwo',
-            payPalType = 'braintreetwo_paypal',
+            braintreeType = 'braintree',
+            payPalType = 'braintree_paypal',
             path = 'checkout.steps.billing-step.payment.payments-list.',
             components = [];
 

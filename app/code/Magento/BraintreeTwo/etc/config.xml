@@ -8,7 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <payment>
-            <braintreetwo>
+            <braintree>
                 <model>BraintreeTwoFacade</model>
                 <title>Credit Card (BraintreeTwo)</title>
                 <payment_action>authorize</payment_action>
@@ -37,8 +37,8 @@
                 <masked_fields>cvv,number</masked_fields>
                 <privateInfoKeys>avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,riskDataId,riskDataDecision</privateInfoKeys>
                 <paymentInfoKeys>cc_type,cc_number,avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,riskDataId,riskDataDecision</paymentInfoKeys>
-            </braintreetwo>
-            <braintreetwo_paypal>
+            </braintree>
+            <braintree_paypal>
                 <model>BraintreeTwoPayPalFacade</model>
                 <title>PayPal (Braintree)</title>
                 <active>0</active>
@@ -59,7 +59,7 @@
                 <can_cancel>1</can_cancel>
                 <privateInfoKeys>processorResponseCode,processorResponseText,paymentId</privateInfoKeys>
                 <paymentInfoKeys>processorResponseCode,processorResponseText,paymentId,payerEmail</paymentInfoKeys>
-            </braintreetwo_paypal>
+            </braintree_paypal>
         </payment>
     </default>
 </config>

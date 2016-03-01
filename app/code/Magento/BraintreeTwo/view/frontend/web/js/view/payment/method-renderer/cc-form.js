@@ -37,7 +37,7 @@ define(
                 paymentMethodNonce: null,
                 lastBillingAddress: null,
                 validatorManager: validatorManager,
-                code: 'braintreetwo',
+                code: 'braintree',
 
                 /**
                  * Additional payment data

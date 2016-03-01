@@ -144,7 +144,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
 
         $layoutMock->expects(self::once())
             ->method('getBlock')
-            ->with('braintreetwo.paypal.review')
+            ->with('braintree.paypal.review')
             ->willReturn($blockMock);
 
         $blockMock->expects(self::once())

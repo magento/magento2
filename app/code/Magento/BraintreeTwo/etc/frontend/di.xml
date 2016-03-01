@@ -9,14 +9,14 @@
     <type name="Magento\Checkout\Model\CompositeConfigProvider">
         <arguments>
             <argument name="configProviders" xsi:type="array">
-                <item name="braintreetwo_config_provider" xsi:type="object">Magento\BraintreeTwo\Model\Ui\ConfigProvider</item>
+                <item name="braintree_config_provider" xsi:type="object">Magento\BraintreeTwo\Model\Ui\ConfigProvider</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\Payment\Model\CcGenericConfigProvider">
         <arguments>
             <argument name="methodCodes" xsi:type="array">
-                <item name="braintreetwo" xsi:type="const">Magento\BraintreeTwo\Model\Ui\ConfigProvider::CODE</item>
+                <item name="braintree" xsi:type="const">Magento\BraintreeTwo\Model\Ui\ConfigProvider::CODE</item>
             </argument>
         </arguments>
     </type>
@@ -31,7 +31,7 @@
     <type name="Magento\Vault\Model\Ui\TokensConfigProvider">
         <arguments>
             <argument name="tokenUiComponentProviders" xsi:type="array">
-                <item name="braintreetwo" xsi:type="object">Magento\BraintreeTwo\Model\Ui\TokenUiComponentProvider</item>
+                <item name="braintree" xsi:type="object">Magento\BraintreeTwo\Model\Ui\TokenUiComponentProvider</item>
             </argument>
         </arguments>
     </type>

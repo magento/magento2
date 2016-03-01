@@ -9,7 +9,7 @@
     <body>
         <referenceBlock name="order.create.billing.method.form">
             <action method="setMethodFormTemplate">
-                <argument name="method" xsi:type="string">braintreetwo</argument>
+                <argument name="method" xsi:type="string">braintree</argument>
                 <argument name="template" xsi:type="string">Magento_BraintreeTwo::form/cc.phtml</argument>
             </action>
         </referenceBlock>
