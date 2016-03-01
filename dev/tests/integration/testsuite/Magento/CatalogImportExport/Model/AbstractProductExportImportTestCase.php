@@ -152,7 +152,6 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
     protected function executeImportDeleteTest($skus)
     {
-        $this->initExportModel();
         $csvfile = $this->exportProducts();
         $this->importProducts($csvfile, \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE);
         /** @var \Magento\Catalog\Model\Product $product */
@@ -211,7 +210,6 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
     protected function executeImportReplaceTest($skus, $skippedAttributes)
     {
-        $this->initExportModel();
         $replacedAttributes = [
             'row_id',
             'entity_id',
