@@ -19,13 +19,13 @@ define([
             dataProviderFromWizard: '',
             insertDataFromWizard: [],
             map: null,
+            isEmpty: true,
             cacheGridData: [],
             unionInsertData: [],
             deleteProperty: false,
             dataLength: 0,
             identificationProperty: 'id',
             attribute_set_id: '',
-            reRender: true,
             listens: {
                 'insertDataFromGrid': 'processingInsertDataFromGrid',
                 'insertDataFromWizard': 'processingInsertDataFromWizard',
@@ -98,10 +98,6 @@ define([
 
         processingUnionInsertData: function (data) {
             var dataInc = 0;
-
-            //if (this.reRender) {
-            //    this.clear();
-            //}
             this.source.remove(this.dataScope + '.' + this.index);
 
             _.each(data, function (row) {
@@ -110,11 +106,10 @@ define([
                     this.source.set(path, value);
                 }, this);
 
-                //if (this.reRender) {
-                //    this.addChild(data, false);
-                //}
                 ++dataInc;
             }, this);
+
+            //this.set('isEmpty', true);
 
             // Render
             var diff = 0;
