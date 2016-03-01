@@ -7,7 +7,6 @@ namespace Magento\Security\Model\Plugin;
 
 use Magento\Backend\Model\Auth\Session;
 use Magento\Security\Model\AdminSessionsManager;
-use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 
 /**
  * Magento\Backend\Model\Auth\Session decorator
@@ -62,7 +61,7 @@ class AuthSession
     public function aroundProlong(Session $session, \Closure $proceed)
     {
         if (!$this->isSessionCheckRequest()) {
-            if (!$this->sessionsManager->getCurrentSession()->isActive()) {
+            if (!$this->sessionsManager->getCurrentSession()->isLoggedInStatus()) {
                 $session->destroy();
                 $this->addUserLogoutNotification();
                 return null;
@@ -85,9 +84,9 @@ class AuthSession
                 $this->sessionsManager->getCurrentSession()->getStatus()
             );
         } else {
-            $this->messageManager->addError(
-                $this->sessionsManager->getLogoutReasonMessage()
-            );
+            if ($message = $this->sessionsManager->getLogoutReasonMessage()) {
+                $this->messageManager->addError($message);
+            }
         }
 
         return $this;

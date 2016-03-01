@@ -172,10 +172,6 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
         $cookieMetadata = $this->getMock('Magento\Framework\Stdlib\Cookie\PublicCookieMetadata');
         $cookieMetadata->expects($this->once())
-            ->method('setDuration')
-            ->with($lifetime)
-            ->will($this->returnSelf());
-        $cookieMetadata->expects($this->once())
             ->method('setPath')
             ->with($path)
             ->will($this->returnSelf());
