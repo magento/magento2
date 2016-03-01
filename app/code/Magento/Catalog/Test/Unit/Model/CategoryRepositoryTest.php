@@ -92,9 +92,13 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->categoryFactoryMock,
             $this->categoryResourceMock,
             $this->storeManagerMock,
-            $this->metadataPoolMock,
-            $this->extensibleDataObjectConverterMock
+            $this->metadataPoolMock
         );
+        // Todo: \Magento\Framework\TestFramework\Unit\Helper\ObjectManager to do this automatically (MAGETWO-49793)
+        $reflection = new \ReflectionClass(get_class($this->model));
+        $reflectionProperty = $reflection->getProperty('extensibleDataObjectConverter');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->model, $this->extensibleDataObjectConverterMock);
     }
 
     public function testGet()
