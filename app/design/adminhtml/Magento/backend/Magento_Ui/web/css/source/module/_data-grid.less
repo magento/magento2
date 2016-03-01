@@ -157,6 +157,12 @@ body._in-resize {
         }
 
         &.data-grid-tr-no-data {
+            td {
+                font-size: @data-grid__no-records__font-size;
+                padding: @data-grid__no-records__padding;
+                text-align: center;
+            }
+
             &:hover {
                 td {
                     background-color: @data-grid-td__odd__background-color;
@@ -979,6 +985,7 @@ body._in-resize {
                 transform: rotate(45deg);
                 width: 1.6rem;
                 z-index: 3;
+
                 .ie9 & {
                     display: none;
                 }
