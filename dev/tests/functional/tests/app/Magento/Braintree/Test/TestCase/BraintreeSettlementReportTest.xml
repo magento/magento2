@@ -17,10 +17,10 @@
             <data name="prices" xsi:type="array">
                 <item name="grandTotal" xsi:type="string">15.00</item>
             </data>
-            <data name="payment/method" xsi:type="string">braintreetwo</data>
+            <data name="payment/method" xsi:type="string">braintree</data>
             <data name="creditCardClass" xsi:type="string">credit_card_braintree</data>
             <data name="creditCard/dataset" xsi:type="string">visa_braintree</data>
-            <data name="configData" xsi:type="string">braintreetwo</data>
+            <data name="configData" xsi:type="string">braintree</data>
             <data name="status" xsi:type="string">Processing</data>
             <data name="tag" xsi:type="string">test_type:extended_acceptance_test, test_type:3rd_party_test</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
