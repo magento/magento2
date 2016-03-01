@@ -34,7 +34,9 @@
 </svg>
 
 <div class="timeline">
-    <div class="timeline-content" css="'_from-now': hasToday()">
+    <div class="timeline-content"
+         css="'_from-now': hasToday(),
+              '_no-records': !hasData()">
         <div class="timeline-past" if="hasToday()">
             <time class="timeline-date" translate="'Past'"/>
         </div>
@@ -57,7 +59,7 @@
                 </time>
             </li>
         </ul>
-        <ul class="timeline-items" style="position: relative;">
+        <ul class="timeline-items">
             <if args="hasData()">
                 <li class="timeline-item"
                     repeat="foreach: rows, item: '$row'"
@@ -70,24 +72,10 @@
             </if>
 
             <ifnot args="hasData()">
-                <!-- TODO: needs refactoring by the webdev team -->
-                <li class="timeline-item _permanent _active" data-role="no-data-msg"
-                    style="
-                        position: absolute;
-                        top: calc(50% - 3.6rem);
-                        width: 100%;
-                    "
-                >
-                    <div class="timeline-event"
-                        style="
-                            margin-right: 0;
-                            background-color: #fffbbb;
-                            color: #333333;
-                        "
-                    >
-                        <strong
-                            class="timeline-event-title"
-                            translate="'We couldn\'t find any records.'"/>
+                <li class="timeline-item" data-role="no-data-msg">
+                    <div class="timeline-event">
+                        <span class="timeline-event-title"
+                                translate="'We couldn\'t find any records.'"/>
                         <div class="timeline-event-info"/>
                     </div>
                 </li>

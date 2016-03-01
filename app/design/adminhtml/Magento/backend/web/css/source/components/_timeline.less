@@ -11,6 +11,8 @@
 @timeline__border-color: @color-gray60;
 @timeline__margin-top: @indent__base;
 @timeline__scale: 1;
+@timeline__no-records__background-color: @color-white;
+
 
 @timeline-item__height: 3.6rem;
 @timeline-unit__width: 100%/7;
@@ -19,7 +21,10 @@
 @timeline-event__border-color: #81c21d;
 @timeline-event__active__background-color: #bceeff;
 @timeline-event__active__border-color: #56c2e6;
-@timeline-event__active__pemanent-color: @color-blue-pure;
+@timeline-event__active__permanent__color: @color-blue-pure;
+@timeline-event__no-records__background-color: transparent;
+@timeline-event__no-records__border-color: transparent;
+@timeline-event__no-records__color: @color-gray20;
 
 @timeline-action__color: #76c004;
 @timeline-action__active__color: #56c2e6;
@@ -58,6 +63,10 @@
     &._from-now {
         padding-left: 50px;
     }
+
+    &._no-records {
+        background: @timeline__no-records__background-color;
+    }
 }
 
 .timeline-past {
@@ -78,7 +87,6 @@
 
 .timeline-legend {
     float: left;
-    margin-left: 50px;
 }
 
 .timeline-legend-item {
@@ -121,6 +129,7 @@
 .timeline-items {
     .extend__list-reset-styles();
     min-height: @timeline-item__height * 7;
+    position: relative;
 }
 
 .timeline-item {
@@ -130,6 +139,13 @@
 
     & + .timeline-item {
         margin-top: -1px;
+    }
+
+    ._no-records & {
+        margin-top: -@timeline-item__height;
+        position: absolute;
+        top: 50%;
+        width: 100%;
     }
 }
 
@@ -148,10 +164,14 @@
     width: auto;
     min-width: 5.5rem;
 
-    ._permanent._active & {
-        color: @timeline-event__active__pemanent-color;
+    ._permanent._active &,
+    ._no-records & {
         justify-content: center;
         text-align: center;
+    }
+
+    ._permanent._active & {
+        color: @timeline-event__active__permanent__color;
     }
 
     .timeline-item._active & {
@@ -171,6 +191,13 @@
         margin-right: 23px;
         overflow: visible;
     }
+
+    ._no-records & {
+        background: @timeline-event__no-records__background-color;
+        border-color: @timeline-event__no-records__border-color;
+        color: @timeline-event__no-records__color;
+        cursor: default;
+    }
 }
 
 .timeline-event-title {
@@ -183,6 +210,10 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+
+    ._no-records & {
+        font-weight: @font-weight__regular;
+    }
 }
 
 .timeline-event-info {
@@ -341,6 +372,12 @@ svg {
     &:first-child {
         &:before {
             content: none;
+        }
+    }
+
+    ._no-records & {
+        &:before {
+            display: none;
         }
     }
 }
