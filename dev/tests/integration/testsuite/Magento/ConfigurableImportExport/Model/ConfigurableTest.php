@@ -20,9 +20,6 @@ class ConfigurableTest extends AbstractProductExportImportTestCase
                     'configurable',
                 ],
                 ['_cache_instance_products', '_cache_instance_configurable_attributes'],
-                [
-                    'Magento/ConfigurableProduct/_files/product_configurable_rollback.php'
-                ]
             ],
         ];
     }
