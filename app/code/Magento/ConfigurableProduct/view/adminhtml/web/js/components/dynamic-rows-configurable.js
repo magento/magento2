@@ -90,7 +90,7 @@ define([
         initObservable: function () {
             this._super()
                 .observe([
-                    'insertDataFromGrid', 'unionInsertData'
+                    'insertDataFromGrid', 'unionInsertData', 'isEmpty'
                 ]);
 
             return this;
@@ -99,6 +99,7 @@ define([
         processingUnionInsertData: function (data) {
             var dataInc = 0;
             this.source.remove(this.dataScope + '.' + this.index);
+            this.isEmpty(data.length == 0);
 
             _.each(data, function (row) {
                 _.each(row, function (value, key) {
@@ -108,8 +109,6 @@ define([
 
                 ++dataInc;
             }, this);
-
-            //this.set('isEmpty', true);
 
             // Render
             var diff = 0;
