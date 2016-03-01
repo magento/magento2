@@ -57,9 +57,6 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->fileSystem = $this->objectManager->get('Magento\Framework\Filesystem');
-        $this->model = $this->objectManager->create(
-            'Magento\CatalogImportExport\Model\Export\Product'
-        );
         $this->productResource = $this->objectManager->create(
             'Magento\Catalog\Model\ResourceModel\Product'
         );
@@ -155,6 +152,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
     protected function executeImportDeleteTest($skus)
     {
+        $this->initExportModel();
         $csvfile = $this->exportProducts();
         $this->importProducts($csvfile, \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE);
         /** @var \Magento\Catalog\Model\Product $product */
@@ -213,6 +211,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 
     protected function executeImportReplaceTest($skus, $skippedAttributes)
     {
+        $this->initExportModel();
         $replacedAttributes = [
             'row_id',
             'entity_id',
@@ -274,13 +273,14 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
     {
         $csvfile = uniqid('importexport_') . '.csv';
 
-        $this->model->setWriter(
+        $exportProduct = $this->objectManager->create('Magento\CatalogImportExport\Model\Export\Product');
+        $exportProduct->setWriter(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
                 'Magento\ImportExport\Model\Export\Adapter\Csv',
                 ['fileSystem' => $this->fileSystem, 'destination' => $csvfile]
             )
         );
-        $this->assertNotEmpty($this->model->export());
+        $this->assertNotEmpty($exportProduct->export());
         return $csvfile;
     }
 
