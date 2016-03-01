@@ -310,8 +310,31 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
         )->setSource(
             $source
         )->validateData();
+        $errorMessage = $this->extractErrorMessage($errors->getAllErrors());
 
-        $this->assertTrue($errors->getErrorsCount() == 0, 'Product import error, imported from file:' . $csvfile);
+        $this->assertEmpty(
+            $errorMessage,
+            'Product import from file' . $csvfile . ' validation errors: ' . $errorMessage
+        );
         $importModel->importData();
+        $importErrors = $importModel->getErrorAggregator()->getAllErrors();
+        $importErrorMessage = $this->extractErrorMessage($importErrors);
+        $this->assertEmpty(
+            $importErrorMessage,
+            'Product import from file' . $csvfile . ' errors: ' . $importErrorMessage
+        );
+    }
+
+    /**
+     * @param \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingError[] $errors
+     * @return string
+     */
+    private function extractErrorMessage($errors)
+    {
+        $errorMessage = '';
+        foreach ($errors as $error) {
+            $errorMessage = "\n" . $error->getErrorMessage();
+        }
+        return $errorMessage;
     }
 }
