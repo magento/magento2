@@ -264,6 +264,7 @@ class ConfigurablePanel extends AbstractModifier
                         'template' => 'ui/dynamic-rows/templates/grid',
                         'component' => 'Magento_ConfigurableProduct/js/components/dynamic-rows-configurable',
                         'addButton' => false,
+                        'deleteButtonLabel' => __('Remove'),
                         'itemTemplate' => 'record',
                         'dataScope' => 'data',
                         'dataProviderFromGrid' => static::ASSOCIATED_PRODUCT_LISTING,
@@ -337,6 +338,19 @@ class ConfigurablePanel extends AbstractModifier
                         ['dataScope' => 'quantity_and_stock_status.qty']
                     ),
                     'price_weight' => $this->getColumn('weight', __('Weight')),
+                    'actionDelete' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'additionalClasses' => 'data-grid-actions-cell',
+                                    'componentType' => 'actionDelete',
+                                    'dataType' => Form\Element\DataType\Text::NAME,
+                                    'label' => __('Actions'),
+                                    'fit' => true,
+                                ],
+                            ],
+                        ],
+                    ],
                 ],
             ],
         ];

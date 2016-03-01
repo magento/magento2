@@ -14,7 +14,6 @@ define([
             canEditField: 'canEdit',
             newProductField: 'newProduct',
             dataScopeAssociatedProduct: 'data.associated_product_ids',
-            associatedProductIncrement: 0,
             dataProviderFromGrid: '',
             insertDataFromGrid: [],
             dataProviderFromWizard: '',
@@ -26,6 +25,7 @@ define([
             dataLength: 0,
             identificationProperty: 'id',
             attribute_set_id: '',
+            reRender: true,
             listens: {
                 'insertDataFromGrid': 'processingInsertDataFromGrid',
                 'insertDataFromWizard': 'processingInsertDataFromWizard',
@@ -47,7 +47,6 @@ define([
 
             this.recordData.each(function (recordData) {
                 tmpArray.push(recordData);
-                this.addAssociatedProduct(recordData.id);
             }, this);
 
             this.unionInsertData(tmpArray);
@@ -55,9 +54,32 @@ define([
             return this;
         },
 
-        addAssociatedProduct: function (productId) {
-            this.source.set(this.dataScopeAssociatedProduct + '.' + this.associatedProductIncrement, productId);
-            ++this.associatedProductIncrement;
+        /**
+         * Delete record
+         *
+         * @param {Number} index - row index
+         *
+         */
+        deleteRecord: function (index, recordId) {
+            this.reRender = false;
+
+            var tmpArray = this.unionInsertData();
+            tmpArray.splice(index, 1);
+
+            this.unionInsertData(tmpArray);
+            this.reRender = true;
+        },
+
+        generateAssociatedProducts: function () {
+            var productsIds = [];
+
+            this.unionInsertData().each(function (data) {
+                if (data.id !== null) {
+                    productsIds.push(data.id);
+                }
+            });
+
+            this.source.set(this.dataScopeAssociatedProduct, productsIds);
         },
 
         /**
@@ -75,17 +97,49 @@ define([
         },
 
         processingUnionInsertData: function (data) {
-            this.clear();
-            this.source.set(this.dataScope + '.' + this.index, []);
+            var dataInc = 0;
+
+            //if (this.reRender) {
+            //    this.clear();
+            //}
+            this.source.remove(this.dataScope + '.' + this.index);
 
             _.each(data, function (row) {
                 _.each(row, function (value, key) {
-                    var path = this.dataScope + '.' + this.index + '.' + this.recordIterator + '.' + key;
+                    var path = this.dataScope + '.' + this.index + '.' + dataInc + '.' + key;
                     this.source.set(path, value);
                 }, this);
 
-                this.addChild(data, false);
+                //if (this.reRender) {
+                //    this.addChild(data, false);
+                //}
+                ++dataInc;
             }, this);
+
+            // Render
+            var diff = 0;
+            var dataCount = data.length;
+            var elemsCount = this.elems().length;
+
+            if (dataCount > elemsCount) {
+                for (diff = dataCount - elemsCount; diff > 0; diff--) {
+                    this.addChild(data, false);
+                }
+            } else {
+                for (diff = elemsCount - dataCount; diff > 0; diff--) {
+                    var lastRecord =
+                        _.findWhere(this.elems(), {
+                            index: this.recordIterator - 1
+                        }) ||
+                        _.findWhere(this.elems(), {
+                            index: (this.recordIterator - 1).toString()
+                        });
+                    lastRecord.destroy();
+                    --this.recordIterator;
+                }
+            }
+
+            this.generateAssociatedProducts();
         },
 
         /**
@@ -107,8 +161,6 @@ define([
             this.cacheGridData = data;
 
             changes.each(function (changedObject) {
-                this.addAssociatedProduct(changedObject[this.map.id]);
-
                 var mappedData = this.mappingValue(changedObject);
                 mappedData[this.canEditField] = 0;
                 mappedData[this.newProductField] = 0;
