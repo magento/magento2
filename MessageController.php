@@ -38,12 +38,12 @@ class MessageController
     }
 
      /**
-     * Get message from registry
+     * Create lock corresponding to the provided message. Throw MessageLockException if lock is already created.
      *
      * @param EnvelopeInterface $envelope
      * @param string $consumerName
      * @return bool
-     * @throws \Exception
+     * @throws MessageLockException
      */
     public function lock(EnvelopeInterface $envelope, $consumerName)
     {

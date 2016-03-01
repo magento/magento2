@@ -3,9 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\MessageQueue\ResourceModel;
 
+/**
+ * Class Lock to handle database lock table db transactions.
+ */
 class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -16,13 +18,13 @@ class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Inject dependencies.
      *
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param string $connectionName
      */
     public function __construct(
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         $connectionName = null
     ) {
         $this->dateTime = $dateTime;
@@ -30,7 +32,7 @@ class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function _construct()
     {
@@ -41,7 +43,7 @@ class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param $interval
      * @return void
      */
-    public function deleteOutdated($interval)
+    public function cleanupOutdated($interval)
     {
         $date = (new \DateTime())->setTimestamp($this->dateTime->gmtTimestamp());
         $date->add(new \DateInterval('PT' . $interval . 'S'));

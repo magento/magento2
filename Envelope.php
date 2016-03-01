@@ -44,7 +44,6 @@ class Envelope implements EnvelopeInterface
         return $this->messageId;
     }
 
-
     /**
      * {@inheritdoc}
      */

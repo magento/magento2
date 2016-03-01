@@ -7,6 +7,9 @@ namespace Magento\Framework\MessageQueue;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class MessageLockException to be thrown when a message being processed is already in the lock table.
+ */
 class MessageLockException extends LocalizedException
 {
 

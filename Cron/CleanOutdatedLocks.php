@@ -6,10 +6,9 @@
 namespace Magento\Framework\MessageQueue\Cron;
 
 /**
- * Class RemoveOutdatedLocks to remove outdated messages (set by interval, default 1 day) using cron from lock table.
- *
+ * Class CleanOutdatedLocks to remove outdated message logs (set by interval, default 1 day) using cron from lock table.
  */
-class RemoveOutdatedLocks
+class CleanOutdatedLocks
 {
     /**
      * @var \Magento\Framework\MessageQueue\ResourceModel\Lock
@@ -35,6 +34,6 @@ class RemoveOutdatedLocks
 
     public function execute()
     {
-        $this->resource->deleteOutdated($this->interval);
+        $this->resource->cleanupOutdated($this->interval);
     }
 }
