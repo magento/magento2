@@ -227,6 +227,7 @@ define([
                     'img': $main.find('.product-image-photo').attr('src')
                 }];
             }
+            this.productForm = this.element.parents(this.options.selectorProduct).find('form:first');
         },
 
         /**
@@ -258,6 +259,11 @@ define([
                     label +=
                         '<span class="' + classes.attributeLabelClass + '">' + item.label + '</span>' +
                         '<span class="' + classes.attributeSelectedOptionLabelClass + '"></span>';
+                }
+
+                if ($widget.productForm) {
+                    $widget.productForm.append(input);
+                    input = '';
                 }
 
                 // Create new control
@@ -476,7 +482,9 @@ define([
 
             var $parent = $this.parents('.' + $widget.options.classes.attributeClass),
                 $label = $parent.find('.' + $widget.options.classes.attributeSelectedOptionLabelClass),
-                $input = $parent.find('.' + $widget.options.classes.attributeInput);
+                attributeId = $parent.attr('attribute-id'),
+                $input = $widget.productForm
+                    .find('.' + $widget.options.classes.attributeInput + '[name="super_attribute[' + attributeId + ']"]');
 
             if ($this.hasClass('disabled')) {
                 return;
