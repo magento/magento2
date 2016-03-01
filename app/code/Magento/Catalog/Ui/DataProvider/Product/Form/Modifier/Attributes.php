@@ -108,6 +108,9 @@ class Attributes extends AbstractModifier
             'componentType' => Component\Modal::NAME,
             'dataScope' => '',
             'provider' => 'product_form.product_form_data_source',
+            'imports' => [
+                'state' => '!index=product_attribute_add_form:responseStatus'
+            ],
             'options' => [
                 'title' => __('Add Attribute'),
                 'buttons' => [
@@ -224,7 +227,7 @@ class Attributes extends AbstractModifier
                             'config' => [
                                 'label' => __('New Attribute'),
                                 'componentType' => Component\Container::NAME,
-                                'component' => 'Magento_Ui/js/form/components/insert-form',
+                                'component' => 'Magento_Catalog/js/components/new-attribute-insert-form',
                                 'dataScope' => '',
                                 'update_url' => $this->urlBuilder->getUrl('mui/index/render'),
                                 'render_url' => $this->urlBuilder->getUrl(
@@ -245,9 +248,15 @@ class Attributes extends AbstractModifier
                                     'catalog/product_attribute/validate',
                                     $params
                                 ),
+                                'productId' => $this->locator->getProduct()->getId(),
+                                'productType' => $this->locator->getProduct()->getTypeId(),
+                                'imports' => [
+                                    'attributeSetId' => '${ $.provider }:data.product.attribute_set_id',
+                                ],
                                 'exports' => [
                                     'saveUrl' => '${ $.externalProvider }:client.urls.save',
-                                    'validateUrl' => '${ $.externalProvider }:client.urls.beforeSave'
+                                    'validateUrl' => '${ $.externalProvider }:client.urls.beforeSave',
+                                    'attributeSetId' => '${ $.externalProvider }:params.set',
                                 ]
                             ]
                         ]
