@@ -72,7 +72,6 @@ class GiftMessage extends AbstractModifier
         return $data;
     }
 
-
     /**
      * {@inheritdoc}
      */
