@@ -48,3 +48,7 @@ atlassian*
 !/var/.htaccess
 /vendor
 !/vendor/.htaccess
+
+test-reports/
+dev/tests/integration/phpunit.xml.travis1
+dev/tests/integration/phpunit.xml.travis2

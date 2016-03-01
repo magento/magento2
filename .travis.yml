@@ -51,23 +51,10 @@ before_script:
       sudo apt-get -y -qq autoremove;
       sudo apt-get -y -qq autoclean;
       sudo apt-get install -y -qq mysql-server-5.6 mysql-client-5.6;
-      mysql -uroot -e 'SET @@global.sql_mode = NO_ENGINE_SUBSTITUTION; CREATE DATABASE magento_integration_tests;';
-      mv dev/tests/integration/etc/install-config-mysql.travis.php.dist dev/tests/integration/etc/install-config-mysql.php;
       fi"
   # Change memory_limit for travis
   - echo 'memory_limit = -1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
   - phpenv rehash;
   - composer install --no-interaction --prefer-dist
 script:
-  # Unit tests
-  - sh -c "if [ '$TEST_SUITE' = 'unit' ]; then ./vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist; fi"
-  # Integration tests
-  - sh -c "if [ '$TEST_SUITE' = 'integration_part_1' ] || [ '$TEST_SUITE' = 'integration_part_2' ]; then cd dev/tests/integration/; bash IntegationTestsForTravis.sh 2; fi"
-  - sh -c "if [ '$TEST_SUITE' = 'integration_part_1' ]; then cd dev/tests/integration/; ./../../../vendor/bin/phpunit -c phpunit.xml.travis1; fi"
-  - sh -c "if [ '$TEST_SUITE' = 'integration_part_2' ]; then cd dev/tests/integration/; ./../../../vendor/bin/phpunit -c phpunit.xml.travis2; fi"
-  # Integration integrity tests
-  - sh -c "if [ '$TEST_SUITE' = 'integration_integrity' ]; then cd dev/tests/integration/; ./../../../vendor/bin/phpunit -c phpunit.xml.dist testsuite/Magento/Test/Integrity; fi"
-  # Static tests [Code Style]
-  - sh -c "if [ '$TEST_SUITE' = 'static_phpcs' ]; then cd dev/tests/static; ./../../../vendor/bin/phpunit -c phpunit.xml.dist --filter 'Magento\\\\Test\\\\Php\\\\LiveCodeTest::testCodeStyle'; fi"
-  # Static tests [Code Style]
-  - sh -c "if [ '$TEST_SUITE' = 'static_annotation' ]; then cd dev/tests/static; ./../../../vendor/bin/phpunit -c phpunit.xml.dist --filter 'Magento\\\\Test\\\\Php\\\\LiveCodeTest::testAnnotationStandard'; fi"
+  - sh -c "./vendor/bin/phing $TEST_SUITE"

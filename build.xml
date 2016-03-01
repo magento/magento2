@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="magento2" default="unit">
+    <!-- ****************************** -->
+    <!-- DEV TASKS                      -->
+    <!-- ****************************** -->
+
+    <!-- install project dependencies with composer -->
+    <target name="composer" description="install composer dependencies">
+        <exec executable="composer" checkreturn="true" passthru="true">
+            <arg value="install" />
+        </exec>
+    </target>
+
+    <!-- install local grunt part -->
+    <target name="local-install-grunt" description="install project local part of grunt">
+        <exec executable="npm" passthru="true">
+            <arg value="install" />
+            <arg value="grunt" />
+            <arg value="--save-dev" />
+        </exec>
+        <exec executable="npm" passthru="true">
+            <arg value="install" />
+        </exec>
+    </target>
+
+    <!-- ****************************** -->
+    <!-- BUILD TASKS                    -->
+    <!-- ****************************** -->
+    <!-- run unittests -->
+    <target name="unit" description="PHPUnit testing" depends="composer">
+        <exec executable="${project.basedir}/vendor/bin/phpunit" checkreturn="true" passthru="true">
+            <arg value="--configuration=${project.basedir}/dev/tests/unit/phpunit.xml.dist"/>
+            <arg value="--log-junit=${project.basedir}/test-reports/junit.xml"/>
+        </exec>
+    </target>
+
+    <target name="integration_db" description="create integration test database">
+        <exec executable="mysql">
+            <arg value="-uroot" />
+            <arg value="-e" />
+            <arg value="SET @@global.sql_mode = NO_ENGINE_SUBSTITUTION;" />
+        </exec>
+        <exec executable="mysql">
+            <arg value="-uroot" />
+            <arg value="-e" />
+            <arg value="DROP DATABASE IF EXISTS `magento_integration_tests`; CREATE DATABASE `magento_integration_tests` DEFAULT CHARSET utf8;" />
+        </exec>
+        <copy file="${project.basedir}/dev/tests/integration/etc/install-config-mysql.php.dist" tofile="${project.basedir}/dev/tests/integration/etc/install-config-mysql.php" overwrite="true"/>
+    </target>
+
+    <target name="integration_prepare" description="prepare part1 and part2 suites">
+        <exec executable="bash" dir="${project.basedir}/dev/tests/integration">
+            <arg value="IntegationTestsForTravis.sh"/>
+            <arg value="2"/>
+        </exec>
+    </target>
+
+    <target name="integration_part_1" description="integration test part 1" depends="composer,integration_db,integration_prepare">
+        <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/dev/tests/integration" checkreturn="true" passthru="true">
+            <arg value="--configuration=${project.basedir}/dev/tests/integration/phpunit.xml.travis1"/>
+        </exec>
+    </target>
+
+    <target name="integration_part_2" description="integration test part 2" depends="composer,integration_db,integration_prepare">
+        <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/dev/tests/integration" checkreturn="true" passthru="true">
+            <arg value="--configuration=${project.basedir}/dev/tests/integration/phpunit.xml.travis2"/>
+        </exec>
+    </target>
+
+    <target name="integration_integrity" description="integration test integrity check" depends="composer,integration_db">
+        <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/dev/tests/integration" checkreturn="true" passthru="true">
+            <arg value="--configuration=${project.basedir}/dev/tests/integration/phpunit.xml.dist"/>
+            <arg value="testsuite/Magento/Test/Integrity"/>
+        </exec>
+    </target>
+
+    <target name="static_phpcs" description="Code Style">
+        <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/dev/tests/static" checkreturn="true" passthru="true">
+            <arg value="--configuration=${project.basedir}/dev/tests/static/phpunit.xml.dist"/>
+            <arg value="--filter=Magento\\\\Test\\\\Php\\\\LiveCodeTest::testCodeStyle"/>
+        </exec>
+    </target>
+
+    <target name="static_annotation" description="Code Style">
+        <exec executable="${project.basedir}/vendor/bin/phpunit" dir="${project.basedir}/dev/tests/static" checkreturn="true" passthru="true">
+            <arg value="--configuration=${project.basedir}/dev/tests/static/phpunit.xml.dist"/>
+            <arg value="--filter=Magento\\\\Test\\\\Php\\\\LiveCodeTest::testAnnotationStandard"/>
+        </exec>
+    </target>
+
+    <target name="testall" description="run all tests in one go"
+        depends="unit,integration_part_1,integration_part_2,integration_integrity,static_phpcs,static_annotation"/>
+</project>

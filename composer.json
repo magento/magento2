@@ -69,7 +69,8 @@
         "pdepend/pdepend": "2.2.2",
         "sjparkinson/static-review": "~4.1",
         "fabpot/php-cs-fixer": "~1.2",
-        "lusitanian/oauth": "~0.3 <=0.7.0"
+        "lusitanian/oauth": "~0.3 <=0.7.0",
+        "phing/phing": "^2.13"
     },
     "replace": {
         "magento/module-marketplace": "100.0.2",
