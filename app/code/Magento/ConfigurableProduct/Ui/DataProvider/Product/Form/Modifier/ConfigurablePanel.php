@@ -265,6 +265,7 @@ class ConfigurablePanel extends AbstractModifier
                         'template' => 'ui/dynamic-rows/templates/grid',
                         'component' => 'Magento_ConfigurableProduct/js/components/dynamic-rows-configurable',
                         'addButton' => false,
+                        'isEmpty' => true,
                         'itemTemplate' => 'record',
                         'dataScope' => 'data',
                         'dataProviderFromGrid' => static::ASSOCIATED_PRODUCT_LISTING,
