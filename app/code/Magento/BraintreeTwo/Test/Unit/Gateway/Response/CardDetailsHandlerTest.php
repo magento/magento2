@@ -3,15 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
+namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
 use Braintree\Result\Successful;
 use Braintree\Transaction;
-use Magento\BraintreeTwo\Gateway\Response\CardDetailsHandler;
+use Magento\Braintree\Gateway\Response\CardDetailsHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order\Payment;
-use Magento\BraintreeTwo\Gateway\Config\Config;
-use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\Config\Config;
+use Magento\Braintree\Gateway\Helper\SubjectReader;
 
 /**
  * Class CardDetailsHandlerTest
@@ -19,7 +19,7 @@ use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 class CardDetailsHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\BraintreeTwo\Gateway\Response\CardDetailsHandler
+     * @var \Magento\Braintree\Gateway\Response\CardDetailsHandler
      */
     private $cardHandler;
 
@@ -29,7 +29,7 @@ class CardDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     private $payment;
 
     /**
-     * @var \Magento\BraintreeTwo\Gateway\Config\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Braintree\Gateway\Config\Config|\PHPUnit_Framework_MockObject_MockObject
      */
     private $config;
 
@@ -49,7 +49,7 @@ class CardDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Response\CardDetailsHandler::handle
+     * @covers \Magento\Braintree\Gateway\Response\CardDetailsHandler::handle
      */
     public function testHandle()
     {

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-/** @var Magento\BraintreeTwo\Block\Payment $block */
+/** @var Magento\Braintree\Block\Payment $block */
 
 $code = $block->escapeHtml($block->getCode());
 
@@ -13,7 +13,7 @@ $code = $block->escapeHtml($block->getCode());
     //<![CDATA[
     require(
         [
-            'Magento_BraintreeTwo/js/braintree',
+            'Magento_Braintree/js/braintree',
             'jquery',
             'domReady!'
         ], function(Braintree, $) {

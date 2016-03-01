@@ -3,15 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Model\Adapter;
+namespace Magento\Braintree\Model\Adapter;
 
 use Braintree\ClientToken;
 use Braintree\Configuration;
 use Braintree\CreditCard;
 use Braintree\PaymentMethodNonce;
 use Braintree\Transaction;
-use Magento\BraintreeTwo\Gateway\Config\Config;
-use Magento\BraintreeTwo\Model\Adminhtml\Source\Environment;
+use Magento\Braintree\Gateway\Config\Config;
+use Magento\Braintree\Model\Adminhtml\Source\Environment;
 
 /**
  * Class BraintreeAdapter

@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Gateway\Command;
+namespace Magento\Braintree\Test\Unit\Gateway\Command;
 
-use Magento\BraintreeTwo\Gateway\Command\GetPaymentNonceCommand;
-use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
-use Magento\BraintreeTwo\Gateway\Validator\PaymentNonceResponseValidator;
-use Magento\BraintreeTwo\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Gateway\Command\GetPaymentNonceCommand;
+use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\Validator\PaymentNonceResponseValidator;
+use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Payment\Gateway\Command;
 use Magento\Payment\Gateway\Command\Result\ArrayResultFactory;
 use Magento\Payment\Gateway\Command\Result\ArrayResult;
@@ -109,7 +109,7 @@ class GetPaymentNonceCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Command\GetPaymentNonceCommand::execute
+     * @covers \Magento\Braintree\Gateway\Command\GetPaymentNonceCommand::execute
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The "publicHash" field does not exists
      */
@@ -128,7 +128,7 @@ class GetPaymentNonceCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Command\GetPaymentNonceCommand::execute
+     * @covers \Magento\Braintree\Gateway\Command\GetPaymentNonceCommand::execute
      * @expectedException \InvalidArgumentException
      * @expectedExceptionMessage The "customerId" field does not exists
      */
@@ -152,7 +152,7 @@ class GetPaymentNonceCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Command\GetPaymentNonceCommand::execute
+     * @covers \Magento\Braintree\Gateway\Command\GetPaymentNonceCommand::execute
      * @expectedException \Exception
      * @expectedExceptionMessage No available payment tokens
      */
@@ -181,7 +181,7 @@ class GetPaymentNonceCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Command\GetPaymentNonceCommand::execute
+     * @covers \Magento\Braintree\Gateway\Command\GetPaymentNonceCommand::execute
      * @expectedException \Exception
      * @expectedExceptionMessage Payment method nonce can't be retrieved.
      */
@@ -235,7 +235,7 @@ class GetPaymentNonceCommandTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Command\GetPaymentNonceCommand::execute
+     * @covers \Magento\Braintree\Gateway\Command\GetPaymentNonceCommand::execute
      */
     public function testExecute()
     {

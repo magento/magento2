@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Model\Ui\Adminhtml;
+namespace Magento\Braintree\Model\Ui\Adminhtml;
 
-use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
+use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
@@ -52,7 +52,7 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
                     'nonceUrl' => $this->getNonceRetrieveUrl(),
                     TokenUiComponentProviderInterface::COMPONENT_DETAILS => $data,
                     TokenUiComponentProviderInterface::COMPONENT_PUBLIC_HASH => $paymentToken->getPublicHash(),
-                    'template' => 'Magento_BraintreeTwo::form/vault.phtml'
+                    'template' => 'Magento_Braintree::form/vault.phtml'
                 ],
                 'name' => Template::class
             ]

@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Helper;
+namespace Magento\Braintree\Helper;
 
-use Magento\BraintreeTwo\Model\Adminhtml\Source\CcType as CcTypeSource;
+use Magento\Braintree\Model\Adminhtml\Source\CcType as CcTypeSource;
 
 /**
  * Class CcType
@@ -20,7 +20,7 @@ class CcType
     private $ccTypes = [];
 
     /**
-     * @var \Magento\BraintreeTwo\Model\Adminhtml\Source\CcType
+     * @var \Magento\Braintree\Model\Adminhtml\Source\CcType
      */
     private $ccTypeSource;
 

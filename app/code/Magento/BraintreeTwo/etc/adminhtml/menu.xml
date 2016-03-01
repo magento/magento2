@@ -8,12 +8,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
         <add
-                id="Magento_BraintreeTwo::settlement_report"
+                id="Magento_Braintree::settlement_report"
                 title="Braintree Settlement"
-                module="Magento_BraintreeTwo"
+                module="Magento_Braintree"
                 sortOrder="80"
                 parent="Magento_Reports::report_salesroot"
                 action="braintree/report"
-                resource="Magento_BraintreeTwo::settlement_report"/>
+                resource="Magento_Braintree::settlement_report"/>
     </menu>
 </config>

@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Helper;
+namespace Magento\Braintree\Helper;
 
 use Magento\Directory\Model\ResourceModel\Country\CollectionFactory;
 
@@ -18,7 +18,7 @@ class Country
     private $collectionFactory;
 
     /**
-     * @var \Magento\BraintreeTwo\Model\Adminhtml\System\Config\Country
+     * @var \Magento\Braintree\Model\Adminhtml\System\Config\Country
      */
     private $countryConfig;
 
@@ -29,11 +29,11 @@ class Country
 
     /**
      * @param \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $factory
-     * @param \Magento\BraintreeTwo\Model\Adminhtml\System\Config\Country $countryConfig
+     * @param \Magento\Braintree\Model\Adminhtml\System\Config\Country $countryConfig
      */
     public function __construct(
         \Magento\Directory\Model\ResourceModel\Country\CollectionFactory $factory,
-        \Magento\BraintreeTwo\Model\Adminhtml\System\Config\Country $countryConfig
+        \Magento\Braintree\Model\Adminhtml\System\Config\Country $countryConfig
     ) {
         $this->collectionFactory = $factory;
         $this->countryConfig = $countryConfig;

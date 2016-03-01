@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Helper;
+namespace Magento\Braintree\Test\Unit\Helper;
 
-use Magento\BraintreeTwo\Helper\CcType;
-use Magento\BraintreeTwo\Model\Adminhtml\Source\CcType as CcTypeSource;
+use Magento\Braintree\Helper\CcType;
+use Magento\Braintree\Model\Adminhtml\Source\CcType as CcTypeSource;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
@@ -21,11 +21,11 @@ class CcTypeTest extends \PHPUnit_Framework_TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\BraintreeTwo\Helper\CcType
+     * @var \Magento\Braintree\Helper\CcType
      */
     private $helper;
 
-    /** @var \Magento\BraintreeTwo\Model\Adminhtml\Source\CcType|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Braintree\Model\Adminhtml\Source\CcType|\PHPUnit_Framework_MockObject_MockObject */
     private $ccTypeSource;
 
     protected function setUp()
@@ -43,7 +43,7 @@ class CcTypeTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Helper\CcType::getCcTypes
+     * @covers \Magento\Braintree\Helper\CcType::getCcTypes
      */
     public function testGetCcTypes()
     {

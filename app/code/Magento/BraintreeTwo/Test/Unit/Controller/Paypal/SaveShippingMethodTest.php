@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Controller\Paypal;
+namespace Magento\Braintree\Test\Unit\Controller\Paypal;
 
 use Magento\Quote\Model\Quote;
 use Magento\Framework\View\Layout;
@@ -16,15 +16,15 @@ use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\App\Response\RedirectInterface;
-use Magento\BraintreeTwo\Block\Paypal\Checkout\Review;
-use Magento\BraintreeTwo\Gateway\Config\PayPal\Config;
-use Magento\BraintreeTwo\Controller\Paypal\SaveShippingMethod;
-use Magento\BraintreeTwo\Model\Paypal\Helper\ShippingMethodUpdater;
+use Magento\Braintree\Block\Paypal\Checkout\Review;
+use Magento\Braintree\Gateway\Config\PayPal\Config;
+use Magento\Braintree\Controller\Paypal\SaveShippingMethod;
+use Magento\Braintree\Model\Paypal\Helper\ShippingMethodUpdater;
 
 /**
  * Class SaveShippingMethodTest
  *
- * @see \Magento\BraintreeTwo\Controller\Paypal\SaveShippingMethod
+ * @see \Magento\Braintree\Controller\Paypal\SaveShippingMethod
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

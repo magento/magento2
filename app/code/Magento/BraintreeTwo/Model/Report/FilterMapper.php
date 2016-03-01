@@ -3,10 +3,10 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Model\Report;
+namespace Magento\Braintree\Model\Report;
 
-use Magento\BraintreeTwo\Model\Adapter\BraintreeSearchAdapter;
-use Magento\BraintreeTwo\Model\Report\ConditionAppliers\AppliersPool;
+use Magento\Braintree\Model\Adapter\BraintreeSearchAdapter;
+use Magento\Braintree\Model\Report\ConditionAppliers\AppliersPool;
 
 /**
  * Class FilterMapper

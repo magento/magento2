@@ -3,14 +3,14 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Controller\Paypal;
+namespace Magento\Braintree\Controller\Paypal;
 
 use Magento\Checkout\Model\Session;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;
-use Magento\BraintreeTwo\Gateway\Config\PayPal\Config;
-use Magento\BraintreeTwo\Model\Paypal\Helper\ShippingMethodUpdater;
+use Magento\Braintree\Gateway\Config\PayPal\Config;
+use Magento\Braintree\Model\Paypal\Helper\ShippingMethodUpdater;
 
 /**
  * Class SaveShippingMethod

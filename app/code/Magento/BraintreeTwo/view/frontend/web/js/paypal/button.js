@@ -9,7 +9,7 @@ define(
         'underscore',
         'jquery',
         'braintree',
-        'Magento_BraintreeTwo/js/paypal/form-builder',
+        'Magento_Braintree/js/paypal/form-builder',
         'domReady!'
     ],
     function (

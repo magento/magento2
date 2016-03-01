@@ -10,10 +10,10 @@ define(
         'jquery',
         'Magento_Payment/js/view/payment/cc-form',
         'Magento_Checkout/js/model/quote',
-        'Magento_BraintreeTwo/js/view/payment/adapter',
+        'Magento_Braintree/js/view/payment/adapter',
         'mage/translate',
-        'Magento_BraintreeTwo/js/validator',
-        'Magento_BraintreeTwo/js/view/payment/validator-handler',
+        'Magento_Braintree/js/validator',
+        'Magento_Braintree/js/view/payment/validator-handler',
         'Magento_Checkout/js/model/full-screen-loader'
     ],
     function (

@@ -3,13 +3,13 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Block;
+namespace Magento\Braintree\Test\Unit\Block;
 
 use Magento\Backend\Model\Session\Quote;
-use Magento\BraintreeTwo\Block\Form;
-use Magento\BraintreeTwo\Gateway\Config\Config as GatewayConfig;
-use Magento\BraintreeTwo\Model\Adminhtml\Source\CcType;
-use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
+use Magento\Braintree\Block\Form;
+use Magento\Braintree\Gateway\Config\Config as GatewayConfig;
+use Magento\Braintree\Model\Adminhtml\Source\CcType;
+use Magento\Braintree\Model\Ui\ConfigProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Model\Config;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
@@ -79,7 +79,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Block\Form::getCcAvailableTypes
+     * @covers \Magento\Braintree\Block\Form::getCcAvailableTypes
      * @param string $countryId
      * @param array $availableTypes
      * @param array $expected

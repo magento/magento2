@@ -8,7 +8,7 @@ define(
     [
         'uiComponent',
         'uiRegistry',
-        'Magento_BraintreeTwo/js/view/payment/adapter',
+        'Magento_Braintree/js/view/payment/adapter',
         'Magento_Checkout/js/model/payment/renderer-list'
     ],
     function (
@@ -30,7 +30,7 @@ define(
             rendererList.push(
                 {
                     type: braintreeType,
-                    component: 'Magento_BraintreeTwo/js/view/payment/method-renderer/hosted-fields'
+                    component: 'Magento_Braintree/js/view/payment/method-renderer/hosted-fields'
                 }
             );
         }
@@ -39,7 +39,7 @@ define(
             rendererList.push(
                 {
                     type: payPalType,
-                    component: 'Magento_BraintreeTwo/js/view/payment/method-renderer/paypal'
+                    component: 'Magento_Braintree/js/view/payment/method-renderer/paypal'
                 }
             );
         }

@@ -9,7 +9,7 @@
     <system>
         <section id="payment">
             <group id="braintree_section" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>BraintreeTwo</label>
+                <label>Braintree</label>
                 <comment><![CDATA[Accept credit/debit cards and PayPal in your Magento store. No setup or monthly fees and your customers never leave your store to complete the purchase.]]></comment>
                 <attribute type="expanded">1</attribute>
                 <fieldset_css>complex braintree-section</fieldset_css>
@@ -36,7 +36,7 @@
                     </field>
                     <group id="braintree_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="5">
                         <comment><![CDATA[<a href="https://www.braintreegateway.com/login" target="_blank">Click here to login to your existing Braintree account</a>. Or to setup a new account and accept payments on your website, <a href="https://apply.braintreegateway.com/signup/us" target="_blank">click here to signup for a Braintree account</a>.]]></comment>
-                        <label>Basic BraintreeTwo Settings</label>
+                        <label>Basic Braintree Settings</label>
                         <attribute type="expanded">1</attribute>
                         <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
                         <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -45,12 +45,12 @@
                         </field>
                         <field id="environment" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Environment</label>
-                            <source_model>Magento\BraintreeTwo\Model\Adminhtml\Source\Environment</source_model>
+                            <source_model>Magento\Braintree\Model\Adminhtml\Source\Environment</source_model>
                             <config_path>payment/braintree/environment</config_path>
                         </field>
                         <field id="payment_action" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Payment Action</label>
-                            <source_model>Magento\BraintreeTwo\Model\Adminhtml\Source\PaymentAction</source_model>
+                            <source_model>Magento\Braintree\Model\Adminhtml\Source\PaymentAction</source_model>
                             <config_path>payment/braintree/payment_action</config_path>
                         </field>
                         <field id="merchant_id" translate="label" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -103,7 +103,7 @@
                         </field>
                         <field id="cctypes" translate="label" type="multiselect" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Credit Card Types</label>
-                            <source_model>Magento\BraintreeTwo\Model\Adminhtml\Source\CcType</source_model>
+                            <source_model>Magento\Braintree\Model\Adminhtml\Source\CcType</source_model>
                             <config_path>payment/braintree/cctypes</config_path>
                         </field>
                         <field id="sort_order" translate="label" type="text" sortOrder="230" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -122,14 +122,14 @@
                         </field>
                         <field id="specificcountry" translate="label" type="multiselect" sortOrder="210" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Payment from Specific Countries</label>
-                            <source_model>Magento\BraintreeTwo\Model\Adminhtml\System\Config\Country</source_model>
+                            <source_model>Magento\Braintree\Model\Adminhtml\System\Config\Country</source_model>
                             <can_be_empty>1</can_be_empty>
                             <config_path>payment/braintree/specificcountry</config_path>
                         </field>
                         <field id="countrycreditcard" translate="label" sortOrder="220" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Country Specific Credit Card Types</label>
-                            <frontend_model>Magento\BraintreeTwo\Block\Adminhtml\Form\Field\CountryCreditCard</frontend_model>
-                            <backend_model>Magento\BraintreeTwo\Model\Adminhtml\System\Config\CountryCreditCard</backend_model>
+                            <frontend_model>Magento\Braintree\Block\Adminhtml\Form\Field\CountryCreditCard</frontend_model>
+                            <backend_model>Magento\Braintree\Model\Adminhtml\System\Config\CountryCreditCard</backend_model>
                             <config_path>payment/braintree/countrycreditcard</config_path>
                         </field>
                     </group>
@@ -152,7 +152,7 @@
                         </field>
                         <field id="payment_action" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Payment Action</label>
-                            <source_model>Magento\BraintreeTwo\Model\Adminhtml\Source\PaymentAction</source_model>
+                            <source_model>Magento\Braintree\Model\Adminhtml\Source\PaymentAction</source_model>
                             <config_path>payment/braintree_paypal/payment_action</config_path>
                         </field>
                         <field id="allowspecific" translate="label" type="allowspecific" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
@@ -162,7 +162,7 @@
                         </field>
                         <field id="specificcountry" translate="label" type="multiselect" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Payment from Specific Countries</label>
-                            <source_model>Magento\BraintreeTwo\Model\Adminhtml\System\Config\Country</source_model>
+                            <source_model>Magento\Braintree\Model\Adminhtml\System\Config\Country</source_model>
                             <can_be_empty>1</can_be_empty>
                             <config_path>payment/braintree_paypal/specificcountry</config_path>
                         </field>
@@ -208,7 +208,7 @@
                         </field>
                         <field id="specificcountry" translate="label" type="multiselect" sortOrder="153" showInDefault="1" showInWebsite="1" showInStore="0">
                             <label>Verify for Specific Countries</label>
-                            <source_model>Magento\BraintreeTwo\Model\Adminhtml\System\Config\Country</source_model>
+                            <source_model>Magento\Braintree\Model\Adminhtml\System\Config\Country</source_model>
                             <can_be_empty>1</can_be_empty>
                             <config_path>payment/braintree/verify_specific_countries</config_path>
                         </field>

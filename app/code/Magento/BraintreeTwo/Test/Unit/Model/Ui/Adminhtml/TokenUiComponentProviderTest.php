@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Model\Ui\Adminhtml;
+namespace Magento\Braintree\Test\Unit\Model\Ui\Adminhtml;
 
-use Magento\BraintreeTwo\Model\Ui\Adminhtml\TokenUiComponentProvider;
+use Magento\Braintree\Model\Ui\Adminhtml\TokenUiComponentProvider;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
@@ -49,7 +49,7 @@ class TokenUiComponentProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Model\Ui\Adminhtml\TokenUiComponentProvider::getComponentForToken
+     * @covers \Magento\Braintree\Model\Ui\Adminhtml\TokenUiComponentProvider::getComponentForToken
      */
     public function testGetComponentForToken()
     {

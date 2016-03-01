@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Observer;
+namespace Magento\Braintree\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Catalog\Block\ShortcutButtons;
@@ -17,7 +17,7 @@ class AddPaypalShortcuts implements ObserverInterface
     /**
      * Block class
      */
-    const PAYPAL_SHORTCUT_BLOCK = 'Magento\BraintreeTwo\Block\Paypal\Button';
+    const PAYPAL_SHORTCUT_BLOCK = 'Magento\Braintree\Block\Paypal\Button';
 
     /**
      * Add Braintree PayPal shortcut buttons

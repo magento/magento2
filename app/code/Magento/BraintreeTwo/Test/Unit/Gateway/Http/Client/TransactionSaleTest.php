@@ -3,10 +3,10 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Gateway\Http\Client;
+namespace Magento\Braintree\Test\Unit\Gateway\Http\Client;
 
-use Magento\BraintreeTwo\Gateway\Http\Client\TransactionSale;
-use Magento\BraintreeTwo\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Gateway\Http\Client\TransactionSale;
+use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
 use Psr\Log\LoggerInterface;

@@ -3,18 +3,18 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Model\Ui;
+namespace Magento\Braintree\Test\Unit\Model\Ui;
 
-use Magento\BraintreeTwo\Gateway\Config\Config;
-use Magento\BraintreeTwo\Model\Adapter\BraintreeAdapter;
-use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
-use Magento\BraintreeTwo\Gateway\Config\PayPal\Config as PayPalConfig;
+use Magento\Braintree\Gateway\Config\Config;
+use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Model\Ui\ConfigProvider;
+use Magento\Braintree\Gateway\Config\PayPal\Config as PayPalConfig;
 use Magento\Framework\Locale\ResolverInterface;
 
 /**
  * Class ConfigProviderTest
  *
- * Test for class \Magento\BraintreeTwo\Model\Ui\ConfigProvider
+ * Test for class \Magento\Braintree\Model\Ui\ConfigProvider
  */
 class ConfigProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -114,7 +114,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Model\Ui\ConfigProvider::getClientToken
+     * @covers \Magento\Braintree\Model\Ui\ConfigProvider::getClientToken
      */
     public function testGetClientToken()
     {

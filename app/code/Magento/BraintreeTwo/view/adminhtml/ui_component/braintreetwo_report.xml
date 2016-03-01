@@ -27,7 +27,7 @@
         </argument>
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_BraintreeTwo/js/grid/provider</item>
+                <item name="component" xsi:type="string">Magento_Braintree/js/grid/provider</item>
             </item>
         </argument>
     </dataSource>
@@ -79,7 +79,7 @@
             </argument>
             <filterSelect name="status">
                 <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\BraintreeTwo\Ui\Component\Report\Listing\Column\Status</argument>
+                    <argument name="class" xsi:type="string">Magento\Braintree\Ui\Component\Report\Listing\Column\Status</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -95,7 +95,7 @@
             </filterSelect>
             <filterSelect name="type">
                 <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\BraintreeTwo\Ui\Component\Report\Listing\Column\TransactionType</argument>
+                    <argument name="class" xsi:type="string">Magento\Braintree\Ui\Component\Report\Listing\Column\TransactionType</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -112,7 +112,7 @@
             <!--
             <filterSelect name="paymentInstrumentType">
                 <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\BraintreeTwo\Ui\Component\Report\Listing\Column\PaymentType</argument>
+                    <argument name="class" xsi:type="string">Magento\Braintree\Ui\Component\Report\Listing\Column\PaymentType</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">

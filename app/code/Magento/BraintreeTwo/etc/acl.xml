@@ -11,7 +11,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Reports::report">
                     <resource id="Magento_Reports::salesroot">
-                        <resource id="Magento_BraintreeTwo::settlement_report" title="Braintree Settlement" sortOrder="80" />
+                        <resource id="Magento_Braintree::settlement_report" title="Braintree Settlement" sortOrder="80" />
                     </resource>
                 </resource>
             </resource>

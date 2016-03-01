@@ -10,7 +10,7 @@ define([
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/lib/view/utils/dom-observer',
     'mage/translate',
-    'Magento_BraintreeTwo/js/validator'
+    'Magento_Braintree/js/validator'
 ], function ($, Class, alert, domObserver, $t, validator) {
     'use strict';
 

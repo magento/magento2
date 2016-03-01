@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Gateway\Request;
+namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
-use Magento\BraintreeTwo\Gateway\Request\CaptureDataBuilder;
+use Magento\Braintree\Gateway\Request\CaptureDataBuilder;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;
-use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\Helper\SubjectReader;
 
 /**
  * Class CaptureDataBuilderTest
@@ -16,7 +16,7 @@ use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 class CaptureDataBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\BraintreeTwo\Gateway\Request\CaptureDataBuilder
+     * @var \Magento\Braintree\Gateway\Request\CaptureDataBuilder
      */
     private $builder;
 
@@ -49,7 +49,7 @@ class CaptureDataBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Request\CaptureDataBuilder::build
+     * @covers \Magento\Braintree\Gateway\Request\CaptureDataBuilder::build
      * @expectedException \Magento\Framework\Exception\LocalizedException
      * @expectedExceptionMessage No authorization transaction to proceed capture.
      */
@@ -78,7 +78,7 @@ class CaptureDataBuilderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Request\CaptureDataBuilder::build
+     * @covers \Magento\Braintree\Gateway\Request\CaptureDataBuilder::build
      */
     public function testBuild()
     {

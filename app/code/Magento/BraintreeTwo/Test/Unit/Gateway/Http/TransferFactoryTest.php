@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Gateway\Http;
+namespace Magento\Braintree\Test\Unit\Gateway\Http;
 
-use Magento\BraintreeTwo\Gateway\Http\TransferFactory;
+use Magento\Braintree\Gateway\Http\TransferFactory;
 use Magento\Payment\Gateway\Http\TransferBuilder;
 use Magento\Payment\Gateway\Http\TransferInterface;
 

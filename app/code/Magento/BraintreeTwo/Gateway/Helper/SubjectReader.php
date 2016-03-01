@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Gateway\Helper;
+namespace Magento\Braintree\Gateway\Helper;
 
 use Braintree\Transaction;
 use Magento\Quote\Model\Quote;

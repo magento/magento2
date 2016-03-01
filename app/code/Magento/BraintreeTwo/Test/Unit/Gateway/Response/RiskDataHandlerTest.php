@@ -3,19 +3,19 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
+namespace Magento\Braintree\Test\Unit\Gateway\Response;
 
 use Braintree\RiskData;
 use Braintree\Transaction;
 use Magento\Sales\Model\Order\Payment;
-use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
-use Magento\BraintreeTwo\Gateway\Response\RiskDataHandler;
+use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\Response\RiskDataHandler;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 
 /**
  * Class RiskDataHandlerTest
  *
- * @see \Magento\BraintreeTwo\Gateway\Response\RiskDataHandler
+ * @see \Magento\Braintree\Gateway\Response\RiskDataHandler
  */
 class RiskDataHandlerTest extends \PHPUnit_Framework_TestCase
 {

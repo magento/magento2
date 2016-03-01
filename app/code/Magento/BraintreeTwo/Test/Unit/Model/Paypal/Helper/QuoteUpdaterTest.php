@@ -3,21 +3,21 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Model\Paypal\Helper;
+namespace Magento\Braintree\Test\Unit\Model\Paypal\Helper;
 
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Payment;
 use Magento\Quote\Api\CartRepositoryInterface;
-use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
-use Magento\BraintreeTwo\Observer\DataAssignObserver;
-use Magento\BraintreeTwo\Gateway\Config\PayPal\Config;
-use Magento\BraintreeTwo\Model\Paypal\Helper\QuoteUpdater;
+use Magento\Braintree\Model\Ui\ConfigProvider;
+use Magento\Braintree\Observer\DataAssignObserver;
+use Magento\Braintree\Gateway\Config\PayPal\Config;
+use Magento\Braintree\Model\Paypal\Helper\QuoteUpdater;
 
 /**
  * Class QuoteUpdaterTest
  *
- * @see \Magento\BraintreeTwo\Model\Paypal\Helper\QuoteUpdater
+ * @see \Magento\Braintree\Model\Paypal\Helper\QuoteUpdater
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

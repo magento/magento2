@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Controller\Payment;
+namespace Magento\Braintree\Controller\Payment;
 
-use Magento\BraintreeTwo\Gateway\Command\GetPaymentNonceCommand;
+use Magento\Braintree\Gateway\Command\GetPaymentNonceCommand;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\ResultFactory;

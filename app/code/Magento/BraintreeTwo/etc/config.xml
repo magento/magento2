@@ -9,8 +9,8 @@
     <default>
         <payment>
             <braintree>
-                <model>BraintreeTwoFacade</model>
-                <title>Credit Card (BraintreeTwo)</title>
+                <model>BraintreeFacade</model>
+                <title>Credit Card (Braintree)</title>
                 <payment_action>authorize</payment_action>
                 <active>0</active>
                 <is_gateway>1</is_gateway>
@@ -39,7 +39,7 @@
                 <paymentInfoKeys>cc_type,cc_number,avsPostalCodeResponseCode,avsStreetAddressResponseCode,cvvResponseCode,processorAuthorizationCode,processorResponseCode,processorResponseText,liabilityShifted,liabilityShiftPossible,riskDataId,riskDataDecision</paymentInfoKeys>
             </braintree>
             <braintree_paypal>
-                <model>BraintreeTwoPayPalFacade</model>
+                <model>BraintreePayPalFacade</model>
                 <title>PayPal (Braintree)</title>
                 <active>0</active>
                 <payment_action>authorize</payment_action>

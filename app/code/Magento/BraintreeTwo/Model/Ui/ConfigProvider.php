@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Model\Ui;
+namespace Magento\Braintree\Model\Ui;
 
 use Magento\Checkout\Model\ConfigProviderInterface;
-use Magento\BraintreeTwo\Gateway\Config\Config;
-use Magento\BraintreeTwo\Gateway\Config\PayPal\Config as PayPalConfig;
-use Magento\BraintreeTwo\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Gateway\Config\Config;
+use Magento\Braintree\Gateway\Config\PayPal\Config as PayPalConfig;
+use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Framework\Locale\ResolverInterface;
 
 /**

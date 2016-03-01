@@ -3,12 +3,12 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Gateway\Request;
+namespace Magento\Braintree\Test\Unit\Gateway\Request;
 
-use Magento\BraintreeTwo\Gateway\Config\Config;
-use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
-use Magento\BraintreeTwo\Gateway\Request\PaymentDataBuilder;
-use Magento\BraintreeTwo\Observer\DataAssignObserver;
+use Magento\Braintree\Gateway\Config\Config;
+use Magento\Braintree\Gateway\Helper\SubjectReader;
+use Magento\Braintree\Gateway\Request\PaymentDataBuilder;
+use Magento\Braintree\Observer\DataAssignObserver;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectInterface;
 use Magento\Sales\Model\Order\Payment;

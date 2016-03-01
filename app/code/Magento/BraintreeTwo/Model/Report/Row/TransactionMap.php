@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Model\Report\Row;
+namespace Magento\Braintree\Model\Report\Row;
 
 use Braintree\Transaction;
 use DateTime;

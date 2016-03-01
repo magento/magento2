@@ -3,11 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Gateway\Http\Client;
+namespace Magento\Braintree\Test\Unit\Gateway\Http\Client;
 
 use Braintree\Result\Successful;
-use Magento\BraintreeTwo\Gateway\Http\Client\TransactionSubmitForSettlement;
-use Magento\BraintreeTwo\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Gateway\Http\Client\TransactionSubmitForSettlement;
+use Magento\Braintree\Model\Adapter\BraintreeAdapter;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Model\Method\Logger;
 use Psr\Log\LoggerInterface;
@@ -52,7 +52,7 @@ class TransactionSubmitForSettlementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Http\Client\TransactionSubmitForSettlement::placeRequest
+     * @covers \Magento\Braintree\Gateway\Http\Client\TransactionSubmitForSettlement::placeRequest
      * @expectedException \Magento\Payment\Gateway\Http\ClientException
      * @expectedExceptionMessage Transaction has been declined
      */
@@ -69,7 +69,7 @@ class TransactionSubmitForSettlementTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\BraintreeTwo\Gateway\Http\Client\TransactionSubmitForSettlement::process
+     * @covers \Magento\Braintree\Gateway\Http\Client\TransactionSubmitForSettlement::process
      */
     public function testPlaceRequest()
     {

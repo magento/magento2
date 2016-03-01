@@ -3,11 +3,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Ui\Component\Report\Listing\Column;
+namespace Magento\Braintree\Test\Unit\Ui\Component\Report\Listing\Column;
 
-use Magento\BraintreeTwo\Ui\Component\Report\Listing\Column\PaymentType;
-use Magento\BraintreeTwo\Ui\Component\Report\Listing\Column\Status;
-use Magento\BraintreeTwo\Ui\Component\Report\Listing\Column\TransactionType;
+use Magento\Braintree\Ui\Component\Report\Listing\Column\PaymentType;
+use Magento\Braintree\Ui\Component\Report\Listing\Column\Status;
+use Magento\Braintree\Ui\Component\Report\Listing\Column\TransactionType;
 
 /**
  * Class CheckColumnOptionSourceTest

@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Ui\Component\Report\Listing\Column;
+namespace Magento\Braintree\Ui\Component\Report\Listing\Column;
 
 use Braintree\PaymentInstrumentType;
 use Magento\Framework\Data\OptionSourceInterface;

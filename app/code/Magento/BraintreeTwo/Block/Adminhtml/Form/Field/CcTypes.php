@@ -3,9 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Block\Adminhtml\Form\Field;
+namespace Magento\Braintree\Block\Adminhtml\Form\Field;
 
-use Magento\BraintreeTwo\Helper\CcType;
+use Magento\Braintree\Helper\CcType;
 use Magento\Framework\View\Element\Context;
 use Magento\Framework\View\Element\Html\Select;
 

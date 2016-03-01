@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Controller\Paypal;
+namespace Magento\Braintree\Test\Unit\Controller\Paypal;
 
 use Magento\Quote\Model\Quote;
 use Magento\Checkout\Model\Session;
@@ -12,14 +12,14 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\BraintreeTwo\Controller\Paypal\PlaceOrder;
-use Magento\BraintreeTwo\Gateway\Config\PayPal\Config;
-use Magento\BraintreeTwo\Model\Paypal\Helper\OrderPlace;
+use Magento\Braintree\Controller\Paypal\PlaceOrder;
+use Magento\Braintree\Gateway\Config\PayPal\Config;
+use Magento\Braintree\Model\Paypal\Helper\OrderPlace;
 
 /**
  * Class PlaceOrderTest
  *
- * @see \Magento\BraintreeTwo\Controller\Paypal\PlaceOrder
+ * @see \Magento\Braintree\Controller\Paypal\PlaceOrder
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */

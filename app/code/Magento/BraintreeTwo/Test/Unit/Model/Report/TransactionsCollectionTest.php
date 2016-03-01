@@ -3,11 +3,11 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Test\Unit\Model\Report;
+namespace Magento\Braintree\Test\Unit\Model\Report;
 
-use Magento\BraintreeTwo\Model\Adapter\BraintreeAdapter;
-use Magento\BraintreeTwo\Model\Report\FilterMapper;
-use Magento\BraintreeTwo\Model\Report\TransactionsCollection;
+use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Model\Report\FilterMapper;
+use Magento\Braintree\Model\Report\TransactionsCollection;
 use Magento\Framework\Api\Search\DocumentInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -15,7 +15,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Class TransactionsCollectionTest
  *
- * Test for class \Magento\BraintreeTwo\Model\Report\TransactionsCollection
+ * Test for class \Magento\Braintree\Model\Report\TransactionsCollection
  */
 class TransactionsCollectionTest extends \PHPUnit_Framework_TestCase
 {

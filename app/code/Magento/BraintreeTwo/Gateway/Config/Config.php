@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\BraintreeTwo\Gateway\Config;
+namespace Magento\Braintree\Gateway\Config;
 
 /**
  * Class Config
