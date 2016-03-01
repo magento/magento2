@@ -39,7 +39,7 @@ class Loader
         $options = [];
         /** @var Configurable $typeInstance */
         $typeInstance = $product->getTypeInstance();
-        $attributeCollection = $typeInstance->getConfigurableAttributes($product);
+        $attributeCollection = $typeInstance->getConfigurableAttributeCollection($product);
 
         foreach ($attributeCollection as $attribute) {
             $values = [];

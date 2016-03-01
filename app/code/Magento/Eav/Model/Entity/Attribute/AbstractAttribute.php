@@ -1237,4 +1237,45 @@ abstract class AbstractAttribute extends \Magento\Framework\Model\AbstractExtens
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function __sleep()
+    {
+        return array_diff(
+            parent::__sleep(),
+            [
+                '_eavConfig',
+                '_eavTypeFactory',
+                '_storeManager',
+                '_resourceHelper',
+                '_universalFactory',
+                'optionDataFactory',
+                'dataObjectProcessor',
+                'dataObjectHelper',
+                '_entity',
+                '_backend',
+                '_source',
+                '_frontend',
+            ]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_eavConfig = $objectManager->get(\Magento\Eav\Model\Config::class);
+        $this->_eavTypeFactory = $objectManager->get(\Magento\Eav\Model\Entity\TypeFactory::class);
+        $this->_storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->_resourceHelper = $objectManager->get(\Magento\Eav\Model\ResourceModel\Helper::class);
+        $this->_universalFactory = $objectManager->get(\Magento\Framework\Validator\UniversalFactory ::class);
+        $this->optionDataFactory = $objectManager->get(\Magento\Eav\Api\Data\AttributeOptionInterfaceFactory::class);
+        $this->dataObjectProcessor = $objectManager->get(\Magento\Framework\Reflection\DataObjectProcessor::class);
+        $this->dataObjectHelper = $objectManager->get(\Magento\Framework\Api\DataObjectHelper::class);
+    }
 }

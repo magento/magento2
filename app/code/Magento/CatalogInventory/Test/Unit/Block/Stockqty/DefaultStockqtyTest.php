@@ -21,11 +21,6 @@ class DefaultStockqtyTest extends \PHPUnit_Framework_TestCase
     protected $registryMock;
 
     /**
-     * @var \Magento\CatalogInventory\Api\StockStateInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $stockState;
-
-    /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $stockRegistryMock;
@@ -39,13 +34,6 @@ class DefaultStockqtyTest extends \PHPUnit_Framework_TestCase
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
-        $this->stockState = $this->getMock(
-            'Magento\CatalogInventory\Api\StockStateInterface',
-            [],
-            [],
-            '',
-            false
-        );
         $this->stockRegistryMock = $this->getMockBuilder('Magento\CatalogInventory\Api\StockRegistryInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -56,7 +44,6 @@ class DefaultStockqtyTest extends \PHPUnit_Framework_TestCase
             'Magento\CatalogInventory\Block\Stockqty\DefaultStockqty',
             [
                 'registry' => $this->registryMock,
-                'stockState' => $this->stockState,
                 'stockRegistry' => $this->stockRegistryMock,
                 'scopeConfig' => $this->scopeConfigMock
             ]
@@ -112,10 +99,13 @@ class DefaultStockqtyTest extends \PHPUnit_Framework_TestCase
                 ->will($this->returnValue($product));
 
             if ($productId) {
-                $this->stockState->expects($this->once())
-                    ->method('getStockQty')
+                $stockStatus = $this->getMockBuilder(\Magento\CatalogInventory\Api\Data\StockStatusInterface::class)
+                    ->getMockForAbstractClass();
+                $stockStatus->expects($this->any())->method('getQty')->willReturn($productStockQty);
+                $this->stockRegistryMock->expects($this->once())
+                    ->method('getStockStatus')
                     ->with($this->equalTo($productId), $this->equalTo($websiteId))
-                    ->will($this->returnValue($productStockQty));
+                    ->will($this->returnValue($stockStatus));
             }
         }
         $this->assertSame($expectedQty, $this->block->getStockQty());
@@ -157,10 +147,6 @@ class DefaultStockqtyTest extends \PHPUnit_Framework_TestCase
             ->method('getStockItem')
             ->with($productId)
             ->willReturn($stockItemMock);
-        $this->stockState->expects($this->once())
-            ->method('getStockQty')
-            ->with($productId, $storeMock)
-            ->willReturn($stockQty);
 
         $this->assertEquals($stockQty, $this->block->getStockQtyLeft());
     }
