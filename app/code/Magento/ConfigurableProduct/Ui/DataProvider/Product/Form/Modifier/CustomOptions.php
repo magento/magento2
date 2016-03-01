@@ -9,6 +9,7 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions as CustomOptionsModifier;
+use Magento\Ui\Component\Container;
 
 /**
  * Data provider that customizes Customizable Options for Configurable product
@@ -16,6 +17,7 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions as Custo
 class CustomOptions extends AbstractModifier
 {
     const PRODUCT_TYPE_CONFIGURABLE = 'configurable';
+    const WARNING_PRICE_TYPE = 'price_type_warning';
 
     /**
      * @var LocatorInterface
@@ -51,26 +53,77 @@ class CustomOptions extends AbstractModifier
     public function modifyMeta(array $meta)
     {
         if ($this->locator->getProduct()->getTypeId() === static::PRODUCT_TYPE_CONFIGURABLE) {
-            $paths = $this->arrayManager->findPaths(
-                CustomOptionsModifier::FIELD_PRICE_TYPE_NAME,
+            $meta = $this->addPriceTypeWarning($meta);
+            $meta = $this->modifyPriceTypeOptions($meta);
+        }
+
+        return $meta;
+    }
+
+    /**
+     * Add warning over options grid
+     *
+     * @param array $meta
+     * @return array
+     */
+    private function addPriceTypeWarning(array $meta)
+    {
+        $gridPath = $this->arrayManager->findPath(
+            CustomOptionsModifier::GRID_OPTIONS_NAME,
+            $meta,
+            CustomOptionsModifier::GROUP_CUSTOM_OPTIONS_NAME . '/children',
+            'children'
+        );
+
+        if ($gridPath) {
+            $path = $this->arrayManager->slicePath($gridPath, 0, -1) . '/' . static::WARNING_PRICE_TYPE;
+            $sortOrder = $this->arrayManager->get($gridPath . static::META_CONFIG_PATH . '/sortOrder', $meta) - 1;
+
+            $meta = $this->arrayManager->set(
+                $path . static::META_CONFIG_PATH,
                 $meta,
-                CustomOptionsModifier::GROUP_CUSTOM_OPTIONS_NAME . '/children',
-                'children'
+                [
+                    'componentType' => Container::NAME,
+                    'component' => 'Magento_Ui/js/form/components/html',
+                    'additionalClasses' => 'message message-warning',
+                    'sortOrder' => $sortOrder,
+                    'content' => __(
+                        'Custom options with price type "percent" is not available for configurable product.'
+                    )
+                ]
             );
+        }
 
-            foreach ($paths as $fieldPath) {
-                $optionsPath = $fieldPath . static::META_CONFIG_PATH . '/options';
-                $options = $this->arrayManager->get($optionsPath, $meta);
+        return $meta;
+    }
 
-                if ($options) {
-                    foreach ($options as $index => $option) {
-                        if ($option['value'] === 'percent') {
-                            unset($options[$index]);
-                        }
+    /**
+     * Remove price type "percent" from option list
+     *
+     * @param array $meta
+     * @return array
+     */
+    private function modifyPriceTypeOptions(array $meta)
+    {
+        $paths = $this->arrayManager->findPaths(
+            CustomOptionsModifier::FIELD_PRICE_TYPE_NAME,
+            $meta,
+            CustomOptionsModifier::GROUP_CUSTOM_OPTIONS_NAME . '/children',
+            'children'
+        );
+
+        foreach ($paths as $fieldPath) {
+            $optionsPath = $fieldPath . static::META_CONFIG_PATH . '/options';
+            $options = $this->arrayManager->get($optionsPath, $meta);
+
+            if ($options) {
+                foreach ($options as $index => $option) {
+                    if ($option['value'] === 'percent') {
+                        unset($options[$index]);
                     }
-
-                    $meta = $this->arrayManager->replace($optionsPath, $meta, $options);
                 }
+
+                $meta = $this->arrayManager->replace($optionsPath, $meta, $options);
             }
         }
 
