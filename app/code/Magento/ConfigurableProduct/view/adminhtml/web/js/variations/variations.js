@@ -367,12 +367,12 @@ define([
         disableConfigurableAttributes: function (attributes) {
             var element;
             _.each(this.disabledAttributes, function (attribute) {
-                registry.get('index = ${$.' + attribute + '}').disabled(false);
+                registry.get('index = ' + attribute).disabled(false);
             });
             this.disabledAttributes = [];
 
             _.each(attributes, function (attribute) {
-                element = registry.get('index = ${$.' + attribute.code + '}');
+                element = registry.get('index = ' + attribute.code);
                 if (!_.isUndefined(element)) {
                     element.disabled(true);
                     this.disabledAttributes.push(attribute.code);
