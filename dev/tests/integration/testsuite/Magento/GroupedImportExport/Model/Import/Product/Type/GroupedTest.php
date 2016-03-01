@@ -48,7 +48,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
-    public function testConfigurableImport()
+    public function testImport()
     {
         // Import data from CSV file
         $pathToFile = __DIR__ . '/../../_files/grouped_product.csv';
