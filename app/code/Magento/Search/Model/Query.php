@@ -29,8 +29,6 @@ use Magento\Store\Model\StoreManagerInterface;
  * @method \Magento\Search\Model\Query setPopularity(int $value)
  * @method string getRedirect()
  * @method \Magento\Search\Model\Query setRedirect(string $value)
- * @method string getSynonymFor()
- * @method \Magento\Search\Model\Query setSynonymFor(string $value)
  * @method int getDisplayInTerms()
  * @method \Magento\Search\Model\Query setDisplayInTerms(int $value)
  * @method \Magento\Search\Model\Query setQueryNameExceeded(bool $value)
@@ -168,23 +166,16 @@ class Query extends AbstractModel implements QueryInterface
      *
      * @param string $text
      * @return $this
+     * @deprecated "synonym for" feature has been removed
      */
     public function loadByQuery($text)
     {
-        $this->_getResource()->loadByQuery($this, $text);
-
-        $synonymFor = $this->getSynonymFor();
-        if (!empty($synonymFor)) {
-            $this->setQueryText($synonymFor);
-        }
-
-        $this->_afterLoad();
-        $this->setOrigData();
+        $this->loadByQueryText($text);
         return $this;
     }
 
     /**
-     * Load Query object only by query text (skip 'synonym For')
+     * Load Query object only by query text
      *
      * @param string $text
      * @return $this
