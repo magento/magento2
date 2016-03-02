@@ -182,7 +182,7 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $productTypeMock = $this->getMockBuilder('Magento\Catalog\Model\Product\Type')
-            ->setMethods(['getEditableAttributes'])
+            ->setMethods(['getSetAttributes'])
             ->disableOriginalConstructor()
             ->getMock();
         $editableAttributeMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute')
@@ -225,7 +225,7 @@ class VariationHandlerTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $newSimpleProductMock->expects($this->once())->method('getTypeInstance')->willReturn($productTypeMock);
         $productTypeMock->expects($this->once())
-            ->method('getEditableAttributes')
+            ->method('getSetAttributes')
             ->with($newSimpleProductMock)
             ->willReturn([$editableAttributeMock]);
         $editableAttributeMock->expects($this->once())->method('getIsUnique')->willReturn(false);
