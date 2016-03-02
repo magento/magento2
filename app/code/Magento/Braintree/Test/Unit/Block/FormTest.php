@@ -59,7 +59,6 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     private $vaultService;
 
-
     protected function setUp()
     {
         $this->initCcTypeMock();

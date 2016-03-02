@@ -70,7 +70,6 @@ class CardDetailsHandler implements HandlerInterface
         $payment->setCcExpMonth($creditCard[self::CARD_EXP_MONTH]);
         $payment->setCcExpYear($creditCard[self::CARD_EXP_YEAR]);
 
-
         $payment->setCcType($this->getCreditCardType($creditCard[self::CARD_TYPE]));
 
         // set card details to additional info

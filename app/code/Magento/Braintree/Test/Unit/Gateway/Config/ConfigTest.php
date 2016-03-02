@@ -31,7 +31,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->scopeConfigMock = $this->getMock(ScopeConfigInterface::class);
 
-
         $this->model = new Config($this->scopeConfigMock, self::METHOD_CODE);
     }
 

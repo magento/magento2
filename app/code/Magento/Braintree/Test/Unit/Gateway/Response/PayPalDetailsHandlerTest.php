@@ -96,7 +96,6 @@ class PayPalDetailsHandlerTest extends \PHPUnit_Framework_TestCase
         return $mock;
     }
 
-
     /**
      * Create Braintree transaction
      * @return Transaction
