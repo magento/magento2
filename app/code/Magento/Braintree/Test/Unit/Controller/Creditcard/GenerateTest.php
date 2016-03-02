@@ -39,7 +39,6 @@ class GenerateTest extends \PHPUnit_Framework_TestCase
      */
     private $messageManager;
 
-
     /**
      * test setup
      */

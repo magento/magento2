@@ -15,10 +15,12 @@ class CostTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\Order\Creditmemo\Total\Cost
      */
     protected $total;
+
     /**
      * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $creditmemoMock;
+
     /**
      * @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject
      */

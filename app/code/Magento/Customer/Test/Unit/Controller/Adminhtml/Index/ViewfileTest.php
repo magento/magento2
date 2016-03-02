@@ -185,7 +185,6 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-
         $this->urlDecoderMock->expects($this->once())->method('decode')->with($decodedFile)->willReturn($file);
 
         $this->resultRawMock->expects($this->once())->method('setHttpResponseCode')->with(200)->willReturnSelf();

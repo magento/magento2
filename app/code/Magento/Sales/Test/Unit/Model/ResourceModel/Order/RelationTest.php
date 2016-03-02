@@ -15,6 +15,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\ResourceModel\Order\Relation
      */
     protected $relationProcessor;
+
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\Handler\Address|\PHPUnit_Framework_MockObject_MockObject
      */

@@ -88,7 +88,6 @@ class DeleteConfirmTest extends \PHPUnit_Framework_TestCase
         $messageManager= $this->getMockBuilder('\Magento\Framework\Message\ManagerInterface')
             ->getMock();
 
-
         $messageManager->expects($this->once())
             ->method('addSuccess')
             ->with($phrase);

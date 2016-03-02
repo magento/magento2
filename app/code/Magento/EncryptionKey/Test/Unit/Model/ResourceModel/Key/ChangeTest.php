@@ -13,24 +13,34 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Framework\Encryption\EncryptorInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $encryptMock;
+
     /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
     protected $filesystemMock;
+
     /** @var \Magento\Config\Model\Config\Structure|\PHPUnit_Framework_MockObject_MockObject */
     protected $structureMock;
+
     /** @var \Magento\Framework\App\DeploymentConfig\Writer|\PHPUnit_Framework_MockObject_MockObject */
     protected $writerMock;
+
     /** @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $adapterMock;
+
     /** @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject */
     protected $resourceMock;
+
     /** @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject */
     protected $selectMock;
+
     /** @var \Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface */
     protected $tansactionMock;
+
     /** @var |\PHPUnit_Framework_MockObject_MockObject */
     protected $objRelationMock;
+
     /** @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject */
     protected $randomMock;
+
     /** @var \Magento\EncryptionKey\Model\ResourceModel\Key\Change */
     protected $model;
 

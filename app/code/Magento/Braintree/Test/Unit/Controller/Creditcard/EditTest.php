@@ -93,7 +93,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-
         $this->block = $this->getMockBuilder('\Magento\Framework\View\Element\AbstractBlock')
             ->disableOriginalConstructor()
             ->getMock();
@@ -118,7 +117,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->willReturn('token');
 
-
         $this->resultRedirectFactory->expects($this->never())
             ->method('create')
             ->willReturn($this->resultRedirect);
@@ -137,7 +135,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->resultPage->expects($this->any())
             ->method('getConfig')
             ->willReturn($this->pageConfig);
-
 
         $notification = $objectManager->getObject(
             'Magento\Braintree\Controller\Creditcard\Edit',
@@ -223,7 +220,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $messageManager->expects($this->once())
             ->method('addError')
             ->with($phrase);
-
 
         $notification = $objectManager->getObject(
             'Magento\Braintree\Controller\Creditcard\Edit',

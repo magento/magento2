@@ -308,7 +308,6 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-
     public function testExecuteBadSecretKey()
     {
         $this->itemOptionMock->expects($this->once())->method('load')->willReturnSelf();

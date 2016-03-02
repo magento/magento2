@@ -75,7 +75,6 @@ class CsvTest extends \PHPUnit_Framework_TestCase
 
         $this->filesystemMock = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
 
-
         $this->csvModel = $objectManager->getObject(
             '\Magento\ImportExport\Model\Report\Csv',
             [

@@ -88,7 +88,6 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-
         $this->optionIds = [
             'value' => ['option 89' => 'test 1', 'option 114' => 'test 2', 'option 170' => 'test 3'],
             'delete' => ['option 89' => 0, 'option 114' => 1, 'option 170' => 0],

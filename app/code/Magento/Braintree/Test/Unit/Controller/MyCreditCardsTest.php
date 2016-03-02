@@ -46,7 +46,6 @@ class MyCreditCardsTest extends \PHPUnit_Framework_TestCase
      */
     protected $_response;
 
-
     /**
      * test setup
      */
@@ -81,8 +80,6 @@ class MyCreditCardsTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['set'])
             ->getMock();
-
-
     }
 
     /**
@@ -154,7 +151,6 @@ class MyCreditCardsTest extends \PHPUnit_Framework_TestCase
         $requestInterface= $this->getMockBuilder('\Magento\Framework\App\Request\Http')
             ->disableOriginalConstructor()
             ->getMock();
-
 
         $notification = $objectManager->getObject(
             'Magento\Braintree\Test\Unit\Controller\Stub\MyCreditCardsStub',

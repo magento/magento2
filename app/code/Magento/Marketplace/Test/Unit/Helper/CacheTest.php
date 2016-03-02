@@ -52,7 +52,6 @@ class CacheTest extends \PHPUnit_Framework_TestCase
         $this->cacheHelperMock->savePartnersToCache([]);
     }
 
-
     /**
      * Gets cache helper mock
      *

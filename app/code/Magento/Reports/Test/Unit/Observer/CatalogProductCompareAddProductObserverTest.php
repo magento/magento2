@@ -105,7 +105,6 @@ class CatalogProductCompareAddProductObserverTest extends \PHPUnit_Framework_Tes
         );
     }
 
-
     /**
      * @param bool $isLoggedIn
      * @param string $userKey

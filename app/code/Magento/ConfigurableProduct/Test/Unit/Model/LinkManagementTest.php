@@ -274,7 +274,6 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $product->expects($this->once())->method('getTypeInstance')->willReturn($productType);
 
-
         $this->productRepository->expects($this->any())->method('get')->will($this->returnValue($product));
 
         $option = $this->getMockBuilder('\Magento\Catalog\Model\Product')

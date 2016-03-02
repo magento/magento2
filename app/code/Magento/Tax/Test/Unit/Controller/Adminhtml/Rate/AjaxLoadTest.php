@@ -130,10 +130,8 @@ class AjaxLoadTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-
         // No exception thrown
         $this->assertSame($jsonObject, $notification->execute());
-
     }
 
     /**

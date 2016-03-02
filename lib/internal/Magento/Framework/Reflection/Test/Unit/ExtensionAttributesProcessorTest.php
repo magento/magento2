@@ -53,6 +53,7 @@ class ExtensionAttributesProcessorTest extends \PHPUnit_Framework_TestCase
      * @var AuthorizationInterface
      */
     private $authorizationMock;
+
     /**
      * Set up helper.
      */

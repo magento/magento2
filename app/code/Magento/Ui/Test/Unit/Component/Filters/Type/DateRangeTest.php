@@ -142,7 +142,6 @@ class DateRangeTest extends \PHPUnit_Framework_TestCase
                 ->method('addFilter')
                 ->with($expectedCondition, $name);
 
-
             $uiComponent->expects($this->any())
                 ->method('getLocale')
                 ->willReturn($expectedCondition['locale']);

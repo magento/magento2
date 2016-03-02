@@ -102,8 +102,6 @@ class CustomerLoginObserverTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
-
     /**
      * @return void
      */

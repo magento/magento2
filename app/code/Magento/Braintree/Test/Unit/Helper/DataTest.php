@@ -90,7 +90,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
             ->method('getCcTypes')
             ->willReturn($cctypes);
 
-
         $result = $this->model->GetCcTypeCodeByName($name);
         $this->assertEquals($expected, $result);
     }
@@ -118,7 +117,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
                     'expected' => 'VI',
                 ],
             ];
-
     }
 
     /**
@@ -133,7 +131,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->paymentConfig->expects($this->any())
             ->method('getCcTypes')
             ->willReturn($cctypes);
-
 
         $result = $this->model->getCcTypeNameByCode($name);
         $this->assertEquals($expected, $result);
@@ -210,7 +207,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(md5("1" . '-' . "email@email.com"), $result);
     }
 
-
     public function testClearTransactionId()
     {
         $result = $this->model->clearTransactionId(1);
@@ -243,8 +239,6 @@ class DataTest extends \PHPUnit_Framework_TestCase
         $this->paymentConfig->expects($this->any())
             ->method('getCcTypes')
             ->willReturn($data['ccTypes']);
-
-
 
         $result = $this->model->getCcAvailableCardTypes($data['country']);
         $this->assertEquals($expected, $result);

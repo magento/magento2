@@ -103,7 +103,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityTypeId')
             ->will($this->returnValue(4));
 
-
         $catalogConfFactory
             ->expects($this->once())
             ->method('create')
@@ -130,7 +129,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue($this->attrId));
 
-
         $catalogAttrFactory = $this->getMock(
             'Magento\Catalog\Model\Entity\AttributeFactory',
             ['create'],
@@ -138,6 +136,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
         $catalogAttrFactory
             ->expects($this->once())
             ->method('create')

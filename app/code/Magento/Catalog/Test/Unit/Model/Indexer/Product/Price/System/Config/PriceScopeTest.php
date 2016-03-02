@@ -51,7 +51,6 @@ class PriceScopeTest extends \PHPUnit_Framework_TestCase
         $storeManagerMock = $this->getMock('Magento\Store\Model\StoreManagerInterface', [], [], '', false);
         $configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
-
         $this->_model = $this->_objectManager->getObject(
             'Magento\Catalog\Model\Indexer\Product\Price\System\Config\PriceScope',
             [

@@ -36,7 +36,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     private $pageLayout;
 
-
     /**
      * test setup
      */
@@ -55,7 +54,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->resultPage = $this->getMockBuilder('\Magento\Framework\View\Result\Page')
             ->disableOriginalConstructor()
             ->getMock();
-
 
         $this->block = $this->getMockBuilder('\Magento\Framework\View\Element\AbstractBlock')
             ->disableOriginalConstructor()

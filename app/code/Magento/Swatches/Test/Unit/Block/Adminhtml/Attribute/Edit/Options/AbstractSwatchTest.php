@@ -81,8 +81,6 @@ class AbstractSwatchTest extends \PHPUnit_Framework_TestCase
             '',
             true
         );
-
-
     }
 
     /**
