@@ -88,7 +88,7 @@ class ClassesScanner implements ClassesScannerInterface
             $patterns = (array)$patterns;
         }
         foreach ($patterns as $pattern) {
-            if (preg_match($pattern, $fileItem->getRealPath())) {
+            if (preg_match($pattern, str_replace('\\', '/', $fileItem->getRealPath()))) {
                 return true;
             }
         }
