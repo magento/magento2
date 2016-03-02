@@ -13,6 +13,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class Show extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Swatches::iframe';
+
+    /**
      * Helper to move image from tmp to catalog
      *
      * @var \Magento\Swatches\Helper\Media
@@ -102,16 +109,5 @@ class Show extends \Magento\Backend\App\Action
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
             $this->getResponse()->setBody(json_encode($result));
         }
-    }
-
-    /**
-     * Check if user has enough privileges
-     *
-     * @codeCoverageIgnore
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Swatches::iframe');
     }
 }

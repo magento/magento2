@@ -1015,7 +1015,7 @@ class CustomOptions extends AbstractModifier
         foreach ($this->productOptionsConfig->getAll() as $option) {
             $group = [
                 'value' => $groupIndex,
-                'label' => __($option['label']),
+                'label' => $option['label'],
                 'optgroup' => []
             ];
 
@@ -1024,7 +1024,7 @@ class CustomOptions extends AbstractModifier
                     continue;
                 }
 
-                $group['optgroup'][] = ['label' => __($type['label']), 'value' => $type['name']];
+                $group['optgroup'][] = ['label' => $type['label'], 'value' => $type['name']];
             }
 
             if (count($group['optgroup'])) {
