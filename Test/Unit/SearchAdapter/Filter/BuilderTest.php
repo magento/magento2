@@ -17,6 +17,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      * @var Builder
      */
     protected $model;
+
     /**
      * @var Range|\PHPUnit_Framework_MockObject_MockObject
      */
