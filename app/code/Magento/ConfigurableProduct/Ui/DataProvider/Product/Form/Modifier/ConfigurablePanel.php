@@ -213,6 +213,8 @@ class ConfigurablePanel extends AbstractModifier
                                 'imports' => [
                                     'visible' => '!ns = ${ $.ns }, index = '
                                         . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                                    'disabled' => 'ns = ${ $.ns }, index = '
+                                        . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
                                 ],
                             ],
                         ],
