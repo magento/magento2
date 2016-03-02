@@ -318,10 +318,15 @@
 
 .image-panel-controls,
 .image-panel-preview {
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
     flex: 1;
 }
 
 .image-panel-preview {
+    -webkit-align-self: center;
+    -ms-flex-item-align: center;
     align-self: center;
 
     img {
@@ -331,8 +336,11 @@
 }
 
 .image-panel-controls {
-    padding-left: @indent__l;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 33%;
+    -ms-flex: 0 0 33%;
     flex: 0 0 33%;
+    padding-left: @indent__l;
 
     .image-name {
         .lib-font-size(16);
@@ -343,6 +351,8 @@
     .action-delete,
     .action-remove {
         &:extend(.abs-action-reset all);
+        margin: 0 0 35px;
+
         .lib-icon-font(
             @icon-delete__content,
             @_icon-font: @icons-admin__font-name,
@@ -351,7 +361,6 @@
             @_icon-font-color-hover: @image-gallery-icons__hover__color,
             @_icon-font-text-hide: true
         );
-        margin: 0 0 35px;
     }
 
     .fieldset-image-panel {
