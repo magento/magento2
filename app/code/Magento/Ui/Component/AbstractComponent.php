@@ -106,6 +106,10 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
             $this->getContext()->addActions($this->getData('actions'), $this);
         }
 
+        if ($this->hasData('html_blocks')) {
+            $this->getContext()->addHtmlBlocks($this->getData('html_blocks'), $this);
+        }
+
         if ($this->hasData('buttons')) {
             $this->getContext()->addButtons($this->getData('buttons'), $this);
         }
