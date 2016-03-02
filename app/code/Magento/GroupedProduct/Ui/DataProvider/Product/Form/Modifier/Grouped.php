@@ -72,6 +72,16 @@ class Grouped extends AbstractModifier
     protected $localeCurrency;
 
     /**
+     * @var array
+     */
+    protected $uiComponentsConfig = [
+        'button_set' => 'grouped_products_button_set',
+        'modal' => 'grouped_products_modal',
+        'listing' => 'grouped_product_listing',
+        'form' => 'product_form',
+    ];
+
+    /**
      * @var string
      */
     private static $codeQuantityAndStockStatus = 'quantity_and_stock_status';
@@ -95,6 +105,7 @@ class Grouped extends AbstractModifier
      * @param Status $status
      * @param AttributeSetRepositoryInterface $attributeSetRepository
      * @param CurrencyInterface $localeCurrency
+     * @param array $uiComponentsConfig
      */
     public function __construct(
         LocatorInterface $locator,
@@ -104,7 +115,8 @@ class Grouped extends AbstractModifier
         ImageHelper $imageHelper,
         Status $status,
         AttributeSetRepositoryInterface $attributeSetRepository,
-        CurrencyInterface $localeCurrency
+        CurrencyInterface $localeCurrency,
+        array $uiComponentsConfig = []
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
@@ -114,6 +126,7 @@ class Grouped extends AbstractModifier
         $this->attributeSetRepository = $attributeSetRepository;
         $this->status = $status;
         $this->localeCurrency = $localeCurrency;
+        $this->uiComponentsConfig = array_replace_recursive($this->uiComponentsConfig, $uiComponentsConfig);
     }
 
     /**
@@ -246,8 +259,8 @@ class Grouped extends AbstractModifier
     protected function getChildren()
     {
         $children = [
-            'grouped_products_button_set' => $this->getButtonSet(),
-            'grouped_products_modal' => $this->getModal(),
+            $this->uiComponentsConfig['button_set'] => $this->getButtonSet(),
+            $this->uiComponentsConfig['modal'] => $this->getModal(),
             self::LINK_TYPE => $this->getGrid(),
         ];
         return $children;
@@ -266,7 +279,11 @@ class Grouped extends AbstractModifier
                     'config' => [
                         'componentType' => Modal::NAME,
                         'dataScope' => '',
-                        'provider' => 'product_form.product_form_data_source',
+                        'provider' =>
+                            $this->uiComponentsConfig['form']
+                            . '.'
+                            . $this->uiComponentsConfig['form']
+                            . '_data_source',
                         'options' => [
                             'title' => __('Add Products to Group'),
                             'buttons' => [
@@ -280,7 +297,7 @@ class Grouped extends AbstractModifier
                                     'class' => 'action-primary',
                                     'actions' => [
                                         [
-                                            'targetName' => 'index = grouped_product_listing',
+                                            'targetName' => 'index = ' . $this->uiComponentsConfig['listing'],
                                             'actionName' => 'save'
                                         ],
                                         'closeModal'
@@ -291,7 +308,7 @@ class Grouped extends AbstractModifier
                     ],
                 ],
             ],
-            'children' => ['grouped_product_listing' => $this->getListing()],
+            'children' => [$this->uiComponentsConfig['listing'] => $this->getListing()],
         ];
     }
 
@@ -308,13 +325,25 @@ class Grouped extends AbstractModifier
                     'config' => [
                         'autoRender' => false,
                         'componentType' => 'insertListing',
-                        'dataScope' => 'grouped_product_listing',
-                        'externalProvider' => 'grouped_product_listing.grouped_product_listing_data_source',
-                        'selectionsProvider' => 'grouped_product_listing.grouped_product_listing.product_columns.ids',
-                        'ns' => 'grouped_product_listing',
+                        'dataScope' => $this->uiComponentsConfig['listing'],
+                        'externalProvider' =>
+                            $this->uiComponentsConfig['listing']
+                            . '.'
+                            . $this->uiComponentsConfig['listing']
+                            . '_data_source',
+                        'selectionsProvider' =>
+                            $this->uiComponentsConfig['listing']
+                            . '.'
+                            . $this->uiComponentsConfig['listing']
+                            . '.product_columns.ids',
+                        'ns' => $this->uiComponentsConfig['listing'],
                         'render_url' => $this->urlBuilder->getUrl('mui/index/render'),
                         'realTimeLink' => true,
-                        'provider' => 'product_form.product_form_data_source',
+                        'provider' =>
+                            $this->uiComponentsConfig['form']
+                            . '.'
+                            . $this->uiComponentsConfig['form']
+                            . '_data_source',
                         'dataLinks' => ['imports' => false, 'exports' => true],
                         'behaviourType' => 'simple',
                         'externalFilterMode' => true,
@@ -365,16 +394,22 @@ class Grouped extends AbstractModifier
                                 'actions' => [
                                     [
                                         'targetName' =>
-                                            'product_form.product_form.'
+                                            $this->uiComponentsConfig['form'] . '.' . $this->uiComponentsConfig['form']
+                                            . '.'
                                             . static::GROUP_GROUPED
-                                            . '.grouped_products_modal',
+                                            . '.'
+                                            . $this->uiComponentsConfig['modal'],
                                         'actionName' => 'openModal',
                                     ],
                                     [
                                         'targetName' =>
-                                            'product_form.product_form.'
+                                            $this->uiComponentsConfig['form'] . '.' . $this->uiComponentsConfig['form']
+                                            . '.'
                                             . static::GROUP_GROUPED
-                                            . '.grouped_products_modal.grouped_product_listing',
+                                            . '.'
+                                            . $this->uiComponentsConfig['modal']
+                                            . '.'
+                                            . $this->uiComponentsConfig['listing'],
                                         'actionName' => 'render',
                                     ],
                                 ],
@@ -409,7 +444,7 @@ class Grouped extends AbstractModifier
                         'itemTemplate' => 'record',
                         'dataScope' => 'data.links',
                         'deleteButtonLabel' => __('Remove'),
-                        'dataProvider' => 'grouped_product_listing',
+                        'dataProvider' => $this->uiComponentsConfig['listing'],
                         'map' => [
                             'id' => 'entity_id',
                             'name' => 'name',
