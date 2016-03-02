@@ -21,8 +21,7 @@ interface WriterInterface
     /**
      * Remove outdated locks
      *
-     * @param int $interval
-     * @return mixed
+     * @return void
      */
-    public function releaseOutdatedLocks($interval);
+    public function releaseOutdatedLocks();
 }
