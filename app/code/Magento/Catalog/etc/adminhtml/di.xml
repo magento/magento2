@@ -159,4 +159,9 @@
             <argument name="scopeName" xsi:type="string">product_form.product_form</argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AdvancedPricing">
+        <arguments>
+            <argument name="scopeName" xsi:type="string">product_form.product_form</argument>
+        </arguments>
+    </type>
 </config>
