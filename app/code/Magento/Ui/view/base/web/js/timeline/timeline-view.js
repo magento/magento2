@@ -279,8 +279,8 @@ define([
                 rightEdge   = this.getRightEdgeFor($elem);
 
             if ($event) {
-                $event.style.left = (leftEdge < 0 ? -leftEdge : 0) + 'px';
-                $event.style.right = (rightEdge > 0 ? rightEdge : 0) + 'px';
+                $event.style.left = Math.max(-leftEdge, 0) + 'px';
+                $event.style.right = Math.max(rightEdge, 0) + 'px';
             }
 
             toggleClass($elem, '_scroll-start', leftEdge < 0);
