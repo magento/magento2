@@ -3,7 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Directory\Model\Currency\Import;
 
 /**
@@ -65,7 +64,6 @@ class FixerIo extends \Magento\Directory\Model\Currency\Import\AbstractImport
         }
         return $data;
     }
-
 
     /**
      * Return currencies convert rates in batch mode
