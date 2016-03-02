@@ -445,9 +445,8 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
                 'getPost',
             ])
             ->getMock();
-        //\Magento\Framework\App\Response\RedirectInterface
 
-        $this->resultRedirect = $this->getMockBuilder('Magento\Framework\Controller\Result\Redirect')
+        $this->resultRedirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
 
