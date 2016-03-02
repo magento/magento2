@@ -19,14 +19,17 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\Order\Address
      */
     protected $address;
+
     /**
      * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderMock;
+
     /**
      * @var \Magento\Directory\Model\RegionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $regionFactoryMock;
+
     /**
      * @var \Magento\Directory\Model\Region|\PHPUnit_Framework_MockObject_MockObject
      */

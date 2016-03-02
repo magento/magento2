@@ -257,6 +257,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns address_type
      *
