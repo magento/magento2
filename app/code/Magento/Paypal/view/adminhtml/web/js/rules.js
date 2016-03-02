@@ -229,8 +229,10 @@ define([
          * @param {String} data
          */
         payflowExpressDisableConditional: function ($target, $owner, data) {
+            var isDisabled;
+
             if (data.argument) {
-                var isDisabled = true;
+                isDisabled = true;
 
                 _.every(data.argument, function (name) {
                     if (data.solutionsElements[name] &&
@@ -247,11 +249,9 @@ define([
                 if (isDisabled) {
                     this.payflowExpressDisable($target, $owner, data);
                 }
-            } else {
-                if ($target.find(data.enableButton).val() === '0') {
-                    this.payflowExpressDisable($target, $owner, data);
-                    $target.find(data.enableExpress).change();
-                }
+            } else if ($target.find(data.enableButton).val() === '0') {
+                this.payflowExpressDisable($target, $owner, data);
+                $target.find(data.enableExpress).change();
             }
         },
 
@@ -350,8 +350,10 @@ define([
          * @param {String} data
          */
         payflowBmlDisableConditional: function ($target, $owner, data) {
+            var isDisabled;
+
             if (data.argument) {
-                var isDisabled = true;
+                isDisabled = true;
 
                 _.every(data.argument, function (name) {
                     if (data.solutionsElements[name] &&
@@ -368,10 +370,8 @@ define([
                 if (isDisabled) {
                     this.payflowBmlDisable($target, $owner, data);
                 }
-            } else {
-                if ($target.find(data.enableButton).val() === '0') {
-                    this.payflowBmlDisable($target, $owner, data);
-                }
+            } else if ($target.find(data.enableButton).val() === '0') {
+                this.payflowBmlDisable($target, $owner, data);
             }
         },
 
