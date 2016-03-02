@@ -67,11 +67,16 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
                 $user->setPassword($password);
                 $user->setPasswordConfirmation($passwordConfirmation);
             }
-            $user->save();
-
-            $user->sendNotificationEmailsIfRequired();
-
-            $this->messageManager->addSuccess(__('You saved the account.'));
+            $errors = $user->validate();
+            if ($errors !== true && !empty($errors)) {
+                foreach ($errors as $error) {
+                    $this->messageManager->addError($error);
+                }
+            } else {
+                $user->save();
+                $user->sendNotificationEmailsIfRequired();
+                $this->messageManager->addSuccess(__('You saved the account.'));
+            }
         } catch (UserLockedException $e) {
             $this->_auth->logout();
             $this->securityCookieHelper->setLogoutReasonCookie(

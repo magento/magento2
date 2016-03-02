@@ -122,12 +122,18 @@ class CustomOptions extends AbstractModifier
     protected $meta = [];
 
     /**
+     * @var string
+     */
+    protected $scopeName;
+
+    /**
      * @param LocatorInterface $locator
      * @param StoreManagerInterface $storeManager
      * @param ConfigInterface $productOptionsConfig
      * @param ProductOptionsPrice $productOptionsPrice
      * @param UrlInterface $urlBuilder
      * @param ArrayManager $arrayManager
+     * @param string $scopeName
      */
     public function __construct(
         LocatorInterface $locator,
@@ -135,7 +141,8 @@ class CustomOptions extends AbstractModifier
         ConfigInterface $productOptionsConfig,
         ProductOptionsPrice $productOptionsPrice,
         UrlInterface $urlBuilder,
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        $scopeName = ''
     ) {
         $this->locator = $locator;
         $this->storeManager = $storeManager;
@@ -143,6 +150,7 @@ class CustomOptions extends AbstractModifier
         $this->productOptionsPrice = $productOptionsPrice;
         $this->urlBuilder = $urlBuilder;
         $this->arrayManager = $arrayManager;
+        $this->scopeName = $scopeName;
     }
 
     /**
@@ -287,7 +295,7 @@ class CustomOptions extends AbstractModifier
                                 'component' => 'Magento_Ui/js/form/components/button',
                                 'actions' => [
                                     [
-                                        'targetName' => 'product_form.product_form.'
+                                        'targetName' => $this->scopeName . '.'
                                             . static::GROUP_CUSTOM_OPTIONS_NAME . '.' . static::IMPORT_OPTIONS_MODAL,
                                         'actionName' => 'toggleModal',
                                     ]
@@ -309,7 +317,7 @@ class CustomOptions extends AbstractModifier
                                 'sortOrder' => 20,
                                 'actions' => [
                                     [
-                                        'targetName' => 'product_form.product_form.'
+                                        'targetName' => $this->scopeName . '.'
                                             . static::GROUP_CUSTOM_OPTIONS_NAME . '.' . static::GRID_OPTIONS_NAME,
                                         'actionName' => 'addChild',
                                     ]
@@ -1007,7 +1015,7 @@ class CustomOptions extends AbstractModifier
         foreach ($this->productOptionsConfig->getAll() as $option) {
             $group = [
                 'value' => $groupIndex,
-                'label' => __($option['label']),
+                'label' => $option['label'],
                 'optgroup' => []
             ];
 
@@ -1016,7 +1024,7 @@ class CustomOptions extends AbstractModifier
                     continue;
                 }
 
-                $group['optgroup'][] = ['label' => __($type['label']), 'value' => $type['name']];
+                $group['optgroup'][] = ['label' => $type['label'], 'value' => $type['name']];
             }
 
             if (count($group['optgroup'])) {

@@ -12,6 +12,13 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 abstract class PrintAction extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::sales_invoice';
+
+    /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
      */
     protected $_fileFactory;
@@ -34,14 +41,6 @@ abstract class PrintAction extends \Magento\Backend\App\Action
         $this->_fileFactory = $fileFactory;
         parent::__construct($context);
         $this->resultForwardFactory = $resultForwardFactory;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_invoice');
     }
 
     /**
