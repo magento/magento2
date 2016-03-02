@@ -71,7 +71,6 @@ class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-
         $this->command = new UninstallLanguageCommand(
             $this->dependencyChecker,
             $this->remove,
@@ -165,8 +164,6 @@ class UninstallLanguageCommandTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertContains('Nothing is removed.', $this->tester->getDisplay());
     }
-
-
 
     public function testExecutePackageNoLanguage()
     {

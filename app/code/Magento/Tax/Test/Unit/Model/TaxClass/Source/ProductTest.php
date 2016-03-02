@@ -163,7 +163,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ->with($searchCriteriaMock)
             ->willReturn($searchResultsMock);
 
-
         $taxClassMock->expects($this->once())
             ->method('getClassId')
             ->willReturn($value['value']);

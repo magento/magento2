@@ -181,7 +181,6 @@ class CatalogProductViewObserverTest extends \PHPUnit_Framework_TestCase
             'store_id' => $storeId,
         ];
 
-
         $expectedEventData = [
             'event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_VIEW,
             'object_id' => $productId,

@@ -33,6 +33,7 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
      * @var ObjectManager
      */
     protected $objectManager;
+
     /**
      * @var Place
      */

@@ -154,7 +154,6 @@ class GrandTotalDetailsPluginTest extends \PHPUnit_Framework_TestCase
         ];
         $taxAmount = 10;
 
-
         $taxRateMock = $this->setupTaxRateFactoryMock($taxRate);
 
         $taxDetailsMock = $this->setupTaxDetails(
@@ -189,7 +188,6 @@ class GrandTotalDetailsPluginTest extends \PHPUnit_Framework_TestCase
             ->method('setTaxGrandtotalDetails')
             ->with([$taxDetailsMock])
             ->willReturnSelf();
-
 
         $taxSegmentMock = $this->getMockBuilder('\Magento\Quote\Model\Cart\TotalSegment')
             ->disableOriginalConstructor()

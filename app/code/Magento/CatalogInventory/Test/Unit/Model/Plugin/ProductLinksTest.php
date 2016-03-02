@@ -57,7 +57,6 @@ class ProductLinksTest extends \PHPUnit_Framework_TestCase
             ->method('addInStockFilterToCollection')
             ->with($collectionMock);
 
-
         $this->assertEquals($collectionMock, $this->model->afterGetProductCollection($subjectMock, $collectionMock));
     }
 

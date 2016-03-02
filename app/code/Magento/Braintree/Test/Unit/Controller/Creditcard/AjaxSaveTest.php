@@ -39,7 +39,6 @@ class AjaxSaveTest extends \PHPUnit_Framework_TestCase
      */
     private $messageManager;
 
-
     /**
      * test setup
      */
@@ -87,7 +86,6 @@ class AjaxSaveTest extends \PHPUnit_Framework_TestCase
         $this->messageManager->expects($this->once())
             ->method('addSuccess')
             ->with($phrase);
-
 
         $notification = $objectManager->getObject(
             'Magento\Braintree\Controller\Creditcard\AjaxSave',

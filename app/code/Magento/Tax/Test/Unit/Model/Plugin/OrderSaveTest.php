@@ -177,7 +177,6 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
             ->method('getItemAppliedTaxes')
             ->willReturn($itemAppliedTaxes);
 
-
         $orderItemMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Item')
             ->disableOriginalConstructor()
             ->setMethods(['getId', ])

@@ -154,7 +154,6 @@ class SingleFileTest extends \PHPUnit_Framework_TestCase
         $customization = $this->getMockBuilder('Magento\Framework\View\Design\Theme\CustomizationInterface')
             ->getMock();
 
-
         $customCss->expects($this->once())
             ->method('delete');
         $this->file->expects($this->once())

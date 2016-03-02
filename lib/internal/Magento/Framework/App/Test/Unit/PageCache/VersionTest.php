@@ -68,6 +68,7 @@ class VersionTest extends \PHPUnit_Framework_TestCase
      * Increment version on post requests.
      * In all other cases do nothing.
      */
+
     /**
      * @dataProvider processProvider
      * @param bool $isPost

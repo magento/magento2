@@ -64,7 +64,6 @@ class NewCardTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-
         $this->block = $this->getMockBuilder('\Magento\Framework\View\Element\AbstractBlock')
             ->disableOriginalConstructor()
             ->getMock();
