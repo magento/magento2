@@ -140,6 +140,16 @@ class Eav extends AbstractModifier
     private $bannedInputTypes = ['media_image'];
 
     /**
+     * @var array
+     */
+    private $attributesToDisable;
+
+    /**
+     * @var array
+     */
+    private $attributesToEliminate;
+
+    /**
      * Initialize dependencies
      *
      * @param LocatorInterface $locator
@@ -157,6 +167,8 @@ class Eav extends AbstractModifier
      * @param EavAttributeFactory $eavAttributeFactory
      * @param Translit $translitFilter
      * @param ScopeOverriddenValue $scopeOverriddenValue
+     * @param array $attributesToDisable
+     * @param array $attributesToEliminate
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -174,7 +186,9 @@ class Eav extends AbstractModifier
         SortOrderBuilder $sortOrderBuilder,
         EavAttributeFactory $eavAttributeFactory,
         Translit $translitFilter,
-        ScopeOverriddenValue $scopeOverriddenValue
+        ScopeOverriddenValue $scopeOverriddenValue,
+        $attributesToDisable = [],
+        $attributesToEliminate = []
     ) {
         $this->locator = $locator;
         $this->eavValidationRules = $eavValidationRules;
@@ -191,6 +205,8 @@ class Eav extends AbstractModifier
         $this->eavAttributeFactory = $eavAttributeFactory;
         $this->translitFilter = $translitFilter;
         $this->scopeOverriddenValue = $scopeOverriddenValue;
+        $this->attributesToDisable = $attributesToDisable;
+        $this->attributesToEliminate = $attributesToEliminate;
     }
 
     /**
@@ -223,6 +239,8 @@ class Eav extends AbstractModifier
      * @param string $groupCode
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getAttributesMeta(array $attributes, $groupCode)
     {
@@ -234,8 +252,11 @@ class Eav extends AbstractModifier
             }
 
             $code = $attribute->getAttributeCode();
-            $child = $this->setupMetaProperties($attribute);
+            if (in_array($code, $this->attributesToEliminate)) {
+                continue;
+            }
 
+            $child = $this->setupMetaProperties($attribute);
             $meta[static::CONTAINER_PREFIX . $code] = [
                 'arguments' => [
                     'data' => [
@@ -267,6 +288,9 @@ class Eav extends AbstractModifier
                 $child['arguments']['data']['config']['componentType'] = Field::NAME;
             }
 
+            if (in_array($code, $this->attributesToDisable)) {
+                $child['arguments']['data']['config']['disabled'] = true;
+            }
             // TODO: getAttributeModel() should not be used when MAGETWO-48284 is complete
             if (($rules = $this->eavValidationRules->build($this->getAttributeModel($attribute), $child))) {
                 $child['arguments']['data']['config']['validation'] = $rules;
