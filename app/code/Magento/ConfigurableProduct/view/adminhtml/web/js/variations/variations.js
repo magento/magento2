@@ -271,52 +271,6 @@ define([
         buildProductUrl: function (productId) {
             return this.productUrl.replace('%id%', productId);
         },
-        removeProduct: function (rowIndex) {
-            this.opened(false);
-            var removedProduct = this.productMatrix.splice(rowIndex, 1);
-            delete this.productAttributesMap[this.getVariationKey(removedProduct[0].options)];
-
-            if (this.productMatrix().length === 0) {
-                this.attributes.each(function (attribute) {
-                    $('[data-attribute-code="' + attribute.code + '"] select').removeProp('disabled');
-                });
-            }
-            this.showPrice();
-        },
-        toggleProduct: function (rowIndex) {
-            var product, row, productChanged = {};
-
-            if (this.productMatrix()[rowIndex].editable) {
-                row = $('[data-row-number=' + rowIndex + ']');
-                _.each(['name','sku','qty','weight','price'], function (column) {
-                    productChanged[column] = $(
-                        'input[type=text]',
-                        row.find($('[data-column="%s"]'.replace('%s', column)))
-                    ).val();
-                });
-            }
-            product = this.productMatrix.splice(rowIndex, 1)[0];
-            product = _.extend(product, productChanged);
-            product.status = +!product.status;
-            this.productMatrix.splice(rowIndex, 0, product);
-        },
-        toggleList: function (rowIndex) {
-            var state = false;
-
-            if (rowIndex !== this.opened()) {
-                state = rowIndex;
-            }
-            this.opened(state);
-
-            return this;
-        },
-        closeList: function (rowIndex) {
-            if (this.opened() === rowIndex()) {
-                this.opened(false);
-            }
-
-            return this;
-        },
         getVariationKey: function (options) {
             return _.pluck(options, 'value').sort().join('-');
         },
