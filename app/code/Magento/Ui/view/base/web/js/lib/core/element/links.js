@@ -54,7 +54,7 @@ define([
             value = data.inversionValue ? !utils.copy(value) : utils.copy(value);
         }
 
-        component.set(property, value);
+        component.set(property, value, owner);
 
         if (linked) {
             linked.mute = false;

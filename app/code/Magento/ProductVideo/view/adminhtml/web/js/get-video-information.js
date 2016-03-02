@@ -3,12 +3,11 @@
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
-require([
-        'jquery',
-        'Magento_Ui/js/modal/alert',
-        'jquery/ui'
-    ],
-    function ($, alert) {
+define([
+    'jquery',
+    'Magento_Ui/js/modal/alert',
+    'jquery/ui'
+], function ($, alert) {
         'use strict';
 
         var videoRegister = {
