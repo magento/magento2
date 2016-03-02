@@ -377,7 +377,11 @@ define([
                     data: this.options
                 })).appendTo(this.modalWrapper);
             this.modal = this.modalWrapper.find(this.options.modalBlock).last();
-            this.element.show().appendTo(this._getElem(this.options.modalContent));
+            this.element.appendTo(this._getElem(this.options.modalContent));
+
+            if ((this.element).is(':hidden')){
+                this.element.show();
+            }
         },
 
         /**
