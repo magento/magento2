@@ -120,7 +120,7 @@ class Composite extends AbstractModifier
                         'selection_price_type' => $productLink->getPriceType(),
                         'selection_qty' => (bool)$integerQty ? (int)$productLink->getQty() : $productLink->getQty(),
                         'selection_can_change_qty' => $productLink->getCanChangeQuantity(),
-                        'selection_qty_is_decimal' => (bool)$integerQty,
+                        'selection_qty_is_integer' => (bool)$integerQty,
                         'position' => $productLink->getPosition(),
                     ];
                 }
