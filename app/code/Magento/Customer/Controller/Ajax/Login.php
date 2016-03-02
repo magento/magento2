@@ -18,6 +18,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
  *
  * @method \Magento\Framework\App\RequestInterface getRequest()
  * @method \Magento\Framework\App\Response\Http getResponse()
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Login extends \Magento\Framework\App\Action\Action
 {
@@ -137,6 +138,7 @@ class Login extends \Magento\Framework\App\Action\Action
      * Expects a POST. ex for JSON {"username":"user@magento.com", "password":"userpassword"}
      *
      * @return \Magento\Framework\Controller\ResultInterface
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {

@@ -199,6 +199,7 @@ class CreatePost extends \Magento\Customer\Controller\AbstractAccount
      *
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function execute()
     {
