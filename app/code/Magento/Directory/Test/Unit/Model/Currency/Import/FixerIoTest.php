@@ -29,7 +29,7 @@ class FixerIoTest extends \PHPUnit_Framework_TestCase
 
         $this->currencyFactoryMock = $this->getMockBuilder('Magento\Directory\Model\CurrencyFactory')
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['create'])
             ->getMock();
         $this->httpClientFactoryMock = $this->getMockBuilder('Magento\Framework\HTTP\ZendClientFactory')
             ->disableOriginalConstructor()
