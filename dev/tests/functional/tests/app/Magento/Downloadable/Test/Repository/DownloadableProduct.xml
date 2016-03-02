@@ -28,7 +28,6 @@
             <field name="downloadable_links" xsi:type="array">
                 <item name="dataset" xsi:type="string">with_two_separately_links</item>
             </field>
-            <field name="product_has_weight" xsi:type="string">This item has no weight</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -56,7 +55,6 @@
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
-            <field name="product_has_weight" xsi:type="string">This item has no weight</field>
             <field name="downloadable_links" xsi:type="array">
                 <item name="dataset" xsi:type="string">with_two_separately_links</item>
             </field>
@@ -84,7 +82,6 @@
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
-            <field name="product_has_weight" xsi:type="string">This item has no weight</field>
             <field name="downloadable_links" xsi:type="array">
                 <item name="dataset" xsi:type="string">with_two_separately_links</item>
             </field>
@@ -116,7 +113,6 @@
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
-            <field name="product_has_weight" xsi:type="string">This item has no weight</field>
             <field name="downloadable_links" xsi:type="array">
                 <item name="dataset" xsi:type="string">with_two_separately_links</item>
             </field>
@@ -147,7 +143,6 @@
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
-            <field name="product_has_weight" xsi:type="string">This item has no weight</field>
             <field name="downloadable_links" xsi:type="array">
                 <item name="dataset" xsi:type="string">with_two_separately_links</item>
             </field>
@@ -182,7 +177,6 @@
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
-            <field name="product_has_weight" xsi:type="string">This item has no weight</field>
             <field name="checkout_data" xsi:type="array">
                 <item name="dataset" xsi:type="string">downloadable_one_dollar_product_with_no_separated_link</item>
             </field>

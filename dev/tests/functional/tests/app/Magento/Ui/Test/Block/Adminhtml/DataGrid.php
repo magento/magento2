@@ -249,21 +249,10 @@ class DataGrid extends Grid
         $this->search($filter);
         $rowItem = $this->getRow($filter);
         if ($rowItem->isVisible()) {
-            $this->clickSelectItem($rowItem);
+            $rowItem->find($this->selectItem)->click();
         } else {
             throw new \Exception('Searched item was not found.');
         }
-    }
-
-    /**
-     * Click on select item checkbox.
-     *
-     * @param SimpleElement $rowItem
-     * @return void
-     */
-    private function clickSelectItem(SimpleElement $rowItem)
-    {
-        $rowItem->find($this->selectItem)->click();
     }
 
     /**

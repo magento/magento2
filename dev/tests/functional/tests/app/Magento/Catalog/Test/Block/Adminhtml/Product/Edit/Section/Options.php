@@ -163,7 +163,7 @@ class Options extends Section
      * @param SimpleElement $element
      * @return Row
      */
-    protected function getRowBlock($index, SimpleElement $element = null)
+    private function getRowBlock($index, SimpleElement $element = null)
     {
         $element = $element ?: $this->_rootElement;
         return $this->blockFactory->create(
@@ -311,7 +311,6 @@ class Options extends Section
             if (isset($currentSortOrder)) {
                 $formDataItem['options'][$key]['sort_order'] = $key;
             }
-            $key++;
         }
 
         return $formDataItem;
