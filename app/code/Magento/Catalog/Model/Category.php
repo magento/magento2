@@ -1054,7 +1054,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Validate attribute values
      *
      * @throws \Magento\Eav\Model\Entity\Attribute\Exception
-     * @return bool|array
+     * @return true|array
      */
     public function validate()
     {
