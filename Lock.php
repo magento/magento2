@@ -8,57 +8,53 @@ namespace Magento\Framework\MessageQueue;
 /**
  * Class Lock to handle message lock transactions.
  */
-class Lock extends \Magento\Framework\Model\AbstractModel
+class Lock extends \Magento\Framework\DataObject implements LockInterface
 {
     /**
-     * Class constructor
-     *
-     * @return void
+     * @inheritDoc
      */
-    protected function _construct()
+    public function getId()
     {
-        $this->_init('Magento\Framework\MessageQueue\ResourceModel\Lock');
+        return $this->getData('id');
     }
 
     /**
-     * Get message code
-     *
-     * @return string
+     * @inheritDoc
+     */
+    public function setId($value)
+    {
+        $this->setData('id', $value);
+    }
+
+    /**
+     * @inheritDoc
      */
     public function getMessageCode()
     {
-        return $this->_getData('message_code');
+        return $this->getData('message_code');
     }
 
     /**
-     * Set message code
-     *
-     * @param string $value
-     * @return $this
+     * @inheritDoc
      */
     public function setMessageCode($value)
     {
-        return $this->setData('message_code', $value);
+        $this->setData('message_code', $value);
     }
 
     /**
-     * Get lock date
-     *
-     * @return string
+     * @inheritDoc
      */
     public function getCreatedAt()
     {
-        return $this->_getData('created_at');
+        return $this->getData('created_at');
     }
 
     /**
-     * Set lock date
-     *
-     * @param string $value
-     * @return $this
+     * @inheritDoc
      */
     public function setCreatedAt($value)
     {
-        return $this->setData('created_at', $value);
+        $this->setData('created_at', $value);
     }
 }

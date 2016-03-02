@@ -11,30 +11,36 @@ use Magento\Framework\Phrase;
 class MessageController
 {
     /**
-     * @var \Magento\Framework\MessageQueue\LockFactory
+     * @var \Magento\Framework\MessageQueue\LockInterfaceFactory
      */
     private $lockFactory;
 
     /**
-     * @var array
+     * @var \Magento\Framework\MessageQueue\Lock\ReaderInterface
      */
-    private $registry = [];
+    private $reader;
+
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var \Magento\Framework\MessageQueue\Lock\WriterInterface
      */
-    private $dateTime;
+    private $writer;
 
     /**
      * Initialize dependencies.
      *
-     * @param LockFactory $lockFactory
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param \Magento\Framework\MessageQueue\LockInterfaceFactory $lockFactory
+     * @param Lock\ReaderInterface $reader
+     * @param Lock\WriterInterface $writer
      */
-    public function __construct(LockFactory $lockFactory, \Magento\Framework\Stdlib\DateTime\DateTime $dateTime)
-    {
+    public function __construct(
+        \Magento\Framework\MessageQueue\LockInterfaceFactory $lockFactory,
+        \Magento\Framework\MessageQueue\Lock\ReaderInterface $reader,
+        \Magento\Framework\MessageQueue\Lock\WriterInterface $writer
+    ) {
         $this->lockFactory = $lockFactory;
-        $this->dateTime = $dateTime;
+        $this->reader = $reader;
+        $this->writer = $writer;
     }
 
      /**
@@ -50,19 +56,11 @@ class MessageController
         $lock = $this->lockFactory->create();
         $code = $consumerName . '-' . $envelope->getMessageId();
         $code = md5($code);
-        if (isset($this->registry[$code])) {
-            throw new MessageLockException(new Phrase('Message code %1 already processed', [$code]));
-        }
-
-        $lock->load($code, 'message_code');
+        $this->reader->read($lock, $code);
         if ($lock->getId()) {
             throw new MessageLockException(new Phrase('Message code %1 already processed', [$code]));
         }
-        $lock->setMessageCode($code);
-        $lock->setCreatedAt($this->dateTime->gmtTimestamp());
-        $lock->save();
-
-        $this->registry[$code] = true;
+        $this->writer->saveLock($lock);
         return $lock;
     }
 }
