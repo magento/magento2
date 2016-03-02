@@ -40,7 +40,6 @@ class PlaceOrder extends AbstractAction
         $this->orderPlace = $orderPlace;
     }
 
-
     /**
      * @inheritdoc
      * @throws LocalizedException

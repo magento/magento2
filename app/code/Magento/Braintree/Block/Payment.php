@@ -46,6 +46,7 @@ class Payment extends Template
         $config['code'] = $this->getCode();
         return json_encode($config, JSON_UNESCAPED_SLASHES);
     }
+
     /**
      * @return string
      */
