@@ -570,6 +570,7 @@ class BundlePanel extends AbstractModifier
                     'arguments' => [
                         'data' => [
                             'config' => [
+                                'component' => 'Magento_Bundle/js/components/bundle-option-qty',
                                 'formElement' => Form\Element\Input::NAME,
                                 'componentType' => Form\Field::NAME,
                                 'dataType' => Form\Element\DataType\Number::NAME,
