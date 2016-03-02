@@ -15,7 +15,7 @@ interface IdentityInterface
     /**
      * Return unique ID(s) for each object in system
      *
-     * @return array
+     * @return string[]
      */
     public function getIdentities();
 }

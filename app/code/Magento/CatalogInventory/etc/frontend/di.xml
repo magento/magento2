@@ -9,4 +9,7 @@
     <type name="Magento\Catalog\Model\Product\Link">
         <plugin name="isInStockFilter" type="Magento\CatalogInventory\Model\Plugin\ProductLinks" />
     </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Collection">
+        <plugin name="add_stock_information" type="Magento\CatalogInventory\Model\AddStockStatusToCollection" />
+    </type>
 </config>
