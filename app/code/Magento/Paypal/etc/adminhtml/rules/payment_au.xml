@@ -32,8 +32,8 @@
             <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target=":self">
-            <rule type="simple/mark-enable" event="activate-rule"/>
-            <rule type="simple/disable" event="deactivate-rule"/>
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="simpleDisable" event="deactivate-rule"/>
             <rule type="conflict" event=":load">
                 <argument name="paypal_payflowpro_au">paypal_payflowpro_au</argument>
                 <argument name="payments_pro_hosted_solution_au">payments_pro_hosted_solution_au</argument>
@@ -62,8 +62,8 @@
             <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target=":self">
-            <rule type="simple/mark-enable" event="activate-rule"/>
-            <rule type="simple/disable" event="deactivate-rule"/>
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="simpleDisable" event="deactivate-rule"/>
             <rule type="conflict" event=":load">
                 <argument name="wps_other">wps_other</argument>
                 <argument name="payments_pro_hosted_solution_au">payments_pro_hosted_solution_au</argument>
@@ -91,8 +91,8 @@
             <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target=":self">
-            <rule type="simple/mark-enable" event="activate-rule"/>
-            <rule type="simple/disable" event="deactivate-rule"/>
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="simpleDisable" event="deactivate-rule"/>
             <rule type="conflict" event=":load">
                 <argument name="wps_other">wps_other</argument>
                 <argument name="paypal_payflowpro_au">paypal_payflowpro_au</argument>
@@ -120,15 +120,14 @@
             <rule type="disable" event="activate-rule"/>
         </relation>
         <relation target=":self">
-            <rule type="simple/mark-enable" event="activate-rule"/>
-            <rule type="simple/disable" event="deactivate-rule"/>
-            <rule type="paypal/in-context/enable" event="activate-rule"/>
-            <rule type="paypal/in-context/disable" event="deactivate-rule"/>
-            <rule type="paypal/in-context/show-merchant-id" event="activate-rule"/>
-            <rule type="paypal/in-context/hide-merchant-id" event="deactivate-rule"/>
-            <rule type="paypal/in-context/activate" event="activate-in-context-api"/>
-            <rule type="paypal/in-context/deactivate" event="deactivate-in-context-api"/>
-            <rule type="paypal/in-context/disable-conditional" event=":load"/>
+            <rule type="simpleMarkEnable" event="activate-rule"/>
+            <rule type="simpleDisable" event="deactivate-rule"/>
+            <rule type="inContextDisable" event="deactivate-rule"/>
+            <rule type="inContextShowMerchantId" event="activate-rule"/>
+            <rule type="inContextHideMerchantId" event="deactivate-rule"/>
+            <rule type="inContextActivate" event="activate-in-context-api"/>
+            <rule type="inContextDeactivate" event="deactivate-in-context-api"/>
+            <rule type="inContextDisableConditional" event=":load"/>
             <rule type="conflict" event=":load">
                 <argument name="wps_other">wps_other</argument>
             </rule>
