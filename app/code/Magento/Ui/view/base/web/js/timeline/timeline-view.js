@@ -13,6 +13,12 @@ define([
 ], function (ko, $, _, raf, registry, Class) {
     'use strict';
 
+    var hasClassList = (function () {
+        var list = document.createElement('_').classList;
+
+        return !!list && !list.toggle('_test', false);
+    })();
+
     /**
      * Polyfill of the 'classList.toggle' method.
      *
@@ -23,7 +29,7 @@ define([
             args        = Array.prototype.slice.call(arguments, 1),
             $elem;
 
-        if (classList) {
+        if (hasClassList) {
             classList.toggle.apply(classList, args);
         } else {
             $elem = $(elem);
@@ -352,6 +358,8 @@ define([
         onToStartClick: function (event) {
             var elem = event.originalEvent.currentTarget;
 
+            event.stopPropagation();
+
             this.toStartOf(elem);
         },
 
@@ -362,6 +370,8 @@ define([
          */
         onToEndClick: function (event) {
             var elem = event.originalEvent.currentTarget;
+
+            event.stopPropagation();
 
             this.toEndOf(elem);
         },
