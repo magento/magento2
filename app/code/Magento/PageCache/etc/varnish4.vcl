@@ -53,7 +53,7 @@ sub vcl_recv {
 
     # Compression filter. See https://www.varnish-cache.org/trac/wiki/FAQ/Compression
     if (req.http.Accept-Encoding) {
-        if (req.url ~ "\.(jpg|png|gif|gz|tgz|bz2|tbz|mp3|ogg|swf|flv)$") {
+        if (req.url ~ "\.(jpg|jpeg|png|gif|gz|tgz|bz2|tbz|mp3|ogg|swf|flv)$") {
             # No point in compressing these
             unset req.http.Accept-Encoding;
         } elsif (req.http.Accept-Encoding ~ "gzip") {
