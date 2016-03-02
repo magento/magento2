@@ -21,6 +21,7 @@
     background-color: @field-control__background-color;
     border-radius: @field-control__border-radius;
     border: @field-control__border-width solid @field-control__border-color;
+    box-shadow: @field-control__box-shadow;
     color: @field-control__color;
     font-size: @field-control__font-size;
     font-weight: @font-weight__regular;
@@ -122,7 +123,16 @@ option:empty {
 .admin__control-multiselect {
     &:extend(.abs-form-control-pattern all);
     height: auto;
-    padding: .6rem 1rem;
+    max-width: 100%;
+    min-width: @field-size__s;
+    overflow: auto;
+    padding: 0;
+    resize: both;
+
+    option,
+    optgroup {
+        padding: .5rem 1rem;
+    }
 }
 
 //  File uploader
@@ -157,6 +167,7 @@ option:empty {
 .admin__control-file {
     background: transparent;
     border: 0;
+    padding-top: .7rem;
     position: relative;
     width: auto;
     z-index: 1;
