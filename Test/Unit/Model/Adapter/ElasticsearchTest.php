@@ -76,7 +76,7 @@ class ElasticsearchTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManagerHelper($this);
         $this->connectionManager = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\ConnectionManager')

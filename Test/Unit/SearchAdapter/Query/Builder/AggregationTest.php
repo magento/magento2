@@ -35,7 +35,7 @@ class AggregationTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $helper = new ObjectManager($this);
 

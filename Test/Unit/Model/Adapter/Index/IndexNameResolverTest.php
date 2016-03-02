@@ -58,7 +58,7 @@ class IndexNameResolverTest extends \PHPUnit_Framework_TestCase
      * Setup method
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManagerHelper($this);
 

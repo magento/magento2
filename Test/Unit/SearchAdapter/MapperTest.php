@@ -37,7 +37,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
      * Setup method
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->queryBuilder = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\Query\Builder')
             ->setMethods([
