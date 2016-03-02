@@ -394,6 +394,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     public function getAttribute($attribute)
     {
+
         /** @var $config \Magento\Eav\Model\Config */
         $config = $this->_getConfig();
         if (is_numeric($attribute)) {
@@ -536,25 +537,25 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     public function loadAllAttributes($object = null)
     {
-        $attributeCodes = $this->_eavConfig->getEntityAttributeCodes($this->getEntityType(), $object);
-
-        /**
-         * Check and init default attributes
-         */
-        $defaultAttributes = $this->getDefaultAttributes();
-        foreach ($defaultAttributes as $attributeCode) {
-            $attributeIndex = array_search($attributeCode, $attributeCodes);
-            if ($attributeIndex !== false) {
-                $this->getAttribute($attributeCodes[$attributeIndex]);
-                unset($attributeCodes[$attributeIndex]);
-            } else {
-                $this->addAttribute($this->_getDefaultAttribute($attributeCode));
-            }
-        }
-
-        foreach ($attributeCodes as $code) {
-            $this->getAttribute($code);
-        }
+//        $attributeCodes = $this->_eavConfig->getEntityAttributeCodes($this->getEntityType(), $object);
+//
+//        /**
+//         * Check and init default attributes
+//         */
+//        $defaultAttributes = $this->getDefaultAttributes();
+//        foreach ($defaultAttributes as $attributeCode) {
+//            $attributeIndex = array_search($attributeCode, $attributeCodes);
+//            if ($attributeIndex !== false) {
+//                $this->getAttribute($attributeCodes[$attributeIndex]);
+//                unset($attributeCodes[$attributeIndex]);
+//            } else {
+//                $this->addAttribute($this->_getDefaultAttribute($attributeCode));
+//            }
+//        }
+//
+//        foreach ($attributeCodes as $code) {
+//            $this->getAttribute($code);
+//        }
 
         return $this;
     }
