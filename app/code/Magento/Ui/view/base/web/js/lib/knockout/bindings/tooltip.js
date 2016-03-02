@@ -21,7 +21,13 @@ define([
         previousTooltip,
         tooltipData,
         positionData = {},
-        tooltipsCollection = {};
+        tooltipsCollection = {},
+        isTouchDevice = (function () {
+            return 'ontouchstart' in document.documentElement;
+        })(),
+        CLICK_EVENT = (function () {
+            return isTouchDevice ? 'touchstart' : 'click';
+        })();
 
     defaults = {
         tooltipWrapper: '[data-tooltip=tooltip-wrapper]',
@@ -621,8 +627,8 @@ define([
                 },
                 elementPosition: tooltipData.trigger.offset(),
                 eventPosition: {
-                    left: tooltipData.event.pageX,
-                    top: tooltipData.event.pageY
+                    left: tooltipData.event.originalEvent.pageX,
+                    top: tooltipData.event.originalEvent.pageY
                 }
             };
 
@@ -656,9 +662,10 @@ define([
          * @param {Object} event - action event
          */
         outerClick: function (id, event) {
-            var tooltipElement = $(event.target).parents(defaults.tooltipWrapper)[0];
+            var tooltipElement = $(event.target).parents(defaults.tooltipWrapper)[0],
+                isTrigger = event.target === tooltipData.trigger[0] || $.contains(tooltipData.trigger[0], event.target);
 
-            if (tooltipData.showed && tooltipElement !== tooltipData.element[0]) {
+            if (tooltipData.showed && tooltipElement !== tooltipData.element[0] && !isTrigger) {
                 tooltip.destroy(id);
             }
         },
@@ -723,7 +730,7 @@ define([
             }
 
             if (action === 'click') {
-                $(window).on('click.outerClick', tooltip.outerClick.bind(null, id));
+                $(window).on(CLICK_EVENT + '.outerClick', tooltip.outerClick.bind(null, id));
             }
 
             if (closeButton) {
@@ -816,7 +823,7 @@ define([
         removeHandlers: function () {
             $('.' + defaults.closeButtonClass).off('click.closeButton');
             tooltipData.trigger.off('mousemove.track');
-            $(window).off('click.outerClick');
+            $(window).off(CLICK_EVENT + '.outerClick');
             $(window).off('scroll.tooltip');
             $(window).off('keydown.tooltip');
             $(window).off('resize.outerClick');
@@ -846,9 +853,7 @@ define([
          * @param {Object} bindingCtx - current element binding context
          */
         init: function (elem, valueAccessor, allBindings, viewModel, bindingCtx) {
-            var config = valueAccessor(),
-                trigger = config.trigger,
-                action = config.action,
+            var config = _.clone(valueAccessor()),
                 $parentScope =  $(elem).addClass('hidden').parent(),
                 id;
 
@@ -856,13 +861,27 @@ define([
                 $parentScope = $(config.parentScope);
             }
 
-            id = tooltip.setTooltip(valueAccessor());
+            if (isTouchDevice) {
+                config.action = 'click';
+            }
 
-            if (action === 'hover') {
-                $parentScope.on('mouseenter', trigger, tooltip.setContent.bind(null, elem, viewModel, id, bindingCtx));
-                $parentScope.on('mouseleave', trigger, tooltip.checkPreviousTooltip.bind(null, id));
-            } else if (action === 'click') {
-                $parentScope.on('click', trigger, tooltip.toggleTooltip.bind(null, elem, viewModel, id, bindingCtx));
+            id = tooltip.setTooltip(config);
+
+            if (config.action === 'hover') {
+                $parentScope.on(
+                    'mouseenter',
+                    config.trigger,
+                    tooltip.setContent.bind(null, elem, viewModel, id, bindingCtx));
+                $parentScope.on(
+                    'mouseleave',
+                    config.trigger,
+                    tooltip.checkPreviousTooltip.bind(null, id));
+            } else if (config.action === 'click') {
+                $parentScope.on(
+                    'click',
+                    config.trigger,
+                    tooltip.toggleTooltip.bind(null, elem, viewModel, id, bindingCtx)
+                );
             }
 
             return {
