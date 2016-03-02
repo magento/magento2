@@ -156,6 +156,8 @@ abstract class AbstractGroupPrice extends Price
     {
         $attribute = $this->getAttribute();
         $priceRows = $object->getData($attribute->getName());
+        $priceRows = array_filter($priceRows);
+
         if (empty($priceRows)) {
             return true;
         }
@@ -243,6 +245,9 @@ abstract class AbstractGroupPrice extends Price
         $data = [];
         $price = $this->_catalogProductType->priceFactory($productTypeId);
         foreach ($priceData as $v) {
+            if (!array_filter($v)) {
+                continue;
+            }
             $key = join('-', array_merge([$v['cust_group']], $this->_getAdditionalUniqueFields($v)));
             if ($v['website_id'] == $websiteId) {
                 $data[$key] = $v;
