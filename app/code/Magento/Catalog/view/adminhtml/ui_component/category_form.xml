@@ -159,29 +159,15 @@
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="dataType" xsi:type="string">string</item>
-                        <item name="formElement" xsi:type="string">image</item>
                         <item name="source" xsi:type="string">category</item>
-                    </item>
-                </argument>
-            </field>
-            <field name="savedImage.delete">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="description" xsi:type="string" translate="true">Delete Image</item>
-                        <item name="dataType" xsi:type="string">boolean</item>
-                        <item name="formElement" xsi:type="string">checkbox</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">${ $.provider }:data.savedImage.value</item>
+                        <item name="label" xsi:type="string"/>
+                        <item name="visible" xsi:type="boolean">true</item>
+                        <item name="formElement" xsi:type="string">fileUploader</item>
+                        <item name="elementTmpl" xsi:type="string">ui/form/element/uploader/uploader</item>
+                        <item name="previewTmpl" xsi:type="string">Magento_Catalog/image-preview</item>
+                        <item name="uploaderConfig" xsi:type="array">
+                            <item name="url" xsi:type="url" path="catalog/category_image/upload"/>
                         </item>
-                    </item>
-                </argument>
-            </field>
-            <field name="savedImage.value">
-                <argument name="data" xsi:type="array">
-                    <item name="config" xsi:type="array">
-                        <item name="dataType" xsi:type="string">string</item>
-                        <item name="formElement" xsi:type="string">input</item>
-                        <item name="elementTmpl" xsi:type="string">ui/form/element/preview</item>
                     </item>
                 </argument>
             </field>
