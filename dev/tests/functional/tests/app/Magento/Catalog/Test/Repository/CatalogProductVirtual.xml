@@ -26,7 +26,6 @@
                 <item name="qty" xsi:type="string">666</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
-            <field name="product_has_weight" xsi:type="string">This item has no weight</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">10</item>
             </field>
@@ -45,7 +44,6 @@
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
-            <field name="product_has_weight" xsi:type="string">This item has no weight</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -64,7 +62,6 @@
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
-            <field name="product_has_weight" xsi:type="string">This item has no weight</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -89,7 +86,6 @@
                 <item name="qty" xsi:type="string">1000</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
-            <field name="product_has_weight" xsi:type="string">This item has no weight</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">10</item>
             </field>
@@ -117,7 +113,6 @@
                 <item name="qty" xsi:type="string">666</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
-            <field name="product_has_weight" xsi:type="string">This item has no weight</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">10</item>
             </field>
@@ -145,7 +140,6 @@
                 <item name="qty" xsi:type="string">111</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
-            <field name="product_has_weight" xsi:type="string">This item has no weight</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">50</item>
             </field>
@@ -171,7 +165,6 @@
             <field name="stock_data" xsi:type="array">
                 <item name="manage_stock" xsi:type="string">No</item>
             </field>
-            <field name="product_has_weight" xsi:type="string">This item has no weight</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">15</item>
             </field>
