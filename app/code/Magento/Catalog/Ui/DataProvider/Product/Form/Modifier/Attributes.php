@@ -9,7 +9,7 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Ui\Component;
-use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Model\Locator\LocatorInterface;use Magento\Ui\Component\Container;
 
 class Attributes extends AbstractModifier
 {
@@ -131,11 +131,106 @@ class Attributes extends AbstractModifier
                                 'closeModal'
                             ]
                         ]
-                    ],
+                    ]
                 ],
             ],
         ];
+
         $meta['add_attribute_modal']['children'] = [
+            'add_new_attribute_button' => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'formElement' => Container::NAME,
+                            'componentType' => Container::NAME,
+                            'content' => __('Select Attribute'),
+                            'label' => false,
+                            'template' => 'ui/form/components/complex',
+                        ],
+                    ],
+                ],
+                'children' => [
+                    'add_new_attribute_button' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'formElement' => Container::NAME,
+                                    'componentType' => Container::NAME,
+                                    'component' => 'Magento_Ui/js/form/components/button',
+                                    'additionalClasses' => '',
+                                    'actions' => [
+                                        [
+                                            'targetName' => 'product_form.product_form.add_attribute_modal'
+                                                . '.create_new_attribute_modal',
+                                            'actionName' => 'toggleModal',
+                                        ],
+                                        [
+                                            'targetName'
+                                            => 'product_form.product_form.add_attribute_modal'
+                                                . '.create_new_attribute_modal.product_attribute_add_form',
+                                            'actionName' => 'render'
+                                        ]
+                                    ],
+                                    'title' => __('Create New Attribute'),
+                                    'provider' => null,
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'create_new_attribute_modal' => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'isTemplate' => false,
+                            'componentType' => Component\Modal::NAME,
+                            'dataScope' => '',
+                            'provider' => 'product_form.product_form_data_source',
+                            'options' => [
+                                'title' => __('New Attribute')
+                            ],
+                        ]
+                    ]
+                ],
+                'children' => [
+                    'product_attribute_add_form' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'label' => __('New Attribute'),
+                                    'componentType' => Component\Container::NAME,
+                                    'component' => 'Magento_Ui/js/form/components/insert-form',
+                                    'dataScope' => '',
+                                    'update_url' => $this->urlBuilder->getUrl('mui/index/render'),
+                                    'render_url' => $this->urlBuilder->getUrl(
+                                        'mui/index/render_handle',
+                                        [
+                                            'handle' => 'catalog_product_attribute_edit_form',
+                                            'buttons' => 1
+                                        ]
+                                    ),
+                                    'autoRender' => false,
+                                    'ns' => 'product_attribute_add_form',
+                                    'externalProvider' => 'product_attribute_add_form'
+                                        . '.product_attribute_add_form_data_source',
+                                    'toolbarContainer' => '${ $.parentName }',
+                                    'formSubmitType' => 'ajax',
+                                    'group' => $this->urlBuilder->getUrl(
+                                        'catalog/product_attribute/save',
+                                        [
+                                            'group' => $this->getGeneralPanelName($meta)
+                                        ]
+                                    ),
+                                    'exports' => [
+                                        'group' => '${ $.externalProvider }:client.urls.save'
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ],
             'product_attributes_grid' => [
                 'arguments' => [
                     'data' => [
@@ -152,7 +247,6 @@ class Attributes extends AbstractModifier
                             'behaviourType' => 'edit',
                             'externalFilterMode' => true,
                             'dataLinks' => ['imports' => false, 'exports' => true],
-
                             'formProvider' => 'ns = ${ $.namespace }, index = product_form',
                             'groupCode' => static::GROUP_CODE,
                             'groupName' => static::GROUP_NAME,
