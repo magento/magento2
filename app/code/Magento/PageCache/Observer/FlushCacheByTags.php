@@ -57,7 +57,7 @@ class FlushCacheByTags implements ObserverInterface
                     $tags[] = preg_replace("~_\\d+$~", '', $tag);
                 }
                 if (!empty($tags)) {
-                    $this->getCache()->clean(array_unique($tags));
+                    $this->getCache()->clean(\Zend_Cache::CLEANING_MODE_ALL, array_unique($tags));
                 }
             }
         }
