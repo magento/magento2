@@ -22,6 +22,10 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb as ResourceModelAbstractDb;
 use Magento\Framework\Mview\View\Collection as MviewCollection;
 
+/**
+ * Class FulltextFilterTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FulltextFilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
