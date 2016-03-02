@@ -36,74 +36,23 @@ define([
             value: [],
             modules: {
                 associatedProductGrid: '${ $.configurableProductGrid }',
-                wizardButtonElement: '${ $.wizardModalButtonName }',
+                wizardButtonElement: '${ $.wizardModalButtonName }'
             },
             links: {
                 value: '${ $.provider }:${ $.dataScopeVariations }',
                 usedAttributes: '${ $.provider }:${ $.dataScopeAttributes }',
                 attributesData: '${ $.provider }:${ $.dataScopeAttributesData }'
-
             }
         },
         initialize: function () {
             this._super();
-            if (this.variations.length) {
-                this.render(this.variations, this.productAttributes);
-            }
+
             this.initProductAttributesMap();
         },
         initObservable: function () {
             this._super().observe('actions opened attributes productMatrix value usedAttributes attributesData');
 
             return this;
-        },
-        showGrid: function (rowIndex) {
-            var product = this.productMatrix()[rowIndex],
-                attributes = JSON.parse(product.attribute),
-                filterModifier = product.productId ? {
-                    'entity_id': {
-                        'condition_type': 'neq', value: product.productId
-                    }
-                 } : {};
-            this.rowIndexToEdit = rowIndex;
-
-            filterModifier = _.extend(filterModifier, _.mapObject(attributes, function (value) {
-                return {
-                    'condition_type': 'eq',
-                    'value': value
-                };
-            }));
-            this.associatedProductGrid().open(
-                {
-                    'filters': attributes,
-                    'filters_modifier': filterModifier
-                },
-                'changeProduct',
-                false
-            );
-        },
-        changeProduct: function (newProducts) {
-            var oldProduct = this.productMatrix()[this.rowIndexToEdit],
-                newProduct = this._makeProduct(_.extend(oldProduct, newProducts[0]));
-            this.productAttributesMap[this.getVariationKey(newProduct.options)] = newProduct.productId;
-            this.productMatrix.splice(this.rowIndexToEdit, 1, newProduct);
-        },
-        appendProducts: function (newProducts) {
-            this.productMatrix.push.apply(
-                this.productMatrix,
-                _.map(
-                    newProducts,
-                    _.wrap(
-                        this._makeProduct.bind(this),
-                        function (func, product) {
-                            var newProduct = func(product);
-                            this.productAttributesMap[this.getVariationKey(newProduct.options)] = newProduct.productId;
-
-                            return newProduct;
-                        }.bind(this)
-                    )
-                )
-            );
         },
         _makeProduct: function (product) {
             var productId = product['entity_id'] || product.productId || null,
@@ -196,7 +145,8 @@ define([
                     variationKey: this.getVariationKey(variation.options),
                     editable: variation.editable === undefined ? !variation.productId : variation.editable,
                     productUrl: this.buildProductUrl(variation.productId),
-                    status: variation.status === undefined ? 1 : parseInt(variation.status, 10)
+                    status: variation.status === undefined ? 1 : parseInt(variation.status, 10),
+                    newProduct: 0
                 }));
             }, this);
 
@@ -284,39 +234,6 @@ define([
                     this.productAttributesMap[this.getVariationKey(product.options)] = product.productId;
                 }.bind(this));
             }
-        },
-
-        /**
-         * Is show preview image
-         * @see use in matrix.phtml
-         * @function
-         * @event
-         * @param {object} variation
-         * @returns {*|boolean}
-         */
-        isShowPreviewImage: function (variation) {
-            return variation.images.preview && (!variation.editable || variation.images.file);
-        },
-        generateImageGallery: function (variation) {
-            var gallery = [],
-                imageFields = ['position', 'file', 'disabled', 'label'];
-            _.each(variation.images.images, function (image) {
-                _.each(imageFields, function (field) {
-                    gallery.push(
-                        '<input type="hidden" name="' +
-                        this.getVariationRowName(variation, 'media_gallery/images/' + image['file_id'] + '/' + field) +
-                        '" value="' + (image[field] || '') + '" />'
-                    );
-                }, this);
-                _.each(image.galleryTypes, function (imageType) {
-                    gallery.push(
-                        '<input type="hidden" name="' + this.getVariationRowName(variation, imageType) +
-                        '" value="' + image.file + '" />'
-                    );
-                }, this);
-            }, this);
-
-            return gallery.join('\n');
         },
         disableConfigurableAttributes: function (attributes) {
             var element;
