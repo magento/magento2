@@ -368,12 +368,6 @@
                     <label>Forgot and Reset Email Sender</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
-                <field id="password_reset_link_expiration_period" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Recovery Link Expiration Period (days)</label>
-                    <comment>Please enter a number 1 or greater in this field.</comment>
-                    <validate>required-entry integer validate-greater-than-zero</validate>
-                    <backend_model>Magento\Config\Model\Config\Backend\Admin\Password\Link\Expirationperiod</backend_model>
-                </field>
             </group>
             <group id="startup" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Startup Page</label>
@@ -414,6 +408,12 @@
             </group>
             <group id="security" translate="label" type="text" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Security</label>
+                <field id="password_reset_link_expiration_period" translate="label comment" type="text" sortOrder="7" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Recovery Link Expiration Period (hours)</label>
+                    <comment>Please enter a number 1 or greater in this field.</comment>
+                    <validate>required-entry integer validate-greater-than-zero</validate>
+                    <backend_model>Magento\Config\Model\Config\Backend\Admin\Password\Link\Expirationperiod</backend_model>
+                </field>
                 <field id="use_form_key" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Add Secret Key to URLs</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

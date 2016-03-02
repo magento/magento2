@@ -56,6 +56,13 @@ abstract class Grid extends Block
     protected $rowItem = 'tbody tr';
 
     /**
+     * The last row in the grid.
+     *
+     * @var string
+     */
+    protected $lastRowItem = 'tbody tr:last-child';
+
+    /**
      * Locator value for link in action column
      *
      * @var string
