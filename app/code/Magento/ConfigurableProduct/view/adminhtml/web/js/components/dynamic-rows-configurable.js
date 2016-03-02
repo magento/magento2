@@ -184,8 +184,8 @@ define([
                     'variationKey': row.variationKey,
                     'configurable_attribute': row.attribute
                 };
-                product[this.canEditField] = 1;
-                product[this.newProductField] = 1;
+                product[this.canEditField] = row.editable;
+                product[this.newProductField] = row.newProduct;
 
                 tmpArray.push(product);
             }, this);

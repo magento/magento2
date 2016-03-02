@@ -143,10 +143,11 @@ define([
                     weight: variation.weight,
                     attribute: JSON.stringify(attributes),
                     variationKey: this.getVariationKey(variation.options),
-                    editable: variation.editable === undefined ? !variation.productId : variation.editable,
+                    //editable: variation.editable === undefined ? !variation.productId : variation.editable,
+                    editable: variation.editable === undefined ? 0 : 1,
                     productUrl: this.buildProductUrl(variation.productId),
                     status: variation.status === undefined ? 1 : parseInt(variation.status, 10),
-                    newProduct: 0
+                    newProduct: variation.productId ? 0 : 1
                 }));
             }, this);
 
