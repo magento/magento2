@@ -51,11 +51,7 @@ sub vcl_recv {
     # collect all cookies
     std.collect(req.http.Cookie);
 
-    # Even though there are few possible values for Accept-Encoding, Varnish treats
-    # them literally rather than semantically, so even a small difference which makes
-    # no difference to the backend can reduce cache efficiency by making Varnish cache
-    # too many different versions of an object.
-    # https://www.varnish-cache.org/trac/wiki/FAQ/Compression
+    # Compression filter. See https://www.varnish-cache.org/trac/wiki/FAQ/Compression
     if (req.http.Accept-Encoding) {
         if (req.url ~ "\.(jpg|png|gif|gz|tgz|bz2|tbz|mp3|ogg|swf|flv)$") {
             # No point in compressing these
@@ -89,17 +85,14 @@ sub vcl_hash {
         hash_data(regsub(req.http.cookie, "^.*?X-Magento-Vary=([^;]+);*.*$", "\1"));
     }
 
-    #for multi site configurations to not cache each-other's content
+    # For multi site configurations to not cache each other's content
     if (req.http.host) {
         hash_data(req.http.host);
     } else {
         hash_data(server.ip);
     }
 
-    # mainly to make sure, if the site was cached via a http connection and a visitor opens the
-    # https version, they won't see an ssl warning about mixed content (if the site was cached via http
-    # connection, the external resources like css, js will be opened via an http connection as well
-    # instead of https
+    # To make sure http users don't see ssl warning
     if (req.http.X-Forwarded-Proto) {
         hash_data(req.http.X-Forwarded-Proto);
     }
