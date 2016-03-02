@@ -27,6 +27,7 @@ use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
 use Magento\Ui\Component\Form\Element\Wysiwyg as WysiwygElement;
+use Magento\Catalog\Model\Attribute\ScopeOverriddenValue;
 
 /**
  * Class Eav
@@ -96,11 +97,6 @@ class Eav extends AbstractModifier
     /**
      * @var array
      */
-    private $usedDefault = [];
-
-    /**
-     * @var array
-     */
     private $canDisplayUseDefault = [];
 
     /**
@@ -134,6 +130,11 @@ class Eav extends AbstractModifier
     private $translitFilter;
 
     /**
+     * @var ScopeOverriddenValue
+     */
+    private $scopeOverriddenValue;
+
+    /**
      * @var array
      */
     private $bannedInputTypes = ['media_image'];
@@ -155,6 +156,7 @@ class Eav extends AbstractModifier
      * @param SortOrderBuilder $sortOrderBuilder
      * @param EavAttributeFactory $eavAttributeFactory
      * @param Translit $translitFilter
+     * @param ScopeOverriddenValue $scopeOverriddenValue
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -171,7 +173,8 @@ class Eav extends AbstractModifier
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SortOrderBuilder $sortOrderBuilder,
         EavAttributeFactory $eavAttributeFactory,
-        Translit $translitFilter
+        Translit $translitFilter,
+        ScopeOverriddenValue $scopeOverriddenValue
     ) {
         $this->locator = $locator;
         $this->eavValidationRules = $eavValidationRules;
@@ -187,6 +190,7 @@ class Eav extends AbstractModifier
         $this->sortOrderBuilder = $sortOrderBuilder;
         $this->eavAttributeFactory = $eavAttributeFactory;
         $this->translitFilter = $translitFilter;
+        $this->scopeOverriddenValue = $scopeOverriddenValue;
     }
 
     /**
@@ -230,9 +234,6 @@ class Eav extends AbstractModifier
             }
 
             $code = $attribute->getAttributeCode();
-            $canDisplayService = $this->canDisplayUseDefault($attribute);
-            $usedDefault = $this->usedDefault($attribute);
-
             $child = $this->setupMetaProperties($attribute);
 
             $meta[static::CONTAINER_PREFIX . $code] = [
@@ -261,19 +262,8 @@ class Eav extends AbstractModifier
             $child['arguments']['data']['config']['globalScope'] = $this->isScopeGlobal($attribute);
             $child['arguments']['data']['config']['sortOrder'] = $sortKey * self::SORT_ORDER_MULTIPLIER;
 
-            if ($canDisplayService) {
-                $child['arguments']['data']['config']['service'] = [
-                    'template' => 'ui/form/element/helper/service',
-                ];
-                $child['usedDefault'] = $usedDefault;
-            }
-
             if (!isset($child['arguments']['data']['config']['componentType'])) {
                 $child['arguments']['data']['config']['componentType'] = Field::NAME;
-            }
-
-            if ($this->locator->getStore()->getId() && !$this->isScopeGlobal($attribute)) {
-                $child['arguments']['data']['config']['disabled'] = $usedDefault;
             }
 
             // TODO: getAttributeModel() should not be used when MAGETWO-48284 is complete
@@ -474,7 +464,31 @@ class Eav extends AbstractModifier
         $meta = $this->addWysiwyg($attribute, $meta);
         $meta = $this->customizeCheckbox($attribute, $meta);
         $meta = $this->customizePriceAttribute($attribute, $meta);
+        $meta = $this->addUseDefaultValueCheckbox($attribute, $meta);
 
+        return $meta;
+    }
+
+    /**
+     * @param ProductAttributeInterface $attribute
+     * @param array $meta
+     * @return array
+     */
+    private function addUseDefaultValueCheckbox(ProductAttributeInterface $attribute, array $meta)
+    {
+        $canDisplayService = $this->canDisplayUseDefault($attribute);
+        if ($canDisplayService) {
+            $meta['arguments']['data']['config']['service'] = [
+                'template' => 'ui/form/element/helper/service',
+            ];
+
+            $meta['arguments']['data']['config']['disabled'] = !$this->scopeOverriddenValue->containsValue(
+                \Magento\Catalog\Api\Data\ProductInterface::class,
+                $this->locator->getProduct(),
+                $attribute->getAttributeCode(),
+                $this->locator->getStore()->getId()
+            );
+        }
         return $meta;
     }
 
@@ -585,7 +599,6 @@ class Eav extends AbstractModifier
         return $product->getData($attributeCode);
     }
 
-
     /**
      * Retrieve scope label
      *
@@ -635,39 +648,6 @@ class Eav extends AbstractModifier
             && $product->getId()
             && $product->getStoreId()
         );
-    }
-
-    /**
-     * Check default value usage fact
-     *
-     * @param ProductAttributeInterface $attribute
-     * @return bool
-     */
-    protected function usedDefault(ProductAttributeInterface $attribute)
-    {
-        /** @var Product $product */
-        $product = $this->locator->getProduct();
-        $productId = $product->getId();
-        $attributeCode = $attribute->getAttributeCode();
-        $defaultValue = $product->getAttributeDefaultValue($attributeCode);
-
-        if (isset($this->usedDefault[$productId][$attributeCode])) {
-            return $this->usedDefault[$productId][$attributeCode];
-        }
-
-        if (!$product->getExistsStoreValueFlag($attributeCode)) {
-            return $this->usedDefault[$productId][$attributeCode] = true;
-        } elseif ($product->getData($attributeCode) == $defaultValue &&
-            $product->getStoreId() != \Magento\Store\Model\Store::DEFAULT_STORE_ID
-        ) {
-            return $this->usedDefault[$productId][$attributeCode] = false;
-        }
-
-        if ($defaultValue === false && !$attribute->getIsRequired() && $product->getData($attributeCode)) {
-            return $this->usedDefault[$productId][$attributeCode] = false;
-        }
-
-        return $this->usedDefault[$productId][$attributeCode] = ($defaultValue === false);
     }
 
     /**
