@@ -16,19 +16,37 @@ define([
         defaults,
         positions,
         transformProp,
-        checkedPositions = {};
+        checkedPositions = {},
+        iterator = 0,
+        previousTooltip,
+        tooltipData,
+        positionData = {},
+        tooltipsCollection = {};
 
     defaults = {
         tooltipWrapper: '[data-tooltip=tooltip-wrapper]',
         tooltipContentBlock: 'data-tooltip-content',
         closeButtonClass: 'action-close',
+        tailClass: 'data-tooltip-tail',
         action: 'click',
-        step: 20,
         delay: 0,
         track: false,
+        step: 20,
         position: 'top',
         closeButton: false,
-        showed: false
+        showed: false,
+        strict: true,
+        center: false
+    };
+
+    tooltipData = {
+        trigger: false,
+        timeout: 0,
+        element: false,
+        event: false,
+        targetElement: {},
+        showed: false,
+        currentID: 0
     };
 
     /**
@@ -55,313 +73,605 @@ define([
     })();
 
     positions = {
-        map: {
-            horizontal: {
-                s: 'w',
-                p: 'left'
-            },
-            vertical: {
-                s: 'h',
-                p: 'top'
-            }
-        },
+
+        /*eslint max-depth: [0, 0]*/
 
         /**
          * Wrapper function to get tooltip data (position, className, etc)
          *
-         * @param {Object} winSize - screen size
-         * @param {Object} wrapSize - tooltip size
-         * @param {Object} elemSize - trigger size
-         * @param {Object} elemPos - trigger position
-         * @param {Object} scrollPos - scroll position
+         * @param {Object} s - object with sizes and positions elements
          * @returns {Object} tooltip data (position, className, etc)
          */
-        top: function (winSize, wrapSize, elemSize, elemPos, scrollPos) {
+        top: function (s) {
+            var result = {
+                    position: {}
+                },
+                config = tooltip.getTooltip(tooltipData.currentID),
+                strict = !_.isUndefined(config.strict) ? config.strict : defaults.strict,
+                step = !_.isUndefined(config.step) ? config.step : defaults.step,
+                startPosition = !strict ? s.eventPosition : s.elementPosition;
+
             checkedPositions.top = true;
 
-            return positions._topLeftChecker(winSize, wrapSize, elemSize, elemPos, scrollPos, 'vertical', 'horizontal',
-                'right', 'left', '_bottom', 'top', positions.map);
-        },
-
-        /**
-         * Wrapper function to get tooltip data (position, className, etc)
-         *
-         * @param {Object} winSize - screen size
-         * @param {Object} wrapSize - tooltip size
-         * @param {Object} elemSize - trigger size
-         * @param {Object} elemPos - trigger position
-         * @param {Object} scrollPos - scroll position
-         * @returns {Object} tooltip data (position, className, etc)
-         */
-        right: function (winSize, wrapSize, elemSize, elemPos, scrollPos) {
-            checkedPositions.right = true;
-
-            return positions._bottomRightChecker(winSize, wrapSize, elemSize, elemPos, scrollPos, 'horizontal',
-                'vertical', 'bottom', 'top', '_left', 'right', positions.map);
-        },
-
-        /**
-         * Wrapper function to get tooltip data (position, className, etc)
-         *
-         * @param {Object} winSize - screen size
-         * @param {Object} wrapSize - tooltip size
-         * @param {Object} elemSize - trigger size
-         * @param {Object} elemPos - trigger position
-         * @param {Object} scrollPos - scroll position
-         * @returns {Object} tooltip data (position, className, etc)
-         */
-        bottom: function (winSize, wrapSize, elemSize, elemPos, scrollPos) {
-            checkedPositions.bottom = true;
-
-            return positions._bottomRightChecker(winSize, wrapSize, elemSize, elemPos, scrollPos, 'vertical',
-                'horizontal', 'left', 'right', '_top', 'bottom', positions.map);
-        },
-
-        /**
-         * Wrapper function to get tooltip data (position, className, etc)
-         *
-         * @param {Object} winSize - screen size
-         * @param {Object} wrapSize - tooltip size
-         * @param {Object} elemSize - trigger size
-         * @param {Object} elemPos - trigger position
-         * @param {Object} scrollPos - scroll position
-         * @returns {Object} tooltip data (position, className, etc)
-         */
-        left: function (winSize, wrapSize, elemSize, elemPos, scrollPos) {
-            checkedPositions.left = true;
-
-            return positions._topLeftChecker(winSize, wrapSize, elemSize, elemPos, scrollPos,
-                'horizontal', 'vertical', 'top', 'bottom', '_right', 'left', positions.map);
-        },
-
-        /**
-         * Check can be tooltip setted to transmitted position
-         *
-         * @param {Object} winSize - screen size
-         * @param {Object} wrapSize - tooltip size
-         * @param {Object} elemSize - trigger size
-         * @param {Object} elemPos - trigger position
-         * @param {Object} scrollPos - scroll position
-         * @param {String} direction - direction position for map (vertical/horizontal)
-         * @param {String} directionDep - direction position for map, used for try set to next position
-         * @param {String} delegateFirst - priority position if tooltip can't be setted in current
-         * @param {String} delegateSecond - secondary position if tooltip can't be setted in current
-         * @param {String} className - class name for tooltip if tooltip can be setted in current position
-         * @param {String} side - current side position
-         * @param {Object} map - map for directions
-         * @returns {Object} tooltip data (position, className, etc)
-         */
-        _bottomRightChecker: function (winSize, wrapSize, elemSize, elemPos, scrollPos, direction, directionDep,
-                                       delegateFirst, delegateSecond, className, side, map) {
-            var result = {
-                position: {}
-            };
-
-            if (elemPos[map[direction].p] + elemSize[map[direction].s] + wrapSize[map[direction].s] <
-                winSize[map[direction].s] + scrollPos[map[direction].p]) {
-                // If tooltip can be setted in left position
-                result.position[map[direction].p] = elemPos[map[direction].p] + elemSize[map[direction].s] +
-                    defaults.step;
-                result.className = className;
-                result.side = side;
-                result = positions._normalize(winSize, wrapSize, elemSize, elemPos, scrollPos, directionDep,
-                    delegateFirst, delegateSecond, result, map);
-            } else if (!checkedPositions[delegateFirst]) {
-                result = positions[delegateFirst].apply(null, arguments);
+            if (startPosition.top - s.tooltipSize.h - step > s.scrollPosition.top) {
+                result.position.top = startPosition.top - s.tooltipSize.h - step;
+                result.className = '_bottom';
+                result.side = 'top';
+                result = positions._normalizeTop(s, result, config);
+            } else if (!checkedPositions.right) {
+                result = positions.right.apply(null, arguments);
             } else {
-                result.position = scrollPos;
+                result = positions._positionCenter(s, result, config);
             }
 
             return result;
         },
 
         /**
-         * Check can be tooltip setted to transmitted position
+         * Centered tooltip if tooltip does not fit in window
          *
-         * @param {Object} winSize - screen size
-         * @param {Object} wrapSize - tooltip size
-         * @param {Object} elemSize - trigger size
-         * @param {Object} elemPos - trigger position
-         * @param {Object} scrollPos - scroll position
-         * @param {String} direction - direction position for map (vertical/horizontal)
-         * @param {String} directionDep - direction position for map, used for try set to next position
-         * @param {String} delegateFirst - priority position if tooltip can't be setted in current
-         * @param {String} delegateSecond - secondary position if tooltip can't be setted in current
-         * @param {String} className - class name for tooltip if tooltip can be setted in current position
-         * @param {String} side - current side position
-         * @param {Object} map - map for directions
+         * @param {Object} s - object with sizes and positions elements
+         * @param {Object} data - current data (position, className, etc)
          * @returns {Object} tooltip data (position, className, etc)
          */
-        _topLeftChecker: function (winSize, wrapSize, elemSize, elemPos, scrollPos, direction, directionDep,
-                                   delegateFirst, delegateSecond, className, side, map) {
-            var result = {
-                position: {}
-            };
-
-            if (elemPos[map[direction].p] - wrapSize[map[direction].s] > scrollPos[map[direction].p]) {
-                // If tooltip can be setted in left position
-                result.position[map[direction].p] = elemPos[map[direction].p] - wrapSize[map[direction].s] -
-                    defaults.step;
-                result.className = className;
-                result.side = side;
-                result = positions._normalize(winSize, wrapSize, elemSize, elemPos, scrollPos, directionDep,
-                    delegateFirst, delegateSecond, result, map);
-            } else if (!checkedPositions[delegateFirst]) {
-                result = positions[delegateFirst].apply(null, arguments);
+        _positionCenter: function (s, data) {
+            if (s.tooltipSize.w < s.windowSize.w) {
+                data.position.left = (s.windowSize.w - s.tooltipSize.w) / 2 + s.scrollPosition.left;
             } else {
-                result.position = scrollPos;
+                data.position.left = s.scrollPosition.left;
+                data.tooltipSize = {
+                    width: s.windowSize.w
+                };
             }
 
-            return result;
+            if (s.tooltipSize.h < s.windowSize.h) {
+                data.position.top = (s.windowSize.h - s.tooltipSize.h) / 2 + s.scrollPosition.top;
+            } else {
+                data.position.top = s.scrollPosition.top;
+                data.tooltipSize = {
+                    height: s.windowSize.h
+                };
+            }
+
+            return data;
         },
 
         /**
-         * Check can be tooltip setted to transmitted position
+         * Normalize horizontal position if element can be setted in vertical position
          *
-         * @param {Object} winSize - screen size
-         * @param {Object} wrapSize - tooltip size
-         * @param {Object} elemSize - trigger size
-         * @param {Object} elemPos - trigger position
-         * @param {Object} scrollPos - scroll position
-         * @param {String} direction - direction position for map (vertical/horizontal)
-         * @param {String} delegateFirst - priority position if tooltip can't be setted in current
-         * @param {String} delegateSecond - secondary position if tooltip can't be setted in current
-         * @param {Object} data - available data
-         * @param {Object} map - map for directions
+         * @param {Object} s - object with sizes and positions elements
+         * @param {Object} data - current data (position, className, etc)
+         * @param {Object} config - tooltip config
          * @returns {Object} tooltip data (position, className, etc)
          */
-        _normalize: function (winSize, wrapSize, elemSize, elemPos, scrollPos, direction, delegateFirst, delegateSecond,
-                              data, map) {
-            var depResult,
-                centerPosition = elemPos[map[direction].p] -
-                    (wrapSize[map[direction].s] - elemSize[map[direction].s]) / 2;
+        _normalizeTop: function (s, data, config) {
+            var center = !_.isUndefined(config.center) ? config.center : defaults.center,
+                startPosition = !center ? s.eventPosition : {
+                    left: s.elementPosition.left + s.elementSize.w / 2,
+                    top: s.elementPosition.top
+                },
+                depResult;
 
-            if (elemSize[map[direction].s] > wrapSize[map[direction].s]) {
-                // If tooltip width less then handler width
-                data.position[map[direction].p] = (elemSize[map[direction].s] -
-                    wrapSize[map[direction].s]) / 2 + elemPos[map[direction].p];
-            } else if (centerPosition + wrapSize[map[direction].s] <
-                winSize[map[direction].s] + scrollPos[map[direction].p] &&
-                centerPosition > scrollPos[map[direction].p]) {
-                // If tooltip width more then handler width but placed in viewport
-                data.position[map[direction].p] = centerPosition;
+            if (startPosition.left + s.tooltipSize.w / 2 < s.windowSize.w + s.scrollPosition.left &&
+                startPosition.left - s.tooltipSize.w / 2  > s.scrollPosition.left) {
+                data.position.left = startPosition.left - s.tooltipSize.w / 2;
             } else {
-                // If tooltip width more then handler width and can't be placed in viewport by left side
+
                 /*eslint-disable no-lonely-if*/
-                if (!checkedPositions[delegateFirst]) {
-                    depResult = positions[delegateFirst].apply(null, arguments);
-                    depResult.hasOwnProperty('className') ?
-                        data = depResult : data.position[map[direction].p] = scrollPos[map[direction].p];
-                } else if (!checkedPositions[delegateSecond]) {
-                    depResult = positions[delegateSecond].apply(null, arguments);
-                    depResult.hasOwnProperty('className') ?
-                        data = depResult : data.position[map[direction].p] = scrollPos[map[direction].p];
+                if (!checkedPositions.right) {
+                    depResult = positions.right.apply(null, arguments);
+
+                    if (depResult.hasOwnProperty('className')) {
+                        data = depResult;
+                    } else {
+                        data.tail = {};
+
+                        if (s.tooltipSize.w < s.windowSize.w) {
+
+                            if (startPosition.left > s.windowSize.w / 2 + s.scrollPosition.left) {
+                                data.position.left = s.windowSize.w + s.scrollPosition.left - s.tooltipSize.w;
+                                data.tail.left = startPosition.left - s.tooltipSize.w / 2 - data.position.left;
+                            } else {
+                                data.position.left = s.scrollPosition.left;
+                                data.tail.left = data.position.left - (startPosition.left - s.tooltipSize.w / 2);
+                            }
+                        } else {
+                            data.position.left = s.scrollPosition.left;
+                            data.tail.left = s.eventPosition.left - s.windowSize.w / 2;
+                            data.tooltipSize = {
+                                width: s.windowSize.w
+                            };
+                        }
+                    }
                 } else {
-                    data.position[map[direction].p] = scrollPos[map[direction].p];
+                    data.tail = {};
+
+                    if (s.tooltipSize.w < s.windowSize.w) {
+
+                        if (startPosition.left > s.windowSize.w / 2 + s.scrollPosition.left) {
+                            data.position.left = s.windowSize.w + s.scrollPosition.left - s.tooltipSize.w;
+                            data.tail.left = startPosition.left - s.tooltipSize.w / 2 - data.position.left;
+
+                        } else {
+                            data.position.left = s.scrollPosition.left;
+                            data.tail.left = data.position.left - (startPosition.left - s.tooltipSize.w / 2);
+                        }
+                    } else {
+                        data.position.left = s.scrollPosition.left;
+                        data.tail.left = s.eventPosition.left - s.windowSize.w / 2;
+                        data.tooltipSize = {
+                            width: s.windowSize.w
+                        };
+                    }
                 }
             }
 
             return data;
+        },
+
+        /**
+         * Normalize horizontal position if element can be setted in vertical position
+         *
+         * @param {Object} s - object with sizes and positions elements
+         * @param {Object} data - current data (position, className, etc)
+         * @param {Object} config - tooltip config
+         * @returns {Object} tooltip data (position, className, etc)
+         */
+        _normalizeBottom: function (s, data, config) {
+            var center = !_.isUndefined(config.center) ? config.center : defaults.center,
+                startPosition = !center ? s.eventPosition : {
+                    left: s.elementPosition.left + s.elementSize.w / 2,
+                    top: s.elementPosition.top
+                },
+                depResult;
+
+            if (startPosition.left + s.tooltipSize.w / 2 < s.windowSize.w + s.scrollPosition.left &&
+                startPosition.left - s.tooltipSize.w / 2  > s.scrollPosition.left) {
+                data.position.left = startPosition.left - s.tooltipSize.w / 2;
+            } else {
+
+                /*eslint-disable no-lonely-if*/
+                if (!checkedPositions.left) {
+                    depResult = positions.left.apply(null, arguments);
+
+                    if (depResult.hasOwnProperty('className')) {
+                        data = depResult;
+                    } else {
+                        data.tail = {};
+
+                        if (s.tooltipSize.w < s.windowSize.w) {
+
+                            if (startPosition.left > s.windowSize.w / 2 + s.scrollPosition.left) {
+                                data.position.left = s.windowSize.w + s.scrollPosition.left - s.tooltipSize.w;
+                                data.tail.left = startPosition.left - s.tooltipSize.w / 2 - data.position.left;
+                            } else {
+                                data.position.left = s.scrollPosition.left;
+                                data.tail.left = data.position.left - (startPosition.left - s.tooltipSize.w / 2);
+                            }
+                        } else {
+                            data.position.left = s.scrollPosition.left;
+                            data.tail.left = s.eventPosition.left - s.windowSize.w / 2;
+                            data.tooltipSize = {
+                                width: s.windowSize.w
+                            };
+                        }
+                    }
+                } else {
+                    data.tail = {};
+
+                    if (s.tooltipSize.w < s.windowSize.w) {
+
+                        if (startPosition.left > s.windowSize.w / 2 + s.scrollPosition.left) {
+                            data.position.left = s.windowSize.w + s.scrollPosition.left - s.tooltipSize.w;
+                            data.tail.left = startPosition.left - s.tooltipSize.w / 2 - data.position.left;
+                        } else {
+                            data.position.left = s.scrollPosition.left;
+                            data.tail.left = data.position.left - (startPosition.left - s.tooltipSize.w / 2);
+                        }
+                    } else {
+                        data.position.left = s.scrollPosition.left;
+                        data.tail.left = s.eventPosition.left - s.windowSize.w / 2;
+                        data.tooltipSize = {
+                            width: s.windowSize.w
+                        };
+                    }
+                }
+            }
+
+            return data;
+        },
+
+        /**
+         * Normalize vertical position if element can be setted in horizontal position
+         *
+         * @param {Object} s - object with sizes and positions elements
+         * @param {Object} data - current data (position, className, etc)
+         * @param {Object} config - tooltip config
+         * @returns {Object} tooltip data (position, className, etc)
+         */
+        _normalizeRight: function (s, data, config) {
+            var center = !_.isUndefined(config.center) ? config.center : defaults.center,
+                startPosition = !center ? s.eventPosition : {
+                    top: s.elementPosition.top + s.elementSize.h / 2,
+                    left: s.elementPosition.left
+                },
+                depResult;
+
+            if (startPosition.top - s.tooltipSize.h / 2 > s.scrollPosition.top &&
+                startPosition.top + s.tooltipSize.h / 2 < s.scrollPosition.top + s.windowSize.h) {
+                data.position.top = startPosition.top - s.tooltipSize.h / 2;
+            } else {
+
+                /*eslint-disable no-lonely-if*/
+                if (!checkedPositions.bottom) {
+                    depResult = positions.bottom.apply(null, arguments);
+
+                    if (depResult.hasOwnProperty('className')) {
+                        data = depResult;
+                    } else {
+                        data.tail = {};
+
+                        if (s.tooltipSize.h < s.windowSize.h) {
+
+                            if (startPosition.top > s.scrollPosition.top + s.windowSize.h / 2) {
+                                data.position.top = s.windowSize.h + s.scrollPosition.top - s.tooltipSize.h;
+                                data.tail.top = startPosition.top - s.tooltipSize.h / 2 - data.position.top;
+                            } else {
+                                data.position.top = s.scrollPosition.top;
+                                data.tail.top = startPosition.top - s.tooltipSize.h / 2 - data.position.top;
+                            }
+                        } else {
+                            data.position.top = s.scrollPosition.top;
+                            data.tail.top = s.eventPosition.top - s.scrollPosition.top - s.windowSize.h / 2;
+                            data.tooltipSize = {
+                                height: s.windowSize.h
+                            };
+                        }
+                    }
+                } else {
+                    data.tail = {};
+
+                    if (s.tooltipSize.h < s.windowSize.h) {
+
+                        if (startPosition.top > s.scrollPosition.top + s.windowSize.h / 2) {
+                            data.position.top = s.scrollPosition.top;
+                            data.tail.top = data.position.top - (startPosition.top - s.tooltipSize.h / 2);
+                        } else {
+                            data.position.top = s.windowSize.h + s.scrollPosition.top - s.tooltipSize.h;
+                            data.tail.top = startPosition.top - s.tooltipSize.h / 2 - data.position.left;
+                        }
+                    } else {
+                        data.position.top = s.scrollPosition.top;
+                        data.tail.top = s.eventPosition.top - s.scrollPosition.top - s.windowSize.h / 2;
+                        data.tooltipSize = {
+                            height: s.windowSize.h
+                        };
+                    }
+                }
+            }
+
+            return data;
+        },
+
+        /**
+         * Normalize vertical position if element can be setted in horizontal position
+         *
+         * @param {Object} s - object with sizes and positions elements
+         * @param {Object} data - current data (position, className, etc)
+         * @param {Object} config - tooltip config
+         * @returns {Object} tooltip data (position, className, etc)
+         */
+        _normalizeLeft: function (s, data, config) {
+            var center = !_.isUndefined(config.center) ? config.center : defaults.center,
+                startPosition = !center ? s.eventPosition : {
+                    top: s.elementPosition.top + s.elementSize.h / 2,
+                    left: s.elementPosition.left
+                },
+                depResult;
+
+            if (startPosition.top - s.tooltipSize.h / 2 > s.scrollPosition.top &&
+                startPosition.top + s.tooltipSize.h / 2 < s.scrollPosition.top + s.windowSize.h) {
+                data.position.top = startPosition.top - s.tooltipSize.h / 2;
+            } else {
+
+                /*eslint-disable no-lonely-if*/
+                if (!checkedPositions.top) {
+                    depResult = positions.top.apply(null, arguments);
+
+                    if (depResult.hasOwnProperty('className')) {
+                        data = depResult;
+                    } else {
+                        data.tail = {};
+
+                        if (s.tooltipSize.h < s.windowSize.h) {
+
+                            if (startPosition.top > s.scrollPosition.top + s.windowSize.h / 2) {
+                                data.position.top = s.windowSize.h + s.scrollPosition.top - s.tooltipSize.h;
+                                data.tail.top = startPosition.top - s.tooltipSize.h / 2 - data.position.top;
+                            } else {
+                                data.position.top = s.scrollPosition.top;
+                                data.tail.top = startPosition.top - s.tooltipSize.h / 2 - data.position.top;
+                            }
+                        } else {
+                            data.position.top = s.scrollPosition.top;
+                            data.tail.top = s.eventPosition.top - s.scrollPosition.top - s.windowSize.h / 2;
+                            data.tooltipSize = {
+                                height: s.windowSize.h
+                            };
+                        }
+                    }
+                } else {
+                    data.tail = {};
+
+                    if (s.tooltipSize.h < s.windowSize.h) {
+
+                        if (startPosition.top > s.scrollPosition.top + s.windowSize.h / 2) {
+                            data.position.top = s.scrollPosition.top;
+                            data.tail.top = data.position.top - (startPosition.top - s.tooltipSize.h / 2);
+                        } else {
+                            data.position.top = s.windowSize.h + s.scrollPosition.top - s.tooltipSize.h;
+                            data.tail.top = startPosition.top - s.tooltipSize.h / 2 - data.position.left;
+                        }
+                    } else {
+                        data.position.top = s.scrollPosition.top;
+                        data.tail.top = s.eventPosition.top - s.scrollPosition.top - s.windowSize.h / 2;
+                        data.tooltipSize = {
+                            height: s.windowSize.h
+                        };
+                    }
+                }
+            }
+
+            return data;
+        },
+
+        /**
+         * Wrapper function to get tooltip data (position, className, etc)
+         *
+         * @param {Object} s - object with sizes and positions elements
+         * @returns {Object} tooltip data (position, className, etc)
+         */
+        left: function (s) {
+            var result = {
+                    position: {}
+                },
+                config = tooltip.getTooltip(tooltipData.currentID),
+                strict = !_.isUndefined(config.strict) ? config.strict : defaults.strict,
+                step = config.step || defaults.step,
+                startPosition = !strict ? s.eventPosition : s.elementPosition;
+
+            checkedPositions.left = true;
+
+            if (startPosition.left - s.tooltipSize.w - step > s.scrollPosition.left) {
+                result.position.left = startPosition.left - s.tooltipSize.w - step;
+                result.className = '_right';
+                result.side = 'left';
+                result = positions._normalizeLeft(s, result, config);
+            } else if (!checkedPositions.top) {
+                result = positions.top.apply(null, arguments);
+            } else {
+                result = positions._positionCenter(s, result, config);
+            }
+
+            return result;
+        },
+
+        /**
+         * Wrapper function to get tooltip data (position, className, etc)
+         *
+         * @param {Object} s - object with sizes and positions elements
+         * @returns {Object} tooltip data (position, className, etc)
+         */
+        bottom: function (s) {
+            var result = {
+                    position: {}
+                },
+                config = tooltip.getTooltip(tooltipData.currentID),
+                strict = !_.isUndefined(config.strict) ? config.strict : defaults.strict,
+                step = config.step || defaults.step,
+                startPosition = !strict ? s.eventPosition : {
+                    top: s.elementPosition.top + s.elementSize.h,
+                    left: s.elementPosition.left
+                };
+
+            checkedPositions.bottom = true;
+
+            if (startPosition.top + s.tooltipSize.h + step < s.scrollPosition.top + s.windowSize.h) {
+                result.position.top = startPosition.top + step;
+                result.className = '_top';
+                result.side = 'bottom';
+                result = positions._normalizeBottom(s, result, config);
+            } else if (!checkedPositions.left) {
+                result = positions.left.apply(null, arguments);
+            } else {
+                result = positions._positionCenter(s, result, config);
+            }
+
+            return result;
+        },
+
+        /**
+         * Wrapper function to get tooltip data (position, className, etc)
+         *
+         * @param {Object} s - object with sizes and positions elements
+         * @returns {Object} tooltip data (position, className, etc)
+         */
+        right: function (s) {
+            var result = {
+                    position: {}
+                },
+                config = tooltip.getTooltip(tooltipData.currentID),
+                strict = !_.isUndefined(config.strict) ? config.strict : defaults.strict,
+                step = config.step || defaults.step,
+                startPosition = !strict ? s.eventPosition : {
+                    left: s.elementPosition.left + s.elementSize.w,
+                    top: s.elementPosition.top
+                };
+
+            checkedPositions.right = true;
+
+            if (startPosition.left + s.tooltipSize.w + step < s.windowSize.w + s.scrollPosition.left) {
+                result.position.left = startPosition.left + step;
+                result.className = '_left';
+                result.side = 'right';
+                result = positions._normalizeRight(s, result, config);
+            } else if (!checkedPositions.bottom) {
+                result = positions.bottom.apply(null, arguments);
+            } else {
+                result = positions._positionCenter(s, result, config);
+            }
+
+            return result;
         }
     };
 
     tooltip = {
 
         /**
-         * Create tooltip and append to DOM
+         * Set new tooltip to tooltipCollection, save config, and add unic id
          *
          * @param {Object} config - tooltip config
-         * @returns {Object} tooltip element
+         * @returns {String} tooltip id
          */
-        createTooltip: function (config) {
-            var body = $('body');
+        setTooltip: function (config) {
+            var property = 'id-' + iterator;
 
-            config = _.extend(defaults, config);
+            tooltipsCollection[property] = config;
+            iterator++;
 
-            $(template(tooltipTmpl, {
-                data: config
-            })).appendTo(body);
-
-            tooltip.showed = true;
-            tooltip.element = $(config.tooltipWrapper);
-
-            return tooltip.element;
+            return property;
         },
 
         /**
-         * Set data/handlers/position to tooltip
+         * Get tooltip config by id
          *
-         * @param {Object} elem - tooltip element
-         * @param {Object} viewModel - tooltip viewModel
-         * @param {Object} config - tooltip config
-         * @param {Object} bindingCtx - tooltip bindingCtx
-         * @param {Object} event - current event
+         * @param {String} id - tooltip id
+         * @returns {Object} tooltip config
          */
-        setContent: function (elem, viewModel, config, bindingCtx, event) {
-            var html = $(elem).html(),
-                tooltipElement;
+        getTooltip: function (id) {
+            return tooltipsCollection[id];
+        },
 
-            config = _.extend(defaults, config);
+        /**
+         * Set content to current tooltip
+         *
+         * @param {Object} tooltipElement - tooltip element
+         * @param {Object} viewModel - tooltip view model
+         * @param {String} id - tooltip id
+         * @param {Object} bindingCtx - tooltip context
+         * @param {Object} event - action event
+         */
+        setContent: function (tooltipElement, viewModel, id, bindingCtx, event) {
+            var html = $(tooltipElement).html(),
+                config = tooltip.getTooltip(id),
+                body = $('body'),
+                delay = !_.isUndefined(config.delay) ? config.delay : defaults.delay;
 
-            if (tooltip.showed && tooltip.trigger && tooltip.trigger[0] === event.currentTarget && config.action === 'click') {
-                tooltip.destroy(config);
+            tooltipData.currentID = id;
+            tooltipData.trigger = $(event.currentTarget);
+            tooltip.setTargetData(event);
+            body.on('mousemove.setTargetData', tooltip.setTargetData);
+            tooltip.clearTimeout(id);
 
-                return tooltip.trigger = false;
-            }
+            tooltipData.timeout = _.delay(function () {
+                body.off('mousemove.setTargetData', tooltip.setTargetData);
 
-            if (config.action === 'click') {
-                tooltip.event = event;
-            }
-
-            tooltip.destroy(config);
-            tooltip.trigger = $(event.currentTarget);
-            tooltip.targetElement = false;
-            $(document).on('mousemove', tooltip.setTargetData);
-
-            tooltip.timeout = _.delay(function () {
-                $(document).off('mousemove', tooltip.setTargetData);
-
-                if (!tooltip.targetElement || tooltip.trigger[0] === tooltip.targetElement) {
+                if (tooltipData.trigger[0] === tooltipData.targetElement) {
+                    tooltip.destroy(id);
                     event.stopPropagation();
-                    tooltipElement = tooltip.createTooltip(config);
-                    tooltipElement.find('.' + config.tooltipContentBlock).append(html);
+                    tooltipElement = tooltip.createTooltip(id);
+                    tooltipElement.find('.' + defaults.tooltipContentBlock).append(html);
                     tooltipElement.applyBindings(bindingCtx);
-                    tooltip.setHandlers(config);
-                    tooltip.setPosition(elem, tooltipElement, config, event);
+                    tooltip.setHandlers(id);
+                    tooltip.setPosition(tooltipElement, id);
+                    previousTooltip = id;
                 }
-            }, config.delay);
+
+            }, delay);
         },
 
         /**
-         * Set target element
+         * Set position to current tooltip
          *
-         * @param {Object} event - current event
+         * @param {Object} tooltipElement - tooltip element
+         * @param {String} id - tooltip id
          */
-        setTargetData: function (event) {
-            tooltip.targetElement = event.target;
-            tooltip.event = event;
+        setPosition: function (tooltipElement, id) {
+            var config = tooltip.getTooltip(id),
+                position = config.position || defaults.position,
+                tail,
+                tailMargin;
+
+            tooltip.sizeData = {
+                windowSize: {
+                    h: $(window).outerHeight(),
+                    w: $(window).outerWidth()
+                },
+                scrollPosition: {
+                    top: $(window).scrollTop(),
+                    left: $(window).scrollLeft()
+                },
+                tooltipSize: {
+                    h: tooltipElement.outerHeight(),
+                    w: tooltipElement.outerWidth()
+                },
+                elementSize: {
+                    h: tooltipData.trigger.outerHeight(),
+                    w: tooltipData.trigger.outerWidth()
+                },
+                elementPosition: tooltipData.trigger.offset(),
+                eventPosition: {
+                    left: tooltipData.event.pageX,
+                    top: tooltipData.event.pageY
+                }
+            };
+
+            _.extend(positionData, positions[position](tooltip.sizeData));
+            checkedPositions = {};
+            tooltipElement.css(positionData.position);
+            tooltipElement.addClass(positionData.className);
+            $('body').css('position', 'relative');
+
+            if (positionData.tooltipSize) {
+                tooltipElement.css(positionData.tooltipSize);
+            }
+
+            if (positionData.tail) {
+                tail = tooltipElement.find('.' + defaults.tailClass);
+
+                if (positionData.tail.left) {
+                    tailMargin = parseInt(tail.css('margin-left'), 10);
+                    tail.css('margin-left', tailMargin + positionData.tail.left);
+                } else {
+                    tailMargin = parseInt(tail.css('margin-top'), 10);
+                    tail.css('margin-top', tailMargin + positionData.tail.top);
+                }
+            }
         },
 
         /**
-         * Set handlers to tooltip
+         * Close tooltip if action happened outside handler and tooltip element
          *
-         * @param {Object} config - tooltip config
+         * @param {String} id - tooltip id
+         * @param {Object} event - action event
          */
-        setHandlers: function (config) {
+        outerClick: function (id, event) {
+            var tooltipElement = $(event.target).parents(defaults.tooltipWrapper)[0];
 
-            if (config.track && config.action === 'hover') {
-                tooltip.trigger.on('mousemove', tooltip.track);
+            if (tooltipData.showed && tooltipElement !== tooltipData.element[0]) {
+                tooltip.destroy(id);
             }
+        },
 
-            if (config.action === 'click') {
-                $(document).on('click', tooltip.outerClick.bind(null, config));
+        /**
+         * Parse keydown event and if event trigger is escape key - close tooltip
+         *
+         * @param {Object} event - action event
+         */
+        keydownHandler: function (event) {
+            if (tooltipData.showed && event.keyCode === 27) {
+                tooltip.destroy(tooltipData.currentID);
             }
-
-            if (config.closeButton) {
-                $('.' + config.closeButtonClass).on('click', tooltip.destroy.bind(null, config));
-            }
-
-            $(window).on('resize', tooltip.outerClick.bind(null, config));
         },
 
         /**
@@ -372,157 +682,155 @@ define([
         track: function (event) {
             var inequality = {};
 
-            if (tooltip.side === 'bottom' || tooltip.side === 'top') {
-                inequality.x = event.pageX - (tooltip.position.left + tooltip.element.outerWidth()/2);
+            if (positionData.side === 'bottom' || positionData.side === 'top') {
+                inequality.x = event.pageX - (positionData.position.left + tooltipData.element.outerWidth() / 2);
 
-                if (tooltip.position.left + inequality.x + tooltip.sizeData.wrapperSize.w >
+                if (positionData.position.left + inequality.x + tooltip.sizeData.tooltipSize.w >
                     tooltip.sizeData.windowSize.w + tooltip.sizeData.scrollPosition.left ||
-                    inequality.x + tooltip.position.left < tooltip.sizeData.scrollPosition.left) {
+                    inequality.x + positionData.position.left < tooltip.sizeData.scrollPosition.left) {
 
                     return false;
                 }
 
-                tooltip.element[0].style[transformProp] = 'translateX(' + inequality.x + 'px)';
-            } else if (tooltip.side === 'left' || tooltip.side === 'right' ) {
-                inequality.y = event.pageY - (tooltip.position.top + tooltip.element.outerHeight()/2);
+                tooltipData.element[0].style[transformProp] = 'translateX(' + inequality.x + 'px)';
+            } else if (positionData.side === 'left' || positionData.side === 'right') {
+                inequality.y = event.pageY - (positionData.position.top + tooltipData.element.outerHeight() / 2);
 
-                if (tooltip.position.top + inequality.x + tooltip.sizeData.wrapperSize.h >
+                if (positionData.position.top + inequality.x + tooltip.sizeData.tooltipSize.h >
                     tooltip.sizeData.windowSize.h + tooltip.sizeData.scrollPosition.top ||
-                    inequality.h + tooltip.position.top < tooltip.sizeData.scrollPosition.top) {
+                    inequality.h + positionData.position.top < tooltip.sizeData.scrollPosition.top) {
 
                     return false;
                 }
 
-                tooltip.element[0].style[transformProp] = 'translateY(' + inequality.y + 'px)';
+                tooltipData.element[0].style[transformProp] = 'translateY(' + inequality.y + 'px)';
             }
         },
 
         /**
-         * Remove tooltip handlers
+         * Set handlers to tooltip
          *
-         * @param {Object} config - tooltip config
+         * @param {String} id - tooltip id
          */
-        removeHandlers: function (config) {
-            if (config.track && tooltip.trigger) {
-                tooltip.trigger.off('mousemove', tooltip.track);
+        setHandlers: function (id) {
+            var config = tooltip.getTooltip(id),
+                action = config.action || defaults.action,
+                closeButton = !_.isUndefined(config.closeButton) ? config.closeButton : defaults.closeButton,
+                track = !_.isUndefined(config.track) ? config.track : defaults.track;
+
+            if (track) {
+                tooltipData.trigger.on('mousemove.track', tooltip.track);
             }
 
-            if (config.action === 'click') {
-                $(document).off('click', tooltip.outerClick);
+            if (action === 'click') {
+                $(window).on('click.outerClick', tooltip.outerClick.bind(null, id));
             }
 
-            if (config.closeButton) {
-                $('.' + config.closeButtonClass).off('click', tooltip.destroy);
+            if (closeButton) {
+                $('.' + defaults.closeButtonClass).on('click.closeButton', tooltip.destroy.bind(null, id));
             }
 
-            $(window).off('resize', tooltip.outerClick);
+            $(window).on('keydown.tooltip', tooltip.keydownHandler);
+            $(window).on('scroll.tooltip', tooltip.outerClick.bind(null, id));
+            $(window).on('resize.outerClick', tooltip.outerClick.bind(null, id));
         },
 
         /**
-         * Outer click handler to close tooltip
+         * Toggle tooltip
          *
-         * @param {Object} config - tooltip config
-         * @param {Object} event - current event
-         */
-        outerClick: function (config, event) {
-            var tooltipElement = $(event.target).parents(config.tooltipWrapper)[0];
-
-            if (tooltip.showed && tooltipElement !== tooltip.element[0]) {
-                tooltip.destroy(config);
-            }
-        },
-
-        /**
-         * Set position to tooltip
-         *
-         * @param {Object} element - tooltip trigger
          * @param {Object} tooltipElement - tooltip element
-         * @param {Object} config - tooltip config
-         * @param {Object} event - current event
+         * @param {Object} viewModel - tooltip view model
+         * @param {String} id - tooltip id
          */
-        setPosition: function (element, tooltipElement, config) {
-            tooltip.sizeData = {
-                windowSize: {
-                    h: $(window).outerHeight(),
-                    w: $(window).outerWidth()
-                },
-                scrollPosition: {
-                    top: $(window).scrollTop(),
-                    left: $(window).scrollLeft()
-                },
-                wrapperSize: {
-                    h: tooltipElement.outerHeight(),
-                    w: tooltipElement.outerWidth()
-                },
-                elementSize: {
-                    h: tooltip.trigger.outerHeight(),
-                    w: tooltip.trigger.outerWidth()
-                },
-                elementPosition: tooltip.trigger.offset()
-            };
+        toggleTooltip: function (tooltipElement, viewModel, id) {
+            if (previousTooltip === id && tooltipData.showed) {
+                tooltip.destroy(id);
 
-            _.extend(tooltip,
-                positions[config.position](tooltip.sizeData.windowSize, tooltip.sizeData.wrapperSize,
-                    tooltip.sizeData.elementSize, tooltip.sizeData.elementPosition, tooltip.sizeData.scrollPosition));
-            checkedPositions = {};
-            tooltip._setPositionShift(config, tooltip.sizeData.windowSize, tooltip.sizeData.wrapperSize,
-                tooltip.sizeData.elementSize, tooltip.sizeData.elementPosition, tooltip.sizeData.scrollPosition);
-            tooltipElement.css(tooltip.position);
-            tooltipElement.addClass(tooltip.className);
+                return false;
+            }
+
+            tooltip.setContent.apply(null, arguments);
         },
 
         /**
-         * Set shift to position if track is enabled
+         * Create tooltip and append to DOM
          *
-         * @param {Object} config - tooltip config
-         * @param {Object} windowSize - window size
-         * @param {Object} wrapperSize - tooltip size
-         * @param {Object} elementSize - trigger size
-         * @param {Object} elementPosition - trigger position
-         * @param {Object} scrollPosition - scroll position
+         * @param {String} id - tooltip id
+         * @returns {Object} tooltip element
          */
-        _setPositionShift: function (config, windowSize, wrapperSize, elementSize, elementPosition, scrollPosition) {
-            var shift;
+        createTooltip: function (id) {
+            var body = $('body'),
+                config = tooltip.getTooltip(id);
 
-            if (config.track && tooltip.event && (tooltip.side === 'bottom' || tooltip.side === 'top')) {
-                shift = tooltip.position.left - (elementSize.w / 2 -
-                    ($(tooltip.event.target).offset().left - tooltip.trigger.offset().left + tooltip.event.offsetX));
+            $(template(tooltipTmpl, {
+                data: config
+            })).appendTo(body);
 
-                if (shift + wrapperSize.w > windowSize.w + scrollPosition.left) {
-                    shift = windowSize.w + scrollPosition.left - wrapperSize.w;
-                } else if (shift < scrollPosition.left) {
-                    shift = scrollPosition.left;
-                }
-                tooltip.position.left = shift;
-            } else if (config.track && tooltip.event && (tooltip.side === 'left' || tooltip.side === 'right')) {
-                shift = tooltip.position.top - (elementSize.h / 2 -
-                    ($(tooltip.event.target).offset().top - tooltip.trigger.offset().top + tooltip.event.offsetY));
+            tooltipData.showed = true;
+            tooltipData.element = $(defaults.tooltipWrapper);
 
-                if (shift + wrapperSize.h > windowSize.h + scrollPosition.top) {
-                    shift = windowSize.h + scrollPosition.top - wrapperSize.h;
-                } else if (shift < scrollPosition.top) {
-                    shift = scrollPosition.top;
-                }
+            return tooltipData.element;
+        },
 
-                tooltip.position.top = shift;
+        /**
+         * Check action and clean timeout
+         *
+         * @param {String} id - tooltip id
+         */
+        clearTimeout: function (id) {
+            var config = tooltip.getTooltip(id),
+                action = config.action || defaults.action;
+
+            if (action === 'hover') {
+                clearTimeout(tooltipData.timeout);
+            }
+        },
+
+        /**
+         * Check previous tooltip
+         */
+        checkPreviousTooltip: function () {
+            if (!tooltipData.timeout) {
+                tooltip.destroy();
             }
         },
 
         /**
          * Destroy tooltip instance
-         *
-         * @param {Object} config - tooltip config
          */
-        destroy: function (config) {
-            config = config || {};
-            clearTimeout(tooltip.timeout);
-
-            if (tooltip.element) {
-                tooltip.element.remove();
-                tooltip.showed = false;
+        destroy: function () {
+            if (tooltipData.element) {
+                tooltipData.element.remove();
+                tooltipData.showed = false;
             }
 
-            tooltip.removeHandlers(config);
+            $('body').css('position', 'static');
+            positionData = {};
+            tooltipData.timeout = false;
+            tooltip.removeHandlers();
+        },
+
+        /**
+         * Remove tooltip handlers
+         */
+        removeHandlers: function () {
+            $('.' + defaults.closeButtonClass).off('click.closeButton');
+            tooltipData.trigger.off('mousemove.track');
+            $(window).off('click.outerClick');
+            $(window).off('scroll.tooltip');
+            $(window).off('keydown.tooltip');
+            $(window).off('resize.outerClick');
+        },
+
+        /**
+         * Set target element
+         *
+         * @param {Object} event - current event
+         */
+        setTargetData: function (event) {
+            tooltipData.event = event;
+            tooltipData.targetElement = event.type === 'mousemove' ?
+                                        event.target : event.currentTarget;
         }
     };
 
@@ -531,29 +839,30 @@ define([
         /**
          * Initialize tooltip
          *
-         * @param {Object} element - tooltip DOM element
+         * @param {Object} elem - tooltip DOM element
          * @param {Function} valueAccessor - ko observable property, tooltip data
          * @param {Object} allBindings - all bindings on current element
          * @param {Object} viewModel - current element viewModel
          * @param {Object} bindingCtx - current element binding context
          */
-        init: function (element, valueAccessor, allBindings, viewModel, bindingCtx) {
-            var config = _.extend(defaults, valueAccessor()),
+        init: function (elem, valueAccessor, allBindings, viewModel, bindingCtx) {
+            var config = valueAccessor(),
                 trigger = config.trigger,
                 action = config.action,
-                $parentScope =  $(element).addClass('hidden').parent();
+                $parentScope =  $(elem).addClass('hidden').parent(),
+                id;
 
             if (config.parentScope) {
                 $parentScope = $(config.parentScope);
             }
 
+            id = tooltip.setTooltip(valueAccessor());
+
             if (action === 'hover') {
-                $parentScope.on('mouseenter', trigger,
-                    tooltip.setContent.bind(null, element, viewModel, valueAccessor(), bindingCtx));
-                $parentScope.on('mouseleave', trigger, tooltip.destroy.bind(null, config));
+                $parentScope.on('mouseenter', trigger, tooltip.setContent.bind(null, elem, viewModel, id, bindingCtx));
+                $parentScope.on('mouseleave', trigger, tooltip.checkPreviousTooltip.bind(null, id));
             } else if (action === 'click') {
-                $parentScope.on('click', trigger,
-                    tooltip.setContent.bind(null, element, viewModel, valueAccessor(), bindingCtx));
+                $parentScope.on('click', trigger, tooltip.toggleTooltip.bind(null, elem, viewModel, id, bindingCtx));
             }
 
             return {
