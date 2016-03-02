@@ -35,6 +35,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="submit_url" xsi:type="url" path="catalog/product_attribute/save"/>
+                    <item name="validate_url" xsi:type="url" path="catalog/product_attribute/validate"/>
                 </item>
             </argument>
         </argument>
@@ -53,15 +54,6 @@
                 <item name="sortOrder" xsi:type="number">10</item>
             </item>
         </argument>
-        <field name="attribute_id">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="dataType" xsi:type="string">string</item>
-                    <item name="formElement" xsi:type="string">hidden</item>
-                    <item name="dataScope" xsi:type="string">attribute_id</item>
-                </item>
-            </argument>
-        </field>
         <field name="frontend_label[0]">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -69,11 +61,11 @@
                     <item name="dataType" xsi:type="string">string</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="label" xsi:type="string" translate="true">Attribute Label</item>
+                    <item name="source" xsi:type="string">product_attribute</item>
                     <item name="required" xsi:type="boolean">true</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
-                    <item name="dataScope" xsi:type="string">frontend_label</item>
                 </item>
             </argument>
         </field>
@@ -84,6 +76,7 @@
                     <item name="sortOrder" xsi:type="number">20</item>
                     <item name="dataType" xsi:type="string">string</item>
                     <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">product_attribute</item>
                     <item name="label" xsi:type="string" translate="true">Catalog Input Type for Store Owner</item>
                     <item name="dataScope" xsi:type="string">frontend_input</item>
                 </item>
@@ -100,6 +93,7 @@
                     <item name="label" xsi:type="string" translate="true">Required</item>
                     <item name="default" xsi:type="number">0</item>
                     <item name="dataScope" xsi:type="string">is_required</item>
+                    <item name="source" xsi:type="string">product_attribute</item>
                 </item>
             </argument>
         </field>
@@ -221,6 +215,7 @@
         </field>
         <field name="is_global">
             <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Catalog\Model\Attribute\Source\Scopes</item>
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">20</item>
                     <item name="dataType" xsi:type="string">string</item>

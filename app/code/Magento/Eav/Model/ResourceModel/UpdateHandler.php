@@ -71,9 +71,10 @@ class UpdateHandler
     protected function getAttributes($entityType)
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
+
         $searchResult = $this->attributeRepository->getList(
             $metadata->getEavEntityType(),
-            $this->searchCriteriaBuilder->create()
+            $this->searchCriteriaBuilder->addFilter('attribute_set_id', null, 'neq')->create()
         );
         return $searchResult->getItems();
     }
@@ -133,7 +134,7 @@ class UpdateHandler
                 }
                 if ((!array_key_exists($attribute->getAttributeCode(), $snapshot)
                     || $snapshot[$attribute->getAttributeCode()] === false)
-                    && !empty($data[$attribute->getAttributeCode()])
+                    && array_key_exists($attribute->getAttributeCode(), $data)
                     && !$attribute->isValueEmpty($data[$attribute->getAttributeCode()])
                 ) {
                     $this->attributePersistor->registerInsert(
@@ -146,7 +147,7 @@ class UpdateHandler
                 }
                 if (array_key_exists($attribute->getAttributeCode(), $snapshot)
                     && $snapshot[$attribute->getAttributeCode()] !== false
-                    && !empty($data[$attribute->getAttributeCode()])
+                    && array_key_exists($attribute->getAttributeCode(), $data)
                     && $snapshot[$attribute->getAttributeCode()] != $data[$attribute->getAttributeCode()]
                     && !$attribute->isValueEmpty($data[$attribute->getAttributeCode()])
                 ) {

@@ -2499,6 +2499,9 @@ return [
     ['getQuoteAddressId', 'Magento\Sales\Api\Data\OrderAddressInterface'],
     ['setQuoteAddressId', 'Magento\Sales\Api\Data\OrderAddressInterface'],
     ['getPaymentById', 'Magento\Quote\Model\Quote'],
+    ['prepareVariationCollection', 'Magento\Swatches\Helper\Data'],
+    ['getProductMedia', 'Magento\Swatches\Helper\Data'],
+    ['createSwatchProduct', 'Magento\Swatches\Helper\Data'],
     ['create', 'Magento\Quote\Model\QuoteRepository'],
     ['set', 'Magento\Quote\Api\GuestShippingMethodManagementInterface', 'Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface::set'],
     ['get', 'Magento\Quote\Api\GuestShippingMethodManagementInterface', 'Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface::get'],
@@ -2518,4 +2521,5 @@ return [
     ['fillFormTab', 'Magento\Backend\Test\Block\Widget\Tab', 'Magento\Ui\Test\Block\Adminhtml\AbstractContainer::setFieldsData'],
     ['getDataFormTab', 'Magento\Backend\Test\Block\Widget\Tab', 'Magento\Ui\Test\Block\Adminhtml\AbstractContainer::getFieldsData'],
     ['getBunchImages', 'Magento\CatalogImportExport\Model\Import\Product'],
+    ['_isAttributeValueEmpty', 'Magento\Catalog\Model\ResourceModel\AbstractResource'],
 ];

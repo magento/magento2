@@ -85,27 +85,32 @@ class Attributes extends AbstractModifier
             return $meta;
         }
 
-        $general = $this->getGeneralPanelName($meta);
-
-        if (!isset($meta[static::GROUP_CODE])) {
-            $meta[static::GROUP_CODE]['arguments']['data']['config'] = [
-                'label' => __('Attributes'),
-                'collapsible' => true,
-                'dataScope' => self::DATA_SCOPE_PRODUCT,
-                'sortOrder' => $this->getNextGroupSortOrder($meta, $general, static::GROUP_SORT_ORDER),
-                'componentType' => Component\Form\Fieldset::NAME
-            ];
+        if (isset($meta[static::GROUP_CODE])) {
+            $meta[static::GROUP_CODE]['arguments']['data']['config']['component'] =
+                'Magento_Catalog/js/components/attributes-fieldset';
         }
 
-        $meta[static::GROUP_CODE]['arguments']['data']['config']['component'] =
-            'Magento_Catalog/js/components/attributes-fieldset';
-        $meta[static::GROUP_CODE]['arguments']['data']['config']['visible'] =
-            !empty($meta[static::GROUP_CODE]['children']);
+        $meta = $this->customizeAddAttributeModal($meta);
+        $meta = $this->customizeCreateAttributeModal($meta);
+        $meta = $this->customizeAttributesGrid($meta);
+
+        return $meta;
+    }
+
+    /**
+     * @param array $meta
+     * @return array
+     */
+    private function customizeAddAttributeModal(array $meta)
+    {
         $meta['add_attribute_modal']['arguments']['data']['config'] = [
             'isTemplate' => false,
             'componentType' => Component\Modal::NAME,
             'dataScope' => '',
             'provider' => 'product_form.product_form_data_source',
+            'imports' => [
+                'state' => '!index=product_attribute_add_form:responseStatus'
+            ],
             'options' => [
                 'title' => __('Add Attribute'),
                 'buttons' => [
@@ -179,95 +184,132 @@ class Attributes extends AbstractModifier
                     ],
                 ],
             ],
-            'create_new_attribute_modal' => [
-                'arguments' => [
-                    'data' => [
-                        'config' => [
-                            'isTemplate' => false,
-                            'componentType' => Component\Modal::NAME,
-                            'dataScope' => '',
-                            'provider' => 'product_form.product_form_data_source',
-                            'options' => [
-                                'title' => __('New Attribute')
-                            ],
-                        ]
+        ];
+        return $meta;
+    }
+
+    /**
+     * @param array $meta
+     * @return array
+     */
+    private function customizeCreateAttributeModal(array $meta)
+    {
+        $params = [
+            'group' => static::GROUP_CODE,
+            'groupName' => self::GROUP_NAME,
+            'groupSortOrder' => self::GROUP_SORT_ORDER,
+            'store' => $this->locator->getStore()->getId(),
+            'product' => $this->locator->getProduct()->getId(),
+            'type' => $this->locator->getProduct()->getTypeId(),
+            'set' => $this->locator->getProduct()->getAttributeSetId(),
+            'message_key' => 'messages'
+        ];
+
+        $meta['add_attribute_modal']['children']['create_new_attribute_modal'] = [
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'isTemplate' => false,
+                        'componentType' => Component\Modal::NAME,
+                        'dataScope' => 'data.new_attribute',
+                        'provider' => 'product_form.product_form_data_source',
+                        'options' => [
+                            'title' => __('New Attribute')
+                        ],
+                        'imports' => [
+                            'state' => '!index=product_attribute_add_form:responseStatus'
+                        ],
                     ]
-                ],
-                'children' => [
-                    'product_attribute_add_form' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'label' => __('New Attribute'),
-                                    'componentType' => Component\Container::NAME,
-                                    'component' => 'Magento_Ui/js/form/components/insert-form',
-                                    'dataScope' => '',
-                                    'update_url' => $this->urlBuilder->getUrl('mui/index/render'),
-                                    'render_url' => $this->urlBuilder->getUrl(
-                                        'mui/index/render_handle',
-                                        [
-                                            'handle' => 'catalog_product_attribute_edit_form',
-                                            'buttons' => 1
-                                        ]
-                                    ),
-                                    'autoRender' => false,
-                                    'ns' => 'product_attribute_add_form',
-                                    'externalProvider' => 'product_attribute_add_form'
-                                        . '.product_attribute_add_form_data_source',
-                                    'toolbarContainer' => '${ $.parentName }',
-                                    'formSubmitType' => 'ajax',
-                                    'group' => $this->urlBuilder->getUrl(
-                                        'catalog/product_attribute/save',
-                                        [
-                                            'group' => $this->getGeneralPanelName($meta)
-                                        ]
-                                    ),
-                                    'exports' => [
-                                        'group' => '${ $.externalProvider }:client.urls.save'
+                ]
+            ],
+            'children' => [
+                'product_attribute_add_form' => [
+                    'arguments' => [
+                        'data' => [
+                            'config' => [
+                                'label' => __('New Attribute'),
+                                'componentType' => Component\Container::NAME,
+                                'component' => 'Magento_Catalog/js/components/new-attribute-insert-form',
+                                'dataScope' => '',
+                                'update_url' => $this->urlBuilder->getUrl('mui/index/render'),
+                                'render_url' => $this->urlBuilder->getUrl(
+                                    'mui/index/render_handle',
+                                    [
+                                        'handle' => 'catalog_product_attribute_edit_form',
+                                        'buttons' => 1
                                     ]
+                                ),
+                                'autoRender' => false,
+                                'ns' => 'product_attribute_add_form',
+                                'externalProvider' => 'product_attribute_add_form'
+                                    . '.product_attribute_add_form_data_source',
+                                'toolbarContainer' => '${ $.parentName }',
+                                'formSubmitType' => 'ajax',
+                                'saveUrl' => $this->urlBuilder->getUrl('catalog/product_attribute/save', $params),
+                                'validateUrl' => $this->urlBuilder->getUrl(
+                                    'catalog/product_attribute/validate',
+                                    $params
+                                ),
+                                'productId' => $this->locator->getProduct()->getId(),
+                                'productType' => $this->locator->getProduct()->getTypeId(),
+                                'imports' => [
+                                    'attributeSetId' => '${ $.provider }:data.product.attribute_set_id',
+                                ],
+                                'exports' => [
+                                    'saveUrl' => '${ $.externalProvider }:client.urls.save',
+                                    'validateUrl' => '${ $.externalProvider }:client.urls.beforeSave',
+                                    'attributeSetId' => '${ $.externalProvider }:params.set',
                                 ]
                             ]
                         ]
                     ]
                 ]
-            ],
-            'product_attributes_grid' => [
-                'arguments' => [
-                    'data' => [
-                        'config' => [
-                            'component' => 'Magento_Catalog/js/components/attributes-insert-listing',
-                            'componentType' => Component\Container::NAME,
-                            'autoRender' => false,
-                            'dataScope' => 'product_attributes_grid',
-                            'externalProvider' => 'product_attributes_grid.product_attributes_grid_data_source',
-                            'selectionsProvider' => '${ $.ns }.${ $.ns }.product_attributes_columns.ids',
-                            'ns' => 'product_attributes_grid',
-                            'render_url' => $this->urlBuilder->getUrl('mui/index/render'),
-                            'immediateUpdateBySelection' => true,
-                            'behaviourType' => 'edit',
-                            'externalFilterMode' => true,
-                            'dataLinks' => ['imports' => false, 'exports' => true],
-                            'formProvider' => 'ns = ${ $.namespace }, index = product_form',
-                            'groupCode' => static::GROUP_CODE,
-                            'groupName' => static::GROUP_NAME,
-                            'groupSortOrder' => static::GROUP_SORT_ORDER,
-                            'addAttributeUrl' =>
-                                $this->urlBuilder->getUrl('catalog/product/addAttributeToTemplate'),
-                            'productId' => $this->locator->getProduct()->getId(),
-                            'productType' => $this->locator->getProduct()->getTypeId(),
-                            'loading' => false,
-                            'imports' => [
-                                'attributeSetId' => '${ $.provider }:data.product.attribute_set_id'
-                            ],
-                            'exports' => [
-                                'attributeSetId' => '${ $.externalProvider }:params.template_id'
-                            ]
+            ]
+        ];
+        return $meta;
+    }
+
+    /**
+     * @param array $meta
+     * @return array
+     */
+    private function customizeAttributesGrid(array $meta)
+    {
+        $meta['add_attribute_modal']['children']['product_attributes_grid'] = [
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'component' => 'Magento_Catalog/js/components/attributes-insert-listing',
+                        'componentType' => Component\Container::NAME,
+                        'autoRender' => false,
+                        'dataScope' => 'product_attributes_grid',
+                        'externalProvider' => 'product_attributes_grid.product_attributes_grid_data_source',
+                        'selectionsProvider' => '${ $.ns }.${ $.ns }.product_attributes_columns.ids',
+                        'ns' => 'product_attributes_grid',
+                        'render_url' => $this->urlBuilder->getUrl('mui/index/render'),
+                        'immediateUpdateBySelection' => true,
+                        'behaviourType' => 'edit',
+                        'externalFilterMode' => true,
+                        'dataLinks' => ['imports' => false, 'exports' => true],
+                        'formProvider' => 'ns = ${ $.namespace }, index = product_form',
+                        'groupCode' => static::GROUP_CODE,
+                        'groupName' => static::GROUP_NAME,
+                        'groupSortOrder' => static::GROUP_SORT_ORDER,
+                        'addAttributeUrl' =>
+                            $this->urlBuilder->getUrl('catalog/product/addAttributeToTemplate'),
+                        'productId' => $this->locator->getProduct()->getId(),
+                        'productType' => $this->locator->getProduct()->getTypeId(),
+                        'loading' => false,
+                        'imports' => [
+                            'attributeSetId' => '${ $.provider }:data.product.attribute_set_id'
                         ],
+                        'exports' => [
+                            'attributeSetId' => '${ $.externalProvider }:params.template_id'
+                        ]
                     ],
                 ],
-            ],
+            ]
         ];
-
         return $meta;
     }
 }
