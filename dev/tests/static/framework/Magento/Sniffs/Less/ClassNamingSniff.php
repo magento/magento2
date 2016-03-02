@@ -56,7 +56,7 @@ class ClassNamingSniff implements PHP_CodeSniffer_Sniff
         }
 
         if (!empty(strpos($className, '_')) && empty(strpos($className, '__'))) {
-            $phpcsFile->addError('"_" symbol allowed only for helpers', $stackPtr, 'UnderscoreSymbol');
+            $phpcsFile->addError('"_" symbol allowed only for helper classes', $stackPtr, 'UnderscoreSymbol');
         }
     }
 }
