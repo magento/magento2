@@ -21,14 +21,17 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Shipping\Model\Shipping\Labels
      */
     protected $labels;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $scopeConfig;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
