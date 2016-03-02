@@ -8,7 +8,7 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Ui\DataProvider\AbstractDataProvider;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
-use Magento\Ui\DataProvider\Modifier\Pool;
+use Magento\Ui\DataProvider\Modifier\PoolInterface;
 
 /**
  * DataProvider for product edit form
@@ -16,7 +16,7 @@ use Magento\Ui\DataProvider\Modifier\Pool;
 class ProductDataProvider extends AbstractDataProvider
 {
     /**
-     * @var Pool
+     * @var PoolInterface
      */
     protected $pool;
 
@@ -25,7 +25,7 @@ class ProductDataProvider extends AbstractDataProvider
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $collectionFactory
-     * @param Pool $pool
+     * @param PoolInterface $pool
      * @param array $meta
      * @param array $data
      */
@@ -34,7 +34,7 @@ class ProductDataProvider extends AbstractDataProvider
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $collectionFactory,
-        Pool $pool,
+        PoolInterface $pool,
         array $meta = [],
         array $data = []
     ) {
