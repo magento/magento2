@@ -59,7 +59,8 @@ class BracesFormattingSniff implements PHP_CodeSniffer_Sniff
             if ($found !== 1) {
                 $error = 'Expected one blank line after closing brace of class definition; %s found';
                 $data  = [$found];
-                $phpcsFile->addError($error, $stackPtr, 'SpacingAfterClose', $data);
+                // Will be implemented in next task related to LESS warnings
+                //$phpcsFile->addWarning($error, $stackPtr, 'SpacingAfterClose', $data);
             }
         }
 

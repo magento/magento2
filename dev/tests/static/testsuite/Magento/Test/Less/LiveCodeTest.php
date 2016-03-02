@@ -12,6 +12,7 @@ use Magento\Framework\App\Utility;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\LessWrapper;
 use PHPUnit_Framework_TestCase;
+use Magento\Framework\App\Utility\Files;
 use Magento\Test\Php\LiveCodeTest as PHPCodeTest;
 
 /**
@@ -60,14 +61,32 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
 
         $codeSniffer->setExtensions([LessWrapper::LESS_FILE_EXTENSION]);
 
-        $whiteList = PHPCodeTest::getWhitelist([LessWrapper::LESS_FILE_EXTENSION], __DIR__);
+        $fileList = PHPCodeTest::getWhitelist([LessWrapper::LESS_FILE_EXTENSION], __DIR__);
 
-        $result = $codeSniffer->run($whiteList);
+        $result = $codeSniffer->run($this->filterFiles($fileList));
 
         $this->assertEquals(
             0,
             $result,
             "PHP Code Sniffer has found {$result} error(s): See detailed report in {$reportFile}"
         );
+    }
+
+    /**
+     * Skip blacklisted files
+     *
+     * @param array $fileList
+     * @return array
+     * @throws \Exception
+     */
+    private function filterFiles(array $fileList)
+    {
+        $blackListFiles = Files::init()->readLists(__DIR__ . '/_files/blacklist/*.txt');
+
+        $filter = function ($value) use ($blackListFiles) {
+            return !in_array($value, $blackListFiles);
+        };
+
+        return array_filter($fileList, $filter);
     }
 }
