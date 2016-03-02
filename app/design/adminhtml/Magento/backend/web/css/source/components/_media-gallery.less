@@ -289,16 +289,13 @@
 //  ---------------------------------------------
 
 .image-panel {
-    &:extend(.abs-clearfix all);
+    .lib-vendor-prefix-display(flex);
+    .lib-vendor-prefix-flex-direction(row);
     background: @color-white;
     border-bottom: 1px solid @color-gray76;
     box-shadow: inset 0 1px 3px @color-gray80;
-    clear: both;
-    display: none;
-    margin: 0 -18px 15px;
-    padding: @indent__base 15px;
-    position: relative;
-    top: 5px;
+    margin: 0 0 1.5rem;
+    padding: @indent__base 1.5rem;
 
     .admin__fieldset {
         .admin__field:not(.admin__field-inline) {
@@ -321,13 +318,11 @@
 
 .image-panel-controls,
 .image-panel-preview {
-    float: left;
-    margin-left: 2.127659574%;
-    width: 65.95744680199999%;
+    flex: 1;
 }
 
 .image-panel-preview {
-    margin-left: 0;
+    align-self: center;
 
     img {
         display: block;
@@ -336,19 +331,18 @@
 }
 
 .image-panel-controls {
-    padding: 0 1%;
-    width: 29.914893614%;
+    padding-left: @indent__l;
+    flex: 0 0 33%;
 
     .image-name {
+        .lib-font-size(16);
         color: @color-gray40;
         display: block;
-        .lib-font-size(16);
     }
 
     .action-delete,
     .action-remove {
         &:extend(.abs-action-reset all);
-        margin: 0 0 35px;
         .lib-icon-font(
             @icon-delete__content,
             @_icon-font: @icons-admin__font-name,
@@ -357,6 +351,7 @@
             @_icon-font-color-hover: @image-gallery-icons__hover__color,
             @_icon-font-text-hide: true
         );
+        margin: 0 0 35px;
     }
 
     .fieldset-image-panel {
