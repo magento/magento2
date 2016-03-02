@@ -16,6 +16,13 @@ use Magento\Framework\Controller\ResultFactory;
 abstract class Rate extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Tax::manage_tax';
+
+    /**
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry;
@@ -79,13 +86,5 @@ abstract class Rate extends \Magento\Backend\App\Action
             ->addBreadcrumb(__('Sales'), __('Sales'))
             ->addBreadcrumb(__('Tax'), __('Tax'));
         return $resultPage;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Tax::manage_tax');
     }
 }
