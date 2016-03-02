@@ -120,7 +120,7 @@
     margin-bottom: 2rem;
 
     .label {
-        .extend__visually-hidden();
+        &:extend(.abs-visually-hidden all);
     }
 }
 
@@ -139,8 +139,8 @@
 
 .dashboard-totals-list {
     &:extend(.abs-clearfix all);
+    &:extend(.abs-list-reset-styles all);
     display: table;
-    .extend__list-reset-styles();
     width: 100%;
 }
 
