@@ -9,6 +9,7 @@ use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\CustomOptions as CustomOptionsModifier;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableProductType;
 use Magento\Ui\Component\Container;
 
 /**
@@ -16,7 +17,6 @@ use Magento\Ui\Component\Container;
  */
 class CustomOptions extends AbstractModifier
 {
-    const PRODUCT_TYPE_CONFIGURABLE = 'configurable';
     const WARNING_PRICE_TYPE = 'price_type_warning';
 
     /**
@@ -52,10 +52,8 @@ class CustomOptions extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        if ($this->locator->getProduct()->getTypeId() === static::PRODUCT_TYPE_CONFIGURABLE) {
-            $meta = $this->addPriceTypeWarning($meta);
-            $meta = $this->modifyPriceTypeOptions($meta);
-        }
+        $meta = $this->addPriceTypeWarning($meta);
+        $meta = $this->modifyPriceTypeFields($meta);
 
         return $meta;
     }
@@ -78,18 +76,24 @@ class CustomOptions extends AbstractModifier
         if ($gridPath) {
             $path = $this->arrayManager->slicePath($gridPath, 0, -1) . '/' . static::WARNING_PRICE_TYPE;
             $sortOrder = $this->arrayManager->get($gridPath . static::META_CONFIG_PATH . '/sortOrder', $meta) - 1;
+            $isConfigurable = $this->locator->getProduct()->getTypeId() === ConfigurableProductType::TYPE_CODE;
 
             $meta = $this->arrayManager->set(
                 $path . static::META_CONFIG_PATH,
                 $meta,
                 [
                     'componentType' => Container::NAME,
-                    'component' => 'Magento_Ui/js/form/components/html',
+                    'component' => 'Magento_ConfigurableProduct/js/components/custom-options-warning',
                     'additionalClasses' => 'message message-warning',
                     'sortOrder' => $sortOrder,
+                    'isConfigurable' => $isConfigurable,
                     'content' => __(
                         'Custom options with price type "percent" is not available for configurable product.'
-                    )
+                    ),
+                    'imports' => [
+                        'updateVisibility' => 'ns = ${ $.ns }, index = '
+                            . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty'
+                    ]
                 ]
             );
         }
@@ -98,13 +102,14 @@ class CustomOptions extends AbstractModifier
     }
 
     /**
-     * Remove price type "percent" from option list
+     * Modify "Price Type" fields
      *
      * @param array $meta
      * @return array
      */
-    private function modifyPriceTypeOptions(array $meta)
+    private function modifyPriceTypeFields(array $meta)
     {
+        $isConfigurable = $this->locator->getProduct()->getTypeId() === ConfigurableProductType::TYPE_CODE;
         $paths = $this->arrayManager->findPaths(
             CustomOptionsModifier::FIELD_PRICE_TYPE_NAME,
             $meta,
@@ -113,18 +118,19 @@ class CustomOptions extends AbstractModifier
         );
 
         foreach ($paths as $fieldPath) {
-            $optionsPath = $fieldPath . static::META_CONFIG_PATH . '/options';
-            $options = $this->arrayManager->get($optionsPath, $meta);
-
-            if ($options) {
-                foreach ($options as $index => $option) {
-                    if ($option['value'] === 'percent') {
-                        unset($options[$index]);
-                    }
-                }
-
-                $meta = $this->arrayManager->replace($optionsPath, $meta, $options);
-            }
+            $meta = $this->arrayManager->merge(
+                $fieldPath . static::META_CONFIG_PATH,
+                $meta,
+                [
+                    'component' => 'Magento_ConfigurableProduct/js/components/custom-options-price-type',
+                    'isConfigurable' => $isConfigurable,
+                    'bannedOptions' => ['percent'],
+                    'imports' => [
+                        'updateOptions' => 'ns = ${ $.ns }, index = '
+                            . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty'
+                    ]
+                ]
+            );
         }
 
         return $meta;
