@@ -5,7 +5,7 @@
   -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
     <group id="default">
-        <job name="messagequeue_clean_outdated_locks" instance="Magento\MessageQueue\Model\ResourceModel\Lock" method="releaseOutdatedLocks">
+        <job name="messagequeue_clean_outdated_locks" instance="Magento\Framework\MessageQueue\Lock\WriterInterface" method="releaseOutdatedLocks">
             <schedule>0 * * * *</schedule>
         </job>
     </group>

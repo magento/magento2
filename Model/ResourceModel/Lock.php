@@ -83,10 +83,10 @@ class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     /**
      * {@inheritDoc}
      */
-    public function releaseOutdatedLocks($interval)
+    public function releaseOutdatedLocks()
     {
         $date = (new \DateTime())->setTimestamp($this->dateTime->gmtTimestamp());
-        $date->add(new \DateInterval('PT' . $interval . 'S'));
+        $date->add(new \DateInterval('PT' . $this->interval . 'S'));
         $selectObject = $this->getConnection()->select();
         $selectObject
             ->from(['queue_lock' => $this->getTable('queue_lock')])
