@@ -11,7 +11,8 @@
         "magento/module-customer": "100.0.*",
         "magento/module-eav": "100.0.*",
         "magento/module-quote": "100.0.*",
-        "magento/framework": "100.0.*"
+        "magento/framework": "100.0.*",
+        "magento/module-ui": "100.0.*"
     },
     "suggest": {
         "magento/module-multishipping": "100.0.*"
