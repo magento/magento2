@@ -78,9 +78,23 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     public function testGetRegionCodeRegionIsSet()
     {
+        $regionId = 1;
         $this->address->setData('region', 'region');
-        $this->regionFactoryMock->expects($this->never())
-            ->method('create');
+        $this->address->setData('region_id', $regionId);
+        $this->address->setData('country_id', 2);
+
+        $this->regionMock->expects(static::once())
+            ->method('load')
+            ->with($regionId)
+            ->willReturnSelf();
+
+        $this->regionMock->expects(static::once())
+            ->method('getCountryId')
+            ->willReturn(1);
+
+        $this->regionFactoryMock->expects(static::once())
+            ->method('create')
+            ->willReturn($this->regionMock);
         $this->assertEquals('region', $this->address->getRegionCode());
     }
 
