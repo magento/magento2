@@ -215,6 +215,7 @@
         </field>
         <field name="is_global">
             <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Catalog\Model\Attribute\Source\Scopes</item>
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">20</item>
                     <item name="dataType" xsi:type="string">string</item>
