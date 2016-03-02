@@ -876,7 +876,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      *
      * @param \Magento\Framework\DataObject $object
      * @throws \Magento\Eav\Model\Entity\Attribute\Exception
-     * @return bool|array
+     * @return true|array
      */
     public function validate($object)
     {
