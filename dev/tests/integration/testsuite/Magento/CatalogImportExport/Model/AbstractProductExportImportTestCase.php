@@ -82,8 +82,16 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
     {
         $this->fixtures = $fixtures;
         $this->executeFixtures($fixtures, $skus);
+        $this->modifyData($skus);
         $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
         $this->executeExportTest($skus, $skippedAttributes);
+    }
+
+    /**
+     * @param array $skus
+     */
+    protected function modifyData($skus)
+    {
     }
 
     protected function executeExportTest($skus, $skippedAttributes)
@@ -148,6 +156,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
     {
         $this->fixtures = $fixtures;
         $this->executeFixtures($fixtures, $skus);
+        $this->modifyData($skus);
         $this->executeImportDeleteTest($skus);
     }
 
@@ -172,7 +181,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    private function executeFixtures($fixtures, $skus = [])
+    protected function executeFixtures($fixtures, $skus = [])
     {
         foreach ($fixtures as $fixture) {
             $fixturePath = $this->fileSystem->getDirectoryRead(DirectoryList::ROOT)
@@ -229,6 +238,7 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
     {
         $this->fixtures = $fixtures;
         $this->executeFixtures($fixtures, $skus);
+        $this->modifyData($skus);
         $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
         $this->executeImportReplaceTest($skus, $skippedAttributes);
     }
