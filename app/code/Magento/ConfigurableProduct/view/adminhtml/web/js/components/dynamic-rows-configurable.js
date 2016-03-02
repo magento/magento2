@@ -167,6 +167,7 @@ define([
 
         processingInsertDataFromWizard: function (data) {
             var tmpArray = this.unionInsertData();
+            var exisitingIds = [];
             tmpArray = this.unsetArrayItem(tmpArray, {'id': null});
 
             _.each(data, function (row) {
@@ -187,8 +188,18 @@ define([
                 product[this.canEditField] = row.editable;
                 product[this.newProductField] = row.newProduct;
 
+                if (row.productId) {
+                    exisitingIds.push(row.productId);
+                }
+
                 tmpArray.push(product);
             }, this);
+
+            /*
+            _.each(exisitingIds, function (id) {
+                tmpArray = this.unsetArrayItem(tmpArray, {'id': id});
+            }, this);
+            */
 
             this.unionInsertData(tmpArray);
         },
