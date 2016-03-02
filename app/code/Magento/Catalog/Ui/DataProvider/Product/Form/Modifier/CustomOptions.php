@@ -1028,7 +1028,8 @@ class CustomOptions extends AbstractModifier
         foreach ($this->productOptionsConfig->getAll() as $option) {
             $group = [
                 'value' => $groupIndex,
-                'label' => __($option['label']),
+                //TODO: Wrap label with __() or remove this TODO after MAGETWO-49771 is closed
+                'label' => $option['label'],
                 'optgroup' => []
             ];
 
@@ -1037,7 +1038,8 @@ class CustomOptions extends AbstractModifier
                     continue;
                 }
 
-                $group['optgroup'][] = ['label' => __($type['label']), 'value' => $type['name']];
+                //TODO: Wrap label with __() or remove this TODO after MAGETWO-49771 is closed
+                $group['optgroup'][] = ['label' => $type['label'], 'value' => $type['name']];
             }
 
             if (count($group['optgroup'])) {
