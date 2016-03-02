@@ -159,6 +159,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface, D
      *
      * @param ThemeInterface $theme
      * @param array $iterator
+     * @param int $index
      * @return array
      */
     private function getParentConfigs(ThemeInterface $theme, array $iterator, $index = 0)
@@ -176,7 +177,7 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface, D
 
             $iterator[$index] = $parentDom->saveXML();
 
-            $iterator = $this->getParentConfigs($theme->getParentTheme(), $iterator);
+            $iterator = $this->getParentConfigs($theme->getParentTheme(), $iterator, ++$index);
         }
 
         return $iterator;
