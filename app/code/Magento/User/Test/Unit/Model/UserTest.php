@@ -151,59 +151,88 @@ class UserTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      */
-    public function testSendPasswordResetNotificationEmail()
+    public function testSendNotificationEmailsIfRequired()
     {
         $storeId = 0;
-        $email = 'test@example.com';
+        $email = 'test1@example.com';
+        $origEmail = 'test2@example.com';
+
+        $password = '1234567';
+        $origPassword = '123456789';
+
+        $username = 'admin1';
+        $origUsername = 'admin2';
+
         $firstName = 'Foo';
         $lastName = 'Bar';
 
+        $changes = __('email') . ', ' . __('password') . ', ' . __('username');
+
         $this->model->setEmail($email);
+        $this->model->setOrigData('email', $origEmail);
+
+        $this->model->setPassword($password);
+        $this->model->setOrigData('password', $origPassword);
+
+        $this->model->setUsername($username);
+        $this->model->setOrigData('username', $origUsername);
+
         $this->model->setFirstname($firstName);
         $this->model->setLastname($lastName);
 
-        $this->configMock->expects($this->at(0))
+        $this->configMock->expects($this->exactly(4))
             ->method('getValue')
-            ->with(\Magento\User\Model\User::XML_PATH_RESET_PASSWORD_TEMPLATE)
-            ->willReturn('templateId');
-        $this->configMock->expects($this->at(1))
-            ->method('getValue')
-            ->with(\Magento\User\Model\User::XML_PATH_FORGOT_EMAIL_IDENTITY)
-            ->willReturn('sender');
-        $this->transportBuilderMock->expects($this->once())
+            ->withConsecutive(
+                [\Magento\User\Model\User::XML_PATH_USER_NOTIFICATION_TEMPLATE],
+                [\Magento\User\Model\User::XML_PATH_FORGOT_EMAIL_IDENTITY],
+                [\Magento\User\Model\User::XML_PATH_USER_NOTIFICATION_TEMPLATE],
+                [\Magento\User\Model\User::XML_PATH_FORGOT_EMAIL_IDENTITY]
+            )->willReturnOnConsecutiveCalls(
+                'templateId',
+                'sender',
+                'templateId',
+                'sender'
+            );
+
+        $this->transportBuilderMock->expects($this->exactly(2))
             ->method('setTemplateModel')
             ->with($this->equalTo('Magento\Email\Model\BackendTemplate'))
             ->willReturnSelf();
-        $this->transportBuilderMock->expects($this->once())
+        $this->transportBuilderMock->expects($this->exactly(2))
             ->method('setTemplateOptions')
             ->willReturnSelf();
-        $this->transportBuilderMock->expects($this->once())
+        $this->transportBuilderMock->expects($this->exactly(2))
             ->method('setTemplateVars')
-            ->with(['user' => $this->model, 'store' => $this->storetMock])
+            ->with(['user' => $this->model, 'store' => $this->storetMock, 'changes' => $changes])
             ->willReturnSelf();
-        $this->transportBuilderMock->expects($this->once())
+        $this->transportBuilderMock->expects($this->exactly(2))
             ->method('addTo')
-            ->with($this->equalTo($email), $this->equalTo($firstName . ' ' . $lastName))
+            ->withConsecutive(
+                $this->equalTo($email),
+                $this->equalTo($firstName . ' ' . $lastName),
+                $this->equalTo($origEmail),
+                $this->equalTo($firstName . ' ' . $lastName)
+            )
             ->willReturnSelf();
-        $this->transportBuilderMock->expects($this->once())
+        $this->transportBuilderMock->expects($this->exactly(2))
             ->method('setFrom')
             ->with('sender')
             ->willReturnSelf();
-        $this->transportBuilderMock->expects($this->once())
+        $this->transportBuilderMock->expects($this->exactly(2))
             ->method('setTemplateIdentifier')
             ->with('templateId')
             ->willReturnSelf();
-        $this->transportBuilderMock->expects($this->once())
+        $this->transportBuilderMock->expects($this->exactly(2))
             ->method('getTransport')
             ->willReturn($this->transportMock);
-        $this->transportMock->expects($this->once())->method('sendMessage');
+        $this->transportMock->expects($this->exactly(2))->method('sendMessage');
 
-        $this->storeManagerMock->expects($this->once())
+        $this->storeManagerMock->expects($this->exactly(2))
             ->method('getStore')
             ->with($storeId)
             ->willReturn($this->storetMock);
 
-        $this->assertInstanceOf('\Magento\User\Model\User', $this->model->sendPasswordResetNotificationEmail());
+        $this->assertInstanceOf('\Magento\User\Model\User', $this->model->sendNotificationEmailsIfRequired());
     }
 
     /**
@@ -658,15 +687,9 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->model->setPassword($newPassword)
             ->setId(1)
             ->setOrigData('password', $oldPassword);
-        $this->encryptorMock->expects($this->once())
+        $this->encryptorMock->expects($this->atLeastOnce())
             ->method('isValidHash')
-            ->with($newPassword, $oldPassword)
-            ->willReturn(false);
-
-        $this->encryptorMock->expects($this->once())
-            ->method('getHash')
-            ->with($newPassword, false)
-            ->willReturn($newPasswordHash);
+            ->will($this->onConsecutiveCalls(false, true));
 
         $this->resourceMock->expects($this->once())->method('getOldPasswords')->willReturn(['hash1', $newPasswordHash]);
 
@@ -690,24 +713,83 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $validatorMock->expects($this->once())->method('isValid')->willReturn(true);
 
         $newPassword = "NEWmYn3wpassw0rd";
-        $newPasswordHash = "new password hash";
         $oldPassword = "OLDmYn3wpassw0rd";
         $this->model->setPassword($newPassword)
             ->setId(1)
             ->setOrigData('password', $oldPassword);
-        $this->encryptorMock->expects($this->once())
+        $this->encryptorMock->expects($this->atLeastOnce())
             ->method('isValidHash')
-            ->with($newPassword, $oldPassword)
-            ->willReturn(false);
-
-        $this->encryptorMock->expects($this->once())
-            ->method('getHash')
-            ->with($newPassword, false)
-            ->willReturn($newPasswordHash);
+            ->will($this->onConsecutiveCalls(false, false, false));
 
         $this->resourceMock->expects($this->once())->method('getOldPasswords')->willReturn(['hash1', 'hash2']);
 
         $result = $this->model->validate();
         $this->assertTrue($result);
+    }
+
+    /**
+     * Test for performIdentityCheck method
+     *
+     * @param bool $verifyIdentityResult
+     * @param bool $lockExpires
+     * @dataProvider dataProviderPerformIdentityCheck
+     */
+    public function testPerformIdentityCheck($verifyIdentityResult, $lockExpires)
+    {
+        $password = 'qwerty1';
+        $userName = 'John Doe';
+
+        $this->encryptorMock
+            ->expects($this->once())
+            ->method('validateHash')
+            ->with($password, $this->model->getPassword())
+            ->willReturn($verifyIdentityResult);
+        $this->model->setIsActive(true);
+        $this->resourceMock->expects($this->any())->method('hasAssigned2Role')->willReturn(true);
+
+        $this->model->setUserName($userName);
+        $this->model->setLockExpires($lockExpires);
+
+        $this->eventManagerMock->expects($this->any())
+            ->method('dispatch')
+            ->with(
+                'admin_user_authenticate_after',
+                [
+                    'username' => $userName,
+                    'password' => $password,
+                    'user' => $this->model,
+                    'result' => $verifyIdentityResult
+                ]
+            )
+            ->willReturnSelf();
+
+        if ($lockExpires) {
+            $this->setExpectedException(
+                '\Magento\Framework\Exception\State\UserLockedException',
+                __('Your account is temporarily disabled.')
+            );
+        }
+
+        if (!$verifyIdentityResult) {
+            $this->setExpectedException(
+                '\Magento\Framework\Exception\AuthenticationException',
+                __('You have entered an invalid password for current user.')
+            );
+        }
+
+        $this->model->performIdentityCheck($password);
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderPerformIdentityCheck()
+    {
+        return [
+            ['verifyIdentityResult' => true, 'lockExpires' => false],
+            ['verifyIdentityResult' => false, 'lockExpires' => false],
+            ['verifyIdentityResult' => true, 'lockExpires' => true],
+            ['verifyIdentityResult' => false, 'lockExpires' => true]
+        ];
     }
 }
