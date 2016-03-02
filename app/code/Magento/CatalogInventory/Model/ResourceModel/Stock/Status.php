@@ -198,10 +198,43 @@ class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $select->joinLeft(
             ['stock_status' => $this->getMainTable()],
             'e.entity_id = stock_status.product_id AND stock_status.website_id=' . $websiteId,
-            ['salable' => 'stock_status.stock_status']
+            ['is_salable' => 'stock_status.stock_status']
         );
 
         return $this;
+    }
+
+    /**
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @param bool $isFilterInStock
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     */
+    public function addStockDataToCollection($collection, $isFilterInStock)
+    {
+        $websiteId = $this->_storeManager->getStore($collection->getStoreId())->getWebsiteId();
+        $joinCondition = $this->getConnection()->quoteInto(
+            'e.entity_id = stock_status_index.product_id' . ' AND stock_status_index.website_id = ?',
+            $websiteId
+        );
+
+        $joinCondition .= $this->getConnection()->quoteInto(
+            ' AND stock_status_index.stock_id = ?',
+            Stock::DEFAULT_STOCK_ID
+        );
+
+        $collection->getSelect()->join(
+            ['stock_status_index' => $this->getMainTable()],
+            $joinCondition,
+            ['is_salable' => 'stock_status']
+        );
+
+        if ($isFilterInStock) {
+            $collection->getSelect()->where(
+                'stock_status_index.stock_status = ?',
+                Stock\Status::STATUS_IN_STOCK
+            );
+        }
+        return $collection;
     }
 
     /**
