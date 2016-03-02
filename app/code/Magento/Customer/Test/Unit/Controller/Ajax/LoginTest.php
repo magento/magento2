@@ -13,6 +13,9 @@ namespace Magento\Customer\Test\Unit\Controller\Ajax;
 
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class LoginTest extends \PHPUnit_Framework_TestCase
 {
     /**
