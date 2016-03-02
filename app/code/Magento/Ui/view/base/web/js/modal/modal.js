@@ -379,7 +379,7 @@ define([
             this.modal = this.modalWrapper.find(this.options.modalBlock).last();
             this.element.appendTo(this._getElem(this.options.modalContent));
 
-            if ((this.element).is(':hidden')){
+            if (this.element.is(':hidden')){
                 this.element.show();
             }
         },
