@@ -219,6 +219,7 @@ class AssociatedProducts
                         'configurable_attribute' => $this->getJsonConfigurableAttributes($variationOptions),
                         'weight' => $product->getWeight(),
                         'status' => $product->getStatus(),
+                        'variationKey' => $this->getVariationKey($variationOptions),
                         'canEdit' => 0,
                         'newProduct' => 0,
                     ];
@@ -245,6 +246,24 @@ class AssociatedProducts
         }
 
         return $this->jsonHelper->jsonEncode($result);
+    }
+
+    /**
+     * @param array $options
+     * @return string
+     */
+    protected function getVariationKey(array $options = [])
+    {
+        $result = [];
+
+        foreach ($options as $option) {
+            $result[] = $option['value'];
+        }
+
+        asort($result);
+
+        return implode('-', $result);
+
     }
 
     /**
