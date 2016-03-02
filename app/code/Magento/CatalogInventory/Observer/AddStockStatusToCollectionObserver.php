@@ -16,6 +16,11 @@ class AddStockStatusToCollectionObserver implements ObserverInterface
 {
 
     /**
+     * @var string[]
+     */
+    private $processedCollections = [];
+
+    /**
      * Add information about product stock status to collection
      * Used in for product collection after load
      *
@@ -26,11 +31,16 @@ class AddStockStatusToCollectionObserver implements ObserverInterface
     {
         /** @var \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection $productCollection */
         $productCollection = $observer->getEvent()->getCollection();
-        $productCollection->getSelect()
-            ->join(
-                ['css' => $productCollection->getResource()->getTable('cataloginventory_stock_status')],
-                'main_table.entity_id = css.entity_id AND css.website_id = 1 AND stock_id = 1',
-                ['is_salable' => 'css.stock_status']
-            );
+
+        $collectionHash = spl_object_hash($productCollection);
+        if  (!in_array($collectionHash, $this->processedCollections)) {
+            $productCollection->getSelect()
+                ->join(
+                    ['css' => $productCollection->getResource()->getTable('cataloginventory_stock_status')],
+                    'main_table.entity_id = css.entity_id AND css.website_id = 1 AND stock_id = 1',
+                    ['is_salable' => 'css.stock_status']
+                );
+            $this->processedCollections[] = $collectionHash;
+        }
     }
 }
