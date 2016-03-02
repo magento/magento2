@@ -167,7 +167,8 @@ define([
 
         processingInsertDataFromWizard: function (data) {
             var tmpArray = this.unionInsertData();
-            var exisitingIds = [];
+            var productIdsToDelete = this.source.get(this.dataScopeAssociatedProduct);
+            var index;
             tmpArray = this.unsetArrayItem(tmpArray, {'id': null});
 
             _.each(data, function (row) {
@@ -189,17 +190,19 @@ define([
                 product[this.newProductField] = row.newProduct;
 
                 if (row.productId) {
-                    exisitingIds.push(row.productId);
+                    index = _.indexOf(productIdsToDelete, row.productId);
+                    if (index > -1) {
+                        productIdsToDelete.splice(index, 1);
+                    }
+                    //tmpArray = this.unsetArrayItem(tmpArray, {'id': row.productId});
                 }
 
                 tmpArray.push(product);
             }, this);
 
-            /*
-            _.each(exisitingIds, function (id) {
+            _.each(productIdsToDelete, function (id) {
                 tmpArray = this.unsetArrayItem(tmpArray, {'id': id});
             }, this);
-            */
 
             this.unionInsertData(tmpArray);
         },
