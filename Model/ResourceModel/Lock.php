@@ -39,9 +39,11 @@ class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
+        \Magento\MessageQueue\Model\LockFactory $lockFactory,
         $connectionName = null,
         $interval = 86400
     ) {
+        $this->lockFactory = $lockFactory;
         $this->interval = $interval;
         $this->dateTime = $dateTime;
         parent::__construct($context, $connectionName);
@@ -63,7 +65,7 @@ class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
         $object = $this->lockFactory->create();
         $object->load($code, 'message_code');
         $lock->setId($object->getId());
-        $lock->setMessageCode($object->getMessageCode());
+        $lock->setMessageCode($object->getMessageCode() ?: $code);
         $lock->setCreatedAt($object->getCreatedAt());
     }
 
