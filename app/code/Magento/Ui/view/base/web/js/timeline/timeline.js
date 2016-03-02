@@ -16,9 +16,9 @@ define([
     return Listing.extend({
         defaults: {
             recordTmpl: 'ui/timeline/record',
-            dateFormat: 'YYYY-MM-DD hh:mm:ss',
+            dateFormat: 'YYYY-MM-DD HH:mm:ss',
             headerFormat: 'ddd MM/DD',
-            detailsFormat: 'DD/MM/YYYY hh:mm:ss',
+            detailsFormat: 'DD/MM/YYYY HH:mm:ss',
             scale: 7,
             scaleStep: 1,
             minScale: 7,
@@ -179,7 +179,7 @@ define([
             var start    = this.createDate(this.getStartDate(record)),
                 firstDay = this.range.firstDay;
 
-            return start.diff(firstDay) / ONE_DAY;
+            return start.diff(firstDay, 'days', true);
         },
 
         /**
@@ -196,7 +196,7 @@ define([
                 end = this.range.lastDay.endOf('day');
             }
 
-            return end.diff(start) / ONE_DAY;
+            return end.diff(start, 'days', true);
         },
 
         /**
