@@ -99,16 +99,16 @@ class DownloadableTest extends AbstractProductExportImportTestCase
         foreach ($expectedProductLinks as $link) {
             $expectedLinksArray[] = $link->getData();
         }
-        foreach ($actualProductLinks as $link) {
-            $this->assertContains($link->getData(), $expectedLinksArray);
+        foreach ($actualProductLinks as $actualLink) {
+            $this->assertContains($expectedLinksArray, $actualLink->getData());
         }
 
         $expectedSamplesArray = [];
         foreach ($expectedProductSamples as $sample) {
             $expectedSamplesArray[] = $sample->getData();
         }
-        foreach ($actualProductSamples as $sample) {
-            $this->assertContains($sample->getData(), $expectedSamplesArray);
+        foreach ($actualProductSamples as $actualSample) {
+            $this->assertContains($expectedSamplesArray, $actualSample->getData());
         }
     }
 }
