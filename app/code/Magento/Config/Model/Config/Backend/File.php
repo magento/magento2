@@ -91,7 +91,7 @@ class File extends \Magento\Framework\App\Config\Value
             $file['name'] = $this->_requestData->getName($this->getPath());
         } elseif (!empty($value['tmp_name'])) {
             $file['tmp_name'] = $value['tmp_name'];
-            $file['name'] = $value['value'];
+            $file['name'] = $value['name'];
         }
         if (!empty($file)) {
             $uploadDir = $this->_getUploadDir();
