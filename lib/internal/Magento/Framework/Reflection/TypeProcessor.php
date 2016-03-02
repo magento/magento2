@@ -421,12 +421,6 @@ class TypeProcessor
 
     /**
      * Get item type of the array.
-     * Example:
-     * <pre>
-     *  ComplexType[] => ComplexType
-     *  string[] => string
-     *  int[] => integer
-     * </pre>
      *
      * @param string $arrayType
      * @return string
