@@ -234,7 +234,8 @@ class Redirect
      * Set cookie manager. For unit tests.
      *
      * @deprecated
-     * @param $value
+     * @param object $value
+     * @return void
      */
     public function setCookieManager($value)
     {
