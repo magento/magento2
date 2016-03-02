@@ -3,19 +3,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\CatalogUrlRewrite\Setup;
+namespace Magento\Wishlist\Setup;
 
-use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product as ResourceProduct;
-use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\Setup\ExternalFKSetup;
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
- * CatalogUrlRewrite recurring setup
+ * @codeCoverageIgnore
  */
 class Recurring implements InstallSchemaInterface
 {
@@ -49,24 +47,27 @@ class Recurring implements InstallSchemaInterface
         $installer = $setup;
         $installer->startSetup();
 
-        $metadata = $this->metadataPool->getMetadata(CategoryInterface::class);
-        $this->externalFKSetup->install(
-            $installer,
-            $metadata->getEntityTable(),
-            $metadata->getIdentifierField(),
-            ResourceProduct::TABLE_NAME,
-            'category_id'
-        );
+        $this->addExternalForeignKeys($installer);
 
+        $installer->endSetup();
+    }
+
+    /**
+     * Add external foreign keys
+     *
+     * @param SchemaSetupInterface $installer
+     * @return void
+     * @throws \Exception
+     */
+    protected function addExternalForeignKeys(SchemaSetupInterface $installer)
+    {
         $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         $this->externalFKSetup->install(
             $installer,
             $metadata->getEntityTable(),
             $metadata->getIdentifierField(),
-            'catalog_url_rewrite_product_category',
+            'wishlist_item',
             'product_id'
         );
-
-        $installer->endSetup();
     }
 }
