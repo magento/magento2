@@ -301,7 +301,7 @@ class Processor
     {
         $documentRoot = '';
         if (!empty($_SERVER['DOCUMENT_ROOT'])) {
-            $documentRoot = rtrim($_SERVER['DOCUMENT_ROOT'], '/');
+            $documentRoot = rtrim(realpath($_SERVER['DOCUMENT_ROOT']), '/');
         }
         return dirname($documentRoot . $this->_scriptName) . '/';
     }
