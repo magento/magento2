@@ -44,7 +44,7 @@ define([
             $(handles.height).show();
         }
 
-        if (maxWidth && $(element).width() > maxWidth) {
+        if (maxWidth && element.width() > maxWidth) {
             element.width(maxWidth + 1);
             $(handles.width).hide();
         } else {
@@ -54,22 +54,34 @@ define([
 
     /**
      * Recalcs allowed min, max width and height based on configured selectors
+     * @param {Object} sizeConstraints
+     * @param {String} componentName
+     * @param {HTMLElement} element
+     * @param {Boolean} hasWidthUpdate
      */
-    function recalcAllowedSize() {
-        var size,
-            element = this.element;
+    function recalcAllowedSize(sizeConstraints, componentName, element, hasWidthUpdate) {
+        var size;
 
-        if (_.isEmpty(this.widthUpdate)) {
-            $(element).css('width', 'auto');
+        element = $(element);
+
+        if (!element.data('resizable')) {
+            return;
         }
 
-        _.each(this.sizeConstraints, function (selector, key) {
+        if (!hasWidthUpdate) {
+            element.css('width', 'auto');
+        }
+
+        _.each(sizeConstraints, function (selector, key) {
             async.async({
-                component: this.componentName,
+                component: componentName,
                 selector: selector
             }, function (elem) {
                 size = key.indexOf('Height') !== -1 ? $(elem).outerHeight(true) : $(elem).outerWidth(true);
-                $(element).resizable('option', key, size + 1);
+
+                if (element.data('resizable')) {
+                    element.resizable('option', key, size + 1);
+                }
             });
         }, this);
 
@@ -88,7 +100,8 @@ define([
     function processConfig(config, viewModel, element) {
         var sizeConstraint,
             sizeConstraints = {},
-            recalc;
+            recalc,
+            hasWidthUpdate;
 
         if (_.isEmpty(config)) {
             return {};
@@ -101,15 +114,11 @@ define([
                 delete config[key];
             }
         });
-
-        recalc = recalcAllowedSize.bind({
-            sizeConstraints: sizeConstraints,
-            componentName: viewModel.name,
-            element: element,
-            widthUpdate: _.filter(sizeConstraints, function (value, key) {
-                return key.indexOf('Width') !== -1;
-            })
+        hasWidthUpdate =  _.some(sizeConstraints, function (value, key) {
+            return key.indexOf('Width') !== -1;
         });
+
+        recalc = recalcAllowedSize.bind(null, sizeConstraints, viewModel.name, element, hasWidthUpdate);
         config.start = recalc;
         $(window).on('resize.resizable', recalc);
         registry.get(viewModel.provider).on('reloaded', recalc);
