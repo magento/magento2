@@ -72,3 +72,4 @@ To suggest documentation improvements, click [here][4].
 [2]: <http://devdocs.magento.com/guides/v2.0/contributor-guide/contributing.html#report>
 [3]: <https://github.com/magento/magento2/issues>
 [4]: <http://devdocs.magento.com>
+Test
