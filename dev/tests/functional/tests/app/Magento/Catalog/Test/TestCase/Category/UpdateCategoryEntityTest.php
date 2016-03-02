@@ -85,7 +85,7 @@ class UpdateCategoryEntityTest extends Injectable
      *
      * @param Category $category
      * @param Category $initialCategory
-     * @return void
+     * @return array
      */
     public function test(Category $category, Category $initialCategory)
     {
