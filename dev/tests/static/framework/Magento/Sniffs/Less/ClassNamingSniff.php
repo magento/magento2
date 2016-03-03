@@ -27,7 +27,7 @@ class ClassNamingSniff implements PHP_CodeSniffer_Sniff
      *
      * @var array
      */
-    public $supportedTokenizers = ['CSS'];
+    public $supportedTokenizers = [CodeSnifferTokenizerSymbols::TOKENIZER_CSS];
 
     /**
      * {@inheritdoc}
@@ -45,7 +45,10 @@ class ClassNamingSniff implements PHP_CodeSniffer_Sniff
         $tokens = $phpcsFile->getTokens();
 
         if (T_WHITESPACE !== $tokens[$stackPtr - 1]['code']
-            && !in_array($tokens[$stackPtr - 1]['content'], ['    ', "\n"])
+            && !in_array($tokens[$stackPtr - 1]['content'], [
+                CodeSnifferTokenizerSymbols::S_INDENT_SPACES,
+                CodeSnifferTokenizerSymbols::S_NEW_LINE,
+            ])
         ) {
             return;
         }

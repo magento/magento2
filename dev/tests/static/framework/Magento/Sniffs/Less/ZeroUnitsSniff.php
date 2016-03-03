@@ -15,7 +15,7 @@ use PHP_CodeSniffer_Sniff;
  * Omit leading "0"s in values, use dot instead
  *
  * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#and-units
- *       http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#floating-values
+ * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#floating-values
  *
  */
 class ZeroUnitsSniff implements PHP_CodeSniffer_Sniff
@@ -40,7 +40,7 @@ class ZeroUnitsSniff implements PHP_CodeSniffer_Sniff
      *
      * @var array
      */
-    public $supportedTokenizers = ['CSS'];
+    public $supportedTokenizers = [CodeSnifferTokenizerSymbols::TOKENIZER_CSS];
 
     /**
      * {@inheritdoc}

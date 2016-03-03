@@ -22,7 +22,7 @@ class IndentationSniff implements PHP_CodeSniffer_Sniff
      *
      * @var array
      */
-    public $supportedTokenizers = ['CSS'];
+    public $supportedTokenizers = [CodeSnifferTokenizerSymbols::TOKENIZER_CSS];
 
     /**
      * The number of spaces code should be indented.
@@ -38,6 +38,12 @@ class IndentationSniff implements PHP_CodeSniffer_Sniff
      */
     public $maxIndentLevel = 3;
 
+    /** Skip codes that can be detected by sniffer incorrectly
+     *
+     * @var array
+     */
+    private $styleCodesToSkip = [T_ASPERAND, T_COLON, T_OPEN_PARENTHESIS, T_CLOSE_PARENTHESIS];
+
     /**
      * {@inheritdoc}
      */
@@ -45,12 +51,6 @@ class IndentationSniff implements PHP_CodeSniffer_Sniff
     {
         return [T_OPEN_TAG];
     }
-
-    /** Skip codes that can be detected by sniffer incorrectly
-     *
-     * @var array
-     */
-    private $styleCodesToSkip = [T_ASPERAND, T_COLON, T_OPEN_PARENTHESIS, T_CLOSE_PARENTHESIS];
 
     /**
      * {@inheritdoc}
@@ -97,7 +97,7 @@ class IndentationSniff implements PHP_CodeSniffer_Sniff
             }
 
             if ($indentLevel > $this->maxIndentLevel) {
-                // Will be implemented in next task related to LESS warnings
+                // Will be implemented in MAGETWO-49778
                 // $phpcsFile->addWarning('Avoid using more than three levels of nesting', $i, 'IncorrectNestingLevel');
             }
         }

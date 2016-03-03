@@ -17,7 +17,7 @@ use PHP_CodeSniffer_Sniff;
  * - All variable names must be lowercase
  *
  * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#local-variables
- *       http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#naming
+ * @link http://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#naming
  *
  */
 class VariablesSniff implements PHP_CodeSniffer_Sniff
@@ -27,7 +27,7 @@ class VariablesSniff implements PHP_CodeSniffer_Sniff
      *
      * @var array
      */
-    public $supportedTokenizers = ['CSS'];
+    public $supportedTokenizers = [CodeSnifferTokenizerSymbols::TOKENIZER_CSS];
 
     /**
      * {@inheritdoc}

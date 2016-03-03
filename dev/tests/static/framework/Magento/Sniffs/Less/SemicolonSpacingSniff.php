@@ -23,7 +23,25 @@ class SemicolonSpacingSniff implements PHP_CodeSniffer_Sniff
      *
      * @var array
      */
-    public $supportedTokenizers = ['CSS'];
+    public $supportedTokenizers = [CodeSnifferTokenizerSymbols::TOKENIZER_CSS];
+
+    /**
+     * Skip symbols that can be detected by sniffer incorrectly
+     *
+     * @var array
+     */
+    private $styleSymbolsToSkip = [
+        CodeSnifferTokenizerSymbols::S_ASPERAND,
+        CodeSnifferTokenizerSymbols::S_COLON,
+        CodeSnifferTokenizerSymbols::S_OPEN_PARENTHESIS,
+        CodeSnifferTokenizerSymbols::S_CLOSE_PARENTHESIS,
+    ];
+
+    /** Skip codes that can be detected by sniffer incorrectly
+     *
+     * @var array
+     */
+    private $styleCodesToSkip = [T_ASPERAND, T_COLON, T_OPEN_PARENTHESIS, T_CLOSE_PARENTHESIS];
 
     /**
      * {@inheritdoc}
@@ -34,21 +52,7 @@ class SemicolonSpacingSniff implements PHP_CodeSniffer_Sniff
     }
 
     /**
-     * Skip symbols that can be detected by sniffer incorrectly
-     *
-     * @var array
-     */
-    private $styleSymbolsToSkip = ['&', ';', '(', ')'];
-
-    /** Skip codes that can be detected by sniffer incorrectly
-     *
-     * @var array
-     */
-    private $styleCodesToSkip = [T_ASPERAND, T_COLON, T_OPEN_PARENTHESIS, T_CLOSE_PARENTHESIS];
-
-    /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
@@ -58,26 +62,48 @@ class SemicolonSpacingSniff implements PHP_CodeSniffer_Sniff
             return;
         }
 
-        $semicolon = $phpcsFile->findNext(T_SEMICOLON, ($stackPtr + 1));
-        if ($tokens[$semicolon]['line'] !== $tokens[$stackPtr]['line']) {
-            $semicolon = $phpcsFile->findNext(T_STYLE, ($stackPtr + 1), null, false, ";");
+        $semicolonPtr = $phpcsFile->findNext(T_SEMICOLON, ($stackPtr + 1));
+        if ($tokens[$semicolonPtr]['line'] !== $tokens[$stackPtr]['line']) {
+            $semicolonPtr = $phpcsFile->findNext(T_STYLE, ($stackPtr + 1), null, false, ";");
         }
 
-        if ((false === $semicolon || $tokens[$semicolon]['line'] !== $tokens[$stackPtr]['line'])
+        $this->validateSemicolon($phpcsFile, $stackPtr, $tokens, $semicolonPtr);
+        $this->validateSpaces($phpcsFile, $stackPtr, $tokens, $semicolonPtr);
+    }
+
+    /**
+     * @param PHP_CodeSniffer_File $phpcsFile
+     * @param int $stackPtr
+     * @param array $tokens
+     * @param int $semicolonPtr
+     * @return void
+     */
+    private function validateSemicolon(PHP_CodeSniffer_File $phpcsFile, $stackPtr, array $tokens, $semicolonPtr)
+    {
+        if ((false === $semicolonPtr || $tokens[$semicolonPtr]['line'] !== $tokens[$stackPtr]['line'])
             && (isset($tokens[$stackPtr - 1]) && !in_array($tokens[$stackPtr - 1]['code'], $this->styleCodesToSkip))
             && (T_COLON !== $tokens[$stackPtr + 1]['code'])
         ) {
             $error = 'Style definitions must end with a semicolon';
             $phpcsFile->addError($error, $stackPtr, 'NotAtEnd');
+        }
+    }
+
+    /**
+     * @param PHP_CodeSniffer_File $phpcsFile
+     * @param int $stackPtr
+     * @param array $tokens
+     * @param int $semicolonPtr
+     * @return void
+     */
+    private function validateSpaces(PHP_CodeSniffer_File $phpcsFile, $stackPtr, array $tokens, $semicolonPtr)
+    {
+        if (!isset($tokens[($semicolonPtr - 1)])) {
             return;
         }
 
-        if (!isset($tokens[($semicolon - 1)])) {
-            return;
-        }
-
-        if ($tokens[($semicolon - 1)]['code'] === T_WHITESPACE) {
-            $length  = strlen($tokens[($semicolon - 1)]['content']);
+        if ($tokens[($semicolonPtr - 1)]['code'] === T_WHITESPACE) {
+            $length  = strlen($tokens[($semicolonPtr - 1)]['content']);
             $error = 'Expected 0 spaces before semicolon in style definition; %s found';
             $data  = [$length];
             $phpcsFile->addError($error, $stackPtr, 'SpaceFound', $data);

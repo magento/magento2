@@ -53,7 +53,7 @@ class TypeSelectorsSniff implements PHP_CodeSniffer_Sniff
      *
      * @var array
      */
-    public $supportedTokenizers = ['CSS'];
+    public $supportedTokenizers = [CodeSnifferTokenizerSymbols::TOKENIZER_CSS];
 
     /**
      * {@inheritdoc}
@@ -85,7 +85,7 @@ class TypeSelectorsSniff implements PHP_CodeSniffer_Sniff
         if ((T_STRING === $tokens[$stackPtr - 1]['code'])
             && in_array($tokens[$stackPtr - 1]['content'], $this->tags)
         ) {
-            // Will be implemented in next task related to LESS warnings
+            // Will be implemented in MAGETWO-49778
             //$phpcsFile->addWarning('Type selector is used', $stackPtr, 'TypeSelector');
         }
 

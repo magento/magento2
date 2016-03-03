@@ -24,7 +24,7 @@ class BracesFormattingSniff implements PHP_CodeSniffer_Sniff
      *
      * @var array
      */
-    public $supportedTokenizers = ['CSS'];
+    public $supportedTokenizers = [CodeSnifferTokenizerSymbols::TOKENIZER_CSS];
 
     /**
      * {@inheritdoc}
@@ -42,7 +42,7 @@ class BracesFormattingSniff implements PHP_CodeSniffer_Sniff
         $tokens = $phpcsFile->getTokens();
 
         if (T_OPEN_CURLY_BRACKET === $tokens[$stackPtr]['code']) {
-            if (" " !== $tokens[$stackPtr - 1]['content']) {
+            if (CodeSnifferTokenizerSymbols::S_WHITESPACE !== $tokens[$stackPtr - 1]['content']) {
                 $phpcsFile->addError('Space before opening brace is missing', $stackPtr, 'SpacingBeforeOpen');
             }
 
@@ -58,8 +58,8 @@ class BracesFormattingSniff implements PHP_CodeSniffer_Sniff
             $found = (($tokens[$next]['line'] - $tokens[$stackPtr]['line']) - 1);
             if ($found !== 1) {
                 $error = 'Expected one blank line after closing brace of class definition; %s found';
-                $data  = [$found];
-                // Will be implemented in next task related to LESS warnings
+                $data = [$found];
+                // Will be implemented in MAGETWO-49778
                 //$phpcsFile->addWarning($error, $stackPtr, 'SpacingAfterClose', $data);
             }
         }
@@ -79,9 +79,9 @@ class BracesFormattingSniff implements PHP_CodeSniffer_Sniff
 
         $prev = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr - 1), null, true);
         if ($prev !== false && $tokens[$prev]['line'] !== ($tokens[$stackPtr]['line'] - 1)) {
-            $num   = ($tokens[$stackPtr]['line'] - $tokens[$prev]['line'] - 1);
+            $num = ($tokens[$stackPtr]['line'] - $tokens[$prev]['line'] - 1);
             $error = 'Expected 0 blank lines before closing brace of class definition; %s found';
-            $data  = [$num];
+            $data = [$num];
             $phpcsFile->addError($error, $stackPtr, 'SpacingBeforeClose', $data);
         }
     }

@@ -24,7 +24,7 @@ class SelectorDelimiterSniff implements PHP_CodeSniffer_Sniff
      *
      * @var array
      */
-    public $supportedTokenizers = ['CSS'];
+    public $supportedTokenizers = [CodeSnifferTokenizerSymbols::TOKENIZER_CSS];
 
     /**
      * {@inheritdoc}
@@ -36,19 +36,28 @@ class SelectorDelimiterSniff implements PHP_CodeSniffer_Sniff
 
     /**
      * {@inheritdoc}
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 
-        $prevPtr = $stackPtr - 1;
-        $nextPtr = $stackPtr + 1;
-
         // Check that there's no spaces before delimiter
-        if ($tokens[$prevPtr]['code'] === T_WHITESPACE) {
-            $phpcsFile->addError('Spaces should not be before delimiter', $prevPtr, 'SpacesBeforeDelimiter');
+        if ($tokens[$stackPtr - 1]['code'] === T_WHITESPACE) {
+            $phpcsFile->addError('Spaces should not be before delimiter', $stackPtr - 1, 'SpacesBeforeDelimiter');
         }
+
+        $this->validateParenthesis($phpcsFile, $stackPtr, $tokens);
+    }
+
+    /**
+     * @param PHP_CodeSniffer_File $phpcsFile
+     * @param int $stackPtr
+     * @param array $tokens
+     * @return void
+     */
+    private function validateParenthesis(PHP_CodeSniffer_File $phpcsFile, $stackPtr, array $tokens)
+    {
+        $nextPtr = $stackPtr + 1;
 
         $nextClassPtr = $phpcsFile->findNext(T_STRING_CONCAT, $nextPtr);
         $nextOpenBrace = $phpcsFile->findNext(T_OPEN_CURLY_BRACKET, $nextPtr);
