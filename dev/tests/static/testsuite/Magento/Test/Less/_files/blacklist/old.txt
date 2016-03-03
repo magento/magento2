@@ -5,8 +5,5 @@ app/design/adminhtml/Magento/backend/Magento_ConfigurableProduct/web/css/source/
 app/design/adminhtml/Magento/backend/Magento_Theme/web/css/source/_module-old.less
 app/design/adminhtml/Magento/backend/Magento_Tax/web/css/source/_module-old.less
 app/design/adminhtml/Magento/backend/Magento_Msrp/web/css/source/_module-old.less
-app/design/adminhtml/Magento/backend/Magento_GiftRegistry/web/css/source/_module-old.less
-app/design/adminhtml/Magento/backend/Magento_GiftCard/web/css/source/_module-old.less
-app/design/adminhtml/Magento/backend/Magento_Enterprise/web/css/source/_module-old.less
 app/design/adminhtml/Magento/backend/Magento_Developer/web/css/source/_module-old.less
 app/design/adminhtml/Magento/backend/Magento_Catalog/web/css/source/_module-old.less
