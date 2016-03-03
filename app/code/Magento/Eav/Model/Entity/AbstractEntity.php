@@ -20,7 +20,8 @@ use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
-
+use Magento\Framework\App\ObjectManager;
+use Magento\Eav\Model\Entity\AttributeLoaderInterface;
 /**
  * Entity/Attribute/Model - entity abstract
  *
@@ -31,6 +32,11 @@ use Magento\Framework\Model\ResourceModel\AbstractResource;
  */
 abstract class AbstractEntity extends AbstractResource implements EntityInterface, DefaultAttributesProvider
 {
+    /**
+     * @var \Magento\Eav\Model\Entity\AttributeLoaderInterface
+     */
+    private $attributeLoader;
+
     /**
      * Connection name
      *
@@ -65,13 +71,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      * @var array
      */
     protected $_staticAttributes = [];
-
-    /**
-     * Default Attributes that are static
-     *
-     * @var array
-     */
-    protected static $_defaultAttributes = [];
 
     /**
      * Entity table
@@ -449,35 +448,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     }
 
     /**
-     * Return default static virtual attribute that doesn't exists in EAV attributes
-     *
-     * @param string $attributeCode
-     * @return Attribute
-     */
-    protected function _getDefaultAttribute($attributeCode)
-    {
-        $entityTypeId = $this->getEntityType()->getId();
-        if (!isset(self::$_defaultAttributes[$entityTypeId][$attributeCode])) {
-            $attribute = $this->_universalFactory->create(
-                $this->getEntityType()->getAttributeModel()
-            )->setAttributeCode(
-                $attributeCode
-            )->setBackendType(
-                AbstractAttribute::TYPE_STATIC
-            )->setIsGlobal(
-                1
-            )->setEntityType(
-                $this->getEntityType()
-            )->setEntityTypeId(
-                $this->getEntityType()->getId()
-            );
-            self::$_defaultAttributes[$entityTypeId][$attributeCode] = $attribute;
-        }
-
-        return self::$_defaultAttributes[$entityTypeId][$attributeCode];
-    }
-
-    /**
      * Adding attribute to entity
      *
      * @param AbstractAttribute $attribute
@@ -537,27 +507,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
      */
     public function loadAllAttributes($object = null)
     {
-//        $attributeCodes = $this->_eavConfig->getEntityAttributeCodes($this->getEntityType(), $object);
-//
-//        /**
-//         * Check and init default attributes
-//         */
-//        $defaultAttributes = $this->getDefaultAttributes();
-//        foreach ($defaultAttributes as $attributeCode) {
-//            $attributeIndex = array_search($attributeCode, $attributeCodes);
-//            if ($attributeIndex !== false) {
-//                $this->getAttribute($attributeCodes[$attributeIndex]);
-//                unset($attributeCodes[$attributeIndex]);
-//            } else {
-//                $this->addAttribute($this->_getDefaultAttribute($attributeCode));
-//            }
-//        }
-//
-//        foreach ($attributeCodes as $code) {
-//            $this->getAttribute($code);
-//        }
-
-        return $this;
+        return $this->getAttributeLoader()->loadAllAttributes($this, $object);
     }
 
     /**
@@ -1900,5 +1850,20 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     protected function _isAttributeValueEmpty(AbstractAttribute $attribute, $value)
     {
         return $attribute->isValueEmpty($value);
+    }
+
+    /**
+     * The getter function to get the AttributeLoaderInterface
+     *
+     * @return AttributeLoaderInterface
+     *
+     * @deprecated
+     */
+    private function getAttributeLoader()
+    {
+        if ($this->attributeLoader === null) {
+            $this->attributeLoader= ObjectManager::getInstance()->get(AttributeLoaderInterface::class);
+        }
+        return $this->attributeLoader;
     }
 }
