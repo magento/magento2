@@ -21,14 +21,17 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Shipping\Model\Shipping\Labels
      */
     protected $labels;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
     protected $scopeConfig;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -128,13 +131,6 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
                 [Shipment::XML_PATH_STORE_ADDRESS2, ScopeInterface::SCOPE_STORE, $storeId, '1st Park Avenue'],
             ]);
 
-        $this->region->expects(static::once())
-            ->method('load')
-            ->willReturnSelf();
-        $this->region->expects(static::once())
-            ->method('getCode')
-            ->willReturn('CO');
-
         $this->labels->requestToShipment($shipment);
     }
 
@@ -213,9 +209,9 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
         $address = $this->getMockBuilder('Magento\Sales\Model\Order\Address')
             ->disableOriginalConstructor()
             ->getMock();
-        $address->expects(static::once())
-            ->method('getRegionId')
-            ->willReturn(23);
+        $address->expects(static::exactly(2))
+            ->method('getRegionCode')
+            ->willReturn('CO');
         $address->expects(static::exactly(2))
             ->method('getFirstname')
             ->willReturn('Chimi');
