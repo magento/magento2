@@ -102,13 +102,16 @@
                 <item name="config" xsi:type="array">
                     <item name="additionalClasses" xsi:type="string">admin__field-no-label</item>
                     <item name="description" xsi:type="string" translate="true">Merge existing synonyms</item>
-                    <item name="dataType" xsi:type="string">boolean</item>
                     <item name="default" xsi:type="boolean">false</item>
                     <item name="formElement" xsi:type="string">checkbox</item>
                     <item name="dataScope" xsi:type="string">mergeOnConflict</item>
                     <item name="source" xsi:type="string">block</item>
                     <item name="tooltip" xsi:type="array">
                         <item name="description" xsi:type="string" translate="true">Automatically merges synonyms in groups that share the same scope. If you check this box and you add one or more of the same terms to different synonym groups in the same scope, automatically merges all the terms to one group. If this isn't what you want, uncheck the box and an error displays if you try to add the same terms.</item>
+                    </item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="boolean">true</item>
+                        <item name="false" xsi:type="boolean">false</item>
                     </item>
                 </item>
             </argument>
