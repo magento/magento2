@@ -23,7 +23,7 @@ define([
             isReadOnly: false,
 
             initialize: function () {
-                if (_.isEmpty(value)) {
+                if (_.isEmpty(value())) {
                     container.addClassName('unavailable');
                 }
 
@@ -290,22 +290,18 @@ define([
 
             this.inputName = this.prefixName + '[' + this.elementName + ']' + this.suffixName;
 
-            var elementName = this.elementName;
-            var value = this.value;
-            var uploadUrl = this.uploadUrl;
-
-            var waiting = function () {
-                var element = jQuery('#swatch_container_option_' + elementName)[0];
-                if (_.isUndefined(element) || _.isEmpty(element)) {
-                    setTimeout(waiting, 100);
-                } else {
-                    oldCode(value, element.parentElement, uploadUrl, elementName);
-                }
-            };
-
-            waiting();
-
             return this;
+        },
+        getId: function (elem) {
+            this.elem = elem;
+
+            return 'swatch_window_option_' + this.elementName;
+        },
+
+        renderAbc: function () {
+            oldCode(this.value, this.elem.parentElement, this.uploadUrl, this.elementName);
+
+            return false;
         }
     });
 });

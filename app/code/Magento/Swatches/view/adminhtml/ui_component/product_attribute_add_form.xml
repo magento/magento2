@@ -228,7 +228,7 @@
                             <item name="component" xsi:type="string">Magento_Swatches/js/form/element/swatch-visual</item>
                             <item name="template" xsi:type="string">Magento_Swatches/swatch-visual</item>
                             <item name="label" xsi:type="string" translate="true">Swatch</item>
-                            <item name="dataScope" xsi:type="string"/>
+                            <item name="dataScope" xsi:type="string">swatchvisual</item>
                             <item name="uploadUrl" xsi:type="url" path="swatches/iframe/show"/>
                             <item name="prefixName" xsi:type="string">swatchvisual[value]</item>
                             <item name="prefixElementName" xsi:type="string">option_</item>
