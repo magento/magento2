@@ -18,4 +18,3 @@ $list = $salesRuleRepository->getList($criteriaBuilder->create());
 foreach ($list->getItems() as $item) {
     $salesRuleRepository->deleteById($item->getRuleId());
 }
-
