@@ -15,7 +15,7 @@ define([
 ], function (jQuery, mageTemplate, rg, prototype, Abstract) {
     'use strict';
 
-    function oldCode(value, container) {
+    function oldCode(value, container, uploadUrl, elementName) {
         var swatchVisualOption = {
             itemCount: 0,
             totalItems: 0,
@@ -173,18 +173,18 @@ define([
                     }).appendTo($('body'));
 
                     this.iframe = $('<iframe />', {
-                        id: 'upload_iframe',
-                        name: 'upload_iframe'
+                        id: 'upload_iframe_' + elementName,
+                        name: 'upload_iframe_' + elementName
                     }).appendTo(this.wrapper);
 
                     this.form = $('<form />', {
-                        id: 'swatch_form_image_upload',
-                        name: 'swatch_form_image_upload',
-                        target: 'upload_iframe',
+                        id: 'swatch_form_image_upload_' + elementName,
+                        name: 'swatch_form_image_upload_' + elementName,
+                        target: 'upload_iframe_' + elementName,
                         method: 'post',
                         enctype: 'multipart/form-data',
                         class: 'ignore-validate',
-                        action: 'someUrl'
+                        action: uploadUrl
                     }).appendTo(this.wrapper);
 
                     this.inputFile = $('<input />', {
@@ -311,7 +311,7 @@ define([
                 if (_.isUndefined(element) || _.isEmpty(element)) {
                     setTimeout(waiting, 100);
                 } else {
-                    oldCode(value, element.parentElement);
+                    oldCode(value, element.parentElement, config.uploadUrl, elementName);
                 }
             };
 

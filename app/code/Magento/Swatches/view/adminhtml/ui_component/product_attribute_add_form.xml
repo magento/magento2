@@ -176,6 +176,7 @@
                             <item name="template" xsi:type="string">Magento_Swatches/swatch-visual</item>
                             <item name="label" xsi:type="string" translate="true">Swatch</item>
                             <item name="dataScope" xsi:type="string">swatchtext.value.option_0</item>
+                            <item name="uploadUrl" xsi:type="url" path="swatches/iframe/show"/>
                             <item name="additionalClasses" xsi:type="array">
                                 <item name="swatches-visual-col" xsi:type="boolean">true</item>
                             </item>
