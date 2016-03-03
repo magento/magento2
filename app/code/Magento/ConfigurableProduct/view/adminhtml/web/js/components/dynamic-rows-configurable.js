@@ -191,7 +191,7 @@ define([
                     'price_currency': row.priceCurrency,
                     'price_string': row.priceCurrency + row.price,
                     'weight': row.weight,
-                    'quantity_and_stock_status.qty': row.quantity,
+                    'qty': row.quantity,
                     'variationKey': row.variationKey,
                     'configurable_attribute': row.attribute
                 };

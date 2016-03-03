@@ -122,21 +122,24 @@ class ConfigurablePanel extends AbstractModifier
                                     'config' => [
                                         'autoRender' => false,
                                         'componentType' => 'insertListing',
+                                        'component' => 'Magento_ConfigurableProduct/js/components/associated-product-insert-listing',
                                         'dataScope' => static::ASSOCIATED_PRODUCT_LISTING,
-                                        'externalProvider' => static::ASSOCIATED_PRODUCT_LISTING . '.'
-                                            . static::ASSOCIATED_PRODUCT_LISTING . '_data_source',
+                                        'externalProvider' => static::ASSOCIATED_PRODUCT_LISTING . '.data_source',
                                         'selectionsProvider' => static::ASSOCIATED_PRODUCT_LISTING . '.'
                                             . static::ASSOCIATED_PRODUCT_LISTING . '.product_columns.ids',
                                         'ns' => static::ASSOCIATED_PRODUCT_LISTING,
                                         'render_url' => $this->urlBuilder->getUrl('mui/index/render'),
                                         'realTimeLink' => true,
                                         'behaviourType' => 'simple',
-                                        'externalFilterMode' => true,
+                                        'externalFilterMode' => false,
                                         'currentProductId' => $this->locator->getProduct()->getId(),
                                         'dataLinks' => [
                                             'imports' => false,
                                             'exports' => true
                                         ],
+                                        'productsProvider' => 'configurable_associated_product_listing.data_source',
+                                        'productsColumns' => 'configurable_associated_product_listing.configurable_associated_product_listing.product_columns',
+                                        'productsMassAction' => 'configurable_associated_product_listing.configurable_associated_product_listing.product_columns.ids',
 //                                      'exports' => [
 //                                          'currentProductId' => '${ $.externalProvider }:params.current_product_id'
 //                                      ]
@@ -284,7 +287,7 @@ class ConfigurablePanel extends AbstractModifier
                             'price' => 'price_number',
                             'price_string' => 'price',
                             'price_currency' => 'price_currency',
-                            'quantity_and_stock_status.qty' => 'qty',
+                            'qty' => 'qty',
                             'weight' => 'weight',
                         ],
                         'links' => [
@@ -341,8 +344,8 @@ class ConfigurablePanel extends AbstractModifier
                     'quantity_container' => $this->getColumn(
                         'quantity',
                         __('Quantity'),
-                        ['dataScope' => 'quantity_and_stock_status.qty'],
-                        ['dataScope' => 'quantity_and_stock_status.qty']
+                        ['dataScope' => 'qty'],
+                        ['dataScope' => 'qty']
                     ),
                     'price_weight' => $this->getColumn('weight', __('Weight')),
                     'actionsList' => [
@@ -379,7 +382,6 @@ class ConfigurablePanel extends AbstractModifier
         $textConfig = []
     ) {
         $fieldEdit['arguments']['data']['config'] = [
-            'component' => 'Magento_ConfigurableProduct/js/components/field-configurable',
             'dataType' => Form\Element\DataType\Number::NAME,
             'formElement' => Form\Element\Input::NAME,
             'componentType' => Form\Field::NAME,
@@ -388,11 +390,10 @@ class ConfigurablePanel extends AbstractModifier
             'additionalClasses' => 'admin__field-small',
             'visibleIfCanEdit' => true,
             'imports' => [
-                'parentComponentScope' => '${$.parentName}:dataScope',
+                'visible' => '${$.provider}:${$.parentScope}.canEdit'
             ],
         ];
         $fieldText['arguments']['data']['config'] = [
-            'component' => 'Magento_ConfigurableProduct/js/components/field-configurable',
             'componentType' => Form\Field::NAME,
             'formElement' => Form\Element\Input::NAME,
             'elementTmpl' => 'Magento_ConfigurableProduct/components/cell-html',
@@ -400,7 +401,7 @@ class ConfigurablePanel extends AbstractModifier
             'dataScope' => $name,
             'visibleIfCanEdit' => false,
             'imports' => [
-                'parentComponentScope' => '${$.parentName}:dataScope',
+                'visible' => '!${$.provider}:${$.parentScope}.canEdit'
             ],
         ];
         $fieldEdit['arguments']['data']['config'] = array_replace_recursive(
