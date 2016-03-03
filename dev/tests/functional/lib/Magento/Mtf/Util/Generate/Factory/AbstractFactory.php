@@ -8,6 +8,7 @@
 namespace Magento\Mtf\Util\Generate\Factory;
 
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\Glob;
 
 /**
  * Class AbstractFactory
@@ -156,7 +157,7 @@ abstract class AbstractFactory
 
             $pattern = $this->_getPattern($type, $location);
 
-            $filesIterator = glob($pattern, GLOB_BRACE);
+            $filesIterator = Glob::glob($pattern, Glob::GLOB_BRACE);
 
             foreach ($filesIterator as $filePath) {
                 if (!is_dir($filePath)) {
