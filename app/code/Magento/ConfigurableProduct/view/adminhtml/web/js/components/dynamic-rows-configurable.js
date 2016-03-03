@@ -169,10 +169,19 @@ define([
             var tmpArray = this.unionInsertData();
             var productIdsToDelete = this.source.get(this.dataScopeAssociatedProduct);
             var index;
+            var product = {};
             tmpArray = this.unsetArrayItem(tmpArray, {'id': null});
 
             _.each(data, function (row) {
-                var product = {
+                if (row.productId) {
+                    index = _.indexOf(productIdsToDelete, row.productId);
+                    if (index > -1) {
+                        productIdsToDelete.splice(index, 1);
+                        tmpArray = this.unsetArrayItem(tmpArray, {'id': row.productId});
+                    }
+                }
+
+                product = {
                     'id': row.productId,
                     'product_link': row.productUrl,
                     'name': row.name,
@@ -186,16 +195,8 @@ define([
                     'variationKey': row.variationKey,
                     'configurable_attribute': row.attribute
                 };
-                product[this.canEditField] = row.editable;
-                product[this.newProductField] = row.newProduct;
-
-                if (row.productId) {
-                    index = _.indexOf(productIdsToDelete, row.productId);
-                    if (index > -1) {
-                        productIdsToDelete.splice(index, 1);
-                    }
-                    //tmpArray = this.unsetArrayItem(tmpArray, {'id': row.productId});
-                }
+                product[this.canEditField] = 1;
+                product[this.newProductField] = 1;
 
                 tmpArray.push(product);
             }, this);
