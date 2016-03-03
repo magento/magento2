@@ -22,6 +22,7 @@ define([
             valueChangedByUser: false,
             elementTmpl: 'ui/form/element/input',
             tooltipTpl: 'ui/form/element/helper/tooltip',
+            fallbackResetTpl: 'ui/form/element/helper/fallback-reset',
             'input_type': 'input',
             placeholder: '',
             description: '',
@@ -31,6 +32,9 @@ define([
             warn: '',
             notice: '',
             customScope: '',
+            default: '',
+            isDifferedFromDefault: false,
+            showFallbackReset: false,
             additionalClasses: {},
             isUseDefault: '',
             valueUpdate: false, // ko binding valueUpdate
@@ -43,6 +47,7 @@ define([
             },
             listens: {
                 visible: 'setPreview',
+                value: 'setDifferedFromDefault',
                 '${ $.provider }:data.reset': 'reset',
                 '${ $.provider }:data.overload': 'overload',
                 '${ $.provider }:${ $.customScope ? $.customScope + "." : ""}data.validate': 'validate',
@@ -64,7 +69,7 @@ define([
             this._super()
                 .setInitialValue()
                 ._setClasses()
-                .initSwicher();
+                .initSwitcher();
 
             return this;
         },
@@ -79,7 +84,8 @@ define([
 
             this._super();
 
-            this.observe('error disabled focused preview visible value warn isUseDefault')
+            this.observe('error disabled focused preview visible value warn isDifferedFromDefault')
+                .observe('isUseDefault')
                 .observe({
                     'required': !!rules['required-entry']
                 });
@@ -95,6 +101,7 @@ define([
         initConfig: function () {
             var uid = utils.uniqueid(),
                 name,
+                valueUpdate,
                 scope;
 
             this._super();
@@ -102,10 +109,13 @@ define([
             scope   = this.dataScope;
             name    = scope.split('.').slice(1);
 
+            valueUpdate = this.showFallbackReset ? 'afterkeydown' : this.valueUpdate;
+
             _.extend(this, {
                 uid: uid,
                 noticeId: 'notice-' + uid,
-                inputName: utils.serializeName(name.join('.'))
+                inputName: utils.serializeName(name.join('.')),
+                valueUpdate: valueUpdate
             });
 
             return this;
@@ -116,7 +126,7 @@ define([
          *
          * @returns {Abstract} Chainable.
          */
-        initSwicher: function () {
+        initSwitcher: function () {
             if (this.switcherConfig.enabled) {
                 layout([this.switcherConfig]);
             }
@@ -180,7 +190,11 @@ define([
                 value;
 
             values.some(function (v) {
-                return !utils.isEmpty(value = v);
+                if (v !== null && v !== undefined) {
+                    value = v;
+                    return true;
+                }
+                return false;
             });
 
             return this.normalizeData(value);
@@ -388,6 +402,25 @@ define([
             this.validate();
         },
 
+        /**
+         * Restore value to default
+         */
+        restoreToDefault: function () {
+            this.value(this.default);
+        },
+
+        /**
+         * Update whether value differs from default value
+         */
+        setDifferedFromDefault: function () {
+            var value = typeof this.value() != 'undefined' && this.value() !== null ? this.value() : '',
+                defaultValue = typeof this.default != 'undefined' && this.default !== null ? this.default : '';
+            this.isDifferedFromDefault(value !== defaultValue);
+        },
+
+        /**
+         * @param {Boolean} state
+         */
         toggleUseDefault: function (state) {
             this.disabled(state);
         },
