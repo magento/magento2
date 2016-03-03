@@ -21,6 +21,9 @@ define([
             detailsFormat: 'DD/MM/YYYY hh:mm:ss',
             scale: 1,
             minDays: 28,
+            minScale: 1,
+            maxScale: 4,
+            scaleStep: 1 / 7,
             displayMode: 'timeline',
             displayModes: {
                 timeline: {

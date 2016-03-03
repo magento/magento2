@@ -83,4 +83,27 @@
             </ifnot>
         </ul>
     </div>
+    <div class="timeline-scale">
+        <div
+            style="font-size: 1.1rem;
+                min-height: 2.2rem;
+                padding-top: 1.2rem;
+                position: relative;
+                width: 100%;
+            ">
+            <input type="range"
+                style="
+                    display: block;
+                    width: 100%;
+                "
+                ko-value="scale"
+                attr="
+                    min: minScale,
+                    max: maxScale,
+                    step: scaleStep
+                "/>
+            <span class="data-slider-from" text="minScale + 'w'"/>
+            <span class="data-slider-to" text="maxScale + 'w'"/>
+        </div>
+    </div>
 </div>
