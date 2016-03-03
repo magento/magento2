@@ -123,6 +123,15 @@ interface ContextInterface
     public function addButtons(array $buttons, UiComponentInterface $component);
 
     /**
+     * Add html block in the actions toolbar
+     *
+     * @param array $htmlBlocks
+     * @param UiComponentInterface $component
+     * @return void
+     */
+    public function addHtmlBlocks(array $htmlBlocks, UiComponentInterface $component);
+
+    /**
      * Get render engine
      *
      * @return ContentTypeInterface
