@@ -39,7 +39,7 @@ class CommentLevelsSniff implements PHP_CodeSniffer_Sniff
      *
      * @var array
      */
-    public $supportedTokenizers = ['CSS'];
+    public $supportedTokenizers = [CodeSnifferTokenizerSymbols::TOKENIZER_CSS];
 
     /**
      * {@inheritdoc}
@@ -74,7 +74,11 @@ class CommentLevelsSniff implements PHP_CodeSniffer_Sniff
         }
 
         // validation of levels comments
-        if (!in_array($tokens[$stackPtr + 1]['content'], ['  ', "\n"])) {
+        if (!in_array($tokens[$stackPtr + 1]['content'], [
+                CodeSnifferTokenizerSymbols::S_DOUBLE_WHITESPACE,
+                CodeSnifferTokenizerSymbols::S_NEW_LINE,
+            ])
+        ) {
             $phpcsFile->addError('Level\'s comment does not have 2 spaces after "//"', $stackPtr, 'SpacesMissed');
         }
 
@@ -101,10 +105,10 @@ class CommentLevelsSniff implements PHP_CodeSniffer_Sniff
      */
     private function validateInlineComment(PHP_CodeSniffer_File $phpcsFile, $stackPtr, array $tokens)
     {
-        if ($tokens[$stackPtr + 1]['content'] !== ' ') {
+        if ($tokens[$stackPtr + 1]['content'] !== CodeSnifferTokenizerSymbols::S_WHITESPACE) {
             $phpcsFile->addError('Inline comment should have 1 space after "//"', $stackPtr, 'SpaceMissedAfter');
         }
-        if ($tokens[$stackPtr - 1]['content'] !== ' ') {
+        if ($tokens[$stackPtr - 1]['content'] !== CodeSnifferTokenizerSymbols::S_WHITESPACE) {
             $phpcsFile->addError('Inline comment should have 1 space before "//"', $stackPtr, 'SpaceMissedBefore');
         }
     }
@@ -156,13 +160,15 @@ class CommentLevelsSniff implements PHP_CodeSniffer_Sniff
     {
         $correct = false;
 
-        $nextLinePtr = $phpcsFile->findNext(T_WHITESPACE, $stackPtr, null, false, "\n");
+        $nextLine = $phpcsFile->findNext(T_WHITESPACE, $stackPtr, null, false, CodeSnifferTokenizerSymbols::S_NEW_LINE);
 
-        if (false === $nextLinePtr) {
+        if (false === $nextLine) {
             return $correct;
         }
 
-        if ($tokens[$nextLinePtr]['content'] !== "\n" || $tokens[$nextLinePtr + 1]['content'] !== "\n") {
+        if (($tokens[$nextLine]['content'] !== CodeSnifferTokenizerSymbols::S_NEW_LINE)
+            || ($tokens[$nextLine + 1]['content'] !== CodeSnifferTokenizerSymbols::S_NEW_LINE)
+        ) {
             return $correct;
         }
 
@@ -175,8 +181,8 @@ class CommentLevelsSniff implements PHP_CodeSniffer_Sniff
                 continue;
             }
 
-            if (($tokens[$commentLinePtr - 1]['content'] === "\n")
-                && ($tokens[$commentLinePtr - 2]['content'] === "\n")
+            if (($tokens[$commentLinePtr - 1]['content'] === CodeSnifferTokenizerSymbols::S_NEW_LINE)
+                && ($tokens[$commentLinePtr - 2]['content'] === CodeSnifferTokenizerSymbols::S_NEW_LINE)
             ) {
                 $correct = true;
                 break;

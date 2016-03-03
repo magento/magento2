@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 namespace Magento\Test\Less;
 
 use Magento\Framework\App\Utility;
@@ -23,12 +21,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     /**
      * @var string
      */
-    protected static $pathToSource = '';
-
-    /**
-     * @var string
-     */
-    protected static $reportDir = '';
+    private static $reportDir = '';
 
     /**
      * Setup basics for all tests
@@ -37,8 +30,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public static function setUpBeforeClass()
     {
-        self::$pathToSource = BP;
-        self::$reportDir = self::$pathToSource . '/dev/tests/static/report';
+        self::$reportDir = BP . '/dev/tests/static/report';
         if (!is_dir(self::$reportDir)) {
             mkdir(self::$reportDir, 0770);
         }

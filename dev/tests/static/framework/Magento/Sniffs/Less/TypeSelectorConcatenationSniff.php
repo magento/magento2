@@ -23,7 +23,15 @@ class TypeSelectorConcatenationSniff implements PHP_CodeSniffer_Sniff
      *
      * @var array
      */
-    public $supportedTokenizers = ['CSS'];
+    public $supportedTokenizers = [CodeSnifferTokenizerSymbols::TOKENIZER_CSS];
+
+    /**
+     * @var array
+     */
+    private $symbolsBeforeConcat = [
+        CodeSnifferTokenizerSymbols::S_INDENT_SPACES,
+        CodeSnifferTokenizerSymbols::S_NEW_LINE,
+    ];
 
     /**
      * {@inheritdoc}
@@ -32,11 +40,6 @@ class TypeSelectorConcatenationSniff implements PHP_CodeSniffer_Sniff
     {
         return [T_BITWISE_AND];
     }
-
-    /**
-     * @var array
-     */
-    private $symbolsBeforeConcat = ['    ', "\n"];
 
     /**
      * {@inheritdoc}

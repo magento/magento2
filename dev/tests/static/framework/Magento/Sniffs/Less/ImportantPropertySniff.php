@@ -23,7 +23,7 @@ class ImportantPropertySniff implements PHP_CodeSniffer_Sniff
      *
      * @var array
      */
-    public $supportedTokenizers = ['CSS'];
+    public $supportedTokenizers = [CodeSnifferTokenizerSymbols::TOKENIZER_CSS];
 
     /**
      * {@inheritdoc}
@@ -40,11 +40,11 @@ class ImportantPropertySniff implements PHP_CodeSniffer_Sniff
     {
         $tokens = $phpcsFile->getTokens();
 
-        // Will be implemented in next task related to LESS warnings
+        // Will be implemented in MAGETWO-49778
         //$phpcsFile->addWarning('!important is used', $stackPtr, '!ImportantIsUsed');
 
         if (($tokens[$stackPtr + 1]['content'] === 'important')
-            && ($tokens[$stackPtr - 1]['content'] !== ' ')
+            && ($tokens[$stackPtr - 1]['content'] !== CodeSnifferTokenizerSymbols::S_WHITESPACE)
         ) {
             $phpcsFile->addError('Space before !important is missing', $stackPtr, 'NoSpace');
         }
