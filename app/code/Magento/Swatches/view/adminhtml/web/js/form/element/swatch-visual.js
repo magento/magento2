@@ -38,7 +38,6 @@ define([
              * ColorPicker initialization process
              */
             initColorPicker: function () {
-                debugger;
                 var element = this,
                     hiddenColorPicker = !jQuery(element).data('colorpickerId');
 
@@ -239,7 +238,7 @@ define([
             /**
              * Register event for choose "upload image" option
              */
-            $(document).on('click', '.btn_choose_file_upload', function () {
+            $(container).on('click', '.btn_choose_file_upload', function () {
                 swatchComponents.inputFile.attr('data-called-by', $(this).attr('id'));
                 swatchComponents.inputFile.click();
             });
@@ -247,19 +246,21 @@ define([
             /**
              * Register event for remove option
              */
-            $(document).on('click', '.btn_remove_swatch', function () {
+            $(container).on('click', '.btn_remove_swatch', function () {
                 var optionPanel = $(this).parents().eq(2);
 
                 optionPanel.children('input').val('');
                 optionPanel.children('.swatch_window').css('background', '');
                 optionPanel.addClass('unavailable');
+                jQuery('.swatch_sub-menu_container').hide();
             });
 
             /**
              * Toggle color upload chooser
              */
-            $(document).on('click', '.swatch_window', function () {
-                var menu = $(this).next('div').toggle();
+            $(container).on('click', '.swatch_window', function () {
+                jQuery('.swatch_sub-menu_container').hide();
+                $(this).next('div').toggle();
             });
         });
     }
@@ -307,7 +308,7 @@ define([
 
             var waiting = function () {
                 var element = jQuery('#swatch_container_option_' + elementName)[0];
-                if (_.isEmpty(element)) {
+                if (_.isUndefined(element) || _.isEmpty(element)) {
                     setTimeout(waiting, 100);
                 } else {
                     oldCode(value, element.parentElement);
