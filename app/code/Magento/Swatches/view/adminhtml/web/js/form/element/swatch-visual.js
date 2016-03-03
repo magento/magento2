@@ -268,8 +268,12 @@ define([
     return Abstract.extend({
         defaults: {
             elementId: 0,
+            prefixName: '',
+            prefixElementName: '',
             elementName: '',
-            value: ''
+            suffixName: '',
+            value: '',
+            uploadUrl: ''
         },
 
         /**
@@ -301,17 +305,18 @@ define([
             this._super();
 
             this.elementId = rg.get(this.parentName).recordId;
-            this.elementName = 'option_' + this.elementId;
+            this.elementName = this.prefixElementName + this.elementId;
 
             var elementName = this.elementName;
             var value = this.value;
+            var uploadUrl = this.uploadUrl;
 
             var waiting = function () {
                 var element = jQuery('#swatch_container_option_' + elementName)[0];
                 if (_.isUndefined(element) || _.isEmpty(element)) {
                     setTimeout(waiting, 100);
                 } else {
-                    oldCode(value, element.parentElement, config.uploadUrl, elementName);
+                    oldCode(value, element.parentElement, uploadUrl, elementName);
                 }
             };
 
