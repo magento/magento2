@@ -19,10 +19,18 @@ class DateTimeFormatter implements DateTimeFormatterInterface
     protected $useIntlFormatObject;
 
     /**
+     * @var \Magento\Framework\Locale\ResolverInterface
+     */
+    private $localeResolver;
+
+    /**
      * @param bool|null $useIntlFormatObject
      */
-    public function __construct($useIntlFormatObject = null)
-    {
+    public function __construct(
+        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        $useIntlFormatObject = null
+    ) {
+        $this->localeResolver = $localeResolver;
         $this->useIntlFormatObject = (null === $useIntlFormatObject)
             ? !defined('HHVM_VERSION')
             : $useIntlFormatObject;
@@ -33,6 +41,7 @@ class DateTimeFormatter implements DateTimeFormatterInterface
      */
     public function formatObject($object, $format = null, $locale = null)
     {
+        $locale = (null === $locale) ? $this->localeResolver->getLocale() : $locale;
         if ($this->useIntlFormatObject) {
             return \IntlDateFormatter::formatObject($object, $format, $locale);
         }
