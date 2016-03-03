@@ -50,6 +50,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'fa_IR', /*Persian (Iran)*/
         'fi_FI', /*Finnish (Finland)*/
         'fil_PH', /*Filipino (Philippines)*/
+        'fr_BE', /*French (Belgium)*/
         'fr_CA', /*French (Canada)*/
         'fr_FR', /*French (France)*/
         'gu_IN', /*Gujarati (India)*/
@@ -71,6 +72,7 @@ class Config implements \Magento\Framework\Locale\ConfigInterface
         'mk_MK', /*Macedonian (Macedonia)*/
         'mn_Cyrl_MN', /*Mongolian (Mongolia)*/
         'ms_Latn_MY', /*Malaysian (Malaysia)*/
+        'nl_BE', /*Dutch (Belgium)*/
         'nl_NL', /*Dutch (Netherlands)*/
         'nb_NO', /*Norwegian BokmГ_l (Norway)*/
         'nn_NO', /*Norwegian Nynorsk (Norway)*/
