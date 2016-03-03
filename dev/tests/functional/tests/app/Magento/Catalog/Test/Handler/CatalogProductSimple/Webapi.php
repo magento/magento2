@@ -60,7 +60,8 @@ class Webapi extends AbstractWebApi implements CatalogProductSimpleInterface
         'options',
         'media_gallery_entries',
         'tier_prices',
-        'extension_attributes'
+        'extension_attributes',
+        'custom_attributes'
     ];
 
     /**
