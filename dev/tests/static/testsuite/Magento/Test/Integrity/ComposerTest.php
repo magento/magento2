@@ -5,6 +5,7 @@
  */
 namespace Magento\Test\Integrity;
 
+use Magento\Framework\App\Bootstrap;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Composer\MagentoComponent;
 
@@ -97,9 +98,9 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
      */
     private function validateComposerJsonFile($path)
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = Bootstrap::create(BP, $_SERVER)->getObjectManager();
         /** @var \Magento\Framework\Composer\MagentoComposerApplicationFactory $appFactory */
-        $appFactory = $objectManager->getObject('Magento\Framework\Composer\MagentoComposerApplicationFactory');
+        $appFactory = $objectManager->get('Magento\Framework\Composer\MagentoComposerApplicationFactory');
         $app = $appFactory->create();
         $app->runComposerCommand(['command' => 'validate'], $path);
     }
