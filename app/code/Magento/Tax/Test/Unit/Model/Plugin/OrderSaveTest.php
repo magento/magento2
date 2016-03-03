@@ -132,7 +132,7 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
         $index = 0;
         $itemTaxes = [];
         foreach ($expectedItemTaxes as $itemTax) {
-            $itemTaxMock = $this->getMockBuilder('\Magento\Tax\Model\Sales\Order\Tax\Item')
+            $itemTaxMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Tax\Item')
                 ->disableOriginalConstructor()
                 ->setMethods(
                     [

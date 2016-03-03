@@ -10,8 +10,6 @@ use Magento\Framework\Phrase;
 
 /**
  * Class LocalizedExceptionTest
- *
- * @package Magento\Framework\Exception
  */
 class LocalizedExceptionTest extends \PHPUnit_Framework_TestCase
 {

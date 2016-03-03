@@ -10,8 +10,6 @@ use Magento\Framework\Phrase;
 
 /**
  * Class NoSuchEntityExceptionTest
- *
- * @package Magento\Framework\Exception
  */
 class NoSuchEntityExceptionTest extends \PHPUnit_Framework_TestCase
 {
