@@ -101,7 +101,7 @@
     <fieldset name="attribute_options_container">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option</item>
+                <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/fieldset</item>
                 <item name="label" xsi:type="string" translate="true">Values</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="sortOrder" xsi:type="number">15</item>
@@ -234,6 +234,10 @@
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="label" xsi:type="string" translate="true">Default Value</item>
                     <item name="dataScope" xsi:type="string">default_value_text</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/input</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="text" xsi:type="string">text</item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -245,6 +249,10 @@
                     <item name="formElement" xsi:type="string">textarea</item>
                     <item name="label" xsi:type="string" translate="true">Default Value</item>
                     <item name="dataScope" xsi:type="string">default_value_textarea</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/textarea</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="textarea" xsi:type="string">textarea</item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -260,6 +268,10 @@
                         <item name="true" xsi:type="number">1</item>
                         <item name="false" xsi:type="number">0</item>
                     </item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/yesno</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="boolean" xsi:type="string">boolean</item>
+                    </item>
                     <item name="default" xsi:type="number">0</item>
                     <item name="dataScope" xsi:type="string">default_value_yesno</item>
                 </item>
@@ -271,8 +283,12 @@
                     <item name="sortOrder" xsi:type="number">30</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="formElement" xsi:type="string">date</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/date</item>
                     <item name="label" xsi:type="string" translate="true">Default Value</item>
                     <item name="dataScope" xsi:type="string">default_value_date</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="date" xsi:type="string">date</item>
+                    </item>
                 </item>
             </argument>
         </field>

@@ -9,7 +9,7 @@
     <fieldset name="text_swatch_container">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option</item>
+                <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/fieldset</item>
                 <item name="label" xsi:type="string" translate="true">Manage Swatch (Values of Your Attribute)</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="sortOrder" xsi:type="number">15</item>
@@ -122,7 +122,7 @@
     <fieldset name="visual_swatch_container">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option</item>
+                <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/fieldset</item>
                 <item name="label" xsi:type="string" translate="true">Manage Swatch (Values of Your Attribute)</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="sortOrder" xsi:type="number">15</item>
