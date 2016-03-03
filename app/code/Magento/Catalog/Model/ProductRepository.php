@@ -508,6 +508,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             if ($tierPrices !== null) {
                 $product->setData('tier_price', $tierPrices);
             }
+            unset($this->instances[$product->getSku()]);
+            unset($this->instancesById[$product->getId()]);
             $this->resourceModel->save($product);
         } catch (\Magento\Eav\Model\Entity\Attribute\Exception $exception) {
             throw \Magento\Framework\Exception\InputException::invalidFieldValue(
@@ -531,6 +533,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $sku = $product->getSku();
         $productId = $product->getId();
         try {
+            unset($this->instances[$product->getSku()]);
+            unset($this->instancesById[$product->getId()]);
             $this->resourceModel->delete($product);
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\StateException(
