@@ -154,10 +154,12 @@ define([
 
             checkedPositions[side] = true;
 
-            if (startPosition[map[direction].p] - s.tooltipSize[map[direction].s] - config.step >
-                s.scrollPosition[map[direction].p]) {
+            if (
+                startPosition[map[direction].p] - s.tooltipSize[map[direction].s] - config.step >
+                s.scrollPosition[map[direction].p]
+            ) {
                 result.position[map[direction].p] = startPosition[map[direction].p] - s.tooltipSize[map[direction].s] -
-                                                    config.step;
+                    config.step;
                 result.className = className;
                 result.side = side;
                 changedDirection = direction === 'vertical' ? 'horizontal' : 'vertical';
@@ -195,8 +197,10 @@ define([
 
             checkedPositions[side] = true;
 
-            if (startPosition[map[direction].p] + s.tooltipSize[map[direction].s] + config.step <
-                s.scrollPosition[map[direction].p] + s.windowSize[map[direction].s]) {
+            if (
+                startPosition[map[direction].p] + s.tooltipSize[map[direction].s] + config.step <
+                s.scrollPosition[map[direction].p] + s.windowSize[map[direction].s]
+            ) {
                 result.position[map[direction].p] = startPosition[map[direction].p] + config.step;
                 result.className = className;
                 result.side = side;
@@ -268,7 +272,8 @@ define([
             if (startPosition[map[direction].p] - s.tooltipSize[map[direction].s] / 2 >
                 s.scrollPosition[map[direction].p] && startPosition[map[direction].p] +
                 s.tooltipSize[map[direction].s] / 2 <
-                s.scrollPosition[map[direction].p] + s.windowSize[map[direction].s]) {
+                s.scrollPosition[map[direction].p] + s.windowSize[map[direction].s]
+            ) {
                 data.position[map[direction].p] = startPosition[map[direction].p] - s.tooltipSize[map[direction].s] / 2;
             } else {
 
@@ -306,8 +311,10 @@ define([
 
             if (s.tooltipSize[map[direction].s] < s.windowSize[map[direction].s]) {
 
-                if (startPosition[map[direction].p] >
-                    s.windowSize[map[direction].s] / 2 + s.scrollPosition[map[direction].p]) {
+                if (
+                    startPosition[map[direction].p] >
+                    s.windowSize[map[direction].s] / 2 + s.scrollPosition[map[direction].p]
+                ) {
                     data.position[map[direction].p] = s.windowSize[map[direction].s] +
                         s.scrollPosition[map[direction].p] - s.tooltipSize[map[direction].s];
                     data.tail[map[direction].p] = startPosition[map[direction].p] -
