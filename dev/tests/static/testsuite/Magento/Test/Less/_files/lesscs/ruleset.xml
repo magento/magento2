@@ -11,7 +11,5 @@
     <rule ref="Generic.Files.LineEndings"/>
     <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
     <rule ref="Squiz.CSS.NamedColours"/>
-    <rule ref="Squiz.PHP.CommentedOutCode"/>
-    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace"/>
     <rule ref="../../../../../../framework/Magento/Sniffs/Less"/>
 </ruleset>
