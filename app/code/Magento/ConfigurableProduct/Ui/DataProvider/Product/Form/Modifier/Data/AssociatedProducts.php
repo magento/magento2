@@ -151,6 +151,20 @@ class AssociatedProducts
         return $result;
     }
 
+    /**
+     * @return array
+     */
+    public function getProductAttributesCodes()
+    {
+        $result = [];
+
+        foreach ($this->getProductAttributes() as $attribute) {
+            $result[] = $attribute['code'];
+        }
+
+        return $result;
+    }
+
     protected function prepareVariations()
     {
         $variations = $this->getVariations();
