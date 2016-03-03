@@ -277,25 +277,6 @@ define([
         },
 
         /**
-         * Extends instance with defaults, extends config with formatted values
-         *     and options, and invokes initialize method of AbstractElement class.
-         *     If instance's 'customEntry' property is set to true, calls 'initInput'
-         */
-        initialize: function () {
-            this._super();
-
-            if (this.customEntry) {
-                this.initInput();
-            }
-
-            if (this.filterBy) {
-                this.initFilter();
-            }
-
-            return this;
-        },
-
-        /**
          * Parses options and merges the result with instance
          *
          * @param  {Object} config
@@ -306,6 +287,8 @@ define([
 
             this.elementId = rg.get(this.parentName).recordId;
             this.elementName = this.prefixElementName + this.elementId;
+
+            this.inputName = this.prefixName + '[' + this.elementName + ']' + this.suffixName;
 
             var elementName = this.elementName;
             var value = this.value;
