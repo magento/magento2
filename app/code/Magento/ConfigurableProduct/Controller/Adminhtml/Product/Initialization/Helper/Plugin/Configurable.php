@@ -141,7 +141,7 @@ class Configurable
                 ];
 
                 if (isset($item['qty'])) {
-                    $result[$item['id']]['quantity_and_stock_status']['qty'] = $item['qty'];
+                    $result[$item['variationKey']]['quantity_and_stock_status']['qty'] = $item['qty'];
                 }
             }
         }
