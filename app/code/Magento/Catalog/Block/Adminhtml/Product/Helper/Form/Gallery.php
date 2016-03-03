@@ -22,23 +22,36 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
 {
     /**
      * Gallery field name suffix
+     *
+     * @var string
      */
-    private static $FIELD_NAME_SUFFIX = 'product';
+    protected $fieldNameSuffix = 'product';
 
     /**
      * Gallery html id
+     *
+     * @var string
      */
-    private static $HTML_ID = 'media_gallery';
+    protected $htmlId = 'media_gallery';
 
     /**
      * Gallery name
+     *
+     * @var string
      */
-    private static $NAME = 'product[media_gallery]';
+    protected $name = 'product[media_gallery]';
 
     /**
      * Html id for data scope
+     *
+     * @var string
      */
-    private static $IMAGE = 'image';
+    protected $image = 'image';
+
+    /**
+     * @var string
+     */
+    protected $formName = 'product_form';
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -104,6 +117,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
         /* @var $content \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
         $content = $this->_layout->createBlock('Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content');
         $content->setId($this->getHtmlId() . '_content')->setElement($this);
+        $content->setFormName($this->formName);
         $galleryJs = $content->getJsObjectName();
         $content->getUploader()->getConfig()->setMegiaGallery($galleryJs);
         return $content->toHtml();
@@ -114,7 +128,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      */
     protected function getHtmlId()
     {
-        return static::$HTML_ID;
+        return $this->htmlId;
     }
 
     /**
@@ -122,7 +136,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      */
     public function getName()
     {
-        return static::$NAME;
+        return $this->name;
     }
 
     /**
@@ -130,7 +144,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      */
     public function getFieldNameSuffix()
     {
-        return static::$FIELD_NAME_SUFFIX;
+        return $this->fieldNameSuffix;
     }
 
     /**
@@ -138,7 +152,7 @@ class Gallery extends \Magento\Framework\View\Element\AbstractBlock
      */
     public function getDataScopeHtmlId()
     {
-        return static::$IMAGE;
+        return $this->image;
     }
 
     /**
