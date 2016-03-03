@@ -403,8 +403,8 @@ define([
             events['click ' + this.options.imageSelector] = function (event) {
                 if (!$(event.currentTarget).is('.ui-sortable-helper')) {
                     $(event.currentTarget).addClass('active');
-                    var itemId = $(event.currentTarget).find('input')[0].name.match(/\[([^\]]*)\]/g)[2];
-                    $('#item_id').val(itemId);
+                    // var itemId = $(event.currentTarget).find('input')[0].name.match(/\[([^\]]*)\]/g)[2];
+                    // $('#item_id').val(itemId);
                     var imageData = $(event.currentTarget).data('imageData');
                     var $imageContainer = this.findElement(imageData);
                     if ($imageContainer.is('.removed')) {
@@ -462,13 +462,13 @@ define([
                 })
             }, this));
 
-            $dialog.on('change', '#image-description', function (e) {
+            $dialog.on('change', '[data-role="image-description"]', function (e) {
                 var target = $(e.target),
                     targetName = target.attr('name'),
                     desc = target.val(),
                     imageData = $dialog.data('imageData');
 
-                $('input[type="hidden"][name="' + targetName + '"]').val(desc);
+                this.element.find('input[type="hidden"][name="' + targetName + '"]').val(desc);
 
                 imageData.label = desc;
                 imageData.label_default = desc;
