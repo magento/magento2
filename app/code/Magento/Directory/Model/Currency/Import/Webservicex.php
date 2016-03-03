@@ -14,8 +14,8 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
     /**
      * @var string
      */
-    const CURRENCY_CONVERTER_URL = 'http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate?' .
-        'FromCurrency={{CURRENCY_FROM}}&ToCurrency={{CURRENCY_TO}}';
+    const CURRENCY_CONVERTER_URL = 'http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate?'
+    . 'FromCurrency={{CURRENCY_FROM}}&ToCurrency={{CURRENCY_TO}}';
 
     /**
      * Http Client Factory
