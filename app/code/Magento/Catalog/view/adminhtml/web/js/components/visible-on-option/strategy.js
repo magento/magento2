@@ -8,7 +8,8 @@ define(function () {
             valuesForOptions: [],
             visibilityState: true,
             imports: {
-                toggleVisibility: 'product_attribute_add_form.product_attribute_add_form.base_fieldset.frontend_input:value'
+                toggleVisibility:
+                    'product_attribute_add_form.product_attribute_add_form.base_fieldset.frontend_input:value'
             },
             isShown: false
         },
