@@ -9,7 +9,8 @@ namespace Magento\Sniffs\Less;
  * Class CodeSnifferTokenizerSymbols
  *
  */
-class CodeSnifferTokenizerSymbols {
+class CodeSnifferTokenizerSymbols
+{
 
     const TOKENIZER_CSS = 'CSS';
 
