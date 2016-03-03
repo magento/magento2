@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Catalog\Test\Block\Adminhtml\Category\Section;
+namespace Magento\Catalog\Test\Block\Adminhtml\Category\Edit\Section;
 
 use Magento\Backend\Test\Block\Widget\Grid;
 
