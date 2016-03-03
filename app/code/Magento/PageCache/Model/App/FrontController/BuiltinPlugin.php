@@ -91,10 +91,9 @@ class BuiltinPlugin
     {
         $cacheControlHeader = $result->getHeader('Cache-Control');
         if ($cacheControlHeader instanceof \Zend\Http\Header\HeaderInterface) {
-            $cacheControl = $cacheControlHeader->getFieldValue();
-            $this->addDebugHeader($result, 'X-Magento-Cache-Control', $cacheControl);
-            $this->addDebugHeader($result, 'X-Magento-Cache-Debug', 'MISS', true);
+            $this->addDebugHeader($result, 'X-Magento-Cache-Control', $cacheControlHeader->getFieldValue());
         }
+        $this->addDebugHeader($result, 'X-Magento-Cache-Debug', 'MISS', true);
         return $result;
     }
 
