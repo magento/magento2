@@ -94,6 +94,16 @@
                     <item name="default" xsi:type="number">0</item>
                     <item name="dataScope" xsi:type="string">is_required</item>
                     <item name="source" xsi:type="string">product_attribute</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/yesno</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="text" xsi:type="string">text</item>
+                        <item name="textarea" xsi:type="string">textarea</item>
+                        <item name="date" xsi:type="string">date</item>
+                        <item name="boolean" xsi:type="string">boolean</item>
+                        <item name="multiselect" xsi:type="string">multiselect</item>
+                        <item name="select" xsi:type="string">select</item>
+                        <item name="price" xsi:type="string">price</item>
+                    </item>
                 </item>
             </argument>
         </field>
