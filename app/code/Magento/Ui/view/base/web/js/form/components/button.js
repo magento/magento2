@@ -19,7 +19,8 @@ define([
             elementTmpl: 'ui/form/element/button',
             template: 'ui/form/components/button/simple',
             visible: true,
-            disabled: false
+            disabled: false,
+            title: ''
         },
 
         /**
@@ -37,7 +38,8 @@ define([
             return this._super()
                 .observe([
                     'visible',
-                    'disabled'
+                    'disabled',
+                    'title'
                 ]);
         },
 
@@ -56,7 +58,7 @@ define([
          */
         applyAction: function (action) {
             var targetName = action.targetName,
-                params = action.params,
+                params = action.params || [],
                 actionName = action.actionName,
                 target;
 
@@ -66,7 +68,8 @@ define([
             target = registry.async(targetName);
 
             if (target && typeof target === 'function' && actionName) {
-                target(actionName, params);
+                params.unshift(actionName);
+                target.apply(target, params);
             }
         },
 

@@ -1,0 +1,64 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix */
+?>
+<?php
+$productMatrix = $block->getProductMatrix();
+$attributes = $block->getProductAttributes();
+$currencySymbol = $block->getCurrencySymbol();
+?>
+<div data-role="step-wizard-dialog" data-bind="scope: 'product_form.product_form.configurableModal'">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+</div>
+<div id="product-variations-matrix" data-role="product-variations-matrix">
+    <div data-bind="scope: 'configurableVariations'"></div>
+</div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "product_form.product_form.configurableModal": {
+                        "component": "Magento_ConfigurableProduct/js/components/modal-configurable",
+                        "options": {"type": "slide", "title": "<?= /* @escapeNotVerified */  __('Create Product Configurations') ?>"},
+                        "formName": "product_form.product_form",
+                        "isTemplate": false,
+                        "wizardName": "variation-steps-wizard",
+                        "children": {
+                            "wizard": {
+                                "url": "<?= /* @noEscape */ $block->getUrl('catalog/product/wizard', ['id' => $block->getProduct()->getId()]) ?>",
+                                "component": "Magento_Ui/js/form/components/html"
+                            }
+                        }
+                    },
+                    "configurableVariations": {
+                        "component": "Magento_ConfigurableProduct/js/variations/variations",
+                        "provider": "product_form.product_form_data_source",
+                        "dataScopeVariations": "variations",
+                        "dataScopeAttributes": "data.attributes",
+                        "dataScopeAttributesData": "data.product.configurable_attributes_data",
+                        "wizardModalButtonName": "product_form.product_form.configurable.configurable_products_button_set.create_configurable_products_button",
+                        "wizardModalButtonTitle": "<?= /* @escapeNotVerified */  __('Edit Configurations') ?>",
+                        "productAttributes": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($attributes) ?>,
+                        "productUrl": "<?= /* @noEscape */ $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>",
+                        "variations": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($productMatrix) ?>,
+                        "currencySymbol": "<?= /* @noEscape */ $currencySymbol ?>",
+                        "configurableProductGrid": "configurableProductGrid"
+                    }
+                }
+            }
+        }
+    }
+</script>
+<script>
+    require(['jquery'], function ($) {
+        $('[data-role=step-wizard-dialog]').applyBindings();
+        $('[data-role=product-variations-matrix]').applyBindings();
+    })
+</script>

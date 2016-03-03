@@ -35,4 +35,23 @@
         </arguments>
     </type>
     <preference for="Magento\ConfigurableProduct\Model\AttributesListInterface" type="Magento\ConfigurableProduct\Model\AttributesList" />
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\ModifierPool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="configurable" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Composite</item>
+                    <item name="sortOrder" xsi:type="number">140</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Composite">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="configurablePanel" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePanel</item>
+                <item name="configurablePrice" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePrice</item>
+                <item name="configurableQty" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurableQty</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

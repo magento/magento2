@@ -112,7 +112,7 @@
                 </item>
             </argument>
         </column>
-        <column name="name">
+        <column name="name" class="Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns\Name">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
@@ -131,13 +131,31 @@
                 </item>
             </argument>
         </column>
-        <column name="price" class="Magento\Catalog\Ui\Component\Listing\Columns\Price">
+        <column name="price" class="Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns\Price">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">textRange</item>
                     <item name="add_field" xsi:type="boolean">true</item>
                     <item name="label" xsi:type="string" translate="true">Price</item>
                     <item name="sortOrder" xsi:type="number">70</item>
+                </item>
+            </argument>
+        </column>
+        <column name="qty">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="add_field" xsi:type="boolean">true</item>
+                    <item name="label" xsi:type="string" translate="true">Quantity</item>
+                </item>
+            </argument>
+        </column>
+        <column name="weight">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="add_field" xsi:type="boolean">true</item>
+                    <item name="label" xsi:type="string" translate="true">Weight</item>
                 </item>
             </argument>
         </column>
