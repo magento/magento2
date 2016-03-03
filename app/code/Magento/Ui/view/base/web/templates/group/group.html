@@ -7,9 +7,9 @@
 <fieldset class="admin__field"
           visible="visible"
           css="_required: required"
-          attr="'data-config-scope': $data.scopeLabel, 'data-index': index">
+          attr="'data-index': index">
     <legend class="admin__field-label" if="showLabel">
-        <span text="label"/>
+        <span text="label" attr="'data-config-scope': $data.scopeLabel"/>
     </legend>
 
     <div class="admin__field-control" css="$data.additionalClasses">
