@@ -11,19 +11,18 @@ namespace Magento\Sniffs\Less;
  */
 class CodeSnifferTokenizerSymbols
 {
-
     const TOKENIZER_CSS = 'CSS';
 
     /**#@+
      * Symbols for usage into Sniffers
      */
-    const S_ASPERAND            = '&';
-    const S_COLON               = ';';
-    const S_OPEN_PARENTHESIS    = '(';
-    const S_CLOSE_PARENTHESIS   = ')';
-    const S_NEW_LINE            = "\n";
-    const S_WHITESPACE          = ' ';
-    const S_DOUBLE_WHITESPACE   = '  ';
-    const S_INDENT_SPACES       = '    ';
+    const STRING_ASPERAND            = '&';
+    const STRING_COLON               = ';';
+    const STRING_OPEN_PARENTHESIS    = '(';
+    const STRING_CLOSE_PARENTHESIS   = ')';
+    const STRING_NEW_LINE            = "\n";
+    const STRING_WHITESPACE          = ' ';
+    const STRING_DOUBLE_WHITESPACE   = '  ';
+    const STRING_INDENT_SPACES       = '    ';
     /**#@-*/
 }

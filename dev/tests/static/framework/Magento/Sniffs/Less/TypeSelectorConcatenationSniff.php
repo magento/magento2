@@ -29,8 +29,8 @@ class TypeSelectorConcatenationSniff implements PHP_CodeSniffer_Sniff
      * @var array
      */
     private $symbolsBeforeConcat = [
-        CodeSnifferTokenizerSymbols::S_INDENT_SPACES,
-        CodeSnifferTokenizerSymbols::S_NEW_LINE,
+        CodeSnifferTokenizerSymbols::STRING_INDENT_SPACES,
+        CodeSnifferTokenizerSymbols::STRING_NEW_LINE,
     ];
 
     /**
