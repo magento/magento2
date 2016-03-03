@@ -5,7 +5,7 @@
  */
 -->
 
-<input type="hidden" data-bind="attr: {name: 'swatchvisual[value][' + elementName + ']', id: 'swatch_visual_value_' + elementName, value: value}"/>
+<input type="hidden" data-bind="attr: {name: prefixName + '[' + elementName + ']' + suffixName, id: 'swatch_visual_value_' + elementName, value: value}"/>
 <div class="swatch_window" data-bind="attr: {id: 'swatch_window_option_' + elementName}"></div>
 <div class="swatch_sub-menu_container" data-bind="attr: {id: 'swatch_container_option_' + elementName}">
     <div class="swatch_row position-relative">

@@ -168,15 +168,17 @@
                         </item>
                     </argument>
                 </field>
-                <field name="swatchvisual_0">
+                <field name="swatchvisual">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="formElement" xsi:type="string">select</item>
                             <item name="component" xsi:type="string">Magento_Swatches/js/form/element/swatch-visual</item>
                             <item name="template" xsi:type="string">Magento_Swatches/swatch-visual</item>
                             <item name="label" xsi:type="string" translate="true">Swatch</item>
-                            <item name="dataScope" xsi:type="string">swatchtext.value.option_0</item>
+                            <item name="dataScope" xsi:type="string"/>
                             <item name="uploadUrl" xsi:type="url" path="swatches/iframe/show"/>
+                            <item name="prefixName" xsi:type="string">swatchvisual[value]</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
                             <item name="additionalClasses" xsi:type="array">
                                 <item name="swatches-visual-col" xsi:type="boolean">true</item>
                             </item>
