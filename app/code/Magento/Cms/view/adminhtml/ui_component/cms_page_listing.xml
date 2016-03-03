@@ -302,6 +302,16 @@
                 </item>
             </argument>
         </column>
+        <column name="meta_title">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="editor" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Meta Title</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </column>
         <column name="meta_keywords">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

@@ -169,6 +169,16 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     }
 
     /**
+     * Get meta title
+     *
+     * @return string|null
+     */
+    public function getMetaTitle()
+    {
+        return $this->getData(self::META_TITLE);
+    }
+
+    /**
      * Get meta keywords
      *
      * @return string
@@ -350,6 +360,17 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     public function setPageLayout($pageLayout)
     {
         return $this->setData(self::PAGE_LAYOUT, $pageLayout);
+    }
+
+    /**
+     * Set meta title
+     *
+     * @param string $metaTitle
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setMetaTitle($metaTitle)
+    {
+        return $this->setData(self::META_TITLE, $metaTitle);
     }
 
     /**

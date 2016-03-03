@@ -148,6 +148,17 @@
                 </item>
             </argument>
         </field>
+        <field name="meta_title">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="label" xsi:type="string" translate="true">Meta Title</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="source" xsi:type="string">page</item>
+                    <item name="dataScope" xsi:type="string">meta_title</item>
+                </item>
+            </argument>
+        </field>
         <field name="meta_keywords">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">

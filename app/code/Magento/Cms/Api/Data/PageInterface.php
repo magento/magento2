@@ -18,6 +18,7 @@ interface PageInterface
     const IDENTIFIER               = 'identifier';
     const TITLE                    = 'title';
     const PAGE_LAYOUT              = 'page_layout';
+    const META_TITLE               = 'meta_title';
     const META_KEYWORDS            = 'meta_keywords';
     const META_DESCRIPTION         = 'meta_description';
     const CONTENT_HEADING          = 'content_heading';
@@ -61,6 +62,13 @@ interface PageInterface
      * @return string|null
      */
     public function getPageLayout();
+
+    /**
+     * Get meta title
+     *
+     * @return string|null
+     */
+    public function getMetaTitle();
 
     /**
      * Get meta keywords
@@ -191,6 +199,14 @@ interface PageInterface
      * @return \Magento\Cms\Api\Data\PageInterface
      */
     public function setPageLayout($pageLayout);
+
+    /**
+     * Set meta title
+     *
+     * @param string $metaTitle
+     * @return \Magento\Cms\Api\Data\PageInterface
+     */
+    public function setMetaTitle($metaTitle);
 
     /**
      * Set meta keywords
