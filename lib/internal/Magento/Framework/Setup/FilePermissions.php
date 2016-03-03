@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Model;
+namespace Magento\Framework\Setup;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Backup\Filesystem\Iterator\Filter;
@@ -204,6 +204,25 @@ class FilePermissions
     }
 
     /**
+     * Checks if var/generation/Magento has
+     * @return bool
+     */
+    public function checkDirectoryPermissionForCLIUser()
+    {
+        $varGenerationMagentoPath = $this->directoryList->getPath(DirectoryList::VAR_DIR)
+            . '/'
+            . DirectoryList::GENERATION
+            . '/'
+            . 'Magento';
+        if (is_dir($varGenerationMagentoPath)
+            && is_readable($varGenerationMagentoPath)
+            && is_executable($varGenerationMagentoPath)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Checks if directory exists and is readable
      *
      * @param \Magento\Framework\Filesystem\Directory\WriteInterface $directory
@@ -211,7 +230,9 @@ class FilePermissions
      */
     protected function isReadableDirectory($directory)
     {
-        if (!$directory->isExist() || !$directory->isDirectory() || !$directory->isReadable()) {
+        if (!$directory->isExist()
+            || !$directory->isDirectory()
+            || !$directory->isReadable()) {
             return false;
         }
         return true;

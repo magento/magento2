@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Test\Unit\Model;
+namespace Magento\Framework\Setup\Test\Unit;
 
-use \Magento\Setup\Model\FilePermissions;
+use \Magento\Framework\Setup\FilePermissions;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 
@@ -132,8 +132,8 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Setup\Model\FilePermissions::getMissingWritableDirectoriesForInstallation
-     * @covers \Magento\Setup\Model\FilePermissions::getMissingWritablePathsForInstallation
+     * @covers \Magento\Framework\FilePermissions::getMissingWritableDirectoriesForInstallation
+     * @covers \Magento\Framework\FilePermissions::getMissingWritablePathsForInstallation
      */
     public function testGetMissingWritableDirectoriesAndPathsForInstallation()
     {
