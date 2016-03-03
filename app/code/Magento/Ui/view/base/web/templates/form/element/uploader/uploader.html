@@ -16,6 +16,7 @@
                 <label class="file-uploader-button action-default" attr="for: uid" translate="'Upload'"/>
 
                 <span class="file-uploader-spinner"/>
+                <render args="fallbackResetTpl" if="$data.showFallbackReset && $data.isDifferedFromDefault"/>
             </div>
 
             <render args="tooltipTpl" if="$data.tooltip"/>
