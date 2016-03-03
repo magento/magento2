@@ -582,6 +582,9 @@ class BundlePanel extends AbstractModifier
                                     'required-entry' => true,
                                     'validate-number' => true,
                                 ],
+                                'imports' => [
+                                    'isInteger' => '${ $.provider }:${ $.parentScope }.selection_qty_is_integer'
+                                ],
                             ],
                         ],
                     ],
