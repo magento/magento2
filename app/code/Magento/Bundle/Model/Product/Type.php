@@ -247,7 +247,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         return $this->_bundleSelection->getChildrenIds($parentId, $required);
     }
 
-  /**
+    /**
      * Retrieve parent ids array by required child
      *
      * @param int|array $childId
@@ -425,7 +425,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
             $optionsCollection = $this->_bundleOption->create()
                 ->getResourceCollection();
-            $optionsCollection->setProductIdFilter($product->getEntityId());
+            $optionsCollection->setProductIdFilter($product->getData($product->getResource()->getLinkField()));
             $this->setStoreFilter($product->getStoreId(), $product);
             $optionsCollection->setPositionOrder();
             $storeId = $this->getStoreFilter($product);
