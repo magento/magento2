@@ -3,32 +3,20 @@
  * See COPYING.txt for license details.
  */
 define([
-    'Magento_Ui/js/form/components/fieldset'
-], function (Fieldset) {
+    'Magento_Ui/js/form/components/fieldset',
+    'Magento_Catalog/js/components/visible-on-option/strategy'
+], function (Fieldset, strategy) {
     'use strict';
 
-    return Fieldset.extend({
-        defaults: {
-            valuesForOptions: [],
-            visibilityState: true,
-            imports: {
-                toggleVisibility: '${ $.parentName }.base_fieldset.frontend_input:value'
+    return Fieldset.extend(strategy).extend(
+        {
+            toggleVisibility: function (selected) {
+                this._super();
+                this.elems.each(function (child) {
+                    child.set('visible', this.isShown);
+                }.bind(this));
+                this.opened(this.isShown);
             }
-        },
-
-        initElement: function (item) {
-            this._super();
-            item.set('visible', this.visibilityState);
-            return this;
-        },
-
-        toggleVisibility: function (selected) {
-            var isShown = this.visibilityState = selected in this.valuesForOptions;
-            this.visible(isShown);
-            this.opened(isShown);
-            this.elems.each(function (child) {
-               child.set('visible', isShown);
-            });
         }
-    });
+    );
 });
