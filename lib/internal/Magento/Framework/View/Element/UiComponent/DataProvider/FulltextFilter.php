@@ -37,11 +37,11 @@ class FulltextFilter implements FilterApplierInterface
      * Add table alias to columns
      *
      * @param array $columns
-     * @param DbCollection $collection
+     * @param AbstractDb $collection
      * @param string $indexTable
      * @return array
      */
-    protected function addTableAliasToColumns(array $columns, DbCollection $collection, $indexTable)
+    protected function addTableAliasToColumns(array $columns, AbstractDb $collection, $indexTable)
     {
         $alias = '';
         foreach ($collection->getSelect()->getPart('from') as $tableAlias => $data) {
