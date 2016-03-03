@@ -210,7 +210,7 @@ class Chooser extends \Magento\Backend\Block\Template
             'value")) {
                             $("' .
             $chooserId .
-            'value").advaiceContainer = "' .
+            'value").adviceContainer = "' .
             $chooserId .
             'advice-container";
                         }
