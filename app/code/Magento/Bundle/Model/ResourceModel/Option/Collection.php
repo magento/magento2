@@ -85,7 +85,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             'cpe.'.$linkField.' = main_table.parent_id',
             []
         )->where(
-            'cpe.entity_id = ?',
+            "cpe.{$linkField} = ?",
             $productId
         );
 
