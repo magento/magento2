@@ -27,10 +27,9 @@ abstract class AbstractFactory
     protected $_checkList = [];
 
     /**
-     * @return mixed
-     */
-    /**
      * Generate Blocks
+     *
+     * @return void
      */
     public function launch()
     {
