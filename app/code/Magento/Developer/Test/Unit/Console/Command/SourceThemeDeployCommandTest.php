@@ -143,9 +143,6 @@ class SourceThemeDeployCommandTest extends \PHPUnit_Framework_TestCase
         /** @var OutputInterface|\PHPUnit_Framework_MockObject_MockObject $outputMock */
         $outputMock = $this->getMockBuilder(OutputInterface::class)
             ->getMockForAbstractClass();
-        $assetMock = $this->getMockBuilder(LocalInterface::class)
-            ->getMockForAbstractClass();
-
         $this->validatorMock->expects(self::once())
             ->method('isValid')
             ->with(self::LOCALE_TEST_VALUE)
