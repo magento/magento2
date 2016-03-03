@@ -243,6 +243,9 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
         $this->executeImportReplaceTest($skus, $skippedAttributes);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
     protected function executeImportReplaceTest($skus, $skippedAttributes)
     {
         $replacedAttributes = [
@@ -344,11 +347,17 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $appParams = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()->getApplication()->getInitParams()[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
+        $appParams = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()
+            ->getApplication()
+            ->getInitParams()[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
         $uploader = $importModel->getUploader();
         $rootDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::ROOT);
-        $destDir = $rootDirectory->getRelativePath($appParams[DirectoryList::MEDIA][DirectoryList::PATH] . '/catalog/product');
-        $tmpDir = $rootDirectory->getRelativePath($appParams[DirectoryList::MEDIA][DirectoryList::PATH] . '/import');
+        $destDir = $rootDirectory->getRelativePath(
+            $appParams[DirectoryList::MEDIA][DirectoryList::PATH] . '/catalog/product'
+        );
+        $tmpDir = $rootDirectory->getRelativePath(
+            $appParams[DirectoryList::MEDIA][DirectoryList::PATH] . '/import'
+        );
 
         $rootDirectory->create($destDir);
         $rootDirectory->create($tmpDir);
