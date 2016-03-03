@@ -8,6 +8,7 @@ namespace Magento\Indexer\Console\Command;
 use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\Indexer\ConfigInterface;
 
 /**
  * Command for reindexing indexers.
@@ -32,10 +33,18 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $indexers = $this->getIndexers($input);
+
+        $sharedIndexesComplete = [];
         foreach ($indexers as $indexer) {
             try {
                 $startTime = microtime(true);
-                $indexer->reindexAll();
+                // Skip indexers that have shared index that was already
+                if (!in_array($indexer->getSharedIndex(), $sharedIndexesComplete)) {
+                    $indexer->reindexAll();
+                }
+                if ($indexer->getSharedIndex()) {
+                    $sharedIndexesComplete[] = $indexer->getSharedIndex();
+                }
                 $resultTime = microtime(true) - $startTime;
                 $output->writeln(
                     $indexer->getTitle() . ' index has been rebuilt successfully in ' . gmdate('H:i:s', $resultTime)
