@@ -6,6 +6,59 @@
  */
 -->
 <form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="base_fieldset">
+        <field name="update_product_preview_image">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Update Product Preview Image</item>
+                    <item name="default" xsi:type="number">0</item>
+                    <item name="dataScope" xsi:type="string">update_product_preview_image</item>
+                    <item name="source" xsi:type="string">product_attribute</item>
+                    <item name="notice" xsi:type="string">Filtering by this attribute will update the product image on catalog page</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/yesno</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="swatch_text" xsi:type="string">swatch_text</item>
+                        <item name="swatch_visual" xsi:type="string">swatch_visual</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="use_product_image_for_swatch">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">50</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Use Product Image for Swatch if Possible</item>
+                    <item name="default" xsi:type="number">0</item>
+                    <item name="dataScope" xsi:type="string">use_product_image_for_swatch</item>
+                    <item name="source" xsi:type="string">product_attribute</item>
+                    <item name="notice" xsi:type="string">Allows use fallback logic for replacing swatch image with product swatch or base image</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/yesno</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="swatch_visual" xsi:type="string">swatch_visual</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+        <field name="is_required">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="swatch_text" xsi:type="string">swatch_text</item>
+                        <item name="swatch_visual" xsi:type="string">swatch_visual</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+    </fieldset>
     <fieldset name="text_swatch_container">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
