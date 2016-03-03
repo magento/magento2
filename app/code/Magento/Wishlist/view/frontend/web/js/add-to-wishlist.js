@@ -22,13 +22,25 @@ define([
             this._bind();
         },
         _bind: function() {
-            var changeCustomOption = 'change ' + this.options.customOptionsInfo,
-                changeQty = 'change ' + this.options.qtyInfo,
-                changeProductInfo = 'change ' + this.options[this.options.productType + 'Info'],
+            var options = this.options,
+                changeCustomOption = 'change ' + options.customOptionsInfo,
+                changeQty = 'change ' + options.qtyInfo,
                 events = {};
+
+            if ('productType' in options) {
+                if (typeof options.productType === 'string') {
+                    options.productType = [options.productType];
+                }
+            } else {
+                options.productType = [];
+            }
+
             events[changeCustomOption] = '_updateWishlistData';
-            events[changeProductInfo] = '_updateWishlistData';
             events[changeQty] = '_updateWishlistData';
+            options.productType.forEach(function (type) {
+                events['change ' + options[type + 'Info']] = '_updateWishlistData';
+            });
+
             this._on(events);
         },
         _updateWishlistData: function(event) {
