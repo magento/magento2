@@ -238,23 +238,31 @@
                         </item>
                     </argument>
                 </field>
-                <field name="optiontext_1">
+                <field name="optionvisual_default_store_view">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
+                            <item name="component" xsi:type="string">Magento_Swatches/js/form/element/input</item>
+                            <item name="template" xsi:type="string">Magento_Swatches/form/element/input</item>
+                            <item name="prefixName" xsi:type="string">optionvisual[value]</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="suffixName" xsi:type="string">[1]</item>
                             <item name="label" xsi:type="string" translate="true">Default Store View</item>
-                            <item name="dataScope" xsi:type="string">optiontext.value.option_1</item>
                         </item>
                     </argument>
                 </field>
-                <field name="optiontext_0">
+                <field name="optionvisual_admin">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
+                            <item name="component" xsi:type="string">Magento_Swatches/js/form/element/input</item>
+                            <item name="template" xsi:type="string">Magento_Swatches/form/element/input</item>
+                            <item name="prefixName" xsi:type="string">optionvisual[value]</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="suffixName" xsi:type="string">[0]</item>
                             <item name="label" xsi:type="string" translate="true">Admin</item>
-                            <item name="dataScope" xsi:type="string">optiontext.value.option_0</item>
                         </item>
                     </argument>
                 </field>
