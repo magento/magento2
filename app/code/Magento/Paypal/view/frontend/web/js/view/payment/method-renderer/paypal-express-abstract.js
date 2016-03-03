@@ -10,14 +10,16 @@ define(
         'Magento_Checkout/js/view/payment/default',
         'Magento_Paypal/js/action/set-payment-method',
         'Magento_Checkout/js/model/payment/additional-validators',
-        'Magento_Checkout/js/model/quote'
+        'Magento_Checkout/js/model/quote',
+        'Magento_Customer/js/customer-data'
     ],
     function (
         $,
         Component,
         setPaymentMethodAction,
         additionalValidators,
-        quote
+        quote,
+        customerData
     ) {
         'use strict';
 
@@ -31,11 +33,12 @@ define(
             initObservable: function () {
                 this._super()
                     .observe('billingAgreement');
+
                 return this;
             },
 
             /** Open window with  */
-            showAcceptanceWindow: function(data, event) {
+            showAcceptanceWindow: function (data, event) {
                 window.open(
                     $(event.target).attr('href'),
                     'olcwhatispaypal',
@@ -45,26 +48,27 @@ define(
                     ' resizable=yes, ,left=0,' +
                     ' top=0, width=400, height=350'
                 );
+
                 return false;
             },
 
             /** Returns payment acceptance mark link path */
-            getPaymentAcceptanceMarkHref: function() {
+            getPaymentAcceptanceMarkHref: function () {
                 return window.checkoutConfig.payment.paypalExpress.paymentAcceptanceMarkHref;
             },
 
             /** Returns payment acceptance mark image path */
-            getPaymentAcceptanceMarkSrc: function() {
+            getPaymentAcceptanceMarkSrc: function () {
                 return window.checkoutConfig.payment.paypalExpress.paymentAcceptanceMarkSrc;
             },
 
             /** Returns billing agreement data */
-            getBillingAgreementCode: function() {
+            getBillingAgreementCode: function () {
                 return window.checkoutConfig.payment.paypalExpress.billingAgreementCode[this.item.method];
             },
 
             /** Returns payment information data */
-            getData: function() {
+            getData: function () {
                 var parent = this._super(),
                     additionalData = null;
 
@@ -72,7 +76,10 @@ define(
                     additionalData = {};
                     additionalData[this.getBillingAgreementCode()] = this.billingAgreement();
                 }
-                return $.extend(true, parent, {'additional_data': additionalData});
+
+                return $.extend(true, parent, {
+                    'additional_data': additionalData
+                });
             },
 
             /** Redirect to paypal */
@@ -82,11 +89,13 @@ define(
                     this.selectPaymentMethod();
                     setPaymentMethodAction(this.messageContainer).done(
                         function () {
+                            customerData.invalidate(['cart']);
                             $.mage.redirect(
                                 window.checkoutConfig.payment.paypalExpress.redirectUrl[quote.paymentMethod().method]
                             );
                         }
                     );
+
                     return false;
                 }
             }
