@@ -13,6 +13,7 @@ use Magento\Framework\Shell\ComplexParameter;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\Setup\FilePermissions;
 
 /**
  * Magento2 CLI Application. This is the hood for all command line tools supported by Magento.
@@ -46,6 +47,22 @@ class Cli extends SymfonyApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
+        // Check to make sure var/generation/Magento folder dir have read/execute permission for the current user
+        /** @var \Magento\Setup\Model\ObjectManagerProvider $omProvider */
+        $omProvider = $this->serviceManager->get('Magento\Setup\Model\ObjectManagerProvider');
+        /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
+        $objectManager = $omProvider->get();
+        /** @var \Magento\Framework\Setup\Filepermissions $filePermissions */
+        $filePermissions = $objectManager->get('Magento\Framework\Setup\FilePermissions');
+        if ($filePermissions->checkDirectoryPermissionForCLIUser() === false) {
+            $output->writeln(
+                "<error>Command line user ("
+                . get_current_user()
+                . ") does not have proper permissions for var/generation/Magento directory. "
+                . "Please address this issue before using Magento command line."
+            );
+        }
+
         $exitCode = parent::doRun($input, $output);
         if ($this->initException) {
             $output->writeln(

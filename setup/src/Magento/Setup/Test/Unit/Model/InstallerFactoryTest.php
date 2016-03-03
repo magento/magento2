@@ -14,8 +14,8 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $returnValueMap = [
             [
-                'Magento\Setup\Model\FilePermissions',
-                $this->getMock('Magento\Setup\Model\FilePermissions', [], [], '', false),
+                'Magento\Framework\Setup\FilePermissions',
+                $this->getMock('Magento\Framework\Setup\FilePermissions', [], [], '', false),
             ],
             [
                 'Magento\Framework\App\DeploymentConfig\Writer',

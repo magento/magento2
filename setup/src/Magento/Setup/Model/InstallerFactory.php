@@ -50,7 +50,7 @@ class InstallerFactory
     public function create(LoggerInterface $log)
     {
         return new Installer(
-            $this->serviceLocator->get('Magento\Setup\Model\FilePermissions'),
+            $this->serviceLocator->get('Magento\Framework\Setup\FilePermissions'),
             $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig\Writer'),
             $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig\Reader'),
             $this->serviceLocator->get('Magento\Framework\App\DeploymentConfig'),
