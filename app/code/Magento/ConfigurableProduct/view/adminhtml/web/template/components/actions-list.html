@@ -1,0 +1,37 @@
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="action-select-wrap" data-bind="
+    css : {
+        '_active' : $parents[1].actionsListOpened() === $parent.index
+    },
+    outerClick: $parents[1].closeList.bind($parents[1], $parent.index)"
+>
+    <button class="action-select" data-bind="click: function(){ $parents[1].toggleActionsList($parent.index); }">
+        <span data-bind="i18n: 'Select'"></span>
+    </button>
+    <ul class="action-menu _active" data-bind="css: {'_active': $parents[1].actionsListOpened() === $parent.index}">
+        <li><a class="action-menu-item">Choose a different Product</a></li>
+        <li>
+            <a class="action-menu-item" data-bind="
+                text: $data.value() == 1 ? $t('Disable Product') : $t('Enable Product'),
+                click: function(){
+                    $parents[1].toggleStatusProduct($parent.index);
+                    $parents[1].closeList($parent.index);
+                }
+            "></a>
+        </li>
+        <li>
+            <a class="action-menu-item" data-bind="
+                click: function(){
+                    $parents[1].deleteRecord($parent.index, $parent.recordId);
+                    $parents[1].closeList($parent.index);
+                },
+                text: $t('Remove Product')
+            "></a>
+        </li>
+    </ul>
+</div>

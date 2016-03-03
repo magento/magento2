@@ -111,11 +111,41 @@ class Configurable
     private function setLinkedProducts(ProductInterface $product, ProductExtensionInterface $extensionAttributes)
     {
         $associatedProductIds = $this->request->getPost('associated_product_ids', []);
-        $variationsMatrix = $this->request->getParam('variations-matrix', []);
+        $variationsMatrix = $this->getVariationMatrix();
         if (!empty($variationsMatrix)) {
             $generatedProductIds = $this->variationHandler->generateSimpleProducts($product, $variationsMatrix);
             $associatedProductIds = array_merge($associatedProductIds, $generatedProductIds);
         }
         $extensionAttributes->setConfigurableProductLinks(array_filter($associatedProductIds));
+    }
+
+    /**
+     * Get variation-matrix from request
+     *
+     * @return array
+     */
+    protected function getVariationMatrix()
+    {
+        $result = [];
+        $configurableMatrix = $this->request->getParam('configurable-matrix', []);
+        foreach ($configurableMatrix as $item) {
+            if ($item['newProduct']) {
+                $result[$item['variationKey']] = [
+                    'status' => isset($item['status']) ? $item['status'] : '',
+                    'sku' => isset($item['sku']) ? $item['sku'] : '',
+                    'name' => isset($item['name']) ? $item['name'] : '',
+                    'price' => isset($item['price']) ? $item['price'] : '',
+                    'configurable_attribute' => isset($item['configurable_attribute'])
+                        ? $item['configurable_attribute'] : '',
+                    'weight' => isset($item['weight']) ? $item['weight'] : '',
+                ];
+
+                if (isset($item['qty'])) {
+                    $result[$item['variationKey']]['quantity_and_stock_status']['qty'] = $item['qty'];
+                }
+            }
+        }
+
+        return $result;
     }
 }

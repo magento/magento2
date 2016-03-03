@@ -9,8 +9,9 @@ define([
     'jquery',
     'ko',
     'underscore',
-    'Magento_Ui/js/modal/alert'
-], function (Component, $, ko, _, alert) {
+    'Magento_Ui/js/modal/alert',
+    'uiRegistry'
+], function (Component, $, ko, _, alert, registry) {
     'use strict';
 
     function UserException(message) {
@@ -23,76 +24,36 @@ define([
         defaults: {
             opened: false,
             attributes: [],
+            usedAttributes: [],
+            attributesData: {},
             productMatrix: [],
             variations: [],
             productAttributes: [],
+            disabledAttributes: [],
             fullAttributes: [],
             rowIndexToEdit: false,
             productAttributesMap: null,
+            value: [],
             modules: {
-                associatedProductGrid: '${ $.configurableProductGrid }'
+                associatedProductGrid: '${ $.configurableProductGrid }',
+                wizardButtonElement: '${ $.wizardModalButtonName }'
+            },
+            links: {
+                value: '${ $.provider }:${ $.dataScopeVariations }',
+                usedAttributes: '${ $.provider }:${ $.dataScopeAttributes }',
+                attributesData: '${ $.provider }:${ $.dataScopeAttributesData }'
             }
         },
         initialize: function () {
             this._super();
 
-            if (this.variations.length) {
-                this.render(this.variations, this.productAttributes);
-            }
+            this.changeButtonWizard();
             this.initProductAttributesMap();
         },
         initObservable: function () {
-            this._super().observe('actions opened attributes productMatrix');
+            this._super().observe('actions opened attributes productMatrix value usedAttributes attributesData');
 
             return this;
-        },
-        showGrid: function (rowIndex) {
-            var product = this.productMatrix()[rowIndex],
-                attributes = JSON.parse(product.attribute),
-                filterModifier = product.productId ? {
-                    'entity_id': {
-                        'condition_type': 'neq', value: product.productId
-                    }
-                 } : {};
-            this.rowIndexToEdit = rowIndex;
-
-            filterModifier = _.extend(filterModifier, _.mapObject(attributes, function (value) {
-                return {
-                    'condition_type': 'eq',
-                    'value': value
-                };
-            }));
-            this.associatedProductGrid().open(
-                {
-                    'filters': attributes,
-                    'filters_modifier': filterModifier
-                },
-                'changeProduct',
-                false
-            );
-        },
-        changeProduct: function (newProducts) {
-            var oldProduct = this.productMatrix()[this.rowIndexToEdit],
-                newProduct = this._makeProduct(_.extend(oldProduct, newProducts[0]));
-            this.productAttributesMap[this.getVariationKey(newProduct.options)] = newProduct.productId;
-            this.productMatrix.splice(this.rowIndexToEdit, 1, newProduct);
-        },
-        appendProducts: function (newProducts) {
-            this.productMatrix.push.apply(
-                this.productMatrix,
-                _.map(
-                    newProducts,
-                    _.wrap(
-                        this._makeProduct.bind(this),
-                        function (func, product) {
-                            var newProduct = func(product);
-                            this.productAttributesMap[this.getVariationKey(newProduct.options)] = newProduct.productId;
-
-                            return newProduct;
-                        }.bind(this)
-                    )
-                )
-            );
         },
         _makeProduct: function (product) {
             var productId = product['entity_id'] || product.productId || null,
@@ -155,25 +116,75 @@ define([
 
             return result;
         },
-        getAttributeRowName: function (attribute, field) {
-            return 'product[configurable_attributes_data][' + attribute.id + '][' + field + ']';
-        },
-        getOptionRowName: function (attribute, option, field) {
-            return 'product[configurable_attributes_data][' + attribute.id + '][values][' +
-                option.value + '][' + field + ']';
-        },
         render: function (variations, attributes) {
             this.changeButtonWizard();
             this.populateVariationMatrix(variations);
             this.attributes(attributes);
-            this.initImageUpload();
             this.disableConfigurableAttributes(attributes);
-            this.showPrice();
+            this.handleValue(variations);
+            this.handleAttributes();
         },
         changeButtonWizard: function () {
-            var $button = $('[data-action=open-steps-wizard] [data-role=button-label]');
-            $button.text($button.attr('data-edit-label'));
+            this.wizardButtonElement().title(this.wizardModalButtonTitle);
         },
+        handleValue: function (variations) {
+            var tmpArray = [];
+
+            _.each(variations, function (variation) {
+                var attributes = _.reduce(variation.options, function (memo, option) {
+                    var attribute = {};
+                    attribute[option['attribute_code']] = option.value;
+
+                    return _.extend(memo, attribute);
+                }, {});
+                tmpArray.push(_.extend(variation, {
+                    productId: variation.productId || null,
+                    name: variation.name || variation.sku,
+                    priceCurrency: this.currencySymbol,
+                    weight: variation.weight,
+                    attribute: JSON.stringify(attributes),
+                    variationKey: this.getVariationKey(variation.options),
+                    //editable: variation.editable === undefined ? !variation.productId : variation.editable,
+                    editable: variation.editable === undefined ? 0 : 1,
+                    productUrl: this.buildProductUrl(variation.productId),
+                    status: variation.status === undefined ? 1 : parseInt(variation.status, 10),
+                    newProduct: variation.productId ? 0 : 1
+                }));
+            }, this);
+
+            this.value(tmpArray);
+        },
+        handleAttributes: function () {
+            var tmpArray = [];
+            var tmpOptions = {};
+            var option = {};
+            var position = 0;
+            var values = {};
+
+            _.each(this.attributes(), function (attribute) {
+                tmpArray.push(attribute.id);
+                values = {};
+                _.each(attribute.chosen, function (row) {
+                    values[row.value] = {
+                        "include": "1",
+                        "value_index": row.value
+                    };
+                }, this);
+                option = {
+                    "attribute_id": attribute.id,
+                    "code": attribute.code,
+                    "label": attribute.label,
+                    "position": position,
+                    "values": values
+                };
+                tmpOptions[attribute.id] = option;
+                position++;
+            }, this);
+
+            this.attributesData(tmpOptions);
+            this.usedAttributes(tmpArray);
+        },
+
 
         /**
          * Get attributes options
@@ -212,52 +223,6 @@ define([
         buildProductUrl: function (productId) {
             return this.productUrl.replace('%id%', productId);
         },
-        removeProduct: function (rowIndex) {
-            this.opened(false);
-            var removedProduct = this.productMatrix.splice(rowIndex, 1);
-            delete this.productAttributesMap[this.getVariationKey(removedProduct[0].options)];
-
-            if (this.productMatrix().length === 0) {
-                this.attributes.each(function (attribute) {
-                    $('[data-attribute-code="' + attribute.code + '"] select').removeProp('disabled');
-                });
-            }
-            this.showPrice();
-        },
-        toggleProduct: function (rowIndex) {
-            var product, row, productChanged = {};
-
-            if (this.productMatrix()[rowIndex].editable) {
-                row = $('[data-row-number=' + rowIndex + ']');
-                _.each(['name','sku','qty','weight','price'], function (column) {
-                    productChanged[column] = $(
-                        'input[type=text]',
-                        row.find($('[data-column="%s"]'.replace('%s', column)))
-                    ).val();
-                });
-            }
-            product = this.productMatrix.splice(rowIndex, 1)[0];
-            product = _.extend(product, productChanged);
-            product.status = +!product.status;
-            this.productMatrix.splice(rowIndex, 0, product);
-        },
-        toggleList: function (rowIndex) {
-            var state = false;
-
-            if (rowIndex !== this.opened()) {
-                state = rowIndex;
-            }
-            this.opened(state);
-
-            return this;
-        },
-        closeList: function (rowIndex) {
-            if (this.opened() === rowIndex()) {
-                this.opened(false);
-            }
-
-            return this;
-        },
         getVariationKey: function (options) {
             return _.pluck(options, 'value').sort().join('-');
         },
@@ -272,123 +237,20 @@ define([
                 }.bind(this));
             }
         },
-
-        /**
-         * Is show preview image
-         * @see use in matrix.phtml
-         * @function
-         * @event
-         * @param {object} variation
-         * @returns {*|boolean}
-         */
-        isShowPreviewImage: function (variation) {
-            return variation.images.preview && (!variation.editable || variation.images.file);
-        },
-        generateImageGallery: function (variation) {
-            var gallery = [],
-                imageFields = ['position', 'file', 'disabled', 'label'];
-            _.each(variation.images.images, function (image) {
-                _.each(imageFields, function (field) {
-                    gallery.push(
-                        '<input type="hidden" name="' +
-                        this.getVariationRowName(variation, 'media_gallery/images/' + image['file_id'] + '/' + field) +
-                        '" value="' + (image[field] || '') + '" />'
-                    );
-                }, this);
-                _.each(image.galleryTypes, function (imageType) {
-                    gallery.push(
-                        '<input type="hidden" name="' + this.getVariationRowName(variation, imageType) +
-                        '" value="' + image.file + '" />'
-                    );
-                }, this);
-            }, this);
-
-            return gallery.join('\n');
-        },
-        initImageUpload: function () {
-            require([
-                'mage/template',
-                'jquery/file-uploader',
-                'mage/mage',
-                'mage/translate',
-                'domReady!'
-            ], function (mageTemplate) {
-
-                var matrix = $('[data-role=product-variations-matrix]');
-                matrix.find('[data-action=upload-image]').find('[name=image]').each(function () {
-                    var imageColumn = $(this).closest('[data-column=image]');
-
-                    if (imageColumn.find('[data-role=image]').length) {
-                        imageColumn.find('[data-toggle=dropdown]').dropdown().show();
-                    }
-                    $(this).fileupload({
-                        dataType: 'json',
-                        dropZone: $(this).closest('[data-role=row]'),
-                        acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
-                        done: function (event, data) {
-                            var tmpl, parentElement, uploaderControl, imageElement;
-
-                            if (!data.result) {
-                                return;
-                            }
-
-                            if (!data.result.error) {
-                                parentElement = $(event.target).closest('[data-column=image]');
-                                uploaderControl = parentElement.find('[data-action=upload-image]');
-                                imageElement = parentElement.find('[data-role=image]');
-
-                                if (imageElement.length) {
-                                    imageElement.attr('src', data.result.url);
-                                } else {
-                                    tmpl = mageTemplate(matrix.find('[data-template-for=variation-image]').html());
-
-                                    $(tmpl({
-                                        data: data.result
-                                    })).prependTo(uploaderControl);
-                                }
-                                parentElement.find('[name$="[image]"]').val(data.result.file);
-                                parentElement.find('[data-toggle=dropdown]').dropdown().show();
-                            } else {
-                                alert({
-                                    content: $.mage.__('We don\'t recognize or support this file extension type.')
-                                });
-                            }
-                        },
-                        start: function (event) {
-                            $(event.target).closest('[data-action=upload-image]').addClass('loading');
-                        },
-                        stop: function (event) {
-                            $(event.target).closest('[data-action=upload-image]').removeClass('loading');
-                        }
-                    });
-                });
-                matrix.find('[data-action=no-image]').click(function (event) {
-                    var parentElement = $(event.target).closest('[data-column=image]');
-                    parentElement.find('[data-role=image]').remove();
-                    parentElement.find('[name$="[image]"]').val('');
-                    parentElement.find('[data-toggle=dropdown]').trigger('close.dropdown').hide();
-                });
-            });
-        },
         disableConfigurableAttributes: function (attributes) {
-            $('[data-attribute-code] select.disabled-configurable-elements')
-                .removeClass('disabled-configurable-elements')
-                .prop('disabled', false);
-            _.each(attributes, function (attribute) {
-                $('[data-attribute-code="' + attribute.code + '"] select')
-                    .addClass('disabled-configurable-elements')
-                    .prop('disabled', true);
+            var element;
+            _.each(this.disabledAttributes, function (attribute) {
+                registry.get('index = ' + attribute).disabled(false);
             });
-        },
-        showPrice: function () {
-            var priceContainer = $('[id="attribute-price-container"]');
-            if (this.productMatrix().length !== 0) {
-                priceContainer.hide();
-                priceContainer.find('input').prop('disabled', true);
-            } else {
-                priceContainer.show();
-                priceContainer.find('input').prop('disabled', false);
-            }
+            this.disabledAttributes = [];
+
+            _.each(attributes, function (attribute) {
+                element = registry.get('index = ' + attribute.code);
+                if (!_.isUndefined(element)) {
+                    element.disabled(true);
+                    this.disabledAttributes.push(attribute.code);
+                }
+            }, this);
         },
 
         /**
