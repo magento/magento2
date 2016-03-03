@@ -2,6 +2,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 define([
     'jquery',
     'ko',
@@ -426,10 +427,7 @@ define([
                     w: tooltipData.trigger.outerWidth()
                 },
                 elementPosition: tooltipData.trigger.offset(),
-                eventPosition: {
-                    left: tooltipData.event.originalEvent.pageX,
-                    top: tooltipData.event.originalEvent.pageY
-                }
+                eventPosition: this.getEventPosition(tooltipData.event)
             };
 
             _.extend(positionData, positions[config.position](tooltip.sizeData));
@@ -475,6 +473,25 @@ define([
                     tail.css('margin-top', tailMargin + data.tail.top);
                 }
             }
+        },
+
+        /**
+         * Resolves position for tooltip
+         *
+         * @param {Object} event
+         * @returns {Object}
+         */
+        getEventPosition: function (event) {
+            var position = {
+                left: event.originalEvent && event.originalEvent.pageX || 0,
+                top: event.originalEvent && event.originalEvent.pageY || 0
+            };
+
+            if (position.left === 0 && position.top === 0) {
+                _.extend(position, event.target.getBoundingClientRect());
+            }
+
+            return position;
         },
 
         /**
@@ -698,12 +715,22 @@ define([
             tooltipId = tooltip.setTooltip(config);
 
             if (config.action === 'hover') {
-                $parentScope.on('mouseenter', config.trigger,
-                    tooltip.setContent.bind(null, elem, viewModel, tooltipId, bindingCtx));
-                $parentScope.on('mouseleave', config.trigger, tooltip.checkPreviousTooltip.bind(null, tooltipId));
+                $parentScope.on(
+                    'mouseenter',
+                    config.trigger,
+                    tooltip.setContent.bind(null, elem, viewModel, tooltipId, bindingCtx)
+                );
+                $parentScope.on(
+                    'mouseleave',
+                    config.trigger,
+                    tooltip.checkPreviousTooltip.bind(null, tooltipId)
+                );
             } else if (config.action === 'click') {
-                $parentScope.on('click', config.trigger,
-                    tooltip.toggleTooltip.bind(null, elem, viewModel, tooltipId, bindingCtx));
+                $parentScope.on(
+                    'click',
+                    config.trigger,
+                    tooltip.toggleTooltip.bind(null, elem, viewModel, tooltipId, bindingCtx)
+                );
             }
 
             return {
