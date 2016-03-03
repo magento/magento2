@@ -22,6 +22,11 @@ use PHP_CodeSniffer_Sniff;
  */
 class ClassNamingSniff implements PHP_CodeSniffer_Sniff
 {
+
+    const STRING_HELPER_CLASSES_PREFIX = '_';
+
+    const STRING_ALLOWED_UNDERSCORES = '__';
+
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -46,8 +51,8 @@ class ClassNamingSniff implements PHP_CodeSniffer_Sniff
 
         if (T_WHITESPACE !== $tokens[$stackPtr - 1]['code']
             && !in_array($tokens[$stackPtr - 1]['content'], [
-                CodeSnifferTokenizerSymbols::S_INDENT_SPACES,
-                CodeSnifferTokenizerSymbols::S_NEW_LINE,
+                CodeSnifferTokenizerSymbols::STRING_INDENT_SPACES,
+                CodeSnifferTokenizerSymbols::STRING_NEW_LINE,
             ])
         ) {
             return;
@@ -58,7 +63,9 @@ class ClassNamingSniff implements PHP_CodeSniffer_Sniff
             $phpcsFile->addError('Class name contains not allowed symbols', $stackPtr, 'NotAllowedSymbol', $matches);
         }
 
-        if (!empty(strpos($className, '_')) && empty(strpos($className, '__'))) {
+        if (!empty(strpos($className, self::STRING_HELPER_CLASSES_PREFIX))
+            && empty(strpos($className, self::STRING_ALLOWED_UNDERSCORES))
+        ) {
             $phpcsFile->addError('"_" symbol allowed only for helper classes', $stackPtr, 'UnderscoreSymbol');
         }
     }

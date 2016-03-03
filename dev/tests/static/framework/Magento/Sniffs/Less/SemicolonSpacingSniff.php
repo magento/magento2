@@ -31,10 +31,10 @@ class SemicolonSpacingSniff implements PHP_CodeSniffer_Sniff
      * @var array
      */
     private $styleSymbolsToSkip = [
-        CodeSnifferTokenizerSymbols::S_ASPERAND,
-        CodeSnifferTokenizerSymbols::S_COLON,
-        CodeSnifferTokenizerSymbols::S_OPEN_PARENTHESIS,
-        CodeSnifferTokenizerSymbols::S_CLOSE_PARENTHESIS,
+        CodeSnifferTokenizerSymbols::STRING_ASPERAND,
+        CodeSnifferTokenizerSymbols::STRING_COLON,
+        CodeSnifferTokenizerSymbols::STRING_OPEN_PARENTHESIS,
+        CodeSnifferTokenizerSymbols::STRING_CLOSE_PARENTHESIS,
     ];
 
     /** Skip codes that can be detected by sniffer incorrectly

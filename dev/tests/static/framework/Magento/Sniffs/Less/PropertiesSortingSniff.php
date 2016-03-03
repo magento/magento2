@@ -38,8 +38,8 @@ class PropertiesSortingSniff implements PHP_CodeSniffer_Sniff
      * @var array
      */
     private $styleSymbolsToSkip = [
-        CodeSnifferTokenizerSymbols::S_ASPERAND,
-        CodeSnifferTokenizerSymbols::S_COLON,
+        CodeSnifferTokenizerSymbols::STRING_ASPERAND,
+        CodeSnifferTokenizerSymbols::STRING_COLON,
     ];
 
     /**

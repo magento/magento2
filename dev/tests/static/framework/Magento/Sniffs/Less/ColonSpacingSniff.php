@@ -57,12 +57,11 @@ class ColonSpacingSniff implements PHP_CodeSniffer_Sniff
      */
     private function needValidateSpaces(PHP_CodeSniffer_File $phpcsFile, $stackPtr, $tokens)
     {
-
         $nextSemicolon = $phpcsFile->findNext(T_SEMICOLON, $stackPtr);
 
         if (false === $nextSemicolon
             || ($tokens[$nextSemicolon]['line'] !== $tokens[$stackPtr]['line'])
-            || CodeSnifferTokenizerSymbols::S_ASPERAND === $tokens[$stackPtr - 1]['content']
+            || CodeSnifferTokenizerSymbols::STRING_ASPERAND === $tokens[$stackPtr - 1]['content']
         ) {
             return false;
         }

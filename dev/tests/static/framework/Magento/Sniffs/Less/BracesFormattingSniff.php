@@ -42,7 +42,7 @@ class BracesFormattingSniff implements PHP_CodeSniffer_Sniff
         $tokens = $phpcsFile->getTokens();
 
         if (T_OPEN_CURLY_BRACKET === $tokens[$stackPtr]['code']) {
-            if (CodeSnifferTokenizerSymbols::S_WHITESPACE !== $tokens[$stackPtr - 1]['content']) {
+            if (CodeSnifferTokenizerSymbols::STRING_WHITESPACE !== $tokens[$stackPtr - 1]['content']) {
                 $phpcsFile->addError('Space before opening brace is missing', $stackPtr, 'SpacingBeforeOpen');
             }
 
