@@ -17,6 +17,10 @@ $salesRule = $objectManager->create('Magento\SalesRule\Model\Rule');
 $salesRuleId = $objectManager->get('Magento\Framework\Registry')
     ->registry('Magento/Checkout/_file/discount_10percent');
 $salesRule->load($salesRuleId);
+
+$objectManager->get('Magento\Framework\Registry')
+    ->unregister('Magento/Checkout/_file/discount_10percent');
+
 $couponCode = $salesRule->getPrimaryCoupon()->getCode();
 
 $quote->setCouponCode(trim($couponCode));

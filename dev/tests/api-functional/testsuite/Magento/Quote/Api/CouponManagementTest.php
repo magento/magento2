@@ -123,9 +123,15 @@ class CouponManagementTest extends WebapiAbstract
         $cartId = $quote->getId();
         /** @var \Magento\SalesRule\Model\Rule $salesRule */
         $salesRule = $this->objectManager->create('Magento\SalesRule\Model\Rule');
+
         $salesRuleId = $this->objectManager->get('Magento\Framework\Registry')
             ->registry('Magento/Checkout/_file/discount_10percent');
+
         $salesRule->load($salesRuleId);
+
+        $this->objectManager->get('Magento\Framework\Registry')
+            ->unregister('Magento/Checkout/_file/discount_10percent');
+
         $couponCode = $salesRule->getPrimaryCoupon()->getCode();
         $serviceInfo = [
             'rest' => [
