@@ -49,7 +49,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     {
         $this->ensureDefaultsExtraFile();
         $this->_shell->execute(
-            'mysql --defaults-extra-file=%s --host=%s %s -e %s',
+            'mysql --defaults-file=%s --host=%s %s -e %s',
             [
                 $this->_defaultsExtraFile,
                 $this->_host,
@@ -86,7 +86,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
     {
         $this->ensureDefaultsExtraFile();
         $this->_shell->execute(
-            'mysqldump --defaults-extra-file=%s --host=%s  %s > %s',
+            'mysqldump --defaults-file=%s --host=%s  %s > %s',
             [$this->_defaultsExtraFile, $this->_host, $this->_schema, $this->getSetupDbDumpFilename()]
         );
     }
@@ -102,7 +102,7 @@ class Mysql extends \Magento\TestFramework\Db\AbstractDb
             throw new \LogicException("DB dump file does not exist: " . $this->getSetupDbDumpFilename());
         }
         $this->_shell->execute(
-            'mysql --defaults-extra-file=%s --host=%s %s < %s',
+            'mysql --defaults-file=%s --host=%s %s < %s',
             [$this->_defaultsExtraFile, $this->_host, $this->_schema, $this->getSetupDbDumpFilename()]
         );
     }
