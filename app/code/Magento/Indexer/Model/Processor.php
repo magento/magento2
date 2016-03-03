@@ -7,6 +7,7 @@ namespace Magento\Indexer\Model;
 
 use Magento\Framework\Indexer\ConfigInterface;
 use Magento\Framework\Indexer\IndexerInterface;
+use Magento\Framework\Indexer\StateInterface;
 
 class Processor
 {
@@ -29,6 +30,11 @@ class Processor
      * @var \Magento\Framework\Mview\ProcessorInterface
      */
     protected $mviewProcessor;
+
+    /**
+     * @var array
+     */
+    protected $threadSharedIndexes;
 
     /**
      * @param ConfigInterface $config
@@ -55,11 +61,24 @@ class Processor
      */
     public function reindexAllInvalid()
     {
+        $sharedIndexesComplete = [];
         foreach (array_keys($this->config->getIndexers()) as $indexerId) {
+            /** @var Indexer $indexer */
             $indexer = $this->indexerFactory->create();
             $indexer->load($indexerId);
             if ($indexer->isInvalid()) {
-                $indexer->reindexAll();
+                // Skip indexers that have shared index that was already
+                if (!in_array($indexer->getSharedIndex(), $sharedIndexesComplete)) {
+                    $indexer->reindexAll();
+                } else {
+                    /** @var \Magento\Indexer\Model\Indexer\State $state */
+                    $state = $indexer->getState();
+                    $state->setStatus(StateInterface::STATUS_VALID);
+                    $state->save();
+                }
+                if ($indexer->getSharedIndex()) {
+                    $sharedIndexesComplete[] = $indexer->getSharedIndex();
+                }
             }
         }
     }
