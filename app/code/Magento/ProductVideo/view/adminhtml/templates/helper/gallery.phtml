@@ -8,6 +8,7 @@
 
 /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
 $elementName = $block->getElement()->getName() . '[images]';
+$formName = $block->getFormName();
 ?>
 <div class="row">
     <div class="add-video-button-container">
@@ -80,7 +81,7 @@ foreach ($block->getMediaAttributes() as $attribute) {
     foreach ($block->getImageTypes() as $typeData) {
         ?>
         <input name="<?php /* @escapeNotVerified */ echo $block->escapeHtml($typeData['name']) ?>"
-               data-form-part="product_form"
+               data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                class="image-<?php /* @escapeNotVerified */ echo $block->escapeHtml($typeData['code']) ?>"
                type="hidden"
                value="<?php /* @escapeNotVerified */ echo $block->escapeHtml($typeData['value']) ?>"/>
@@ -93,56 +94,56 @@ foreach ($block->getMediaAttributes() as $attribute) {
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][position]"
                    value="<%- data.position %>"
-                   data-form-part="product_form"
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                    class="position"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][media_type]"
                    value="<%- data.media_type %>"
-                   data-form-part="product_form"/>
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_provider]"
                    value="<%- data.video_provider %>"
-                   data-form-part="product_form"/>
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][file]"
                    value="<%- data.file %>"
-                   data-form-part="product_form"/>
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][value_id]"
                    value="<%- data.value_id %>"
-                   data-form-part="product_form"/>
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][label]"
                    value="<%- data.label %>"
-                   data-form-part="product_form"/>
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][disabled]"
                    value="<%- data.disabled %>"
-                   data-form-part="product_form"/>
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][removed]"
                    value="" class="is-removed"
-                   data-form-part="product_form"/>
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_url]"
                    value="<%- data.video_url %>"
-                   data-form-part="product_form"/>
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_title]"
                    value="<%- data.video_title %>"
-                   data-form-part="product_form"/>
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_description]"
                    value="<%- data.video_description %>"
-                   data-form-part="product_form"/>
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_metadata]"
                    value="<%- data.video_metadata %>"
-                   data-form-part="product_form"/>
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][role]"
                    value="<%- data.video_description %>"
-                   data-form-part="product_form"/>
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
 
             <div class="product-image-wrapper">
                 <img class="spacer"
@@ -244,7 +245,7 @@ foreach ($block->getMediaAttributes() as $attribute) {
                                         <label>
                                             <input class="image-type"
                                                    data-role="type-selector"
-                                                   data-form-part="product_form"
+                                                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                                                    type="checkbox"
                                                    value="<?php /* @escapeNotVerified */ echo $block->escapeHtml(
                                                        $attribute->getAttributeCode()
@@ -282,7 +283,7 @@ foreach ($block->getMediaAttributes() as $attribute) {
                                 <input type="checkbox"
                                        id="hide-from-product-page"
                                        data-role="visibility-trigger"
-                                       data-form-part="product_form"
+                                       data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                                        value="1"
                                        class="admin__control-checkbox"
                                        name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][disabled]"

@@ -8,6 +8,7 @@
 
 /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
 $elementName = $block->getElement()->getName() . '[images]';
+$formName = $block->getFormName();
 ?>
 <div id="<?php echo $block->getHtmlId() ?>"
      class="gallery"
@@ -36,7 +37,7 @@ $elementName = $block->getElement()->getName() . '[images]';
     <?php foreach ($block->getImageTypes() as $typeData) {
     ?>
         <input name="<?php echo $block->escapeHtml($typeData['name']) ?>"
-               data-form-part="product_form"
+               data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                class="image-<?php echo $block->escapeHtml($typeData['code']) ?>"
                type="hidden"
                value="<?php echo $block->escapeHtml($typeData['value']) ?>"/>
@@ -50,27 +51,27 @@ $elementName = $block->getElement()->getName() . '[images]';
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][position]"
                    value="<%- data.position %>"
-                   data-form-part="product_form"
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                    class="position"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][file]"
-                   data-form-part="product_form"
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                    value="<%- data.file %>"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][value_id]"
-                   data-form-part="product_form"
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                    value="<%- data.value_id %>"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][label]"
-                   data-form-part="product_form"
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                    value="<%- data.label %>"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][disabled]"
-                   data-form-part="product_form"
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                    value="<%- data.disabled %>"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][removed]"
-                   data-form-part="product_form"
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                    value=""
                    class="is-removed"/>
 
@@ -163,7 +164,7 @@ $elementName = $block->getElement()->getName() . '[images]';
                                         <label>
                                             <input class="image-type"
                                                    data-role="type-selector"
-                                                   data-form-part="product_form"
+                                                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                                                    type="checkbox"
                                                    value="<?php /* @escapeNotVerified */ echo $block->escapeHtml(
                                                        $attribute->getAttributeCode()
@@ -201,7 +202,7 @@ $elementName = $block->getElement()->getName() . '[images]';
                                 <input type="checkbox"
                                        id="hide-from-product-page"
                                        data-role="visibility-trigger"
-                                       data-form-part="product_form"
+                                       data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                                        value="1"
                                        class="admin__control-checkbox"
                                        name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][disabled]"
