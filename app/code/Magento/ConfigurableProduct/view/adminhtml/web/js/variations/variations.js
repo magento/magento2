@@ -25,6 +25,7 @@ define([
             opened: false,
             attributes: [],
             usedAttributes: [],
+            attributeCodes: [],
             attributesData: {},
             productMatrix: [],
             variations: [],
@@ -41,7 +42,8 @@ define([
             links: {
                 value: '${ $.provider }:${ $.dataScopeVariations }',
                 usedAttributes: '${ $.provider }:${ $.dataScopeAttributes }',
-                attributesData: '${ $.provider }:${ $.dataScopeAttributesData }'
+                attributesData: '${ $.provider }:${ $.dataScopeAttributesData }',
+                attributeCodes: '${ $.provider }:${ $.dataScopeAttributeCodes }'
             }
         },
         initialize: function () {
@@ -51,7 +53,9 @@ define([
             this.initProductAttributesMap();
         },
         initObservable: function () {
-            this._super().observe('actions opened attributes productMatrix value usedAttributes attributesData');
+            this._super().observe(
+                'actions opened attributes productMatrix value usedAttributes attributesData attributeCodes'
+            );
 
             return this;
         },
@@ -125,7 +129,9 @@ define([
             this.handleAttributes();
         },
         changeButtonWizard: function () {
-            this.wizardButtonElement().title(this.wizardModalButtonTitle);
+            if (this.value().length) {
+                this.wizardButtonElement().title(this.wizardModalButtonTitle);
+            }
         },
         handleValue: function (variations) {
             var tmpArray = [];
@@ -156,6 +162,7 @@ define([
         },
         handleAttributes: function () {
             var tmpArray = [];
+            var codesArray = [];
             var tmpOptions = {};
             var option = {};
             var position = 0;
@@ -163,6 +170,7 @@ define([
 
             _.each(this.attributes(), function (attribute) {
                 tmpArray.push(attribute.id);
+                codesArray.push(attribute.code);
                 values = {};
                 _.each(attribute.chosen, function (row) {
                     values[row.value] = {
@@ -183,6 +191,7 @@ define([
 
             this.attributesData(tmpOptions);
             this.usedAttributes(tmpArray);
+            this.attributeCodes(codesArray);
         },
 
 
