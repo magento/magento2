@@ -79,10 +79,12 @@ class UpdateConfigurations
                     'price' => isset($item['price']) ? $item['price'] : '',
                     'configurable_attribute' => isset($item['configurable_attribute'])
                         ? $item['configurable_attribute'] : '',
-                    'quantity_and_stock_status' => isset($item['quantity_and_stock_status'])
-                        ? $item['quantity_and_stock_status'] : '',
                     'weight' => isset($item['weight']) ? $item['weight'] : '',
                 ];
+
+                if (isset($item['qty'])) {
+                    $result[$item['id']]['quantity_and_stock_status']['qty'] = $item['qty'];
+                }
             }
         }
 
