@@ -488,7 +488,7 @@ class Grouped extends AbstractModifier
                                     'additionalClasses' => 'admin__field-small',
                                     'sortOrder' => 80,
                                     'validation' => [
-                                        'validate-number' => true,
+                                        'validate-zero-or-greater' => true
                                     ],
                                 ],
                             ],
