@@ -146,6 +146,7 @@ class Attributes extends AbstractModifier
                 'arguments' => [
                     'data' => [
                         'config' => [
+                            'additionalClasses' => 'admin_field-complex-attributes',
                             'formElement' => Container::NAME,
                             'componentType' => Container::NAME,
                             'content' => __('Select Attribute'),
