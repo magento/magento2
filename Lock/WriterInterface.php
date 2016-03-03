@@ -6,7 +6,7 @@
 namespace Magento\Framework\MessageQueue\Lock;
 
 /**
- * Class Lock to handle message lock transactions.
+ * Message lock writer
  */
 interface WriterInterface
 {
