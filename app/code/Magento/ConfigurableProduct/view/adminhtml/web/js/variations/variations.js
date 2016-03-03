@@ -47,6 +47,7 @@ define([
         initialize: function () {
             this._super();
 
+            this.changeButtonWizard();
             this.initProductAttributesMap();
         },
         initObservable: function () {
