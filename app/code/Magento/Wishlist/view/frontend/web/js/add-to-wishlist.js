@@ -102,10 +102,11 @@ define([
             return result;
         },
         _getElementData: function(element) {
+            element = $(element);
             var data = {},
-                elementName = $(element).data('selector'),
-                elementValue = $(element).val();
-            if ($(element).is('select[multiple]') && elementValue !== null) {
+                elementName = element.data('selector') ? element.data('selector') : element.attr('name'),
+                elementValue = element.val();
+            if (element.is('select[multiple]') && elementValue !== null) {
                 if (elementName.substr(elementName.length - 2) == '[]') {
                     elementName = elementName.substring(0, elementName.length - 2);
                 }
