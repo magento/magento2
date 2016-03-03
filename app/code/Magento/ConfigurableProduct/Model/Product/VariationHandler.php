@@ -157,13 +157,7 @@ class VariationHandler
         }
 
         $postData['stock_data'] = $parentProduct->getStockData();
-        $postData['stock_data']['manage_stock'] = 1;
-        if (!empty($postData['quantity_and_stock_status']['qty']) || !empty($postData['qty'])) {
-            $postData['stock_data']['manage_stock'] = 0;
-        }
-        if (!empty($postData['qty']) && empty($postData['quantity_and_stock_status']['qty'])) {
-            $postData['quantity_and_stock_status']['qty'] = $postData['qty'];
-        }
+        $postData['stock_data']['manage_stock'] = $postData['quantity_and_stock_status']['qty'] === '' ? 0 : 1;
         if (!isset($postData['stock_data']['is_in_stock'])) {
             $stockStatus = $parentProduct->getQuantityAndStockStatus();
             $postData['stock_data']['is_in_stock'] = $stockStatus['is_in_stock'];
