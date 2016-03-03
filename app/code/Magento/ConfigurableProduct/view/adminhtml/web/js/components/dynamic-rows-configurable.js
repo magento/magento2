@@ -159,10 +159,22 @@ define([
                 var mappedData = this.mappingValue(changedObject);
                 mappedData[this.canEditField] = 0;
                 mappedData[this.newProductField] = 0;
+                mappedData['variationKey'] = this._getVariationKey(changedObject);
                 tmpArray.push(mappedData);
             }, this);
 
             this.unionInsertData(tmpArray);
+        },
+
+        _getVariationKey: function (data) {
+            var attrCodes = this.source.get('data.attribute_codes'),
+                key = [];
+
+            attrCodes.each(function (code) {
+                key.push(data[code]);
+            });
+
+            return key.sort().join('-');
         },
 
         processingInsertDataFromWizard: function (data) {

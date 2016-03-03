@@ -208,7 +208,8 @@ class ConfigurablePanel extends AbstractModifier
                                     [
                                         'targetName' => 'ns=' . static::ASSOCIATED_PRODUCT_LISTING
                                             . ', index=' . static::ASSOCIATED_PRODUCT_LISTING,
-                                        'actionName' => 'render',
+                                        'actionName' => 'doRender',
+                                        'params' => ['showMassActionColumn', true],
                                     ],
                                 ],
                                 'title' => __('Add Products Manually'),

@@ -80,6 +80,7 @@ class Composite extends AbstractModifier
             if ($productTypeId === ConfigurableType::TYPE_CODE) {
                 $data[$productId]['configurable-matrix'] = $this->associatedProducts->getProductMatrix();
                 $data[$productId]['attributes'] = $this->associatedProducts->getProductAttributesIds();
+                $data[$productId]['attribute_codes'] = $this->associatedProducts->getProductAttributesCodes();
             }
         }
 
