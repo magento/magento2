@@ -8,6 +8,7 @@
 namespace Magento\Test\Legacy;
 
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Filesystem\Glob;
 
 class FilesystemTest extends \PHPUnit_Framework_TestCase
 {
@@ -115,7 +116,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         foreach ($pathsToCheck as $path => $allowed) {
             $allowedFiles = $allowed['allowed_files'];
             $allowedDirs = $allowed['allowed_dirs'];
-            $foundFiles = glob($path, GLOB_BRACE);
+            $foundFiles = Glob::glob($path, Glob::GLOB_BRACE);
             if (!$foundFiles) {
                 continue;
             }
