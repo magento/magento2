@@ -68,12 +68,26 @@ class Registration
     public function register()
     {
         $this->_themeCollection->clear();
-        foreach ($this->_themeCollection as $theme) {
-            $this->_registerThemeRecursively($theme);
+
+        $dbThemes = $this->_collectionFactory->create();
+        $dbThemeNames = [];
+
+        foreach ($dbThemes as $dbTheme) {
+            $dbThemeNames[] = $dbTheme->getFullPath();
         }
 
-        $this->checkPhysicalThemes()->checkAllowedThemeRelations();
+        $filesystemThemeNames = [];
+        foreach ($this->_themeCollection as $filesystemTheme) {
+            $filesystemThemeNames[] = $filesystemTheme->getFullPath();
+        }
 
+        if (sizeof(array_diff($filesystemThemeNames, $dbThemeNames)) > 0) {
+            foreach ($this->_themeCollection as $theme) {
+                $this->_registerThemeRecursively($theme);
+            }
+
+            $this->checkPhysicalThemes()->checkAllowedThemeRelations();
+        }
         return $this;
     }
 

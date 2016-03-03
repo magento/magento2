@@ -426,7 +426,7 @@ class Application
          * @see \Magento\Setup\Mvc\Bootstrap\InitParamListener::BOOTSTRAP_PARAM
          */
         $this->_shell->execute(
-            'php -f %s setup:uninstall -n --magento-init-params=%s',
+            'php -f %s setup:uninstall -vvv -n --magento-init-params=%s',
             [BP . '/bin/magento', $this->getInitParamsQuery()]
         );
     }
@@ -459,15 +459,15 @@ class Application
 
         // run install script
         $this->_shell->execute(
-            'php -f %s setup:install ' . implode(' ', array_keys($installParams)),
+            'php -f %s setup:install -vvv ' . implode(' ', array_keys($installParams)),
             array_merge([BP . '/bin/magento'], array_values($installParams))
         );
 
         // enable only specified list of caches
         $initParamsQuery = $this->getInitParamsQuery();
-        $this->_shell->execute('php -f %s cache:disable --bootstrap=%s', [BP . '/bin/magento', $initParamsQuery]);
+        $this->_shell->execute('php -f %s cache:disable -vvv --bootstrap=%s', [BP . '/bin/magento', $initParamsQuery]);
         $this->_shell->execute(
-            'php -f %s cache:enable %s %s %s %s --bootstrap=%s',
+            'php -f %s cache:enable -vvv %s %s %s %s --bootstrap=%s',
             [
                 BP . '/bin/magento',
                 \Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER,
