@@ -16,6 +16,7 @@ define([
             loading: false,
             error: false,
             opened: false,
+            level: 0,
             visible: true,
             disabled: false,
             additionalClasses: {}
@@ -35,11 +36,12 @@ define([
         /**
          * Calls initObservable of parent class.
          * Defines observable properties of instance.
-         * @return {Object} - reference to instance
+         *
+         * @returns {Object} Reference to instance
          */
         initObservable: function () {
             this._super()
-                .observe(['changed', 'loading', 'error', 'visible']);
+                .observe('changed loading error visible');
 
             return this;
         },
@@ -47,10 +49,10 @@ define([
         /**
          * Calls parent's initElement method.
          * Assignes callbacks on various events of incoming element.
+         *
          * @param  {Object} elem
          * @return {Object} - reference to instance
          */
-
         initElement: function (elem) {
             elem.initContainer(this);
 
