@@ -73,12 +73,11 @@ class BuiltinPlugin
         }
 
         if ($this->state->getMode() == \Magento\Framework\App\State::MODE_DEVELOPER) {
-            $cacheControlHeader = $result->getHeader('Cache-Control');
+            $cacheControlHeader = $response->getHeader('Cache-Control');
             if ($cacheControlHeader instanceof \Zend\Http\Header\HeaderInterface) {
-                $cacheControl = $cacheControlHeader->getFieldValue();
-                $response->setHeader('X-Magento-Cache-Control', $cacheControl);
-                $response->setHeader('X-Magento-Cache-Debug', 'MISS', true);
+                $response->setHeader('X-Magento-Cache-Control', $cacheControlHeader->getFieldValue());
             }
+            $response->setHeader('X-Magento-Cache-Debug', 'MISS', true);
         }
 
         $tagsHeader = $response->getHeader('X-Magento-Tags');
