@@ -16,4 +16,14 @@
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
+    <type name="Braintree\Gateway">
+        <arguments>
+            <argument name="config" xsi:type="array">
+                <item name="environment" xsi:type="string">sandbox</item>
+                <item name="merchantId" xsi:type="string">d4pdjhxgjfrsmzbf</item>
+                <item name="publicKey" xsi:type="string">ryygybnwzfqjg3xw</item>
+                <item name="privateKey" xsi:type="string">dbqzcm6bmq7n5nyb</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
