@@ -287,7 +287,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->categoryMock->expects($this->atLeastOnce())
             ->method('getId')
             ->will($this->returnValue($categoryId));
-        
+
         /**
          * @var \Magento\Framework\View\Element\Template
          * |\PHPUnit_Framework_MockObject_MockObject $blockMock

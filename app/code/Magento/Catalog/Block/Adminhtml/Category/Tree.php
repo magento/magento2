@@ -15,6 +15,13 @@ use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Framework\Data\Tree\Node;
 use Magento\Store\Model\Store;
 
+/**
+ * Class Tree
+ *
+ * @package Magento\Catalog\Block\Adminhtml\Category
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Tree extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCategory
 {
     /**
