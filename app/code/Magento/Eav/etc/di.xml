@@ -47,14 +47,8 @@
     </type>
     <type name="Magento\Eav\Model\EavCustomAttributeTypeLocator">
         <arguments>
-            <argument name="serviceEntityTypeMap" xsi:type="array">
-                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="const">Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE</item>
-            </argument>
-            <argument name="serviceBackendModelDataInterfaceMap" xsi:type="array">
-                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
-                    <item name="Magento\Catalog\Model\Product\Attribute\Backend\Media" xsi:type="string">Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface</item>
-                </item>
-            </argument>
+            <argument name="serviceEntityTypeMap" xsi:type="array" />
+            <argument name="serviceBackendModelDataInterfaceMap" xsi:type="array" />
         </arguments>
     </type>
     <type name="Magento\Eav\Model\Entity\Attribute">
