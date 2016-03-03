@@ -66,14 +66,14 @@ define([
             vi = vendors.length,
             property;
 
-        if (typeof style.transform != 'undefined') {
+        if (typeof style.transform !== 'undefined') {
             return 'transform';
         }
 
         while (vi--) {
             property = vendors[vi] + base;
 
-            if (typeof style[property] != 'undefined') {
+            if (typeof style[property] !== 'undefined') {
                 return property;
             }
         }
