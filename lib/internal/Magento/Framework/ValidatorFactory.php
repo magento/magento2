@@ -10,7 +10,7 @@ namespace Magento\Framework;
  */
 class ValidatorFactory
 {
-    const DEFAULT_INSTANCE_NAME = 'Magento\Framework\Validator';
+    const DEFAULT_INSTANCE_NAME = Validator::class;
 
     /**
      * Object Manager instance

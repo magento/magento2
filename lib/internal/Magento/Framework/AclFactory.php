@@ -31,6 +31,6 @@ class AclFactory
      */
     public function create()
     {
-        return $this->_objectManager->create('Magento\Framework\Acl');
+        return $this->_objectManager->create(Acl::class);
     }
 }
