@@ -74,6 +74,7 @@ echo 'memory_limit = -1' >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d
 phpenv rehash;
 
 # install deps
+export COMPOSER_BIN_DIR=~/bin
 if [[ -n "$GITHUB_TOKEN" ]]; then
     composer config github-oauth.github.com "$GITHUB_TOKEN"
 fi

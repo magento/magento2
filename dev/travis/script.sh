@@ -4,7 +4,7 @@
 # See COPYING.txt for license details.
 
 set -e
-export PATH="./../../../vendor/bin:$PATH"
+export PATH="~/bin:$PATH"
 
 case $TEST_SUITE in
     unit)
