@@ -5,21 +5,10 @@
  */
 /* @var Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo $block */
 ?>
-<div id="<?php /* @escapeNotVerified */ echo $block->getNameInLayout();?>" style="display:none">
+<div id="<?php /* @escapeNotVerified */ echo $block->getNameInLayout();?>" style="display:none"
+    data-mage-init='{"newVideoDialog": <?php /* @escapeNotVerified */ echo $block->getWidgetOptions();?>}'
+>
     <?php /* @escapeNotVerified */ echo $block->getFormHtml();?>
-    <script>
-        require([
-            "jquery",
-            "uiRegistry",
-            "newVideoDialog"
-        ], function ($, registry) { 
-            var $elem = $('#<?php /* @escapeNotVerified */ echo $block->getNameInLayout();?>');
-
-            registry.get('productGalleryWidget', function () {
-                $elem.newVideoDialog(<?php /* @escapeNotVerified */ echo $block->getWidgetOptions();?>);    
-            });
-        });
-    </script>
     <div id="video-player-preview-location" class="video-player-sidebar">
         <div class="video-player-container"></div>
         <div class="video-information title">
