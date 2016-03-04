@@ -249,7 +249,8 @@ define([
 
                     this.responseList.indexList
                         .on('click', function (e) {
-                            this.responseList.selected = $(e.target);
+                            var elem = $(e.target).parent('li');
+                            this.responseList.selected = $(elem);
                             this.searchForm.trigger('submit');
                         }.bind(this))
                         .on('mouseenter mouseleave', function (e) {
