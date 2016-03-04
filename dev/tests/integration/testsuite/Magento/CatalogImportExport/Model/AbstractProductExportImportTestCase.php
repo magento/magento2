@@ -8,7 +8,7 @@ namespace Magento\CatalogImportExport\Model;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
+abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\CatalogImportExport\Model\Export\Product
@@ -86,6 +86,8 @@ class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
         $skippedAttributes = array_merge(self::$skippedAttributes, $skippedAttributes);
         $this->executeExportTest($skus, $skippedAttributes);
     }
+
+    public abstract function exportImportDataProvider();
 
     /**
      * @param array $skus
