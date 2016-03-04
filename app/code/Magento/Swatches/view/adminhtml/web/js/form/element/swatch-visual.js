@@ -23,7 +23,7 @@ define([
             isReadOnly: false,
 
             initialize: function () {
-                if (_.isEmpty(value())) {
+                if (_.isEmpty(value)) {
                     container.addClassName('unavailable');
                 }
 
@@ -293,8 +293,8 @@ define([
             return this;
         },
 
-        renderAbc: function (elem) {
-            oldCode(this.value, elem.parentElement, this.uploadUrl, this.elementName);
+        performOldCode: function (elem) {
+            oldCode(this.value(), elem.parentElement, this.uploadUrl, this.elementName);
 
             return false;
         }
