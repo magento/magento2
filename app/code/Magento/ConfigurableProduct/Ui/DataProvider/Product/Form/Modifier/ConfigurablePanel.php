@@ -382,6 +382,20 @@ class ConfigurablePanel extends AbstractModifier
                         ['dataScope' => 'qty']
                     ),
                     'price_weight' => $this->getColumn('weight', __('Weight')),
+                    'status' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'componentType' => 'text',
+                                    'component' => 'Magento_Ui/js/form/element/abstract',
+                                    'template' => 'Magento_ConfigurableProduct/components/cell-status',
+                                    'label' => __('Status'),
+                                    'fit' => true,
+                                    'dataScope' => 'status',
+                                ],
+                            ],
+                        ],
+                    ],
                     'actionsList' => [
                         'arguments' => [
                             'data' => [
