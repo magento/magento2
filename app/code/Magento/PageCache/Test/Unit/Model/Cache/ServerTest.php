@@ -81,7 +81,7 @@ class ServerTest extends \PHPUnit_Framework_TestCase
             }
         }
 
-        foreach ($uris as $key => $value) {
+        foreach (array_keys($uris) as $key) {
             $uris[$key]->setScheme('http')
                 ->setPath('/')
                 ->setQuery(null);
