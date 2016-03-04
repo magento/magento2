@@ -43,7 +43,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
      */
     public function testExport()
     {
-        $skus = ['simple'];
+        $this->modifyData(['simple']);
         $productRepository = $this->objectManager->create(
             'Magento\Catalog\Api\ProductRepositoryInterface'
         );
@@ -103,6 +103,14 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals(count($origPricingData[$index]), count($newPricingData));
             $this->assertEqualsOtherThanSkippedAttributes($origPricingData[$index], $newPricingData, []);
         }
+    }
+
+    /**
+     * @param array $skus
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function modifyData($skus)
+    {
     }
 
     protected function assertEqualsOtherThanSkippedAttributes($expected, $actual, $skippedAttributes)
