@@ -291,4 +291,14 @@
             </container>
         </dynamicRows>
     </fieldset>
+    <fieldset name="advanced_fieldset">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="valuesForEnable" xsi:type="array">
+                    <item name="swatch_text" xsi:type="string">swatch_text</item>
+                    <item name="swatch_visual" xsi:type="string">swatch_visual</item>
+                </item>
+            </item>
+        </argument>
+    </fieldset>
 </form>
