@@ -63,10 +63,12 @@ class GrandTotalDetailsPluginTest extends \PHPUnit_Framework_TestCase
 
         $this->detailsFactoryMock = $this->getMockBuilder('\Magento\Tax\Api\Data\GrandTotalDetailsInterfaceFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
 
         $this->ratesFactoryMock = $this->getMockBuilder('\Magento\Tax\Api\Data\GrandTotalRatesInterfaceFactory')
             ->disableOriginalConstructor()
+            ->setMethods(['create'])
             ->getMock();
 
         $this->taxConfigMock = $this->getMockBuilder('\Magento\Tax\Model\Config')
