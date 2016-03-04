@@ -16,13 +16,13 @@
         "magento/module-directory": "100.0.*",
         "magento/module-theme": "100.0.*",
         "magento/framework": "100.0.*",
-        "braintree/braintree_php": "2.39.0"
+        "braintree/braintree_php": "3.7.0"
     },
     "suggest": {
         "magento/module-checkout-agreements": "100.0.*"
     },
     "type": "magento2-module",
-    "version": "100.0.1",
+    "version": "100.0.2",
     "license": [
         "proprietary"
     ],

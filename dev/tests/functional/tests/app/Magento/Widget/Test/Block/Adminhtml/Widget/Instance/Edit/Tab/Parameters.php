@@ -37,7 +37,7 @@ class Parameters extends Tab
      * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         $data = $fields['parameters']['value'];
         $path = $this->path . str_replace(' ', '', $fields['code']);

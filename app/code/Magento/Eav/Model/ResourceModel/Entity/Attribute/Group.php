@@ -13,13 +13,6 @@ namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
 class Group extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * Constants for attribute group codes
-     */
-    const TAB_GENERAL_CODE = 'product-details';
-
-    const TAB_IMAGE_MANAGEMENT_CODE = 'image-management';
-
-    /**
      * Resource initialization
      *
      * @return void

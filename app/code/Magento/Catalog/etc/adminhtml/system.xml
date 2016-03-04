@@ -147,31 +147,6 @@
                 </field>
             </group>
         </section>
-        <section id="design">
-            <group id="watermark" translate="label" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Product Image Watermarks</label>
-                <clone_fields>1</clone_fields>
-                <clone_model>Magento\Catalog\Model\Config\CatalogClone\Media\Image</clone_model>
-                <field id="size" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Watermark Default Size</label>
-                    <comment>Example format: 200x300.</comment>
-                </field>
-                <field id="imageOpacity" translate="label" type="text" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Watermark Opacity, Percent</label>
-                </field>
-                <field id="image" translate="label" type="image" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Watermark</label>
-                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
-                    <upload_dir config="system/filesystem/media" scope_info="1">catalog/product/watermark</upload_dir>
-                    <base_url type="media" scope_info="1">catalog/product/watermark</base_url>
-                    <comment>Allowed file types: jpeg, gif, png.</comment>
-                </field>
-                <field id="position" translate="label" type="select" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Watermark Position</label>
-                    <source_model>Magento\Catalog\Model\Config\Source\Watermark\Position</source_model>
-                </field>
-            </group>
-        </section>
         <section id="cms">
             <group id="wysiwyg">
                 <field id="use_static_urls_in_catalog" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">

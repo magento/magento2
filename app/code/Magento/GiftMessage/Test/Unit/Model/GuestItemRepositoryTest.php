@@ -82,7 +82,7 @@ class GuestItemRepositoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->messageMock = $this->getMock('Magento\GiftMessage\Model\Message', [], [], '', false);
         $this->quoteItemMock = $this->getMock(
-            '\Magento\Qote\Model\Quote\Item',
+            '\Magento\Quote\Model\Quote\Item',
             [
                 'getGiftMessageId',
                 '__wakeup'
@@ -184,7 +184,7 @@ class GuestItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage Gift Messages is not applicable for virtual products
+     * @expectedExceptionMessage Gift Messages are not applicable for virtual products
      */
     public function testSaveWithInvalidTransitionException()
     {

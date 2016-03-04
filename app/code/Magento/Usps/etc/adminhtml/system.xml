@@ -14,6 +14,10 @@
                     <label>Enabled for Checkout</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="active_rma" translate="label" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enabled for RMA</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
                 <field id="gateway_url" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Gateway URL</label>
                 </field>
@@ -101,13 +105,16 @@
                     <frontend_class>free-method</frontend_class>
                     <source_model>Magento\Usps\Model\Source\Freemethod</source_model>
                 </field>
-                <field id="free_shipping_enable" translate="label" type="select" sortOrder="1500" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>Free Shipping Amount Threshold</label>
+                <field id="free_shipping_enable" translate="label" type="select" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Enable Free Shipping Threshold</label>
                     <source_model>Magento\Config\Model\Config\Source\Enabledisable</source_model>
                 </field>
-                <field id="free_shipping_subtotal" translate="label" type="text" sortOrder="160" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="free_shipping_subtotal" translate="label" type="text" sortOrder="165" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Free Shipping Amount Threshold</label>
                     <validate>validate-number validate-zero-or-greater</validate>
+                    <depends>
+                        <field id="free_shipping_enable">1</field>
+                    </depends>
                 </field>
                 <field id="specificerrmsg" translate="label" type="textarea" sortOrder="170" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Displayed Error Message</label>

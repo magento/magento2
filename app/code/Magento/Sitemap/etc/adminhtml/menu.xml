@@ -7,6 +7,6 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Magento_Sitemap::catalog_sitemap" title="Site Map" module="Magento_Sitemap" sortOrder="40" parent="Magento_Backend::marketing_seo" action="adminhtml/sitemap/" resource="Magento_Sitemap::sitemap"/>
+        <add id="Magento_Sitemap::catalog_sitemap" title="Site Map" translate="title" module="Magento_Sitemap" sortOrder="60" parent="Magento_Backend::marketing_seo" action="adminhtml/sitemap/" resource="Magento_Sitemap::sitemap"/>
     </menu>
 </config>

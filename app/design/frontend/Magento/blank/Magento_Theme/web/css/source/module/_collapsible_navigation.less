@@ -32,11 +32,14 @@
         .lib-css(background, @collapsible-nav-background);
         padding: 15px 0;
     }
+
     .item {
         margin: 3px 0 0;
+
         &:first-child {
             margin-top: 0;
         }
+
         a,
         > strong {
             border-left: 3px solid transparent;
@@ -44,12 +47,15 @@
             display: block;
             padding: 5px 18px 5px 15px;
         }
+
         a {
             text-decoration: none;
+
             &:hover {
                 .lib-css(background, @collapsible-nav-item-hover);
             }
         }
+
         &.current {
             a,
             strong {
@@ -57,6 +63,7 @@
                 .lib-css(color, @collapsible-nav-current-color);
                 .lib-css(font-weight, @collapsible-nav-current-font-weight);
             }
+
             a {
                 .lib-css(border-color, @collapsible-nav-current-border-color);
             }
@@ -89,12 +96,15 @@
         top: -21px;
         width: 100%;
         z-index: 5;
+
         .title {
             &:extend(.abs-toggling-title-mobile all);
         }
+
         .content {
             border-bottom: @border-width__base solid @border-color__base;
             display: none;
+
             &.active {
                 display: block;
             }

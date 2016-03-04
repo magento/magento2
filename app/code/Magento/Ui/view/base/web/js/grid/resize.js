@@ -9,7 +9,7 @@ define([
     'underscore',
     'mageUtils',
     'uiRegistry',
-    'Magento_Ui/js/lib/ko/extender/bound-nodes',
+    'Magento_Ui/js/lib/knockout/extender/bound-nodes',
     'uiElement'
 ], function ($, ko, _, utils, registry, boundedNodes, Element) {
     'use strict';

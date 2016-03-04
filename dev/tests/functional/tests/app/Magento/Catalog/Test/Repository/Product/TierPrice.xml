@@ -30,5 +30,14 @@
                 <item name="customer_group" xsi:type="string">ALL GROUPS</item>
             </field>
         </dataset>
+
+        <dataset name="general">
+            <field name="0" xsi:type="array">
+                <item name="price" xsi:type="string">80</item>
+                <item name="website" xsi:type="string">All Websites [USD]</item>
+                <item name="price_qty" xsi:type="string">2</item>
+                <item name="customer_group" xsi:type="string">General</item>
+            </field>
+        </dataset>
     </repository>
 </config>

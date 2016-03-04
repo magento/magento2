@@ -53,12 +53,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Product">
-        <plugin name="downloadableAfterLoad" type="\Magento\Downloadable\Model\Plugin\AfterProductLoad"/>
-    </type>
-    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
-        <plugin name="downloadableAroundSave" type="\Magento\Downloadable\Model\Plugin\AroundProductRepositorySave"/>
-    </type>
     <type name="Magento\Quote\Model\Quote\Item\Repository">
         <arguments>
             <argument name="cartItemProcessors" xsi:type="array">
@@ -81,4 +75,42 @@
     <preference for="\Magento\Downloadable\Api\Data\File\ContentUploaderInterface" type="\Magento\Downloadable\Model\File\ContentUploader" />
     <preference for="\Magento\Downloadable\Model\Product\TypeHandler\TypeHandlerInterface" type="\Magento\Downloadable\Model\Product\TypeHandler\TypeHandler" />
     <preference for="\Magento\Downloadable\Api\Data\DownloadableOptionInterface" type="\Magento\Downloadable\Model\DownloadableOption" />
+    <type name="Magento\Framework\Model\ResourceModel\Db\Relation\ActionPool">
+        <arguments>
+            <argument name="relationActions" xsi:type="array">
+                <item name="Magento\Catalog\Api\Data\ProductInterface" xsi:type="array">
+                    <item name="read" xsi:type="array">
+                        <item name="downloadable_link_read" xsi:type="string">Magento\Downloadable\Model\Link\ReadHandler</item>
+                        <item name="downloadable_sample_read" xsi:type="string">Magento\Downloadable\Model\Sample\ReadHandler</item>
+                    </item>
+                    <item name="create" xsi:type="array">
+                        <item name="downloadable_link_create" xsi:type="string">Magento\Downloadable\Model\Link\SaveHandler</item>
+                        <item name="downloadable_sample_create" xsi:type="string">Magento\Downloadable\Model\Sample\SaveHandler</item>
+                    </item>
+                    <item name="update" xsi:type="array">
+                        <item name="downloadable_link_update" xsi:type="string">Magento\Downloadable\Model\Sample\SaveHandler</item>
+                        <item name="downloadable_sample_update" xsi:type="string">Magento\Downloadable\Model\Link\SaveHandler</item>
+                    </item>
+                    <item name="delete" xsi:type="array">
+                        <item name="downloadable_link_delete" xsi:type="string">Magento\Downloadable\Model\Sample\DeleteHandler</item>
+                        <item name="downloadable_sample_delete" xsi:type="string">Magento\Downloadable\Model\Link\DeleteHandler</item>
+                    </item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Model\Entity\MetadataPool">
+        <arguments>
+            <argument name="metadata" xsi:type="array">
+                <item name="Magento\Downloadable\Api\Data\LinkInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">downloadable_link</item>
+                    <item name="identifierField" xsi:type="string">link_id</item>
+                </item>
+                <item name="Magento\Downloadable\Api\Data\SampleInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">downloadable_sample</item>
+                    <item name="identifierField" xsi:type="string">sample_id</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

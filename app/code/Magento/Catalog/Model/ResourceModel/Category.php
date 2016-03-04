@@ -11,6 +11,9 @@
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
+use Magento\Framework\Model\EntityManager;
+use Magento\Catalog\Api\Data\CategoryInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -66,12 +69,25 @@ class Category extends AbstractResource
     protected $_categoryTreeFactory;
 
     /**
+     * @var EntityManager
+     */
+    protected $entityManager;
+
+    /**
+     * @var Category\AggregateCount
+     */
+    protected $aggregateCount;
+
+    /**
+     * Category constructor.
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param Category\TreeFactory $categoryTreeFactory
      * @param Category\CollectionFactory $categoryCollectionFactory
+     * @param EntityManager $entityManager
+     * @param Category\AggregateCount $aggregateCount
      * @param array $data
      */
     public function __construct(
@@ -81,6 +97,8 @@ class Category extends AbstractResource
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Category\TreeFactory $categoryTreeFactory,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
+        EntityManager $entityManager,
+        Category\AggregateCount $aggregateCount,
         $data = []
     ) {
         parent::__construct(
@@ -92,8 +110,9 @@ class Category extends AbstractResource
         $this->_categoryTreeFactory = $categoryTreeFactory;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_eventManager = $eventManager;
-
+        $this->entityManager = $entityManager;
         $this->connectionName  = 'catalog';
+        $this->aggregateCount = $aggregateCount;
     }
 
     /**
@@ -172,20 +191,8 @@ class Category extends AbstractResource
     protected function _beforeDelete(\Magento\Framework\DataObject $object)
     {
         parent::_beforeDelete($object);
-
-        /**
-         * Update children count for all parent categories
-         */
-        $parentIds = $object->getParentIds();
-        if ($parentIds) {
-            $childDecrease = $object->getChildrenCount() + 1;
-            // +1 is itself
-            $data = ['children_count' => new \Zend_Db_Expr('children_count - ' . $childDecrease)];
-            $where = ['entity_id IN(?)' => $parentIds];
-            $this->getConnection()->update($this->getEntityTable(), $data, $where);
-        }
+        $this->aggregateCount->processDelete($object);
         $this->deleteChildren($object);
-        return $this;
     }
 
     /**
@@ -196,20 +203,16 @@ class Category extends AbstractResource
      */
     public function deleteChildren(\Magento\Framework\DataObject $object)
     {
-        $connection = $this->getConnection();
-        $pathField = $connection->quoteIdentifier('path');
+        if ($object->getSkipDeleteChildren()) {
+            return $this;
+        }
 
-        $select = $connection->select()->from(
-            $this->getEntityTable(),
-            ['entity_id']
-        )->where(
-            $pathField . ' LIKE :c_path'
-        );
-
-        $childrenIds = $connection->fetchCol($select, ['c_path' => $object->getPath() . '/%']);
-
-        if (!empty($childrenIds)) {
-            $connection->delete($this->getEntityTable(), ['entity_id IN (?)' => $childrenIds]);
+        $categories = $this->_categoryCollectionFactory->create();
+        $categories->addAttributeToFilter('path', ['like' => $object->getPath() . '/%']);
+        $childrenIds = $categories->getAllIds();
+        foreach ($categories as $category) {
+            $category->setSkipDeleteChildren(true);
+            $category->delete();
         }
 
         /**
@@ -524,7 +527,7 @@ class Category extends AbstractResource
         $table = $this->getTable([$this->getEntityTablePrefix(), 'int']);
         $connection = $this->getConnection();
         $checkSql = $connection->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
-
+        $linkField = $this->getLinkField();
         $bind = [
             'attribute_id' => $attributeId,
             'store_id' => $storeId,
@@ -536,11 +539,11 @@ class Category extends AbstractResource
             ['COUNT(m.entity_id)']
         )->joinLeft(
             ['d' => $table],
-            'd.attribute_id = :attribute_id AND d.store_id = 0 AND d.entity_id = m.entity_id',
+            "d.attribute_id = :attribute_id AND d.store_id = 0 AND d.{$linkField} = m.{$linkField}",
             []
         )->joinLeft(
             ['c' => $table],
-            "c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.entity_id = m.entity_id",
+            "c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.{$linkField} = m.{$linkField}",
             []
         )->where(
             'm.path LIKE :c_path'
@@ -576,20 +579,22 @@ class Category extends AbstractResource
      */
     public function findWhereAttributeIs($entityIdsFilter, $attribute, $expectedValue)
     {
+        $linkField = $this->getLinkField();
         $bind = ['attribute_id' => $attribute->getId(), 'value' => $expectedValue];
-        $select = $this->getConnection()->select()->from(
-            $attribute->getBackend()->getTable(),
+        $selectEntities = $this->getConnection()->select()->from(
+            ['ce' => $this->getTable('catalog_category_entity')],
             ['entity_id']
+        )->joinLeft(
+            ['ci' => $attribute->getBackend()->getTable()],
+            "ci.{$linkField} = ce.{$linkField} AND attribute_id = :attribute_id",
+            ['value']
         )->where(
-            'attribute_id = :attribute_id'
+            'ci.value = :value'
         )->where(
-            'value = :value'
-        )->where(
-            'entity_id IN(?)',
+            'ce.entity_id IN (?)',
             $entityIdsFilter
         );
-
-        return $this->getConnection()->fetchCol($select, $bind);
+        return $this->getConnection()->fetchCol($selectEntities, $bind);
     }
 
     /**
@@ -745,10 +750,12 @@ class Category extends AbstractResource
      */
     public function getChildren($category, $recursive = true)
     {
+        $linkField = $this->getLinkField();
         $attributeId = $this->getIsActiveAttributeId();
         $backendTable = $this->getTable([$this->getEntityTablePrefix(), 'int']);
         $connection = $this->getConnection();
         $checkSql = $connection->getCheckSql('c.value_id > 0', 'c.value', 'd.value');
+        $linkField = $this->getLinkField();
         $bind = [
             'attribute_id' => $attributeId,
             'store_id' => $category->getStoreId(),
@@ -760,11 +767,11 @@ class Category extends AbstractResource
             'entity_id'
         )->joinLeft(
             ['d' => $backendTable],
-            'd.attribute_id = :attribute_id AND d.store_id = 0 AND d.entity_id = m.entity_id',
+            "d.attribute_id = :attribute_id AND d.store_id = 0 AND d.{$linkField} = m.{$linkField}",
             []
         )->joinLeft(
             ['c' => $backendTable],
-            'c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.entity_id = m.entity_id',
+            "c.attribute_id = :attribute_id AND c.store_id = :store_id AND c.{$linkField} = m.{$linkField}",
             []
         )->where(
             $checkSql . ' = :scope'
@@ -978,5 +985,136 @@ class Category extends AbstractResource
         $select = $connection->select();
         $select->from($this->getEntityTable(), 'COUNT(*)')->where('parent_id != ?', 0);
         return (int)$connection->fetchOne($select);
+    }
+
+    /**
+     * Reset firstly loaded attributes
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param integer $entityId
+     * @param array|null $attributes
+     * @return $this
+     */
+    public function load($object, $entityId, $attributes = [])
+    {
+        \Magento\Framework\Profiler::start('EAV:load_entity');
+        /**
+         * Load object base row data
+         */
+        $this->entityManager->load(CategoryInterface::class, $object, $entityId);
+
+        if (!$this->entityManager->has(\Magento\Catalog\Api\Data\CategoryInterface::class, $entityId)) {
+            $object->isObjectNew(true);
+        }
+
+        $this->loadAttributesMetadata($attributes);
+
+        $this->_loadModelAttributes($object);
+
+        $object->setOrigData();
+
+        $this->_afterLoad($object);
+
+        \Magento\Framework\Profiler::stop('EAV:load_entity');
+        return $this;
+    }
+
+    /**
+     * Save object collected data
+     *
+     * @param   array $saveData array('newObject', 'entityRow', 'insert', 'update', 'delete')
+     * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    protected function _processSaveData($saveData)
+    {
+        extract($saveData, EXTR_SKIP);
+        /**
+         * Import variables into the current symbol table from save data array
+         *
+         * @see \Magento\Eav\Model\Entity\AbstractEntity::_collectSaveData()
+         *
+         * @var array $entityRow
+         * @var \Magento\Framework\Model\AbstractModel $newObject
+         * @var array $insert
+         * @var array $update
+         * @var array $delete
+         */
+
+        /**
+         * Process base row
+         */
+        $this->entityManager->save(CategoryInterface::class, $newObject);
+
+        /**
+         * insert attribute values
+         */
+        if (!empty($insert)) {
+            foreach ($insert as $attributeId => $value) {
+                $attribute = $this->getAttribute($attributeId);
+                $this->_insertAttribute($newObject, $attribute, $value);
+            }
+        }
+
+        /**
+         * update attribute values
+         */
+        if (!empty($update)) {
+            foreach ($update as $attributeId => $v) {
+                $attribute = $this->getAttribute($attributeId);
+                $this->_updateAttribute($newObject, $attribute, $v['value_id'], $v['value']);
+            }
+        }
+
+        /**
+         * delete empty attribute values
+         */
+        if (!empty($delete)) {
+            foreach ($delete as $table => $values) {
+                $this->_deleteAttributes($newObject, $table, $values);
+            }
+        }
+
+        $this->_processAttributeValues();
+
+        $newObject->isObjectNew(false);
+
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function delete($object)
+    {
+        try {
+            $this->transactionManager->start($this->getConnection());
+            if (is_numeric($object)) {
+            } elseif ($object instanceof \Magento\Framework\Model\AbstractModel) {
+                $object->beforeDelete();
+            }
+            $this->_beforeDelete($object);
+            $this->entityManager->delete(\Magento\Catalog\Api\Data\CategoryInterface::class, $object);
+
+            $this->_afterDelete($object);
+
+            if ($object instanceof \Magento\Framework\Model\AbstractModel) {
+                $object->isDeleted(true);
+                $object->afterDelete();
+            }
+            $this->transactionManager->commit();
+            if ($object instanceof \Magento\Framework\Model\AbstractModel) {
+                $object->afterDeleteCommit();
+            }
+        } catch (\Exception $e) {
+            $this->transactionManager->rollBack();
+            throw $e;
+        }
+        $this->_eventManager->dispatch(
+            'catalog_category_delete_after_done',
+            ['product' => $object]
+        );
+        return $this;
     }
 }

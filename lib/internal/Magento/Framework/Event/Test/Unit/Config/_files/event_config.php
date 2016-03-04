@@ -15,5 +15,8 @@ return [
             'shared' => false,
             'name' => 'observer_2',
         ],
+    ],
+    'some_eventname' => [
+        'observer_3' => ['instance' => 'instance_3', 'name' => 'observer_3'],
     ]
 ];

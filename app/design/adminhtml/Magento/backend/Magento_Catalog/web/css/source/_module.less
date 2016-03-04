@@ -41,30 +41,6 @@ div.removed,
 }
 
 //
-//  Product weight switcher
-//  ---------------------------------------------
-
-.weight-switcher {
-    .field-weight & {
-        .admin__control-switcher {
-            > .admin__field-label {
-                float: none;
-                padding-top: 7px;
-                text-align: left;
-                width: 100%;
-            }
-        }
-    }
-    .admin__control-radio[type=radio] {
-        margin: 0;
-        position: absolute;
-    }
-    .admin__control-addon {
-        width: auto; // IE9 width fix
-    }
-}
-
-//
 //  Create attribute panel iframe page configuration
 //  ---------------------------------------------
 
@@ -74,9 +50,22 @@ div.removed,
     &.attribute-popup {
         .page-wrapper {
             width: 100%;
+
             .page-content {
                 padding-left: 0;
             }
         }
+    }
+}
+
+//
+//  Category page sidebar
+//  ---------------------------------------------
+
+.sidebar-actions {
+    margin-bottom: @indent__base;
+
+    [class*='action-'] {
+        margin-bottom: @indent__xs;
     }
 }

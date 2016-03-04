@@ -8,7 +8,6 @@ namespace Magento\User\Block\Role\Tab;
 /**
  * Class \Magento\User\Block\Role\Tab\Users
  *
- * @SuppressWarnings(PHPMD.LongVariable)
  */
 class Users extends \Magento\Backend\Block\Widget\Tabs
 {

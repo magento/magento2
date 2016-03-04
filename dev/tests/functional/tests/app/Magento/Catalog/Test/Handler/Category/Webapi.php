@@ -71,7 +71,7 @@ class Webapi extends AbstractWebapi implements CategoryInterface
     public function persist(FixtureInterface $fixture = null)
     {
         $data = $this->prepareData($fixture);
-        $url = $_ENV['app_frontend_url'] . 'rest/V1/categories';
+        $url = $_ENV['app_frontend_url'] . 'rest/all/V1/categories';
 
         $this->webapiTransport->write($url, $data);
         $response = json_decode($this->webapiTransport->read(), true);

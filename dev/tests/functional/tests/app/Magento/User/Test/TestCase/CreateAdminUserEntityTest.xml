@@ -8,6 +8,7 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\User\Test\TestCase\CreateAdminUserEntityTest" summary="Create Admin User" ticketId="MAGETWO-25699">
         <variation name="CreateAdminUserEntityTestVariation1">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="user/data/username" xsi:type="string">AdminUser%isolation%</data>
             <data name="user/data/firstname" xsi:type="string">FirstName%isolation%</data>
             <data name="user/data/lastname" xsi:type="string">LastName%isolation%</data>
@@ -33,7 +34,7 @@
             <data name="user/data/is_active" xsi:type="string">Inactive</data>
             <data name="user/data/role_id/dataset" xsi:type="string">role::Administrators</data>
             <data name="isDuplicated" xsi:type="string">-</data>
-            <data name="user/data/current_password" xsi:type="string">%current_password%</data>
+            <data name="user/data/current_password" xsi:type="string">123123q</data>
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessSaveMessage" />
             <constraint name="Magento\User\Test\Constraint\AssertUserInGrid" />
             <constraint name="Magento\User\Test\Constraint\AssertUserSuccessLogOut" />

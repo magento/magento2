@@ -136,8 +136,8 @@ class State implements StateInterface
         $stream = $this->getStream();
         if ($stream === false) {
             throw new \Exception(
-                'Please, ensure that file ' . $this->fileName
-                . ' inside var directory exists and is writable'
+                'Please ensure that the ' . $this->fileName
+                . ' file exists in the var directory and is writable.'
             );
         }
         $stream->write($data);

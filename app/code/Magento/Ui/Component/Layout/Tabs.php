@@ -11,6 +11,7 @@ use Magento\Ui\Component\Layout\Tabs\TabInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\LayoutInterface;
+use Magento\Framework\View\Element\UiComponent\BlockWrapperInterface;
 
 /**
  * Class Tabs
@@ -23,16 +24,6 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
     protected $navContainerName;
 
     /**
-     * @var UiComponentInterface
-     */
-    protected $component;
-
-    /**
-     * @var string
-     */
-    protected $namespace;
-
-    /**
      * @var array
      */
     protected $structure = [];
@@ -43,20 +34,16 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
     protected $sortIncrement = 10;
 
     /**
-     * @var UiComponentFactory
-     */
-    protected $uiComponentFactory;
-
-    /**
      * Constructor
      *
      * @param UiComponentFactory $uiComponentFactory
      * @param null|string $navContainerName
+     * @param array $data
      */
-    public function __construct(UiComponentFactory $uiComponentFactory, $navContainerName = null)
+    public function __construct(UiComponentFactory $uiComponentFactory, $navContainerName = null, $data = [])
     {
         $this->navContainerName = $navContainerName;
-        $this->uiComponentFactory = $uiComponentFactory;
+        parent::__construct($uiComponentFactory, $data);
     }
 
     /**
@@ -71,15 +58,6 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
         $this->namespace = $component->getContext()->getNamespace();
 
         $this->addNavigationBlock();
-
-        // Register html content element
-        $this->component->getContext()->addComponentDefinition(
-            'html_content',
-            [
-                'component' => 'Magento_Ui/js/form/components/html',
-                'extends' => $this->namespace
-            ]
-        );
 
         // Initialization of structure components
         $this->initSections();
@@ -96,6 +74,7 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
      * @param string $componentType
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function addChildren(array &$topNode, UiComponentInterface $component, $componentType)
     {
@@ -137,8 +116,8 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
                         'type' => 'collection',
                         'config' => [
                             'active' => 1,
-                            'removeLabel' => __('Remove ' . $label),
-                            'addLabel' => __('Add New ' . $label),
+                            'removeLabel' => __('Remove %1', $label),
+                            'addLabel' => __('Add New %1', $label),
                             'removeMessage' => $childComponent->getData('config/removeMessage'),
                             'itemTemplate' => 'item_template',
                         ],
@@ -148,7 +127,7 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
                                 'component' => 'Magento_Ui/js/form/components/collection/item',
                                 'childType' => 'group',
                                 'config' => [
-                                    'label' => __('New ' . $label),
+                                    'label' => __('New %1', $label),
                                 ],
                                 'children' => $childrenStructure
                             ]
@@ -165,9 +144,16 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
 
             $tabComponent = $this->createTabComponent($childComponent, $name);
 
+            if (isset($structure[$name]['dataScope']) && $structure[$name]['dataScope']) {
+                $dataScope = $structure[$name]['dataScope'];
+                unset($structure[$name]['dataScope']);
+            } else {
+                $dataScope = 'data.' . $name;
+            }
+
             $childrenAreas[$name] = [
                 'type' => $tabComponent->getComponentName(),
-                'dataScope' => 'data.' . $name,
+                'dataScope' => $dataScope,
                 'config' => $config,
                 'insertTo' => [
                     $this->namespace . '.sections' => [
@@ -185,11 +171,11 @@ class Tabs extends \Magento\Framework\View\Layout\Generic implements LayoutInter
     /**
      * Add wrapped layout block
      *
-     * @param \Magento\Ui\Component\Wrapper\Block $childComponent
+     * @param BlockWrapperInterface $childComponent
      * @param array $areas
      * @return void
      */
-    protected function addWrappedBlock(\Magento\Ui\Component\Wrapper\Block $childComponent, array &$areas)
+    protected function addWrappedBlock(BlockWrapperInterface $childComponent, array &$areas)
     {
         $name = $childComponent->getName();
         /** @var TabInterface $block */

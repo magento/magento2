@@ -8,7 +8,8 @@ namespace Magento\Framework\DataObject\Copy\Config\Data;
 /**
  * Proxy class for @see \Magento\Framework\DataObject\Copy\Config\Data
  */
-class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data
+class Proxy extends \Magento\Framework\DataObject\Copy\Config\Data implements
+    \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
     /**
      * Object Manager instance

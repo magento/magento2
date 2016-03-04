@@ -10,16 +10,17 @@
         <variation name="OnePageCheckoutDhlTestVariation1" summary="Use DHL International (EU) Online Shipping Carrier on Checkout as a Registered Customer" ticketId="MAGETWO-12850">
             <data name="products" xsi:type="string">catalogProductSimple::default, configurableProduct::default, bundleProduct::bundle_fixed_product</data>
             <data name="checkoutMethod" xsi:type="string">login</data>
-            <data name="customer/dataset" xsi:type="string">customer_DE</data>
+            <data name="customer/dataset" xsi:type="string">default</data>
             <data name="address/dataset" xsi:type="string">DE_address</data>
-            <data name="shippingAddress/dataset" xsi:type="string">customer_DE</data>
+            <data name="shippingAddress/dataset" xsi:type="string">DE_address</data>
             <data name="shipping/shipping_service" xsi:type="string">DHL</data>
-            <data name="shipping/shipping_method" xsi:type="string">Express worldwide</data>
-            <data name="cart/data/shipping_method" xsi:type="string">Express worldwide</data>
+            <data name="shipping/shipping_method" xsi:type="string">Express easy</data>
+            <data name="cart/data/shipping_method" xsi:type="string">Express easy</data>
             <data name="payment/method" xsi:type="string">checkmo</data>
             <data name="configData" xsi:type="string">checkmo, dhl_eu, shipping_origin_CH, config_base_currency_ch</data>
             <data name="tag" xsi:type="string">test_type:3rd_party_test</data>
             <constraint name="Magento\Checkout\Test\Constraint\AssertOrderSuccessPlacedMessage" />
+            <constraint name="Magento\Checkout\Test\Constraint\AssertMinicartEmpty" />
             <constraint name="Magento\Sales\Test\Constraint\AssertOrderInOrdersGrid" />
             <constraint name="Magento\Checkout\Test\Constraint\AssertCartIsEmpty" />
         </variation>

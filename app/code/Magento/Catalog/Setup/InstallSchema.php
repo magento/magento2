@@ -1202,6 +1202,13 @@ class InstallSchema implements InstallSchemaInterface
         $table = $installer->getConnection()
             ->newTable($installer->getTable('catalog_category_product'))
             ->addColumn(
+                'entity_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['identity' => true, 'nullable' => false, 'primary' => true],
+                'Entity ID'
+            )
+            ->addColumn(
                 'category_id',
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
@@ -1225,18 +1232,6 @@ class InstallSchema implements InstallSchemaInterface
             ->addIndex(
                 $installer->getIdxName('catalog_category_product', ['product_id']),
                 ['product_id']
-            )
-            ->addForeignKey(
-                $installer->getFkName(
-                    'catalog_category_product',
-                    'category_id',
-                    'catalog_category_entity',
-                    'entity_id'
-                ),
-                'category_id',
-                $installer->getTable('catalog_category_entity'),
-                'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
                 $installer->getFkName('catalog_category_product', 'product_id', 'catalog_product_entity', 'entity_id'),

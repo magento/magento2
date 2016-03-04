@@ -71,6 +71,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
                 'getBaseWeeeTaxAppliedAmount',
                 'getBaseWeeeTaxInclTax',
                 'getBasePriceInclTax',
+                'getQtyOrdered'
             ])
             ->getMock();
 
@@ -314,8 +315,12 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($baseWeeeTaxExclTax));
 
         $this->item->expects($this->once())
-            ->method('getBasePrice')
+            ->method('getBaseRowTotal')
             ->will($this->returnValue($basePriceExclTax));
+
+        $this->item->expects($this->once())
+            ->method('getQtyOrdered')
+            ->will($this->returnValue(1));
 
         $this->weeeHelper->expects($this->any())
             ->method('typeOfDisplay')
@@ -610,8 +615,12 @@ class RendererTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($baseWeeeTaxExclTax));
 
         $this->item->expects($this->once())
-            ->method('getBasePrice')
+            ->method('getBaseRowTotal')
             ->will($this->returnValue($basePriceExclTax));
+
+        $this->item->expects($this->once())
+            ->method('getQtyOrdered')
+            ->will($this->returnValue(1));
 
         $this->assertEquals($expectedValue, $this->renderer->getBaseFinalUnitDisplayPriceExclTax());
     }
