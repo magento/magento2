@@ -70,21 +70,39 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
             return $this;
         }
         $dup = [];
+        $dupAll = [];
+        $dupAllState = [];
 
         foreach ($taxes as $tax) {
             if (!empty($tax['delete'])) {
                 continue;
             }
 
+            if (isset($tax['state']) && $tax['state']) {
+                $dupAll[implode('-', [$tax['website_id'], $tax['country']])] = 1;
+            } else {
+                $dupAllState[implode('-', [$tax['website_id'], $tax['country']])] = 1;
+            }
             $state = isset($tax['state']) ? $tax['state'] : '0';
             $key1 = implode('-', [$tax['website_id'], $tax['country'], $state]);
 
             if (!empty($dup[$key1])) {
                 throw new LocalizedException(
-                    __('We found a duplicate of website, country and state fields for a fixed product tax')
+                    __('You must set unique country-state combinations within the same fixed product tax')
                 );
             }
             $dup[$key1] = 1;
+
+        }
+
+        //search for the * edge case so that the attribute does not include other states
+        foreach ($dupAllState as $key => $tax) {
+            if (isset($dupAll[$key])) {
+                throw new LocalizedException(
+                    __('When specifying fixed product tax regions within the same country,' .
+                        'select either unique region names or all (\'*\')')
+                );
+            }
         }
         return $this;
     }

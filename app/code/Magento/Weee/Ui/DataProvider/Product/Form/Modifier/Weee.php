@@ -217,9 +217,7 @@ class Weee extends AbstractModifier
                                                 ],
                                                 'caption' => '*',
                                                 'visible' => true,
-                                                'validation' => [
-                                                    'required-entry' => true
-                                                ],
+
                                             ],
                                         ],
                                     ],
