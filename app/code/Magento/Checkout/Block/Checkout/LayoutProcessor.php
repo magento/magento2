@@ -173,7 +173,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                                     'telephone' => [
                                         'config' => [
                                             'tooltip' => [
-                                                'description' => 'For delivery questions.',
+                                                'description' => __('For delivery questions.'),
                                             ],
                                         ],
                                     ],
