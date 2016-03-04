@@ -929,7 +929,6 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
     {
         $connection = $this->getConnection();
         $select = $connection->select();
-        $linkField = $object->getResource()->getLinkField();
         if ($attribute->getBackend()->getType() === 'static') {
             $value = $object->getData($attribute->getAttributeCode());
             $bind = ['value' => trim($value)];
@@ -951,7 +950,7 @@ abstract class AbstractEntity extends AbstractResource implements EntityInterfac
             ];
             $select->from(
                 $attribute->getBackend()->getTable(),
-                $linkField
+                $object->getResource()->getLinkField()
             )->where(
                 'attribute_id = :attribute_id'
             )->where(
