@@ -71,7 +71,7 @@ class Server
             $servers[] = UriFactory::factory($this->urlBuilder->getUrl('*', ['_nosid' => true]));
         }
 
-        foreach ($servers as $key => $value) {
+        foreach (array_keys($servers) as $key) {
             $servers[$key]->setScheme('http')
                 ->setPath('/')
                 ->setQuery(null);
