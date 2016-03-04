@@ -46,8 +46,8 @@
             <data name="customer/data/lastname" xsi:type="string">doe</data>
             <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
             <data name="customer/data/is_subscribed" xsi:type="string">No</data>
-            <data name="customer/data/password" xsi:type="string">123123q</data>
-            <data name="customer/data/password_confirmation" xsi:type="string">123123q</data>
+            <data name="customer/data/password" xsi:type="string">123123q#</data>
+            <data name="customer/data/password_confirmation" xsi:type="string">123123q#</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertPasswordLengthErrorMessage" />
         </variation>
         <variation name="RegisterCustomerFrontendEntityTestVariation5" summary="Customer password is not secure enough">
@@ -55,8 +55,8 @@
             <data name="customer/data/lastname" xsi:type="string">doe</data>
             <data name="customer/data/email" xsi:type="string">johndoe%isolation%@example.com</data>
             <data name="customer/data/is_subscribed" xsi:type="string">No</data>
-            <data name="customer/data/password" xsi:type="string">123123qw</data>
-            <data name="customer/data/password_confirmation" xsi:type="string">123123qw</data>
+            <data name="customer/data/password" xsi:type="string">123123q#</data>
+            <data name="customer/data/password_confirmation" xsi:type="string">123123q#</data>
             <constraint name="Magento\Customer\Test\Constraint\AssertPasswordIsNotSecureEnoughMessage" />
         </variation>
     </testCase>
