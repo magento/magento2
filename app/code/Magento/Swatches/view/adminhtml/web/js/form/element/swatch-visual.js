@@ -292,14 +292,9 @@ define([
 
             return this;
         },
-        getId: function (elem) {
-            this.elem = elem;
 
-            return 'swatch_window_option_' + this.elementName;
-        },
-
-        renderAbc: function () {
-            oldCode(this.value, this.elem.parentElement, this.uploadUrl, this.elementName);
+        renderAbc: function (elem) {
+            oldCode(this.value, elem.parentElement, this.uploadUrl, this.elementName);
 
             return false;
         }
