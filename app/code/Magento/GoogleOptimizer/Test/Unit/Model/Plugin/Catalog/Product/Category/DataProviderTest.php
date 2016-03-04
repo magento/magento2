@@ -48,10 +48,11 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->helper->expects($this->any())->method('isGoogleExperimentActive')->willReturn(true);
         $result = $this->plugin->afterGetMeta($this->subject, []);
 
-        $this->assertArrayHasKey('experiment_script', $result['data']['children']);
-        $this->assertFalse($result['data']['children']['experiment_script']['componentDisabled']);
-        $this->assertArrayHasKey('code_id', $result['data']['children']);
-        $this->assertFalse($result['data']['children']['code_id']['componentDisabled']);
+        $children = $result['data']['children'];
+        $this->assertArrayHasKey('experiment_script', $children);
+        $this->assertFalse($children['experiment_script']['arguments']['data']['config']['componentDisabled']);
+        $this->assertArrayHasKey('code_id', $children);
+        $this->assertFalse($children['code_id']['arguments']['data']['config']['componentDisabled']);
     }
 
     public function testAfterGetMetaNegative()
@@ -59,9 +60,10 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->helper->expects($this->any())->method('isGoogleExperimentActive')->willReturn(false);
         $result = $this->plugin->afterGetMeta($this->subject, []);
 
-        $this->assertArrayHasKey('experiment_script', $result['data']['children']);
-        $this->assertTrue($result['data']['children']['experiment_script']['componentDisabled']);
-        $this->assertArrayHasKey('code_id', $result['data']['children']);
-        $this->assertTrue($result['data']['children']['code_id']['componentDisabled']);
+        $children = $result['data']['children'];
+        $this->assertArrayHasKey('experiment_script', $children);
+        $this->assertTrue($children['experiment_script']['arguments']['data']['config']['componentDisabled']);
+        $this->assertArrayHasKey('code_id', $children);
+        $this->assertTrue($children['code_id']['arguments']['data']['config']['componentDisabled']);
     }
 }
