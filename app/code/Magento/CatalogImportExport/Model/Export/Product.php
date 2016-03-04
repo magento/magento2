@@ -1045,6 +1045,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function addMultirowData($dataRow, $multiRawData)
     {
