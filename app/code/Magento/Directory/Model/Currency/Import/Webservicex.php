@@ -12,14 +12,11 @@ namespace Magento\Directory\Model\Currency\Import;
 class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImport
 {
     /**
-     * Currency converter Url path
+     * Currency converter url
      */
-    const CURRENCY_CONVERTER_URL = 'http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate';
-
-    /**
-     * Currency converter Url query
-     */
-    const CURRENCY_CONVERTER_URL_QUERY = '?FromCurrency={{CURRENCY_FROM}}&ToCurrency={{CURRENCY_TO}}';
+    // @codingStandardsIgnoreStart
+    const CURRENCY_CONVERTER_URL = 'http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate?FromCurrency={{CURRENCY_FROM}}&ToCurrency={{CURRENCY_TO}}';
+    // @codingStandardsIgnoreEnd
 
     /**
      * Http Client Factory
@@ -55,11 +52,7 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
      */
     protected function _convert($currencyFrom, $currencyTo, $retry = 0)
     {
-        $url = str_replace(
-            '{{CURRENCY_FROM}}',
-            $currencyFrom,
-            self::CURRENCY_CONVERTER_URL . self::CURRENCY_CONVERTER_URL_QUERY
-        );
+        $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, self::CURRENCY_CONVERTER_URL);
         $url = str_replace('{{CURRENCY_TO}}', $currencyTo, $url);
         /** @var \Magento\Framework\HTTP\ZendClient $httpClient */
         $httpClient = $this->getHttpClientFactory()->create();
