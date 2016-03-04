@@ -78,6 +78,11 @@ class AdvancedPricing extends AbstractModifier
     protected $arrayManager;
 
     /**
+     * @var string
+     */
+    protected $targetName = 'product_form.product_form';
+
+    /**
      * @var array
      */
     protected $meta = [];
@@ -370,7 +375,7 @@ class AdvancedPricing extends AbstractModifier
                 'template' => 'ui/form/components/button/container',
                 'actions' => [
                     [
-                        'targetName' => 'product_form.product_form.advanced_pricing_modal',
+                        'targetName' => $this->targetName . '.advanced_pricing_modal',
                         'actionName' => 'toggleModal',
                     ]
                 ],
