@@ -16,6 +16,12 @@ use Magento\Mtf\Constraint\AbstractConstraint;
 class AssertCatalogPriceRuleInGrid extends AbstractConstraint
 {
     /**
+     * Fields used to filter rows in the grid.
+     * @var array
+     */
+    protected $fieldsToFilter = ['name', 'is_active'];
+
+    /**
      * Assert that data in grid on Catalog Price Rules page according to fixture
      *
      * @param CatalogRule $catalogPriceRule
@@ -31,10 +37,11 @@ class AssertCatalogPriceRuleInGrid extends AbstractConstraint
         $data = ($catalogPriceRuleOriginal === null)
             ? $catalogPriceRule->getData()
             : array_merge($catalogPriceRuleOriginal->getData(), $catalogPriceRule->getData());
-        $filter = [
-            'name' => $data['name'],
-            'is_active' => $data['is_active'],
-        ];
+
+        $filter = [];
+        foreach ($this->fieldsToFilter as $field) {
+            $filter[$field] = $data[$field];
+        }
         //add ruleWebsite to filter if there is one
         if ($catalogPriceRule->getWebsiteIds() != null) {
             $ruleWebsite = $catalogPriceRule->getWebsiteIds();

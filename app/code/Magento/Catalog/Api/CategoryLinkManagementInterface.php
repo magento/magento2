@@ -18,4 +18,13 @@ interface CategoryLinkManagementInterface
      * @return \Magento\Catalog\Api\Data\CategoryProductLinkInterface[]
      */
     public function getAssignedProducts($categoryId);
+
+    /**
+     * Assign product to given categories
+     *
+     * @param string $productSku
+     * @param int[] $categoryIds
+     * @return bool
+     */
+    public function assignProductToCategories($productSku, array $categoryIds);
 }

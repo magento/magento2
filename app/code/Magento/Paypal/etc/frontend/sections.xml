@@ -11,4 +11,8 @@
         <section name="cart"/>
         <section name="checkout-data"/>
     </action>
+    <action name="paypal/payflowexpress/placeOrder">
+        <section name="cart"/>
+        <section name="checkout-data"/>
+    </action>
 </config>

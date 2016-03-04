@@ -10,12 +10,6 @@
     <rule ref="Zend.Files.ClosingTag"/>
     <rule ref="Generic.WhiteSpace.DisallowTabIndent"/>
     <rule ref="Generic.WhiteSpace.ScopeIndent"/>
-    <rule ref="Generic.Files.LineLength">
-        <properties>
-            <property name="lineLimit" value="120"/>
-            <property name="absoluteLineLimit" value="120"/>
-        </properties>
-    </rule>
     <rule ref="Generic.Files.LineEndings"/>
     <rule ref="PEAR.NamingConventions.ValidClassName"/>
     <rule ref="Squiz.Functions.GlobalFunction"/>

@@ -76,6 +76,7 @@ class BlockInstantiationTest extends \Magento\TestFramework\TestCase\AbstractInt
                 }
                 $templateBlocks = $this->_addBlock($module, $blockClass, $class, $templateBlocks);
             }
+            asort($templateBlocks);
             return $templateBlocks;
         } catch (\Exception $e) {
             trigger_error(

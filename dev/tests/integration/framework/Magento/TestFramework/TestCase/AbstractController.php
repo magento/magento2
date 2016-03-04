@@ -211,7 +211,7 @@ abstract class AbstractController extends \PHPUnit_Framework_TestCase
         $this->assertThat(
             $actualMessages,
             $constraint,
-            'Session messages do not meet expectations' . var_export($actualMessages, true)
+            'Session messages do not meet expectations ' . var_export($actualMessages, true)
         );
     }
 }

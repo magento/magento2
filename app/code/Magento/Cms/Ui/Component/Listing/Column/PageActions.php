@@ -87,7 +87,7 @@ class PageActions extends Column
                             isset($item['_first_store_id']) ? $item['_first_store_id'] : null,
                             isset($item['store_code']) ? $item['store_code'] : null
                         ),
-                        'label' => __('Preview')
+                        'label' => __('View')
                     ];
                 }
             }

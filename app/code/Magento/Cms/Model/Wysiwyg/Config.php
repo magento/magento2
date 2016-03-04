@@ -5,10 +5,14 @@
  */
 namespace Magento\Cms\Model\Wysiwyg;
 
+use Magento\Framework\Filesystem;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Ui\Component\Wysiwyg\ConfigInterface;
+
 /**
  * Wysiwyg Config for Editor HTML Element
  */
-class Config extends \Magento\Framework\DataObject
+class Config extends \Magento\Framework\DataObject implements ConfigInterface
 {
     /**
      * Wysiwyg status enabled
@@ -90,6 +94,11 @@ class Config extends \Magento\Framework\DataObject
     protected $_storeManager;
 
     /**
+     * @var Filesystem
+     */
+    protected $filesystem;
+
+    /**
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\AuthorizationInterface $authorization
@@ -98,6 +107,7 @@ class Config extends \Magento\Framework\DataObject
      * @param \Magento\Widget\Model\Widget\Config $widgetConfig
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param Filesystem $filesystem
      * @param array $windowSize
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -111,6 +121,7 @@ class Config extends \Magento\Framework\DataObject
         \Magento\Widget\Model\Widget\Config $widgetConfig,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        Filesystem $filesystem,
         array $windowSize = [],
         array $data = []
     ) {
@@ -123,6 +134,7 @@ class Config extends \Magento\Framework\DataObject
         $this->_widgetConfig = $widgetConfig;
         $this->_windowSize = $windowSize;
         $this->_storeManager = $storeManager;
+        $this->filesystem = $filesystem;
         parent::__construct($data);
     }
 
@@ -155,6 +167,9 @@ class Config extends \Magento\Framework\DataObject
                 'add_widgets' => true,
                 'no_display' => false,
                 'encode_directives' => true,
+                'baseStaticUrl' => $this->_assetRepo->getStaticViewFileContext()->getBaseUrl(),
+                'baseStaticDefaultUrl' => str_replace('index.php/', '', $this->_backendUrl->getBaseUrl())
+                    . $this->filesystem->getUri(DirectoryList::STATIC_VIEW) . '/',
                 'directives_url' => $this->_backendUrl->getUrl('cms/wysiwyg/directive'),
                 'popup_css' => $this->_assetRepo->getUrl(
                     'mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/dialog.css'
@@ -163,6 +178,7 @@ class Config extends \Magento\Framework\DataObject
                     'mage/adminhtml/wysiwyg/tiny_mce/themes/advanced/skins/default/content.css'
                 ),
                 'width' => '100%',
+                'height' => '500px',
                 'plugins' => [],
             ]
         );

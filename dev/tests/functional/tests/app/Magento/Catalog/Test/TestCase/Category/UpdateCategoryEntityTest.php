@@ -10,6 +10,7 @@ use Magento\Catalog\Test\Fixture\Category;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryEdit;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogCategoryIndex;
 use Magento\Mtf\TestCase\Injectable;
+use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
  * Test Creation for UpdateCategoryEntity
@@ -51,18 +52,28 @@ class UpdateCategoryEntityTest extends Injectable
     protected $catalogCategoryEdit;
 
     /**
+     * Fixture Factory.
+     *
+     * @var FixtureFactory
+     */
+    protected $fixtureFactory;
+
+    /**
      * Inject page end prepare default category
      *
      * @param Category $initialCategory
      * @param CatalogCategoryIndex $catalogCategoryIndex
      * @param CatalogCategoryEdit $catalogCategoryEdit
+     * @param FixtureFactory $fixtureFactory
      * @return array
      */
     public function __inject(
         Category $initialCategory,
         CatalogCategoryIndex $catalogCategoryIndex,
-        CatalogCategoryEdit $catalogCategoryEdit
+        CatalogCategoryEdit $catalogCategoryEdit,
+        FixtureFactory $fixtureFactory
     ) {
+        $this->fixtureFactory = $fixtureFactory;
         $this->catalogCategoryIndex = $catalogCategoryIndex;
         $this->catalogCategoryEdit = $catalogCategoryEdit;
         $initialCategory->persist();
@@ -74,7 +85,7 @@ class UpdateCategoryEntityTest extends Injectable
      *
      * @param Category $category
      * @param Category $initialCategory
-     * @return void
+     * @return array
      */
     public function test(Category $category, Category $initialCategory)
     {
@@ -82,5 +93,31 @@ class UpdateCategoryEntityTest extends Injectable
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($initialCategory);
         $this->catalogCategoryEdit->getEditForm()->fill($category);
         $this->catalogCategoryEdit->getFormPageActions()->save();
+
+        return ['category' => $this->prepareCategory($category, $initialCategory)];
+    }
+
+    /**
+     * Prepare Category fixture with the updated data.
+     *
+     * @param Category $category
+     * @param Category $initialCategory
+     * @return Category
+     */
+    protected function prepareCategory(Category $category, Category $initialCategory)
+    {
+        $parentCategory = $category->hasData('parent_id')
+            ? $category->getDataFieldConfig('parent_id')['source']->getParentCategory()
+            : $initialCategory->getDataFieldConfig('parent_id')['source']->getParentCategory();
+
+        $data = [
+            'data' => array_merge(
+                $initialCategory->getData(),
+                $category->getData(),
+                ['parent_id' => ['source' => $parentCategory]]
+            )
+        ];
+
+        return $this->fixtureFactory->createByCode('category', $data);
     }
 }

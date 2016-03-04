@@ -17,14 +17,14 @@
 <?php $class = ($_option->getIsRequire()) ? ' required' : ''; ?>
 
 <div class="field file<?php /* @escapeNotVerified */ echo $class; ?>">
-    <label class="label" for="<?php /* @escapeNotVerified */ echo $_fileName; ?>" id="<?php /* @escapeNotVerified */ echo $_fileName; ?>-label">
+    <label class="label" for="<?php /* @noEscape */ echo $_fileName; ?>" id="<?php /* @noEscape */ echo $_fileName; ?>-label">
         <span><?php echo  $block->escapeHtml($_option->getTitle()) ?></span>
         <?php /* @escapeNotVerified */ echo $block->getFormatedPrice() ?>
     </label>
     <?php if ($_fileExists): ?>
     <div class="control">
-        <span class="<?php /* @escapeNotVerified */ echo $_fileNamed ?>"><?php /* @escapeNotVerified */ echo $_fileInfo->getTitle(); ?></span>
-        <a href="javascript:void(0)" class="label" id="change-<?php /* @escapeNotVerified */ echo $_fileName ?>" >
+        <span class="<?php /* @noEscape */ echo $_fileNamed ?>"><?php echo $block->escapeHtml($_fileInfo->getTitle()); ?></span>
+        <a href="javascript:void(0)" class="label" id="change-<?php /* @noEscape */ echo $_fileName ?>" >
             <?php /* @escapeNotVerified */ echo __('Change') ?>
         </a>
         <?php if (!$_option->getIsRequire()): ?>
@@ -35,8 +35,8 @@
     <?php endif; ?>
     <div class="control" id="input-box-<?php /* @escapeNotVerified */ echo $_fileName ?>"
              data-mage-init='{"priceOptionFile":{
-                "fileName":"<?php /* @escapeNotVerified */ echo $_fileName ?>",
-                "fileNamed":"<?php /* @escapeNotVerified */ echo $_fileNamed ?>",
+                "fileName":"<?php /* @noEscape */ echo $_fileName ?>",
+                "fileNamed":"<?php /* @noEscape */ echo $_fileNamed ?>",
                 "fieldNameAction":"<?php /* @escapeNotVerified */ echo $_fieldNameAction ?>",
                 "changeFileSelector":"#change-<?php /* @escapeNotVerified */ echo $_fileName ?>",
                 "deleteFileSelector":"#delete-<?php /* @escapeNotVerified */ echo $_fileName ?>"}

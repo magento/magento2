@@ -5,8 +5,6 @@
  */
 namespace Magento\Framework\App\Test\Unit\ResourceConnection;
 
-use Magento\Framework\DB\Adapter\DdlCache;
-
 class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -38,7 +36,7 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $cacheAdapterMock = $this->getMockBuilder('Magento\Framework\Cache\FrontendInterface')
+        $cacheAdapterMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\DdlCache')
             ->disableOriginalConstructor()
             ->getMock();
         $loggerMock = $this->getMockBuilder('Magento\Framework\DB\LoggerInterface')
@@ -63,19 +61,12 @@ class ConnectionFactoryTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with('Magento\Framework\App\ResourceConnection\ConnectionAdapterInterface')
             ->will($this->returnValue($connectionAdapterMock));
-        $poolMock = $this->getMockBuilder('Magento\Framework\App\Cache\Type\FrontendPool')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $poolMock->expects($this->once())
-            ->method('get')
-            ->with(DdlCache::TYPE_IDENTIFIER)
-            ->will($this->returnValue($cacheAdapterMock));
         $this->objectManagerMock->expects($this->any())
             ->method('get')
             ->will($this->returnValueMap(
                 [
                     ['Magento\Framework\DB\LoggerInterface', $loggerMock],
-                    ['Magento\Framework\App\Cache\Type\FrontendPool', $poolMock],
+                    ['Magento\Framework\DB\Adapter\DdlCache', $cacheAdapterMock],
                 ]
             ));
         $this->assertSame($connectionMock, $this->model->create(['active' => true]));

@@ -91,7 +91,7 @@ define([
         },
         _getElementData: function(element) {
             var data = {},
-                elementName = $(element).attr('id').replace(/[^_]+/, 'options').replace(/_(\d+)/g, '[$1]'),
+                elementName = $(element).data('selector'),
                 elementValue = $(element).val();
             if ($(element).is('select[multiple]') && elementValue !== null) {
                 if (elementName.substr(elementName.length - 2) == '[]') {
@@ -123,6 +123,13 @@ define([
                     params = $(event.currentTarget).data('post'),
                     form = $(element).closest('form'),
                     action = params.action;
+                if (params.data.id) {
+                    $('<input>', {
+                        type: 'hidden',
+                        name: 'id',
+                        value: params.data.id
+                    }).appendTo(form);
+                }
                 if (params.data.uenc) {
                     action += 'uenc/' + params.data.uenc;
                 }

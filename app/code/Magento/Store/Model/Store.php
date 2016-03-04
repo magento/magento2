@@ -40,6 +40,11 @@ class Store extends AbstractExtensibleModel implements
     StoreInterface
 {
     /**
+     * Store Id key name
+     */
+    const STORE_ID = 'store_id';
+
+    /**
      * Entity name
      */
     const ENTITY = 'store';
@@ -63,6 +68,10 @@ class Store extends AbstractExtensibleModel implements
     const XML_PATH_SECURE_IN_FRONTEND = 'web/secure/use_in_frontend';
 
     const XML_PATH_SECURE_IN_ADMINHTML = 'web/secure/use_in_adminhtml';
+
+    const XML_PATH_ENABLE_HSTS = 'web/secure/enable_hsts';
+
+    const XML_PATH_ENABLE_UPGRADE_INSECURE = 'web/secure/enable_upgrade_insecure';
 
     const XML_PATH_SECURE_BASE_LINK_URL = 'web/secure/base_link_url';
 
@@ -732,7 +741,7 @@ class Store extends AbstractExtensibleModel implements
      */
     public function getId()
     {
-        return $this->_getData('store_id');
+        return $this->_getData(self::STORE_ID);
     }
 
     /**
@@ -1233,6 +1242,22 @@ class Store extends AbstractExtensibleModel implements
     {
         $parsedUrl = parse_url($this->getBaseUrl());
         return isset($parsedUrl['path']) ? $parsedUrl['path'] : '/';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getScopeType()
+    {
+        return ScopeInterface::SCOPE_STORE;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getScopeTypeName()
+    {
+        return 'Store View';
     }
 
     /**

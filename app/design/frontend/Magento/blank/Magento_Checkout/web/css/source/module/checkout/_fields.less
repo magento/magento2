@@ -20,6 +20,7 @@
                 &:extend(.abs-field-tooltip all);
             }
         }
+
         &._error {
             .control {
                 input,
@@ -30,6 +31,7 @@
             }
         }
     }
+
     .opc-wrapper {
         .fieldset {
             > .field {
@@ -50,10 +52,13 @@
     .opc-wrapper {
         .fieldset {
             > .field {
-                &.required {
+                &.required,
+                &._required {
                     position: relative;
+
                     > label {
                         padding-right: 25px;
+
                         &:after {
                             margin-left: @indent__s;
                             position: absolute;

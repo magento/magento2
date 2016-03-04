@@ -14,11 +14,11 @@
        data-bind="scope: 'minicart_content'">
         <span class="text"><?php /* @escapeNotVerified */ echo __('My Cart'); ?></span>
         <span class="counter qty empty"
-              data-bind="css: { empty: cart().summary_count == 0 }, blockLoader: isLoading">
-            <span class="counter-number"><!-- ko text: cart().summary_count --><!-- /ko --></span>
+              data-bind="css: { empty: !!getCartParam('summary_count') == false }, blockLoader: isLoading">
+            <span class="counter-number"><!-- ko text: getCartParam('summary_count') --><!-- /ko --></span>
             <span class="counter-label">
-            <!-- ko if: cart().summary_count -->
-                <!-- ko text: cart().summary_count --><!-- /ko -->
+            <!-- ko if: getCartParam('summary_count') -->
+                <!-- ko text: getCartParam('summary_count') --><!-- /ko -->
                 <!-- ko i18n: 'items' --><!-- /ko -->
             <!-- /ko -->
             </span>

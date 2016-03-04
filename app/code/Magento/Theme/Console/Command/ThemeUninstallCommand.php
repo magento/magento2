@@ -242,27 +242,84 @@ class ThemeUninstallCommand extends Command
     private function validate($themePaths)
     {
         $messages = [];
-        $unknownPackages = [];
-        $unknownThemes = [];
-        $installedPackages = $this->composer->getRootRequiredPackages();
-        foreach ($themePaths as $themePath) {
-            if (array_search($this->themePackageInfo->getPackageName($themePath), $installedPackages) === false) {
-                $unknownPackages[] = $themePath;
-            }
-            if (!$this->themeCollection->hasTheme($this->themeCollection->getThemeByFullPath($themePath))) {
-                $unknownThemes[] = $themePath;
-            }
+
+        $incorrectThemes = $this->getIncorrectThemes($themePaths);
+        if (!empty($incorrectThemes)) {
+            $text = 'Theme path should be specified as full path which is area/vendor/name.';
+            $messages[] = '<error>Incorrect theme(s) format: ' . implode(', ', $incorrectThemes)
+                . '. ' . $text . '</error>';
+            return $messages;
         }
+
+        $unknownPackages = $this->getUnknownPackages($themePaths);
+        $unknownThemes = $this->getUnknownThemes($themePaths);
+
         $unknownPackages = array_diff($unknownPackages, $unknownThemes);
         if (!empty($unknownPackages)) {
             $text = count($unknownPackages) > 1 ?
                 ' are not installed Composer packages' : ' is not an installed Composer package';
             $messages[] = '<error>' . implode(', ', $unknownPackages) . $text . '</error>';
         }
+
         if (!empty($unknownThemes)) {
             $messages[] = '<error>Unknown theme(s): ' . implode(', ', $unknownThemes) . '</error>';
         }
+
         return $messages;
+    }
+
+    /**
+     * Retrieve list of themes with wrong name format
+     *
+     * @param string[] $themePaths
+     * @return string[]
+     */
+    protected function getIncorrectThemes($themePaths)
+    {
+        $result = [];
+        foreach ($themePaths as $themePath) {
+            if (!preg_match('/^[^\/]+\/[^\/]+\/[^\/]+$/', $themePath)) {
+                $result[] = $themePath;
+                continue;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Retrieve list of unknown packages
+     *
+     * @param string[] $themePaths
+     * @return string[]
+     */
+    protected function getUnknownPackages($themePaths)
+    {
+        $installedPackages = $this->composer->getRootRequiredPackages();
+
+        $result = [];
+        foreach ($themePaths as $themePath) {
+            if (array_search($this->themePackageInfo->getPackageName($themePath), $installedPackages) === false) {
+                $result[] = $themePath;
+            }
+        }
+        return $result;
+    }
+
+    /**
+     * Retrieve list of unknown themes
+     *
+     * @param string[] $themePaths
+     * @return string[]
+     */
+    protected function getUnknownThemes($themePaths)
+    {
+        $result = [];
+        foreach ($themePaths as $themePath) {
+            if (!$this->themeCollection->hasTheme($this->themeCollection->getThemeByFullPath($themePath))) {
+                $result[] = $themePath;
+            }
+        }
+        return $result;
     }
 
     /**

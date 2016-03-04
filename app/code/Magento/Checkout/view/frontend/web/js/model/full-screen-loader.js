@@ -4,9 +4,10 @@
  */
 /*jshint browser:true jquery:true*/
 /*global alert*/
-define(
-    ['jquery'],
-    function ($) {
+define([
+    'jquery',
+    'rjsResolver'
+], function ($, resolver) {
         'use strict';
 
         var containerId = '#checkout';
@@ -22,9 +23,14 @@ define(
 
             /**
              * Stop full page loader action
+             *
+             * @param {Boolean} forceStop
              */
-            stopLoader: function () {
-                $(containerId).trigger('processStop');
+            stopLoader: function (forceStop) {
+                var $elem = $(containerId),
+                    stop = $elem.trigger.bind($elem, 'processStop');
+
+                forceStop ? stop() : resolver(stop);
             }
         };
     }

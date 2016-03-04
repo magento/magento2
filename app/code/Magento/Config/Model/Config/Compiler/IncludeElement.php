@@ -112,6 +112,6 @@ class IncludeElement implements ElementInterface
             return $directoryRead->readFile($path);
         }
 
-        throw new LocalizedException(__('The file "' . $path . '" does not exist'));
+        throw new LocalizedException(__('The file "%1" does not exist', $path));
     }
 }
