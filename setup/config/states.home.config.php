@@ -49,13 +49,14 @@ return [
         ],
         [
             'id'          => 'root.upgrade',
-            'url'         => 'select-version',
+            'url'         => 'marketplace-credentials',
             'templateUrl' => "$base/select-version",
             'title'       => 'System Upgrade',
-            'controller'  => 'selectVersionController',
+            'controller'  => 'MarketplaceCredentialsController',
             'header'      => 'Step 1: Select Version',
             'order'       => 1,
-            'nav'         => true,
+            'nav'         => false,
+            'noMenu'      => true,
             'type'        => 'upgrade'
         ],
     ],
