@@ -20,7 +20,6 @@ class MessageController
      */
     private $reader;
 
-
     /**
      * @var \Magento\Framework\MessageQueue\Lock\WriterInterface
      */
@@ -43,7 +42,7 @@ class MessageController
         $this->writer = $writer;
     }
 
-     /**
+    /**
      * Create lock corresponding to the provided message. Throw MessageLockException if lock is already created.
      *
      * @param EnvelopeInterface $envelope

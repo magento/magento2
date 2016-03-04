@@ -13,6 +13,7 @@ interface ReaderInterface
     /**
      * Get lock from storage
      *
+     * @param \Magento\Framework\MessageQueue\LockInterface $lock
      * @param string $code
      * @return void
      */
