@@ -64,6 +64,8 @@ abstract class Category extends \Magento\Backend\App\Action
      * @param \Magento\Backend\Model\View\Result\Page $resultPage
      *
      * @return \Magento\Framework\Controller\Result\Json
+     *
+     * @deprecated
      */
     protected function ajaxRequestResponse($category, $resultPage)
     {
