@@ -147,7 +147,7 @@ class SourceThemeDeployCommand extends Command
             );
         }
 
-        if (!preg_match('#^([\w\-]+\/[\w\-]+)$#', $theme)) {
+        if (!preg_match('#^[\w\-]+\/[\w\-]+$#', $theme)) {
             throw new \InvalidArgumentException(
                 'Value "' . $theme . '" of the option "' . self::THEME_OPTION .
                 '" has invalid format. The format should be "Vendor/theme".'
