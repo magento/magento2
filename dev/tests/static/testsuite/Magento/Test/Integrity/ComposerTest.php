@@ -31,18 +31,16 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
     private static $dependencies;
 
     /**
-     * @var string
+     * @var \Magento\Framework\ObjectManagerInterface
      */
-    private static $composerPath = 'composer';
+    private static $objectManager;
 
     public static function setUpBeforeClass()
     {
-        if (defined('TESTS_COMPOSER_PATH')) {
-            self::$composerPath = TESTS_COMPOSER_PATH;
-        }
         self::$root = BP;
         self::$rootJson = json_decode(file_get_contents(self::$root . '/composer.json'), true);
         self::$dependencies = [];
+        self::$objectManager = Bootstrap::create(BP, $_SERVER)->getObjectManager();
     }
 
     public function testValidComposerJson()
@@ -98,9 +96,8 @@ class ComposerTest extends \PHPUnit_Framework_TestCase
      */
     private function validateComposerJsonFile($path)
     {
-        $objectManager = Bootstrap::create(BP, $_SERVER)->getObjectManager();
         /** @var \Magento\Framework\Composer\MagentoComposerApplicationFactory $appFactory */
-        $appFactory = $objectManager->get('Magento\Framework\Composer\MagentoComposerApplicationFactory');
+        $appFactory = self::$objectManager->get('Magento\Framework\Composer\MagentoComposerApplicationFactory');
         $app = $appFactory->create();
         $app->runComposerCommand(['command' => 'validate'], $path);
     }
