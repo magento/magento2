@@ -58,12 +58,11 @@ class NotificationTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             '<tr id="row_' . $htmlId . '">' .
             '<td class="label">' .
-            '<label for="' . $htmlId . '">' . $label . '</label>' .
+            '<label for="' . $htmlId . '"><span>' . $label . '</span></label>' .
             '</td>' .
             '<td class="value">' .
             $formattedDate .
             '</td>' .
-            '<td class="scope-label"></td>' .
             '<td class=""></td>' .
             '</tr>',
             $html
