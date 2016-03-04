@@ -85,7 +85,12 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
                 'name' => 'simple2_name',
                 'price' => '3.33',
                 'configurable_attribute' => 'simple2_configurable_attribute',
-                'weight' => '5.55'
+                'weight' => '5.55',
+                'media_gallery' => 'simple2_media_gallery',
+                'swatch_image' => 'simple2_swatch_image',
+                'small_image' => 'simple2_small_image',
+                'thumbnail' => 'simple2_thumbnail',
+                'image' => 'simple2_image'
             ],
             [
                 'newProduct' => false,
@@ -100,7 +105,12 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
                 'name' => 'simple2_name',
                 'price' => '3.33',
                 'configurable_attribute' => 'simple2_configurable_attribute',
-                'weight' => '5.55'
+                'weight' => '5.55',
+                'media_gallery' => 'simple2_media_gallery',
+                'swatch_image' => 'simple2_swatch_image',
+                'small_image' => 'simple2_small_image',
+                'thumbnail' => 'simple2_thumbnail',
+                'image' => 'simple2_image'
             ],
             'product3' => [
                 'status' => '',
@@ -109,6 +119,11 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
                 'price' => '',
                 'configurable_attribute' => '',
                 'weight' => '',
+                'media_gallery' => '',
+                'swatch_image' => '',
+                'small_image' => '',
+                'thumbnail' => '',
+                'image' => '',
                 'quantity_and_stock_status' => ['qty' => '3']
             ]
         ];
