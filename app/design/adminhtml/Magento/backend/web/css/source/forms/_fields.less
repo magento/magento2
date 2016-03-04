@@ -10,6 +10,7 @@
 @import 'fields/_control-collapsible.less';
 @import 'fields/_control-table.less';
 @import 'fields/_field-tooltips.less';
+@import 'fields/_field-reset.less';
 
 //
 //  Extends
@@ -189,22 +190,38 @@
             line-height: @field-label__line-height;
             vertical-align: middle;
             white-space: normal;
+
+            &[data-config-scope] {
+                position: relative;
+
+                &:before {
+                    &:extend(.abs-config-scope-label all);
+                }
+            }
         }
     }
 
     .required > &, //  ToDo UI: change classes "required" to "_required".
     ._required > & {
-        span:after {
-            color: @field-label__required__color;
-            content: '*';
-            display: inline-block;
-            font-size: @font-size__l;
-            font-weight: @font-weight__heavier;
-            line-height: 1;
-            margin-left: 10px;
-            position: absolute;
-            top: 1.2rem;
-            z-index: 1;
+        span {
+            &:after {
+                color: @field-label__required__color;
+                content: '*';
+                display: inline-block;
+                font-size: @font-size__l;
+                font-weight: @font-weight__heavier;
+                line-height: 1;
+                margin-left: 10px;
+                position: absolute;
+                top: 1.2rem;
+                z-index: 1;
+            }
+
+            &[data-config-scope] {
+                &:after {
+                    top: .2rem;
+                }
+            }
         }
     }
 
@@ -242,6 +259,9 @@
         position: relative;
     }
 
+    //  ToDo UI: Scope Labels must be moved from right side of each control to the place under the label of the control.
+    //  This code must be removed after Scope Labels are moved completely.
+    //  Till that time they'll be disabled by commenting pseudo-element content property.
     &[data-config-scope] {
         &:before {
             #mix-grid .return_length(@field-label-grid__column + @field-control-grid__column, @field-grid__columns);
@@ -305,6 +325,28 @@
 
         .admin__field-option {
             display: inline-block;
+        }
+    }
+
+    //  If there is a fallback reset button
+    &._with-reset {
+        > .admin__control-text,
+        > .admin__control-textarea {
+            width: ~'calc(100% - @{field-fallback-reset__width} - @{field-fallback-reset-icon__margin-left} - 4px)'; // Minus space size
+        }
+
+        .admin__field-fallback-reset {
+            margin-left: @field-fallback-reset__margin-left;
+            margin-top: @field-fallback-reset__margin-top;
+            vertical-align: top;
+        }
+
+        //  If both
+        &._with-tooltip {
+            > .admin__control-text,
+            > .admin__control-textarea {
+                width: ~'calc(100% - @{field-fallback-reset__width} - @{field-fallback-reset-icon__margin-left} - @{field-tooltip__width} - 8px)'; // Minus 2 space sizes
+            }
         }
     }
 }
@@ -636,6 +678,39 @@
 
         button {
             margin-left: @indent__m;
+        }
+    }
+
+    .admin_field-complex-content {
+        max-width: 60%;
+        overflow: hidden;
+    }
+}
+
+//
+//  Complex Field
+//  _____________________________________________
+
+.admin_field-complex {
+    &:extend(.abs-clearfix all);
+    margin-bottom: 3rem;
+    padding-left: @indent__s;
+
+    .admin_field-complex-title {
+        clear: both;
+        color: @collapsible-title__color;
+        font-size: @collapsible-title__font-size;
+        font-weight: @font-weight__semibold;
+        letter-spacing: .025em;
+        margin-bottom: @indent__s;
+    }
+
+    .admin_field-complex-elements {
+        float: right;
+        max-width: 40%;
+
+        button {
+            margin-left: @indent__s;
         }
     }
 
