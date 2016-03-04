@@ -220,7 +220,7 @@ class Eav extends AbstractModifier
             if ($attributes) {
                 $meta[$groupCode]['children'] = $this->getAttributesMeta($attributes, $groupCode);
                 $meta[$groupCode]['arguments']['data']['config']['componentType'] = Fieldset::NAME;
-                $meta[$groupCode]['arguments']['data']['config']['label'] = $group->getAttributeGroupName();
+                $meta[$groupCode]['arguments']['data']['config']['label'] = __('%1', $group->getAttributeGroupName());
                 $meta[$groupCode]['arguments']['data']['config']['collapsible'] = true;
                 $meta[$groupCode]['arguments']['data']['config']['dataScope'] = self::DATA_SCOPE_PRODUCT;
                 $meta[$groupCode]['arguments']['data']['config']['sortOrder'] =
@@ -264,9 +264,10 @@ class Eav extends AbstractModifier
                             'formElement' => 'container',
                             'componentType' => 'container',
                             'breakLine' => false,
-                            'label' => $attribute->getDefaultFrontendLabel(),
+                            'label' => __('%1', $attribute->getDefaultFrontendLabel()),
                             'sortOrder' => $sortKey * self::SORT_ORDER_MULTIPLIER,
                             'required' => $attribute->getIsRequired(),
+                            'scopeLabel' => $this->getScopeLabel($attribute),
                         ],
                     ],
                 ],
@@ -468,7 +469,7 @@ class Eav extends AbstractModifier
                         'required' => $attribute->getIsRequired(),
                         'notice' => $attribute->getNote(),
                         'default' => $attribute->getDefaultValue(),
-                        'label' => $attribute->getDefaultFrontendLabel(),
+                        'label' => __('%1', $attribute->getDefaultFrontendLabel()),
                     ],
                 ],
             ],
