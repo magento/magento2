@@ -80,7 +80,7 @@ class AdvancedPricing extends AbstractModifier
     /**
      * @var string
      */
-    protected $targetName;
+    protected $scopeName;
 
     /**
      * @var array
