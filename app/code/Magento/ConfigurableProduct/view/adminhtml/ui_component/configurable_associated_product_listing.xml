@@ -71,7 +71,7 @@
             <item name="config" xsi:type="array">
                 <item name="childDefaults" xsi:type="array">
                     <item name="fieldAction" xsi:type="array">
-                        <item name="provider" xsi:type="string">configurableProductGrid</item>
+                        <item name="provider" xsi:type="string">product_form.product_form.configurable_associated_product_modal.configurable_associated_product_listing</item>
                         <item name="target" xsi:type="string">selectProduct</item>
                         <item name="params" xsi:type="array">
                             <item name="0" xsi:type="string">${ $.$data.rowIndex }</item>

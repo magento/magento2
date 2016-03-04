@@ -14,7 +14,14 @@
         <span data-bind="i18n: 'Select'"></span>
     </button>
     <ul class="action-menu _active" data-bind="css: {'_active': $parents[1].actionsListOpened() === $parent.index}">
-        <li><a class="action-menu-item">Choose a different Product</a></li>
+        <li>
+            <a class="action-menu-item" data-bind="
+                click: function(){
+                    $parents[1].openModalWithGrid($parent.index);
+                    $parents[1].closeList($parent.index);
+                }
+            ">Choose a different Product</a>
+        </li>
         <li>
             <a class="action-menu-item" data-bind="
                 text: $data.value() == 1 ? $t('Disable Product') : $t('Enable Product'),
