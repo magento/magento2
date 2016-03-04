@@ -142,8 +142,7 @@ class CreateHandler
         }
 
         /* @var $mediaAttribute \Magento\Catalog\Api\Data\ProductAttributeInterface */
-        foreach ($product->getMediaAttributes() as $mediaAttribute) {
-            $mediaAttrCode = $mediaAttribute->getAttributeCode();
+        foreach ($this->mediaConfig->getMediaAttributeCodes() as $mediaAttrCode) {
             $attrData = $product->getData($mediaAttrCode);
 
             if (in_array($attrData, $clearImages)) {

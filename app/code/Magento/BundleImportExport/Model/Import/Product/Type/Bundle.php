@@ -383,7 +383,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      */
     public function isRowValid(array $rowData, $rowNum, $isNewProduct = true)
     {
-        $rowData = array_merge($rowData, $this->transformBundleCustomAttributes($rowData));
         if (isset($rowData['bundle_price_type']) && $rowData['bundle_price_type'] == 'dynamic') {
             $rowData['price'] = isset($rowData['price']) && $rowData['price'] ? $rowData['price'] : '0.00';
         }
