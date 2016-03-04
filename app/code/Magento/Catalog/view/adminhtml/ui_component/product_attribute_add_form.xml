@@ -324,7 +324,31 @@
             </argument>
         </field>
 
-        <!--TODO: Add frontend_class, see \Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced::_prepareForm-->
+        <field name="frontend_class">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Eav\Model\Adminhtml\Attribute\Validation\Rules\Options</item>
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">50</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Input Validation for Store Owner</item>
+                    <item name="dataScope" xsi:type="string">frontend_class</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/disable-select</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="text" xsi:type="string">text</item>
+                        <item name="textarea" xsi:type="string">textarea</item>
+                        <item name="date" xsi:type="string">date</item>
+                        <item name="boolean" xsi:type="string">boolean</item>
+                        <item name="multiselect" xsi:type="string">multiselect</item>
+                        <item name="select" xsi:type="string">select</item>
+                        <item name="price" xsi:type="string">price</item>
+                    </item>
+                    <item name="valuesForEnable" xsi:type="array">
+                        <item name="text" xsi:type="string">text</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
 
         <field name="is_used_in_grid">
             <argument name="data" xsi:type="array">
