@@ -23,7 +23,7 @@ class CombinatorIndentationSniff implements PHP_CodeSniffer_Sniff
      *
      * @var array
      */
-    public $supportedTokenizers = [CodeSnifferTokenizerSymbols::TOKENIZER_CSS];
+    public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
      * {@inheritdoc}

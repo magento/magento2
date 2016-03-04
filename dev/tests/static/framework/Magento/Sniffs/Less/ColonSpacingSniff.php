@@ -24,7 +24,7 @@ class ColonSpacingSniff implements PHP_CodeSniffer_Sniff
      *
      * @var array
      */
-    public $supportedTokenizers = [CodeSnifferTokenizerSymbols::TOKENIZER_CSS];
+    public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
      * {@inheritdoc}
@@ -61,7 +61,7 @@ class ColonSpacingSniff implements PHP_CodeSniffer_Sniff
 
         if (false === $nextSemicolon
             || ($tokens[$nextSemicolon]['line'] !== $tokens[$stackPtr]['line'])
-            || CodeSnifferTokenizerSymbols::STRING_ASPERAND === $tokens[$stackPtr - 1]['content']
+            || TokenizerSymbolsInterface::BITWISE_AND === $tokens[$stackPtr - 1]['content']
         ) {
             return false;
         }
