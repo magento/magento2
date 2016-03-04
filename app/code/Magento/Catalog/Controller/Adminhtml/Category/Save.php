@@ -7,6 +7,8 @@ namespace Magento\Catalog\Controller\Adminhtml\Category;
 
 /**
  * Class Save
+ * 
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 {
@@ -37,8 +39,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             'include_in_menu',
             'is_anchor',
             'use_default' => ['url_key'],
-            'use_config' => ['available_sort_by', 'filter_price_range', 'default_sort_by'],
-            'savedImage' => ['delete']
+            'use_config' => ['available_sort_by', 'filter_price_range', 'default_sort_by']
         ]
     ];
 
@@ -100,7 +101,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 
         $data['general'] = $this->getRequest()->getPostValue();
         $isNewCategory = !isset($data['general']['entity_id']);
-        $data = $this->stringToBoolConverting($this->stringToBoolInputs, $data);
+        $data = $this->stringToBoolConverting($data);
         $data = $this->imagePreprocessing($data);
         $storeId = isset($data['general']['store_id']) ? $data['general']['store_id'] : null;
         $parentId = isset($data['general']['parent']) ? $data['general']['parent'] : null;
@@ -121,10 +122,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 foreach ($generalPost['use_config'] as $attributeCode => $attributeValue) {
                     if ($attributeValue) {
                         $useConfig[] = $attributeCode;
+                        $category->setData($attributeCode, null);
                     }
-                }
-                foreach ($useConfig as $attributeCode) {
-                    $category->setData($attributeCode, null);
                 }
             }
 
@@ -148,7 +147,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             if (isset($generalPost['use_default']) && !empty($generalPost['use_default'])) {
                 foreach ($generalPost['use_default'] as $attributeCode => $attributeValue) {
                     if ($attributeValue) {
-                        $category->setData($attributeCode, false);
+                        $category->setData($attributeCode, null);
                     }
                 }
             }
@@ -173,7 +172,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                                 __('Attribute "%1" is required.', $attribute)
                             );
                         } else {
-                            throw new \Magento\Framework\Exception\LocalizedException(__($error));
+                            throw new \Exception($error);
                         }
                     }
                 }
@@ -232,14 +231,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      */
     public function imagePreprocessing($data)
     {
-        if (!isset($_FILES) || (isset($_FILES['image']) && $_FILES['image']['name'] === '' )) {
+        if (empty($data['general']['image'])) {
             unset($data['general']['image']);
-            if (
-                isset($data['general']['savedImage']['delete']) &&
-                $data['general']['savedImage']['delete']
-            ) {
-                $data['general']['image']['delete'] = $data['general']['savedImage']['delete'];
-            }
+            $data['general']['image']['delete'] = true;
         }
         return $data;
     }
@@ -247,17 +241,20 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     /**
      * Converting inputs from string to boolean
      *
-     * @param array $stringToBoolInputs
      * @param array $data
+     * @param array $stringToBoolInputs
      *
      * @return array
      */
-    public function stringToBoolConverting($stringToBoolInputs, $data)
+    public function stringToBoolConverting($data, $stringToBoolInputs = null)
     {
+        if (null === $stringToBoolInputs) {
+            $stringToBoolInputs = $this->stringToBoolInputs;
+        }
         foreach ($stringToBoolInputs as $key => $value) {
             if (is_array($value)) {
                 if (isset($data[$key])) {
-                    $data[$key] = $this->stringToBoolConverting($value, $data[$key]);
+                    $data[$key] = $this->stringToBoolConverting($data[$key], $value);
                 }
             } else {
                 if (isset($data[$value])) {
