@@ -23,14 +23,14 @@ class AvoidIdSniff implements PHP_CodeSniffer_Sniff
      *
      * @var array
      */
-    public $supportedTokenizers = [CodeSnifferTokenizerSymbols::TOKENIZER_CSS];
+    public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
      * @var array
      */
     private $symbolsBeforeId = [
-        CodeSnifferTokenizerSymbols::STRING_INDENT_SPACES,
-        CodeSnifferTokenizerSymbols::STRING_NEW_LINE,
+        TokenizerSymbolsInterface::INDENT_SPACES,
+        TokenizerSymbolsInterface::NEW_LINE,
     ];
 
     /**

@@ -22,7 +22,7 @@ class IndentationSniff implements PHP_CodeSniffer_Sniff
      *
      * @var array
      */
-    public $supportedTokenizers = [CodeSnifferTokenizerSymbols::TOKENIZER_CSS];
+    public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
      * The number of spaces code should be indented.

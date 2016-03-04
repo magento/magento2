@@ -23,7 +23,7 @@ class SemicolonSpacingSniff implements PHP_CodeSniffer_Sniff
      *
      * @var array
      */
-    public $supportedTokenizers = [CodeSnifferTokenizerSymbols::TOKENIZER_CSS];
+    public $supportedTokenizers = [TokenizerSymbolsInterface::TOKENIZER_CSS];
 
     /**
      * Skip symbols that can be detected by sniffer incorrectly
@@ -31,10 +31,10 @@ class SemicolonSpacingSniff implements PHP_CodeSniffer_Sniff
      * @var array
      */
     private $styleSymbolsToSkip = [
-        CodeSnifferTokenizerSymbols::STRING_ASPERAND,
-        CodeSnifferTokenizerSymbols::STRING_COLON,
-        CodeSnifferTokenizerSymbols::STRING_OPEN_PARENTHESIS,
-        CodeSnifferTokenizerSymbols::STRING_CLOSE_PARENTHESIS,
+        TokenizerSymbolsInterface::BITWISE_AND,
+        TokenizerSymbolsInterface::COLON,
+        TokenizerSymbolsInterface::OPEN_PARENTHESIS,
+        TokenizerSymbolsInterface::CLOSE_PARENTHESIS,
     ];
 
     /** Skip codes that can be detected by sniffer incorrectly
