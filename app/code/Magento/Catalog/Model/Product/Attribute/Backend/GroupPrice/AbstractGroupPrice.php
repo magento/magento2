@@ -321,6 +321,7 @@ abstract class AbstractGroupPrice extends Price
         $isGlobal = $this->getAttribute()->isScopeGlobal() || $websiteId == 0;
 
         $priceRows = $object->getData($this->getAttribute()->getName());
+        $priceRows = array_filter($priceRows);
         if ($priceRows === null) {
             return $this;
         }
