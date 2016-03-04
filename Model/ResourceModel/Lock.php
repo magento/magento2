@@ -24,7 +24,7 @@ class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
     private $lockFactory;
 
     /**
-     * @var int
+     * @var integer
      */
     private $interval;
 
@@ -34,7 +34,7 @@ class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param null $connectionName
-     * @param int $interval
+     * @param integer $interval
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
