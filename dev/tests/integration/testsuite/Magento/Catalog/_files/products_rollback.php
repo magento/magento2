@@ -16,14 +16,14 @@ $registry->register('isSecureArea', true);
 $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->get('Magento\Catalog\Api\ProductRepositoryInterface');
 try {
-    $product = $productRepository->get('simple');
+    $product = $productRepository->get('simple', false, null, true);
     $productRepository->delete($product);
 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
     //Product already removed
 }
 
 try {
-    $customDesignProduct = $productRepository->get('custom-design-simple-product');
+    $customDesignProduct = $productRepository->get('custom-design-simple-product', false, null, true);
     $productRepository->delete($customDesignProduct);
 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
     //Product already removed

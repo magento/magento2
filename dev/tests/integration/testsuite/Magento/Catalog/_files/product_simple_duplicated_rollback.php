@@ -16,7 +16,7 @@ $registry->register('isSecureArea', true);
 $productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
 
 try {
-    $product = $productRepository->get('simple-1');
+    $product = $productRepository->get('simple-1', false, null, true);
     $productRepository->delete($product);
 } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
     //Product already removed

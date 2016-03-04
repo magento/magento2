@@ -15,7 +15,7 @@ $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->creat
     'Magento\Catalog\Model\ProductRepository'
 );
 try {
-    $product = $repository->get('simple');
+    $product = $repository->get('simple', false, null, true);
     $product->delete();
 } catch (NoSuchEntityException $e) {
     //Entity already deleted
