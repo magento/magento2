@@ -388,7 +388,8 @@
                 </field>
                 <field id="session_lifetime" translate="label comment" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Admin Session Lifetime (seconds)</label>
-                    <comment>Values less than 60 are ignored.</comment>
+                    <comment>Please enter at least 60 and at most 31536000 (one year).</comment>
+                    <backend_model>Magento\Backend\Model\Config\SessionLifetime\BackendModel</backend_model>
                     <validate>validate-digits</validate>
                 </field>
             </group>
