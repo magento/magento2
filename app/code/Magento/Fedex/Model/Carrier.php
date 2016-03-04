@@ -120,6 +120,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_productCollectionFactory;
 
     /**
+     * @inheritdoc
+     */
+    protected $_debugReplacePrivateDataKeys = [
+        'Key', 'Password', 'MeterNumber'
+    ];
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -454,7 +461,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         $ratesRequest = $this->_formRateRequest($purpose);
         $requestString = serialize($ratesRequest);
         $response = $this->_getCachedQuotes($requestString);
-        $debugData = ['request' => $ratesRequest];
+        $debugData = ['request' => $this->filterDebugData($ratesRequest)];
         if ($response === null) {
             try {
                 $client = $this->_createRateSoapClient();
@@ -1559,5 +1566,22 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     public function getDeliveryConfirmationTypes(\Magento\Framework\DataObject $params = null)
     {
         return $this->getCode('delivery_confirmation_types');
+    }
+
+    /**
+     * Recursive replace sensitive fields in debug data by the mask
+     * @param string $data
+     * @return string
+     */
+    protected function filterDebugData($data)
+    {
+        foreach (array_keys($data) as $key) {
+            if (is_array($data[$key])) {
+                $data[$key] = $this->filterDebugData($data[$key]);
+            } elseif (in_array($key, $this->_debugReplacePrivateDataKeys)) {
+                $data[$key] = self::DEBUG_KEYS_MASK;
+            }
+        }
+        return $data;
     }
 }

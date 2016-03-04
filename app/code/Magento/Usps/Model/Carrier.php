@@ -113,6 +113,13 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
     protected $_httpClientFactory;
 
     /**
+     * @inheritdoc
+     */
+    protected $_debugReplacePrivateDataKeys = [
+        'USERID'
+    ];
+
+    /**
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Quote\Model\Quote\Address\RateResult\ErrorFactory $rateErrorFactory
      * @param \Psr\Log\LoggerInterface $logger
@@ -467,7 +474,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
 
         $responseBody = $this->_getCachedQuotes($request);
         if ($responseBody === null) {
-            $debugData = ['request' => $request];
+            $debugData = ['request' => $this->filterDebugData($request)];
             try {
                 $url = $this->getConfigData('gateway_url');
                 if (!$url) {
@@ -2039,5 +2046,38 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
             }
         }
         return false;
+    }
+
+    /**
+     * Replace sensitive fields.
+     *
+     * Replace sensitive fields, which specified as attributes of xml node.
+     * For followed xml:
+     * ```xml
+     * <RateV4Request USERID="1">
+     *     <Revision>2</Revision>
+     * </RateV4Request>
+     * ```xml
+     * the `USERID` attribute value will be replaced by specified mask
+     *
+     * @param string $data
+     * @return string
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    protected function filterDebugData($data)
+    {
+        try {
+            $xml = new \SimpleXMLElement($data);
+            $attributes = $xml->attributes();
+            /** @var \SimpleXMLElement $attribute */
+            foreach ($attributes as $key => $attribute) {
+                if (in_array((string) $key, $this->_debugReplacePrivateDataKeys)) {
+                    $attributes[$key] = self::DEBUG_KEYS_MASK;
+                }
+            }
+            $data = $xml->asXML();
+        } catch (\Exception $e) {}
+
+        return $data;
     }
 }

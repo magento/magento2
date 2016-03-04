@@ -6,6 +6,7 @@
 namespace Magento\Usps\Test\Unit\Model;
 
 use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Usps\Model\Carrier;
 
 class CarrierTest extends \PHPUnit_Framework_TestCase
 {
@@ -274,5 +275,50 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $request->setPackageWeight(1);
 
         $this->assertNotEmpty($this->carrier->collectRates($request));
+    }
+
+    /**
+     * @param string $data
+     * @param array $maskFields
+     * @param string $expected
+     * @dataProvider logDataProvider
+     */
+    public function testFilterDebugData($data, array $maskFields, $expected)
+    {
+        $refClass = new \ReflectionClass(Carrier::class);
+        $property = $refClass->getProperty('_debugReplacePrivateDataKeys');
+        $property->setAccessible(true);
+        $property->setValue($this->carrier, $maskFields);
+
+        $refMethod = $refClass->getMethod('filterDebugData');
+        $refMethod->setAccessible(true);
+        $result = $refMethod->invoke($this->carrier, $data);
+        $expectedXml = new \SimpleXMLElement($expected);
+        $resultXml = new \SimpleXMLElement($result);
+        static::assertEquals($expectedXml->asXML(), $resultXml->asXML());
+    }
+
+    /**
+     * Get list of variations
+     */
+    public function logDataProvider()
+    {
+        return [
+            [
+                '<?xml version="1.0" encoding="UTF-8"?>
+                <RateRequest USERID="12312">
+                    <Package ID="0">
+                        <Service>ALL</Service>
+                    </Package>
+                </RateRequest>',
+                ['USERID'],
+                '<?xml version="1.0" encoding="UTF-8"?>
+                <RateRequest USERID="****">
+                    <Package ID="0">
+                        <Service>ALL</Service>
+                    </Package>
+                </RateRequest>',
+            ],
+        ];
     }
 }
