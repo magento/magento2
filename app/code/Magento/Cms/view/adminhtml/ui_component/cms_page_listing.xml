@@ -23,7 +23,7 @@
     </argument>
     <dataSource name="cms_page_listing_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">PageGridDataProvider</argument>
+            <argument name="class" xsi:type="string">Magento\Cms\Ui\Component\DataProvider</argument>
             <argument name="name" xsi:type="string">cms_page_listing_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">page_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
