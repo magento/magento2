@@ -760,13 +760,6 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      */
     public function isAttributeValid($attrCode, array $attrParams, array $rowData, $rowNum)
     {
-        // @todo remove workaround after issue with price_type validation resolved
-        if (isset($rowData['product_type'])
-            && $rowData['product_type'] == 'bundle'
-            && $attrParams['code'] == 'price_type'
-        ) {
-            $attrParams['type'] = 'int';
-        }
         if (!$this->validator->isAttributeValid($attrCode, $attrParams, $rowData)) {
             foreach ($this->validator->getMessages() as $message) {
                 $this->addRowError($message, $rowNum, $attrCode);
