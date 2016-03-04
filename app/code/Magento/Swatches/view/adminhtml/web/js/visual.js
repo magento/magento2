@@ -394,8 +394,9 @@ define([
                 optionPanel.children('input').val('');
                 optionPanel.children('.swatch_window').css('background', '');
 
-                optionPanel.hide();
                 optionPanel.addClass('unavailable');
+
+                jQuery('.swatch_sub-menu_container').hide();
             });
 
             /**
