@@ -10,7 +10,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Class Pool
  */
-class Pool
+class Pool implements \Magento\Ui\DataProvider\Modifier\PoolInterface
 {
     /**
      * @var array
