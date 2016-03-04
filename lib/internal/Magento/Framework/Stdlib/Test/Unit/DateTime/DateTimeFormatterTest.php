@@ -47,9 +47,13 @@ class DateTimeFormatterTest extends \PHPUnit_Framework_TestCase
             'Magento\Framework\Stdlib\DateTime\DateTimeFormatter',
             [
                 'useIntlFormatObject' => $useIntlFormatObject,
-                'localeResolver' => $this->localeResolverMock,
             ]
         );
+
+        $reflection = new \ReflectionClass(get_class($dateTimeFormatter));
+        $reflectionProperty = $reflection->getProperty('localeResolver');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($dateTimeFormatter, $this->localeResolverMock);
 
         $this->assertEquals(
             \IntlDateFormatter::formatObject(
@@ -125,6 +129,11 @@ class DateTimeFormatterTest extends \PHPUnit_Framework_TestCase
                 'useIntlFormatObject' => false,
             ]
         );
+
+        $reflection = new \ReflectionClass(get_class($dateTimeFormatter));
+        $reflectionProperty = $reflection->getProperty('localeResolver');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($dateTimeFormatter, $this->localeResolverMock);
         $dateTimeFormatter->formatObject(new \DateTime('2013-06-06 17:05:06 Europe/Dublin'), new \StdClass());
     }
 }
