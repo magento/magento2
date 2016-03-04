@@ -74,7 +74,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getType', 'getId'])
             ->getMockForAbstractClass();
         $themeFromCollection = $this->getMockBuilder('Magento\Framework\View\Design\ThemeInterface')
-            ->setMethods(['setType', 'save', 'getParentTheme', 'getType', 'getParentId', 'setParentId', 'getFullPath'])
+            ->setMethods(['setType', 'save', 'getParentTheme', 'getType', 'getParentId', 'setParentId'])
             ->getMockForAbstractClass();
         $collection = $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\Data\Collection')
             ->disableOriginalConstructor()
@@ -112,7 +112,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
             ->method('hasTheme')
             ->with($themeFromCollection)
             ->willReturn(false);
-        $this->filesystemCollection->expects($this->exactly(2))
+        $this->filesystemCollection->expects($this->once())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$theme]));
         $collection->expects($this->once())
@@ -165,9 +165,6 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
             ->method('setParentId')
             ->with($parentThemeFromCollectionId)
             ->willReturnSelf();
-        $themeFromCollection->expects($this->any())
-            ->method('getFullPath')
-            ->willReturn('/theme/in/db');
         $parentThemeFromCollection->expects($this->any())
             ->method('getType')
             ->willReturn(ThemeInterface::TYPE_VIRTUAL);

@@ -69,25 +69,12 @@ class Registration
     {
         $this->_themeCollection->clear();
 
-        $dbThemes = $this->_collectionFactory->create();
-        $dbThemeNames = [];
-
-        foreach ($dbThemes as $dbTheme) {
-            $dbThemeNames[] = $dbTheme->getFullPath();
+        foreach ($this->_themeCollection as $theme) {
+            $this->_registerThemeRecursively($theme);
         }
 
-        $filesystemThemeNames = [];
-        foreach ($this->_themeCollection as $filesystemTheme) {
-            $filesystemThemeNames[] = $filesystemTheme->getFullPath();
-        }
+        $this->checkPhysicalThemes()->checkAllowedThemeRelations();
 
-        if (sizeof(array_diff($filesystemThemeNames, $dbThemeNames)) > 0) {
-            foreach ($this->_themeCollection as $theme) {
-                $this->_registerThemeRecursively($theme);
-            }
-
-            $this->checkPhysicalThemes()->checkAllowedThemeRelations();
-        }
         return $this;
     }
 
