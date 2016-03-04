@@ -561,6 +561,14 @@
                         <item name="store_id" xsi:type="string">store_id</item>
                     </item>
                 </item>
+                <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="array">
+                    <item name="entityTableName" xsi:type="string">catalog_category_entity</item>
+                    <item name="eavEntityType" xsi:type="string">catalog_category</item>
+                    <item name="identifierField" xsi:type="string">entity_id</item>
+                    <item name="entityContext" xsi:type="array">
+                        <item name="store_id" xsi:type="string">store_id</item>
+                    </item>
+                </item>
             </argument>
         </arguments>
     </type>
@@ -584,4 +592,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction">
+        <arguments>
+            <argument name="skipStaticColumns" xsi:type="array">
+                <item name="entity_type_id" xsi:type="string">entity_type_id</item>
+                <item name="attribute_set_id" xsi:type="string">attribute_set_id</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation"  shared="false"/>
 </config>

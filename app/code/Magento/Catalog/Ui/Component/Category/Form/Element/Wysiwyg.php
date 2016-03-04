@@ -9,8 +9,7 @@ use Magento\Backend\Block\Widget\Button;
 use Magento\Backend\Helper\Data as DataHelper;
 use Magento\Catalog\Api\CategoryAttributeRepositoryInterface;
 use Magento\Catalog\Model\Category;
-use Magento\Framework\Data\Form;
-use Magento\Framework\Data\Form\Element\Editor as EditorElement;
+use Magento\Framework\Data\FormFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Wysiwyg\ConfigInterface;
 use Magento\Framework\View\LayoutInterface;
@@ -31,10 +30,8 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
     protected $layout;
 
     /**
-     * Wysiwyg constructor.
      * @param ContextInterface $context
-     * @param Form $form
-     * @param EditorElement $editorElement
+     * @param FormFactory $formFactory
      * @param ConfigInterface $wysiwygConfig
      * @param LayoutInterface $layout
      * @param DataHelper $backendHelper
@@ -47,8 +44,7 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
      */
     public function __construct(
         ContextInterface $context,
-        Form $form,
-        EditorElement $editorElement,
+        FormFactory $formFactory,
         ConfigInterface $wysiwygConfig,
         LayoutInterface $layout,
         DataHelper $backendHelper,
@@ -60,8 +56,8 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
         $this->layout = $layout;
         $this->backendHelper = $backendHelper;
 
-        $editorElement->setData('wysiwyg', (bool)$attrRepository->get($data['name'])->getIsWysiwygEnabled());
-        parent::__construct($context, $form, $editorElement, $wysiwygConfig, $components, $data, $config);
+        $config['wysiwyg'] = (bool)$attrRepository->get($data['name'])->getIsWysiwygEnabled();
+        parent::__construct($context, $formFactory, $wysiwygConfig, $components, $data, $config);
         $this->setData($this->prepareData($this->getData()));
     }
 
@@ -73,7 +69,7 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
      */
     private function prepareData($data)
     {
-        if ($this->editorElement->isEnabled()) {
+        if ($this->editor->isEnabled()) {
             $data['config']['content'] .= $this->getWysiwygButtonHtml();
         }
         return $data;
@@ -96,7 +92,7 @@ class Wysiwyg extends \Magento\Ui\Component\Form\Element\Wysiwyg
                     'class' => 'action-wysiwyg',
                     'onclick' => 'catalogWysiwygEditor.open(\'' . $this->backendHelper->getUrl(
                         'catalog/product/wysiwyg'
-                    ) . '\', \'' . $this->editorElement->getHtmlId() . '\')',
+                    ) . '\', \'' . $this->editor->getHtmlId() . '\')',
                 ]
             ]
         )->toHtml();

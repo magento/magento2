@@ -25,6 +25,8 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @method array getAffectedCategoryIds()
  * @method Category setUrlKey(string $urlKey)
  * @method Category setUrlPath(string $urlPath)
+ * @method Category getSkipDeleteChildren()
+ * @method Category setSkipDeleteChildren(boolean $value)
  *
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
@@ -440,6 +442,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         if (!$productIndexer->isScheduled()) {
             $productIndexer->reindexList(array_merge($this->getPathIds(), $oldParentIds));
         }
+        $this->_eventManager->dispatch('clean_cache_by_tags', ['object' => $this]);
         $this->_cacheManager->clean([self::CACHE_TAG]);
 
         return $this;
