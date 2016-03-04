@@ -112,22 +112,25 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
             [
                 'orderFactory' => $this->orderFactoryMock,
                 'orderItemTaxFactory' => $this->taxItemFactoryMock,
-                'appliedTaxDataObjectFactory' => $this->appliedTaxDataObjectFactoryMock,
+                'orderTaxDetailsDataObjectFactory' => $this->orderTaxDetailsDataObjectFactoryMock,
                 'itemDataObjectFactory' => $this->itemDataObjectFactoryMock,
-                'orderTaxDetailsDataObjectFactory' => $this->orderTaxDetailsDataObjectFactoryMock
+                'appliedTaxDataObjectFactory' => $this->appliedTaxDataObjectFactoryMock
             ]
         );
     }
 
     /**
      * @param array $orderItemAppliedTaxes
+     * @param array $expected
      * @return void
      * @dataProvider getOrderTaxDetailsDataProvider
      */
-    public function testGetOrderTaxDetails($orderItemAppliedTaxes)
+    public function testGetOrderTaxDetails($orderItemAppliedTaxes, $expected)
     {
+        if ($expected === null) {
+            $expected = $orderItemAppliedTaxes[0];
+        }
         $orderId = 1;
-        $data = $orderItemAppliedTaxes[0];
 
         $this->orderFactoryMock->expects($this->atLeastOnce())
             ->method('create')
@@ -141,12 +144,14 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
             ->method('getTaxItemsByOrderId')
             ->with($orderId)
             ->will($this->returnValue($orderItemAppliedTaxes));
+
         $this->assertEquals($this->orderTaxDetailsDataObject, $this->taxManagement->getOrderTaxDetails($orderId));
-        $this->assertEquals($data['code'], $this->appliedTaxDataObject->getCode());
-        $this->assertEquals($data['title'], $this->appliedTaxDataObject->getTitle());
-        $this->assertEquals($data['tax_percent'], $this->appliedTaxDataObject->getPercent());
-        $this->assertEquals($data['real_amount'], $this->appliedTaxDataObject->getAmount());
-        $this->assertEquals($data['real_base_amount'], $this->appliedTaxDataObject->getBaseAmount());
+
+        $this->assertEquals($expected['code'], $this->appliedTaxDataObject->getCode());
+        $this->assertEquals($expected['title'], $this->appliedTaxDataObject->getTitle());
+        $this->assertEquals($expected['tax_percent'], $this->appliedTaxDataObject->getPercent());
+        $this->assertEquals($expected['real_amount'], $this->appliedTaxDataObject->getAmount());
+        $this->assertEquals($expected['real_base_amount'], $this->appliedTaxDataObject->getBaseAmount());
     }
 
     /**
@@ -169,8 +174,9 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
                         'real_base_amount' => '12.3779',
                     ],
                 ],
+                'expected' => null,  // use a subset of the above
             ],
-            'wee_item' => [
+            'weee_item' => [
                 'orderItemAppliedTaxes' => [
                     [
                         'item_id' => null,
@@ -183,6 +189,7 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
                         'real_base_amount' => '1.7979',
                     ],
                 ],
+                'expected' => null,  // use a subset of the above
             ],
             'shipping' => [
                 'orderItemAppliedTaxes' => [
@@ -196,6 +203,100 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
                         'real_amount' => '2.6',
                         'real_base_amount' => '5.21',
                     ],
+                ],
+                'expected' => null,  // use a subset of the above
+            ],
+            'canadian_product' => [
+                'orderItemAppliedTaxes' => [
+                    [
+                        'item_id' => 57,
+                        'taxable_item_type' => 'product',
+                        'associated_item_id' => null,
+                        'code' => 'GST-1',
+                        'title' => 'GST-1',
+                        'tax_percent' => '5',
+                        'real_amount' => '2.0',
+                        'real_base_amount' => '4.0',
+                    ],
+                    [
+                        'item_id' => 57,
+                        'taxable_item_type' => 'product',
+                        'associated_item_id' => null,
+                        'code' => 'GST-1',
+                        'title' => 'GST-1',
+                        'tax_percent' => '5',
+                        'real_amount' => '1.5',
+                        'real_base_amount' => '3.0',
+                    ],
+                ],
+                'expected' => [
+                    'code' => 'GST-1',
+                    'title' => 'GST-1',
+                    'tax_percent' => '5',
+                    'real_amount' => '3.5',
+                    'real_base_amount' => '7.0',
+                ],
+            ],
+            'canadian_weee' => [
+                'orderItemAppliedTaxes' => [
+                    [
+                        'item_id' => null,
+                        'taxable_item_type' => 'weee',
+                        'associated_item_id' => 69,
+                        'code' => 'GST',
+                        'title' => 'GST',
+                        'tax_percent' => '5',
+                        'real_amount' => '2.10',
+                        'real_base_amount' => '4.10',
+                    ],
+                    [
+                        'item_id' => null,
+                        'taxable_item_type' => 'weee',
+                        'associated_item_id' => 69,
+                        'code' => 'GST',
+                        'title' => 'GST',
+                        'tax_percent' => '5',
+                        'real_amount' => '1.15',
+                        'real_base_amount' => '3.10',
+                    ],
+                ],
+                'expected' => [
+                    'code' => 'GST',
+                    'title' => 'GST',
+                    'tax_percent' => '5',
+                    'real_amount' => '3.25',
+                    'real_base_amount' => '7.20',
+                ],
+            ],
+            'canadian_shipping' => [
+                'orderItemAppliedTaxes' => [
+                    [
+                        'item_id' => null,
+                        'taxable_item_type' => 'shipping',
+                        'associated_item_id' => null,
+                        'code' => 'PST',
+                        'title' => 'PST',
+                        'tax_percent' => '5',
+                        'real_amount' => '2.20',
+                        'real_base_amount' => '4.20',
+                    ],
+                    [
+                        'item_id' => null,
+                        'taxable_item_type' => 'shipping',
+                        'associated_item_id' => null,
+                        'code' => 'PST',
+                        'title' => 'PST',
+                        'tax_percent' => '5',
+                        'real_amount' => '1.25',
+                        'real_base_amount' => '3.20',
+                    ],
+                ],
+                'expected' => [
+                    'code' => 'PST',
+                    'title' => 'PST',
+                    'tax_percent' => '5',
+                    'real_amount' => '3.45',
+                    'real_base_amount' => '7.40',
                 ],
             ],
         ];
