@@ -15,7 +15,7 @@ $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Catalog\Api\ProductRepositoryInterface');
 
 try {
-    $product = $productRepository->get('virtual-product');
+    $product = $productRepository->get('virtual-product', false, null, true);
     $productRepository->delete($product);
 } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
     //Product already removed
