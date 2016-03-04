@@ -74,8 +74,7 @@ class Server
         foreach ($servers as $key => $value) {
             $servers[$key]->setScheme('http')
                 ->setPath('/')
-                ->setQuery(null)
-            ;
+                ->setQuery(null);
         }
         return $servers;
     }
