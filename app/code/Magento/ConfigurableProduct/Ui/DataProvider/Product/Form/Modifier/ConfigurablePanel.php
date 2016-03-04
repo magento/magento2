@@ -390,7 +390,6 @@ class ConfigurablePanel extends AbstractModifier
                                     'component' => 'Magento_Ui/js/form/element/abstract',
                                     'template' => 'Magento_ConfigurableProduct/components/cell-status',
                                     'label' => __('Status'),
-                                    'fit' => true,
                                     'dataScope' => 'status',
                                 ],
                             ],
