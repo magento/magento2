@@ -116,6 +116,42 @@ class ConfigurablePanel extends AbstractModifier
                         ],
                     ],
                     'children' => [
+                        'information-block1' => [
+                            'arguments' => [
+                                'data' => [
+                                    'config' => [
+                                        'componentType' => Container::NAME,
+                                        'component' => 'Magento_Ui/js/form/components/html',
+                                        'additionalClasses' => 'message message-notice',
+                                        'content' => __(
+                                            'Choose a new product to delete and replace the current product configuration.'
+                                        ),
+                                        'imports' => [
+                                            'visible' => '!ns = ${ $.ns }, index = '
+                                                . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'information-block2' => [
+                            'arguments' => [
+                                'data' => [
+                                    'config' => [
+                                        'componentType' => Container::NAME,
+                                        'component' => 'Magento_Ui/js/form/components/html',
+                                        'additionalClasses' => 'message message-notice',
+                                        'content' => __(
+                                            'For better results, add attributes and attribute values to your products.'
+                                        ),
+                                        'imports' => [
+                                            'visible' => 'ns = ${ $.ns }, index = '
+                                                . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
                         static::ASSOCIATED_PRODUCT_LISTING => [
                             'arguments' => [
                                 'data' => [
@@ -140,9 +176,6 @@ class ConfigurablePanel extends AbstractModifier
                                         'productsProvider' => 'configurable_associated_product_listing.data_source',
                                         'productsColumns' => 'configurable_associated_product_listing.configurable_associated_product_listing.product_columns',
                                         'productsMassAction' => 'configurable_associated_product_listing.configurable_associated_product_listing.product_columns.ids',
-//                                      'exports' => [
-//                                          'currentProductId' => '${ $.externalProvider }:params.current_product_id'
-//                                      ]
                                     ],
                                 ],
                             ],
