@@ -128,21 +128,21 @@ class Configurable
     {
         $result = [];
         $configurableMatrix = $this->request->getParam('configurable-matrix', []);
+
         foreach ($configurableMatrix as $item) {
             if ($item['newProduct']) {
                 $result[$item['variationKey']] = [
-                    'status' => isset($item['status']) ? $item['status'] : '',
-                    'sku' => isset($item['sku']) ? $item['sku'] : '',
-                    'name' => isset($item['name']) ? $item['name'] : '',
-                    'price' => isset($item['price']) ? $item['price'] : '',
-                    'configurable_attribute' => isset($item['configurable_attribute'])
-                        ? $item['configurable_attribute'] : '',
-                    'weight' => isset($item['weight']) ? $item['weight'] : '',
-                    'media_gallery' => isset($item['media_gallery']) ? $item['media_gallery'] : '',
-                    'swatch_image' => isset($item['swatch_image']) ? $item['swatch_image'] : '',
-                    'small_image' => isset($item['small_image']) ? $item['small_image'] : '',
-                    'thumbnail' => isset($item['thumbnail']) ? $item['thumbnail'] : '',
-                    'image' => isset($item['image']) ? $item['image'] : '',
+                    'status' => $this->getItemValue($item, 'status'),
+                    'sku' => $this->getItemValue($item, 'sku'),
+                    'name' => $this->getItemValue($item, 'name'),
+                    'price' => $this->getItemValue($item, 'price'),
+                    'configurable_attribute' => $this->getItemValue($item, 'configurable_attribute'),
+                    'weight' => $this->getItemValue($item, 'weight'),
+                    'media_gallery' => $this->getItemValue($item, 'media_gallery'),
+                    'swatch_image' => $this->getItemValue($item, 'swatch_image'),
+                    'small_image' => $this->getItemValue($item, 'small_image'),
+                    'thumbnail' => $this->getItemValue($item, 'thumbnail'),
+                    'image' => $this->getItemValue($item, 'image')
                 ];
 
                 if (isset($item['qty'])) {
@@ -152,5 +152,18 @@ class Configurable
         }
 
         return $result;
+    }
+
+    /**
+     * Get item value
+     *
+     * @param array $item
+     * @param string $key
+     * @param mixed $defaultValue
+     * @return mixed
+     */
+    private function getItemValue(array $item, $key, $defaultValue = '')
+    {
+        return isset($item[$key]) ? $item[$key] : $defaultValue;
     }
 }

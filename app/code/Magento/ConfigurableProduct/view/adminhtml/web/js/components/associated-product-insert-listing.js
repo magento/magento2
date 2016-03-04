@@ -29,6 +29,11 @@ define([
             }
         },
 
+        /**
+         * Get ids of used products.
+         *
+         * @returns {Array}
+         */
         getUsedProductIds: function () {
             return this.source.get(this.dataScopeAssociatedProduct);
         },
@@ -40,6 +45,7 @@ define([
          */
         doRender: function (showMassActionColumn) {
             this.showMassActionColumn = showMassActionColumn;
+
             if (this.gridInitialized) {
                 this.paramsUpdated = false;
                 this._setFilters(this.externalProviderParams);
@@ -49,6 +55,11 @@ define([
             return this.render();
         },
 
+        /**
+         * Set visibility state for mass action column
+         *
+         * @private
+         */
         _setVisibilityMassActionColumn: function () {
             this.productsMassAction(function (massActionComponent) {
                 this.productsColumns().elems().each(function (rowElement) {
@@ -58,6 +69,12 @@ define([
             }.bind(this));
         },
 
+        /**
+         * Set filters.
+         *
+         * @param {Object} params
+         * @private
+         */
         _setFilters: function (params) {
             if (!this.paramsUpdated) {
                 this.gridInitialized = true;
@@ -82,12 +99,24 @@ define([
             }
         },
 
+        /**
+         * Get attribute codes.
+         *
+         * @returns {Array}
+         * @private
+         */
         _getAttributesCodes: function () {
             var attrCodes = this.source.get('data.attribute_codes');
 
             return attrCodes ? attrCodes : [];
         },
 
+        /**
+         * Get product variations.
+         *
+         * @returns {Array}
+         * @private
+         */
         _getProductVariations: function () {
             var matrix = this.source.get('data.configurable-matrix');
 
@@ -109,6 +138,9 @@ define([
         },
 
         /**
+         * Handle manual selection.
+         *
+         * @param {Array} selected
          * @private
          */
         _handleManualGridSelect: function (selected) {
@@ -150,7 +182,7 @@ define([
         /**
          * Get variation key map used in manual grid.
          *
-         * @param items
+         * @param {Array} items
          * @returns {Array} [{entity_id: variation-key}, ...]
          * @private
          */
