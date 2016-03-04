@@ -694,8 +694,11 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 [],
                 [
                     'related_skus',
+                    'related_position',
                     'crosssell_skus',
+                    'crosssell_position',
                     'upsell_skus',
+                    'upsell_position'
                 ],
                 ['additional_images', 'additional_image_labels', 'hide_from_product_page']
             );
@@ -1104,6 +1107,8 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                     asort($associations);
                     $dataRow[$colPrefix . 'skus'] =
                         implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, array_keys($associations));
+                    $dataRow[$colPrefix . 'position'] =
+                        implode(Import::DEFAULT_GLOBAL_MULTI_VALUE_SEPARATOR, array_values($associations));
                 }
             }
             $dataRow = $this->rowCustomizer->addData($dataRow, $productId);
