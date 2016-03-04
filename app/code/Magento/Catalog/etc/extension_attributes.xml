@@ -19,4 +19,8 @@
     <extension_attributes for="Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface">
         <attribute code="video_content" type="Magento\Framework\Api\Data\VideoContentInterface" />
     </extension_attributes>
+    <extension_attributes for="Magento\Eav\Api\Data\AttributeGroupInterface">
+        <attribute code="attribute_group_code" type="string" />
+        <attribute code="sort_order" type="string" />
+    </extension_attributes>
 </config>
