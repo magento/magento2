@@ -5,12 +5,11 @@
 define([
     'jquery',
     'Magento_Catalog/catalog/type-events',
-    'Magento_ConfigurableProduct/js/advanced-pricing-handler',
     'collapsible',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
     'domReady!'
-], function ($, productType, advancedPricingHandler) {
+], function ($, productType) {
     'use strict';
 
     return {
@@ -83,6 +82,7 @@ define([
          * @private
          */
         _initType: function () {
+
             /*var suggestContainer = $('#product-template-suggest-container .action-dropdown > .action-toggle');
 
 
