@@ -10,13 +10,13 @@
         <referenceBlock name="product_tabs">
             <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config" name="admin.product.edit.tab.super.config.grid.container">
                 <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix" template="Magento_ConfigurableProduct::catalog/product/edit/super/matrix.phtml" as="matrix">
-                    <block class="Magento\Ui\Block\Component\StepsWizard" name="variation-steps-wizard">
-                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes" name="step1" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/select_attributes.phtml">
+                    <block class="Magento\Ui\Block\Component\StepsWizard">
+                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/select_attributes.phtml">
                             <uiComponent name="product_attributes_listing"/>
                         </block>
-                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues" name="step2" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/attributes_values.phtml"/>
-                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" name="step3" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/bulk.phtml"/>
-                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary" name="step4" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml"/>
+                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/attributes_values.phtml"/>
+                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/bulk.phtml"/>
+                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml"/>
                     </block>
                 </block>
             </block>
@@ -37,13 +37,13 @@
                     </argument>
                 </arguments>
                 <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix" template="Magento_ConfigurableProduct::catalog/product/edit/super/matrix.phtml" as="matrix">
-                    <block class="Magento\Ui\Block\Component\StepsWizard" name="variation-steps-wizard">
-                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes" name="step1" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/select_attributes.phtml">
+                    <block class="Magento\Ui\Block\Component\StepsWizard">
+                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/select_attributes.phtml">
                             <uiComponent name="product_attributes_listing"/>
                         </block>
-                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues" name="step2" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/attributes_values.phtml"/>
-                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" name="step3" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/bulk.phtml"/>
-                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary" name="step4" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml"/>
+                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/attributes_values.phtml"/>
+                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/bulk.phtml"/>
+                        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml"/>
                     </block>
                 </block>
             </block>
@@ -59,13 +59,13 @@
                         <item name="componentType" xsi:type="string">fieldset</item>
                     </argument>
                 </arguments>
-                <block class="Magento\Ui\Block\Component\StepsWizard" name="variation-steps-wizard">
-                    <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes" name="step1" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/select_attributes.phtml">
+                <block class="Magento\Ui\Block\Component\StepsWizard">
+                    <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/select_attributes.phtml">
                         <uiComponent name="product_attributes_listing"/>
                     </block>
-                    <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues" name="step2" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/attributes_values.phtml"/>
-                    <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" name="step3" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/bulk.phtml"/>
-                    <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary" name="step4" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml"/>
+                    <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/attributes_values.phtml"/>
+                    <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Bulk" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/bulk.phtml"/>
+                    <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/summary.phtml"/>
                 </block>
             </block>
         </referenceBlock>

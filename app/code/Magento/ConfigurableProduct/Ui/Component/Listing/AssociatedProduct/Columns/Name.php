@@ -22,16 +22,16 @@ class Name extends \Magento\Ui\Component\Listing\Columns\Column
     protected $urlBuilder;
 
     /**
-     * @param UrlInterface $urlBuilder
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
+     * @param UrlInterface $urlBuilder
      * @param array $components
      * @param array $data
      */
     public function __construct(
-        UrlInterface $urlBuilder,
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
+        UrlInterface $urlBuilder,
         array $components = [],
         array $data = []
     ) {
