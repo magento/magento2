@@ -16,7 +16,7 @@ use Magento\Framework\Currency;
 use Magento\Directory\Model\Currency as CurrencyModel;
 use Magento\Store\Model\Store;
 
-class NameTest extends \PHPUnit_Framework_TestCase
+class PriceTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var PriceColumn
