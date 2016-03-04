@@ -19,7 +19,7 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Security\Helper\SecurityConfig
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Security\Helper\SecurityConfig
      */
     protected $securityConfigMock;
 
@@ -57,7 +57,23 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
     public function testIsLoggedInStatus()
     {
         $this->model->setData('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_IN);
+        $this->model->setUpdatedAt(901);
+        $this->securityConfigMock->expects($this->once())->method('getAdminSessionLifetime')->willReturn(100);
+        $this->securityConfigMock->expects($this->once())->method('getCurrentTimestamp')->willReturn(1000);
         $this->assertEquals(true, $this->model->isLoggedInStatus());
+    }
+
+    /**
+     * @return void
+     */
+    public function testIsLoggedInStatusExpired()
+    {
+        $this->model->setData('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_IN);
+        $this->model->setUpdatedAt(899);
+        $this->securityConfigMock->expects($this->once())->method('getAdminSessionLifetime')->willReturn(100);
+        $this->securityConfigMock->expects($this->once())->method('getCurrentTimestamp')->willReturn(1000);
+        $this->assertEquals(false, $this->model->isLoggedInStatus());
+        $this->assertEquals(\Magento\Security\Model\AdminSessionInfo::LOGGED_OUT, $this->model->getStatus());
     }
 
     /**
@@ -94,25 +110,6 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
             ['expectedResult' => true, 'sessionLifetime' => '1'],
             ['expectedResult' => false, 'sessionLifetime' => '2']
         ];
-    }
-
-    /**
-     * @param bool $expectedResult
-     * @param bool $sessionLifetime
-     * @dataProvider dataProviderIsActive
-     */
-    public function testIsActive($expectedResult, $sessionLifetime)
-    {
-        $this->model->setData('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_IN);
-        $this->securityConfigMock->expects($this->any())
-            ->method('getAdminSessionLifetime')
-            ->will($this->returnValue($sessionLifetime));
-        $this->securityConfigMock->expects($this->any())
-            ->method('getCurrentTimestamp')
-            ->will($this->returnValue(10));
-        $this->model->setUpdatedAt(9);
-
-        $this->assertEquals($expectedResult, $this->model->isActive());
     }
 
     /**
