@@ -9,6 +9,7 @@ namespace Magento\Framework\App\Utility;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Component\DirSearch;
 use Magento\Framework\View\Design\Theme\ThemePackageList;
+use Magento\Framework\Filesystem\Glob;
 
 /**
  * A helper to gather specific kind of files in Magento application
@@ -235,8 +236,8 @@ class Files
     {
         if ($flags & self::INCLUDE_PUB_CODE) {
             return array_merge(
-                glob(BP . '/*.php', GLOB_NOSORT),
-                glob(BP . '/pub/*.php', GLOB_NOSORT)
+                Glob::glob(BP . '/*.php', Glob::GLOB_NOSORT),
+                Glob::glob(BP . '/pub/*.php', Glob::GLOB_NOSORT)
             );
         }
         return [];
@@ -1191,9 +1192,9 @@ class Files
     {
         $result = [];
         foreach ($dirPatterns as $oneDirPattern) {
-            $oneDirPattern  = str_replace('\\', '/', $oneDirPattern);
-            $entriesInDir = glob("{$oneDirPattern}/{$fileNamePattern}", GLOB_NOSORT | GLOB_BRACE);
-            $subDirs = glob("{$oneDirPattern}/*", GLOB_ONLYDIR | GLOB_NOSORT | GLOB_BRACE);
+            $oneDirPattern = str_replace('\\', '/', $oneDirPattern);
+            $entriesInDir = Glob::glob("{$oneDirPattern}/{$fileNamePattern}", Glob::GLOB_NOSORT | Glob::GLOB_BRACE);
+            $subDirs = Glob::glob("{$oneDirPattern}/*", Glob::GLOB_ONLYDIR | Glob::GLOB_NOSORT | Glob::GLOB_BRACE);
             $filesInDir = array_diff($entriesInDir, $subDirs);
 
             if ($recursive) {
@@ -1212,10 +1213,13 @@ class Files
      */
     public function getDiConfigs($asDataSet = false)
     {
-        $primaryConfigs = glob(BP . '/app/etc/{di.xml,*/di.xml}', GLOB_BRACE);
+        $primaryConfigs = Glob::glob(BP . '/app/etc/{di.xml,*/di.xml}', Glob::GLOB_BRACE);
         $moduleConfigs = [];
         foreach ($this->componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleDir) {
-            $moduleConfigs = array_merge($moduleConfigs, glob($moduleDir . '/etc/{di,*/di}.xml', GLOB_BRACE));
+            $moduleConfigs = array_merge(
+                $moduleConfigs,
+                Glob::glob($moduleDir . '/etc/{di,*/di}.xml', Glob::GLOB_BRACE)
+            );
         }
         $configs = array_merge($primaryConfigs, $moduleConfigs);
 
@@ -1383,7 +1387,7 @@ class Files
         $key = __METHOD__ . "/{$module}";
         if (!isset(self::$_cache[$key])) {
             $files = self::getFiles(
-                [$this->componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_'. $module)],
+                [$this->componentRegistrar->getPath(ComponentRegistrar::MODULE, 'Magento_' . $module)],
                 '*.php'
             );
             self::$_cache[$key] = $files;
@@ -1456,7 +1460,7 @@ class Files
                  * Note that glob() for directories will be returned as is,
                  * but passing directory is supported by the tools (phpcpd, phpmd, phpcs)
                  */
-                $files = glob(BP . '/' . $pattern, GLOB_BRACE);
+                $files = Glob::glob(BP . '/' . $pattern, Glob::GLOB_BRACE);
             } else {
                 throw new \UnexpectedValueException(
                     "Incorrect pattern record '$pattern'. Supported formats: "
@@ -1501,7 +1505,7 @@ class Files
             } else {
                 $componentDir = $this->componentRegistrar->getPath($type, $componentName);
                 if (!empty($componentDir)) {
-                    $files = array_merge($files, glob($componentDir . '/' . $pathPattern, GLOB_BRACE));
+                    $files = array_merge($files, Glob::glob($componentDir . '/' . $pathPattern, Glob::GLOB_BRACE));
                 }
             }
         }
