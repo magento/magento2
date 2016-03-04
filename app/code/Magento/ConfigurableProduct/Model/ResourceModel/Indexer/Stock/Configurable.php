@@ -25,6 +25,7 @@ class Configurable extends \Magento\CatalogInventory\Model\ResourceModel\Indexer
      */
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
+        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $connection = $this->getConnection();
         $idxTable = $usePrimaryTable ? $this->getMainTable() : $this->getIdxTable();
         $select = $connection->select()->from(['e' => $this->getTable('catalog_product_entity')], ['entity_id']);
@@ -42,7 +43,7 @@ class Configurable extends \Magento\CatalogInventory\Model\ResourceModel\Indexer
             []
         )->joinLeft(
             ['l' => $this->getTable('catalog_product_super_link')],
-            'l.parent_id = e.entity_id',
+            'l.parent_id = e.' . $metadata->getLinkField(),
             []
         )->join(
             ['le' => $this->getTable('catalog_product_entity')],
@@ -62,8 +63,7 @@ class Configurable extends \Magento\CatalogInventory\Model\ResourceModel\Indexer
         )->group(
             ['e.entity_id', 'cw.website_id', 'cis.stock_id']
         );
-
-        $psExpr = $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id');
+        $psExpr = $this->_addAttributeToSelect($select, 'status', 'e.' . $metadata->getLinkField(), 'cs.store_id');
         $psCond = $connection->quoteInto($psExpr . '=?', ProductStatus::STATUS_ENABLED);
 
         if ($this->_isManageStock()) {

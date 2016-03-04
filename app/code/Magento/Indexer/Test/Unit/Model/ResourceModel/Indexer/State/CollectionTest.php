@@ -19,12 +19,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $fetchStrategyMock = $this->getMock('Magento\Framework\Data\Collection\Db\FetchStrategyInterface');
         $managerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $connectionMock = $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', [], [], '', false);
+        $selectRendererMock = $this->getMock('Magento\Framework\DB\Select\SelectRenderer', [], [], '', false);
         $resourceMock = $this->getMock('Magento\Framework\Flag\FlagResource', [], [], '', false);
         $resourceMock->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
         $selectMock = $this->getMock(
             'Magento\Framework\DB\Select',
             ['getPart', 'setPart', 'from', 'columns'],
-            [$connectionMock]
+            [$connectionMock, $selectRendererMock]
         );
         $connectionMock->expects($this->any())->method('select')->will($this->returnValue($selectMock));
 

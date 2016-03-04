@@ -73,7 +73,7 @@ class AssociatedProducts extends Tab
      * @param SimpleElement|null $element
      * @return $this
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         if (isset($fields['grouped_products'])) {
             foreach ($fields['grouped_products']['value'] as $groupedProduct) {

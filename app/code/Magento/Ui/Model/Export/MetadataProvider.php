@@ -14,6 +14,9 @@ use Magento\Ui\Component\MassAction\Filter;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class MetadataProvider
 {
     /**
@@ -95,7 +98,9 @@ class MetadataProvider
         if (!isset($this->columns[$component->getName()])) {
             $columns = $this->getColumnsComponent($component);
             foreach ($columns->getChildComponents() as $column) {
-                $this->columns[$component->getName()][$column->getName()] = $column;
+                if ($column->getData('config/label') && $column->getData('config/dataType') !== 'actions') {
+                    $this->columns[$component->getName()][$column->getName()] = $column;
+                }
             }
         }
         return $this->columns[$component->getName()];
@@ -111,9 +116,7 @@ class MetadataProvider
     {
         $row = [];
         foreach ($this->getColumns($component) as $column) {
-            if ($column->getData('config/label')) {
-                $row[] = $column->getData('config/label');
-            }
+            $row[] = $column->getData('config/label');
         }
         return $row;
     }
@@ -128,9 +131,7 @@ class MetadataProvider
     {
         $row = [];
         foreach ($this->getColumns($component) as $column) {
-            if ($column->getData('config/label')) {
-                $row[] = $column->getName();
-            }
+            $row[] = $column->getName();
         }
         return $row;
     }

@@ -16,16 +16,19 @@ class RelatedTest extends \PHPUnit_Framework_TestCase
     {
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        \Magento\TestFramework\Helper\Bootstrap::getInstance()
-            ->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
-        /** @var \Magento\Catalog\Model\Product $product */
-        $product = $objectManager->create('Magento\Catalog\Model\Product');
-        $product->load(2);
-        $objectManager->get('Magento\Framework\Registry')->register('product', $product);
+        \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(\Magento\Framework\App\Area::AREA_FRONTEND);
+
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+
+        $product = $productRepository->get('simple');
+        $productWithCross = $productRepository->get('simple_with_cross');
+        $objectManager->get('Magento\Framework\Registry')->register('product', $productWithCross);
 
         /** @var $block \Magento\Catalog\Block\Product\ProductList\Related */
         $block = $objectManager->get('Magento\Framework\View\LayoutInterface')
             ->createBlock('Magento\Catalog\Block\Product\ProductList\Related');
+
         $block->setLayout($objectManager->get('Magento\Framework\View\LayoutInterface'));
         $block->setTemplate('Magento_Catalog::product/list/items.phtml');
         $block->setType('related');
@@ -34,7 +37,7 @@ class RelatedTest extends \PHPUnit_Framework_TestCase
         $this->assertNotEmpty($html);
         $this->assertContains('Simple Related Product', $html);
         /* name */
-        $this->assertContains('"product":"1"', $html);
+        $this->assertContains('"product":"' . $product->getId() .'"', $html);
         /* part of url */
         $this->assertInstanceOf(
             'Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection',

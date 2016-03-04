@@ -427,7 +427,7 @@
     },"22":function(depth0,helpers,partials,data) {
         return "";
     },"24":function(depth0,helpers,partials,data) {
-        return "          <div class='sandbox_header'>\n            <input class='submit' type='hidden' value='Try it out!' data-sw-translate/>\n            <a href='#' class='response_hider' style='display:none' data-sw-translate>Hide Response</a>\n            <span class='response_throbber' style='display:none'></span>\n          </div>\n";
+        return "          <div class='sandbox_header'>\n            <input class='submit' type='button' value='Try it out!' data-sw-translate/>\n            <a href='#' class='response_hider' style='display:none' data-sw-translate>Hide Response</a>\n            <span class='response_throbber' style='display:none'></span>\n          </div>\n";
     },"26":function(depth0,helpers,partials,data) {
         return "          <h4 data-sw-translate>Request Headers</h4>\n          <div class='block request_headers'></div>\n";
     },"compiler":[6,">= 2.0.0-beta.1"],"main":function(depth0,helpers,partials,data) {
@@ -6059,7 +6059,7 @@
                 var i, j, l, tmp, placeHolders, arr
 
                 if (b64.length % 4 > 0) {
-                    throw new Error('Invalid string. Length must be a multiple of 4')
+                    throw new Error('Invalid string. Length must be a multiple of 4.')
                 }
 
                 // the number of equal signs (place holders)

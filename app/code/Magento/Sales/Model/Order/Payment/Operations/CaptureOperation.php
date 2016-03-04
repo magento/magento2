@@ -59,10 +59,12 @@ class CaptureOperation extends AbstractOperation
             $method->setStore(
                 $order->getStoreId()
             );
-            $method->fetchTransactionInfo(
-                $payment,
-                $invoice->getTransactionId()
-            );
+            if ($method->canFetchTransactionInfo()) {
+                $method->fetchTransactionInfo(
+                    $payment,
+                    $invoice->getTransactionId()
+                );
+            }
         }
 
         if ($invoice->getIsPaid()) {

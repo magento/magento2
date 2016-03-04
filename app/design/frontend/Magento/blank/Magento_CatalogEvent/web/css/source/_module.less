@@ -18,50 +18,71 @@
 .block-category-event {
     .lib-css(background, @catalog-event-background-color);
     .lib-css(color, @catalog-event-color);
-    text-align: center;
     padding: @indent__s 0 15px;
+    text-align: center;
+
     &.block:last-child {
         margin-bottom: @indent__s;
     }
+
     .block-title {
         margin: 0 0 @indent__s;
+
         strong {
             .lib-font-size(15);
             font-weight: @font-weight__light;
         }
     }
+
     .ticker {
         .lib-list-reset-styles();
+
         li {
             display: none;
             margin: 0 15px;
         }
+
         .value {
             .lib-font-size(18);
             font-weight: @font-weight__light;
         }
+
         .label {
+            .lib-font-size(10);
             display: block;
             text-transform: lowercase;
-            .lib-font-size(10);
         }
     }
+
     .dates {
+        display: table;
+        margin: 0 auto;
+
         .start,
         .end {
-            display: block;
+            display: table-cell;
+            vertical-align: top;
         }
+
         .date {
-            .lib-font-size(50);
+            .lib-font-size(18);
         }
+
         .time {
             display: block;
         }
+
         .start {
+            padding-right: @indent__xl;
+            position: relative;
+
             &:after {
+                .lib-font-size(18);
                 content: "\2013";
-                .lib-font-size(50);
                 display: block;
+                position: absolute;
+                right: 15px;
+                top: 0;
             }
         }
     }
@@ -78,37 +99,42 @@
             margin-bottom: @indent__l;
             padding: @indent__s 0 @indent__l;
         }
+
         .block-title {
             margin: 0;
+
             strong {
                 .lib-font-size(24);
             }
         }
+
         .ticker {
             li {
                 display: none;
                 margin: 0 50px;
             }
+
             .value {
                 .lib-font-size(60);
             }
+
             .label {
                 .lib-font-size(14);
                 text-transform: none;
             }
         }
+
         .dates {
-            .start,
-            .end {
-                display: inline-block;
+            .date {
+                .lib-font-size(50);
             }
+
             .start {
                 padding-right: 50px;
-                position: relative;
+
                 &:after {
-                    position: absolute;
+                    .lib-font-size(50);
                     right: 10px;
-                    top: 0;
                 }
             }
         }

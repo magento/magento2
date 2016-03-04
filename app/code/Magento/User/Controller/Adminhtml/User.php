@@ -8,6 +8,13 @@ namespace Magento\User\Controller\Adminhtml;
 abstract class User extends \Magento\Backend\App\AbstractAction
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_User::acl_users';
+
+    /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
@@ -75,13 +82,5 @@ abstract class User extends \Magento\Backend\App\AbstractAction
             unset($data['password_confirmation']);
         }
         return $data;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_User::acl_users');
     }
 }

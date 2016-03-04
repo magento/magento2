@@ -8,15 +8,11 @@
 namespace Magento\Framework\App;
 
 use Magento\Framework\App;
-use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\App\Area;
+use Magento\Framework\ObjectManagerInterface;
 
 class Cron implements \Magento\Framework\AppInterface
 {
-    /**
-     * @var \Magento\Framework\Event\ManagerInterface
-     */
-    protected $_eventManager;
-
     /**
      * @var State
      */
@@ -33,24 +29,33 @@ class Cron implements \Magento\Framework\AppInterface
     protected $_response;
 
     /**
-     * @param ManagerInterface $eventManager
+     * Object manager
+     *
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    /**
+     * Inject dependencies
+     *
      * @param State $state
      * @param Console\Request $request
      * @param Console\Response $response
+     * @param ObjectManagerInterface $objectManager
      * @param array $parameters
      */
     public function __construct(
-        ManagerInterface $eventManager,
         State $state,
         Console\Request $request,
         Console\Response $response,
+        ObjectManagerInterface $objectManager,
         array $parameters = []
     ) {
-        $this->_eventManager = $eventManager;
         $this->_state = $state;
         $this->_request = $request;
         $this->_request->setParams($parameters);
         $this->_response = $response;
+        $this->objectManager = $objectManager;
     }
 
     /**
@@ -60,8 +65,13 @@ class Cron implements \Magento\Framework\AppInterface
      */
     public function launch()
     {
-        $this->_state->setAreaCode('crontab');
-        $this->_eventManager->dispatch('default');
+        $this->_state->setAreaCode(Area::AREA_CRONTAB);
+        $configLoader = $this->objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
+        $this->objectManager->configure($configLoader->load(Area::AREA_CRONTAB));
+
+        /** @var \Magento\Framework\Event\ManagerInterface $eventManager */
+        $eventManager = $this->objectManager->get('Magento\Framework\Event\ManagerInterface');
+        $eventManager->dispatch('default');
         $this->_response->setCode(0);
         return $this->_response;
     }

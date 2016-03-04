@@ -1296,7 +1296,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
             )
         );
         if (!$countryParams->getData()) {
-            $this->_errors[] = __('Please, specify origin country');
+            $this->_errors[] = __('Please specify origin country.');
         }
 
         if (!empty($this->_errors)) {

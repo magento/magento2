@@ -4,12 +4,6 @@
     "magento/product-community-edition": "0.74.0-beta2",
     "magento/sample-module-minimal" : "*"
    },
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "http://packages.magento.com/"
-    }
-  ],
   "autoload": {
         "psr-4": {
             "Magento\\Framework\\": "htdocs/lib/internal/Magento/Framework/",

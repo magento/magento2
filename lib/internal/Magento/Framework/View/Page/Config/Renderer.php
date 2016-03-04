@@ -106,7 +106,7 @@ class Renderer implements RendererInterface
      */
     public function renderTitle()
     {
-        return '<title>' . $this->pageConfig->getTitle()->get() . '</title>' . "\n";
+        return '<title>' . $this->escaper->escapeHtml($this->pageConfig->getTitle()->get()) . '</title>' . "\n";
     }
 
     /**

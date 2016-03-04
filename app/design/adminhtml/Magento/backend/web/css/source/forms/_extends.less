@@ -9,12 +9,15 @@
 
 .abs-form-control-pattern {
     .__form-control-pattern();
+
     &:hover {
         .__form-control-pattern__hover();
     }
+
     &:focus {
         .__form-control-pattern__focus();
     }
+
     &[disabled] {
         .__form-control-pattern__disabled();
     }
@@ -31,6 +34,7 @@
         text-align: left;
         width: auto;
     }
+
     &:not(.admin__field-option) {
         > .admin__field-label {
             display: block;
@@ -39,14 +43,18 @@
             margin-top: 0rem - round(( @field-label__line-height - 1 ) * @field-label__font-size / 2, 2);
             text-align: left;
             width: auto;
+
             &:before {
                 display: none;
             }
         }
+
+        &.required,
         &._required {
             > .admin__field-label {
                 span {
                     padding-left: 1.5rem;
+
                     &:after {
                         left: 0;
                         margin-left: @temp_gutter; // @todo ui: update after finalizing Form Grid mixing css/source/forms/_temp.less:10

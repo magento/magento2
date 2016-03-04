@@ -135,7 +135,7 @@ define([
          */
         close: function (rowIndex) {
             try {
-                if (this.productsMassAction().selected.length) {
+                if (this.productsMassAction().selected.getLength()) {
                     this.variationsComponent()[this.callbackName](this.productsMassAction()
                         .selected.map(this.getProductById.bind(this)));
                     this.productsMassAction().deselectAll();
@@ -245,7 +245,7 @@ define([
                 }),
                 usedProductIds = _.values(this.variationsComponent().productAttributesMap);
 
-            if (usedProductIds) {
+            if (usedProductIds && usedProductIds.length > 0) {
                 filterModifier['entity_id'] = {
                     'condition_type': 'nin', value: usedProductIds
                 };

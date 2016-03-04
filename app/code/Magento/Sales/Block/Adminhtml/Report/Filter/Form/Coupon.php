@@ -81,7 +81,12 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
             $fieldset->addField(
                 'rules_list',
                 'multiselect',
-                ['name' => 'rules_list', 'values' => $rulesListOptions, 'display' => 'none'],
+                [
+                    'name' => 'rules_list',
+                    'label' => '',
+                    'values' => $rulesListOptions,
+                    'display' => 'none'
+                ],
                 'price_rule_type'
             );
 

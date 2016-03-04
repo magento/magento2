@@ -705,6 +705,27 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Returns the base total amount of FPT across all items.  Used for displaying the FPT totals line item.
+     *
+     * @param  \Magento\Quote\Model\Quote\Item\AbstractItem[] $items
+     * @param  null|string|bool|int|Store $store
+     * @return float
+     */
+    public function getBaseTotalAmounts($items, $store = null)
+    {
+        $baseWeeeTotal = 0;
+        $displayTotalsInclTax = $this->displayTotalsInclTax($store);
+        foreach ($items as $item) {
+            if ($displayTotalsInclTax) {
+                $baseWeeeTotal += $this->getBaseRowWeeeTaxInclTax($item);
+            } else {
+                $baseWeeeTotal += $item->getBaseWeeeTaxAppliedRowAmount();
+            }
+        }
+        return $baseWeeeTotal;
+    }
+
+    /**
      * Get FPT DISPLAY_INCL setting
      *
      * @param  int|null $storeId
@@ -791,19 +812,33 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 $typeInstance->getOptionsIds($product),
                 $product
             );
-            $insertedWeeCodesArray = [];
+            $insertedWeeeCodesArray = [];
             foreach ($selectionCollection as $selectionItem) {
-                $weeAttributes = $this->getProductWeeeAttributes(
+                $weeeAttributes = $this->getProductWeeeAttributes(
                     $selectionItem,
                     null,
                     null,
-                    $product->getStore()->getWebsiteId()
+                    $product->getStore()->getWebsiteId(),
+                    true,
+                    false
                 );
-                foreach ($weeAttributes as $weeAttribute) {
-                    $insertedWeeCodesArray[$selectionItem->getId()][$weeAttribute->getCode()]=$weeAttribute;
+                $priceTaxDisplay = $this->getTaxDisplayConfig();
+                $priceIncludesTax = $this->displayTotalsInclTax();
+                foreach ($weeeAttributes as $weeeAttribute) {
+                    if ($priceTaxDisplay == \Magento\Tax\Model\Config::DISPLAY_TYPE_INCLUDING_TAX ||
+                        $priceTaxDisplay == \Magento\Tax\Model\Config::DISPLAY_TYPE_BOTH) {
+                        if ($priceIncludesTax == false) {
+                            $weeeAttribute['amount'] = $weeeAttribute['amount_excl_tax'] + $weeeAttribute['tax_amount'];
+                        }
+                    } else if ($priceTaxDisplay == \Magento\Tax\Model\Config::DISPLAY_TYPE_EXCLUDING_TAX) {
+                        if ($priceIncludesTax == true) {
+                            $weeeAttribute['amount'] = $weeeAttribute['amount_excl_tax'];
+                        }
+                    }
+                    $insertedWeeeCodesArray[$selectionItem->getId()][$weeeAttribute->getCode()] = $weeeAttribute;
                 }
             }
-            return $insertedWeeCodesArray;
+            return $insertedWeeeCodesArray;
         }
         return [];
     }

@@ -22,9 +22,15 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
      */
     private $objectManager;
 
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    private $productRepository;
+
     protected function setUp()
     {
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->productRepository = $this->objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
     }
 
     protected function getCustomerById($id)
@@ -63,9 +69,8 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $customer->setGroupId($customerGroup->getId())->save();
 
         $productTaxClassId = $this->getProductTaxClassId();
-        $fixtureProductId = 1;
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product')->load($fixtureProductId);
+        $product = $this->productRepository->get('simple');
         $product->setTaxClassId($productTaxClassId)->save();
 
         $quoteShippingAddressDataObject = $this->getShippingAddressDataObject($fixtureCustomerId);
@@ -179,13 +184,11 @@ class SubtotalTest extends \PHPUnit_Framework_TestCase
         $customer->setGroupId($customerGroup->getId())->save();
 
         $productTaxClassId = $this->getProductTaxClassId();
-        $fixtureChildProductId = 1;
         /** @var \Magento\Catalog\Model\Product $product */
-        $childProduct = $this->objectManager->create('Magento\Catalog\Model\Product')->load($fixtureChildProductId);
+        $childProduct = $this->productRepository->get('simple');
         $childProduct->setTaxClassId($productTaxClassId)->save();
-        $fixtureProductId = 3;
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product')->load($fixtureProductId);
+        $product = $this->productRepository->get('bundle-product');
         $product->setTaxClassId($productTaxClassId)
             ->setPriceType(\Magento\Catalog\Model\Product\Type\AbstractType::CALCULATE_CHILD)
             ->save();

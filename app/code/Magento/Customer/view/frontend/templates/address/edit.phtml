@@ -100,7 +100,7 @@
         </div>
 
         <?php if ($block->isDefaultBilling()): ?>
-            <div class="field note default"><?php /* @escapeNotVerified */ echo __('Default Billing Address') ?></div>
+            <div class="message info"><?php /* @escapeNotVerified */ echo __("It's a default billing address.") ?></div>
         <?php elseif ($block->canSetAsDefaultBilling()): ?>
             <div class="field choice set billing">
                 <input type="checkbox" id="primary_billing" name="default_billing" value="1" class="checkbox">
@@ -111,7 +111,7 @@
         <?php endif; ?>
 
         <?php if ($block->isDefaultShipping()): ?>
-            <div class="field note default"><?php /* @escapeNotVerified */ echo __('Default Shipping Address') ?></div>
+            <div class="message info"><?php /* @escapeNotVerified */ echo __("It's a default shipping address.") ?></div>
         <?php elseif ($block->canSetAsDefaultShipping()): ?>
             <div class="field choice set shipping">
                 <input type="checkbox" id="primary_shipping" name="default_shipping" value="1" class="checkbox">

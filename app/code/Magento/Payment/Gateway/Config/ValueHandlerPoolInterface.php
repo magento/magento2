@@ -7,6 +7,11 @@ namespace Magento\Payment\Gateway\Config;
 
 use Magento\Framework\Exception\NotFoundException;
 
+/**
+ * Interface ValueHandlerPoolInterface
+ * @package Magento\Payment\Gateway\Config
+ * @api
+ */
 interface ValueHandlerPoolInterface
 {
     /**
