@@ -57,7 +57,7 @@
             <td class="col-default">
                 <input class="input-radio" type="<%- data.intype %>" name="defaultvisual[]" value="<%- data.id %>" <%- data.checked %><?php if ($block->getReadOnly()):?>disabled="disabled"<?php endif;?>/>
             </td>
-            <td class="swatch-window-col-<%- data.id %> col-default <%- data.empty_class %>">
+            <td class="swatches-visual-col col-default <%- data.empty_class %>">
                 <?php //@todo add logic getting swatch value from db */ ?>
                 <input id="swatch_visual_value_<%- data.id %>" type="hidden" name="swatchvisual[value][<%- data.id %>]" value="<%- data.defaultswatch0 %>" />
                 <div class="swatch_window" id="swatch_window_option_<%- data.id %>" style="<%- data.swatch0 %>"></div>

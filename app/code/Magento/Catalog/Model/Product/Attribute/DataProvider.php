@@ -55,35 +55,23 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     {
         $meta = parent::getMeta();
 
-        $scopes = [
-            [
-                'value' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_STORE,
-                'label' => __('Store View')
-            ],
-            [
-                'value' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
-                'label' => __('Website')
-            ],
-            [
-                'value' => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_GLOBAL,
-                'label' => __('Global')
-            ]
-        ];
-
         $meta['advanced_fieldset']['children'] = [
-            'is_global' => ['options' => $scopes],
             'attribute_code' => [
-                'notice' => __(
-                    "This is used internally. Make sure you don't use spaces or more than %1 symbols.",
-                    EavAttribute::ATTRIBUTE_CODE_MAX_LENGTH
-                ),
-                'validation' => [
-                    'validate-length' => true,
-                    'maximum-length-' . EavAttribute::ATTRIBUTE_CODE_MAX_LENGTH => true
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'notice' => __(
+                                'This is used internally. Make sure you don\'t use spaces or more than %1 symbols.',
+                                EavAttribute::ATTRIBUTE_CODE_MAX_LENGTH
+                            ),
+                            'validation' => [
+                                'max_text_length' => EavAttribute::ATTRIBUTE_CODE_MAX_LENGTH
+                            ]
+                        ]
+                    ]
                 ]
             ]
         ];
-
         return $meta;
     }
 }
