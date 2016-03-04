@@ -121,4 +121,18 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
 
         return parent::afterSave();
     }
+
+    /**
+     * {@inheritdoc}
+     *
+     * {@inheritdoc}. In addition, it sets status 'invalidate' for config caches
+     *
+     * @return $this
+     */
+    public function afterDelete()
+    {
+        $this->cacheTypeList->invalidate(\Magento\Framework\App\Cache\Type\Config::TYPE_IDENTIFIER);
+
+        return parent::afterDelete();
+    }
 }
