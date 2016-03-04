@@ -116,6 +116,42 @@ class ConfigurablePanel extends AbstractModifier
                         ],
                     ],
                     'children' => [
+                        'information-block1' => [
+                            'arguments' => [
+                                'data' => [
+                                    'config' => [
+                                        'componentType' => Container::NAME,
+                                        'component' => 'Magento_Ui/js/form/components/html',
+                                        'additionalClasses' => 'message message-notice',
+                                        'content' => __(
+                                            'Choose a new product to delete and replace the current product configuration.'
+                                        ),
+                                        'imports' => [
+                                            'visible' => '!ns = ${ $.ns }, index = '
+                                                . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                        'information-block2' => [
+                            'arguments' => [
+                                'data' => [
+                                    'config' => [
+                                        'componentType' => Container::NAME,
+                                        'component' => 'Magento_Ui/js/form/components/html',
+                                        'additionalClasses' => 'message message-notice',
+                                        'content' => __(
+                                            'For better results, add attributes and attribute values to your products.'
+                                        ),
+                                        'imports' => [
+                                            'visible' => 'ns = ${ $.ns }, index = '
+                                                . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
                         static::ASSOCIATED_PRODUCT_LISTING => [
                             'arguments' => [
                                 'data' => [
@@ -140,9 +176,6 @@ class ConfigurablePanel extends AbstractModifier
                                         'productsProvider' => 'configurable_associated_product_listing.data_source',
                                         'productsColumns' => 'configurable_associated_product_listing.configurable_associated_product_listing.product_columns',
                                         'productsMassAction' => 'configurable_associated_product_listing.configurable_associated_product_listing.product_columns.ids',
-//                                      'exports' => [
-//                                          'currentProductId' => '${ $.externalProvider }:params.current_product_id'
-//                                      ]
                                     ],
                                 ],
                             ],
@@ -208,7 +241,8 @@ class ConfigurablePanel extends AbstractModifier
                                     [
                                         'targetName' => 'ns=' . static::ASSOCIATED_PRODUCT_LISTING
                                             . ', index=' . static::ASSOCIATED_PRODUCT_LISTING,
-                                        'actionName' => 'render',
+                                        'actionName' => 'doRender',
+                                        'params' => ['showMassActionColumn', true],
                                     ],
                                 ],
                                 'title' => __('Add Products Manually'),
@@ -289,13 +323,14 @@ class ConfigurablePanel extends AbstractModifier
                             'price_currency' => 'price_currency',
                             'qty' => 'qty',
                             'weight' => 'weight',
+                            'thumbnail' => 'thumbnail',
                         ],
                         'links' => [
                             'insertDataFromGrid' => '${$.provider}:${$.dataProviderFromGrid}',
                             'insertDataFromWizard' => '${$.provider}:${$.dataProviderFromWizard}',
                         ],
                         'sortOrder' => 20,
-                        'columnsHeader' => true,
+                        'columnsHeader' => false,
                         'columnsHeaderAfterRender' => true,
                     ],
                 ],
@@ -325,6 +360,22 @@ class ConfigurablePanel extends AbstractModifier
                     ],
                 ],
                 'children' => [
+                    'thumbnail_image' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'componentType' => Form\Field::NAME,
+                                    'formElement' => Form\Element\Input::NAME,
+                                    'elementTmpl' => 'ui/dynamic-rows/cells/thumbnail',
+                                    'dataType' => Form\Element\DataType\Text::NAME,
+                                    'dataScope' => 'thumbnail_image',
+                                    'fit' => true,
+                                    'label' => __('Image'),
+                                    'sortOrder' => 0,
+                                ],
+                            ],
+                        ],
+                    ],
                     'name_container' => $this->getColumn(
                         'name',
                         __('Name'),
@@ -348,6 +399,19 @@ class ConfigurablePanel extends AbstractModifier
                         ['dataScope' => 'qty']
                     ),
                     'price_weight' => $this->getColumn('weight', __('Weight')),
+                    'status' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'componentType' => 'text',
+                                    'component' => 'Magento_Ui/js/form/element/abstract',
+                                    'template' => 'Magento_ConfigurableProduct/components/cell-status',
+                                    'label' => __('Status'),
+                                    'dataScope' => 'status',
+                                ],
+                            ],
+                        ],
+                    ],
                     'actionsList' => [
                         'arguments' => [
                             'data' => [

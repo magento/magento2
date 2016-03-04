@@ -16,6 +16,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\VariationMatrix;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
+use Magento\Catalog\Helper\Image as ImageHelper;
 
 class AssociatedProducts
 {
@@ -75,6 +76,11 @@ class AssociatedProducts
     protected $jsonHelper;
 
     /**
+     * @var ImageHelper
+     */
+    protected $imageHelper;
+
+    /**
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
      * @param ConfigurableType $configurableType
@@ -83,6 +89,7 @@ class AssociatedProducts
      * @param VariationMatrix $variationMatrix
      * @param CurrencyInterface $localeCurrency
      * @param JsonHelper $jsonHelper
+     * @param ImageHelper $imageHelper
      */
     public function __construct(
         LocatorInterface $locator,
@@ -92,7 +99,8 @@ class AssociatedProducts
         StockRegistryInterface $stockRegistry,
         VariationMatrix $variationMatrix,
         CurrencyInterface $localeCurrency,
-        JsonHelper $jsonHelper
+        JsonHelper $jsonHelper,
+        ImageHelper $imageHelper
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
@@ -102,6 +110,7 @@ class AssociatedProducts
         $this->variationMatrix = $variationMatrix;
         $this->localeCurrency = $localeCurrency;
         $this->jsonHelper = $jsonHelper;
+        $this->imageHelper = $imageHelper;
     }
 
     /**
@@ -146,6 +155,20 @@ class AssociatedProducts
 
         foreach ($this->getProductAttributes() as $attribute) {
             $result[] = $attribute['id'];
+        }
+
+        return $result;
+    }
+
+    /**
+     * @return array
+     */
+    public function getProductAttributesCodes()
+    {
+        $result = [];
+
+        foreach ($this->getProductAttributes() as $attribute) {
+            $result[] = $attribute['code'];
         }
 
         return $result;
@@ -222,6 +245,7 @@ class AssociatedProducts
                         'variationKey' => $this->getVariationKey($variationOptions),
                         'canEdit' => 0,
                         'newProduct' => 0,
+                        'thumbnail_image' => $this->imageHelper->init($product, 'product_thumbnail_image')->getUrl(),
                     ];
                     $productIds[] = $product->getId();
                 }
