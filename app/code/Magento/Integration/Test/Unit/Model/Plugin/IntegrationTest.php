@@ -37,7 +37,12 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Integration\Model\IntegrationConfig|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $integrationConfig;
+    protected $integrationConfigMock;
+
+    /**
+     * @var \Magento\Integration\Model\ConsolidatedConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $consolidatedConfigMock;
 
     public function setUp()
     {
@@ -56,15 +61,25 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->integrationConfig = $this->getMockBuilder('Magento\Integration\Model\IntegrationConfig')
+        $this->integrationConfigMock = $this->getMockBuilder('Magento\Integration\Model\IntegrationConfig')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $this->consolidatedConfigMock = $this->getMockBuilder('Magento\Integration\Model\ConsolidatedConfig')
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->integrationPlugin = new \Magento\Integration\Model\Plugin\Integration(
-            $this->integrationAuthServiceMock,
-            $this->aclRetrieverMock,
-            $this->integrationConfig
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+
+        $this->integrationPlugin = $objectManagerHelper->getObject(
+            'Magento\Integration\Model\Plugin\Integration',
+            [
+                'integrationAuthorizationService' => $this->integrationAuthServiceMock,
+                'aclRetriever' => $this->aclRetrieverMock,
+                'integrationConfig' => $this->integrationConfigMock,
+                'consolidatedConfig' => $this->consolidatedConfigMock
+            ]
         );
     }
 
@@ -193,6 +208,24 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $integrationModelMock->expects($this->once())
             ->method('setData')
             ->with('resource', ['testResource']);
+        $deprecatedIntegrationsData = [
+            Integration::ID => $integrationId,
+            Integration::NAME => 'TestIntegration1',
+            Integration::EMAIL => 'test-integration1@magento.com',
+            Integration::ENDPOINT => 'http://endpoint.com',
+            Integration::SETUP_TYPE => 1,
+            'resource' => ['testResource']
+        ];
+        $consolidatedIntegrationsData = [
+            Integration::ID => 2,
+            Integration::NAME => 'TestIntegration2',
+            Integration::EMAIL => 'test-integration2@magento.com',
+            Integration::ENDPOINT => 'http://endpoint2.com',
+            Integration::SETUP_TYPE => 1,
+            'resource' => ['testResource']
+        ];
+        $this->integrationConfigMock->method('getIntegrations')->willReturn($deprecatedIntegrationsData);
+        $this->consolidatedConfigMock->method('getIntegrations')->willReturn($consolidatedIntegrationsData);
 
         $this->aclRetrieverMock->expects($this->once())
             ->method('getAllowedResourcesByUser')

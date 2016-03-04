@@ -150,9 +150,10 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
             'default values' => [
                 [
                     'id' => '2',
+                    'entity_id' => '2',
                     'path' => '1/2',
                     'url_key' => 'default-category',
-                    'is_anchor' => '0',
+                    'is_anchor' => 'false',
                     'use_default' => [
                         'name' => 1,
                         'is_active' => 1,
@@ -201,6 +202,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
             'custom values' => [
                 [
                     'id' => '2',
+                    'entity_id' => '2',
                     'path' => '1/2',
                     'name' => 'Custom Name',
                     'is_active' => '0',
@@ -269,6 +271,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
             'incorrect datefrom' => [
                 [
                     'id' => '2',
+                    'entity_id' => '2',
                     'path' => '1/2',
                     'name' => 'Custom Name',
                     'is_active' => '0',
