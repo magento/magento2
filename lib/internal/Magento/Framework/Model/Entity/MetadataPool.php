@@ -6,24 +6,17 @@
 
 namespace Magento\Framework\Model\Entity;
 
+use Magento\Framework\ObjectManagerInterface;
+
 /**
  * Class MetadataPool
  */
 class MetadataPool
 {
     /**
-     * @var array
+     * @var ObjectManagerInterface
      */
-    protected $eavMapping;
-    /**
-     * @var EntityMetadataFactory
-     */
-    protected $metadataFactory;
-
-    /**
-     * @var EntityHydratorFactory
-     */
-    protected $hydratorFactory;
+    protected $objectManager;
 
     /**
      * @var array
@@ -41,28 +34,23 @@ class MetadataPool
     protected $sequenceFactory;
 
     /**
-     * @param EntityMetadataFactory $metadataFactory
-     * @param EntityHydratorFactory $hydratorFactory
+     * MetadataPool constructor.
+     * @param ObjectManagerInterface $objectManager
      * @param SequenceFactory $sequenceFactory
      * @param array $metadata
-     * @param array $eavMapping
      */
     public function __construct(
-        EntityMetadataFactory $metadataFactory,
-        EntityHydratorFactory $hydratorFactory,
+        ObjectManagerInterface $objectManager,
         SequenceFactory $sequenceFactory,
-        array $metadata,
-        array $eavMapping = []
+        array $metadata
     ) {
-        $this->metadataFactory = $metadataFactory;
-        $this->hydratorFactory = $hydratorFactory;
+        $this->objectManager = $objectManager;
         $this->sequenceFactory = $sequenceFactory;
         $this->metadata = $metadata;
-        $this->eavMapping = $eavMapping;
     }
 
     /**
-     * @param string $entityType
+     * @param string $bentityType
      * @return EntityMetadata
      * @throws \Exception
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -74,7 +62,8 @@ class MetadataPool
         }
         if (!isset($this->registry[$entityType])) {
             $this->metadata[$entityType]['connectionName'] = 'default';
-            $this->registry[$entityType] = $this->metadataFactory->create(
+            $this->registry[$entityType] = $this->objectManager->create(
+                EntityMetadata::class,
                 [
                     'entityTableName' => $this->metadata[$entityType]['entityTableName'],
                     'eavEntityType' => isset($this->metadata[$entityType]['eavEntityType'])
@@ -98,11 +87,14 @@ class MetadataPool
 
     /**
      * @param string $entityType
-     * @return EntityHydrator
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return HydratorInterface
      */
     public function getHydrator($entityType)
     {
-        return $this->hydratorFactory->create();
+        if (!isset($this->metadata[$entityType]['hydrator'])) {
+            return $this->objectManager->get(EntityHydrator::class);
+        } else {
+            return $this->objectManager->get($this->metadata[$entityType]['hydrator']);
+        }
     }
 }
