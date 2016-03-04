@@ -9,7 +9,7 @@ namespace Magento\Framework\Model\Entity;
 /**
  * Class EntityHydrator
  */
-class EntityHydrator
+class EntityHydrator implements HydratorInterface
 {
     /**
      * @param object $entity
