@@ -16,6 +16,9 @@ use Magento\Framework\Currency;
 use Magento\Directory\Model\Currency as CurrencyModel;
 use Magento\Store\Model\Store;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class PriceTest extends \PHPUnit_Framework_TestCase
 {
     /**
