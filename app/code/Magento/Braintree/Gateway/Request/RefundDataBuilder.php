@@ -8,6 +8,7 @@ namespace Magento\Braintree\Gateway\Request;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Helper\Formatter;
+use Magento\Sales\Api\Data\TransactionInterface;
 use Magento\Sales\Model\Order\Payment;
 
 class RefundDataBuilder implements BuilderInterface
@@ -51,8 +52,14 @@ class RefundDataBuilder implements BuilderInterface
 
         /*
          * we should remember that Payment sets Capture txn id of current Invoice into ParentTransactionId Field
+         * We should also support previous implementations of Magento Braintree -
+         * and cut off '-capture' postfix from transaction ID to support backward compatibility
          */
-        $txnId = $payment->getParentTransactionId();
+        $txnId = str_replace(
+            '-' . TransactionInterface::TYPE_CAPTURE,
+            '',
+            $payment->getParentTransactionId()
+        );
 
         return [
             'transaction_id' => $txnId,
