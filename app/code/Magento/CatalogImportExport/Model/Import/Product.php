@@ -299,8 +299,11 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         'max_sale_qty' => 'max_cart_qty',
         'notify_stock_qty' => 'notify_on_stock_below',
         '_related_sku' => 'related_skus',
+        '_related_position' => 'related_position',
         '_crosssell_sku' => 'crosssell_skus',
+        '_crosssell_position' => 'crosssell_position',
         '_upsell_sku' => 'upsell_skus',
+        '_upsell_position' => 'upsell_position',
         'meta_keyword' => 'meta_keywords',
     ];
 
