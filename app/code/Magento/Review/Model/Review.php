@@ -374,7 +374,7 @@ class Review extends \Magento\Framework\Model\AbstractModel implements IdentityI
     public function getIdentities()
     {
         $tags = [];
-        if ($this->isApproved() && $this->getEntityPkValue()) {
+        if ($this->getEntityPkValue()) {
             $tags[] = Product::CACHE_TAG . '_' . $this->getEntityPkValue();
         }
         return $tags;
