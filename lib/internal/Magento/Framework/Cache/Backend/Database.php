@@ -48,6 +48,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
         'tags_table' => '',
         'tags_table_callback' => '',
         'store_data' => true,
+        'infinite_loop_flag' => false,
     ];
 
     /**
@@ -98,6 +99,7 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
             } else {
                 $this->_connection = $connection;
             }
+            $this->_options['store_data'] = true;
         }
         return $this->_connection;
     }
@@ -145,13 +147,16 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      */
     public function load($id, $doNotTestCacheValidity = false)
     {
-        if ($this->_options['store_data']) {
+        if ($this->_options['store_data'] && !$this->_options['infinite_loop_flag']) {
+            $this->_options['infinite_loop_flag'] = true;
             $select = $this->_getConnection()->select()->from($this->_getDataTable(), 'data')->where('id=:cache_id');
 
             if (!$doNotTestCacheValidity) {
                 $select->where('expire_time=0 OR expire_time>?', time());
             }
-            return $this->_getConnection()->fetchOne($select, ['cache_id' => $id]);
+            $result = $this->_getConnection()->fetchOne($select, ['cache_id' => $id]);
+            $this->_options['infinite_loop_flag'] = false;
+            return $result;
         } else {
             return false;
         }
@@ -165,7 +170,8 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      */
     public function test($id)
     {
-        if ($this->_options['store_data']) {
+        if ($this->_options['store_data'] && !$this->_options['infinite_loop_flag']) {
+            $this->_options['infinite_loop_flag'] = true;
             $select = $this->_getConnection()->select()->from(
                 $this->_getDataTable(),
                 'update_time'
@@ -175,7 +181,9 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
                 'expire_time=0 OR expire_time>?',
                 time()
             );
-            return $this->_getConnection()->fetchOne($select, ['cache_id' => $id]);
+            $result = $this->_getConnection()->fetchOne($select, ['cache_id' => $id]);
+            $this->_options['infinite_loop_flag'] = false;
+            return $result;
         } else {
             return false;
         }
@@ -195,7 +203,8 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      */
     public function save($data, $id, $tags = [], $specificLifetime = false)
     {
-        if ($this->_options['store_data']) {
+        if ($this->_options['store_data'] && !$this->_options['infinite_loop_flag']) {
+            $this->_options['infinite_loop_flag'] = true;
             $connection = $this->_getConnection();
             $dataTable = $this->_getDataTable();
 
@@ -214,12 +223,14 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
             )},\n                    {$expireCol})\n                VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE\n                    {$dataCol}=VALUES({$dataCol}),\n                    {$expireCol}=VALUES({$expireCol})";
 
             $result = $connection->query($query, [$id, $data, $time, $time, $expire])->rowCount();
-            if (!$result) {
-                return false;
+            if ($result) {
+                $result = $this->_saveTags($id, $tags);
             }
+            $this->_options['infinite_loop_flag'] = false;
+        } else {
+            $result = false;
         }
-        $tagRes = $this->_saveTags($id, $tags);
-        return $tagRes;
+        return $result;
     }
 
     /**
@@ -230,8 +241,11 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      */
     public function remove($id)
     {
-        if ($this->_options['store_data']) {
-            return $this->_getConnection()->delete($this->_getDataTable(), ['id=?' => $id]);
+        if ($this->_options['store_data'] && !$this->_options['infinite_loop_flag']) {
+            $this->_options['infinite_loop_flag'] = true;
+            $result = $this->_getConnection()->delete($this->_getDataTable(), ['id=?' => $id]);
+            $this->_options['infinite_loop_flag'] = false;
+            return $result;
         }
         return false;
     }
@@ -255,34 +269,38 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      */
     public function clean($mode = \Zend_Cache::CLEANING_MODE_ALL, $tags = [])
     {
-        $connection = $this->_getConnection();
-        switch ($mode) {
-            case \Zend_Cache::CLEANING_MODE_ALL:
-                if ($this->_options['store_data']) {
-                    $result = $connection->query('TRUNCATE TABLE ' . $this->_getDataTable());
-                } else {
-                    $result = true;
-                }
-                $result = $result && $connection->query('TRUNCATE TABLE ' . $this->_getTagsTable());
-                break;
-            case \Zend_Cache::CLEANING_MODE_OLD:
-                if ($this->_options['store_data']) {
-                    $result = $connection->delete(
-                        $this->_getDataTable(),
-                        ['expire_time> ?' => 0, 'expire_time<= ?' => time()]
-                    );
-                } else {
-                    $result = true;
-                }
-                break;
-            case \Zend_Cache::CLEANING_MODE_MATCHING_TAG:
-            case \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG:
-            case \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG:
-                $result = $this->_cleanByTags($mode, $tags);
-                break;
-            default:
-                \Zend_Cache::throwException('Invalid mode for clean() method');
-                break;
+        if (!$this->_options['infinite_loop_flag']) {
+            $this->_options['infinite_loop_flag'] = true;
+            $connection = $this->_getConnection();
+            switch ($mode) {
+                case \Zend_Cache::CLEANING_MODE_ALL:
+                    if ($this->_options['store_data']) {
+                        $result = $connection->query('TRUNCATE TABLE ' . $this->_getDataTable());
+                    } else {
+                        $result = true;
+                    }
+                    $result = $result && $connection->query('TRUNCATE TABLE ' . $this->_getTagsTable());
+                    break;
+                case \Zend_Cache::CLEANING_MODE_OLD:
+                    if ($this->_options['store_data']) {
+                        $result = $connection->delete(
+                            $this->_getDataTable(),
+                            ['expire_time> ?' => 0, 'expire_time<= ?' => time()]
+                        );
+                    } else {
+                        $result = true;
+                    }
+                    break;
+                case \Zend_Cache::CLEANING_MODE_MATCHING_TAG:
+                case \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG:
+                case \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG:
+                    $result = $this->_cleanByTags($mode, $tags);
+                    break;
+                default:
+                    \Zend_Cache::throwException('Invalid mode for clean() method');
+                    break;
+            }
+            $this->_options['infinite_loop_flag'] = false;
         }
 
         return $result;
