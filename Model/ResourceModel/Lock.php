@@ -33,6 +33,7 @@ class Lock extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb implemen
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param \Magento\MessageQueue\Model\LockFactory $lockFactory
      * @param null $connectionName
      * @param integer $interval
      */
