@@ -50,7 +50,7 @@
             </argument>
         </filters>
         <paging name="listing_paging">
-            <argument name="data">
+            <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Catalog/js/components/attributes-grid-paging</item>
                     <item name="selectProvider" xsi:type="string">product_attributes_grid.product_attributes_grid.product_attributes_columns.ids</item>
