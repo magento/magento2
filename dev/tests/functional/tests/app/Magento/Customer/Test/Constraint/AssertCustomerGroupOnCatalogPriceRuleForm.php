@@ -32,7 +32,7 @@ class AssertCustomerGroupOnCatalogPriceRuleForm extends AbstractConstraint
     ) {
         $catalogRuleIndex->open();
         $catalogRuleIndex->getGridPageActions()->addNew();
-        $catalogRuleNew->getEditForm()->openTab('rule_information');
+        $catalogRuleNew->getEditForm()->openSection('rule_information');
 
         /** @var RuleInformation $ruleInformationSection */
         $ruleInformationSection = $catalogRuleNew->getEditForm()->getSection('rule_information');

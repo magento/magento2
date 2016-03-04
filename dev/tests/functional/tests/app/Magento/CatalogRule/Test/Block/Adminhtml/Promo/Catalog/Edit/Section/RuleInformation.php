@@ -18,7 +18,7 @@ class RuleInformation extends Section
      *
      * @var string
      */
-    protected $customerGroup = '#rule_customer_group_ids';
+    protected $customerGroup = '[name=customer_group_ids]';
 
     /**
      * Check whether Customer Group is visible.
