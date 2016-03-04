@@ -106,6 +106,7 @@ define([
         FTAR: 'fotorama__arr',
         TI: 'video-thumb-icon',
         isFullscreen: false,
+        FTCF: '[data-gallery-role="fotorama__fullscreen-icon"]',
         Base: 0, //on check for video is base this setting become true if there is any video with base role
         MobileMaxWidth: 767,
         GP: 'gallery-placeholder', //gallery placeholder class is needed to find and erase <script> tag
@@ -695,6 +696,11 @@ define([
 
                 self._hideCloseVideo();
 
+                if (self.isFullscreen && !self.fotoramaItem.data('fotorama').options.fullscreen.arrows) {
+                    if ($('.' + self.FTAR + '--prev').is(':focus') || $('.' + self.FTAR + '--next').is(':focus')) {
+                        $(self.FTCF).focus();
+                    }
+                }
                 $('.' + self.FTAR).removeClass('fotorama__arr--shown');
                 $('.' + self.FTAR).removeClass('fotorama__arr--hidden');
             });
