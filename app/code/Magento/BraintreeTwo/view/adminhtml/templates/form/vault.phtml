@@ -23,7 +23,7 @@ $id = $block->escapeHtml($block->getData('id'));
         <img src="<?php echo $block->escapeUrl($icon['url']); ?>"
              width="<?php echo $block->escapeHtml($icon['width']); ?>"
              height="<?php echo $block->escapeHtml($icon['height']); ?>"
-            >
+             class="payment-icon" >
         <span><?php echo $block->escapeHtml(__('ending'));?></span>
         <span><?php echo $block->escapeHtml($details['maskedCC']); ?></span>
         (<span><?php echo $block->escapeHtml(__('expires'));?></span>:

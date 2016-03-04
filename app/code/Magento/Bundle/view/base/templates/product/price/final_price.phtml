@@ -16,7 +16,8 @@ $productId = $block->getSaleableItem()->getId();
 $finalPriceModel = $block->getPrice();
 $minimalPrice = $finalPriceModel->getMinimalPrice();
 $maximalPrice = $finalPriceModel->getMaximalPrice();
-/** @var \Magento\Bundle\Pricing\Price\BundleRegularPrice $regularPriceModel */
+/** ex: \Magento\Bundle\Pricing\Price\BundleRegularPrice */
+/** @var \Magento\Framework\Pricing\Price\PriceInterface $regularPriceModel */
 $regularPriceModel = $block->getPriceType('regular_price');
 $maximalRegularPrice = $regularPriceModel->getMaximalPrice();
 $minimalRegularPrice = $regularPriceModel->getMinimalPrice();
