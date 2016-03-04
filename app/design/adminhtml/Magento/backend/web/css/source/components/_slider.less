@@ -30,12 +30,12 @@
 
 .data-slider {
     &:extend(.abs-clearfix all);
+    background: none;
     font-size: @data-slider-track__font-size;
     min-height: @data-slider-handle__height;
     padding-top: 1.2rem;
     position: relative;
     width: @data-slider-track__width;
-    background: none;
 
     &:before {
         background: @data-slider-track__background-color;
@@ -69,12 +69,11 @@
     cursor: pointer;
     display: block;
     height: @data-slider-handle__height;
+    margin-left: -@data-slider-handle__width / 2 !important;
     position: absolute;
     top: -@data-slider-handle__height / 2;
     width: @data-slider-handle__width;
     z-index: @data-slider-track__z-index + 1 !important;
-    margin-left: -@data-slider-handle__width / 2 !important;
-
 
     &:before {
         .lib-background-gradient(
