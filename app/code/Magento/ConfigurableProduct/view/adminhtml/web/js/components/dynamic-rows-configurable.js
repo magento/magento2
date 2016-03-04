@@ -250,7 +250,12 @@ define([
                     'weight': row.weight,
                     'qty': row.quantity,
                     'variationKey': row.variationKey,
-                    'configurable_attribute': row.attribute
+                    'configurable_attribute': row.attribute,
+                    'thumbnail_image': row.images.preview,
+                    'media_gallery': row.media_gallery,
+                    'swatch_image': row.swatch_image,
+                    'small_image': row.small_image,
+                    'thumbnail': row.thumbnail
                 };
                 product[this.canEditField] = row.editable;
                 product[this.newProductField] = row.newProduct;

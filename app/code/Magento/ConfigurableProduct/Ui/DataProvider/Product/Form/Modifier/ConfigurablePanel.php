@@ -326,6 +326,7 @@ class ConfigurablePanel extends AbstractModifier
                             'price_currency' => 'price_currency',
                             'qty' => 'qty',
                             'weight' => 'weight',
+                            'thumbnail' => 'thumbnail',
                         ],
                         'links' => [
                             'insertDataFromGrid' => '${$.provider}:${$.dataProviderFromGrid}',
@@ -333,7 +334,7 @@ class ConfigurablePanel extends AbstractModifier
                             'changeDataFromGrid' => '${$.provider}:${$.dataProviderChangeFromGrid}',
                         ],
                         'sortOrder' => 20,
-                        'columnsHeader' => true,
+                        'columnsHeader' => false,
                         'columnsHeaderAfterRender' => true,
                         'modalWithGrid' => 'ns=' . static::FORM_NAME . ', index='
                             . static::ASSOCIATED_PRODUCT_MODAL,
@@ -367,6 +368,22 @@ class ConfigurablePanel extends AbstractModifier
                     ],
                 ],
                 'children' => [
+                    'thumbnail_image' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'componentType' => Form\Field::NAME,
+                                    'formElement' => Form\Element\Input::NAME,
+                                    'elementTmpl' => 'ui/dynamic-rows/cells/thumbnail',
+                                    'dataType' => Form\Element\DataType\Text::NAME,
+                                    'dataScope' => 'thumbnail_image',
+                                    'fit' => true,
+                                    'label' => __('Image'),
+                                    'sortOrder' => 0,
+                                ],
+                            ],
+                        ],
+                    ],
                     'name_container' => $this->getColumn(
                         'name',
                         __('Name'),

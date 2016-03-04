@@ -138,6 +138,11 @@ class Configurable
                     'configurable_attribute' => isset($item['configurable_attribute'])
                         ? $item['configurable_attribute'] : '',
                     'weight' => isset($item['weight']) ? $item['weight'] : '',
+                    'media_gallery' => isset($item['media_gallery']) ? $item['media_gallery'] : '',
+                    'swatch_image' => isset($item['swatch_image']) ? $item['swatch_image'] : '',
+                    'small_image' => isset($item['small_image']) ? $item['small_image'] : '',
+                    'thumbnail' => isset($item['thumbnail']) ? $item['thumbnail'] : '',
+                    'image' => isset($item['image']) ? $item['image'] : '',
                 ];
 
                 if (isset($item['qty'])) {
