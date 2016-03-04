@@ -53,8 +53,8 @@ class Actions extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstrac
         $encodedUrl = $this->_urlHelper->getEncodedUrl();
         return sprintf(
             '%s%s<a class="action-delete" href="%s" onClick="deleteConfirm(\'%s\', this.href); return false;">%s</a>',
-            $readDetailsHtml,
-            $markAsReadHtml,
+            $readDetailsHtml ? $readDetailsHtml . ' | ' : '',
+            $markAsReadHtml ? $markAsReadHtml . ' | ' : '',
             $this->getUrl(
                 '*/*/remove/',
                 [
