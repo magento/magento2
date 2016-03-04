@@ -90,7 +90,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Configurable::afterInitialize
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testAfterInitializeWithAttributesAndVariations()
     {
