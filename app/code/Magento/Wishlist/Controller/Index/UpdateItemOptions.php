@@ -6,19 +6,22 @@
 namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Wishlist\Controller\WishlistProviderInterface;
 
 class UpdateItemOptions extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
-     * @var \Magento\Wishlist\Controller\WishlistProviderInterface
+     * @var WishlistProviderInterface
      */
     protected $wishlistProvider;
 
     /**
-     * @var \Magento\Customer\Model\Session
+     * @var Session
      */
     protected $_customerSession;
 
@@ -28,21 +31,29 @@ class UpdateItemOptions extends \Magento\Wishlist\Controller\AbstractIndex
     protected $productRepository;
 
     /**
+     * @var Validator
+     */
+    protected $formKeyValidator;
+
+    /**
      * @param Action\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
+     * @param Session $customerSession
+     * @param WishlistProviderInterface $wishlistProvider
      * @param ProductRepositoryInterface $productRepository
+     * @param Validator $formKeyValidator
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
-        \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
-        ProductRepositoryInterface $productRepository
+        Session $customerSession,
+        WishlistProviderInterface $wishlistProvider,
+        ProductRepositoryInterface $productRepository,
+        Validator $formKeyValidator
     ) {
         $this->_customerSession = $customerSession;
         $this->wishlistProvider = $wishlistProvider;
-        parent::__construct($context);
         $this->productRepository = $productRepository;
+        $this->formKeyValidator = $formKeyValidator;
+        parent::__construct($context);
     }
 
     /**
@@ -52,9 +63,13 @@ class UpdateItemOptions extends \Magento\Wishlist\Controller\AbstractIndex
      */
     public function execute()
     {
-        $productId = (int)$this->getRequest()->getParam('product');
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        if (!$this->formKeyValidator->validate($this->getRequest())) {
+            return $resultRedirect->setPath('*/*/');
+        }
+
+        $productId = (int)$this->getRequest()->getParam('product');
         if (!$productId) {
             $resultRedirect->setPath('*/');
             return $resultRedirect;

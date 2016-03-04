@@ -16,7 +16,6 @@ class FinalPriceResolver implements PriceResolverInterface
      */
     public function resolvePrice(\Magento\Framework\Pricing\SaleableInterface $product)
     {
-        return $product->getPriceInfo()->getPrice(CatalogFinalPrice::PRICE_CODE)
-            ->getAmount()->getBaseAmount();
+        return $product->getPriceInfo()->getPrice(CatalogFinalPrice::PRICE_CODE)->getValue();
     }
 }

@@ -63,65 +63,7 @@ define([
             expect(iframe.comments().length).toEqual(0);
         });
     });
-
-    describe('Testing msgBox Widget', function () {
-        var wdContainer,
-            msgCookieName,
-            msgContainer;
-
-        beforeEach(function () {
-            wdContainer = $('<div />');
-            msgContainer = $('<div />');
-            msgCookieName = 'FAKE_COOKIE';
-        });
-
-        afterEach(function () {
-            $(wdContainer).remove();
-            $(msgContainer).remove();
-        });
-
-        it('widget extends jQuery object', function () {
-            expect($.fn.msgBox).toBeDefined();
-        });
-
-        it('widget gets options', function () {
-            wdContainer.msgBox({
-                'msgBoxCookieName': msgCookieName
-            });
-            expect(wdContainer.msgBox('option', 'msgBoxCookieName')).toBe('FAKE_COOKIE');
-        });
-
-        it('widget disables cookie if it exist', function () {
-            spyOn($.mage.cookies, 'get').and.returnValue('FAKE_MAGE_COOKIE');
-            spyOn($.mage.cookies, 'clear');
-
-            wdContainer.msgBox({
-                'msgBoxSelector': msgContainer
-            });
-
-            expect($.mage.cookies.get).toHaveBeenCalled();
-            expect($.mage.cookies.clear).toHaveBeenCalled();
-        });
-
-        it('widget disables messageBox if cookie not exist', function () {
-            spyOn($.mage.cookies, 'get');
-
-            wdContainer.msgBox({
-                'msgBoxSelector': msgContainer
-            });
-
-            expect($.mage.cookies.get).toHaveBeenCalled();
-            expect(msgContainer.is(':hidden')).toBeTruthy();
-        });
-
-        it('widget exist on load on body', function (done) {
-            $(function () {
-                expect($('body').data('mageMsgBox')).toBeDefined();
-                done();
-            });
-        });
-    });
-
+    
     describe('Testing FormKey Widget', function () {
         var wdContainer,
             msgCookieName,

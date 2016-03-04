@@ -52,28 +52,6 @@ define([
     };
 
     /**
-     * MsgBox Widget checks if message box is displayed and sets cookie
-     */
-    $.widget('mage.msgBox', {
-        options: {
-            msgBoxCookieName: 'message_box_display',
-            msgBoxSelector: '.main div.messages'
-        },
-
-        /**
-         * Creates widget 'mage.msgBox'
-         * @private
-         */
-        _create: function () {
-            if ($.mage.cookies.get(this.options.msgBoxCookieName)) {
-                $.mage.cookies.clear(this.options.msgBoxCookieName);
-            } else {
-                $(this.options.msgBoxSelector).hide();
-            }
-        }
-    });
-
-    /**
      * FormKey Widget - this widget is generating from key, saves it to cookie and
      */
     $.widget('mage.formKey', {
@@ -272,14 +250,12 @@ define([
 
     domReady(function () {
         $('body')
-            .msgBox()
             .formKey();
     });
 
     return {
         'pageCache': $.mage.pageCache,
-        'formKey': $.mage.formKey,
-        'msgBox': $.mage.msgBox
+        'formKey': $.mage.formKey
     };
 
     /**

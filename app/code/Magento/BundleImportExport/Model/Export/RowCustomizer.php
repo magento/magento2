@@ -159,14 +159,13 @@ class RowCustomizer implements RowCustomizerInterface
     protected function populateBundleData($collection)
     {
         foreach ($collection as $product) {
-            $id = $product->getId();
+            $id = $product->getEntityId();
             $this->bundleData[$id][self::BUNDLE_PRICE_TYPE_COL] = $this->getTypeValue($product->getPriceType());
             $this->bundleData[$id][self::BUNDLE_SKU_TYPE_COL] = $this->getTypeValue($product->getSkuType());
             $this->bundleData[$id][self::BUNDLE_PRICE_VIEW_COL] = $this->getPriceViewValue($product->getPriceView());
             $this->bundleData[$id][self::BUNDLE_WEIGHT_TYPE_COL] = $this->getTypeValue($product->getWeightType());
             $this->bundleData[$id][self::BUNDLE_VALUES_COL] = $this->getFormattedBundleOptionValues($product);
         }
-
         return $this;
     }
 

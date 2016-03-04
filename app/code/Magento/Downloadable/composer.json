@@ -18,13 +18,14 @@
         "magento/module-config": "100.0.*",
         "magento/module-media-storage": "100.0.*",
         "magento/module-quote": "100.0.*",
-        "magento/framework": "100.0.*"
+        "magento/framework": "100.0.*",
+        "magento/module-ui": "100.0.*"
     },
     "suggest": {
         "magento/module-downloadable-sample-data": "Sample Data version:100.0.*"
     },
     "type": "magento2-module",
-    "version": "100.0.1",
+    "version": "100.0.2",
     "license": [
         "OSL-3.0",
         "AFL-3.0"

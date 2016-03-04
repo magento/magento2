@@ -265,6 +265,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $output['isCustomerLoginRequired'] = $this->isCustomerLoginRequired();
         $output['registerUrl'] = $this->getRegisterUrl();
         $output['checkoutUrl'] = $this->getCheckoutUrl();
+        $output['defaultSuccessPageUrl'] = $this->getDefaultSuccessPageUrl();
         $output['pageNotFoundUrl'] = $this->pageNotFoundUrl();
         $output['forgotPasswordUrl'] = $this->getForgotPasswordUrl();
         $output['staticBaseUrl'] = $this->getStaticBaseUrl();
@@ -449,6 +450,17 @@ class DefaultConfigProvider implements ConfigProviderInterface
     public function pageNotFoundUrl()
     {
         return $this->urlBuilder->getUrl('checkout/noroute');
+    }
+
+    /**
+     * Retrieve default success page URL
+     *
+     * @return string
+     * @codeCoverageIgnore
+     */
+    public function getDefaultSuccessPageUrl()
+    {
+        return $this->urlBuilder->getUrl('checkout/onepage/success/');
     }
 
     /**

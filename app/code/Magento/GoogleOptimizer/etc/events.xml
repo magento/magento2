@@ -24,7 +24,4 @@
     <event name="cms_page_delete_after">
         <observer name="googleoptimizer_observer" instance="Magento\GoogleOptimizer\Observer\CmsPage\DeleteCmsGoogleExperimentScriptObserver" />
     </event>
-    <event name="adminhtml_catalog_category_tabs">
-        <observer name="googleoptimizer_observer" instance="Magento\GoogleOptimizer\Observer\Block\Category\AddGoogleExperimentTabObserver" />
-    </event>
 </config>

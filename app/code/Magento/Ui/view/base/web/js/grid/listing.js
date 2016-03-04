@@ -7,9 +7,10 @@ define([
     'ko',
     'underscore',
     'Magento_Ui/js/lib/spinner',
+    'rjsResolver',
     'uiLayout',
     'uiCollection'
-], function (ko, _, loader, layout, Collection) {
+], function (ko, _, loader, resolver, layout, Collection) {
     'use strict';
 
     return Collection.extend({
@@ -41,8 +42,8 @@ define([
             },
             listens: {
                 elems: 'updatePositions updateVisible',
-                '${ $.provider }:reload': 'showLoader',
-                '${ $.provider }:reloaded': 'hideLoader'
+                '${ $.provider }:reload': 'onBeforeReload',
+                '${ $.provider }:reloaded': 'onDataReloaded'
             },
             modules: {
                 dnd: '${ $.dndConfig.name }',
@@ -242,6 +243,20 @@ define([
          */
         showLoader: function () {
             loader.get(this.name).show();
+        },
+
+        /**
+         * Handler of the data providers' 'reload' event.
+         */
+        onBeforeReload: function () {
+            this.showLoader();
+        },
+
+        /**
+         * Handler of the data providers' 'reloaded' event.
+         */
+        onDataReloaded: function () {
+            resolver(this.hideLoader, this);
         }
     });
 });

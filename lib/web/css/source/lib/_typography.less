@@ -28,26 +28,26 @@
 
 //  Rem font size
 .lib-font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and (isunit(@sizeValue, @font-size-unit)) {
-    font-size: @sizeValue;
+    .lib-css(font-size, @sizeValue);
 }
 
 .lib-font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and (isunit(@sizeValue, em)) {
-    font-size: @sizeValue;
+    .lib-css(font-size, @sizeValue);
 }
 
 .lib-font-size(@sizeValue) when not (ispercentage(@sizeValue)) and not (@sizeValue = false) and not (isunit(@sizeValue, em)) and not (isunit(@sizeValue, @font-size-unit)) {
     .lib-font-size-value(@sizeValue);
-    font-size: @fontValue;
+    .lib-css(font-size, @fontValue);
 }
 
 //  Rem line height
 .lib-line-height(@heightValue) when not (@heightValue = false) and not (ispercentage(@heightValue)) {
     .lib-font-size-value(@heightValue);
-    line-height: @fontValue;
+    .lib-css(line-height, @fontValue);
 }
 
 .lib-line-height(@heightValue) when (ispercentage(@heightValue)) and not (@heightValue = false) {
-    line-height: @heightValue;
+    .lib-css(line-height, @heightValue);
 }
 
 .lib-wrap-words() {
@@ -102,6 +102,7 @@
 
 .lib-list-inline() {
     .lib-list-reset-styles();
+
     > li {
         display: inline-block;
         vertical-align: top;
@@ -120,14 +121,17 @@
 ) {
     .lib-css(color, @_link-color);
     .lib-css(text-decoration, @_link-text-decoration);
+
     &:visited {
         .lib-css(color, @_link-color-visited);
         .lib-css(text-decoration, @_link-text-decoration-visited);
     }
+
     &:hover {
         .lib-css(color, @_link-color-hover);
         .lib-css(text-decoration, @_link-text-decoration-hover);
     }
+
     &:active {
         .lib-css(color,@_link-color-active);
         .lib-css(text-decoration, @_link-text-decoration-active);
@@ -151,13 +155,15 @@
         @@_line-height,
         @@_font-style
     );
+
     & {
         .lib-font-size-value(@@_margin-top);
-        margin-top: @fontValue;
+        .lib-css(margin-top, @fontValue);
     }
+
     & {
         .lib-font-size-value(@@_margin-bottom);
-        margin-bottom: @fontValue;
+        .lib-css(margin-bottom, @fontValue);
     }
 }
 
@@ -172,6 +178,7 @@
             -ms-text-size-adjust: 100%;
                 font-size-adjust: 100%;
     }
+
     body {
         .lib-typography();
     }
@@ -179,11 +186,12 @@
     p {
         & {
             .lib-font-size-value(@p__margin-top);
-            margin-top: @fontValue;
+            .lib-css(margin-top, @fontValue);
         }
+
         & {
             .lib-font-size-value(@p__margin-bottom);
-            margin-bottom: @fontValue;
+            .lib-css(margin-bottom, @fontValue);
         }
     }
 
@@ -227,9 +235,11 @@
         position: relative;
         vertical-align: baseline;
     }
+
     sup {
         top: -.5em;
     }
+
     sub {
         bottom: -.25em;
     }
@@ -300,23 +310,27 @@
     ol {
         & {
             .lib-font-size-value(@list__margin-top);
-            margin-top: @fontValue;
+            .lib-css(margin-top, @fontValue);
         }
+
         & {
             .lib-font-size-value(@list__margin-bottom);
-            margin-bottom: @fontValue;
+            .lib-css(margin-bottom, @fontValue);
         }
+
         //.lib-typography(@list__font-size__base, @list__color__base);
         > li {
             & {
                 .lib-font-size-value(@list-item__margin-top);
-                margin-top: @fontValue;
+                .lib-css(margin-top, @fontValue);
             }
+
             & {
                 .lib-font-size-value(@list-item__margin-bottom);
-                margin-bottom: @fontValue;
+                .lib-css(margin-bottom, @fontValue);
             }
         }
+
         ul,
         ol {
             margin-bottom: 0;
@@ -327,11 +341,13 @@
         .lib-css(margin-bottom, @dl__margin-bottom);
         .lib-css(margin-top, @dl__margin-top);
     }
+
     dt {
         .lib-css(font-weight, @dt__font-weight);
         .lib-css(margin-bottom, @dt__margin-bottom);
         .lib-css(margin-top, @dt__margin-top);
     }
+
     dd {
         .lib-css(margin-bottom, @dd__margin-bottom);
         .lib-css(margin-top, @dd__margin-top);
@@ -379,7 +395,7 @@
         .lib-font-size (@code__font-size);
         display: block;
         word-wrap: break-word;
-        word-wrap: break-word;
+
         code {
             background-color: transparent;
             border-radius: 0;

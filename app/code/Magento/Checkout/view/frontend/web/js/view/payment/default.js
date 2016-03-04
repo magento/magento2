@@ -17,7 +17,8 @@ define(
         'uiRegistry',
         'Magento_Checkout/js/model/payment/additional-validators',
         'Magento_Ui/js/model/messages',
-        'uiLayout'
+        'uiLayout',
+        'Magento_Checkout/js/action/redirect-on-success'
     ],
     function (
         ko,
@@ -33,46 +34,56 @@ define(
         registry,
         additionalValidators,
         Messages,
-        layout
+        layout,
+        redirectOnSuccessAction
     ) {
         'use strict';
+
         return Component.extend({
             redirectAfterPlaceOrder: true,
+            isPlaceOrderActionAllowed: ko.observable(quote.billingAddress() != null),
+
             /**
              * After place order callback
              */
             afterPlaceOrder: function () {
-                //
+                // Override this function and put after place order logic here
             },
-            isPlaceOrderActionAllowed: ko.observable(quote.billingAddress() != null),
+
             /**
              * Initialize view.
              *
-             * @returns {Component} Chainable.
+             * @return {exports}
              */
             initialize: function () {
+                var billingAddressCode,
+                    billingAddressData,
+                    defaultAddressData;
+
                 this._super().initChildren();
-                quote.billingAddress.subscribe(function(address) {
-                    this.isPlaceOrderActionAllowed((address !== null));
+                quote.billingAddress.subscribe(function (address) {
+                    this.isPlaceOrderActionAllowed(address !== null);
                 }, this);
                 checkoutDataResolver.resolveBillingAddress();
 
-                var billingAddressCode = 'billingAddress' + this.getCode();
+                billingAddressCode = 'billingAddress' + this.getCode();
                 registry.async('checkoutProvider')(function (checkoutProvider) {
-                    var defaultAddressData = checkoutProvider.get(billingAddressCode);
+                    defaultAddressData = checkoutProvider.get(billingAddressCode);
+
                     if (defaultAddressData === undefined) {
-                        // skip if payment does not have a billing address form
+                        // Skip if payment does not have a billing address form
                         return;
                     }
-                    var billingAddressData = checkoutData.getBillingAddressFromData();
+                    billingAddressData = checkoutData.getBillingAddressFromData();
+
                     if (billingAddressData) {
                         checkoutProvider.set(
                             billingAddressCode,
-                            $.extend({}, defaultAddressData, billingAddressData)
+                            $.extend(true, {}, defaultAddressData, billingAddressData)
                         );
                     }
-                    checkoutProvider.on(billingAddressCode, function (billingAddressData) {
-                        checkoutData.setBillingAddressFromData(billingAddressData);
+                    checkoutProvider.on(billingAddressCode, function (providerBillingAddressData) {
+                        checkoutData.setBillingAddressFromData(providerBillingAddressData);
                     }, billingAddressCode);
                 });
 
@@ -117,8 +128,7 @@ define(
              * Place order.
              */
             placeOrder: function (data, event) {
-                var self = this,
-                    placeOrder;
+                var self = this;
 
                 if (event) {
                     event.preventDefault();
@@ -126,19 +136,41 @@ define(
 
                 if (this.validate() && additionalValidators.validate()) {
                     this.isPlaceOrderActionAllowed(false);
-                    placeOrder = placeOrderAction(this.getData(), this.redirectAfterPlaceOrder, this.messageContainer);
 
-                    $.when(placeOrder).fail(function () {
-                        self.isPlaceOrderActionAllowed(true);
-                    }).done(this.afterPlaceOrder.bind(this));
+                    this.getPlaceOrderDeferredObject()
+                        .fail(
+                            function () {
+                                self.isPlaceOrderActionAllowed(true);
+                            }
+                        ).done(
+                            function () {
+                                self.afterPlaceOrder();
+
+                                if (self.redirectAfterPlaceOrder) {
+                                    redirectOnSuccessAction.execute();
+                                }
+                            }
+                        );
+
                     return true;
                 }
+
                 return false;
             },
 
-            selectPaymentMethod: function() {
+            getPlaceOrderDeferredObject: function () {
+                return $.when(
+                    placeOrderAction(this.getData(), this.messageContainer)
+                );
+            },
+
+            /**
+             * @return {Boolean}
+             */
+            selectPaymentMethod: function () {
                 selectPaymentMethodAction(this.getData());
                 checkoutData.setSelectedPaymentMethod(this.item.method);
+
                 return true;
             },
 
@@ -153,11 +185,11 @@ define(
             /**
              * Get payment method data
              */
-            getData: function() {
+            getData: function () {
                 return {
-                    "method": this.item.method,
-                    "po_number": null,
-                    "additional_data": null
+                    'method': this.item.method,
+                    'po_number': null,
+                    'additional_data': null
                 };
             },
 
@@ -175,17 +207,27 @@ define(
                 return this.item.method;
             },
 
+            /**
+             * @return {Boolean}
+             */
             validate: function () {
                 return true;
             },
 
-            getBillingAddressFormName: function() {
+            /**
+             * @return {String}
+             */
+            getBillingAddressFormName: function () {
                 return 'billing-address-form-' + this.item.method;
             },
 
+            /**
+             * Dispose billing address subscriptions
+             */
             disposeSubscriptions: function () {
                 // dispose all active subscriptions
                 var billingAddressCode = 'billingAddress' + this.getCode();
+
                 registry.async('checkoutProvider')(function (checkoutProvider) {
                     checkoutProvider.off(billingAddressCode);
                 });

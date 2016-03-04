@@ -15,6 +15,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
         $expectedStatusArr = [
             ['value' => \Magento\Integration\Model\Integration::STATUS_INACTIVE, 'label' => __('Inactive')],
             ['value' => \Magento\Integration\Model\Integration::STATUS_ACTIVE, 'label' => __('Active')],
+            ['value' => \Magento\Integration\Model\Integration::STATUS_RECREATED, 'label' => __('Reset')],
         ];
         $statusArr = $statusSource->toOptionArray();
         $this->assertEquals($expectedStatusArr, $statusArr, "Status source arrays don't match");

@@ -26,7 +26,17 @@
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>
     </type>
-    <type name="Magento\Sales\Test\Constraint\AssertOrderCommentsHistory">
+    <type name="Magento\Sales\Test\Constraint\AssertAuthorizationInCommentsHistory">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertCaptureInCommentsHistory">
+        <arguments>
+            <argument name="severity" xsi:type="string">high</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sales\Test\Constraint\AssertTransactionDetails">
         <arguments>
             <argument name="severity" xsi:type="string">high</argument>
         </arguments>

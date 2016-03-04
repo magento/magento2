@@ -86,7 +86,7 @@ class Webapi extends AbstractWebapi implements OrderInjectableInterface
         $this->webapiTransport->close();
         if (!is_numeric($response)) {
             $this->eventManager->dispatchEvent(['webapi_failed'], [$response]);
-            throw new \Exception('Could not create checkout quote viw web API!');
+            throw new \Exception('Could not create a checkout quote using web API.');
         }
         $this->quote = $response;
     }

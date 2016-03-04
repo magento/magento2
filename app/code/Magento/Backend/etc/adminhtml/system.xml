@@ -100,43 +100,6 @@
             <label>Design</label>
             <tab>general</tab>
             <resource>Magento_Config::config_design</resource>
-            <group id="theme" translate="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Design Theme</label>
-                <field id="theme_id" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Design Theme</label>
-                    <source_model>Magento\Framework\View\Design\Theme\Label::getLabelsCollectionForSystemConfiguration</source_model>
-                    <backend_model>Magento\Theme\Model\Design\Backend\Theme</backend_model>
-                    <comment><![CDATA[If no value is specified, the system default will be used. The system default may be modified by third party extensions.]]></comment>
-                </field>
-                <field id="ua_regexp" translate="label comment tooltip" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>User-Agent Exceptions</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Field\Regexceptions</frontend_model>
-                    <backend_model>Magento\Theme\Model\Design\Backend\Exceptions</backend_model>
-                    <comment>
-                        <![CDATA[Search strings are either normal strings or regular exceptions (PCRE). They are matched in the same order as entered. Examples:<br /><span style="font-family:monospace">Firefox<br />/^mozilla/i</span>]]>
-                    </comment>
-                    <tooltip>Find a string in client user-agent header and switch to specific design theme for that browser.</tooltip>
-                </field>
-            </group>
-            <group id="pagination" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Pagination</label>
-                <field id="pagination_frame" translate="label comment" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Pagination Frame</label>
-                    <comment>How many links to display at once.</comment>
-                </field>
-                <field id="pagination_frame_skip" translate="label comment" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Pagination Frame Skip</label>
-                    <comment>If the current frame position does not cover utmost pages, will render link to current position plus/minus this value.</comment>
-                </field>
-                <field id="anchor_text_for_previous" translate="label comment" type="text" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Anchor Text for Previous</label>
-                    <comment>Alternative text for previous link in pagination menu. If empty, default arrow image will used.</comment>
-                </field>
-                <field id="anchor_text_for_next" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Anchor Text for Next</label>
-                    <comment>Alternative text for next link in pagination menu. If empty, default arrow image will used.</comment>
-                </field>
-            </group>
         </section>
         <section id="dev" translate="label" type="text" sortOrder="920" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Developer</label>
@@ -164,9 +127,10 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Warning! Enabling this feature is not recommended on production environments because it represents a potential security risk.</comment>
                 </field>
-                <field id="minify_html" translate="label" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="minify_html" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Minify Html</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Minification is not applied in developer mode.</comment>
                 </field>
             </group>
             <group id="translate_inline" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -190,12 +154,13 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="enable_js_bundling" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enable Javascript Bundling</label>
+                    <label>Enable JavaScript Bundling</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="minify_files" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="minify_files" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Minify JavaScript Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Minification is not applied in developer mode.</comment>
                 </field>
             </group>
             <group id="css" translate="label" type="text" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -204,9 +169,10 @@
                     <label>Merge CSS Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="minify_files" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="minify_files" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Minify CSS Files</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Minification is not applied in developer mode.</comment>
                 </field>
             </group>
             <group id="image" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -215,7 +181,7 @@
                     <label>Image Adapter</label>
                     <source_model>Magento\Config\Model\Config\Source\Image\Adapter</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Image\Adapter</backend_model>
-                    <comment>When the adapter was changed, please, flush Catalog Images Cache.</comment>
+                    <comment>When the adapter was changed, please flush Catalog Images Cache.</comment>
                 </field>
             </group>
             <group id="static" translate="label" type="text" sortOrder="130" showInDefault="1" showInWebsite="0" showInStore="0">
@@ -365,12 +331,6 @@
                     <label>Forgot and Reset Email Sender</label>
                     <source_model>Magento\Config\Model\Config\Source\Email\Identity</source_model>
                 </field>
-                <field id="password_reset_link_expiration_period" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Recovery Link Expiration Period (days)</label>
-                    <comment>Please enter a number 1 or greater in this field.</comment>
-                    <validate>required-entry integer validate-greater-than-zero</validate>
-                    <backend_model>Magento\Config\Model\Config\Backend\Admin\Password\Link\Expirationperiod</backend_model>
-                </field>
             </group>
             <group id="startup" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Startup Page</label>
@@ -411,16 +371,22 @@
             </group>
             <group id="security" translate="label" type="text" sortOrder="35" showInDefault="1" showInWebsite="0" showInStore="0">
                 <label>Security</label>
-                <field id="use_form_key" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="password_reset_link_expiration_period" translate="label comment" type="text" sortOrder="7" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Recovery Link Expiration Period (hours)</label>
+                    <comment>Please enter a number 1 or greater in this field.</comment>
+                    <validate>required-entry integer validate-greater-than-zero</validate>
+                    <backend_model>Magento\Config\Model\Config\Backend\Admin\Password\Link\Expirationperiod</backend_model>
+                </field>
+                <field id="use_form_key" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Add Secret Key to URLs</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Admin\Usesecretkey</backend_model>
                 </field>
-                <field id="use_case_sensitive_login" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="use_case_sensitive_login" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Login is Case Sensitive</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="session_lifetime" translate="label comment" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="session_lifetime" translate="label comment" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Admin Session Lifetime (seconds)</label>
                     <comment>Values less than 60 are ignored.</comment>
                     <validate>validate-digits</validate>
@@ -520,7 +486,27 @@
                     <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>
                     <comment>Enter https protocol to use Secure URLs in Admin.</comment>
                 </field>
-                <field id="offloader_header" translate="label" type="text" sortOrder="70" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="enable_hsts" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable HTTP Strict Transport Security (HSTS)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>
+                    <comment><![CDATA[See <a href="https://www.owasp.org/index.php/HTTP_Strict_Transport_Security" target="_blank">HTTP Strict Transport Security</a> page for details.]]></comment>
+                    <depends>
+                        <field id="use_in_frontend">1</field>
+                        <field id="use_in_adminhtml">1</field>
+                    </depends>
+                </field>
+                <field id="enable_upgrade_insecure" translate="label" type="select" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Upgrade Insecure Requests</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Secure</backend_model>
+                    <comment><![CDATA[See <a href="http://www.w3.org/TR/upgrade-insecure-requests/" target="_blank">Upgrade Insecure Requests</a> page for details.]]></comment>
+                    <depends>
+                        <field id="use_in_frontend">1</field>
+                        <field id="use_in_adminhtml">1</field>
+                    </depends>
+                </field>
+                <field id="offloader_header" translate="label" type="text" sortOrder="90" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Offloader header</label>
                 </field>
             </group>

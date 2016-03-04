@@ -21,7 +21,7 @@ class FormFactoryTest extends \PHPUnit_Framework_TestCase
             'id' => 13,
             'default_shipping' => true,
             'default_billing' => false,
-            'company' => 'eBay Inc.',
+            'company' => 'Magento Commerce Inc.',
             'middlename' => 'MiddleName',
             'prefix' => 'Mr.',
             'suffix' => 'Esq.',
