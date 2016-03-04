@@ -4,8 +4,9 @@
  */
 
 define([
+    'underscore',
     'Magento_Ui/js/form/components/insert-listing'
-], function (insertListing) {
+], function (_, insertListing) {
     'use strict';
 
     return insertListing.extend({
@@ -76,12 +77,14 @@ define([
          * @private
          */
         _setFilters: function (params) {
+            var filter = {},
+                attrCodes;
+
             if (!this.paramsUpdated) {
                 this.gridInitialized = true;
                 this.paramsUpdated = true;
 
-                var filter = {},
-                    attrCodes = this._getAttributesCodes();
+                attrCodes = this._getAttributesCodes();
 
                 filter['entity_id'] = {
                     'condition_type': 'nin', value: this.getUsedProductIds()
@@ -145,9 +148,10 @@ define([
          */
         _handleManualGridSelect: function (selected) {
             var selectedRows = _.filter(this.productsProvider().data.items, function (row) {
-                    return selected.indexOf(row['entity_id']) != -1;
+                    return selected.indexOf(row['entity_id']) !== -1;
                 }),
                 selectedVariationKeys = _.values(this._getVariationKeyMap(selectedRows));
+
             this._disableRows(this.productsProvider().data.items, selectedVariationKeys, selected);
         },
 
@@ -171,7 +175,7 @@ define([
                     rowsForDisable = _.keys(_.pick(
                         variationKeyMap,
                         function (variationKey) {
-                            return configurableVariationKeys.indexOf(variationKey) != -1;
+                            return configurableVariationKeys.indexOf(variationKey) !== -1;
                         }
                     ));
 

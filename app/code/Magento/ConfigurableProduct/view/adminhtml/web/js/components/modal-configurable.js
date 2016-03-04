@@ -15,7 +15,7 @@ define([
                 targetWizard: '${ $.wizardName }'
             }
         },
-        
+
         /**
          * Open modal
          */
