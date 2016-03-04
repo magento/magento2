@@ -1377,6 +1377,22 @@
             line-height: 1.33;
             vertical-align: middle;
             white-space: normal;
+
+            &[data-config-scope] {
+                position: relative;
+
+                &:before {
+                    bottom: -1.3rem;
+                    color: #808080;
+                    content: attr(data-config-scope);
+                    font-size: 1.1rem;
+                    font-weight: @font-weight__regular;
+                    min-width: 15rem;
+                    position: absolute;
+                    right: 0;
+                    text-transform: lowercase;
+                }
+            }
         }
     }
 
@@ -1401,6 +1417,14 @@
                 top: 1.2rem;
                 z-index: 1;
             }
+
+            &[data-config-scope] {
+                position: relative;
+
+                &:after {
+                    top: .2rem;
+                }
+            }
         }
     }
 
@@ -1414,6 +1438,12 @@
                     left: auto;
                     margin-left: 10px;
                     top: 1.2rem;
+                }
+
+                &[data-config-scope] {
+                    &:after {
+                        top: .2rem;
+                    }
                 }
             }
         }
