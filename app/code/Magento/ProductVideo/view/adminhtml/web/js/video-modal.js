@@ -15,21 +15,15 @@ define([
 
     $.widget('mage.productGallery', productGallery, {
 
-        /**
-         * * Fired when widget initialization start
-         * @private
-         */
-        _create: function () {
-            this._bind();
-        },
 
         /**
          * Bind events
          * @private
          */
         _bind: function () {
-            $(this.element).on('click', this.showModal.bind(this));
-            $('.gallery.ui-sortable').on('openDialog', $.proxy(this._onOpenDialog, this));
+            this._super();
+            this.element.prev().find('[data-role="add-video-button"]').on('click', this.showModal.bind(this));
+            this.element.on('openDialog', '.gallery.ui-sortable', $.proxy(this._onOpenDialog, this));
         },
 
         /**
@@ -39,17 +33,17 @@ define([
         _onOpenDialog: function (e, imageData) {
 
             if (imageData['media_type'] !== 'external-video') {
-                return;
+                this._superApply(arguments);
+            } else {
+                this.showModal();
             }
-            this.showModal();
         },
 
         /**
          * Fired on trigger "openModal"
          */
         showModal: function () {
-
-            $('#new-video').modal('openModal');
+            this.element.find('#new-video').modal('openModal');
         }
     });
 

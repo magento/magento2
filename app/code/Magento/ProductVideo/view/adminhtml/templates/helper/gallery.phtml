@@ -10,6 +10,7 @@
 $elementName = $block->getElement()->getName() . '[images]';
 $formName = $block->getFormName();
 ?>
+
 <div class="row">
     <div class="add-video-button-container">
         <button id="add_video_button"
@@ -17,9 +18,8 @@ $formName = $block->getFormName();
                 data-role="add-video-button"
                 type="button"
                 class="action-secondary"
-                data-mage-init='{"openVideoModal" : {}}'
                 data-ui-id="widget-button-1">
-            <span><?php /* @escapeNotVerified */ echo __('Add Video') ?></span>
+            <span><?php echo $block->escapeHtml(__('Add Video')) ?></span>
         </button>
     </div>
 </div>
@@ -28,37 +28,17 @@ $formName = $block->getFormName();
 /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
 $element = $block->getElement();
 $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'toggleValueElements(this, this.parentNode.parentNode.parentNode)';
-foreach ($block->getMediaAttributes() as $attribute) {
-//    if ($attribute->getAttributeCode() === 'image') {
-//        ?>
-<!--        <div class="admin__field-service admin__field-service-gallery" data-config-scope="--><?php ///* @escapeNotVerified */ echo $element->getScopeLabel($attribute) ?><!--">-->
-<!--            --><?php //if ($element->canDisplayUseDefault($attribute)): ?>
-<!--                <input --><?php //if ($element->getReadonly()):?><!-- disabled="disabled"--><?php //endif; ?>
-<!--                    type="checkbox"-->
-<!--                    name="use_default[]"-->
-<!--                    data-form-part="product_form"-->
-<!--                    class="admin__control-checkbox"-->
-<!--                    id="--><?php //echo $element->getDataScopeHtmlId() ?><!--_default"-->
-<!--                    --><?php //if ($element->usedDefault($attribute)): ?><!-- checked="checked"--><?php //endif; ?>
-<!--                    onclick="--><?php ///* @escapeNotVerified */ echo $elementToggleCode; ?><!--"-->
-<!--                    value="--><?php ///* @escapeNotVerified */ echo $attribute->getAttributeCode() ?><!--"/>-->
-<!--                <label for="--><?php //echo $element->getDataScopeHtmlId() ?><!--_default" class="admin__field-label">-->
-<!--                    --><?php ///* @escapeNotVerified */ echo __('Use Default Value') ?>
-<!--                </label>-->
-<!--            --><?php //endif; ?>
-<!--        </div>-->
-<!--        --><?php
-//    }
-}
 ?>
 
-<div id="<?php /* @escapeNotVerified */ echo $block->getHtmlId() ?>"
+<div id="<?php echo $block->getHtmlId() ?>"
      class="gallery"
-     data-images="<?php /* @escapeNotVerified */ echo $block->escapeHtml($block->getImagesJson()) ?>"
-     data-types="<?php /* @escapeNotVerified */ echo $block->escapeHtml(
+     data-mage-init='{"openVideoModal":{}}'
+     data-images="<?php echo $block->escapeHtml($block->getImagesJson()) ?>"
+     data-types="<?php echo $block->escapeHtml(
          $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getImageTypes())
      ) ?>"
     >
+
     <?php
     if (!$block->getElement()->getReadonly()) {
         ?>
@@ -88,7 +68,7 @@ foreach ($block->getMediaAttributes() as $attribute) {
         <?php
     }
     ?>
-    <script id="<?php /* @escapeNotVerified */ echo $block->getHtmlId() ?>-template" type="text/x-magento-template">
+    <script id="<?php /* @escapeNotVerified */ echo $block->getHtmlId() ?>-template" data-template="image" type="text/x-magento-template">
         <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>  <% if (data.video_url) { %>video-item<% } %>"
              data-role="image">
             <input type="hidden"
@@ -223,7 +203,7 @@ foreach ($block->getMediaAttributes() as $attribute) {
                         </label>
 
                         <div class="admin__field-control">
-                            <textarea id="image-description"
+                            <textarea data-role="image-description"
                                       rows="3"
                                       class="admin__control-textarea"
                                       name="<?php /* @escapeNotVerified */
@@ -298,41 +278,28 @@ foreach ($block->getMediaAttributes() as $attribute) {
                 </fieldset>
             </div>
     </script>
-</div>
-
-<div id="<?php /* @escapeNotVerified */ echo $block->getNewVideoBlockName();?>" style="display:none">
-    <?php /* @escapeNotVerified */ echo $block->getFormHtml();?>
-    <div id="video-player-preview-location" class="video-player-sidebar">
-        <div class="video-player-container"></div>
-        <div class="video-information title">
-            <label><?php /* @escapeNotVerified */ echo __('Title:') ?> </label><span></span>
-        </div>
-        <div class="video-information uploaded">
-            <label><?php /* @escapeNotVerified */ echo __('Uploaded:') ?> </label><span></span>
-        </div>
-        <div class="video-information uploader">
-            <label><?php /* @escapeNotVerified */ echo __('Uploader:') ?> </label><span></span>
-        </div>
-        <div class="video-information duration">
-            <label><?php /* @escapeNotVerified */ echo __('Duration:') ?> </label><span></span>
+    <div id="<?php /* @escapeNotVerified */ echo $block->getNewVideoBlockName();?>" style="display:none">
+        <?php /* @escapeNotVerified */ echo $block->getFormHtml();?>
+        <div id="video-player-preview-location" class="video-player-sidebar">
+            <div class="video-player-container"></div>
+            <div class="video-information title">
+                <label><?php /* @escapeNotVerified */ echo __('Title:') ?> </label><span></span>
+            </div>
+            <div class="video-information uploaded">
+                <label><?php /* @escapeNotVerified */ echo __('Uploaded:') ?> </label><span></span>
+            </div>
+            <div class="video-information uploader">
+                <label><?php /* @escapeNotVerified */ echo __('Uploader:') ?> </label><span></span>
+            </div>
+            <div class="video-information duration">
+                <label><?php /* @escapeNotVerified */ echo __('Duration:') ?> </label><span></span>
+            </div>
         </div>
     </div>
+
+    <?php echo $block->getChildHtml('new-video'); ?>
 </div>
-
 <script>
-require([
-    'jquery',
-    'uiRegistry',
-    'productGallery'
-], function (jQuery, registry) {
-    var $galleryElem = jQuery('#<?php /* @escapeNotVerified */ echo $block->getHtmlId() ?>');
-
-    $galleryElem.productGallery({
-        "template": "#<?php /* @escapeNotVerified */ echo $block->getHtmlId() ?>-template"
-    });
-
-    registry.set('productGalleryWidget', $galleryElem.data('mageProductGallery'));
-
     jQuery('body').trigger('contentUpdated');
-});
 </script>
+
