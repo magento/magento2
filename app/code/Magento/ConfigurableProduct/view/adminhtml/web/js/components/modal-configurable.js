@@ -19,8 +19,9 @@ define([
         /**
          * Open modal
          */
-        'openModal': function () {
+        openModal: function () {
             this.form().validate();
+
             if (this.form().source.get('params.invalid') === false && this.targetWizard()) {
                 this._super();
                 this.targetWizard().open();

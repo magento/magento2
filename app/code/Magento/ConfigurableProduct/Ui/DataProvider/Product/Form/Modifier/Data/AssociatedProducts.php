@@ -18,6 +18,9 @@ use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Catalog\Helper\Image as ImageHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AssociatedProducts
 {
     /**
@@ -61,8 +64,8 @@ class AssociatedProducts
     protected $variationMatrix;
 
     /**
-    * @var UrlInterface
-    */
+     * @var UrlInterface
+     */
     protected $urlBuilder;
 
     /**
@@ -174,6 +177,12 @@ class AssociatedProducts
         return $result;
     }
 
+    /**
+     * Prepare variations
+     *
+     * @return void
+     * @throws \Zend_Currency_Exception
+     */
     protected function prepareVariations()
     {
         $variations = $this->getVariations();

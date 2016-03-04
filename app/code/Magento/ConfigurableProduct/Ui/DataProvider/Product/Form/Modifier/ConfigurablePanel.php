@@ -15,6 +15,7 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
 
 /**
  * Data provider for Configurable panel
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigurablePanel extends AbstractModifier
 {
@@ -65,6 +66,7 @@ class ConfigurablePanel extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function modifyMeta(array $meta)
     {
@@ -158,7 +160,8 @@ class ConfigurablePanel extends AbstractModifier
                                     'config' => [
                                         'autoRender' => false,
                                         'componentType' => 'insertListing',
-                                        'component' => 'Magento_ConfigurableProduct/js/components/associated-product-insert-listing',
+                                        'component' => 'Magento_ConfigurableProduct/js'
+                                            .'/components/associated-product-insert-listing',
                                         'dataScope' => static::ASSOCIATED_PRODUCT_LISTING,
                                         'externalProvider' => static::ASSOCIATED_PRODUCT_LISTING . '.data_source',
                                         'selectionsProvider' => static::ASSOCIATED_PRODUCT_LISTING . '.'
@@ -174,8 +177,10 @@ class ConfigurablePanel extends AbstractModifier
                                             'exports' => true
                                         ],
                                         'productsProvider' => 'configurable_associated_product_listing.data_source',
-                                        'productsColumns' => 'configurable_associated_product_listing.configurable_associated_product_listing.product_columns',
-                                        'productsMassAction' => 'configurable_associated_product_listing.configurable_associated_product_listing.product_columns.ids',
+                                        'productsColumns' => 'configurable_associated_product_listing'
+                                            . '.configurable_associated_product_listing.product_columns',
+                                        'productsMassAction' => 'configurable_associated_product_listing'
+                                            . '.configurable_associated_product_listing.product_columns.ids',
                                     ],
                                 ],
                             ],
@@ -193,7 +198,8 @@ class ConfigurablePanel extends AbstractModifier
      *
      * @return array
      */
-    protected function getPanelChildren() {
+    protected function getPanelChildren()
+    {
         return [
             'configurable_products_button_set' => $this->getButtonSet(),
             'configurable-matrix' => $this->getGrid(),
