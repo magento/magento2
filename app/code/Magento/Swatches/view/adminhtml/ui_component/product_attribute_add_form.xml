@@ -90,7 +90,7 @@
                         <item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/record</item>
                         <item name="componentType" xsi:type="string">container</item>
                         <item name="positionProvider" xsi:type="string">text_swatch.position</item>
-                        <item name="dataScope" xsi:type="string"></item>
+                        <item name="dataScope" xsi:type="string"/>
                     </item>
                 </argument>
                 <field name="defaulttext">
@@ -248,6 +248,7 @@
                             <item name="prefixName" xsi:type="string">optionvisual[value]</item>
                             <item name="prefixElementName" xsi:type="string">option_</item>
                             <item name="suffixName" xsi:type="string">[1]</item>
+                            <item name="dataScope" xsi:type="string">optionvisual_default_store_view</item>
                             <item name="label" xsi:type="string" translate="true">Default Store View</item>
                         </item>
                     </argument>
@@ -262,6 +263,7 @@
                             <item name="prefixName" xsi:type="string">optionvisual[value]</item>
                             <item name="prefixElementName" xsi:type="string">option_</item>
                             <item name="suffixName" xsi:type="string">[0]</item>
+                            <item name="dataScope" xsi:type="string">optionvisual_admin</item>
                             <item name="label" xsi:type="string" translate="true">Admin</item>
                         </item>
                     </argument>
