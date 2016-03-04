@@ -15,7 +15,7 @@
 @control-collapsible-title__padding-left: @control-collapsible-title-icon-open__size + @control-collapsible-title__padding__horizontal * 2;
 @control-collapsible-title__padding-right: @control-collapsible-title-icon-remove__size + @control-collapsible-title__padding__horizontal * 2;
 @control-collapsible-title__padding__horizontal: @indent__s;
-@control-collapsible-title__padding__vertical: 1.3rem;
+@control-collapsible-title__padding__vertical: 1.6rem;
 
 @control-collapsible-content__padding: @indent__s;
 
@@ -73,6 +73,7 @@
     .admin__collapsible-block-wrapper {
         &.fieldset-wrapper {
             border: 0;
+            margin: 0;
             position: relative;
 
             .fieldset-wrapper-title {
@@ -84,12 +85,15 @@
         .fieldset-wrapper-title {
             .admin__collapsible-title {
                 font-size: @font-size__base;
+                font-weight: @font-weight__regular;
+                line-height: 1;
                 padding: @control-collapsible-title__padding__vertical @control-collapsible-title__padding-right
-                @control-collapsible-title__padding__vertical @control-collapsible-title__padding-left;
+                         @control-collapsible-title__padding__vertical @control-collapsible-title__padding-left;
 
                 &:before {
                     left: @control-collapsible-title__padding__horizontal;
-                    top: @control-collapsible-title__padding__vertical;
+                    right: auto;
+                    top: 1.4rem;
                 }
             }
 
@@ -98,7 +102,7 @@
                 padding: 0;
                 position: absolute;
                 right: @control-collapsible-title__padding__horizontal;
-                top: @control-collapsible-title__padding__vertical;
+                top: 1.4rem;
 
                 &:before {
                     &:extend(.abs-icon all);
@@ -125,6 +129,10 @@
             border: 1px solid @control-collapsible__border-color;
             margin-top: -1px;
             padding: @control-collapsible-content__padding;
+        }
+
+        .admin__fieldset {
+            padding: 0;
         }
 
         .admin__field {
