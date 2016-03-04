@@ -93,10 +93,19 @@ define([
      * @return {*}
      */
     ko.extenders.disposableCustomerData = function (target, sectionName) {
-        storage.remove(sectionName);
+        var sectionDataIds, newSectionDataIds = [];
         target.subscribe(function () {
             setTimeout(function () {
+                var sectionId;
                 storage.remove(sectionName);
+                sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
+                _.each(sectionDataIds, function (data, name) {
+                    if (name == sectionName) {
+                        sectionId = data['data_id'];
+                        newSectionDataIds[name] = sectionId;
+                    }
+                });
+                $.cookieStorage.set('section_data_ids', newSectionDataIds);
             }, 3000);
         });
 
