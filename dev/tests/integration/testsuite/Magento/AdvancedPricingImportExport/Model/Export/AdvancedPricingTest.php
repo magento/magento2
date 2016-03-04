@@ -113,7 +113,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     {
     }
 
-    protected function assertEqualsOtherThanSkippedAttributes($expected, $actual, $skippedAttributes)
+    private function assertEqualsOtherThanSkippedAttributes($expected, $actual, $skippedAttributes)
     {
         foreach ($expected as $key => $value) {
             if (in_array($key, $skippedAttributes)) {
