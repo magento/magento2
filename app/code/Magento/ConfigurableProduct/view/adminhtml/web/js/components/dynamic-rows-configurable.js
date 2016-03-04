@@ -61,12 +61,12 @@ define([
          * Delete record
          *
          * @param {Number} index - row index
-         * @param {String} recordId
          */
-        deleteRecord: function (index, recordId) {
-            this.reRender = false;
+        deleteRecord: function (index) {
+            var tmpArray;
 
-            var tmpArray = this.unionInsertData();
+            this.reRender = false;
+            tmpArray = this.unionInsertData();
             tmpArray.splice(index, 1);
 
             this.unionInsertData(tmpArray);
@@ -108,13 +108,19 @@ define([
          * @param {Array} data
          */
         processingUnionInsertData: function (data) {
-            var dataInc = 0;
+            var dataInc = 0,
+                diff = 0,
+                dataCount,
+                elemsCount,
+                lastRecord;
+
             this.source.remove(this.dataScope + '.' + this.index);
-            this.isEmpty(data.length == 0);
+            this.isEmpty(data.length === 0);
 
             _.each(data, function (row) {
                 _.each(row, function (value, key) {
                     var path = this.dataScope + '.' + this.index + '.' + dataInc + '.' + key;
+
                     this.source.set(path, value);
                 }, this);
 
@@ -122,10 +128,8 @@ define([
             }, this);
 
             // Render
-            var diff = 0,
-                dataCount = data.length,
-                elemsCount = this.elems().length,
-                lastRecord;
+            dataCount = data.length;
+            elemsCount = this.elems().length;
 
             if (dataCount > elemsCount) {
                 for (diff = dataCount - elemsCount; diff > 0; diff--) {
@@ -169,6 +173,7 @@ define([
 
             changes.each(function (changedObject) {
                 var mappedData = this.mappingValue(changedObject);
+
                 mappedData[this.canEditField] = 0;
                 mappedData[this.newProductField] = 0;
                 mappedData.variationKey = this._getVariationKey(changedObject);
@@ -316,6 +321,7 @@ define([
          */
         mappingValue: function (data) {
             var result = {};
+
             _.each(this.map, function (prop, index) {
                 result[index] = data[prop];
             });
@@ -363,7 +369,7 @@ define([
             var tmpArray = this.unionInsertData(),
                 status = tmpArray[rowIndex].status;
 
-            if (status == 1) {
+            if (status === 1) {
                 tmpArray[rowIndex].status = 2;
             } else {
                 tmpArray[rowIndex].status = 1;

@@ -6,12 +6,11 @@ define([
     'jquery',
     'Magento_Catalog/catalog/type-events',
     'Magento_ConfigurableProduct/js/advanced-pricing-handler',
-    'Magento_ConfigurableProduct/js/options/price-type-handler',
     'collapsible',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
     'domReady!'
-], function ($, productType, advancedPricingHandler, priceTypeHandler) {
+], function ($, productType, advancedPricingHandler) {
     'use strict';
 
     return {
@@ -84,9 +83,9 @@ define([
          * @private
          */
         _initType: function () {
-            var suggestContainer = $('#product-template-suggest-container .action-dropdown > .action-toggle');
+            /*var suggestContainer = $('#product-template-suggest-container .action-dropdown > .action-toggle');
 
-            /*
+
             if (productType.type.current === 'configurable') {
                 this._setElementDisabled(suggestContainer.addClass('disabled'), true);
                 this._setElementDisabled($('#inventory_qty'), true);
