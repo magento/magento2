@@ -95,6 +95,8 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
 
     /**
      * Check if session is timed out and set status accordingly
+     *
+     * @return void
      */
     private function checkActivity()
     {

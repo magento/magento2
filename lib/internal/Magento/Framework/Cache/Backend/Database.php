@@ -274,22 +274,10 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
             $connection = $this->_getConnection();
             switch ($mode) {
                 case \Zend_Cache::CLEANING_MODE_ALL:
-                    if ($this->_options['store_data']) {
-                        $result = $connection->query('TRUNCATE TABLE ' . $this->_getDataTable());
-                    } else {
-                        $result = true;
-                    }
-                    $result = $result && $connection->query('TRUNCATE TABLE ' . $this->_getTagsTable());
+                    $result = $this->cleanAll($connection);
                     break;
                 case \Zend_Cache::CLEANING_MODE_OLD:
-                    if ($this->_options['store_data']) {
-                        $result = $connection->delete(
-                            $this->_getDataTable(),
-                            ['expire_time> ?' => 0, 'expire_time<= ?' => time()]
-                        );
-                    } else {
-                        $result = true;
-                    }
+                    $result = $this->cleanOld($connection);
                     break;
                 case \Zend_Cache::CLEANING_MODE_MATCHING_TAG:
                 case \Zend_Cache::CLEANING_MODE_NOT_MATCHING_TAG:
@@ -559,6 +547,43 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
             return $result;
         } else {
             return true;
+        }
+    }
+
+    /**
+     * Clean all cache entries
+     *
+     * @param $connection
+     * @return bool
+     */
+    private function cleanAll($connection)
+    {
+        if ($this->_options['store_data']) {
+            $result = $connection->query('TRUNCATE TABLE ' . $this->_getDataTable());
+        } else {
+            $result = true;
+        }
+        $result = $result && $connection->query('TRUNCATE TABLE ' . $this->_getTagsTable());
+        return $result;
+    }
+
+    /**
+     * Clean old cache entries
+     *
+     * @param $connection
+     * @return bool
+     */
+    private function cleanOld($connection)
+    {
+        if ($this->_options['store_data']) {
+            $result = $connection->delete(
+                $this->_getDataTable(),
+                ['expire_time> ?' => 0, 'expire_time<= ?' => time()]
+            );
+            return $result;
+        } else {
+            $result = true;
+            return $result;
         }
     }
 }
