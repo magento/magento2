@@ -8,11 +8,13 @@ namespace Magento\Framework\Shell;
 use Magento\Framework\DataObject;
 
 /**
- *
+ * Encapsulates output of shell command
  */
 class Response extends DataObject
 {
     /**
+     * Get output
+     *
      * @return string
      * @codeCoverageIgnore
      */
@@ -22,6 +24,8 @@ class Response extends DataObject
     }
 
     /**
+     * Get exit code
+     *
      * @return int
      * @codeCoverageIgnore
      */
@@ -31,6 +35,8 @@ class Response extends DataObject
     }
 
     /**
+     * Get escaped command
+     *
      * @return string
      * @codeCoverageIgnore
      */
