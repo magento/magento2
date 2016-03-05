@@ -12,6 +12,10 @@ use Magento\Framework\Shell\Driver;
 use Magento\Framework\ShellInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class is separate from \Magento|Framework\Shell because logging behavior is different, and relies on ObjectManager
+ * being available.
+ */
 class Shell implements ShellInterface
 {
     /** @var Driver */

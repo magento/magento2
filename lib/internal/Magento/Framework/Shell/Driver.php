@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Shell;
+
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -21,6 +22,7 @@ class Driver
     {
         $this->commandRenderer = $commandRenderer;
     }
+
     /**
      * Execute a command through the command line, passing properly escaped arguments, and return its output
      *
@@ -29,6 +31,7 @@ class Driver
      * @return Response
      * @throws LocalizedException
      */
+
     public function execute($command, $arguments)
     {
         $disabled = explode(',', str_replace(' ', ',', ini_get('disable_functions')));
