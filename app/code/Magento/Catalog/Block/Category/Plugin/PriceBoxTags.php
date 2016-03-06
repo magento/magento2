@@ -8,22 +8,17 @@ namespace Magento\Catalog\Block\Category\Plugin;
 
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\ScopeResolverInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\Pricing\Render\PriceBox;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Store\Model\StoreManager;
 
 class PriceBoxTags
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
+     * @var TimezoneInterface
      */
     protected $dateTime;
-
-    /**
-     * @var \Magento\Store\Model\StoreManager
-     */
-    protected $storeManager;
 
     /**
      * @var \Magento\Customer\Model\Session
@@ -34,24 +29,29 @@ class PriceBoxTags
      * @var PriceCurrencyInterface
      */
     private $priceCurrency;
+    
+    /**
+     * @var ScopeResolverInterface
+     */
+    private $scopeResolver;
 
     /**
      * PriceBoxTags constructor.
      * @param PriceCurrencyInterface $priceCurrency
      * @param TimezoneInterface $dateTime
-     * @param StoreManager $storeManager
+     * @param ScopeResolverInterface $scopeResolver
      * @param Session $customerSession
      */
     public function __construct(
         PriceCurrencyInterface $priceCurrency,
         TimezoneInterface $dateTime,
-        StoreManager $storeManager,
+        ScopeResolverInterface $scopeResolver,
         Session $customerSession
     ) {
         $this->dateTime = $dateTime;
-        $this->storeManager = $storeManager;
         $this->customerSession = $customerSession;
         $this->priceCurrency = $priceCurrency;
+        $this->scopeResolver = $scopeResolver;
     }
 
     /**
@@ -68,8 +68,8 @@ class PriceBoxTags
             [
                 $result,
                 $this->priceCurrency->getCurrencySymbol(),
-                $this->dateTime->scopeDate($this->storeManager->getStore()->getId())->format('Ymd'),
-                $this->storeManager->getStore()->getId(),
+                $this->dateTime->scopeDate($this->scopeResolver->getScope()->getId())->format('Ymd'),
+                $this->scopeResolver->getScope()->getId(),
                 $this->customerSession->getCustomerGroupId(),
             ]
         );

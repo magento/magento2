@@ -49,7 +49,6 @@ class Topmenu extends Template implements IdentityInterface
         TreeFactory $treeFactory,
         array $data = []
     ) {
-        $this->setCacheLifetime(30 * 60);
         parent::__construct($context, $data);
         $this->_menu = $nodeFactory->create(
             [
@@ -58,6 +57,14 @@ class Topmenu extends Template implements IdentityInterface
                 'tree' => $treeFactory->create()
             ]
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getCacheLifetime()
+    {
+        return parent::getCacheLifetime() ?: 3600;
     }
 
     /**
