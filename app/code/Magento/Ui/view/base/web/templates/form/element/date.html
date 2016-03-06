@@ -7,6 +7,7 @@
 <input class="admin__control-text" type="text" data-bind="
     hasFocus: focused,
     datepicker: { storage: shiftedValue, options: options },
+    valueUpdate: valueUpdate,
     attr: {
         value: shiftedValue,
         name: inputName,
