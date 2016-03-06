@@ -397,7 +397,6 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return $this
-     * @return $this
      */
     public function resetConfigurableAttributes($product)
     {
