@@ -40,9 +40,10 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'generate_random',
                 'label' => __('Auto-generate a Key'),
                 'options' => [0 => __('No'), 1 => __('Yes')],
-                'onclick' => "var cryptKey = $('crypt_key'); cryptKey.disabled = this.value == 1; " .
-                    "if (cryptKey.disabled) {cryptKey.parentNode.parentNode.hide();} " .
-                    "else {cryptKey.parentNode.parentNode.show();}",
+                'onclick' => "var cryptKey = jQuery('#crypt_key'); var cryptKeyBlock = cryptKey.parent().parent(); ".
+                    "cryptKey.prop('disabled', this.value === '1'); " .
+                    "if (cryptKey.prop('disabled')) { cryptKeyBlock.hide() } " .
+                    "else { cryptKeyBlock.show() }",
                 'note' => __('The generated key will be displayed after changing.')
             ]
         );
