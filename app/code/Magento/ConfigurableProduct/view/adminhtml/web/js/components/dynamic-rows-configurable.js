@@ -5,8 +5,9 @@
 
 define([
     'underscore',
+    'uiRegistry',
     'Magento_Ui/js/dynamic-rows/dynamic-rows'
-], function (_, dynamicRows) {
+], function (_, registry, dynamicRows) {
     'use strict';
 
     return dynamicRows.extend({
@@ -16,7 +17,9 @@ define([
             newProductField: 'newProduct',
             dataScopeAssociatedProduct: 'data.associated_product_ids',
             dataProviderFromGrid: '',
+            dataProviderChangeFromGrid: '',
             insertDataFromGrid: [],
+            changeDataFromGrid: [],
             dataProviderFromWizard: '',
             insertDataFromWizard: [],
             map: null,
@@ -26,18 +29,39 @@ define([
             deleteProperty: false,
             dataLength: 0,
             identificationProperty: 'id',
-            attributeSetId: '',
+            'attribute_set_id': '',
             listens: {
                 'insertDataFromGrid': 'processingInsertDataFromGrid',
                 'insertDataFromWizard': 'processingInsertDataFromWizard',
-                'unionInsertData': 'processingUnionInsertData'
+                'unionInsertData': 'processingUnionInsertData',
+                'changeDataFromGrid': 'processingChangeDataFromGrid'
             },
             imports: {
-                'attributeSetId': '${$.provider}:data.product.attribute_set_id'
+                'attribute_set_id': '${$.provider}:data.product.attribute_set_id'
             },
             'exports': {
-                'attributeSetId': '${$.provider}:data.new-variations-attribute-set-id'
+                'attribute_set_id': '${$.provider}:data.new-variations-attribute-set-id'
+            },
+            modules: {
+                modalWithGrid: '${ $.modalWithGrid }',
+                gridWithProducts: '${ $.gridWithProducts}'
             }
+        },
+
+        /**
+         * Open modal with grid.
+         * 
+         * @param {String} rowIndex
+         */
+        openModalWithGrid: function (rowIndex) {
+            var productSource = this.source.get(this.dataScope + '.' + this.index + '.' + rowIndex);
+            var product = {
+                'id': productSource.id,
+                'attributes': productSource.configurable_attribute
+            };
+
+            this.modalWithGrid().openModal();
+            this.gridWithProducts().showGridChangeProduct(rowIndex, product);
         },
 
         /**
@@ -177,8 +201,28 @@ define([
                 mappedData[this.canEditField] = 0;
                 mappedData[this.newProductField] = 0;
                 mappedData.variationKey = this._getVariationKey(changedObject);
+                mappedData['configurable_attribute'] = this._getConfigurableAttribute(changedObject);
                 tmpArray.push(mappedData);
             }, this);
+
+            this.unionInsertData(tmpArray);
+        },
+
+        /**
+         * Process changes from grid.
+         * 
+         * @param {Object} data
+         */
+        processingChangeDataFromGrid: function (data) {
+            var tmpArray = this.unionInsertData(),
+                mappedData = this.mappingValue(data.product);
+
+            mappedData[this.canEditField] = 0;
+            mappedData[this.newProductField] = 0;
+            mappedData['variationKey'] = this._getVariationKey(data.product);
+            mappedData['configurable_attribute'] = this._getConfigurableAttribute(data.product);
+
+            tmpArray[data.rowIndex] = mappedData;
 
             this.unionInsertData(tmpArray);
         },
@@ -199,6 +243,24 @@ define([
             });
 
             return key.sort().join('-');
+        },
+
+        /**
+         * Get configurable attribute.
+         * 
+         * @param {Object} data
+         * @returns {String}
+         * @private
+         */
+        _getConfigurableAttribute: function (data) {
+            var attrCodes = this.source.get('data.attribute_codes'),
+                confAttrs = {};
+
+            attrCodes.each(function (code) {
+                confAttrs[code] = data[code];
+            });
+
+            return JSON.stringify(confAttrs);
         },
 
         /**
