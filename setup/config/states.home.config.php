@@ -50,7 +50,7 @@ return [
         [
             'id'          => 'root.upgrade',
             'url'         => 'marketplace-credentials',
-            'templateUrl' => "$base/select-version",
+            'templateUrl' => "$base/marketplace-credentials",
             'title'       => 'System Upgrade',
             'controller'  => 'MarketplaceCredentialsController',
             'header'      => 'Step 1: Select Version',
