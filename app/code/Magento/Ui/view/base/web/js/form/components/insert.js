@@ -124,7 +124,8 @@ define([
             }
 
             $.async({
-                component: this.name
+                component: this.name,
+                ctx: '.' + this.contentSelector
             }, function (el) {
                 self.contentEl = $(el);
                 self.startRender = true;
