@@ -22,6 +22,7 @@ define([
             this._super();
 
             this.checkedState = this.checked.peek();
+            this.checked(!this.disabled());
             this.on('checked', function (checkedState) {
                 this.checkedState = checkedState;
             }.bind(this));
