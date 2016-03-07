@@ -428,6 +428,20 @@ class ConfigurablePanel extends AbstractModifier
                             ],
                         ],
                     ],
+                    'attributes' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'componentType' => Form\Field::NAME,
+                                    'formElement' => Form\Element\Input::NAME,
+                                    'elementTmpl' => 'ui/dynamic-rows/cells/text',
+                                    'dataType' => Form\Element\DataType\Text::NAME,
+                                    'label' => __('Attributes'),
+                                    //'dataScope' => 'attributes',
+                                ],
+                            ],
+                        ],
+                    ],
                     'actionsList' => [
                         'arguments' => [
                             'data' => [
