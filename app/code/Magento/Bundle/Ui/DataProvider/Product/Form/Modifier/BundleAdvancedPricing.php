@@ -5,8 +5,8 @@
  */
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Catalog\Model\AttributeConstantsInterface as Constants;
 
 /**
  * Customize Advanced Pricing modal panel
@@ -32,13 +32,15 @@ class BundleAdvancedPricing extends AbstractModifier
                 unset($parentNode['container_' . self::CODE_MSRP]);
                 unset($parentNode['container_' . self::CODE_MSRP_DISPLAY_ACTUAL_PRICE_TYPE]);
             }
-            if (isset($parentNode['container_' . Constants::CODE_SPECIAL_PRICE])) {
-                $currentNode = &$parentNode['container_' . Constants::CODE_SPECIAL_PRICE]['children'];
-                $currentNode[Constants::CODE_SPECIAL_PRICE]['arguments']['data']['config']['addbefore']  = "%";
+            if (isset($parentNode['container_' . ProductAttributeInterface::CODE_SPECIAL_PRICE])) {
+                $currentNode = &$parentNode['container_' . ProductAttributeInterface::CODE_SPECIAL_PRICE]['children'];
+                $currentNode[ProductAttributeInterface::CODE_SPECIAL_PRICE]['arguments']['data']['config']['addbefore']
+                    = "%";
             }
-            $parentNodeChildren = &$parentNode[Constants::CODE_TIER_PRICE]['children'];
-            if (isset( $parentNodeChildren[self::CODE_RECORD]['children'][Constants::CODE_PRICE])) {
-                $currentNode = &$parentNodeChildren[self::CODE_RECORD]['children'][Constants::CODE_PRICE];
+            $parentNodeChildren = &$parentNode[ProductAttributeInterface::CODE_TIER_PRICE]['children'];
+            if (isset($parentNodeChildren[self::CODE_RECORD]['children'][ProductAttributeInterface::CODE_PRICE])) {
+                $currentNode =
+                &$parentNodeChildren[self::CODE_RECORD]['children'][ProductAttributeInterface::CODE_PRICE];
                 $currentNode['arguments']['data']['config']['label'] = __('Percent Discount');
             }
         }
