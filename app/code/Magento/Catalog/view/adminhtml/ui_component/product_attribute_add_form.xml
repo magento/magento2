@@ -346,6 +346,15 @@
                     <item name="label" xsi:type="string" translate="true">Scope</item>
                     <item name="notice" xsi:type="string" translate="true">Declare attribute value saving scope.</item>
                     <item name="dataScope" xsi:type="string">is_global</item>
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/select</item>
+                    <item name="valuesForOptions" xsi:type="array">
+                        <item name="text" xsi:type="string">text</item>
+                        <item name="textarea" xsi:type="string">textarea</item>
+                        <item name="date" xsi:type="string">date</item>
+                        <item name="boolean" xsi:type="string">boolean</item>
+                        <item name="multiselect" xsi:type="string">multiselect</item>
+                        <item name="select" xsi:type="string">select</item>
+                    </item>
                 </item>
             </argument>
         </field>
@@ -507,12 +516,27 @@
         </field>
     </fieldset>
 
+    <fieldset name="manage-titles">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Manage Titles (Size, Color, etc.)</item>
+                <item name="collapsible" xsi:type="boolean">true</item>
+                <item name="sortOrder" xsi:type="number">25</item>
+            </item>
+        </argument>
+    </fieldset>
+
     <fieldset name="front_fieldset">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="label" xsi:type="string" translate="true">Storefront Properties</item>
                 <item name="collapsible" xsi:type="boolean">true</item>
                 <item name="sortOrder" xsi:type="number">30</item>
+                <item name="component" xsi:type="string">Magento_Catalog/js/components/visible-on-option/fieldset</item>
+                <item name="valuesForOptions" xsi:type="array">
+                    <item name="media_image" xsi:type="string">media_image</item>
+                </item>
+                <item name="inverse" xsi:type="boolean">true</item>
             </item>
         </argument>
         <field name="is_searchable">
