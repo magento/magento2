@@ -100,7 +100,7 @@ define([
                 storage.remove(sectionName);
                 sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
                 _.each(sectionDataIds, function (data, name) {
-                    if (name == sectionName) {
+                    if (name != sectionName) {
                         sectionId = data['data_id'];
                         newSectionDataIds[name] = sectionId;
                     }
