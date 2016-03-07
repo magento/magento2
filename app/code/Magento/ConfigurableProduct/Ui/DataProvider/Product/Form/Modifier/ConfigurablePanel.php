@@ -326,7 +326,7 @@ class ConfigurablePanel extends AbstractModifier
                             'price_currency' => 'price_currency',
                             'qty' => 'qty',
                             'weight' => 'weight',
-                            'thumbnail' => 'thumbnail',
+                            'thumbnail_image' => 'thumbnail_src',
                             'status' => 'status',
                         ],
                         'links' => [
