@@ -11,10 +11,10 @@ define([
 
     return Select.extend({
         defaults: {
-            previousType: undefined,
-            parentContainer: undefined,
-            selections: undefined,
-            targetIndex: undefined,
+            previousType: '',
+            parentContainer: '',
+            selections: '',
+            targetIndex: '',
             typeMap: {}
         },
 
@@ -57,6 +57,16 @@ define([
                     }
                 });
             }, this);
+        },
+
+        /**
+         * Retrieve name for the most global parent with provided index.
+         *
+         * @param {String} parent - parent name.
+         * @returns {String}
+         */
+        retrieveParentName: function (parent) {
+            return this.name.replace(new RegExp('^(.+?\\.)?' + parent + '\\..+'), '$1' + parent);
         }
     });
 });

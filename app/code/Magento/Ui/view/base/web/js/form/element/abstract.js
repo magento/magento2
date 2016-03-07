@@ -430,16 +430,6 @@ define([
          */
         userChanges: function() {
             this.valueChangedByUser = true;
-        },
-
-        /**
-         * Retrieve name for the most global parent with provided index.
-         *
-         * @param {String} parent - parent name.
-         * @returns {String}
-         */
-        retrieveParentName: function (parent) {
-            return this.name.replace(new RegExp('^(.+?\\.)?' + parent + '\\..+'), '$1' + parent);
         }
     });
 });
