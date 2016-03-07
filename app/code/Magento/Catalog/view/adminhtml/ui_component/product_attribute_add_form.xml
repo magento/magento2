@@ -168,7 +168,7 @@
                             <item name="prefixName" xsi:type="string">option[value]</item>
                             <item name="prefixElementName" xsi:type="string">option_</item>
                             <item name="suffixName" xsi:type="string">[1]</item>
-                            <item name="label" xsi:type="string" translate="true">Default Store View еуые</item>
+                            <item name="label" xsi:type="string" translate="true">Default Store View</item>
                             <item name="sortOrder" xsi:type="string">1</item>
                         </item>
                     </argument>
