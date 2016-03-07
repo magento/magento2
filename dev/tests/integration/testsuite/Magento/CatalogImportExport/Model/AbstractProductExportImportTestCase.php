@@ -87,7 +87,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
         $this->executeExportTest($skus, $skippedAttributes);
     }
 
-    public abstract function exportImportDataProvider();
+    abstract public function exportImportDataProvider();
 
     /**
      * @param array $skus
