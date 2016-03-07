@@ -99,7 +99,10 @@
                             <item name="dataType" xsi:type="string">boolean</item>
                             <item name="formElement" xsi:type="string">checkbox</item>
                             <item name="label" xsi:type="string" translate="true">Is Default</item>
-                            <item name="dataScope" xsi:type="string">defaulttext[]</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/checkbox</item>
+                            <item name="template" xsi:type="string">Magento_Catalog/form/element/checkbox</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="inputName" xsi:type="string">defaulttext[]</item>
                             <item name="prefer" xsi:type="string">radio</item>
                             <item name="value" xsi:type="string">1</item>
                             <item name="sortOrder" xsi:type="string">0</item>
@@ -229,10 +232,12 @@
                         <item name="config" xsi:type="array">
                             <item name="dataType" xsi:type="string">boolean</item>
                             <item name="formElement" xsi:type="string">checkbox</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/checkbox</item>
+                            <item name="template" xsi:type="string">Magento_Catalog/form/element/checkbox</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="inputName" xsi:type="string">defaultvisual[]</item>
                             <item name="label" xsi:type="string" translate="true">Is Default</item>
-                            <item name="dataScope" xsi:type="string">defaulttext[]</item>
                             <item name="prefer" xsi:type="string">radio</item>
-                            <item name="value" xsi:type="string">1</item>
                             <item name="sortOrder" xsi:type="string">0</item>
                         </item>
                     </argument>
