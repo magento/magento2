@@ -25,15 +25,16 @@ class Attributes
         if (isset($result['url_key'])) {
             if ($category && $category->getId()) {
                 if ($category->getLevel() == 1) {
-                    $result['url_key']['arguments']['data']['config']['visible'] = false;
-                    $result['url_key_create_redirect']['arguments']['data']['config']['visible'] = false;
-                    $result['url_key_group']['arguments']['data']['disabled'] = true;
+                    $result['url_key']['visible'] = false;
+                    $result['url_key_create_redirect']['visible'] = false;
+                    $result['url_key_group']['disabled'] = true;
                 } else {
-                    $result['url_key_create_redirect']['arguments']['data']['config']['value'] = $category->getUrlKey();
-                    $result['url_key_create_redirect']['arguments']['data']['config']['disabled'] = true;
+                    $result['url_key_create_redirect']['valueMap']['true'] = $category->getUrlKey();
+                    $result['url_key_create_redirect']['value'] = $category->getUrlKey();
+                    $result['url_key_create_redirect']['disabled'] = true;
                 }
             } else {
-                $result['url_key_create_redirect']['arguments']['data']['config']['visible'] = false;
+                $result['url_key_create_redirect']['visible'] = false;
             }
         }
         return $result;
