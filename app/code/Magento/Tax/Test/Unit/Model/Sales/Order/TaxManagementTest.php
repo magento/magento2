@@ -27,36 +27,6 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
     private $taxItemResourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $taxItemFactoryMock;
-
-    /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $orderFactoryMock;
-
-    /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $appliedTaxDataObjectFactoryMock;
-
-    /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $itemDataObjectFactoryMock;
-
-    /**
-     * @var \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface
-     */
-    protected $itemDataObject;
-
-    /**
-     * @var  \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $orderTaxDetailsDataObjectFactoryMock;
-
-    /**
      * @var \Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterface
      */
     protected $appliedTaxDataObject;
@@ -68,53 +38,56 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->orderMock = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
-        $this->orderFactoryMock = $this->getMock('Magento\Sales\Model\OrderFactory', ['create'], [], '', false);
-        $this->taxItemResourceMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Tax\Item',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->taxItemFactoryMock = $this->getMock(
-            'Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory',
-            ['create'],
-            [],
-            '',
-            false
-        );
+        $this->orderMock = $this->getMock('Magento\Sales\Model\Order', ['load'], [], '', false);
+
+        $methods = ['create'];
+        $orderFactoryMock = $this->getMock('Magento\Sales\Model\OrderFactory', $methods, [], '', false);
+        $orderFactoryMock->expects($this->atLeastOnce())
+            ->method('create')
+            ->will($this->returnValue($this->orderMock));
+
+        $className = 'Magento\Sales\Model\ResourceModel\Order\Tax\Item';
+        $this->taxItemResourceMock = $this->getMock($className, ['getTaxItemsByOrderId'], [], '', false);
+
+        $className = 'Magento\Sales\Model\ResourceModel\Order\Tax\ItemFactory';
+        $taxItemFactoryMock = $this->getMock($className, $methods, [], '', false);
+        $taxItemFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->taxItemResourceMock);
 
         $objectManager = new ObjectManager($this);
-        $methods = ['create'];
         $this->appliedTaxDataObject = $objectManager->getObject('Magento\Tax\Model\Sales\Order\Tax');
-        $this->appliedTaxDataObjectFactoryMock
-            = $this->getMock('Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterfaceFactory', $methods, [], '', false);
-        $this->appliedTaxDataObjectFactoryMock->expects($this->any())
+
+        $className = 'Magento\Tax\Api\Data\OrderTaxDetailsAppliedTaxInterfaceFactory';
+        $appliedTaxDataObjectFactoryMock = $this->getMock($className, $methods, [], '', false);
+        $appliedTaxDataObjectFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->appliedTaxDataObject);
 
-        $this->itemDataObject = $objectManager->getObject('Magento\Sales\Model\Order\Tax\Item');
-        $this->itemDataObjectFactoryMock =
-            $this->getMock('Magento\Tax\Api\Data\OrderTaxDetailsItemInterfaceFactory', $methods, [], '', false);
-        $this->itemDataObjectFactoryMock->expects($this->atLeastOnce())
-            ->method('create')->willReturn($this->itemDataObject);
+        $itemDataObject = $objectManager->getObject('Magento\Sales\Model\Order\Tax\Item');
+
+        $className = 'Magento\Tax\Api\Data\OrderTaxDetailsItemInterfaceFactory';
+        $itemDataObjectFactoryMock = $this->getMock($className, $methods, [], '', false);
+        $itemDataObjectFactoryMock->expects($this->atLeastOnce())
+            ->method('create')
+            ->willReturn($itemDataObject);
 
         $this->orderTaxDetailsDataObject = $objectManager->getObject('Magento\Tax\Model\Sales\Order\Details');
-        $this->orderTaxDetailsDataObjectFactoryMock =
-            $this->getMock('Magento\Tax\Api\Data\OrderTaxDetailsInterfaceFactory', $methods, [], '', false);
-        $this->orderTaxDetailsDataObjectFactoryMock->expects($this->any())
+
+        $className = 'Magento\Tax\Api\Data\OrderTaxDetailsInterfaceFactory';
+        $orderTaxDetailsDataObjectFactoryMock = $this->getMock($className, $methods, [], '', false);
+        $orderTaxDetailsDataObjectFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->orderTaxDetailsDataObject);
 
         $this->taxManagement = $objectManager->getObject(
             'Magento\Tax\Model\Sales\Order\TaxManagement',
             [
-                'orderFactory' => $this->orderFactoryMock,
-                'orderItemTaxFactory' => $this->taxItemFactoryMock,
-                'orderTaxDetailsDataObjectFactory' => $this->orderTaxDetailsDataObjectFactoryMock,
-                'itemDataObjectFactory' => $this->itemDataObjectFactoryMock,
-                'appliedTaxDataObjectFactory' => $this->appliedTaxDataObjectFactoryMock
+                'orderFactory' => $orderFactoryMock,
+                'orderItemTaxFactory' => $taxItemFactoryMock,
+                'orderTaxDetailsDataObjectFactory' => $orderTaxDetailsDataObjectFactoryMock,
+                'itemDataObjectFactory' => $itemDataObjectFactoryMock,
+                'appliedTaxDataObjectFactory' => $appliedTaxDataObjectFactoryMock
             ]
         );
     }
@@ -131,15 +104,10 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
             $expected = $orderItemAppliedTaxes[0];
         }
         $orderId = 1;
-
-        $this->orderFactoryMock->expects($this->atLeastOnce())
-            ->method('create')
-            ->will($this->returnValue($this->orderMock));
         $this->orderMock->expects($this->once())
             ->method('load')
             ->with($orderId)
             ->will($this->returnSelf());
-        $this->taxItemFactoryMock->expects($this->once())->method('create')->willReturn($this->taxItemResourceMock);
         $this->taxItemResourceMock->expects($this->once())
             ->method('getTaxItemsByOrderId')
             ->with($orderId)
@@ -160,7 +128,7 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function getOrderTaxDetailsDataProvider()
     {
-        return [
+        $data = [
             'one_item' => [
                 'orderItemAppliedTaxes' => [
                     [
@@ -206,37 +174,6 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
                 ],
                 'expected' => null,  // use a subset of the above
             ],
-            'canadian_product' => [
-                'orderItemAppliedTaxes' => [
-                    [
-                        'item_id' => 57,
-                        'taxable_item_type' => 'product',
-                        'associated_item_id' => null,
-                        'code' => 'GST-1',
-                        'title' => 'GST-1',
-                        'tax_percent' => '5',
-                        'real_amount' => '2.0',
-                        'real_base_amount' => '4.0',
-                    ],
-                    [
-                        'item_id' => 57,
-                        'taxable_item_type' => 'product',
-                        'associated_item_id' => null,
-                        'code' => 'GST-1',
-                        'title' => 'GST-1',
-                        'tax_percent' => '5',
-                        'real_amount' => '1.5',
-                        'real_base_amount' => '3.0',
-                    ],
-                ],
-                'expected' => [
-                    'code' => 'GST-1',
-                    'title' => 'GST-1',
-                    'tax_percent' => '5',
-                    'real_amount' => '3.5',
-                    'real_base_amount' => '7.0',
-                ],
-            ],
             'canadian_weee' => [
                 'orderItemAppliedTaxes' => [
                     [
@@ -268,37 +205,8 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
                     'real_base_amount' => '7.20',
                 ],
             ],
-            'canadian_shipping' => [
-                'orderItemAppliedTaxes' => [
-                    [
-                        'item_id' => null,
-                        'taxable_item_type' => 'shipping',
-                        'associated_item_id' => null,
-                        'code' => 'PST',
-                        'title' => 'PST',
-                        'tax_percent' => '5',
-                        'real_amount' => '2.20',
-                        'real_base_amount' => '4.20',
-                    ],
-                    [
-                        'item_id' => null,
-                        'taxable_item_type' => 'shipping',
-                        'associated_item_id' => null,
-                        'code' => 'PST',
-                        'title' => 'PST',
-                        'tax_percent' => '5',
-                        'real_amount' => '1.25',
-                        'real_base_amount' => '3.20',
-                    ],
-                ],
-                'expected' => [
-                    'code' => 'PST',
-                    'title' => 'PST',
-                    'tax_percent' => '5',
-                    'real_amount' => '3.45',
-                    'real_base_amount' => '7.40',
-                ],
-            ],
         ];
+
+        return $data;
     }
 }
