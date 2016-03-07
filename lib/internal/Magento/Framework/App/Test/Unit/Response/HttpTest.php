@@ -72,9 +72,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         unset($this->model);
-        $magentoObjectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
-        $objectManager = $magentoObjectManagerFactory->create($_SERVER);
-        \Magento\Framework\App\ObjectManager::setInstance($objectManager);
     }
 
     public function testSendVary()
@@ -268,27 +265,6 @@ class HttpTest extends \PHPUnit_Framework_TestCase
         $this->model->__wakeup();
         $this->assertNull($this->cookieMetadataFactoryMock);
         $this->assertNull($this->cookieManagerMock);
-    }
-
-    /**
-     * Test for the magic method __wakeup
-     *
-     * @covers \Magento\Framework\App\Response\Http::__wakeup
-     */
-    public function testWakeUpWith()
-    {
-        $objectManagerMock = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
-        $objectManagerMock->expects($this->once())
-            ->method('create')
-            ->with('Magento\Framework\Stdlib\CookieManagerInterface')
-            ->will($this->returnValue($this->cookieManagerMock));
-        $objectManagerMock->expects($this->at(1))
-            ->method('get')
-            ->with('Magento\Framework\Stdlib\Cookie\CookieMetadataFactory')
-            ->will($this->returnValue($this->cookieMetadataFactoryMock));
-
-        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
-        $this->model->__wakeup();
     }
 
     public function testSetXFrameOptions()
