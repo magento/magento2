@@ -10,10 +10,14 @@ namespace Magento\Directory\Model\Currency\Import;
  */
 class FixerIo extends \Magento\Directory\Model\Currency\Import\AbstractImport
 {
-    /**
+    /**#@+
      * @var string
      */
-    const CURRENCY_CONVERTER_URL = 'http://api.fixer.io/latest?base={{CURRENCY_FROM}}&symbols={{CURRENCY_TO}}';
+    const CURRENCY_CONVERTER_ENDPOINT = 'http://api.fixer.io/latest';
+    const CURRENCY_CONVERTER_FROM_PARAM = 'base';
+    const CURRENCY_CONVERTER_TO_PARAM = 'symbols';
+    /**#@-*/
+
 
     /**
      * Http Client Factory
@@ -76,8 +80,9 @@ class FixerIo extends \Magento\Directory\Model\Currency\Import\AbstractImport
     private function convertBatch($data, $currencyFrom, $currenciesTo)
     {
         $currenciesStr = implode(',', $currenciesTo);
-        $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, self::CURRENCY_CONVERTER_URL);
-        $url = str_replace('{{CURRENCY_TO}}', $currenciesStr, $url);
+        $url = self::CURRENCY_CONVERTER_ENDPOINT . 
+            '?' . self::CURRENCY_CONVERTER_FROM_PARAM . '=' . $currencyFrom .
+            '&' . self::CURRENCY_CONVERTER_TO_PARAM . '=' . $currenciesStr;
 
         set_time_limit(0);
         $response = $this->getServiceResponse($url);
@@ -114,18 +119,15 @@ class FixerIo extends \Magento\Directory\Model\Currency\Import\AbstractImport
         $response = [];
 
         try {
-            $jsonResponse = $httpClient->setUri(
-                $url
-            )->setConfig(
-                [
+            $jsonResponse = $httpClient->setUri($url)
+                ->setConfig([
                     'timeout' => $this->scopeConfig->getValue(
                         'currency/fixerio/timeout',
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                     ),
-                ]
-            )->request(
-                'GET'
-            )->getBody();
+                ])
+                ->request('GET')
+                ->getBody();
 
             $response = json_decode($jsonResponse, true);
         } catch (\Exception $e) {

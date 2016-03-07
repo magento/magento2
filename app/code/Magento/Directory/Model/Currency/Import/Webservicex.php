@@ -11,11 +11,13 @@ namespace Magento\Directory\Model\Currency\Import;
  */
 class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImport
 {
-    /**
+    /**#@+
      * @var string
      */
-    const CURRENCY_CONVERTER_URL = 'http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate?' .
-        'FromCurrency={{CURRENCY_FROM}}&ToCurrency={{CURRENCY_TO}}';
+    const CURRENCY_CONVERTER_ENDPOINT = 'http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate';
+    const CURRENCY_CONVERTER_FROM_PARAM = 'FromCurrency';
+    const CURRENCY_CONVERTER_TO_PARAM = 'ToCurrency';
+    /**#@-*/
 
     /**
      * Http Client Factory
@@ -51,24 +53,23 @@ class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImpor
      */
     protected function _convert($currencyFrom, $currencyTo, $retry = 0)
     {
-        $url = str_replace('{{CURRENCY_FROM}}', $currencyFrom, self::CURRENCY_CONVERTER_URL);
-        $url = str_replace('{{CURRENCY_TO}}', $currencyTo, $url);
+        $url = self::CURRENCY_CONVERTER_ENDPOINT . 
+            '?' . self::CURRENCY_CONVERTER_FROM_PARAM . '=' . $currencyFrom .
+            '&' . self::CURRENCY_CONVERTER_TO_PARAM . '=' . $currencyTo;
+
         /** @var \Magento\Framework\HTTP\ZendClient $httpClient */
         $httpClient = $this->getHttpClientFactory()->create();
 
         try {
-            $response = $httpClient->setUri(
-                $url
-            )->setConfig(
-                [
+            $response = $httpClient->setUri($url)
+                ->setConfig([
                     'timeout' => $this->scopeConfig->getValue(
                         'currency/webservicex/timeout',
                         \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                     ),
-                ]
-            )->request(
-                'GET'
-            )->getBody();
+                ])
+                ->request('GET')
+                ->getBody();
 
             $xml = simplexml_load_string($response, null, LIBXML_NOERROR);
             if (!$xml) {
