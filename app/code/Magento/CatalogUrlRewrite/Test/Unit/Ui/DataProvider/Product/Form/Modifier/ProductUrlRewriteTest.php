@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Model\AttributeConstantsInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
 use Magento\CatalogUrlRewrite\Ui\DataProvider\Product\Form\Modifier\ProductUrlRewrite;
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -47,7 +47,7 @@ class ProductUrlRewriteTest extends AbstractModifierTest
         $this->assertNotEmpty($this->getModel()->modifyMeta([
             'test_group_code' => [
                 'children' => [
-                    AttributeConstantsInterface::CODE_SEO_FIELD_URL_KEY => [
+                    ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY => [
                         'label' => 'label',
                         'scopeLabel' => 'scopeLabel',
                     ],
