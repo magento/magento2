@@ -35,7 +35,7 @@
         </arguments>
     </type>
     <preference for="Magento\ConfigurableProduct\Model\AttributesListInterface" type="Magento\ConfigurableProduct\Model\AttributesList" />
-    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\ModifierPool">
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
         <arguments>
             <argument name="modifiers" xsi:type="array">
                 <item name="configurable" xsi:type="array">
@@ -44,7 +44,7 @@
                 </item>
             </argument>
         </arguments>
-    </type>
+    </virtualType>
     <type name="Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Composite">
         <arguments>
             <argument name="modifiers" xsi:type="array">
