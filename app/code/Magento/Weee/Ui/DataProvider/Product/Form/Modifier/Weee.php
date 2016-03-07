@@ -178,7 +178,7 @@ class Weee extends AbstractModifier
                                 'data' => [
                                     'config' => [
                                         'componentType' => Container::NAME,
-                                        'component' => 'Magento_Ui/js/form/components/group',
+                                        'component' => 'Magento_Weee/js/fpt-group',
                                         'visible' => true,
                                         'label' => __('Country/State'),
                                     ],
