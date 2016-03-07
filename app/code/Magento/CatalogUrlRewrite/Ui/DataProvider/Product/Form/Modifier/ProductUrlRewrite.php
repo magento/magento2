@@ -105,13 +105,14 @@ class ProductUrlRewrite extends AbstractModifier
                 'componentType' => Field::NAME,
                 'formElement' => Checkbox::NAME,
                 'dataType' => Text::NAME,
-                'component' => 'Magento_CatalogUrlRewrite/js/components/url-key-handle-changes',
+                'component' => 'Magento_Catalog/js/components/url-key-handle-changes',
                 'valueMap' => [
                     'false' => '',
                     'true' => $urlKey
                 ],
                 'imports' => [
-                    'handleChanges' => '${ $.provider }:data.product.' . AC::CODE_SEO_FIELD_URL_KEY,
+                    'urlKey' => '${ $.provider }:data.product.' . AC::CODE_SEO_FIELD_URL_KEY,
+                    'handleUseDefault' => '${ $.parentName }.url_key:isUseDefault',
                 ],
                 'description' => __('Create Permanent Redirect for old URL'),
                 'dataScope' => 'url_key_create_redirect',

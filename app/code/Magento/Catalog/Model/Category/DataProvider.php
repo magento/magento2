@@ -384,9 +384,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $result['use_config.default_sort_by']['default'] = true;
         $result['use_config.filter_price_range']['default'] = true;
         if ($this->request->getParam('store') && $this->request->getParam('id')) {
+            $result['use_default.url_key']['checked'] = true;
             $result['use_default.url_key']['default'] = true;
             $result['use_default.url_key']['visible'] = true;
         } else {
+            $result['use_default.url_key']['checked'] = false;
             $result['use_default.url_key']['default'] = false;
             $result['use_default.url_key']['visible'] = false;
         }
