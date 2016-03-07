@@ -65,7 +65,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareCollection()
     {
-        $priceRule = $this->_coreRegistry->registry('current_promo_quote_rule');
+        $priceRule = $this->_coreRegistry->registry(\Magento\SalesRule\Model\RegistryConstants::CURRENT_SALES_RULE);
 
         /**
          * @var \Magento\SalesRule\Model\ResourceModel\Coupon\Collection $collection

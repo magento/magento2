@@ -52,5 +52,12 @@
         <item>
             <path>composer.lock</path>
         </item>
+        <item>
+            <path>app/code/Magento/Customer/view/frontend/web/js/zxcvbn.js</path>
+            <word>twig</word>
+        </item>
+        <item>
+            <path>dev/build/publication/sanity/ce.xml</path>
+        </item>
     </whitelist>
 </config>

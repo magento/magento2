@@ -15,6 +15,7 @@
     <!-- Components list -->
     <xs:element type="formConfiguration" name="form"/>
     <xs:element type="modalConfiguration" name="modal"/>
+    <xs:element type="dynamicRowsConfiguration" name="dynamicRows"/>
     <xs:element type="containerConfiguration" name="container"/>
     <xs:element type="listingConfiguration" name="listing"/>
     <!-- Custom configuration -->
@@ -46,6 +47,8 @@
                     <xs:element type="listingToolbarConfiguration" name="listingToolbar"/>
                     <xs:element type="button" name="button"/>
                     <xs:element type="htmlContent" name="htmlContent"/>
+                    <xs:element type="actionDelete" name="actionDelete"/>
+                    <xs:element type="dynamicRowsConfiguration" name="dynamicRows"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
@@ -66,6 +69,7 @@
                     <xs:element type="insertListingConfiguration" name="insertListing"/>
                     <xs:element type="modalConfiguration" name="modal"/>
                     <xs:element type="button" name="button"/>
+                    <xs:element type="dynamicRowsConfiguration" name="dynamicRows"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
@@ -137,6 +141,16 @@
             <xs:extension base="massaction">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element name="action" type="action" />
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="dynamicRowsConfiguration">
+        <xs:complexContent>
+            <xs:extension base="dynamicRows">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element type="containerConfiguration" name="container"/>
+                    <xs:element type="actionDelete" name="actionDelete"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>

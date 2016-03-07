@@ -30,12 +30,7 @@ class PaymentTokenRepositoryProxy implements PaymentTokenRepositoryInterface
     /**
      * @var PaymentTokenRepositoryInterface
      */
-    private $nullRepository;
-
-    /**
-     * @var VaultPaymentInterface
-     */
-    private $vaultPayment;
+    private $defaultRepository;
 
     /**
      * @var ConfigInterface
@@ -50,22 +45,19 @@ class PaymentTokenRepositoryProxy implements PaymentTokenRepositoryInterface
     /**
      * Constructor
      *
-     * @param PaymentTokenRepositoryInterface $nullRepository
-     * @param VaultPaymentInterface $vaultPayment
+     * @param PaymentTokenRepositoryInterface $defaultRepository
      * @param ConfigInterface $config
      * @param ObjectManagerInterface $objectManager
      * @param PaymentTokenRepositoryInterface[] $repositories
      */
     public function __construct(
-        PaymentTokenRepositoryInterface $nullRepository,
-        VaultPaymentInterface $vaultPayment,
+        PaymentTokenRepositoryInterface $defaultRepository,
         ConfigInterface $config,
         ObjectManagerInterface $objectManager,
         array $repositories
     ) {
         $this->repositories = $repositories;
-        $this->nullRepository = $nullRepository;
-        $this->vaultPayment = $vaultPayment;
+        $this->defaultRepository = $defaultRepository;
         $this->config = $config;
         $this->objectManager = $objectManager;
     }
@@ -87,15 +79,11 @@ class PaymentTokenRepositoryProxy implements PaymentTokenRepositoryInterface
      */
     private function getInstance()
     {
-        if (!$this->vaultPayment->isActive()) {
-            return $this->nullRepository;
-        }
-
         $methodCode = $this->config->getValue(VaultProvidersMap::VALUE_CODE);
 
         return isset($this->repositories[$methodCode])
             ? $this->objectManager->get($this->repositories[$methodCode])
-            : $this->nullRepository;
+            : $this->defaultRepository;
     }
 
     /**

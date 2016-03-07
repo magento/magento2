@@ -245,7 +245,7 @@
                 </item>
             </argument>
         </column>
-        <column name="website_id">
+        <column name="website_id" class="Magento\Customer\Ui\Component\Listing\Column\Websites">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">select</item>
@@ -415,6 +415,15 @@
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">Billing Lastname</item>
                     <item name="sortOrder" xsi:type="number">260</item>
+                </item>
+            </argument>
+        </column>
+        <column name="lock_expires" class="Magento\Customer\Ui\Component\Listing\Column\AccountLock">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="label" xsi:type="string" translate="true">Account Lock</item>
+                    <item name="sortOrder" xsi:type="number">270</item>
                 </item>
             </argument>
         </column>

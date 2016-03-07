@@ -61,7 +61,7 @@ class UserTest extends \PHPUnit_Framework_TestCase
 
         $this->roleFactoryMock = $this->getMockBuilder('Magento\Authorization\Model\RoleFactory')
             ->disableOriginalConstructor()
-            ->setMethods([])
+            ->setMethods(['create'])
             ->getMock();
 
         $this->userRolesFactoryMock = $this
@@ -131,7 +131,14 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->requestInterfaceMock->expects($this->at(0))->method('getParam')->willReturn("");
         $this->requestInterfaceMock->expects($this->at(1))->method('getParam')->willReturn($roleId);
         $this->requestInterfaceMock->expects($this->at(2))->method('getParam')->willReturn($roleId);
+
+        $this->registryMock->expects($this->once())
+            ->method('registry')
+            ->with(\Magento\User\Controller\Adminhtml\User\Role\SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY)
+            ->willReturn(null);
+
         $this->roleFactoryMock->expects($this->once())->method('create')->willReturn($roleModelMock);
+
         $roleModelMock->expects($this->once())->method('setId')->willReturnSelf();
         $roleModelMock->expects($this->once())->method('getRoleUsers')->willReturn($roles);
 
@@ -151,9 +158,13 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->requestInterfaceMock->expects($this->at(0))->method('getParam')->willReturn("");
         $this->requestInterfaceMock->expects($this->at(1))->method('getParam')->willReturn($roleId);
         $this->requestInterfaceMock->expects($this->at(2))->method('getParam')->willReturn($roleId);
-        $this->roleFactoryMock->expects($this->once())->method('create')->willReturn($roleModelMock);
-        $roleModelMock->expects($this->once())->method('setId')->willReturnSelf();
-        $roleModelMock->expects($this->once())->method('getRoleUsers')->willReturn($roles);
+
+        $this->registryMock->expects($this->once())
+            ->method('registry')
+            ->with(\Magento\User\Controller\Adminhtml\User\Role\SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY)
+            ->willReturn('role1=value1&role2=value2&role3=value3');
+
+        $this->roleFactoryMock->expects($this->never())->method('create')->willReturn($roleModelMock);
         $this->jsonEncoderMock->expects($this->once())->method('encode')->willReturn($roles);
 
         $this->assertEquals($roles, $this->model->getUsers(true));
@@ -172,6 +183,12 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->requestInterfaceMock->expects($this->at(0))->method('getParam')->willReturn("");
         $this->requestInterfaceMock->expects($this->at(1))->method('getParam')->willReturn($roleId);
         $this->requestInterfaceMock->expects($this->at(2))->method('getParam')->willReturn($roleId);
+
+        $this->registryMock->expects($this->once())
+            ->method('registry')
+            ->with(\Magento\User\Controller\Adminhtml\User\Role\SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY)
+            ->willReturn(null);
+
         $this->roleFactoryMock->expects($this->once())->method('create')->willReturn($roleModelMock);
         $roleModelMock->expects($this->once())->method('setId')->willReturnSelf();
         $roleModelMock->expects($this->once())->method('getRoleUsers')->willReturn($roles);

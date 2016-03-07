@@ -69,7 +69,9 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
                 unset($data['rule']);
                 $model->loadPost($data);
 
-                $useAutoGeneration = (int)(!empty($data['use_auto_generation']));
+                $useAutoGeneration = (int)(
+                    !empty($data['use_auto_generation']) && $data['use_auto_generation'] !== 'false'
+                );
                 $model->setUseAutoGeneration($useAutoGeneration);
 
                 $session->setPageData($model->getData());

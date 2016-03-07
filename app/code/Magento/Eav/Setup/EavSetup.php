@@ -609,6 +609,27 @@ class EavSetup
     }
 
     /**
+     * Retrieve Attribute Group Data by Code
+     *
+     * @param int|string $entityTypeId
+     * @param int|string $setId
+     * @param string $code
+     * @param string $field
+     * @return mixed
+     */
+    public function getAttributeGroupByCode($entityTypeId, $setId, $code, $field = null)
+    {
+        return $this->setup->getTableRow(
+            'eav_attribute_group',
+            'attribute_group_code',
+            $code,
+            $field,
+            'attribute_set_id',
+            $this->getAttributeSetId($entityTypeId, $setId)
+        );
+    }
+
+    /**
      * Retrieve Attribute Group Id by Id or Name
      *
      * @param int|string $entityTypeId

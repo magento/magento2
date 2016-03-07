@@ -7,6 +7,7 @@ namespace Magento\Vault\Test\Unit\Model;
 
 use Magento\Framework\Api\Filter;
 use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Intl\DateTimeFactory;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Framework\Api\FilterBuilder;
@@ -20,6 +21,7 @@ use Magento\Vault\Api\PaymentTokenRepositoryInterface;
 use Magento\Vault\Api\Data\PaymentTokenSearchResultsInterface;
 use Magento\Vault\Api\Data\PaymentTokenSearchResultsInterfaceFactory;
 use Magento\Vault\Model\ResourceModel\PaymentToken as PaymentTokenResourceModel;
+use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 
 /**
  * Class PaymentTokenManagementTest
@@ -75,6 +77,11 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
     protected $encryptorMock;
 
     /**
+     * @var DateTimeFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $dateTimeFactory;
+
+    /**
      * Set up
      */
     protected function setUp()
@@ -102,6 +109,9 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->encryptorMock = $this->getMock(EncryptorInterface::class);
+        $this->dateTimeFactory = $this->getMockBuilder(DateTimeFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->paymentTokenManagement = new PaymentTokenManagement(
             $this->paymentTokenRepositoryMock,
@@ -110,7 +120,8 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
             $this->filterBuilderMock,
             $this->searchCriteriaBuilderMock,
             $this->searchResultsFactoryMock,
-            $this->encryptorMock
+            $this->encryptorMock,
+            $this->dateTimeFactory
         );
     }
 
@@ -380,7 +391,7 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
         $newEntityId = 1;
         $paymentId = 1;
         $customerId = 1;
-        $createdAt = '30-02-2017';
+        $gatewayToken = 'xs4vf3';
         $publicHash = 'existing-token';
         $duplicateTokenData = [
             'entity_id' => $entityId
@@ -403,19 +414,19 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with(['data' => $duplicateTokenData])
             ->willReturn($duplicateToken);
-        $tokenMock->expects(static::once())
+        $tokenMock->expects(static::atLeastOnce())
             ->method('getIsVisible')
             ->willReturn(false);
-        $tokenMock->expects(static::once())
+        $tokenMock->expects(static::atLeastOnce())
             ->method('getCustomerId')
             ->willReturn($customerId);
-        $tokenMock->expects(static::once())
-            ->method('getCreatedAt')
-            ->willReturn($createdAt);
+        $tokenMock->expects(static::atLeastOnce())
+            ->method('getGatewayToken')
+            ->willReturn($gatewayToken);
 
         $this->encryptorMock->expects(static::once())
             ->method('getHash')
-            ->with($publicHash . $createdAt)
+            ->with($publicHash . $gatewayToken)
             ->willReturn($newHash);
         $tokenMock->expects(static::once())
             ->method('setPublicHash')
@@ -424,11 +435,11 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
         $this->paymentTokenRepositoryMock->expects(self::once())
             ->method('save')
             ->with($tokenMock);
-        $tokenMock->expects(static::once())
+        $tokenMock->expects(static::atLeastOnce())
             ->method('getEntityId')
             ->willReturn($newEntityId);
 
-        $paymentMock->expects(self::once())
+        $paymentMock->expects(self::atLeastOnce())
             ->method('getEntityId')
             ->willReturn($paymentId);
         $this->paymentTokenResourceModelMock->expects(static::once())
@@ -436,5 +447,102 @@ class PaymentTokenManagementTest extends \PHPUnit_Framework_TestCase
             ->with($newEntityId, $paymentId);
 
         $this->paymentTokenManagement->saveTokenWithPaymentLink($tokenMock, $paymentMock);
+    }
+
+    public function testGetVisibleAvailableTokens()
+    {
+        $customerId = 1;
+        $vaultProviderCode = 'vault_provider_code';
+
+        $searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $searchResultMock = $this->getMockBuilder(PaymentTokenSearchResultsInterface::class)
+            ->getMockForAbstractClass();
+        $tokenMock = $this->getMockBuilder(PaymentTokenInterface::class)
+            ->getMockForAbstractClass();
+
+        $customerFilter = $this->createExpectedFilter(PaymentTokenInterface::CUSTOMER_ID, $customerId, 0);
+        $visibilityFilter = $this->createExpectedFilter(PaymentTokenInterface::IS_VISIBLE, true, 1);
+        $isActiveFilter = $this->createExpectedFilter(PaymentTokenInterface::IS_ACTIVE, true, 2);
+        $providerFilter = $this->createExpectedFilter(
+            PaymentTokenInterface::PAYMENT_METHOD_CODE,
+            $vaultProviderCode,
+            3
+        );
+
+        // express at expectations
+        $expiresAtFilter = $this->createExpectedFilter(
+            PaymentTokenInterface::EXPIRES_AT,
+            '2015-01-01 00:00:00',
+            4
+        );
+        $this->filterBuilderMock->expects(static::once())
+            ->method('setConditionType')
+            ->with('gt')
+            ->willReturnSelf();
+
+        $date = $this->getMockBuilder('DateTime')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dateTimeFactory->expects(static::once())
+            ->method('create')
+            ->with("now", new \DateTimeZone('UTC'))
+            ->willReturn($date);
+        $date->expects(static::once())
+            ->method('format')
+            ->with('Y-m-d 00:00:00')
+            ->willReturn('2015-01-01 00:00:00');
+
+        $this->searchCriteriaBuilderMock->expects(self::once())
+            ->method('addFilters')
+            ->with([$customerFilter, $visibilityFilter, $providerFilter, $isActiveFilter, $expiresAtFilter])
+            ->willReturnSelf();
+
+        $this->searchCriteriaBuilderMock->expects(self::once())
+            ->method('create')
+            ->willReturn($searchCriteriaMock);
+
+        $this->paymentTokenRepositoryMock->expects(self::once())
+            ->method('getList')
+            ->with($searchCriteriaMock)
+            ->willReturn($searchResultMock);
+
+        $searchResultMock->expects(self::once())
+            ->method('getItems')
+            ->willReturn([$tokenMock]);
+
+        static::assertEquals(
+            [$tokenMock],
+            $this->paymentTokenManagement->getVisibleAvailableTokens($customerId, $vaultProviderCode)
+        );
+
+    }
+
+    /**
+     * @param string $field
+     * @param mixed $value
+     * @param int $atIndex
+     *
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createExpectedFilter($field, $value, $atIndex)
+    {
+        $filterObject = $this->getMockBuilder(Filter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->filterBuilderMock->expects(new MethodInvokedAtIndex($atIndex))
+            ->method('setField')
+            ->with($field)
+            ->willReturnSelf();
+        $this->filterBuilderMock->expects(new MethodInvokedAtIndex($atIndex))
+            ->method('setValue')
+            ->with($value)
+            ->willReturnSelf();
+        $this->filterBuilderMock->expects(new MethodInvokedAtIndex($atIndex))
+            ->method('create')
+            ->willReturn($filterObject);
+
+        return $filterObject;
     }
 }

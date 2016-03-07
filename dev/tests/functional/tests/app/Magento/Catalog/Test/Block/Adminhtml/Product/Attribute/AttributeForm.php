@@ -8,9 +8,6 @@ namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute;
 
 use Magento\Backend\Test\Block\Widget\FormTabs;
 use Magento\Backend\Test\Block\Widget\Tab;
-use Magento\Mtf\Block\BlockFactory;
-use Magento\Mtf\Block\Mapper;
-use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
@@ -43,21 +40,13 @@ class AttributeForm extends FormTabs
     protected $isTabOpened = '.opened ';
 
     /**
-     * @constructor
-     * @param SimpleElement $element
-     * @param BlockFactory $blockFactory
-     * @param Mapper $mapper
-     * @param BrowserInterface $browser
-     * @param array $config
+     * Initialize block. Switch to frame.
+     *
+     * @return void
      */
-    public function __construct(
-        SimpleElement $element,
-        BlockFactory $blockFactory,
-        Mapper $mapper,
-        BrowserInterface $browser,
-        array $config = []
-    ) {
-        parent::__construct($element, $blockFactory, $mapper, $browser, $config);
+    protected function init()
+    {
+        parent::init();
         $this->browser->switchToFrame(new Locator($this->iFrame));
     }
 
@@ -82,7 +71,7 @@ class AttributeForm extends FormTabs
     }
 
     /**
-     * Open tab
+     * Open tab.
      *
      * @param string $tabName
      * @return Tab

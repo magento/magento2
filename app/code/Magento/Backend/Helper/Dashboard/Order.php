@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Helper\Dashboard;
 
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Adminhtml dashboard helper for orders
  */
@@ -16,6 +18,11 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
     protected $_orderCollection;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
      * @param \Magento\Reports\Model\ResourceModel\Order\Collection $orderCollection
      */
@@ -24,9 +31,18 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
         \Magento\Reports\Model\ResourceModel\Order\Collection $orderCollection
     ) {
         $this->_orderCollection = $orderCollection;
-        parent::__construct(
-            $context
-        );
+        parent::__construct($context);
+    }
+
+    /**
+     * @return \Magento\SalesRule\Model\RuleFactory
+     * @deprecated
+     */
+    public function getStoreManager()
+    {
+        if ($this->_storeManager instanceof \Magento\Store\Model\StoreManagerInterface) {
+            $this->_storeManager = ObjectManager::getInstance()->get('\Magento\Store\Model\StoreManagerInterface');
+        }
     }
 
     /**

@@ -18,6 +18,8 @@ define([
             links: {
                 value: '${ $.provider }:${ $.dataScope }'
             },
+            template: 'ui/form/field',
+            elementTmpl: 'ui/form/element/wysiwyg',
             content:        '',
             showSpinner:    false,
             loading:        false

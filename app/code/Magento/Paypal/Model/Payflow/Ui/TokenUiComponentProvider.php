@@ -9,7 +9,6 @@ use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentInterfaceFactory;
-use Magento\Framework\UrlInterface;
 
 /**
  * Class TokenUiComponentProvider
@@ -22,20 +21,12 @@ class TokenUiComponentProvider implements TokenUiComponentProviderInterface
     private $componentFactory;
 
     /**
-     * @var \Magento\Framework\UrlInterface
-     */
-    private $urlBuilder;
-
-    /**
      * @param TokenUiComponentInterfaceFactory $componentFactory
-     * @param UrlInterface $urlBuilder
      */
     public function __construct(
-        TokenUiComponentInterfaceFactory $componentFactory,
-        UrlInterface $urlBuilder
+        TokenUiComponentInterfaceFactory $componentFactory
     ) {
         $this->componentFactory = $componentFactory;
-        $this->urlBuilder = $urlBuilder;
     }
 
     /**

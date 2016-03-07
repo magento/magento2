@@ -62,12 +62,20 @@ define([
 
     Element = _.extend({
         defaults: {
-            name: '',
-            template: '',
-            containers: [],
             _requesetd: {},
-            registerNodes: true,
+            containers: [],
+            exports: {},
+            imports: {},
+            links: {},
+            listens: {},
+            name: '',
             ns: '${ $.name.split(".")[0] }',
+            provider: '',
+            registerNodes: true,
+            source: null,
+            statefull: {},
+            template: '',
+            tracks: {},
             storageConfig: {
                 provider: 'localStorage',
                 namespace: '${ $.name }',
@@ -104,10 +112,8 @@ define([
          * @returns {Element} Chainable.
          */
         initObservable: function () {
-            var tracks = this.tracks || {};
-
-            _.each(tracks, function (enabled, key) {
-                if (enabled !== false) {
+            _.each(this.tracks, function (enabled, key) {
+                if (enabled) {
                     this.track(key);
                 }
             }, this);
@@ -122,10 +128,10 @@ define([
          * @returns {Element} Chainable.
          */
         initModules: function () {
-            var modules = this.modules || {};
-
-            _.each(modules, function (name, property) {
-                this[property] = this.requestModule(name);
+            _.each(this.modules, function (name, property) {
+                if (name) {
+                    this[property] = this.requestModule(name);
+                }
             }, this);
 
             if (!_.isFunction(this.source)) {
@@ -154,14 +160,10 @@ define([
          * @returns {Element} Chainable.
          */
         initStatefull: function () {
-            var statefull = this.statefull || {};
-
-            _.each(statefull, function (path, key) {
-                if (!path) {
-                    return;
+            _.each(this.statefull, function (path, key) {
+                if (path) {
+                    this.setStatefull(key, path);
                 }
-
-                this.setStatefull(key, path);
             }, this);
 
             return this;
@@ -173,16 +175,11 @@ define([
          * @returns {Element} Chainbale.
          */
         initLinks: function () {
-            this.setListeners(this.listens)
-                .setLinks(this.links, 'imports')
-                .setLinks(this.links, 'exports');
-
-            _.each({
-                exports: this.exports,
-                imports: this.imports
-            }, this.setLinks, this);
-
-            return this;
+            return this.setListeners(this.listens)
+                       .setLinks(this.links, 'imports')
+                       .setLinks(this.links, 'exports')
+                       .setLinks(this.exports, 'exports')
+                       .setLinks(this.imports, 'imports');
         },
 
         /**
@@ -291,11 +288,17 @@ define([
          *
          * @param {String} path - Path to property.
          * @param {*} value - New value of the property.
+         * @param {Object} [owner] - Object with property that changed and component reference.
          * @returns {Element} Chainable.
          */
-        set: function (path, value) {
+        set: function (path, value, owner) {
             var data = this.get(path),
                 diffs;
+
+            if (_.isUndefined(data) && this.cachedComponent && owner) {
+                value = utils.nested(this.cachedComponent, path);
+                owner.component.set(owner.property, value);
+            }
 
             diffs = !_.isFunction(data) && !this.isTracked(path) ?
                 utils.compare(data, value, path) :
@@ -550,7 +553,7 @@ define([
         /**
          * Overrides 'EventsBus.trigger' method to implement events bubbling.
          *
-         * @param {...*} parameters - Any number of arguments that should be passed to the events' handler.
+         * @param {...*} arguments - Any number of arguments that should be passed to the events' handler.
          * @returns {Boolean} False if event bubbling was canceled.
          */
         bubble: function () {
@@ -581,6 +584,50 @@ define([
                 property = this.uniqueProp;
 
             this[property](active);
+        },
+
+        /**
+         * Clean data form data source.
+         *
+         * @returns {Element}
+         */
+        cleanData: function () {
+            if (this.source && this.source.componentType === 'dataSource') {
+                if (this.elems) {
+                    _.each(this.elems(), function (val) {
+                        val.cleanData();
+                    });
+                } else {
+                    this.source.remove(this.dataScope);
+                }
+            }
+
+            return this;
+        },
+
+        /**
+         * Fallback data.
+         */
+        cacheData: function () {
+            this.cachedComponent = utils.copy(this);
+        },
+
+        /**
+         * Update configuration in component.
+         *
+         * @param {*} oldValue
+         * @param {*} newValue
+         * @param {String} path - path to value.
+         * @returns {Element}
+         */
+        updateConfig: function (oldValue, newValue, path) {
+            var names = path.split('.'),
+                index = _.lastIndexOf(names, 'config') + 1;
+
+            names = names.splice(index, names.length - index).join('.');
+            this.set(names, newValue);
+
+            return this;
         }
     }, Events, links);
 

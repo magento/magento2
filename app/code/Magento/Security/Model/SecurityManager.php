@@ -38,10 +38,16 @@ class SecurityManager
     protected $securityCheckers;
 
     /**
+     * @var \Magento\Framework\Event\ManagerInterface
+     */
+    private $eventManager;
+
+    /**
      * SecurityManager constructor.
      * @param \Magento\Security\Helper\SecurityConfig $securityConfig
      * @param \Magento\Security\Model\PasswordResetRequestEventFactory $passwordResetRequestEventModelFactory
      * @param ResourceModel\PasswordResetRequestEvent\CollectionFactory $passwordResetRequestEventCollectionFactory
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param array $securityCheckers
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -49,12 +55,14 @@ class SecurityManager
         \Magento\Security\Helper\SecurityConfig $securityConfig,
         \Magento\Security\Model\PasswordResetRequestEventFactory $passwordResetRequestEventModelFactory,
         ResourceModel\PasswordResetRequestEvent\CollectionFactory $passwordResetRequestEventCollectionFactory,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
         $securityCheckers = []
     ) {
         $this->securityConfig = $securityConfig;
         $this->passwordResetRequestEventModelFactory = $passwordResetRequestEventModelFactory;
         $this->passwordResetRequestEventCollectionFactory = $passwordResetRequestEventCollectionFactory;
         $this->securityCheckers = $securityCheckers;
+        $this->eventManager = $eventManager;
 
         foreach ($this->securityCheckers as $checker) {
             if (!($checker instanceof \Magento\Security\Model\SecurityChecker\SecurityCheckerInterface)) {

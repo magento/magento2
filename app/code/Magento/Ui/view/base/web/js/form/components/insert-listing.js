@@ -268,6 +268,9 @@ define([
             };
             _.extend(selectionsData, this.params || {}, selections.params);
             selectionsData.filters = {};
+            this.selections().excludeMode() ? selectionsData.paging = {
+                notLimits: 1
+            } : false;
 
             request = this.requestData(selectionsData);
             request

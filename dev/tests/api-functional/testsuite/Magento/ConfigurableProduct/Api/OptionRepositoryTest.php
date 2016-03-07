@@ -187,11 +187,12 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
             ]
         ];
 
-        $option = [
-            'label' => 'Update Test Configurable'
+        $requestBody = [
+            'option' => [
+                'label' => 'Update Test Configurable',
+            ]
         ];
 
-        $requestBody = ['option' => $option];
         if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
             $requestBody['sku'] = $productSku;
             $requestBody['option']['id'] = $optionId;
@@ -200,7 +201,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         $result = $this->_webApiCall($serviceInfo, $requestBody);
         $this->assertGreaterThan(0, $result);
         $configurableAttribute = $this->getConfigurableAttribute($productSku);
-        $this->assertEquals($option['label'], $configurableAttribute[0]['label']);
+        $this->assertEquals($requestBody['option']['label'], $configurableAttribute[0]['label']);
     }
 
     /**

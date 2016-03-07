@@ -100,18 +100,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $productAttributeSetId = $product->getAttributeSetId();
                 $productTypeId = $product->getTypeId();
 
-                /**
-                 * Do copying data to stores
-                 */
-                if (isset($data['copy_to_stores'])) {
-                    foreach ($data['copy_to_stores'] as $storeTo => $storeFrom) {
-                        $this->_objectManager->create('Magento\Catalog\Model\Product')
-                            ->setStoreId($storeFrom)
-                            ->load($productId)
-                            ->setStoreId($storeTo)
-                            ->save();
-                    }
-                }
+                $this->copyToStores($data, $productId);
+
                 $this->messageManager->addSuccess(__('You saved the product.'));
                 if ($product->getSku() != $originalSku) {
                     $this->messageManager->addNotice(
@@ -192,6 +182,35 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                     $this->messageManager->addNotice(
                         __('The image cannot be removed as it has been assigned to the other image role')
                     );
+                }
+            }
+        }
+    }
+
+    /**
+     * Do copying data to stores
+     *
+     * @param array $data
+     * @param int $productId
+     * @return void
+     */
+    protected function copyToStores($data, $productId)
+    {
+        if (!empty($data['product']['copy_to_stores'])) {
+            foreach ($data['product']['copy_to_stores'] as $websiteId => $group) {
+                if (isset($data['product']['website_ids'][$websiteId])
+                    && (bool)$data['product']['website_ids'][$websiteId]) {
+                    foreach ($group as $store) {
+                        $copyFrom = (isset($store['copy_from'])) ? $store['copy_from'] : 0;
+                        $copyTo = (isset($store['copy_to'])) ? $store['copy_to'] : 0;
+                        if ($copyTo) {
+                            $this->_objectManager->create('Magento\Catalog\Model\Product')
+                                ->setStoreId($copyFrom)
+                                ->load($productId)
+                                ->setStoreId($copyTo)
+                                ->save();
+                        }
+                    }
                 }
             }
         }

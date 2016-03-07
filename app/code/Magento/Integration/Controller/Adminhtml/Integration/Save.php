@@ -9,21 +9,44 @@ use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Integration\Model\Integration as IntegrationModel;
+use Magento\Framework\Exception\State\UserLockedException;
 
+/**
+ * Integration Save controller
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class Save extends \Magento\Integration\Controller\Adminhtml\Integration
 {
     /**
-     * Redirect merchant to 'Edit integration' or 'New integration' if error happened during integration save.
-     *
-     * @return void
+     * @var \Magento\Security\Helper\SecurityCookie
      */
-    protected function _redirectOnSaveError()
+    protected $securityCookieHelper;
+
+    /**
+     * Set security cookie helper
+     *
+     * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
+     * @return void
+     * @deprecated
+     */
+    public function setSecurityCookieHelper(\Magento\Security\Helper\SecurityCookie $securityCookieHelper)
     {
-        $integrationId = $this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
-        if ($integrationId) {
-            $this->_redirect('*/*/edit', ['id' => $integrationId]);
+        $this->securityCookieHelper = $securityCookieHelper;
+    }
+
+    /**
+     * Get security cookie helper
+     *
+     * @return \Magento\Security\Helper\SecurityCookie
+     * @deprecated
+     */
+    public function getSecurityCookieHelper()
+    {
+        if (!($this->securityCookieHelper instanceof \Magento\Security\Helper\SecurityCookie)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Security\Helper\SecurityCookie');
         } else {
-            $this->_redirect('*/*/new');
+            return $this->securityCookieHelper;
         }
     }
 
@@ -39,23 +62,26 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
         try {
             $integrationId = (int)$this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
             if ($integrationId) {
-                try {
-                    $integrationData = $this->_integrationService->get($integrationId)->getData();
-                } catch (IntegrationException $e) {
-                    $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
-                    $this->_redirect('*/*/');
-                    return;
-                } catch (\Exception $e) {
-                    $this->_logger->critical($e);
-                    $this->messageManager->addError(__('Internal error. Check exception log for details.'));
-                    $this->_redirect('*/*');
+                $integrationData = $this->getIntegration($integrationId);
+                if (!$integrationData) {
                     return;
                 }
                 if ($integrationData[Info::DATA_SETUP_TYPE] == IntegrationModel::TYPE_CONFIG) {
                     throw new LocalizedException(__('Cannot edit integrations created via config file.'));
                 }
             }
+            $this->validateUser();
             $this->processData($integrationData);
+        } catch (UserLockedException $e) {
+            $this->_auth->logout();
+            $this->getSecurityCookieHelper()->setLogoutReasonCookie(
+                \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
+            );
+            $this->_redirect('*');
+        } catch (\Magento\Framework\Exception\AuthenticationException $e) {
+            $this->messageManager->addError($e->getMessage());
+            $this->_getSession()->setIntegrationData($this->getRequest()->getPostValue());
+            $this->_redirectOnSaveError();
         } catch (IntegrationException $e) {
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_getSession()->setIntegrationData($integrationData);
@@ -67,6 +93,63 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
             $this->_logger->critical($e);
             $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_redirectOnSaveError();
+        }
+    }
+
+    /**
+     * Validate current user password
+     *
+     * @return $this
+     * @throws UserLockedException
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
+    protected function validateUser()
+    {
+        $password = $this->getRequest()->getParam(
+            \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info::DATA_CONSUMER_PASSWORD
+        );
+        $user = $this->_auth->getUser();
+        $user->performIdentityCheck($password);
+
+        return $this;
+    }
+
+    /**
+     * Get Integration entity
+     *
+     * @param int $integrationId
+     * @return \Magento\Integration\Model\Integration|null
+     */
+    protected function getIntegration($integrationId)
+    {
+        try {
+            $integrationData = $this->_integrationService->get($integrationId)->getData();
+        } catch (IntegrationException $e) {
+            $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
+            $this->_redirect('*/*/');
+            return null;
+        } catch (\Exception $e) {
+            $this->_logger->critical($e);
+            $this->messageManager->addError(__('Internal error. Check exception log for details.'));
+            $this->_redirect('*/*');
+            return null;
+        }
+
+        return $integrationData;
+    }
+
+    /**
+     * Redirect merchant to 'Edit integration' or 'New integration' if error happened during integration save.
+     *
+     * @return void
+     */
+    protected function _redirectOnSaveError()
+    {
+        $integrationId = $this->getRequest()->getParam(self::PARAM_INTEGRATION_ID);
+        if ($integrationId) {
+            $this->_redirect('*/*/edit', ['id' => $integrationId]);
+        } else {
+            $this->_redirect('*/*/new');
         }
     }
 

@@ -387,7 +387,7 @@
             </field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">1</field>
-            <field name="status" xsi:type="string">Product online</field>
+            <field name="status" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -493,7 +493,7 @@
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">1</field>
             <field name="description" xsi:type="string">&lt;p&gt;dfj_full&lt;/p&gt;</field>
-            <field name="status" xsi:type="string">Product online</field>
+            <field name="status" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -517,7 +517,7 @@
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">0.1</field>
             <field name="description" xsi:type="string">&lt;p&gt;Simple with Weight 0.1&lt;/p&gt;</field>
-            <field name="status" xsi:type="string">Product online</field>
+            <field name="status" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -541,7 +541,7 @@
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">150.1</field>
             <field name="description" xsi:type="string">&lt;p&gt;Simple with Weight 150.1&lt;/p&gt;</field>
-            <field name="status" xsi:type="string">Product online</field>
+            <field name="status" xsi:type="string">Yes</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>
@@ -565,7 +565,7 @@
             <field name="product_has_weight" xsi:type="string">Yes</field>
             <field name="weight" xsi:type="string">1</field>
             <field name="description" xsi:type="string">&lt;p&gt;adc_Full&lt;/p&gt;</field>
-            <field name="status" xsi:type="string">Product online</field>
+            <field name="status" xsi:type="string">Yes</field>
             <field name="short_description" xsi:type="string">&lt;p&gt;abc_short&lt;/p&gt;</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
@@ -818,7 +818,7 @@
             <field name="checkout_data" xsi:type="array">
                 <item name="dataset" xsi:type="string">simple_order_default</item>
             </field>
-            <field name="status" xsi:type="string">Product offline</field>
+            <field name="status" xsi:type="string">No</field>
             <field name="url_key" xsi:type="string">simple-product-%isolation%</field>
         </dataset>
 

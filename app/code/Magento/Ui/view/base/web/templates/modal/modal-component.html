@@ -5,8 +5,8 @@
  */
 -->
 
-<div data-bind="css: modalClass">
+<div data-bind="css: modalClass, hasFocus: focused">
     <!-- ko foreach: { data: elems, as: 'element' } -->
-    <!-- ko template: element.getTemplate() --><!-- /ko -->
+        <!-- ko template: element.getTemplate() --><!-- /ko -->
     <!-- /ko -->
 </div>

@@ -9,7 +9,6 @@ use Braintree\Transaction;
 use Magento\BraintreeTwo\Gateway\Validator\PaymentNonceResponseValidator;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
-use Magento\BraintreeTwo\Gateway\Validator\ResponseValidator;
 use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 
 /**
@@ -18,7 +17,7 @@ use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 class PaymentNonceResponseValidatorTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ResponseValidator
+     * @var PaymentNonceResponseValidator
      */
     private $validator;
 
@@ -71,7 +70,9 @@ class PaymentNonceResponseValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with([
                 'isValid' => false,
-                'failsDescription' => ['Payment method nonce can\'t be retrieved.']
+                'failsDescription' => [
+                    __('Payment method nonce can\'t be retrieved.')
+                ]
             ])
             ->willReturn($result);
 
@@ -79,10 +80,7 @@ class PaymentNonceResponseValidatorTest extends \PHPUnit_Framework_TestCase
         static::assertEquals($result, $actual);
     }
 
-    /**
-     * @covers \Magento\BraintreeTwo\Gateway\Validator\PaymentNonceResponseValidator::validatePaymentMethodNonce
-     */
-    public function testValidatePaymentMethodNonce()
+    public function testValidateSuccess()
     {
         $obj = new \stdClass();
         $obj->success = true;
@@ -104,7 +102,7 @@ class PaymentNonceResponseValidatorTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->with([
                 'isValid' => true,
-                'failsDescription' => ['Payment method nonce can\'t be retrieved.']
+                'failsDescription' => []
             ])
             ->willReturn($result);
 

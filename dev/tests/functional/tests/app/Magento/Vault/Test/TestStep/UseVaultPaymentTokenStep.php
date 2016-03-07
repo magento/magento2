@@ -33,6 +33,6 @@ class UseVaultPaymentTokenStep implements TestStepInterface
     {
         $block = $this->orderCreatePage->getCreateBlock();
         $block->selectPaymentMethod(['method' => 'vault']);
-        $block->selectVaultToken('token_switcher_vault_item_');
+        $block->selectVaultToken('token_switcher_');
     }
 }
