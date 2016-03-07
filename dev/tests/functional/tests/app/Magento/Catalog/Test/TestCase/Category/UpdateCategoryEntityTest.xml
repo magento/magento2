@@ -24,7 +24,7 @@
             <data name="category/data/parent_id/dataset" xsi:type="string">default_category</data>
             <data name="category/data/available_product_listing_config" xsi:type="string">Yes</data>
             <data name="category/data/default_product_listing_config" xsi:type="string">No</data>
-            <data name="category/data/default_sort_by" xsi:type="string">Name</data>
+            <data name="category/data/default_sort_by" xsi:type="string">Product Name</data>
             <data name="category/data/available_product_listing_config" xsi:type="string">No</data>
             <data name="category/data/available_sort_by/sort_2" xsi:type="string">Product Name</data>
             <data name="category/data/available_sort_by/sort_1" xsi:type="string">Price</data>

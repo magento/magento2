@@ -586,4 +586,14 @@ class StoreTest extends \PHPUnit_Framework_TestCase
             ->willReturn($expectedResult);
         $this->assertEquals($expectedResult, $this->store->getBaseStaticDir());
     }
+
+    public function testGetScopeType()
+    {
+        $this->assertEquals(ScopeInterface::SCOPE_STORE, $this->store->getScopeType());
+    }
+
+    public function testGetScopeTypeName()
+    {
+        $this->assertEquals('Store View', $this->store->getScopeTypeName());
+    }
 }

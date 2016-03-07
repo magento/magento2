@@ -259,12 +259,10 @@ class Phrase
     }
 
     /**
-     * Compile PHP string based on quotes type it enclosed with
+     * Compile PHP string (escaping unescaped quotes and processing concatenation)
      *
      * @param string $string
      * @return string
-     *
-     * @SuppressWarnings(PHPMD.EvalExpression)
      */
     private function getCompiledString($string)
     {
@@ -273,10 +271,7 @@ class Phrase
         preg_match_all('/[^\\\\]' . $encloseQuote . '|' . $encloseQuote . '[^\\\\]/', $string, $matches);
         if (count($matches[0])) {
             $string = preg_replace('/([^\\\\])' . $encloseQuote . ' ?\. ?' . $encloseQuote . '/', '$1', $string);
-            $string = addslashes($string);
         }
-        $evalString = 'return ' . $encloseQuote . $string . $encloseQuote . ';';
-        $result = @eval($evalString);
-        return is_string($result) ? $result :  $string;
+        return $string;
     }
 }
