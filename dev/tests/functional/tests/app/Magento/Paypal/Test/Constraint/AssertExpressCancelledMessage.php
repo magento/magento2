@@ -10,18 +10,19 @@ use Magento\Checkout\Test\Page\CheckoutCart;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Class AssertOrderSuccessPlacedMessage
+ * Class AssertExpressCancelledMessage
  * Assert that success message is correct
  */
-class AssertExpressSuccessfullyCancelledMessage extends AbstractConstraint
+class AssertExpressCancelledMessage extends AbstractConstraint
 {
     /**
-     * Message of success checkout
+     * Message of cancelled PayPal Express checkout.
      */
     const SUCCESS_MESSAGE = 'Express Checkout has been canceled.';
 
     /**
-     * Assert that success message is correct
+     * Assert that success message is correct.
+     *
      * @param CheckoutCart $checkoutCart
      */
     public function processAssert(CheckoutCart $checkoutCart)
@@ -29,17 +30,17 @@ class AssertExpressSuccessfullyCancelledMessage extends AbstractConstraint
         \PHPUnit_Framework_Assert::assertEquals(
             self::SUCCESS_MESSAGE,
             $checkoutCart->getMessagesBlock()->getSuccessMessage(),
-            'Wrong success message is displayed.'
+            'Success message about Express Checkout cancellation is not present or wrong.'
         );
     }
 
     /**
-     * Returns string representation of successful assertion
+     * Returns string representation of successful assertion.
      *
      * @return string
      */
     public function toString()
     {
-        return 'Success message on Shopping Cart page is correct.';
+        return 'Success message about Express Checkout cancellation is present.';
     }
 }
