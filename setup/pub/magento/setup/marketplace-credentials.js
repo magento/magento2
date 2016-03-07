@@ -12,7 +12,7 @@ angular.module('marketplace-credentials', ['ngStorage'])
                 password : '',
                 submitted : false
             };
-
+            $scope.errors = false;
             if (!$rootScope.authRequest) {
                 $scope.isAuthLoadingComplete = false;
                 $http.post('index.php/marketplace/check-auth', [])
@@ -44,11 +44,13 @@ angular.module('marketplace-credentials', ['ngStorage'])
                             if ($scope.saveAuthJson.result.success) {
                                 $scope.logout = false;
                                 $localStorage.isMarketplaceAuthorized = true;
+                                $scope.errors = false;
                                 $scope.isAuthLoadingComplete = true;
                                 $scope.nextState();
                             } else {
                                 $localStorage.isMarketplaceAuthorized = false;
                                 $scope.isAuthLoadingComplete = true;
+                                $scope.errors = true;
                             }
                             $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized;
                             $localStorage.marketplaceUsername = $scope.user.username;
@@ -56,6 +58,7 @@ angular.module('marketplace-credentials', ['ngStorage'])
                         .error(function (data) {
                             $scope.saveAuthJson.failed = data;
                             $localStorage.isMarketplaceAuthorized = false;
+                            $scope.errors = true;
 
                         });
                 } else {
