@@ -41,7 +41,7 @@ define([
 
         /**
          * Initialize observables.
-         * 
+         *
          * @returns {Object} Chainable.
          */
         initObservable: function () {
@@ -81,7 +81,7 @@ define([
 
         /**
          * Show grid with assigned product.
-         * 
+         *
          * @returns {Object}
          */
         showGridAssignProduct: function () {
@@ -92,7 +92,7 @@ define([
 
         /**
          * Show grid with changed product.
-         * 
+         *
          * @param {String} rowIndex
          * @param {String} product
          */
@@ -104,7 +104,7 @@ define([
 
         /**
          * Select product.
-         * 
+         *
          * @param {String} rowIndex
          */
         selectProduct: function (rowIndex) {
@@ -232,7 +232,7 @@ define([
             
             if (this.typeGrid === 'assignProduct') {
                 selectedRows = _.filter(this.productsProvider().data.items, function (row) {
-                    return selected.indexOf(row['entity_id']) != -1;
+                    return selected.indexOf(row['entity_id']) !== -1;
                 });
                 selectedVariationKeys = _.values(this._getVariationKeyMap(selectedRows));
                 this._disableRows(this.productsProvider().data.items, selectedVariationKeys, selected);

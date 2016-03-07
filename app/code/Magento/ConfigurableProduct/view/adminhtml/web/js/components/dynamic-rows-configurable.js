@@ -54,10 +54,10 @@ define([
          * @param {String} rowIndex
          */
         openModalWithGrid: function (rowIndex) {
-            var productSource = this.source.get(this.dataScope + '.' + this.index + '.' + rowIndex);
-            var product = {
+            var productSource = this.source.get(this.dataScope + '.' + this.index + '.' + rowIndex),
+                product = {
                 'id': productSource.id,
-                'attributes': productSource.configurable_attribute
+                'attributes': productSource['configurable_attribute']
             };
 
             this.modalWithGrid().openModal();
@@ -210,7 +210,7 @@ define([
 
         /**
          * Process changes from grid.
-         * 
+         *
          * @param {Object} data
          */
         processingChangeDataFromGrid: function (data) {
@@ -219,7 +219,7 @@ define([
 
             mappedData[this.canEditField] = 0;
             mappedData[this.newProductField] = 0;
-            mappedData['variationKey'] = this._getVariationKey(data.product);
+            mappedData.variationKey = this._getVariationKey(data.product);
             mappedData['configurable_attribute'] = this._getConfigurableAttribute(data.product);
 
             tmpArray[data.rowIndex] = mappedData;
@@ -247,7 +247,7 @@ define([
 
         /**
          * Get configurable attribute.
-         * 
+         *
          * @param {Object} data
          * @returns {String}
          * @private
