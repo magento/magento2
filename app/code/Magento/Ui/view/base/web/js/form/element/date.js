@@ -23,9 +23,7 @@ define([
          */
         initConfig: function () {
             this._super();
-
-            //this.dateFormat = utils.normalizeDate(this.dateFormat);
-            this.dateFormat = utils.normalizeDate('MM/dd/YYYY');
+            this.dateFormat = utils.normalizeDate(this.dateFormat);
 
             return this;
         },
