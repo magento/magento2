@@ -73,6 +73,22 @@ class Consumer implements ConsumerInterface
     private $messageController;
 
     /**
+     * This getter serves as a workaround to add this dependency to this class without breaking constructor structure.
+     *
+     * @return MessageController
+     *
+     * @deprecated
+     */
+    private function getMessageController()
+    {
+        if ($this->messageController === null) {
+            $this->messageController = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\MessageQueue\MessageController');
+        }
+        return $this->messageController;
+    }
+
+    /**
      * Initialize dependencies.
      *
      * @param CallbackInvoker $invoker
@@ -83,7 +99,6 @@ class Consumer implements ConsumerInterface
      * @param QueueConfig $queueConfig
      * @param EnvelopeFactory $envelopeFactory
      * @param MessageValidator $messageValidator
-     * @param MessageController $messageController
      */
     public function __construct(
         CallbackInvoker $invoker,
@@ -93,8 +108,7 @@ class Consumer implements ConsumerInterface
         \Magento\Framework\MessageQueue\QueueRepository $queueRepository,
         \Magento\Framework\MessageQueue\ConfigInterface $queueConfig,
         EnvelopeFactory $envelopeFactory,
-        MessageValidator $messageValidator,
-        MessageController $messageController
+        MessageValidator $messageValidator
     ) {
         $this->invoker = $invoker;
         $this->messageEncoder = $messageEncoder;
@@ -104,7 +118,6 @@ class Consumer implements ConsumerInterface
         $this->queueConfig = $queueConfig;
         $this->envelopeFactory = $envelopeFactory;
         $this->messageValidator = $messageValidator;
-        $this->messageController = $messageController;
     }
 
     /**
@@ -186,7 +199,7 @@ class Consumer implements ConsumerInterface
         return function (EnvelopeInterface $message) use ($queue) {
             try {
                 $this->resource->getConnection()->beginTransaction();
-                $this->messageController->lock($message, $this->configuration->getConsumerName());
+                $this->getMessageController()->lock($message, $this->configuration->getConsumerName());
                 $responseBody = $this->dispatchMessage($message);
                 $responseMessage = $this->envelopeFactory->create(
                     ['body' => $responseBody, 'properties' => $message->getProperties()]

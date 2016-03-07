@@ -25,13 +25,32 @@ class Envelope implements EnvelopeInterface
     private $messageId;
 
     /**
-     * @param \Magento\Framework\Json\DecoderInterface $jsonDecoder
+     * @var \Magento\Framework\Json\DecoderInterface
+     */
+    private $jsonDecoder;
+
+    /**
+     * This getter serves as a workaround to add this dependency to this class without breaking constructor structure.
+     *
+     * @return \Magento\Framework\Json\DecoderInterface
+     *
+     * @deprecated
+     */
+    private function getJsonDecoder()
+    {
+        if ($this->jsonDecoder === null) {
+            $this->jsonDecoder = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Json\DecoderInterface');
+        }
+        return $this->jsonDecoder;
+    }
+
+    /**
      * @param string $body
      * @param array $properties
      */
-    public function __construct(\Magento\Framework\Json\DecoderInterface $jsonDecoder, $body, array $properties = [])
+    public function __construct($body, array $properties = [])
     {
-        $this->messageId = $jsonDecoder->decode($body)['message_id'];
         $this->body = $body;
         $this->properties = $properties;
     }
@@ -41,6 +60,9 @@ class Envelope implements EnvelopeInterface
      */
     public function getMessageId()
     {
+        if ($this->messageId === null) {
+            $this->messageId = $this->getJsonDecoder()->decode($this->getBody())['message_id'];
+        }
         return $this->messageId;
     }
 

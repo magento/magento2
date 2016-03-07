@@ -42,26 +42,39 @@ class Consumer implements ConsumerInterface
     private $messageController;
 
     /**
+     * This getter serves as a workaround to add this dependency to this class without breaking constructor structure.
+     *
+     * @return MessageController
+     *
+     * @deprecated
+     */
+    private function getMessageController()
+    {
+        if ($this->messageController === null) {
+            $this->messageController = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\MessageQueue\MessageController');
+        }
+        return $this->messageController;
+    }
+
+    /**
      * Initialize dependencies.
      *
      * @param CallbackInvoker $invoker
      * @param MessageEncoder $messageEncoder
      * @param ResourceConnection $resource
      * @param ConsumerConfigurationInterface $configuration
-     * @param MessageController $messageController
      */
     public function __construct(
         CallbackInvoker $invoker,
         MessageEncoder $messageEncoder,
         ResourceConnection $resource,
-        ConsumerConfigurationInterface $configuration,
-        MessageController $messageController
+        ConsumerConfigurationInterface $configuration
     ) {
         $this->invoker = $invoker;
         $this->messageEncoder = $messageEncoder;
         $this->resource = $resource;
         $this->configuration = $configuration;
-        $this->messageController = $messageController;
     }
 
     /**
@@ -120,7 +133,7 @@ class Consumer implements ConsumerInterface
                 $topicName = $message->getProperties()['topic_name'];
                 $allowedTopics = $this->configuration->getTopicNames();
                 $this->resource->getConnection()->beginTransaction();
-                $this->messageController->lock($message, $this->configuration->getConsumerName());
+                $this->getMessageController()->lock($message, $this->configuration->getConsumerName());
                 if (in_array($topicName, $allowedTopics)) {
                     $this->dispatchMessage($message);
                     $this->resource->getConnection()->commit();

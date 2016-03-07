@@ -57,6 +57,22 @@ class BatchConsumer implements ConsumerInterface
     private $messageController;
 
     /**
+     * This getter serves as a workaround to add this dependency to this class without breaking constructor structure.
+     *
+     * @return MessageController
+     *
+     * @deprecated
+     */
+    private function getMessageController()
+    {
+        if ($this->messageController === null) {
+            $this->messageController = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\MessageQueue\MessageController');
+        }
+        return $this->messageController;
+    }
+
+    /**
      * Initialize dependencies.
      *
      * @param ConfigInterface $messageQueueConfig
@@ -65,7 +81,6 @@ class BatchConsumer implements ConsumerInterface
      * @param MergerFactory $mergerFactory
      * @param ResourceConnection $resource
      * @param ConsumerConfigurationInterface $configuration
-     * @param MessageController $messageController
      * @param int $interval
      */
     public function __construct(
@@ -75,7 +90,6 @@ class BatchConsumer implements ConsumerInterface
         MergerFactory $mergerFactory,
         ResourceConnection $resource,
         ConsumerConfigurationInterface $configuration,
-        MessageController $messageController,
         $interval = 5
     ) {
         $this->messageQueueConfig = $messageQueueConfig;
@@ -85,7 +99,6 @@ class BatchConsumer implements ConsumerInterface
         $this->interval = $interval;
         $this->resource = $resource;
         $this->configuration = $configuration;
-        $this->messageController = $messageController;
     }
 
     /**
@@ -285,7 +298,7 @@ class BatchConsumer implements ConsumerInterface
         $toAcknowledge = [];
         foreach ($messages as $message) {
             try {
-                $this->messageController->lock($message, $this->configuration->getConsumerName());
+                $this->getMessageController()->lock($message, $this->configuration->getConsumerName());
                 $toProcess[] = $message;
             } catch (MessageLockException $exception) {
                 $toAcknowledge[] = $message;
