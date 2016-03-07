@@ -50,7 +50,7 @@ define([
 
         /**
          * Open modal with grid.
-         * 
+         *
          * @param {String} rowIndex
          */
         openModalWithGrid: function (rowIndex) {
