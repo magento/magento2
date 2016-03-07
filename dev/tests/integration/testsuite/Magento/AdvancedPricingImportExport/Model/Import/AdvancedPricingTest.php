@@ -84,7 +84,6 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
      */
     public function testImportAddUpdate()
     {
-        $this->modifyData(['AdvancedPricingSimple 1', 'AdvancedPricingSimple 2']);
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/import_advanced_pricing.csv';
         $filesystem = $this->objectManager->create(
@@ -128,14 +127,6 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param array $skus
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    protected function modifyData($skus)
-    {
-    }
-
-    /**
      * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
@@ -143,7 +134,6 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
      */
     public function testImportDelete()
     {
-        $this->modifyData(['simple']);
         $productRepository = $this->objectManager->create(
             'Magento\Catalog\Api\ProductRepositoryInterface'
         );
@@ -210,7 +200,6 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
      */
     public function testImportReplace()
     {
-        $this->modifyData(['AdvancedPricingSimple 1', 'AdvancedPricingSimple 2']);
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/import_advanced_pricing.csv';
         $filesystem = $this->objectManager->create(
