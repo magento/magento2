@@ -133,19 +133,24 @@ class Source
     private function preProcess(LocalInterface $asset)
     {
         $sourceFile = $this->findSourceFile($asset);
-        $result = false;
+        $dir = $this->rootDir->getAbsolutePath();
+        $path = '';
         if ($sourceFile) {
             $path = basename($sourceFile);
             $dir = dirname($sourceFile);
+        }
 
-            $chain = $this->createChain($asset, $dir, $path);
-            $this->preProcessorPool->process($chain);
-            $chain->assertValid();
-            if ($chain->isChanged()) {
-                $dir = $this->varDir->getAbsolutePath();
-                $path = DirectoryList::TMP_MATERIALIZATION_DIR . '/source/' . $chain->getTargetAssetPath();
-                $this->varDir->writeFile($path, $chain->getContent());
-            }
+        $chain = $this->createChain($asset, $dir, $path);
+        $this->preProcessorPool->process($chain);
+        $chain->assertValid();
+        if ($chain->isChanged()) {
+            $dir = $this->varDir->getAbsolutePath();
+            $path = DirectoryList::TMP_MATERIALIZATION_DIR . '/source/' . $chain->getTargetAssetPath();
+            $this->varDir->writeFile($path, $chain->getContent());
+        }
+        if (empty($path)) {
+            $result = false;
+        } else {
             $result = [$dir, $path];
         }
         return $result;
