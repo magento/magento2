@@ -5,8 +5,9 @@
 
 define([
     'underscore',
+    'uiRegistry',
     'Magento_Ui/js/dynamic-rows/dynamic-rows'
-], function (_, dynamicRows) {
+], function (_, registry, dynamicRows) {
     'use strict';
 
     return dynamicRows.extend({
@@ -16,7 +17,9 @@ define([
             newProductField: 'newProduct',
             dataScopeAssociatedProduct: 'data.associated_product_ids',
             dataProviderFromGrid: '',
+            dataProviderChangeFromGrid: '',
             insertDataFromGrid: [],
+            changeDataFromGrid: [],
             dataProviderFromWizard: '',
             insertDataFromWizard: [],
             map: null,
@@ -30,14 +33,30 @@ define([
             listens: {
                 'insertDataFromGrid': 'processingInsertDataFromGrid',
                 'insertDataFromWizard': 'processingInsertDataFromWizard',
-                'unionInsertData': 'processingUnionInsertData'
+                'unionInsertData': 'processingUnionInsertData',
+                'changeDataFromGrid': 'processingChangeDataFromGrid'
             },
             imports: {
                 'attribute_set_id': '${$.provider}:data.product.attribute_set_id'
             },
             'exports': {
                 'attribute_set_id': '${$.provider}:data.new-variations-attribute-set-id'
+            },
+            modules: {
+                modalWithGrid: '${ $.modalWithGrid }',
+                gridWithProducts: '${ $.gridWithProducts}'
             }
+        },
+
+        openModalWithGrid: function (rowIndex) {
+            var productSource = this.source.get(this.dataScope + '.' + this.index + '.' + rowIndex);
+            var product = {
+                'id': productSource.id,
+                'attributes': productSource.configurable_attribute
+            };
+
+            this.modalWithGrid().openModal();
+            this.gridWithProducts().showGridChangeProduct(rowIndex, product);
         },
 
         /**
@@ -159,10 +178,48 @@ define([
                 var mappedData = this.mappingValue(changedObject);
                 mappedData[this.canEditField] = 0;
                 mappedData[this.newProductField] = 0;
+                mappedData['variationKey'] = this._getVariationKey(changedObject);
+                mappedData['configurable_attribute'] = this._getConfigurableAttribute(changedObject);
                 tmpArray.push(mappedData);
             }, this);
 
             this.unionInsertData(tmpArray);
+        },
+
+        processingChangeDataFromGrid: function (data) {
+            var tmpArray = this.unionInsertData(),
+                mappedData = this.mappingValue(data.product);
+
+            mappedData[this.canEditField] = 0;
+            mappedData[this.newProductField] = 0;
+            mappedData['variationKey'] = this._getVariationKey(data.product);
+            mappedData['configurable_attribute'] = this._getConfigurableAttribute(data.product);
+
+            tmpArray[data.rowIndex] = mappedData;
+
+            this.unionInsertData(tmpArray);
+        },
+
+        _getVariationKey: function (data) {
+            var attrCodes = this.source.get('data.attribute_codes'),
+                key = [];
+
+            attrCodes.each(function (code) {
+                key.push(data[code]);
+            });
+
+            return key.sort().join('-');
+        },
+
+        _getConfigurableAttribute: function (data) {
+            var attrCodes = this.source.get('data.attribute_codes'),
+                confAttrs = {};
+
+            attrCodes.each(function (code) {
+                confAttrs[code] = data[code];
+            });
+
+            return JSON.stringify(confAttrs);
         },
 
         processingInsertDataFromWizard: function (data) {
@@ -193,7 +250,12 @@ define([
                     'weight': row.weight,
                     'qty': row.quantity,
                     'variationKey': row.variationKey,
-                    'configurable_attribute': row.attribute
+                    'configurable_attribute': row.attribute,
+                    'thumbnail_image': row.images.preview,
+                    'media_gallery': row.media_gallery,
+                    'swatch_image': row.swatch_image,
+                    'small_image': row.small_image,
+                    'thumbnail': row.thumbnail
                 };
                 product[this.canEditField] = row.editable;
                 product[this.newProductField] = row.newProduct;

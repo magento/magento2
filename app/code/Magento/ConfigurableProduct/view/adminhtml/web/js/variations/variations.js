@@ -25,6 +25,7 @@ define([
             opened: false,
             attributes: [],
             usedAttributes: [],
+            attributeCodes: [],
             attributesData: {},
             productMatrix: [],
             variations: [],
@@ -41,7 +42,8 @@ define([
             links: {
                 value: '${ $.provider }:${ $.dataScopeVariations }',
                 usedAttributes: '${ $.provider }:${ $.dataScopeAttributes }',
-                attributesData: '${ $.provider }:${ $.dataScopeAttributesData }'
+                attributesData: '${ $.provider }:${ $.dataScopeAttributesData }',
+                attributeCodes: '${ $.provider }:${ $.dataScopeAttributeCodes }'
             }
         },
         initialize: function () {
@@ -51,7 +53,9 @@ define([
             this.initProductAttributesMap();
         },
         initObservable: function () {
-            this._super().observe('actions opened attributes productMatrix value usedAttributes attributesData');
+            this._super().observe(
+                'actions opened attributes productMatrix value usedAttributes attributesData attributeCodes'
+            );
 
             return this;
         },
@@ -125,10 +129,13 @@ define([
             this.handleAttributes();
         },
         changeButtonWizard: function () {
-            this.wizardButtonElement().title(this.wizardModalButtonTitle);
+            if (this.variations.length) {
+                this.wizardButtonElement().title(this.wizardModalButtonTitle);
+            }
         },
         handleValue: function (variations) {
             var tmpArray = [];
+
 
             _.each(variations, function (variation) {
                 var attributes = _.reduce(variation.options, function (memo, option) {
@@ -137,6 +144,21 @@ define([
 
                     return _.extend(memo, attribute);
                 }, {});
+                var gallery = {images: {}};
+                var defaultImage = null;
+
+                _.each(variation.images.images, function (image) {
+                    gallery.images[image.file_id] = {
+                        position: image.position,
+                        file: image.file,
+                        disabled: image.disabled,
+                        label: ''
+                    };
+                    if (image.position == 1) {
+                        defaultImage = image.file;
+                    }
+                }, this);
+
                 tmpArray.push(_.extend(variation, {
                     productId: variation.productId || null,
                     name: variation.name || variation.sku,
@@ -144,11 +166,15 @@ define([
                     weight: variation.weight,
                     attribute: JSON.stringify(attributes),
                     variationKey: this.getVariationKey(variation.options),
-                    //editable: variation.editable === undefined ? !variation.productId : variation.editable,
                     editable: variation.editable === undefined ? 0 : 1,
                     productUrl: this.buildProductUrl(variation.productId),
                     status: variation.status === undefined ? 1 : parseInt(variation.status, 10),
-                    newProduct: variation.productId ? 0 : 1
+                    newProduct: variation.productId ? 0 : 1,
+                    media_gallery: gallery,
+                    swatch_image: defaultImage,
+                    small_image: defaultImage,
+                    thumbnail: defaultImage,
+                    image: defaultImage
                 }));
             }, this);
 
@@ -156,6 +182,7 @@ define([
         },
         handleAttributes: function () {
             var tmpArray = [];
+            var codesArray = [];
             var tmpOptions = {};
             var option = {};
             var position = 0;
@@ -163,6 +190,7 @@ define([
 
             _.each(this.attributes(), function (attribute) {
                 tmpArray.push(attribute.id);
+                codesArray.push(attribute.code);
                 values = {};
                 _.each(attribute.chosen, function (row) {
                     values[row.value] = {
@@ -183,6 +211,7 @@ define([
 
             this.attributesData(tmpOptions);
             this.usedAttributes(tmpArray);
+            this.attributeCodes(codesArray);
         },
 
 
