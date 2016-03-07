@@ -62,7 +62,9 @@
             </li>
         </ul>
 
-        <div data-role="step-gallery-single" class="attribute-image-selector" data-bind="visible: type() == 'single'">
+        <div data-role="step-gallery-single"
+             class="attribute-image-selector"
+             data-bind="visible: type() == 'single'">
             <div data-role="gallery"
                  class="gallery"
                  data-images="[]"
@@ -82,7 +84,9 @@
                                    data-url="<?= /* @escapeNotVerified */ $block->getUrl('catalog/product_gallery/upload') ?>" />
                         </div>
                     </div>
-                    <p class="image-placeholder-text"><?= /* @escapeNotVerified */  __('Browse to find or drag image here') ?></p>
+                    <div class="product-image-wrapper">
+                        <p class="image-placeholder-text"><?= /* @escapeNotVerified */  __('Browse to find or drag image here') ?></p>
+                    </div>
                 </div>
 
                 <script data-template="uploader" type="text/x-magento-template">
@@ -118,35 +122,43 @@
                                value="<%- data.disabled %>"/>
                         <input type="hidden"
                                name="product[media_gallery][images][<%- data.file_id %>][removed]"/>
-                        <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
-                        <button type="button"
-                                class="action-remove"
-                                data-role="delete-button"
-                                title="<?= $block->escapeHtml(__('Remove image')) ?>">
-                            <span><?= /* @escapeNotVerified */  __('Remove image') ?></span>
-                        </button>
-                        <div class="draggable-handle"></div>
-                        <div class="image-label" title="<?= $block->escapeHtml(__('Edit role')) ?>"></div>
-                        <div class="image-fade"><span><?= /* @escapeNotVerified */  __('Hidden') ?></span></div>
+                        <div class="product-image-wrapper">
+                            <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
+                            <div class="actions">
+                                <button type="button"
+                                        class="action-remove"
+                                        data-role="delete-button"
+                                        title="<?= $block->escapeHtml(__('Delete image')) ?>">
+                                    <span><?= /* @escapeNotVerified */  __('Delete image') ?></span>
+                                </button>
+                                <div class="draggable-handle"></div>
+                            </div>
+                            <div class="image-fade"><span><?= /* @escapeNotVerified */  __('Hidden') ?></span></div>
+                        </div>
                     </div>
                 </script>
 
                 <script data-template="image" type="text/x-magento-template">
                     <div class="image">
-                        <img
-                            class="product-image"
-                            src="<%- data.url %>"
-                            data-position="<%- data.position %>"
-                            alt="<%- data.label %>" />
-                        <button type="button"
-                                class="action-remove"
-                                data-role="delete-button"
-                                title="<?= $block->escapeHtml(__('Remove image')) ?>">
-                            <span><?= /* @escapeNotVerified */  __('Remove image') ?></span>
-                        </button>
-                        <div class="draggable-handle"></div>
-                        <div class="image-label" title="<?= $block->escapeHtml(__('Edit role')) ?>"></div>
-                        <div class="image-fade"><span><?= /* @escapeNotVerified */  __('Hidden') ?></span></div>
+                        <div class="product-image-wrapper">
+                            <img class="product-image"
+                                 src="<%- data.url %>"
+                                 data-position="<%- data.position %>"
+                                 alt="<%- data.label %>" />
+
+                            <div class="actions">
+                                <button type="button"
+                                        class="action-remove"
+                                        data-role="delete-button"
+                                        title="<?= $block->escapeHtml(__('Delete image')) ?>">
+                                    <span><?= /* @escapeNotVerified */  __('Delete image') ?></span>
+                                </button>
+
+                                <div class="draggable-handle"></div>
+                            </div>
+
+                            <div class="image-fade"><span><?= /* @escapeNotVerified */  __('Hidden') ?></span></div>
+                        </div>
                     </div>
                 </script>
 
@@ -218,6 +230,7 @@
 
             </div>
         </div>
+
         <div data-role="step-gallery-each" class="attribute-image-selector" data-bind="visible: type() == 'each'">
             <fieldset class="admin__fieldset bulk-attribute-values">
                 <div class="admin__field _required">
@@ -261,12 +274,15 @@
                                            data-url="<?= /* @escapeNotVerified */ $block->getUrl('catalog/product_gallery/upload') ?>" />
                                 </div>
                             </div>
-                            <p class="image-placeholder-text"><?= /* @escapeNotVerified */  __('Browse to find or drag image here') ?></p>
+                            <div class="product-image-wrapper">
+                                <p class="image-placeholder-text"><?= /* @escapeNotVerified */  __('Browse to find or drag image here') ?></p>
+                            </div>
                             <div class="spinner">
                                <span></span><span></span><span></span><span></span>
                                <span></span><span></span><span></span><span></span>
                             </div>
                         </div>
+
                         <script data-template="uploader" type="text/x-magento-template">
                             <div id="<%- data.id %>" class="file-row">
                                 <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
@@ -302,37 +318,40 @@
                                        name="product[media_gallery][images][<%- data.file_id %>][removed]"
                                        value=""
                                        class="is-removed"/>
-                                <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
-
-                                <button type="button"
-                                        class="action-remove"
-                                        data-role="delete-button"
-                                        title="<?= $block->escapeHtml(__('Remove image')) ?>">
-                                    <span><?= /* @escapeNotVerified */  __('Remove image') ?></span>
-                                </button>
-                                <div class="draggable-handle"></div>
-                                <div class="image-label" title="<?= $block->escapeHtml(__('Edit role')) ?>"></div>
-                                <div class="image-fade"><span><?= /* @escapeNotVerified */  __('Hidden') ?></span></div>
+                                <div class="product-image-wrapper">
+                                    <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
+                                    <div class="actions">
+                                        <button type="button"
+                                                class="action-remove"
+                                                data-role="delete-button"
+                                                title="<?= $block->escapeHtml(__('Remove image')) ?>">
+                                            <span><?= /* @escapeNotVerified */  __('Remove image') ?></span>
+                                        </button>
+                                        <div class="draggable-handle"></div>
+                                    </div>
+                                    <div class="image-fade"><span><?= /* @escapeNotVerified */  __('Hidden') ?></span></div>
+                                </div>
                             </div>
                         </script>
 
                         <script data-template="image" type="text/x-magento-template">
                             <div class="image">
-                                <img
-                                    class="product-image"
-                                    src="<%- data.url %>"
-                                    data-position="<%- data.position %>"
-                                    alt="<%- data.label %>" />
-
-                                <button type="button"
-                                        class="action-remove"
-                                        data-role="delete-button"
-                                        title="<?= $block->escapeHtml(__('Remove image')) ?>">
-                                    <span><?= /* @escapeNotVerified */  __('Remove image') ?></span>
-                                </button>
-                                <div class="draggable-handle"></div>
-                                <div class="image-label" title="<?= $block->escapeHtml(__('Edit role')) ?>"></div>
-                                <div class="image-fade"><span><?= /* @escapeNotVerified */  __('Hidden') ?></span></div>
+                                <div class="product-image-wrapper">
+                                    <img class="product-image"
+                                         src="<%- data.url %>"
+                                         data-position="<%- data.position %>"
+                                         alt="<%- data.label %>" />
+                                    <div class="actions">
+                                        <button type="button"
+                                                class="action-remove"
+                                                data-role="delete-button"
+                                                title="<?= $block->escapeHtml(__('Remove image')) ?>">
+                                            <span><?= /* @escapeNotVerified */  __('Remove image') ?></span>
+                                        </button>
+                                        <div class="draggable-handle"></div>
+                                    </div>
+                                    <div class="image-fade"><span><?= /* @escapeNotVerified */  __('Hidden') ?></span></div>
+                                </div>
                             </div>
                         </script>
 
