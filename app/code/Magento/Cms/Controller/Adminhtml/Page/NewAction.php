@@ -9,6 +9,13 @@ namespace Magento\Cms\Controller\Adminhtml\Page;
 class NewAction extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Cms::save';
+
+    /**
      * @var \Magento\Backend\Model\View\Result\Forward
      */
     protected $resultForwardFactory;
@@ -23,14 +30,6 @@ class NewAction extends \Magento\Backend\App\Action
     ) {
         $this->resultForwardFactory = $resultForwardFactory;
         parent::__construct($context);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Cms::save');
     }
 
     /**

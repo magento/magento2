@@ -102,12 +102,17 @@ class PageRepository implements PageRepositoryInterface
      */
     public function save(\Magento\Cms\Api\Data\PageInterface $page)
     {
-        $storeId = $this->storeManager->getStore()->getId();
-        $page->setStoreId($storeId);
+        if (empty($page->getStoreId())) {
+            $storeId = $this->storeManager->getStore()->getId();
+            $page->setStoreId($storeId);
+        }
         try {
             $this->resource->save($page);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__($exception->getMessage()));
+            throw new CouldNotSaveException(__(
+                'Could not save the page: %1',
+                $exception->getMessage()
+            ));
         }
         return $page;
     }
@@ -196,7 +201,10 @@ class PageRepository implements PageRepositoryInterface
         try {
             $this->resource->delete($page);
         } catch (\Exception $exception) {
-            throw new CouldNotDeleteException(__($exception->getMessage()));
+            throw new CouldNotDeleteException(__(
+                'Could not delete the page: %1',
+                $exception->getMessage()
+            ));
         }
         return true;
     }
