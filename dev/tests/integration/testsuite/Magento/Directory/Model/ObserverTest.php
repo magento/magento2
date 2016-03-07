@@ -8,6 +8,7 @@
 
 namespace Magento\Directory\Model;
 
+use Magento\Directory\Model\Currency\Import\Webservicex;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -61,13 +62,14 @@ class ObserverTest extends \PHPUnit_Framework_TestCase
     public function testScheduledUpdateCurrencyRates()
     {
         //skipping test if service is unavailable
-        $url = str_replace('{{CURRENCY_FROM}}', 'USD',
-            \Magento\Directory\Model\Currency\Import\Webservicex::CURRENCY_CONVERTER_URL);
-        $url = str_replace('{{CURRENCY_TO}}', 'GBP', $url);
+        $url = Webservicex::CURRENCY_CONVERTER_ENDPOINT . 
+            '?' . Webservicex::CURRENCY_CONVERTER_FROM_PARAM . '=USD' .
+            '&' . Webservicex::CURRENCY_CONVERTER_TO_PARAM . '=GBP';
+
         try {
             file_get_contents($url);
         } catch (\PHPUnit_Framework_Error_Warning $e) {
-            $this->markTestSkipped('http://www.webservicex.net is unavailable ');
+            $this->markTestSkipped(Webservicex::CURRENCY_CONVERTER_ENDPOINT . ' is unavailable ');
         }
 
         $allowedCurrencies = 'USD,GBP,EUR';
