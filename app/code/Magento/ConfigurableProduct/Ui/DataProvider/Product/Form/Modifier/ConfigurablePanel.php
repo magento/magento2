@@ -374,6 +374,17 @@ class ConfigurablePanel extends AbstractModifier
                         __('Image'),
                         [
                             'fit' => true,
+                            'formElement' => 'fileUploader',
+                            'componentType' => 'fileUploader',
+                            'component' => 'Magento_ConfigurableProduct/js/components/file-uploader',
+                            'elementTmpl' => 'Magento_ConfigurableProduct/components/file-uploader',
+                            'fileInputName' => 'image',
+                            'uploaderConfig' => [
+                                'url' => $this->urlBuilder->addSessionParam()->getUrl(
+                                    'catalog/product_gallery/upload'
+                                ),
+                            ],
+                            'dataScope' => 'image',
                         ],
                         [
                             'elementTmpl' => 'ui/dynamic-rows/cells/thumbnail',
