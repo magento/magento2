@@ -41,32 +41,6 @@ div.removed,
 }
 
 //
-//  Product weight switcher
-//  ---------------------------------------------
-
-.weight-switcher {
-    .field-weight & {
-        .admin__control-switcher {
-            > .admin__field-label {
-                float: none;
-                padding-top: 7px;
-                text-align: left;
-                width: 100%;
-            }
-        }
-    }
-
-    .admin__control-radio[type=radio] {
-        margin: 0;
-        position: absolute;
-    }
-
-    .admin__control-addon {
-        width: auto; // IE9 width fix
-    }
-}
-
-//
 //  Create attribute panel iframe page configuration
 //  ---------------------------------------------
 
@@ -84,45 +58,14 @@ div.removed,
     }
 }
 
-.catalog-category-edit {
-    .admin__field {
-        legend {
-            margin-right: 0;
-        }
-    }
+//
+//  Category page sidebar
+//  ---------------------------------------------
 
-    .admin__field-control {
-        .switcher {
-            line-height: 3.2rem;
-        }
+.sidebar-actions {
+    margin-bottom: @indent__base;
 
-        .switcher-label {
-            &:before,
-            &:after {
-                vertical-align: middle;
-            }
-        }
-    }
-
-    .admin__field-date {
-        white-space: nowrap;
-
-        &:first-child {
-            width: 1px;
-        }
-
-        .admin__field-control {
-            display: inline-block;
-            vertical-align: top;
-        }
-
-        + .admin__field-date {
-            margin-top: 0;
-            width: auto;
-
-            .admin__field-label {
-                margin-right: 1.5rem;
-            }
-        }
+    [class*='action-'] {
+        margin-bottom: @indent__xs;
     }
 }

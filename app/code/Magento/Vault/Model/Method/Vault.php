@@ -180,7 +180,7 @@ final class Vault implements VaultPaymentInterface
      */
     public function getTitle()
     {
-        return $this->getVaultProvider()->getTitle();
+        return 'Stored Cards';
     }
 
     /**

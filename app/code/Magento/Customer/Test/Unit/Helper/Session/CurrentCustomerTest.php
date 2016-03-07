@@ -51,7 +51,7 @@ class CurrentCustomerTest extends \PHPUnit_Framework_TestCase
     protected $moduleManagerMock;
 
     /**
-     * @var \Magento\Framework\App\ViewInterface
+     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $viewMock;
 

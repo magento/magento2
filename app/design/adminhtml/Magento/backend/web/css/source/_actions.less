@@ -75,6 +75,21 @@
     }
 }
 
+.abs-action-button-as-link {
+    .lib-button-as-link(@_margin: false);
+    .lib-css(font-weight, @font-weight__regular);
+    border-radius: 0;
+
+    &:active,
+    &:not(:focus) {
+        box-shadow: none;
+    }
+
+    &:focus {
+        color: @link__hover__color;
+    }
+}
+
 .abs-action-default {
     .action-default();
 }
@@ -392,6 +407,14 @@ button {
         cursor: pointer;
         text-decoration: none;
     }
+}
+
+//
+//  Secondary action
+//  ---------------------------------------------
+
+.action-advanced {
+    &:extend(.abs-action-button-as-link all);
 }
 
 //

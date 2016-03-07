@@ -339,6 +339,7 @@ app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/marked.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/swagger-oauth.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/lib/underscore-min.js
 app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/swagger-ui.js
+app/code/Magento/Swagger/view/frontend/web/swagger-ui/js/magento-swagger.js
 app/code/Magento/Swatches/view/frontend/requirejs-config.js
 app/code/Magento/Swatches/view/adminhtml/requirejs-config.js
 app/code/Magento/Tax/view/adminhtml/web/js/bootstrap.js
@@ -443,7 +444,6 @@ dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/form/components/html.test
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/form/components/tab_group.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/form/components/tab.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/form/element/abstract.test.js
-dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/form/element/boolean.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/form/element/date.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/form/element/multiselect.test.js
 dev/tests/js/jasmine/tests/app/code/Magento/Ui/base/js/form/element/post-code.test.js
@@ -942,7 +942,6 @@ vendor/magento/module-ui/view/base/web/js/form/components/html.js
 vendor/magento/module-ui/view/base/web/js/form/components/tab_group.js
 vendor/magento/module-ui/view/base/web/js/form/components/tab.js
 vendor/magento/module-ui/view/base/web/js/form/element/abstract.js
-vendor/magento/module-ui/view/base/web/js/form/element/boolean.js
 vendor/magento/module-ui/view/base/web/js/form/element/date.js
 vendor/magento/module-ui/view/base/web/js/form/element/helpers/options.js
 vendor/magento/module-ui/view/base/web/js/form/element/multiselect.js
@@ -1056,3 +1055,4 @@ vendor/magento/theme-frontend-blank/web/js/navigation-menu.js
 vendor/magento/theme-frontend-blank/web/js/responsive.js
 vendor/magento/theme-frontend-blank/web/js/theme.js
 app/code/Magento/BraintreeTwo/view/frontend/requirejs-config.js
+app/code/Magento/Customer/view/frontend/web/js/zxcvbn.js

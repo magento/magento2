@@ -14,6 +14,7 @@ define([
         defaults: {
             $selector: null,
             selector: 'edit_form',
+            fieldset: '',
             active: false,
             imports: {
                 onActiveChange: 'active'
@@ -34,6 +35,10 @@ define([
             // re-init payment method events
             self.$selector.off('changePaymentMethod.' + this.code)
                 .on('changePaymentMethod.' + this.code, this.changePaymentMethod.bind(this));
+
+            if (this.active()) {
+                $('#' + this.fieldset + ' input:radio:first').trigger('click');
+            }
 
             return this;
         },
@@ -56,9 +61,12 @@ define([
          */
         onActiveChange: function (isActive) {
             if (!isActive) {
+                this.$selector.trigger('setVaultNotActive');
 
                 return;
             }
+
+            $('#' + this.fieldset + ' input:radio:first').trigger('click');
             window.order.addExcludedPaymentMethod(this.code);
         }
     });

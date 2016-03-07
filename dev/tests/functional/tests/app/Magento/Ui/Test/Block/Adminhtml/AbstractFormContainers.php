@@ -37,7 +37,7 @@ abstract class AbstractFormContainers extends Form
      *
      * @var string
      */
-    protected $header = 'header';
+    protected $header = 'header.page-header';
 
     /**
      * Initialize.

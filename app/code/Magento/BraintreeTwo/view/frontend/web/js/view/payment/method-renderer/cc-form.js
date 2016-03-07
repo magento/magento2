@@ -11,10 +11,10 @@ define(
         'Magento_Payment/js/view/payment/cc-form',
         'Magento_Checkout/js/model/quote',
         'Magento_BraintreeTwo/js/view/payment/adapter',
-        'Magento_Ui/js/model/messageList',
         'mage/translate',
         'Magento_BraintreeTwo/js/validator',
-        'Magento_BraintreeTwo/js/view/payment/validator-handler'
+        'Magento_BraintreeTwo/js/view/payment/validator-handler',
+        'Magento_Checkout/js/model/full-screen-loader'
     ],
     function (
         _,
@@ -22,17 +22,16 @@ define(
         Component,
         quote,
         braintree,
-        globalMessageList,
         $t,
         validator,
-        validatorManager
+        validatorManager,
+        fullScreenLoader
     ) {
         'use strict';
 
         return Component.extend({
             defaults: {
                 active: false,
-                isInitialized: false,
                 braintreeClient: null,
                 braintreeDeviceData: null,
                 paymentMethodNonce: null,
@@ -48,11 +47,6 @@ define(
                 additionalData: {},
 
                 /**
-                 * {String}
-                 */
-                integration: 'custom',
-
-                /**
                  * Braintree client configuration
                  *
                  * {Object}
@@ -61,65 +55,29 @@ define(
 
                     /**
                      * Triggers on payment nonce receive
-                     *
                      * @param {Object} response
                      */
                     onPaymentMethodReceived: function (response) {
-                        this.paymentMethodNonce = response.nonce;
-                        this.placeOrder();
+                        this.beforePlaceOrder(response);
                     },
 
                     /**
                      * Triggers on any Braintree error
                      */
                     onError: function () {
-                        this.paymentMethodNonce = '';
-                    }
-                }
-            },
-
-            /**
-             * Init config
-             */
-            initClientConfig: function () {
-                // Advanced fraud tools settings
-                if (this.hasFraudProtection()) {
-                    this.clientConfig = _.extend(this.clientConfig, this.kountConfig());
-                }
-
-                _.each(this.clientConfig, function (fn, name) {
-                    if (typeof fn === 'function') {
-                        this.clientConfig[name] = fn.bind(this);
-                    }
-                }, this);
-            },
-
-            /**
-             * @returns {Object}
-             */
-            kountConfig: function () {
-                var config = {
-                    dataCollector: {
-                        kount: {
-                            environment: this.getEnvironment()
-                        }
+                        this.paymentMethodNonce = null;
                     },
 
                     /**
-                     * Device data initialization
-                     *
-                     * @param {Object} braintreeInstance
+                     * Triggers when customer click "Cancel"
                      */
-                    onReady: function (braintreeInstance) {
-                        this.additionalData['device_data'] = braintreeInstance.deviceData;
+                    onCancelled: function () {
+                        this.paymentMethodNonce = null;
                     }
-                };
-
-                if (this.getKountMerchantId()) {
-                    config.dataCollector.kount.merchantId = this.getKountMerchantId();
+                },
+                imports: {
+                    onActiveChange: 'active'
                 }
-
-                return config;
             },
 
             /**
@@ -130,9 +88,8 @@ define(
             initObservable: function () {
                 validator.setConfig(window.checkoutConfig.payment[this.getCode()]);
                 this._super()
-                    .observe(['active', 'isInitialized']);
+                    .observe(['active']);
                 this.validatorManager.initialize();
-                this.braintreeClient = braintree;
                 this.initBraintree();
 
                 return this;
@@ -161,40 +118,84 @@ define(
             },
 
             /**
-             * Init Braintree handlers
+             * Triggers when payment method change
+             * @param {Boolean} isActive
+             */
+            onActiveChange: function (isActive) {
+                if (!isActive || this.isSingleUse()) {
+                    return;
+                }
+
+                this.reInitBraintree();
+            },
+
+            /**
+             * Init config
+             */
+            initClientConfig: function () {
+                // Advanced fraud tools settings
+                if (this.hasFraudProtection()) {
+                    this.clientConfig = _.extend(this.clientConfig, this.kountConfig());
+                }
+
+                _.each(this.clientConfig, function (fn, name) {
+                    if (typeof fn === 'function') {
+                        this.clientConfig[name] = fn.bind(this);
+                    }
+                }, this);
+            },
+
+            /**
+             * Create Braintree configuration
              */
             initBraintree: function () {
-                if (!this.braintreeClient.getClientToken()) {
-                    this.showError($t('Sorry, but something went wrong.'));
-                }
-
-                if (!this.isInitialized()) {
-                    this.isInitialized(true);
-                    this.initClient();
-                }
-            },
-
-            /**
-             * Init Braintree client
-             */
-            initClient: function () {
                 this.initClientConfig();
-                this.braintreeClient.getSdkClient().setup(
-                    this.braintreeClient.getClientToken(),
-                    this.integration,
-                    this.clientConfig
-                );
+                braintree.config = _.extend(braintree.config, this.clientConfig);
             },
 
             /**
-             * Show error message
-             *
-             * @param {String} errorMessage
+             * Re-init Braintree configuration
              */
-            showError: function (errorMessage) {
-                globalMessageList.addErrorMessage({
-                    message: errorMessage
-                });
+            reInitBraintree: function () {
+                var intervalId = setInterval(function () {
+                    // stop loader when frame will be loaded
+                    if ($('#braintree-hosted-field-number').length) {
+                        clearInterval(intervalId);
+                        fullScreenLoader.stopLoader();
+                    }
+                }, 500);
+
+                fullScreenLoader.startLoader();
+                braintree.setConfig(this.clientConfig);
+                braintree.setup();
+            },
+
+            /**
+             * @returns {Object}
+             */
+            kountConfig: function () {
+                var config = {
+                    dataCollector: {
+                        kount: {
+                            environment: this.getEnvironment()
+                        }
+                    },
+
+                    /**
+                     * Device data initialization
+                     *
+                     * @param {Object} braintreeInstance
+                     */
+                    onReady: function (braintreeInstance) {
+                        this.additionalData['device_data'] = braintreeInstance.deviceData;
+                    }
+                };
+
+                if (this.getKountMerchantId()) {
+                    config.dataCollector.kount.merchantId = this.getKountMerchantId();
+                }
+
+                return config;
             },
 
             /**
@@ -283,8 +284,16 @@ define(
             },
 
             /**
+             * Prepare data to place order
+             * @param {Object} data
+             */
+            beforePlaceOrder: function (data) {
+                this.setPaymentMethodNonce(data.nonce);
+                this.placeOrder();
+            },
+
+            /**
              * Action to place order
-             *
              * @param {String} key
              */
             placeOrder: function (key) {
@@ -299,6 +308,14 @@ define(
                 });
 
                 return false;
+            },
+
+            /**
+             * Check if Braintree configured without PayPal
+             * @returns {Boolean}
+             */
+            isSingleUse: function () {
+                return window.checkoutConfig.payment[this.getCode()].isSingleUse;
             }
         });
     }

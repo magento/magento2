@@ -94,8 +94,8 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             'Main Website' => 1
         ],
         'status' => [
-            'Product offline' => 2,
-            'Product online' => 1
+            'No' => 2,
+            'Yes' => 1
         ],
         'is_require' => [
             'Yes' => 1,
@@ -322,7 +322,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     {
         $this->fields['product']['status'] = isset($this->fields['product']['status'])
             ? $this->fields['product']['status']
-            : 'Product online';
+            : 'Yes';
     }
 
     /**

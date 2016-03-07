@@ -30,6 +30,10 @@
         .store-switcher {
             display: none;
         }
+        
+        .page-actions-placeholder {
+            min-height: 50px;
+        }
     }
 }
 
@@ -95,6 +99,11 @@
             &:extend(.abs-action-primary all);
             &:extend(.abs-action-l all);
             .lib-vendor-prefix-order(2);
+        }
+
+        &.action-secondary {
+            &:extend(.abs-action-secondary all);
+            &:extend(.abs-action-l all);
         }
 
         &.save {

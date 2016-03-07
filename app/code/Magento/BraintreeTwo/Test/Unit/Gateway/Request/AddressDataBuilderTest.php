@@ -71,9 +71,6 @@ class AddressDataBuilderTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->orderMock);
 
         $this->orderMock->expects(static::once())
-            ->method('getOrderIncrementId')
-            ->willReturn('000000100');
-        $this->orderMock->expects(static::once())
             ->method('getShippingAddress')
             ->willReturn(null);
         $this->orderMock->expects(static::once())
@@ -89,7 +86,7 @@ class AddressDataBuilderTest extends \PHPUnit_Framework_TestCase
             ->with($buildSubject)
             ->willReturn($this->paymentDOMock);
 
-        static::assertEquals(['orderId' => '000000100'], $this->builder->build($buildSubject));
+        static::assertEquals([], $this->builder->build($buildSubject));
     }
 
     /**
@@ -106,9 +103,6 @@ class AddressDataBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('getOrder')
             ->willReturn($this->orderMock);
 
-        $this->orderMock->expects(static::once())
-            ->method('getOrderIncrementId')
-            ->willReturn('000000101');
         $this->orderMock->expects(static::once())
             ->method('getShippingAddress')
             ->willReturn($addressMock);
@@ -147,7 +141,6 @@ class AddressDataBuilderTest extends \PHPUnit_Framework_TestCase
                     'post_code' => '00000'
                 ],
                 [
-                    AddressDataBuilder::ORDER_ID => '000000101',
                     AddressDataBuilder::SHIPPING_ADDRESS => [
                         AddressDataBuilder::FIRST_NAME => 'John',
                         AddressDataBuilder::LAST_NAME => 'Smith',

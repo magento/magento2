@@ -94,7 +94,7 @@ Permissions,Permissions
 Resources,Resources
 "Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?","Warning!\r\nThis action will remove this user from already assigned role\r\nAre you sure?"
 "Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?","Warning!\r\nThis action will remove those users from already assigned roles\r\nAre you sure?"
-"Reset Password Template","Reset Password Template"
+"User Notification Template","User Notification Template"
 No,No
 Yes,Yes
 Username,Username
@@ -121,3 +121,8 @@ Unlocked,Unlocked
 "All Users","All Users"
 "User Roles","User Roles"
 "Your Password","Your Password"
+"Hello,","Hello,"
+"We have received a request to change the following information associated with your account at %store_name: %changes.","We have received a request to change the following information associated with your account at %store_name: %changes."
+"If you have not authorized this action, please contact us immediately at %store_email","If you have not authorized this action, please contact us immediately at %store_email"
+"or call us at %store_phone","or call us at %store_phone"
+"Thanks,","Thanks,"

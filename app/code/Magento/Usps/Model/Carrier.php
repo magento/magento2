@@ -550,6 +550,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                                 $serviceName = $this->_filterServiceName((string)$service->SvcDescription);
                                 $serviceCode = 'INT_' . (string)$service->attributes()->ID;
                                 $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
+                                if (!$this->isServiceAvailable($service)) {
+                                    continue;
+                                }
                                 if (in_array($serviceCode, $allowedMethods)) {
                                     $costArr[$serviceCode] = (string)$service->Postage;
                                     $priceArr[$serviceCode] = $this->getMethodPrice(
@@ -2020,5 +2023,21 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         return [$zip5, $zip4];
+    }
+
+    /**
+     * Check availability of post service
+     *
+     * @param \SimpleXMLElement $service
+     * @return boolean
+     */
+    private function isServiceAvailable(\SimpleXMLElement $service)
+    {
+        foreach ($service->ExtraServices->children() as $child) {
+            if (filter_var($child->Available, FILTER_VALIDATE_BOOLEAN)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

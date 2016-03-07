@@ -12,6 +12,7 @@ use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponent\DataSourceInterface;
 use Magento\Framework\View\Element\UiComponent\ObserverInterface;
+use Magento\Framework\Data\ValueSourceInterface;
 
 /**
  * Abstract class AbstractComponent
@@ -87,6 +88,12 @@ abstract class AbstractComponent extends DataObject implements UiComponentInterf
      */
     public function prepare()
     {
+        $config = $this->getData('config');
+        if (isset($config['value']) && $config['value'] instanceof ValueSourceInterface) {
+            $config['value'] = $config['value']->getValue($this->getName());
+        }
+        $this->setData('config', (array)$config);
+
         $jsConfig = $this->getJsConfig($this);
         if (isset($jsConfig['provider'])) {
             unset($jsConfig['extends']);

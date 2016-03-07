@@ -34,6 +34,11 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
     protected $objectManager;
 
     /**
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $eventManagerMock;
+
+    /**
      * Init mocks for tests
      * @return void
      */
@@ -89,12 +94,23 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->eventManagerMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Event\ManagerInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['dispatch']
+        );
+
         $this->model = $this->objectManager->getObject(
             '\Magento\Security\Model\SecurityManager',
             [
                 'securityConfig' => $this->securityConfigMock,
                 'passwordResetRequestEventModelFactory' => $this->passwordResetRequestEventFactoryMock,
                 'passwordResetRequestEventCollectionFactory' => $this->passwordResetRequestEventCollectionFactoryMock,
+                'eventManager' => $this->eventManagerMock,
                 'securityCheckers' => [$securityChecker]
             ]
         );
@@ -122,6 +138,7 @@ class SecurityManagerTest extends \PHPUnit_Framework_TestCase
             $this->securityConfigMock,
             $this->passwordResetRequestEventFactoryMock,
             $this->passwordResetRequestEventCollectionFactoryMock,
+            $this->eventManagerMock,
             [$securityChecker]
         );
     }

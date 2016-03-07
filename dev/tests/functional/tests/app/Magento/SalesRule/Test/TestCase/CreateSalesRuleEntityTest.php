@@ -129,7 +129,6 @@ class CreateSalesRuleEntityTest extends Injectable
         $this->promoQuoteNew->open();
         $this->promoQuoteNew->getSalesRuleForm()->fill($salesRule, null, $replace);
         $this->promoQuoteNew->getFormPageActions()->save();
-
     }
 
     /**

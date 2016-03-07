@@ -31,64 +31,25 @@ class SynonymAnalyzerTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'WithSynonymsFromStoreViewScope' => [
-                'phrase' => 'Elizabeth is the English queen.',
+                'phrase' => 'elizabeth is the english queen',
                 'expectedResult' => [['elizabeth'],['is'],['the'],['british', 'english'],['queen', 'monarch']]
             ],
             'WithSynonymsFromWebsiteScope' => [
-                'phrase' => 'Orange hill',
+                'phrase' => 'orange hill',
                 'expectedResult' => [['orange', 'magento'], ['hill', 'mountain', 'peak']]
             ],
             'WithSynonymsFromDefaultScope' => [
-                'phrase' => 'universe is enormous.',
+                'phrase' => 'universe is enormous',
                 'expectedResult' => [['universe', 'cosmos'], ['is'], ['big', 'huge', 'large', 'enormous']]
             ],
             'noSynonyms' => [
-                'phrase' => 'This sentence has no synonyms',
+                'phrase' => 'this sentence has no synonyms',
                 'expectedResult' => [['this'], ['sentence'], ['has'], ['no'], ['synonyms']]
-            ],
-            'specialCharacters' => [
-                'phrase' => '~tilde`backtic! exclamation@  at#hash\$dollar%percent^carat&ampersand*star(leftparan'
-                    . ')rightparan_underscore+plus=equal{leftcurly}rightcurly[leftbracket]rightbracket:colon'
-                    . '"doublequote\'singlequote,comma  space.period<leftangle>rightangle?questionmark\\backslash'
-                    . '/forwardslash   tab;semicolon',
-                'expectedResult' => [
-                    ['tilde'],
-                    ['backtic'],
-                    ['exclamation'],
-                    ['at'],
-                    ['hash'],
-                    ['dollar'],
-                    ['percent'],
-                    ['carat'],
-                    ['ampersand'],
-                    ['star'],
-                    ['leftparan'],
-                    ['rightparan'],
-                    ['underscore'],
-                    ['plus'],
-                    ['equal'],
-                    ['leftcurly'],
-                    ['rightcurly'],
-                    ['leftbracket'],
-                    ['rightbracket'],
-                    ['colon'],
-                    ['doublequote'],
-                    ['singlequote'],
-                    ['comma'],
-                    ['space'],
-                    ['period'],
-                    ['leftangle'],
-                    ['rightangle'],
-                    ['questionmark'],
-                    ['backslash'],
-                    ['forwardslash'],
-                    ['tab'],
-                    ['semicolon']
-                ]
             ],
             'oneMoreTest' => [
                 'phrase' => 'schlicht',
-                'expectedResult' => [['schlicht', 'natürlich']]]
+                'expectedResult' => [['schlicht', 'natürlich']]
+            ],
         ];
     }
 

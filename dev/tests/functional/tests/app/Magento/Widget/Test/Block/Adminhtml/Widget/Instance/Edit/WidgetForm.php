@@ -25,7 +25,7 @@ class WidgetForm extends FormTabs
     public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
         $tabs = $this->getFixtureFieldsByContainers($fixture);
-        $this->fillTabs(['settings' => $tabs['settings']]);
+        $this->fillTabs(['settings' => $tabs['settings']], $element);
         $key = 0;
         foreach ($tabs as $key => $value) {
             if (isset($value['parameters'])) {

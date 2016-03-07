@@ -287,28 +287,31 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     }
 
     /**
-     * Delete the object
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param AbstractModel $object
      * @return $this
      * @throws \Exception
      */
-    public function delete(AbstractModel $object)
+    public function delete(\Magento\Framework\Model\AbstractModel $object)
     {
+        //TODO: add object relation processor support (MAGETWO-49297)
         $this->transactionManager->start($this->getConnection());
         try {
             $object->beforeDelete();
             $this->_beforeDelete($object);
-            $this->entityManager->delete('Magento\CatalogRule\Api\Data\RuleInterface', $object);
+            $this->entityManager->delete(
+                'Magento\CatalogRule\Api\Data\RuleInterface',
+                $object
+            );
             $this->_afterDelete($object);
             $object->isDeleted(true);
             $object->afterDelete();
             $this->transactionManager->commit();
             $object->afterDeleteCommit();
-        } catch (\Exception $exception) {
+        } catch (\Exception $e) {
             $this->transactionManager->rollBack();
-            throw $exception;
+            throw $e;
         }
+
         return $this;
     }
 }

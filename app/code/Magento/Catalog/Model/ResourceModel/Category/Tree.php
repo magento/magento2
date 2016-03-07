@@ -5,13 +5,14 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Category;
 
+use Magento\Framework\Data\Tree\Dbp;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Tree extends \Magento\Framework\Data\Tree\Dbp
+class Tree extends Dbp
 {
     const ID_FIELD = 'id';
 
@@ -124,10 +125,10 @@ class Tree extends \Magento\Framework\Data\Tree\Dbp
             $resource->getConnection('catalog'),
             $resource->getTableName('catalog_category_entity'),
             [
-                \Magento\Framework\Data\Tree\Dbp::ID_FIELD => 'entity_id',
-                \Magento\Framework\Data\Tree\Dbp::PATH_FIELD => 'path',
-                \Magento\Framework\Data\Tree\Dbp::ORDER_FIELD => 'position',
-                \Magento\Framework\Data\Tree\Dbp::LEVEL_FIELD => 'level'
+                Dbp::ID_FIELD => 'entity_id',
+                Dbp::PATH_FIELD => 'path',
+                Dbp::ORDER_FIELD => 'position',
+                Dbp::LEVEL_FIELD => 'level'
             ]
         );
         $this->_eventManager = $eventManager;

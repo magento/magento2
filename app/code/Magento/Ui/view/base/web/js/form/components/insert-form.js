@@ -125,7 +125,7 @@ define([
         },
 
         /**
-         * Reset external form data and response status.
+         * Reset external form data.
          */
         resetForm: function () {
             if (this.externalSource()) {

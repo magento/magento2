@@ -14,12 +14,10 @@ use Magento\Payment\Gateway\Command;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Payment\Gateway\Command\GatewayCommand;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
-use Magento\Sales\Api\Data\OrderPaymentExtension;
 use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory;
-use Magento\Vault\Model\PaymentToken;
 
 /**
  * Class CaptureStrategyCommandTest
@@ -110,8 +108,15 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getAuthorizationTransaction')
             ->willReturn(false);
 
-        $this->payment->expects(static::never())
-            ->method('getId');
+        $this->payment->expects(static::once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->buildSearchCriteria();
+
+        $this->transactionRepository->expects(static::once())
+            ->method('getTotalCount')
+            ->willReturn(0);
 
         $this->commandPool->expects(static::once())
             ->method('get')
@@ -183,71 +188,9 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getTotalCount')
             ->willReturn(1);
 
-        $paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
-            ->setMethods(['getVaultPaymentToken'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $paymentToken = $this->getMockBuilder(PaymentToken::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $paymentExtension->expects(static::once())
-            ->method('getVaultPaymentToken')
-            ->willReturn($paymentToken);
-        $this->payment->expects(static::once())
-            ->method('getExtensionAttributes')
-            ->willReturn($paymentExtension);
-
         $this->commandPool->expects(static::once())
             ->method('get')
             ->with(CaptureStrategyCommand::VAULT_CAPTURE)
-            ->willReturn($this->command);
-
-        $this->strategyCommand->execute($subject);
-    }
-
-    /**
-     * @covers \Magento\BraintreeTwo\Gateway\Command\CaptureStrategyCommand::execute
-     */
-    public function testCloneExecute()
-    {
-        $paymentData = $this->getPaymentDataObjectMock();
-        $subject['payment'] = $paymentData;
-
-        $this->subjectReaderMock->expects(self::once())
-            ->method('readPayment')
-            ->with($subject)
-            ->willReturn($paymentData);
-
-        $this->payment->expects(static::once())
-            ->method('getAuthorizationTransaction')
-            ->willReturn(true);
-
-        $this->payment->expects(static::once())
-            ->method('getId')
-            ->willReturn(1);
-
-        $this->buildSearchCriteria();
-
-        $this->transactionRepository->expects(static::once())
-            ->method('getTotalCount')
-            ->willReturn(1);
-
-        $paymentExtension = $this->getMockBuilder(OrderPaymentExtension::class)
-            ->setMethods(['getVaultPaymentToken'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $paymentExtension->expects(static::once())
-            ->method('getVaultPaymentToken')
-            ->willReturn(null);
-        $this->payment->expects(static::once())
-            ->method('getExtensionAttributes')
-            ->willReturn($paymentExtension);
-
-        $this->commandPool->expects(static::once())
-            ->method('get')
-            ->with(CaptureStrategyCommand::CLONE_TRANSACTION)
             ->willReturn($this->command);
 
         $this->strategyCommand->execute($subject);

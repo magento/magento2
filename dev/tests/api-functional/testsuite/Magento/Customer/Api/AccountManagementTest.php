@@ -281,7 +281,7 @@ class AccountManagementTest extends WebapiAbstract
         $customerModel->load($customerData[Customer::ID]);
         $rpToken = 'lsdj579slkj5987slkj595lkj';
         $customerModel->setRpToken('lsdj579slkj5987slkj595lkj');
-        $customerModel->setRpTokenCreatedAt(date('Y-m-d'));
+        $customerModel->setRpTokenCreatedAt(date('Y-m-d H:i:s'));
         $customerModel->save();
         $path = self::RESOURCE_PATH . '/' . $customerData[Customer::ID] . '/password/resetLinkToken/' . $rpToken;
         $serviceInfo = [

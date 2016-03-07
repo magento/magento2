@@ -131,9 +131,28 @@
                     <group id="express_checkout_required_express_checkout"/>
                 </requires>
             </field>
-
-
-            <field id="enable_express_checkout_bml" translate="label comment" type="select" sortOrder="21" showInDefault="1" showInWebsite="1">
+            <field id="enable_in_context_checkout" translate="label comment" type="select" sortOrder="21" showInDefault="1" showInWebsite="1">
+                <label>Enable In-Context Checkout Experience</label>
+                <comment>
+                    <![CDATA[See PayPal Feature Support details and list of supported regions
+                    <a href="https://developer.paypal.com/docs/classic/express-checkout/in-context/" target="_blank">here</a>.]]>
+                </comment>
+                <config_path>payment/paypal_express/in_context</config_path>
+                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Field\Enable\InContextApi</frontend_model>
+                <requires>
+                    <field id="enable_express_checkout"/>
+                </requires>
+            </field>
+            <field id="merchant_id" translate="label" type="text" sortOrder="22" showInDefault="1" showInWebsite="1">
+                <label>Merchant Account ID</label>
+                <tooltip>You can look up your merchant ID by logging into https://www.paypal.com/. Click the profile icon on the top right side of the page and then select Profile and settings in the Business Profile menu. (If you do not see the profile icon at the top of the page, click Profile, which appears in the top menu when the My Account tab is selected.) Click My business info on the left, and the Merchant account ID is displayed in the list of profile items on the right.</tooltip>
+                <config_path>payment/paypal_express/merchant_id</config_path>
+                <depends>
+                    <field id="enable_in_context_checkout">1</field>
+                </depends>
+            </field>
+            <field id="enable_express_checkout_bml" translate="label comment" type="select" sortOrder="23" showInDefault="1" showInWebsite="1">
                 <label>Enable PayPal Credit</label>
                 <comment><![CDATA[PayPal Express Checkout lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
                         You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
@@ -284,7 +303,7 @@
             <frontend_model>Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Expanded</frontend_model>
             <field id="title" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Title</label>
-                <comment>It is recommended to set this value to "Magento_Paypal" per store views.</comment>
+                <comment>It is recommended to set this value to "PayPal" per store views.</comment>
                 <config_path>payment/paypal_express/title</config_path>
                 <attribute type="shared">1</attribute>
             </field>

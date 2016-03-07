@@ -9,9 +9,7 @@ use Magento\Framework\Api\SearchCriteria;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Vault\Model\PaymentTokenFactory;
-use Magento\Vault\Model\VaultPaymentInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
-use Magento\Vault\Model\PaymentTokenNullRepository;
 use Magento\Vault\Model\PaymentTokenRepositoryProxy;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
 use Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap;
@@ -31,14 +29,9 @@ class PaymentTokenRepositoryProxyTest extends \PHPUnit_Framework_TestCase
     const SAVE_RESULT = 'save_result';
 
     /**
-     * @var PaymentTokenNullRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var PaymentTokenRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $nullRepositoryMock;
-
-    /**
-     * @var VaultPaymentInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $vaultPaymentMock;
+    private $defaultRepository;
 
     /**
      * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -55,11 +48,7 @@ class PaymentTokenRepositoryProxyTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->nullRepositoryMock = $this->getMockBuilder(PaymentTokenNullRepository::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->vaultPaymentMock = $this->getMockBuilder(VaultPaymentInterface::class)
-            ->getMockForAbstractClass();
+        $this->defaultRepository = $this->getMock(PaymentTokenRepositoryInterface::class);
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)
             ->getMockForAbstractClass();
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
@@ -87,10 +76,6 @@ class PaymentTokenRepositoryProxyTest extends \PHPUnit_Framework_TestCase
         $proxyCallsMock = $this->getMockBuilder(PaymentTokenRepositoryInterface::class)
             ->getMockForAbstractClass();
 
-        $this->vaultPaymentMock->expects(self::once())
-            ->method('isActive')
-            ->willReturn(1);
-
         $this->configMock->expects(self::once())
             ->method('getValue')
             ->with(VaultProvidersMap::VALUE_CODE)
@@ -102,8 +87,7 @@ class PaymentTokenRepositoryProxyTest extends \PHPUnit_Framework_TestCase
             ->willReturn($proxyCallsMock);
 
         $proxy = new PaymentTokenRepositoryProxy(
-            $this->nullRepositoryMock,
-            $this->vaultPaymentMock,
+            $this->defaultRepository,
             $this->configMock,
             $this->objectManagerMock,
             ['code' => get_class($proxyCallsMock)]
@@ -133,9 +117,9 @@ class PaymentTokenRepositoryProxyTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Run test for null repository
+     * Run test for default repository
      */
-    public function testNullRepository()
+    public function testDefaultRepository()
     {
         /** @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject $searchCriteriaMock */
         $searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
@@ -151,89 +135,22 @@ class PaymentTokenRepositoryProxyTest extends \PHPUnit_Framework_TestCase
             ->method('get');
 
         $proxy = new PaymentTokenRepositoryProxy(
-            $this->nullRepositoryMock,
-            $this->vaultPaymentMock,
+            $this->defaultRepository,
             $this->configMock,
             $this->objectManagerMock,
             []
         );
 
-        $this->nullRepositoryMock->expects(self::once())
+        $this->defaultRepository->expects(self::once())
             ->method('getById')
             ->with(1)
             ->willReturn($tokenMock);
-        $this->nullRepositoryMock->expects(self::once())
+        $this->defaultRepository->expects(self::once())
             ->method('getList')
             ->with($searchCriteriaMock)
             ->willReturn($searchResultMock);
 
         self::assertEquals($tokenMock, $proxy->getById(1));
         self::assertEquals($searchResultMock, $proxy->getList($searchCriteriaMock));
-    }
-
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessageRegExp You must implement this operation\. \([^:]+::save\)
-     */
-    public function testNullRepositoryExceptionSave()
-    {
-        /** @var PaymentTokenFactory|\PHPUnit_Framework_MockObject_MockObject $tokenFactoryMock */
-        $tokenFactoryMock = $this->getMockBuilder(PaymentTokenFactory::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        /** @var PaymentTokenSearchResultsInterfaceFactory
-         * |\PHPUnit_Framework_MockObject_MockObject $searchResultFactoryMock */
-        $searchResultFactoryMock = $this->getMockBuilder(PaymentTokenSearchResultsInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        /** @var PaymentTokenInterface|\PHPUnit_Framework_MockObject_MockObject $tokenMock */
-        $tokenMock = $this->getMockBuilder(PaymentTokenInterface::class)
-            ->getMockForAbstractClass();
-
-        $proxy = new PaymentTokenRepositoryProxy(
-            new \Magento\Vault\Model\PaymentTokenNullRepository(
-                $tokenFactoryMock,
-                $searchResultFactoryMock
-            ),
-            $this->vaultPaymentMock,
-            $this->configMock,
-            $this->objectManagerMock,
-            []
-        );
-
-        $proxy->save($tokenMock);
-    }
-
-    /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessageRegExp You must implement this operation\. \([^:]+::delete\)
-     */
-    public function testNullRepositoryExceptionDelete()
-    {
-        /** @var PaymentTokenFactory|\PHPUnit_Framework_MockObject_MockObject $tokenFactoryMock */
-        $tokenFactoryMock = $this->getMockBuilder(PaymentTokenFactory::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        /** @var PaymentTokenSearchResultsInterfaceFactory
-         * |\PHPUnit_Framework_MockObject_MockObject $searchResultFactoryMock */
-        $searchResultFactoryMock = $this->getMockBuilder(PaymentTokenSearchResultsInterfaceFactory::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        /** @var PaymentTokenInterface|\PHPUnit_Framework_MockObject_MockObject $tokenMock */
-        $tokenMock = $this->getMockBuilder(PaymentTokenInterface::class)
-            ->getMockForAbstractClass();
-
-        $proxy = new PaymentTokenRepositoryProxy(
-            new \Magento\Vault\Model\PaymentTokenNullRepository(
-                $tokenFactoryMock,
-                $searchResultFactoryMock
-            ),
-            $this->vaultPaymentMock,
-            $this->configMock,
-            $this->objectManagerMock,
-            []
-        );
-
-        $proxy->delete($tokenMock);
     }
 }

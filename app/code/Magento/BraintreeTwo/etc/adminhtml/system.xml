@@ -26,6 +26,14 @@
                             <group id="braintreetwo_required"/>
                         </requires>
                     </field>
+                    <field id="active_braintreetwo_paypal" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="0">
+                        <label>Enable PayPal through Braintree</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>payment/braintreetwo_paypal/active</config_path>
+                        <requires>
+                            <group id="braintreetwo_required"/>
+                        </requires>
+                    </field>
                     <group id="braintreetwo_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="5">
                         <comment><![CDATA[<a href="https://www.braintreegateway.com/login" target="_blank">Click here to login to your existing Braintree account</a>. Or to setup a new account and accept payments on your website, <a href="https://apply.braintreegateway.com/signup/us" target="_blank">click here to signup for a Braintree account</a>.]]></comment>
                         <label>Basic BraintreeTwo Settings</label>
@@ -123,6 +131,62 @@
                             <frontend_model>Magento\BraintreeTwo\Block\Adminhtml\Form\Field\CountryCreditCard</frontend_model>
                             <backend_model>Magento\BraintreeTwo\Model\Adminhtml\System\Config\CountryCreditCard</backend_model>
                             <config_path>payment/braintreetwo/countrycreditcard</config_path>
+                        </field>
+                    </group>
+                    <group id="braintreetwo_paypal" translate="label" showInDefault="1" showInWebsite="1" sortOrder="40">
+                        <label>PayPal through Braintree</label>
+                        <frontend_model>Magento\Config\Block\System\Config\Form\Fieldset</frontend_model>
+                        <field id="title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Title</label>
+                            <config_path>payment/braintreetwo_paypal/title</config_path>
+                            <comment>It is recommended to set this value to "PayPal" per store views.</comment>
+                        </field>
+                        <field id="sort_order" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Sort Order</label>
+                            <frontend_class>validate-number</frontend_class>
+                            <config_path>payment/braintreetwo_paypal/sort_order</config_path>
+                        </field>
+                        <field id="merchant_name_override" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Override Merchant Name</label>
+                            <config_path>payment/braintreetwo_paypal/merchant_name_override</config_path>
+                        </field>
+                        <field id="payment_action" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment Action</label>
+                            <source_model>Magento\BraintreeTwo\Model\Adminhtml\Source\PaymentAction</source_model>
+                            <config_path>payment/braintreetwo_paypal/payment_action</config_path>
+                        </field>
+                        <field id="allowspecific" translate="label" type="allowspecific" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Applicable Countries</label>
+                            <source_model>Magento\Payment\Model\Config\Source\Allspecificcountries</source_model>
+                            <config_path>payment/braintreetwo_paypal/allowspecific</config_path>
+                        </field>
+                        <field id="specificcountry" translate="label" type="multiselect" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Payment from Specific Countries</label>
+                            <source_model>Magento\BraintreeTwo\Model\Adminhtml\System\Config\Country</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <config_path>payment/braintreetwo_paypal/specificcountry</config_path>
+                        </field>
+                        <field id="require_billing_address" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Require Customer's Billing Address</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/braintreetwo_paypal/require_billing_address</config_path>
+                            <comment>This feature needs be enabled first for the merchant account through PayPal technical support.</comment>
+                        </field>
+                        <field id="allow_shipping_address_override" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Allow to Edit Shipping Address Entered During Checkout on PayPal Side</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/braintreetwo_paypal/allow_shipping_address_override</config_path>
+                        </field>
+                        <field id="debug" translate="label" type="select" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Debug</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/braintreetwo_paypal/debug</config_path>
+                        </field>
+                        <field id="display_on_shopping_cart" translate="label" type="select" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="0">
+                            <label>Display on Shopping Cart</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <config_path>payment/braintreetwo_paypal/display_on_shopping_cart</config_path>
+                            <comment>Also affects mini-shopping cart.</comment>
                         </field>
                     </group>
                     <group id="braintreetwo_3dsecure" translate="label" showInDefault="1" showInWebsite="1" sortOrder="41">

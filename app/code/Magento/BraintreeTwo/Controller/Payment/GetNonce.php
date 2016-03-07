@@ -14,6 +14,8 @@ use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Webapi\Exception;
 use Psr\Log\LoggerInterface;
 use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
+use Magento\CheckoutAgreements;
+use Magento\Theme;
 
 /**
  * Class GetNonce
