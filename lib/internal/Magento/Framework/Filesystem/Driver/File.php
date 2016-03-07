@@ -297,7 +297,7 @@ class File implements DriverInterface
         if (!$result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase(
-                    'The "%1" path cannot be renamed into "%2" %3',
+                    'The path "%1" cannot be renamed into "%2" %3',
                     [$oldPath, $newPath, $this->getWarningMessage()]
                 )
             );
