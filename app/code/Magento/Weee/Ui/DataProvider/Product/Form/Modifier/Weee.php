@@ -196,7 +196,8 @@ class Weee extends AbstractModifier
                                                 'visible' => true,
                                                 'options' => $this->getCountries(),
                                                 'validation' => [
-                                                    'required-entry' => true
+                                                    'required-entry' => true,
+                                                    'validate-fpt-group' => true
                                                 ],
                                             ],
                                         ],
@@ -217,7 +218,6 @@ class Weee extends AbstractModifier
                                                 ],
                                                 'caption' => '*',
                                                 'visible' => true,
-
                                             ],
                                         ],
                                     ],
