@@ -66,6 +66,7 @@ class FilePermissions
     /**
      * @param Filesystem $filesystem
      * @param DirectoryList $directoryList
+     * @param File $driverFile
      */
     public function __construct(
         Filesystem $filesystem,
