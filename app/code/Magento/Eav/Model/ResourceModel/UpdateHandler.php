@@ -120,6 +120,12 @@ class UpdateHandler
                 if ($attribute->isStatic()) {
                     continue;
                 }
+                /**
+                 * Only scalar values can be stored in generic tables
+                 */
+                if (isset($data[$attribute->getAttributeCode()]) && !is_scalar($data[$attribute->getAttributeCode()])) {
+                    continue;
+                }
                 if (isset($snapshot[$attribute->getAttributeCode()])
                     && $snapshot[$attribute->getAttributeCode()] !== false
                     && (array_key_exists($attribute->getAttributeCode(), $data)
