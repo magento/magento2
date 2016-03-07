@@ -3,7 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Backend\Model\Config\SessionLifetime;
+namespace Magento\Backend\Test\Unit\Model\Config\SessionLifetime;
 
 use Magento\Backend\Model\Config\SessionLifetime\BackendModel;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
