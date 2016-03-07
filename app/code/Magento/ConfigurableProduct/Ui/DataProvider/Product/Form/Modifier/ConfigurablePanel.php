@@ -360,22 +360,18 @@ class ConfigurablePanel extends AbstractModifier
                     ],
                 ],
                 'children' => [
-                    'thumbnail_image' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'componentType' => Form\Field::NAME,
-                                    'formElement' => Form\Element\Input::NAME,
-                                    'elementTmpl' => 'ui/dynamic-rows/cells/thumbnail',
-                                    'dataType' => Form\Element\DataType\Text::NAME,
-                                    'dataScope' => 'thumbnail_image',
-                                    'fit' => true,
-                                    'label' => __('Image'),
-                                    'sortOrder' => 0,
-                                ],
-                            ],
+                    'thumbnail_image_container' => $this->getColumn(
+                        'thumbnail_image',
+                        __('Image'),
+                        [
+                            'fit' => true,
                         ],
-                    ],
+                        [
+                            'elementTmpl' => 'ui/dynamic-rows/cells/thumbnail',
+                            'fit' => true,
+                            'sortOrder' => 0
+                        ]
+                    ),
                     'name_container' => $this->getColumn(
                         'name',
                         __('Name'),
