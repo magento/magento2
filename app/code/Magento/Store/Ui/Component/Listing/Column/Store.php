@@ -93,11 +93,12 @@ class Store extends Column
     protected function prepareItem(array $item)
     {
         $content = '';
-        $origStores = $item[$this->storeKey];
 
-        if (empty($origStores)) {
+        if (empty($item[$this->storeKey])) {
             return '';
         }
+        $origStores = $item[$this->storeKey];
+
         if (!is_array($origStores)) {
             $origStores = [$origStores];
         }
