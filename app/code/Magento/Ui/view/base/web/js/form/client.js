@@ -17,7 +17,7 @@ define([
      * @param {String} url
      * @returns {*}
      */
-    function beforeSave(data, url) {
+    function beforeSave(data, url, selectorPrefix) {
         var save = $.Deferred();
 
         data = utils.serialize(data);
@@ -58,7 +58,7 @@ define([
                          * @param {String} msg
                          */
                         insertMethod: function (msg) {
-                            $('.page-main-actions').after(msg);
+                            $(selectorPrefix + ' .page-main-actions').after(msg);
                         }
                     });
                 });
@@ -82,9 +82,10 @@ define([
          */
         save: function (data, options) {
             var url = this.urls.beforeSave,
-                save = this._save.bind(this, data, options);
+                save = this._save.bind(this, data, options),
+                selectorPrefix = this.selectorPrefix || '';
 
-            beforeSave(data, url).then(save);
+            beforeSave(data, url, selectorPrefix).then(save);
 
             return this;
         },

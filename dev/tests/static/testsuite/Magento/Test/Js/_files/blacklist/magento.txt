@@ -373,7 +373,6 @@ app/code/Magento/Ui/view/base/web/js/block-loader.js
 app/code/Magento/Ui/view/base/web/js/core/renderer/layout.js
 app/code/Magento/Ui/view/base/web/js/core/renderer/types.js
 app/code/Magento/Ui/view/base/web/js/form/adapter.js
-app/code/Magento/Ui/view/base/web/js/form/client.js
 app/code/Magento/Ui/view/base/web/js/form/components/collection.js
 app/code/Magento/Ui/view/base/web/js/form/components/html.js
 app/code/Magento/Ui/view/base/web/js/form/components/tab.js
@@ -383,7 +382,6 @@ app/code/Magento/Ui/view/base/web/js/form/element/post-code.js
 app/code/Magento/Ui/view/base/web/js/form/element/region.js
 app/code/Magento/Ui/view/base/web/js/form/element/select.js
 app/code/Magento/Ui/view/base/web/js/form/element/ui-select.js
-app/code/Magento/Ui/view/base/web/js/form/form.js
 app/code/Magento/Ui/view/base/web/js/form/provider.js
 app/code/Magento/Ui/view/base/web/js/grid/columns/thumbnail.js
 app/code/Magento/Ui/view/base/web/js/grid/controls/bookmarks/storage.js
