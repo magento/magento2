@@ -99,7 +99,6 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
             } else {
                 $this->_connection = $connection;
             }
-            $this->_options['store_data'] = true;
         }
         return $this->_connection;
     }
@@ -203,18 +202,21 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
      */
     public function save($data, $id, $tags = [], $specificLifetime = false)
     {
-        if ($this->_options['store_data'] && !$this->_options['infinite_loop_flag']) {
+        $result = false;
+        if (!$this->_options['infinite_loop_flag']) {
             $this->_options['infinite_loop_flag'] = true;
-            $connection = $this->_getConnection();
-            $dataTable = $this->_getDataTable();
+            $result = true;
+            if ($this->_options['store_data']) {
+                $connection = $this->_getConnection();
+                $dataTable = $this->_getDataTable();
 
-            $lifetime = $this->getLifetime($specificLifetime);
-            $time = time();
-            $expire = $lifetime === 0 || $lifetime === null ? 0 : $time + $lifetime;
+                $lifetime = $this->getLifetime($specificLifetime);
+                $time = time();
+                $expire = $lifetime === 0 || $lifetime === null ? 0 : $time + $lifetime;
 
-            $dataCol = $connection->quoteIdentifier('data');
-            $expireCol = $connection->quoteIdentifier('expire_time');
-            $query = "INSERT INTO {$dataTable} (\n                    {$connection->quoteIdentifier(
+                $dataCol = $connection->quoteIdentifier('data');
+                $expireCol = $connection->quoteIdentifier('expire_time');
+                $query = "INSERT INTO {$dataTable} (\n                    {$connection->quoteIdentifier(
                 'id'
             )},\n                    {$dataCol},\n                    {$connection->quoteIdentifier(
                 'create_time'
@@ -222,13 +224,12 @@ class Database extends \Zend_Cache_Backend implements \Zend_Cache_Backend_Extend
                 'update_time'
             )},\n                    {$expireCol})\n                VALUES (?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE\n                    {$dataCol}=VALUES({$dataCol}),\n                    {$expireCol}=VALUES({$expireCol})";
 
-            $result = $connection->query($query, [$id, $data, $time, $time, $expire])->rowCount();
+                $result = $connection->query($query, [$id, $data, $time, $time, $expire])->rowCount();
+            }
             if ($result) {
                 $result = $this->_saveTags($id, $tags);
             }
             $this->_options['infinite_loop_flag'] = false;
-        } else {
-            $result = false;
         }
         return $result;
     }
