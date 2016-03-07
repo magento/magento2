@@ -11,6 +11,7 @@ use Magento\CatalogImportExport\Model\Import\Product as ImportProductModel;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as SelectionCollection;
 use Magento\ImportExport\Controller\Adminhtml\Import;
 use Magento\ImportExport\Model\Import as ImportModel;
+use \Magento\Catalog\Model\Product\Type\AbstractType;
 
 /**
  * Class RowCustomizer
@@ -18,6 +19,8 @@ use Magento\ImportExport\Model\Import as ImportModel;
 class RowCustomizer implements RowCustomizerInterface
 {
     const BUNDLE_PRICE_TYPE_COL = 'bundle_price_type';
+
+    const BUNDLE_SHIPMENT_TYPE_COL = 'bundle_shipment_type';
 
     const BUNDLE_SKU_TYPE_COL = 'bundle_sku_type';
 
@@ -32,6 +35,10 @@ class RowCustomizer implements RowCustomizerInterface
     const VALUE_DYNAMIC = 'dynamic';
 
     const VALUE_PERCENT = 'percent';
+
+    const VALUE_SHIPMENT_TOGETHER = 'together';
+
+    const VALUE_SHIPMENT_SEPARATELY = 'separately';
 
     const VALUE_PRICE_RANGE = 'Price range';
 
@@ -68,12 +75,23 @@ class RowCustomizer implements RowCustomizerInterface
     ];
 
     /**
+     * Mapping for shipment type
+     *
+     * @var array
+     */
+    protected $shipmentTypeMapping = [
+        AbstractType::SHIPMENT_TOGETHER => self::VALUE_SHIPMENT_TOGETHER,
+        AbstractType::SHIPMENT_SEPARATELY => self::VALUE_SHIPMENT_SEPARATELY,
+    ];
+
+    /**
      * Bundle product columns
      *
      * @var array
      */
     protected $bundleColumns = [
         self::BUNDLE_PRICE_TYPE_COL,
+        self::BUNDLE_SHIPMENT_TYPE_COL,
         self::BUNDLE_SKU_TYPE_COL,
         self::BUNDLE_PRICE_VIEW_COL,
         self::BUNDLE_WEIGHT_TYPE_COL,
@@ -161,6 +179,9 @@ class RowCustomizer implements RowCustomizerInterface
         foreach ($collection as $product) {
             $id = $product->getEntityId();
             $this->bundleData[$id][self::BUNDLE_PRICE_TYPE_COL] = $this->getTypeValue($product->getPriceType());
+            $this->bundleData[$id][self::BUNDLE_SHIPMENT_TYPE_COL] = $this->getShipmentTypeValue(
+                $product->getShipmentType()
+            );
             $this->bundleData[$id][self::BUNDLE_SKU_TYPE_COL] = $this->getTypeValue($product->getSkuType());
             $this->bundleData[$id][self::BUNDLE_PRICE_VIEW_COL] = $this->getPriceViewValue($product->getPriceView());
             $this->bundleData[$id][self::BUNDLE_WEIGHT_TYPE_COL] = $this->getTypeValue($product->getWeightType());
@@ -279,6 +300,17 @@ class RowCustomizer implements RowCustomizerInterface
     protected function getPriceTypeValue($type)
     {
         return isset($this->priceTypeMapping[$type]) ? $this->priceTypeMapping[$type] : null;
+    }
+
+    /**
+     * Retrieve bundle shipment type value by code
+     *
+     * @param string $type
+     * @return string
+     */
+    private function getShipmentTypeValue($type)
+    {
+        return isset($this->shipmentTypeMapping[$type]) ? $this->shipmentTypeMapping[$type] : null;
     }
 
     /**

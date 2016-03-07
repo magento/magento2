@@ -9,6 +9,8 @@
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
 use \Magento\Bundle\Model\Product\Price as BundlePrice;
+use \Magento\BundleImportExport\Model\Export\RowCustomizer;
+use \Magento\Catalog\Model\Product\Type\AbstractType;
 
 /**
  * Class Bundle
@@ -102,6 +104,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      */
     protected $_specialAttributes = [
         'price_type',
+        'shipment_type',
         'weight_type',
         'sku_type',
     ];
@@ -113,6 +116,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      */
     protected $_customFieldsMapping = [
         'price_type' => 'bundle_price_type',
+        'shipment_type' => 'bundle_shipment_type',
         'price_view' => 'bundle_price_view',
         'weight_type' => 'bundle_weight_type',
         'sku_type' => 'bundle_sku_type',
@@ -414,10 +418,18 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         $resultAttrs = [];
         foreach (array_keys($this->_customFieldsMapping) as $oldKey) {
             if (isset($rowData[$oldKey])) {
-                if ($oldKey != self::NOT_FIXED_DYNAMIC_ATTRIBUTE) {
-                    $resultAttrs[$oldKey] = (($rowData[$oldKey] == self::VALUE_FIXED) ?
-                        BundlePrice::PRICE_TYPE_FIXED :
-                        BundlePrice::PRICE_TYPE_DYNAMIC);
+                switch ($oldKey) {
+                    case RowCustomizer::BUNDLE_PRICE_VIEW_COL:
+                        break;
+                    case RowCustomizer::BUNDLE_SHIPMENT_TYPE_COL:
+                        $resultAttrs[$oldKey] = (($rowData[$oldKey] == RowCustomizer::VALUE_SHIPMENT_SEPARATELY) ?
+                            AbstractType::SHIPMENT_SEPARATELY :
+                            AbstractType::SHIPMENT_TOGETHER);
+                        break;
+                    default:
+                        $resultAttrs[$oldKey] = (($rowData[$oldKey] == self::VALUE_FIXED) ?
+                            BundlePrice::PRICE_TYPE_FIXED :
+                            BundlePrice::PRICE_TYPE_DYNAMIC);
                 }
             }
         }
