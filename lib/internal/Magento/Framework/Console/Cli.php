@@ -58,9 +58,10 @@ class Cli extends SymfonyApplication
             $output->writeln(
                 "<error>Command line user ("
                 . get_current_user()
-                . ") does not have proper permissions for var/generation/Magento directory. "
+                . ") may not have proper read+execute permissions for directories under \"var/generation/\" . "
                 . "Please address this issue before using Magento command line."
             );
+            return 0;
         }
 
         $exitCode = parent::doRun($input, $output);

@@ -9,6 +9,7 @@ namespace Magento\Framework\Setup;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Backup\Filesystem\Iterator\Filter;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Driver\File;
 
 class FilePermissions
 {
@@ -21,6 +22,11 @@ class FilePermissions
      * @var DirectoryList
      */
     protected $directoryList;
+
+    /**
+     * @var File
+     */
+    protected $driverFile;
 
     /**
      * List of required writable directories for installation
@@ -63,10 +69,12 @@ class FilePermissions
      */
     public function __construct(
         Filesystem $filesystem,
-        DirectoryList $directoryList
+        DirectoryList $directoryList,
+        File $driverFile
     ) {
         $this->filesystem = $filesystem;
         $this->directoryList = $directoryList;
+        $this->driverFile = $driverFile;
     }
 
     /**
@@ -204,22 +212,25 @@ class FilePermissions
     }
 
     /**
-     * Checks if var/generation/Magento has
+     * Checks if var/generation/* has read and execute permissions
+     *
      * @return bool
      */
     public function checkDirectoryPermissionForCLIUser()
     {
-        $varGenerationMagentoPath = $this->directoryList->getPath(DirectoryList::VAR_DIR)
-            . '/'
-            . DirectoryList::GENERATION
-            . '/'
-            . 'Magento';
-        if (is_dir($varGenerationMagentoPath)
-            && is_readable($varGenerationMagentoPath)
-            && is_executable($varGenerationMagentoPath)) {
-            return true;
+        $varGenerationDir = $this->directoryList->getPath(DirectoryList::GENERATION);
+        $dirs = $this->driverFile->readDirectory($varGenerationDir);
+        array_unshift($dirs, $varGenerationDir);
+
+        foreach ($dirs as $dir) {
+            if (!is_dir($dir)
+                || !is_readable($dir)
+                || !is_executable($dir)
+            ) {
+                return false;
+            }
         }
-        return false;
+        return true;
     }
 
     /**
@@ -230,9 +241,7 @@ class FilePermissions
      */
     protected function isReadableDirectory($directory)
     {
-        if (!$directory->isExist()
-            || !$directory->isDirectory()
-            || !$directory->isReadable()) {
+        if (!$directory->isExist() || !$directory->isDirectory() || !$directory->isReadable()) {
             return false;
         }
         return true;
