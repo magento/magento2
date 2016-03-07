@@ -39,7 +39,7 @@ define([
          * Clears values in components like this.
          */
         clearValues: function () {
-            var records = registry.get(this.getParentName(this.parentContainer) + '.' + this.selections),
+            var records = registry.get(this.retrieveParentName(this.parentContainer) + '.' + this.selections),
                 checkedFound = false;
 
             records.elems.each(function (record) {
