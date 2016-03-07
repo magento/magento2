@@ -41,7 +41,7 @@ class UpdateEntityRow
             if ($column['DEFAULT'] == 'CURRENT_TIMESTAMP' || $column['IDENTITY']) {
                 continue;
             }
-            if (isset($data[strtolower($column['COLUMN_NAME'])])) {
+            if (array_key_exists(strtolower($column['COLUMN_NAME']), $data)) {
                 $output[strtolower($column['COLUMN_NAME'])] = $data[strtolower($column['COLUMN_NAME'])];
             }
         }
