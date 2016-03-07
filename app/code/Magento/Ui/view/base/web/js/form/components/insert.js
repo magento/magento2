@@ -234,8 +234,6 @@ define([
         onRender: function (data) {
             this.loading(false);
             this.set('content', data);
-            this.contentEl.children().applyBindings();
-            this.contentEl.trigger('contentUpdated');
             this.isRendered = true;
             this.startRender = false;
         },
