@@ -8,7 +8,6 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Ui\Component\Form;
-use Magento\Catalog\Ui\DataProvider\Grouper;
 use Magento\Framework\Stdlib\ArrayManager;
 
 /**
@@ -22,27 +21,19 @@ class General extends AbstractModifier
     protected $locator;
 
     /**
-     * @var Grouper
-     */
-    protected $grouper;
-
-    /**
      * @var ArrayManager
      */
     protected $arrayManager;
 
     /**
      * @param LocatorInterface $locator
-     * @param Grouper $grouper
      * @param ArrayManager $arrayManager
      */
     public function __construct(
         LocatorInterface $locator,
-        Grouper $grouper,
         ArrayManager $arrayManager
     ) {
         $this->locator = $locator;
-        $this->grouper = $grouper;
         $this->arrayManager = $arrayManager;
     }
 
@@ -264,25 +255,6 @@ class General extends AbstractModifier
                                 ],
                             ],
                         ]
-                    ]
-                );
-
-                $meta = $this->grouper->groupMetaElements(
-                    $meta,
-                    [ProductAttributeInterface::CODE_WEIGHT, ProductAttributeInterface::CODE_HAS_WEIGHT],
-                    [
-                        'meta' => [
-                            'arguments' => [
-                                'data' => [
-                                    'config' => [
-                                        'dataScope' => '',
-                                        'breakLine' => false,
-                                        'scopeLabel' => $this->arrayManager->get($weightPath . '/scopeLabel', $meta)
-                                    ],
-                                ],
-                            ],
-                        ],
-                        'targetCode' => 'container_' . ProductAttributeInterface::CODE_WEIGHT
                     ]
                 );
             }
