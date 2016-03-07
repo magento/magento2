@@ -35,7 +35,6 @@ class GiftMessageTest extends AbstractModifierTest
     {
         return $this->objectManager->getObject(GiftMessage::class, [
             'locator' => $this->locatorMock,
-            'grouper' => $this->grouperMock,
             'scopeConfig' => $this->scopeConfigMock,
         ]);
     }

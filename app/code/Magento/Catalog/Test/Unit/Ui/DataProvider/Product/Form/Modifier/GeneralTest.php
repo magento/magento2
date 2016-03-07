@@ -22,7 +22,6 @@ class GeneralTest extends AbstractModifierTest
     {
         return $this->objectManager->getObject(General::class, [
             'locator' => $this->locatorMock,
-            'grouper' => $this->grouperMock,
             'arrayManager' => $this->arrayManagerMock,
         ]);
     }
