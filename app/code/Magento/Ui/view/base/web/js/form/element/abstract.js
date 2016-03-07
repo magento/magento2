@@ -433,13 +433,13 @@ define([
         },
 
         /**
-         * Getter for parent name. Split string by provided parent name.
+         * Retrieve name for the most global parent with provided index.
          *
          * @param {String} parent - parent name.
          * @returns {String}
          */
-        getParentName: function (parent) {
-            return this.name.split(parent)[0] + parent;
+        retrieveParentName: function (parent) {
+            return this.name.replace(new RegExp('^(.+?\\.)?' + parent + '\\..+'), '$1' + parent);
         }
     });
 });

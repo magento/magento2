@@ -32,7 +32,7 @@ define([
          */
         initConfig: function () {
             this._super();
-            this.imports.changeType = this.getParentName(this.parentContainer) + '.' + this.changer + ':value';
+            this.imports.changeType = this.retrieveParentName(this.parentContainer) + '.' + this.changer + ':value';
 
             return this;
         },
@@ -54,7 +54,7 @@ define([
          * @param {String} type - type to change.
          */
         changeType: function (type) {
-            var typeMap = registry.get(this.getParentName(this.parentContainer) + '.' + this.changer).typeMap;
+            var typeMap = registry.get(this.retrieveParentName(this.parentContainer) + '.' + this.changer).typeMap;
 
             this.prefer = typeMap[type];
             this.elementTmpl(this.templates[typeMap[type]]);
@@ -64,7 +64,7 @@ define([
          * Clears values in components like this.
          */
         clearValues: function () {
-            var records = registry.get(this.getParentName(this.parentSelections)),
+            var records = registry.get(this.retrieveParentName(this.parentSelections)),
                 index = this.index,
                 uid = this.uid;
 
