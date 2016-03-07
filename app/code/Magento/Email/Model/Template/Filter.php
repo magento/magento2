@@ -894,7 +894,7 @@ class Filter extends \Magento\Framework\Filter\Template
         } catch (ContentProcessorException $exception) {
             $css = $exception->getMessage();
         } catch (\Magento\Framework\View\Asset\File\NotFoundException $exception) {
-            $css = $exception->getMessage();
+            $css = '';
         }
 
         return $css;
