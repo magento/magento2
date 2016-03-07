@@ -291,8 +291,25 @@
 .fieldset-schedule {
     border-bottom: 1px solid @collapsible__border-color;
 
+    .admin__fieldset {
+        padding: 0;
+        
+        > :last-child {
+            margin-bottom: @indent__l;
+        }
+        
+        > .fieldset-wrapper {
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
     .fieldset-wrapper-title {
+        border-bottom: 0;
         margin: @indent__base 0 @indent__s;
+        line-height: 1.2;
+        padding: 0;
 
         strong {
             font-size: 2rem;
