@@ -40,11 +40,10 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
         $customerExtension = $this->objectManager->create('Magento\Customer\Api\Data\CustomerExtension');
         $customerExtension->setTestGroupCode('Some Group Code');
         $customer->setExtensionAttributes($customerExtension);
-        $encodedCustomerData = $this->encoder->encode('customer.created', $customer);
+        $encodedCustomerData = json_decode($this->encoder->encode('customer.created', $customer), true);
         $createdAt = $customer->getCreatedAt();
-        $expectedEncodedCustomerData = $this->getCustomerDataAsJson($createdAt);
-        $actualPrettifiedResult = json_encode(json_decode($encodedCustomerData), JSON_PRETTY_PRINT);
-        $this->assertEquals($expectedEncodedCustomerData, $actualPrettifiedResult);
+        $expectedEncodedCustomerData = json_decode($this->getCustomerDataAsJson($createdAt), true);
+        $this->assertEquals($expectedEncodedCustomerData['data'], $encodedCustomerData['data']);
     }
 
     /**
@@ -61,14 +60,10 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
         $customerExtension = $this->objectManager->create('Magento\Customer\Api\Data\CustomerExtension');
         $customerExtension->setTestGroupCode('Some Group Code');
         $customer->setExtensionAttributes($customerExtension);
-        $encodedCustomerData = $this->encoder->encode('customer.list.retrieved', [$customer]);
+        $encodedCustomerData = json_decode($this->encoder->encode('customer.list.retrieved', [$customer]), true);
         $createdAt = $customer->getCreatedAt();
-        $expectedPrettifiedResult = json_encode(
-            json_decode("[" . $this->getCustomerDataAsJson($createdAt) . "]"),
-            JSON_PRETTY_PRINT
-        );
-        $actualPrettifiedResult = json_encode(json_decode($encodedCustomerData), JSON_PRETTY_PRINT);
-        $this->assertEquals($expectedPrettifiedResult, $actualPrettifiedResult);
+        $expectedEncodedCustomerData = json_decode($this->getCustomerDataAsJson($createdAt), true);
+        $this->assertEquals($expectedEncodedCustomerData['data'], $encodedCustomerData['data'][0]);
     }
 
     public function testDecode()
@@ -116,7 +111,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
      */
     public function testDecodeInvalidMessage()
     {
-        $this->encoder->decode('customer.created', '{"not_existing_field": "value"}');
+        $this->encoder->decode('customer.created', '{"data": {"not_existing_field": "value"}}');
     }
 
     /**
@@ -169,49 +164,52 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     {
         return <<<JSON
 {
-    "id": 1,
-    "group_id": 1,
-    "default_billing": "1",
-    "default_shipping": "1",
-    "created_at": "{$createdAt}",
-    "updated_at": "{$createdAt}",
-    "email": "customer@example.com",
-    "firstname": "John",
-    "lastname": "Smith",
-    "middlename": "A",
-    "prefix": "Mr.",
-    "suffix": "Esq.",
-    "gender": 0,
-    "store_id": 1,
-    "taxvat": "12",
-    "website_id": 1,
-    "addresses": [
-        {
-            "id": 1,
-            "customer_id": 1,
-            "region": {
-                "region_code": "AL",
-                "region": "Alabama",
-                "region_id": 1
-            },
-            "region_id": 1,
-            "country_id": "US",
-            "street": [
-                "Green str, 67"
-            ],
-            "company": "CompanyName",
-            "telephone": "3468676",
-            "postcode": "75477",
-            "city": "CityM",
-            "firstname": "John",
-            "lastname": "Smith",
-            "default_shipping": true,
-            "default_billing": true
+    "data":
+    {
+        "id": 1,
+        "group_id": 1,
+        "default_billing": "1",
+        "default_shipping": "1",
+        "created_at": "{$createdAt}",
+        "updated_at": "{$createdAt}",
+        "email": "customer@example.com",
+        "firstname": "John",
+        "lastname": "Smith",
+        "middlename": "A",
+        "prefix": "Mr.",
+        "suffix": "Esq.",
+        "gender": 0,
+        "store_id": 1,
+        "taxvat": "12",
+        "website_id": 1,
+        "addresses": [
+            {
+                "id": 1,
+                "customer_id": 1,
+                "region": {
+                    "region_code": "AL",
+                    "region": "Alabama",
+                    "region_id": 1
+                },
+                "region_id": 1,
+                "country_id": "US",
+                "street": [
+                    "Green str, 67"
+                ],
+                "company": "CompanyName",
+                "telephone": "3468676",
+                "postcode": "75477",
+                "city": "CityM",
+                "firstname": "John",
+                "lastname": "Smith",
+                "default_shipping": true,
+                "default_billing": true
+            }
+        ],
+        "disable_auto_group_change": 0,
+        "extension_attributes": {
+            "test_group_code": "Some Group Code"
         }
-    ],
-    "disable_auto_group_change": 0,
-    "extension_attributes": {
-        "test_group_code": "Some Group Code"
     }
 }
 JSON;
