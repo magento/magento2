@@ -111,13 +111,12 @@
                         <item name="config" xsi:type="array">
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
-                            <item name="component" xsi:type="string">Magento_Swatches/js/form/element/input</item>
-                            <item name="template" xsi:type="string">Magento_Swatches/form/element/input</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
+                            <item name="template" xsi:type="string">Magento_Catalog/form/element/input</item>
                             <item name="prefixName" xsi:type="string">swatchtext[value]</item>
                             <item name="prefixElementName" xsi:type="string">option_</item>
                             <item name="suffixName" xsi:type="string">[1]</item>
                             <item name="label" xsi:type="string" translate="true">Swatch</item>
-                            <item name="dataScope" xsi:type="string"/>
                         </item>
                     </argument>
                 </field>
@@ -126,8 +125,8 @@
                         <item name="config" xsi:type="array">
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
-                            <item name="component" xsi:type="string">Magento_Swatches/js/form/element/input</item>
-                            <item name="template" xsi:type="string">Magento_Swatches/form/element/input</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
+                            <item name="template" xsi:type="string">Magento_Catalog/form/element/input</item>
                             <item name="prefixName" xsi:type="string">optiontext[value]</item>
                             <item name="prefixElementName" xsi:type="string">option_</item>
                             <item name="suffixName" xsi:type="string">[1]</item>
@@ -140,8 +139,8 @@
                         <item name="config" xsi:type="array">
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
-                            <item name="component" xsi:type="string">Magento_Swatches/js/form/element/input</item>
-                            <item name="template" xsi:type="string">Magento_Swatches/form/element/input</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
+                            <item name="template" xsi:type="string">Magento_Catalog/form/element/input</item>
                             <item name="prefixName" xsi:type="string">swatchtext[value]</item>
                             <item name="prefixElementName" xsi:type="string">option_</item>
                             <item name="suffixName" xsi:type="string">[0]</item>
@@ -154,13 +153,12 @@
                         <item name="config" xsi:type="array">
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
-                            <item name="component" xsi:type="string">Magento_Swatches/js/form/element/input</item>
-                            <item name="template" xsi:type="string">Magento_Swatches/form/element/input</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
+                            <item name="template" xsi:type="string">Magento_Catalog/form/element/input</item>
                             <item name="prefixName" xsi:type="string">optiontext[value]</item>
                             <item name="prefixElementName" xsi:type="string">option_</item>
                             <item name="suffixName" xsi:type="string">[0]</item>
                             <item name="label" xsi:type="string" translate="true">Admin</item>
-                            <item name="dataScope" xsi:type="string"/>
                         </item>
                     </argument>
                 </field>
@@ -261,8 +259,8 @@
                         <item name="config" xsi:type="array">
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
-                            <item name="component" xsi:type="string">Magento_Swatches/js/form/element/input</item>
-                            <item name="template" xsi:type="string">Magento_Swatches/form/element/input</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
+                            <item name="template" xsi:type="string">Magento_Catalog/form/element/input</item>
                             <item name="prefixName" xsi:type="string">optionvisual[value]</item>
                             <item name="prefixElementName" xsi:type="string">option_</item>
                             <item name="suffixName" xsi:type="string">[1]</item>
@@ -276,8 +274,8 @@
                         <item name="config" xsi:type="array">
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
-                            <item name="component" xsi:type="string">Magento_Swatches/js/form/element/input</item>
-                            <item name="template" xsi:type="string">Magento_Swatches/form/element/input</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
+                            <item name="template" xsi:type="string">Magento_Catalog/form/element/input</item>
                             <item name="prefixName" xsi:type="string">optionvisual[value]</item>
                             <item name="prefixElementName" xsi:type="string">option_</item>
                             <item name="suffixName" xsi:type="string">[0]</item>
