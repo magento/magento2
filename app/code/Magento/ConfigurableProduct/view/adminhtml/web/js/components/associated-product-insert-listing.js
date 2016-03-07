@@ -87,6 +87,7 @@ define([
         showGridAssignProduct: function () {
             this.product = {};
             this.rowIndexForChange = undefined;
+
             return this.doRender(true, 'assignProduct');
         },
 
@@ -171,9 +172,8 @@ define([
                         };
                     }));
 
-                    params['filters'] = attributes;
+                    params.filters = attributes;
                 }
-
 
                 params['attributes_codes'] = attrCodes;
 
@@ -229,7 +229,7 @@ define([
         _handleManualGridSelect: function (selected) {
             var selectedRows,
                 selectedVariationKeys;
-            
+
             if (this.typeGrid === 'assignProduct') {
                 selectedRows = _.filter(this.productsProvider().data.items, function (row) {
                     return selected.indexOf(row['entity_id']) !== -1;
