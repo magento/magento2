@@ -49,7 +49,7 @@ class QueueTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Framework\MessageQueue\EnvelopeFactory $envelopFactory */
         $envelopFactory = $this->objectManager->get('Magento\Framework\MessageQueue\EnvelopeFactory');
-        $messageBody = 'Message body';
+        $messageBody = '{"data": {"body": "Message body"}, "message_id": 1}';
         $topicName = 'some.topic';
         $envelop = $envelopFactory->create(['body' => $messageBody, 'properties' => ['topic_name' => $topicName]]);
 
