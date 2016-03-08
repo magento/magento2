@@ -161,7 +161,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\CatalogImportExport\Model\Export\Product $model */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            Magento\CatalogImportExport\Model\Export\Product::class,
+            \Magento\CatalogImportExport\Model\Export\Product::class,
             [
                 'rowCustomizer' => $rowCustomizerMock,
                 'logger' => $loggerMock,
