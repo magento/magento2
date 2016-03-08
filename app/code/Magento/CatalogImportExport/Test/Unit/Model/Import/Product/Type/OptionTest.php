@@ -292,11 +292,10 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $class = new \ReflectionClass($modelClassName);
         $this->model = $class->newInstanceArgs($modelClassArgs);
         // Create model mock with rewritten _getMultiRowFormat method to support test data with the old format.
-        $this->modelMock = $this->
-            getMockBuilder($modelClassName)->
-            setConstructorArgs($modelClassArgs)->
-            setMethods(['_getMultiRowFormat'])->
-            getMock();
+        $this->modelMock = $this->getMockBuilder($modelClassName)
+            ->setConstructorArgs($modelClassArgs)
+            ->setMethods(['_getMultiRowFormat'])
+            ->getMock();
         $reflection = new \ReflectionClass(\Magento\CatalogImportExport\Model\Import\Product\Option::class);
         $reflectionProperty = $reflection->getProperty('metadataPool');
         $reflectionProperty->setAccessible(true);
