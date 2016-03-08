@@ -1341,7 +1341,7 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
     {
         if (!$this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\Entity\MetadataPool');
+                ->get(\Magento\Framework\Model\Entity\MetadataPool::class);
         }
         return $this->metadataPool;
     }

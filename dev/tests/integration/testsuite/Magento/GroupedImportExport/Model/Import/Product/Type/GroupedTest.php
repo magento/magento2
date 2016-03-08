@@ -40,7 +40,7 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->model = $this->objectManager->create('Magento\CatalogImportExport\Model\Import\Product');
+        $this->model = $this->objectManager->create(\Magento\CatalogImportExport\Model\Import\Product::class);
     }
 
     /**
@@ -52,11 +52,11 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
     {
         // Import data from CSV file
         $pathToFile = __DIR__ . '/../../_files/grouped_product.csv';
-        $filesystem = $this->objectManager->create('Magento\Framework\Filesystem');
+        $filesystem = $this->objectManager->create(\Magento\Framework\Filesystem::class);
 
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => $pathToFile,
                 'directory' => $directory
@@ -74,11 +74,11 @@ class GroupedTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($errors->getErrorsCount() == 0);
         $this->model->importData();
 
-        $resource = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Product');
+        $resource = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productId = $resource->getIdBySku('Test Grouped');
         $this->assertTrue(is_numeric($productId));
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product');
+        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         $product->load($productId);
 
         $this->assertFalse($product->isObjectNew());

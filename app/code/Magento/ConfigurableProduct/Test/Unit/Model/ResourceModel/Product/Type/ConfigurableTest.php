@@ -44,26 +44,38 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $connectionMock = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')->getMock();
-        $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
+        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)->getMock();
+        $this->resource = $this->getMock(\Magento\Framework\App\ResourceConnection::class, [], [], '', false);
         $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($connectionMock));
-        $this->relation = $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Relation', [], [], '', false);
-        $this->metadataMock = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
-        $this->metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $this->relation = $this->getMock(
+            \Magento\Catalog\Model\ResourceModel\Product\Relation::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->metadataMock = $this->getMock(\Magento\Framework\Model\Entity\EntityMetadata::class, [], [], '', false);
+        $this->metadataPoolMock = $this->getMock(
+            \Magento\Framework\Model\Entity\MetadataPool::class,
+            [],
+            [],
+            '',
+            false
+        );
         $this->metadataPoolMock->expects($this->any())
             ->method('getMetadata')
             ->with(ProductInterface::class)
             ->willReturn($this->metadataMock);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->configurable = $this->objectManagerHelper->getObject(
-            'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable',
+            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable::class,
             [
                 'resource' => $this->resource,
                 'catalogProductRelation' => $this->relation,
             ]
         );
         $reflection = new \ReflectionClass(
-            '\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable'
+            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable::class
         );
         $reflectionProperty = $reflection->getProperty('metadataPool');
         $reflectionProperty->setAccessible(true);
@@ -72,7 +84,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     public function testSaveProducts()
     {
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $mainProduct */
-        $mainProduct = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $mainProduct = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(['__sleep', '__wakeup', 'getData'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -105,7 +117,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $reflectionProperty->setValue($configurable, $this->metadataPoolMock);
 
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
-        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
+        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
             ->setMethods(
                 [
                     '__sleep',
@@ -138,7 +150,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 )
             );
         $select = $this->getMock(
-            '\Magento\Framework\DB\Select',
+            \Magento\Framework\DB\Select::class,
             [
                 'from',
                 'joinInner',
@@ -163,7 +175,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             )
             ->will($this->returnSelf());
         $superAttribute = $this->getMock(
-            '\Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute',
+            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute::class,
             [
                 'getBackendTable',
                 'getAttributeId',
@@ -252,7 +264,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'super_attribute.product_id = ?',
                 'getId value'
             );
-        $readerAdapter = $this->getMockBuilder('\Magento\Framework\DB\Adapter\AdapterInterface')
+        $readerAdapter = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
             ->setMethods([
                 'select',
                 'fetchAll',
