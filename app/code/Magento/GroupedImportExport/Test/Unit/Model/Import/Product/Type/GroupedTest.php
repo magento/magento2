@@ -8,6 +8,9 @@ namespace Magento\GroupedImportExport\Test\Unit\Model\Import\Product\Type;
 
 use \Magento\GroupedImportExport;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class GroupedTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /** @var GroupedImportExport\Model\Import\Product\Type\Grouped */
