@@ -4,7 +4,7 @@
 # See COPYING.txt for license details.
 
 set -e
-export PATH="$HOME/.cache/bin:$PATH"
+PATH="$HOME/.cache/bin:$PATH"
 
 # mock mail
 sudo service postfix stop
