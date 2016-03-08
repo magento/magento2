@@ -135,9 +135,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $exception = new \Exception('Error');
 
-        $rowCustomizerMock = $this->getMockBuilder(
-            \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface::class
-        )
+        $rowCustomizerMock =
+            $this->getMockBuilder(\Magento\CatalogImportExport\Model\Export\RowCustomizerInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
