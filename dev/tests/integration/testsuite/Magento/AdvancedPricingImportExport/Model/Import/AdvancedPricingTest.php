@@ -90,7 +90,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/import_advanced_pricing.csv';
         $filesystem = $this->objectManager->create(
-            Magento\Framework\Filesystem::class
+            \Magento\Framework\Filesystem::class
         );
 
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
