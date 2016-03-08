@@ -37,6 +37,27 @@ class Consumer implements ConsumerInterface
     private $invoker;
 
     /**
+     * @var MessageController
+     */
+    private $messageController;
+
+    /**
+     * This getter serves as a workaround to add this dependency to this class without breaking constructor structure.
+     *
+     * @return MessageController
+     *
+     * @deprecated
+     */
+    private function getMessageController()
+    {
+        if ($this->messageController === null) {
+            $this->messageController = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\MessageQueue\MessageController');
+        }
+        return $this->messageController;
+    }
+
+    /**
      * Initialize dependencies.
      *
      * @param CallbackInvoker $invoker
@@ -100,6 +121,8 @@ class Consumer implements ConsumerInterface
     }
 
     /**
+     * Get transaction callback
+     *
      * @param QueueInterface $queue
      * @return \Closure
      */
@@ -110,14 +133,16 @@ class Consumer implements ConsumerInterface
                 $topicName = $message->getProperties()['topic_name'];
                 $allowedTopics = $this->configuration->getTopicNames();
                 $this->resource->getConnection()->beginTransaction();
+                $this->getMessageController()->lock($message, $this->configuration->getConsumerName());
                 if (in_array($topicName, $allowedTopics)) {
                     $this->dispatchMessage($message);
+                    $this->resource->getConnection()->commit();
                     $queue->acknowledge($message);
                 } else {
-                    //push message back to the queue
-                    $queue->reject($message);
+                    $queue->reject($message); //push message back to the queue
                 }
-                $this->resource->getConnection()->commit();
+            } catch (MessageLockException $exception) {
+                $queue->acknowledge($message);
             } catch (\Magento\Framework\MessageQueue\ConnectionLostException $e) {
                 $this->resource->getConnection()->rollBack();
             } catch (\Exception $e) {

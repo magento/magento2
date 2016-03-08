@@ -78,7 +78,11 @@ class MessageEncoder
     public function encode($topic, $message, $requestType = true)
     {
         $convertedMessage = $this->convertMessage($topic, $message, self::DIRECTION_ENCODE, $requestType);
-        return $this->jsonEncoder->encode($convertedMessage);
+        $data = [
+            'data' => $convertedMessage,
+            'message_id' => md5(uniqid($topic))
+        ];
+        return $this->jsonEncoder->encode($data);
     }
 
     /**
@@ -97,7 +101,7 @@ class MessageEncoder
         } catch (\Exception $e) {
             throw new LocalizedException(new Phrase("Error occurred during message decoding."));
         }
-        return $this->convertMessage($topic, $decodedMessage, self::DIRECTION_DECODE, $requestType);
+        return $this->convertMessage($topic, $decodedMessage['data'], self::DIRECTION_DECODE, $requestType);
     }
 
     /**

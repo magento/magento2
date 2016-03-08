@@ -52,6 +52,29 @@ class BatchConsumer implements ConsumerInterface
     private $resource;
 
     /**
+     * @var MessageController
+     */
+    private $messageController;
+
+    /**
+     * This getter serves as a workaround to add this dependency to this class without breaking constructor structure.
+     *
+     * @return MessageController
+     *
+     * @deprecated
+     */
+    private function getMessageController()
+    {
+        if ($this->messageController === null) {
+            $this->messageController = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\MessageQueue\MessageController');
+        }
+        return $this->messageController;
+    }
+
+    /**
+     * Initialize dependencies.
+     *
      * @param ConfigInterface $messageQueueConfig
      * @param MessageEncoder $messageEncoder
      * @param QueueRepository $queueRepository
@@ -100,18 +123,18 @@ class BatchConsumer implements ConsumerInterface
     /**
      * Decode message and invoke callbacks method
      *
-     * @param EnvelopeInterface[] $messages
+     * @param array $messageList
      * @return void
      * @throws LocalizedException
      */
-    private function dispatchMessage(array $messages)
+    private function dispatchMessage(array $messageList)
     {
-        foreach ($messages as $message) {
-            $properties = $message->getProperties();
-            $topicName = $properties['topic_name'];
-            $callbacks = $this->configuration->getHandlers($message[$topicName]);
-            foreach ($callbacks as $callback) {
-                call_user_func($callback, $message);
+        foreach ($messageList as $topicName => $messages) {
+            foreach ($messages as $message) {
+                $callbacks = $this->configuration->getHandlers($topicName);
+                foreach ($callbacks as $callback) {
+                    call_user_func($callback, $message);
+                }
             }
         }
     }
@@ -153,6 +176,8 @@ class BatchConsumer implements ConsumerInterface
     }
 
     /**
+     * Acknowledge all given messages
+     *
      * @param QueueInterface $queue
      * @param EnvelopeInterface[] $messages
      * @return void
@@ -165,6 +190,8 @@ class BatchConsumer implements ConsumerInterface
     }
 
     /**
+     * Get all messages from queue
+     *
      * @param QueueInterface $queue
      * @return EnvelopeInterface[]
      */
@@ -179,6 +206,8 @@ class BatchConsumer implements ConsumerInterface
     }
 
     /**
+     * Get N messages from queue
+     *
      * @param QueueInterface $queue
      * @param int $count
      * @return EnvelopeInterface[]
@@ -198,6 +227,8 @@ class BatchConsumer implements ConsumerInterface
     }
 
     /**
+     * Reject all given messages
+     *
      * @param QueueInterface $queue
      * @param EnvelopeInterface[] $messages
      * @return void
@@ -209,8 +240,9 @@ class BatchConsumer implements ConsumerInterface
         }
     }
 
-
     /**
+     * Decode message
+     *
      * @param EnvelopeInterface[] $messages
      * @return object[]
      */
@@ -220,14 +252,15 @@ class BatchConsumer implements ConsumerInterface
         foreach ($messages as $message) {
             $properties = $message->getProperties();
             $topicName = $properties['topic_name'];
-
-            $decodedMessages[] = $this->messageEncoder->decode($topicName, $message->getBody());
+            $decodedMessages[$topicName][] = $this->messageEncoder->decode($topicName, $message->getBody());
         }
 
         return $decodedMessages;
     }
 
     /**
+     * Get transaction callback
+     *
      * @param QueueInterface $queue
      * @param MergerInterface $merger
      * @return \Closure
@@ -237,11 +270,13 @@ class BatchConsumer implements ConsumerInterface
         return function (array $messages) use ($queue, $merger) {
             try {
                 $this->resource->getConnection()->beginTransaction();
+                list($messages, $toAcknowledge) = $this->lockMessages($messages);
+                $this->acknowledgeAll($queue, $toAcknowledge); //acknowledge already processed messages if needed
                 $decodedMessages = $this->decodeMessages($messages);
                 $mergedMessages = $merger->merge($decodedMessages);
                 $this->dispatchMessage($mergedMessages);
-                $this->acknowledgeAll($queue, $messages);
                 $this->resource->getConnection()->commit();
+                $this->acknowledgeAll($queue, $messages);
             } catch (ConnectionLostException $e) {
                 $this->resource->getConnection()->rollBack();
             } catch (\Exception $e) {
@@ -249,5 +284,26 @@ class BatchConsumer implements ConsumerInterface
                 $this->rejectAll($queue, $messages);
             }
         };
+    }
+
+    /**
+     * Lock messages
+     *
+     * @param array $messages
+     * @return array
+     */
+    private function lockMessages(array $messages)
+    {
+        $toProcess = [];
+        $toAcknowledge = [];
+        foreach ($messages as $message) {
+            try {
+                $this->getMessageController()->lock($message, $this->configuration->getConsumerName());
+                $toProcess[] = $message;
+            } catch (MessageLockException $exception) {
+                $toAcknowledge[] = $message;
+            }
+        }
+        return [$toProcess, $toAcknowledge];
     }
 }

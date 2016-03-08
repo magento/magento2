@@ -18,6 +18,8 @@ use Magento\Framework\MessageQueue\QueueInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\MessageQueue\EnvelopeFactory;
 use Magento\Framework\MessageQueue\MessageValidator;
+use Magento\Framework\MessageQueue\MessageController;
+use Magento\Framework\MessageQueue\MessageLockException;
 
 /**
  * A MessageQueue Consumer to handle receiving, processing and replying to an RPC message.
@@ -66,6 +68,27 @@ class Consumer implements ConsumerInterface
     private $messageValidator;
 
     /**
+     * @var MessageController
+     */
+    private $messageController;
+
+    /**
+     * This getter serves as a workaround to add this dependency to this class without breaking constructor structure.
+     *
+     * @return MessageController
+     *
+     * @deprecated
+     */
+    private function getMessageController()
+    {
+        if ($this->messageController === null) {
+            $this->messageController = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\MessageQueue\MessageController');
+        }
+        return $this->messageController;
+    }
+
+    /**
      * Initialize dependencies.
      *
      * @param CallbackInvoker $invoker
@@ -73,7 +96,7 @@ class Consumer implements ConsumerInterface
      * @param ResourceConnection $resource
      * @param ConsumerConfigurationInterface $configuration
      * @param \Magento\Framework\MessageQueue\QueueRepository $queueRepository
-     * @param \Magento\Framework\MessageQueue\ConfigInterface $queueConfig
+     * @param QueueConfig $queueConfig
      * @param EnvelopeFactory $envelopeFactory
      * @param MessageValidator $messageValidator
      */
@@ -176,13 +199,16 @@ class Consumer implements ConsumerInterface
         return function (EnvelopeInterface $message) use ($queue) {
             try {
                 $this->resource->getConnection()->beginTransaction();
+                $this->getMessageController()->lock($message, $this->configuration->getConsumerName());
                 $responseBody = $this->dispatchMessage($message);
                 $responseMessage = $this->envelopeFactory->create(
                     ['body' => $responseBody, 'properties' => $message->getProperties()]
                 );
                 $this->sendResponse($responseMessage);
-                $queue->acknowledge($message);
                 $this->resource->getConnection()->commit();
+                $queue->acknowledge($message);
+            } catch (MessageLockException $exception) {
+                $queue->acknowledge($message);
             } catch (\Magento\Framework\MessageQueue\ConnectionLostException $e) {
                 $this->resource->getConnection()->rollBack();
             } catch (\Exception $e) {

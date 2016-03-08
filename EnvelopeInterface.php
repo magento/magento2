@@ -15,6 +15,13 @@ interface EnvelopeInterface
     public function getBody();
 
     /**
+     * Get message unique id
+     *
+     * @return string
+     */
+    public function getMessageId();
+
+    /**
      * Message metadata
      *
      * @return array
