@@ -575,7 +575,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             ->getInitParams()[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
         $uploader = $this->_model->getUploader();
 
-        $destDir = $directory->getRelativePath($appParams[DirectoryList::MEDIA][DirectoryList::PATH] . '/catalog/product');
+        $destDir = $directory->getRelativePath(
+            $appParams[DirectoryList::MEDIA][DirectoryList::PATH] . '/catalog/product'
+        );
         $tmpDir = $directory->getRelativePath($appParams[DirectoryList::MEDIA][DirectoryList::PATH] . '/import');
 
         $directory->create($destDir);
@@ -655,7 +657,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 $data['header'] = str_getcsv($line);
             } else {
                 $row = array_combine($data['header'], str_getcsv($line));
-                if (!is_null($entityId) && !empty($row[$entityId])) {
+                if ($entityId && !empty($row[$entityId])) {
                     $data['data'][$row[$entityId]] = $row;
                 } else {
                     $data['data'][] = $row;
@@ -942,9 +944,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $errorCount = count($errorProcessor->getAllErrors());
 
         $errorMessage = $errorProcessor->getAllErrors()[0]->getErrorMessage();
-        $this->assertContains('URL key for specified store already exists' , $errorMessage);
-        $this->assertContains('Default Category/Category 2' , $errorMessage);
-        $this->assertTrue($errorCount === 1 , 'Error expected');
+        $this->assertContains('URL key for specified store already exists', $errorMessage);
+        $this->assertContains('Default Category/Category 2', $errorMessage);
+        $this->assertTrue($errorCount === 1, 'Error expected');
 
         $categoryAfter = $this->loadCategoryByName('Category 2');
         $this->assertTrue($categoryAfter === null);
@@ -996,8 +998,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->assertTrue($errors->getErrorsCount() == $errorsCount);
         if ($errorsCount >= 1) {
             $this->assertEquals(
-            "Specified url key already exists",
-            $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
+                "Specified url key already exists",
+                $errors->getErrorByRowNumber(1)[0]->getErrorMessage()
             );
         }
     }
