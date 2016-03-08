@@ -76,7 +76,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
     public function render(\Magento\Framework\DataObject $row)
     {
         $format = $this->getColumn()->getFormat();
-        $date = $date = $this->_getValue($row);
+        $date = $this->_getValue($row);
         if ($date) {
             if (!($date instanceof \DateTimeInterface)) {
                 $date = new \DateTime($date);
