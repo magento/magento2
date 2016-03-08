@@ -29,9 +29,9 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->fileSystem = $this->objectManager->get('Magento\Framework\Filesystem');
+        $this->fileSystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
         $this->model = $this->objectManager->create(
-            'Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing'
+            \Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing::class
         );
     }
 
@@ -44,14 +44,14 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     public function testExport()
     {
         $productRepository = $this->objectManager->create(
-            'Magento\Catalog\Api\ProductRepositoryInterface'
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
         $index = 0;
         $ids = [];
         $origPricingData = [];
         while (isset($skus[$index])) {
             $ids[$index] = $productRepository->get($skus[$index])->getId();
-            $origPricingData[$index] = $this->objectManager->create('Magento\Catalog\Model\Product')
+            $origPricingData[$index] = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
                 ->load($ids[$index])
                 ->getTierPrices();
             $index++;
@@ -61,7 +61,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
 
         $this->model->setWriter(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\ImportExport\Model\Export\Adapter\Csv',
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class,
                 ['fileSystem' => $this->fileSystem, 'destination' => $csvfile]
             )
         );
@@ -69,11 +69,11 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing $importModel */
         $importModel = $this->objectManager->create(
-            'Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing'
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class
         );
         $directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => $csvfile,
                 'directory' => $directory
@@ -96,7 +96,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
 
         while ($index > 0) {
             $index--;
-            $newPricingData = $this->objectManager->create('Magento\Catalog\Model\Product')
+            $newPricingData = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
                 ->load($ids[$index])
                 ->getTierPrices();
             $this->assertEquals(count($origPricingData[$index]), count($newPricingData));

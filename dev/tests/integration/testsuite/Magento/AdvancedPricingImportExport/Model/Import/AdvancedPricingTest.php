@@ -38,8 +38,10 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->fileSystem = $this->objectManager->get('Magento\Framework\Filesystem');
-        $this->model = $this->objectManager->create('Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing');
+        $this->fileSystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
+        $this->model = $this->objectManager->create(
+            \Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing::class
+        );
         $this->expectedTierPrice = [
             'AdvancedPricingSimple 1' => [
                 [
@@ -87,12 +89,12 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/import_advanced_pricing.csv';
         $filesystem = $this->objectManager->create(
-            'Magento\Framework\Filesystem'
+            Magento\Framework\Filesystem::class
         );
 
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => $pathToFile,
                 'directory' => $directory
@@ -111,10 +113,10 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $this->model->importData();
 
         /** @var \Magento\Catalog\Model\ResourceModel\Product $resource */
-        $resource = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Product');
+        $resource = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productIdList = $resource->getProductsIdsBySkus(array_keys($this->expectedTierPrice));
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product');
+        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         foreach ($productIdList as $sku => $productId) {
             $product->load($productId);
             $tierPriceCollection = $product->getTierPrices();
@@ -135,14 +137,14 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     public function testImportDelete()
     {
         $productRepository = $this->objectManager->create(
-            'Magento\Catalog\Api\ProductRepositoryInterface'
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
         $index = 0;
         $ids = [];
         $origPricingData = [];
         while (isset($skus[$index])) {
             $ids[$index] = $productRepository->get($skus[$index])->getId();
-            $origPricingData[$index] = $this->objectManager->create('Magento\Catalog\Model\Product')
+            $origPricingData[$index] = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
                 ->load($ids[$index])
                 ->getTierPrices();
             $index++;
@@ -152,11 +154,11 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing $exportModel */
         $exportModel = $this->objectManager->create(
-            'Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing'
+            \Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing::class
         );
         $exportModel->setWriter(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\ImportExport\Model\Export\Adapter\Csv',
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class,
                 ['fileSystem' => $this->fileSystem, 'destination' => $csvfile]
             )
         );
@@ -164,7 +166,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
 
         $directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => $csvfile,
                 'directory' => $directory
@@ -187,7 +189,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
 
         while ($index > 0) {
             $index--;
-            $newPricingData = $this->objectManager->create('Magento\Catalog\Model\Product')
+            $newPricingData = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
                 ->load($ids[$index])
                 ->getTierPrices();
             $this->assertEquals(0, count($newPricingData));
@@ -203,12 +205,12 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/import_advanced_pricing.csv';
         $filesystem = $this->objectManager->create(
-            'Magento\Framework\Filesystem'
+            \Magento\Framework\Filesystem::class
         );
 
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => $pathToFile,
                 'directory' => $directory
@@ -227,10 +229,10 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
         $this->model->importData();
 
         /** @var \Magento\Catalog\Model\ResourceModel\Product $resource */
-        $resource = $this->objectManager->get('Magento\Catalog\Model\ResourceModel\Product');
+        $resource = $this->objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productIdList = $resource->getProductsIdsBySkus(array_keys($this->expectedTierPrice));
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product');
+        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         foreach ($productIdList as $sku => $productId) {
             $product->load($productId);
             $tierPriceCollection = $product->getTierPrices();

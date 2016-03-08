@@ -58,9 +58,9 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->fileSystem = $this->objectManager->get('Magento\Framework\Filesystem');
+        $this->fileSystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
         $this->model = $this->objectManager->create(
-            'Magento\CatalogImportExport\Model\Export\Product'
+            \Magento\CatalogImportExport\Model\Export\Product::class
         );
     }
 
@@ -72,8 +72,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testExportStockItemAttributesAreFilled()
     {
-        $fileWrite = $this->getMock('Magento\Framework\Filesystem\File\Write', [], [], '', false);
-        $directoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
+        $fileWrite = $this->getMock(\Magento\Framework\Filesystem\File\Write::class, [], [], '', false);
+        $directoryMock = $this->getMock(\Magento\Framework\Filesystem\Directory\Write::class, [], [], '', false);
         $directoryMock->expects($this->any())->method('getParentDirectory')->will($this->returnValue('some#path'));
         $directoryMock->expects($this->any())->method('isWritable')->will($this->returnValue(true));
         $directoryMock->expects($this->any())->method('isFile')->will($this->returnValue(true));
@@ -86,7 +86,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         );
         $directoryMock->expects($this->once())->method('openFile')->will($this->returnValue($fileWrite));
 
-        $filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $filesystemMock->expects($this->once())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
 
         $exportAdapter = new \Magento\ImportExport\Model\Export\Adapter\Csv($filesystemMock);
@@ -135,17 +135,19 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     {
         $exception = new \Exception('Error');
 
-        $rowCustomizerMock = $this->getMockBuilder('Magento\CatalogImportExport\Model\Export\RowCustomizerInterface')
+        $rowCustomizerMock = $this->getMockBuilder(
+            \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface::class
+        )
             ->disableOriginalConstructor()
             ->getMock();
 
-        $loggerMock = $this->getMockBuilder('\Psr\Log\LoggerInterface')->getMock();
+        $loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)->getMock();
 
-        $directoryMock = $this->getMock('Magento\Framework\Filesystem\Directory\Write', [], [], '', false);
+        $directoryMock = $this->getMock(\Magento\Framework\Filesystem\Directory\Write::class, [], [], '', false);
         $directoryMock->expects($this->any())->method('getParentDirectory')->will($this->returnValue('some#path'));
         $directoryMock->expects($this->any())->method('isWritable')->will($this->returnValue(true));
 
-        $filesystemMock = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
+        $filesystemMock = $this->getMock(\Magento\Framework\Filesystem::class, [], [], '', false);
         $filesystemMock->expects($this->once())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
 
         $exportAdapter = new \Magento\ImportExport\Model\Export\Adapter\Csv($filesystemMock);
@@ -154,12 +156,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $loggerMock->expects($this->once())->method('critical')->with($exception);
 
         $collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            '\Magento\Catalog\Model\ResourceModel\Product\Collection'
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class
         );
 
         /** @var \Magento\CatalogImportExport\Model\Export\Product $model */
         $model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\CatalogImportExport\Model\Export\Product',
+            Magento\CatalogImportExport\Model\Export\Product::class,
             [
                 'rowCustomizer' => $rowCustomizerMock,
                 'logger' => $loggerMock,

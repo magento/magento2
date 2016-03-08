@@ -57,9 +57,9 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
         parent::setUp();
 
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->fileSystem = $this->objectManager->get('Magento\Framework\Filesystem');
+        $this->fileSystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
         $this->productResource = $this->objectManager->create(
-            'Magento\Catalog\Model\ResourceModel\Product'
+            \Magento\Catalog\Model\ResourceModel\Product::class
         );
     }
 
@@ -112,7 +112,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
         $origProducts = [];
         while (isset($skus[$index])) {
             $ids[$index] = $this->productResource->getIdBySku($skus[$index]);
-            $origProducts[$index] = $this->objectManager->create('Magento\Catalog\Model\Product')
+            $origProducts[$index] = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
                 ->load($ids[$index]);
             $index++;
         }
@@ -122,7 +122,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
 
         while ($index > 0) {
             $index--;
-            $newProduct = $this->objectManager->create('Magento\Catalog\Model\Product')
+            $newProduct = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
                 ->load($ids[$index]);
 
             // @todo uncomment or remove after MAGETWO-49806 resolved
@@ -176,7 +176,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
         $csvfile = $this->exportProducts();
         $this->importProducts($csvfile, \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE);
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->objectManager->create('Magento\Catalog\Model\Product');
+        $product = $this->objectManager->create(\Magento\Catalog\Model\Product::class);
         foreach ($skus as $sku) {
             $productId = $this->productResource->getIdBySku($sku);
             $product->load($productId);
@@ -272,7 +272,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
         $origProducts = [];
         while (isset($skus[$index])) {
             $ids[$index] = $this->productResource->getIdBySku($skus[$index]);
-            $origProducts[$index] = $this->objectManager->create('Magento\Catalog\Model\Product')
+            $origProducts[$index] = $this->objectManager->create(\Magento\Catalog\Model\Product::class)
                 ->load($ids[$index]);
             $index++;
         }
@@ -284,10 +284,10 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
             $index--;
 
             $id = $this->productResource->getIdBySku($skus[$index]);
-            $newProduct = $this->objectManager->create('Magento\Catalog\Model\Product')->load($id);
+            $newProduct = $this->objectManager->create(\Magento\Catalog\Model\Product::class)->load($id);
 
             // check original product is deleted
-            $origProduct = $this->objectManager->create('Magento\Catalog\Model\Product')->load($ids[$index]);
+            $origProduct = $this->objectManager->create(\Magento\Catalog\Model\Product::class)->load($ids[$index]);
             $this->assertNull($origProduct->getId());
 
             // check new product data
@@ -324,10 +324,10 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
     {
         $csvfile = uniqid('importexport_') . '.csv';
 
-        $exportProduct = $this->objectManager->create('Magento\CatalogImportExport\Model\Export\Product');
+        $exportProduct = $this->objectManager->create(\Magento\CatalogImportExport\Model\Export\Product::class);
         $exportProduct->setWriter(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\ImportExport\Model\Export\Adapter\Csv',
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class,
                 ['fileSystem' => $this->fileSystem, 'destination' => $csvfile]
             )
         );
@@ -346,11 +346,11 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_Te
     {
         /** @var \Magento\CatalogImportExport\Model\Import\Product $importModel */
         $importModel = $this->objectManager->create(
-            'Magento\CatalogImportExport\Model\Import\Product'
+            \Magento\CatalogImportExport\Model\Import\Product::class
         );
         $directory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => $csvfile,
                 'directory' => $directory

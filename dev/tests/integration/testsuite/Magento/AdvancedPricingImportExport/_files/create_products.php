@@ -4,7 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-$productModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
+$productModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->create(\Magento\Catalog\Model\Product::class);
 
 $productModel->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setAttributeSetId(4)

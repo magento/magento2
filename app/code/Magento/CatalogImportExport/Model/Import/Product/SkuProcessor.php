@@ -173,7 +173,7 @@ class SkuProcessor
     {
         if (!$this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\Entity\MetadataPool');
+                ->get(\Magento\Framework\Model\Entity\MetadataPool::class);
         }
         return $this->metadataPool;
     }
