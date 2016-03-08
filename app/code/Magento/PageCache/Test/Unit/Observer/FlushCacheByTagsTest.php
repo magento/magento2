@@ -67,16 +67,14 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
             $eventMock = $this->getMock('Magento\Framework\Event', ['getObject'], [], '', false);
             $eventMock->expects($this->once())->method('getObject')->will($this->returnValue($observedObject));
             $observerObject->expects($this->once())->method('getEvent')->will($this->returnValue($eventMock));
-            $this->_configMock->expects(
-                $this->once()
-            )->method(
-                    'getType'
-                )->will(
-                    $this->returnValue(\Magento\PageCache\Model\Config::BUILT_IN)
-                );
+            $this->_configMock->expects($this->once())
+                ->method('getType')
+                ->willReturn(\Magento\PageCache\Model\Config::BUILT_IN);
             $observedObject->expects($this->once())->method('getIdentities')->will($this->returnValue($tags));
 
-            $this->fullPageCacheMock->expects($this->once())->method('clean')->with($this->equalTo($expectedTags));
+            $this->fullPageCacheMock->expects($this->once())
+                ->method('clean')
+                ->with(\Zend_Cache::CLEANING_MODE_ALL, $this->equalTo($expectedTags));
         }
 
         $this->_model->execute($observerObject);
