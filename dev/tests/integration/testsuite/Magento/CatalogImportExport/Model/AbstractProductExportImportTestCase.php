@@ -8,6 +8,9 @@ namespace Magento\CatalogImportExport\Model;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 abstract class AbstractProductExportImportTestCase extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -3,15 +3,6 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
-/**
- * Test class for \Magento\CatalogImportExport\Model\Import\Product
- *
- * The "CouplingBetweenObjects" warning is caused by tremendous complexity of the original class
- *
- */
 namespace Magento\CatalogImportExport\Model\Import;
 
 use Magento\Framework\App\Bootstrap;
@@ -22,6 +13,7 @@ use Magento\ImportExport\Model\Import;
  * Class ProductTest
  *
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 {

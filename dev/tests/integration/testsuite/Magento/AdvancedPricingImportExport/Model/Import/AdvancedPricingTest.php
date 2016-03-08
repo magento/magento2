@@ -10,6 +10,7 @@ use Magento\ImportExport\Model\Import;
 
 /**
  * @magentoAppArea adminhtml
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
 {
