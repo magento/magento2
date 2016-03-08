@@ -100,9 +100,6 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOrderTaxDetails($orderItemAppliedTaxes, $expected)
     {
-        if ($expected === null) {
-            $expected = $orderItemAppliedTaxes[0];
-        }
         $orderId = 1;
         $this->orderMock->expects($this->once())
             ->method('load')
@@ -142,8 +139,15 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
                         'real_base_amount' => '12.3779',
                     ],
                 ],
-                'expected' => null,  // use a subset of the above
+                'expected' => [
+                    'code' => 'US-CA-*-Rate 1',
+                    'title' => 'US-CA-*-Rate 1',
+                    'tax_percent' => '8.25',
+                    'real_amount' => '6.1889',
+                    'real_base_amount' => '12.3779',
+                ],
             ],
+
             'weee_item' => [
                 'orderItemAppliedTaxes' => [
                     [
@@ -157,8 +161,15 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
                         'real_base_amount' => '1.7979',
                     ],
                 ],
-                'expected' => null,  // use a subset of the above
+                'expected' => [
+                    'code' => 'SanJose City Tax',
+                    'title' => 'SanJose City Tax',
+                    'tax_percent' => '6',
+                    'real_amount' => '0.9011',
+                    'real_base_amount' => '1.7979',
+                ],
             ],
+
             'shipping' => [
                 'orderItemAppliedTaxes' => [
                     [
@@ -172,8 +183,15 @@ class TaxManagementTest extends \PHPUnit_Framework_TestCase
                         'real_base_amount' => '5.21',
                     ],
                 ],
-                'expected' => null,  // use a subset of the above
+                'expected' => [
+                    'code' => 'Shipping',
+                    'title' => 'Shipping',
+                    'tax_percent' => '21',
+                    'real_amount' => '2.6',
+                    'real_base_amount' => '5.21',
+                ],
             ],
+
             'canadian_weee' => [
                 'orderItemAppliedTaxes' => [
                     [
