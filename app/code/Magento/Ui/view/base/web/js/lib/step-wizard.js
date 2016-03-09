@@ -188,7 +188,10 @@ define([
             this.wizard = new Wizard(this.steps);
         },
         close: function () {
-            uiRegistry.get('product_form.product_form.configurableModal').closeModal();
+            var modal =  uiRegistry.get(this.initData.configurableModal);
+            if (!_.isUndefined(modal)) {
+                modal.closeModal();
+            }
         },
         showSpecificStep: function () {
             var index = _.indexOf(this.stepsNames, event.target.hash.substr(1)),
