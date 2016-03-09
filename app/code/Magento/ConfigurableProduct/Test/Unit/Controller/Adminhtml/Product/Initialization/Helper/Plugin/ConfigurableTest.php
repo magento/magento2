@@ -90,7 +90,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Configurable::afterInitialize
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testAfterInitializeWithAttributesAndVariations()
     {
@@ -105,9 +105,63 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ['product', [], ['configurable_attributes_data' => $attributes]],
         ];
         $simpleProductsIds = [1, 2, 3];
-        $simpleProducts = ['simple1', 'simple2', 'simple3'];
+        $simpleProducts = [
+            [
+                'newProduct' => false,
+                'variationKey' => 'simple1'
+            ],
+            [
+                'newProduct' => true,
+                'variationKey' => 'simple2',
+                'status' => 'simple2_status',
+                'sku' => 'simple2_sku',
+                'name' => 'simple2_name',
+                'price' => '3.33',
+                'configurable_attribute' => 'simple2_configurable_attribute',
+                'weight' => '5.55',
+                'media_gallery' => 'simple2_media_gallery',
+                'swatch_image' => 'simple2_swatch_image',
+                'small_image' => 'simple2_small_image',
+                'thumbnail' => 'simple2_thumbnail',
+                'image' => 'simple2_image'
+            ],
+            [
+                'newProduct' => true,
+                'variationKey' => 'simple3',
+                'qty' => '3'
+            ]
+        ];
+        $variationMatrix = [
+            'simple2' => [
+                'status' => 'simple2_status',
+                'sku' => 'simple2_sku',
+                'name' => 'simple2_name',
+                'price' => '3.33',
+                'configurable_attribute' => 'simple2_configurable_attribute',
+                'weight' => '5.55',
+                'media_gallery' => 'simple2_media_gallery',
+                'swatch_image' => 'simple2_swatch_image',
+                'small_image' => 'simple2_small_image',
+                'thumbnail' => 'simple2_thumbnail',
+                'image' => 'simple2_image'
+            ],
+            'simple3' => [
+                'status' => '',
+                'sku' => '',
+                'name' => '',
+                'price' => '',
+                'configurable_attribute' => '',
+                'weight' => '',
+                'media_gallery' => '',
+                'swatch_image' => '',
+                'small_image' => '',
+                'thumbnail' => '',
+                'image' => '',
+                'quantity_and_stock_status' => ['qty' => '3']
+            ]
+        ];
         $paramValueMap = [
-            ['variations-matrix', [], $simpleProducts],
+            ['configurable-matrix', [], $simpleProducts],
             ['attributes', null, $attributes],
         ];
 
@@ -142,7 +196,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         $this->variationHandler->expects(static::once())
             ->method('generateSimpleProducts')
-            ->with($this->product, $simpleProducts)
+            ->with($this->product, $variationMatrix)
             ->willReturn($simpleProductsIds);
 
         $extensionAttributes->expects(static::once())
@@ -172,7 +226,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ['product', [], ['configurable_attributes_data' => $attributes]],
         ];
         $paramValueMap = [
-            ['variations-matrix', [], []],
+            ['configurable-matrix', [], []],
             ['attributes', null, $attributes],
         ];
 
