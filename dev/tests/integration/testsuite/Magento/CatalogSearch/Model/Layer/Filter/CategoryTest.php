@@ -131,6 +131,6 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Catalog\Model\Layer\Filter\Item', $item);
         $this->assertEquals('Category 1.2', $item->getLabel());
         $this->assertEquals(13, $item->getValue());
-        $this->assertEquals(2, $items[0]->getCount());
+        $this->assertEquals(2, $item->getCount());
     }
 }
