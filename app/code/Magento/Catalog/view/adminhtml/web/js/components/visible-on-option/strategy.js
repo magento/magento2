@@ -3,6 +3,8 @@
  * See COPYING.txt for license details.
  */
 define(function () {
+    'use strict';
+
     return {
         defaults: {
             valuesForOptions: [],
@@ -23,7 +25,7 @@ define(function () {
         initElement: function (item) {
             this._super();
             item.set('visible', this.inverseVisibility ? !this.isShown : this.isShown);
-            
+
             return this;
         },
 

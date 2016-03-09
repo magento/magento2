@@ -17,7 +17,7 @@ use Magento\Framework\Escaper;
 use Magento\Framework\View\LayoutInterface;
 
 /**
- * Class ValidateTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ValidateTest extends AttributeTest
 {

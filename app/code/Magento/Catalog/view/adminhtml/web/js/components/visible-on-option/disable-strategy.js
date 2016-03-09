@@ -3,6 +3,8 @@
  * See COPYING.txt for license details.
  */
 define(function () {
+    'use strict';
+
     return {
         defaults: {
             valuesForEnable: [],
