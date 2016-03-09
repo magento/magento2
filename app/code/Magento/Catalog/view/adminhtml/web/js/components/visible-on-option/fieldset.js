@@ -10,15 +10,22 @@ define([
 
     return Fieldset.extend(strategy).extend(
         {
+            defaults: {
+                openOnShow: true
+            },
+            
             /**
              * Toggle visibility state.
              */
             toggleVisibility: function () {
                 this._super();
                 this.elems.each(function (child) {
-                    child.set('visible', this.isShown);
+                    child.set('visible', this.inverseVisibility ? !this.isShown : this.isShown);
                 }.bind(this));
-                this.opened(this.isShown);
+                
+                if (this.openOnShow) {
+                    this.opened(this.inverseVisibility ? !this.isShown : this.isShown);
+                }
             }
         }
     );
