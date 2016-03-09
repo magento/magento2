@@ -130,7 +130,7 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $items = $model->getItems();
 
         $this->assertInternalType('array', $items);
-        $this->assertEquals(1, count($items));
+        $this->assertEquals(2, count($items));
 
         /** @var $item \Magento\Catalog\Model\Layer\Filter\Item */
         $item = $items[0];
@@ -139,6 +139,12 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($model, $item->getFilter());
         $this->assertEquals('Category 1.1', $item->getLabel());
         $this->assertEquals(4, $item->getValue());
-        $this->assertEquals(1, $item->getCount());
+        $this->assertEquals(2, $item->getCount());
+
+        $item = $items[1];
+        $this->assertInstanceOf('Magento\Catalog\Model\Layer\Filter\Item', $item);
+        $this->assertEquals('Category 1.2', $item->getLabel());
+        $this->assertEquals(13, $item->getValue());
+        $this->assertEquals(2, $item->getCount());
     }
 }
