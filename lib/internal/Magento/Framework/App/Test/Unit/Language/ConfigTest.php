@@ -58,7 +58,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertEquals('en_GB', $this->config->getCode());
         $this->assertEquals('magento', $this->config->getVendor());
-        $this->assertEquals('en_gb', $this->config->getPackage());
+        $this->assertEquals('en_GB', $this->config->getPackage());
         $this->assertEquals('100', $this->config->getSortOrder());
         $this->assertEquals(
             [
