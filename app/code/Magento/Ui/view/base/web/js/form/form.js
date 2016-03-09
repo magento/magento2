@@ -153,7 +153,8 @@ define([
         defaults: {
             additionalFields: [],
             additionalInvalid: false,
-            selectorPrefix: false,
+            selectorPrefix: '.page-content',
+            messagesClass: 'messages',
             eventPrefix: '.${ $.index }',
             ajaxSave: false,
             ajaxSaveType: 'default',
@@ -165,7 +166,8 @@ define([
                 '${ $.name }.${ $.reloadItem }': 'params.set reload'
             },
             exports: {
-                selectorPrefix: '${ $.provider }:client.selectorPrefix'
+                selectorPrefix: '${ $.provider }:client.selectorPrefix',
+                messagesClass: '${ $.provider }:client.messagesClass'
             }
         },
 
