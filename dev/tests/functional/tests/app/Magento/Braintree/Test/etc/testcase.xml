@@ -62,4 +62,13 @@
         <step name="fillBillingInformation" module="Magento_Checkout" next="placeOrder"/>
         <step name="placeOrder" module="Magento_Checkout"/>
     </scenario>
+    <scenario name="InvoicePayPalBraintreeTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createTaxRule" />
+        <step name="createTaxRule" module="Magento_Tax" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="addProductsToTheCart" />
+        <step name="addProductsToTheCart" module="Magento_Checkout" next="checkoutWithPaypalFromCart" />
+        <step name="checkoutWithPaypalFromCart" module="Magento_Braintree" next="expressCheckoutOrderPlace" />
+        <step name="expressCheckoutOrderPlace" module="Magento_Paypal" next="createInvoice" />
+        <step name="createInvoice" module="Magento_Sales" />
+    </scenario>
 </config>
