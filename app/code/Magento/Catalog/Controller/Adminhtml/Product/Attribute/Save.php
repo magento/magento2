@@ -157,7 +157,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
                     }
                     return $this->returnResult(
                         'catalog/*/edit',
-                        ['attribute_id' => $attributeId, '_current' => true].
+                        ['attribute_id' => $attributeId, '_current' => true],
                         ['error' => true]
                     );
                 }
