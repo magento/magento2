@@ -332,7 +332,7 @@ class ConfigurablePanel extends AbstractModifier
                             'price_currency' => 'price_currency',
                             'qty' => 'qty',
                             'weight' => 'weight',
-                            'thumbnail' => 'thumbnail',
+                            'thumbnail_image' => 'thumbnail_src',
                             'status' => 'status',
                         ],
                         'links' => [
@@ -380,6 +380,17 @@ class ConfigurablePanel extends AbstractModifier
                         __('Image'),
                         [
                             'fit' => true,
+                            'formElement' => 'fileUploader',
+                            'componentType' => 'fileUploader',
+                            'component' => 'Magento_ConfigurableProduct/js/components/file-uploader',
+                            'elementTmpl' => 'Magento_ConfigurableProduct/components/file-uploader',
+                            'fileInputName' => 'image',
+                            'uploaderConfig' => [
+                                'url' => $this->urlBuilder->addSessionParam()->getUrl(
+                                    'catalog/product_gallery/upload'
+                                ),
+                            ],
+                            'dataScope' => 'image',
                         ],
                         [
                             'elementTmpl' => 'ui/dynamic-rows/cells/thumbnail',
@@ -419,6 +430,20 @@ class ConfigurablePanel extends AbstractModifier
                                     'template' => 'Magento_ConfigurableProduct/components/cell-status',
                                     'label' => __('Status'),
                                     'dataScope' => 'status',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'attributes' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'componentType' => Form\Field::NAME,
+                                    'formElement' => Form\Element\Input::NAME,
+                                    'elementTmpl' => 'ui/dynamic-rows/cells/text',
+                                    'dataType' => Form\Element\DataType\Text::NAME,
+                                    'label' => __('Attributes'),
+                                    //'dataScope' => 'attributes',
                                 ],
                             ],
                         ],
