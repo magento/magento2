@@ -35,6 +35,8 @@ class Wizard extends Action
      */
     public function execute()
     {
+        $this->productBuilder->build($this->getRequest());
+
         /** @var \Magento\Framework\View\Result\Layout $resultLayout */
         $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
         $resultLayout->getLayout()->getUpdate()->removeHandle('default');
