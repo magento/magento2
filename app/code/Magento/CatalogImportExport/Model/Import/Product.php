@@ -1290,7 +1290,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Retrieving images from all columns and rows
      *
-     * @deprecated since 2.0.3
+     * @deprecated
      * @param array $bunch
      * @return array
      */
