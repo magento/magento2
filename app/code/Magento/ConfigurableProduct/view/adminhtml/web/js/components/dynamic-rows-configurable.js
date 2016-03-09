@@ -86,6 +86,10 @@ define([
             var tmpArray = this.unionInsertData();
             tmpArray.splice(index, 1);
 
+            if (!tmpArray.length) {
+                this.source.set('data.attributes', []);
+            }
+
             this.unionInsertData(tmpArray);
             this.reRender = true;
         },
