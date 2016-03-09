@@ -14,7 +14,7 @@
                     <item name="valuesForOptions" xsi:type="array">
                         <item name="weee" xsi:type="string">weee</item>
                     </item>
-                    <item name="inverse" xsi:type="boolean">true</item>
+                    <item name="inverseVisibility" xsi:type="boolean">true</item>
                 </item>
             </argument>
         </field>
@@ -25,7 +25,7 @@
                 <item name="valuesForOptions" xsi:type="array">
                     <item name="weee" xsi:type="string">weee</item>
                 </item>
-                <item name="inverse" xsi:type="boolean">true</item>
+                <item name="inverseVisibility" xsi:type="boolean">true</item>
             </item>
         </argument>
     </fieldset>
