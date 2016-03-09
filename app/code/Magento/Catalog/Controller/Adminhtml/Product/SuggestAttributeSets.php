@@ -6,7 +6,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-class SuggestAttributeSets extends \Magento\Catalog\Controller\Adminhtml\Product
+class SuggestAttributeSets extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
@@ -20,17 +20,15 @@ class SuggestAttributeSets extends \Magento\Catalog\Controller\Adminhtml\Product
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Catalog\Model\Product\AttributeSet\SuggestedSet $suggestedSet
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
-	\Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Catalog\Model\Product\AttributeSet\SuggestedSet $suggestedSet
     ) {
-        parent::__construct($context, $productBuilder);
+        parent::__construct($context);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->suggestedSet = $suggestedSet;
     }
@@ -48,4 +46,15 @@ class SuggestAttributeSets extends \Magento\Catalog\Controller\Adminhtml\Product
         );
         return $resultJson;
     }
+    
+    /**
+     * Check for is allowed
+     *
+     * @return boolean
+     */
+    protected function _isAllowed()
+    {
+        return $this->_authorization->isAllowed('Magento_Catalog::sets');
+    }
 }
+
