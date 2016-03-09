@@ -47,8 +47,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     const COLUMN_ROW_SKU = '_custom_option_row_sku';
 
-    const COLUMN_MAX_CHARACTERS = '_custom_option_max_characters';
-
     const COLUMN_ROW_SORT = '_custom_option_row_sort';
 
     /**#@-*/
@@ -57,6 +55,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * XML path to page size parameter
      */
     const XML_PATH_PAGE_SIZE = 'import/format_v1/page_size';
+
+    /**
+     * @var string
+     */
+    private $columnMaxCharacters = '_custom_option_max_characters';
 
     /**
      * All stores code-ID pairs
@@ -1108,7 +1111,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $result[self::COLUMN_PREFIX . 'price'] = $result[self::COLUMN_ROW_PRICE];
 
         if (isset($optionRow['max_characters'])) {
-            $result[self::COLUMN_MAX_CHARACTERS] = $optionRow['max_characters'];
+            $result[$this->columnMaxCharacters] = $optionRow['max_characters'];
         }
 
         return $result;
