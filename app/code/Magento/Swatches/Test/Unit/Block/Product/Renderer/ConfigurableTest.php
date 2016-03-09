@@ -212,7 +212,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ]);
 
         $this->swatchHelper->expects($this->once())->method('loadFirstVariationWithSwatchImage')
-            ->with($this->product, 'code', 3)
+            ->with($this->product, ['code' => 3])
             ->willReturn($this->product);
 
         $this->product->expects($this->exactly(4))->method('getData')
@@ -252,7 +252,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ]);
 
         $this->swatchHelper->expects($this->once())->method('loadFirstVariationWithSwatchImage')
-            ->with($this->product, 'code', 3)
+            ->with($this->product, ['code' => 3])
             ->willReturn($this->product);
 
         $this->swatchMediaHelper->expects($this->exactly(2))->method('getSwatchAttributeImage')
@@ -300,7 +300,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ]);
 
         $this->swatchHelper->expects($this->once())->method('loadFirstVariationWithSwatchImage')
-            ->with($this->product, 'code', 3)
+            ->with($this->product, ['code' => 3])
             ->willReturn($this->product);
 
         $this->swatchMediaHelper->expects($this->exactly(2))->method('getSwatchAttributeImage')
