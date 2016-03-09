@@ -15,7 +15,7 @@ define([
      *
      * @param {Object} data
      * @param {String} url
-     * @param {String|HTMLElement} selectorPrefix
+     * @param {String} selectorPrefix
      * @returns {*}
      */
     function beforeSave(data, url, selectorPrefix) {
