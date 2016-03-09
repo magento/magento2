@@ -27,10 +27,15 @@ class StoreViewServiceTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->config = $this->getMock('Magento\Eav\Model\Config', [], [], '', false);
-        $this->select = $this->getMock('Magento\Framework\Db\Select', [], [], '', false);
-        $this->connection = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface', [], [], '', false);
+        $this->select = $this->getMockBuilder('Magento\Framework\DB\Select')
+            ->setMethods(['select', 'from', 'where', 'join'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->connection = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
-        $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($this->connection));
+        $this->resource->expects($this->any())->method('getConnection')->willReturn($this->connection);
 
         $this->storeViewService = (new ObjectManager($this))->getObject(
             'Magento\CatalogUrlRewrite\Service\V1\StoreViewService',
@@ -77,15 +82,26 @@ class StoreViewServiceTest extends \PHPUnit_Framework_TestCase
         $productId = 'product_id';
         $attribute = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
             ->disableOriginalConstructor()
-            ->setMethods(['__wakeup', 'getBackendTable', 'getId'])
+            ->setMethods(['__wakeup', 'getBackendTable', 'getId', 'getEntity'])
             ->getMockForAbstractClass();
         $this->config->expects($this->once())->method('getAttribute')->with($entityType, 'url_key')
             ->will($this->returnValue($attribute));
+        $entity = $this->getMockBuilder('Magento\Eav\Model\Entity\AbstractEntity')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $attribute->expects($this->exactly(2))->method('getEntity')->willReturn($entity);
+        $entity->expects($this->once())->method('getEntityTable')->will($this->returnValue('entity_table'));
+        $entity->expects($this->once())->method('getLinkField')->willReturn('link_field');
         $attribute->expects($this->once())->method('getBackendTable')->will($this->returnValue('backend_table'));
         $attribute->expects($this->once())->method('getId')->will($this->returnValue('attribute-id'));
-        $this->select->expects($this->once())->method('from')->with('backend_table', 'store_id')
+        $this->select->expects($this->once())->method('from')->with(['e' => 'entity_table'], [])
             ->will($this->returnSelf());
         $this->select->expects($this->any())->method('where')->will($this->returnSelf());
+        $this->select->expects($this->once())->method('join')->with(
+            ['e_attr' => 'backend_table'],
+            "e.link_field = e_attr.link_field",
+            'store_id'
+        )->will($this->returnSelf());
         $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->select));
         $this->connection->expects($this->once())->method('fetchCol')->will($this->returnValue($fetchedStoreIds));
 

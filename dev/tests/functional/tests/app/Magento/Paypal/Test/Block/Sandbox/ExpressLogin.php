@@ -21,23 +21,6 @@ class ExpressLogin extends Form
     protected $loginButton = '#btnLogin';
 
     /**
-     * PayPal load spinner.
-     *
-     * @var string
-     */
-    protected $preloaderSpinner = '#preloaderSpinner';
-
-    /**
-     * Wait for PayPal page is loaded.
-     *
-     * @return void
-     */
-    public function waitForFormLoaded()
-    {
-        $this->waitForElementNotVisible($this->preloaderSpinner);
-    }
-
-    /**
      * Login to PayPal Sandbox.
      *
      * @return void

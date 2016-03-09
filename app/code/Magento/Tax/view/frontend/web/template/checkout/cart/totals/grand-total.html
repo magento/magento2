@@ -7,7 +7,7 @@
 <!-- ko if: isTaxDisplayedInGrandTotal && isDisplayed() -->
 <tr class="grand totals incl">
     <th class="mark" scope="row">
-        <strong data-bind="text: inclTaxLabel"></strong>
+        <strong data-bind="i18n: inclTaxLabel"></strong>
     </th>
     <td data-bind="attr: {'data-th': inclTaxLabel}" class="amount">
         <strong><span class="price" data-bind="text: getValue()"></span></strong>
@@ -15,7 +15,7 @@
 </tr>
 <tr class="grand totals excl">
     <th class="mark" scope="row">
-        <strong data-bind="text: exclTaxLabel"></strong>
+        <strong data-bind="i18n: exclTaxLabel"></strong>
     </th>
     <td data-bind="attr: {'data-th': exclTaxLabel}" class="amount">
         <strong><span class="price" data-bind="text: getGrandTotalExclTax()"></span></strong>
@@ -25,7 +25,7 @@
 <!-- ko if: !isTaxDisplayedInGrandTotal && isDisplayed() -->
 <tr class="grand totals">
     <th class="mark" scope="row">
-        <strong data-bind="text: title"></strong>
+        <strong data-bind="i18n: title"></strong>
     </th>
     <td data-bind="attr: {'data-th': title}" class="amount">
         <strong><span class="price" data-bind="text: getValue()"></span></strong>

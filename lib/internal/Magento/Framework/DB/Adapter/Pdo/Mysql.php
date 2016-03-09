@@ -17,6 +17,7 @@ use Magento\Framework\DB\ExpressionConverter;
 use Magento\Framework\DB\LoggerInterface;
 use Magento\Framework\DB\Profiler;
 use Magento\Framework\DB\Select;
+use Magento\Framework\DB\SelectFactory;
 use Magento\Framework\DB\Statement\Parameter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
@@ -179,26 +180,33 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     protected $dateTime;
 
     /**
+     * @var SelectFactory
+     */
+    protected $selectFactory;
+
+    /**
      * @var LoggerInterface
      */
     protected $logger;
 
     /**
-     * @param \Magento\Framework\Stdlib\StringUtils|String $string
+     * @param StringUtils $string
      * @param DateTime $dateTime
      * @param LoggerInterface $logger
+     * @param SelectFactory $selectFactory
      * @param array $config
-     * @throws \InvalidArgumentException
      */
     public function __construct(
         StringUtils $string,
         DateTime $dateTime,
         LoggerInterface $logger,
+        SelectFactory $selectFactory,
         array $config = []
     ) {
         $this->string = $string;
         $this->dateTime = $dateTime;
         $this->logger = $logger;
+        $this->selectFactory = $selectFactory;
         try {
             parent::__construct($config);
         } catch (\Zend_Db_Adapter_Exception $e) {
@@ -1327,7 +1335,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function select()
     {
-        return new Select($this);
+//        return new Select($this);
+        return $this->selectFactory->create($this);
     }
 
     /**
@@ -2780,6 +2789,9 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
                 if (($key == 'seq') || ($key == 'sneq')) {
                     $key = $this->_transformStringSqlCondition($key, $value);
                 }
+                if (($key == 'in' || $key == 'nin') && is_string($value)) {
+                    $value = explode(',', $value);
+                }
                 $query = $this->_prepareQuotedSqlCondition($conditionKeyMap[$key], $value, $fieldName);
             } else {
                 $queries = [];
@@ -3778,5 +3790,22 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
             $tables[] = $row;
         }
         return $tables;
+    }
+
+    /**
+     * Returns auto increment field if exists
+     *
+     * @param string $tableName
+     * @param string|null $schemaName
+     * @return string|bool
+     */
+    public function getAutoIncrementField($tableName, $schemaName = null)
+    {
+        $indexName = $this->getPrimaryKeyName($tableName, $schemaName);
+        $indexes = $this->getIndexList($tableName);
+        if ($indexName && count($indexes[$indexName]['COLUMNS_LIST']) == 1) {
+            return current($indexes[$indexName]['COLUMNS_LIST']);
+        }
+        return false;
     }
 }

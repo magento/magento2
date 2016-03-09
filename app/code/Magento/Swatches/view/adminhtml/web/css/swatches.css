@@ -2,10 +2,11 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-.swatch_submenu_container {
+.swatch_sub-menu_container {
     position: absolute;
     z-index: 9999;
     width: 140px;
+    display: none;
 }
 
 .swatch_row {
@@ -14,6 +15,11 @@
     position: relative;
     height: 30px;
     overflow: hidden;
+    border:1px solid black;
+}
+
+.position-relative {
+    position: relative;
 }
 
 .swatch_row_name {
@@ -27,6 +33,10 @@
 
 .swatch_row_name p {
     padding-top: 10px;
+}
+
+.swatch_window {
+    border: 1px solid black; width: 30px; height: 30px; overflow: hidden;
 }
 
 .ui-sortable .col-default div[id*="swatch_window_option"] {
@@ -93,11 +103,11 @@
 .ui-sortable .col-default div[id*="swatch_container_option"] .swatch_row:hover .swatch_row_name {
     background: #FBFAF6 !important;
 }
-.swatch_submenu_container {
+.swatch_sub-menu_container {
     margin-left: -94px;
     top: 37px;
 }
-.swatch_submenu_container:after {
+.swatch_sub-menu_container:after {
     width: 16px;
     background: #fff;
     height: 3px;
@@ -108,6 +118,9 @@
 }
 .col-default[class*="swatch-window-col"] {
     position: relative;
+}
+.col-swatch {
+    .width: 50px;
 }
 .col-default[class*="swatch-window-col"].unavailable:after {
     content: '';

@@ -72,7 +72,6 @@ class CreateSandboxCustomerStep implements TestStepInterface
     public function run()
     {
         $this->accountSignup->open();
-        $this->accountSignup->getSignupChooseAccountTypeBlock()->selectPersonalAccount();
         $this->accountSignup->getSignupPersonalAccountBlock()->fill($this->sandboxCustomer);
         $this->accountSignup->getSignupPersonalAccountBlock()->continueSignup();
         $this->signupCreate->getSignupCreateBlock()->fill($this->sandboxCustomer);

@@ -98,7 +98,7 @@ class ClassReflector
             $methodData['interface']['in']['parameters'][$parameter->getName()] = $parameterData;
         }
         $returnType = $this->_typeProcessor->getGetterReturnType($method);
-        if ($returnType != 'void' && $returnType != 'null') {
+        if ($returnType['type'] != 'void' && $returnType['type'] != 'null') {
             $methodData['interface']['out']['parameters']['result'] = [
                 'type' => $this->_typeProcessor->register($returnType['type']),
                 'documentation' => $returnType['description'],

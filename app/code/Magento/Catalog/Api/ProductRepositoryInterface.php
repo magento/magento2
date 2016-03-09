@@ -41,7 +41,7 @@ interface ProductRepositoryInterface
      *
      * @param int $productId
      * @param bool $editMode
-     * @param null|int $storeId
+     * @param int|null $storeId
      * @param bool $forceReload
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException

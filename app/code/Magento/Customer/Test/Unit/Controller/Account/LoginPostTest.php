@@ -71,6 +71,11 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
      */
     protected $messageManager;
 
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scopeConfig;
+
     protected function setUp()
     {
         $this->prepareContext();
@@ -100,6 +105,9 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->scopeConfig = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
+            ->getMockForAbstractClass();
+
         $this->controller = new LoginPost(
             $this->context,
             $this->session,
@@ -108,6 +116,7 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             $this->formkeyValidator,
             $this->accountRedirect
         );
+        $this->controller->setScopeConfig($this->scopeConfig);
     }
 
     /**
@@ -269,7 +278,6 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
         $username = 'user1';
         $password = 'pass1';
 
-
         $this->session->expects($this->once())
             ->method('isLoggedIn')
             ->willReturn(false);
@@ -330,6 +338,12 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
                     'exception' => '\Exception',
                 ],
             ],
+            [
+                [
+                    'message' => 'UserLockedException',
+                    'exception' => '\Magento\Framework\Exception\State\UserLockedException',
+                ],
+            ],
         ];
     }
 
@@ -384,6 +398,7 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
     protected function mockExceptions($exception, $username)
     {
         $url = 'url1';
+        $email = 'hello@example.com';
 
         switch ($exception) {
             case '\Magento\Framework\Exception\EmailNotConfirmedException':
@@ -423,7 +438,23 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             case '\Exception':
                 $this->messageManager->expects($this->once())
                     ->method('addError')
-                    ->with(__('Invalid login or password.'))
+                    ->with(__('An unspecified error occurred. Please contact us for assistance.'))
+                    ->willReturnSelf();
+                break;
+
+            case '\Magento\Framework\Exception\State\UserLockedException':
+                $this->scopeConfig->expects($this->once())->method('getValue')->willReturn($email);
+                $message = __(
+                    'The account is locked. Please wait and try again or contact %1.',
+                    $email
+                );
+                $this->messageManager->expects($this->once())
+                    ->method('addError')
+                    ->with($message)
+                    ->willReturnSelf();
+                $this->session->expects($this->once())
+                    ->method('setUsername')
+                    ->with($username)
                     ->willReturnSelf();
                 break;
         }

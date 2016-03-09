@@ -68,7 +68,7 @@ class QueryFactoryTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->scopeConfigMock));
         $this->queryMock = $this->getMockBuilder('\Magento\Search\Model\Query')
             ->disableOriginalConstructor()
-            ->setMethods(['setIsQueryTextExceeded', 'getId', 'setQueryText', 'loadByQuery'])
+            ->setMethods(['setIsQueryTextExceeded', 'getId', 'setQueryText', 'loadByQueryText'])
             ->getMock();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->queryFactory = $this->objectManagerHelper->getObject(
@@ -102,7 +102,7 @@ class QueryFactoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('Magento\Search\Model\Query'))
             ->will($this->returnValue($this->queryMock));
         $this->queryMock->expects($this->once())
-            ->method('loadByQuery')
+            ->method('loadByQueryText')
             ->with($this->equalTo($preparedQueryText))
             ->will($this->returnSelf());
         $this->queryMock->expects($this->once())
@@ -141,7 +141,7 @@ class QueryFactoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('Magento\Search\Model\Query'))
             ->will($this->returnValue($this->queryMock));
         $this->queryMock->expects($this->once())
-            ->method('loadByQuery')
+            ->method('loadByQueryText')
             ->with($this->equalTo($preparedQueryText))
             ->will($this->returnSelf());
         $this->queryMock->expects($this->once())
@@ -179,7 +179,7 @@ class QueryFactoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('Magento\Search\Model\Query'))
             ->will($this->returnValue($this->queryMock));
         $this->queryMock->expects($this->once())
-            ->method('loadByQuery')
+            ->method('loadByQueryText')
             ->with($this->equalTo($preparedQueryText))
             ->will($this->returnSelf());
         $this->queryMock->expects($this->once())
@@ -218,7 +218,7 @@ class QueryFactoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo('Magento\Search\Model\Query'))
             ->will($this->returnValue($this->queryMock));
         $this->queryMock->expects($this->once())
-            ->method('loadByQuery')
+            ->method('loadByQueryText')
             ->with($this->equalTo($preparedQueryText))
             ->will($this->returnSelf());
         $this->queryMock->expects($this->once())

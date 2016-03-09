@@ -68,7 +68,7 @@ class ImagesAndVideos extends Tab
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function fillFormTab(array $fields, SimpleElement $element = null)
+    public function setFieldsData(array $fields, SimpleElement $element = null)
     {
         if (!array_key_exists('images', $fields['media_gallery']['value'])) {
             return $this;
@@ -142,7 +142,7 @@ class ImagesAndVideos extends Tab
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function getDataFormTab($tabFields = null, SimpleElement $element = null)
+    public function getFieldsData($tabFields = null, SimpleElement $element = null)
     {
         $fields = reset($tabFields);
         $name = key($tabFields);

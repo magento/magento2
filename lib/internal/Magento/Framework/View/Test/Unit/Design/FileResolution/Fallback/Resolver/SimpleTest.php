@@ -30,13 +30,9 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->directory = $this->getMock('\Magento\Framework\Filesystem\Directory\Read', [], [], '', false);
-        $this->directory->expects($this->any())
-            ->method('getRelativePath')
-            ->will($this->returnArgument(0));
-        $filesystem = $this->getMock('\Magento\Framework\Filesystem', [], [], '', false);
-        $filesystem->expects($this->once())
-            ->method('getDirectoryRead')
-            ->with(DirectoryList::ROOT)
+        $readFactory = $this->getMock('\Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
+        $readFactory->expects($this->any())
+            ->method('create')
             ->will($this->returnValue($this->directory));
         $this->rule = $this->getMock('\Magento\Framework\View\Design\Fallback\Rule\RuleInterface', [], [], '', false);
         $rulePool = $this->getMock('Magento\Framework\View\Design\Fallback\RulePool', [], [], '', false);
@@ -45,7 +41,7 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
             ->with('type')
             ->will($this->returnValue($this->rule));
 
-        $this->object = new Simple($filesystem, $rulePool);
+        $this->object = new Simple($readFactory, $rulePool);
     }
 
     /**
@@ -65,15 +61,13 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
             $expectedParams['theme'] = $this->getMockForTheme($expectedParams['theme']);
         }
 
-        $this->directory->expects($this->never())
-            ->method('getAbsolutePath');
         $this->rule->expects($this->once())
             ->method('getPatternDirs')
             ->with($expectedParams)
             ->will($this->returnValue(['/some/dir']));
         $this->directory->expects($this->once())
             ->method('isExist')
-            ->with($expectedPath)
+            ->with('file.ext')
             ->will($this->returnValue(true));
         $actualPath = $this->object->resolve('type', 'file.ext', $area, $theme, $locale, $module);
         $this->assertSame($expectedPath, $actualPath);

@@ -22,7 +22,7 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $rootDirWrite;
+    private $sourceDirWrite;
 
     /**
      * @var \Magento\Framework\Filesystem\Directory\ReadInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -44,6 +44,11 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
      */
     private $materializationStrategyFactory;
 
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $writeFactory;
+
     protected function setUp()
     {
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
@@ -54,9 +59,10 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->object = new Publisher($this->filesystem, $this->materializationStrategyFactory);
+        $this->writeFactory = $this->getMock('Magento\Framework\Filesystem\Directory\WriteFactory', [], [], '', false);
+        $this->object = new Publisher($this->filesystem, $this->materializationStrategyFactory, $this->writeFactory);
 
-        $this->rootDirWrite = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
+        $this->sourceDirWrite = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
         $this->staticDirRead = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\ReadInterface');
         $this->staticDirWrite = $this->getMockForAbstractClass('Magento\Framework\Filesystem\Directory\WriteInterface');
         $this->filesystem->expects($this->any())
@@ -65,10 +71,8 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->staticDirRead));
         $this->filesystem->expects($this->any())
             ->method('getDirectoryWrite')
-            ->will($this->returnValueMap([
-                [DirectoryList::ROOT, DriverPool::FILE, $this->rootDirWrite],
-                [DirectoryList::STATIC_VIEW, DriverPool::FILE, $this->staticDirWrite],
-            ]));
+            ->will($this->returnValue($this->staticDirWrite));
+        $this->writeFactory->expects($this->any())->method('create')->willReturn($this->sourceDirWrite);
     }
 
     public function testPublishExistsBefore()
@@ -94,17 +98,13 @@ class PublisherTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->rootDirWrite->expects($this->once())
-            ->method('getRelativePath')
-            ->with('/root/some/file.ext')
-            ->will($this->returnValue('some/file.ext'));
         $this->materializationStrategyFactory->expects($this->once())
             ->method('create')
             ->with($this->getAsset())
             ->will($this->returnValue($materializationStrategy));
         $materializationStrategy->expects($this->once())
             ->method('publishFile')
-            ->with($this->rootDirWrite, $this->staticDirWrite, 'some/file.ext', 'some/file.ext')
+            ->with($this->sourceDirWrite, $this->staticDirWrite, 'file.ext', 'some/file.ext')
             ->will($this->returnValue(true));
 
         $this->assertTrue($this->object->publish($this->getAsset()));

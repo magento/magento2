@@ -12,7 +12,8 @@ define([
 
     return Select.extend({
         defaults: {
-            size: 5
+            size: 5,
+            elementTmpl: 'ui/form/element/multiselect'
         },
 
         /**

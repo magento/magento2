@@ -35,6 +35,12 @@ define([
             enableExpress:  '[data-enable="express"]',
 
             /**
+             * An attribute of the element responsible for the activation of the
+             * PayPal Express In-Context Checkout Experience (data attribute)
+             */
+            enableInContextPayPal: '[data-enable="in-context-api"]',
+
+            /**
              * An attribute of the element responsible for the activation of the Payflow Bml (data attribute)
              */
             enableBml:      '[data-enable="bml"]',
@@ -148,6 +154,7 @@ define([
                                 buttonConfiguration: this.buttonConfiguration,
                                 enableButton: this.enableButton,
                                 enableExpress: this.enableExpress,
+                                enableInContextPayPal: this.enableInContextPayPal,
                                 enableBml: this.enableBml,
                                 enableBmlPayPal: this.enableBmlPayPal,
                                 solutionsElements: this.solutionsElements,

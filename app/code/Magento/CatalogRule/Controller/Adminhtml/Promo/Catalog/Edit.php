@@ -14,15 +14,23 @@ class Edit extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
     public function execute()
     {
         $id = $this->getRequest()->getParam('id');
-        $model = $this->_objectManager->create('Magento\CatalogRule\Model\Rule');
+
+        /** @var \Magento\CatalogRule\Api\CatalogRuleRepositoryInterface $ruleRepository */
+        $ruleRepository = $this->_objectManager->get(
+            'Magento\CatalogRule\Api\CatalogRuleRepositoryInterface'
+        );
 
         if ($id) {
-            $model->load($id);
-            if (!$model->getRuleId()) {
+            try {
+                $model = $ruleRepository->get($id);
+            } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
                 $this->messageManager->addError(__('This rule no longer exists.'));
                 $this->_redirect('catalog_rule/*');
                 return;
             }
+        } else {
+            /** @var \Magento\CatalogRule\Model\Rule $model */
+            $model = $this->_objectManager->create('Magento\CatalogRule\Model\Rule');
         }
 
         // set entered data if was error when we do save
@@ -30,7 +38,10 @@ class Edit extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
         if (!empty($data)) {
             $model->addData($data);
         }
-        $model->getConditions()->setJsFormObject('rule_conditions_fieldset');
+        $model->getConditions()->setFormName('catalog_rule_form');
+        $model->getConditions()->setJsFormObject(
+            $model->getConditionsFieldSetId($model->getConditions()->getFormName())
+        );
 
         $this->_coreRegistry->register('current_promo_catalog_rule', $model);
 
@@ -38,12 +49,6 @@ class Edit extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Catalog
         $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Catalog Price Rule'));
         $this->_view->getPage()->getConfig()->getTitle()->prepend(
             $model->getRuleId() ? $model->getName() : __('New Catalog Price Rule')
-        );
-        $this->_view->getLayout()->getBlock(
-            'promo_catalog_edit'
-        )->setData(
-            'action',
-            $this->getUrl('catalog_rule/promo_catalog/save')
         );
 
         $breadcrumb = $id ? __('Edit Rule') : __('New Rule');

@@ -5,7 +5,9 @@
  */
 namespace Magento\Config\Model\Config\Structure\Search;
 
-class Proxy implements \Magento\Config\Model\Config\Structure\SearchInterface
+class Proxy implements
+    \Magento\Config\Model\Config\Structure\SearchInterface,
+    \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
     /**
      * Object manager

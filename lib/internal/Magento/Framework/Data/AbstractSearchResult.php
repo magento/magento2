@@ -262,7 +262,7 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
         if ($itemId !== null) {
             if (isset($this->data['items'][$itemId])) {
                 throw new \Exception(
-                    'Item (' . get_class($item) . ') with the same id "' . $item->getId() . '" already exist'
+                    'Item (' . get_class($item) . ') with the same ID "' . $item->getId() . '" already exists.'
                 );
             }
             $this->data['items'][$itemId] = $item;

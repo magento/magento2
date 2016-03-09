@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="payment_method_assign_data_braintreetwo">
+        <observer name="braintreetwo_gateway_data_assign" instance="Magento\BraintreeTwo\Observer\DataAssignObserver" />
+    </event>
+    <event name="payment_method_assign_data_braintreetwo_paypal">
+        <observer name="braintreetwo_paypal_gateway_data_assign" instance="Magento\BraintreeTwo\Observer\DataAssignObserver" />
+    </event>
+</config>

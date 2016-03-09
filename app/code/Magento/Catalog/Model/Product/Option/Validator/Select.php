@@ -36,7 +36,7 @@ class Select extends DefaultValidator
      */
     protected function validateOptionValue(Option $option)
     {
-        $values = $option->getData('values');
+        $values = $option->getValues() ?: $option->getData('values');
         if (!is_array($values) || $this->isEmpty($values)) {
             return false;
         }
@@ -50,7 +50,7 @@ class Select extends DefaultValidator
         if ($option->getProduct()) {
             $storeId = $option->getProduct()->getStoreId();
         }
-        foreach ($option->getData('values') as $value) {
+        foreach ($values as $value) {
             $type = isset($value['price_type']) ? $value['price_type'] : null;
             $price = isset($value['price']) ? $value['price'] : null;
             $title = isset($value['title']) ? $value['title'] : null;

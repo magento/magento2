@@ -149,9 +149,12 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $select = $connection->select();
             $select->from($this->getTable('authorization_role'))
                 ->where('parent_id > :parent_id')
-                ->where('user_id = :user_id');
+                ->where('user_id = :user_id')
+                ->where('user_type = :user_type');
 
-            $binds = ['parent_id' => 0, 'user_id' => $userId];
+            $binds = ['parent_id' => 0, 'user_id' => $userId,
+                      'user_type' => UserContextInterface::USER_TYPE_ADMIN
+            ];
 
             return $connection->fetchAll($select, $binds);
         } else {
@@ -292,9 +295,13 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['role_id']
         )->where(
             "{$table}.user_id = :user_id"
+        )->where(
+            "{$table}.user_type = :user_type"
         );
 
-        $binds = ['user_id' => (int)$user->getId()];
+        $binds = ['user_id' => (int)$user->getId(),
+                  'user_type' => UserContextInterface::USER_TYPE_ADMIN
+        ];
 
         $roles = $connection->fetchCol($select, $binds);
 
@@ -539,7 +546,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $userId = (int)$user->getId();
         $table = $this->getTable('admin_passwords');
 
-        // purge expired passwords, except that should retain
+        // purge expired passwords, except those which should be retained
         $retainPasswordIds = $this->getConnection()->fetchCol(
             $this->getConnection()
                 ->select()
@@ -556,7 +563,7 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
         $this->getConnection()->delete($table, $where);
 
-        // now get all remained passwords
+        // get all remaining passwords
         return $this->getConnection()->fetchCol(
             $this->getConnection()
                 ->select()

@@ -30,7 +30,7 @@ class Longtext extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
             $truncateLength = $this->getColumn()->getTruncate();
         }
         $text = $this->filterManager->truncate(parent::_getValue($row), ['length' => $truncateLength]);
-        if ($this->getColumn()->getEscape()) {
+        if (!$this->getColumn()->hasEscape() || $this->getColumn()->getEscape()) {
             $text = $this->escapeHtml($text);
         }
         if ($this->getColumn()->getNl2br()) {
