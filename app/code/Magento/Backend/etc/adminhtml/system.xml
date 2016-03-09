@@ -100,43 +100,6 @@
             <label>Design</label>
             <tab>general</tab>
             <resource>Magento_Config::config_design</resource>
-            <group id="theme" translate="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Design Theme</label>
-                <field id="theme_id" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Design Theme</label>
-                    <source_model>Magento\Framework\View\Design\Theme\Label::getLabelsCollectionForSystemConfiguration</source_model>
-                    <backend_model>Magento\Theme\Model\Design\Backend\Theme</backend_model>
-                    <comment><![CDATA[If no value is specified, the system default will be used. The system default may be modified by third party extensions.]]></comment>
-                </field>
-                <field id="ua_regexp" translate="label comment tooltip" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="0">
-                    <label>User-Agent Exceptions</label>
-                    <frontend_model>Magento\Config\Block\System\Config\Form\Field\Regexceptions</frontend_model>
-                    <backend_model>Magento\Theme\Model\Design\Backend\Exceptions</backend_model>
-                    <comment>
-                        <![CDATA[Search strings are either normal strings or regular exceptions (PCRE). They are matched in the same order as entered. Examples:<br /><span style="font-family:monospace">Firefox<br />/^mozilla/i</span>]]>
-                    </comment>
-                    <tooltip>Find a string in client user-agent header and switch to specific design theme for that browser.</tooltip>
-                </field>
-            </group>
-            <group id="pagination" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Pagination</label>
-                <field id="pagination_frame" translate="label comment" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Pagination Frame</label>
-                    <comment>How many links to display at once.</comment>
-                </field>
-                <field id="pagination_frame_skip" translate="label comment" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Pagination Frame Skip</label>
-                    <comment>If the current frame position does not cover utmost pages, will render link to current position plus/minus this value.</comment>
-                </field>
-                <field id="anchor_text_for_previous" translate="label comment" type="text" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Anchor Text for Previous</label>
-                    <comment>Alternative text for previous link in pagination menu. If empty, default arrow image will used.</comment>
-                </field>
-                <field id="anchor_text_for_next" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Anchor Text for Next</label>
-                    <comment>Alternative text for next link in pagination menu. If empty, default arrow image will used.</comment>
-                </field>
-            </group>
         </section>
         <section id="dev" translate="label" type="text" sortOrder="920" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Developer</label>
