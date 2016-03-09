@@ -75,9 +75,7 @@ class FulltextFilter implements FilterApplierInterface
             throw new \InvalidArgumentException('Database collection required.');
         }
 
-        /** @var AbstractDb $collection */
         $mainTable = $collection->getResource()->getMainTable();
-
         /** @var AbstractDb $collection */
         $columns = $this->getFulltextIndexColumns($collection, $mainTable);
         if (!$columns) {
