@@ -8,7 +8,7 @@ namespace Magento\ConfigurableProduct\Test\Unit\Ui\DataProvider\Product\Form\Mod
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
 use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePrice as ConfigurablePriceModifier;
 
-class ConfigurablePanelTest extends AbstractModifierTest
+class ConfigurablePriceTest extends AbstractModifierTest
 {
     /**
      * {@inheritdoc}
