@@ -19,12 +19,12 @@ use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencySymbolIndex;
 abstract class AbstractCurrencySymbolEntityTest extends Injectable
 {
     /**
-     * Store>Config>General>CurrencyPage
+     * Store>Config>General>Currency Page.
      *
      * @var ConfigCurrencySetup
      */
-
     protected $ConfigCurrencySetup;
+
     /**
      * System Currency Symbol grid page.
      *
@@ -48,6 +48,7 @@ abstract class AbstractCurrencySymbolEntityTest extends Injectable
 
     /**
      * Create simple product and inject pages.
+     *
      * @param ConfigCurrencySetup $configCurrencySetup
      * @param SystemCurrencySymbolIndex $currencySymbolIndex
      * @param SystemCurrencyIndex $currencyIndex
@@ -94,7 +95,7 @@ abstract class AbstractCurrencySymbolEntityTest extends Injectable
         // Import Exchange Rates for currencies
         $this->currencyIndex->open();
         $this->currencyIndex->getCurrencyRateForm()->clickImportButton();
-        $this->currencyIndex->getCurrencyRateForm()->setCurrencyUSDUAHRate();
+        $this->currencyIndex->getCurrencyRateForm()->fillCurrencyUSDUAHRate();
         if ($this->currencyIndex->getMessagesBlock()->isVisibleMessage('warning')) {
             throw new \Exception($this->currencyIndex->getMessagesBlock()->getWarningMessages());
         }

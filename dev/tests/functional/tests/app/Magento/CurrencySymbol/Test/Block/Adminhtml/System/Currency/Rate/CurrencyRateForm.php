@@ -28,7 +28,13 @@ class CurrencyRateForm extends Form
      * @var string
      */
     protected $importButton = '[data-ui-id$="import-button"]';
-    protected $setUSDUAHRate = '[name$="rate[USD][UAH]"]';
+
+    /**
+     * Locator value for "[USD][UAH] Rate" text field.
+     *
+     * @var string
+     */
+    protected $USDUAHRate = '[name$="rate[USD][UAH]"]';
 
     /**
      * Click on the "Import" button.
@@ -57,9 +63,9 @@ class CurrencyRateForm extends Form
      * @throws \Exception
      * @return void
      */
-    public function setCurrencyUSDUAHRate()
+    public function fillCurrencyUSDUAHRate()
     {
-        $this->_rootElement->find($this->setUSDUAHRate)->setValue('2.000');
+        $this->_rootElement->find($this->USDUAHRate)->setValue('2.000');
 
         //Wait message
         $browser = $this->browser;
