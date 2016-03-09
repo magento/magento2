@@ -6,6 +6,7 @@
 namespace Magento\Ups\Test\Unit\Model;
 
 use Magento\Quote\Model\Quote\Address\RateRequest;
+use Magento\Ups\Model\Carrier;
 
 class CarrierTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,10 +20,12 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Quote\Model\Quote\Address\RateResult\Error|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $error;
+
     /**
      * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $helper;
+
     /**
      * Model under test
      *
@@ -232,5 +235,75 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
         $request->setPackageWeight(1);
 
         $this->assertSame($this->rate, $this->model->collectRates($request));
+    }
+
+    /**
+     * @param string $data
+     * @param array $maskFields
+     * @param string $expected
+     * @dataProvider logDataProvider
+     */
+    public function testFilterDebugData($data, array $maskFields, $expected)
+    {
+        $refClass = new \ReflectionClass(Carrier::class);
+        $property = $refClass->getProperty('_debugReplacePrivateDataKeys');
+        $property->setAccessible(true);
+        $property->setValue($this->model, $maskFields);
+
+        $refMethod = $refClass->getMethod('filterDebugData');
+        $refMethod->setAccessible(true);
+        $result = $refMethod->invoke($this->model, $data);
+        $expectedXml = new \SimpleXMLElement($expected);
+        $resultXml = new \SimpleXMLElement($result);
+        static::assertEquals($expectedXml->asXML(), $resultXml->asXML());
+    }
+
+    /**
+     * Get list of variations
+     */
+    public function logDataProvider()
+    {
+        return [
+            [
+                '<?xml version="1.0" encoding="UTF-8"?>
+                <RateRequest>
+                    <UserId>42121</UserId>
+                    <Password>TestPassword</Password>
+                    <Package ID="0">
+                        <Service>ALL</Service>
+                    </Package>
+                </RateRequest>',
+                ['UserId', 'Password'],
+                '<?xml version="1.0" encoding="UTF-8"?>
+                <RateRequest>
+                    <UserId>****</UserId>
+                    <Password>****</Password>
+                    <Package ID="0">
+                        <Service>ALL</Service>
+                    </Package>
+                </RateRequest>',
+            ],
+            [
+                '<?xml version="1.0" encoding="UTF-8"?>
+                <RateRequest>
+                    <Auth>
+                        <UserId>1231</UserId>
+                    </Auth>
+                    <Package ID="0">
+                        <Service>ALL</Service>
+                    </Package>
+                </RateRequest>',
+                ['UserId'],
+                '<?xml version="1.0" encoding="UTF-8"?>
+                <RateRequest>
+                    <Auth>
+                        <UserId>****</UserId>
+                    </Auth>
+                    <Package ID="0">
+                        <Service>ALL</Service>
+                    </Package>
+                </RateRequest>',
+            ]
+        ];
     }
 }
