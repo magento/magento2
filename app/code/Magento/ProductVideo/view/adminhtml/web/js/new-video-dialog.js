@@ -185,8 +185,6 @@ define([
             '.gif'
         ],
 
-        _imageWidgetSelector: '#media_gallery_content',
-
         _imageProductGalleryWrapperSelector: '#image-container',
 
         _videoPreviewInputSelector: '#new_video_screenshot',
@@ -609,7 +607,7 @@ define([
          * @private
          */
         _create: function () {
-            this._gallary =  this.element.closest(this._imageWidgetSelector);
+            this._gallary =  this.element.closest(this.options.videoSelector);
 
             var imgs = this._gallary.data('images') || [],
                 widget,

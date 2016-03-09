@@ -30,6 +30,11 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
     protected $jsonEncoder;
 
     /**
+     * @var string
+     */
+    protected $videoSelector = '#media_gallery_content';
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Data\FormFactory $formFactory
@@ -197,7 +202,8 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'saveVideoUrl' => $this->getUrl('catalog/product_gallery/upload'),
                 'saveRemoteVideoUrl' => $this->getUrl('product_video/product_gallery/retrieveImage'),
                 'htmlId' => $this->getHtmlId(),
-                'youTubeApiKey' => $this->mediaHelper->getYouTubeApiKey()
+                'youTubeApiKey' => $this->mediaHelper->getYouTubeApiKey(),
+                'videoSelector' => $this->videoSelector
             ]
         );
     }
