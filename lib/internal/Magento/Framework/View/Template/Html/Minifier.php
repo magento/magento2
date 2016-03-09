@@ -132,7 +132,11 @@ class Minifier implements MinifierInterface
                             preg_replace(
                                 '#(?<!:)//[^\n\r]*(\s\?\>)#',
                                 '$1',
-                                $this->readFactory->create($dir)->readFile($fileName)
+                                preg_replace(
+                                    '#//[^\n\r]*(\<\?php)[^\n\r]*(\s\?\>)[^\n\r]*#',
+                                    '',
+                                    $this->readFactory->create($dir)->readFile($fileName)
+                                )
                             )
                         )
                     )
