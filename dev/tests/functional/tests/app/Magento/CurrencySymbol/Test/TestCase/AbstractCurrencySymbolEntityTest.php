@@ -19,11 +19,11 @@ use Magento\CurrencySymbol\Test\Page\Adminhtml\SystemCurrencySymbolIndex;
 abstract class AbstractCurrencySymbolEntityTest extends Injectable
 {
     /**
-     * Store>Config>General>Currency Page.
+     * Store config Currency Setup page.
      *
      * @var ConfigCurrencySetup
      */
-    protected $ConfigCurrencySetup;
+    protected $configCurrencySetup;
 
     /**
      * System Currency Symbol grid page.
@@ -49,19 +49,19 @@ abstract class AbstractCurrencySymbolEntityTest extends Injectable
     /**
      * Create simple product and inject pages.
      *
-     * @param ConfigCurrencySetup $configCurrencySetup
+     * @param configCurrencySetup $configCurrencySetup
      * @param SystemCurrencySymbolIndex $currencySymbolIndex
      * @param SystemCurrencyIndex $currencyIndex
      * @param FixtureFactory $fixtureFactory
      * @return array
      */
     public function __inject(
-        ConfigCurrencySetup $configCurrencySetup,
+        configCurrencySetup $configCurrencySetup,
         SystemCurrencySymbolIndex $currencySymbolIndex,
         SystemCurrencyIndex $currencyIndex,
         FixtureFactory $fixtureFactory
     ) {
-        $this->ConfigCurrencySetup = $configCurrencySetup;
+        $this->configCurrencySetup = $configCurrencySetup;
         $this->currencySymbolIndex = $currencySymbolIndex;
         $this->currencyIndex = $currencyIndex;
         $this->fixtureFactory = $fixtureFactory;
@@ -89,8 +89,8 @@ abstract class AbstractCurrencySymbolEntityTest extends Injectable
         )->run();
 
         //Click 'Save Config' on 'Config>>Currency Setup' page.
-        $this->ConfigCurrencySetup->open();
-        $this->ConfigCurrencySetup->getFormPageActions()->save();
+        $this->configCurrencySetup->open();
+        $this->configCurrencySetup->getFormPageActions()->save();
 
         // Import Exchange Rates for currencies
         $this->currencyIndex->open();
