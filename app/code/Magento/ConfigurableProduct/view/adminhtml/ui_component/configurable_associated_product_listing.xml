@@ -174,5 +174,15 @@
                 </item>
             </argument>
         </column>
+        <column name="attributes" class="Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns\Attributes">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="add_field" xsi:type="boolean">true</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="number">99</item>
+                    <item name="label" xsi:type="string" translate="true">Attributes</item>
+                </item>
+            </argument>
+        </column>
     </columns>
 </listing>

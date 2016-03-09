@@ -21,10 +21,10 @@ define([
          */
         openModal: function () {
             this.form().validate();
-
-            if (this.form().source.get('params.invalid') === false && this.targetWizard()) {
+            if (this.form().source.get('params.invalid') === false) {
                 this._super();
-                this.targetWizard().open();
+
+                //this.targetWizard().open();
             }
         }
     });

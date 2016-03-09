@@ -120,6 +120,26 @@ class Matrix extends \Magento\Backend\Block\Template
     }
 
     /**
+     * Retrieve data source for variations data
+     *
+     * @return string
+     */
+    public function getProvider()
+    {
+        return $this->getData('config/provider');
+    }
+
+    /**
+     * Retrieve configurable modal name
+     *
+     * @return string
+     */
+    public function getConfigurableModal()
+    {
+        return $this->getData('config/configurableModal');
+    }
+
+    /**
      * Get url for product edit
      *
      * @param string $id
