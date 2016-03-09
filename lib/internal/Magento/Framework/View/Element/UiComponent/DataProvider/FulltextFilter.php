@@ -75,13 +75,14 @@ class FulltextFilter implements FilterApplierInterface
             throw new \InvalidArgumentException('Database collection required.');
         }
 
+        $mainTable = $collection->getResource()->getMainTable();
         /** @var AbstractDb $collection */
-        $columns = $this->getFulltextIndexColumns($collection, $collection->getResource()->getMainTable());
+        $columns = $this->getFulltextIndexColumns($collection, $mainTable);
         if (!$columns) {
             return;
         }
 
-        $columns = $this->addTableAliasToColumns($columns, $collection, $collection->getMainTable());
+        $columns = $this->addTableAliasToColumns($columns, $collection, $mainTable);
         $collection->getSelect()
             ->where(
                 'MATCH(' . implode(',', $columns) . ') AGAINST(?)',
