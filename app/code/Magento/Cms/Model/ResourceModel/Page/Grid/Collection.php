@@ -90,7 +90,6 @@ class Collection extends PageCollection implements SearchResultInterface
         $this->aggregations = $aggregations;
     }
 
-
     /**
      * Get search criteria.
      *
@@ -155,13 +154,14 @@ class Collection extends PageCollection implements SearchResultInterface
         if (isset($this->loadedData)) {
             return $this->loadedData;
         }
+        /** @var \Magento\Cms\Model\Page $page */
+        $page = $this->_entityFactory->create(\Magento\Cms\Model\Page::class);
         /** Load every record separately to make sure the list of associated stores is available */
         /** @var \Magento\Framework\View\Element\UiComponent\DataProvider\Document $pageDocument */
         foreach (parent::getItems() as $pageDocument) {
-            /** @var \Magento\Cms\Model\Page $page */
-            $page = $this->_entityFactory->create(\Magento\Cms\Model\Page::class);
-            $pageId = $pageDocument->getId();
-            $this->loadedData[$pageId] = $pageDocument->setData($page->load($pageId)->getData());
+            $this->loadedData[$pageDocument->getId()] = $pageDocument->setData(
+                $page->load($pageDocument->getId())->getData()
+            );
         }
 
         return $this->loadedData;
