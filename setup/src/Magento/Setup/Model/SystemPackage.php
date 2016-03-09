@@ -172,7 +172,8 @@ class SystemPackage
                 'We\'re sorry, no components are available because you cloned the Magento 2 GitHub repository. ' .
                 'You must manually update components as discussed in the ' .
                 '<a href="http://devdocs.magento.com/guides/v2.0/install-gde/install/cli/dev_options.html">' .
-                'Installation Guide</a>.');
+                'Installation Guide</a>.'
+            );
         }
         return $systemPackages;
     }
