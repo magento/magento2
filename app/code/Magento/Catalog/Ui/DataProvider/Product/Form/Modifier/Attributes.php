@@ -9,7 +9,8 @@ use Magento\Framework\UrlInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Ui\Component;
-use Magento\Catalog\Model\Locator\LocatorInterface;use Magento\Ui\Component\Container;
+use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Ui\Component\Container;
 
 class Attributes extends AbstractModifier
 {

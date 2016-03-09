@@ -19,10 +19,9 @@ define([
         /**
          * Parses options and merges the result with instance
          *
-         * @param  {Object} config
          * @returns {Object} Chainable.
          */
-        initConfig: function (config) {
+        initConfig: function () {
             var recordId;
 
             this._super();

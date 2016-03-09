@@ -15,15 +15,27 @@ define(function () {
             inverse: false
         },
 
+        /**
+         * Initialize item.
+         *
+         * @param {Object} item
+         * @returns {Object} Chainable.
+         */
         initElement: function (item) {
             this._super();
             item.set('visible', this.inverse ? !this.visibilityState : this.visibilityState);
+
             return this;
         },
 
+        /**
+         * Toggle visibility state.
+         *
+         * @param {Boolean} selected
+         */
         toggleVisibility: function (selected) {
             this.isShown = this.visibilityState = selected in this.valuesForOptions;
             this.visible(this.inverse ? !this.isShown : this.isShown);
         }
-    }
+    };
 });

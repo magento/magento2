@@ -66,8 +66,14 @@ define([
             });
         },
 
+        /**
+         * Resolve parent name.
+         *
+         * @param {String} parent
+         * @returns {String}
+         */
         resolveParentName: function (parent) {
-            return this.name.split("." + parent + ".")[0] + "." + parent;
+            return this.name.split('.' + parent + '.')[0] + '.' + parent;
         }
     });
 });
