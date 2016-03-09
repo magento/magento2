@@ -10,7 +10,8 @@ use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
 use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\App\ResourceConnection as AppResource;
-use Magento\Framework\Model\Operation\ContextHandlerInterface;
+use Magento\Framework\Model\Entity\ScopeResolver;
+use Magento\Framework\Model\Entity\ScopeInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -38,29 +39,31 @@ class ReadHandler
     protected $searchCriteriaBuilder;
 
     /**
-     * @var ContextHandlerInterface
+     * @var ScopeResolver
      */
-    protected $contextHandler;
+    protected $scopeResolver;
 
     /**
+     * ReadHandler constructor.
+     *
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param AppResource $appResource
-     * @param ContextHandlerInterface $contextHandler
+     * @param ScopeResolver $scopeResolver
      */
     public function __construct(
         AttributeRepository $attributeRepository,
         MetadataPool $metadataPool,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         AppResource $appResource,
-        ContextHandlerInterface $contextHandler
+        ScopeResolver $scopeResolver
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->appResource = $appResource;
-        $this->contextHandler = $contextHandler;
+        $this->scopeResolver = $scopeResolver;
     }
 
     /**
@@ -79,16 +82,16 @@ class ReadHandler
     }
 
     /**
-     * @param string $entityType
-     * @param array $data
+     * @param ScopeInterface $scope
      * @return array
      */
-    protected function getActionContext($entityType, $data)
+    private function getContextVariables(ScopeInterface $scope)
     {
-        return $this->contextHandler->retrieve(
-            $this->metadataPool->getMetadata($entityType),
-            $data
-        );
+        $data[] = $scope->getValue();
+        if ($scope->getFallback()) {
+            $data = array_merge($data, $this->getContextVariables($scope->getFallback()));
+        }
+        return $data;
     }
 
     /**
@@ -105,7 +108,7 @@ class ReadHandler
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
         $attributeTables = [];
         if ($metadata->getEavEntityType()) {
-            $context = $this->getActionContext($entityType, $entityData);
+            $context = $this->scopeResolver->getEntityContext($entityType);
             foreach ($this->getAttributes($entityType) as $attribute) {
                 if (!$attribute->isStatic()) {
                     $attributeTables[$attribute->getBackend()->getTable()][] = $attribute->getAttributeId();
@@ -123,12 +126,12 @@ class ReadHandler
                     ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()])
                     ->where('t.attribute_id IN (?)', $attributeCodes)
                     ->order('a.attribute_id');
-                foreach ($context as $field => $value) {
+                foreach ($context as $scope) {
                     //TODO: if (in table exists context field)
                     $select->where(
-                        $metadata->getEntityConnection()->quoteIdentifier($field) . ' IN (?)',
-                        $value
-                    )->order('t.' . $field . ' DESC');
+                        $metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' IN (?)',
+                        $this->getContextVariables($scope)
+                    )->order('t.' . $scope->getIdentifier() . ' DESC');
                 }
                 $selects[] = $select;
             }
