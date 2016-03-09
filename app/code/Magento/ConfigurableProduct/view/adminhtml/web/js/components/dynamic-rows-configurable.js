@@ -34,7 +34,8 @@ define([
                 'insertDataFromGrid': 'processingInsertDataFromGrid',
                 'insertDataFromWizard': 'processingInsertDataFromWizard',
                 'unionInsertData': 'processingUnionInsertData',
-                'changeDataFromGrid': 'processingChangeDataFromGrid'
+                'changeDataFromGrid': 'processingChangeDataFromGrid',
+                'isEmpty': 'changeVisibility'
             },
             imports: {
                 'attribute_set_id': '${$.provider}:data.product.attribute_set_id'
@@ -46,6 +47,28 @@ define([
                 modalWithGrid: '${ $.modalWithGrid }',
                 gridWithProducts: '${ $.gridWithProducts}'
             }
+        },
+
+        /**
+         * Invokes initialize method of parent class,
+         * contains initialization logic
+         */
+        initialize: function () {
+            this._super()
+                .changeVisibility(this.isEmpty());
+
+            return this;
+        },
+
+        /**
+         * Change visibility
+         *
+         * When isEmpty = true, then visbible = false
+         *
+         * @param {Boolean} isEmpty
+         */
+        changeVisibility: function (isEmpty) {
+            this.visible(!isEmpty);
         },
 
         openModalWithGrid: function (rowIndex) {
