@@ -5,6 +5,8 @@
  */
 namespace Magento\Paypal\Block\Express\InContext\Minicart;
 
+use Magento\Checkout\Model\Session;
+use Magento\Payment\Model\MethodInterface;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\ConfigFactory;
 use Magento\Paypal\Block\Express\InContext;
@@ -42,17 +44,30 @@ class Button extends Template implements ShortcutInterface
     private $config;
 
     /**
+     * @var MethodInterface
+     */
+    private $payment;
+
+    /**
+     * @var Session
+     */
+    private $session;
+
+    /**
      * Constructor
-     *
      * @param Context $context
      * @param ResolverInterface $localeResolver
      * @param ConfigFactory $configFactory
+     * @param MethodInterface $payment
+     * @param Session $session
      * @param array $data
      */
     public function __construct(
         Context $context,
         ResolverInterface $localeResolver,
         ConfigFactory $configFactory,
+        Session $session,
+        MethodInterface $payment,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -60,6 +75,8 @@ class Button extends Template implements ShortcutInterface
         $this->localeResolver = $localeResolver;
         $this->config = $configFactory->create();
         $this->config->setMethod(Config::METHOD_EXPRESS);
+        $this->payment = $payment;
+        $this->session = $session;
     }
 
     /**
@@ -75,7 +92,9 @@ class Button extends Template implements ShortcutInterface
      */
     protected function shouldRender()
     {
-        return $this->isMiniCart && $this->isInContext();
+        return $this->payment->isAvailable($this->session->getQuote())
+            && $this->isMiniCart
+            && $this->isInContext();
     }
 
     /**
