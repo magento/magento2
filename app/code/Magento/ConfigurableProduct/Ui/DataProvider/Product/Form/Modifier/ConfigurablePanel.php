@@ -328,6 +328,7 @@ class ConfigurablePanel extends AbstractModifier
                             'weight' => 'weight',
                             'thumbnail_image' => 'thumbnail_src',
                             'status' => 'status',
+                            'attributes' => 'attributes',
                         ],
                         'links' => [
                             'insertDataFromGrid' => '${$.provider}:${$.dataProviderFromGrid}',
