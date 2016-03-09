@@ -29,6 +29,14 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     /** @var  RelationComposite|\PHPUnit_Framework_MockObject_MockObject */
     protected $entityRelationCompositeMock;
 
+    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    protected $objectManagerMock;
+
+    /**
+     * @var \Magento\Framework\App\ObjectManager
+     */
+    protected $objectManagerBackup;
+
     protected function setUp()
     {
         $this->entitySnapshotMock = $this->getMock(
@@ -48,6 +56,22 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        try {
+            $this->objectManagerBackup = \Magento\Framework\App\ObjectManager::getInstance();
+        } catch (\RuntimeException $e) {
+            $this->objectManagerBackup = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER)
+                ->create($_SERVER);
+        }
+        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
+
         $this->addressResource = (new ObjectManagerHelper($this))->getObject(
             'Magento\Customer\Model\ResourceModel\Address',
             [
@@ -59,6 +83,12 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 'customerFactory' => $this->prepareCustomerFactory()
             ]
         );
+    }
+
+    protected function tearDown()
+    {
+        parent::tearDown();
+        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerBackup);
     }
 
     /**
@@ -100,6 +130,16 @@ class AddressTest extends \PHPUnit_Framework_TestCase
         $address->expects($this->any())->method('getIsDefaultShipping')->willReturn($isDefaultShipping);
         $address->expects($this->any())->method('getIsDefaultBilling')->willReturn($isDefaultBilling);
         $this->addressResource->setType('customer_address');
+
+        $attributeLoaderMock = $this->getMockBuilder('Magento\Eav\Model\Entity\AttributeLoaderInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->objectManagerMock->expects($this->once())
+            ->method('get')
+            ->with('Magento\Eav\Model\Entity\AttributeLoaderInterface')
+            ->willReturn($attributeLoaderMock);
+
         $this->addressResource->save($address);
     }
 
