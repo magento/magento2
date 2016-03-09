@@ -13,7 +13,7 @@ define([
             defaults: {
                 openOnShow: true
             },
-            
+
             /**
              * Toggle visibility state.
              */
@@ -22,7 +22,7 @@ define([
                 this.elems.each(function (child) {
                     child.set('visible', this.inverseVisibility ? !this.isShown : this.isShown);
                 }.bind(this));
-                
+
                 if (this.openOnShow) {
                     this.opened(this.inverseVisibility ? !this.isShown : this.isShown);
                 }
