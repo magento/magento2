@@ -14,6 +14,9 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CompositeTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -108,7 +111,7 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
         $this->objectManagerMock->expects(static::any())
             ->method('get')
             ->willReturnMap(
-                $modifiersMap = [
+                [
                     ['modifier1', $this->createModifierMock($initialMeta, ['modifier1_meta'])],
                     ['modifier2', $this->createModifierMock(['modifier1_meta'], $resultMeta)]
                 ]
