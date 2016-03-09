@@ -126,7 +126,6 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Magento\Catalog\Model\Category', $category);
         $this->assertEquals(3, $category->getId());
 
-
         $items = $model->getItems();
 
         $this->assertInternalType('array', $items);
