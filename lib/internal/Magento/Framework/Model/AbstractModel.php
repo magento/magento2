@@ -263,7 +263,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
         return $this->_idFieldName;
     }
 
-
     /**
      * Identifier getter
      *
