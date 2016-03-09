@@ -29,7 +29,7 @@ define([
             deleteProperty: false,
             dataLength: 0,
             identificationProperty: 'id',
-            attribute_set_id: '',
+            'attribute_set_id': '',
             listens: {
                 'insertDataFromGrid': 'processingInsertDataFromGrid',
                 'insertDataFromWizard': 'processingInsertDataFromWizard',
@@ -71,11 +71,16 @@ define([
             this.visible(!isEmpty);
         },
 
+        /**
+         * Open modal with grid.
+         *
+         * @param {String} rowIndex
+         */
         openModalWithGrid: function (rowIndex) {
-            var productSource = this.source.get(this.dataScope + '.' + this.index + '.' + rowIndex);
-            var product = {
+            var productSource = this.source.get(this.dataScope + '.' + this.index + '.' + rowIndex),
+                product = {
                 'id': productSource.id,
-                'attributes': productSource.configurable_attribute
+                'attributes': productSource['configurable_attribute']
             };
 
             this.modalWithGrid().openModal();
@@ -84,6 +89,8 @@ define([
 
         /**
          * Initialize children
+         *
+         * @returns {Object} Chainable.
          */
         initChildren: function () {
             var tmpArray = [];
@@ -101,12 +108,12 @@ define([
          * Delete record
          *
          * @param {Number} index - row index
-         *
          */
-        deleteRecord: function (index, recordId) {
-            this.reRender = false;
+        deleteRecord: function (index) {
+            var tmpArray;
 
-            var tmpArray = this.unionInsertData();
+            this.reRender = false;
+            tmpArray = this.unionInsertData();
             tmpArray.splice(index, 1);
 
             if (!tmpArray.length) {
@@ -117,6 +124,9 @@ define([
             this.reRender = true;
         },
 
+        /**
+         * Generate associated products
+         */
         generateAssociatedProducts: function () {
             var productsIds = [];
 
@@ -143,14 +153,25 @@ define([
             return this;
         },
 
+        /**
+         * Process union insert data.
+         *
+         * @param {Array} data
+         */
         processingUnionInsertData: function (data) {
-            var dataInc = 0;
+            var dataInc = 0,
+                diff = 0,
+                dataCount,
+                elemsCount,
+                lastRecord;
+
             this.source.remove(this.dataScope + '.' + this.index);
-            this.isEmpty(data.length == 0);
+            this.isEmpty(data.length === 0);
 
             _.each(data, function (row) {
                 _.each(row, function (value, key) {
                     var path = this.dataScope + '.' + this.index + '.' + dataInc + '.' + key;
+
                     this.source.set(path, value);
                 }, this);
 
@@ -158,9 +179,8 @@ define([
             }, this);
 
             // Render
-            var diff = 0;
-            var dataCount = data.length;
-            var elemsCount = this.elems().length;
+            dataCount = data.length;
+            elemsCount = this.elems().length;
 
             if (dataCount > elemsCount) {
                 for (diff = dataCount - elemsCount; diff > 0; diff--) {
@@ -168,7 +188,7 @@ define([
                 }
             } else {
                 for (diff = elemsCount - dataCount; diff > 0; diff--) {
-                    var lastRecord =
+                    lastRecord =
                         _.findWhere(this.elems(), {
                             index: this.recordIterator - 1
                         }) ||
@@ -190,13 +210,14 @@ define([
          * about selected records
          */
         processingInsertDataFromGrid: function (data) {
-            var changes;
+            var changes,
+                tmpArray;
 
             if (!data.length) {
                 return;
             }
 
-            var tmpArray = this.unionInsertData();
+            tmpArray = this.unionInsertData();
 
             changes = this._checkGridData(data);
             this.cacheGridData = data;
@@ -206,7 +227,7 @@ define([
 
                 mappedData[this.canEditField] = 0;
                 mappedData[this.newProductField] = 0;
-                mappedData['variationKey'] = this._getVariationKey(changedObject);
+                mappedData.variationKey = this._getVariationKey(changedObject);
                 mappedData['configurable_attribute'] = this._getConfigurableAttribute(changedObject);
                 tmpArray.push(mappedData);
             }, this);
@@ -214,19 +235,31 @@ define([
             this.unionInsertData(tmpArray);
         },
 
+        /**
+         * Process changes from grid.
+         *
+         * @param {Object} data
+         */
         processingChangeDataFromGrid: function (data) {
             var tmpArray = this.unionInsertData(),
                 mappedData = this.mappingValue(data.product);
 
             mappedData[this.canEditField] = 0;
             mappedData[this.newProductField] = 0;
-            mappedData['variationKey'] = this._getVariationKey(data.product);
+            mappedData.variationKey = this._getVariationKey(data.product);
             mappedData['configurable_attribute'] = this._getConfigurableAttribute(data.product);
             tmpArray[data.rowIndex] = mappedData;
 
             this.unionInsertData(tmpArray);
         },
 
+        /**
+         * Get variation key.
+         *
+         * @param {Object} data
+         * @returns {String}
+         * @private
+         */
         _getVariationKey: function (data) {
             var attrCodes = this.source.get('data.attribute_codes'),
                 key = [];
@@ -238,6 +271,13 @@ define([
             return key.sort().join('-');
         },
 
+        /**
+         * Get configurable attribute.
+         *
+         * @param {Object} data
+         * @returns {String}
+         * @private
+         */
         _getConfigurableAttribute: function (data) {
             var attrCodes = this.source.get('data.attribute_codes'),
                 confAttrs = {};
@@ -249,28 +289,47 @@ define([
             return JSON.stringify(confAttrs);
         },
 
+        /**
+         * Process data insertion from wizard
+         *
+         * @param {Object} data
+         */
         processingInsertDataFromWizard: function (data) {
-            var tmpArray = this.unionInsertData();
-            var productIdsToDelete = this.source.get(this.dataScopeAssociatedProduct);
-            var index;
-            var product = {};
-            tmpArray = this.unsetArrayItem(tmpArray, {'id': null});
+            var tmpArray = this.unionInsertData(),
+                productIdsToDelete = this.source.get(this.dataScopeAssociatedProduct),
+                index,
+                product = {};
+
+            tmpArray = this.unsetArrayItem(
+                tmpArray,
+                {
+                    id: null
+                }
+            );
 
             _.each(data, function (row) {
+                var attributesText;
+
                 if (row.productId) {
                     index = _.indexOf(productIdsToDelete, row.productId);
+
                     if (index > -1) {
                         productIdsToDelete.splice(index, 1);
-                        tmpArray = this.unsetArrayItem(tmpArray, {'id': row.productId});
+                        tmpArray = this.unsetArrayItem(
+                            tmpArray,
+                            {
+                                id: row.productId
+                            }
+                        );
                     }
                 }
 
-                var attributesText = '';
+                attributesText = '';
                 _.each(row.options, function (attribute) {
                     if (attributesText) {
                         attributesText += ', ';
                     }
-                    attributesText += attribute['attribute_label'] + ': ' + attribute['label'];
+                    attributesText += attribute['attribute_label'] + ': ' + attribute.label;
                 }, this);
 
                 product = {
@@ -287,9 +346,9 @@ define([
                     'variationKey': row.variationKey,
                     'configurable_attribute': row.attribute,
                     'thumbnail_image': row.images.preview,
-                    'media_gallery': row.media_gallery,
-                    'swatch_image': row.swatch_image,
-                    'small_image': row.small_image,
+                    'media_gallery': row['media_gallery'],
+                    'swatch_image': row['swatch_image'],
+                    'small_image': row['small_image'],
                     'thumbnail': row.thumbnail,
                     'attributes': attributesText
                 };
@@ -300,17 +359,30 @@ define([
             }, this);
 
             _.each(productIdsToDelete, function (id) {
-                tmpArray = this.unsetArrayItem(tmpArray, {'id': id});
+                tmpArray = this.unsetArrayItem(
+                    tmpArray,
+                    {
+                        id: id
+                    }
+                );
             }, this);
 
             this.unionInsertData(tmpArray);
         },
 
+        /**
+         * Remove array items matching condition.
+         *
+         * @param {Array} data
+         * @param {Object} condition
+         * @returns {Array}
+         */
         unsetArrayItem: function (data, condition) {
             var objs = _.where(data, condition);
 
             _.each(objs, function (obj) {
                 var index = _.indexOf(data, obj);
+
                 if (index > -1) {
                     data.splice(index, 1);
                 }
@@ -348,6 +420,7 @@ define([
          */
         mappingValue: function (data) {
             var result = {};
+
             _.each(this.map, function (prop, index) {
                 result[index] = data[prop];
             });
@@ -355,6 +428,12 @@ define([
             return result;
         },
 
+        /**
+         * Toggle actions list.
+         *
+         * @param {Number} rowIndex
+         * @returns {Object} Chainable.
+         */
         toggleActionsList: function (rowIndex) {
             var state = false;
 
@@ -366,6 +445,12 @@ define([
             return this;
         },
 
+        /**
+         * Close action list.
+         *
+         * @param {Number} rowIndex
+         * @returns {Object} Chainable
+         */
         closeList: function (rowIndex) {
             if (this.actionsListOpened() === rowIndex) {
                 this.actionsListOpened(false);
@@ -374,14 +459,19 @@ define([
             return this;
         },
 
+        /**
+         * Toggle product status.
+         *
+         * @param {Number} rowIndex
+         */
         toggleStatusProduct: function (rowIndex) {
-            var tmpArray = this.unionInsertData();
-            var status = tmpArray[rowIndex]['status'];
+            var tmpArray = this.unionInsertData(),
+                status = tmpArray[rowIndex].status;
 
-            if (status == 1) {
-                tmpArray[rowIndex]['status'] = 2;
+            if (status === 1) {
+                tmpArray[rowIndex].status = 2;
             } else {
-                tmpArray[rowIndex]['status'] = 1;
+                tmpArray[rowIndex].status = 1;
             }
 
             this.unionInsertData(tmpArray);
