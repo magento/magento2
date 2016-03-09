@@ -22,25 +22,13 @@ class LineLengthSniff extends \Generic_Sniffs_Files_LineLengthSniff
      */
     protected function checkLineLength(\PHP_CodeSniffer_File $phpcsFile, $stackPtr, $lineContent)
     {
-        $previousLineRegexp = '~__\($|Phrase\($~';
-        $currentLineRegexp = '~__\(.+\)|Phrase\(.+\)~';
+        $previousLineRegexp = '~__\($|\bPhrase\($~';
+        $currentLineRegexp = '~__\(.+\)|\bPhrase\(.+\)~';
         $currentLineMatch = preg_match($currentLineRegexp, $lineContent) !== 0;
         $previousLineMatch = preg_match($previousLineRegexp, $this->previousLineContent) !== 0;
         $this->previousLineContent = $lineContent;
-        $error = 'Variable is not allowed as the first argument of translation function, use string literal instead';
-        if ($currentLineMatch) {
-            $variableRegexp = '~__\(\$.+\)|Phrase\(\$.+\)~';
-            if (preg_match($variableRegexp, $lineContent) !== 0) {
-                $phpcsFile->addError($error, $stackPtr, 'VariableTranslation');
-            }
-            return;
-        } else if ($previousLineMatch) {
-            $variableRegexp = '~^\s*\$.+~';
-            if (preg_match($variableRegexp, $lineContent) !== 0) {
-                $phpcsFile->addError($error, $stackPtr, 'VariableTranslation');
-            }
-            return;
+        if (! $currentLineMatch && !$previousLineMatch) {
+            parent::checkLineLength($phpcsFile, $stackPtr, $lineContent);
         }
-        parent::checkLineLength($phpcsFile, $stackPtr, $lineContent);
     }
 }

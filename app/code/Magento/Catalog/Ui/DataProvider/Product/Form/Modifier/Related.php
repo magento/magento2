@@ -373,7 +373,7 @@ class Related extends AbstractModifier
                                         'actionName' => 'render',
                                     ]
                                 ],
-                                'title' => __($buttonTitle),
+                                'title' => $buttonTitle,
                                 'provider' => null,
                             ],
                         ],
@@ -599,7 +599,7 @@ class Related extends AbstractModifier
                         'dataType' => Text::NAME,
                         'dataScope' => $dataScope,
                         'fit' => $fit,
-                        'label' => __($label),
+                        'label' => $label,
                         'sortOrder' => $sortOrder,
                     ],
                 ],
