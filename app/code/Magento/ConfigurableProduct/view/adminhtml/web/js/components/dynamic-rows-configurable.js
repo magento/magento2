@@ -221,7 +221,6 @@ define([
             mappedData[this.newProductField] = 0;
             mappedData.variationKey = this._getVariationKey(data.product);
             mappedData['configurable_attribute'] = this._getConfigurableAttribute(data.product);
-
             tmpArray[data.rowIndex] = mappedData;
 
             this.unionInsertData(tmpArray);
@@ -282,6 +281,8 @@ define([
             );
 
             _.each(data, function (row) {
+                var attributesText;
+                
                 if (row.productId) {
                     index = _.indexOf(productIdsToDelete, row.productId);
 
@@ -295,6 +296,14 @@ define([
                         );
                     }
                 }
+
+                attributesText = '';
+                _.each(row.options, function (attribute) {
+                    if (attributesText) {
+                        attributesText += ', ';
+                    }
+                    attributesText += attribute['attribute_label'] + ': ' + attribute['label'];
+                }, this);
 
                 product = {
                     'id': row.productId,
@@ -313,7 +322,8 @@ define([
                     'media_gallery': row['media_gallery'],
                     'swatch_image': row['swatch_image'],
                     'small_image': row['small_image'],
-                    'thumbnail': row.thumbnail
+                    'thumbnail': row.thumbnail,
+                    'attributes': attributesText
                 };
                 product[this.canEditField] = row.editable;
                 product[this.newProductField] = row.newProduct;
