@@ -23,38 +23,29 @@
     }
 }
 
-//  Change Attribute Set
-#product_info_tabs li.removed,
-div.removed,
-.field.removed {
-    display: none !important;
-}
+//
+//  Create attribute panel
+//  ---------------------------------------------
 
-.ie9 {
-    .catalog-product-new {
-        .page-main-actions {
-            .action-default {
-                margin-right: 0;
-            }
-        }
+//  Panel description
+.admin_field-complex-attributes {
+    .admin_field-complex-content {
+        font-size: 2.4rem;
+        padding: .5rem 0;
+    }
+
+    [class^='action-'] {
+        &:extend(.abs-action-l all);
     }
 }
 
-//
-//  Create attribute panel iframe page configuration
-//  ---------------------------------------------
+//  Grid search result summary
+.attributes-summary {
+    &:extend(.abs-list-reset-styles all);
 
-.catalog-product-attribute-edit {
-    min-width: 0;
-
-    &.attribute-popup {
-        .page-wrapper {
-            width: 100%;
-
-            .page-content {
-                padding-left: 0;
-            }
-        }
+    .attributes-selected,
+    .attributes-found {
+        display: block;
     }
 }
 
