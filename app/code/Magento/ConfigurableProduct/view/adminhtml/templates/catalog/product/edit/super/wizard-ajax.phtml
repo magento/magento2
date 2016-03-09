@@ -13,7 +13,8 @@ $attributes = $block->getProductAttributes();
 
 /* @escapeNotVerified */ echo $block->getVariationWizard([
     'attributes' => $attributes,
-    'configurations' => $productMatrix
+    'configurations' => $productMatrix,
+    'configurableModal' => $block->getConfigurableModal()
 ]);
 ?>
 <script>
