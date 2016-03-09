@@ -18,24 +18,26 @@ class CreateHandler
     /**
      * @var AttributeRepository
      */
-    protected $attributeRepository;
+    private $attributeRepository;
 
     /**
      * @var MetadataPool
      */
-    protected $metadataPool;
+    private $metadataPool;
 
     /**
      * @var SearchCriteriaBuilder
      */
-    protected $searchCriteriaBuilder;
+    private $searchCriteriaBuilder;
 
     /**
      * @var AttributePersistor
      */
-    protected $attributePersistor;
+    private $attributePersistor;
 
     /**
+     * CreateHandler constructor.
+     *
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
@@ -72,25 +74,6 @@ class CreateHandler
      * @param string $entityType
      * @param array $data
      * @return array
-     */
-    protected function getActionContext($entityType, $data)
-    {
-        $metadata = $this->metadataPool->getMetadata($entityType);
-        $contextFields = $metadata->getEntityContext();
-        $context = [];
-        foreach ($contextFields as $field) {
-            if (isset($data[$field])) {
-                $data[$field] = 0;
-                $context[$field] = $data[$field];
-            }
-        }
-        return $context;
-    }
-
-    /**
-     * @param string $entityType
-     * @param array $data
-     * @return array
      * @throws \Exception
      */
     public function execute($entityType, $data)
@@ -99,7 +82,6 @@ class CreateHandler
 
         $metadata = $this->metadataPool->getMetadata($entityType);
         if ($metadata->getEavEntityType()) {
-            $context = $this->getActionContext($entityType, $data);
             $processed = [];
             foreach ($this->getAttributes($entityType) as $attribute) {
                 if ($attribute->isStatic()) {
@@ -117,7 +99,7 @@ class CreateHandler
                     $processed[$attribute->getAttributeCode()] = $data[$attribute->getAttributeCode()];
                 }
             }
-            $this->attributePersistor->flush($entityType, $context);
+            $this->attributePersistor->flush($entityType);
         }
         return $data;
     }
