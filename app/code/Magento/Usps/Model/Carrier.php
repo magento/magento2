@@ -550,6 +550,9 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                                 $serviceName = $this->_filterServiceName((string)$service->SvcDescription);
                                 $serviceCode = 'INT_' . (string)$service->attributes()->ID;
                                 $serviceCodeToActualNameMap[$serviceCode] = $serviceName;
+                                if (!$this->isServiceAvailable($service)) {
+                                    continue;
+                                }
                                 if (in_array($serviceCode, $allowedMethods)) {
                                     $costArr[$serviceCode] = (string)$service->Postage;
                                     $priceArr[$serviceCode] = $this->getMethodPrice(
@@ -614,7 +617,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 '1' => __('Priority Mail'),
                 '2' => __('Priority Mail Express Hold For Pickup'),
                 '3' => __('Priority Mail Express'),
-                '4' => __('Standard Post'),
+                '4' => __('Retail Ground'),
                 '6' => __('Media Mail'),
                 '7' => __('Library Mail'),
                 '13' => __('Priority Mail Express Flat Rate Envelope'),
@@ -649,8 +652,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 '49' => __('Priority Mail Regional Rate Box B'),
                 '50' => __('Priority Mail Regional Rate Box B Hold For Pickup'),
                 '53' => __('First-Class Package Service Hold For Pickup'),
-                '55' => __('Priority Mail Express Flat Rate Boxes'),
-                '56' => __('Priority Mail Express Flat Rate Boxes Hold For Pickup'),
                 '57' => __('Priority Mail Express Sunday/Holiday Delivery Flat Rate Boxes'),
                 '58' => __('Priority Mail Regional Rate Box C'),
                 '59' => __('Priority Mail Regional Rate Box C Hold For Pickup'),
@@ -682,7 +683,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'INT_23' => __('Priority Mail International Padded Flat Rate Envelope'),
                 'INT_24' => __('Priority Mail International DVD Flat Rate priced box'),
                 'INT_25' => __('Priority Mail International Large Video Flat Rate priced box'),
-                'INT_26' => __('Priority Mail Express International Flat Rate Boxes'),
                 'INT_27' => __('Priority Mail Express International Padded Flat Rate Envelope'),
             ],
             'service_to_code' => [
@@ -693,7 +693,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 '1' => 'Priority',
                 '2' => 'Priority Express',
                 '3' => 'Priority Express',
-                '4' => 'Standard Post',
+                '4' => 'Retail Ground',
                 '6' => 'Media',
                 '7' => 'Library',
                 '13' => 'Priority Express',
@@ -728,8 +728,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 '49' => 'Priority',
                 '50' => 'Priority',
                 '53' => 'First Class',
-                '55' => 'Priority Express',
-                '56' => 'Priority Express',
                 '57' => 'Priority Express',
                 '58' => 'Priority',
                 '59' => 'Priority',
@@ -761,7 +759,6 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 'INT_23' => 'Priority',
                 'INT_24' => 'Priority',
                 'INT_25' => 'Priority',
-                'INT_26' => 'Priority Express',
                 'INT_27' => 'Priority Express',
             ],
             'method_to_code' => [
@@ -800,9 +797,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                                 'Priority Mail Small Flat Rate Envelope',
                                 'Priority Mail Small Flat Rate Envelope Hold For Pickup',
                                 'First-Class Package Service Hold For Pickup',
-                                'Priority Mail Express Flat Rate Boxes',
-                                'Priority Mail Express Flat Rate Boxes Hold For Pickup',
-                                'Standard Post',
+                                'Retail Ground',
                                 'Media Mail',
                                 'First-Class Mail Large Envelope',
                                 'Priority Mail Express Sunday/Holiday Delivery',
@@ -894,7 +889,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                             'method' => [
                                 'Priority Mail Express',
                                 'Priority Mail',
-                                'Standard Post',
+                                'Retail Ground',
                                 'Media Mail',
                                 'Library Mail',
                                 'First-Class Package Service',
@@ -917,7 +912,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                             'method' => [
                                 'Priority Mail Express',
                                 'Priority Mail',
-                                'Standard Post',
+                                'Retail Ground',
                                 'Media Mail',
                                 'Library Mail',
                             ],
@@ -1489,7 +1484,8 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 break;
             case 'STANDARD':
             case 'Standard Post':
-                $serviceType = 'Standard Post';
+            case 'Retail Ground':
+                $serviceType = 'Retail Ground';
                 break;
             case 'MEDIA':
             case 'Media':
@@ -2027,5 +2023,21 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         }
 
         return [$zip5, $zip4];
+    }
+
+    /**
+     * Check availability of post service
+     *
+     * @param \SimpleXMLElement $service
+     * @return boolean
+     */
+    private function isServiceAvailable(\SimpleXMLElement $service)
+    {
+        foreach ($service->ExtraServices->children() as $child) {
+            if (filter_var($child->Available, FILTER_VALIDATE_BOOLEAN)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

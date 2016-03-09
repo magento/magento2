@@ -43,6 +43,7 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
 
     /**
      * {@inheritdoc}
+     * @deprecated
      */
     public function prepareDataSource(array $dataSource)
     {
@@ -63,15 +64,16 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
 
         return $dataSource;
     }
-
+    
     /**
      * Prepare component configuration
      * @return void
      */
     public function prepare()
     {
-        if (!$this->storeManager->isSingleStoreMode()) {
-            parent::prepare();
+        parent::prepare();
+        if ($this->storeManager->isSingleStoreMode()) {
+            $this->_data['config']['componentDisabled'] = true;
         }
     }
 }

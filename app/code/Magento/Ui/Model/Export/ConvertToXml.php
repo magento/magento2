@@ -125,13 +125,18 @@ class ConvertToXml
         $this->filter->prepareComponent($component);
         $this->filter->applySelectionOnTargetProvider();
 
+        $component->getContext()->getDataProvider()->setLimit(0, 0);
+
         /** @var SearchResultInterface $searchResult */
         $searchResult = $component->getContext()->getDataProvider()->getSearchResult();
 
-        $this->prepareItems($component->getName(), $searchResult->getItems());
+        /** @var DocumentInterface[] $searchResultItems */
+        $searchResultItems = $searchResult->getItems();
+
+        $this->prepareItems($component->getName(), $searchResultItems);
 
         /** @var SearchResultIterator $searchResultIterator */
-        $searchResultIterator = $this->iteratorFactory->create(['items' => $searchResult->getItems()]);
+        $searchResultIterator = $this->iteratorFactory->create(['items' => $searchResultItems]);
 
         /** @var Excel $excel */
         $excel = $this->excelFactory->create([

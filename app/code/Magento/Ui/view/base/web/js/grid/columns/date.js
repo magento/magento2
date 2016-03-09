@@ -11,7 +11,7 @@ define([
 
     return Column.extend({
         defaults: {
-            dateFormat: 'MMM D, YYYY h:mm:ss A'
+            dateFormat: 'MMM d, YYYY h:mm:ss A'
         },
 
         /**

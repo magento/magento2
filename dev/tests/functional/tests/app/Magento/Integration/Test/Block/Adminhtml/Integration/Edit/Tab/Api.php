@@ -20,7 +20,7 @@ class Api extends \Magento\Backend\Test\Block\Widget\Tab
      * @param SimpleElement|null $element
      * @return array
      */
-    public function getDataFormTab($fields = null, SimpleElement $element = null)
+    public function getFieldsData($fields = null, SimpleElement $element = null)
     {
         $data = $this->dataMapping($fields);
         $resourceAccessValue = $this->_getData([$data['resource_access']])[0];

@@ -39,11 +39,5 @@
         }
     },
     "minimum-stability": "alpha",
-    "prefer-stable": true,
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "http://packages.magento.com/"
-        }
-    ]
+    "prefer-stable": true
 }

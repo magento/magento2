@@ -69,12 +69,12 @@ class Stock
      * Assign stock status information to product
      *
      * @param Product $product
-     * @param int $stockStatus
+     * @param int $status
      * @return void
      */
-    public function assignStatusToProduct(Product $product, $stockStatus = null)
+    public function assignStatusToProduct(Product $product, $status = null)
     {
-        if ($stockStatus === null) {
+        if ($status === null) {
             $websiteId = $product->getStore()->getWebsiteId();
             $stockStatus = $this->stockRegistryProvider->getStockStatus($product->getId(), $websiteId);
             $status = $stockStatus->getStockStatus();

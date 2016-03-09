@@ -23,10 +23,10 @@
                 <?php } ?>
             </ul>
             <div class="nav-bar-outer-actions">
-                <div class="action-wrap action-wrap-next" data-role="step-wizard-next">
+                <div class="action-wrap" data-role="closeBtn">
                     <button type="button"
-                            class="action-default action-primary action-next-step" data-bind="click: next">
-                        <span><?= /* @escapeNotVerified */  __('Next') ?></span>
+                            class="action-cancel action-tertiary" data-bind="click: close">
+                        <span><?= /* @escapeNotVerified */  __('Cancel') ?></span>
                     </button>
                 </div>
                 <div class="action-wrap action-wrap-prev" data-role="step-wizard-prev">
@@ -36,10 +36,10 @@
                         <span><?= /* @escapeNotVerified */  __('Back') ?></span>
                     </button>
                 </div>
-                <div class="action-wrap" data-role="closeBtn">
+                <div class="action-wrap action-wrap-next" data-role="step-wizard-next">
                     <button type="button"
-                            class="action-cancel action-tertiary" data-bind="click: close">
-                        <span><?= /* @escapeNotVerified */  __('Cancel') ?></span>
+                            class="action-default action-primary action-next-step" data-bind="click: next">
+                        <span><?= /* @escapeNotVerified */  __('Next') ?></span>
                     </button>
                 </div>
             </div>

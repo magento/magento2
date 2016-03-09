@@ -55,7 +55,7 @@ define(
                     observableFields = shippingRatesValidationRules.getObservableFields();
 
                 $.each(elements, function (index, elem) {
-                    if (elem && (observableFields.indexOf(elem.index) != -1 || force)) {
+                    if (elem && (observableFields.indexOf(elem.index) !== -1 || force)) {
                         if (elem.index !== 'postcode') {
                             self.bindHandler(elem, delay);
                         }
@@ -75,9 +75,9 @@ define(
             bindHandler: function (element, delay) {
                 var self = this;
 
-                delay = typeof delay === "undefined" ? self.validateDelay : delay;
+                delay = typeof delay === 'undefined' ? self.validateDelay : delay;
 
-                if (element.component.indexOf('/group') != -1) {
+                if (element.component.indexOf('/group') !== -1) {
                     $.each(element.elems(), function (index, elem) {
                         self.bindHandler(elem);
                     });
@@ -110,6 +110,7 @@ define(
 
                 if (!validationResult) {
                     warnMessage = $t('Provided Zip/Postal Code seems to be invalid.');
+
                     if (postcodeValidator.validatedPostCodeExample.length) {
                         warnMessage += $t(' Example: ') + postcodeValidator.validatedPostCodeExample.join('; ') + '. ';
                     }

@@ -46,6 +46,7 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
         $this->_session = $this->_auth->getAuthStorage();
         $credentials = $this->_getAdminCredentials();
         $this->_auth->login($credentials['user'], $credentials['password']);
+        $this->_objectManager->get('Magento\Security\Model\Plugin\Auth')->afterLogin($this->_auth);
     }
 
     /**

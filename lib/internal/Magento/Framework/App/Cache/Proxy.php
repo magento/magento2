@@ -3,15 +3,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Framework\App\Cache;
+
+use \Magento\Framework\App\CacheInterface;
+use \Magento\Framework\ObjectManager\NoninterceptableInterface;
 
 /**
  * System cache proxy model
  */
-namespace Magento\Framework\App\Cache;
-
-use Magento\Framework\App\CacheInterface;
-
-class Proxy implements CacheInterface
+class Proxy implements
+    CacheInterface,
+    NoninterceptableInterface
 {
     /**
      * @var \Magento\Framework\ObjectManagerInterface

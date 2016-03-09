@@ -93,7 +93,7 @@ class Phrase
     }
 
     /**
-     * Get quote type
+     * Get phrase
      *
      * @return string
      */
@@ -116,7 +116,7 @@ class Phrase
     }
 
     /**
-     * Get phrase
+     * Get quote type
      *
      * @return string
      */
@@ -259,19 +259,19 @@ class Phrase
     }
 
     /**
-     * Compile PHP string based on quotes type it enclosed with
+     * Compile PHP string (escaping unescaped quotes and processing concatenation)
      *
      * @param string $string
      * @return string
-     *
-     * @SuppressWarnings(PHPMD.EvalExpression)
      */
     private function getCompiledString($string)
     {
         $encloseQuote = $this->getQuote() == Phrase::QUOTE_DOUBLE ? Phrase::QUOTE_DOUBLE : Phrase::QUOTE_SINGLE;
-
-        $evalString = 'return ' . $encloseQuote . $string . $encloseQuote . ';';
-        $result = @eval($evalString);
-        return is_string($result) ? $result :  $string;
+        //find all occurrences of ' and ", with no \ before it.
+        preg_match_all('/[^\\\\]' . $encloseQuote . '|' . $encloseQuote . '[^\\\\]/', $string, $matches);
+        if (count($matches[0])) {
+            $string = preg_replace('/([^\\\\])' . $encloseQuote . ' ?\. ?' . $encloseQuote . '/', '$1', $string);
+        }
+        return $string;
     }
 }

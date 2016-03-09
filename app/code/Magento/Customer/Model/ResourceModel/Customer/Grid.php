@@ -63,13 +63,13 @@ class Grid
         $gridTableName = $this->flatScopeResolver->resolve(Customer::CUSTOMER_GRID_INDEXER_ID, []);
 
         $select = $connection->select()
-            ->from($connection->getTableName($gridTableName), 'last_visit_at')
+            ->from($this->resource->getTableName($gridTableName), 'last_visit_at')
             ->order('last_visit_at DESC')
             ->limit(1);
         $lastVisitAt = $connection->query($select)->fetchColumn();
 
         $select = $connection->select()
-            ->from($connection->getTableName('customer_log'), 'customer_id')
+            ->from($this->resource->getTableName('customer_log'), 'customer_id')
             ->where('last_login_at > ?', $lastVisitAt);
 
         $customerIds = [];
