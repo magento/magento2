@@ -110,8 +110,18 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->timezone = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $this->timezone->expects($this->any())->method('scopeTimeStamp')->will($this->returnValue(time()));
-        $phpExecutableFinder = $this->getMock('Magento\Framework\Process\PhpExecutableFinder', [], [], '', false);
+
+        $phpExecutableFinder = $this->getMock('Symfony\Component\Process\PhpExecutableFinder', [], [], '', false);
         $phpExecutableFinder->expects($this->any())->method('find')->willReturn('php');
+        $phpExecutableFinderFactory = $this->getMock(
+            'Magento\Framework\Process\PhpExecutableFinderFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $phpExecutableFinderFactory->expects($this->any())->method('create')->willReturn($phpExecutableFinder);
+
         $this->_observer = new ProcessCronQueueObserver(
             $this->_objectManager,
             $this->_scheduleFactory,
@@ -121,7 +131,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
             $this->_request,
             $this->_shell,
             $this->timezone,
-            $phpExecutableFinder
+            $phpExecutableFinderFactory
         );
     }
 
