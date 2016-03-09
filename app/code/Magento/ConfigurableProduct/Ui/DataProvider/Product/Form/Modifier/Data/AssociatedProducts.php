@@ -245,6 +245,7 @@ class AssociatedProducts
                         'variationKey' => $this->getVariationKey($variationOptions),
                         'canEdit' => 0,
                         'newProduct' => 0,
+                        'attributes' => $this->getTextAttributes($variationOptions),
                         'thumbnail_image' => $this->imageHelper->init($product, 'product_thumbnail_image')->getUrl(),
                     ];
                     $productIds[] = $product->getId();
@@ -270,6 +271,25 @@ class AssociatedProducts
         }
 
         return $this->jsonHelper->jsonEncode($result);
+    }
+
+    /**
+     * Prepares text list of used attributes
+     *
+     * @param array $options
+     * @return string
+     */
+    protected function getTextAttributes(array $options = [])
+    {
+        $text = '';
+        foreach ($options as $option) {
+            if ($text) {
+                $text .= ', ';
+            }
+            $text .= $option['attribute_label'] . ': ' . $option['label'];
+        }
+
+        return $text;
     }
 
     /**

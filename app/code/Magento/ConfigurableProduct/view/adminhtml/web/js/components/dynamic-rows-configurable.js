@@ -86,6 +86,10 @@ define([
             var tmpArray = this.unionInsertData();
             tmpArray.splice(index, 1);
 
+            if (!tmpArray.length) {
+                this.source.set('data.attributes', []);
+            }
+
             this.unionInsertData(tmpArray);
             this.reRender = true;
         },
@@ -176,6 +180,7 @@ define([
 
             changes.each(function (changedObject) {
                 var mappedData = this.mappingValue(changedObject);
+
                 mappedData[this.canEditField] = 0;
                 mappedData[this.newProductField] = 0;
                 mappedData['variationKey'] = this._getVariationKey(changedObject);
@@ -194,7 +199,6 @@ define([
             mappedData[this.newProductField] = 0;
             mappedData['variationKey'] = this._getVariationKey(data.product);
             mappedData['configurable_attribute'] = this._getConfigurableAttribute(data.product);
-
             tmpArray[data.rowIndex] = mappedData;
 
             this.unionInsertData(tmpArray);
@@ -238,6 +242,14 @@ define([
                     }
                 }
 
+                var attributesText = '';
+                _.each(row.options, function (attribute) {
+                    if (attributesText) {
+                        attributesText += ', ';
+                    }
+                    attributesText += attribute['attribute_label'] + ': ' + attribute['label'];
+                }, this);
+
                 product = {
                     'id': row.productId,
                     'product_link': row.productUrl,
@@ -255,7 +267,8 @@ define([
                     'media_gallery': row.media_gallery,
                     'swatch_image': row.swatch_image,
                     'small_image': row.small_image,
-                    'thumbnail': row.thumbnail
+                    'thumbnail': row.thumbnail,
+                    'attributes': attributesText
                 };
                 product[this.canEditField] = row.editable;
                 product[this.newProductField] = row.newProduct;

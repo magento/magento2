@@ -326,8 +326,9 @@ class ConfigurablePanel extends AbstractModifier
                             'price_currency' => 'price_currency',
                             'qty' => 'qty',
                             'weight' => 'weight',
-                            'thumbnail' => 'thumbnail',
+                            'thumbnail_image' => 'thumbnail_src',
                             'status' => 'status',
+                            'attributes' => 'attributes',
                         ],
                         'links' => [
                             'insertDataFromGrid' => '${$.provider}:${$.dataProviderFromGrid}',
@@ -424,6 +425,20 @@ class ConfigurablePanel extends AbstractModifier
                                     'template' => 'Magento_ConfigurableProduct/components/cell-status',
                                     'label' => __('Status'),
                                     'dataScope' => 'status',
+                                ],
+                            ],
+                        ],
+                    ],
+                    'attributes' => [
+                        'arguments' => [
+                            'data' => [
+                                'config' => [
+                                    'componentType' => Form\Field::NAME,
+                                    'formElement' => Form\Element\Input::NAME,
+                                    'elementTmpl' => 'ui/dynamic-rows/cells/text',
+                                    'dataType' => Form\Element\DataType\Text::NAME,
+                                    'label' => __('Attributes'),
+                                    //'dataScope' => 'attributes',
                                 ],
                             ],
                         ],
