@@ -44,21 +44,19 @@ class Interceptor extends \Magento\Framework\Code\Generator\EntityAbstract
         $reflectionClass = new \ReflectionClass($this->getSourceClassName());
         $constructor = $reflectionClass->getConstructor();
         $parameters = [];
+        $body = "\$this->___init();\n";
         if ($constructor) {
             foreach ($constructor->getParameters() as $parameter) {
                 $parameters[] = $this->_getMethodParameterInfo($parameter);
             }
+            $body .= count($parameters)
+                ? "parent::__construct({$this->_getParameterList($parameters)});"
+                : "parent::__construct();";
         }
-
         return [
             'name' => '__construct',
             'parameters' => $parameters,
-            'body' => "\$this->___init();\n" .
-            (count(
-                $parameters
-            ) ? "parent::__construct({$this->_getParameterList(
-                $parameters
-            )});" : '')
+            'body' => $body
         ];
     }
 

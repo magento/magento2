@@ -54,11 +54,12 @@ class Multiline extends AbstractElement
 
     /**
      * @param int $suffix
+     * @param string $scopeLabel
      * @return string
      */
-    public function getLabelHtml($suffix = 0)
+    public function getLabelHtml($suffix = 0, $scopeLabel = '')
     {
-        return parent::getLabelHtml($suffix);
+        return parent::getLabelHtml($suffix, $scopeLabel);
     }
 
     /**

@@ -29,7 +29,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\ModifierPool">
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
         <arguments>
             <argument name="modifiers" xsi:type="array">
                 <item name="advancedInventory" xsi:type="array">
@@ -38,5 +38,5 @@
                 </item>
             </argument>
         </arguments>
-    </type>
+    </virtualType>
 </config>

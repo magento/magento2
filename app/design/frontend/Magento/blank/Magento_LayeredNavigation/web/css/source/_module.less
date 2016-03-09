@@ -27,7 +27,6 @@
     }
 
     .filter-current {
-
         .item {
             margin-bottom: @indent__s;
         }
@@ -63,6 +62,7 @@
 
         .filter-options-content {
             margin: 0 0 @indent__m;
+
             .item {
                 margin-bottom: 3px;
             }
@@ -91,9 +91,9 @@
         }
 
         .item {
-            position: relative;
-            padding-left: 22px;
             margin-bottom: 6px;
+            padding-left: 22px;
+            position: relative;
 
             .label {
                 font-weight: @font-weight__bold;
@@ -101,8 +101,8 @@
 
             .action.remove {
                 &:extend(.abs-remove-button-for-blocks all);
-                position: absolute;
                 left: -6px;
+                position: absolute;
                 top: 0;
             }
         }
@@ -117,7 +117,7 @@
 //  Mobile
 //  _____________________________________________
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .page-with-filter {
         .columns {
             .sidebar-main {

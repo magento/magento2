@@ -79,7 +79,10 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->_userMock = $this->getMockBuilder('Magento\User\Model\User')
             ->disableOriginalConstructor()
             ->setMethods(
-                ['load', 'save', 'sendNotificationEmailsIfRequired', 'performIdentityCheck', '__sleep', '__wakeup']
+                [
+                    'load', 'save', 'sendNotificationEmailsIfRequired',
+                    'performIdentityCheck', 'validate', '__sleep', '__wakeup'
+                ]
             )
             ->getMock();
 
@@ -195,6 +198,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->_userMock->setUserId($userId);
         $this->_userMock->expects($this->once())->method('performIdentityCheck')->will($this->returnValue(true));
         $this->_userMock->expects($this->once())->method('save');
+        $this->_userMock->expects($this->once())->method('validate')->willReturn(true);
         $this->_userMock->expects($this->once())->method('sendNotificationEmailsIfRequired');
 
         $this->_requestMock->setParams($requestParams);
