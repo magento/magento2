@@ -167,8 +167,8 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     {
         parent::setUp();
 
-        $metadataPoolMock = $this->getMock(\Magento\Framework\Model\Entity\MetadataPool::class, [], [], '', false);
-        $entityMetadataMock = $this->getMock(\Magento\Framework\Model\Entity\EntityMetadata::class, [], [], '', false);
+        $metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $entityMetadataMock = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
         $metadataPoolMock->expects($this->any())
             ->method('getMetadata')
             ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
@@ -179,168 +179,168 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
         /* For parent object construct */
         $this->jsonHelper =
-            $this->getMockBuilder(\Magento\Framework\Json\Helper\Data::class)
+            $this->getMockBuilder('\Magento\Framework\Json\Helper\Data')
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->importExportData =
-            $this->getMockBuilder(\Magento\ImportExport\Helper\Data::class)
+            $this->getMockBuilder('\Magento\ImportExport\Helper\Data')
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->_dataSourceModel =
-            $this->getMockBuilder(\Magento\ImportExport\Model\ResourceModel\Import\Data::class)
+            $this->getMockBuilder('\Magento\ImportExport\Model\ResourceModel\Import\Data')
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->config =
-            $this->getMockBuilder(\Magento\Eav\Model\Config::class)
+            $this->getMockBuilder('\Magento\Eav\Model\Config')
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->resource =
-            $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+            $this->getMockBuilder('\Magento\Framework\App\ResourceConnection')
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->resourceHelper =
-            $this->getMockBuilder(\Magento\ImportExport\Model\ResourceModel\Helper::class)
+            $this->getMockBuilder('\Magento\ImportExport\Model\ResourceModel\Helper')
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->string =
-            $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)
+            $this->getMockBuilder('\Magento\Framework\Stdlib\StringUtils')
                 ->disableOriginalConstructor()
                 ->getMock();
 
         /* For object construct */
         $this->_eventManager =
-            $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+            $this->getMockBuilder('\Magento\Framework\Event\ManagerInterface')
                 ->getMock();
         $this->stockRegistry =
-            $this->getMockBuilder(\Magento\CatalogInventory\Api\StockRegistryInterface::class)
+            $this->getMockBuilder('\Magento\CatalogInventory\Api\StockRegistryInterface')
                 ->getMock();
         $this->stockConfiguration =
-            $this->getMockBuilder(\Magento\CatalogInventory\Api\StockConfigurationInterface::class)
+            $this->getMockBuilder('\Magento\CatalogInventory\Api\StockConfigurationInterface')
                 ->getMock();
         $this->stockStateProvider =
-            $this->getMockBuilder(\Magento\CatalogInventory\Model\Spi\StockStateProviderInterface::class)
+            $this->getMockBuilder('\Magento\CatalogInventory\Model\Spi\StockStateProviderInterface')
                 ->getMock();
         $this->_catalogData =
-            $this->getMockBuilder(\Magento\Catalog\Helper\Data::class)
+            $this->getMockBuilder('\Magento\Catalog\Helper\Data')
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->_importConfig =
-            $this->getMockBuilder(\Magento\ImportExport\Model\Import\Config::class)
+            $this->getMockBuilder('\Magento\ImportExport\Model\Import\Config')
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->_resourceFactory = $this->getMock(
-            \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory::class,
+            '\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->_setColFactory = $this->getMock(
-            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory::class,
+            '\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->_productTypeFactory = $this->getMock(
-            \Magento\CatalogImportExport\Model\Import\Product\Type\Factory::class,
+            '\Magento\CatalogImportExport\Model\Import\Product\Type\Factory',
             ['create'],
             [],
             '',
             false
         );
         $this->_linkFactory = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\LinkFactory::class,
+            '\Magento\Catalog\Model\ResourceModel\Product\LinkFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->_proxyProdFactory = $this->getMock(
-            \Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory::class,
+            '\Magento\CatalogImportExport\Model\Import\Proxy\ProductFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->_uploaderFactory = $this->getMock(
-            \Magento\CatalogImportExport\Model\Import\UploaderFactory::class,
+            '\Magento\CatalogImportExport\Model\Import\UploaderFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->_filesystem =
-            $this->getMockBuilder(\Magento\Framework\Filesystem::class)
+            $this->getMockBuilder('\Magento\Framework\Filesystem')
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->_mediaDirectory =
-            $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
+            $this->getMockBuilder('\Magento\Framework\Filesystem\Directory\WriteInterface')
                 ->getMock();
         $this->_stockResItemFac = $this->getMock(
-            \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory::class,
+            '\Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory',
             ['create'],
             [],
             '',
             false
         );
         $this->_localeDate =
-            $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
+            $this->getMockBuilder('\Magento\Framework\Stdlib\DateTime\TimezoneInterface')
                 ->getMock();
         $this->dateTime =
-            $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime::class)
+            $this->getMockBuilder('\Magento\Framework\Stdlib\DateTime')
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->indexerRegistry =
-            $this->getMockBuilder(\Magento\Framework\Indexer\IndexerRegistry::class)
+            $this->getMockBuilder('\Magento\Framework\Indexer\IndexerRegistry')
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->_logger =
-            $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+            $this->getMockBuilder('\Psr\Log\LoggerInterface')
                 ->getMock();
         $this->storeResolver =
-            $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\StoreResolver::class)
+            $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\StoreResolver')
                 ->setMethods([
                     'getStoreCodeToId',
                 ])
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->skuProcessor =
-            $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\SkuProcessor::class)
+            $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\SkuProcessor')
                 ->disableOriginalConstructor()
                 ->getMock();
-        $reflection = new \ReflectionClass(\Magento\CatalogImportExport\Model\Import\Product\SkuProcessor::class);
+        $reflection = new \ReflectionClass('\Magento\CatalogImportExport\Model\Import\Product\SkuProcessor');
         $reflectionProperty = $reflection->getProperty('metadataPool');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->skuProcessor, $metadataPoolMock);
 
         $this->categoryProcessor =
-            $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor::class)
+            $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\CategoryProcessor')
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->validator =
-            $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\Validator::class)
+            $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\Validator')
                 ->setMethods(['isAttributeValid', 'getMessages', 'isValid'])
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->objectRelationProcessor =
-            $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor::class)
+            $this->getMockBuilder('\Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor')
                 ->disableOriginalConstructor()
                 ->getMock();
         $this->transactionManager =
-            $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface::class)
+            $this->getMockBuilder('\Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface')
                 ->getMock();
 
         $this->taxClassProcessor =
-            $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor::class)
+            $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\TaxClassProcessor')
                 ->disableOriginalConstructor()
                 ->getMock();
 
-        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfig = $this->getMockBuilder('\Magento\Framework\App\Config\ScopeConfigInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->productUrl = $this->getMockBuilder(\Magento\Catalog\Model\Product\Url::class)
+        $this->productUrl = $this->getMockBuilder('\Magento\Catalog\Model\Product\Url')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -357,7 +357,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
         $this->importProduct = $objectManager->getObject(
-            \Magento\CatalogImportExport\Model\Import\Product::class,
+            'Magento\CatalogImportExport\Model\Import\Product',
             [
                 'jsonHelper' => $this->jsonHelper,
                 'importExportData' => $this->importExportData,
@@ -416,7 +416,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             '',
             false
         );
-        $this->optionEntity = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\Option::class)
+        $this->optionEntity = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\Option')
             ->disableOriginalConstructor()->getMock();
         $this->optionFactory->expects($this->once())->method('create')->willReturn($this->optionEntity);
 
@@ -434,11 +434,11 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      */
     protected function _parentObjectConstructor()
     {
-        $type = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)->disableOriginalConstructor()->getMock();
+        $type = $this->getMockBuilder('Magento\Eav\Model\Entity\Type')->disableOriginalConstructor()->getMock();
         $type->expects($this->any())->method('getEntityTypeId')->will($this->returnValue(self::ENTITY_TYPE_ID));
         $this->config->expects($this->any())->method('getEntityType')->with(self::ENTITY_TYPE_CODE)->willReturn($type);
 
-        $this->_connection = $this->getMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->_connection = $this->getMock('\Magento\Framework\DB\Adapter\AdapterInterface');
         $this->resource->expects($this->any())->method('getConnection')->willReturn($this->_connection);
         return $this;
     }
@@ -448,7 +448,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      */
     protected function _initAttributeSets()
     {
-        $attributeSetOne = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Set::class)
+        $attributeSetOne = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\Set')
             ->disableOriginalConstructor()
             ->getMock();
         $attributeSetOne->expects($this->any())
@@ -457,7 +457,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $attributeSetOne->expects($this->any())
             ->method('getId')
             ->willReturn('1');
-        $attributeSetTwo = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\Set::class)
+        $attributeSetTwo = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\Set')
             ->disableOriginalConstructor()
             ->getMock();
         $attributeSetTwo->expects($this->any())
@@ -467,7 +467,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ->method('getId')
             ->willReturn('2');
         $attributeSetCol = [$attributeSetOne, $attributeSetTwo];
-        $collection = $this->getMockBuilder(\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection::class)
+        $collection = $this->getMockBuilder('\Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection')
             ->disableOriginalConstructor()
             ->getMock();
         $collection->expects($this->once())
@@ -491,7 +491,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
                 'params' => [],
             ]];
         $productTypeInstance =
-            $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::class)
+            $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType')
                 ->disableOriginalConstructor()->getMock();
         $productTypeInstance->expects($this->once())
             ->method('isSuitable')
@@ -538,13 +538,13 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
             ]
         ];
         $entityTable = 'catalog_product_entity';
-        $resource = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel::class)
+        $resource = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel')
             ->disableOriginalConstructor()
             ->setMethods(['getTable'])
             ->getMock();
         $resource->expects($this->once())->method('getTable')->with($entityTable)->willReturnArgument(0);
         $this->_resourceFactory->expects($this->once())->method('create')->willReturn($resource);
-        $selectMock = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
             ->disableOriginalConstructor()
             ->getMock();
         $selectMock->expects($this->once())->method('from')->with($entityTable, '*', null)->willReturnSelf();
@@ -576,7 +576,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     {
         $attrCode = 'code';
         $rowNum = 0;
-        $string = $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)->setMethods(null)->getMock();
+        $string = $this->getMockBuilder('\Magento\Framework\Stdlib\StringUtils')->setMethods(null)->getMock();
         $this->setPropertyValue($this->importProduct, 'string', $string);
 
         $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(true);
@@ -592,7 +592,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     {
         $attrCode = 'code';
         $rowNum = 0;
-        $string = $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)->setMethods(null)->getMock();
+        $string = $this->getMockBuilder('\Magento\Framework\Stdlib\StringUtils')->setMethods(null)->getMock();
         $this->setPropertyValue($this->importProduct, 'string', $string);
 
         $this->validator->expects($this->once())->method('isAttributeValid')->willReturn(false);
@@ -627,7 +627,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
     public function testDeleteProductsForReplacement()
     {
-        $importProduct = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product::class)
+        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
             ->setMethods([
                 'setParameters', '_deleteProducts'
@@ -652,12 +652,12 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->setPropertyValue($this->importProduct, '_mediaGalleryAttributeId', null);
 
         $expectedId = '100';
-        $attribute = $this->getMockBuilder(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class)
+        $attribute = $this->getMockBuilder('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
             ->disableOriginalConstructor()
             ->setMethods(['getId'])
             ->getMockForAbstractClass();
         $attribute->expects($this->once())->method('getId')->willReturn($expectedId);
-        $resource = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel::class)
+        $resource = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModel')
             ->disableOriginalConstructor()
             ->setMethods(['getAttribute'])
             ->getMock();
@@ -693,7 +693,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      */
     public function testValidateRow($rowScope, $oldSku, $expectedResult, $behaviour = Import::BEHAVIOR_DELETE)
     {
-        $importProduct = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product::class)
+        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
             ->setMethods(['getBehavior', 'getRowScope', 'getErrorAggregator'])
             ->getMock();
@@ -717,7 +717,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
 
     public function testValidateRowDeleteBehaviourAddRowErrorCall()
     {
-        $importProduct = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product::class)
+        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
             ->setMethods(['getBehavior', 'getRowScope', 'addRowError'])
             ->getMock();
@@ -995,7 +995,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         ];
         $this->skuProcessor->expects($this->once())->method('getNewSku')->with($expectedSku)->willReturn($newSku);
         $this->setPropertyValue($importProduct, 'skuProcessor', $this->skuProcessor);
-        $productType = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::class)
+        $productType = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType')
             ->disableOriginalConstructor()
             ->getMock();
         $this->setPropertyValue($importProduct, '_productTypeModels', [
@@ -1135,7 +1135,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         ];
         $this->skuProcessor->expects($this->once())->method('getNewSku')->with($expectedSku)->willReturn($newSku);
         $this->setPropertyValue($importProduct, 'skuProcessor', $this->skuProcessor);
-        $productType = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::class)
+        $productType = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType')
             ->disableOriginalConstructor()
             ->getMock();
         $this->setPropertyValue($importProduct, '_productTypeModels', [
@@ -1150,13 +1150,11 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $sku = 'sku';
         $rowNum = 0;
         $attrCode = 'code';
-        $stringUtilsMock = $this->getMockBuilder(\Magento\Framework\Stdlib\StringUtils::class)
-            ->setMethods(null)
-            ->getMock();
+        $stringUtilsMock = $this->getMockBuilder('\Magento\Framework\Stdlib\StringUtils')->setMethods(null)->getMock();
         $this->setPropertyValue($this->importProduct, 'string', $stringUtilsMock);
 
         $scopeMock = $this->getMock(
-            \Magento\CatalogImportExport\Model\Import\Product::class,
+            '\Magento\CatalogImportExport\Model\Import\Product',
             ['getRowScope'],
             [],
             '',
@@ -1232,7 +1230,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         $this->skuProcessor->expects($this->any())->method('getNewSku')->willReturn($newSku);
         $this->setPropertyValue($importProduct, 'skuProcessor', $this->skuProcessor);
 
-        $productType = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType::class)
+        $productType = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\Type\AbstractType')
             ->disableOriginalConstructor()
             ->getMock();
         $productType->expects($this->once())->method('isRowValid')->with($expectedRowData);
@@ -1271,7 +1269,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
         //suppress validator
         $this->_setValidatorMockInImportProduct($importProduct);
 
-        $option = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\Option::class)
+        $option = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\Option')
             ->disableOriginalConstructor()
             ->getMock();
         $option->expects($this->once())->method('validateRow')->with($rowData, $rowNum);
@@ -1654,7 +1652,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
      */
     private function _rewriteGetOptionEntityInImportProduct($importProduct)
     {
-        $option = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product\Option::class)
+        $option = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product\Option')
             ->disableOriginalConstructor()
             ->getMock();
         $importProduct->expects($this->once())->method('getOptionEntity')->willReturn($option);
@@ -1670,7 +1668,7 @@ class ProductTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractI
     protected function createModelMockWithErrorAggregator(array $methods = [], array $errorAggregatorMethods = [])
     {
         $methods[] = 'getErrorAggregator';
-        $importProduct = $this->getMockBuilder(\Magento\CatalogImportExport\Model\Import\Product::class)
+        $importProduct = $this->getMockBuilder('\Magento\CatalogImportExport\Model\Import\Product')
             ->disableOriginalConstructor()
             ->setMethods($methods)
             ->getMock();
