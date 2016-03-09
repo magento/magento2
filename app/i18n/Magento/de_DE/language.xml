@@ -7,6 +7,6 @@
 -->
 <language xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/Language/package.xsd">
     <code>de_DE</code>
-    <vendor>magento</vendor>
-    <package>de_de</package>
+    <vendor>Magento</vendor>
+    <package>de_DE</package>
 </language>
