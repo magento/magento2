@@ -28,6 +28,7 @@ class CurrencyRateForm extends Form
      * @var string
      */
     protected $importButton = '[data-ui-id$="import-button"]';
+    protected $setUSDUAHRate = '[name$="rate[USD][UAH]"]';
 
     /**
      * Click on the "Import" button.
@@ -38,6 +39,27 @@ class CurrencyRateForm extends Form
     public function clickImportButton()
     {
         $this->_rootElement->find($this->importButton)->click();
+
+        //Wait message
+        $browser = $this->browser;
+        $selector = $this->message;
+        $browser->waitUntil(
+            function () use ($browser, $selector) {
+                $message = $browser->find($selector);
+                return $message->isVisible() ? true : null;
+            }
+        );
+    }
+
+    /*
+     * Populate USD-UAH rate value.
+     *
+     * @throws \Exception
+     * @return void
+     */
+    public function setCurrencyUSDUAHRate()
+    {
+        $this->_rootElement->find($this->setUSDUAHRate)->setValue('2.000');
 
         //Wait message
         $browser = $this->browser;
