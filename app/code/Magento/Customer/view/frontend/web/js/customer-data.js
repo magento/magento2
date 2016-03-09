@@ -53,16 +53,14 @@ define([
 
 
     ko.extenders.disposableCustomerData = function(target, sectionName) {
-        var sectionDataIds, newSectionDataIds = [];
+        var sectionDataIds, newSectionDataIds = {};
         target.subscribe(function(newValue) {
             setTimeout(function(){
-                var sectionId;
                 storage.remove(sectionName);
                 sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
                 _.each(sectionDataIds, function (data, name) {
                     if (name != sectionName) {
-                        sectionId = data['data_id'];
-                        newSectionDataIds[name] = sectionId;
+                        newSectionDataIds[name] = data;
                     }
                 });
                 $.cookieStorage.set('section_data_ids', newSectionDataIds);
@@ -137,7 +135,7 @@ define([
             if (!_.isEmpty(privateContent)) {
                 countryData = this.get('directory-data');
                 if (_.isEmpty(countryData())) {
-                    countryData(customerData.reload(['directory-data'], false));
+                    customerData.reload(['directory-data'], false);
                 }
             }
         },
