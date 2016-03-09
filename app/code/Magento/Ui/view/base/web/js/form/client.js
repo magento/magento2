@@ -16,9 +16,10 @@ define([
      * @param {Object} data
      * @param {String} url
      * @param {String} selectorPrefix
+     * @param {String} messagesClass
      * @returns {*}
      */
-    function beforeSave(data, url, selectorPrefix) {
+    function beforeSave(data, url, selectorPrefix, messagesClass) {
         var save = $.Deferred();
 
         data = utils.serialize(data);
@@ -59,7 +60,9 @@ define([
                          * @param {String} msg
                          */
                         insertMethod: function (msg) {
-                            $('.page-main-actions', selectorPrefix).after(msg);
+                            var $wrapper = $('<div/>').addClass(messagesClass).html(msg);
+
+                            $('.page-main-actions', selectorPrefix).after($wrapper);
                         }
                     });
                 });
@@ -83,10 +86,9 @@ define([
          */
         save: function (data, options) {
             var url = this.urls.beforeSave,
-                save = this._save.bind(this, data, options),
-                selectorPrefix = this.selectorPrefix || '';
+                save = this._save.bind(this, data, options);
 
-            beforeSave(data, url, selectorPrefix).then(save);
+            beforeSave(data, url, this.selectorPrefix, this.messagesClass).then(save);
 
             return this;
         },
