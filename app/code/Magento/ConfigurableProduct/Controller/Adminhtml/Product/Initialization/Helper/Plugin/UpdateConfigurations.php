@@ -101,7 +101,7 @@ class UpdateConfigurations
     }
 
     /**
-     * Pam data from POST
+     * Map data from POST
      *
      * @param array $item
      * @return array
