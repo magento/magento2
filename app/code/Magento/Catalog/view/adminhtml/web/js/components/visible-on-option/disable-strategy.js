@@ -16,5 +16,5 @@ define(function () {
         toggleDisable: function (selected) {
             this.disabled(!(selected in this.valuesForEnable));
         }
-    }
+    };
 });

@@ -6,23 +6,23 @@ define(function () {
     return {
         defaults: {
             valuesForOptions: [],
-            visibilityState: true,
             imports: {
                 toggleVisibility:
                     'product_attribute_add_form.product_attribute_add_form.base_fieldset.frontend_input:value'
             },
-            isShown: false
+            isShown: false,
+            inverseVisibility: false
         },
 
         initElement: function (item) {
             this._super();
-            item.set('visible', this.visibilityState);
+            item.set('visible', this.inverseVisibility ? !this.isShown : this.isShown);
             return this;
         },
 
         toggleVisibility: function (selected) {
-            this.isShown = this.visibilityState = selected in this.valuesForOptions;
-            this.visible(this.isShown);
+            this.isShown = selected in this.valuesForOptions;
+            this.visible(this.inverseVisibility ? !this.isShown : this.isShown);
         }
     }
 });
