@@ -15,6 +15,7 @@ define([
      *
      * @param {Object} data
      * @param {String} url
+     * @param {String|HTMLElement} selectorPrefix
      * @returns {*}
      */
     function beforeSave(data, url, selectorPrefix) {
@@ -58,7 +59,7 @@ define([
                          * @param {String} msg
                          */
                         insertMethod: function (msg) {
-                            $(selectorPrefix + ' .page-main-actions').after(msg);
+                            $('.page-main-actions', selectorPrefix).after(msg);
                         }
                     });
                 });
