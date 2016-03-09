@@ -92,6 +92,9 @@ class ValidateTest extends AttributeTest
             ->willReturn($this->objectManagerMock);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function getModel()
     {
         return $this->objectManager->getObject(Validate::class, [
