@@ -20,6 +20,13 @@ use Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory;
 class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\AbstractMassAction
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
+
+    /**
      * @var LabelGenerator
      */
     protected $labelGenerator;
@@ -47,14 +54,6 @@ class MassPrintShippingLabel extends \Magento\Sales\Controller\Adminhtml\Order\A
         $this->fileFactory = $fileFactory;
         $this->labelGenerator = $labelGenerator;
         parent::__construct($context, $filter);
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::shipment');
     }
 
     /**

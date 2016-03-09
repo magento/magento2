@@ -14,6 +14,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @see \Magento\Catalog\Model\ProductExternalTest
  * @see \Magento\Catalog\Model\ProductPriceTest
  * @magentoDataFixture Magento/Catalog/_files/categories.php
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  */
 class ProductGettersTest extends \PHPUnit_Framework_TestCase
 {
@@ -96,7 +98,7 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIdBySku()
     {
-        $this->assertEquals(1, $this->_model->getIdBySku('simple')); // fixture
+        $this->assertGreaterThan(0, (int)$this->_model->getIdBySku('simple')); // fixture
     }
 
     public function testGetAttributes()
@@ -222,14 +224,6 @@ class ProductGettersTest extends \PHPUnit_Framework_TestCase
         $model = $this->_model->getOptionInstance();
         $this->assertInstanceOf('Magento\Catalog\Model\Product\Option', $model);
         $this->assertSame($model, $this->_model->getOptionInstance());
-    }
-
-    public function testGetProductOptionsCollection()
-    {
-        $this->assertInstanceOf(
-            'Magento\Catalog\Model\ResourceModel\Product\Option\Collection',
-            $this->_model->getProductOptionsCollection()
-        );
     }
 
     public function testGetDefaultAttributeSetId()

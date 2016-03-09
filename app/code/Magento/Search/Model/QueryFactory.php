@@ -69,7 +69,7 @@ class QueryFactory implements QueryFactoryInterface
             $maxQueryLength = $this->getMaxQueryLength();
             $rawQueryText = $this->getRawQueryText();
             $preparedQueryText = $this->getPreparedQueryText($rawQueryText, $maxQueryLength);
-            $query = $this->create()->loadByQuery($preparedQueryText);
+            $query = $this->create()->loadByQueryText($preparedQueryText);
             if (!$query->getId()) {
                 $query->setQueryText($preparedQueryText);
             }

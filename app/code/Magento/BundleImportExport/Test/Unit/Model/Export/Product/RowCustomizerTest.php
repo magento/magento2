@@ -71,7 +71,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->product = $this->getMock(
             '\Magento\Catalog\Model\Product',
             [
-                'getId',
+                'getEntityId',
                 'getPriceType',
                 'getSkuType',
                 'getPriceView',
@@ -84,7 +84,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->product->expects($this->any())->method('getId')->willReturn(1);
+        $this->product->expects($this->any())->method('getEntityId')->willReturn(1);
         $this->product->expects($this->any())->method('getPriceType')->willReturn(1);
         $this->product->expects($this->any())->method('getSkuType')->willReturn(1);
         $this->product->expects($this->any())->method('getPriceView')->willReturn(1);

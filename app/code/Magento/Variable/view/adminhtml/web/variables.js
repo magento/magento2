@@ -84,6 +84,7 @@ window.Variables = {
             updateElementAtCursor(textareaElm, value);
             textareaElm.focus();
             textareaElm.scrollTop = scrollPos;
+            jQuery(textareaElm).change();
             textareaElm = null;
         }
         return;

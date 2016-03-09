@@ -128,9 +128,9 @@ class ServiceMetadataTest extends \PHPUnit_Framework_TestCase
         ];
 
         /**
-         * @var $cacheMock \Magento\Framework\App\Cache\Type\Webapi
+         * @var $cacheMock \Magento\Webapi\Model\Cache\Type\Webapi
          */
-        $cacheMock = $this->getMockBuilder('Magento\Framework\App\Cache\Type\Webapi')
+        $cacheMock = $this->getMockBuilder('Magento\Webapi\Model\Cache\Type\Webapi')
             ->disableOriginalConstructor()
             ->getMock();
 

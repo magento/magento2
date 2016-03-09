@@ -80,13 +80,24 @@ class MenuTest extends \PHPUnit_Framework_TestCase
     {
         $this->loginAdminUser();
 
+        $componentRegistrar = new \Magento\Framework\Component\ComponentRegistrar();
+        $libraryPath = $componentRegistrar->getPath(ComponentRegistrar::LIBRARY, 'magento/framework');
+
         $reflection = new \ReflectionClass('Magento\Framework\Component\ComponentRegistrar');
         $paths = $reflection->getProperty('paths');
         $paths->setAccessible(true);
+
         $paths->setValue(
-            [ComponentRegistrar::MODULE => [], ComponentRegistrar::THEME => [], ComponentRegistrar::LANGUAGE => []]
+            [
+                ComponentRegistrar::MODULE => [],
+                ComponentRegistrar::THEME => [],
+                ComponentRegistrar::LANGUAGE => [],
+                ComponentRegistrar::LIBRARY => []
+            ]
         );
         $paths->setAccessible(false);
+
+        ComponentRegistrar::register(ComponentRegistrar::LIBRARY, 'magento/framework', $libraryPath);
 
         ComponentRegistrar::register(
             ComponentRegistrar::MODULE,

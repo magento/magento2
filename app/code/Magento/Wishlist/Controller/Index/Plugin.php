@@ -68,6 +68,10 @@ class Plugin
                 $this->customerSession->setBeforeWishlistUrl($this->redirector->getRefererUrl());
             }
             $this->customerSession->setBeforeWishlistRequest($request->getParams());
+            $this->customerSession->setBeforeRequestParams($this->customerSession->getBeforeWishlistRequest());
+            $this->customerSession->setBeforeModuleName('wishlist');
+            $this->customerSession->setBeforeControllerName('index');
+            $this->customerSession->setBeforeAction('add');
         }
         if (!$this->config->isSetFlag('wishlist/general/active')) {
             throw new NotFoundException(__('Page not found.'));

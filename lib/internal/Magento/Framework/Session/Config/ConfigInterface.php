@@ -170,4 +170,19 @@ interface ConfigInterface
      * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public function getUseCookies();
+
+    /**
+     * Get save handler name
+     *
+     * @return string
+     */
+    public function getSaveHandlerName();
+
+    /**
+     * Set session.save_handler
+     *
+     * @param string $saveHandler
+     * @return $this
+     */
+    public function setSaveHandler($saveHandler);
 }

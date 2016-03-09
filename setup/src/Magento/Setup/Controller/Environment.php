@@ -148,7 +148,7 @@ class Environment extends AbstractActionController
     public function filePermissionsAction()
     {
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
-        if ($this->permissions->getMissingWritableDirectoriesForInstallation()) {
+        if ($this->permissions->getMissingWritablePathsForInstallation()) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
         }
 

@@ -19,6 +19,7 @@
                 <default_keywords>Magento, Varien, E-commerce</default_keywords>
                 <default_media_type>text/html</default_media_type>
                 <default_charset>utf-8</default_charset>
+                <demonotice>0</demonotice>
             </head>
             <search_engine_robots>
                 <default_robots>INDEX,FOLLOW</default_robots>
@@ -47,7 +48,7 @@ Disallow: /*SID=
                 <welcome>Default welcome msg!</welcome>
             </header>
             <footer translate="copyright">
-                <copyright>Copyright &#169; 2015 Magento. All rights reserved.</copyright>
+                <copyright>Copyright &#169; 2016 Magento. All rights reserved.</copyright>
             </footer>
         </design>
         <theme>

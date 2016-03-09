@@ -193,11 +193,12 @@ define([
          * @returns {Boolean}
          */
         hasFieldAction: function () {
-            return !!this.fieldAction;
+            return !!this.fieldAction || !!this.fieldActions;
         },
 
         /**
-         * Applies action described in a 'fieldAction' property.
+         * Applies action described in a 'fieldAction' property
+         * or actions described in 'fieldActions' property.
          *
          * @param {Number} rowIndex - Index of a row which initiates action.
          * @returns {Column} Chainable.
@@ -213,13 +214,30 @@ define([
          *      }
          */
         applyFieldAction: function (rowIndex) {
-            var action = this.fieldAction,
-                callback;
-
             if (!this.hasFieldAction() || this.disableAction) {
                 return this;
             }
 
+            if (this.fieldActions) {
+                this.fieldActions.forEach(this.applySingleAction.bind(this, rowIndex), this);
+            } else {
+                this.applySingleAction(rowIndex);
+            }
+
+            return this;
+        },
+
+        /**
+         * Applies single action
+         *
+         * @param {Number} rowIndex - Index of a row which initiates action.
+         * @param {Object} action - Action (fieldAction) to be applied
+         *
+         */
+        applySingleAction: function (rowIndex, action) {
+            var callback;
+
+            action = action || this.fieldAction;
             action = utils.template(action, {
                 column: this,
                 rowIndex: rowIndex
@@ -230,8 +248,6 @@ define([
             if (_.isFunction(callback)) {
                 callback();
             }
-
-            return this;
         },
 
         /**

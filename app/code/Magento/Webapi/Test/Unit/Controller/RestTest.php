@@ -50,7 +50,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
     protected $_oauthServiceMock;
 
     /**
-     * @var \Magento\Framework\AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Webapi\Authorization|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $_authorizationMock;
 
@@ -70,12 +70,20 @@ class RestTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Store\Api\Data\StoreInterface | \PHPUnit_Framework_MockObject_MockObject*/
     private $storeMock;
 
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $deploymentConfigMock;
+
     const SERVICE_METHOD = 'testMethod';
 
     const SERVICE_ID = 'Magento\Webapi\Controller\TestService';
 
     protected function setUp()
     {
+        $this->deploymentConfigMock = $this->getMock(
+            'Magento\Framework\App\DeploymentConfig', [], [], '', false, false
+        );
         $this->_requestMock = $this->getMockBuilder('Magento\Framework\Webapi\Rest\Request')
             ->setMethods(
                 [
@@ -87,7 +95,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
             ->method('getHttpHost')
             ->willReturn('testHostName.com');
         $this->_responseMock = $this->getMockBuilder('Magento\Framework\Webapi\Rest\Response')
-            ->setMethods(['sendResponse', 'prepareResponse'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['sendResponse', 'prepareResponse', 'setHeader'])->disableOriginalConstructor()->getMock();
         $routerMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\Router')->setMethods(['match'])
             ->disableOriginalConstructor()->getMock();
         $this->_routeMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\Router\Route')
@@ -98,7 +106,7 @@ class RestTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()->getMock();
         $this->_oauthServiceMock = $this->getMockBuilder('\Magento\Framework\Oauth\OauthInterface')
             ->setMethods(['validateAccessTokenRequest'])->getMockForAbstractClass();
-        $this->_authorizationMock = $this->getMockBuilder('Magento\Framework\AuthorizationInterface')
+        $this->_authorizationMock = $this->getMockBuilder('Magento\Framework\Webapi\Authorization')
             ->disableOriginalConstructor()->getMock();
         $paramsOverriderMock = $this->getMockBuilder('Magento\Webapi\Controller\Rest\ParamsOverrider')
             ->setMethods(['overrideParams'])
@@ -144,6 +152,8 @@ class RestTest extends \PHPUnit_Framework_TestCase
                     'storeManager' => $this->storeManagerMock
                 ]
             );
+
+        $this->_restController->setDeploymentConfig($this->deploymentConfigMock);
         // Set default expectations used by all tests
         $this->_routeMock->expects($this->any())->method('getServiceClass')->will($this->returnValue(self::SERVICE_ID));
         $this->_routeMock->expects($this->any())->method('getServiceMethod')
@@ -218,6 +228,14 @@ class RestTest extends \PHPUnit_Framework_TestCase
      */
     public function testSecureRouteAndRequest($isSecureRoute, $isSecureRequest)
     {
+
+        $this->deploymentConfigMock->expects($this->once())
+            ->method('get')
+            ->with('x-frame-options')
+            ->willReturn('SAMEORIGIN');
+
+        $this->_responseMock->expects($this->once())->method('setHeader')->with('X-Frame-Options', 'SAMEORIGIN');
+
         $this->_serviceMock->expects($this->any())->method(self::SERVICE_METHOD)->will($this->returnValue([]));
         $this->_routeMock->expects($this->any())->method('isSecure')->will($this->returnValue($isSecureRoute));
         $this->_routeMock->expects($this->once())->method('getParameters')->will($this->returnValue([]));

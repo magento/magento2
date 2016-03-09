@@ -328,8 +328,8 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         $this->_model->setForm(
             $this->getMock('Magento\Framework\Data\Form\AbstractForm', [], [], '', false)
         );
-        $expectedHtml = '<span class="field-row">' . "\n"
-            . '<input id="" name=""  data-ui-id="form-element-" value="" class=" required-entry _required"/></span>' . "\n";
+        $expectedHtml = '<div class="admin__field">' . "\n"
+            . '<input id="" name=""  data-ui-id="form-element-" value="" class=" required-entry _required"/></div>' . "\n";
 
         $this->assertEquals($expectedHtml, $this->_model->getHtml());
         $this->assertEquals(' required-entry _required', $this->_model->getClass());
@@ -529,8 +529,8 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 [],
-                '<span class="field-row">' . "\n"
-                    . '<input id="" name=""  data-ui-id="form-element-" value="" /></span>' . "\n",
+                '<div class="admin__field">' . "\n"
+                    . '<input id="" name=""  data-ui-id="form-element-" value="" /></div>' . "\n",
             ],
             [
                 ['default_html' => 'some default html'],
@@ -543,11 +543,11 @@ class AbstractElementTest extends \PHPUnit_Framework_TestCase
                     'name' => 'some-name',
                     'value' => 'some-value',
                 ],
-                '<span class="field-row">' . "\n"
+                '<div class="admin__field">' . "\n"
                     . '<label class="label admin__field-label" for="html-id" data-ui-id="form-element-some-namelabel">'
                     . '<span>some label</span></label>' . "\n"
                     . '<input id="html-id" name="some-name"  data-ui-id="form-element-some-name" value="some-value" />'
-                    . '</span>' . "\n"
+                    . '</div>' . "\n"
             ],
             [
                 [

@@ -3217,6 +3217,12 @@ class InstallSchema implements InstallSchemaInterface
             [],
             'Grand Total'
         )->addColumn(
+            'base_grand_total',
+            \Magento\Framework\DB\Ddl\Table::TYPE_DECIMAL,
+            '12,4',
+            [],
+            'Base Grand Total'
+        )->addColumn(
             'created_at',
             \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
             null,
@@ -3234,6 +3240,9 @@ class InstallSchema implements InstallSchemaInterface
         )->addIndex(
             $installer->getIdxName('sales_invoice_grid', ['grand_total']),
             ['grand_total']
+        )->addIndex(
+            $installer->getIdxName('sales_invoice_grid', ['base_grand_total']),
+            ['base_grand_total']
         )->addIndex(
             $installer->getIdxName('sales_invoice_grid', ['order_id']),
             ['order_id']

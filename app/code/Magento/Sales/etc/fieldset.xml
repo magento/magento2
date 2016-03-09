@@ -508,7 +508,6 @@
             </field>
             <field name="base_shipping_amount">
                 <aspect name="to_quote_address_shipping" />
-                <aspect name="to_cm"/>
             </field>
             <field name="base_shipping_incl_tax">
                 <aspect name="to_quote_address_shipping" />

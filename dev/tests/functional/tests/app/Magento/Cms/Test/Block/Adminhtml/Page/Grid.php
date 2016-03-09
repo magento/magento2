@@ -73,7 +73,7 @@ class Grid extends DataGrid
      *
      * @var string
      */
-    protected $previewCmsPage = "..//a[contains(@class, 'action-menu-item') and text() = 'Preview']";
+    protected $previewCmsPage = '[data-action="item-preview"]';
 
     /**
      * Click on "Edit" link.
@@ -100,7 +100,7 @@ class Grid extends DataGrid
         $rowItem = $this->getRow([$filter['title']]);
         if ($rowItem->isVisible()) {
             $rowItem->find($this->selectAction)->click();
-            $rowItem->find($this->previewCmsPage, Locator::SELECTOR_XPATH)->click();
+            $rowItem->find($this->previewCmsPage)->click();
         } else {
             throw new \Exception('Searched item was not found.');
         }
