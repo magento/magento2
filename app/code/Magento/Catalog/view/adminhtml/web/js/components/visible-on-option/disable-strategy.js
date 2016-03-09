@@ -13,8 +13,13 @@ define(function () {
             }
         },
 
+        /**
+         * Toggle disabled state.
+         *
+         * @param {Number} selected
+         */
         toggleDisable: function (selected) {
             this.disabled(!(selected in this.valuesForEnable));
         }
-    }
+    };
 });

@@ -10,7 +10,10 @@ define([
 
     return Fieldset.extend(strategy).extend(
         {
-            toggleVisibility: function (selected) {
+            /**
+             * Toggle visibility state.
+             */
+            toggleVisibility: function () {
                 this._super();
                 this.elems.each(function (child) {
                     child.set('visible', this.isShown);
