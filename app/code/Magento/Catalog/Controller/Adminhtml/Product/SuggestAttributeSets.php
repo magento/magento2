@@ -6,7 +6,7 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-class SuggestAttributeSets extends \Magento\Backend\App\Action
+class SuggestAttributeSets extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
@@ -20,15 +20,17 @@ class SuggestAttributeSets extends \Magento\Backend\App\Action
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Catalog\Model\Product\AttributeSet\SuggestedSet $suggestedSet
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
+	\Magento\Catalog\Controller\Adminhtml\Product\Builder $productBuilder,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Catalog\Model\Product\AttributeSet\SuggestedSet $suggestedSet
     ) {
-        parent::__construct($context);
+        parent::__construct($context, $productBuilder);
         $this->resultJsonFactory = $resultJsonFactory;
         $this->suggestedSet = $suggestedSet;
     }
