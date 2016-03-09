@@ -17,8 +17,13 @@ $attributes = $block->getProductAttributes();
 ]);
 ?>
 <script>
-    require(['jquery'], function ($) {
+    require(['jquery', 'uiRegistry', 'underscore'], function ($, registry, _) {
         $('body').trigger('contentUpdated');
         $('[data-role=steps-wizard-main]').applyBindings();
+
+        registry.async('variation-steps-wizard')(function (component) {
+            _.delay(component.open.bind(component), 600); // TODO: MAGETWO-50246
+        })
     });
 </script>
+
