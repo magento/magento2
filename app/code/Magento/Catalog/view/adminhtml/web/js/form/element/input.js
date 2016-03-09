@@ -23,11 +23,11 @@ define([
          * @returns {Object} Chainable.
          */
         initConfig: function (config) {
+            var recordId;
+
             this._super();
-
-            var elementId = rg.get(this.parentName).recordId;
-            this.elementName = this.prefixElementName + elementId;
-
+            recordId = rg.get(this.parentName).recordId;
+            this.elementName = this.prefixElementName + recordId;
             this.inputName = this.prefixName + '[' + this.elementName + ']' + this.suffixName;
 
             return this;
