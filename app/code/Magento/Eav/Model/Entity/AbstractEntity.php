@@ -21,7 +21,7 @@ use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 use Magento\Eav\Model\ResourceModel\Attribute\DefaultEntityAttributes\ProviderInterface as DefaultAttributesProvider;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\App\ObjectManager;
-use Magento\Eav\Model\Entity\AttributeLoaderInterface;
+
 /**
  * Entity/Attribute/Model - entity abstract
  *
