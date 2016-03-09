@@ -282,7 +282,7 @@ define([
 
             _.each(data, function (row) {
                 var attributesText;
-                
+
                 if (row.productId) {
                     index = _.indexOf(productIdsToDelete, row.productId);
 
@@ -302,7 +302,7 @@ define([
                     if (attributesText) {
                         attributesText += ', ';
                     }
-                    attributesText += attribute['attribute_label'] + ': ' + attribute['label'];
+                    attributesText += attribute['attribute_label'] + ': ' + attribute.label;
                 }, this);
 
                 product = {

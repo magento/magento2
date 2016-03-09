@@ -358,6 +358,7 @@ class ConfigurablePanel extends AbstractModifier
      * Returns Dynamic rows records configuration
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function getRows()
     {
