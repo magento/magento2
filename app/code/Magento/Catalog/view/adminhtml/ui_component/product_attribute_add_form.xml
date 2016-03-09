@@ -575,9 +575,8 @@
                         <item name="true" xsi:type="number">1</item>
                         <item name="false" xsi:type="number">0</item>
                     </item>
-                    <!--TODO: Fix import-->
                     <item name="imports" xsi:type="array">
-                        <item name="visible" xsi:type="string">${ $.provider }:data.is_searchable</item>
+                        <item name="visible" xsi:type="string">${ $.parentName}.is_searchable:checked</item>
                     </item>
                     <item name="default" xsi:type="number">0</item>
                     <item name="dataScope" xsi:type="string">is_visible_in_advanced_search</item>
