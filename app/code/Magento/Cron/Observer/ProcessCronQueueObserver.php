@@ -114,7 +114,7 @@ class ProcessCronQueueObserver implements ObserverInterface
      * @param \Magento\Framework\App\Console\Request $request
      * @param \Magento\Framework\ShellInterface $shell
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone
-     * @param \Magento\Framework\Process\PhpExecutableFinder $phpExecutableFinder
+     * @param \Magento\Framework\Process\PhpExecutableFinderFactory $phpExecutableFinderFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -125,7 +125,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         \Magento\Framework\App\Console\Request $request,
         \Magento\Framework\ShellInterface $shell,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $timezone,
-        \Magento\Framework\Process\PhpExecutableFinder $phpExecutableFinder
+        \Magento\Framework\Process\PhpExecutableFinderFactory $phpExecutableFinderFactory
     ) {
         $this->_objectManager = $objectManager;
         $this->_scheduleFactory = $scheduleFactory;
@@ -135,7 +135,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         $this->_request = $request;
         $this->_shell = $shell;
         $this->timezone = $timezone;
-        $this->phpExecutableFinder = $phpExecutableFinder;
+        $this->phpExecutableFinder = $phpExecutableFinderFactory->create();
     }
 
     /**
