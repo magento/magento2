@@ -23,7 +23,8 @@ define([
             return isDisabled;
         }, this);
 
-        if (!isDisabled) {
+        if (!isDisabled &&
+            $target.find(data.enableInContextPayPal).val() === '0') {
             lockConfiguration($target, $owner, data);
         }
     };

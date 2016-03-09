@@ -51,7 +51,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($elementMock)
         );
-        $this->assertSame($elementMock, $this->_factory->create($type));
+        $element = $this->_factory->create($type);
+        $this->assertSame($elementMock, $element);
+        unset($elementMock, $element);
     }
 
     /**
@@ -73,7 +75,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnValue($elementMock)
         );
-        $this->assertSame($elementMock, $this->_factory->create($type, $config));
+        $element = $this->_factory->create($type, $config);
+        $this->assertSame($elementMock, $element);
+        unset($elementMock, $element);
     }
 
     /**

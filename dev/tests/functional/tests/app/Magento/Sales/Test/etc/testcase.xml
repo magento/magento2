@@ -28,9 +28,9 @@
         <step name="addProducts" module="Magento_Sales" next="updateProductsData" />
         <step name="updateProductsData" module="Magento_Sales" next="fillAccountInformation" />
         <step name="fillAccountInformation" module="Magento_Sales" next="fillBillingAddress" />
-        <step name="fillBillingAddress" module="Magento_Sales" next="selectPaymentMethodForOrder" />
-        <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="selectShippingMethodForOrder" />
-        <step name="selectShippingMethodForOrder" module="Magento_Sales" next="submitOrder" />
+        <step name="fillBillingAddress" module="Magento_Sales" next="selectShippingMethodForOrder" />
+        <step name="selectShippingMethodForOrder" module="Magento_Sales" next="selectPaymentMethodForOrder" />
+        <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="submitOrder" />
         <step name="submitOrder" module="Magento_Sales" />
     </scenario>
     <scenario name="PrintOrderFrontendGuestTest" firstStep="createProducts">
@@ -47,5 +47,23 @@
         <step name="submitOrder" module="Magento_Sales" next="openSalesOrderOnFrontendForGuest" />
         <step name="openSalesOrderOnFrontendForGuest" module="Magento_Sales" next="printOrderOnFrontend" />
         <step name="printOrderOnFrontend" module="Magento_Sales" />
+    </scenario>
+    <scenario name="CreateOnlineInvoiceEntityTest" firstStep="setupConfiguration">
+        <step name="setupConfiguration" module="Magento_Config" next="createProducts" />
+        <step name="createProducts" module="Magento_Catalog" next="createTaxRule" />
+        <step name="createTaxRule" module="Magento_Tax" next="createCustomer" />
+        <step name="createCustomer" module="Magento_Customer" next="openSalesOrders" />
+        <step name="openSalesOrders" module="Magento_Sales" next="createNewOrder" />
+        <step name="createNewOrder" module="Magento_Sales" next="selectCustomerOrder" />
+        <step name="selectCustomerOrder" module="Magento_Sales" next="selectStore" />
+        <step name="selectStore" module="Magento_Sales" next="addProducts" />
+        <step name="addProducts" module="Magento_Sales" next="updateProductsData" />
+        <step name="updateProductsData" module="Magento_Sales" next="fillAccountInformation" />
+        <step name="fillAccountInformation" module="Magento_Sales" next="fillBillingAddress" />
+        <step name="fillBillingAddress" module="Magento_Sales" next="selectShippingMethodForOrder" />
+        <step name="selectShippingMethodForOrder" module="Magento_Sales" next="selectPaymentMethodForOrder" />
+        <step name="selectPaymentMethodForOrder" module="Magento_Sales" next="submitOrder" />
+        <step name="submitOrder" module="Magento_Sales" next="createInvoice" />
+        <step name="createInvoice" module="Magento_Sales" />
     </scenario>
 </config>

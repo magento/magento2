@@ -32,7 +32,7 @@ define(['uiElement', 'underscore', 'mage/url'],
                         message =
                             window.giftOptionsConfig.giftMessage.hasOwnProperty('itemLevel')
                             && window.giftOptionsConfig.giftMessage['itemLevel'].hasOwnProperty(this.itemId)
-                            ? window.giftOptionsConfig.giftMessage['itemLevel'][this.itemId]
+                            ? window.giftOptionsConfig.giftMessage['itemLevel'][this.itemId]['message']
                             : null;
                     }
                     if (_.isObject(message)) {
@@ -103,6 +103,32 @@ define(['uiElement', 'underscore', 'mage/url'],
                         }
                     });
                     return params;
+                },
+
+                /**
+                 * Check if gift message can be displayed
+                 *
+                 * @returns {Boolean}
+                 */
+                isGiftMessageAvailable: function () {
+                    var isGloballyAvailable,
+                        giftMessageConfig,
+                        itemConfig;
+
+                    // itemId represent gift message level: 'orderLevel' constant or cart item ID
+                    if (this.itemId === 'orderLevel') {
+                        return this.getConfigValue('isOrderLevelGiftOptionsEnabled');
+                    }
+
+                    // gift message product configuration must override system configuration
+                    isGloballyAvailable = this.getConfigValue('isItemLevelGiftOptionsEnabled');
+                    giftMessageConfig = window.giftOptionsConfig.giftMessage;
+                    itemConfig = giftMessageConfig.hasOwnProperty('itemLevel') &&
+                        giftMessageConfig.itemLevel.hasOwnProperty(this.itemId) ?
+                        giftMessageConfig.itemLevel[this.itemId] :
+                        {};
+
+                    return itemConfig.hasOwnProperty('is_available') ? itemConfig['is_available'] : isGloballyAvailable;
                 }
             };
             model.initialize();

@@ -176,7 +176,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
             $errors = true;
             if (!empty($protectCode) && !empty($incrementId)) {
                 $order->loadByIncrementId($incrementId);
-                if ($order->getProtectCode() == $protectCode) {
+                if ($order->getProtectCode() === $protectCode) {
                     // renew cookie
                     $this->setGuestViewCookie($fromCookie);
                     $errors = false;

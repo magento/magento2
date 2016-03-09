@@ -112,6 +112,11 @@ class Payflowlink extends \Magento\Paypal\Model\Payflowpro
     protected $orderSender;
 
     /**
+     * @var \Magento\Framework\Math\Random
+     */
+    private $mathRandom;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory

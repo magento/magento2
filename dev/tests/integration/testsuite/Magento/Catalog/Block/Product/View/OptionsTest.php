@@ -13,24 +13,39 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Catalog\Block\Product\View\Options
      */
-    protected $_block;
+    protected $block;
 
     /**
      * @var \Magento\Catalog\Model\Product
      */
-    protected $_product;
+    protected $product;
+
+    /**
+     * @var \Magento\TestFramework\ObjectManager
+     */
+    protected $objectManager;
+
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    protected $productRepository;
 
     protected function setUp()
     {
-        $this->_product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
-        );
-        $this->_product->load(1);
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $objectManager->get('Magento\Framework\Registry')->unregister('current_product');
-        $objectManager->get('Magento\Framework\Registry')->register('current_product', $this->_product);
-        $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+
+        $this->productRepository = $this->objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+
+        try {
+            $this->product = $this->productRepository->get('simple');
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            $this->product = $this->productRepository->get('simple_dropdown_option');
+        }
+
+        $this->objectManager->get('Magento\Framework\Registry')->unregister('current_product');
+        $this->objectManager->get('Magento\Framework\Registry')->register('current_product', $this->product);
+
+        $this->block = $this->objectManager->get(
             'Magento\Framework\View\LayoutInterface'
         )->createBlock(
             'Magento\Catalog\Block\Product\View\Options'
@@ -42,13 +57,13 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetGetProduct()
     {
-        $this->assertSame($this->_product, $this->_block->getProduct());
+        $this->assertSame($this->product, $this->block->getProduct());
 
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        $product = $this->objectManager->create(
             'Magento\Catalog\Model\Product'
         );
-        $this->_block->setProduct($product);
-        $this->assertSame($product, $this->_block->getProduct());
+        $this->block->setProduct($product);
+        $this->assertSame($product, $this->block->getProduct());
     }
 
     /**
@@ -56,7 +71,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetGroupOfOption()
     {
-        $this->assertEquals('default', $this->_block->getGroupOfOption('test'));
+        $this->assertEquals('default', $this->block->getGroupOfOption('test'));
     }
 
     /**
@@ -64,7 +79,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetOptions()
     {
-        $options = $this->_block->getOptions();
+        $options = $this->block->getOptions();
         $this->assertNotEmpty($options);
         foreach ($options as $option) {
             $this->assertInstanceOf('Magento\Catalog\Model\Product\Option', $option);
@@ -76,7 +91,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testHasOptions()
     {
-        $this->assertTrue($this->_block->hasOptions());
+        $this->assertTrue($this->block->hasOptions());
     }
 
     /**
@@ -84,7 +99,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetJsonConfig()
     {
-        $config = json_decode($this->_block->getJsonConfig(), true);
+        $config = json_decode($this->block->getJsonConfig(), true);
         $configValues = array_values($config);
         $this->assertEquals($this->getExpectedJsonConfig(), array_values($configValues[0]));
     }

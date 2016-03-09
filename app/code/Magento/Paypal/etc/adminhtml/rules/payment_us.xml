@@ -329,10 +329,8 @@
                 <argument name="wpp_usuk">wpp_usuk</argument>
                 <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
             </rule>
-
             <rule type="payflow/bml/disable-conditional-express" event="deactivate-express"/>
             <rule type="payflow/bml/disable-conditional-express" event=":load"/>
-
             <rule type="payflow/bml/enable" event="activate-express"/>
             <rule type="payflow/express/lock-conditional" event=":load"/>
             <rule type="payflow/bml/lock-conditional" event=":load"/>
@@ -358,6 +356,10 @@
                 </predicate>
             </event>
         </events>
+        <events selector="[data-enable='in-context-api']">
+            <event value="0" name="deactivate-in-context-api"/>
+            <event value="1" name="activate-in-context-api"/>
+        </events>
         <relation target="wps_express">
             <rule type="disable" event="activate-rule"/>
         </relation>
@@ -372,6 +374,13 @@
                 <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
                 <argument name="payflow_link_us">payflow_link_us</argument>
             </rule>
+            <rule type="paypal/in-context/enable" event="activate-rule"/>
+            <rule type="paypal/in-context/disable" event="deactivate-rule"/>
+            <rule type="paypal/in-context/show-merchant-id" event="activate-rule"/>
+            <rule type="paypal/in-context/hide-merchant-id" event="deactivate-rule"/>
+            <rule type="paypal/in-context/activate" event="activate-in-context-api"/>
+            <rule type="paypal/in-context/deactivate" event="deactivate-in-context-api"/>
+            <rule type="paypal/in-context/disable-conditional" event=":load"/>
             <rule type="paypal/bml/disable-conditional" event=":load"/>
             <rule type="conflict" event=":load">
                 <argument name="payflow_advanced">payflow_advanced</argument>

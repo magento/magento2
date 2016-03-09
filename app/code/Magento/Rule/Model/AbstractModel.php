@@ -4,12 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Abstract Rule entity data model
- */
 namespace Magento\Rule\Model;
 
-abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
+/**
+ * Abstract Rule entity data model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+abstract class AbstractModel extends \Magento\Framework\Model\AbstractExtensibleModel
 {
     /**
      * Store rule combine conditions model
@@ -75,19 +76,23 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
     protected $_localeDate;
 
     /**
-     * Constructor
+     * AbstractModel constructor.
      *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory
      * @param \Magento\Framework\Data\FormFactory $formFactory
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        \Magento\Framework\Api\AttributeValueFactory $customAttributeFactory,
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -96,7 +101,15 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
     ) {
         $this->_formFactory = $formFactory;
         $this->_localeDate = $localeDate;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**
@@ -118,13 +131,13 @@ abstract class AbstractModel extends \Magento\Framework\Model\AbstractModel
         // Serialize conditions
         if ($this->getConditions()) {
             $this->setConditionsSerialized(serialize($this->getConditions()->asArray()));
-            $this->unsConditions();
+            $this->_conditions = null;
         }
 
         // Serialize actions
         if ($this->getActions()) {
             $this->setActionsSerialized(serialize($this->getActions()->asArray()));
-            $this->unsActions();
+            $this->_actions = null;
         }
 
         /**

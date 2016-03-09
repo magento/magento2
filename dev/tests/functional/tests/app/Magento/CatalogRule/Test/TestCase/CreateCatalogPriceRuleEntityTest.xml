@@ -7,7 +7,7 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CatalogRule\Test\TestCase\CreateCatalogPriceRuleEntityTest" summary="Create Catalog Price Rule" ticketId="MAGETWO-24341">
-        <variation name="CreateCatalogPriceRuleEntityTestVariation1">
+        <variation name="CatalogRule_Create_Active_AdminOnly">
             <data name="catalogPriceRule/data/name" xsi:type="string">CatalogPriceRule %isolation%</data>
             <data name="catalogPriceRule/data/description" xsi:type="string">Catalog Price Rule Description</data>
             <data name="catalogPriceRule/data/is_active" xsi:type="string">Active</data>
@@ -21,7 +21,7 @@
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleForm" />
             <constraint name="Magento\CatalogRule\Test\Constraint\AssertCatalogPriceRuleInGrid" />
         </variation>
-        <variation name="CreateCatalogPriceRuleEntityTestVariation2">
+        <variation name="CatalogRule_Create_Inactive_AdminOnly">
             <data name="catalogPriceRule/data/name" xsi:type="string">CatalogPriceRule %isolation%</data>
             <data name="catalogPriceRule/data/description" xsi:type="string">Catalog Price Rule Description</data>
             <data name="catalogPriceRule/data/is_active" xsi:type="string">Inactive</data>

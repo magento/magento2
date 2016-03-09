@@ -25,7 +25,7 @@ use Magento\Mtf\Fixture\InjectableFixture;
 class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
 {
     /* tags */
-    const TEST_TYPE = 'acceptance_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const MVP = 'yes';
     const DOMAIN = 'MX';
     /* end tags */
@@ -70,6 +70,7 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
         $productsToVerify,
         CheckoutCart $checkoutCart
     ) {
+        $this->markTestIncomplete('MAGETWO-48732');
         // Preconditions
         $this->createProducts($products);
         $this->assignPromotedProducts($promotedProducts, 'related_products');

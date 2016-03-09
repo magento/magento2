@@ -9,6 +9,7 @@ use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Indexer\SaveHandler\IndexerInterface;
+use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Framework\Search\Request\Dimension;
 use Magento\Framework\Search\Request\IndexScopeResolverInterface;
 use Magento\Framework\Indexer\SaveHandler\Batch;
@@ -17,7 +18,7 @@ use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 class IndexerHandler implements IndexerInterface
 {
     /**
-     * @var IndexStructure
+     * @var IndexStructureInterface
      */
     private $indexStructure;
 
@@ -57,7 +58,7 @@ class IndexerHandler implements IndexerInterface
     private $indexScopeResolver;
 
     /**
-     * @param IndexStructure $indexStructure
+     * @param IndexStructureInterface $indexStructure
      * @param ResourceConnection $resource
      * @param Config $eavConfig
      * @param Batch $batch
@@ -66,7 +67,7 @@ class IndexerHandler implements IndexerInterface
      * @param int $batchSize
      */
     public function __construct(
-        IndexStructure $indexStructure,
+        IndexStructureInterface $indexStructure,
         ResourceConnection $resource,
         Config $eavConfig,
         Batch $batch,

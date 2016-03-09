@@ -15,6 +15,11 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
     const ENTITY_TYPE = 'proxy';
 
     /**
+     * Marker interface
+     */
+    const NON_INTERCEPTABLE_INTERFACE = '\Magento\Framework\ObjectManager\NoninterceptableInterface';
+
+    /**
      * @param string $modelClassName
      * @return string
      */
@@ -131,9 +136,10 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         $reflection = new \ReflectionClass($typeName);
 
         if ($reflection->isInterface()) {
-            $this->_classGenerator->setImplementedInterfaces([$typeName]);
+            $this->_classGenerator->setImplementedInterfaces([$typeName, self::NON_INTERCEPTABLE_INTERFACE]);
         } else {
             $this->_classGenerator->setExtendedClass($typeName);
+            $this->_classGenerator->setImplementedInterfaces([self::NON_INTERCEPTABLE_INTERFACE]);
         }
         return parent::_generateCode();
     }

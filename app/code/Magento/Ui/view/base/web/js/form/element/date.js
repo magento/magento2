@@ -11,6 +11,7 @@ define([
 
     return Abstract.extend({
         defaults: {
+            elementTmpl: 'ui/form/element/date',
             dateFormat: 'MM/dd/YYYY',
             options: {}
         },
@@ -23,7 +24,8 @@ define([
         initConfig: function () {
             this._super();
 
-            this.dateFormat = utils.normalizeDate(this.dateFormat);
+            //this.dateFormat = utils.normalizeDate(this.dateFormat);
+            this.dateFormat = utils.normalizeDate('MM/dd/YYYY');
 
             return this;
         },

@@ -127,4 +127,27 @@
             </argument>
         </arguments>
     </type>
+
+    <virtualType name="PayflowproCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="vault_authorize" xsi:type="string">Magento\Paypal\Gateway\Payflowpro\Command\AuthorizationCommand</item>
+                <item name="vault_sale" xsi:type="string">Magento\Paypal\Gateway\Payflowpro\Command\SaleCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="PayflowproCommandManager" type="Magento\Payment\Gateway\Command\CommandManager">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">PayflowproCommandPool</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Magento\Payment\Gateway\Command\CommandManagerPool">
+        <arguments>
+            <argument name="executors" xsi:type="array">
+                <item name="payflowpro" xsi:type="string">PayflowproCommandManager</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

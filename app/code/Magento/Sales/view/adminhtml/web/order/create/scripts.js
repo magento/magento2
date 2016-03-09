@@ -1,3 +1,4 @@
+// jscs:disable
 /**
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
@@ -344,6 +345,11 @@ define([
         },
 
         switchPaymentMethod : function(method){
+            jQuery('#edit_form')
+                .off('submitOrder')
+                .on('submitOrder', function(){
+                    jQuery(this).trigger('realOrder');
+                });
             jQuery('#edit_form').trigger('changePaymentMethod', [method]);
             this.setPaymentMethod(method);
             var data = {};
@@ -1152,11 +1158,22 @@ define([
                 jQuery('#edit_form').triggerHandler('save');
             }
             if (this.orderItemChanged) {
-                if (confirm('You have item changes')) {
-                    disableAndSave();
-                } else {
-                    this.itemsUpdate();
-                }
+                var self = this;
+
+                jQuery('#edit_form').trigger('processStop');
+
+                confirm({
+                    content: jQuery.mage.__('You have item changes'),
+                    actions: {
+                        confirm: function() {
+                            jQuery('#edit_form').trigger('processStart');
+                            disableAndSave();
+                        },
+                        cancel: function() {
+                            self.itemsUpdate();
+                        }
+                    }
+                });
             } else {
                 disableAndSave();
             }
@@ -1387,3 +1404,4 @@ define([
     };
 
 });
+/* jshint ignore:end */

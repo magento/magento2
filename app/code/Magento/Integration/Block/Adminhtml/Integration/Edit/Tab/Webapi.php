@@ -121,6 +121,11 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     protected function _construct()
     {
         parent::_construct();
+        $savedFromData = $this->retrieveFormResources();
+        if (false !== $savedFromData) {
+            $this->setSelectedResources($savedFromData);
+            return;
+        }
         $integrationData = $this->_coreRegistry->registry(IntegrationController::REGISTRY_KEY_CURRENT_INTEGRATION);
         if (is_array($integrationData)
             && isset($integrationData['integration_id'])
@@ -132,6 +137,25 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
         } else {
             $this->setSelectedResources([]);
         }
+    }
+
+    /**
+     * Retrieve saved resource
+     * 
+     * @return array|bool
+     */
+    protected function retrieveFormResources()
+    {
+        $savedData = $this->_coreRegistry->registry(
+            \Magento\Integration\Controller\Adminhtml\Integration::REGISTRY_KEY_CURRENT_RESOURCE
+        );
+        if (is_array($savedData)) {
+            if ($savedData['all_resources']) {
+                return [$this->rootResource->getId()];
+            }
+            return $savedData['resource'];
+        }
+        return false;
     }
 
     /**

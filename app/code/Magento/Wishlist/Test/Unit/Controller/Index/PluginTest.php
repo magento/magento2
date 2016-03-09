@@ -35,7 +35,21 @@ class PluginTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->customerSession = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
+        $this->customerSession = $this->getMockBuilder('Magento\Customer\Model\Session')
+            ->disableOriginalConstructor()
+            ->setMethods([
+                'authenticate',
+                'getBeforeWishlistUrl',
+                'setBeforeWishlistUrl',
+                'setBeforeWishlistRequest',
+                'getBeforeWishlistRequest',
+                'setBeforeRequestParams',
+                'setBeforeModuleName',
+                'setBeforeControllerName',
+                'setBeforeAction',
+            ])
+            ->getMock();
+
         $this->authenticationState = $this->getMock('Magento\Wishlist\Model\AuthenticationState', [], [], '', false);
         $this->config = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
         $this->redirector = $this->getMock('\Magento\Store\App\Response\Redirect', [], [], '', false);
@@ -68,6 +82,11 @@ class PluginTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeDispatch()
     {
+        $refererUrl = 'http://referer-url.com';
+        $params = [
+            'product' => 1,
+        ];
+
         $actionFlag = $this->getMock('Magento\Framework\App\ActionFlag', [], [], '', false);
         $indexController = $this->getMock('Magento\Wishlist\Controller\Index\Index', [], [], '', false);
 
@@ -87,36 +106,49 @@ class PluginTest extends \PHPUnit_Framework_TestCase
             ->method('isEnabled')
             ->willReturn(true);
 
-        $this->customerSession
-            ->expects($this->once())
-            ->method('authenticate')
-            ->willReturn(false);
-
         $this->redirector
             ->expects($this->once())
             ->method('getRefererUrl')
-            ->willReturn('http://referer-url.com');
+            ->willReturn($refererUrl);
 
         $this->request
             ->expects($this->once())
             ->method('getParams')
-            ->willReturn(['product' => 1]);
+            ->willReturn($params);
 
-        $this->customerSession
-            ->expects($this->at(1))
-            ->method('__call')
-            ->with('getBeforeWishlistUrl', [])
+        $this->customerSession->expects($this->once())
+            ->method('authenticate')
             ->willReturn(false);
-        $this->customerSession
-            ->expects($this->at(2))
-            ->method('__call')
-            ->with('setBeforeWishlistUrl', ['http://referer-url.com'])
+        $this->customerSession->expects($this->once())
+            ->method('getBeforeWishlistUrl')
             ->willReturn(false);
-        $this->customerSession
-            ->expects($this->at(3))
-            ->method('__call')
-            ->with('setBeforeWishlistRequest', [['product' => 1]])
-            ->willReturn(true);
+        $this->customerSession->expects($this->once())
+            ->method('setBeforeWishlistUrl')
+            ->with($refererUrl)
+            ->willReturnSelf();
+        $this->customerSession->expects($this->once())
+            ->method('setBeforeWishlistRequest')
+            ->with($params)
+            ->willReturnSelf();
+        $this->customerSession->expects($this->once())
+            ->method('getBeforeWishlistRequest')
+            ->willReturn($params);
+        $this->customerSession->expects($this->once())
+            ->method('setBeforeRequestParams')
+            ->with($params)
+            ->willReturnSelf();
+        $this->customerSession->expects($this->once())
+            ->method('setBeforeModuleName')
+            ->with('wishlist')
+            ->willReturnSelf();
+        $this->customerSession->expects($this->once())
+            ->method('setBeforeControllerName')
+            ->with('index')
+            ->willReturnSelf();
+        $this->customerSession->expects($this->once())
+            ->method('setBeforeAction')
+            ->with('add')
+            ->willReturnSelf();
 
         $this->config
             ->expects($this->once())

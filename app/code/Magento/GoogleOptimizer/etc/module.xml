@@ -11,6 +11,7 @@
             <module name="Magento_GoogleAnalytics"/>
             <module name="Magento_Catalog"/>
             <module name="Magento_Cms"/>
+            <module name="Magento_Ui"/>
         </sequence>
     </module>
 </config>

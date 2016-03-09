@@ -58,6 +58,20 @@ class Cart extends Block
     protected $paypalCheckoutButton = '[data-action=checkout-form-submit]';
 
     /**
+     * Locator value for "Check out with PayPal" button.
+     *
+     * @var string
+     */
+    protected $inContextPaypalCheckoutButton = '#paypal-express-in-context-mini-cart';
+
+    /**
+     * Locator value for "Check out with Braintree PayPal" button.
+     *
+     * @var string
+     */
+    protected $braintreePaypalCheckoutButton = './/button[contains(@id, "braintree-paypal-mini-cart")]';
+
+    /**
      * Locator value for "empty Shopping Cart" block.
      *
      * @var string
@@ -77,6 +91,23 @@ class Cart extends Block
      * @var string
      */
     protected $deleteItemButton = 'a.action.action-delete';
+
+    /**
+     * PayPal load spinner.
+     *
+     * @var string
+     */
+    protected $preloaderSpinner = '#preloaderSpinner';
+
+    /**
+     * Wait for PayPal page is loaded.
+     *
+     * @return void
+     */
+    public function waitForFormLoaded()
+    {
+        $this->waitForElementNotVisible($this->preloaderSpinner);
+    }
 
     /**
      * Get Shopping Cart item.
@@ -119,6 +150,17 @@ class Cart extends Block
     }
 
     /**
+     * Click "Check out with Braintree PayPal" button.
+     *
+     * @return void
+     */
+    public function braintreePaypalCheckout()
+    {
+        $this->_rootElement->find($this->braintreePaypalCheckoutButton, Locator::SELECTOR_XPATH)
+            ->click();
+    }
+
+    /**
      * Click "Check out with PayPal" button.
      *
      * @return void
@@ -126,6 +168,17 @@ class Cart extends Block
     public function paypalCheckout()
     {
         $this->_rootElement->find($this->paypalCheckoutButton)->click();
+    }
+
+    /**
+     * Click "Check out with PayPal" button.
+     */
+    public function inContextPaypalCheckout()
+    {
+        $this->_rootElement->find($this->inContextPaypalCheckoutButton)->click();
+        $this->browser->selectWindow();
+        $this->waitForFormLoaded();
+        $this->browser->closeWindow();
     }
 
     /**
