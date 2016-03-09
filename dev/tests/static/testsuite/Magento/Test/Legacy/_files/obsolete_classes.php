@@ -4134,5 +4134,6 @@ return [
     ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Form'],
     ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Js'],
     ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit\Tabs'],
+    ['Magento\ConfigurableProduct\Model\Product\VariationMediaAttributes'],
     ['Magento\CatalogRule\Block\Adminhtml\Promo\Catalog\Edit']
 ];

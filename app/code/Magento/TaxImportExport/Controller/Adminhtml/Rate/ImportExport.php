@@ -10,6 +10,13 @@ use Magento\Framework\Controller\ResultFactory;
 class ImportExport extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_TaxImportExport::import_export';
+
+    /**
      * Import and export Page
      *
      * @return \Magento\Backend\Model\View\Result\Page
@@ -29,13 +36,5 @@ class ImportExport extends \Magento\TaxImportExport\Controller\Adminhtml\Rate
         $resultPage->getConfig()->getTitle()->prepend(__('Tax Zones and Rates'));
         $resultPage->getConfig()->getTitle()->prepend(__('Import and Export Tax Rates'));
         return $resultPage;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_TaxImportExport::import_export');
     }
 }
