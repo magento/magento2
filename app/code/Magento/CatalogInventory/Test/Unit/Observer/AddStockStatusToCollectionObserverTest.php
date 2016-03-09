@@ -15,11 +15,6 @@ class AddStockStatusToCollectionObserverTest extends \PHPUnit_Framework_TestCase
     protected $observer;
 
     /**
-     * @var \Magento\CatalogInventory\Helper\Stock|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $stockHelper;
-
-    /**
      * @var \Magento\Framework\Event|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $event;
@@ -31,8 +26,6 @@ class AddStockStatusToCollectionObserverTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->stockHelper = $this->getMock('Magento\CatalogInventory\Helper\Stock', [], [], '', false);
-
         $this->event = $this->getMockBuilder('Magento\Framework\Event')
             ->disableOriginalConstructor()
             ->setMethods(['getCollection'])
@@ -48,27 +41,44 @@ class AddStockStatusToCollectionObserverTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($this->event));
 
         $this->observer = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            'Magento\CatalogInventory\Observer\AddStockStatusToCollectionObserver',
-            [
-                'stockHelper' => $this->stockHelper,
-            ]
+            'Magento\CatalogInventory\Observer\AddStockStatusToCollectionObserver'
         );
     }
 
     public function testAddStockStatusToCollection()
     {
+        $resourceMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\AbstractDb')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $resourceMock->expects($this->once())
+            ->method('getTable')
+            ->with('cataloginventory_stock_status')
+            ->willReturnArgument(0);
+
+        $selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $selectMock->expects($this->once())
+            ->method('join')
+            ->with(
+                ['css' => 'cataloginventory_stock_status'],
+                'main_table.entity_id = css.entity_id AND css.website_id = 1 AND stock_id = 1',
+                ['is_salable' => 'css.stock_status']
+            )->willReturnSelf();
+
         $productCollection = $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Collection')
             ->disableOriginalConstructor()
             ->getMock();
+        $productCollection->expects($this->any())
+            ->method('getSelect')
+            ->willReturn($selectMock);
+        $productCollection->expects($this->once())
+            ->method('getResource')
+            ->willReturn($resourceMock);
 
         $this->event->expects($this->once())
             ->method('getCollection')
             ->will($this->returnValue($productCollection));
-
-        $this->stockHelper->expects($this->once())
-            ->method('addStockStatusToProducts')
-            ->with($productCollection)
-            ->will($this->returnSelf());
 
         $this->observer->execute($this->eventObserver);
     }
