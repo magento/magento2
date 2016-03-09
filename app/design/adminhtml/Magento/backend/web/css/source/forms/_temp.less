@@ -7,15 +7,22 @@
 //  Admin section wrapper title @todo ui - find the right place
 //  _____________________________________________
 
+.fieldset-wrapper-title,
 .admin__fieldset-wrapper-title {
     &:extend(.abs-clearfix all);
     border-bottom: 1px solid @color-gray80;
-    font-size: 1.7rem;
-    margin-bottom: 30px;
+    line-height: 1.2;
+    margin-bottom: 0;
     padding: 14px 0 16px;
 
     .title {
-        font-weight: 600;
+        font-size: 2rem;
+        font-weight: 400;
+
+        .admin__fieldset-wrapper-content & {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
 
         &.active {
             ~ .actions {
@@ -27,6 +34,27 @@
     .actions {
         display: block;
         float: right;
+    }
+}
+
+.admin__fieldset-wrapper-content {
+    .admin__fieldset {
+        padding-bottom: 3rem;
+        padding-top: 3rem;
+
+        > .admin__collapsible-block-wrapper {
+            &:first-child {
+                margin-top: -3rem;
+            }
+        }
+
+        > *:first-child {
+            margin-top: 0;
+        }
+
+        > *:last-child {
+            margin-bottom: 0;
+        }
     }
 }
 
