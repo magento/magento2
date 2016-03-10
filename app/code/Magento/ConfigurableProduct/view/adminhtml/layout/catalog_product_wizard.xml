@@ -7,7 +7,7 @@
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
     <container name="root">
-        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix" template="Magento_ConfigurableProduct::catalog/product/edit/super/wizard-ajax.phtml" as="matrix">
+        <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix" template="Magento_ConfigurableProduct::catalog/product/edit/super/wizard-ajax.phtml" as="wizard">
             <arguments>
                 <argument name="config" xsi:type="array">
                     <item name="collapsible" xsi:type="boolean">false</item>
@@ -15,6 +15,7 @@
                     <item name="sortOrder" xsi:type="string">3333</item>
                     <item name="canShow" xsi:type="boolean">true</item>
                     <item name="componentType" xsi:type="string">fieldset</item>
+                    <item name="configurableModal" xsi:type="string">product_form.product_form.configurableModal</item>
                 </argument>
             </arguments>
             <block class="Magento\Ui\Block\Component\StepsWizard" name="variation-steps-wizard">

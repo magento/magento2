@@ -51,6 +51,7 @@ define([
 
             this.changeButtonWizard();
             this.initProductAttributesMap();
+            this.disableConfigurableAttributes(this.productAttributes);
         },
         initObservable: function () {
             this._super().observe(

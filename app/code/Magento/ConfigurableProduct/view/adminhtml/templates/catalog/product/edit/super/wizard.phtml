@@ -39,7 +39,7 @@ $currencySymbol = $block->getCurrencySymbol();
                     },
                     "configurableVariations": {
                         "component": "Magento_ConfigurableProduct/js/variations/variations",
-                        "provider": "product_form.product_form_data_source",
+                        "provider": "<?= /* @noEscape */ $block->getProvider() ?>",
                         "dataScopeVariations": "variations",
                         "dataScopeAttributes": "data.attributes",
                         "dataScopeAttributeCodes": "data.attribute_codes",

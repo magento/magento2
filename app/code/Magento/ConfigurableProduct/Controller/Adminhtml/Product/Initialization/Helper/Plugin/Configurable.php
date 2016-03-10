@@ -38,6 +38,23 @@ class Configurable
     private $optionsFactory;
 
     /**
+     * @var array
+     */
+    private $keysPOST = [
+        'status',
+        'sku',
+        'name',
+        'price',
+        'configurable_attribute',
+        'weight',
+        'media_gallery',
+        'swatch_image',
+        'small_image',
+        'thumbnail',
+        'image'
+    ];
+
+    /**
      * Constructor
      *
      * @param VariationHandler $variationHandler
@@ -128,26 +145,33 @@ class Configurable
     {
         $result = [];
         $configurableMatrix = $this->request->getParam('configurable-matrix', []);
+
         foreach ($configurableMatrix as $item) {
             if ($item['newProduct']) {
-                $result[$item['variationKey']] = [
-                    'status' => isset($item['status']) ? $item['status'] : '',
-                    'sku' => isset($item['sku']) ? $item['sku'] : '',
-                    'name' => isset($item['name']) ? $item['name'] : '',
-                    'price' => isset($item['price']) ? $item['price'] : '',
-                    'configurable_attribute' => isset($item['configurable_attribute'])
-                        ? $item['configurable_attribute'] : '',
-                    'weight' => isset($item['weight']) ? $item['weight'] : '',
-                    'media_gallery' => isset($item['media_gallery']) ? $item['media_gallery'] : '',
-                    'swatch_image' => isset($item['swatch_image']) ? $item['swatch_image'] : '',
-                    'small_image' => isset($item['small_image']) ? $item['small_image'] : '',
-                    'thumbnail' => isset($item['thumbnail']) ? $item['thumbnail'] : '',
-                    'image' => isset($item['image']) ? $item['image'] : '',
-                ];
+                $result[$item['variationKey']] = $this->mapData($item);
 
                 if (isset($item['qty'])) {
                     $result[$item['variationKey']]['quantity_and_stock_status']['qty'] = $item['qty'];
                 }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Map data from POST
+     *
+     * @param array $item
+     * @return array
+     */
+    private function mapData(array $item)
+    {
+        $result = [];
+
+        foreach ($this->keysPOST as $key) {
+            if (isset($item[$key])) {
+                $result[$key] = $item[$key];
             }
         }
 
