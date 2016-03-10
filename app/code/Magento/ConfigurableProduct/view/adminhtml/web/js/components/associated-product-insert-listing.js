@@ -4,8 +4,9 @@
  */
 
 define([
+    'underscore',
     'Magento_Ui/js/form/components/insert-listing'
-], function (insertListing) {
+], function (_, insertListing) {
     'use strict';
 
     return insertListing.extend({
@@ -38,6 +39,11 @@ define([
             }
         },
 
+        /**
+         * Initialize observables.
+         *
+         * @returns {Object} Chainable.
+         */
         initObservable: function () {
             this._super().observe(
                 'changeProductData'
@@ -46,6 +52,11 @@ define([
             return this;
         },
 
+        /**
+         * Get ids of used products.
+         *
+         * @returns {Array}
+         */
         getUsedProductIds: function () {
             return this.source.get(this.dataScopeAssociatedProduct);
         },
@@ -58,6 +69,7 @@ define([
         doRender: function (showMassActionColumn, typeGrid) {
             this.typeGrid = typeGrid;
             this.showMassActionColumn = showMassActionColumn;
+
             if (this.gridInitialized) {
                 this.paramsUpdated = false;
                 this._setFilters(this.externalProviderParams);
@@ -67,18 +79,35 @@ define([
             return this.render();
         },
 
+        /**
+         * Show grid with assigned product.
+         *
+         * @returns {Object}
+         */
         showGridAssignProduct: function () {
             this.product = {};
             this.rowIndexForChange = undefined;
+
             return this.doRender(true, 'assignProduct');
         },
 
+        /**
+         * Show grid with changed product.
+         *
+         * @param {String} rowIndex
+         * @param {String} product
+         */
         showGridChangeProduct: function (rowIndex, product) {
             this.rowIndexForChange = rowIndex;
             this.product = product;
             this.doRender(false, 'changeProduct');
         },
 
+        /**
+         * Select product.
+         *
+         * @param {String} rowIndex
+         */
         selectProduct: function (rowIndex) {
             this.changeProductData({
                 rowIndex: this.rowIndexForChange,
@@ -87,6 +116,11 @@ define([
             this.modalWithGrid().closeModal();
         },
 
+        /**
+         * Set visibility state for mass action column
+         *
+         * @private
+         */
         _setVisibilityMassActionColumn: function () {
             this.productsMassAction(function (massActionComponent) {
                 this.productsColumns().elems().each(function (rowElement) {
@@ -96,14 +130,24 @@ define([
             }.bind(this));
         },
 
+        /**
+         * Set filters.
+         *
+         * @param {Object} params
+         * @private
+         */
         _setFilters: function (params) {
+            var filterModifier = {},
+                attrCodes,
+                usedProductIds,
+                attributes;
+
             if (!this.paramsUpdated) {
                 this.gridInitialized = true;
                 this.paramsUpdated = true;
 
-                var filterModifier = {},
-                    attrCodes = this._getAttributesCodes(),
-                    usedProductIds = this.getUsedProductIds();
+                attrCodes = this._getAttributesCodes(),
+                usedProductIds = this.getUsedProductIds();
 
                 if (this.currentProductId) {
                     usedProductIds.push(this.currentProductId);
@@ -118,8 +162,8 @@ define([
                     };
                 });
 
-                if (this.typeGrid == 'changeProduct') {
-                    var attributes = JSON.parse(this.product.attributes);
+                if (this.typeGrid === 'changeProduct') {
+                    attributes = JSON.parse(this.product.attributes);
 
                     filterModifier = _.extend(filterModifier, _.mapObject(attributes, function (value) {
                         return {
@@ -128,9 +172,8 @@ define([
                         };
                     }));
 
-                    params['filters'] = attributes;
+                    params.filters = attributes;
                 }
-
 
                 params['attributes_codes'] = attrCodes;
 
@@ -139,12 +182,24 @@ define([
             }
         },
 
+        /**
+         * Get attribute codes.
+         *
+         * @returns {Array}
+         * @private
+         */
         _getAttributesCodes: function () {
             var attrCodes = this.source.get('data.attribute_codes');
 
             return attrCodes ? attrCodes : [];
         },
 
+        /**
+         * Get product variations.
+         *
+         * @returns {Array}
+         * @private
+         */
         _getProductVariations: function () {
             var matrix = this.source.get('data.configurable-matrix');
 
@@ -156,7 +211,7 @@ define([
          * @private
          */
         _handleManualGridOpening: function (data) {
-            if (data.items.length && this.typeGrid == 'assignProduct') {
+            if (data.items.length && this.typeGrid === 'assignProduct') {
                 this.productsColumns().elems().each(function (rowElement) {
                     rowElement.disableAction = true;
                 });
@@ -166,14 +221,20 @@ define([
         },
 
         /**
+         * Handle manual selection.
+         *
+         * @param {Array} selected
          * @private
          */
         _handleManualGridSelect: function (selected) {
-            if (this.typeGrid == 'assignProduct') {
-                var selectedRows = _.filter(this.productsProvider().data.items, function (row) {
-                        return selected.indexOf(row['entity_id']) != -1;
-                    }),
-                    selectedVariationKeys = _.values(this._getVariationKeyMap(selectedRows));
+            var selectedRows,
+                selectedVariationKeys;
+
+            if (this.typeGrid === 'assignProduct') {
+                selectedRows = _.filter(this.productsProvider().data.items, function (row) {
+                    return selected.indexOf(row['entity_id']) !== -1;
+                });
+                selectedVariationKeys = _.values(this._getVariationKeyMap(selectedRows));
                 this._disableRows(this.productsProvider().data.items, selectedVariationKeys, selected);
             }
         },
@@ -198,7 +259,7 @@ define([
                     rowsForDisable = _.keys(_.pick(
                         variationKeyMap,
                         function (variationKey) {
-                            return configurableVariationKeys.indexOf(variationKey) != -1;
+                            return configurableVariationKeys.indexOf(variationKey) !== -1;
                         }
                     ));
 
@@ -209,7 +270,7 @@ define([
         /**
          * Get variation key map used in manual grid.
          *
-         * @param items
+         * @param {Array} items
          * @returns {Array} [{entity_id: variation-key}, ...]
          * @private
          */

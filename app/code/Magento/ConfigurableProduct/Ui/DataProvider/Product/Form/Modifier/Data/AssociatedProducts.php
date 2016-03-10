@@ -18,6 +18,9 @@ use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Catalog\Helper\Image as ImageHelper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class AssociatedProducts
 {
     /**
@@ -61,8 +64,8 @@ class AssociatedProducts
     protected $variationMatrix;
 
     /**
-    * @var UrlInterface
-    */
+     * @var UrlInterface
+     */
     protected $urlBuilder;
 
     /**
@@ -174,6 +177,12 @@ class AssociatedProducts
         return $result;
     }
 
+    /**
+     * Prepare variations
+     *
+     * @return void
+     * @throws \Zend_Currency_Exception
+     */
     protected function prepareVariations()
     {
         $variations = $this->getVariations();
@@ -245,6 +254,7 @@ class AssociatedProducts
                         'variationKey' => $this->getVariationKey($variationOptions),
                         'canEdit' => 0,
                         'newProduct' => 0,
+                        'attributes' => $this->getTextAttributes($variationOptions),
                         'thumbnail_image' => $this->imageHelper->init($product, 'product_thumbnail_image')->getUrl(),
                     ];
                     $productIds[] = $product->getId();
@@ -270,6 +280,25 @@ class AssociatedProducts
         }
 
         return $this->jsonHelper->jsonEncode($result);
+    }
+
+    /**
+     * Prepares text list of used attributes
+     *
+     * @param array $options
+     * @return string
+     */
+    protected function getTextAttributes(array $options = [])
+    {
+        $text = '';
+        foreach ($options as $option) {
+            if ($text) {
+                $text .= ', ';
+            }
+            $text .= $option['attribute_label'] . ': ' . $option['label'];
+        }
+
+        return $text;
     }
 
     /**
