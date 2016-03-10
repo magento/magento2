@@ -15,6 +15,7 @@ use Magento\Framework\Stdlib\ArrayManager;
  */
 abstract class AbstractModifier implements ModifierInterface
 {
+    const FORM_NAME = 'product_form';
     const DATA_SOURCE_DEFAULT = 'product';
     const DATA_SCOPE_PRODUCT = 'data.product';
 

@@ -19,7 +19,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\ModifierPool">
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
         <arguments>
             <argument name="modifiers" xsi:type="array">
                 <item name="bundle" xsi:type="array">
@@ -32,7 +32,7 @@
                 </item>
             </argument>
         </arguments>
-    </type>
+    </virtualType>
     <type name="Magento\Bundle\Ui\DataProvider\Product\Form\Modifier\Composite">
         <arguments>
             <argument name="modifiers" xsi:type="array">

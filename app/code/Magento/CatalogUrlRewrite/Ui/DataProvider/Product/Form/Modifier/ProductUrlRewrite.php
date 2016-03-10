@@ -5,11 +5,11 @@
  */
 namespace Magento\CatalogUrlRewrite\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Catalog\Model\AttributeConstantsInterface as AC;
 use Magento\Ui\Component\Form\Element\Checkbox;
 use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Form\Field;
@@ -80,7 +80,12 @@ class ProductUrlRewrite extends AbstractModifier
      */
     protected function addUrlRewriteCheckbox(array $meta)
     {
-        $urlPath = $this->arrayManager->findPath(AC::CODE_SEO_FIELD_URL_KEY, $meta, null, 'children');
+        $urlPath = $this->arrayManager->findPath(
+            ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
+            $meta,
+            null,
+            'children'
+        );
 
         if ($urlPath) {
             $containerPath = $this->arrayManager->slicePath($urlPath, 0, -2);
@@ -111,7 +116,8 @@ class ProductUrlRewrite extends AbstractModifier
                     'true' => $urlKey
                 ],
                 'imports' => [
-                    'handleChanges' => '${ $.provider }:data.product.' . AC::CODE_SEO_FIELD_URL_KEY,
+                    'handleChanges' => '${ $.provider }:data.product.'
+                        . ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
                 ],
                 'description' => __('Create Permanent Redirect for old URL'),
                 'dataScope' => 'url_key_create_redirect',

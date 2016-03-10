@@ -144,18 +144,17 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Product'
         );
-        $product->setData(['test_media1' => 'test1', 'test_media2' => 'test2', 'test_media3' => 'test3']);
-        $product->setMediaAttributes(['test_media1', 'test_media2', 'test_media3']);
+        $product->setData(['image' => 'test1', 'small_image' => 'test2', 'thumbnail' => 'test3']);
 
-        $this->assertNotEmpty($product->getData('test_media1'));
-        $this->_model->clearMediaAttribute($product, 'test_media1');
-        $this->assertNull($product->getData('test_media1'));
+        $this->assertNotEmpty($product->getData('image'));
+        $this->_model->clearMediaAttribute($product, 'image');
+        $this->assertNull($product->getData('image'));
 
-        $this->assertNotEmpty($product->getData('test_media2'));
-        $this->assertNotEmpty($product->getData('test_media3'));
-        $this->_model->clearMediaAttribute($product, ['test_media2', 'test_media3']);
-        $this->assertNull($product->getData('test_media2'));
-        $this->assertNull($product->getData('test_media3'));
+        $this->assertNotEmpty($product->getData('small_image'));
+        $this->assertNotEmpty($product->getData('thumbnail'));
+        $this->_model->clearMediaAttribute($product, ['small_image', 'thumbnail']);
+        $this->assertNull($product->getData('small_image'));
+        $this->assertNull($product->getData('thumbnail'));
     }
 
     public function testSetMediaAttribute()
@@ -164,12 +163,11 @@ class ProcessorTest extends \PHPUnit_Framework_TestCase
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Catalog\Model\Product'
         );
-        $product->setMediaAttributes(['test_media1', 'test_media2', 'test_media3']);
-        $this->_model->setMediaAttribute($product, 'test_media1', 'test1');
-        $this->assertEquals('test1', $product->getData('test_media1'));
+        $this->_model->setMediaAttribute($product, 'image', 'test1');
+        $this->assertEquals('test1', $product->getData('image'));
 
-        $this->_model->setMediaAttribute($product, ['test_media2', 'test_media3'], 'test');
-        $this->assertEquals('test', $product->getData('test_media2'));
-        $this->assertEquals('test', $product->getData('test_media3'));
+        $this->_model->setMediaAttribute($product, ['non-exist-image-attribute', 'small_image'], 'test');
+        $this->assertNull($product->getData('non-exist-image-attribute'));
+        $this->assertEquals('test', $product->getData('small_image'));
     }
 }
