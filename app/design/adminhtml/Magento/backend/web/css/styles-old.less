@@ -1243,12 +1243,18 @@
 
     .fieldset-wrapper .draggable-handle,
     .fieldset .draggable-handle {
-        width: 8px;
+        background: url(../Magento_Backend/images/draggable-handle-vertical.png) no-repeat 0 0;
+        color: #b2b0ad;
+        cursor: ns-resize;
         height: 14px;
         line-height: 14px;
-        background: url(../Magento_Backend/images/draggable-handle-vertical.png) no-repeat 0 0;
-        cursor: ns-resize;
-        color: #b2b0ad;
+        margin: 0;
+        vertical-align: top;
+        width: 8px;
+
+        &:before {
+            display: none;
+        }
     }
 
     .fieldset-wrapper-title > .draggable-handle {
