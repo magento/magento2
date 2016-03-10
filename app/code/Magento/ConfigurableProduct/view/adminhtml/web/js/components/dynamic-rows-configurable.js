@@ -466,7 +466,7 @@ define([
          */
         toggleStatusProduct: function (rowIndex) {
             var tmpArray = this.unionInsertData(),
-                status = tmpArray[rowIndex].status;
+                status = parseInt(tmpArray[rowIndex].status, 10);
 
             if (status === 1) {
                 tmpArray[rowIndex].status = 2;
