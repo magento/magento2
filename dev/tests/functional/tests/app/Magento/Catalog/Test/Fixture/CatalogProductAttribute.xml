@@ -13,7 +13,6 @@
              repository_class="Magento\Catalog\Test\Repository\CatalogProductAttribute"
              handler_interface="Magento\Catalog\Test\Handler\CatalogProductAttribute\CatalogProductAttributeInterface"
              class="Magento\Catalog\Test\Fixture\CatalogProductAttribute">
-        <field name="attribute_id" is_required="1" />
         <field name="entity_type_id" is_required="" />
         <field name="attribute_code" is_required="" group="advanced-properties" />
         <field name="attribute_model" is_required="" />

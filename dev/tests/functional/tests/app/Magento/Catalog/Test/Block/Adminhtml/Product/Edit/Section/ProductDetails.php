@@ -29,6 +29,22 @@ class ProductDetails extends Section
     protected $newCategoryRootElement = '.product_form_product_form_create_category_modal';
 
     /**
+     * Fixture mapping.
+     *
+     * @param array|null $fields
+     * @param string|null $parent
+     * @return array
+     */
+    protected function dataMapping(array $fields = null, $parent = null)
+    {
+        if (isset($fields['custom_attribute'])) {
+            $this->placeholders = ['attribute_code' => $fields['custom_attribute']['value']['code']];
+            $this->applyPlaceholders();
+        }
+        return parent::dataMapping($fields, $parent);
+    }
+
+    /**
      * Fill data to fields on section.
      *
      * @param array $fields

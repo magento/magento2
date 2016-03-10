@@ -17,7 +17,7 @@ use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 use Magento\Mtf\Fixture\InjectableFixture;
 use Magento\Catalog\Test\Fixture\Category;
-use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Attributes\Search;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
  * Product form on backend product page.
@@ -32,11 +32,11 @@ class ProductForm extends FormSections
     protected $attribute = './/*[contains(@class,"label")]/span[text()="%s"]';
 
     /**
-     * Attribute Search locator the Product page.
+     * Attributes Search modal locator.
      *
      * @var string
      */
-    protected $attributeSearch = '#product-attribute-search-container';
+    protected $attributeSearch = '.product_form_product_form_add_attribute_modal';
 
     /**
      * Custom Section locator.
@@ -50,21 +50,7 @@ class ProductForm extends FormSections
      *
      * @var string
      */
-    protected $attributeBlock = '#attribute-%s-container';
-
-    /**
-     * Magento loader.
-     *
-     * @var string
-     */
-    protected $loader = '[data-role="loader"]';
-
-    /**
-     * New attribute form selector.
-     *
-     * @var string
-     */
-    protected $newAttributeForm = '#create_new_attribute';
+    protected $attributeBlock = '[data-index="%s"]';
 
     /**
      * Magento form loader.
@@ -72,6 +58,13 @@ class ProductForm extends FormSections
      * @var string
      */
     protected $spinner = '[data-role="spinner"]';
+
+    /**
+     * New Attribute modal locator.
+     *
+     * @var string
+     */
+    protected $newAttributeModal = '.product_form_product_form_add_attribute_modal_create_new_attribute_modal';
 
     /**
      * Fill the product form.
@@ -117,17 +110,17 @@ class ProductForm extends FormSections
      * Create custom attribute.
      *
      * @param InjectableFixture $product
-     * @param string $tabName
+     * @param string $sectionName
      * @return void
      */
-    protected function createCustomAttribute(InjectableFixture $product, $tabName = 'product-details')
+    protected function createCustomAttribute(InjectableFixture $product, $sectionName = 'product-details')
     {
         $attribute = $product->getDataFieldConfig('custom_attribute')['source']->getAttribute();
         $this->openSection('product-details');
         if (!$this->checkAttributeLabel($attribute)) {
             /** @var \Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails $section */
-            $section = $this->openSection($tabName);
-            $section->addNewAttribute($tabName);
+            $section = $this->openSection($sectionName);
+            $section->addNewAttribute($sectionName);
             $this->getAttributeForm()->fill($attribute);
         }
     }
@@ -176,28 +169,27 @@ class ProductForm extends FormSections
     }
 
     /**
-     * Call method that checking present attribute in search result.
+     * Check if attribute exists in product attributes grid.
      *
-     * @param CatalogProductAttribute $productAttribute
+     * @param array $filter
      * @return bool
      */
-    public function checkAttributeInSearchAttributeForm(CatalogProductAttribute $productAttribute)
+    public function checkIfAttributeExistsInGrid(array $filter)
     {
         $this->waitPageToLoad();
-        return $this->getAttributesSearchForm()->isExistAttributeInSearchResult($productAttribute);
+        return $this->getAttributesSearchGrid()->isRowVisible($filter);
     }
 
     /**
-     * Get attributes search form.
+     * Get attributes search grid.
      *
-     * @return Search
+     * @return DataGrid
      */
-    protected function getAttributesSearchForm()
+    protected function getAttributesSearchGrid()
     {
-        return $this->_rootElement->find(
-            $this->attributeSearch,
-            Locator::SELECTOR_CSS,
-            'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Attributes\Search'
+        return $this->blockFactory->create(
+            '\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Attributes\Grid',
+            ['element' => $this->browser->find($this->attributeSearch)]
         );
     }
 
@@ -210,7 +202,7 @@ class ProductForm extends FormSections
     public function isCustomSectionVisible($sectionName)
     {
         $sectionName = strtolower($sectionName);
-        $selector = sprintf($this->customSection, $sectionName);
+        $selector = sprintf($this->attributeBlock, $sectionName);
         $this->waitForElementVisible($selector);
 
         return $this->_rootElement->find($selector)->isVisible();
@@ -229,31 +221,6 @@ class ProductForm extends FormSections
     }
 
     /**
-     * Click "Save" button on attribute form.
-     *
-     * @return void
-     */
-    public function saveAttributeForm()
-    {
-        $this->getAttributeForm()->saveAttributeForm();
-
-        $browser = $this->browser;
-        $element = $this->newAttributeForm;
-        $loader = $this->loader;
-        $this->_rootElement->waitUntil(
-            function () use ($browser, $element) {
-                return $browser->find($element)->isVisible() == false ? true : null;
-            }
-        );
-
-        $this->_rootElement->waitUntil(
-            function () use ($browser, $loader) {
-                return $browser->find($loader)->isVisible() == false ? true : null;
-            }
-        );
-    }
-
-    /**
      * Get Attribute Form.
      *
      * @return AttributeForm
@@ -262,7 +229,7 @@ class ProductForm extends FormSections
     {
         return $this->blockFactory->create(
             'Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm',
-            ['element' => $this->browser->find('body')]
+            ['element' => $this->browser->find($this->newAttributeModal)]
         );
     }
 
@@ -279,24 +246,5 @@ class ProductForm extends FormSections
             Locator::SELECTOR_CSS,
             'Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\CustomAttribute'
         );
-    }
-
-    /**
-     * Click "Add Attribute" button from specific section.
-     *
-     * @param string $sectionName
-     * @throws \Exception
-     */
-    public function addNewAttribute($sectionName = 'product-details')
-    {
-        $section = $this->getSection($sectionName);
-        if ($section instanceof Attributes) {
-            $this->openSection($sectionName);
-            $section->addNewAttribute($sectionName);
-        } else {
-            throw new \Exception(
-                "$sectionName hasn't 'Add attribute' button or is not instance of ProductSection class."
-            );
-        }
     }
 }

@@ -8,6 +8,7 @@ namespace Magento\Catalog\Test\TestStep;
 
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 use Magento\Mtf\TestStep\TestStepInterface;
+use Magento\Mtf\Client\BrowserInterface;
 
 /**
  * Add custom attribute to product from product page.
@@ -22,21 +23,35 @@ class AddNewAttributeFromProductPageStep implements TestStepInterface
     protected $catalogProductEdit;
 
     /**
-     * Tab name for adding attribute.
+     * Browser instance.
+     *
+     * @var BrowserInterface
+     */
+    protected $browser;
+
+    /**
+     * Add Attribute modal.
      *
      * @var string
      */
-    protected $tabName;
+    protected $addAttributeModal = '.product_form_product_form_add_attribute_modal';
+
+    /**
+     * "Create New Attribute" button.
+     *
+     * @var string
+     */
+    protected $createNewAttribute = 'button[data-index="add_new_attribute_button"]';
 
     /**
      * @constructor
      * @param CatalogProductEdit $catalogProductEdit
-     * @param string $tabName
+     * @param BrowserInterface $browser
      */
-    public function __construct(CatalogProductEdit $catalogProductEdit, $tabName)
+    public function __construct(CatalogProductEdit $catalogProductEdit, BrowserInterface $browser)
     {
         $this->catalogProductEdit = $catalogProductEdit;
-        $this->tabName = $tabName;
+        $this->browser = $browser;
     }
 
     /**
@@ -46,7 +61,8 @@ class AddNewAttributeFromProductPageStep implements TestStepInterface
      */
     public function run()
     {
-        $productForm = $this->catalogProductEdit->getProductForm();
-        $productForm->addNewAttribute($this->tabName);
+        $productForm = $this->catalogProductEdit->getFormPageActions();
+        $productForm->addNewAttribute();
+        $this->browser->find($this->addAttributeModal)->find($this->createNewAttribute)->click();
     }
 }

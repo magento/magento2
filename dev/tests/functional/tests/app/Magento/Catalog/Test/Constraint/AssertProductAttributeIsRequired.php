@@ -39,10 +39,11 @@ class AssertProductAttributeIsRequired extends AbstractConstraint
     ) {
         $catalogProductIndex->open()->getProductGrid()->searchAndOpen(['sku' => $product->getSku()]);
         $productForm = $catalogProductEdit->getProductForm();
+        $productForm->openSection('attributes');
         $productForm->getAttributeElement($attribute)->setValue('');
         $catalogProductEdit->getFormPageActions()->save();
-        $failedAttributes = $productForm->getRequireNoticeAttributes($product);
-        $actualMessage = $failedAttributes['product-details'][$attribute->getFrontendLabel()];
+        $failedAttributes = $productForm->getRequireNoticeAttributes();
+        $actualMessage = $failedAttributes['attributes'][$attribute->getFrontendLabel()];
 
         \PHPUnit_Framework_Assert::assertEquals(
             self::REQUIRE_MESSAGE,
