@@ -958,9 +958,15 @@
     opacity: 0;
     right: 0;
     top: 0;
-    width: @fotorama_close_button;
-    transition: opacity 0.3s ease-in-out;
     transform: translate3d((@fotorama_close_button), (-@fotorama_close_button), 0);
+    transition: opacity 0.3s ease-in-out;
+    width: @fotorama_close_button;
+    @media all and (max-width: 768px) {
+        background-position: -100px -20px;
+        top: 10px;
+        height: 40px;
+        width: 40px;
+    }
     &.fotorama-show-control {
         opacity: 1;
         transform: translate3d(0, -10px, 0);
