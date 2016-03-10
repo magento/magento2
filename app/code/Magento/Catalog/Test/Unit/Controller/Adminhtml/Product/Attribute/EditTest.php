@@ -199,7 +199,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         $this->blockTemplate->expects($this->any())->method('setIsPopup')->willReturnSelf();
 
-        $this->assertSame($this->resultPage, $this->editController->executeInternal());
+        $this->assertSame($this->resultPage, $this->editController->execute());
     }
 
     public function testExecuteNoPopup()
@@ -250,6 +250,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
         $this->blockTemplate->expects($this->any())->method('setIsPopup')->willReturnSelf();
 
-        $this->assertSame($this->resultPage, $this->editController->executeInternal());
+        $this->assertSame($this->resultPage, $this->editController->execute());
     }
 }

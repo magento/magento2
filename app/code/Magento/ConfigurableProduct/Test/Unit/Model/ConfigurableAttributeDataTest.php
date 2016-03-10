@@ -39,8 +39,8 @@ class ConfigurableAttributeDataTest extends \PHPUnit_Framework_TestCase
                 'setParentId',
                 'hasPreconfiguredValues',
                 'getPreconfiguredValues',
-                '__wakeup',
-                'getPriceInfo'
+                'getPriceInfo',
+                'getStoreId'
             ],
             [],
             '',
@@ -61,6 +61,7 @@ class ConfigurableAttributeDataTest extends \PHPUnit_Framework_TestCase
      */
     public function testPrepareJsonAttributes()
     {
+        $storeId = '1';
         $attributeId = 5;
         $attributeOptions = [
             ['value_index' => 'option_id_1', 'label' => 'label_1'],
@@ -96,7 +97,7 @@ class ConfigurableAttributeDataTest extends \PHPUnit_Framework_TestCase
 
         $productAttributeMock = $this->getMockBuilder('Magento\Catalog\Model\Entity\Attribute')
             ->disableOriginalConstructor()
-            ->setMethods(['getLabel', '__wakeup', 'getAttributeCode', 'getId', 'getAttributeLabel'])
+            ->setMethods(['getStoreLabel', '__wakeup', 'getAttributeCode', 'getId', 'getAttributeLabel'])
             ->getMock();
         $productAttributeMock->expects($this->once())
             ->method('getId')
@@ -112,8 +113,10 @@ class ConfigurableAttributeDataTest extends \PHPUnit_Framework_TestCase
         $attributeMock->expects($this->once())
             ->method('getProductAttribute')
             ->willReturn($productAttributeMock);
-        $attributeMock->expects($this->once())
-            ->method('getLabel')
+        $this->product->expects($this->once())->method('getStoreId')->willReturn($storeId);
+        $productAttributeMock->expects($this->once())
+            ->method('getStoreLabel')
+            ->with($storeId)
             ->willReturn($expected['attributes'][$attributeId]['label']);
 
         $attributeMock->expects($this->atLeastOnce())

@@ -65,6 +65,6 @@ class ExportSoldCsvTest extends \Magento\Reports\Test\Unit\Controller\Adminhtml\
             ->method('create')
             ->with('products_ordered.csv', $content, \Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
 
-        $this->exportSoldCsv->executeInternal();
+        $this->exportSoldCsv->execute();
     }
 }

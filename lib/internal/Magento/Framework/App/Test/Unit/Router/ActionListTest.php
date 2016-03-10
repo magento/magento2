@@ -145,14 +145,6 @@ class ActionListTest extends \PHPUnit_Framework_TestCase
             [
                 'Magento_Module',
                 'Area',
-                'Namespace_A',
-                'Index_edit',
-                ['magento\module\controller\area\namespace\a\index_edit' => $mockClassName],
-                $actionClass
-            ],
-            [
-                'Magento_Module',
-                'Area',
                 'Namespace',
                 'Index',
                 ['magento\module\controller\area\namespace\index' => 'Not_Exist_Class'],

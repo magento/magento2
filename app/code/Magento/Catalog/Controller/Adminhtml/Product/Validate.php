@@ -72,7 +72,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function executeInternal()
+    public function execute()
     {
         $response = new \Magento\Framework\DataObject();
         $response->setError(false);
@@ -126,10 +126,10 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
         } catch (\Magento\Eav\Model\Entity\Attribute\Exception $e) {
             $response->setError(true);
             $response->setAttribute($e->getAttributeCode());
-            $response->setMessage($e->getMessage());
+            $response->setMessages([$e->getMessage()]);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $response->setError(true);
-            $response->setMessage($e->getMessage());
+            $response->setMessages([$e->getMessage()]);
         } catch (\Exception $e) {
             $this->messageManager->addError($e->getMessage());
             $layout = $this->layoutFactory->create();
@@ -138,6 +138,6 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
             $response->setHtmlMessage($layout->getMessagesBlock()->getGroupedHtml());
         }
 
-        return $this->resultJsonFactory->create()->setJsonData($response->toJson());
+        return $this->resultJsonFactory->create()->setData($response);
     }
 }

@@ -22,6 +22,7 @@
         <step name="addNewAttribute" module="Magento_Catalog" next="fillAttributeForm"/>
         <step name="fillAttributeForm" module="Magento_Catalog" next="saveAttribute"/>
         <step name="saveAttribute" module="Magento_Catalog" next="addAttributeToAttributeSet"/>
-        <step name="addAttributeToAttributeSet" module="Magento_Catalog"/>
+        <step name="addAttributeToAttributeSet" module="Magento_Catalog" next="createProductWithAttributeSet"/>
+        <step name="createProductWithAttributeSet" module="Magento_Catalog"/>
     </scenario>
 </config>

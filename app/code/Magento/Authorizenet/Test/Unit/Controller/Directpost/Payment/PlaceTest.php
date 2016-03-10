@@ -205,7 +205,7 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
             ->method('jsonEncode')
             ->with($result);
 
-        $this->placeOrderController->executeInternal();
+        $this->placeOrderController->execute();
     }
 
     /**
@@ -243,7 +243,7 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
             ->method('jsonEncode')
             ->with($result);
 
-        $this->placeOrderController->executeInternal();
+        $this->placeOrderController->execute();
     }
 
     /**

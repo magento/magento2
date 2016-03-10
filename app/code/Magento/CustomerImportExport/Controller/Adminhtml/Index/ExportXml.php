@@ -37,7 +37,7 @@ class ExportXml extends \Magento\Backend\App\Action
      *
      * @return \Magento\Framework\App\ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_view->loadLayout();
         $fileName = 'customers.xml';

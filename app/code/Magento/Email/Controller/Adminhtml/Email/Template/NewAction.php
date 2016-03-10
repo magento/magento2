@@ -13,7 +13,7 @@ class NewAction extends \Magento\Email\Controller\Adminhtml\Email\Template
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_forward('edit');
     }

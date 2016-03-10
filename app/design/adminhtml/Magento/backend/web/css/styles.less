@@ -13,7 +13,6 @@
 
 @import 'source/lib/_lib.less'; // Global lib
 @import (reference) 'source/_extends.less';
-@import 'source/_theme.less'; // Theme variables overrides
 @import 'source/_sources.less'; // Theme
 
 //
@@ -31,6 +30,7 @@
     .page-wrapper {
         margin-left: 0;
     }
+
     .menu-wrapper,
     .page-header-hgroup,
     .page-header-actions {
@@ -50,9 +50,16 @@
 
 //  ToDo UI: Temporary. Should be changed
 @import 'source/components/_calendar-temp.less';
+@import 'source/components/_rules-temp.less';
 
 //
 //  Media queries collector
 //  ---------------------------------------------
 
 @import 'source/_responsive.less';
+
+//
+//  Theme variables overrides
+//  ---------------------------------------------
+
+@import 'source/_theme.less';

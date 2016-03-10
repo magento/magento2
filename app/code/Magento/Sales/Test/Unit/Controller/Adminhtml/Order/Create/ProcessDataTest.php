@@ -233,7 +233,7 @@ class ProcessDataTest extends \PHPUnit_Framework_TestCase
             ->method('forward')
             ->with('index')
             ->willReturnSelf();
-        $this->assertInstanceOf('Magento\Backend\Model\View\Result\Forward', $this->processData->executeInternal());
+        $this->assertInstanceOf('Magento\Backend\Model\View\Result\Forward', $this->processData->execute());
     }
 
     public function isApplyDiscountDataProvider()

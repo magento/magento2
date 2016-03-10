@@ -14,7 +14,7 @@ class UploadJs extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function executeInternal()
+    public function execute()
     {
         $themeId = $this->getRequest()->getParam('id');
         /** @var $serviceModel \Magento\Theme\Model\Uploader\Service */

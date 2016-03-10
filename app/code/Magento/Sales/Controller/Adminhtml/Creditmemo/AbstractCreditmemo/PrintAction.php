@@ -12,6 +12,13 @@ use Magento\Sales\Api\CreditmemoRepositoryInterface;
 class PrintAction extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
+
+    /**
      * @var \Magento\Framework\App\Response\Http\FileFactory
      */
     protected $_fileFactory;
@@ -45,17 +52,9 @@ class PrintAction extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_creditmemo');
-    }
-
-    /**
      * @return ResponseInterface|\Magento\Backend\Model\View\Result\Forward
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @see \Magento\Sales\Controller\Adminhtml\Order\Invoice */
         $creditmemoId = $this->getRequest()->getParam('creditmemo_id');

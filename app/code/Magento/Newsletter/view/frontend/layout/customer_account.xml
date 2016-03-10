@@ -11,7 +11,7 @@
             <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-newsletter-subscriptions-link">
                 <arguments>
                     <argument name="path" xsi:type="string">newsletter/manage</argument>
-                    <argument name="label" xsi:type="string">Newsletter Subscriptions</argument>
+                    <argument name="label" xsi:type="string" translate="true">Newsletter Subscriptions</argument>
                 </arguments>
             </block>
         </referenceBlock>

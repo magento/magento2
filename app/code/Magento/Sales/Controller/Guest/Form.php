@@ -30,7 +30,7 @@ class Form extends \Magento\Framework\App\Action\Action
      *
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->_objectManager->get('Magento\Customer\Model\Session')->isLoggedIn()) {
             return $this->resultRedirectFactory->create()->setPath('customer/account/');

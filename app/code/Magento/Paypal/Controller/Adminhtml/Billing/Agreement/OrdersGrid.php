@@ -13,7 +13,7 @@ class OrdersGrid extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_initBillingAgreement();
         $this->_view->loadLayout(false);

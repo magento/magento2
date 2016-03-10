@@ -9,7 +9,7 @@ namespace Magento\Setup\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\View\Model\ViewModel;
-use Magento\Setup\Model\ConnectManager;
+use Magento\Setup\Model\MarketplaceManager;
 
 /**
  * Controller for extensions grid tasks
@@ -17,16 +17,16 @@ use Magento\Setup\Model\ConnectManager;
 class InstallExtensionGrid extends AbstractActionController
 {
     /**
-     * @var ConnectManager
+     * @var MarketplaceManager
      */
-    private $connectManager;
+    private $marketplaceManager;
 
     /**
-     * @param ConnectManager $connectManager
+     * @param MarketplaceManager $marketplaceManager
      */
-    public function __construct(ConnectManager $connectManager)
+    public function __construct(MarketplaceManager $marketplaceManager)
     {
-        $this->connectManager = $connectManager;
+        $this->marketplaceManager = $marketplaceManager;
     }
 
     /**
@@ -48,7 +48,7 @@ class InstallExtensionGrid extends AbstractActionController
      */
     public function extensionsAction()
     {
-        $extensions = $this->getConnectManager()->getPackagesForInstall();
+        $extensions = $this->getMarketplaceManager()->getPackagesForInstall();
         $packages = isset($extensions['packages']) ? $extensions['packages'] : [];
         return new JsonModel(
             [
@@ -60,11 +60,11 @@ class InstallExtensionGrid extends AbstractActionController
     }
 
     /**
-     * @return ConnectManager
+     * @return MarketplaceManager
      */
 
-    public function getConnectManager()
+    public function getMarketplaceManager()
     {
-        return $this->connectManager;
+        return $this->marketplaceManager;
     }
 }

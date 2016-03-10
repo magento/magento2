@@ -174,7 +174,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->method('getQuote')
             ->willReturn($this->quote);
 
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 
     public function testExecuteWithGoodCouponAndItems()
@@ -232,7 +232,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturnSelf();
 
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 
     public function testExecuteWithGoodCouponAndNoItems()
@@ -286,7 +286,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturnSelf();
 
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 
     public function testExecuteWithBadCouponAndItems()
@@ -337,7 +337,7 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->with('You canceled the coupon code.')
             ->willReturnSelf();
 
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 
     public function testExecuteWithBadCouponAndNoItems()
@@ -382,6 +382,6 @@ class CouponPostTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->willReturnSelf();
 
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 }

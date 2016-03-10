@@ -32,7 +32,7 @@ class Product
         CatalogProduct $product,
         array $identities
     ) {
-        foreach ($this->type->getParentIdsByChild($product->getId()) as $parentId) {
+        foreach ($this->type->getParentIdsByChild($product->getEntityId()) as $parentId) {
             $identities[] = CatalogProduct::CACHE_TAG . '_' . $parentId;
         }
         return $identities;

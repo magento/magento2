@@ -13,7 +13,7 @@ class Update extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Composi
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $updateResult = new \Magento\Framework\DataObject();
         try {

@@ -19,5 +19,15 @@
                 <aspect name="to_order" />
             </field>
         </fieldset>
+        <fieldset id="sales_convert_order">
+            <field name="shipping_discount_amount">
+                <aspect name="to_cm" />
+                <aspect name="to_quote_address_shipping" />
+            </field>
+            <field name="base_shipping_discount_amount">
+                <aspect name="to_cm" />
+                <aspect name="to_quote_address_shipping" />
+            </field>
+        </fieldset>
     </scope>
 </config>

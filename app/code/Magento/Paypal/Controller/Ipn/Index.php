@@ -45,7 +45,7 @@ class Index extends \Magento\Framework\App\Action\Action
      * @return void
      * @SuppressWarnings(PHPMD.ExitExpression)
      */
-    public function executeInternal()
+    public function execute()
     {
         if (!$this->getRequest()->isPost()) {
             return;

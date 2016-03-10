@@ -31,8 +31,6 @@ $attribute->setAttributeCode(
 $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
 $product->setTypeId(
     'simple'
-)->setId(
-    101
 )->setAttributeSetId(
     $attributeSetId
 )->setStoreId(
@@ -40,9 +38,9 @@ $product->setTypeId(
 )->setWebsiteIds(
     [1]
 )->setName(
-    'Simple Product'
+    'Simple Product FPT'
 )->setSku(
-    'simple'
+    'simple-with-ftp'
 )->setPrice(
     100
 )->setFptForAll(

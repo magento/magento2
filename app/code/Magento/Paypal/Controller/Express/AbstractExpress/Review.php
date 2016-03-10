@@ -15,7 +15,7 @@ class Review extends \Magento\Paypal\Controller\Express\AbstractExpress
      *
      * @return void|\Magento\Framework\Controller\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $this->_initCheckout();

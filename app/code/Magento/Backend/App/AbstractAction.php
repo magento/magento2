@@ -102,7 +102,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed(self::ADMIN_RESOURCE);
+        return $this->_authorization->isAllowed(static::ADMIN_RESOURCE);
     }
 
     /**
@@ -200,10 +200,10 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ResponseInterface
      */
-    public function execute(\Magento\Framework\App\RequestInterface $request)
+    public function dispatch(\Magento\Framework\App\RequestInterface $request)
     {
         if (!$this->_processUrlKeys()) {
-            return parent::execute($request);
+            return parent::dispatch($request);
         }
 
         if ($request->isDispatched() && $request->getActionName() !== 'denied' && !$this->_isAllowed()) {
@@ -223,7 +223,7 @@ abstract class AbstractAction extends \Magento\Framework\App\Action\Action
 
         $this->_processLocaleSettings();
 
-        return parent::execute($request);
+        return parent::dispatch($request);
     }
 
     /**

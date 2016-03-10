@@ -11,7 +11,7 @@ class Save extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreement
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $postData = $this->getRequest()->getPostValue();
         if ($postData) {

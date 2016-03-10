@@ -197,7 +197,6 @@ class BackupRollback
      */
     public function dbBackup($time)
     {
-        $this->setAreaCode();
         /** @var \Magento\Framework\Backup\Db $dbBackup */
         $dbBackup = $this->objectManager->create('Magento\Framework\Backup\Db');
         $dbBackup->setRootDir($this->directoryList->getRoot());
@@ -205,14 +204,11 @@ class BackupRollback
             $this->file->createDirectory($this->backupsDir, DriverInterface::WRITEABLE_DIRECTORY_MODE);
         }
         $dbBackup->setBackupsDir($this->backupsDir);
-        $dbBackup->setBackupExtension('gz');
+        $dbBackup->setBackupExtension('sql');
         $dbBackup->setTime($time);
         $this->log->log('DB backup is starting...');
         $dbBackup->create();
-        $this->log->log(
-            'DB backup filename: ' . $dbBackup->getBackupFilename()
-            . ' (The archive can be uncompressed with 7-Zip on Windows systems)'
-        );
+        $this->log->log('DB backup filename: ' . $dbBackup->getBackupFilename());
         $this->log->log('DB backup path: ' . $dbBackup->getBackupPath());
         $this->log->logSuccess('DB backup completed successfully.');
         return $dbBackup->getBackupPath();
@@ -227,18 +223,17 @@ class BackupRollback
      */
     public function dbRollback($rollbackFile)
     {
-        if (preg_match('/[0-9]_(db)(.*?).(gz)$/', $rollbackFile) !== 1) {
+        if (preg_match('/[0-9]_(db)(.*?).(sql)$/', $rollbackFile) !== 1) {
             throw new LocalizedException(new Phrase('Invalid rollback file.'));
         }
         if (!$this->file->isExists($this->backupsDir . '/' . $rollbackFile)) {
             throw new LocalizedException(new Phrase('The rollback file does not exist.'));
         }
-        $this->setAreaCode();
         /** @var \Magento\Framework\Backup\Db $dbRollback */
         $dbRollback = $this->objectManager->create('Magento\Framework\Backup\Db');
         $dbRollback->setRootDir($this->directoryList->getRoot());
         $dbRollback->setBackupsDir($this->backupsDir);
-        $dbRollback->setBackupExtension('gz');
+        $dbRollback->setBackupExtension('sql');
         $time = explode('_', $rollbackFile);
         if (count($time) === 3) {
             $thirdPart = explode('.', $time[2]);
@@ -251,22 +246,6 @@ class BackupRollback
         $this->log->log('DB rollback filename: ' . $dbRollback->getBackupFilename());
         $this->log->log('DB rollback path: ' . $dbRollback->getBackupPath());
         $this->log->logSuccess('DB rollback completed successfully.');
-    }
-
-    /**
-     * Sets area code to start a session for database backup and rollback
-     *
-     * @return void
-     */
-    private function setAreaCode()
-    {
-        $areaCode = 'adminhtml';
-        /** @var \Magento\Framework\App\State $appState */
-        $appState = $this->objectManager->get('Magento\Framework\App\State');
-        $appState->setAreaCode($areaCode);
-        /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
-        $configLoader = $this->objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
-        $this->objectManager->configure($configLoader->load($areaCode));
     }
 
     /**

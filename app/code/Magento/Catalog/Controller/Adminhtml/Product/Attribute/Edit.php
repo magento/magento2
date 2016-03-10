@@ -12,7 +12,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function executeInternal()
+    public function execute()
     {
         $id = $this->getRequest()->getParam('attribute_id');
         /** @var $model \Magento\Catalog\Model\ResourceModel\Eav\Attribute */

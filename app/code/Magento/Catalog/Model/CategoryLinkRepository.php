@@ -80,6 +80,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
         if (!isset($productPositions[$productID])) {
             throw new InputException(__('Category does not contain specified product'));
         }
+        $backupPosition = $productPositions[$productID];
         unset($productPositions[$productID]);
 
         $category->setPostedProducts($productPositions);
@@ -88,9 +89,12 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
         } catch (\Exception $e) {
             throw new CouldNotSaveException(
                 __(
-                    'Could not save product "%1" with position %position to category %2',
-                    $product->getId(),
-                    $category->getId()
+                    'Could not save product "%product" with position %position to category %category',
+                    [
+                        "product" => $product->getId(),
+                        "position" => $backupPosition,
+                        "category" => $category->getId()
+                    ]
                 ),
                 $e
             );

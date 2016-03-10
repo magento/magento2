@@ -8,10 +8,18 @@ namespace Magento\AdminNotification\Controller\Adminhtml\Notification;
 
 class Remove extends \Magento\AdminNotification\Controller\Adminhtml\Notification
 {
+
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_AdminNotification::adminnotification_remove';
+
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($id = $this->getRequest()->getParam('id')) {
             $model = $this->_objectManager->create('Magento\AdminNotification\Model\Inbox')->load($id);
@@ -34,13 +42,5 @@ class Remove extends \Magento\AdminNotification\Controller\Adminhtml\Notificatio
             return;
         }
         $this->_redirect('adminhtml/*/');
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_AdminNotification::adminnotification_remove');
     }
 }

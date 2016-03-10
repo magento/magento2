@@ -15,7 +15,7 @@ class ReturnWizard extends \Magento\Paypal\Controller\Billing\Agreement
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var \Magento\Paypal\Model\Billing\Agreement $agreement */
         $agreement = $this->_objectManager->create('Magento\Paypal\Model\Billing\Agreement');

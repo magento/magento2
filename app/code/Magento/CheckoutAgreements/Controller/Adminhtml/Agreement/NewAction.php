@@ -12,7 +12,7 @@ class NewAction extends \Magento\CheckoutAgreements\Controller\Adminhtml\Agreeme
      * @return void
      * @codeCoverageIgnore
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_forward('edit');
     }

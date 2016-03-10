@@ -14,6 +14,7 @@
         div.grid {
             padding: 0;
         }
+
         div.grid-actions {
             padding: 10px 0;
             float: right;
@@ -28,9 +29,11 @@
         &:extend(.abs-clearfix all);
         list-style: none;
         overflow: hidden;
+
         li {
             background-color: #f0f0f0;
             float: left;
+
             > a {
                 border: 1px solid #cccccc;
                 padding: 7px 10px;
@@ -39,9 +42,11 @@
                 color: #7d7d7d;
             }
         }
+
         li:last-child > a {
             border-left: 0;
         }
+
         li.ui-tabs-active {
             background-color: #dedede;
         }
@@ -49,6 +54,7 @@
 
     #catalog_category_merchandiser_list {
         overflow: hidden;
+
         > li {
             list-style: none;
             width: 190px;
@@ -59,38 +65,47 @@
             padding: 10px;
             background-color: #fff;
         }
+
         .image-holder {
             text-align: center;
+
             img {
                 max-height: 130px;
             }
         }
+
         .controlbar-top {
             overflow: hidden;
+
             a {
                 text-decoration: none;
                 color: #7d7d7d;
                 float: left;
                 display: inline-block;
             }
+
             a:last-child {
                 float: right;
             }
         }
+
         .info-block {
             height: 100px;
         }
+
         .controlbar-bottom {
             .position {
                 border-top: 1px solid #7d7d7d;
                 margin-top: 6px;
                 padding-top: 4px;
+
                 input {
                     width: 50px;
                     height: 25px;
                     float: left;
                     margin-right: 5px;
                 }
+
                 a {
                     text-decoration: none;
                     color: #7d7d7d;
@@ -101,6 +116,7 @@
                 }
             }
         }
+
         .selected {
             background-color: #f5d6c7;
         }
@@ -115,20 +131,24 @@
             width: 10px;
             margin: 0 auto 0 auto;
         }
+
         td.col-position {
             > * {
                 float: left;
                 margin-right: 5px;
             }
+
             .position input {
                 width: 40px;
                 text-align: center;
             }
+
             a {
                 text-decoration: none;
                 color: #7d7d7d;
             }
         }
+
         .selected td {
             background-color: #f5d6c7;
         }
@@ -145,6 +165,7 @@
         font-size: 17px;
         speak: none;
     }
+
     .mode-grid > span,
     .mode-tile > span,
     .icon-backward > span,
@@ -222,6 +243,7 @@
             float: right;
         }
     }
+
     .data-grid-search-control-wrap {
         .massassign_textarea, .massassign_buttons, .massassign_messages {
             display: block;
@@ -249,12 +271,15 @@
 .manage-rules-panel {
     box-sizing: border-box;
     margin: @indent__base 0 0;
+
     .message {
         margin: 0 0 @indent__base;
     }
+
     .admin__data-grid-wrap {
         padding-bottom: 0;
     }
+
     .smart-category-table {
         .action-delete {
             .action-icon();
@@ -262,11 +287,13 @@
                 &:extend(.abs-icon all);
                 content: @icon-delete__content;
             }
+
             > span {
                 display: none;
             }
         }
     }
+
     .hidden {
         + .action-secondary {
             margin-top: @indent__base;
@@ -281,6 +308,7 @@
 .regular-category-settings {
     &:extend(.abs-clearfix all);
     margin: 0 0 @indent__base;
+
     .actions {
         float: right;
     }
@@ -289,6 +317,7 @@
 .merchandiser-toolbar {
     float: left;
     width: 80%;
+
     .admin__field {
         display: inline-block;
         margin-right: @indent__s;
@@ -301,6 +330,7 @@
         > .admin__field-label {
             margin-right: @indent__xs;
             text-align: left;
+
             span {
                 white-space: nowrap;
             }
@@ -316,17 +346,9 @@
 .smart-category-switcher {
     &:extend(.abs-clearfix all);
     margin: 0 0 @indent__base;
-    .actions-switch {
-        display: inline-block;
+
+    .admin__actions-switch {
         margin-left: @indent__xs;
-        vertical-align: top;
-        .actions-switch-label {
-            width: 35px;
-        }
-        .actions-switch-checkbox {
-            position: absolute;
-            z-index: -1;
-        }
     }
 }
 
@@ -339,6 +361,7 @@
     &:extend(.abs-clearfix all);
     border-top: 1px solid @color-gray80;
     padding: @indent__base 0 0;
+
     .merchandiser-tab {
         border-top: 0 !important;
         clear: both;

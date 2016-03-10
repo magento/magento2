@@ -80,7 +80,7 @@ class MassDeleteTest extends AbstractMassActionTest
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->massDeleteController->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->massDeleteController->execute());
     }
 
     /**

@@ -27,7 +27,7 @@ class RefreshStatistics extends \Magento\Reports\Controller\Adminhtml\Report\Sta
     /**
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $collectionsNames = array_values($this->reportTypes);

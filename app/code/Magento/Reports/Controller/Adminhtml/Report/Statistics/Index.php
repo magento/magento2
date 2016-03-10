@@ -13,7 +13,7 @@ class Index extends \Magento\Reports\Controller\Adminhtml\Report\Statistics
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_initAction()->_setActiveMenu(
             'Magento_Reports::report_statistics_refresh'

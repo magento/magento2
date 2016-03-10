@@ -107,7 +107,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
     {
         /** @var \Magento\Customer\Controller\Adminhtml\Index\Viewfile $controller */
         $controller = $this->objectManager->getObject('Magento\Customer\Controller\Adminhtml\Index\Viewfile');
-        $controller->executeInternal();
+        $controller->execute();
     }
 
     public function testExecuteParamFile()
@@ -154,7 +154,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
                 'fileFactory' => $fileFactoryMock
             ]
         );
-        $controller->executeInternal();
+        $controller->execute();
     }
 
     public function testExecuteGetParamImage()
@@ -217,6 +217,6 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
                 'resultRawFactory' => $this->resultRawFactoryMock
             ]
         );
-        $this->assertSame($this->resultRawMock, $controller->executeInternal());
+        $this->assertSame($this->resultRawMock, $controller->execute());
     }
 }

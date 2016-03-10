@@ -65,7 +65,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
     {
         $this->customerSession->expects($this->once())->method('isLoggedIn')->will($this->returnValue(true));
         $this->messageManager->expects($this->once())->method('addError')->with();
-        $this->action->executeInternal();
+        $this->action->execute();
     }
 
     public function testExecute()
@@ -76,6 +76,6 @@ class CreateTest extends \PHPUnit_Framework_TestCase
         $this->orderCustomerService->expects($this->once())->method('create')->with(100)->will(
             $this->returnValue($customer)
         );
-        $this->action->executeInternal();
+        $this->action->execute();
     }
 }

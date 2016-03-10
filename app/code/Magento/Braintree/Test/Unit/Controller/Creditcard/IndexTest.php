@@ -86,18 +86,17 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     /**
      * Executes the controller action and asserts non exception logic
      */
-    public function testExecuteInternal()
+    public function testExecute()
     {
         $objectManager = new ObjectManagerHelper($this);
 
-        /** @var \Magento\Braintree\Controller\Creditcard\Index $controller */
-        $controller = $objectManager->getObject(
+        $notification = $objectManager->getObject(
             'Magento\Braintree\Controller\Creditcard\Index',
             [
                 'resultPageFactory' => $this->resultPageFactory,
             ]
         );
 
-        $this->assertSame($this->resultPage, $controller->executeInternal());
+        $this->assertSame($this->resultPage, $notification->execute());
     }
 }

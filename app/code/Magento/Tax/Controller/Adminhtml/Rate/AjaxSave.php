@@ -15,7 +15,7 @@ class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Rate
      *
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $rateData = $this->_processRateData($this->getRequest()->getPostValue());

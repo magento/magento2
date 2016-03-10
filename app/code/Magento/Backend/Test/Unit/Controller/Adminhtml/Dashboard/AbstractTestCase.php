@@ -19,7 +19,7 @@ class AbstractTestCase extends \PHPUnit_Framework_TestCase
      * @param $controllerName
      * @param $blockName
      */
-    protected function assertExecuteInternal($controllerName, $blockName)
+    protected function assertExecute($controllerName, $blockName)
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $outPut = "data";
@@ -47,7 +47,7 @@ class AbstractTestCase extends \PHPUnit_Framework_TestCase
                 'layoutFactory' => $layoutFactoryMock
             ]
         );
-        $result = $controller->executeInternal();
+        $result = $controller->execute();
         $this->assertInstanceOf('Magento\Framework\Controller\Result\Raw', $result);
     }
 }

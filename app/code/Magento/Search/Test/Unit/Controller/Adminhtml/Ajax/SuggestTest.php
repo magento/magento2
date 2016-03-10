@@ -126,7 +126,7 @@ class SuggestTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->willReturnSelf();
 
-        $this->assertSame($this->resultJsonMock, $this->controller->executeInternal());
+        $this->assertSame($this->resultJsonMock, $this->controller->execute());
     }
 
     public function testExecuteEmptyQuery()
@@ -146,6 +146,6 @@ class SuggestTest extends \PHPUnit_Framework_TestCase
             ->with($url)
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->controller->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->controller->execute());
     }
 }

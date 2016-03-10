@@ -12,7 +12,7 @@ class VoidPayment extends \Magento\Sales\Controller\Adminhtml\Order
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $order = $this->_initOrder();
         $resultRedirect = $this->resultRedirectFactory->create();

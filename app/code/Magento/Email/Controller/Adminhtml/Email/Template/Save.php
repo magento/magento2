@@ -15,7 +15,7 @@ class Save extends \Magento\Email\Controller\Adminhtml\Email\Template
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $request = $this->getRequest();
         $id = $this->getRequest()->getParam('id');

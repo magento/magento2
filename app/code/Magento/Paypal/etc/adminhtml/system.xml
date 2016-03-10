@@ -51,6 +51,7 @@
                 <group id="wpp_usuk" sortOrder="40" extends="payment_us/paypal_payment_gateways/paypal_payflowpro_with_express_checkout">
                     <label>Payments Pro (Includes Express Checkout)</label>
                     <attribute type="activity_path">payment/paypal_payment_pro/active</attribute>
+                    <more_url>https://www.paypal.com/us/webapps/mpp/paypal-payments-pro?partner_id=NB9WWHYEMVUMS</more_url>
                     <group id="paypal_payflow_required" translate="label" showInDefault="1" showInWebsite="1" sortOrder="10">
                         <field id="enable_paypal_payflow">
                             <attribute type="shared">0</attribute>
@@ -72,6 +73,8 @@
                         <group id="express_checkout_required_express_checkout">
                             <label>Payments Standard</label>
                         </group>
+                        <field id="enable_in_context_checkout" showInDefault="0" showInWebsite="0"/>
+                        <field id="merchant_id" showInDefault="0" showInWebsite="0"/>
                         <field id="enable_express_checkout">
                             <config_path>payment/wps_express/active</config_path>
                         </field>
@@ -136,6 +139,8 @@
                         <group id="express_checkout_required_express_checkout">
                             <label>Website Payments Standard</label>
                         </group>
+                        <field id="enable_in_context_checkout" showInDefault="0" showInWebsite="0"/>
+                        <field id="merchant_id" showInDefault="0" showInWebsite="0"/>
                         <field id="enable_express_checkout">
                             <config_path>payment/wps_express/active</config_path>
                         </field>
@@ -199,6 +204,8 @@
                         <group id="express_checkout_required_express_checkout">
                             <label>Website Payments Standard</label>
                         </group>
+                        <field id="enable_in_context_checkout" showInDefault="0" showInWebsite="0"/>
+                        <field id="merchant_id" showInDefault="0" showInWebsite="0"/>
                         <field id="enable_express_checkout">
                             <config_path>payment/wps_express/active</config_path>
                         </field>
@@ -227,6 +234,8 @@
                         <group id="paypal_payflow_api_settings">
                             <label>Payments Pro</label>
                         </group>
+                        <field id="enable_in_context_checkout" showInDefault="0" showInWebsite="0"/>
+                        <field id="merchant_id" showInDefault="0" showInWebsite="0"/>
                         <field id="enable_paypal_payflow">
                             <frontend_class>paypal-enabler paypal-ec-pe</frontend_class>
                             <attribute type="shared">0</attribute>

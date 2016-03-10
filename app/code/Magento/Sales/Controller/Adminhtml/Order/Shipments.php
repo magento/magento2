@@ -12,7 +12,7 @@ class Shipments extends \Magento\Sales\Controller\Adminhtml\Order
      *
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_initOrder();
         $resultLayout = $this->resultLayoutFactory->create();

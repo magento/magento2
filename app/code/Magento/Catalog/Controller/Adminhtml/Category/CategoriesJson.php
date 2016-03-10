@@ -38,7 +38,7 @@ class CategoriesJson extends \Magento\Catalog\Controller\Adminhtml\Category
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->getRequest()->getParam('expand_all')) {
             $this->_objectManager->get('Magento\Backend\Model\Auth\Session')->setIsTreeWasExpanded(true);

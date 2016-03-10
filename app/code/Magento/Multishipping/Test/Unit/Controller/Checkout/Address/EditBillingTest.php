@@ -153,7 +153,7 @@ class EditBillingTest extends \PHPUnit_Framework_TestCase
         $this->titleMock->expects($this->once())->method('set')->with('Address title - default_title');
         $this->addressFormMock->expects($this->once())->method('setBackUrl')->with('back/address');
         $this->viewMock->expects($this->once())->method('renderLayout');
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 
     public function testExecuteWhenCustomerAddressBlockNotExist()
@@ -170,7 +170,7 @@ class EditBillingTest extends \PHPUnit_Framework_TestCase
             ->with('customer_address_edit');
         $this->urlMock->expects($this->never())->method('getUrl');
         $this->viewMock->expects($this->once())->method('renderLayout');
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 
 }

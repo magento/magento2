@@ -57,6 +57,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     const XML_PATH_PAGE_SIZE = 'import/format_v1/page_size';
 
     /**
+     * @var string
+     */
+    private $columnMaxCharacters = '_custom_option_max_characters';
+
+    /**
      * All stores code-ID pairs
      *
      * @var array
@@ -300,7 +305,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $_colIteratorFactory;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
      */
     protected $dateTime;
 
@@ -314,7 +319,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * @param \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $colIteratorFactory
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $dateTime
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param array $data
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -331,7 +336,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         \Magento\ImportExport\Model\ResourceModel\CollectionByPagesIteratorFactory $colIteratorFactory,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Stdlib\DateTime\TimezoneInterface $dateTime,
         ProcessingErrorAggregatorInterface $errorAggregator,
         array $data = []
     ) {
@@ -1043,9 +1048,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Get multiRow format from one line data.
      *
      * @param array $rowData
-     *
      * @return array
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _getMultiRowFormat($rowData)
     {
@@ -1057,34 +1060,61 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         }
 
         $i = 0;
-
         foreach ($rowData['custom_options'] as $name => $customOption) {
             $i++;
             foreach ($customOption as $rowOrder => $optionRow) {
-                $row = [
-                    self::COLUMN_STORE => '',
-                    self::COLUMN_TYPE => $name ? $optionRow['type'] : '',
-                    self::COLUMN_TITLE => $name,
-                    self::COLUMN_IS_REQUIRED => $optionRow['required'],
-                    self::COLUMN_SORT_ORDER => $i,
-                    self::COLUMN_ROW_TITLE => isset($optionRow['option_title']) ? $optionRow['option_title'] : '',
-                    self::COLUMN_ROW_SKU => $optionRow['sku'],
-                    self::COLUMN_ROW_SORT => $rowOrder,
-                    self::COLUMN_PREFIX . 'sku' => $optionRow['sku']
-                ];
-
-                $percent_suffix = isset($optionRow['price_type']) && ($optionRow['price_type'] == 'percent') ? '%' : '';
-                $row[self::COLUMN_ROW_PRICE] = isset($optionRow['price']) ? $optionRow['price'] . $percent_suffix : '';
-                $row[self::COLUMN_PREFIX . 'price'] = $row[self::COLUMN_ROW_PRICE];
-
+                $row = array_merge(
+                    [
+                        self::COLUMN_STORE => '',
+                        self::COLUMN_TITLE => $name,
+                        self::COLUMN_SORT_ORDER => $i,
+                        self::COLUMN_ROW_SORT => $rowOrder
+                    ],
+                    $this->processOptionRow($name, $optionRow)
+                );
                 $name = '';
-
                 $multiRow[] = $row;
             }
-
         }
 
         return $multiRow;
+    }
+
+    /**
+     * @param string $name
+     * @param array $optionRow
+     * @return array
+     */
+    private function processOptionRow($name, $optionRow)
+    {
+        $result = [
+            self::COLUMN_TYPE => $name ? $optionRow['type'] : '',
+            self::COLUMN_IS_REQUIRED => $optionRow['required'],
+            self::COLUMN_ROW_SKU => $optionRow['sku'],
+            self::COLUMN_PREFIX . 'sku' => $optionRow['sku'],
+            self::COLUMN_ROW_TITLE => '',
+            self::COLUMN_ROW_PRICE => ''
+        ];
+
+        if (isset($optionRow['option_title'])) {
+            $result[self::COLUMN_ROW_TITLE] = $optionRow['option_title'];
+        }
+
+        if (isset($optionRow['price'])) {
+            $percent_suffix = '';
+            if (isset($optionRow['price_type']) && $optionRow['price_type'] == 'percent') {
+                $percent_suffix =  '%';
+            }
+            $result[self::COLUMN_ROW_PRICE] = $optionRow['price'] . $percent_suffix;
+        }
+
+        $result[self::COLUMN_PREFIX . 'price'] = $result[self::COLUMN_ROW_PRICE];
+
+        if (isset($optionRow['max_characters'])) {
+            $result[$this->columnMaxCharacters] = $optionRow['max_characters'];
+        }
+
+        return $result;
     }
 
     /**
@@ -1432,7 +1462,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             'entity_id' => $productId,
             'has_options' => 1,
             'required_options' => 0,
-            'updated_at' => (new \DateTime())->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT),
+            'updated_at' => $this->dateTime->date(null, null, false)->format('Y-m-d H:i:s'),
         ];
 
         if (!empty($rowData[self::COLUMN_IS_REQUIRED])) {

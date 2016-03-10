@@ -74,9 +74,9 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test aroundExecute
+     * Test aroundDispatch
      */
-    public function testAroundExecute()
+    public function testAroundDispatch()
     {
         $this->customerSessionMock->expects($this->once())
             ->method('getCustomerGroupId')
@@ -96,7 +96,7 @@ class ContextPluginTest extends \PHPUnit_Framework_TestCase
             );
         $this->assertEquals(
             'ExpectedValue',
-            $this->plugin->aroundExecute($this->subjectMock, $this->closureMock, $this->requestMock)
+            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
         );
     }
 }

@@ -11,7 +11,7 @@ class Grid extends \Magento\Backend\App\Action
     /**
      * @return mixed
      */
-    public function executeInternal()
+    public function execute()
     {
         $index = $this->getRequest()->getParam('index');
         if (!preg_match('/^[a-z0-9_.]*$/i', $index)) {

@@ -15,7 +15,7 @@ class Cancel extends \Magento\Paypal\Controller\Express\AbstractExpress
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $this->_initToken(false);

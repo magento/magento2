@@ -141,7 +141,7 @@ abstract class Onepage extends Action
      * @return \Magento\Framework\App\ResponseInterface
      * @throws \Magento\Framework\Exception\NotFoundException
      */
-    public function execute(RequestInterface $request)
+    public function dispatch(RequestInterface $request)
     {
         $this->_request = $request;
         $result = $this->_preDispatchValidateCustomer();
@@ -158,7 +158,7 @@ abstract class Onepage extends Action
         if (!$this->_canShowForUnregisteredUsers()) {
             throw new NotFoundException(__('Page not found.'));
         }
-        return parent::execute($request);
+        return parent::dispatch($request);
     }
 
     /**

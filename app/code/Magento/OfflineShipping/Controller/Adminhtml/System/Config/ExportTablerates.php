@@ -46,7 +46,7 @@ class ExportTablerates extends \Magento\Config\Controller\Adminhtml\System\Abstr
      *
      * @return ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $fileName = 'tablerates.csv';
         /** @var $gridBlock \Magento\OfflineShipping\Block\Adminhtml\Carrier\Tablerate\Grid */

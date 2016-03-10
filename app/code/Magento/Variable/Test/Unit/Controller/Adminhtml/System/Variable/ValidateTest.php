@@ -152,7 +152,7 @@ class ValidateTest extends \PHPUnit_Framework_TestCase
             ->method('setData')
             ->with($responseArray);
 
-        $this->validateMock->executeInternal();
+        $this->validateMock->execute();
     }
 
     /**

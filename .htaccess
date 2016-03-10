@@ -243,10 +243,6 @@
         order allow,deny
         deny from all
     </Files>
-    <Files CONTRIBUTOR_LICENSE_AGREEMENT.html>
-        order allow,deny
-        deny from all
-    </Files>
     <Files COPYING.txt>
         order allow,deny
         deny from all
@@ -285,10 +281,3 @@
 ## http://developer.yahoo.com/performance/rules.html#etags
 
     #FileETag none
-
-############################################
-## Add custom headers
-<IfModule mod_headers.c>
-    Header set X-Content-Type-Options "nosniff"
-    Header set X-XSS-Protection "1; mode=block"
-</IfModule>

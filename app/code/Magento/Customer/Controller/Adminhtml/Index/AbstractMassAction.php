@@ -19,6 +19,13 @@ use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory;
 abstract class AbstractMassAction extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+
+    /**
      * @var string
      */
     protected $redirectUrl = '*/*/index';
@@ -51,7 +58,7 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
      * @return \Magento\Backend\Model\View\Result\Redirect
      * @throws \Magento\Framework\Exception\LocalizedException|\Exception
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $collection = $this->filter->getCollection($this->collectionFactory->create());
@@ -62,16 +69,6 @@ abstract class AbstractMassAction extends \Magento\Backend\App\Action
             $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
             return $resultRedirect->setPath($this->redirectUrl);
         }
-    }
-
-    /**
-     * Check the permission to Manage Customers
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Customer::manage');
     }
 
     /**

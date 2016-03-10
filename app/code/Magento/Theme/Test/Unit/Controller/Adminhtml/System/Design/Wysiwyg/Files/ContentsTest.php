@@ -96,6 +96,6 @@ class ContentsTest extends \PHPUnit_Framework_TestCase
         $this->response->expects($this->once())
             ->method('representJson');
 
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 }

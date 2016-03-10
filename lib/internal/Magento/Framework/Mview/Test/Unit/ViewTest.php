@@ -232,7 +232,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->changelogMock->expects($this->once())
             ->method('drop');
         $subscriptionMock = $this->getMock(
-            'Magento\Framework\Mview\View\Subscription',
+            \Magento\Framework\Mview\View\Subscription::class,
             ['remove'],
             [],
             '',

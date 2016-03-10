@@ -13,7 +13,7 @@ class Form extends \Magento\Catalog\Controller\Adminhtml\Product\Edit
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_initProduct();
         $this->getResponse()->setBody(

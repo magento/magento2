@@ -24,10 +24,10 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetTierPrice()
     {
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
-        );
-        $product->load(3);
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $product = $productRepository->get('bundle-product');
         // fixture
 
         // Note that this is really not the "tier price" but the "tier discount percentage"

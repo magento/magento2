@@ -41,7 +41,7 @@ class Account
      * @param RequestInterface $request
      * @return mixed
      */
-    public function aroundExecute(
+    public function aroundDispatch(
         ActionInterface $subject,
         \Closure $proceed,
         RequestInterface $request

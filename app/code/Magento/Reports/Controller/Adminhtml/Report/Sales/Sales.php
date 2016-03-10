@@ -15,7 +15,7 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\Sales
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_showLastExecutionTime(Flag::REPORT_ORDER_FLAG_CODE, 'sales');
 
@@ -25,7 +25,7 @@ class Sales extends \Magento\Reports\Controller\Adminhtml\Report\Sales
             __('Sales Report'),
             __('Sales Report')
         );
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Sales Report'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Orders Report'));
 
         $gridBlock = $this->_view->getLayout()->getBlock('adminhtml_sales_sales.grid');
         $filterFormBlock = $this->_view->getLayout()->getBlock('grid.filter.form');

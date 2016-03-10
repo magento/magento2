@@ -22,6 +22,7 @@ define(
         return Component.extend({
             registerUrl: window.authenticationPopup.customerRegisterUrl,
             forgotPasswordUrl: window.authenticationPopup.customerForgotPasswordUrl,
+            autocomplete: window.checkout.autocomplete,
             modalWindow: null,
             isLoading: ko.observable(false),
 

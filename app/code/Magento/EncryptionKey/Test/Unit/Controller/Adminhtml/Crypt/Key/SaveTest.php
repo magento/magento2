@@ -90,7 +90,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock->expects($this->once())->method('clean');
         $this->responseMock->expects($this->once())->method('setRedirect');
 
-        $this->model->executeInternal();
+        $this->model->execute();
     }
 
     public function testExecuteNonRandomAndWithoutCryptKey()
@@ -108,7 +108,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->willReturn($key);
         $this->managerMock->expects($this->once())->method('addErrorMessage');
 
-        $this->model->executeInternal();
+        $this->model->execute();
     }
 
     public function testExecuteRandom()
@@ -125,6 +125,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->cacheMock->expects($this->once())->method('clean');
         $this->responseMock->expects($this->once())->method('setRedirect');
 
-        $this->model->executeInternal();
+        $this->model->execute();
     }
 }

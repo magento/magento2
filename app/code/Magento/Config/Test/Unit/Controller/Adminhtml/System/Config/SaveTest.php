@@ -124,6 +124,12 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->_cacheMock = $this->getMock('Magento\Framework\App\Cache\Type\Layout', [], [], '', false);
 
         $configStructureMock->expects($this->any())->method('getElement')->willReturn($this->_sectionMock);
+        $configStructureMock->expects($this->any())->method('getSectionList')->willReturn(
+            [
+                'some_key_0' => '0',
+                'some_key_1' => '1'
+            ]
+        );
 
         $helperMock->expects($this->any())->method('getUrl')->willReturnArgument(0);
 
@@ -213,18 +219,25 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($backendConfigMock)
         );
 
-        $this->assertEquals($this->resultRedirect, $this->_controller->executeInternal());
+        $this->assertEquals($this->resultRedirect, $this->_controller->execute());
     }
 
     public function testIndexActionSaveState()
     {
         $this->_sectionCheckerMock->expects($this->any())->method('isSectionAllowed')->will($this->returnValue(false));
-        $data = ['some_key' => 'some_value'];
+        $inputData = [
+            'some_key'   => 'some_value',
+            'some_key_0' => '0',
+            'some_key_1' => 'some_value_1',
+        ];
+        $extraData = [
+            'some_key_0' => '0',
+            'some_key_1' => '1',
+        ];
 
         $userMock = $this->getMock('Magento\User\Model\User', [], [], '', false, false);
-        $userMock->expects($this->once())->method('saveExtra')->with(['configState' => $data]);
+        $userMock->expects($this->once())->method('saveExtra')->with(['configState' => $extraData]);
         $this->_authMock->expects($this->once())->method('getUser')->will($this->returnValue($userMock));
-
         $this->_requestMock->expects(
             $this->any()
         )->method(
@@ -232,9 +245,10 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         )->with(
             'config_state'
         )->will(
-            $this->returnValue($data)
+            $this->returnValue($inputData)
         );
-        $this->assertEquals($this->resultRedirect, $this->_controller->executeInternal());
+
+        $this->assertEquals($this->resultRedirect, $this->_controller->execute());
     }
 
     public function testIndexActionGetGroupForSave()
@@ -285,7 +299,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         );
         $backendConfigMock->expects($this->once())->method('save');
 
-        $this->assertEquals($this->resultRedirect, $this->_controller->executeInternal());
+        $this->assertEquals($this->resultRedirect, $this->_controller->execute());
     }
 
     public function testIndexActionSaveAdvanced()
@@ -311,6 +325,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $backendConfigMock->expects($this->once())->method('save');
 
         $this->_cacheMock->expects($this->once())->method('clean')->with(\Zend_Cache::CLEANING_MODE_ALL);
-        $this->assertEquals($this->resultRedirect, $this->_controller->executeInternal());
+        $this->assertEquals($this->resultRedirect, $this->_controller->execute());
     }
 }

@@ -169,9 +169,7 @@ abstract class AbstractCollection extends \Magento\Framework\Data\Collection\Abs
     }
 
     /**
-     * Init collection select
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     protected function _initSelect()
     {

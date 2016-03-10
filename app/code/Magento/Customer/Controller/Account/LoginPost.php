@@ -5,9 +5,7 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\Account\Redirect as AccountRedirect;
-use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Api\AccountManagementInterface;
@@ -15,11 +13,13 @@ use Magento\Customer\Model\Url as CustomerUrl;
 use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class LoginPost extends Action implements AccountInterface
+class LoginPost extends \Magento\Customer\Controller\AbstractAccount
 {
     /** @var AccountManagementInterface */
     protected $customerAccountManagement;
@@ -36,6 +36,11 @@ class LoginPost extends Action implements AccountInterface
      * @var Session
      */
     protected $session;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
 
     /**
      * @param Context $context
@@ -62,12 +67,41 @@ class LoginPost extends Action implements AccountInterface
     }
 
     /**
+     * Set scope config
+     *
+     * @param ScopeConfigInterface $scopeConfig
+     * @return void
+     * @deprecated
+     */
+    public function setScopeConfig(ScopeConfigInterface $scopeConfig)
+    {
+        $this->scopeConfig = $scopeConfig;
+    }
+
+    /**
+     * Get scope config
+     *
+     * @return ScopeConfigInterface
+     * @deprecated
+     */
+    public function getScopeConfig()
+    {
+        if (!($this->scopeConfig instanceof \Magento\Framework\App\Config\ScopeConfigInterface)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Framework\App\Config\ScopeConfigInterface'
+            );
+        } else {
+            return $this->scopeConfig;
+        }
+    }
+
+    /**
      * Login post action
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->session->isLoggedIn() || !$this->formKeyValidator->validate($this->getRequest())) {
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
@@ -86,9 +120,15 @@ class LoginPost extends Action implements AccountInterface
                 } catch (EmailNotConfirmedException $e) {
                     $value = $this->customerUrl->getEmailConfirmationUrl($login['username']);
                     $message = __(
-                        'This account is not confirmed.' .
-                        ' <a href="%1">Click here</a> to resend confirmation email.',
+                        'This account is not confirmed. <a href="%1">Click here</a> to resend confirmation email.',
                         $value
+                    );
+                    $this->messageManager->addError($message);
+                    $this->session->setUsername($login['username']);
+                } catch (UserLockedException $e) {
+                    $message = __(
+                        'The account is locked. Please wait and try again or contact %1.',
+                        $this->getScopeConfig()->getValue('contact/email/recipient_email')
                     );
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);
@@ -97,7 +137,10 @@ class LoginPost extends Action implements AccountInterface
                     $this->messageManager->addError($message);
                     $this->session->setUsername($login['username']);
                 } catch (\Exception $e) {
-                    $this->messageManager->addError(__('Invalid login or password.'));
+                    // PA DSS violation: throwing or logging an exception here can disclose customer password
+                    $this->messageManager->addError(
+                        __('An unspecified error occurred. Please contact us for assistance.')
+                    );
                 }
             } else {
                 $this->messageManager->addError(__('A login and a password are required.'));

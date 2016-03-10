@@ -77,7 +77,7 @@ abstract class PayPal extends \Magento\Framework\App\Action\Action
      * @param RequestInterface $request
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\App\ResponseInterface
      */
-    public function execute(RequestInterface $request)
+    public function dispatch(RequestInterface $request)
     {
         if (!$this->braintreePayPalConfig->isActive() || !$this->braintreePayPalConfig->isShortcutCheckoutEnabled()) {
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
@@ -87,7 +87,7 @@ abstract class PayPal extends \Magento\Framework\App\Action\Action
             return $resultRedirect;
         }
 
-        return parent::execute($request);
+        return parent::dispatch($request);
     }
 
     /**

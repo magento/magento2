@@ -15,7 +15,7 @@ class ListAjax extends ProductController
      *
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->initProduct();
         /** @var \Magento\Framework\View\Result\Layout $resultLayout */

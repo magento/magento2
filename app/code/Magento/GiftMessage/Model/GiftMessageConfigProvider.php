@@ -105,11 +105,11 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
             $configuration['isOrderLevelGiftOptionsEnabled'] = (bool)$this->isQuoteVirtual() ? false : true;
             $configuration['giftMessage']['orderLevel'] = $orderMessages === null ? true : $orderMessages->getData();
         }
-        if ($itemLevelGiftMessageConfiguration) {
-            $itemMessages = $this->getItemLevelGiftMessages();
-            $configuration['isItemLevelGiftOptionsEnabled'] = true;
-            $configuration['giftMessage']['itemLevel'] = $itemMessages === null ? true : $itemMessages;
-        }
+
+        $itemMessages = $this->getItemLevelGiftMessages();
+        $configuration['isItemLevelGiftOptionsEnabled'] = $itemLevelGiftMessageConfiguration;
+        $configuration['giftMessage']['itemLevel'] = $itemMessages === null ? true : $itemMessages;
+
         $configuration['priceFormat'] = $this->localeFormat->getPriceFormat(
             null,
             $this->checkoutSession->getQuote()->getQuoteCurrencyCode()
@@ -166,22 +166,27 @@ class GiftMessageConfigProvider implements ConfigProviderInterface
     }
 
     /**
-     * Load already specified item level gift messages.
+     * Load already specified item level gift messages and related configuration.
      *
      * @return \Magento\GiftMessage\Api\Data\MessageInterface[]|null
      */
     protected function getItemLevelGiftMessages()
     {
-        $itemMessages = [];
-        $cartId = $this->checkoutSession->getQuoteId();
-        $items = $this->checkoutSession->getQuote()->getAllVisibleItems();
-        foreach ($items as $item) {
+        $itemLevelConfig = [];
+        $quote = $this->checkoutSession->getQuote();
+        foreach ($quote->getAllVisibleItems() as $item) {
             $itemId = $item->getId();
-            $message = $this->itemRepository->get($cartId, $itemId);
+            $itemLevelConfig[$itemId] = [];
+            $isMessageAvailable = $item->getProduct()->getGiftMessageAvailable();
+            // use gift message product setting if it is available
+            if ($isMessageAvailable !== null) {
+                $itemLevelConfig[$itemId]['is_available'] = (bool)$isMessageAvailable;
+            }
+            $message = $this->itemRepository->get($quote->getId(), $itemId);
             if ($message) {
-                $itemMessages[$itemId] = $message->getData();
+                $itemLevelConfig[$itemId]['message'] = $message->getData();
             }
         }
-        return count($itemMessages) === 0 ? null : $itemMessages;
+        return count($itemLevelConfig) === 0 ? null : $itemLevelConfig;
     }
 }

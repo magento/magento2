@@ -347,37 +347,22 @@ abstract class AbstractElement extends AbstractForm
         $html = '';
         $htmlId = $this->getHtmlId();
 
-        if (($beforeElementHtml = $this->getBeforeElementHtml())) {
-            $html .= '<label class="addbefore" for="' .
-                $htmlId .
-                '">' .
-                $beforeElementHtml .
-                '</label>';
+        $beforeElementHtml = $this->getBeforeElementHtml();
+        if ($beforeElementHtml) {
+            $html .= '<label class="addbefore" for="' . $htmlId . '">' . $beforeElementHtml . '</label>';
         }
 
-        $html .= '<input id="' .
-            $htmlId .
-            '" name="' .
-            $this->getName() .
-            '" ' .
-            $this->_getUiId() .
-            ' value="' .
-            $this->getEscapedValue() .
-            '" ' .
-            $this->serialize(
-                $this->getHtmlAttributes()
-            ) . '/>';
+        $html .= '<input id="' . $htmlId . '" name="' . $this->getName() . '" ' . $this->_getUiId() . ' value="' .
+            $this->getEscapedValue() . '" ' . $this->serialize($this->getHtmlAttributes()) . '/>';
 
-        if (($afterElementJs = $this->getAfterElementJs())) {
+        $afterElementJs = $this->getAfterElementJs();
+        if ($afterElementJs) {
             $html .= $afterElementJs;
         }
 
-        if (($afterElementHtml = $this->getAfterElementHtml())) {
-            $html .= '<label class="addafter" for="' .
-                $htmlId .
-                '">' .
-                $afterElementHtml .
-                '</label>';
+        $afterElementHtml = $this->getAfterElementHtml();
+        if ($afterElementHtml) {
+            $html .= '<label class="addafter" for="' . $htmlId . '">' . $afterElementHtml . '</label>';
         }
 
         return $html;
@@ -417,15 +402,18 @@ abstract class AbstractElement extends AbstractForm
      * Render HTML for element's label
      *
      * @param string $idSuffix
+     * @param string $scopeLabel
      * @return string
      */
-    public function getLabelHtml($idSuffix = '')
+    public function getLabelHtml($idSuffix = '', $scopeLabel = '')
     {
+        $scopeLabel = $scopeLabel ? ' data-config-scope="' . $scopeLabel . '"' : '';
+
         if ($this->getLabel() !== null) {
             $html = '<label class="label admin__field-label" for="' .
                 $this->getHtmlId() . $idSuffix . '"' . $this->_getUiId(
                     'label'
-                ) . '><span>' . $this->_escape(
+                ) . '><span' . $scopeLabel . '>' . $this->_escape(
                     $this->getLabel()
                 ) . '</span></label>' . "\n";
         } else {
@@ -443,10 +431,10 @@ abstract class AbstractElement extends AbstractForm
     {
         $html = $this->getData('default_html');
         if ($html === null) {
-            $html = $this->getNoSpan() === true ? '' : '<span class="field-row">' . "\n";
+            $html = $this->getNoSpan() === true ? '' : '<div class="admin__field">' . "\n";
             $html .= $this->getLabelHtml();
             $html .= $this->getElementHtml();
-            $html .= $this->getNoSpan() === true ? '' : '</span>' . "\n";
+            $html .= $this->getNoSpan() === true ? '' : '</div>' . "\n";
         }
         return $html;
     }

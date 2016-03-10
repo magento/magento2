@@ -7,15 +7,15 @@ namespace Magento\Wishlist\Controller\Index;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Action;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Framework\Controller\ResultFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Add extends Action\Action implements IndexInterface
+class Add extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var \Magento\Wishlist\Controller\WishlistProviderInterface
@@ -33,21 +33,29 @@ class Add extends Action\Action implements IndexInterface
     protected $productRepository;
 
     /**
+     * @var Validator
+     */
+    protected $formKeyValidator;
+
+    /**
      * @param Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider
      * @param ProductRepositoryInterface $productRepository
+     * @param Validator $formKeyValidator
      */
     public function __construct(
         Action\Context $context,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Wishlist\Controller\WishlistProviderInterface $wishlistProvider,
-        ProductRepositoryInterface $productRepository
+        ProductRepositoryInterface $productRepository,
+        Validator $formKeyValidator
     ) {
         $this->_customerSession = $customerSession;
         $this->wishlistProvider = $wishlistProvider;
-        parent::__construct($context);
         $this->productRepository = $productRepository;
+        $this->formKeyValidator = $formKeyValidator;
+        parent::__construct($context);
     }
 
     /**
@@ -59,8 +67,14 @@ class Add extends Action\Action implements IndexInterface
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function executeInternal()
+    public function execute()
     {
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        if (!$this->formKeyValidator->validate($this->getRequest())) {
+            return $resultRedirect->setPath('*/');
+        }
+
         $wishlist = $this->wishlistProvider->getWishlist();
         if (!$wishlist) {
             throw new NotFoundException(__('Page not found.'));
@@ -76,8 +90,6 @@ class Add extends Action\Action implements IndexInterface
         }
 
         $productId = isset($requestParams['product']) ? (int)$requestParams['product'] : null;
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         if (!$productId) {
             $resultRedirect->setPath('*/');
             return $resultRedirect;

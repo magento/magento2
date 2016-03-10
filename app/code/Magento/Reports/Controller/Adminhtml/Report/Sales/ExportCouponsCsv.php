@@ -16,7 +16,7 @@ class ExportCouponsCsv extends \Magento\Reports\Controller\Adminhtml\Report\Sale
      *
      * @return ResponseInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $fileName = 'coupons.csv';
         $grid = $this->_view->getLayout()->createBlock('Magento\Reports\Block\Adminhtml\Sales\Coupons\Grid');

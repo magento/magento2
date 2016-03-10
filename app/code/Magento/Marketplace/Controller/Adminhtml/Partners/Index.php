@@ -33,7 +33,7 @@ class Index extends \Magento\Marketplace\Controller\Adminhtml\Partners
     /**
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->getRequest()->isAjax()) {
             $output = $this->getLayoutFactory()->create()

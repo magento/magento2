@@ -14,7 +14,7 @@ class AlertsPriceGrid extends AbstractProductGrid
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         return $this->resultLayoutFactory->create();
     }

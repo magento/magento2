@@ -39,7 +39,7 @@ class Tree extends \Magento\Catalog\Controller\Adminhtml\Category
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $storeId = (int)$this->getRequest()->getParam('store');
         $categoryId = (int)$this->getRequest()->getParam('id');

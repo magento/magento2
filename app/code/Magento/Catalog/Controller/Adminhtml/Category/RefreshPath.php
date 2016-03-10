@@ -30,7 +30,7 @@ class RefreshPath extends \Magento\Catalog\Controller\Adminhtml\Category
      *
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function executeInternal()
+    public function execute()
     {
         $categoryId = (int)$this->getRequest()->getParam('id');
         if ($categoryId) {

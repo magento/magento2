@@ -14,6 +14,9 @@ class XsdTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
+        if (!function_exists('libxml_set_external_entity_loader')) {
+            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
+        }
         $this->_xsdFile = "urn:magento:module:Magento_Sales:etc/sales.xsd";
     }
 

@@ -13,7 +13,7 @@ class Configure extends \Magento\Customer\Controller\Adminhtml\Cart\Product\Comp
      *
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function executeInternal()
+    public function execute()
     {
         $configureResult = new \Magento\Framework\DataObject();
         try {

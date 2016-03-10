@@ -188,7 +188,7 @@ class MassUnsubscribeTest extends \PHPUnit_Framework_TestCase
             ->with('customer/*/index')
             ->willReturnSelf();
 
-        $this->massAction->executeInternal();
+        $this->massAction->execute();
     }
 
     public function testExecuteWithException()
@@ -207,6 +207,6 @@ class MassUnsubscribeTest extends \PHPUnit_Framework_TestCase
             ->method('addError')
             ->with('Some message.');
 
-        $this->massAction->executeInternal();
+        $this->massAction->execute();
     }
 }

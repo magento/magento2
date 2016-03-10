@@ -14,7 +14,7 @@ class NewAction extends \Magento\Sitemap\Controller\Adminhtml\Sitemap
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         // the same form is used to create and edit
         $this->_forward('edit');

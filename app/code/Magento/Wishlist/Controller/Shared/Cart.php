@@ -79,7 +79,7 @@ class Cart extends \Magento\Framework\App\Action\Action
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $itemId = (int)$this->getRequest()->getParam('item');
 

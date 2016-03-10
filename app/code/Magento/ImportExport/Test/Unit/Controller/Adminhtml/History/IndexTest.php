@@ -75,6 +75,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
-        $this->indexController->executeInternal();
+        $this->indexController->execute();
     }
 }

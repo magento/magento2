@@ -52,7 +52,7 @@ class Create extends \Magento\Framework\App\Action\Action
      * @throws \Exception
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->customerSession->isLoggedIn()) {
             $this->messageManager->addError(__("Customer is already registered"));

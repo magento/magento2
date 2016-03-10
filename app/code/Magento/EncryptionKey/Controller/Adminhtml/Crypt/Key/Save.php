@@ -50,7 +50,7 @@ class Save extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $key = null;
@@ -69,7 +69,7 @@ class Save extends \Magento\EncryptionKey\Controller\Adminhtml\Crypt\Key
             if (!$key) {
                 $this->messageManager->addNoticeMessage(
                     __(
-                        'This is your new encryption key: <span style="font-family:monospace;">%1</span>. ' .
+                        'This is your new encryption key: %1. ' .
                         'Be sure to write it down and take good care of it!',
                         $newKey
                     )

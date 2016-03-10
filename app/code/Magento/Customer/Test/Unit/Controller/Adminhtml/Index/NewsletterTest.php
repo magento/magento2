@@ -256,7 +256,7 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Magento\Framework\View\Result\Layout',
-            $this->_testedObject->executeInternal()
+            $this->_testedObject->execute()
         );
     }
 }

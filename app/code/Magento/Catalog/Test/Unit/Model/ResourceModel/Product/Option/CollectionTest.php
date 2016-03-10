@@ -11,8 +11,17 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product\Option;
 use \Magento\Catalog\Model\ResourceModel\Product\Option\Collection;
 use \Magento\Catalog\Model\ResourceModel\Product\Option\Value;
 
+/**
+ * Class CollectionTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPoolMock;
+
     /**
      * @var Collection
      */
@@ -49,6 +58,11 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     protected $storeManagerMock;
 
     /**
+     * @var \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $joinProcessor;
+
+    /**
      * @var \Magento\Catalog\Model\ResourceModel\Product\Option|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
@@ -81,6 +95,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);
+        $this->joinProcessor = $this->getMockBuilder('Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->resourceMock = $this->getMock(
             'Magento\Catalog\Model\ResourceModel\Product\Option',
             ['getConnection', '__wakeup', 'getMainTable', 'getTable'],
@@ -88,7 +105,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->selectMock = $this->getMock('Magento\Framework\DB\Select', ['from', 'reset'], [], '', false);
+        $this->selectMock = $this->getMock('Magento\Framework\DB\Select', ['from', 'reset', 'join'], [], '', false);
         $this->connection =
             $this->getMock('Magento\Framework\DB\Adapter\Pdo\Mysql', ['select'], [], '', false);
         $this->connection->expects($this->once())
@@ -100,11 +117,22 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects($this->once())
             ->method('getMainTable')
             ->will($this->returnValue('test_main_table'));
-        $this->resourceMock->expects($this->once())
+        $this->resourceMock->expects($this->exactly(3))
             ->method('getTable')
-            ->with('test_main_table')
-            ->will($this->returnValue('test_main_table'));
-
+            ->withConsecutive(
+                ['test_main_table'],
+                ['catalog_product_entity'],
+                ['catalog_product_entity']
+            )->willReturnOnConsecutiveCalls(
+                $this->returnValue('test_main_table'),
+                'catalog_product_entity',
+                'catalog_product_entity'
+            );
+        $this->metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $metadata = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $metadata->expects($this->any())->method('getLinkField')->willReturn('id');
+        $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($metadata);
+        $this->selectMock->expects($this->exactly(2))->method('join');
         $this->collection = new Collection(
             $this->entityFactoryMock,
             $this->loggerMock,
@@ -112,6 +140,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             $this->eventManagerMock,
             $this->optionsFactoryMock,
             $this->storeManagerMock,
+            $this->metadataPoolMock,
+            $this->joinProcessor,
             null,
             $this->resourceMock
         );

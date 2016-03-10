@@ -16,7 +16,10 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testViewAction()
     {
-        $this->dispatch('catalog/product/view/id/3');
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $this->_objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $product = $productRepository->get('bundle-product');
+        $this->dispatch('catalog/product/view/id/' . $product->getEntityId());
         $responseBody = $this->getResponse()->getBody();
         $this->assertContains('Bundle Product', $responseBody);
         $this->assertContains(

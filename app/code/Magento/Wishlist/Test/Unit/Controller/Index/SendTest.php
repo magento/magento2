@@ -270,7 +270,7 @@ class SendTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->model->executeInternal());
+        $this->assertEquals($this->resultRedirect, $this->model->execute());
     }
 
     /**
@@ -288,7 +288,7 @@ class SendTest extends \PHPUnit_Framework_TestCase
             ->method('getWishlist')
             ->willReturn(null);
 
-        $this->model->executeInternal();
+        $this->model->execute();
     }
 
     /**
@@ -356,7 +356,7 @@ class SendTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/share')
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->model->executeInternal());
+        $this->assertEquals($this->resultRedirect, $this->model->execute());
     }
 
     /**
@@ -514,7 +514,7 @@ class SendTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/share')
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->model->executeInternal());
+        $this->assertEquals($this->resultRedirect, $this->model->execute());
     }
 
     /**
@@ -693,6 +693,6 @@ class SendTest extends \PHPUnit_Framework_TestCase
             ->with('*/*', ['wishlist_id' => $wishlistId])
             ->willReturnSelf();
 
-        $this->assertEquals($this->resultRedirect, $this->model->executeInternal());
+        $this->assertEquals($this->resultRedirect, $this->model->execute());
     }
 }

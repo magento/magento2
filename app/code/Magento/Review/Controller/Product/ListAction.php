@@ -38,7 +38,7 @@ class ListAction extends ProductController
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $product = $this->initProduct();
         if ($product) {

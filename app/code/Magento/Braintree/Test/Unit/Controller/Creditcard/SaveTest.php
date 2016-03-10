@@ -58,7 +58,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     /**
      * Executes the controller action
      */
-    public function testExecuteInternal()
+    public function testExecute()
     {
         $objectManager = new ObjectManagerHelper($this);
         $phrase = new \Magento\Framework\Phrase('There was error during saving card data');
@@ -84,8 +84,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('addError')
             ->with($phrase);
 
-        /** @var \Magento\Braintree\Controller\Creditcard\Save $controller */
-        $controller = $objectManager->getObject(
+        $notification = $objectManager->getObject(
             'Magento\Braintree\Controller\Creditcard\Save',
             [
                 'request' => $this->request,
@@ -94,6 +93,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->assertSame($this->resultRedirect, $controller->executeInternal());
+        $this->assertSame($this->resultRedirect, $notification->execute());
     }
 }

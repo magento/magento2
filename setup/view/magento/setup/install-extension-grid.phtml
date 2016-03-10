@@ -61,22 +61,22 @@
         <table class="data-grid">
             <thead data-part="head">
             <tr>
-                <th class="data-grid-th _ascend">
-                    <div class="action-multiselect-wrap"
+                <th class="data-grid-multicheck-cell">
+                    <div class="action-multicheck-wrap"
                          ng-class="{'_active':isNewExtensionsMenuVisible}"
                          click-out="hideNewExtensionsMenu()"
-                    >
+                        >
                         <input type="checkbox"
                                style="visibility: hidden;"
                                class="admin__control-checkbox"
                                ng-class="{'_indeterminate':someExtensionsSelected}"
                                ng-checked="allExtensionsSelected"
-                        >
+                            >
                         <label></label>
-                        <button class="action-multiselect-toggle"
+                        <button class="action-multicheck-toggle"
                                 ng-class="{'_active':isNewExtensionsMenuVisible}"
                                 ng-click="toggleNewExtensionsMenu()"
-                        >
+                            >
                             <span>Options</span>
                         </button>
                         <ul class="action-menu">
@@ -93,6 +93,10 @@
                 <th ng-click="order('name')" ng-class="{'_ascend' : predicate === 'name'
                 && !reverse,'_descend' : predicate === 'name' && reverse}" class="data-grid-th _sortable">
                     <span>Extension Name</span>
+                </th>
+                <th ng-click="order('metapackage')" ng-class="{'_ascend' : predicate === 'metapackage' &&
+                !reverse,'_descend' : predicate === 'metapackage' && reverse}" class="data-grid-th _sortable">
+                    <span>Metapackage</span>
                 </th>
                 <th ng-click="order('version')" ng-class="{'_ascend' : predicate === 'version'
                 && !reverse,'_descend' : predicate === 'version' && reverse}" class="data-grid-th _sortable">
@@ -127,13 +131,16 @@
                     <span class="data-grid-data">{{extension.name}}</span>
                 </td>
                 <td>
+                    <span class="data-grid-data">{{extension.metapackage}}</span>
+                </td>
+                <td>
                     <span class="data-grid-data">{{extension.version}}</span>
                 </td>
                 <td>
                     <span class="data-grid-data">{{extension.type}}</span>
                 </td>
                 <td>
-                    <span class="data-grid-data">{{extension.author}}</span>
+                    <span class="data-grid-data">{{extension.vendor}}</span>
                 </td>
                 <td class="data-grid-data">
                     <div class="action-wrap" ng-class="_active">
@@ -153,4 +160,4 @@
     <div class="grid-loader"></div>
 </div>
 <div ng-controller="authDialogController" ng-show="edited===true"
-     ng-include="'index.php/connect/popup-auth'" style="display: inline-block"></div>
+     ng-include="'index.php/marketplace/popup-auth'" style="display: inline-block"></div>

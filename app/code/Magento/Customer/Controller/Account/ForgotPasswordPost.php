@@ -7,15 +7,18 @@
 namespace Magento\Customer\Controller\Account;
 
 use Magento\Customer\Api\AccountManagementInterface;
-use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\SecurityViolationException;
 
-class ForgotPasswordPost extends Action implements AccountInterface
+/**
+ * ForgotPasswordPost controller
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ForgotPasswordPost extends \Magento\Customer\Controller\AbstractAccount
 {
     /** @var AccountManagementInterface */
     protected $customerAccountManagement;
@@ -51,7 +54,7 @@ class ForgotPasswordPost extends Action implements AccountInterface
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
@@ -68,8 +71,11 @@ class ForgotPasswordPost extends Action implements AccountInterface
                     $email,
                     AccountManagement::EMAIL_RESET
                 );
-            } catch (NoSuchEntityException $e) {
+            } catch (NoSuchEntityException $exception) {
                 // Do nothing, we don't want anyone to use this action to determine which email accounts are registered.
+            } catch (SecurityViolationException $exception) {
+                $this->messageManager->addErrorMessage($exception->getMessage());
+                return $resultRedirect->setPath('*/*/forgotpassword');
             } catch (\Exception $exception) {
                 $this->messageManager->addExceptionMessage(
                     $exception,

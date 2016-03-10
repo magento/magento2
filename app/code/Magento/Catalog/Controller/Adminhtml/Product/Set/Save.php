@@ -57,7 +57,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Set
      * @return \Magento\Framework\Controller\ResultInterface
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function executeInternal()
+    public function execute()
     {
         $entityTypeId = $this->_getEntityTypeId();
         $hasError = false;

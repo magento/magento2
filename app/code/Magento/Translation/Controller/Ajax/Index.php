@@ -31,17 +31,16 @@ class Index extends \Magento\Framework\App\Action\Action
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $translate = (array)$this->getRequest()->getPost('translate');
 
         try {
-            $this->inlineParser->processAjaxPost($translate);
-            $response = "{success:true}";
+            $response = $this->inlineParser->processAjaxPost($translate);
         } catch (\Exception $e) {
             $response = "{error:true,message:'" . $e->getMessage() . "'}";
         }
-        $this->getResponse()->representJson($response);
+        $this->getResponse()->representJson(json_encode($response));
         $this->_actionFlag->set('', self::FLAG_NO_POST_DISPATCH, true);
     }
 }

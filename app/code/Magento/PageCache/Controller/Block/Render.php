@@ -13,7 +13,7 @@ class Render extends \Magento\PageCache\Controller\Block
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         if (!$this->getRequest()->isAjax()) {
             $this->_forward('noroute');

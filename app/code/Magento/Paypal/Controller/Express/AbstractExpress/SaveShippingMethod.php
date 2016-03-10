@@ -13,7 +13,7 @@ class SaveShippingMethod extends \Magento\Paypal\Controller\Express\AbstractExpr
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $isAjax = $this->getRequest()->getParam('isAjax');

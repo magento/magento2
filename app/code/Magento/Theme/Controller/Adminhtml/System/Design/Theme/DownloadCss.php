@@ -16,7 +16,7 @@ class DownloadCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Them
      *
      * @return ResponseInterface|void
      */
-    public function executeInternal()
+    public function execute()
     {
         $themeId = $this->getRequest()->getParam('theme_id');
         $file = $this->getRequest()->getParam('file');

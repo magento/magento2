@@ -13,13 +13,15 @@ $registry = $objectManager->get('Magento\Framework\Registry');
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var \Magento\Catalog\Model\Product $product */
-$product = $objectManager->create('Magento\Catalog\Model\Product');
-/** @var \Magento\Catalog\Model\Product[] $products */
-$products = $product->getCollection()->getItems();
-foreach ($products as $product) {
-    if ($product->getId()) {
-        $product->delete();
+/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+
+foreach (['simple 01', 'simple 02', 'simple 03'] as $sku) {
+    try {
+        $product = $productRepository->get($sku);
+        $productRepository->delete($product);
+    } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
+        //Product already removed
     }
 }
 

@@ -109,6 +109,7 @@ class GiftMessageConfigProviderTest extends \PHPUnit_Framework_TestCase
         $isFrontUrlSecure = true;
         $baseUrl = 'https://magento.com/';
         $quoteItemMock = $this->getMock('Magento\Quote\Model\Quote\Item', [], [], '', false);
+        $productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $storeMock = $this->getMock(
             'Magento\Store\Model\Store',
             ['isFrontUrlSecure', 'getBaseUrl', 'getCode'],
@@ -118,7 +119,7 @@ class GiftMessageConfigProviderTest extends \PHPUnit_Framework_TestCase
         );
         $quoteMock = $this->getMock(
             'Magento\Quote\Model\Quote',
-            ['getQuoteCurrencyCode', 'getStore', 'getIsVirtual', 'getAllVisibleItems'],
+            ['getQuoteCurrencyCode', 'getStore', 'getIsVirtual', 'getAllVisibleItems', 'getId'],
             [],
             '',
             false
@@ -142,18 +143,17 @@ class GiftMessageConfigProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->checkoutSessionMock->expects($this->atLeastOnce())->method('getQuoteId')->willReturn($quoteId);
         $this->cartRepositoryMock->expects($this->once())->method('get')->with($quoteId)->willReturn($messageMock);
-
         $this->checkoutSessionMock->expects($this->once())->method('loadCustomerQuote')->willReturnSelf();
         $this->checkoutSessionMock->expects($this->atLeastOnce())->method('getQuote')->willReturn($quoteMock);
+        $quoteMock->expects($this->any())->method('getId')->willReturn($quoteId);
         $quoteMock->expects($this->once())->method('getIsVirtual')->willReturn(false);
-
         $messageMock->expects($this->atLeastOnce())->method('getData')->willReturn($messageDataMock);
-
         $quoteMock->expects($this->once())->method('getAllVisibleItems')->willReturn([$quoteItemMock]);
         $quoteItemMock->expects($this->once())->method('getId')->willReturn($itemId);
+        $quoteItemMock->expects($this->any())->method('getProduct')->willReturn($productMock);
+        $productMock->expects($this->any())->method('getGiftMessageAvailable')->willReturn(false);
         $this->itemRepositoryMock->expects($this->once())->method('get')->with($quoteId, $itemId)
             ->willReturn($messageMock);
-
         $quoteMock->expects($this->once())->method('getQuoteCurrencyCode')->willReturn($currencyCode);
         $this->localeFormatMock->expects($this->once())->method('getPriceFormat')->with(null, $currencyCode)
             ->willReturn($priceFormat);
@@ -172,7 +172,12 @@ class GiftMessageConfigProviderTest extends \PHPUnit_Framework_TestCase
         $expectedResult = [
             'giftMessage' => [
                 'orderLevel' => $messageDataMock,
-                'itemLevel' => [$itemId => $messageDataMock]
+                'itemLevel' => [
+                    $itemId => [
+                        'is_available' => false,
+                        'message' => $messageDataMock,
+                    ],
+                ]
             ],
             'isOrderLevelGiftOptionsEnabled' => $orderLevel,
             'isItemLevelGiftOptionsEnabled' => $itemLevel,
@@ -182,7 +187,6 @@ class GiftMessageConfigProviderTest extends \PHPUnit_Framework_TestCase
             'formKey' => $formKey,
             'baseUrl' => $baseUrl
         ];
-
         $this->assertSame($expectedResult, $this->model->getConfig());
     }
 }

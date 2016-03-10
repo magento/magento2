@@ -98,6 +98,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function attributeValidationProvider()
     {
@@ -146,6 +147,13 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
                 ['is_required' => true, 'type' => 'int'],
                 ['product_type' => 'any', 'attribute_code' => '1'],
                 true
+            ],
+            [
+                Import::BEHAVIOR_APPEND,
+                ['is_required' => true, 'type' => 'decimal'],
+                ['product_type' => 'any', 'price' => ''],
+                true,
+                'price'
             ],
             [
                 Import::BEHAVIOR_APPEND,

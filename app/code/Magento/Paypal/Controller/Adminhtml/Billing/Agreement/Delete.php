@@ -9,11 +9,18 @@ namespace Magento\Paypal\Controller\Adminhtml\Billing\Agreement;
 class Delete extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Paypal::actions_manage';
+
+    /**
      * Delete billing agreement action
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $agreementModel = $this->_initBillingAgreement();
 
@@ -39,15 +46,5 @@ class Delete extends \Magento\Paypal\Controller\Adminhtml\Billing\Agreement
             $this->_redirect('paypal/*/view', ['_current' => true]);
         }
         $this->_redirect('paypal/*/');
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Paypal::actions_manage');
     }
 }

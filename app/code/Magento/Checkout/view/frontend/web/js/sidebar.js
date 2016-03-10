@@ -5,15 +5,15 @@
 /*jshint browser:true jquery:true*/
 /*global confirm:true*/
 define([
-    "jquery",
+    'jquery',
     'Magento_Customer/js/model/authentication-popup',
     'Magento_Customer/js/customer-data',
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/modal/confirm',
-    'Magento_Customer/js/customer-data',
-    "jquery/ui",
-    "mage/decorate"
-], function($, authenticationPopup, customerData, alert, confirm, customerData){
+    'jquery/ui',
+    'mage/decorate',
+    'mage/collapsible'
+], function ($, authenticationPopup, customerData, alert, confirm) {
 
     $.widget('mage.sidebar', {
         options: {
@@ -27,14 +27,16 @@ define([
          * @private
          */
         _create: function () {
-            var self = this;
-
             this._initContent();
-            customerData.get('cart').subscribe(function () {
-                $(self.options.targetElement).trigger('contentUpdated');
-                self._calcHeight();
-                self._isOverflowed();
-            });
+        },
+
+        /**
+         * Update sidebar block.
+         */
+        update: function () {
+            $(this.options.targetElement).trigger('contentUpdated');
+            this._calcHeight();
+            this._isOverflowed();
         },
 
         _initContent: function() {
@@ -43,11 +45,11 @@ define([
 
             this.element.decorate('list', this.options.isRecursive);
 
-            events['click ' + this.options.button.close] = function(event) {
+            events['click ' + this.options.button.close] = function (event) {
                 event.stopPropagation();
                 $(self.options.targetElement).dropdownDialog("close");
             };
-            events['click ' + this.options.button.checkout] = $.proxy(function() {
+            events['click ' + this.options.button.checkout] = $.proxy(function () {
                 var cart = customerData.get('cart'),
                     customer = customerData.get('customer');
 
@@ -108,9 +110,9 @@ define([
             }
         },
 
-        _showItemButton: function(elem) {
-            var itemId = elem.data('cart-item');
-            var itemQty = elem.data('item-qty');
+        _showItemButton: function (elem) {
+            var itemId = elem.data('cart-item'),
+                itemQty = elem.data('item-qty');
             if (this._isValidQty(itemQty, elem.val())) {
                 $('#update-cart-item-' + itemId).show('fade', 300);
             } else if (elem.val() == 0) {
@@ -196,10 +198,10 @@ define([
                 type: 'post',
                 dataType: 'json',
                 context: this,
-                beforeSend: function() {
+                beforeSend: function () {
                     elem.attr('disabled', 'disabled');
                 },
-                complete: function() {
+                complete: function () {
                     elem.attr('disabled', null);
                 }
             })
@@ -219,31 +221,29 @@ define([
                     console.log(JSON.stringify(error));
                 });
         },
+
         /**
          * Calculate height of minicart list
          *
          * @private
          */
-        _calcHeight: function() {
+        _calcHeight: function () {
             var self = this,
                 height = 0,
                 counter = this.options.maxItemsVisible,
-                target = $(this.options.minicart.list)
-                    .clone()
-                    .attr('style', 'position: absolute !important; top: -10000 !important;')
-                    .appendTo('body');
+                target = $(this.options.minicart.list);
 
-            this.scrollHeight = 0;
-            target.children().each(function() {
+            target.children().each(function () {
+                $(this).collapsible();
+                var outerHeight = $(this).outerHeight();
+
                 if (counter-- > 0) {
-                    height += $(this).height();
+                    height += outerHeight;
                 }
-                self.scrollHeight += $(this).height();
+                self.scrollHeight += outerHeight;
             });
 
-            target.remove();
-
-            $(this.options.minicart.list).css('height', height);
+            target.height(height);
         }
     });
 

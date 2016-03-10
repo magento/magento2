@@ -154,7 +154,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $this->listCompareMock->expects($this->never())->method('addProducts');
         $this->redirectFactoryMock->expects($this->never())->method('create');
-        $this->index->executeInternal();
+        $this->index->execute();
     }
 
     public function testExecuteWithItems()
@@ -180,6 +180,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->redirectFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($redirect);
-        $this->index->executeInternal();
+        $this->index->execute();
     }
 }

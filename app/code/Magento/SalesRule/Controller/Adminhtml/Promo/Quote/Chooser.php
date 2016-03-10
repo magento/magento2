@@ -13,7 +13,7 @@ class Chooser extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $uniqId = $this->getRequest()->getParam('uniq_id');
         $chooserBlock = $this->_view->getLayout()->createBlock(

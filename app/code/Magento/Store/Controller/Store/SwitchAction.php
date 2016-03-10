@@ -68,7 +68,7 @@ class SwitchAction extends Action
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $storeCode = $this->_request->getParam(
             StoreResolver::PARAM_NAME,

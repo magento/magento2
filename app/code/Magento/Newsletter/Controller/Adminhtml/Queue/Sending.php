@@ -13,7 +13,7 @@ class Sending extends \Magento\Newsletter\Controller\Adminhtml\Queue
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         // Todo: put it somewhere in config!
         $countOfQueue = 3;

@@ -49,7 +49,7 @@ class Download extends \Magento\Backup\Controller\Adminhtml\Index
      *
      * @return void|\Magento\Backend\App\Action
      */
-    public function executeInternal()
+    public function execute()
     {
         /* @var $backup \Magento\Backup\Model\Backup */
         $backup = $this->_backupModelFactory->create(

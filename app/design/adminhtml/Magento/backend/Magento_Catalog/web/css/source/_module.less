@@ -3,6 +3,18 @@
 //  * See COPYING.txt for license details.
 //  */
 
+//
+//  Catalog product grid
+//  ---------------------------------------------
+
+.catalog-product-index {
+    .admin__data-grid-wrap {
+        .data-row {
+            cursor: pointer;
+        }
+    }
+}
+
 .product-composite-configure-inner {
     .admin__control-text {
         &.qty {
@@ -29,25 +41,31 @@ div.removed,
 }
 
 //
-//  Product weight switcher
+//  Create attribute panel iframe page configuration
 //  ---------------------------------------------
 
-.weight-switcher {
-    .field-weight & {
-        .admin__control-switcher {
-            > .admin__field-label {
-                float: none;
-                padding-top: 7px;
-                text-align: left;
-                width: 100%;
+.catalog-product-attribute-edit {
+    min-width: 0;
+
+    &.attribute-popup {
+        .page-wrapper {
+            width: 100%;
+
+            .page-content {
+                padding-left: 0;
             }
         }
     }
-    .admin__control-radio[type=radio] {
-        margin: 0;
-        position: absolute;
-    }
-    .admin__control-addon {
-        width: auto; // IE9 width fix
+}
+
+//
+//  Category page sidebar
+//  ---------------------------------------------
+
+.sidebar-actions {
+    margin-bottom: @indent__base;
+
+    [class*='action-'] {
+        margin-bottom: @indent__xs;
     }
 }

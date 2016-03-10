@@ -13,7 +13,7 @@ class Chooser extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Widget
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $request = $this->getRequest();
 

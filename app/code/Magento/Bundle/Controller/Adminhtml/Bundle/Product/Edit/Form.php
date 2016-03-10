@@ -33,7 +33,7 @@ class Form extends \Magento\Catalog\Controller\Adminhtml\Product
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $product = $this->initializationHelper->initialize($this->productBuilder->build($this->getRequest()));
         $this->getResponse()->setBody(

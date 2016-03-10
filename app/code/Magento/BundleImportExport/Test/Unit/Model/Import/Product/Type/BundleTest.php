@@ -377,8 +377,8 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     {
         $this->entityModel->expects($this->any())->method('getRowScope')->will($this->returnValue(-1));
         $rowData = [
-            'price_type' => 'fixed',
-            'price_view' => 'bundle_price_view'
+            'bundle_price_type' => 'dynamic',
+            'bundle_price_view' => 'bundle_price_view'
         ];
         $this->assertEquals($this->bundle->isRowValid($rowData, 0), true);
     }

@@ -252,7 +252,7 @@ class ComposerInformation
     {
         $rootPackage = $this->composer->getPackage();
 
-        return preg_match('/magento\/magento2.e/', $rootPackage->getName());
+        return preg_match('/magento\/magento2...?/', $rootPackage->getName());
     }
 
     /**

@@ -40,7 +40,7 @@ class Directive extends \Magento\Backend\App\Action
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function executeInternal()
+    public function execute()
     {
         $directive = $this->getRequest()->getParam('___directive');
         $directive = $this->urlDecoder->decode($directive);

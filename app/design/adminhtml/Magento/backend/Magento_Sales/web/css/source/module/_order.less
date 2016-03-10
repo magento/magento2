@@ -48,6 +48,7 @@
         #mix-grid .width(9,12);
         margin-left: 0;
     }
+
     .order-sidebar {
         #mix-grid .column(3,12);
         margin-left: 0;
@@ -69,6 +70,21 @@
     .order-view-account-information .order-account-information {
         float: right;
         #mix-grid .width(6,12);
+    }
+}
+
+//
+//  Tablets
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__l) {
+    .order-details {
+        .order-search-items {
+            .action-configure {
+                display: block;
+                float: none;
+            }
+        }
     }
 }
 
@@ -104,6 +120,12 @@
     }
 }
 
+.admin__page-subsection {
+    & + & {
+        margin-top: @indent__m;
+    }
+}
+
 .admin__page-section-title {
     &:extend(.abs-clearfix all);
     border-bottom: 1px solid @color-gray80;
@@ -118,6 +140,9 @@
     .actions {
         display: inline-block;
         margin-left: @indent__xs;
+        &._primary {
+            float: right;
+        }
     }
 }
 

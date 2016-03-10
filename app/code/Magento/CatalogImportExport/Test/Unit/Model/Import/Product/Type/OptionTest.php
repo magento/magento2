@@ -232,6 +232,9 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
 
         $scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
 
+        $timezoneInterface = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
+        $date = new \DateTime();
+        $timezoneInterface->expects($this->any())->method('date')->willReturn($date);
         $modelClassArgs = [
             $this->getMock('Magento\ImportExport\Model\ResourceModel\Import\Data', [], [], '', false),
             $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false),
@@ -254,7 +257,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ),
             $catalogDataMock,
             $scopeConfig,
-            new \Magento\Framework\Stdlib\DateTime(),
+            $timezoneInterface,
             $this->getMock(
                 'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface',
                 [],

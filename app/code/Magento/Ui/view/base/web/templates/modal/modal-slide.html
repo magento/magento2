@@ -15,10 +15,17 @@
     <div class="modal-inner-wrap"
          data-role="focusable-scope">
         <header class="modal-header">
-            <% if(data.title){ %>
             <h1 class="modal-title"
-                data-role="title"><%= data.title %></h1>
-            <% } %>
+                data-role="title">
+                <% if(data.title){ %>
+                    <%= data.title %>
+                <% } %>
+                <span data-role="subTitle">
+                    <% if(data.subTitle){ %>
+                        <%= data.subTitle %>
+                    <% } %>
+                </span>
+            </h1>
             <button
                 class="action-close"
                 data-role="closeBtn"
