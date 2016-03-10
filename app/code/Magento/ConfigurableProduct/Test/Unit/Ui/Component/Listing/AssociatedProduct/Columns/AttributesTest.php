@@ -8,8 +8,11 @@ namespace Magento\ConfigurableProduct\Test\Unit\Ui\Component\Listing\AssociatedP
 use Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Columns\Attributes as AttributesColumn;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface as AttributeRepository;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\View\Element\UiComponent\Processor as UiElementProcessor;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 
@@ -31,35 +34,65 @@ class AttributesTest extends \PHPUnit_Framework_TestCase
     private $contextMock;
 
     /**
-     * @var AttributeRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $attributeRepositoryMock;
+
+    /**
+     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $searchCriteriaBuilderMock;
 
     /**
      * @var UiElementProcessor|\PHPUnit_Framework_MockObject_MockObject
      */
     private $uiElementProcessorMock;
 
+    /**
+     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $searchCriteriaMock;
+
+    /**
+     * @var ProductAttributeSearchResultsInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $searchResultsMock;
+
     protected function setUp()
     {
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)
             ->getMockForAbstractClass();
-        $this->attributeRepositoryMock = $this->getMockBuilder(AttributeRepository::class)
+        $this->attributeRepositoryMock = $this->getMockBuilder(ProductAttributeRepositoryInterface::class)
             ->getMockForAbstractClass();
+        $this->searchCriteriaBuilderMock = $this->getMockBuilder(SearchCriteriaBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->uiElementProcessorMock = $this->getMockBuilder(UiElementProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->searchCriteriaMock = $this->getMockBuilder(SearchCriteria::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->searchResultsMock = $this->getMockBuilder(ProductAttributeSearchResultsInterface::class)
+            ->getMockForAbstractClass();
 
         $this->contextMock->expects(static::any())
             ->method('getProcessor')
             ->willReturn($this->uiElementProcessorMock);
+        $this->searchCriteriaBuilderMock->expects(static::any())
+            ->method('addFilter')
+            ->willReturnSelf();
+        $this->searchCriteriaBuilderMock->expects(static::any())
+            ->method('create')
+            ->willReturn($this->searchCriteriaMock);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->attributesColumn = $this->objectManagerHelper->getObject(
             AttributesColumn::class,
             [
                 'context' => $this->contextMock,
-                'attributeRepository' => $this->attributeRepositoryMock
+                'attributeRepository' => $this->attributeRepositoryMock,
+                'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock
             ]
         );
     }
@@ -76,7 +109,7 @@ class AttributesTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         ];
-        $attributeList = [
+        $attributes = [
             $this->createAttributeMock(
                 'attribute1_1_code',
                 'attribute1_1_label',
@@ -116,12 +149,6 @@ class AttributesTest extends \PHPUnit_Framework_TestCase
                 'attribute4_1_label'
             )
         ];
-        $attributeCodes = [
-            'attribute1_1_code',
-            'attribute3_1_code',
-            'attribute3_2_code',
-            'attribute4_1_code'
-        ];
         $resultData = [
             'data' => [
                 'items' => [
@@ -144,31 +171,16 @@ class AttributesTest extends \PHPUnit_Framework_TestCase
         ];
 
         $this->attributesColumn->setData('name', $name);
-        $this->getAttributes($attributeList, $attributeCodes);
-
-        $this->assertSame($resultData, $this->attributesColumn->prepareDataSource($initialData));
-    }
-
-    /**
-     * Set expectations for method "getAttributes"
-     *
-     * @param array $attributeList
-     * @param array $attributeCodes
-     * @return void
-     */
-    private function getAttributes(array $attributeList, array $attributeCodes = [])
-    {
-        $this->contextMock->expects(static::any())
-            ->method('getRequestParam')
-            ->willReturnMap(
-                [
-                    ['attributes_codes', [], $attributeCodes]
-                ]
-            );
 
         $this->attributeRepositoryMock->expects(static::any())
             ->method('getList')
-            ->willReturn($attributeList);
+            ->with($this->searchCriteriaMock)
+            ->willReturn($this->searchResultsMock);
+        $this->searchResultsMock->expects(static::any())
+            ->method('getItems')
+            ->willReturn($attributes);
+
+        $this->assertSame($resultData, $this->attributesColumn->prepareDataSource($initialData));
     }
 
     /**
