@@ -44,7 +44,7 @@ class AssertProductAttributeAbsenceInVariationsSearch extends AbstractConstraint
 
         /** @var VariationsTab $variationsTab */
         $newProductPage->getProductForm()->fill($assertProduct);
-        $variationsTab = $newProductPage->getProductForm()->getTab(self::TAB_VARIATIONS);
+        $variationsTab = $newProductPage->getProductForm()->getSection(self::TAB_VARIATIONS);
         $variationsTab->showContent();
         $variationsTab->createConfigurations();
         $attributesGrid = $variationsTab->getAttributeBlock()->getAttributesGrid();

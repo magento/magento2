@@ -73,7 +73,7 @@
         <field name="id" group="null" />
         <field name="type_id" />
         <field name="attribute_set_id" group="product-details" source="Magento\Catalog\Test\Fixture\Product\AttributeSetId" />
-        <field name="custom_attribute" group="product-details" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomAttribute" />
+        <field name="custom_attribute" source="Magento\Catalog\Test\Fixture\CatalogProductSimple\CustomAttribute" />
         <field name="custom_options" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\Product\CustomOptions" repository="Magento\Catalog\Test\Repository\Product\CustomOptions" />
         <field name="website_ids" group="websites" />
         <field name="is_returnable" is_required="0" group="product-details" />

@@ -6,8 +6,7 @@
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Attribute;
 
-use Magento\Backend\Test\Block\Widget\FormTabs;
-use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\Ui\Test\Block\Adminhtml\FormSections;
 use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
@@ -16,14 +15,14 @@ use Magento\Mtf\Fixture\FixtureInterface;
 /**
  * Edit attribute form on catalog product edit page.
  */
-class AttributeForm extends FormTabs
+class AttributeForm extends FormSections
 {
     /**
-     * Iframe locator.
+     * New Attribute modal locator.
      *
      * @var string
      */
-    protected $iFrame = '#create_new_attribute_container';
+    protected $newAttributeModal = '.product_form_product_form_add_attribute_modal_create_new_attribute_modal';
 
     /**
      * Save button selector.
@@ -47,7 +46,6 @@ class AttributeForm extends FormTabs
     protected function init()
     {
         parent::init();
-        $this->browser->switchToFrame(new Locator($this->iFrame));
     }
 
     /**
@@ -67,28 +65,6 @@ class AttributeForm extends FormTabs
             }
         );
         parent::fill($fixture, $element);
-        $this->browser->switchToFrame();
-    }
-
-    /**
-     * Open tab.
-     *
-     * @param string $tabName
-     * @return Tab
-     */
-    public function openTab($tabName)
-    {
-        $selector = $this->getTabs()[$tabName]['selector'];
-        $strategy = isset($this->getTabs()[$tabName]['strategy'])
-            ? $this->getTabs()[$tabName]['strategy']
-            : Locator::SELECTOR_CSS;
-
-        $isTabOpened = $this->_rootElement->find($this->isTabOpened . $selector, $strategy);
-        if (!$isTabOpened->isVisible()) {
-            $this->_rootElement->find($selector, $strategy)->click();
-        }
-
-        return $this;
     }
 
     /**

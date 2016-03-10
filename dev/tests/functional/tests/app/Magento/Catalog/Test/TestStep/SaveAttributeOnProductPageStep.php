@@ -7,22 +7,15 @@
 namespace Magento\Catalog\Test\TestStep;
 
 use Magento\Mtf\ObjectManager;
+use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
-use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 
 /**
  * Click "Save" button on attribute form on product page.
  */
 class SaveAttributeOnProductPageStep implements TestStepInterface
 {
-    /**
-     * Catalog product edit page.
-     *
-     * @var CatalogProductEdit
-     */
-    protected $catalogProductEdit;
-
     /**
      * Product attribute fixture.
      *
@@ -38,29 +31,50 @@ class SaveAttributeOnProductPageStep implements TestStepInterface
     protected $objectManager;
 
     /**
+     * Browser instance.
+     *
+     * @var BrowserInterface
+     */
+    protected $browser;
+
+    /**
+     * New Attribute modal locator.
+     *
+     * @var string
+     */
+    protected $newAttributeModal = '.product_form_product_form_add_attribute_modal_create_new_attribute_modal';
+
+    /**
+     * "Save" button.
+     *
+     * @var string
+     */
+    protected $save = 'button#save';
+
+    /**
      * @constructor
-     * @param CatalogProductEdit $catalogProductEdit
      * @param CatalogProductAttribute $attribute
      * @param ObjectManager $objectManager
+     * @param BrowserInterface $browser
      */
     public function __construct(
-        CatalogProductEdit $catalogProductEdit,
         CatalogProductAttribute $attribute,
-        ObjectManager $objectManager
+        ObjectManager $objectManager,
+        BrowserInterface $browser
     ) {
-        $this->catalogProductEdit = $catalogProductEdit;
         $this->attribute = $attribute;
         $this->objectManager = $objectManager;
+        $this->browser = $browser;
     }
 
     /**
-     * Click "Save" button on attribute form on product page.
+     * Click "Save" button on attribute form.
      *
-     * @return array
+     * @return void
      */
     public function run()
     {
-        $this->catalogProductEdit->getProductForm()->saveAttributeForm();
+        $this->browser->find($this->newAttributeModal)->find($this->save)->click();
     }
 
     /**

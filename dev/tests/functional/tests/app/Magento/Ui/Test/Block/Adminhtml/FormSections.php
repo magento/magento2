@@ -122,20 +122,15 @@ class FormSections extends AbstractFormContainers
     /**
      * Get Require Notice Attributes.
      *
-     * @param InjectableFixture $product
      * @return array
      */
-    public function getRequireNoticeAttributes(InjectableFixture $product)
+    public function getRequireNoticeAttributes()
     {
         $data = [];
-        $tabs = $this->getFixtureFieldsByContainers($product);
-        foreach (array_keys($tabs) as $tabName) {
-            $tab = $this->getSection($tabName);
-            $this->openSection($tabName);
-            $errors = $tab->getJsErrors();
-            if (!empty($errors)) {
-                $data[$tabName] = $errors;
-            }
+        $section = $this->getSection('attributes');
+        $errors = $section->getJsErrors();
+        if (!empty($errors)) {
+            $data['attributes'] = $errors;
         }
 
         return $data;

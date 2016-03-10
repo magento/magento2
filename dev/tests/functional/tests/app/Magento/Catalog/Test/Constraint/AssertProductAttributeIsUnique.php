@@ -58,7 +58,7 @@ class AssertProductAttributeIsUnique extends AbstractConstraint
         $productForm = $catalogProductEdit->getProductForm();
         $productForm->fill($simpleProduct);
         $catalogProductEdit->getFormPageActions()->save();
-        $failedAttributes = $productForm->getRequireNoticeAttributes($simpleProduct);
+        $failedAttributes = $productForm->getRequireNoticeAttributes();
         $attributeLabel = $attribute->getFrontendLabel();
         $actualMessage = $this->getActualMessage($failedAttributes, $attributeLabel);
 
@@ -76,10 +76,10 @@ class AssertProductAttributeIsUnique extends AbstractConstraint
      * @param string $attributeLabel
      * @return mixed
      */
-    protected function getActualMessage(array $errors, $attributeLabel)
+    private function getActualMessage(array $errors, $attributeLabel)
     {
-        return isset($errors['product-details'][$attributeLabel])
-            ? $errors['product-details'][$attributeLabel]
+        return isset($errors['attributes'][$attributeLabel])
+            ? $errors['attributes'][$attributeLabel]
             : null;
     }
 
