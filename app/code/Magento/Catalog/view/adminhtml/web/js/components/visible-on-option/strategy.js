@@ -17,19 +17,6 @@ define(function () {
         },
 
         /**
-         * Initialize item.
-         *
-         * @param {Object} item
-         * @returns {Object} Chainable.
-         */
-        initElement: function (item) {
-            this._super();
-            item.set('visible', this.inverseVisibility ? !this.isShown : this.isShown);
-
-            return this;
-        },
-
-        /**
          * Toggle visibility state.
          *
          * @param {Number} selected
