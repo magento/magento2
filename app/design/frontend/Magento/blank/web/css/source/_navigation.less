@@ -77,12 +77,10 @@
         .lib-css(transition, left .3s, 1);
         height: 100%;
         left: -80%;
-        left: calc(~"-1 * (100% - @{active-nav-indent})");
         overflow: auto;
         position: fixed;
         top: 0;
         width: 80%;
-        width: calc(~"100% - @{active-nav-indent}");
 
         .switcher {
             border-top: 1px solid @color-gray82;
@@ -189,7 +187,6 @@
     .nav-open {
         .page-wrapper {
             left: 80%;
-            left: calc(~"100% - @{active-nav-indent}");
         }
 
         .nav-sections {
