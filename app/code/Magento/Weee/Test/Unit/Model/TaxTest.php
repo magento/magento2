@@ -16,6 +16,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Weee\Model\Tax
      */
     protected $model;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -93,7 +94,6 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-
         $className = '\Magento\Framework\Model\Context';
         $this->context = $this->getMock($className, [], [], '', false);
 
@@ -158,6 +158,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ]
         );
     }
+
     /**
      * test GetProductWeeeAttributes
      * @dataProvider getProductWeeeAttributesDataProvider
@@ -275,5 +276,4 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ]
         ];
     }
-
 }
