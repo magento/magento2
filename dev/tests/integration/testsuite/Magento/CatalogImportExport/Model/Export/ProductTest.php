@@ -62,7 +62,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
                 'Magento\ImportExport\Model\Export\Adapter\Csv'
             )
         );
-        $this->assertNotEmpty($this->_model->export());
+        $exportData = $this->_model->export();
+        $this->assertContains('New Product', $exportData);
+
+        $this->markTestIncomplete('Test must be unskiped after implementation MAGETWO-49018');
+        $this->assertContains('Option 1 Value 1', $exportData);
+        $this->assertContains('test_option_code_2', $exportData);
+        $this->assertContains('max_characters=10', $exportData);
     }
 
     /**

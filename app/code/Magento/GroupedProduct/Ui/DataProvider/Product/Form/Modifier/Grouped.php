@@ -7,6 +7,7 @@ namespace Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
+use Magento\Framework\Phrase;
 use Magento\Ui\Component\Modal;
 use Magento\Ui\Component\Form;
 use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedProductType;
@@ -469,11 +470,11 @@ class Grouped extends AbstractModifier
                             ],
                         ],
                     ],
-                    'name' => $this->getTextColumn('name', false, 'Name', 30),
-                    'attribute_set' => $this->getTextColumn('attribute_set', false, 'Attribute Set', 40),
-                    'status' => $this->getTextColumn('status', true, 'Status', 50),
-                    'sku' => $this->getTextColumn('sku', false, 'SKU', 60),
-                    'price' => $this->getTextColumn('price', true, 'Price', 70),
+                    'name' => $this->getTextColumn('name', false, __('Name'), 30),
+                    'attribute_set' => $this->getTextColumn('attribute_set', false, __('Attribute Set'), 40),
+                    'status' => $this->getTextColumn('status', true, __('Status'), 50),
+                    'sku' => $this->getTextColumn('sku', false, __('SKU'), 60),
+                    'price' => $this->getTextColumn('price', true, __('Price'), 70),
                     'qty' => [
                         'arguments' => [
                             'data' => [
@@ -487,8 +488,7 @@ class Grouped extends AbstractModifier
                                     'additionalClasses' => 'admin__field-small',
                                     'sortOrder' => 80,
                                     'validation' => [
-                                        'validate-number' => true,
-                                        'validate-digits' => true,
+                                        'validate-zero-or-greater' => true
                                     ],
                                 ],
                             ],
@@ -531,12 +531,12 @@ class Grouped extends AbstractModifier
      * Returns text column configuration for the dynamic grid
      *
      * @param string $dataScope
-     * @param boolean $fit
-     * @param string $label
+     * @param bool $fit
+     * @param Phrase $label
      * @param int $sortOrder
      * @return array
      */
-    protected function getTextColumn($dataScope, $fit, $label, $sortOrder)
+    protected function getTextColumn($dataScope, $fit, Phrase $label, $sortOrder)
     {
         $column = [
             'arguments' => [
@@ -548,7 +548,7 @@ class Grouped extends AbstractModifier
                         'dataType' => Form\Element\DataType\Text::NAME,
                         'dataScope' => $dataScope,
                         'fit' => $fit,
-                        'label' => __($label),
+                        'label' => $label,
                         'sortOrder' => $sortOrder,
                     ],
                 ],
