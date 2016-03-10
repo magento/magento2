@@ -12,6 +12,7 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\BraintreeTwo\Model\Ui\ConfigProvider;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\BraintreeTwo\Gateway\Config\PayPal\Config;
+use Magento\Payment\Model\MethodInterface;
 
 /**
  * Class Button
@@ -43,6 +44,11 @@ class Button extends Template implements ShortcutInterface
     private $configProvider;
 
     /**
+     * @var MethodInterface
+     */
+    private $payment;
+
+    /**
      * Constructor
      *
      * @param Context $context
@@ -50,6 +56,7 @@ class Button extends Template implements ShortcutInterface
      * @param Session $checkoutSession
      * @param Config $config
      * @param ConfigProvider $configProvider
+     * @param MethodInterface $payment
      * @param array $data
      */
     public function __construct(
@@ -58,6 +65,7 @@ class Button extends Template implements ShortcutInterface
         Session $checkoutSession,
         Config $config,
         ConfigProvider $configProvider,
+        MethodInterface $payment,
         array $data = []
     ) {
         parent::__construct($context, $data);
@@ -66,6 +74,7 @@ class Button extends Template implements ShortcutInterface
         $this->checkoutSession = $checkoutSession;
         $this->config = $config;
         $this->configProvider = $configProvider;
+        $this->payment = $payment;
     }
 
     /**
@@ -125,7 +134,8 @@ class Button extends Template implements ShortcutInterface
      */
     public function isActive()
     {
-        return $this->config->isActive() && $this->config->isDisplayShoppingCart();
+        return $this->payment->isAvailable($this->checkoutSession->getQuote()) &&
+            $this->config->isDisplayShoppingCart();
     }
 
     /**

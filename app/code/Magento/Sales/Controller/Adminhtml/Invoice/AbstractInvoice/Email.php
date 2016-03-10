@@ -14,6 +14,13 @@ namespace Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice;
 abstract class Email extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::sales_invoice';
+
+    /**
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
      */
     protected $resultForwardFactory;
@@ -28,16 +35,6 @@ abstract class Email extends \Magento\Backend\App\Action
     ) {
         parent::__construct($context);
         $this->resultForwardFactory = $resultForwardFactory;
-    }
-
-    /**
-     * Check if email sending is allowed for the current user
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_invoice');
     }
 
     /**
