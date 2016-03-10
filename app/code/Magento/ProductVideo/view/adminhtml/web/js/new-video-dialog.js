@@ -207,7 +207,7 @@ define([
 
         _videoInformationBtnSelector: '[name="new_video_get"]',
 
-        _editVideoBtnSelector: '#media_gallery_content .image',
+        _editVideoBtnSelector: '.image',
 
         _deleteGalleryVideoSelector: '[data-role=delete-button]',
 
@@ -249,7 +249,7 @@ define([
 
             this._videoInformationGetBtn = this.element.find(this._videoInformationBtnSelector);
             this._videoInformationGetUrlField = this.element.find(this._videoUrlSelector);
-            this._videoInformationGetEditBtn = this.element.find(this._editVideoBtnSelector);
+            this._videoInformationGetEditBtn = this._gallery.find(this._editVideoBtnSelector);
 
             this._videoInformationGetBtn.on('click', $.proxy(this._onGetVideoInformationClick, this));
             this._videoInformationGetUrlField.on('focusout', $.proxy(this._onGetVideoInformationFocusOut, this));
@@ -304,7 +304,7 @@ define([
          * @private
          */
         _onGetVideoInformationSuccess: function (e, data) {
-            var player = this._gallery.find(this._videoPlayerSelector).createVideoPlayer({
+            var player = this.element.createVideoPlayer({
                 videoId: data.videoId,
                 videoProvider: data.videoProvider,
                 reset: false,
@@ -458,7 +458,7 @@ define([
             }
 
             newImageId = this.findElementId(tmpNewFile);
-            fc = this._gallery.find(this._itemIdSelector).val();
+            fc = this.element.find(this._itemIdSelector).val();
 
             suff = 'product[media_gallery][images]' + fc;
 
@@ -545,20 +545,20 @@ define([
         _onImageLoaded: function (result, file, oldFile, callback) {
             var data = JSON.parse(result);
 
-            if (this._gallery.find('#video_url').parent().find('.image-upload-error').length > 0) {
-                this._gallery.find('.image-upload-error').remove();
+            if (this.element.find('#video_url').parent().find('.image-upload-error').length > 0) {
+                this.element.find('.image-upload-error').remove();
             }
 
             if (data.errorcode || data.error) {
-                this._gallery.find('#video_url').parent().append('<div class="image-upload-error">' +
+                this.element.find('#video_url').parent().append('<div class="image-upload-error">' +
                 '<div class="image-upload-error-cross"></div><span>' + data.error + '</span></div>');
 
                 return;
             }
-            $.each(this._gallery.find(this._videoFormSelector).serializeArray(), function (i, field) {
+            $.each(this.element.find(this._videoFormSelector).serializeArray(), function (i, field) {
                 data[field.name] = field.value;
             });
-            data.disabled = this._gallery.find(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
+            data.disabled = this.element.find(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
             data['media_type'] = 'external-video';
             data.oldFile = oldFile;
 
@@ -573,7 +573,7 @@ define([
          * @private
          */
         _uploadFile: function (data, callback) {
-            var fu = this._gallery.find(this._videoPreviewInputSelector),
+            var fu = this.element.find(this._videoPreviewInputSelector),
                 tmpInput = document.createElement('input'),
                 fileUploader = null;
 
@@ -635,7 +635,7 @@ define([
 
             this.element.modal({
                 type: 'slide',
-                appendTo: this._gallery,
+                //appendTo: this._gallery,
                 modalClass: 'mage-new-video-dialog form-inline',
                 title: $.mage.__('New Video'),
                 buttons: [
@@ -672,13 +672,14 @@ define([
                     roles.prop('disabled', false);
                     file = widget.element.find('#file_name').val();
                     widget._onGetVideoInformationEditClick();
-                    modalTitleElement = widget._gallery.find('.mage-new-video-dialog .modal-title');
-
+                    modalTitleElement = widget.element.closest('.mage-new-video-dialog .modal-title');
+                    var modal = widget.element.closest('.mage-new-video-dialog');
                     if (!file) {
                         widget._blockActionButtons(true);
-                        widget._gallery.find('.video-delete-button').hide();
-                        widget._gallery.find('.video-edit').hide();
-                        widget._gallery.find('.video-create-button').show();
+
+                        modal.find('.video-delete-button').hide();
+                        modal.find('.video-edit').hide();
+                        modal.find('.video-create-button').show();
                         roles.prop('checked', widget._gallery.find('.image.item:not(.removed)').length < 1);
                         modalTitleElement.text($.mage.__('New Video'));
                         widget._isEditPage = false;
@@ -717,8 +718,10 @@ define([
          * @private
          */
         _blockActionButtons: function (status) {
-           this._gallery.find('.page-actions-buttons').find('button.video-create-button').attr('disabled', status);
-           this._gallery.find('.page-actions-buttons').find('button.video-edit').attr('disabled', status);
+           this.element
+               .closest('.mage-new-video-dialog')
+               .find('.page-actions-buttons button.video-create-button, .page-actions-buttons button.video-edit')
+               .attr('disabled', status);
         },
 
         /**
@@ -726,7 +729,7 @@ define([
          * @param {Function} callback
          */
         isValid: function (callback) {
-            var videoForm =this._gallery.find(this._videoFormSelector),
+            var videoForm =this.element.find(this._videoFormSelector),
                 videoLoaded = true;
 
             this._blockActionButtons(true);
@@ -779,7 +782,7 @@ define([
          * @private
          */
         _onCreate: function () {
-            var nvs = this._gallery.find(this._videoPreviewInputSelector),
+            var nvs = this.element.find(this._videoPreviewInputSelector),
                 file = nvs.get(0),
                 reqClass = 'required-entry _required';
 
@@ -828,8 +831,8 @@ define([
                     }
 
                     imageData = this.imageData || {};
-                    inputFile = this._gallery.find(this._videoPreviewInputSelector);
-                    itemId = this._gallery.find(this._itemIdSelector).val();
+                    inputFile = this.element.find(this._videoPreviewInputSelector);
+                    itemId = this.element.find(this._itemIdSelector).val();
                     itemId = itemId.slice(1, itemId.length - 1);
                     _inputSelector = '[name*="[' + itemId + ']"]';
                     mediaFields = this._gallery.find('input' + _inputSelector);
@@ -845,8 +848,8 @@ define([
                             this._gallery.find(_tmp).val(_field.val());
                             imageData[fieldName] = _field.val();
                         }
-                    });
-                    flagChecked = this._gallery.find(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
+                    }.bind(this));
+                    flagChecked = this.element.find(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
                     this._gallery.find('input[name*="' + itemId + '][disabled]"]').val(flagChecked);
                     this._gallery.find(_inputSelector).siblings('.image-fade').css('visibility', flagChecked ? 'visible' : 'hidden');
                     imageData.disabled = flagChecked;
@@ -950,7 +953,7 @@ define([
          * @private
          */
         _onImageInputChange: function () {
-            var jFile = this._gallery(this._videoPreviewInputSelector),
+            var jFile = this.element(this._videoPreviewInputSelector),
                 file = jFile[0],
                 val = jFile.val(),
                 prev = this._getPreviewImage(),
@@ -1023,7 +1026,7 @@ define([
                     'display': 'none',
                     'src': ''
                 });
-                $(this._previewImage).insertAfter(this._gallery.find(this._videoPreviewImagePointer));
+                $(this._previewImage).insertAfter(this.element.find(this._videoPreviewImagePointer));
                 $(this._previewImage).attr('data-role', 'video_preview_image');
             }
 
@@ -1052,11 +1055,11 @@ define([
                 this._previewImage = null;
             }
             this._tempPreviewImageData = null;
-            this._gallery.find(this._videoPlayerSelector).trigger('reset');
+            this.element.trigger('reset');
             newVideoForm = this.element.find(this._videoFormSelector);
 
             $(newVideoForm).find('input[type="hidden"][name!="form_key"]').val('');
-            this._gallery.find('input[name*="' + $(this._itemIdSelector).val() + '"]').parent().removeClass('active');
+            this._gallery.find('input[name*="' + this.element.find(this._itemIdSelector).val() + '"]').parent().removeClass('active');
 
             try {
                 newVideoForm.validation('clearError');
@@ -1095,7 +1098,7 @@ define([
                     var start = el.name.indexOf('[') + 1,
                         end = el.name.indexOf(']'),
                         imageType = el.name.substring(start, end),
-                        imageCheckbox = self._gallery.find(self._videoFormSelector + ' input[value="' + imageType + '"]');
+                        imageCheckbox = self.element.find(self._videoFormSelector + ' input[value="' + imageType + '"]');
 
                     self._changeRole(imageType, imageCheckbox.attr('checked'), imageData);
                 });
@@ -1135,27 +1138,28 @@ define([
         _onOpenDialog: function (e, imageData) {
             var formFields, flagChecked, file;
 
+            var modal = this.element.closest('.mage-new-video-dialog');
             if (imageData['media_type'] === 'external-video') {
                 this.imageData = imageData;
-                this._gallery.find('.video-create-button').hide();
-                this._gallery.find('.video-delete-button').show();
-                this._gallery.find('.video-edit').show();
-                this._gallery.find('.mage-new-video-dialog').createVideoPlayer({
+                modal.find('.video-create-button').hide();
+                modal.find('.video-delete-button').show();
+                modal.find('.video-edit').show();
+                modal.createVideoPlayer({
                     reset: true
                 }).createVideoPlayer('reset');
 
-                formFields = this._gallery.find(this._videoFormSelector).find('.edited-data');
+                formFields = modal.find(this._videoFormSelector).find('.edited-data');
 
                 $.each(formFields, function (i, field) {
                     $(field).val(imageData[field.name]);
                 });
 
                 flagChecked = imageData.disabled > 0;
-                this._gallery.find(this._videoDisableinputSelector).prop('checked', flagChecked);
+                modal.find(this._videoDisableinputSelector).prop('checked', flagChecked);
 
-                file = this._gallery.find('#file_name').val(imageData.file);
+                file = modal.find('#file_name').val(imageData.file);
 
-                $.each(this._gallery.find('.video_image_role'), function () {
+                $.each(modal.find('.video_image_role'), function () {
                     $(this).prop('checked', false).prop('disabled', false);
                 });
 
@@ -1166,7 +1170,7 @@ define([
                         start = this.name.indexOf('[') + 1;
                         end = this.name.length - 1;
                         imageRole = this.name.substring(start, end);
-                        this._gallery.find('#new_video_form input[value="' + imageRole + '"]').prop('checked', true);
+                        modal.find('#new_video_form input[value="' + imageRole + '"]').prop('checked', true);
                     }
                 });
             }
@@ -1178,29 +1182,30 @@ define([
          */
         toggleButtons: function () {
             var self = this;
+            var modal = this.element.closest('.mage-new-video-dialog');
 
-            this._gallery.find('.video-placeholder, .add-video-button-container > button').click(function () {
-                self._gallery.find('.video-create-button').show();
-                self._gallery.find('.video-delete-button').hide();
-                self._gallery.find('.video-edit').hide();
-                self._gallery.find('.mage-new-video-dialog').createVideoPlayer({
+            modal.find('.video-placeholder, .add-video-button-container > button').click(function () {
+                modal.find('.video-create-button').show();
+                modal.find('.video-delete-button').hide();
+                modal.find('.video-edit').hide();
+                modal.createVideoPlayer({
                     reset: true
                 }).createVideoPlayer('reset').updateInputFields({
                     reset: true
                 }).updateInputFields('reset');
             });
             this._gallery.on('click', '.item.video-item', function () {
-                self._gallery.find('.video-create-button').hide();
-                self._gallery.find('.video-delete-button').show();
-                self._gallery.find('.video-edit').show();
-                self._gallery.find('.mage-new-video-dialog').createVideoPlayer({
+                modal.find('.video-create-button').hide();
+                modal.find('.video-delete-button').show();
+                modal.find('.video-edit').show();
+                modal.find('.mage-new-video-dialog').createVideoPlayer({
                     reset: true
                 }).createVideoPlayer('reset');
             });
             this._gallery.on('click', '.item.video-item:not(.removed)', function () {
                 var flagChecked,
                     file,
-                    formFields = self._gallery.find(self._videoFormSelector).find('.edited-data'),
+                    formFields = modal.find('.edited-data'),
                     container = $(this);
 
                 $.each(formFields, function (i, field) {

@@ -9,7 +9,8 @@ define([
     'Magento_Ui/js/modal/modal',
     'mage/translate',
     'mage/backend/tree-suggest',
-    'mage/backend/validation'
+    'mage/backend/validation',
+    'newVideoDialog'
 ], function ($, productGallery) {
     'use strict';
 
@@ -26,6 +27,11 @@ define([
             this.element.on('openDialog', '.gallery.ui-sortable', $.proxy(this._onOpenDialog, this));
         },
 
+        _create: function () {
+            this._super();
+            this.videoDialog = this.element.find('#new-video');
+            this.videoDialog.mage('newVideoDialog', this.videoDialog.data('modalInfo'));
+        },
         /**
          * Open dialog for external video
          * @private
@@ -43,7 +49,7 @@ define([
          * Fired on trigger "openModal"
          */
         showModal: function () {
-            this.element.find('#new-video').modal('openModal');
+            this.videoDialog.modal('openModal');
         }
     });
 
