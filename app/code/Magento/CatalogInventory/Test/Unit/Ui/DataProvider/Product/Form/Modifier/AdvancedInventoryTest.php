@@ -8,7 +8,6 @@ namespace Magento\CatalogInventory\Test\Unit\Ui\DataProvider\Product\Form\Modifi
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Source\Stock;
-use Magento\Catalog\Ui\DataProvider\Grouper;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Store\Model\Store;
 use Magento\CatalogInventory\Ui\DataProvider\Product\Form\Modifier\AdvancedInventory;
@@ -18,11 +17,6 @@ use Magento\CatalogInventory\Ui\DataProvider\Product\Form\Modifier\AdvancedInven
  */
 class AdvancedInventoryTest extends AbstractModifierTest
 {
-    /**
-     * @var Grouper|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $grouperMock;
-
     /**
      * @var Stock|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -46,9 +40,6 @@ class AdvancedInventoryTest extends AbstractModifierTest
     protected function setUp()
     {
         parent::setUp();
-        $this->grouperMock = $this->getMockBuilder(Grouper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->stockMock = $this->getMockBuilder(Stock::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -77,7 +68,6 @@ class AdvancedInventoryTest extends AbstractModifierTest
     {
         return $this->objectManager->getObject(AdvancedInventory::class, [
             'locator' => $this->locatorMock,
-            'grouper' => $this->grouperMock,
             'stockRegistry' => $this->stockRegistryMock,
             'stock' => $this->stockMock,
         ]);
