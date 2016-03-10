@@ -113,17 +113,6 @@ class UpdateConfigurationsTest extends \PHPUnit_Framework_TestCase
                 'image' => 'simple2_image'
             ],
             'product3' => [
-                'status' => '',
-                'sku' => '',
-                'name' => '',
-                'price' => '',
-                'configurable_attribute' => '',
-                'weight' => '',
-                'media_gallery' => '',
-                'swatch_image' => '',
-                'small_image' => '',
-                'thumbnail' => '',
-                'image' => '',
                 'quantity_and_stock_status' => ['qty' => '3']
             ]
         ];
