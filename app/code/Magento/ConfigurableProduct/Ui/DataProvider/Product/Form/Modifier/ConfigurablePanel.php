@@ -393,6 +393,7 @@ class ConfigurablePanel extends AbstractModifier
                             'component' => 'Magento_ConfigurableProduct/js/components/file-uploader',
                             'elementTmpl' => 'Magento_ConfigurableProduct/components/file-uploader',
                             'fileInputName' => 'image',
+                            'isMultipleFiles' => false,
                             'uploaderConfig' => [
                                 'url' => $this->urlBuilder->addSessionParam()->getUrl(
                                     'catalog/product_gallery/upload'
