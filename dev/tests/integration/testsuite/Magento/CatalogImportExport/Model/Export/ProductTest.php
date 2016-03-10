@@ -65,6 +65,24 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_data.php
+     */
+    public function testExport()
+    {
+        $this->model->setWriter(
+            $this->objectManager->create(
+                \Magento\ImportExport\Model\Export\Adapter\Csv::class
+            )
+        );
+        $exportData = $this->model->export();
+        $this->assertContains('New Product', $exportData);
+
+        $this->assertContains('Option 1 Value 1', $exportData);
+        $this->assertContains('test_option_code_2', $exportData);
+        $this->assertContains('max_characters=10', $exportData);
+    }
+
+    /**
      * Verify that all stock item attribute values are exported (aren't equal to empty string)
      *
      * @covers \Magento\CatalogImportExport\Model\Export\Product::export
