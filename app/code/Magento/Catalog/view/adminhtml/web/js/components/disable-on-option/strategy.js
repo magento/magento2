@@ -3,6 +3,8 @@
  * See COPYING.txt for license details.
  */
 define(function () {
+    'use strict';
+
     return {
         defaults: {
             valuesForEnable: [],
@@ -13,6 +15,11 @@ define(function () {
             }
         },
 
+        /**
+         * Toggle disabled state.
+         *
+         * @param {Number} selected
+         */
         toggleDisable: function (selected) {
             this.disabled(!(selected in this.valuesForEnable));
         }

@@ -10,6 +10,11 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Attribute\Button;
  */
 class Cancel extends Generic
 {
+    /**
+     * Get button data
+     *
+     * @return array
+     */
     public function getButtonData()
     {
         return [
@@ -20,7 +25,8 @@ class Cancel extends Generic
                     'Magento_Ui/js/form/button-adapter' => [
                         'actions' => [
                             [
-                                'targetName' => 'product_form.product_form.add_attribute_modal.create_new_attribute_modal',
+                                'targetName' => 'product_form.product_form.add_attribute_modal'
+                                    . '.create_new_attribute_modal',
                                 'actionName' => 'toggleModal'
                             ]
                         ]
