@@ -22,7 +22,7 @@ class AssertBundlePriceType extends AbstractConstraint
      *
      * @var string
      */
-    protected $productPriceType = 'Dynamic';
+    protected $productPriceType = 'Yes';
 
     /**
      * Assert that displayed price for bundle items on shopping cart page equals to passed from fixture.
@@ -90,7 +90,7 @@ class AssertBundlePriceType extends AbstractConstraint
                 }
             }
 
-            $optionPrice[$key]['price'] = $this->productPriceType == 'Fixed'
+            $optionPrice[$key]['price'] = $this->productPriceType == 'No'
                 ? number_format(
                     $bundleData['bundle_selections']['bundle_options'][$key]['assigned_products'][$data['value']['key']]
                     ['data']['selection_price_value'],

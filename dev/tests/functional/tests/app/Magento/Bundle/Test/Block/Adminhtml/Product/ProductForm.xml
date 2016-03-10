@@ -7,10 +7,6 @@
 -->
 <sections>
     <product-details>
-        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
-        <selector>[data-index='product-details']</selector>
-        <strategy>css selector</strategy>
-        <wrapper>product</wrapper>
         <fields>
             <shipment_type>
                 <input>select</input>

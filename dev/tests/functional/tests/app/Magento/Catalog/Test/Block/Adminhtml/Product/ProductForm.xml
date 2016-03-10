@@ -7,7 +7,7 @@
 -->
 <sections>
     <product-details>
-        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
+        <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails</class>
         <selector>[data-index='product-details']</selector>
         <strategy>css selector</strategy>
         <wrapper>product</wrapper>
@@ -173,16 +173,6 @@
         <selector>[data-index='schedule-design-update']</selector>
         <strategy>css selector</strategy>
     </schedule-design-update>
-    <gift-wrapping-gift-messaging>
-        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
-        <selector>[data-index='gift-wrapping-gift-messaging']</selector>
-        <strategy>css selector</strategy>
-    </gift-wrapping-gift-messaging>
-    <downloadable>
-        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
-        <selector>[data-index='downloadable']</selector>
-        <strategy>css selector</strategy>
-    </downloadable>
     <customer-options>
         <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options</class>
         <selector>[data-index="custom_options"]</selector>
@@ -216,10 +206,6 @@
             <use_config_gift_message_available>
                 <input>checkbox</input>
             </use_config_gift_message_available>
-            <gift_wrapping_price>
-                <selector>[name="product[gift_wrapping_price]"]</selector>
-                <strategy>css selector</strategy>
-            </gift_wrapping_price>
         </fields>
     </gift-options>
     <related>
