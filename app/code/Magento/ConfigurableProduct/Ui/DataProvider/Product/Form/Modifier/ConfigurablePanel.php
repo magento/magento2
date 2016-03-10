@@ -220,15 +220,21 @@ class ConfigurablePanel extends AbstractModifier
             'arguments' => [
                 'data' => [
                     'config' => [
+                        'component' => 'Magento_ConfigurableProduct/js/components/container-configurable-handler',
                         'formElement' => 'container',
                         'componentType' => 'container',
                         'label' => false,
-                        'content' => __(
+                        'content1' => __(
                             'Configurable products allow customers to choose options '
                             . '(Ex: shirt color). You need to create a simple product for each '
                             . 'configuration (Ex: a product for each color).'
                         ),
+                        'content2' => __(
+                            'Configurations cannot be created for a standard product with downloadable files. '
+                            . 'To create configurations, first remove all downloadable files.'
+                        ),
                         'template' => 'ui/form/components/complex',
+                        'createConfigurableButton' => 'ns = ${ $.ns }, index = create_configurable_products_button',
                     ],
                 ],
             ],
