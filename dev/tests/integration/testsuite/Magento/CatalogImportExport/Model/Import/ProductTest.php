@@ -69,6 +69,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         'price' => '_custom_option_price',
         'sku' => '_custom_option_sku',
         'sort_order' => '_custom_option_sort_order',
+        'max_characters' => '_custom_option_max_characters',
     ];
 
     /**
