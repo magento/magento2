@@ -33,6 +33,12 @@
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
                 <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/disable-on-option/yesno</item>
+                    <item name="valuesForEnable" xsi:type="array">
+                        <item name="select" xsi:type="string">select</item>
+                        <item name="multiselect" xsi:type="string">multiselect</item>
+                        <item name="price" xsi:type="string">price</item>
+                    </item>
                     <item name="sortOrder" xsi:type="number">50</item>
                     <item name="valueMap" xsi:type="array">
                         <item name="true" xsi:type="number">1</item>
@@ -52,6 +58,14 @@
         <field name="position">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/disable-on-option/input</item>
+                    <item name="imports" xsi:type="array">
+                        <item name="toggleDisable" xsi:type="string">${ $.parentName}.is_filterable:value</item>
+                    </item>
+                    <item name="valuesForEnable" xsi:type="array">
+                        <item name="1" xsi:type="string">1</item>
+                        <item name="2" xsi:type="string">2</item>
+                    </item>
                     <item name="sortOrder" xsi:type="number">60</item>
                     <item name="dataType" xsi:type="string">string</item>
                     <item name="formElement" xsi:type="string">input</item>

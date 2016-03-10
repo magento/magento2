@@ -11,10 +11,10 @@ define([
 
     return Checkbox.extend({
         defaults: {
-            inputName: '',
+            inputCheckBoxName: '',
             value: '',
             prefixElementName: '',
-            parentDynamicRowName: 'text_swatch'
+            parentDynamicRowName: 'visual_swatch'
         },
 
         /**
@@ -24,56 +24,49 @@ define([
          * @returns {Object} Chainable.
          */
         initConfig: function (config) {
-            var recordId;
-
             this._super();
-
-            this.inputName = config.inputName;
-            recordId = rg.get(this.parentName).recordId;
-            this.value = this.prefixElementName + recordId;
+            this.configureDataScope();
 
             return this;
         },
 
         /**
-         * @inheritdoc
+         * Configure data scope.
          */
-        onUpdate: function () {
-            if (this.prefer === 'radio' && !this.clearing) {
-                this.clearValues();
-            } else if (this.prefer === 'radio') {
-                this.clearing = false;
-            }
+        configureDataScope: function () {
+            var recordId,
+                value;
 
-            this._super();
+            recordId = this.parentName.split('.').last();
+            value = this.prefixElementName + recordId;
+
+            this.dataScope = 'data.' + this.inputCheckBoxName;
+            this.inputName = this.dataScopeToHtmlArray(this.inputCheckBoxName);
+
+            this.initialValue = value;
+
+            this.links.value = this.provider + ':' + this.dataScope;
         },
 
         /**
-         * Clears values in components like this.
-         */
-        clearValues: function () {
-            var records = rg.get(this.resolveParentName(this.parentDynamicRowName)),
-                index = this.index,
-                uid = this.uid;
-
-            this.clearing = true;
-            records.elems.each(function (record) {
-                record.elems.filter(function (comp) {
-                    return comp.index === index && comp.uid !== uid;
-                }).each(function (comp) {
-                    comp.clear();
-                });
-            });
-        },
-
-        /**
-         * Resolve parent name.
+         * Get HTML array from data scope.
          *
-         * @param {String} parent
+         * @param {String} dataScopeString
          * @returns {String}
          */
-        resolveParentName: function (parent) {
-            return this.name.split('.' + parent + '.')[0] + '.' + parent;
+        dataScopeToHtmlArray: function (dataScopeString) {
+            var dataScopeArray, dataScope, reduceFunction;
+
+            reduceFunction = function (prev, curr) {
+                return prev + '[' + curr + ']';
+            };
+
+            dataScopeArray = dataScopeString.split('.');
+
+            dataScope = dataScopeArray.shift();
+            dataScope += dataScopeArray.reduce(reduceFunction, '');
+
+            return dataScope;
         }
     });
 });
