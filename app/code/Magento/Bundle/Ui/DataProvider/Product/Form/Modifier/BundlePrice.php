@@ -46,7 +46,7 @@ class BundlePrice extends AbstractModifier
     public function modifyMeta(array $meta)
     {
         $meta = $this->arrayManager->merge(
-            $this->getElementArrayPath($meta, static::CODE_PRICE_TYPE) . static::META_CONFIG_PATH,
+            $this->arrayManager->findPath(static::CODE_PRICE_TYPE, $meta, null, 'children') . static::META_CONFIG_PATH,
             $meta,
             [
                 'disabled' => (bool)$this->locator->getProduct()->getId(),
@@ -61,7 +61,12 @@ class BundlePrice extends AbstractModifier
         );
 
         $meta = $this->arrayManager->merge(
-            $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_PRICE) . static::META_CONFIG_PATH,
+            $this->arrayManager->findPath(
+                ProductAttributeInterface::CODE_PRICE,
+                $meta,
+                null,
+                'children'
+            ) . static::META_CONFIG_PATH,
             $meta,
             [
                 'imports' => [
@@ -71,7 +76,12 @@ class BundlePrice extends AbstractModifier
         );
 
         $meta = $this->arrayManager->merge(
-            $this->getElementArrayPath($meta, static::CODE_TAX_CLASS_ID) . static::META_CONFIG_PATH,
+            $this->arrayManager->findPath(
+                static::CODE_TAX_CLASS_ID,
+                $meta,
+                null,
+                'children'
+            ) . static::META_CONFIG_PATH,
             $meta,
             [
                 'imports' => [

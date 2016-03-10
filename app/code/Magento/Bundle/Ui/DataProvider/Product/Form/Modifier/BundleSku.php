@@ -34,7 +34,7 @@ class BundleSku extends AbstractModifier
     public function modifyMeta(array $meta)
     {
         $meta = $this->arrayManager->merge(
-            $this->getElementArrayPath($meta, static::CODE_SKU_TYPE) . static::META_CONFIG_PATH,
+            $this->arrayManager->findPath(static::CODE_SKU_TYPE, $meta, null, 'children') . static::META_CONFIG_PATH,
             $meta,
             [
                 'valueMap' => [

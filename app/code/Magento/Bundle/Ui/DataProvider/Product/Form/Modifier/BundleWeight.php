@@ -35,7 +35,7 @@ class BundleWeight extends AbstractModifier
     public function modifyMeta(array $meta)
     {
         $meta = $this->arrayManager->merge(
-            $this->getElementArrayPath($meta, static::CODE_WEIGHT_TYPE) . static::META_CONFIG_PATH,
+            $this->arrayManager->findPath(static::CODE_WEIGHT_TYPE, $meta, null, 'children') . static::META_CONFIG_PATH,
             $meta,
             [
                 'valueMap' => [
@@ -49,7 +49,12 @@ class BundleWeight extends AbstractModifier
         );
 
         $meta = $this->arrayManager->merge(
-            $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_HAS_WEIGHT) . static::META_CONFIG_PATH,
+            $this->arrayManager->findPath(
+                ProductAttributeInterface::CODE_HAS_WEIGHT,
+                $meta,
+                null,
+                'children'
+            ) . static::META_CONFIG_PATH,
             $meta,
             [
                 'disabled' => true,
@@ -58,7 +63,12 @@ class BundleWeight extends AbstractModifier
         );
 
         $meta = $this->arrayManager->merge(
-            $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_WEIGHT) . static::META_CONFIG_PATH,
+            $this->arrayManager->findPath(
+                ProductAttributeInterface::CODE_WEIGHT,
+                $meta,
+                null,
+                'children'
+            ) . static::META_CONFIG_PATH,
             $meta,
             [
                 'imports' => [
