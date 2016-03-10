@@ -615,7 +615,7 @@ define([
                 $(event.target).removeClass(this.VU);
                 $(event.target).find('.' + this.PV).productVideoLoader();
 
-                $('.' + this.FTAR).addClass(isFullscreen ? 'fotorama__arr--shown' : 'fotorama__arr--hidden');
+                $('.' + this.FTAR).addClass(this.isFullscreen ? 'fotorama__arr--shown' : 'fotorama__arr--hidden');
             }
         },
 
