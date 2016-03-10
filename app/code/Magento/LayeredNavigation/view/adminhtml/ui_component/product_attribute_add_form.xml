@@ -16,7 +16,7 @@
                     <item name="dataType" xsi:type="string">string</item>
                     <item name="formElement" xsi:type="string">select</item>
                     <item name="source" xsi:type="string">product_attribute</item>
-                    <item name="label" xsi:type="string" translate="true">Catalog Input Type for Store Owner</item>
+                    <item name="label" xsi:type="string" translate="true">Use in Layered Navigation</item>
                     <item name="dataScope" xsi:type="string">is_filterable</item>
                     <item name="notice" xsi:type="string" translate="true">Can be used only with catalog input type Dropdown, Multiple Select and Price.</item>
                     <item name="title" xsi:type="string" translate="true">Can be used only with catalog input type Dropdown, Multiple Select and Price</item>
