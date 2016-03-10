@@ -76,10 +76,17 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                    value="<%- data.position %>"
                    data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                    class="position"/>
+            <% if (data.media_type !== 'external-video') {%>
+            <input type="hidden"
+                   name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][media_type]"
+                   data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
+                   value="image"/>
+            <% } else { %>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][media_type]"
                    value="<%- data.media_type %>"
                    data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
+            <% } %>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_provider]"
                    value="<%- data.video_provider %>"
