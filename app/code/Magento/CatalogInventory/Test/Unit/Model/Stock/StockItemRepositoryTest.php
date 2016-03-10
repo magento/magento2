@@ -5,8 +5,10 @@
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Stock;
 
-use \Magento\CatalogInventory\Model\Stock\StockItemRepository;
-use \Magento\CatalogInventory\Api\Data as InventoryApiData;
+use Magento\CatalogInventory\Model\Stock\StockItemRepository;
+use Magento\CatalogInventory\Api\Data as InventoryApiData;
+use Magento\CatalogInventory\Model\StockRegistryStorage;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class StockItemRepositoryTest
@@ -24,6 +26,7 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\CatalogInventory\Model\Stock\Item |\PHPUnit_Framework_MockObject_MockObject
      */
     protected $stockItemMock;
+
     /**
      * @var \Magento\CatalogInventory\Api\StockConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -84,6 +87,14 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $dateTime;
 
+    /**
+     * @var StockRegistryStorage|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $stockRegistryStorage;
+
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         $this->stockItemMock = $this->getMockBuilder('\Magento\CatalogInventory\Model\Stock\Item')
@@ -168,24 +179,36 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->stockRegistryStorage = $this->getMockBuilder(StockRegistryStorage::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->model = new StockItemRepository(
-            $this->stockConfigurationMock,
-            $this->stockStateProviderMock,
-            $this->stockItemResourceMock,
-            $this->stockItemFactoryMock,
-            $this->stockItemCollectionMock,
-            $this->productFactoryMock,
-            $this->queryBuilderFactoryMock,
-            $this->mapperMock,
-            $this->localeDateMock,
-            $this->indexProcessorMock,
-            $this->dateTime
+        $this->model = (new ObjectManager($this))->getObject(
+            StockItemRepository::class,
+            [
+                'stockConfiguration' => $this->stockConfigurationMock,
+                'stockStateProvider' => $this->stockStateProviderMock,
+                'resource' => $this->stockItemResourceMock,
+                'stockItemFactory' => $this->stockItemFactoryMock,
+                'stockItemCollectionFactory' => $this->stockItemCollectionMock,
+                'productFactory' => $this->productFactoryMock,
+                'queryBuilderFactory' => $this->queryBuilderFactoryMock,
+                'mapperFactory' => $this->mapperMock,
+                'localeDate' => $this->localeDateMock,
+                'indexProcessor' => $this->indexProcessorMock,
+                'dateTime' => $this->dateTime,
+                'stockRegistryStorage' => $this->stockRegistryStorage,
+            ]
         );
     }
 
     public function testDelete()
     {
+        $productId = 1;
+        $this->stockItemMock->expects($this->atLeastOnce())->method('getProductId')->willReturn($productId);
+        $this->stockRegistryStorage->expects($this->once())->method('removeStockItem')->with($productId);
+        $this->stockRegistryStorage->expects($this->once())->method('removeStockStatus')->with($productId);
+
         $this->stockItemResourceMock->expects($this->once())
             ->method('delete')
             ->with($this->stockItemMock)
@@ -220,7 +243,7 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedExceptionMessage Stock Item with id "1" does not exist.
+     * @expectedExceptionMessage Unable to remove Stock Item with id "1"
      */
     public function testDeleteByIdException()
     {
@@ -286,6 +309,8 @@ class StockItemRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->stockItemMock->expects($this->any())->method('getProductId')->willReturn($productId);
         $this->productMock->expects($this->once())->method('load')->with($productId)->willReturnSelf();
         $this->productMock->expects($this->once())->method('getId')->willReturn(null);
+        $this->stockRegistryStorage->expects($this->never())->method('removeStockItem');
+        $this->stockRegistryStorage->expects($this->never())->method('removeStockStatus');
 
         $this->assertEquals($this->stockItemMock, $this->model->save($this->stockItemMock));
     }
