@@ -188,11 +188,14 @@ define([
          * @private
          */
         _listenForFullscreen: function () {
+            var self = this;
+
             this.fotoramaItem.on('fotorama:fullscreenenter', $.proxy(function () {
                 this.isFullscreen = true;
             }, this));
             this.fotoramaItem.on('fotorama:fullscreenexit', $.proxy(function () {
                 this.isFullscreen = false;
+                self._hideVideoArrows();
             }, this));
         },
 
@@ -596,6 +599,14 @@ define([
                 .on('click tap', $.proxy(this._clickHandler, this));
             this._handleBaseVideo(fotorama, number); //check for video is it base and handle it if it's base
         },
+        /**
+         * Hides preview arrows above video player.
+         * @private
+         */
+        _hideVideoArrows: function () {
+            $('.' + this.FTAR).removeClass('fotorama__arr--shown');
+            $('.' + this.FTAR).removeClass('fotorama__arr--hidden');
+        },
 
         _clickHandler: function (event) {
             if ($(event.target).hasClass(this.VU) && $(event.target).find('iframe').length === 0) {
@@ -603,12 +614,7 @@ define([
                 $(event.target).removeClass(this.VU);
                 $(event.target).find('.' + this.PV).productVideoLoader();
 
-                if (this.isFullscreen) {
-                    $('.' + this.FTAR).addClass('fotorama__arr--shown');
-                } else {
-                    this._showCloseVideo();
-                    $('.' + this.FTAR).addClass('fotorama__arr--hidden');
-                }
+                $('.' + this.FTAR).addClass(isFullscreen ? 'fotorama__arr--shown' : 'fotorama__arr--hidden');
             }
         },
 
@@ -695,8 +701,7 @@ define([
 
                 self._hideCloseVideo();
 
-                $('.' + self.FTAR).removeClass('fotorama__arr--shown');
-                $('.' + self.FTAR).removeClass('fotorama__arr--hidden');
+                self._hideVideoArrows();
             });
         }
     });
