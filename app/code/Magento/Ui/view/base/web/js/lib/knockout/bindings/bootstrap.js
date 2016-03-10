@@ -22,6 +22,7 @@ define(function (require) {
         resizable:      require('./resizable'),
         i18n:           require('./i18n'),
         scope:          require('./scope'),
+        range:          require('./range'),
         mageInit:       require('./mage-init'),
         keyboard:       require('./keyboard'),
         optgroup:       require('./optgroup'),
@@ -34,6 +35,7 @@ define(function (require) {
         staticChecked:  require('./staticChecked'),
         simpleChecked:  require('./simple-checked'),
         bindHtml:       require('./bind-html'),
+        tooltip:        require('./tooltip'),
         repeat:         require('knockoutjs/knockout-repeat'),
         fastForEach:    require('knockoutjs/knockout-fast-foreach')
     };
