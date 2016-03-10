@@ -607,6 +607,50 @@
     .action-tertiary {
         color: @staging-preview-form-element__color;
     }
+
+    .action-select-wrap {
+        .action-select {
+            color: @staging-preview-form-element__color;
+
+            &:hover {
+                color: @staging-preview-form-element__color;
+                &:after {
+                    border-color: @staging-preview-form-element__color transparent transparent transparent;
+                }
+            }
+
+            &:after{
+                border-color: @staging-preview-form-element__color transparent transparent transparent;
+            }
+
+            &._active {
+                &:hover {
+                    &:after {
+                        border-color: @staging-preview-form-element__color transparent transparent transparent;
+                    }
+                }
+            }
+        }
+
+        .action-menu {
+            background-color: @staging-preview-selectmenu__background-color;
+            border-color: lighten(@staging-preview-general__background-color, 10%);
+            color: @staging-preview-form-element__color;
+
+            > li {
+                &:hover {
+                    background-color: lighten(@staging-preview-general__background-color, 10%);
+                }
+                > a {
+                    color: @staging-preview-form-element__color;
+
+                    &:hover {
+                        color: @staging-preview-form-element__color;
+                    }
+                }
+            }
+        }
+    }
 }
 
 //
