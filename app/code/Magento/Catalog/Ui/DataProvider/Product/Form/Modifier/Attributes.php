@@ -12,6 +12,9 @@ use Magento\Ui\Component;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Ui\Component\Container;
 
+/**
+ * Class Attributes
+ */
 class Attributes extends AbstractModifier
 {
     const GROUP_SORT_ORDER = 15;
@@ -67,7 +70,7 @@ class Attributes extends AbstractModifier
     /**
      * @return boolean
      */
-    protected function canAddAttributes()
+    private function canAddAttributes()
     {
         $isWrapped = $this->registry->registry('use_wrapper');
         if (!isset($isWrapped)) {
@@ -147,6 +150,7 @@ class Attributes extends AbstractModifier
                 'arguments' => [
                     'data' => [
                         'config' => [
+                            'additionalClasses' => 'admin_field-complex-attributes',
                             'formElement' => Container::NAME,
                             'componentType' => Container::NAME,
                             'content' => __('Select Attribute'),
