@@ -11,7 +11,7 @@ define([
     return Abstract.extend({
         defaults: {
             valueUpdate: 'input',
-            isInteger : true
+            isInteger: true
         },
 
         /**
