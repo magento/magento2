@@ -12,6 +12,12 @@
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\CatalogSearch\Model\Source\Weight</item>
                 <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Catalog/js/components/disable-on-option/select</item>
+                    <item name="valuesForEnable" xsi:type="array">
+                        <item name="select" xsi:type="string">select</item>
+                        <item name="multiselect" xsi:type="string">multiselect</item>
+                        <item name="price" xsi:type="string">price</item>
+                    </item>
                     <item name="sortOrder" xsi:type="number">15</item>
                     <item name="dataType" xsi:type="string">string</item>
                     <item name="formElement" xsi:type="string">select</item>
