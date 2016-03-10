@@ -8,7 +8,7 @@ namespace Magento\CatalogSearch\Model\Source;
 /**
  * Attribute weight options
  */
-class Weight
+class Weight implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * Quick search weights
@@ -39,5 +39,15 @@ class Weight
     public function getValues()
     {
         return $this->_weights;
+    }
+
+    /**
+     * Return array of options as value-label pairs
+     *
+     * @return array Format: array(array('value' => '<value>', 'label' => '<label>'), ...)
+     */
+    public function toOptionArray()
+    {
+        return $this->getOptions();
     }
 }
