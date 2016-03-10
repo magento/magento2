@@ -6,7 +6,6 @@
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AdvancedPricing;
-use Magento\Catalog\Ui\DataProvider\Grouper;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\Data\GroupInterface as CustomerGroupInterface;
 use Magento\Customer\Api\GroupManagementInterface;
@@ -25,11 +24,6 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
  */
 class AdvancedPricingTest extends AbstractModifierTest
 {
-    /**
-     * @var Grouper|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $grouperMock;
-
     /**
      * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -78,9 +72,6 @@ class AdvancedPricingTest extends AbstractModifierTest
     protected function setUp()
     {
         parent::setUp();
-        $this->grouperMock = $this->getMockBuilder(Grouper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->getMockForAbstractClass();
         $this->groupRepositoryMock = $this->getMockBuilder(GroupRepositoryInterface::class)
@@ -117,7 +108,6 @@ class AdvancedPricingTest extends AbstractModifierTest
     {
         return $this->objectManager->getObject(AdvancedPricing::class, [
             'locator' => $this->locatorMock,
-            'grouper' => $this->grouperMock,
             'storeManager' => $this->storeManagerMock,
             'groupRepository' => $this->groupRepositoryMock,
             'groupManagement' => $this->groupManagementMock,
