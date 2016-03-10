@@ -495,7 +495,6 @@ class ConfigurablePanel extends AbstractModifier
             'componentType' => Form\Field::NAME,
             'dataScope' => $name,
             'fit' => true,
-            'additionalClasses' => 'admin__field-small',
             'visibleIfCanEdit' => true,
             'imports' => [
                 'visible' => '${$.provider}:${$.parentScope}.canEdit'
@@ -521,7 +520,6 @@ class ConfigurablePanel extends AbstractModifier
             $textConfig
         );
         $container['arguments']['data']['config'] = [
-            'additionalClasses' => 'admin__field',
             'componentType' => Container::NAME,
             'formElement' => Container::NAME,
             'component' => 'Magento_Ui/js/form/components/group',
