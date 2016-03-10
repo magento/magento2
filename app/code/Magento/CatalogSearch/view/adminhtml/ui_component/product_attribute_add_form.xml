@@ -12,7 +12,7 @@
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\CatalogSearch\Model\Source\Weight</item>
                 <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">45</item>
+                    <item name="sortOrder" xsi:type="number">15</item>
                     <item name="dataType" xsi:type="string">string</item>
                     <item name="formElement" xsi:type="string">select</item>
                     <item name="source" xsi:type="string">product_attribute</item>

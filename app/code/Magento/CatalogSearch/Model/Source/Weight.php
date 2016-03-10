@@ -15,7 +15,7 @@ class Weight implements \Magento\Framework\Data\OptionSourceInterface
      *
      * @var int[]
      */
-    protected $_weights = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    protected $weights = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
     /**
      * Retrieve search weights as options array
@@ -38,7 +38,7 @@ class Weight implements \Magento\Framework\Data\OptionSourceInterface
      */
     public function getValues()
     {
-        return $this->_weights;
+        return $this->weights;
     }
 
     /**
