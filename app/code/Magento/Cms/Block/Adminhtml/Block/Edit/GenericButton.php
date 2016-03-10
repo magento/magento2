@@ -5,7 +5,9 @@
  */
 namespace Magento\Cms\Block\Adminhtml\Block\Edit;
 
-use Magento\Cms\Controller\RegistryConstants;
+use Magento\Backend\Block\Widget\Context;
+use Magento\Cms\Api\BlockRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class GenericButton
@@ -13,42 +15,41 @@ use Magento\Cms\Controller\RegistryConstants;
 class GenericButton
 {
     /**
-     * Url Builder
-     *
-     * @var \Magento\Framework\UrlInterface
+     * @var Context
      */
-    protected $urlBuilder;
+    protected $context;
 
     /**
-     * Registry
-     *
-     * @var \Magento\Framework\Registry
+     * @var BlockRepositoryInterface
      */
-    protected $registry;
+    protected $blockRepository;
 
     /**
-     * Constructor
-     *
-     * @param \Magento\Backend\Block\Widget\Context $context
-     * @param \Magento\Framework\Registry $registry
+     * @param Context $context
+     * @param BlockRepositoryInterface $blockRepository
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Framework\Registry $registry
+        Context $context,
+        BlockRepositoryInterface $blockRepository
     ) {
-        $this->urlBuilder = $context->getUrlBuilder();
-        $this->registry = $registry;
+        $this->context = $context;
+        $this->blockRepository = $blockRepository;
     }
 
     /**
-     * Return the cms page Id.
+     * Return CMS block ID
      *
      * @return int|null
      */
-    public function getPageId()
+    public function getBlockId()
     {
-        $cmsBlock = $this->registry->registry(RegistryConstants::CMS_BLOCK);
-        return $cmsBlock ? $cmsBlock->getId() : null;
+        try {
+            return $this->blockRepository->getById(
+                $this->context->getRequest()->getParam('block_id')
+            )->getId();
+        } catch (NoSuchEntityException $e) {
+        }
+        return null;
     }
 
     /**
@@ -60,6 +61,6 @@ class GenericButton
      */
     public function getUrl($route = '', $params = [])
     {
-        return $this->urlBuilder->getUrl($route, $params);
+        return $this->context->getUrlBuilder()->getUrl($route, $params);
     }
 }

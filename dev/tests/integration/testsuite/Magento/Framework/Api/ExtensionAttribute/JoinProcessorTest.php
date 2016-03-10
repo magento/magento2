@@ -251,7 +251,7 @@ SELECT `e`.*,
 EXPECTED_SQL;
         $resultSql = $collection->getSelectSql(true);
         $formattedResultSql = str_replace(',', ",\n    ", $resultSql);
-        $this->assertEquals($expectedSql, $formattedResultSql);
+        $this->assertContains($expectedSql, $formattedResultSql);
     }
 
     /**

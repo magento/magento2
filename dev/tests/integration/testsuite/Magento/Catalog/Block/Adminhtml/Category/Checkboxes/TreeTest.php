@@ -7,6 +7,8 @@ namespace Magento\Catalog\Block\Adminhtml\Category\Checkboxes;
 
 /**
  * @magentoAppArea adminhtml
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  */
 class TreeTest extends \PHPUnit_Framework_TestCase
 {

@@ -177,9 +177,13 @@ define([
          * Customer data initialization
          */
         init: function() {
-            var privateContent = $.cookieStorage.get('private_content_version');
-            if (_.isEmpty(storage.keys()) && _.isObject(privateContent)) {
-                this.reload([], false);
+            var countryData,
+                privateContent = $.cookieStorage.get('private_content_version');
+
+            if (_.isEmpty(storage.keys())) {
+                if (!_.isEmpty(privateContent)) {
+                    this.reload([], false);
+                }
             } else if (this.needReload()) {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
@@ -192,6 +196,13 @@ define([
 
                 if (!_.isEmpty(storageInvalidation.keys())) {
                     this.reload(storageInvalidation.keys(), false);
+                }
+            }
+
+            if (!_.isEmpty(privateContent)) {
+                countryData = this.get('directory-data');
+                if (_.isEmpty(countryData())) {
+                    countryData(customerData.reload(['directory-data'], false));
                 }
             }
         },

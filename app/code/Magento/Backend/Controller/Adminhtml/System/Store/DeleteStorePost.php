@@ -44,7 +44,7 @@ class DeleteStorePost extends \Magento\Backend\Controller\Adminhtml\System\Store
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addError($e->getMessage());
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('Unable to delete store view. Please, try again later.'));
+            $this->messageManager->addException($e, __('Unable to delete the store view. Please try again later.'));
         }
         return $redirectResult->setPath('adminhtml/*/editStore', ['store_id' => $itemId]);
     }

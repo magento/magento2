@@ -38,12 +38,12 @@
                 <div class="field password required">
                     <label for="pass" class="label"><span><?php /* @escapeNotVerified */ echo __('Password') ?></span></label>
                     <div class="control">
-                        <input name="login[password]" type="password" <?php if ($block->isAutocompleteDisabled()) :?> autocomplete="off"<?php endif; ?> class="input-text" id="pass" title="<?php /* @escapeNotVerified */ echo __('Password') ?>" data-validate="{required:true, 'validate-password':true}">
+                        <input name="login[password]" type="password" <?php if ($block->isAutocompleteDisabled()) :?> autocomplete="off"<?php endif; ?> class="input-text" id="pass" title="<?php /* @escapeNotVerified */ echo __('Password') ?>" data-validate="{required:true}">
                     </div>
                 </div>
                 <?php echo $block->getChildHtml('form_additional_info'); ?>
                 <div class="actions-toolbar">
-                    <div class="primary"><button type="submit" class="action login primary" name="send" id="send2"><span><?php /* @escapeNotVerified */ echo __('Login') ?></span></button></div>
+                    <div class="primary"><button type="submit" class="action login primary" name="send" id="send2"><span><?php /* @escapeNotVerified */ echo __('Sign In') ?></span></button></div>
                     <div class="secondary"><a class="action remind" href="<?php /* @escapeNotVerified */ echo $block->getForgotPasswordUrl() ?>"><span><?php /* @escapeNotVerified */ echo __('Forgot Your Password?') ?></span></a></div>
                 </div>
             </fieldset>

@@ -55,11 +55,34 @@ class ExceptionsTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSave()
     {
-        $value = ['__empty' => '', 'test' => ['search' => '1qwe', 'value' => '#val#', 'regexp' => '[a-zA-Z0-9]*']];
+        $value = ['test' => ['search' => '1qwe', 'value' => '#val#', 'regexp' => '[a-zA-Z0-9]*']];
         $this->designMock->expects($this->once())
             ->method('setDesignTheme')
             ->with('#val#', Area::AREA_FRONTEND);
         $this->model->setValue($value);
         $this->model->beforeSave();
+    }
+
+    public function testAfterLoad()
+    {
+        $this->model->setValue(
+            [
+                [
+                    'value' => 'value',
+                    'search' => 'qwe',
+                    'record_id' => 1
+                ],
+            ]
+        );
+        $this->model->afterLoad();
+        $this->assertEquals(
+            [
+                [
+                    'value' => 'value',
+                    'search' => 'qwe',
+                ],
+            ],
+            $this->model->getValue()
+        );
     }
 }

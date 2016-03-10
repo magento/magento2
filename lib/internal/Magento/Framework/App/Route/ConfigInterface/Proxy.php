@@ -10,7 +10,9 @@ namespace Magento\Framework\App\Route\ConfigInterface;
 /**
  * Proxy class for \Magento\Framework\App\ResourceConnection
  */
-class Proxy implements \Magento\Framework\App\Route\ConfigInterface
+class Proxy implements
+    \Magento\Framework\App\Route\ConfigInterface,
+    \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
     /**
      * Object Manager instance

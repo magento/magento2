@@ -35,6 +35,7 @@ class ExpressCheckoutOnePageTest extends Scenario
     const MVP = 'yes';
     const DOMAIN = 'CS';
     const TEST_TYPE = '3rd_party_test';
+    const TO_MAINTAIN = 'yes';
     /* end tags */
 
     /**

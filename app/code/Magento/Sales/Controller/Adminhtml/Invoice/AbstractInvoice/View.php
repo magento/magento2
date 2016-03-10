@@ -12,6 +12,13 @@ use Magento\Framework\Registry;
 abstract class View extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::sales_invoice';
+
+    /**
      * @var Registry
      */
     protected $registry;
@@ -34,14 +41,6 @@ abstract class View extends \Magento\Backend\App\Action
         $this->registry = $registry;
         parent::__construct($context);
         $this->resultForwardFactory = $resultForwardFactory;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_invoice');
     }
 
     /**

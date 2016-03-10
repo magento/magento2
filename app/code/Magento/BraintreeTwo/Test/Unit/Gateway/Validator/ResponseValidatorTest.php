@@ -5,9 +5,12 @@
  */
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Validator;
 
+use Braintree\Transaction;
+use Magento\Framework\Phrase;
 use Magento\Payment\Gateway\Validator\ResultInterface;
 use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 use Magento\BraintreeTwo\Gateway\Validator\ResponseValidator;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 
 /**
  * Class ResponseValidatorTest
@@ -25,6 +28,11 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
     private $resultInterfaceFactoryMock;
 
     /**
+     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $subjectReaderMock;
+
+    /**
      * Set up
      *
      * @return void
@@ -36,13 +44,18 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
         )->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
+        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->responseValidator = new ResponseValidator($this->resultInterfaceFactoryMock);
+        $this->responseValidator = new ResponseValidator(
+            $this->resultInterfaceFactoryMock,
+            $this->subjectReaderMock
+        );
     }
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Response does not exist
      */
     public function testValidateReadResponseException()
     {
@@ -50,12 +63,16 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
             'response' => null
         ];
 
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readResponseObject')
+            ->with($validationSubject)
+            ->willThrowException(new \InvalidArgumentException());
+
         $this->responseValidator->validate($validationSubject);
     }
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Response object does not exist
      */
     public function testValidateReadResponseObjectException()
     {
@@ -63,35 +80,45 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
             'response' => ['object' => null]
         ];
 
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readResponseObject')
+            ->with($validationSubject)
+            ->willThrowException(new \InvalidArgumentException());
+
         $this->responseValidator->validate($validationSubject);
     }
-
 
     /**
      * Run test for validate method
      *
      * @param array $validationSubject
      * @param bool $isValid
+     * @param Phrase[] $messages
      * @return void
      *
      * @dataProvider dataProviderTestValidate
      */
-    public function testValidate(array $validationSubject, $isValid)
+    public function testValidate(array $validationSubject, $isValid, $messages)
     {
         /** @var ResultInterface|\PHPUnit_Framework_MockObject_MockObject $resultMock */
         $resultMock = $this->getMock(ResultInterface::class);
 
-        $this->resultInterfaceFactoryMock->expects($this->once())
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readResponseObject')
+            ->with($validationSubject)
+            ->willReturn($validationSubject['response']['object']);
+
+        $this->resultInterfaceFactoryMock->expects(self::once())
             ->method('create')
             ->with([
                 'isValid' => $isValid,
-                'failsDescription' => ['Transaction has been declined, please, try again later.']
+                'failsDescription' => $messages
             ])
             ->willReturn($resultMock);
 
         $actualMock = $this->responseValidator->validate($validationSubject);
 
-        $this->assertEquals($resultMock, $actualMock);
+        self::assertEquals($resultMock, $actualMock);
     }
 
     /**
@@ -102,7 +129,7 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
         $successTrue = new \stdClass();
         $successTrue->success = true;
         $successTrue->transaction = new \stdClass();
-        $successTrue->transaction->status = \Braintree_Transaction::AUTHORIZED;
+        $successTrue->transaction->status = Transaction::AUTHORIZED;
 
         $successFalse = new \stdClass();
         $successFalse->success = false;
@@ -110,7 +137,7 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
         $transactionDeclined = new \stdClass();
         $transactionDeclined->success = true;
         $transactionDeclined->transaction = new \stdClass();
-        $transactionDeclined->transaction->status = \Braintree_Transaction::SETTLEMENT_DECLINED;
+        $transactionDeclined->transaction->status = Transaction::SETTLEMENT_DECLINED;
 
         return [
             [
@@ -120,6 +147,7 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
                     ],
                 ],
                 'isValid' => true,
+                []
             ],
             [
                 'validationSubject' => [
@@ -127,7 +155,11 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
                         'object' => $successFalse
                     ]
                 ],
-                'isValid' => false
+                'isValid' => false,
+                [
+                    __('Braintree error response.'),
+                    __('Wrong transaction status')
+                ]
             ],
             [
                 'validationSubject' => [
@@ -135,7 +167,10 @@ class ResponseValidatorTest extends \PHPUnit_Framework_TestCase
                         'object' => $transactionDeclined
                     ]
                 ],
-                'isValid' => false
+                'isValid' => false,
+                [
+                    __('Wrong transaction status')
+                ]
             ]
         ];
     }

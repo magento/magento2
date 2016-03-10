@@ -167,10 +167,10 @@
             <resource ref="Magento_Cart::manage" />
         </resources>
     </route>
-    <route url="/V1/carts/:cartId/items" method="POST">
+    <route url="/V1/carts/:quoteId/items" method="POST">
         <service class="Magento\Quote\Api\CartItemRepositoryInterface" method="save"/>
         <resources>
-            <resource ref="Magento_Catalog::products" />
+            <resource ref="Magento_Cart::manage" />
         </resources>
     </route>
     <route url="/V1/carts/:cartId/items/:itemId" method="PUT">

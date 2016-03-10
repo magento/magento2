@@ -8,8 +8,8 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\CatalogSearch\Test\TestCase\SearchEntityResultsTest" summary="Use Simple Product Search" ticketId="MAGETWO-25095">
         <variation name="SearchEntityResultsTestVariation1" summary="Use Quick Search to Find the Product" ticketId="MAGETWO-12420">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <data name="catalogSearch/data/query_text/value" xsi:type="string">catalogProductSimple::default::sku</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\CatalogSearch\Test\Constraint\AssertProductCanBeOpenedFromSearchResult" />
         </variation>
         <variation name="SearchEntityResultsTestVariation2">

@@ -8,6 +8,7 @@ namespace Magento\Downloadable\Controller\Adminhtml\Product\Initialization\Helpe
 use Magento\Downloadable\Api\Data\SampleInterfaceFactory as SampleFactory;
 use Magento\Downloadable\Api\Data\LinkInterfaceFactory as LinkFactory;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 
 /**
  * Class Downloadable
@@ -30,18 +31,26 @@ class Downloadable
     protected $linkFactory;
 
     /**
+     * @var JsonHelper
+     */
+    protected $jsonHelper;
+
+    /**
      * @param RequestInterface $request
      * @param SampleFactory $sampleFactory
      * @param LinkFactory $linkFactory
+     * @param JsonHelper $jsonHelper
      */
     public function __construct(
         RequestInterface $request,
         SampleFactory $sampleFactory,
-        LinkFactory $linkFactory
+        LinkFactory $linkFactory,
+        JsonHelper $jsonHelper
     ) {
         $this->request = $request;
         $this->linkFactory = $linkFactory;
         $this->sampleFactory = $sampleFactory;
+        $this->jsonHelper = $jsonHelper;
     }
 
     /**
@@ -75,7 +84,7 @@ class Downloadable
                             $link->setLinkType($linkData['type']);
                         }
                         if (isset($linkData['file'])) {
-                            $link->setLinkFile($linkData['file']);
+                            $link->setFile($this->jsonHelper->jsonEncode($linkData['file']));
                         }
                         if (isset($linkData['file_content'])) {
                             $link->setLinkFileContent($linkData['file_content']);
@@ -85,7 +94,7 @@ class Downloadable
                             $link->setSampleType($linkData['sample']['type']);
                         }
                         if (isset($linkData['sample']['file'])) {
-                            $link->setSampleFile($linkData['sample']['file']);
+                            $link->setSampleFileData($this->jsonHelper->jsonEncode($linkData['sample']['file']));
                         }
                         if (isset($linkData['sample']['url'])) {
                             $link->setSampleUrl($linkData['sample']['url']);
@@ -122,6 +131,9 @@ class Downloadable
                         $sample->setStoreId($product->getStoreId());
                         if (isset($sampleData['type'])) {
                             $sample->setSampleType($sampleData['type']);
+                        }
+                        if (isset($sampleData['file'])) {
+                            $sample->setFile($this->jsonHelper->jsonEncode($sampleData['file']));
                         }
                         if (isset($sampleData['sample_url'])) {
                             $sample->setSampleUrl($sampleData['sample_url']);

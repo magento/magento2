@@ -62,55 +62,62 @@ class Grouped
      * @return \Magento\Catalog\Model\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function beforeInitializeLinks(
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $subject,
         \Magento\Catalog\Model\Product $product,
         array $links
     ) {
-        if ($product->getTypeId() == TypeGrouped::TYPE_CODE && !$product->getGroupedReadonly()) {
-            $links = isset($links[self::TYPE_NAME]) ? $links[self::TYPE_NAME] : $product->getGroupedLinkData();
+        if ($product->getTypeId() === TypeGrouped::TYPE_CODE && !$product->getGroupedReadonly()) {
+            $links = (isset($links[self::TYPE_NAME])) ? $links[self::TYPE_NAME] : $product->getGroupedLinkData();
+            if (!is_array($links)) {
+                $links = [];
+            }
             if ($product->getGroupedLinkData()) {
                 $links = array_merge($links, $product->getGroupedLinkData());
             }
             $newLinks = [];
-            $existingLinks =  $product->getProductLinks();
-            if ($links) {
-                foreach ($links as $linkId => $linkRaw) {
-                    /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
-                    $productLink = $this->productLinkFactory->create();
-                    if (isset($linkRaw['id'])) {
-                        $productId = $linkRaw['id'];
-                    } else {
-                        $productId = $linkId;
-                    }
-                    $linkedProduct = $this->productRepository->getById($productId);
-                    $productLink->setSku($product->getSku())
-                        ->setLinkType(self::TYPE_NAME)
-                        ->setLinkedProductSku($linkedProduct->getSku())
-                        ->setLinkedProductType($linkedProduct->getTypeId())
-                        ->setPosition($linkRaw['position'])
-                        ->getExtensionAttributes()
-                        ->setQty($linkRaw['qty']);
-                    if (isset($linkRaw['custom_attributes'])) {
-                        $productLinkExtension = $productLink->getExtensionAttributes();
-                        if ($productLinkExtension === null) {
-                            $productLinkExtension = $this->productLinkExtensionFactory->create();
-                        }
-                        foreach ($linkRaw['custom_attributes'] as $option) {
-                            $name = $option['attribute_code'];
-                            $value = $option['value'];
-                            $setterName = 'set' . ucfirst($name);
-                            // Check if setter exists
-                            if (method_exists($productLinkExtension, $setterName)) {
-                                call_user_func([$productLinkExtension, $setterName], $value);
-                            }
-                        }
-                        $productLink->setExtensionAttributes($productLinkExtension);
-                    }
-                    $newLinks[] = $productLink;
+            $existingLinks = $product->getProductLinks();
+
+            foreach ($links as $linkRaw) {
+                /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $productLink */
+                $productLink = $this->productLinkFactory->create();
+                if (!isset($linkRaw['id'])) {
+                    continue;
                 }
+                $productId = $linkRaw['id'];
+                if (!isset($linkRaw['qty'])) {
+                    $linkRaw['qty'] = 0;
+                }
+                $linkedProduct = $this->productRepository->getById($productId);
+
+                $productLink->setSku($product->getSku())
+                    ->setLinkType(self::TYPE_NAME)
+                    ->setLinkedProductSku($linkedProduct->getSku())
+                    ->setLinkedProductType($linkedProduct->getTypeId())
+                    ->setPosition($linkRaw['position'])
+                    ->getExtensionAttributes()
+                    ->setQty($linkRaw['qty']);
+                if (isset($linkRaw['custom_attributes'])) {
+                    $productLinkExtension = $productLink->getExtensionAttributes();
+                    if ($productLinkExtension === null) {
+                        $productLinkExtension = $this->productLinkExtensionFactory->create();
+                    }
+                    foreach ($linkRaw['custom_attributes'] as $option) {
+                        $name = $option['attribute_code'];
+                        $value = $option['value'];
+                        $setterName = 'set' . ucfirst($name);
+                        // Check if setter exists
+                        if (method_exists($productLinkExtension, $setterName)) {
+                            call_user_func([$productLinkExtension, $setterName], $value);
+                        }
+                    }
+                    $productLink->setExtensionAttributes($productLinkExtension);
+                }
+                $newLinks[] = $productLink;
             }
+
             $existingLinks = $this->removeUnExistingLinks($existingLinks, $newLinks);
             $product->setProductLinks(array_merge($existingLinks, $newLinks));
         }

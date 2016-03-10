@@ -7,7 +7,9 @@
 
 namespace Magento\Vault\Plugin;
 
-use Magento\Vault\Model\PaymentTokenManagement;
+use Magento\Sales\Api\Data\OrderPaymentExtensionInterface;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
+use Magento\Vault\Api\PaymentTokenManagementInterface;
 
 /**
  * Plugin for loading vault payment extension attribute to order/payment entity
@@ -20,17 +22,17 @@ class PaymentVaultAttributesLoad
     protected $paymentExtensionFactory;
 
     /**
-     * @var PaymentTokenManagement
+     * @var PaymentTokenManagementInterface
      */
     protected $paymentTokenManagement;
 
     /**
      * @param \Magento\Sales\Api\Data\OrderPaymentExtensionFactory $paymentExtensionFactory
-     * @param PaymentTokenManagement $paymentTokenManagement
+     * @param PaymentTokenManagement|PaymentTokenManagementInterface $paymentTokenManagement
      */
     public function __construct(
         \Magento\Sales\Api\Data\OrderPaymentExtensionFactory $paymentExtensionFactory,
-        PaymentTokenManagement $paymentTokenManagement
+        PaymentTokenManagementInterface $paymentTokenManagement
     ) {
         $this->paymentExtensionFactory = $paymentExtensionFactory;
         $this->paymentTokenManagement = $paymentTokenManagement;
@@ -39,16 +41,15 @@ class PaymentVaultAttributesLoad
     /**
      * Load vault payment extension attribute to order/payment entity
      *
-     * @param \Magento\Sales\Model\Order\Payment $subject
+     * @param OrderPaymentInterface $payment
      * @param \Closure $proceed
-     * @return \Magento\Sales\Model\Order\Payment
+     * @return OrderPaymentExtensionInterface
      */
     public function aroundGetExtensionAttributes(
-        \Magento\Sales\Model\Order\Payment $subject,
+        OrderPaymentInterface $payment,
         \Closure $proceed
     ) {
-        // Call native getExtensionAttributes () and get OrderPaymentExtensionInterface
-        /** @var \Magento\Sales\Api\Data\OrderPaymentExtensionInterface $paymentExtension */
+        /** @var OrderPaymentExtensionInterface $paymentExtension */
         $paymentExtension = $proceed();
 
         if ($paymentExtension === null) {
@@ -57,9 +58,9 @@ class PaymentVaultAttributesLoad
 
         $paymentToken = $paymentExtension->getVaultPaymentToken();
         if ($paymentToken === null) {
-            $paymentToken = $this->paymentTokenManagement->getByPaymentId($subject->getEntityId());
+            $paymentToken = $this->paymentTokenManagement->getByPaymentId($payment->getEntityId());
             $paymentExtension->setVaultPaymentToken($paymentToken);
-            $subject->setExtensionAttributes($paymentExtension);
+            $payment->setExtensionAttributes($paymentExtension);
         }
 
         return $paymentExtension;

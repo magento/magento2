@@ -7,12 +7,12 @@ namespace Magento\Payment\Model\Method;
 
 use Magento\Framework\DataObject;
 use Magento\Payment\Model\InfoInterface;
+use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Payment\Model\MethodInterface;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Payment\Gateway\CommandExecutorInterface;
+use Magento\Payment\Gateway\Command\CommandManagerInterface;
 use Magento\Payment\Gateway\Command\CommandPoolInterface;
 use Magento\Payment\Gateway\Data\PaymentDataObjectFactory;
 use Magento\Payment\Gateway\Config\ValueHandlerPoolInterface;
@@ -24,7 +24,7 @@ use Magento\Payment\Gateway\Validator\ValidatorPoolInterface;
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-final class Adapter implements MethodInterface, CommandExecutorInterface
+class Adapter implements MethodInterface
 {
     /**
      * @var ValueHandlerPoolInterface
@@ -77,14 +77,20 @@ final class Adapter implements MethodInterface, CommandExecutorInterface
     private $paymentDataObjectFactory;
 
     /**
+     * @var \Magento\Payment\Gateway\Command\CommandManagerInterface
+     */
+    private $commandExecutor;
+
+    /**
      * @param ManagerInterface $eventManager
      * @param ValueHandlerPoolInterface $valueHandlerPool
-     * @param ValidatorPoolInterface $validatorPool
-     * @param CommandPoolInterface $commandPool
      * @param PaymentDataObjectFactory $paymentDataObjectFactory
      * @param string $code
      * @param string $formBlockType
      * @param string $infoBlockType
+     * @param CommandPoolInterface $commandPool
+     * @param ValidatorPoolInterface $validatorPool
+     * @param CommandManagerInterface $commandExecutor
      */
     public function __construct(
         ManagerInterface $eventManager,
@@ -94,7 +100,8 @@ final class Adapter implements MethodInterface, CommandExecutorInterface
         $formBlockType,
         $infoBlockType,
         CommandPoolInterface $commandPool = null,
-        ValidatorPoolInterface $validatorPool = null
+        ValidatorPoolInterface $validatorPool = null,
+        CommandManagerInterface $commandExecutor = null
     ) {
         $this->valueHandlerPool = $valueHandlerPool;
         $this->validatorPool = $validatorPool;
@@ -104,6 +111,7 @@ final class Adapter implements MethodInterface, CommandExecutorInterface
         $this->formBlockType = $formBlockType;
         $this->eventManager = $eventManager;
         $this->paymentDataObjectFactory = $paymentDataObjectFactory;
+        $this->commandExecutor = $commandExecutor;
     }
 
     /**
@@ -493,29 +501,28 @@ final class Adapter implements MethodInterface, CommandExecutorInterface
     /**
      * @inheritdoc
      */
-    public function executeCommand($commandCode, array $arguments = [])
+    private function executeCommand($commandCode, array $arguments = [])
     {
-        if ($this->canPerformCommand($commandCode)) {
-            if ($this->commandPool === null) {
-                throw new \DomainException('Command pool is not configured for use.');
-            }
-
-            try {
-
-                $command = $this->commandPool->get($commandCode);
-
-                if (isset($arguments['payment'])) {
-                    $arguments['payment'] = $this->paymentDataObjectFactory->create($arguments['payment']);
-                }
-
-                return $command->execute($arguments);
-
-            } catch (NotFoundException $e) {
-                throw $e;
-            }
+        if (!$this->canPerformCommand($commandCode)) {
+            return null;
         }
 
-        return null;
+        if (isset($arguments['payment'])) {
+            $arguments['payment'] = $this->paymentDataObjectFactory->create($arguments['payment']);
+        }
+
+        if ($this->commandExecutor !== null) {
+            return $this->commandExecutor->executeByCode($commandCode, $arguments);
+        }
+
+        if ($this->commandPool === null) {
+            throw new \DomainException('Command pool is not configured for use.');
+        }
+
+        $command = $this->commandPool->get($commandCode);
+
+        return $command->execute($arguments);
+
     }
 
     /**
@@ -592,12 +599,21 @@ final class Adapter implements MethodInterface, CommandExecutorInterface
         $this->eventManager->dispatch(
             'payment_method_assign_data_' . $this->getCode(),
             [
-                'method' => $this,
-                'data' => $data
+                AbstractDataAssignObserver::METHOD_CODE => $this,
+                AbstractDataAssignObserver::MODEL_CODE => $this->getInfoInstance(),
+                AbstractDataAssignObserver::DATA_CODE => $data
             ]
         );
 
-        $this->getInfoInstance()->addData($data->getData());
+        $this->eventManager->dispatch(
+            'payment_method_assign_data',
+            [
+                AbstractDataAssignObserver::METHOD_CODE => $this,
+                AbstractDataAssignObserver::MODEL_CODE => $this->getInfoInstance(),
+                AbstractDataAssignObserver::DATA_CODE => $data
+            ]
+        );
+
         return $this;
     }
 

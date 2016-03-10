@@ -5,6 +5,9 @@
  */
 namespace Magento\Ui\Component\Wysiwyg;
 
+/**
+ * Interface ConfigInterface
+ */
 interface ConfigInterface
 {
     /**

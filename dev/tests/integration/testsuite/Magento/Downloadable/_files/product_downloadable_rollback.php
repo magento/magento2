@@ -5,6 +5,8 @@
  */
 use Magento\Framework\Exception\NoSuchEntityException;
 
+\Magento\TestFramework\Helper\Bootstrap::getInstance()->getInstance()->reinitialize();
+
 /** @var \Magento\Framework\Registry $registry */
 $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
 

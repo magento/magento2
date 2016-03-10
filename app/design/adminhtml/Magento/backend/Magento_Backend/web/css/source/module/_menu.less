@@ -469,6 +469,16 @@
                 content: @icon-systems__content;
             }
         }
+
+        &._current {
+            + .item-partners {
+                > a {
+                    &:after {
+                        display: none;
+                    }
+                }
+            }
+        }
     }
 
     .item-partners {

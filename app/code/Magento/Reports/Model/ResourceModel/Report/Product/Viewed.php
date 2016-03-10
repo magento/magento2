@@ -159,7 +159,7 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
         $productLinkField = $this->_productResource->getLinkField();
         $select->joinInner(
             ['product' => $this->getTable('catalog_product_entity')],
-            "product.{$productLinkField} = source_table.object_id",
+            'product.entity_id = source_table.object_id',
             []
         );
 

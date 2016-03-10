@@ -39,9 +39,7 @@
         <span class="message-text">Checking for a new version...</span>
     </div>
     <div class="message message-error" ng-show="upgradeProcessError">
-            <span class="message-text">
-                Sorry, we can't take that action right now.
-            </span>
+            <span class="message-text" ng-bind-html="upgradeProcessErrorMessage"></span>
     </div>
     <div class="row" ng-show="upgradeProcessed && !upgradeProcessError">
         <div class="col-m-3">
@@ -184,17 +182,19 @@
                 </tr>
                 </thead>
                 <tbody>
-            <tr ng-repeat="component in displayComponents | limitTo:rowLimit">
+                <tr ng-repeat="component in displayComponents | limitTo:rowLimit">
                     <td class="data-grid-indicator-cell">
-                        <div class="actions-switch">
-                            <input type="checkbox" name="{{component.checkboxId}}"
-                                   class="actions-switch-checkbox" id="{{component.checkboxId}}"
+                        <div class="admin__actions-switch">
+                            <input class="admin__actions-switch-checkbox"
+                                   name="{{component.checkboxId}}"
+                                   type="checkbox"
                                    ng-click="AddRemoveComponentOnSliderMove(component)"
                                    ng-checked="isSelected(component.name)">
-                            <label class="actions-switch-label" for="{{component.checkboxId}}">
-                                <span class="actions-switch-inner"></span>
-                                <span class="actions-switch-indicator"></span>
-                                <span class="actions-switch-text" data-label-yes="Yes" data-label-no="No"></span>
+                            <label class="admin__actions-switch-label"
+                                   for="{{component.checkboxId}}">
+                                <span data-text-on="Yes"
+                                      data-text-off="No"
+                                      class="admin__actions-switch-text"></span>
                             </label>
                         </div>
                     </td>
@@ -227,4 +227,3 @@
 <div data-role="spinner" class="admin__data-grid-loading-mask hide" ng-class="{'hide':isHiddenSpinner}">
     <div class="grid-loader"></div>
 </div>
-

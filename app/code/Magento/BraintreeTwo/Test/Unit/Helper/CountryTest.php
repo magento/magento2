@@ -12,7 +12,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class CountryTest
- * @package Magento\BraintreeTwo\Test\Unit\Helper
  */
 class CountryTest extends \PHPUnit_Framework_TestCase
 {

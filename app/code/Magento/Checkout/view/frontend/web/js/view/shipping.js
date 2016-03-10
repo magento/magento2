@@ -83,7 +83,7 @@ define(
                     stepNavigator.registerStep(
                         'shipping',
                         '',
-                        'Shipping',
+                        $t('Shipping'),
                         this.visible, _.bind(this.navigate, this),
                         10
                     );
@@ -248,7 +248,7 @@ define(
                     emailValidationResult = customer.isLoggedIn();
 
                 if (!quote.shippingMethod()) {
-                    this.errorValidationMessage('Please specify a shipping method');
+                    this.errorValidationMessage('Please specify a shipping method.');
 
                     return false;
                 }
@@ -284,9 +284,14 @@ define(
 
                         if (addressData.hasOwnProperty(field) &&
                             shippingAddress.hasOwnProperty(field) &&
-                            typeof addressData[field] != 'function'
+                            typeof addressData[field] != 'function' &&
+                            _.isEqual(shippingAddress[field], addressData[field])
                         ) {
                             shippingAddress[field] = addressData[field];
+                        } else if (typeof addressData[field] != 'function' &&
+                            !_.isEqual(shippingAddress[field], addressData[field])) {
+                            shippingAddress = addressData;
+                            break;
                         }
                     }
 

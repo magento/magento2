@@ -18,6 +18,7 @@
         "magento/module-catalog-rule": "100.0.*",
         "magento/module-widget": "100.0.*",
         "magento/module-quote": "100.0.*",
+        "magento/module-ui": "100.0.*",
         "magento/framework": "100.0.*"
     },
     "suggest": {

@@ -11,6 +11,7 @@ namespace Magento\Catalog\Model;
  *
  * @see \Magento\Catalog\Model\CategoryTreeTest
  * @magentoDataFixture Magento/Catalog/_files/categories.php
+ * @magentoDbIsolation enabled
  * @magentoAppIsolation enabled
  */
 class CategoryTest extends \PHPUnit_Framework_TestCase
@@ -272,6 +273,30 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
     {
         $category = $this->_model->load('444');
         $this->assertEquals('5', $category->getPosition());
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     */
+    public function testDeleteChildren()
+    {
+        $this->_model->unsetData();
+        $this->_model->load(4);
+        $this->_model->setSkipDeleteChildren(true);
+        $this->_model->delete();
+
+        $this->_model->unsetData();
+        $this->_model->load(5);
+        $this->assertEquals($this->_model->getId(), 5);
+
+        $this->_model->unsetData();
+        $this->_model->load(3);
+        $this->assertEquals($this->_model->getId(), 3);
+        $this->_model->delete();
+
+        $this->_model->unsetData();
+        $this->_model->load(5);
+        $this->assertEquals($this->_model->getId(), null);
     }
 
     protected function getCategoryByName($categoryName)

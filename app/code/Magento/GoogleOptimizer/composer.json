@@ -8,7 +8,8 @@
         "magento/module-catalog": "100.0.*",
         "magento/module-cms": "100.0.*",
         "magento/module-backend": "100.0.*",
-        "magento/framework": "100.0.*"
+        "magento/framework": "100.0.*",
+        "magento/module-ui": "100.0.*"
     },
     "type": "magento2-module",
     "version": "100.0.2",

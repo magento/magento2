@@ -378,11 +378,11 @@ abstract class AbstractAction
         if (!empty($notCompositeIds)) {
             $select = $this->_connection->select()->from(
                 ['l' => $this->_defaultIndexerResource->getTable('catalog_product_relation')],
-                'parent_id'
+                ''
             )->join(
                 ['e' => $this->_defaultIndexerResource->getTable('catalog_product_entity')],
-                'e.entity_id = l.parent_id',
-                ['type_id']
+                'e.' . $this->getProductIdFieldName() . ' = l.parent_id',
+                ['e.entity_id as parent_id', 'type_id']
             )->where(
                 'l.child_id IN(?)',
                 $notCompositeIds
@@ -422,11 +422,15 @@ abstract class AbstractAction
      */
     protected function _copyRelationIndexData($parentIds, $excludeIds = null)
     {
+        $linkField = $this->getProductIdFieldName();
         $select = $this->_connection->select()->from(
             $this->_defaultIndexerResource->getTable('catalog_product_relation'),
             ['child_id']
+        )->join(
+            ['e' => $this->_defaultIndexerResource->getTable('catalog_product_entity')],
+            'e.' . $linkField . ' = parent_id'
         )->where(
-            'parent_id IN(?)',
+            'e.entity_id IN(?)',
             $parentIds
         );
         if (!empty($excludeIds)) {

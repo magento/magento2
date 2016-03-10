@@ -5,14 +5,15 @@
 /*jshint browser:true jquery:true*/
 /*global confirm:true*/
 define([
-    "jquery",
+    'jquery',
     'Magento_Customer/js/model/authentication-popup',
     'Magento_Customer/js/customer-data',
     'Magento_Ui/js/modal/alert',
     'Magento_Ui/js/modal/confirm',
-    "jquery/ui",
-    "mage/decorate"
-], function($, authenticationPopup, customerData, alert, confirm){
+    'jquery/ui',
+    'mage/decorate',
+    'mage/collapsible'
+], function ($, authenticationPopup, customerData, alert, confirm) {
 
     $.widget('mage.sidebar', {
         options: {
@@ -44,11 +45,11 @@ define([
 
             this.element.decorate('list', this.options.isRecursive);
 
-            events['click ' + this.options.button.close] = function(event) {
+            events['click ' + this.options.button.close] = function (event) {
                 event.stopPropagation();
                 $(self.options.targetElement).dropdownDialog("close");
             };
-            events['click ' + this.options.button.checkout] = $.proxy(function() {
+            events['click ' + this.options.button.checkout] = $.proxy(function () {
                 var cart = customerData.get('cart'),
                     customer = customerData.get('customer');
 
@@ -109,9 +110,9 @@ define([
             }
         },
 
-        _showItemButton: function(elem) {
-            var itemId = elem.data('cart-item');
-            var itemQty = elem.data('item-qty');
+        _showItemButton: function (elem) {
+            var itemId = elem.data('cart-item'),
+                itemQty = elem.data('item-qty');
             if (this._isValidQty(itemQty, elem.val())) {
                 $('#update-cart-item-' + itemId).show('fade', 300);
             } else if (elem.val() == 0) {
@@ -197,10 +198,10 @@ define([
                 type: 'post',
                 dataType: 'json',
                 context: this,
-                beforeSend: function() {
+                beforeSend: function () {
                     elem.attr('disabled', 'disabled');
                 },
-                complete: function() {
+                complete: function () {
                     elem.attr('disabled', null);
                 }
             })
@@ -226,13 +227,14 @@ define([
          *
          * @private
          */
-        _calcHeight: function() {
+        _calcHeight: function () {
             var self = this,
                 height = 0,
                 counter = this.options.maxItemsVisible,
                 target = $(this.options.minicart.list);
 
             target.children().each(function () {
+                $(this).collapsible();
                 var outerHeight = $(this).outerHeight();
 
                 if (counter-- > 0) {

@@ -9,7 +9,6 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\AbstractDb as DbCollection;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Registry;
 
 /**
@@ -17,10 +16,12 @@ use Magento\Framework\Registry;
  *
  * @method \Magento\Search\Model\ResourceModel\SynonymReader _getResource()
  * @method \Magento\Search\Model\ResourceModel\SynonymReader getResource()
- * @method \Magento\Search\Model\SynonymReader setGroupId(int $value)
+ * @method \Magento\Search\Model\SynonymReader setGroupId(int $group)
  * @method int getGroupId()
- * @method \Magento\Search\Model\SynonymReader setStoreId(int $value)
+ * @method \Magento\Search\Model\SynonymReader setStoreId(int $storeId)
  * @method int getStoreId()
+ * @method \Magento\Search\Model\SynonymReader setWebsiteId(int $websiteId)
+ * @method int getWebsiteId()
  * @method \Magento\Search\Model\SynonymReader setSynonyms(string $value)
  * @method string getSynonyms()
  */
@@ -41,18 +42,10 @@ class SynonymReader extends AbstractModel
     protected $_eventObject = 'search_synonyms';
 
     /**
-     * Store manager
-     *
-     * @var StoreManagerInterface
-     */
-    protected $storeManager;
-
-    /**
      * Construct
      *
      * @param \Magento\Framework\Model\Context $context
      * @param Registry $registry
-     * @param StoreManagerInterface $storeManager
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param DbCollection $resourceCollection
      * @param array $data
@@ -60,12 +53,10 @@ class SynonymReader extends AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         Registry $registry,
-        StoreManagerInterface $storeManager,
         AbstractResource $resource = null,
         DbCollection $resourceCollection = null,
         array $data = []
     ) {
-        $this->storeManager = $storeManager;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -91,30 +82,5 @@ class SynonymReader extends AbstractModel
         $this->_afterLoad();
         $this->setOrigData();
         return $this;
-    }
-
-    /**
-     * Load synonyms object by store view Id
-     *
-     * @param int $storeViewId
-     * @return $this
-     */
-    public function loadByStoreViewId($storeViewId)
-    {
-        $this->_getResource()->loadByStoreViewId($this, $storeViewId);
-        $this->_afterLoad();
-        $this->setOrigData();
-        return $this;
-    }
-
-    /**
-     * Retrieve store view Id
-     *
-     * @return int
-     */
-    public function getStoreViewId()
-    {
-        $storeId = $this->storeManager->getStore()->getId();
-        return $storeId;
     }
 }

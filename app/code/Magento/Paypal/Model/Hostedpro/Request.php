@@ -8,10 +8,10 @@ namespace Magento\Paypal\Model\Hostedpro;
 use Magento\Customer\Helper\Address;
 use Magento\Framework\DataObject;
 use Magento\Framework\Locale\Resolver;
+use Magento\Payment\Helper\Formatter;
 use Magento\Paypal\Model\Hostedpro;
 use Magento\Sales\Model\Order;
 use Magento\Tax\Helper\Data;
-use Magento\Paypal\Helper\Formatter;
 
 /**
  *  Website Payments Pro Hosted Solution request model to get token.

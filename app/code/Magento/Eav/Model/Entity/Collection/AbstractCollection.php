@@ -1514,7 +1514,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     public function toArray($arrAttributes = [])
     {
         $arr = [];
-        foreach ($this->_items as $key => $item) {
+        foreach ($this->getItems() as $key => $item) {
             $arr[$key] = $item->toArray($arrAttributes);
         }
         return $arr;

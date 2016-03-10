@@ -96,7 +96,16 @@ define([
          */
         createRenderer: function (paymentMethodData) {
             _.find(rendererList(), function (renderer) {
-                if (renderer.type.indexOf(paymentMethodData.method) === 0) {
+                var isRendererForMethod = false;
+
+                if (renderer.hasOwnProperty('typeComparatorCallback')
+                    && typeof renderer.typeComparatorCallback == 'function') {
+                    isRendererForMethod = renderer.typeComparatorCallback(renderer.type, paymentMethodData.method);
+                } else {
+                    isRendererForMethod = renderer.type === paymentMethodData.method;
+                }
+
+                if (isRendererForMethod) {
                     layout(
                         [
                             this.createComponent(

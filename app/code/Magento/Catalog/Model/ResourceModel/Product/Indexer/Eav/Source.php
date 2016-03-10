@@ -6,6 +6,7 @@
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
 
 use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Catalog Product Eav Select and Multiply Select Attributes Indexer resource model
@@ -28,6 +29,7 @@ class Source extends AbstractEav
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param string $connectionName
      */
@@ -35,12 +37,13 @@ class Source extends AbstractEav
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         $connectionName = null
     ) {
         $this->_resourceHelper = $resourceHelper;
-        parent::__construct($context, $tableStrategy, $eavConfig, $eventManager, $connectionName);
+        parent::__construct($context, $tableStrategy, $eavConfig, $metadataPool, $eventManager, $connectionName);
     }
 
     /**
@@ -117,7 +120,7 @@ class Source extends AbstractEav
         if (!$attrIds) {
             return $this;
         }
-        $productIdField = $this->getProductIdFieldName();
+        $productIdField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
 
         /**@var $subSelect \Magento\Framework\DB\Select*/
         $subSelect = $connection->select()->from(
@@ -126,7 +129,7 @@ class Source extends AbstractEav
         )->joinLeft(
             ['d' => $this->getTable('catalog_product_entity_int')],
             'd.store_id = 0 OR d.store_id = s.store_id',
-            [$productIdField, 'attribute_id', 'value']
+            ['attribute_id', 'value']
         )->joinLeft(
             ['d2' => $this->getTable('catalog_product_entity_int')],
             sprintf(
@@ -136,6 +139,10 @@ class Source extends AbstractEav
                 ProductStatus::STATUS_ENABLED
             ),
             []
+        )->joinLeft(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            "cpe.{$productIdField} = d.{$productIdField}",
+            array_unique([$productIdField, 'entity_id'])
         )->where(
             's.store_id != 0'
         )->where(
@@ -143,11 +150,11 @@ class Source extends AbstractEav
         )->where(
             'd2.value IS NOT NULL'
         )->group([
-            's.store_id', 's.website_id', "d.{$productIdField}", 'd.attribute_id', 'd.value',
+            's.store_id', 's.website_id', 'cpe.entity_id', 'd.attribute_id', 'd.value',
         ]);
 
         if ($entityIds !== null) {
-            $subSelect->where("d.{$productIdField} IN(?)", $entityIds);
+            $subSelect->where('cpe.entity_id IN(?)', $entityIds);
         }
 
         $ifNullSql = $connection->getIfNullSql('pis.value', 'pid.value');
@@ -162,7 +169,7 @@ class Source extends AbstractEav
             []
         )->columns(
             [
-                "pid.{$productIdField}",
+                'pid.entity_id',
                 'pid.attribute_id',
                 'pid.store_id',
                 'value' => $ifNullSql,
@@ -186,7 +193,7 @@ class Source extends AbstractEav
             'prepare_catalog_product_index_select',
             [
                 'select' => $select,
-                'entity_field' => new \Zend_Db_Expr("pid.{$productIdField}"),
+                'entity_field' => new \Zend_Db_Expr('pid.entity_id'),
                 'website_field' => new \Zend_Db_Expr('pid.website_id'),
                 'store_field' => new \Zend_Db_Expr('pid.store_id')
             ]
@@ -218,17 +225,14 @@ class Source extends AbstractEav
         if (!$attrIds) {
             return $this;
         }
-        $productIdField = $this->getProductIdFieldName();
+        $productIdField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
 
         // load attribute options
         $options = [];
         $select = $connection->select()->from(
             $this->getTable('eav_attribute_option'),
             ['attribute_id', 'option_id']
-        )->where(
-            'attribute_id IN(?)',
-            $attrIds
-        );
+        )->where('attribute_id IN(?)', $attrIds);
         $query = $select->query();
         while ($row = $query->fetch()) {
             $options[$row['attribute_id']][$row['option_id']] = true;
@@ -246,8 +250,12 @@ class Source extends AbstractEav
         )->joinLeft(
             ['pvs' => $this->getTable('catalog_product_entity_varchar')],
             "pvs.{$productIdField} = pvd.{$productIdField} AND pvs.attribute_id = pvd.attribute_id"
-            .' AND pvs.store_id=cs.store_id',
+            . ' AND pvs.store_id=cs.store_id',
             ['value' => $productValueExpression]
+        )->joinLeft(
+            ['cpe' => $this->getTable('catalog_product_entity')],
+            "cpe.{$productIdField} = pvd.{$productIdField}",
+            ['entity_id']
         )->where(
             'pvd.store_id=?',
             $connection->getIfNullSql('pvs.store_id', \Magento\Store\Model\Store::DEFAULT_STORE_ID)
@@ -263,9 +271,8 @@ class Source extends AbstractEav
         $this->_addAttributeToSelect($select, 'status', "pvd.{$productIdField}", 'cs.store_id', $statusCond);
 
         if ($entityIds !== null) {
-            $select->where("pvd.{$productIdField} IN(?)", $entityIds);
+            $select->where('cpe.entity_id IN(?)', $entityIds);
         }
-
         /**
          * Add additional external limitation
          */
@@ -273,7 +280,7 @@ class Source extends AbstractEav
             'prepare_catalog_product_index_select',
             [
                 'select' => $select,
-                'entity_field' => new \Zend_Db_Expr("pvd.{$productIdField}"),
+                'entity_field' => new \Zend_Db_Expr('cpe.entity_id'),
                 'website_field' => new \Zend_Db_Expr('cs.website_id'),
                 'store_field' => new \Zend_Db_Expr('cs.store_id')
             ]
@@ -286,7 +293,7 @@ class Source extends AbstractEav
             $values = explode(',', $row['value']);
             foreach ($values as $valueId) {
                 if (isset($options[$row['attribute_id']][$valueId])) {
-                    $data[] = [$row[$productIdField], $row['attribute_id'], $row['store_id'], $valueId];
+                    $data[] = [$row['entity_id'], $row['attribute_id'], $row['store_id'], $valueId];
                     $i++;
                     if ($i % 10000 == 0) {
                         $this->_saveIndexData($data);
@@ -317,7 +324,7 @@ class Source extends AbstractEav
         $connection = $this->getConnection();
         $connection->insertArray(
             $this->getIdxTable(),
-            [$this->getProductIdFieldName(), 'attribute_id', 'store_id', 'value'],
+            ['entity_id', 'attribute_id', 'store_id', 'value'],
             $data
         );
         return $this;
@@ -333,15 +340,5 @@ class Source extends AbstractEav
     public function getIdxTable($table = null)
     {
         return $this->tableStrategy->getTableName('catalog_product_index_eav');
-    }
-
-    /**
-     * @return string
-     */
-    protected function getProductIdFieldName()
-    {
-        $table = $this->getTable('catalog_product_entity');
-        $indexList = $this->getConnection()->getIndexList($table);
-        return $indexList[$this->getConnection()->getPrimaryKeyName($table)]['COLUMNS_LIST'][0];
     }
 }

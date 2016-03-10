@@ -214,6 +214,10 @@
                 }
             }
         }
+
+        .price {
+            white-space: nowrap;
+        }
     }
 
     .product-info-stock-sku {
@@ -294,7 +298,8 @@
             margin: 0 0 8px;
         }
 
-        &.required {
+        &.required,
+        &._required {
             .legend {
                 &:after {
                     content: '*';

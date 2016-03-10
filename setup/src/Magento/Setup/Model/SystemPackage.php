@@ -59,13 +59,19 @@ class SystemPackage
         $systemPackages = [];
         $systemPackages = $this->getInstalledSystemPackages($systemPackages);
         if (empty($systemPackages)) {
-            throw new \RuntimeException('System packages not found');
+            // git cloned Magento does not include system package
+            throw new \RuntimeException(
+                'We\'re sorry, no components are available because you cloned the Magento 2 GitHub repository. ' .
+                'You must manually update components as discussed in the ' .
+                '<a href="http://devdocs.magento.com/guides/v2.0/install-gde/install/cli/dev_options.html">' .
+                'Installation Guide</a>.'
+            );
         }
         foreach ($systemPackages as $systemPackage) {
             $versions = [];
             $systemPackageInfo = $this->infoCommand->run($systemPackage);
             if (!$systemPackageInfo) {
-                throw new \RuntimeException('System package not found');
+                throw new \RuntimeException("We cannot retrieve information on $systemPackage.");
             }
 
             $versions = $this->getSystemPackageVersions($systemPackageInfo, $versions);

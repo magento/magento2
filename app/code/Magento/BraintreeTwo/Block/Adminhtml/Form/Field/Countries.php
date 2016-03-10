@@ -11,20 +11,19 @@ use Magento\Framework\View\Element\Html\Select;
 
 /**
  * Class Countries
- * @package Magento\BraintreeTwo\Block\Adminhtml\Form\Field
  */
 class Countries extends Select
 {
     /**
-     * @var \Magento\BraintreeTwo\Helper\Country
+     * @var Country
      */
     private $countryHelper;
 
     /**
      * Constructor
      *
-     * @param \Magento\Framework\View\Element\Context $context
-     * @param \Magento\BraintreeTwo\Helper\Country $countryHelper
+     * @param Context $context
+     * @param Country $countryHelper
      * @param array $data
      */
     public function __construct(Context $context, Country $countryHelper, array $data = [])

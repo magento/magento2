@@ -50,14 +50,14 @@ class Content extends Tab
      *
      * @var string
      */
-    protected $content = '#page_content';
+    protected $content = '#cms_page_form_content';
 
     /**
      * Content Heading input locator.
      *
      * @var string
      */
-    protected $contentHeading = '#page_content_heading';
+    protected $contentHeading = '[name="content_heading"]';
 
     /**
      * Clicking in content tab 'Insert Variable' button.
@@ -113,5 +113,50 @@ class Content extends Tab
             'Magento\Widget\Test\Block\Adminhtml\WidgetForm',
             ['element' => $this->_rootElement->find($this->widgetBlock, Locator::SELECTOR_XPATH)]
         );
+    }
+
+    /**
+     * Fill data to content fields on content tab.
+     *
+     * @param array $fields
+     * @param SimpleElement|null $element
+     * @return $this
+     */
+    public function setFieldsData(array $fields, SimpleElement $element = null)
+    {
+        $context = $element === null ? $this->_rootElement : $element;
+        $context->find($this->content)->setValue($fields['content']['value']['content']);
+        if (isset($fields['content_heading']['value'])) {
+            $element->find($this->contentHeading)->setValue($fields['content_heading']['value']);
+        }
+        if (isset($fields['content']['value']['widget']['dataset'])) {
+            foreach ($fields['content']['value']['widget']['dataset'] as $widget) {
+                $this->clickInsertWidget();
+                $this->getWidgetBlock()->addWidget($widget);
+            }
+        }
+        if (isset($fields['content']['value']['variable'])) {
+            $this->clickInsertVariable();
+            $config = $this->getWysiwygConfig();
+            $config->selectVariableByName($fields['content']['value']['variable']);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get data of content tab.
+     *
+     * @param array|null $fields
+     * @param SimpleElement|null $element
+     * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function getFieldsData($fields = null, SimpleElement $element = null)
+    {
+        return [
+            'content' => [],
+            'content_heading' => ''
+        ];
     }
 }

@@ -893,6 +893,8 @@ class Filter extends \Magento\Framework\Filter\Template
             }
         } catch (ContentProcessorException $exception) {
             $css = $exception->getMessage();
+        } catch (\Magento\Framework\View\Asset\File\NotFoundException $exception) {
+            $css = '';
         }
 
         return $css;
@@ -920,7 +922,7 @@ class Filter extends \Magento\Framework\Filter\Template
                     !== false
                 ) {
                     throw new \Magento\Framework\Exception\MailException(
-                        __('<pre>' . PHP_EOL . $cssToInline . PHP_EOL . '</pre>')
+                        __('<pre> %1 </pre>', PHP_EOL . $cssToInline . PHP_EOL)
                     );
                 }
 

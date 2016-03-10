@@ -1234,18 +1234,6 @@ class InstallSchema implements InstallSchemaInterface
                 ['product_id']
             )
             ->addForeignKey(
-                $installer->getFkName(
-                    'catalog_category_product',
-                    'category_id',
-                    'catalog_category_entity',
-                    'entity_id'
-                ),
-                'category_id',
-                $installer->getTable('catalog_category_entity'),
-                'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
-            )
-            ->addForeignKey(
                 $installer->getFkName('catalog_category_product', 'product_id', 'catalog_product_entity', 'entity_id'),
                 'product_id',
                 $installer->getTable('catalog_product_entity'),

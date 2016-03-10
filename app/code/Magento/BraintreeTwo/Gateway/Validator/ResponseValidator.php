@@ -5,59 +5,35 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Validator;
 
-use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
-use Magento\Payment\Gateway\Validator\AbstractValidator;
+use Braintree\Result\Error;
+use Braintree\Result\Successful;
+use Braintree\Transaction;
+use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
 
 /**
  * Class ResponseValidator
- * @package Magento\BraintreeTwo\Gateway\Validator
  */
-class ResponseValidator extends AbstractValidator
+class ResponseValidator extends GeneralResponseValidator
 {
     /**
-     * @inheritdoc
+     * @return array
      */
-    public function validate(array $validationSubject)
+    protected function getResponseValidators()
     {
-        $response = SubjectReader::readResponseObject($validationSubject);
-
-        $result = $this->createResult(
-            $this->validateSuccess($response)
-            && $this->validateErrors($response)
-            && $this->validateTransactionStatus($response),
-            [__('Transaction has been declined, please, try again later.')]
-        );
-
-        return $result;
-    }
-
-    /**
-     * @param object $response
-     * @return bool
-     */
-    private function validateSuccess($response)
-    {
-        return property_exists($response, 'success') && $response->success === true;
-    }
-
-    /**
-     * @param object $response
-     * @return bool
-     */
-    private function validateErrors($response)
-    {
-        return !(property_exists($response, 'errors') && $response->errors->deepSize() > 0);
-    }
-
-    /**
-     * @param object $response
-     * @return bool
-     */
-    private function validateTransactionStatus($response)
-    {
-        return in_array(
-            $response->transaction->status,
-            [\Braintree_Transaction::AUTHORIZED, \Braintree_Transaction::SUBMITTED_FOR_SETTLEMENT]
+        return array_merge(
+            parent::getResponseValidators(),
+            [
+                function ($response) {
+                    return [
+                        isset($response->transaction)
+                        && in_array(
+                            $response->transaction->status,
+                            [Transaction::AUTHORIZED, Transaction::SUBMITTED_FOR_SETTLEMENT, Transaction::SETTLING]
+                        ),
+                        [__('Wrong transaction status')]
+                    ];
+                }
+            ]
         );
     }
 }

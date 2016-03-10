@@ -128,6 +128,55 @@ class StructureTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($this->_tabIteratorMock, $model->getTabs());
     }
 
+    public function testGetSectionList()
+    {
+        $this->_structureDataMock = $this->getMock(
+            'Magento\Config\Model\Config\Structure\Data',
+            [],
+            [],
+            '',
+            false
+        );
+        $this->_structureDataMock->expects(
+            $this->any()
+        )->method(
+            'get'
+        )->will(
+            $this->returnValue(
+                [
+                    'sections' => [
+                        'section1' => [
+                            'children' => [
+                                'child_id_1' => 'child_data',
+                                'child_id_2' => 'child_data',
+                                'child_id_3' => 'child_data'
+                            ]
+                        ],
+                        'section2' => [
+                            'children' => [
+                                'child_id_1' => 'child_data'
+                            ]
+                        ],
+                    ]
+                ]
+            )
+        );
+        $expected = [
+            'section1_child_id_1' => true,
+            'section1_child_id_2' => true,
+            'section1_child_id_3' => true,
+            'section2_child_id_1' => true
+        ];
+        $model = new \Magento\Config\Model\Config\Structure(
+            $this->_structureDataMock,
+            $this->_tabIteratorMock,
+            $this->_flyweightFactory,
+            $this->_scopeDefinerMock
+        );
+
+        $this->assertEquals($expected, $model->getSectionList());
+    }
+
     /**
      * @param string $path
      * @param string $expectedType

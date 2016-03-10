@@ -13,9 +13,9 @@ class SelectRendererTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $renders = [
-            ['renderer' => $rendererOne, 'sort' => 10],
-            ['renderer' => $rendererOne, 'sort' => 20],
-            ['renderer' => $rendererOne, 'sort' => 5],
+            ['renderer' => $rendererOne, 'sort' => 10, 'part' => 'from'],
+            ['renderer' => $rendererOne, 'sort' => 20, 'part' => 'from'],
+            ['renderer' => $rendererOne, 'sort' => 5, 'part' => 'from'],
         ];
         $selectMock = $this->getMockBuilder('Magento\Framework\DB\Select')
             ->disableOriginalConstructor()

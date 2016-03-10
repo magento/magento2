@@ -45,7 +45,7 @@ abstract class AbstractProcessor
      */
     public function reindexRow($id)
     {
-        if ($this->getIndexer()->isScheduled()) {
+        if ($this->isIndexerScheduled()) {
             return;
         }
         $this->getIndexer()->reindexRow($id);
@@ -59,7 +59,7 @@ abstract class AbstractProcessor
      */
     public function reindexList($ids)
     {
-        if ($this->getIndexer()->isScheduled()) {
+        if ($this->isIndexerScheduled()) {
             return;
         }
         $this->getIndexer()->reindexList($ids);

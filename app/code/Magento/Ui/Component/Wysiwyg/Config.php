@@ -5,6 +5,9 @@
  */
 namespace Magento\Ui\Component\Wysiwyg;
 
+/**
+ * Class Config
+ */
 class Config implements ConfigInterface
 {
     /**

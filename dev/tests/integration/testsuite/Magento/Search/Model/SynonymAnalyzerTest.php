@@ -30,57 +30,26 @@ class SynonymAnalyzerTest extends \PHPUnit_Framework_TestCase
     public static function loadGetSynonymsForPhraseDataProvider()
     {
         return [
-            'withSynonyms' => [
-                'phrase' => 'Elizabeth is the English queen.',
+            'WithSynonymsFromStoreViewScope' => [
+                'phrase' => 'elizabeth is the english queen',
                 'expectedResult' => [['elizabeth'],['is'],['the'],['british', 'english'],['queen', 'monarch']]
             ],
-            'noSynonyms' => [
-                'phrase' => 'This sentence has no synonyms',
-                'expectedResult' => [['this'], ['sentence'], ['has'], ['no'], ['synonyms']]
+            'WithSynonymsFromWebsiteScope' => [
+                'phrase' => 'orange hill',
+                'expectedResult' => [['orange', 'magento'], ['hill', 'mountain', 'peak']]
             ],
-            'specialCharacters' => [
-                'phrase' => '~tilde`backtic! exclamation@  at#hash\$dollar%percent^carat&ampersand*star(leftparan'
-                    . ')rightparan_underscore+plus=equal{leftcurly}rightcurly[leftbracket]rightbracket:colon'
-                    . '"doublequote\'singlequote,comma  space.period<leftangle>rightangle?questionmark\\backslash'
-                    . '/forwardslash   tab;semicolon',
-                'expectedResult' => [
-                    ['tilde'],
-                    ['backtic'],
-                    ['exclamation'],
-                    ['at'],
-                    ['hash'],
-                    ['dollar'],
-                    ['percent'],
-                    ['carat'],
-                    ['ampersand'],
-                    ['star'],
-                    ['leftparan'],
-                    ['rightparan'],
-                    ['underscore'],
-                    ['plus'],
-                    ['equal'],
-                    ['leftcurly'],
-                    ['rightcurly'],
-                    ['leftbracket'],
-                    ['rightbracket'],
-                    ['colon'],
-                    ['doublequote'],
-                    ['singlequote'],
-                    ['comma'],
-                    ['space'],
-                    ['period'],
-                    ['leftangle'],
-                    ['rightangle'],
-                    ['questionmark'],
-                    ['backslash'],
-                    ['forwardslash'],
-                    ['tab'],
-                    ['semicolon']
-                ]
+            'WithSynonymsFromDefaultScope' => [
+                'phrase' => 'universe is enormous',
+                'expectedResult' => [['universe', 'cosmos'], ['is'], ['big', 'huge', 'large', 'enormous']]
+            ],
+            'noSynonyms' => [
+                'phrase' => 'this sentence has no synonyms',
+                'expectedResult' => [['this'], ['sentence'], ['has'], ['no'], ['synonyms']]
             ],
             'oneMoreTest' => [
                 'phrase' => 'schlicht',
-                'expectedResult' => [['schlicht', 'natürlich']]]
+                'expectedResult' => [['schlicht', 'natürlich']]
+            ],
         ];
     }
 

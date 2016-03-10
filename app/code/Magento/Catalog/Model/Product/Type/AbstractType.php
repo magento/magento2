@@ -9,6 +9,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
+ * @api
  * Abstract model for product type implementation
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -25,7 +26,6 @@ abstract class AbstractType
     protected $_typeId;
 
     /**
-     *
      * @var array
      */
     protected $_editableAttributes;
@@ -294,15 +294,7 @@ abstract class AbstractType
      */
     public function getEditableAttributes($product)
     {
-        $cacheKey = '_cache_editable_attributes';
-        if (!$product->hasData($cacheKey)) {
-            $editableAttributes = [];
-            foreach ($this->getSetAttributes($product) as $attributeCode => $attribute) {
-                $editableAttributes[$attributeCode] = $attribute;
-            }
-            $product->setData($cacheKey, $editableAttributes);
-        }
-        return $product->getData($cacheKey);
+        return $this->getSetAttributes($product);
     }
 
     /**
@@ -574,8 +566,12 @@ abstract class AbstractType
     {
         $transport = new \StdClass();
         $transport->options = [];
+        $options = null;
         if ($product->getHasOptions()) {
-            foreach ($product->getOptions() as $option) {
+            $options = $product->getOptions();
+        }
+        if ($options !== null) {
+            foreach ($options as $option) {
                 /* @var $option \Magento\Catalog\Model\Product\Option */
                 $group = $option->groupFactory($option->getType())
                     ->setOption($option)
@@ -590,7 +586,6 @@ abstract class AbstractType
                 }
             }
         }
-
 
         $eventName = sprintf('catalog_product_type_prepare_%s_options', $processMode);
         $this->_eventManager->dispatch(

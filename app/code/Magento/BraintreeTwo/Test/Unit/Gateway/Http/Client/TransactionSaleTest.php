@@ -5,10 +5,11 @@
  */
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Http\Client;
 
-use Magento\BraintreeTwo\Model\Adapter\BraintreeTransaction;
-use Magento\Payment\Model\Method\Logger;
 use Magento\BraintreeTwo\Gateway\Http\Client\TransactionSale;
+use Magento\BraintreeTwo\Model\Adapter\BraintreeAdapter;
 use Magento\Payment\Gateway\Http\TransferInterface;
+use Magento\Payment\Model\Method\Logger;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class TransactionSaleTest
@@ -26,9 +27,9 @@ class TransactionSaleTest extends \PHPUnit_Framework_TestCase
     private $loggerMock;
 
     /**
-     * @var BraintreeTransaction|\PHPUnit_Framework_MockObject_MockObject
+     * @var BraintreeAdapter|\PHPUnit_Framework_MockObject_MockObject
      */
-    private $braintreeTransactionMock;
+    private $adapter;
 
     /**
      * Set up
@@ -37,13 +38,15 @@ class TransactionSaleTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
+        $criticalLoggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->loggerMock = $this->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->braintreeTransactionMock = $this->getMockBuilder(BraintreeTransaction::class)
+        $this->adapter = $this->getMockBuilder(BraintreeAdapter::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = new TransactionSale($this->loggerMock, $this->braintreeTransactionMock);
+        $this->model = new TransactionSale($criticalLoggerMock, $this->loggerMock, $this->adapter);
     }
 
     /**
@@ -66,7 +69,7 @@ class TransactionSaleTest extends \PHPUnit_Framework_TestCase
                 ]
             );
 
-        $this->braintreeTransactionMock->expects($this->once())
+        $this->adapter->expects($this->once())
             ->method('sale')
             ->willThrowException(new \Exception('Test messages'));
 
@@ -84,7 +87,7 @@ class TransactionSaleTest extends \PHPUnit_Framework_TestCase
     public function testPlaceRequestSuccess()
     {
         $response = $this->getResponseObject();
-        $this->braintreeTransactionMock->expects($this->once())
+        $this->adapter->expects($this->once())
             ->method('sale')
             ->with($this->getTransferData())
             ->willReturn($response)
