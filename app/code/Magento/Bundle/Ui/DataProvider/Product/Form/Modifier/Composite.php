@@ -88,6 +88,8 @@ class Composite extends AbstractModifier
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function modifyData(array $data)
     {
