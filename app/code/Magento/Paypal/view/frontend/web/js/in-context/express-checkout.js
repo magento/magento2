@@ -42,6 +42,7 @@ define(
                             function (response) {
                                 if (response && response.token) {
                                     paypalExpressCheckout.checkout.startFlow(response.token);
+
                                     return;
                                 }
 

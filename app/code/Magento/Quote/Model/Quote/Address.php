@@ -1009,7 +1009,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
                     if ($item) {
                         $item->setBaseShippingAmount($rate->getPrice());
                     } else {
-                        /**
+
                         /** @var \Magento\Quote\Model\Quote $quote */
                         $quote = $this->getQuote();
                         $amountPrice = $quote->getStore()
@@ -1028,6 +1028,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     /******************************* Total Collector Interface *******************************************/
+
     /**
      * Get address totals as array
      *
@@ -1302,6 +1303,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress implements
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Get all total amount values
      *
