@@ -1,17 +1,35 @@
-<div class="admin__field-control">
-    <div class="file-uploader" data-role="drop-zone" css="_loading: isLoading">
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div class="data-grid-file-uploader" data-role="drop-zone" css="_loading: isLoading">
+    <div class="data-grid-file-uploader-inner">
         <each args="data: value, as: '$file'">
-            <div class="file-uploader-summary">
-                <div class="file-uploader-filename">
-                    <!-- ko if: $file.url --><a attr="href: $file.url" target="_blank" text="$file.name"/><!-- /ko -->
-                    <!-- ko if: !$file.url --><text args="$file.name"/><!-- /ko -->
-                </div>
-            </div>
+            <!-- ko if: $file.url -->
+            <img class="file-uploader-image" attr="src: $file.url, alt: $file.name"/>
+            <!-- /ko -->
+            <!-- ko if: !$file.url -->
+            <text args="$file.name"/>
+            <!-- /ko -->
         </each>
         <div class="file-uploader-area">
-            <input type="file" afterRender="onElementRender" attr="id: uid, name: fileInputName, multiple: isMultipleFiles"/>
-            <label class="file-uploader-button action-secondary" attr="for: uid" translate="'Browse Files...'"/>
+            <input type="file"
+                   class="file-uploader-input"
+                   afterRender="onElementRender"
+                   attr="id: uid, name: fileInputName, multiple: isMultipleFiles"/>
+            <label class="file-uploader-button" attr="for: uid, title: $t('Browse Files...')"><span translate="'Browse Files...'"/></label>
             <span class="file-uploader-spinner"/>
         </div>
+    </div>
+    <div class="action-select-wrap">
+        <button type="button" class="action-select">
+            <span translate="'Select Files'"/>
+        </button>
+        <ul class="action-menu">
+            <li><a href="#" class="action-menu-item">Item</a></li>
+        </ul>
     </div>
 </div>
