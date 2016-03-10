@@ -79,6 +79,11 @@ class Related extends AbstractModifier
     protected $attributeSetRepository;
 
     /**
+     * @var string
+     */
+    protected $scopeName;
+
+    /**
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
      * @param ProductLinkRepositoryInterface $productLinkRepository
@@ -86,6 +91,7 @@ class Related extends AbstractModifier
      * @param ImageHelper $imageHelper
      * @param Status $status
      * @param AttributeSetRepositoryInterface $attributeSetRepository
+     * @param string $scopeName
      */
     public function __construct(
         LocatorInterface $locator,
@@ -94,7 +100,8 @@ class Related extends AbstractModifier
         ProductRepositoryInterface $productRepository,
         ImageHelper $imageHelper,
         Status $status,
-        AttributeSetRepositoryInterface $attributeSetRepository
+        AttributeSetRepositoryInterface $attributeSetRepository,
+        $scopeName = ''
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
@@ -103,6 +110,7 @@ class Related extends AbstractModifier
         $this->imageHelper = $imageHelper;
         $this->status = $status;
         $this->attributeSetRepository = $attributeSetRepository;
+        $this->scopeName = $scopeName;
     }
 
     /**
@@ -333,7 +341,7 @@ class Related extends AbstractModifier
      */
     protected function getButtonSet(Phrase $content, Phrase $buttonTitle, $scope)
     {
-        $modalTarget = 'product_form.product_form.' . static::GROUP_RELATED . '.' . $scope . '.modal';
+        $modalTarget = $this->scopeName . '.' . static::GROUP_RELATED . '.' . $scope . '.modal';
 
         return [
             'arguments' => [
@@ -365,7 +373,7 @@ class Related extends AbstractModifier
                                         'actionName' => 'render',
                                     ]
                                 ],
-                                'title' => __($buttonTitle),
+                                'title' => $buttonTitle,
                                 'provider' => null,
                             ],
                         ],
@@ -591,7 +599,7 @@ class Related extends AbstractModifier
                         'dataType' => Text::NAME,
                         'dataScope' => $dataScope,
                         'fit' => $fit,
-                        'label' => __($label),
+                        'label' => $label,
                         'sortOrder' => $sortOrder,
                     ],
                 ],

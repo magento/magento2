@@ -97,7 +97,7 @@
         </fields>
     </seo>
     <category_products>
-        <class>\Magento\Catalog\Test\Block\Adminhtml\Category\Edit\Section\Product</class>
+        <class>\Magento\Catalog\Test\Block\Adminhtml\Category\Edit\Section\Products</class>
         <selector>//div[contains(@class,'admin__collapsible-block-wrapper')][descendant::div[@id='catalog_category_products']]</selector>
         <strategy>xpath</strategy>
     </category_products>

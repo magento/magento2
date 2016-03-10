@@ -5,8 +5,8 @@
  */
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Catalog\Model\AttributeConstantsInterface;
 use Magento\Ui\Component\Form;
 use Magento\Framework\Stdlib\ArrayManager;
 
@@ -37,10 +37,10 @@ class BundleWeight extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        if (($groupCode = $this->getGroupCodeByField($meta, AttributeConstantsInterface::CODE_WEIGHT)
+        if (($groupCode = $this->getGroupCodeByField($meta, ProductAttributeInterface::CODE_WEIGHT)
             ?: $this->getGroupCodeByField($meta, self::CODE_CONTAINER_WEIGHT))
         ) {
-            $weightPath = $this->getElementArrayPath($meta, AttributeConstantsInterface::CODE_WEIGHT)
+            $weightPath = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_WEIGHT)
                 ?: $this->getElementArrayPath($meta, self::CODE_CONTAINER_WEIGHT);
             $meta[$groupCode]['children'][self::CODE_WEIGHT_TYPE] = [
                 'arguments' => [
@@ -76,7 +76,7 @@ class BundleWeight extends AbstractModifier
                 $meta[$groupCode]['children'][self::CODE_CONTAINER_WEIGHT],
                 [
                     'children' => [
-                        AttributeConstantsInterface::CODE_HAS_WEIGHT => [
+                        ProductAttributeInterface::CODE_HAS_WEIGHT => [
                             'arguments' => [
                                 'data' => [
                                     'config' => [
@@ -93,7 +93,7 @@ class BundleWeight extends AbstractModifier
                 $meta[$groupCode]['children'][self::CODE_CONTAINER_WEIGHT],
                 [
                     'children' => [
-                        AttributeConstantsInterface::CODE_WEIGHT => [
+                        ProductAttributeInterface::CODE_WEIGHT => [
                             'arguments' => [
                                 'data' => [
                                     'config' => [

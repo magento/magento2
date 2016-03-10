@@ -27,6 +27,13 @@ use Magento\Framework\Api\DataObjectHelper;
 abstract class Index extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+
+    /**
      * @var \Magento\Framework\Validator
      */
     protected $_validator;
@@ -298,15 +305,5 @@ abstract class Index extends \Magento\Backend\App\Action
             }
         }
         return $customersUpdated;
-    }
-
-    /**
-     * Customer access rights checking
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Customer::manage');
     }
 }
