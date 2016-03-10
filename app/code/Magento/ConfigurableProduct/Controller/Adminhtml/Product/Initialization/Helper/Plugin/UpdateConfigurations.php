@@ -19,6 +19,23 @@ class UpdateConfigurations
     protected $variationHandler;
 
     /**
+     * @var array
+     */
+    private $keysPOST = [
+        'status',
+        'sku',
+        'name',
+        'price',
+        'configurable_attribute',
+        'weight',
+        'media_gallery',
+        'swatch_image',
+        'small_image',
+        'thumbnail',
+        'image'
+    ];
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\ConfigurableProduct\Model\Product\VariationHandler $variationHandler
@@ -72,19 +89,7 @@ class UpdateConfigurations
         $configurableMatrix = $this->request->getParam('configurable-matrix', []);
         foreach ($configurableMatrix as $item) {
             if (!$item['newProduct']) {
-                $result[$item['id']] = [
-                    'status' => $this->getItemValue($item, 'status'),
-                    'sku' => $this->getItemValue($item, 'sku'),
-                    'name' => $this->getItemValue($item, 'name'),
-                    'price' => $this->getItemValue($item, 'price'),
-                    'configurable_attribute' => $this->getItemValue($item, 'configurable_attribute'),
-                    'weight' => $this->getItemValue($item, 'weight'),
-                    'media_gallery' => $this->getItemValue($item, 'media_gallery'),
-                    'swatch_image' => $this->getItemValue($item, 'swatch_image'),
-                    'small_image' => $this->getItemValue($item, 'small_image'),
-                    'thumbnail' => $this->getItemValue($item, 'thumbnail'),
-                    'image' => $this->getItemValue($item, 'image')
-                ];
+                $result[$item['id']] = $this->mapData($item);
 
                 if (isset($item['qty'])) {
                     $result[$item['id']]['quantity_and_stock_status']['qty'] = $item['qty'];
@@ -96,15 +101,21 @@ class UpdateConfigurations
     }
 
     /**
-     * Get item value
+     * Map data from POST
      *
      * @param array $item
-     * @param string $key
-     * @param mixed $defaultValue
-     * @return mixed
+     * @return array
      */
-    private function getItemValue(array $item, $key, $defaultValue = '')
+    private function mapData(array $item)
     {
-        return isset($item[$key]) ? $item[$key] : $defaultValue;
+        $result = [];
+
+        foreach ($this->keysPOST as $key) {
+            if (isset($item[$key])) {
+                $result[$key] = $item[$key];
+            }
+        }
+
+        return $result;
     }
 }
