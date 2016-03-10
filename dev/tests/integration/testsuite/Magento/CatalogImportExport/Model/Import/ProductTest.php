@@ -1057,4 +1057,73 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $this->assertTrue($errors->getErrorsCount() == 0);
     }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testProductWithLinks()
+    {
+        $linksData = [
+            'upsell' => [
+                'simple1' => '3',
+                'simple3' => '1'
+            ],
+            'crosssell' => [
+                'simple2' => '1',
+                'simple3' => '2'
+            ],
+            'related' => [
+                'simple1' => '2',
+                'simple2' => '1'
+            ]
+        ];
+        // import data from CSV file
+        $pathToFile = __DIR__ . '/_files/products_to_import_with_product_links.csv';
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Framework\Filesystem'
+        );
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            '\Magento\ImportExport\Model\Import\Source\Csv',
+            [
+                'file' => $pathToFile,
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setSource(
+            $source
+        )->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                'entity' => 'catalog_product'
+            ]
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $resource = $objectManager->get('Magento\Catalog\Model\ResourceModel\Product');
+        $productId = $resource->getIdBySku('simple4');
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
+        $product->load($productId);
+        $productLinks = [
+            'upsell' => $product->getUpSellProducts(),
+            'crosssell' => $product->getCrossSellProducts(),
+            'related' => $product->getRelatedProducts()
+        ];
+        $importedProductLinks = [];
+        foreach ($productLinks as $linkType => $linkedProducts) {
+            foreach ($linkedProducts as $linkedProductData) {
+                $importedProductLinks[$linkType][$linkedProductData->getSku()] = $linkedProductData->getPosition();
+            }
+        }
+        $this->assertEquals($linksData, $importedProductLinks);
+    }
 }

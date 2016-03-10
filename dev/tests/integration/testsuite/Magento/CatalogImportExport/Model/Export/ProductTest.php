@@ -72,6 +72,19 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_product_links_data.php
+     */
+    public function testExportWithProductLinks()
+    {
+        $this->_model->setWriter(
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                'Magento\ImportExport\Model\Export\Adapter\Csv'
+            )
+        );
+        $this->assertNotEmpty($this->_model->export());
+    }
+
+    /**
      * Verify that all stock item attribute values are exported (aren't equal to empty string)
      *
      * @covers \Magento\CatalogImportExport\Model\Export\Product::export
