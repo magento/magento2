@@ -2447,59 +2447,6 @@ class TypeTest extends \PHPUnit_Framework_TestCase
             ->willReturn(false);
     }
 
-    public function testGetOptionsCollection()
-    {
-        $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    '_wakeup',
-                    'getStoreId',
-                    'getData',
-                    'hasData',
-                    'setData',
-                    'getEntityId'
-                ]
-            )
-            ->getMock();
-        $option = $this->getMockBuilder('\Magento\Bundle\Model\Option')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $resourceClassName = 'Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection';
-        $dbResourceMock = $this->getMockBuilder($resourceClassName)
-            ->setMethods(['setProductIdFilter', 'setPositionOrder', 'joinValues'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $store = $this->getMockBuilder('\Magento\Store\Model\Store')
-            ->disableOriginalConstructor()
-            ->setMethods(['getId'])
-            ->getMock();
-
-        $product->expects($this->once())
-            ->method('hasData')
-            ->with('_cache_instance_options_collection')
-            ->willReturn(false);
-        $this->bundleOptionFactory->expects($this->once())->method('create')->willReturn($option);
-        $option->expects($this->once())->method('getResourceCollection')->willReturn($dbResourceMock);
-        $product->expects($this->once())->method('getEntityId')->willReturn('prod_id');
-        $dbResourceMock->expects($this->once())->method('setProductIdFilter')->with('prod_id')->willReturnSelf();
-        $product->expects($this->once())->method('getStoreId')->willReturn('store_id');
-        $product->expects($this->at(3))->method('setData')->willReturnSelf();
-        $dbResourceMock->expects($this->once())->method('setPositionOrder')->willReturnSelf();
-        $product->expects($this->at(4))->method('getData')->with('_cache_instance_store_filter')->willReturn($store);
-        $store->expects($this->once())->method('getId')->willReturn('store_id');
-        $dbResourceMock->expects($this->once())->method('joinValues')->with('store_id')->willReturnSelf();
-        $product->expects($this->at(5))
-            ->method('setData')
-            ->with('_cache_instance_options_collection', $dbResourceMock)
-            ->willReturnSelf();
-        $product->expects($this->at(6))->method('getData')->with('_cache_instance_options_collection')->willReturn(
-            'result_data'
-        );
-
-        $this->assertEquals('result_data', $this->model->getOptionsCollection($product));
-    }
-
     public function testGetSelectionsCollection()
     {
         $optionIds = [1, 2, 3];
