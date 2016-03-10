@@ -22,14 +22,50 @@ define([
          * @returns {Object} Chainable.
          */
         initConfig: function () {
-            var recordId;
-
             this._super();
-            recordId = rg.get(this.parentName).recordId;
-            this.elementName = this.prefixElementName + recordId;
-            this.inputName = this.prefixName + '[' + this.elementName + ']' + this.suffixName;
+            this.configureDataScope();
 
             return this;
+        },
+
+        /**
+         * Configure data scope.
+         */
+        configureDataScope: function () {
+            var recordId,
+                prefixName;
+
+            // Get recordId
+            recordId = this.parentName.split('.').last();
+
+            prefixName = this.dataScopeToHtmlArray(this.prefixName);
+            this.elementName = this.prefixElementName + recordId;
+
+            this.inputName = prefixName + '[' + this.elementName + ']' + '[' + this.suffixName + ']';
+            this.dataScope = 'data.' + this.prefixName + '.' + this.elementName + '.' + this.suffixName;
+
+            this.links.value = this.provider + ':' + this.dataScope;
+        },
+
+        /**
+         * Get HTML array from data scope.
+         *
+         * @param {String} dataScopeString
+         * @returns {String}
+         */
+        dataScopeToHtmlArray: function (dataScopeString) {
+            var dataScopeArray, dataScope, reduceFunction;
+
+            reduceFunction = function (prev, curr) {
+                return prev + '[' + curr + ']';
+            };
+
+            dataScopeArray = dataScopeString.split('.');
+
+            dataScope = dataScopeArray.shift();
+            dataScope += dataScopeArray.reduce(reduceFunction, '');
+
+            return dataScope;
         }
     });
 });

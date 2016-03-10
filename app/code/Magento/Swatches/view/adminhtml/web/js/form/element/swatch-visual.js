@@ -7,7 +7,7 @@
 
 define([
     'underscore',
-    'jquery',
+    'Magento_Ui/js/lib/view/utils/async',
     'mage/template',
     'uiRegistry',
     'prototype',
@@ -79,7 +79,7 @@ define([
 
                         jQuery(el).ColorPickerHide();
                         localContainer.parent().removeClass('unavailable');
-                        localContainer.prev('input').val('#' + hex);
+                        localContainer.prev('input').val('#' + hex).trigger('change');
                         localContainer.css('background', '#' + hex);
                     }
                 });
@@ -144,10 +144,6 @@ define([
             }
             jQuery('.swatch_sub-menu_container').hide();
         });
-
-        window.swatchVisualOption = swatchVisualOption;
-
-        rg.set('swatch-visual-options-panel', swatchVisualOption);
 
         jQuery(function ($) {
 
@@ -233,7 +229,7 @@ define([
                         var imageParams = $.parseJSON($(this).contents().find('body').html()),
                             fullMediaUrl = imageParams['swatch_path'] + imageParams['file_path'];
 
-                        localContainer.prev('input').val(imageParams['file_path']);
+                        localContainer.prev('input').val(imageParams['file_path']).trigger('change');
                         localContainer.css({
                             'background-image': 'url(' + fullMediaUrl + ')',
                             'background-size': 'cover'
@@ -261,7 +257,7 @@ define([
             $(container).on('click', '.btn_remove_swatch', function () {
                 var optionPanel = $(this).parents().eq(2);
 
-                optionPanel.children('input').val('');
+                optionPanel.children('input').val('').trigger('change');
                 optionPanel.children('.swatch_window').css('background', '');
                 optionPanel.addClass('unavailable');
                 jQuery('.swatch_sub-menu_container').hide();
@@ -283,7 +279,6 @@ define([
             prefixName: '',
             prefixElementName: '',
             elementName: '',
-            suffixName: '',
             value: '',
             uploadUrl: ''
         },
@@ -296,24 +291,75 @@ define([
         initConfig: function () {
             this._super();
 
-            this.elementId = rg.get(this.parentName).recordId;
-            this.elementName = this.prefixElementName + this.elementId;
-
-            this.inputName = this.prefixName + '[' + this.elementName + ']' + this.suffixName;
+            this.configureDataScope();
 
             return this;
         },
 
         /**
-         * Run wrapped former implementation.
+         * Initialize.
          *
-         * @param {Object} elem
-         * @returns {Boolean}
+         * @returns {Object} Chainable.
          */
-        performOldCode: function (elem) {
-            oldCode(this.value(), elem.parentElement, this.uploadUrl, this.elementName);
+        initialize: function () {
+            this._super()
+                .initOldCode();
 
-            return false;
+            return this;
+        },
+
+        /**
+         * Initialize wrapped former implementation.
+         *
+         * @returns {Object} Chainable.
+         */
+        initOldCode: function () {
+            jQuery.async('.' + this.elementName, function (elem) {
+                oldCode(this.value(), elem.parentElement, this.uploadUrl, this.elementName);
+            }.bind(this));
+
+            return this;
+        },
+
+        /**
+         * Configure data scope.
+         */
+        configureDataScope: function () {
+            var recordId,
+                prefixName,
+                suffixName;
+
+            // Get recordId
+            recordId = this.parentName.split('.').last();
+
+            prefixName = this.dataScopeToHtmlArray(this.prefixName);
+            this.elementName = this.prefixElementName + recordId;
+
+            this.inputName = prefixName + '[' + this.elementName + ']';
+            this.dataScope = 'data.' + this.prefixName + '.' + this.elementName;
+
+            this.links.value = this.provider + ':' + this.dataScope;
+        },
+
+        /**
+         * Get HTML array from data scope.
+         *
+         * @param {String} dataScopeString
+         * @returns {String}
+         */
+        dataScopeToHtmlArray: function (dataScopeString) {
+            var dataScopeArray, dataScope, reduceFunction;
+
+            reduceFunction = function (prev, curr) {
+                return prev + '[' + curr + ']';
+            };
+
+            dataScopeArray = dataScopeString.split('.');
+
+            dataScope = dataScopeArray.shift();
+            dataScope += dataScopeArray.reduce(reduceFunction, '');
+
+            return dataScope;
         }
     });
 });
