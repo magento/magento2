@@ -7,7 +7,8 @@ namespace Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Col
 
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
-use Magento\Catalog\Ui\Component\Listing\Attribute\RepositoryInterface as AttributeRepository;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface as AttributeRepository;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 
 class Attributes extends \Magento\Ui\Component\Listing\Columns\Column
 {
@@ -22,9 +23,15 @@ class Attributes extends \Magento\Ui\Component\Listing\Columns\Column
     protected $attributeRepository;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    protected $searchCriteriaBuilder;
+
+    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param AttributeRepository $attributeRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param array $components
      * @param array $data
      */
@@ -32,11 +39,13 @@ class Attributes extends \Magento\Ui\Component\Listing\Columns\Column
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         AttributeRepository $attributeRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $this->attributeRepository = $attributeRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
     }
 
     /**
@@ -51,17 +60,13 @@ class Attributes extends \Magento\Ui\Component\Listing\Columns\Column
             $attributes = $this->getAttributes();
             $fieldName = $this->getData('name');
             foreach ($dataSource['data']['items'] as & $item) {
-                $attributeString = '';
+                $attrStrings = [];
                 foreach ($attributes as $attributeCode => $attribute) {
                     if (isset($item[$attributeCode]) && isset($attribute['options'][$item[$attributeCode]])) {
-                        if ($attributeString) {
-                            $attributeString .= ', ';
-                        }
-
-                        $attributeString .= $attribute['label'] . ': ' . $attribute['options'][$item[$attributeCode]];
+                        $attrStrings[] = $attribute['label'] . ': ' . $attribute['options'][$item[$attributeCode]];
                     }
 
-                    $item[$fieldName] = $attributeString;
+                    $item[$fieldName] = implode(', ', $attrStrings);
                 }
             }
         }
@@ -78,13 +83,9 @@ class Attributes extends \Magento\Ui\Component\Listing\Columns\Column
      */
     private function getAttributes()
     {
-        $attributesCodes = (array) $this->context->getRequestParam('attributes_codes', []);
         $attributes = [];
-        foreach ($this->attributeRepository->getList() as $attribute) {
+        foreach ($this->attributeRepository->getList($this->getSearchCriteria())->getItems() as $attribute) {
             $attributeCode = $attribute->getAttributeCode();
-            if (!in_array($attributeCode, $attributesCodes)) {
-                continue;
-            }
 
             $attributes[$attributeCode] = [
                 'label' => $attribute->getDefaultFrontendLabel(),
@@ -99,5 +100,20 @@ class Attributes extends \Magento\Ui\Component\Listing\Columns\Column
         }
 
         return $attributes;
+    }
+
+    /**
+     * Get SearchCriteria for attributeRepository
+     *
+     * @return \Magento\Framework\Api\SearchCriteria
+     */
+    private function getSearchCriteria()
+    {
+        $attributesCodes = (array) $this->context->getRequestParam('attributes_codes', []);
+
+        return $this->searchCriteriaBuilder
+            ->addFilter('additional_table.is_used_in_grid', 1)
+            ->addFilter('main_table.attribute_code', $attributesCodes, 'in')
+            ->create();
     }
 }
