@@ -37,7 +37,7 @@ class AddStockStatusToCollectionObserver implements ObserverInterface
             $productCollection->getSelect()
                 ->join(
                     ['css' => $productCollection->getResource()->getTable('cataloginventory_stock_status')],
-                    'main_table.entity_id = css.entity_id AND css.website_id = 1 AND stock_id = 1',
+                    'e.entity_id = css.product_id AND css.website_id = 1 AND css.stock_id = 1',
                     ['is_salable' => 'css.stock_status']
                 );
             $this->processedCollections[] = $collectionHash;
