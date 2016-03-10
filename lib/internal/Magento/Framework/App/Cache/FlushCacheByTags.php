@@ -57,12 +57,10 @@ class FlushCacheByTags
         \Closure $proceed,
         \Magento\Framework\Model\AbstractModel $object
     ) {
-        $tags = [];
-        if ($object instanceof \Magento\Framework\DataObject\IdentityInterface) {
-            $tags = $object->getIdentities();
-        }
         $result = $proceed($object);
-        $this->cleanCacheByTags($tags);
+        if ($object instanceof \Magento\Framework\DataObject\IdentityInterface) {
+            $this->cleanCacheByTags($object->getIdentities());
+        }
         return $result;
     }
 
