@@ -85,7 +85,7 @@ class ReadHandler
      * @param ScopeInterface $scope
      * @return array
      */
-    private function getContextVariables(ScopeInterface $scope)
+    protected function getContextVariables(ScopeInterface $scope)
     {
         $data[] = $scope->getValue();
         if ($scope->getFallback()) {
