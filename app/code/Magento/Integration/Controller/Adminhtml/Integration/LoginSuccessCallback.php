@@ -13,7 +13,7 @@ class LoginSuccessCallback extends \Magento\Integration\Controller\Adminhtml\Int
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->getResponse()->setBody('<script>setTimeout("self.close()",1000);</script>');
     }

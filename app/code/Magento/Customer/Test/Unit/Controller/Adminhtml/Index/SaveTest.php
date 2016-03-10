@@ -121,7 +121,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected $redirectFactoryMock;
 
     /**
-     * @var \Magento\Customer\Api\AccountManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\AccountManagement|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $managementMock;
 
@@ -129,6 +129,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Customer\Api\Data\AddressInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $addressDataFactoryMock;
+
+    /**
+     * @var \Magento\Customer\Helper\EmailNotification | \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $emailNotification;
 
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -199,12 +204,17 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->managementMock = $this->getMockBuilder('Magento\Customer\Api\AccountManagementInterface')
+        $this->managementMock = $this->getMockBuilder('Magento\Customer\Model\AccountManagement')
             ->disableOriginalConstructor()
+            ->setMethods(['createAccount'])
             ->getMock();
         $this->addressDataFactoryMock = $this->getMockBuilder('Magento\Customer\Api\Data\AddressInterfaceFactory')
             ->disableOriginalConstructor()
             ->setMethods(['create'])
+            ->getMock();
+        $this->emailNotification = $this->getMockBuilder('Magento\Customer\Helper\EmailNotification')
+            ->disableOriginalConstructor()
+            ->setMethods(['sendNotificationEmailsIfRequired'])
             ->getMock();
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
@@ -234,12 +244,13 @@ class SaveTest extends \PHPUnit_Framework_TestCase
                 'coreRegistry' => $this->registryMock,
                 'customerAccountManagement' => $this->managementMock,
                 'addressDataFactory' => $this->addressDataFactoryMock,
+                'emailNotification' => $this->emailNotification
             ]
         );
     }
 
     /**
-     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::executeInternal
+     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::execute
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecuteWithExistentCustomer()
@@ -459,6 +470,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with($customerMock)
             ->willReturnSelf();
 
+        $this->emailNotification->expects($this->once())
+            ->method('sendNotificationEmailsIfRequired')
+            ->with($customerMock, $customerMock)
+            ->willReturnSelf();
+
         $this->authorizationMock->expects($this->once())
             ->method('isAllowed')
             ->with(null)
@@ -512,11 +528,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with('customer/*/edit', ['id' => $customerId, '_current' => true])
             ->willReturn(true);
 
-        $this->assertEquals($redirectMock, $this->model->executeInternal());
+        $this->assertEquals($redirectMock, $this->model->execute());
     }
 
     /**
-     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::executeInternal
+     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::execute
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecuteWithNewCustomer()
@@ -760,11 +776,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with('customer/index', [])
             ->willReturnSelf();
 
-        $this->assertEquals($redirectMock, $this->model->executeInternal());
+        $this->assertEquals($redirectMock, $this->model->execute());
     }
 
     /**
-     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::executeInternal
+     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::execute
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecuteWithNewCustomerAndValidationException()
@@ -900,11 +916,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with('customer/*/new', ['_current' => true])
             ->willReturn(true);
 
-        $this->assertEquals($redirectMock, $this->model->executeInternal());
+        $this->assertEquals($redirectMock, $this->model->execute());
     }
 
     /**
-     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::executeInternal
+     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::execute
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecuteWithNewCustomerAndLocalizedException()
@@ -1040,11 +1056,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with('customer/*/new', ['_current' => true])
             ->willReturn(true);
 
-        $this->assertEquals($redirectMock, $this->model->executeInternal());
+        $this->assertEquals($redirectMock, $this->model->execute());
     }
 
     /**
-     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::executeInternal
+     * @covers \Magento\Customer\Controller\Adminhtml\Index\Index::execute
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testExecuteWithNewCustomerAndException()
@@ -1181,6 +1197,6 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with('customer/*/new', ['_current' => true])
             ->willReturn(true);
 
-        $this->assertEquals($redirectMock, $this->model->executeInternal());
+        $this->assertEquals($redirectMock, $this->model->execute());
     }
 }

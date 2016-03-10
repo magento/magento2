@@ -6,6 +6,7 @@
 namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Visibility;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Event\ObserverInterface;

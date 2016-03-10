@@ -40,7 +40,7 @@ class Chooser extends \Magento\Backend\App\Action
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function executeInternal()
+    public function execute()
     {
         $uniqId = $this->getRequest()->getParam('uniq_id');
         /** @var \Magento\Framework\View\Layout $layout */

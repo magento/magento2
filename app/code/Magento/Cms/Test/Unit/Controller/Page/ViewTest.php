@@ -89,7 +89,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->method('prepareResultPage')
             ->with($this->controller, $this->pageId)
             ->willReturn($this->resultPageMock);
-        $this->assertSame($this->resultPageMock, $this->controller->executeInternal());
+        $this->assertSame($this->resultPageMock, $this->controller->execute());
     }
 
     public function testExecuteResultForward()
@@ -106,6 +106,6 @@ class ViewTest extends \PHPUnit_Framework_TestCase
             ->method('forward')
             ->with('noroute')
             ->willReturnSelf();
-        $this->assertSame($this->forwardMock, $this->controller->executeInternal());
+        $this->assertSame($this->forwardMock, $this->controller->execute());
     }
 }

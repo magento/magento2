@@ -5,7 +5,9 @@
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response\Validator;
 
+use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Paypal\Model\Payflow\Service\Response\Validator\AVSResponse;
+use Magento\Paypal\Model\Payflow\Transparent;
 
 /**
  * Class AVSResponseTest
@@ -20,9 +22,14 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
     protected $validator;
 
     /**
-     * @var \Magento\Payment\Model\Method\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $configMock;
+
+    /**
+     * @var Transparent|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $payflowproFacade;
 
     /**
      * Set up
@@ -31,76 +38,15 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $quoteRepositoryMock = $this->getMock('\Magento\Quote\Api\CartRepositoryInterface');
-        $sessionTransparentMock = $this->getMockBuilder('Magento\Framework\Session\Generic')
-            ->setMethods(['getQuoteId'])
+        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->payflowproFacade = $this->getMockBuilder(Transparent::class)
             ->disableOriginalConstructor()
+            ->setMethods([])
             ->getMock();
-        $paymentManagementMock = $this->getMockBuilder('Magento\Quote\Api\PaymentMethodManagementInterface')
-            ->setMethods(['get'])
-            ->getMockForAbstractClass();
-        $this->configMock = $this->getMockBuilder('Magento\Payment\Model\Method\ConfigInterface')
-            ->getMockForAbstractClass();
 
-        $this->setToExpectedCallsInConstructor(
-            $quoteRepositoryMock,
-            $sessionTransparentMock,
-            $paymentManagementMock
-        );
-
-        $this->validator = new AVSResponse(
-            $quoteRepositoryMock,
-            $sessionTransparentMock,
-            $paymentManagementMock
-        );
-    }
-
-    /**
-     * @param \PHPUnit_Framework_MockObject_MockObject $quoteRepositoryMock
-     * @param \PHPUnit_Framework_MockObject_MockObject $sessionTransparentMock
-     * @param \PHPUnit_Framework_MockObject_MockObject $paymentManagementMock
-     */
-    protected function setToExpectedCallsInConstructor(
-        \PHPUnit_Framework_MockObject_MockObject $quoteRepositoryMock,
-        \PHPUnit_Framework_MockObject_MockObject $sessionTransparentMock,
-        \PHPUnit_Framework_MockObject_MockObject $paymentManagementMock
-    ) {
-        $quoteId = 77;
-
-        $quoteMock = $this->getMockBuilder('Magento\Quote\Api\Data\CartInterface')
-            ->setMethods(['getId'])
-            ->getMockForAbstractClass();
-        $paymentMock = $this->getMockBuilder('Magento\Quote\Api\Data\PaymentInterface')
-            ->setMethods(['getMethodInstance'])
-            ->getMockForAbstractClass();
-        $paymentInstanceMock = $this->getMockBuilder('Magento\Payment\Model\Method\TransparentInterface')
-            ->getMockForAbstractClass();
-
-        $sessionTransparentMock->expects($this->once())
-            ->method('getQuoteId')
-            ->willReturn($quoteId);
-
-        $quoteRepositoryMock->expects($this->once())
-            ->method('get')
-            ->with($quoteId)
-            ->willReturn($quoteMock);
-
-        $quoteMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($quoteId);
-
-        $paymentManagementMock->expects($this->once())
-            ->method('get')
-            ->with($quoteId)
-            ->willReturn($paymentMock);
-
-        $paymentMock->expects($this->once())
-            ->method('getMethodInstance')
-            ->willReturn($paymentInstanceMock);
-
-        $paymentInstanceMock->expects($this->once())
-            ->method('getConfigInterface')
-            ->willReturn($this->configMock);
+        $this->validator = new AVSResponse();
     }
 
     /**
@@ -117,14 +63,18 @@ class AVSResponseTest extends \PHPUnit_Framework_TestCase
         array $configMap,
         $exactlyCount
     ) {
-        $this->configMock->expects($this->exactly($exactlyCount))
+        $this->payflowproFacade->expects(static::once())
+            ->method('getConfig')
+            ->willReturn($this->configMock);
+
+        $this->configMock->expects(static::exactly($exactlyCount))
             ->method('getValue')
             ->willReturnMap($configMap);
 
-        $this->assertEquals($expectedResult, $this->validator->validate($response));
+        static::assertEquals($expectedResult, $this->validator->validate($response, $this->payflowproFacade));
 
         if (!$expectedResult) {
-            $this->assertNotEmpty($response->getRespmsg());
+            static::assertNotEmpty($response->getRespmsg());
         }
     }
 

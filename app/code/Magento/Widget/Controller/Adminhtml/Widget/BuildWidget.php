@@ -30,7 +30,7 @@ class BuildWidget extends \Magento\Backend\App\Action
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $type = $this->getRequest()->getPost('widget_type');
         $params = $this->getRequest()->getPost('parameters', []);

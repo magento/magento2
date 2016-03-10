@@ -11,11 +11,11 @@ use Magento\Reports\Model\Flag;
 class Bestsellers extends \Magento\Reports\Controller\Adminhtml\Report\Sales
 {
     /**
-     * Best sellers report action
+     * Bestsellers report action
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_showLastExecutionTime(Flag::REPORT_BESTSELLERS_FLAG_CODE, 'bestsellers');
 
@@ -25,7 +25,7 @@ class Bestsellers extends \Magento\Reports\Controller\Adminhtml\Report\Sales
             __('Products Bestsellers Report'),
             __('Products Bestsellers Report')
         );
-        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Best Sellers Report'));
+        $this->_view->getPage()->getConfig()->getTitle()->prepend(__('Bestsellers Report'));
 
         $gridBlock = $this->_view->getLayout()->getBlock('adminhtml_sales_bestsellers.grid');
         $filterFormBlock = $this->_view->getLayout()->getBlock('grid.filter.form');

@@ -23,14 +23,6 @@ class PaymentTest extends \Magento\TestFramework\TestCase\AbstractController
         );
     }
 
-    public function testRedirectActionErrorMessage()
-    {
-        $this->getRequest()->setParam('success', '0');
-        $this->getRequest()->setParam('error_msg', 'Error message');
-        $this->dispatch('authorizenet/directpost_payment/redirect');
-        $this->assertContains('alert("Error message");', $this->getResponse()->getBody());
-    }
-
     public function testBackendResponseActionOrderSuccess()
     {
         $xNum = 1;

@@ -96,9 +96,9 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
         $noGenerationLevel = CategoryUrlPathGenerator::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING - 1;
         return [
             [Category::TREE_ROOT_ID, 'url-path', $noGenerationLevel, '', false, false, ''],
-            ['parent_id', 'url-path', $noGenerationLevel, '', false, false, 'url-path'],
-            ['parent_id', 'url-path', $noGenerationLevel, 'url-key', true, false, 'url-key'],
-            ['parent_id', 'url-path', $noGenerationLevel, 'url-key', false, true, 'url-key'],
+            [13, 'url-path', $noGenerationLevel, '', false, false, 'url-path'],
+            [13, 'url-path', $noGenerationLevel, 'url-key', true, false, 'url-key'],
+            [13, 'url-path', $noGenerationLevel, 'url-key', false, true, 'url-key'],
         ];
     }
 
@@ -110,7 +110,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
         $requireGenerationLevel = CategoryUrlPathGenerator::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING;
         $noGenerationLevel = CategoryUrlPathGenerator::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING - 1;
         return [
-            ['url-key', false, $requireGenerationLevel, 'parent_id', 'parent-path', 'parent-path/url-key'],
+            ['url-key', false, $requireGenerationLevel, 13, 'parent-path', 'parent-path/url-key'],
             ['url-key', false, $requireGenerationLevel, Category::TREE_ROOT_ID, null, 'url-key'],
             ['url-key', true, $noGenerationLevel, Category::TREE_ROOT_ID, null, 'url-key'],
         ];
@@ -136,7 +136,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
         $urlPath = null;
         $parentLevel = CategoryUrlPathGenerator::MINIMAL_CATEGORY_LEVEL_FOR_PROCESSING - 1;
         $this->category->expects($this->any())->method('getParentId')
-            ->will($this->returnValue('parent_id'));
+            ->will($this->returnValue(13));
         $this->category->expects($this->any())->method('getLevel')
             ->will($this->returnValue($level));
         $this->category->expects($this->any())->method('getUrlPath')->will($this->returnValue($urlPath));
@@ -152,7 +152,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
         $parentCategory->expects($this->any())->method('dataHasChangedFor')
             ->will($this->returnValueMap([['url_key', false], ['path_ids', false]]));
 
-        $this->categoryRepository->expects($this->once())->method('get')->with('parent_id')
+        $this->categoryRepository->expects($this->any())->method('get')->with(13)
             ->will($this->returnValue($parentCategory));
 
         $this->assertEquals($result, $this->categoryUrlPathGenerator->getUrlPath($this->category));
@@ -205,7 +205,7 @@ class CategoryUrlPathGeneratorTest extends \PHPUnit_Framework_TestCase
         $result = 'url-path.html';
 
         $this->category->expects($this->any())->method('getStoreId')->will($this->returnValue($storeId));
-        $this->category->expects($this->once())->method('getParentId')->will($this->returnValue('parent_id'));
+        $this->category->expects($this->once())->method('getParentId')->will($this->returnValue(2));
         $this->category->expects($this->once())->method('getUrlPath')->will($this->returnValue($urlPath));
         $this->category->expects($this->exactly(2))->method('dataHasChangedFor')
             ->will($this->returnValueMap([['url_key', false], ['path_ids', false]]));

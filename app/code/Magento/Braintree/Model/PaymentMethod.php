@@ -250,8 +250,9 @@ class PaymentMethod extends \Magento\Payment\Model\Method\Cc
      *
      * @param \Magento\Framework\DataObject|mixed $data
      * @return $this
+     * @throws LocalizedException
      */
-    public function assignData($data)
+    public function assignData(\Magento\Framework\DataObject $data)
     {
         parent::assignData($data);
         $infoInstance = $this->getInfoInstance();

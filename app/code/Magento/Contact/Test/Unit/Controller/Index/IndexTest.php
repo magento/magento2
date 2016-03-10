@@ -99,6 +99,6 @@ class IndexTest extends \PHPUnit_Framework_TestCase
         $this->_view->expects($this->once())
             ->method('renderLayout');
 
-        $this->_controller->executeInternal();
+        $this->_controller->execute();
     }
 }

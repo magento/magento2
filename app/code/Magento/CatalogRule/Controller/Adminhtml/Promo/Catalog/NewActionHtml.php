@@ -13,23 +13,18 @@ class NewActionHtml extends \Magento\CatalogRule\Controller\Adminhtml\Promo\Cata
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $id = $this->getRequest()->getParam('id');
         $typeArr = explode('|', str_replace('-', '/', $this->getRequest()->getParam('type')));
         $type = $typeArr[0];
 
-        $model = $this->_objectManager->create(
-            $type
-        )->setId(
-            $id
-        )->setType(
-            $type
-        )->setRule(
-            $this->_objectManager->create('Magento\CatalogRule\Model\Rule')
-        )->setPrefix(
-            'actions'
-        );
+        $model = $this->_objectManager->create($type)
+            ->setId($id)
+            ->setType($type)
+            ->setRule($this->_objectManager->create('Magento\CatalogRule\Model\Rule'))
+            ->setPrefix('actions');
+
         if (!empty($typeArr[1])) {
             $model->setAttribute($typeArr[1]);
         }

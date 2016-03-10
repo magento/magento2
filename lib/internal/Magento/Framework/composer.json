@@ -2,7 +2,7 @@
     "name": "magento/framework",
     "description": "N/A",
     "type": "magento2-library",
-    "version": "1.0.0-beta",
+    "version": "100.0.2",
     "license": [
         "OSL-3.0",
         "AFL-3.0"
@@ -28,6 +28,8 @@
         "psr-4": {
             "Magento\\Framework\\": ""
         },
-        "files": [ "registration.php" ]
+        "files": [
+            "registration.php"
+        ]
     }
 }

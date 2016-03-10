@@ -9,17 +9,16 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Group;
 class Save extends \Magento\Backend\App\Action
 {
     /**
-     * @return bool
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
      */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Catalog::products');
-    }
+    const ADMIN_RESOURCE = 'Magento_Catalog::products';
 
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $model = $this->_objectManager->create('Magento\Eav\Model\Entity\Attribute\Group');
 

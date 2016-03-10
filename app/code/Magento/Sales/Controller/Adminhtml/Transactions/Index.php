@@ -13,7 +13,7 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Transactions
     /**
      * @return Page
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var Page $resultPage */
         $resultPage = $this->resultPageFactory->create();

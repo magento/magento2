@@ -154,7 +154,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->editController->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->editController->execute());
     }
 
     /**
@@ -179,16 +179,6 @@ class EditTest extends \PHPUnit_Framework_TestCase
         $this->blockMock->expects($this->any())
             ->method('getTitle')
             ->willReturn('Test title');
-
-        $sessionManagerMock = $this->getMock('Magento\Backend\Model\Session', ['getFormData'], [], '', false);
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with('Magento\Backend\Model\Session')
-            ->willReturn($sessionManagerMock);
-
-        $sessionManagerMock->expects($this->once())
-            ->method('getFormData')
-            ->with(true);
 
         $this->coreRegistryMock->expects($this->once())
             ->method('register')
@@ -220,7 +210,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
             ->method('getConfig')
             ->willReturn($pageConfigMock);
 
-        $this->assertSame($resultPageMock, $this->editController->executeInternal());
+        $this->assertSame($resultPageMock, $this->editController->execute());
     }
 
     /**

@@ -27,4 +27,5 @@ angular.module('success', ['ngStorage'])
         $localStorage.$reset();
         $scope.admin.password = '';
         $scope.db.password = '';
+        $localStorage.$reset();
     }]);

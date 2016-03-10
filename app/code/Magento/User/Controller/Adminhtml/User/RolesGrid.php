@@ -11,7 +11,7 @@ class RolesGrid extends \Magento\User\Controller\Adminhtml\User
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $userId = $this->getRequest()->getParam('user_id');
         /** @var \Magento\User\Model\User $model */

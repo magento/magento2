@@ -208,7 +208,7 @@ require([
                 '</select>'+
             '</td>'+
             '<td class="col-limit">' +
-                '<input type="text" id="downloadable_link_<%- data.id %>_downloads" name="downloadable[link][<%- data.id %>][number_of_downloads]" class="input-text admin__control-text downloads" value="<%- data.number_of_downloads %>" />'+
+                '<input type="text" id="downloadable_link_<%- data.id %>_downloads" name="downloadable[link][<%- data.id %>][number_of_downloads]" class="input-text validate-zero-or-greater admin__control-text downloads" value="<%- data.number_of_downloads %>" />'+
                 '<div class="admin__field admin__field-option">' +
                     '<input type="checkbox" class="admin__control-checkbox" id="downloadable_link_<%- data.id %>_is_unlimited" name="downloadable[link][<%- data.id %>][is_unlimited]" value="1" <%- data.is_unlimited %> />' +
                     '<label for="downloadable_link_<%- data.id %>_is_unlimited" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Unlimited'); ?></span></label>' +
@@ -470,9 +470,7 @@ require([
         };
 
         if (jQuery('input[name="product[links_purchased_separately]"]')) {
-            jQuery('input[name="product[links_purchased_separately]"]').on('change', function () {
-                linkItems.togglePriceFields.bind()
-            });
+            jQuery('input[name="product[links_purchased_separately]"]').on('change', linkItems.togglePriceFields.bind());
         }
 
         if($('add_link_item')) {

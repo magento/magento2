@@ -27,29 +27,24 @@ class CountrycreditcardTest extends \PHPUnit_Framework_TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $resourceMock;
-
-    /**
      * @var \Magento\Framework\Math\Random|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $mathRandomMock;
 
     protected function setUp()
     {
-        $this->resourceMock = $this->getMockForAbstractClass('\Magento\Framework\Model\ResourceModel\AbstractResource');
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+
         $this->mathRandomMock = $this->getMockBuilder(
             '\Magento\Framework\Math\Random'
         )->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerHelper = new ObjectManagerHelper($this);
+
         $this->model = $this->objectManagerHelper->getObject(
             '\Magento\Braintree\Model\System\Config\Backend\Countrycreditcard',
             [
-                'mathRandom' => $this->mathRandomMock,
-                'resource' => $this->resourceMock,
+                'mathRandom' => $this->mathRandomMock
             ]
         );
     }

@@ -13,7 +13,7 @@ class Customer extends \Magento\Reports\Controller\Adminhtml\Report\Review
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_initAction()->_setActiveMenu(
             'Magento_Review::report_review_customer'

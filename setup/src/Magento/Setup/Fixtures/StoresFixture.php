@@ -88,9 +88,9 @@ class StoresFixture extends Fixture
                 $parentCategoryId = $defaultParentCategoryId;
                 $categoryPath = '1/' . $defaultParentCategoryId;
             }
+            $category->load($parentCategoryId);
 
-            $category->setId($parentCategoryId)
-                ->setName("Category $storeGroupName")
+            $category->setName("Category $storeGroupName")
                 ->setPath($categoryPath)
                 ->setLevel(1)
                 ->setAvailableSortBy('name')

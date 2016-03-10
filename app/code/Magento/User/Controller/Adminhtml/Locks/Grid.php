@@ -16,7 +16,7 @@ class Grid extends \Magento\User\Controller\Adminhtml\Locks
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->_view->loadLayout(false);
         $this->_view->renderLayout();

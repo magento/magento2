@@ -11,7 +11,8 @@ use Magento\Framework\Module\Dir\Reader;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Symfony\Component\Config\Definition\Exception\Exception;
+use Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface;
+use Magento\Framework\View\Design\Fallback\RulePool;
 
 class FileResolver implements \Magento\Framework\Config\FileResolverInterface
 {
@@ -35,19 +36,17 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
     /**
      * @var string
      */
-    protected $themePath;
-
-    /**
-     * @var string
-     */
     protected $area;
 
     /**
-     * Root directory
-     *
-     * @var ReadInterface
+     * @var Filesystem\Directory\ReadInterface
      */
     protected $rootDirectory;
+
+    /**
+     * @var \Magento\Framework\View\Design\FileResolution\Fallback\ResolverInterface
+     */
+    protected $resolver;
 
     /**
      * @param Reader $moduleReader
@@ -55,21 +54,23 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
      * @param DesignInterface $designInterface
      * @param DirectoryList $directoryList
      * @param Filesystem $filesystem
+     * @param ResolverInterface $resolver
      */
     public function __construct(
         Reader $moduleReader,
         FileIteratorFactory $iteratorFactory,
         DesignInterface $designInterface,
         DirectoryList $directoryList,
-        Filesystem $filesystem
+        Filesystem $filesystem,
+        ResolverInterface $resolver
     ) {
         $this->directoryList = $directoryList;
         $this->iteratorFactory = $iteratorFactory;
         $this->moduleReader = $moduleReader;
         $this->currentTheme = $designInterface->getDesignTheme();
-        $this->themePath = $designInterface->getThemePath($this->currentTheme);
         $this->area = $designInterface->getArea();
         $this->rootDirectory = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+        $this->resolver = $resolver;
     }
 
     /**
@@ -80,29 +81,33 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface
         switch ($scope) {
             case 'global':
                 $iterator = $this->moduleReader->getConfigurationFiles($filename)->toArray();
-
                 $themeConfigFile = $this->currentTheme->getCustomization()->getCustomViewConfigPath();
                 if ($themeConfigFile
                     && $this->rootDirectory->isExist($this->rootDirectory->getRelativePath($themeConfigFile))
                 ) {
-                    $iterator[$this->rootDirectory->getRelativePath($themeConfigFile)] = $this->rootDirectory->readFile(
-                        $this->rootDirectory->getRelativePath($themeConfigFile)
+                    $iterator[$this->rootDirectory->getRelativePath($themeConfigFile)] =
+                        $this->rootDirectory->readFile(
+                            $this->rootDirectory->getRelativePath(
+                                $themeConfigFile
+                            )
+                        );
+                } else {
+                    $designPath = $this->resolver->resolve(
+                        RulePool::TYPE_FILE,
+                        'etc/view.xml',
+                        $this->area,
+                        $this->currentTheme
                     );
-                }
-
-                $designPath =
-                    $this->directoryList->getPath(DirectoryList::APP)
-                    . '/design/'
-                    . $this->area
-                    . '/'
-                    . $this->themePath
-                    . '/etc/view.xml';
-                if (file_exists($designPath)) {
-                    try {
-                        $designDom = new \DOMDocument;
-                        $designDom->load($designPath);
-                        $iterator[$designPath] = $designDom->saveXML();
-                    } catch (Exception $e) {
+                    if (file_exists($designPath)) {
+                        try {
+                            $designDom = new \DOMDocument;
+                            $designDom->load($designPath);
+                            $iterator[$designPath] = $designDom->saveXML();
+                        } catch (\Exception $e) {
+                            throw new \Magento\Framework\Exception\LocalizedException(
+                                new \Magento\Framework\Phrase('Could not read config file')
+                            );
+                        }
                     }
                 }
                 break;

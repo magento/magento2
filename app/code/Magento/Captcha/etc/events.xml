@@ -25,6 +25,9 @@
     <event name="customer_customer_authenticated">
         <observer name="captcha_reset_attempt" instance="Magento\Captcha\Observer\ResetAttemptForFrontendObserver" />
     </event>
+    <event name="customer_account_edited">
+        <observer name="captcha_reset_attempt" instance="Magento\Captcha\Observer\ResetAttemptForFrontendAccountEditObserver" />
+    </event>
     <event name="backend_auth_user_login_success">
         <observer name="captcha_reset_attempt" instance="Magento\Captcha\Observer\ResetAttemptForBackendObserver" />
     </event>

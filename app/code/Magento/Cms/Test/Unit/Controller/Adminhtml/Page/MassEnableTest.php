@@ -85,7 +85,7 @@ class MassEnableTest extends AbstractMassActionTest
             ->with('*/*/')
             ->willReturnSelf();
 
-        $this->assertSame($this->resultRedirectMock, $this->massEnableController->executeInternal());
+        $this->assertSame($this->resultRedirectMock, $this->massEnableController->execute());
     }
 
     /**

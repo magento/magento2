@@ -12,6 +12,13 @@ use Magento\ConfigurableProduct\Model\SuggestedAttributeList;
 class SuggestConfigurableAttributes extends Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Catalog::attributes_attributes';
+
+    /**
      * @var \Magento\ConfigurableProduct\Model\SuggestedAttributeList
      */
     protected $attributeList;
@@ -47,21 +54,11 @@ class SuggestConfigurableAttributes extends Action
     }
 
     /**
-     * ACL check
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Catalog::attributes_attributes');
-    }
-
-    /**
      * Search for attributes by part of attribute's label in admin store
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::ADMIN_CODE);
 

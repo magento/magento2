@@ -72,15 +72,6 @@ class BlockActions extends Column
                             ),
                             'label' => __('Edit')
                         ],
-                        'details' => [
-                            'href' => $this->urlBuilder->getUrl(
-                                static::URL_PATH_DETAILS,
-                                [
-                                    'block_id' => $item['block_id']
-                                ]
-                            ),
-                            'label' => __('Details')
-                        ],
                         'delete' => [
                             'href' => $this->urlBuilder->getUrl(
                                 static::URL_PATH_DELETE,

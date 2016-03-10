@@ -30,7 +30,7 @@ class ValidateAdvanced extends \Magento\Customer\Controller\Adminhtml\System\Con
      *
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function executeInternal()
+    public function execute()
     {
         $result = $this->_validate();
         $valid = $result->getIsValid();

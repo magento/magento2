@@ -15,7 +15,7 @@ class AjaxSave extends \Magento\Tax\Controller\Adminhtml\Tax
      *
      * @return \Magento\Framework\Controller\Result\Json
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $taxClassId = (int)$this->getRequest()->getPost('class_id') ?: null;

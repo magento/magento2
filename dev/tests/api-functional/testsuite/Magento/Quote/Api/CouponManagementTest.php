@@ -123,7 +123,9 @@ class CouponManagementTest extends WebapiAbstract
         $cartId = $quote->getId();
         /** @var \Magento\SalesRule\Model\Rule $salesRule */
         $salesRule = $this->objectManager->create('Magento\SalesRule\Model\Rule');
-        $salesRule->load('Test Coupon', 'name');
+        $salesRuleId = $this->objectManager->get('Magento\Framework\Registry')
+            ->registry('Magento/Checkout/_file/discount_10percent');
+        $salesRule->load($salesRuleId);
         $couponCode = $salesRule->getPrimaryCoupon()->getCode();
         $serviceInfo = [
             'rest' => [
@@ -263,8 +265,11 @@ class CouponManagementTest extends WebapiAbstract
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote');
         $quote->load('test01', 'reserved_order_id');
         $cartId = $quote->getId();
+        /** @var \Magento\SalesRule\Model\Rule $salesRule */
         $salesRule = $this->objectManager->create('Magento\SalesRule\Model\Rule');
-        $salesRule->load('Test Coupon for General', 'name');
+        $salesRuleId = $this->objectManager->get('Magento\Framework\Registry')
+            ->registry('Magento/Checkout/_file/discount_10percent_generalusers');
+        $salesRule->load($salesRuleId);
         $couponCode = $salesRule->getPrimaryCoupon()->getCode();
 
         /* Since this isn't a full quote fixture, need to assign it to the right customer */

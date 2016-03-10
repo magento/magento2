@@ -163,7 +163,7 @@ class ReviewPaymentTest extends \PHPUnit_Framework_TestCase
             ->with('sales/order/view')
             ->willReturnSelf();
 
-        $result = $this->reviewPayment->executeInternal();
+        $result = $this->reviewPayment->execute();
         $this->assertEquals($this->resultRedirectMock, $result);
     }
 }

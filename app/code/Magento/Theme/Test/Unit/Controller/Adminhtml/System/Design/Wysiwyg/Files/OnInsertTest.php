@@ -54,6 +54,6 @@ class OnInsertTest extends \PHPUnit_Framework_TestCase
             ->method('setBody')
             ->with('http://relative.url/');
 
-        $this->controller->executeInternal();
+        $this->controller->execute();
     }
 }

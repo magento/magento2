@@ -307,12 +307,7 @@ class Packaging extends \Magento\Backend\Block\Template
     public function getPrintButton()
     {
         $data['shipment_id'] = $this->getShipment()->getId();
-        $url = $this->getUrl('adminhtml/order_shipment/printPackage', $data);
-        return $this->getLayout()->createBlock(
-            'Magento\Backend\Block\Widget\Button'
-        )->setData(
-            ['label' => __('Print'), 'onclick' => 'setLocation(\'' . $url . '\')']
-        )->toHtml();
+        return $this->getUrl('adminhtml/order_shipment/printPackage', $data);
     }
 
     /**

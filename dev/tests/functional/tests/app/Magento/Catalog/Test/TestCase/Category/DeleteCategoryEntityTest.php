@@ -63,7 +63,7 @@ class DeleteCategoryEntityTest extends Injectable
     }
 
     /**
-     * Delete category
+     * Delete category.
      *
      * @param Category $category
      * @return void
@@ -73,7 +73,9 @@ class DeleteCategoryEntityTest extends Injectable
         $category->persist();
         $this->catalogCategoryIndex->open();
         $this->catalogCategoryIndex->getTreeCategories()->selectCategory($category);
-        $this->catalogCategoryEdit->getFormPageActions()->delete();
-        $this->catalogCategoryEdit->getModalBlock()->acceptAlert();
+        if ($this->catalogCategoryEdit->getFormPageActions()->checkDeleteButton()) {
+            $this->catalogCategoryEdit->getFormPageActions()->delete();
+            $this->catalogCategoryEdit->getModalBlock()->acceptAlert();
+        }
     }
 }

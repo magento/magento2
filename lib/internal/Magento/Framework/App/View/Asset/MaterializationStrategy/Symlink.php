@@ -15,19 +15,19 @@ class Symlink implements StrategyInterface
     /**
      * Publish file
      *
-     * @param WriteInterface $rootDir
+     * @param WriteInterface $sourceDir
      * @param WriteInterface $targetDir
      * @param string $sourcePath
      * @param string $destinationPath
      * @return bool
      */
     public function publishFile(
-        WriteInterface $rootDir,
+        WriteInterface $sourceDir,
         WriteInterface $targetDir,
         $sourcePath,
         $destinationPath
     ) {
-        return $rootDir->createSymlink($sourcePath, $destinationPath, $targetDir);
+        return $sourceDir->createSymlink($sourcePath, $destinationPath, $targetDir);
     }
 
     /**

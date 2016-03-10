@@ -16,7 +16,7 @@ class FetchRates extends \Magento\CurrencySymbol\Controller\Adminhtml\System\Cur
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var \Magento\Backend\Model\Session $backendSession */
         $backendSession = $this->_objectManager->get('Magento\Backend\Model\Session');

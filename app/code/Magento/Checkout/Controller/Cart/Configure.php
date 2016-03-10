@@ -48,7 +48,7 @@ class Configure extends \Magento\Checkout\Controller\Cart
      *
      * @return \Magento\Framework\View\Result\Page|\Magento\Framework\Controller\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         // Extract item and product to configure
         $id = (int)$this->getRequest()->getParam('id');

@@ -146,12 +146,10 @@ class FormPost extends \Magento\Customer\Controller\Address
      */
     protected function updateRegionData(&$attributeValues)
     {
-        if ($this->helperData->isRegionRequired($attributeValues['country_id'])) {
+        if (!empty($attributeValues['region_id'])) {
             $newRegion = $this->regionFactory->create()->load($attributeValues['region_id']);
             $attributeValues['region_code'] = $newRegion->getCode();
             $attributeValues['region'] = $newRegion->getDefaultName();
-        } else {
-            $attributeValues['region_id'] = null;
         }
 
         $regionData = [
@@ -176,7 +174,7 @@ class FormPost extends \Magento\Customer\Controller\Address
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $redirectUrl = null;
         if (!$this->_formKeyValidator->validate($this->getRequest())) {

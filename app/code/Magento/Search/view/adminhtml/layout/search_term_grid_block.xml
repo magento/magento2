@@ -69,12 +69,6 @@
                             <argument name="type" xsi:type="string">number</argument>
                         </arguments>
                     </block>
-                    <block class="Magento\Backend\Block\Widget\Grid\Column" as="synonym_for">
-                        <arguments>
-                            <argument name="header" xsi:type="string" translate="true">Synonym</argument>
-                            <argument name="index" xsi:type="string">synonym_for</argument>
-                        </arguments>
-                    </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" as="redirect">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Redirect URL</argument>

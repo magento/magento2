@@ -113,7 +113,7 @@ class GuestBillingAddressManagementTest extends WebapiAbstract
             'firstname' => 'John',
             'lastname' => 'Smith',
             'email' => '',
-            'company' => 'eBay Inc',
+            'company' => 'Magento Commerce Inc.',
             'street' => ['Typical Street', 'Tiny House 18'],
             'city' => 'Big City',
             'region_id' => 12,

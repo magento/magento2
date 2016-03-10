@@ -13,7 +13,7 @@ class OptionsImportGrid extends AbstractProductGrid
      *
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function executeInternal()
+    public function execute()
     {
         return $this->resultLayoutFactory->create();
     }

@@ -12,7 +12,7 @@ class ConfigureProductToAdd extends \Magento\Sales\Controller\Adminhtml\Order\Cr
      *
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function executeInternal()
+    public function execute()
     {
         // Prepare data
         $productId = (int)$this->getRequest()->getParam('id');

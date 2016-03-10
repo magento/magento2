@@ -76,7 +76,7 @@ class NewActionTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Prod
         $this->action->getRequest()->expects($this->any())->method('getParam')->willReturn(true);
         $this->action->getRequest()->expects($this->any())->method('getFullActionName')
             ->willReturn('catalog_product_new');
-        $this->action->executeInternal();
+        $this->action->execute();
     }
 
     public function testExecuteObtainsProductDataFromSession()
@@ -90,6 +90,6 @@ class NewActionTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Prod
 
         $this->product->expects($this->once())->method('addData')->with(['name' => 'test-name', 'stock_data' => null]);
 
-        $this->action->executeInternal();
+        $this->action->execute();
     }
 }

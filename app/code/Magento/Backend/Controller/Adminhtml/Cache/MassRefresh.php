@@ -16,7 +16,7 @@ class MassRefresh extends \Magento\Backend\Controller\Adminhtml\Cache
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $types = $this->getRequest()->getParam('types');
@@ -27,7 +27,6 @@ class MassRefresh extends \Magento\Backend\Controller\Adminhtml\Cache
             $this->_validateTypes($types);
             foreach ($types as $type) {
                 $this->_cacheTypeList->cleanType($type);
-                $this->_eventManager->dispatch('adminhtml_cache_refresh_type', ['type' => $type]);
                 $updatedTypes++;
             }
             if ($updatedTypes > 0) {

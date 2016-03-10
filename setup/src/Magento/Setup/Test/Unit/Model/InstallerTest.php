@@ -292,12 +292,15 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
         $this->logger->expects($this->at(26))->method('log')->with('Data install/update:');
         $this->logger->expects($this->at(27))->method('log')->with("Module 'Foo_One':");
         $this->logger->expects($this->at(29))->method('log')->with("Module 'Bar_Two':");
-        $this->logger->expects($this->at(32))->method('log')->with('Installing admin user...');
-        $this->logger->expects($this->at(34))->method('log')->with('Caches clearing:');
-        $this->logger->expects($this->at(37))->method('log')->with('Disabling Maintenance Mode:');
-        $this->logger->expects($this->at(39))->method('log')->with('Post installation file permissions check...');
-        $this->logger->expects($this->at(41))->method('logSuccess')->with('Magento installation complete.');
-        $this->logger->expects($this->at(43))->method('log')
+        $this->logger->expects($this->at(31))->method('log')->with('Data post-updates:');
+        $this->logger->expects($this->at(32))->method('log')->with("Module 'Foo_One':");
+        $this->logger->expects($this->at(34))->method('log')->with("Module 'Bar_Two':");
+        $this->logger->expects($this->at(37))->method('log')->with('Installing admin user...');
+        $this->logger->expects($this->at(39))->method('log')->with('Caches clearing:');
+        $this->logger->expects($this->at(42))->method('log')->with('Disabling Maintenance Mode:');
+        $this->logger->expects($this->at(44))->method('log')->with('Post installation file permissions check...');
+        $this->logger->expects($this->at(46))->method('logSuccess')->with('Magento installation complete.');
+        $this->logger->expects($this->at(48))->method('log')
             ->with('Sample Data is installed with errors. See log file for details');
         $this->object->install($request);
     }
@@ -306,20 +309,20 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     {
         $this->filePermissions
             ->expects($this->once())
-            ->method('getMissingWritableDirectoriesForInstallation')
+            ->method('getMissingWritablePathsForInstallation')
             ->willReturn([]);
         $this->object->checkInstallationFilePermissions();
     }
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Missing write permissions to the following directories: 'foo' 'bar'
+     * @expectedExceptionMessage Missing write permissions to the following paths: 'foo' 'bar'
      */
     public function testCheckInstallationFilePermissionsError()
     {
         $this->filePermissions
             ->expects($this->once())
-            ->method('getMissingWritableDirectoriesForInstallation')
+            ->method('getMissingWritablePathsForInstallation')
             ->willReturn(['foo', 'bar']);
         $this->object->checkInstallationFilePermissions();
     }
@@ -338,7 +341,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdateModulesSequence()
     {
-        $this->cleanupFiles->expects($this->once())->method('clearCodeGeneratedClasses')->will(
+        $this->cleanupFiles->expects($this->once())->method('clearCodeGeneratedFiles')->will(
             $this->returnValue(
                 [
                     "The directory '/generation' doesn't exist - skipping cleanup",
@@ -390,7 +393,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             ]));
         $this->logger->expects($this->at(0))->method('log')->with('Starting Magento uninstallation:');
         $this->logger
-            ->expects($this->at(1))
+            ->expects($this->at(2))
             ->method('log')
             ->with('No database connection defined - skipping database cleanup');
         $cacheManager = $this->getMock('Magento\Framework\App\Cache\Manager', [], [], '', false);
@@ -400,7 +403,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('Magento\Framework\App\Cache\Manager')
             ->willReturn($cacheManager);
-        $this->logger->expects($this->at(2))->method('log')->with('Cache cleared successfully');
+        $this->logger->expects($this->at(1))->method('log')->with('Cache cleared successfully');
         $this->logger->expects($this->at(3))->method('log')->with('File system cleanup:');
         $this->logger
             ->expects($this->at(4))
@@ -494,7 +497,7 @@ namespace Magento\Setup\Model;
 
 /**
  * Mocking autoload function
- * 
+ *
  * @returns array
  */
 function spl_autoload_functions()

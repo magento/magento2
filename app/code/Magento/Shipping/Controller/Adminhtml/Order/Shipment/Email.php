@@ -17,6 +17,13 @@ use Magento\Framework\Controller\ResultFactory;
 class Email extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::shipment';
+
+    /**
      * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader
      */
     protected $shipmentLoader;
@@ -34,21 +41,11 @@ class Email extends \Magento\Backend\App\Action
     }
 
     /**
-     * Check if email sending is allowed for the current user
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::shipment');
-    }
-
-    /**
      * Send email with shipment data to customer
      *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $this->shipmentLoader->setOrderId($this->getRequest()->getParam('order_id'));

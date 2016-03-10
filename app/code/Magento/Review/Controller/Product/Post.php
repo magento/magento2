@@ -18,7 +18,7 @@ class Post extends ProductController
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function executeInternal()
+    public function execute()
     {
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
@@ -37,10 +37,10 @@ class Post extends ProductController
             $data = $this->getRequest()->getPostValue();
             $rating = $this->getRequest()->getParam('ratings', []);
         }
-
         if (($product = $this->initProduct()) && !empty($data)) {
             /** @var \Magento\Review\Model\Review $review */
             $review = $this->reviewFactory->create()->setData($data);
+            $review->unsetData('review_id');
 
             $validate = $review->validate();
             if ($validate === true) {

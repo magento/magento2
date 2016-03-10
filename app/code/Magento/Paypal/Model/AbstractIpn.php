@@ -82,7 +82,7 @@ class AbstractIpn
     {
         $httpAdapter = $this->_curlFactory->create();
         $postbackQuery = http_build_query($this->getRequestData()) . '&cmd=_notify-validate';
-        $postbackUrl = $this->_config->getPaypalUrl();
+        $postbackUrl = $this->_config->getPayPalIpnUrl();
         $this->_addDebugData('postback_to', $postbackUrl);
 
         $httpAdapter->setConfig(['verifypeer' => $this->_config->getValue('verifyPeer')]);

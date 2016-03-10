@@ -139,7 +139,7 @@ class FieldTest extends \PHPUnit_Framework_TestCase
             ->with('config', $this->logicalNot($this->isEmpty()));
         $wrappedComponentMock->expects($this->once())
             ->method('prepare');
-        $wrappedComponentMock->expects($this->once())
+        $wrappedComponentMock->expects($this->atLeastOnce())
             ->method('getChildComponents')
             ->willReturn($this->getComponentsMock());
         $wrappedComponentMock->expects($this->any())

@@ -25,7 +25,7 @@ class CatalogCategory extends Page
      *
      * @var string
      */
-    protected $formBlock = '#category-edit-container';
+    protected $formBlock = '//div[contains(@data-bind, "category_form")]';
 
     /**
      * Categories tree block.
@@ -80,7 +80,7 @@ class CatalogCategory extends Page
     public function getFormBlock()
     {
         return Factory::getBlockFactory()->getMagentoCatalogAdminhtmlCategoryEditCategoryForm(
-            $this->browser->find($this->formBlock, Locator::SELECTOR_CSS)
+            $this->browser->find($this->formBlock, Locator::SELECTOR_XPATH)
         );
     }
 

@@ -9,10 +9,10 @@ use Magento\Checkout\Helper\Cart as CartHelper;
 use Magento\Checkout\Model\Cart as CheckoutCart;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Wishlist\Controller\IndexInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
 use Magento\Wishlist\Helper\Data as WishlistHelper;
@@ -20,7 +20,7 @@ use Magento\Wishlist\Helper\Data as WishlistHelper;
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Fromcart extends Action\Action implements IndexInterface
+class Fromcart extends \Magento\Wishlist\Controller\AbstractIndex
 {
     /**
      * @var WishlistProviderInterface
@@ -48,12 +48,18 @@ class Fromcart extends Action\Action implements IndexInterface
     protected $escaper;
 
     /**
+     * @var Validator
+     */
+    protected $formKeyValidator;
+
+    /**
      * @param Action\Context $context
      * @param WishlistProviderInterface $wishlistProvider
      * @param WishlistHelper $wishlistHelper
      * @param CheckoutCart $cart
      * @param CartHelper $cartHelper
      * @param Escaper $escaper
+     * @param Validator $formKeyValidator
      */
     public function __construct(
         Action\Context $context,
@@ -61,13 +67,15 @@ class Fromcart extends Action\Action implements IndexInterface
         WishlistHelper $wishlistHelper,
         CheckoutCart $cart,
         CartHelper $cartHelper,
-        Escaper $escaper
+        Escaper $escaper,
+        Validator $formKeyValidator
     ) {
         $this->wishlistProvider = $wishlistProvider;
         $this->wishlistHelper = $wishlistHelper;
         $this->cart = $cart;
         $this->cartHelper = $cartHelper;
         $this->escaper = $escaper;
+        $this->formKeyValidator = $formKeyValidator;
         parent::__construct($context);
     }
 
@@ -78,8 +86,14 @@ class Fromcart extends Action\Action implements IndexInterface
      * @throws NotFoundException
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function executeInternal()
+    public function execute()
     {
+        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
+        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        if (!$this->formKeyValidator->validate($this->getRequest())) {
+            return $resultRedirect->setPath('*/*/');
+        }
+
         $wishlist = $this->wishlistProvider->getWishlist();
         if (!$wishlist) {
             throw new NotFoundException(__('Page not found.'));
@@ -113,9 +127,6 @@ class Fromcart extends Action\Action implements IndexInterface
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage($e, __('We can\'t move the item to the wish list.'));
         }
-
-        /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setUrl($this->cartHelper->getCartUrl());
     }
 }

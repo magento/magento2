@@ -11,7 +11,7 @@ class Addgroup extends \Magento\Checkout\Controller\Cart
     /**
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $orderItemIds = $this->getRequest()->getParam('order_items', []);
         if (is_array($orderItemIds)) {

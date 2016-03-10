@@ -23,17 +23,18 @@ $product = $block->getSaleableItem();
         <li class="item">
             <?php
                 $productId = $product->getId();
+                $isSaleable = $product->isSaleable();
                 $popupId = 'msrp-popup-' . $productId . $block->getRandomString(20);
                 if ($msrpShowOnGesture && $price['price']->getValue() < $product->getMsrp()):
                     $addToCartUrl = '';
-                    if ($product->isSaleable()) {
+                    if ($isSaleable) {
                         $addToCartUrl = $this->helper('\Magento\Checkout\Helper\Cart')
                             ->getAddUrl($product, ['qty' => $price['price_qty']]);
                     }
                     $tierPriceData = [
                         'addToCartUrl' => $addToCartUrl,
                         'name' => $product->getName(),
-                        'price' => $block->renderAmount(
+                        'realPrice' => $block->renderAmount(
                             $price['price'],
                             [
                                 'price_id'          => $index,
@@ -41,7 +42,7 @@ $product = $block->getSaleableItem();
                                 'include_container' => true
                             ]
                         ),
-                        'msrp' => $block->renderAmount(
+                        'msrpPrice' => $block->renderAmount(
                             $block->getPriceType('msrp_price')->getAmount(),
                             [
                                 'price_id'          => $index,
@@ -95,7 +96,8 @@ $product = $block->getSaleableItem();
                         "attr": "[data-tier-price]",
                         "productForm": "#product_addtocart_form",
                         "productId": "<?php /* @escapeNotVerified */ echo $productId; ?>",
-                        "productIdInput": "input[type=hidden][name=product]"
+                        "productIdInput": "input[type=hidden][name=product]",
+                        "isSaleable": "<?php /* @escapeNotVerified */ echo $isSaleable; ?>"
                     }
                 }
             }

@@ -73,6 +73,8 @@ abstract class Payflow extends \Magento\Framework\App\Action\Action
      */
     protected function _cancelPayment($errorMsg = '')
     {
+        $errorMsg = trim(strip_tags($errorMsg));
+
         $gotoSection = false;
         $this->_checkoutHelper->cancelCurrentOrder($errorMsg);
         if ($this->_checkoutSession->restoreQuote()) {

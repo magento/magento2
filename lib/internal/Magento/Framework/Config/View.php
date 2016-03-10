@@ -19,6 +19,13 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
     protected $xpath;
 
     /**
+     * View config data
+     *
+     * @var array
+     */
+    protected $data;
+
+    /**
      * @param FileResolverInterface $fileResolver
      * @param ConverterInterface $converter
      * @param SchemaLocatorInterface $schemaLocator
@@ -52,7 +59,6 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
             $domDocumentClass,
             $defaultScope
         );
-        $this->data = $this->read();
     }
 
     /**
@@ -65,6 +71,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      */
     public function getVars($module)
     {
+        $this->initData();
         return isset($this->data['vars'][$module]) ? $this->data['vars'][$module] : [];
     }
 
@@ -77,6 +84,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      */
     public function getVarValue($module, $var)
     {
+        $this->initData();
         if (!isset($this->data['vars'][$module])) {
             return false;
         }
@@ -102,6 +110,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      */
     public function getMediaEntities($module, $mediaType)
     {
+        $this->initData();
         return isset($this->data['media'][$module][$mediaType]) ? $this->data['media'][$module][$mediaType] : [];
     }
 
@@ -115,6 +124,7 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      */
     public function getMediaAttributes($module, $mediaType, $mediaId)
     {
+        $this->initData();
         return isset($this->data['media'][$module][$mediaType][$mediaId])
             ? $this->data['media'][$module][$mediaType][$mediaId]
             : [];
@@ -185,6 +195,19 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
      */
     protected function getItems()
     {
+        $this->initData();
         return isset($this->data['exclude']) ? $this->data['exclude'] : [];
+    }
+
+    /**
+     * Initialize data array
+     *
+     * @return void
+     */
+    protected function initData()
+    {
+        if ($this->data === null) {
+            $this->data = $this->read();
+        }
     }
 }

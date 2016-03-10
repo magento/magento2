@@ -11,6 +11,6 @@
                 type="Magento\PageCache\Model\App\CacheIdentifierPlugin" sortOrder="10"/>
     </type>
     <type name="Magento\Framework\App\PageCache\Cache">
-        <plugin name="fpc-tag-addition-plugin" type="Magento\PageCache\Model\App\PageCachePlugin"/>
+        <plugin name="fpc-type-plugin" type="Magento\PageCache\Model\App\PageCachePlugin"/>
     </type>
 </config>

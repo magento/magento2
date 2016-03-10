@@ -147,6 +147,6 @@ class PrintActionTest extends \PHPUnit_Framework_TestCase
             ->with('Magento\Framework\Stdlib\DateTime\DateTime')
             ->willReturn($dateTimeMock);
 
-        $this->assertNull($this->controller->executeInternal());
+        $this->assertNull($this->controller->execute());
     }
 }

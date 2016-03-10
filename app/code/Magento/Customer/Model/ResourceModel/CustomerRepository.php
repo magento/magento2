@@ -179,6 +179,9 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             $customerModel->setRpToken($customerSecure->getRpToken());
             $customerModel->setRpTokenCreatedAt($customerSecure->getRpTokenCreatedAt());
             $customerModel->setPasswordHash($customerSecure->getPasswordHash());
+            $customerModel->setFailuresNum($customerSecure->getFailuresNum());
+            $customerModel->setFirstFailure($customerSecure->getFirstFailure());
+            $customerModel->setLockExpires($customerSecure->getLockExpires());
         } else {
             if ($passwordHash) {
                 $customerModel->setPasswordHash($passwordHash);
@@ -192,8 +195,7 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
             $customerModel->setRpToken(null);
             $customerModel->setRpTokenCreatedAt(null);
         }
-
-        $this->customerResourceModel->save($customerModel);
+        $customerModel->save();
         $this->customerRegistry->push($customerModel);
         $customerId = $customerModel->getId();
 
@@ -400,13 +402,12 @@ class CustomerRepository implements \Magento\Customer\Api\CustomerRepositoryInte
         \Magento\Customer\Model\ResourceModel\Customer\Collection $collection
     ) {
         $fields = [];
-        $conditions = [];
         foreach ($filterGroup->getFilters() as $filter) {
             $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
             $fields[] = ['attribute' => $filter->getField(), $condition => $filter->getValue()];
         }
         if ($fields) {
-            $collection->addFieldToFilter($fields, $conditions);
+            $collection->addFieldToFilter($fields);
         }
     }
 }

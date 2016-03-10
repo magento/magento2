@@ -61,6 +61,9 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
     /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject*/
     protected $logger;
 
+    /** @var \Magento\Customer\Helper\EmailNotification | \PHPUnit_Framework_MockObject_MockObject */
+    protected $emailNotification;
+
     /** @var array */
     protected $items;
 
@@ -126,6 +129,11 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         );
         $this->logger = $this->getMockForAbstractClass('Psr\Log\LoggerInterface', [], '', false);
 
+        $this->emailNotification = $this->getMockBuilder('Magento\Customer\Helper\EmailNotification')
+            ->disableOriginalConstructor()
+            ->setMethods(['sendNotificationEmailsIfRequired'])
+            ->getMock();
+
         $this->context = $objectManager->getObject(
             'Magento\Backend\App\Action\Context',
             [
@@ -147,6 +155,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
                 'logger' => $this->logger,
             ]
         );
+        $this->controller->setEmailNotification($this->emailNotification);
 
         $this->items = [
             14 => [
@@ -254,12 +263,21 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         $this->customerData->expects($this->once())
             ->method('getDefaultBilling')
             ->willReturn(23);
+
+        $currentCustomerData = clone $this->customerData;
+
         $this->prepareMocksForUpdateDefaultBilling();
         $this->customerRepository->expects($this->once())
             ->method('save')
             ->with($this->customerData);
+
+        $this->emailNotification->expects($this->once())
+            ->method('sendNotificationEmailsIfRequired')
+            ->with($currentCustomerData, $this->customerData)
+            ->willReturnSelf();
+
         $this->prepareMocksForErrorMessagesProcessing();
-        $this->assertSame($this->resultJson, $this->controller->executeInternal());
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
     public function testExecuteWithoutItems()
@@ -283,7 +301,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
                 'error' => true,
             ])
             ->willReturnSelf();
-        $this->assertSame($this->resultJson, $this->controller->executeInternal());
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
     public function testExecuteLocalizedException()
@@ -305,7 +323,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->with($exception);
 
         $this->prepareMocksForErrorMessagesProcessing();
-        $this->assertSame($this->resultJson, $this->controller->executeInternal());
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 
     public function testExecuteException()
@@ -327,6 +345,6 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->with($exception);
 
         $this->prepareMocksForErrorMessagesProcessing();
-        $this->assertSame($this->resultJson, $this->controller->executeInternal());
+        $this->assertSame($this->resultJson, $this->controller->execute());
     }
 }

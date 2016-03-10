@@ -50,7 +50,7 @@ class Media extends \Magento\Framework\App\Action\Action
      *
      * @return string
      */
-    public function executeInternal()
+    public function execute()
     {
         $productMedia = [];
         if ($productId = (int)$this->getRequest()->getParam('product_id')) {
@@ -85,10 +85,10 @@ class Media extends \Magento\Framework\App\Action\Action
 
         $product = $this->swatchHelper->loadVariationByFallback($currentConfigurable, $resultAttributes);
         if (!$product || (!$product->getImage() || $product->getImage() == 'no_selection')) {
-            $product = $this->swatchHelper->loadFirstVariationWithImage(
-                $currentConfigurable,
-                $resultAttributes
-            );
+            $product = $this->swatchHelper->loadFirstVariationWithSwatchImage($currentConfigurable, $resultAttributes);
+        }
+        if (!$product) {
+            $product = $this->swatchHelper->loadFirstVariationWithImage($currentConfigurable, $resultAttributes);
         }
         return $product;
     }

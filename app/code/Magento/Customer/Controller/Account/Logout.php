@@ -6,12 +6,10 @@
  */
 namespace Magento\Customer\Controller\Account;
 
-use Magento\Customer\Controller\AccountInterface;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 
-class Logout extends Action implements AccountInterface
+class Logout extends \Magento\Customer\Controller\AbstractAccount
 {
     /**
      * @var Session
@@ -35,7 +33,7 @@ class Logout extends Action implements AccountInterface
      *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
-    public function executeInternal()
+    public function execute()
     {
         $lastCustomerId = $this->session->getId();
         $this->session->logout()->setBeforeAuthUrl($this->_redirect->getRefererUrl())

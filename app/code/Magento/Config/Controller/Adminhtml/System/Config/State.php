@@ -36,7 +36,7 @@ class State extends AbstractScopeConfig
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($this->getRequest()->getParam('isAjax')
             && $this->getRequest()->getParam('container') != ''

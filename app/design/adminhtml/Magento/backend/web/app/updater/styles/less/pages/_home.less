@@ -40,15 +40,18 @@
     min-height: 30rem;
     padding: 2rem;
     text-align: center;
+
     &:hover {
         border-color: @setup-home-item__active__border-color;
         color: @setup-home-item__color;
         text-decoration: none;
         transition: border-color .1s linear;
     }
+
     &:active {
         transform: scale(.99);
     }
+
     &:before {
         &:extend(.abs-icon all);
         display: block;

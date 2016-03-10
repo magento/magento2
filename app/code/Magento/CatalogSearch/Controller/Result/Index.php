@@ -65,7 +65,7 @@ class Index extends \Magento\Framework\App\Action\Action
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         $this->layerResolver->create(Resolver::CATALOG_LAYER_SEARCH);
         /* @var $query \Magento\Search\Model\Query */

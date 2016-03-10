@@ -56,7 +56,7 @@ class ToOrderAddress
         $orderAddress = $this->orderAddressRepository->create();
 
         $orderAddressData = $this->objectCopyService->getDataFromFieldset(
-            'quote_convert_address',
+            'sales_convert_quote_address',
             'to_order_address',
             $object
         );

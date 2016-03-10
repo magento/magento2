@@ -17,7 +17,7 @@ class Index extends \Magento\Framework\App\Action\Action
      * @return void
      * @codeCoverageIgnore
      */
-    public function executeInternal()
+    public function execute()
     {
         throw new NotFoundException(__('Page not found.'));
     }

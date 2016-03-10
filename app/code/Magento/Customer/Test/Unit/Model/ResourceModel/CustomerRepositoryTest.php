@@ -87,7 +87,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Customer\Model\ResourceModel\CustomerRepository
      */
     protected $model;
-    
+
     public function setUp()
     {
         $this->customerResourceModel =
@@ -268,6 +268,10 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
                 'setRpTokenCreatedAt',
                 'getDataModel',
                 'setPasswordHash',
+                'setFailuresNum',
+                'setFirstFailure',
+                'setLockExpires',
+                'save',
             ],
             [],
             '',
@@ -293,7 +297,10 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             [
                 'getRpToken',
                 'getRpTokenCreatedAt',
-                'getPasswordHash'
+                'getPasswordHash',
+                'getFailuresNum',
+                'getFirstFailure',
+                'getLockExpires',
             ],
             [],
             '',
@@ -382,6 +389,15 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $customerSecureData->expects($this->once())
             ->method('getPasswordHash')
             ->willReturn('passwordHash');
+        $customerSecureData->expects($this->once())
+            ->method('getFailuresNum')
+            ->willReturn('failuresNum');
+        $customerSecureData->expects($this->once())
+            ->method('getFirstFailure')
+            ->willReturn('firstFailure');
+        $customerSecureData->expects($this->once())
+            ->method('getLockExpires')
+            ->willReturn('lockExpires');
 
         $customerModel->expects($this->exactly(2))
             ->method('setRpToken')
@@ -399,12 +415,20 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $customerModel->expects($this->once())
             ->method('setPasswordHash')
             ->with('passwordHash');
+        $customerModel->expects($this->once())
+            ->method('setFailuresNum')
+            ->with('failuresNum');
+        $customerModel->expects($this->once())
+            ->method('setFirstFailure')
+            ->with('firstFailure');
+        $customerModel->expects($this->once())
+            ->method('setLockExpires')
+            ->with('lockExpires');
         $customerModel->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
-        $this->customerResourceModel->expects($this->once())
-            ->method('save')
-            ->with($customerModel);
+        $customerModel->expects($this->once())
+            ->method('save');
         $this->customerRegistry->expects($this->once())
             ->method('push')
             ->with($customerModel);
@@ -486,6 +510,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
                 'setRpTokenCreatedAt',
                 'getDataModel',
                 'setPasswordHash',
+                'save',
             ],
             [],
             '',
@@ -579,9 +604,8 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
         $customerModel->expects($this->atLeastOnce())
             ->method('getId')
             ->willReturn($customerId);
-        $this->customerResourceModel->expects($this->once())
-            ->method('save')
-            ->with($customerModel);
+        $customerModel->expects($this->once())
+            ->method('save');
         $this->customerRegistry->expects($this->once())
             ->method('push')
             ->with($customerModel);
@@ -722,7 +746,7 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn([$filterGroup]);
         $collection->expects($this->once())
             ->method('addFieldToFilter')
-            ->with([['attribute' => 'Field', 'eq' => 'Value']], []);
+            ->with([['attribute' => 'Field', 'eq' => 'Value']]);
         $filterGroup->expects($this->once())
             ->method('getFilters')
             ->willReturn([$filter]);
@@ -801,7 +825,6 @@ class CustomerRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($this->model->deleteById($customerId));
     }
-
 
     public function testDelete()
     {

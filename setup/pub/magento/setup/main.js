@@ -36,8 +36,19 @@ main.controller('navigationController',
     ]
 )
 .controller('mainController', [
-    '$scope', '$state', 'navigationService', '$localStorage',
-    function ($scope, $state, navigationService, $localStorage) {
+    '$scope', '$state', 'navigationService', '$localStorage', '$interval', '$http',
+    function ($scope, $state, navigationService, $localStorage, $interval, $http) {
+        $interval(
+            function () {
+                $http.post('index.php/session/prolong')
+                    .success(function (result) {
+                    })
+                    .error(function (result) {
+                    });
+            },
+            120000
+        );
+
         $scope.moduleName = $localStorage.moduleName;
         $scope.$on('$stateChangeSuccess', function (event, state) {
             $scope.valid = true;
@@ -102,14 +113,17 @@ main.controller('navigationController',
     return {
         mainState: {},
         states: [],
+        titlesWithModuleName: ['enable', 'disable', 'update', 'uninstall'],
         load: function () {
-            $localStorage.$reset();
             var self = this;
             return $http.get('index.php/navigation').success(function (data) {
                 var currentState = $location.path().replace('/', '');
                 var isCurrentStateFound = false;
                 self.states = data.nav;
                 $localStorage.menu = data.menu;
+                self.titlesWithModuleName.forEach(function (value) {
+                    data.titles[value] = data.titles[value] + $localStorage.moduleName;
+                });
                 $localStorage.titles = data.titles;
                 data.nav.forEach(function (item) {
                     app.stateProvider.state(item.id, item);

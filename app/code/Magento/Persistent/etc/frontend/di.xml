@@ -29,4 +29,7 @@
     <type name="Magento\Quote\Model\AddressAdditionalDataProcessor">
         <plugin name="persistent_remember_me_checkbox_processor" type="Magento\Persistent\Model\Checkout\AddressDataProcessorPlugin" />
     </type>
+    <type name="Magento\Checkout\Model\DefaultConfigProvider">
+        <plugin name="mask_quote_id_substitutor" type="Magento\Persistent\Model\Checkout\ConfigProviderPlugin" />
+    </type>
 </config>

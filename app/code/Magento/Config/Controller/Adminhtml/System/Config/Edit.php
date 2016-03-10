@@ -36,7 +36,7 @@ class Edit extends AbstractScopeConfig
      *
      * @return \Magento\Framework\App\ResponseInterface|void
      */
-    public function executeInternal()
+    public function execute()
     {
         $current = $this->getRequest()->getParam('section');
         $website = $this->getRequest()->getParam('website');

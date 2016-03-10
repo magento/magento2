@@ -14,6 +14,13 @@ use Magento\Sales\Model\Service\InvoiceService;
 class NewAction extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::sales_invoice';
+
+    /**
      * @var Registry
      */
     protected $registry;
@@ -47,14 +54,6 @@ class NewAction extends \Magento\Backend\App\Action
     }
 
     /**
-     * {@inheritdoc}
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_invoice');
-    }
-
-    /**
      * Redirect to order view page
      *
      * @param int $orderId
@@ -73,7 +72,7 @@ class NewAction extends \Magento\Backend\App\Action
      *
      * @return \Magento\Framework\Controller\ResultInterface
      */
-    public function executeInternal()
+    public function execute()
     {
         $orderId = $this->getRequest()->getParam('order_id');
         $invoiceData = $this->getRequest()->getParam('invoice', []);

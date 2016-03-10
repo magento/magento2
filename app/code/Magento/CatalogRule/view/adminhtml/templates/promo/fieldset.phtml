@@ -6,10 +6,12 @@
 
 // @codingStandardsIgnoreFile
 
+/**@var \Magento\Backend\Block\Widget\Form\Renderer\Fieldset $block */
 ?>
 <?php $_element = $block->getElement() ?>
+<?php $_jsObjectName = $block->getFieldSetId() != null ? $block->getFieldSetId() : $_element->getHtmlId() ?>
 <div class="rule-tree">
-    <fieldset id="<?php echo $_element->getHtmlId() ?>" <?php /* @escapeNotVerified */ echo $_element->serialize(['class']) ?> class="fieldset">
+    <fieldset id="<?php /* @escapeNotVerified */ echo $_jsObjectName ?>" <?php /* @escapeNotVerified */ echo $_element->serialize(['class']) ?> class="fieldset">
         <legend class="legend"><span><?php /* @escapeNotVerified */ echo $_element->getLegend() ?></span></legend>
         <br>
     <?php if ($_element->getComment()): ?>
@@ -28,7 +30,7 @@ require([
     "prototype"
 ], function(VarienRulesForm){
 
-window.<?php echo $_element->getHtmlId() ?> = new VarienRulesForm('<?php echo $_element->getHtmlId() ?>', '<?php /* @escapeNotVerified */ echo $block->getNewChildUrl() ?>');
+window.<?php /* @escapeNotVerified */ echo $_jsObjectName ?> = new VarienRulesForm('<?php /* @escapeNotVerified */ echo $_jsObjectName ?>', '<?php /* @escapeNotVerified */ echo $block->getNewChildUrl() ?>');
 <?php if ($_element->getReadonly()): ?>
     <?php echo $_element->getHtmlId() ?>.setReadonly(true);
 <?php endif; ?>

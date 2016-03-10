@@ -62,7 +62,7 @@ class ForwardTest extends \PHPUnit_Framework_TestCase
     public function testDispatch()
     {
         $this->request->expects($this->once())->method('setDispatched')->with(false);
-        $this->actionAbstract->execute($this->request);
+        $this->actionAbstract->dispatch($this->request);
     }
 
     /**

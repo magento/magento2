@@ -212,7 +212,7 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
             ->with('sales/*/')
             ->willReturnSelf();
 
-        $this->massAction->executeInternal();
+        $this->massAction->execute();
     }
 
     public function testExecuteNoReleasedOrderFromHold()
@@ -251,6 +251,6 @@ class MassUnholdTest extends \PHPUnit_Framework_TestCase
             ->with('sales/*/')
             ->willReturnSelf();
 
-        $this->massAction->executeInternal();
+        $this->massAction->execute();
     }
 }

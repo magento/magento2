@@ -11,7 +11,7 @@ class Grid extends \Magento\Backend\Controller\Adminhtml\System\Design
     /**
      * @return \Magento\Framework\View\Result\Layout
      */
-    public function executeInternal()
+    public function execute()
     {
         return $this->resultLayoutFactory->create();
     }

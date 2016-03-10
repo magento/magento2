@@ -11,7 +11,7 @@ class EditShippingPost extends \Magento\Multishipping\Controller\Checkout\Addres
     /**
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         if ($addressId = $this->getRequest()->getParam('id')) {
             $this->_objectManager->create(

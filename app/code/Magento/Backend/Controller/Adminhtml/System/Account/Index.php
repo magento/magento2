@@ -28,7 +28,7 @@ class Index extends \Magento\Backend\Controller\Adminhtml\System\Account
     /**
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    public function executeInternal()
+    public function execute()
     {
         $resultPage = $this->resultPageFactory->create();
         $resultPage->getConfig()->getTitle()->prepend(__('My Account'));

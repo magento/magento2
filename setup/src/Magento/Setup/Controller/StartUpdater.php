@@ -103,6 +103,12 @@ class StartUpdater extends AbstractActionController
                 $this->getCronTaskConfigInfo($jobType, $postPayload, $additionalOptions, $cronTaskType);
 
                 $errorMessage .= $this->updater->createUpdaterTask(
+                    [],
+                    \Magento\Setup\Model\Updater::TASK_TYPE_MAINTENANCE_MODE,
+                    ['enable' => true]
+                );
+
+                $errorMessage .= $this->updater->createUpdaterTask(
                     $packages,
                     $cronTaskType,
                     $additionalOptions
@@ -115,6 +121,12 @@ class StartUpdater extends AbstractActionController
                         [],
                         \Magento\Setup\Model\Cron\JobFactory::JOB_UPGRADE,
                         []
+                    );
+                } elseif ($jobType == 'disable') {
+                    $errorMessage .= $this->updater->createUpdaterTask(
+                        [],
+                        \Magento\Setup\Model\Updater::TASK_TYPE_MAINTENANCE_MODE,
+                        ['enable' => false]
                     );
                 }
             }

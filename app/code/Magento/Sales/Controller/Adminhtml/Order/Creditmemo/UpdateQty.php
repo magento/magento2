@@ -10,6 +10,13 @@ use Magento\Backend\App\Action;
 class UpdateQty extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::sales_creditmemo';
+
+    /**
      * @var \Magento\Sales\Controller\Adminhtml\Order\CreditmemoLoader
      */
     protected $creditmemoLoader;
@@ -51,19 +58,11 @@ class UpdateQty extends \Magento\Backend\App\Action
     }
 
     /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::sales_creditmemo');
-    }
-
-    /**
      * Update items qty action
      *
      * @return \Magento\Framework\Controller\Result\Json|\Magento\Framework\Controller\Result\Raw
      */
-    public function executeInternal()
+    public function execute()
     {
         try {
             $this->creditmemoLoader->setOrderId($this->getRequest()->getParam('order_id'));

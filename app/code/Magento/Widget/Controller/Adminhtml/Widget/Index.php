@@ -40,7 +40,7 @@ class Index extends \Magento\Backend\App\Action
      *
      * @return void
      */
-    public function executeInternal()
+    public function execute()
     {
         // save extra params for widgets insertion form
         $skipped = $this->getRequest()->getParam('skip_widgets');

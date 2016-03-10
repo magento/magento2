@@ -52,3 +52,5 @@ Inventory,Inventory
                 "
 "Qty for Item's Status to Become Out of Stock","Qty for Item's Status to Become Out of Stock"
 "Automatically Return Credit Memo Item to Stock","Automatically Return Credit Memo Item to Stock"
+"Display products availability in stock on Storefront.","Display products availability in stock on Storefront."
+"Changing can take some time due to processing whole catalog.","Changing can take some time due to processing whole catalog."

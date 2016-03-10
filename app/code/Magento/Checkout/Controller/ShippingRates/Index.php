@@ -41,7 +41,7 @@ class Index extends \Magento\Framework\App\Action\Action
      * @return \Magento\Framework\Controller\ResultInterface
      * @throws Action\NotFoundException
      */
-    public function executeInternal()
+    public function execute()
     {
         $quote = $this->checkoutSession->getQuote();
         $address = $quote->getShippingAddress();
