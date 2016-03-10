@@ -6,6 +6,11 @@
  */
 -->
 <layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
+    <head>
+        <css src="Magento_Swatches::css/swatches.css"/>
+        <css src="jquery/colorpicker/css/colorpicker.css"/>
+        <link src="jquery/colorpicker/js/colorpicker.js"/>
+    </head>
     <referenceContainer name="content">
         <uiComponent name="product_form"/>
         <referenceContainer name="product_form">
