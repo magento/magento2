@@ -6,6 +6,29 @@
 
 // @codingStandardsIgnoreFile
 
+namespace Magento\Framework\App;
+use Magento\Framework\ObjectManager\ObjectManager as FrameworkObjectManager;
+
+class ObjectManager extends FrameworkObjectManager
+{
+    public static $instance;
+
+    public function __construct()
+    {
+        // empty constructor
+    }
+
+    public static function getInstance()
+    {
+        return self::$instance;
+    }
+
+    public static function setInstance($instance)
+    {
+        self::$instance = $instance;
+    }
+}
+
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
@@ -37,6 +60,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManagerBackup;
 
+    /**
+     * @var bool
+     */
+    protected $notExistedFlag;
+
     protected function setUp()
     {
         $this->entitySnapshotMock = $this->getMock(
@@ -60,16 +88,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        try {
-            $this->objectManagerBackup = \Magento\Framework\App\ObjectManager::getInstance();
-        } catch (\RuntimeException $e) {
-            $this->objectManagerBackup = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER)
-                ->create($_SERVER);
-        }
         \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
 
         $this->addressResource = (new ObjectManagerHelper($this))->getObject(
@@ -88,7 +106,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         parent::tearDown();
-        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerBackup);
+        \Magento\Framework\App\ObjectManager::setInstance(null);
     }
 
     /**
