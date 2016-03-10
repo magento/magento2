@@ -81,9 +81,18 @@ class AddCatalogToTopmenuItemsObserverTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $collection =  $this->getMockBuilder('\Magento\Catalog\Model\ResourceModel\Category\Collection')
-            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'addIsActiveFilter',
+                    'addAttributeToSelect',
+                    'addFieldToFilter',
+                    'addAttributeToFilter',
+                    'addUrlRewriteToResult',
+                    'getIterator'
+                ]
+            )->disableOriginalConstructor()
             ->getMock();
-
+        $collection->expects($this->once())->method('addIsActiveFilter');
         $collectionFactory->expects($this->once())->method('create')
             ->willReturn($collection);
 
@@ -151,6 +160,4 @@ class AddCatalogToTopmenuItemsObserverTest extends \PHPUnit_Framework_TestCase
         $observer = $this->_preparationData();
         $this->_observer->execute($observer);
     }
-
-
 }
