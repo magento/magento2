@@ -5,25 +5,6 @@
  */
 
 // @codingStandardsIgnoreFile
-
-namespace Magento\Framework\App;
-use Magento\Framework\ObjectManager\ObjectManager as FrameworkObjectManager;
-
-class ObjectManager extends FrameworkObjectManager
-{
-    public static $instance;
-
-    public static function getInstance()
-    {
-        return self::$instance;
-    }
-
-    public static function setInstance($instance)
-    {
-        self::$instance = $instance;
-    }
-}
-
 namespace Magento\Customer\Test\Unit\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\VersionControl\RelationComposite;
@@ -32,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 
 class AddressTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Customer\Model\ResourceModel\Address */
+    /** @var \Magento\Customer\Test\Unit\Model\ResourceModel\SubResourceModelAddress */
     protected $addressResource;
 
     /** @var \Magento\Customer\Model\CustomerFactory|\PHPUnit_Framework_MockObject_MockObject */
@@ -46,19 +27,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
     /** @var  RelationComposite|\PHPUnit_Framework_MockObject_MockObject */
     protected $entityRelationCompositeMock;
-
-    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
-    protected $objectManagerMock;
-
-    /**
-     * @var \Magento\Framework\App\ObjectManager
-     */
-    protected $objectManagerBackup;
-
-    /**
-     * @var bool
-     */
-    protected $notExistedFlag;
 
     protected function setUp()
     {
@@ -79,14 +47,8 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
-
         $this->addressResource = (new ObjectManagerHelper($this))->getObject(
-            'Magento\Customer\Model\ResourceModel\Address',
+            'Magento\Customer\Test\Unit\Model\ResourceModel\SubResourceModelAddress',
             [
                 'resource' => $this->prepareResource(),
                 'entitySnapshot' => $this->entitySnapshotMock,
@@ -96,12 +58,6 @@ class AddressTest extends \PHPUnit_Framework_TestCase
                 'customerFactory' => $this->prepareCustomerFactory()
             ]
         );
-    }
-
-    protected function tearDown()
-    {
-        parent::tearDown();
-        \Magento\Framework\App\ObjectManager::setInstance(null);
     }
 
     /**
@@ -148,11 +104,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->objectManagerMock->expects($this->once())
-            ->method('get')
-            ->with('Magento\Eav\Model\Entity\AttributeLoaderInterface')
-            ->willReturn($attributeLoaderMock);
-
+        $this->addressResource->setAttributeLoader($attributeLoaderMock);
         $this->addressResource->save($address);
     }
 
@@ -326,5 +278,30 @@ class AddressTest extends \PHPUnit_Framework_TestCase
     public function testGetType()
     {
         $this->assertSame($this->eavConfigType, $this->addressResource->getEntityType());
+    }
+}
+
+/**
+ * Class SubResourceModelAddress
+ * Mock method getAttributeLoader
+ * @package Magento\Customer\Test\Unit\Model\ResourceModel
+ */
+class SubResourceModelAddress extends \Magento\Customer\Model\ResourceModel\Address
+{
+    protected $attributeLoader;
+
+    public function loadAllAttributes($object = null)
+    {
+        return $this->getAttributeLoader()->loadAllAttributes($this, $object);
+    }
+
+    public function setAttributeLoader($attributeLoader)
+    {
+        $this->attributeLoader = $attributeLoader;
+    }
+
+    protected function getAttributeLoader()
+    {
+        return $this->attributeLoader;
     }
 }
