@@ -20,13 +20,9 @@ class UpgradeSchema implements UpgradeSchemaInterface
      */
     public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
-        $setup->startSetup();
-
         if (version_compare($context->getVersion(), '2.0.1', '<')) {
             $this->addMetaTitleField($setup);
         }
-
-        $setup->endSetup();
     }
     protected function addMetaTitleField(SchemaSetupInterface $setup)
     {
