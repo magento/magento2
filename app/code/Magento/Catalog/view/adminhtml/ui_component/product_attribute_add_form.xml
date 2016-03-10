@@ -148,12 +148,12 @@
                         <item name="config" xsi:type="array">
                             <item name="dataType" xsi:type="string">boolean</item>
                             <item name="formElement" xsi:type="string">checkbox</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/checkbox</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="inputCheckBoxName" xsi:type="string">default.</item>
                             <item name="label" xsi:type="string" translate="true">Is Default</item>
-                            <item name="dataScope" xsi:type="string">is_default</item>
                             <item name="prefer" xsi:type="string">radio</item>
-                            <item name="value" xsi:type="string">1</item>
                             <item name="sortOrder" xsi:type="string">0</item>
-                            <item name="fit" xsi:type="boolean">true</item>
                         </item>
                     </argument>
                 </field>
@@ -164,9 +164,9 @@
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
                             <item name="template" xsi:type="string">Magento_Catalog/form/element/input</item>
-                            <item name="prefixName" xsi:type="string">option[value]</item>
+                            <item name="prefixName" xsi:type="string">option.value</item>
                             <item name="prefixElementName" xsi:type="string">option_</item>
-                            <item name="suffixName" xsi:type="string">[1]</item>
+                            <item name="suffixName" xsi:type="string">1</item>
                             <item name="label" xsi:type="string" translate="true">Default Store View</item>
                             <item name="sortOrder" xsi:type="string">1</item>
                         </item>
@@ -179,9 +179,9 @@
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
                             <item name="template" xsi:type="string">Magento_Catalog/form/element/input</item>
-                            <item name="prefixName" xsi:type="string">option[value]</item>
+                            <item name="prefixName" xsi:type="string">option.value</item>
                             <item name="prefixElementName" xsi:type="string">option_</item>
-                            <item name="suffixName" xsi:type="string">[0]</item>
+                            <item name="suffixName" xsi:type="string">0</item>
                             <item name="label" xsi:type="string" translate="true">Admin</item>
                             <item name="sortOrder" xsi:type="string">2</item>
                         </item>
@@ -251,7 +251,9 @@
                             <item name="dataType" xsi:type="string">boolean</item>
                             <item name="formElement" xsi:type="string">checkbox</item>
                             <item name="label" xsi:type="string" translate="true">Is Default</item>
-                            <item name="dataScope" xsi:type="string">is_default</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/checkbox</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
+                            <item name="inputCheckBoxName" xsi:type="string">default.</item>
                             <item name="value" xsi:type="string">1</item>
                             <item name="sortOrder" xsi:type="string">0</item>
                             <item name="fit" xsi:type="boolean">true</item>
@@ -265,9 +267,9 @@
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
                             <item name="template" xsi:type="string">Magento_Catalog/form/element/input</item>
-                            <item name="prefixName" xsi:type="string">option[value]</item>
+                            <item name="prefixName" xsi:type="string">option.value</item>
                             <item name="prefixElementName" xsi:type="string">option_</item>
-                            <item name="suffixName" xsi:type="string">[1]</item>
+                            <item name="suffixName" xsi:type="string">1</item>
                             <item name="label" xsi:type="string" translate="true">Default Store View</item>
                             <item name="sortOrder" xsi:type="string">1</item>
                         </item>
@@ -280,9 +282,9 @@
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
                             <item name="template" xsi:type="string">Magento_Catalog/form/element/input</item>
-                            <item name="prefixName" xsi:type="string">option[value]</item>
+                            <item name="prefixName" xsi:type="string">option.value</item>
                             <item name="prefixElementName" xsi:type="string">option_</item>
-                            <item name="suffixName" xsi:type="string">[0]</item>
+                            <item name="suffixName" xsi:type="string">0</item>
                             <item name="label" xsi:type="string" translate="true">Admin</item>
                             <item name="sortOrder" xsi:type="string">2</item>
                         </item>
