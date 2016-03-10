@@ -20,10 +20,12 @@ class TypeTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Bundle\Model\ResourceModel\BundleFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $bundleFactory;
+
     /**
      * @var \Magento\Bundle\Model\SelectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     private $bundleModelSelection;
+
     /**
      * @var \Magento\Bundle\Model\Product\Type
      */
