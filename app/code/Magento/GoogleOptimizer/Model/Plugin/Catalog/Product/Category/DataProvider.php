@@ -34,9 +34,27 @@ class DataProvider
     public function afterGetMeta(NewCategoryDataProvider $subject, $result)
     {
         $isDisabled = !$this->helper->isGoogleExperimentActive();
+        $experimentScriptFieldConfig = [
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'componentDisabled' => $isDisabled
+                    ]
+                ]
+            ]
+        ];
 
-        $result['data']['children']['experiment_script']['componentDisabled'] = $isDisabled;
-        $result['data']['children']['code_id']['componentDisabled'] = $isDisabled;
+        $codeIdFieldConfig = [
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'componentDisabled' => $isDisabled
+                    ]
+                ]
+            ]
+        ];
+        $result['data']['children']['experiment_script'] = $experimentScriptFieldConfig;
+        $result['data']['children']['code_id'] = $codeIdFieldConfig;
 
         return $result;
     }
