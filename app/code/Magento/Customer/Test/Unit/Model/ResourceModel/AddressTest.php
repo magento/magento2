@@ -13,11 +13,6 @@ class ObjectManager extends FrameworkObjectManager
 {
     public static $instance;
 
-    public function __construct()
-    {
-        // empty constructor
-    }
-
     public static function getInstance()
     {
         return self::$instance;
