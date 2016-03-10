@@ -19,6 +19,7 @@ define([
              */
             toggleVisibility: function () {
                 this._super();
+
                 if (this.openOnShow) {
                     this.opened(this.inverseVisibility ? !this.isShown : this.isShown);
                 }
