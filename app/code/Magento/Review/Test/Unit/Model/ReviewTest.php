@@ -274,6 +274,7 @@ class ReviewTest extends \PHPUnit_Framework_TestCase
 
     public function testGetIdentities()
     {
+        $this->review->setStatusId(Review::STATUS_PENDING);
         $this->assertEmpty($this->review->getIdentities());
 
         $productId = 1;
