@@ -625,7 +625,7 @@ define([
                 }
             }
 
-            this._gallery.find('.gallery.ui-sortable').on('openDialog', $.proxy(this._onOpenDialog, this));
+            this._gallery.on('openDialog', $.proxy(this._onOpenDialog, this));
             this._bind();
             this.createVideoItemIcons();
             widget = this;
