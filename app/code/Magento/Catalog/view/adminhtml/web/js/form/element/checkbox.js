@@ -41,7 +41,6 @@ define([
             this.dataScope = 'data.' + this.inputCheckBoxName;
             this.inputName = this.dataScopeToHtmlArray(this.inputCheckBoxName);
 
-            this.value = value;
             this.initialValue = value;
 
             this.links.value = this.provider + ':' + this.dataScope;

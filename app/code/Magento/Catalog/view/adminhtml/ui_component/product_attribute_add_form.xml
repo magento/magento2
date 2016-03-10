@@ -253,7 +253,8 @@
                             <item name="label" xsi:type="string" translate="true">Is Default</item>
                             <item name="component" xsi:type="string">Magento_Catalog/js/form/element/checkbox</item>
                             <item name="prefixElementName" xsi:type="string">option_</item>
-                            <item name="inputCheckBoxName" xsi:type="string">default.</item>
+                            <item name="inputCheckBoxName" xsi:type="string">default</item>
+                            <item name="isMultiple" xsi:type="boolean">true</item>
                             <item name="value" xsi:type="string">1</item>
                             <item name="sortOrder" xsi:type="string">0</item>
                             <item name="fit" xsi:type="boolean">true</item>
