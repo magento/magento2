@@ -382,6 +382,10 @@ class Theme extends \Magento\Framework\Model\AbstractModel implements ThemeInter
     public function __sleep()
     {
         $properties = parent::__sleep();
+        $key =  array_search('_logger', $properties);
+        if (false !== $key) {
+            unset($properties[$key]);
+        }
         return array_diff(
             $properties,
             [
