@@ -23,14 +23,42 @@ define([
          * @returns {Object} Chainable.
          */
         initConfig: function (config) {
-            var recordId;
-
             this._super();
-            recordId = rg.get(this.parentName).recordId;
-            this.elementName = this.prefixElementName + recordId;
-            this.inputName = this.prefixName + '[' + this.elementName + ']' + this.suffixName;
+
+            this.configureDataScope();
 
             return this;
+        },
+
+        configureDataScope: function () {
+            var recordId,
+                prefixName;
+
+            // Get recordId
+            recordId = this.parentName.split('.').last();
+
+            prefixName = this.dataScopeToHtmlArray(this.prefixName);
+            this.elementName = this.prefixElementName + recordId;
+
+            this.inputName = prefixName + '[' + this.elementName + ']' + '[' + this.suffixName + ']';
+            this.dataScope = 'data.' + this.prefixName + '.' + this.elementName + '.' + this.suffixName;
+
+            this.links.value = this.provider + ':' + this.dataScope;
+        },
+
+        dataScopeToHtmlArray: function (dataScopeString) {
+            var dataScopeArray, dataScope, reduceFunction;
+
+            reduceFunction = function (prev, curr) {
+                return prev + '[' + curr + ']';
+            };
+
+            dataScopeArray = dataScopeString.split('.');
+
+            dataScope = dataScopeArray.shift();
+            dataScope += dataScopeArray.reduce(reduceFunction, '');
+
+            return dataScope;
         }
     });
 });
