@@ -20,7 +20,7 @@ use Magento\Backend\Model\View\Result\Redirect as ResultRedirect;
 use Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\Validator as InputTypeValidator;
 
 /**
- * Class SaveTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class SaveTest extends AttributeTest
 {

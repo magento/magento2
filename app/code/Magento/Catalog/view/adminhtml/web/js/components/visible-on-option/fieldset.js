@@ -13,8 +13,13 @@ define([
             defaults: {
                 openOnShow: true
             },
-            toggleVisibility: function (selected) {
+
+            /**
+             * Toggle visibility state.
+             */
+            toggleVisibility: function () {
                 this._super();
+
                 if (this.openOnShow) {
                     this.opened(this.inverseVisibility ? !this.isShown : this.isShown);
                 }

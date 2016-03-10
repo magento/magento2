@@ -3,18 +3,27 @@
  * See COPYING.txt for license details.
  */
 
-/* global $break $ $$ FORM_KEY */
+/* global $break $ FORM_KEY */
 
 define([
+    'underscore',
     'Magento_Ui/js/lib/view/utils/async',
     'mage/template',
     'uiRegistry',
     'prototype',
     'Magento_Ui/js/form/element/abstract',
     'jquery/ui'
-], function (jQuery, mageTemplate, rg, prototype, Abstract) {
+], function (_, jQuery, mageTemplate, rg, prototype, Abstract) {
     'use strict';
 
+    /**
+     * Former implementation.
+     *
+     * @param {*} value
+     * @param {Object} container
+     * @param {String} uploadUrl
+     * @param {String} elementName
+     */
     function oldCode(value, container, uploadUrl, elementName) {
         var swatchVisualOption = {
             itemCount: 0,
@@ -22,6 +31,9 @@ define([
             rendered: 0,
             isReadOnly: false,
 
+            /**
+             * Initialize.
+             */
             initialize: function () {
                 if (_.isEmpty(value)) {
                     container.addClassName('unavailable');
@@ -63,12 +75,12 @@ define([
                      * @param {String} el
                      */
                     onSubmit: function (hsb, hex, rgb, el) {
-                        var container = jQuery(el).parent().parent().prev();
+                        var localContainer = jQuery(el).parent().parent().prev();
 
                         jQuery(el).ColorPickerHide();
-                        container.parent().removeClass('unavailable');
-                        container.prev('input').val('#' + hex).trigger('change');
-                        container.css('background', '#' + hex);
+                        localContainer.parent().removeClass('unavailable');
+                        localContainer.prev('input').val('#' + hex).trigger('change');
+                        localContainer.css('background', '#' + hex);
                     }
                 });
 
@@ -208,7 +220,7 @@ define([
              * Register event for swatch input[type=file] change
              */
             swatchComponents.inputFile.change(function () {
-                var container = $('#' + $(this).attr('data-called-by')).parents().eq(2).children('.swatch_window'),
+                var localContainer = $('#' + $(this).attr('data-called-by')).parents().eq(2).children('.swatch_window'),
 
                     /**
                      * @this {iframe}
@@ -217,12 +229,12 @@ define([
                         var imageParams = $.parseJSON($(this).contents().find('body').html()),
                             fullMediaUrl = imageParams['swatch_path'] + imageParams['file_path'];
 
-                        container.prev('input').val(imageParams['file_path']).trigger('change');
-                        container.css({
+                        localContainer.prev('input').val(imageParams['file_path']).trigger('change');
+                        localContainer.css({
                             'background-image': 'url(' + fullMediaUrl + ')',
                             'background-size': 'cover'
                         });
-                        container.parent().removeClass('unavailable');
+                        localContainer.parent().removeClass('unavailable');
                     };
 
                 swatchComponents.iframe.off('load');
@@ -274,10 +286,9 @@ define([
         /**
          * Parses options and merges the result with instance
          *
-         * @param  {Object} config
          * @returns {Object} Chainable.
          */
-        initConfig: function (config) {
+        initConfig: function () {
             this._super();
 
             this.configureDataScope();
@@ -285,6 +296,11 @@ define([
             return this;
         },
 
+        /**
+         * Initialize.
+         *
+         * @returns {Object} Chainable.
+         */
         initialize: function () {
             this._super()
                 .initOldCode();
@@ -292,6 +308,11 @@ define([
             return this;
         },
 
+        /**
+         * Initialize wrapped former implementation.
+         *
+         * @returns {Object} Chainable.
+         */
         initOldCode: function () {
             jQuery.async('.' + this.elementName, function (elem) {
                 oldCode(this.value(), elem.parentElement, this.uploadUrl, this.elementName);
@@ -300,6 +321,9 @@ define([
             return this;
         },
 
+        /**
+         * Configure data scope.
+         */
         configureDataScope: function () {
             var recordId,
                 prefixName,
@@ -317,6 +341,12 @@ define([
             this.links.value = this.provider + ':' + this.dataScope;
         },
 
+        /**
+         * Get HTML array from data scope.
+         *
+         * @param {String} dataScopeString
+         * @returns {String}
+         */
         dataScopeToHtmlArray: function (dataScopeString) {
             var dataScopeArray, dataScope, reduceFunction;
 

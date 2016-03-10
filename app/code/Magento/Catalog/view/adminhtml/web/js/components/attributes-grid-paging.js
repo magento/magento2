@@ -22,15 +22,15 @@ define([
         },
 
         /**
+         * Change label.
          *
-         * @param selected
+         * @param {Array} selected
          */
         changeLabel: function (selected) {
-
             this.selectedAttrs = [];
             _.each(this.selectionColumn().rows(), function (row) {
-                if (selected.indexOf(row.attribute_id) !== -1) {
-                    this.selectedAttrs.push(row.attribute_code);
+                if (selected.indexOf(row['attribute_id']) !== -1) {
+                    this.selectedAttrs.push(row['attribute_code']);
                 }
             }, this);
 

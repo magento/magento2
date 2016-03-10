@@ -25,12 +25,14 @@ define([
          */
         initConfig: function (config) {
             this._super();
-
             this.configureDataScope();
 
             return this;
         },
 
+        /**
+         * Configure data scope.
+         */
         configureDataScope: function () {
             var recordId,
                 value;
@@ -46,6 +48,12 @@ define([
             this.links.value = this.provider + ':' + this.dataScope;
         },
 
+        /**
+         * Get HTML array from data scope.
+         *
+         * @param {String} dataScopeString
+         * @returns {String}
+         */
         dataScopeToHtmlArray: function (dataScopeString) {
             var dataScopeArray, dataScope, reduceFunction;
 
