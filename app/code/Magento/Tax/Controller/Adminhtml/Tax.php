@@ -16,6 +16,13 @@ use Magento\Framework\Exception\InputException;
 abstract class Tax extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Tax::manage_tax';
+
+    /**
      * @var \Magento\Tax\Api\TaxClassRepositoryInterface
      */
     protected $taxClassRepository;
@@ -54,15 +61,5 @@ abstract class Tax extends \Magento\Backend\App\Action
             throw new InputException(__('Invalid name of tax class specified.'));
         }
         return $className;
-    }
-
-    /**
-     * Check current user permission on resource and privilege
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Tax::manage_tax');
     }
 }
