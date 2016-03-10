@@ -7,7 +7,7 @@ namespace Magento\Vault\Test\Unit\Gateway\Config;
 
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Vault\Gateway\Config\ActiveHandler;
-use Magento\Vault\Model\Adminhtml\Source\VaultPayment;
+use Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap;
 
 /**
  * Class ActiveHandlerTest
@@ -44,7 +44,7 @@ class ActiveHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->configMock->expects(self::at(0))
             ->method('getValue')
-            ->with(VaultPayment::VALUE_CODE)
+            ->with(VaultProvidersMap::VALUE_CODE)
             ->willReturn('code');
         $this->configMock->expects(self::at(1))
             ->method('getValue')
@@ -61,7 +61,7 @@ class ActiveHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->configMock->expects(self::at(0))
             ->method('getValue')
-            ->with(VaultPayment::VALUE_CODE)
+            ->with(VaultProvidersMap::VALUE_CODE)
             ->willReturn('code');
         $this->configMock->expects(self::at(1))
             ->method('getValue')
@@ -78,8 +78,8 @@ class ActiveHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $this->configMock->expects(self::at(0))
             ->method('getValue')
-            ->with(VaultPayment::VALUE_CODE)
-            ->willReturn(VaultPayment::EMPTY_VALUE);
+            ->with(VaultProvidersMap::VALUE_CODE)
+            ->willReturn(VaultProvidersMap::EMPTY_VALUE);
         $this->configMock->expects(self::at(1))
             ->method('getValue')
             ->with('active')

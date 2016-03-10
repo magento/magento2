@@ -6,7 +6,6 @@
 namespace Magento\Search\Model;
 
 use Magento\Search\Api\SynonymAnalyzerInterface;
-use Magento\Search\Model\SynonymsReader;
 
 class SynonymAnalyzer implements SynonymAnalyzerInterface
 {
@@ -28,6 +27,16 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
     /**
      * Returns an array of arrays consisting of the synonyms found for each word in the input phrase
      *
+     * For phrase: "Elizabeth is the English queen" correct output is an array of arrays containing synonyms for each
+     * word in the phrase:
+     *
+     * [
+     *   0 => [ 0 => "elizabeth" ],
+     *   1 => [ 0 => "is" ],
+     *   2 => [ 0 => "the" ],
+     *   3 => [ 0 => "british", 1 => "english" ],
+     *   4 => [ 0 => "queen", 1 => "monarch" ]
+     * ]
      * @param string $phrase
      * @return array
      */
@@ -39,17 +48,6 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
             return $synGroups;
         }
 
-        // strip off all the white spaces, comma, semicolons, and other such
-        // "non-word" characters. Then implode it into a single string using white space as delimiter
-        //$words = preg_split('/\W+/', strtolower($phrase), -1, PREG_SPLIT_NO_EMPTY);
-        $words = preg_split(
-            '/[~`!@#$%^&*()_+={}\[\]:"\',\s\.<>?\/\;\\\]+/',
-            strtolower($phrase),
-            -1,
-            PREG_SPLIT_NO_EMPTY
-        );
-        $phrase = implode(' ', $words);
-
         $rows = $this->synReaderModel->loadByPhrase($phrase)->getData();
         $synonyms = [];
         foreach ($rows as $row) {
@@ -58,6 +56,7 @@ class SynonymAnalyzer implements SynonymAnalyzerInterface
 
         // Go through every returned record looking for presence of the actual phrase. If there were no matching
         // records found in DB then create a new entry for it in the returned array
+        $words = explode(' ', $phrase);
         foreach ($words as $w) {
             $position = $this->findInArray($w, $synonyms);
             if ($position !== false) {

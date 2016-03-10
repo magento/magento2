@@ -14,6 +14,14 @@
     .admin__field {
         margin: 1.5rem 0;
     }
+
+    .gift-wrapping-design {
+        display: none;
+
+        &._active {
+            display: block;
+        }
+    }
 }
 
 .giftmessage-order-create {
@@ -23,19 +31,23 @@
 }
 
 .order-create-gift-wrapping,
+.order-gift-options,
 .gift_options-popup {
     .gift-wrapping-design {
         &:extend(.abs-clearfix all);
-        display: none;
-
-        &._active {
-            display: block;
-        }
 
         .image-box {
             float: left;
             margin-right: 1.5rem;
+            max-height: 7.5rem;
+            max-width: 7.5rem;
         }
+    }
+}
+
+.order-gift-options {
+    .admin__field {
+        margin: 1.5rem 0;
     }
 }
 

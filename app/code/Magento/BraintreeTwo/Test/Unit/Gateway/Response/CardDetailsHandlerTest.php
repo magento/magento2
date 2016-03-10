@@ -5,21 +5,19 @@
  */
 namespace Magento\BraintreeTwo\Test\Unit\Gateway\Response;
 
-use Braintree_Result_Successful;
-use Braintree_Transaction;
+use Braintree\Result\Successful;
+use Braintree\Transaction;
 use Magento\BraintreeTwo\Gateway\Response\CardDetailsHandler;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Payment\Gateway\Data\PaymentDataObject;
 use Magento\Sales\Model\Order\Payment;
 use Magento\BraintreeTwo\Gateway\Config\Config;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 
 /**
  * Class CardDetailsHandlerTest
- * @package Magento\BraintreeTwo\Test\Unit\Gateway\Response
  */
 class CardDetailsHandlerTest extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \Magento\BraintreeTwo\Gateway\Response\CardDetailsHandler
      */
@@ -35,12 +33,19 @@ class CardDetailsHandlerTest extends \PHPUnit_Framework_TestCase
      */
     private $config;
 
+    /**
+     * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $subjectReaderMock;
+
     protected function setUp()
     {
         $this->initConfigMock();
+        $this->subjectReaderMock = $this->getMockBuilder(SubjectReader::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $helper = new ObjectManager($this);
-        $this->cardHandler = $helper->getObject(CardDetailsHandler::class, ['config' => $this->config]);
+        $this->cardHandler = new CardDetailsHandler($this->config, $this->subjectReaderMock);
     }
 
     /**
@@ -49,11 +54,19 @@ class CardDetailsHandlerTest extends \PHPUnit_Framework_TestCase
     public function testHandle()
     {
         $paymentData = $this->getPaymentDataObjectMock();
-        $subject['payment'] = $paymentData;
+        $transaction = $this->getBraintreeTransaction();
 
-        $response = [
-            'object' => $this->getBraintreeTransaction()
-        ];
+        $subject = ['payment' => $paymentData];
+        $response = ['object' => $transaction];
+
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readPayment')
+            ->with($subject)
+            ->willReturn($paymentData);
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readTransaction')
+            ->with($response)
+            ->willReturn($transaction);
 
         $this->payment->expects(static::once())
             ->method('setCcLast4');
@@ -122,7 +135,7 @@ class CardDetailsHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Create Braintree transaction
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \Braintree\Transaction
      */
     private function getBraintreeTransaction()
     {
@@ -135,18 +148,8 @@ class CardDetailsHandlerTest extends \PHPUnit_Framework_TestCase
                 'last4' => 1231
             ]
         ];
-        $transaction = Braintree_Transaction::factory($attributes);
+        $transaction = Transaction::factory($attributes);
 
-        $mock = $this->getMockBuilder(Braintree_Result_Successful::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['__get'])
-            ->getMock();
-
-        $mock->expects(static::once())
-            ->method('__get')
-            ->with('transaction')
-            ->willReturn($transaction);
-
-        return $mock;
+        return $transaction;
     }
 }

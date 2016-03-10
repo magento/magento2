@@ -5,16 +5,19 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Request;
 
-use Magento\Payment\Gateway\Helper\SubjectReader;
-use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\BraintreeTwo\Gateway\Config\Config;
 use Magento\BraintreeTwo\Observer\DataAssignObserver;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
+use Magento\Payment\Gateway\Request\BuilderInterface;
+use Magento\Payment\Helper\Formatter;
 
 /**
- * Class PaymentDataBuilder
+ * Payment Data Builder
  */
 class PaymentDataBuilder implements BuilderInterface
 {
+    use Formatter;
+
     /**
      * The billing amount of the request. This value must be greater than 0,
      * and must match the currency format of the merchant account.
@@ -40,17 +43,30 @@ class PaymentDataBuilder implements BuilderInterface
     const MERCHANT_ACCOUNT_ID = 'merchantAccountId';
 
     /**
+     * Order ID
+     */
+    const ORDER_ID = 'orderId';
+
+    /**
      * @var Config
      */
     private $config;
 
     /**
-     * @param Config $config
+     * @var SubjectReader
      */
-    public function __construct(
-        Config $config
-    ) {
+    private $subjectReader;
+
+    /**
+     * Constructor
+     *
+     * @param Config $config
+     * @param SubjectReader $subjectReader
+     */
+    public function __construct(Config $config, SubjectReader $subjectReader)
+    {
         $this->config = $config;
+        $this->subjectReader = $subjectReader;
     }
 
     /**
@@ -58,16 +74,17 @@ class PaymentDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject)
     {
-        $paymentDO = SubjectReader::readPayment($buildSubject);
+        $paymentDO = $this->subjectReader->readPayment($buildSubject);
 
-        /** @var \Magento\Sales\Model\Order\Payment $payment */
         $payment = $paymentDO->getPayment();
+        $order = $paymentDO->getOrder();
 
         $result = [
-            self::AMOUNT => sprintf('%.2F', SubjectReader::readAmount($buildSubject)),
+            self::AMOUNT => $this->formatPrice($this->subjectReader->readAmount($buildSubject)),
             self::PAYMENT_METHOD_NONCE => $payment->getAdditionalInformation(
                 DataAssignObserver::PAYMENT_METHOD_NONCE
-            )
+            ),
+            self::ORDER_ID => $order->getOrderIncrementId()
         ];
 
         $merchantAccountId = $this->config->getValue(Config::KEY_MERCHANT_ACCOUNT_ID);

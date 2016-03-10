@@ -242,7 +242,8 @@
                 padding: 0;
             }
 
-            &.required {
+            &.required,
+            &._required {
                 .legend {
                     &:after {
                         content: '*';
@@ -290,6 +291,10 @@
             .price-wrapper .price {
                 .lib-font-size(18);
                 font-weight: @font-weight__bold;
+            }
+
+            .price {
+                white-space: nowrap;
             }
         }
 

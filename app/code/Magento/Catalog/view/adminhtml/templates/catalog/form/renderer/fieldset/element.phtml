@@ -47,16 +47,16 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
         >
         <?php if ($elementBeforeLabel): ?>
             <?php echo $block->getElementHtml() ?>
-            <?php echo $element->getLabelHtml() ?>
+            <?php echo $element->getLabelHtml('', $block->getScopeLabel()) ?>
             <?php /* @escapeNotVerified */ echo $note ?>
         <?php else: ?>
-            <?php echo $element->getLabelHtml() ?>
+            <?php echo $element->getLabelHtml('', $block->getScopeLabel()) ?>
             <div class="control">
                 <?php /* @escapeNotVerified */ echo($addOn) ? '<div class="addon">' . $block->getElementHtml() . '</div>' : $block->getElementHtml(); ?>
                 <?php /* @escapeNotVerified */ echo $note ?>
             </div>
         <?php endif; ?>
-        <div class="field-service" value-scope="<?php /* @escapeNotVerified */ echo $block->getScopeLabel()?>">
+        <div class="field-service">
             <?php if ($block->canDisplayUseDefault()): ?>
                 <label for="<?php echo $element->getHtmlId() ?>_default" class="choice use-default">
                     <input <?php if ($element->getReadonly()):?> disabled="disabled"<?php endif; ?>

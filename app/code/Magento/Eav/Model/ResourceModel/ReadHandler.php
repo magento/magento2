@@ -13,7 +13,7 @@ use Magento\Framework\App\ResourceConnection as AppResource;
 use Magento\Framework\Model\Operation\ContextHandlerInterface;
 
 /**
- * Class ReadHandler
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ReadHandler
 {
@@ -89,43 +89,6 @@ class ReadHandler
             $this->metadataPool->getMetadata($entityType),
             $data
         );
-    }
-
-    /**
-     * @param string $entityType
-     * @param array $entityData
-     * @return array
-     * @throws \Exception
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function executeOldGoodImplementation($entityType, $entityData)
-    {
-        $data = [];
-        $metadata = $this->metadataPool->getMetadata($entityType);
-        /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
-        if ($metadata->getEavEntityType()) {
-            foreach ($this->getAttributes($entityType) as $attribute) {
-                if (!$attribute->isStatic()) {
-                    $select = $metadata->getEntityConnection()->select()
-                        ->from($attribute->getBackend()->getTable(), ['value'])
-                        ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()])
-                        ->where('attribute_id = ?', $attribute->getAttributeId());
-                    $context = $this->getActionContext($entityType, $entityData);
-                    foreach ($context as $field => $value) {
-                        //TODO: if (in table exists context field)
-                        $select->where(
-                            $metadata->getEntityConnection()->quoteIdentifier($field) . ' IN (?)',
-                            $value
-                        )->order($field . ' DESC');
-                    }
-                    $value = $metadata->getEntityConnection()->fetchOne($select);
-                    if ($value !== false) {
-                        $data[$attribute->getAttributeCode()] = $value;
-                    }
-                }
-            }
-        }
-        return $data;
     }
 
     /**

@@ -22,6 +22,9 @@ class ExtensionPoolTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
+    /**
+     * {@inheritdoc}
+     */
     protected function setUp()
     {
         $this->objectManager = $this->getMockForAbstractClass(
@@ -61,14 +64,41 @@ class ExtensionPoolTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testExecute()
+    /**
+     * @dataProvider executeDataProvider
+     *
+     * @param array $expected
+     * @param string $entityType
+     * @param string $actionName
+     * @return void
+     */
+    public function testExecute(array $expected, $entityType, $actionName)
     {
         $this->assertEquals(
-            [
-                'test_extension_1' => 'Test\Extension1\Entity\ReadHandler',
-                'test_extension_2' => 'Test\Extension2\Default\CreateHandler'
-            ],
-            $this->subject->getActions('Test\First\Entity', 'read')
+            $expected,
+            $this->subject->getActions($entityType, $actionName)
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function executeDataProvider()
+    {
+        return [
+            [
+                [
+                    'test_extension_1' => 'Test\Extension1\Entity\ReadHandler',
+                    'test_extension_2' => 'Test\Extension2\Default\CreateHandler'
+                ],
+                'Test\First\Entity',
+                'read'
+            ],
+            [
+                [],
+                'Test\First\Entity',
+                'delete'
+            ]
+        ];
     }
 }

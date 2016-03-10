@@ -8,6 +8,8 @@
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * @SuppressWarnings(PHPMD.LongVariable)
@@ -51,6 +53,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_storeManager;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -59,6 +66,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\ConfigurableProduct\Model\Product\Type\Configurable $catalogProductTypeConfigurable
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute $resource
+     * @param MetadataPool $metadataPool
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -71,11 +79,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\ConfigurableProduct\Model\Product\Type\Configurable $catalogProductTypeConfigurable,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute $resource,
+        MetadataPool $metadataPool,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
         $this->_storeManager = $storeManager;
         $this->_productTypeConfigurable = $catalogProductTypeConfigurable;
         $this->_catalogData = $catalogData;
+        $this->metadataPool = $metadataPool;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
@@ -101,8 +111,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function setProductFilter($product)
     {
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
         $this->_product = $product;
-        return $this->addFieldToFilter('product_id', $product->getId());
+        return $this->addFieldToFilter('product_id', $product->getData($metadata->getLinkField()));
     }
 
     /**

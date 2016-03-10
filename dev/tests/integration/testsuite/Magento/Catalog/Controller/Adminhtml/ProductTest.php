@@ -105,15 +105,15 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
         $this->dispatch('backend/catalog/product/edit/id/' . $product->getEntityId());
         $body = $this->getResponse()->getBody();
 
-        $this->assertSelectCount('#save-split-button', 1, $body, '"Save" button isn\'t present on Edit Product page');
+        $this->assertSelectCount('#save-button', 1, $body, '"Save" button isn\'t present on Edit Product page');
         $this->assertSelectCount(
-            '#save-split-button-new-button',
+            '#save_and_new',
             1,
             $body,
             '"Save & New" button isn\'t present on Edit Product page'
         );
         $this->assertSelectCount(
-            '#save-split-button-duplicate-button',
+            '#save_and_duplicate',
             1,
             $body,
             '"Save & Duplicate" button isn\'t present on Edit Product page'

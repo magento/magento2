@@ -492,6 +492,14 @@ define([
         checked: {
             name: 'ko-checked'
         },
+        disabled: {
+            name: 'ko-disabled',
+            binding: 'disable'
+        },
+        focused: {
+            name: 'ko-focused',
+            binding: 'hasFocus'
+        },
 
         /**
          * Custom 'render' attrobute handler function. Wraps child elements

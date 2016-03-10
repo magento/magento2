@@ -6,18 +6,35 @@
 namespace Magento\Vault\Model;
 
 use Magento\Payment\Model\MethodInterface;
-use Magento\Payment\Gateway\CommandExecutorInterface;
 
 /**
  * Interface VaultPaymentInterface
+ * @api
  */
-interface VaultPaymentInterface extends MethodInterface, CommandExecutorInterface
+interface VaultPaymentInterface extends MethodInterface
 {
-    const VAULT_TOKEN_COMMAND = 'vault_token';
-
-    const VAULT_TOKEN_LIST_COMMAND = 'vault_token_list';
+    const CODE = 'vault';
 
     const VAULT_AUTHORIZE_COMMAND = 'vault_authorize';
 
-    const VAULT_CAPTURE_COMMAND = 'vault_capture';
+    const VAULT_SALE_COMMAND = 'vault_sale';
+
+    const CAN_AUTHORIZE = 'can_authorize_vault';
+
+    const CAN_CAPTURE = 'can_capture_vault';
+
+    /**
+     * @param string $paymentCode
+     * @param null $storeId
+     *
+     * @return bool
+     */
+    public function isActiveForPayment($paymentCode, $storeId = null);
+
+    /**
+     * @param null $storeId
+     *
+     * @return string|null
+     */
+    public function getProviderCode($storeId = null);
 }

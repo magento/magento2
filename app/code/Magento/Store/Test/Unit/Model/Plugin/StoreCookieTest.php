@@ -38,11 +38,6 @@ class StoreCookieTest extends \PHPUnit_Framework_TestCase
     protected $storeMock;
 
     /**
-     * @var \Closure
-     */
-    protected $closureMock;
-
-    /**
      * @var \Magento\Framework\App\FrontController|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $subjectMock;
@@ -77,10 +72,6 @@ class StoreCookieTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMock();
 
-        $this->closureMock = function () {
-            return 'ExpectedValue';
-        };
-
         $this->subjectMock = $this->getMockBuilder('Magento\Framework\App\FrontController')
             ->disableOriginalConstructor()
             ->setMethods([])
@@ -106,7 +97,7 @@ class StoreCookieTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testAroundDispatchNoSuchEntity()
+    public function testBeforeDispatchNoSuchEntity()
     {
         $storeCode = 'store';
         $this->storeManagerMock->expects($this->once())->method('getDefaultStoreView')->willReturn($this->storeMock);
@@ -115,13 +106,10 @@ class StoreCookieTest extends \PHPUnit_Framework_TestCase
             ->method('getActiveStoreByCode')
             ->willThrowException(new NoSuchEntityException);
         $this->storeCookieManagerMock->expects($this->once())->method('deleteStoreCookie')->with($this->storeMock);
-        $this->assertEquals(
-            'ExpectedValue',
-            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
-        );
+        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 
-    public function testAroundDispatchStoreIsInactive()
+    public function testBeforeDispatchStoreIsInactive()
     {
         $storeCode = 'store';
         $this->storeManagerMock->expects($this->once())->method('getDefaultStoreView')->willReturn($this->storeMock);
@@ -130,13 +118,10 @@ class StoreCookieTest extends \PHPUnit_Framework_TestCase
             ->method('getActiveStoreByCode')
             ->willThrowException(new StoreIsInactiveException);
         $this->storeCookieManagerMock->expects($this->once())->method('deleteStoreCookie')->with($this->storeMock);
-        $this->assertEquals(
-            'ExpectedValue',
-            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
-        );
+        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 
-    public function testAroundDispatchInvalidArgument()
+    public function testBeforeDispatchInvalidArgument()
     {
         $storeCode = 'store';
         $this->storeManagerMock->expects($this->once())->method('getDefaultStoreView')->willReturn($this->storeMock);
@@ -145,22 +130,16 @@ class StoreCookieTest extends \PHPUnit_Framework_TestCase
             ->method('getActiveStoreByCode')
             ->willThrowException(new InvalidArgumentException);
         $this->storeCookieManagerMock->expects($this->once())->method('deleteStoreCookie')->with($this->storeMock);
-        $this->assertEquals(
-            'ExpectedValue',
-            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
-        );
+        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 
-    public function testAroundDispatchNoStoreCookie()
+    public function testBeforeDispatchNoStoreCookie()
     {
         $storeCode = null;
-        $this->storeManagerMock->expects($this->once())->method('getDefaultStoreView')->willReturn($this->storeMock);
         $this->storeCookieManagerMock->expects($this->once())->method('getStoreCodeFromCookie')->willReturn($storeCode);
+        $this->storeManagerMock->expects($this->never())->method('getDefaultStoreView')->willReturn($this->storeMock);
         $this->storeRepositoryMock->expects($this->never())->method('getActiveStoreByCode');
         $this->storeCookieManagerMock->expects($this->never())->method('deleteStoreCookie')->with($this->storeMock);
-        $this->assertEquals(
-            'ExpectedValue',
-            $this->plugin->aroundDispatch($this->subjectMock, $this->closureMock, $this->requestMock)
-        );
+        $this->plugin->beforeDispatch($this->subjectMock, $this->requestMock);
     }
 }

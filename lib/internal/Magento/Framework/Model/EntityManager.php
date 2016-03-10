@@ -71,6 +71,19 @@ class EntityManager
     }
 
     /**
+     * Is entity exists in Entity Manager
+     *
+     * @param string $entityType
+     * @param string $identifier
+     * @return bool
+     * @throws \Exception
+     */
+    public function has($entityType, $identifier)
+    {
+        return $this->metadataPool->getMetadata($entityType)->checkIsEntityExists($identifier);
+    }
+
+    /**
      * @param string $entityType
      * @param object $entity
      * @return bool|object

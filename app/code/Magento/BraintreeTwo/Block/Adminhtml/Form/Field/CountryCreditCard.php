@@ -5,29 +5,28 @@
  */
 namespace Magento\BraintreeTwo\Block\Adminhtml\Form\Field;
 
-use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
 use Magento\Framework\DataObject;
+use Magento\Config\Block\System\Config\Form\Field\FieldArray\AbstractFieldArray;
 
 /**
  * Class CountryCreditCard
- * @package Magento\BraintreeTwo\Block\Adminhtml\Form\Field
  */
 class CountryCreditCard extends AbstractFieldArray
 {
     /**
-     * @var \Magento\BraintreeTwo\Block\Adminhtml\Form\Field\Countries
+     * @var Countries
      */
     protected $countryRenderer = null;
 
     /**
-     * @var \Magento\BraintreeTwo\Block\Adminhtml\Form\Field\CcTypes
+     * @var CcTypes
      */
     protected $ccTypesRenderer = null;
     
     /**
      * Returns renderer for country element
      * 
-     * @return \Magento\BraintreeTwo\Block\Adminhtml\Form\Field\Countries
+     * @return Countries
      */
     protected function getCountryRenderer()
     {
@@ -44,13 +43,13 @@ class CountryCreditCard extends AbstractFieldArray
     /**
      * Returns renderer for country element
      * 
-     * @return \Magento\BraintreeTwo\Block\Adminhtml\Form\Field\Cctypes
+     * @return CcTypes
      */
     protected function getCcTypesRenderer()
     {
         if (!$this->ccTypesRenderer) {
             $this->ccTypesRenderer = $this->getLayout()->createBlock(
-                Cctypes::class,
+                CcTypes::class,
                 '',
                 ['data' => ['is_render_to_js_template' => true]]
             );
@@ -85,7 +84,7 @@ class CountryCreditCard extends AbstractFieldArray
     /**
      * Prepare existing row data object
      *
-     * @param \Magento\Framework\DataObject $row
+     * @param DataObject $row
      * @return void
      */
     protected function _prepareArrayRow(DataObject $row)
@@ -103,6 +102,5 @@ class CountryCreditCard extends AbstractFieldArray
             }
         }
         $row->setData('option_extra_attrs', $options);
-        return;
     }
 }

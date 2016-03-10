@@ -125,7 +125,6 @@ class CustomerForm extends FormTabs
     protected function waitForm()
     {
         $this->waitForElementNotVisible($this->spinner);
-        $this->waitForElementVisible($this->activeFormTab);
     }
 
     /**

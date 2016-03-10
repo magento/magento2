@@ -6,6 +6,8 @@
  */
 namespace Magento\Paypal\Controller\Payflowadvanced;
 
+use Magento\Paypal\Model\Config;
+
 class ReturnUrl extends \Magento\Paypal\Controller\Payflow\ReturnUrl
 {
     /**
@@ -13,4 +15,12 @@ class ReturnUrl extends \Magento\Paypal\Controller\Payflow\ReturnUrl
      * @var string
      */
     protected $_redirectBlockName = 'payflow.advanced.iframe';
+
+    /**
+     * Payment method code
+     * @var string
+     */
+    protected $allowedPaymentMethodCodes = [
+        Config::METHOD_PAYFLOWADVANCED
+    ];
 }

@@ -7,6 +7,11 @@ namespace Magento\Payment\Gateway\Http;
 
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * Class ClientException
+ * @package Magento\Payment\Gateway\Http
+ * @api
+ */
 class ClientException extends LocalizedException
 {
 }

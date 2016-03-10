@@ -392,7 +392,7 @@
         </elementProp>
         <elementProp name="Accept" elementType="Header">
           <stringProp name="Header.name">Accept</stringProp>
-          <stringProp name="Header.value">text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</stringProp>
+          <stringProp name="Header.value">application/json,text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8</stringProp>
         </elementProp>
         <elementProp name="User-Agent" elementType="Header">
           <stringProp name="Header.name">User-Agent</stringProp>

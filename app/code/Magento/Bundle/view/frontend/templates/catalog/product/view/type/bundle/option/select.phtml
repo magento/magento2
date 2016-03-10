@@ -27,6 +27,7 @@
         <?php else:?>
             <select id="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?>"
                     name="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
+                    data-selector="bundle_option[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                     class="bundle-option-<?php /* @escapeNotVerified */ echo $_option->getId() ?> product bundle option bundle-option-select change-container-classname"
                 <?php if ($_option->getRequired()) echo 'data-validate = {required:true}' ?>>
                 <option value=""><?php /* @escapeNotVerified */ echo __('Choose a selection...') ?></option>
@@ -50,6 +51,7 @@
                            class="input-text qty<?php if (!$_canChangeQty) echo ' qty-disabled' ?>"
                            type="number"
                            name="bundle_option_qty[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
+                           data-selector="bundle_option_qty[<?php /* @escapeNotVerified */ echo $_option->getId() ?>]"
                            value="<?php /* @escapeNotVerified */ echo $_defaultQty ?>"/>
                 </div>
             </div>

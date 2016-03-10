@@ -10,9 +10,7 @@
         <payment>
             <vault>
                 <debug>1</debug>
-                <active>0</active>
-                <model>Magento\Vault\Model\Method\Vault</model>
-                <vault_payment>empty_value</vault_payment>
+                <model>Magento\Vault\Model\VaultPaymentInterface</model>
             </vault>
         </payment>
     </default>

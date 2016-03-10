@@ -77,6 +77,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param GroupManagementInterface $groupManagement
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation
      * @param MetadataPool $metadataPool
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -101,6 +102,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         GroupManagementInterface $groupManagement,
+        \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation,
         MetadataPool $metadataPool,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
@@ -125,6 +127,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $customerSession,
             $dateTime,
             $groupManagement,
+            $productLimitation,
             $connection
         );
     }
@@ -280,23 +283,24 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $connection->quoteInto('links.link_type_id = ?', $this->_linkTypeId),
         ];
         $joinType = 'join';
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         if ($this->getProduct() && $this->getProduct()->getId()) {
-            $productId = $this->getProduct()->getData(
-                $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
+            $linkFieldId = $this->getProduct()->getData(
+                $linkField
             );
             if ($this->_isStrongMode) {
-                $this->getSelect()->where('links.product_id = ?', (int)$productId);
+                $this->getSelect()->where('links.product_id = ?', (int)$linkFieldId);
             } else {
                 $joinType = 'joinLeft';
-                $joinCondition[] = $connection->quoteInto('links.product_id = ?', $productId);
+                $joinCondition[] = $connection->quoteInto('links.product_id = ?', $linkFieldId);
             }
             $this->addFieldToFilter(
-                'entity_id',
-                ['neq' => $productId]
+                $linkField,
+                ['neq' => $linkFieldId]
             );
         } elseif ($this->_isStrongMode) {
             $this->addFieldToFilter(
-                'entity_id',
+                $linkField,
                 ['eq' => -1]
             );
         }

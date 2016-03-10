@@ -5,8 +5,8 @@
  */
 namespace Magento\BraintreeTwo\Gateway\Request;
 
-use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
+use Magento\BraintreeTwo\Gateway\Helper\SubjectReader;
 
 /**
  * Class CustomerDataBuilder
@@ -45,11 +45,26 @@ class CustomerDataBuilder implements BuilderInterface
     const PHONE = 'phone';
 
     /**
+     * @var SubjectReader
+     */
+    private $subjectReader;
+
+    /**
+     * Constructor
+     *
+     * @param SubjectReader $subjectReader
+     */
+    public function __construct(SubjectReader $subjectReader)
+    {
+        $this->subjectReader = $subjectReader;
+    }
+
+    /**
      * @inheritdoc
      */
     public function build(array $buildSubject)
     {
-        $paymentDO = SubjectReader::readPayment($buildSubject);
+        $paymentDO = $this->subjectReader->readPayment($buildSubject);
 
         $order = $paymentDO->getOrder();
         $billingAddress = $order->getBillingAddress();

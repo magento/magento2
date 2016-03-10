@@ -97,7 +97,7 @@
             <data name="product/data/quantity_and_stock_status/qty" xsi:type="string">87.0000</data>
             <data name="product/data/url_key" xsi:type="string">test-simple-product-%isolation%</data>
             <data name="product/data/weight" xsi:type="string">333.0000</data>
-            <data name="product/data/status" xsi:type="string">Product offline</data>
+            <data name="product/data/status" xsi:type="string">No</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductForm" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductIsNotDisplayingOnFrontend" />
@@ -128,9 +128,9 @@
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
         </variation>
         <variation name="UpdateSimpleProductEntityTestVariation9" summary="Unassign Products from the Category" ticketId="MAGETWO-12417">
+            <data name="tag" xsi:type="string">test_type:acceptance_test, test_type:extended_acceptance_test</data>
             <data name="initialProduct/dataset" xsi:type="string">product_with_category</data>
             <data name="product/data/category_ids/dataset" xsi:type="string"> -</data>
-            <data name="tag" xsi:type="string">test_type:acceptance_test</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductNotVisibleInCategory" />
         </variation>

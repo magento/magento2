@@ -53,6 +53,7 @@ class Manager implements ManagerInterface
      */
     public function dispatch($eventName, array $data = [])
     {
+        $eventName = mb_strtolower($eventName);
         \Magento\Framework\Profiler::start('EVENT:' . $eventName, ['group' => 'EVENT', 'name' => $eventName]);
         foreach ($this->_eventConfig->getObservers($eventName) as $observerConfig) {
             $event = new \Magento\Framework\Event($data);

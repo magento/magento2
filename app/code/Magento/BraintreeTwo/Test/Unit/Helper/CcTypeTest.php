@@ -11,7 +11,6 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * Class CcTypeTest
- * @package Magento\BraintreeTwo\Test\Unit\Helper
  */
 class CcTypeTest extends \PHPUnit_Framework_TestCase
 {

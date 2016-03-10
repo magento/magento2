@@ -6,6 +6,8 @@
 
 namespace Magento\Framework\Model;
 
+use Magento\Framework\ObjectManagerInterface as ObjectManager;
+
 /**
  * Class Orchestrator
  */
@@ -16,13 +18,21 @@ class OrchestratorPool
      */
     protected $operations;
 
+    /**
+     * @var ObjectManager
+     */
+    protected $objectManager;
 
     /**
-     * @param array $operations
+     * OrchestratorPool constructor.
+     * @param ObjectManager $objectManager
+     * @param string[] $operations
      */
     public function __construct(
+        ObjectManager $objectManager,
         $operations
     ) {
+        $this->objectManager = $objectManager;
         $this->operations = $operations;
     }
 
@@ -34,12 +44,10 @@ class OrchestratorPool
      */
     public function getWriteOperation($entityType, $operationName)
     {
-        if (!isset($this->operations[$entityType][$operationName])
-            || !$this->operations[$entityType][$operationName] instanceof Operation\WriteInterface
-        ) {
-            return $this->operations['default'][$operationName];
+        if (!isset($this->operations[$entityType][$operationName])) {
+            return $this->objectManager->get($this->operations['default'][$operationName]);
         }
-        return $this->operations[$entityType][$operationName];
+        return $this->objectManager->get($this->operations[$entityType][$operationName]);
     }
 
     /**
@@ -49,12 +57,9 @@ class OrchestratorPool
      */
     public function getReadOperation($entityType)
     {
-        //TODO: remove interfaces Read and Write
-        if (!isset($this->operations[$entityType]['read'])
-            || !$this->operations[$entityType]['read'] instanceof Operation\ReadInterface
-        ) {
-            return $this->operations['default']['read'];
+        if (!isset($this->operations[$entityType]['read'])) {
+            return $this->objectManager->get($this->operations['default']['read']);
         }
-        return $this->operations[$entityType]['read'];
+        return $this->objectManager->get($this->operations[$entityType]['read']);
     }
 }
