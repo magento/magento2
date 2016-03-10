@@ -18,7 +18,7 @@ $_newRates = $block->getNewRates();
 $_rates = ($_newRates) ? $_newRates : $_oldRates;
 ?>
 <?php if (empty($_rates)): ?>
-    <div class="message message-error error"><p><?php echo __('You must first configure Currency Options.');?></p></div>
+    <div class="message message-warning warning"><p><?php echo __('You must first configure currency options before being able to see currency rates.');?></p></div>
 <?php else: ?>
     <form name="rateForm" id="rate-form" method="post" action="<?php /* @escapeNotVerified */ echo $block->getRatesFormAction(); ?>">
         <?php echo $block->getBlockHtml('formkey')?>
