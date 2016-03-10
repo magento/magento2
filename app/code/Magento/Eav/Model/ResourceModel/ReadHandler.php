@@ -105,45 +105,44 @@ class ReadHandler
     {
         $data = [];
         $metadata = $this->metadataPool->getMetadata($entityType);
+        if (!$metadata->getEavEntityType()) {
+            return $data;
+        }
+        $context = $this->scopeResolver->getEntityContext($entityType);
+        $connection = $metadata->getEntityConnection();
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
         $attributeTables = [];
-        if ($metadata->getEavEntityType()) {
-            $context = $this->scopeResolver->getEntityContext($entityType);
-            foreach ($this->getAttributes($entityType) as $attribute) {
-                if (!$attribute->isStatic()) {
-                    $attributeTables[$attribute->getBackend()->getTable()][] = $attribute->getAttributeId();
-                }
+        $attributesMap = [];
+        $selects = [];
+
+        foreach ($this->getAttributes($entityType) as $attribute) {
+            if (!$attribute->isStatic()) {
+                $attributeTables[$attribute->getBackend()->getTable()][] = $attribute->getAttributeId();
+                $attributesMap[$attribute->getAttributeId()] = $attribute->getAttributeCode();
             }
-            $selects = [];
-            foreach ($attributeTables as $attributeTable => $attributeCodes) {
-                $select = $metadata->getEntityConnection()->select()
-                    ->from(['t' => $attributeTable], ['value' => 't.value'])
-                    ->join(
-                        ['a' => $this->appResource->getTableName('eav_attribute')],
-                        'a.attribute_id = t.attribute_id',
-                        ['attribute_code' => 'a.attribute_code']
-                    )
-                    ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()])
-                    ->where('t.attribute_id IN (?)', $attributeCodes)
-                    ->order('a.attribute_id');
-                foreach ($context as $scope) {
+        }
+        foreach ($attributeTables as $attributeTable => $attributeCodes) {
+            $select = $connection->select()
+                ->from(
+                    ['t' => $attributeTable],
+                    ['value' => 't.value', 'attribute_id' => 't.attribute_id']
+                )
+                ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()]);
+            foreach ($context as $scope) {
                     //TODO: if (in table exists context field)
                     $select->where(
                         $metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' IN (?)',
                         $this->getContextVariables($scope)
                     )->order('t.' . $scope->getIdentifier() . ' DESC');
                 }
-                $selects[] = $select;
-            }
-
-            $unionSelect = new \Magento\Framework\DB\Sql\UnionExpression(
-                $selects,
-                \Magento\Framework\DB\Select::SQL_UNION_ALL
-            );
-            $attributeValues = $metadata->getEntityConnection()->fetchAll((string)$unionSelect);
-            foreach ($attributeValues as $attributeValue) {
-                $data[$attributeValue['attribute_code']] = $attributeValue['value'];
-            }
+            $selects[] = $select;
+        }
+        $unionSelect = new \Magento\Framework\DB\Sql\UnionExpression(
+            $selects,
+            \Magento\Framework\DB\Select::SQL_UNION_ALL
+        );
+        foreach ($connection->fetchAll($unionSelect) as $attributeValue) {
+            $data[$attributesMap[$attributeValue['attribute_id']]] = $attributeValue['value'];
         }
         return $data;
     }
