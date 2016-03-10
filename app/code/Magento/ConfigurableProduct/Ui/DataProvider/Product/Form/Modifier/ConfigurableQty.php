@@ -6,7 +6,6 @@
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Catalog\Model\AttributeConstantsInterface;
 
 /**
  * Data provider for quantity in the Configurable products
