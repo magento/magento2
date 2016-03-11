@@ -9,7 +9,6 @@ use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Source\Stock;
-use Magento\Catalog\Ui\DataProvider\Grouper;
 use Magento\Framework\Stdlib\ArrayManager;
 
 /**
@@ -23,11 +22,6 @@ class AdvancedInventory extends AbstractModifier
      * @var LocatorInterface
      */
     protected $locator;
-
-    /**
-     * @var Grouper
-     */
-    protected $grouper;
 
     /**
      * @var StockRegistryInterface
@@ -51,20 +45,17 @@ class AdvancedInventory extends AbstractModifier
 
     /**
      * @param LocatorInterface $locator
-     * @param Grouper $grouper
      * @param Stock $stock
      * @param StockRegistryInterface $stockRegistry
      * @param ArrayManager $arrayManager
      */
     public function __construct(
         LocatorInterface $locator,
-        Grouper $grouper,
         Stock $stock,
         StockRegistryInterface $stockRegistry,
         ArrayManager $arrayManager
     ) {
         $this->locator = $locator;
-        $this->grouper = $grouper;
         $this->stockRegistry = $stockRegistry;
         $this->stock = $stock;
         $this->arrayManager = $arrayManager;
