@@ -5,8 +5,9 @@
  */
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 use Magento\Indexer\Console\Command\IndexerReindexCommand;
-use Magento\Setup\Module\I18n\Dictionary\Phrase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
@@ -23,12 +24,20 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
      */
     protected $configMock;
 
+    /**
+     * Set up
+     */
     public function setUp()
     {
         $this->configMock = $this->getMock(\Magento\Indexer\Model\Config::class, [], [], '', false);
         parent::setUp();
     }
 
+    /**
+     * Get return value map for object manager
+     *
+     * @return array
+     */
     protected function getObjectManagerReturnValueMap()
     {
         $result = parent::getObjectManagerReturnValueMap();
@@ -120,7 +129,7 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
     {
         $this->configureAdminArea();
         $indexerOne = $this->getMock('Magento\Indexer\Model\Indexer', [], [], '', false);
-        $localizedException = new \Magento\Framework\Exception\LocalizedException(new \Magento\Framework\Phrase('Some Exception Message'));
+        $localizedException = new LocalizedException(new Phrase('Some Exception Message'));
         $indexerOne->expects($this->once())->method('reindexAll')->will($this->throwException($localizedException));
         $this->collectionFactory->expects($this->never())->method('create');
         $this->indexerFactory->expects($this->once())->method('create')->willReturn($indexerOne);
