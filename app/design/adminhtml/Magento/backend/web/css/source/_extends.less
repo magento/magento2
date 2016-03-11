@@ -83,6 +83,12 @@
     &:extend(.abs-clearer all);
 }
 
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .abs-clearer-mobile {
+        .lib-clearer();
+    }
+}
+
 //  Reset list styles
 .abs-list-reset-styles {
     .lib-list-reset-styles();
