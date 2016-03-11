@@ -3,17 +3,22 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+/*global byteConvert*/
 define([
-    "jquery",
+    'jquery',
     'mage/template',
     'Magento_Ui/js/modal/alert',
-    "mage/translate",
-    "jquery/file-uploader"
+    'mage/translate',
+    'jquery/file-uploader'
 ], function ($, mageTemplate, alert) {
     'use strict';
 
     $.widget('mage.mediaUploader', {
+
+        /**
+         *
+         * @private
+         */
         _create: function () {
             var
                 self = this,
@@ -28,13 +33,18 @@ define([
                 sequentialUploads: true,
                 acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
                 maxFileSize: this.options.maxFileSize,
+
+                /**
+                 * @param {Object} e
+                 * @param {Object} data
+                 */
                 add: function (e, data) {
                     var
                         fileSize,
                         tmpl;
 
                     $.each(data.files, function (index, file) {
-                        fileSize = typeof file.size == "undefined" ?
+                        fileSize = typeof file.size == 'undefined' ?
                             $.mage.__('We could not detect a size.') :
                             byteConvert(file.size);
 
@@ -55,6 +65,11 @@ define([
                         data.submit();
                     });
                 },
+
+                /**
+                 * @param {Object} e
+                 * @param {Object} data
+                 */
                 done: function (e, data) {
                     if (data.result && !data.result.error) {
                         self.element.trigger('addItem', data.result);
@@ -65,20 +80,32 @@ define([
                     }
                     self.element.find('#' + data.fileId).remove();
                 },
+
+                /**
+                 * @param {Object} e
+                 * @param {Object} data
+                 */
                 progress: function (e, data) {
-                    var progress = parseInt(data.loaded / data.total * 100, 10);
-                    var progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+                    var progress = parseInt(data.loaded / data.total * 100, 10),
+                        progressSelector = '#' + data.fileId + ' .progressbar-container .progressbar';
+
                     self.element.find(progressSelector).css('width', progress + '%');
                 },
+
+                /**
+                 * @param {Object} e
+                 * @param {Object} data
+                 */
                 fail: function (e, data) {
                     var progressSelector = '#' + data.fileId;
+
                     self.element.find(progressSelector).removeClass('upload-progress').addClass('upload-failure')
                         .delay(2000)
                         .hide('highlight')
                         .remove();
                 }
             });
-            
+
             this.element.find('input[type=file]').fileupload('option', {
                 process: [{
                     action: 'load',

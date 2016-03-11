@@ -58,7 +58,9 @@ define([
          * @returns {Boolean}
          */
         update: function () {
-            var checkVideoID = this.element.find(this.options.container).find('.' + this.options.videoClass).data('code');
+            var checkVideoID = this.element.find(this.options.container).find(
+                '.' + this.options.videoClass
+            ).data('code');
 
             if (checkVideoID && checkVideoID !== this.options.videoId) {
                 this._doUpdate();
@@ -607,13 +609,13 @@ define([
          * @private
          */
         _create: function () {
-            this._gallery =  this.element.closest(this.options.videoSelector);
-
-            var imgs = this._gallery.data('images') || [],
+            var imgs = this.element.closest(this.options.videoSelector).data('images') || [],
                 widget,
                 uploader,
                 tmp,
                 i;
+
+            this._gallery =  this.element.closest(this.options.videoSelector);
 
             for (i = 0; i < imgs.length; i++) {
                 tmp = imgs[i];
@@ -665,7 +667,11 @@ define([
                  * @returns {null}
                  */
                 opened: function () {
-                    var roles, file, modalTitleElement, imageData;
+                    var roles,
+                        file,
+                        modalTitleElement,
+                        imageData,
+                        modal = widget.element.closest('.mage-new-video-dialog');
 
                     widget.element.find('#video_url').focus();
                     roles = widget.element.find('.video_image_role');
@@ -673,7 +679,7 @@ define([
                     file = widget.element.find('#file_name').val();
                     widget._onGetVideoInformationEditClick();
                     modalTitleElement = widget.element.closest('.mage-new-video-dialog .modal-title');
-                    var modal = widget.element.closest('.mage-new-video-dialog');
+
                     if (!file) {
                         widget._blockActionButtons(true);
 
@@ -729,7 +735,7 @@ define([
          * @param {Function} callback
          */
         isValid: function (callback) {
-            var videoForm =this.element.find(this._videoFormSelector),
+            var videoForm = this.element.find(this._videoFormSelector),
                 videoLoaded = true;
 
             this._blockActionButtons(true);
@@ -850,7 +856,9 @@ define([
                     }.bind(this));
                     flagChecked = this.element.find(this._videoDisableinputSelector).attr('checked') ? 1 : 0;
                     this._gallery.find('input[name*="' + itemId + '][disabled]"]').val(flagChecked);
-                    this._gallery.find(_inputSelector).siblings('.image-fade').css('visibility', flagChecked ? 'visible' : 'hidden');
+                    this._gallery.find(_inputSelector).siblings('.image-fade').css(
+                        'visibility', flagChecked ? 'visible' : 'hidden'
+                    );
                     imageData.disabled = flagChecked;
 
                     if (this._tempPreviewImageData) {
@@ -1058,7 +1066,9 @@ define([
             newVideoForm = this.element.find(this._videoFormSelector);
 
             $(newVideoForm).find('input[type="hidden"][name!="form_key"]').val('');
-            this._gallery.find('input[name*="' + this.element.find(this._itemIdSelector).val() + '"]').parent().removeClass('active');
+            this._gallery.find('input[name*="' + this.element.find(
+                    this._itemIdSelector).val() + '"]'
+            ).parent().removeClass('active');
 
             try {
                 newVideoForm.validation('clearError');
@@ -1097,7 +1107,9 @@ define([
                     var start = el.name.indexOf('[') + 1,
                         end = el.name.indexOf(']'),
                         imageType = el.name.substring(start, end),
-                        imageCheckbox = self.element.find(self._videoFormSelector + ' input[value="' + imageType + '"]');
+                        imageCheckbox = self.element.find(
+                            self._videoFormSelector + ' input[value="' + imageType + '"]'
+                        );
 
                     self._changeRole(imageType, imageCheckbox.attr('checked'), imageData);
                 });
@@ -1135,9 +1147,9 @@ define([
          * @private
          */
         _onOpenDialog: function (e, imageData) {
-            var formFields, flagChecked, file;
+            var formFields, flagChecked, file,
+                modal = this.element.closest('.mage-new-video-dialog');
 
-            var modal = this.element.closest('.mage-new-video-dialog');
             if (imageData['media_type'] === 'external-video') {
                 this.imageData = imageData;
                 modal.find('.video-create-button').hide();
@@ -1180,8 +1192,8 @@ define([
          * Toggle buttons
          */
         toggleButtons: function () {
-            var self = this;
-            var modal = this.element.closest('.mage-new-video-dialog');
+            var self = this,
+                modal = this.element.closest('.mage-new-video-dialog');
 
             modal.find('.video-placeholder, .add-video-button-container > button').click(function () {
                 modal.find('.video-create-button').show();
