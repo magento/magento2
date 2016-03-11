@@ -76,7 +76,10 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
                 'affect_configurable_product_attributes' => '1',
                 'configurable-matrix' => $productMatrix,
                 'attributes' => $productAttributesIds,
-                'attribute_codes' => $productAttributesCodes
+                'attribute_codes' => $productAttributesCodes,
+                'product' => [
+                    'configurable_attributes_data' => null
+                ]
             ]
         ];
 
