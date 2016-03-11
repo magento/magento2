@@ -5,7 +5,7 @@
  */
 namespace Magento\CatalogRule\Model\Rule\Action;
 
-class SimpleActionOptionsProvider
+class SimpleActionOptionsProvider implements \Magento\Framework\Data\OptionSourceInterface
 {
     /**
      * @return array
