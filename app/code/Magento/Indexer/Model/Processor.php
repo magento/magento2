@@ -32,11 +32,6 @@ class Processor
     protected $mviewProcessor;
 
     /**
-     * @var array
-     */
-    protected $threadSharedIndexes;
-
-    /**
      * @param ConfigInterface $config
      * @param IndexerFactory $indexerFactory
      * @param Indexer\CollectionFactory $indexersFactory
