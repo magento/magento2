@@ -21,7 +21,7 @@ class UpdateConfigurations
     /**
      * @var array
      */
-    private $keysPOST = [
+    private $keysPost = [
         'status',
         'sku',
         'name',
@@ -109,7 +109,7 @@ class UpdateConfigurations
     {
         $result = [];
 
-        foreach ($this->keysPOST as $key) {
+        foreach ($this->keysPost as $key) {
             if (isset($item[$key])) {
                 $result[$key] = $item[$key];
             }
