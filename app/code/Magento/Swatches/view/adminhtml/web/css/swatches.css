@@ -88,36 +88,36 @@
     outline: 1px solid rgb(173, 173, 173);
 }
 
-div[id*="swatch_container_option"] {
+.swatch_sub-menu_container {
     border: 1px solid rgb(173, 173, 173) !important;
     border-radius: 5px 0 5px 5px;
     box-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
 }
 
-div[id*="swatch_container_option"] .swatch_row {
+.swatch_sub-menu_container .swatch_row {
     border: 0 !important;
     text-align: left;
     cursor: pointer;
     border-bottom: 1px solid #e3e3e3 !important;
 }
-div[id*="swatch_container_option"] .swatch_row:first-child {
+.swatch_sub-menu_container .swatch_row:first-child {
     border-radius: 5px 0 0 0;
 }
 
-div[id*="swatch_container_option"] .swatch_row:last-child {
+.swatch_sub-menu_container .swatch_row:last-child {
     border-bottom: 0 !important;
     border-radius: 0 0 5px 5px;
 }
 
-div[id*="swatch_container_option"] .swatch_row .swatch_row_name p {
+.swatch_sub-menu_container .swatch_row .swatch_row_name p {
     padding-left: 12px;
 }
 
-div[id*="swatch_container_option"] .swatch_row .swatch_row_name {
+.swatch_sub-menu_container .swatch_row .swatch_row_name {
     background: #fff !important;
 }
 
-div[id*="swatch_container_option"] .swatch_row:hover .swatch_row_name {
+.swatch_sub-menu_container .swatch_row:hover .swatch_row_name {
     background: #fbfaf6 !important;
 }
 
