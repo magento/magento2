@@ -23,8 +23,6 @@ $elementName = $block->getElement()->getName() . '[images]';
             <?php echo $block->getUploaderHtml();
     ?>
             <div class="product-image-wrapper">
-                <img class="spacer"
-                     src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/spacer.gif')?>"/>
                 <p class="image-placeholder-text">
                     <?php /* @escapeNotVerified */ echo __('Browse to find or drag image here'); ?>
                 </p>
@@ -75,9 +73,6 @@ $elementName = $block->getElement()->getName() . '[images]';
                    class="is-removed"/>
 
             <div class="product-image-wrapper">
-                <img class="spacer"
-                     src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/spacer.gif')?>"/>
-
                 <img class="product-image"
                      data-role="image-element"
                      src="<%- data.url %>"
@@ -127,6 +122,7 @@ $elementName = $block->getElement()->getName() . '[images]';
       <div class="image-panel ui-tabs-panel ui-widget-content ui-corner-bottom" data-role="dialog">
       </div>
     </script>
+
     <script data-role="img-dialog-tmpl" type="text/x-magento-template">
             <div class="image-panel-preview">
                 <img src="<%- data.url %>" alt="<%- data.label %>" />

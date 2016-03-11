@@ -196,6 +196,14 @@
     //  Actions
     .action-remove {
         &:extend(.abs-action-reset all);
+        bottom: 12px;
+        cursor: pointer;
+        height: 20px;
+        left: 6px;
+        position: absolute;
+        width: 20px;
+        z-index: @image-gallery-action__z-index;
+
         .lib-icon-font(
             @icon-delete__content,
             @_icon-font: @icons-admin__font-name,
@@ -205,23 +213,18 @@
             @_icon-font-text-hide: true,
             @_icon-font-display: block
         );
-        bottom: 12px;
-        cursor: pointer;
-        height: 20px;
-        left: 6px;
-        position: absolute;
-        width: 20px;
-        z-index: @image-gallery-action__z-index;
     }
 
     .draggable-handle {
         cursor: move;
         height: 20px;
         left: 2px;
+        margin: 0;
         position: absolute;
         top: 4px;
         width: 20px;
         z-index: @image-gallery-action__z-index;
+
         .lib-icon-font(
             @icon-gripper__content,
             @_icon-font: @icons-admin__font-name,
