@@ -608,6 +608,7 @@
                 margin: 0;
                 opacity: 1;
                 position: static;
+                text-align: left;
             }
         }
 
@@ -732,10 +733,10 @@
 
     &:extend(.abs-fieldset-legend);
     & + br {
+        clear: left;
         display: block;
         height: 0;
         overflow: hidden;
-        clear: left;
     }
 }
 
