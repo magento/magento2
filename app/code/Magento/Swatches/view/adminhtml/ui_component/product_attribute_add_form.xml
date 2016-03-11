@@ -169,6 +169,9 @@
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">position</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
+                            <item name="prefixName" xsi:type="string">optiontext.order</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
                             <item name="visible" xsi:type="boolean">false</item>
                             <item name="additionalClasses" xsi:type="array">
                                 <item name="_hidden" xsi:type="boolean">true</item>
@@ -180,6 +183,11 @@
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="componentType" xsi:type="string">actionDelete</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/action-delete</item>
+                            <item name="elementTmpl" xsi:type="string">Magento_Catalog/form/element/action-delete</item>
+                            <item name="template" xsi:type="string">Magento_Catalog/form/element/action-delete</item>
+                            <item name="prefixName" xsi:type="string">optiontext.delete</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="fit" xsi:type="boolean">true</item>
                         </item>
@@ -292,6 +300,9 @@
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">position</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/input</item>
+                            <item name="prefixName" xsi:type="string">optionvisual.order</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
                             <item name="visible" xsi:type="boolean">false</item>
                             <item name="additionalClasses" xsi:type="array">
                                 <item name="_hidden" xsi:type="boolean">true</item>
@@ -303,6 +314,11 @@
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="componentType" xsi:type="string">actionDelete</item>
+                            <item name="component" xsi:type="string">Magento_Catalog/js/form/element/action-delete</item>
+                            <item name="elementTmpl" xsi:type="string">Magento_Catalog/form/element/action-delete</item>
+                            <item name="template" xsi:type="string">Magento_Catalog/form/element/action-delete</item>
+                            <item name="prefixName" xsi:type="string">optionvisual.delete</item>
+                            <item name="prefixElementName" xsi:type="string">option_</item>
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="fit" xsi:type="boolean">true</item>
                         </item>
