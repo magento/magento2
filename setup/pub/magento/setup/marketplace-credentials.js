@@ -14,9 +14,7 @@ angular.module('marketplace-credentials', ['ngStorage'])
                 submitted : false
             };
 
-            $scope.upgradeProcessed = false;
             $scope.upgradeProcessError = false;
-            $scope.isAuthLoadingComplete = false;
 
             $http.get('index.php/select-version/installedSystemPackage', {'responseType' : 'json'})
                 .success(function (data) {
@@ -26,7 +24,6 @@ angular.module('marketplace-credentials', ['ngStorage'])
                     } else {
                         if (!$rootScope.authRequest || !$rootScope.isMarketplaceAuthorized) {
                             $scope.isHiddenSpinner = false;
-                            $scope.isAuthLoadingComplete = false;
                             $http.post('index.php/marketplace/check-auth', [])
                                 .success(function (response) {
                                     if (response.success) {
@@ -39,27 +36,18 @@ angular.module('marketplace-credentials', ['ngStorage'])
                                     }
                                     $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized;
                                     $rootScope.authRequest = true;
-                                    $scope.isAuthLoadingComplete = true;
-                                })
-                                .error(function (data) {
-                                    $scope.isAuthLoadingComplete = true;
                                 });
                         } else {
                             $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized;
-                            $rootScope.isAuthLoadingComplete = true;
-                            $scope.sentToNextState = true;
                             $scope.nextState();
                         }
                     }
-                    $scope.upgradeProcessed = true;
                 })
                 .error(function (data) {
                     $scope.upgradeProcessError = true;
                 });
 
             $scope.errors = false;
-            if (!$scope.upgradeProcessError && $scope.upgradeProcessed) {
-            }
 
             $scope.saveAuthJson = function () {
                 if ($scope.auth.$valid) {
@@ -70,11 +58,9 @@ angular.module('marketplace-credentials', ['ngStorage'])
                                 $scope.logout = false;
                                 $localStorage.isMarketplaceAuthorized = true;
                                 $scope.errors = false;
-                                $scope.isAuthLoadingComplete = true;
                                 $scope.nextState();
                             } else {
                                 $localStorage.isMarketplaceAuthorized = false;
-                                $scope.isAuthLoadingComplete = true;
                                 $scope.errors = true;
                             }
                             $rootScope.isMarketplaceAuthorized = $localStorage.isMarketplaceAuthorized;
@@ -89,17 +75,6 @@ angular.module('marketplace-credentials', ['ngStorage'])
                 } else {
                     $scope.validate();
                 }
-            };
-            $scope.reset = function () {
-                $http.post('index.php/marketplace/remove-credentials', [])
-                    .success(function (response) {
-                        if (response.success) {
-                            $scope.logout = true;
-                        }
-                        $localStorage.isMarketplaceAuthorized = $rootScope.isMarketplaceAuthorized = false;
-                    })
-                    .error(function (data) {
-                    });
             };
 
             $scope.validate = function() {
