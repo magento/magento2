@@ -45,8 +45,19 @@ define([
          * @returns {Search} Chainable.
          */
         initialize: function () {
+            var urlParams = window.location.href.slice(window.location.href.search('[\&\?](search=)')).split('&'),
+                searchTerm = [];
+
             this._super()
                 .initChips();
+
+            if (urlParams[0]) {
+                searchTerm = urlParams[0].split('=');
+
+                if (searchTerm[1]) {
+                    this.apply(decodeURIComponent(searchTerm[1]));
+                }
+            }
 
             return this;
         },

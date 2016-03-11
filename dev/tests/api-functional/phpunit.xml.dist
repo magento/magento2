@@ -35,11 +35,11 @@
         <!-- WebSerivice Type. Possible values: soap, rest -->
         <const name="TESTS_WEB_API_ADAPTER" value="rest"/>
         <!-- Webserver URL -->
-        <const name="TESTS_BASE_URL" value="http://local.puphpet/develop/magento2ce"/>
+        <const name="TESTS_BASE_URL" value="http://magento.url"/>
         <!-- Webserver API user -->
         <const name="TESTS_WEBSERVICE_USER" value="admin"/>
         <!-- Webserver API key -->
-        <const name="TESTS_WEBSERVICE_APIKEY" value="vgWeAsD!15"/>
+        <const name="TESTS_WEBSERVICE_APIKEY" value="123123q"/>
         <!-- Define if debugger should be started using XDEBUG_SESSION cookie -->
         <const name="TESTS_XDEBUG_ENABLED" value="false"/>
         <!-- Define XDEBUG_SESSION cookie value-->

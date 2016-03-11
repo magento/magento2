@@ -50,7 +50,7 @@
         &:not(.admin__field-label) {
             :after {
                 content: '*';
-                color: red;
+                color: #f00;
                 margin-left: 3px;
             }
         }
@@ -1377,6 +1377,22 @@
             line-height: 1.33;
             vertical-align: middle;
             white-space: normal;
+
+            &[data-config-scope] {
+                position: relative;
+
+                &:before {
+                    bottom: -1.3rem;
+                    color: #808080;
+                    content: attr(data-config-scope);
+                    font-size: 1.1rem;
+                    font-weight: @font-weight__regular;
+                    min-width: 15rem;
+                    position: absolute;
+                    right: 0;
+                    text-transform: lowercase;
+                }
+            }
         }
     }
 
@@ -1401,6 +1417,14 @@
                 top: 1.2rem;
                 z-index: 1;
             }
+
+            &[data-config-scope] {
+                position: relative;
+
+                &:after {
+                    top: .2rem;
+                }
+            }
         }
     }
 
@@ -1414,6 +1438,12 @@
                     left: auto;
                     margin-left: 10px;
                     top: 1.2rem;
+                }
+
+                &[data-config-scope] {
+                    &:after {
+                        top: .2rem;
+                    }
                 }
             }
         }
@@ -2550,7 +2580,7 @@
 
     //
     //  Customer
-    //  ---------------------------------------
+    //  ---------------------------------------------
 
     #customer_info_tabs_account_content #_accountsendemail {
         margin-top: 8px;
@@ -2577,37 +2607,55 @@
     }
 
     .customer-information address {
-        padding-top: 4px;
-        line-height: 2.2;
         float: right;
+        line-height: 2.2;
+        padding-top: 4px;
     }
 
     .address-list {
+        float: left;
         list-style: none;
-        width: 278px;
         margin: 0 0 10px;
         padding: 0;
-        float: left;
+        width: 278px;
     }
 
     //
-    //      Configuration -> Design
-    //  --------------------------------------
+    //  Configuration -> Design
+    //  ---------------------------------------------
 
-    #row_design_theme_ua_regexp .design_theme_ua_regexp {
-        float: left;
-        width: 100%;
+    #row_design_theme_ua_regexp {
+        .design_theme_ua_regexp {
+            float: left;
+            width: 100%;
+        }
+
+        .tooltip {
+            margin-top: 8px;
+        }
+
+        .note {
+            clear: both;
+        }
     }
-    #row_design_theme_ua_regexp .tooltip {
-        margin-top: 8px;
-    }
-    #row_design_theme_ua_regexp .note {
-        clear: both;
+
+    .form-list {
+        .small-image-preview {
+            display: inline-block;
+            margin: 0 @indent__xs 0 0;
+            vertical-align: middle;
+        }
+
+        .delete-image {
+            display: block;
+            margin: @indent__xs 0;
+            white-space: nowrap;
+        }
     }
 
     //
-    //      Configuration -> Advanced -> System -> Notifications section
-    //  --------------------------------------
+    //  Configuration -> Advanced -> System -> Notifications section
+    //  ---------------------------------------------
 
     #row_system_adminnotification_last_update {
         .value {
@@ -2617,7 +2665,7 @@
 
     //
     //  CMS -> Banners
-    //  --------------------------------------
+    //  ---------------------------------------------
 
     // Banner Properties
     #banner_properties_customer_segment_ids {
@@ -2626,7 +2674,7 @@
 
     //
     //  CMS -> Manage Hierarchy
-    //  --------------------------------------
+    //  ---------------------------------------------
 
     .cms-hierarchy .cms-scope {
         float: right;
@@ -2678,7 +2726,7 @@
 
     //
     //  CMS -> Widgets
-    //  --------------------------------------
+    //  ---------------------------------------------
 
     #widget_instace_tabs_properties_section_content .widget-option-label {
         margin-top: 6px;
@@ -5126,7 +5174,7 @@
 @media print {
     * {
         background: transparent !important;
-        color: black !important;
+        color: #000 !important;
         box-shadow: none !important;
         text-shadow: none !important;
         filter: none !important;

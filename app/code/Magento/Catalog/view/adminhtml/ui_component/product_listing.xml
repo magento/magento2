@@ -230,7 +230,7 @@
                 </item>
             </argument>
         </column>
-        <column name="websites">
+        <column name="websites" class="Magento\Catalog\Ui\Component\Listing\Columns\Websites">
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\Store\Model\ResourceModel\Website\Collection</item>
                 <item name="config" xsi:type="array">
