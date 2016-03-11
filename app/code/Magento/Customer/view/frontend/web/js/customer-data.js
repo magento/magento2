@@ -93,10 +93,17 @@ define([
      * @return {*}
      */
     ko.extenders.disposableCustomerData = function (target, sectionName) {
-        storage.remove(sectionName);
+        var sectionDataIds, newSectionDataIds = {};
         target.subscribe(function () {
             setTimeout(function () {
                 storage.remove(sectionName);
+                sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
+                _.each(sectionDataIds, function (data, name) {
+                    if (name != sectionName) {
+                        newSectionDataIds[name] = data;
+                    }
+                });
+                $.cookieStorage.set('section_data_ids', newSectionDataIds);
             }, 3000);
         });
 
@@ -202,7 +209,7 @@ define([
             if (!_.isEmpty(privateContent)) {
                 countryData = this.get('directory-data');
                 if (_.isEmpty(countryData())) {
-                    countryData(customerData.reload(['directory-data'], false));
+                    customerData.reload(['directory-data'], false);
                 }
             }
         },
@@ -299,6 +306,7 @@ define([
                 sectionsNamesForInvalidation;
 
             sectionsNamesForInvalidation = _.contains(sectionNames, '*') ? buffer.keys() : sectionNames;
+            sectionsNamesForInvalidation = sectionConfig.filterClientSideSections(sectionsNamesForInvalidation);
             buffer.remove(sectionsNamesForInvalidation);
             sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
 
