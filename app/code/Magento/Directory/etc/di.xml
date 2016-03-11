@@ -13,6 +13,10 @@
                     <item name="label" xsi:type="string">Webservicex</item>
                     <item name="class" xsi:type="string">Magento\Directory\Model\Currency\Import\Webservicex</item>
                 </item>
+                <item name="fixerio" xsi:type="array">
+                    <item name="label" xsi:type="string">Fixer.io</item>
+                    <item name="class" xsi:type="string">Magento\Directory\Model\Currency\Import\FixerIo</item>
+                </item>
             </argument>
         </arguments>
     </type>

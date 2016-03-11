@@ -79,6 +79,16 @@ class Related extends AbstractModifier
     protected $attributeSetRepository;
 
     /**
+     * @var string
+     */
+    protected $scopeName;
+
+    /**
+     * @var string
+     */
+    protected $scopePrefix;
+
+    /**
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
      * @param ProductLinkRepositoryInterface $productLinkRepository
@@ -86,6 +96,8 @@ class Related extends AbstractModifier
      * @param ImageHelper $imageHelper
      * @param Status $status
      * @param AttributeSetRepositoryInterface $attributeSetRepository
+     * @param string $scopeName
+     * @param string $scopePrefix
      */
     public function __construct(
         LocatorInterface $locator,
@@ -94,7 +106,9 @@ class Related extends AbstractModifier
         ProductRepositoryInterface $productRepository,
         ImageHelper $imageHelper,
         Status $status,
-        AttributeSetRepositoryInterface $attributeSetRepository
+        AttributeSetRepositoryInterface $attributeSetRepository,
+        $scopeName = '',
+        $scopePrefix = ''
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
@@ -103,6 +117,8 @@ class Related extends AbstractModifier
         $this->imageHelper = $imageHelper;
         $this->status = $status;
         $this->attributeSetRepository = $attributeSetRepository;
+        $this->scopeName = $scopeName;
+        $this->scopePrefix = $scopePrefix;
     }
 
     /**
@@ -115,9 +131,9 @@ class Related extends AbstractModifier
             [
                 static::GROUP_RELATED => [
                     'children' => [
-                        static::DATA_SCOPE_RELATED => $this->getRelatedFieldset(),
-                        static::DATA_SCOPE_UPSELL => $this->getUpSellFieldset(),
-                        static::DATA_SCOPE_CROSSSELL => $this->getCrossSellFieldset(),
+                        $this->scopePrefix . static::DATA_SCOPE_RELATED => $this->getRelatedFieldset(),
+                        $this->scopePrefix . static::DATA_SCOPE_UPSELL => $this->getUpSellFieldset(),
+                        $this->scopePrefix . static::DATA_SCOPE_CROSSSELL => $this->getCrossSellFieldset(),
                     ],
                     'arguments' => [
                         'data' => [
@@ -220,13 +236,13 @@ class Related extends AbstractModifier
                 'button_set' => $this->getButtonSet(
                     $content,
                     __('Add Related Products'),
-                    static::DATA_SCOPE_RELATED
+                    $this->scopePrefix . static::DATA_SCOPE_RELATED
                 ),
                 'modal' => $this->getGenericModal(
                     __('Add Related Products'),
-                    static::DATA_SCOPE_RELATED
+                    $this->scopePrefix . static::DATA_SCOPE_RELATED
                 ),
-                static::DATA_SCOPE_RELATED => $this->getGrid(static::DATA_SCOPE_RELATED),
+                static::DATA_SCOPE_RELATED => $this->getGrid($this->scopePrefix . static::DATA_SCOPE_RELATED),
             ],
             'arguments' => [
                 'data' => [
@@ -260,13 +276,13 @@ class Related extends AbstractModifier
                 'button_set' => $this->getButtonSet(
                     $content,
                     __('Add Up-Sell Products'),
-                    static::DATA_SCOPE_UPSELL
+                    $this->scopePrefix . static::DATA_SCOPE_UPSELL
                 ),
                 'modal' => $this->getGenericModal(
                     __('Add Up-Sell Products'),
-                    static::DATA_SCOPE_UPSELL
+                    $this->scopePrefix . static::DATA_SCOPE_UPSELL
                 ),
-                static::DATA_SCOPE_UPSELL => $this->getGrid(static::DATA_SCOPE_UPSELL),
+                static::DATA_SCOPE_UPSELL => $this->getGrid($this->scopePrefix . static::DATA_SCOPE_UPSELL),
             ],
             'arguments' => [
                 'data' => [
@@ -300,13 +316,13 @@ class Related extends AbstractModifier
                 'button_set' => $this->getButtonSet(
                     $content,
                     __('Add Cross-Sell Products'),
-                    static::DATA_SCOPE_CROSSSELL
+                    $this->scopePrefix . static::DATA_SCOPE_CROSSSELL
                 ),
                 'modal' => $this->getGenericModal(
                     __('Add Cross-Sell Products'),
-                    static::DATA_SCOPE_CROSSSELL
+                    $this->scopePrefix . static::DATA_SCOPE_CROSSSELL
                 ),
-                static::DATA_SCOPE_CROSSSELL => $this->getGrid(static::DATA_SCOPE_CROSSSELL),
+                static::DATA_SCOPE_CROSSSELL => $this->getGrid($this->scopePrefix . static::DATA_SCOPE_CROSSSELL),
             ],
             'arguments' => [
                 'data' => [
@@ -333,7 +349,7 @@ class Related extends AbstractModifier
      */
     protected function getButtonSet(Phrase $content, Phrase $buttonTitle, $scope)
     {
-        $modalTarget = 'product_form.product_form.' . static::GROUP_RELATED . '.' . $scope . '.modal';
+        $modalTarget = $this->scopeName . '.' . static::GROUP_RELATED . '.' . $scope . '.modal';
 
         return [
             'arguments' => [
@@ -365,7 +381,7 @@ class Related extends AbstractModifier
                                         'actionName' => 'render',
                                     ]
                                 ],
-                                'title' => __($buttonTitle),
+                                'title' => $buttonTitle,
                                 'provider' => null,
                             ],
                         ],
@@ -591,7 +607,7 @@ class Related extends AbstractModifier
                         'dataType' => Text::NAME,
                         'dataScope' => $dataScope,
                         'fit' => $fit,
-                        'label' => __($label),
+                        'label' => $label,
                         'sortOrder' => $sortOrder,
                     ],
                 ],
