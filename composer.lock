@@ -110,7 +110,7 @@
             "require": {
                 "colinmollenhour/credis": "1.6",
                 "magento/zendframework1": "1.12.16",
-                "php": "~5.5.0|~5.6.0|~7.0.0"
+                "php": "~5.5.22|~5.6.0|~7.0.0"
             },
             "type": "library",
             "autoload": {
@@ -281,7 +281,7 @@
             },
             "require": {
                 "composer/composer": "1.0.0-alpha10",
-                "php": "~5.5.0|~5.6.0|~7.0.0",
+                "php": "~5.5.22|~5.6.0|~7.0.0",
                 "symfony/console": "~2.3 <2.7"
             },
             "require-dev": {
@@ -2868,16 +2868,16 @@
         },
         {
             "name": "phpmd/phpmd",
-            "version": "2.4.1",
+            "version": "2.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpmd/phpmd.git",
-                "reference": "1ce4c586f4071d27a82421e56ae0e9864c89094d"
+                "reference": "fccbdb6b222f6d7a6d35af1c396ba5435cec76a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/1ce4c586f4071d27a82421e56ae0e9864c89094d",
-                "reference": "1ce4c586f4071d27a82421e56ae0e9864c89094d",
+                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/fccbdb6b222f6d7a6d35af1c396ba5435cec76a9",
+                "reference": "fccbdb6b222f6d7a6d35af1c396ba5435cec76a9",
                 "shasum": ""
             },
             "require": {
@@ -2929,7 +2929,7 @@
                 "phpmd",
                 "pmd"
             ],
-            "time": "2016-03-08 21:43:36"
+            "time": "2016-03-10 17:17:44"
         },
         {
             "name": "phpunit/php-code-coverage",
