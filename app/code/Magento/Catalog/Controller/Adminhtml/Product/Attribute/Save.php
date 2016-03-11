@@ -291,12 +291,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             $layout->initMessages();
 
             $response['messages'] = [$layout->getMessagesBlock()->getGroupedHtml()];
-            return $this->resultFactory->create(ResultFactory::TYPE_JSON)
-                    ->setData($response);
-        } else {
-            return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)
-                ->setPath($path, $params);
+            $response['params'] = $params;
+            return $this->resultFactory->create(ResultFactory::TYPE_JSON)->setData($response);
         }
+        return $this->resultFactory->create(ResultFactory::TYPE_REDIRECT)->setPath($path, $params);
+
     }
 
     /**
