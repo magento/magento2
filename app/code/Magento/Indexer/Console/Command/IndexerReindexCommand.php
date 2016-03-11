@@ -34,7 +34,7 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $indexers = $this->getIndexers($input);
-        $config = $this->getObjectManager()->create(ConfigInterface::class);
+        $config = $this->getConfig();
         $sharedIndexesComplete = [];
         foreach ($indexers as $indexer) {
             try {
@@ -61,5 +61,16 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
                 $output->writeln($e->getMessage());
             }
         }
+    }
+
+    /**
+     * Get config
+     *
+     * @return \Magento\Framework\Indexer\ConfigInterface
+     * @deprecated
+     */
+    private function getConfig()
+    {
+        return $this->getObjectManager()->get(ConfigInterface::class);
     }
 }
