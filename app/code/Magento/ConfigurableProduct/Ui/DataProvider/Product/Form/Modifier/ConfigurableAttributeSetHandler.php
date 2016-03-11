@@ -20,7 +20,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
     /**
      * @var UrlInterface
      */
-    protected $urlBuilder;
+    private $urlBuilder;
 
     /**
      * @param UrlInterface $urlBuilder

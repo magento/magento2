@@ -38,7 +38,7 @@ define([
          */
         onCheckedChanged: function () {
             this.changeVisibility();
-            this._super();
+            this._super(newChecked);
         }
     });
 });
