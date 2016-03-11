@@ -185,12 +185,7 @@ define([
             this.value(tmpArray);
         },
         handleAttributes: function () {
-            var tmpArray = [];
-            var codesArray = [];
-            var tmpOptions = {};
-            var option = {};
-            var position = 0;
-            var values = {};
+            var tmpArray = [], codesArray = [], tmpOptions = {}, option = {}, position = 0, values = {};
 
             _.each(this.attributes(), function (attribute) {
                 tmpArray.push(attribute.id);
@@ -237,6 +232,7 @@ define([
             _.each(variations, function (variation) {
                 var attributes = _.reduce(variation.options, function (memo, option) {
                     var attribute = {};
+
                     attribute[option['attribute_code']] = option.value;
 
                     return _.extend(memo, attribute);
@@ -272,6 +268,7 @@ define([
         },
         disableConfigurableAttributes: function (attributes) {
             var element;
+
             _.each(this.disabledAttributes, function (attribute) {
                 registry.get('index = ' + attribute).disabled(false);
             });
@@ -293,6 +290,11 @@ define([
         getCurrencySymbol: function () {
             return this.currencySymbol;
         },
+
+        /**
+         * Chose action for the form save button
+         * @param params
+         */
         saveFormHandler: function(params) {
             if (this.checkForNewAttributes()) {
                 this.attributeSetHandlerModal().openModal();
@@ -300,11 +302,17 @@ define([
                 this.formElement().save(params);
             }
         },
+
+        /**
+         * Check for newly added attributes
+         * @returns {boolean}
+         */
         checkForNewAttributes: function () {
-            var newAttributes = false;
-            var element;
+            var element, newAttributes = false;
+
             _.each(this.source.get('data.attribute_codes'), function (attribute) {
                 element = registry.get('index = ' + attribute);
+
                 if (_.isUndefined(element)) {
                     newAttributes = true;
                 }
