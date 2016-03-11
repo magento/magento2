@@ -181,12 +181,10 @@ define([
                     }).appendTo($('body'));
 
                     this.iframe = $('<iframe />', {
-                        id: 'upload_iframe_' + elementName,
                         name: 'upload_iframe_' + elementName
                     }).appendTo(this.wrapper);
 
                     this.form = $('<form />', {
-                        id: 'swatch_form_image_upload_' + elementName,
                         name: 'swatch_form_image_upload_' + elementName,
                         target: 'upload_iframe_' + elementName,
                         method: 'post',
@@ -220,7 +218,7 @@ define([
              * Register event for swatch input[type=file] change
              */
             swatchComponents.inputFile.change(function () {
-                var localContainer = $('#' + $(this).attr('data-called-by')).parents().eq(2).children('.swatch_window'),
+                var localContainer = $('.' + $(this).attr('data-called-by')).parents().eq(2).children('.swatch_window'),
 
                     /**
                      * @this {iframe}
@@ -247,7 +245,7 @@ define([
              * Register event for choose "upload image" option
              */
             $(container).on('click', '.btn_choose_file_upload', function () {
-                swatchComponents.inputFile.attr('data-called-by', $(this).attr('id'));
+                swatchComponents.inputFile.attr('data-called-by', $(this).data('class'));
                 swatchComponents.inputFile.click();
             });
 
@@ -325,9 +323,7 @@ define([
          * Configure data scope.
          */
         configureDataScope: function () {
-            var recordId,
-                prefixName,
-                suffixName;
+            var recordId, prefixName;
 
             // Get recordId
             recordId = this.parentName.split('.').last();
@@ -350,6 +346,13 @@ define([
         dataScopeToHtmlArray: function (dataScopeString) {
             var dataScopeArray, dataScope, reduceFunction;
 
+            /**
+             * Add new level of nesting.
+             *
+             * @param {String} prev
+             * @param {String} curr
+             * @returns {String}
+             */
             reduceFunction = function (prev, curr) {
                 return prev + '[' + curr + ']';
             };
