@@ -19,8 +19,6 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     protected $editLink = '[data-column="increment_id"]';
 
     /**
-
-    /**
      * Locator for invoice ids
      *
      * @var string
@@ -63,7 +61,6 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
 
         return $result;
     }
-
 
     /**
      * Click the 'View' link for invoice in Invoices grid.
