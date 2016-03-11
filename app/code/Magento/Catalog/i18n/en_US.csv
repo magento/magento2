@@ -75,7 +75,7 @@ Integer,Integer
 Properties,Properties
 "Manage Labels","Manage Labels"
 Visible,Visible
-"Web Site","Web Site"
+"Website","Website"
 Searchable,Searchable
 Comparable,Comparable
 "Delete Selected Group","Delete Selected Group"
@@ -412,7 +412,7 @@ Cancel,Cancel
 Done,Done
 "Add Selected","Add Selected"
 "Customizable Options","Customizable Options"
-"Custom options let shoppers choose the product variations they want.","Custom options let shoppers choose the product variations they want."
+"Custom options let customers choose the product variations they want.","Custom options let customers choose the product variations they want."
 "Add Option","Add Option"
 "New Option","New Option"
 "Select Product","Select Product"
