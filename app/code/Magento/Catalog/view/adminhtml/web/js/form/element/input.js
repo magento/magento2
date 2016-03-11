@@ -3,8 +3,9 @@
  * See COPYING.txt for license details.
  */
 define([
+    'underscore',
     'Magento_Ui/js/form/element/abstract'
-], function (Acstract) {
+], function (_, Acstract) {
     'use strict';
 
     return Acstract.extend({
@@ -42,12 +43,14 @@ define([
             this.elementName = this.prefixElementName + recordId;
 
             suffixName = '';
+
             if (!_.isEmpty(this.suffixName) || _.isNumber(this.suffixName)) {
                 suffixName = '[' + this.suffixName + ']';
             }
             this.inputName = prefixName + '[' + this.elementName + ']' + suffixName;
 
             suffixName = '';
+
             if (!_.isEmpty(this.suffixName) || _.isNumber(this.suffixName)) {
                 suffixName = '.' + this.suffixName;
             }

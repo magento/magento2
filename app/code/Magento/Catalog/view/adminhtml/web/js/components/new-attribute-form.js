@@ -7,7 +7,8 @@ define([
     'jquery',
     'Magento_Ui/js/form/form',
     'Magento_Ui/js/modal/prompt',
-], function ($, Form, prompt) {
+    'Magento_Ui/js/modal/alert'
+], function ($, Form, prompt, alert) {
     'use strict';
 
     return Form.extend({
@@ -18,15 +19,25 @@ define([
             },
             modules: {
                 productForm: 'product_form.product_form'
-            },
-        },
-
-        processResponseData: function (data) {
-            if (data.params.new_attribute_set_id != undefined) {
-                this.productForm().params = {set: data.params.new_attribute_set_id};
             }
         },
 
+        /**
+         * Process response data
+         *
+         * @param {Object} data
+         */
+        processResponseData: function (data) {
+            if (data.params['new_attribute_set_id'] !== undefined) {
+                this.productForm().params = {
+                    set: data.params['new_attribute_set_id']
+                };
+            }
+        },
+
+        /**
+         * Process Save In New Attribute Set prompt
+         */
         saveAttributeInNewSet: function () {
 
             var self = this;
@@ -43,7 +54,8 @@ define([
                         var rules = ['required-entry', 'validate-no-html-tags'],
                             editForm = self,
                             newAttributeSetName = val,
-                            i;
+                            i,
+                            params = [];
 
                         if (!newAttributeSetName) {
                             return;
@@ -59,10 +71,8 @@ define([
                             }
                         }
 
-                        editForm.setAdditionalData({
-                            new_attribute_set_name: newAttributeSetName
-                        });
-
+                        params['new_attribute_set_name'] = newAttributeSetName;
+                        editForm.setAdditionalData(params);
                         editForm.save();
                     }
                 }

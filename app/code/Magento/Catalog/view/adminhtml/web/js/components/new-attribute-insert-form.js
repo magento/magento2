@@ -26,7 +26,7 @@ define([
         processResponseStatus: function () {
             if (this.responseStatus()) {
 
-                if (this.productForm().params == undefined) {
+                if (this.productForm().params === undefined) {
                     this.productForm().params = {
                         set: this.attributeSetId
                     };
