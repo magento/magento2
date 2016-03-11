@@ -241,8 +241,13 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         if (is_array($this->getData('store_ids'))) {
             $this->setData('store_ids', implode(',', $this->getData('store_ids')));
         }
-        if (is_array($this->getData('widget_parameters'))) {
-            $this->setData('widget_parameters', serialize($this->getData('widget_parameters')));
+
+        $parameters = $this->getData('widget_parameters');
+        if (is_array($parameters)) {
+            if ((bool)$parameters['show_pager'] && !array_key_exists('page_var_name', $parameters)) {
+                $parameters['page_var_name'] = 'p_' . substr(md5(microtime()), 0, 5);
+            }
+            $this->setData('widget_parameters', serialize($parameters));
         }
         $this->setData('page_groups', $tmpPageGroups);
         $this->setData('page_group_ids', $pageGroupIds);
