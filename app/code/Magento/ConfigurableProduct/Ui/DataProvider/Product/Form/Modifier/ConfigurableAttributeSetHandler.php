@@ -44,6 +44,8 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
+        $this->getExistingAttributeSet($meta);
+
         $meta = array_merge_recursive(
             $meta,
             [
@@ -217,5 +219,42 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                 ],
             ],
         ];
+    }
+
+    /**
+     * Returns configuration for existing attribute set options
+     *
+     * @param array $meta
+     * @return null|array
+     */
+    protected function getExistingAttributeSet($meta)
+    {
+        $ret = null;
+        if ($name = $this->getGeneralPanelName($meta)) {
+            if (!empty($meta[$name]['children']['attribute_set_id']['arguments']['data']['config']['options'])) {
+                $options = $meta[$name]['children']['attribute_set_id']['arguments']['data']['config']['options'];
+                $ret = [
+                    'component' => 'Magento_Ui/js/form/element/ui-select',
+                    'disableLabel' => false,
+                    'filterOptions' => false,
+                    'elementTmpl' => 'ui/grid/filters/elements/ui-select',
+                    'formElement' => 'select',
+                    'componentType' => Form\Field::NAME,
+                    'options' => $options,
+                    'label' => __('Choose existing Attribute Set'),
+                    'dataScope' => 'configurable_existing_attribute_set_id',
+                    'sortOrder' => 50,
+                    'multiple' => false,
+                    'imports' => [
+                        'value' => 'ns = ${ $.ns }, index = attribute_set_id:value',
+                        'visible' => 'ns = ${ $.ns }, index = affected-attribute-set-existing:checked',
+                        'disabled' =>
+                            '!ns = ${ $.ns }, index = affected-attribute-set-existing:checked',
+                    ]
+                ];
+            }
+        }
+
+        return $ret;
     }
 }
