@@ -245,7 +245,7 @@ class Instance extends \Magento\Framework\Model\AbstractModel
         $parameters = $this->getData('widget_parameters');
         if (is_array($parameters)) {
             if ((bool)$parameters['show_pager'] && !array_key_exists('page_var_name', $parameters)) {
-                $parameters['page_var_name'] = 'p_' . substr(md5(microtime()), 0, 5);
+                $parameters['page_var_name'] = 'p' . $this->mathRandom->getRandomString(5, \Magento\Framework\Math\Random::CHARS_LOWERS);
             }
             $this->setData('widget_parameters', serialize($parameters));
         }

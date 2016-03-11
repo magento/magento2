@@ -51,12 +51,18 @@ class Widget
     protected $conditionsHelper;
 
     /**
+     * @var \Magento\Framework\Math\Random
+     */
+    protected $mathRandom;
+
+    /**
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Widget\Model\Config\Data $dataStorage
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\Asset\Source $assetSource
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Widget\Helper\Conditions $conditionsHelper
+     * @param \Magento\Framework\Math\Random
      */
     public function __construct(
         \Magento\Framework\Escaper $escaper,
@@ -64,7 +70,8 @@ class Widget
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\Asset\Source $assetSource,
         \Magento\Framework\View\FileSystem $viewFileSystem,
-        \Magento\Widget\Helper\Conditions $conditionsHelper
+        \Magento\Widget\Helper\Conditions $conditionsHelper,
+        \Magento\Framework\Math\Random $mathRandom
     ) {
         $this->escaper = $escaper;
         $this->dataStorage = $dataStorage;
@@ -72,6 +79,7 @@ class Widget
         $this->assetSource = $assetSource;
         $this->viewFileSystem = $viewFileSystem;
         $this->conditionsHelper = $conditionsHelper;
+        $this->mathRandom = $mathRandom;
     }
 
     /**
@@ -299,7 +307,7 @@ class Widget
         }
 
         if (array_key_exists('show_pager', $params) && (bool)$params['show_pager']) {
-            $directive .= sprintf(' %s="%s"', 'page_var_name', 'p_' . substr(md5(microtime()), 0, 5));
+            $directive .= sprintf(' %s="%s"', 'page_var_name', 'p' . $this->mathRandom->getRandomString(5, \Magento\Framework\Math\Random::CHARS_LOWERS));
         }
 
         $directive .= '}}';
