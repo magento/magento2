@@ -76,8 +76,9 @@ class SwaggerUiForRestApiTest extends Injectable
         $serviceName,
         array $endpoints
     ) {
-        $this->markTestIncomplete("MAGETWO-49889: Failed in Bamboo>>PS-FT-Plan. "
-            . "Needs to be triaged and fixed as part of MLS-13.");
+        $this->markTestIncomplete(
+            "MAGETWO-49889: Failed in Bamboo>>PS-FT-Plan. Needs to be triaged and fixed as part of MLS-13."
+        );
 
         $this->serviceName = $serviceName;
         $this->endpoints = $endpoints;
