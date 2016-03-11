@@ -6,7 +6,7 @@
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Catalog\Model\AttributeConstantsInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 
 /**
  * Data provider for price in the Configurable products
@@ -33,7 +33,7 @@ class ConfigurablePrice extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        if ($groupCode = $this->getGroupCodeByField($meta, AttributeConstantsInterface::CODE_PRICE)
+        if ($groupCode = $this->getGroupCodeByField($meta, ProductAttributeInterface::CODE_PRICE)
             ?: $this->getGroupCodeByField($meta, self::CODE_GROUP_PRICE)
         ) {
             if (!empty($meta[$groupCode]['children'][self::CODE_GROUP_PRICE])) {
@@ -41,7 +41,7 @@ class ConfigurablePrice extends AbstractModifier
                     $meta[$groupCode]['children'][self::CODE_GROUP_PRICE],
                     [
                         'children' => [
-                            AttributeConstantsInterface::CODE_PRICE => [
+                            ProductAttributeInterface::CODE_PRICE => [
                                 'arguments' => [
                                     'data' => [
                                         'config' => [

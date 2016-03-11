@@ -1230,6 +1230,9 @@ class Product extends \Magento\ImportExport\Model\Export\Entity\AbstractEntity
                 $row['price'] = $option['price'];
                 $row['price_type'] = ($option['price_type'] == 'percent') ? $option['price_type'] : 'fixed';
                 $row['sku'] = $option['sku'];
+                if ($option['max_characters']) {
+                    $row['max_characters'] = $option['max_characters'];
+                }
 
                 $values = $option->getValues();
 
