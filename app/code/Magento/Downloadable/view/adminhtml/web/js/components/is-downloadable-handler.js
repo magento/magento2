@@ -35,8 +35,10 @@ define([
 
         /**
          * Handle checked state changes for checkbox / radio button.
+         *
+         * @param {Boolean} newChecked
          */
-        onCheckedChanged: function () {
+        onCheckedChanged: function (newChecked) {
             this.changeVisibility();
             this._super(newChecked);
         }

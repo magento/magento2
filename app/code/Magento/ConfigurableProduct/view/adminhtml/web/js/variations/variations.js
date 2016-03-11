@@ -40,7 +40,6 @@ define([
                 wizardButtonElement: '${ $.wizardModalButtonName }',
                 formElement: '${ $.formName }',
                 attributeSetHandlerModal: '${ $.attributeSetHandler }'
-
             },
             links: {
                 value: '${ $.provider }:${ $.dataScopeVariations }',
