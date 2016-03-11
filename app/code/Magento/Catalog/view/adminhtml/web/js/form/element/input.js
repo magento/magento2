@@ -3,9 +3,8 @@
  * See COPYING.txt for license details.
  */
 define([
-    'Magento_Ui/js/form/element/abstract',
-    'uiRegistry'
-], function (Acstract, rg) {
+    'Magento_Ui/js/form/element/abstract'
+], function (Acstract) {
     'use strict';
 
     return Acstract.extend({
@@ -66,6 +65,13 @@ define([
         dataScopeToHtmlArray: function (dataScopeString) {
             var dataScopeArray, dataScope, reduceFunction;
 
+            /**
+             * Add new level of nesting.
+             *
+             * @param {String} prev
+             * @param {String} curr
+             * @returns {String}
+             */
             reduceFunction = function (prev, curr) {
                 return prev + '[' + curr + ']';
             };
