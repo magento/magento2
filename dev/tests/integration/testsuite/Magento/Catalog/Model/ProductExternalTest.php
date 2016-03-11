@@ -112,7 +112,7 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
         $this->_model->setId(
             $this->productRepository->get('simple')->getId()
         );
-        $this->assertEquals([2, 3, 4], $this->_model->getCategoryIds());
+        $this->assertEquals([2, 3, 4, 13], $this->_model->getCategoryIds());
     }
 
     public function testGetCategoryCollection()
@@ -132,7 +132,7 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
         foreach ($fixtureCollection as $category) {
             $ids[] = $category->getId();
         }
-        $this->assertEquals([2, 3, 4], $ids);
+        $this->assertEquals([2, 3, 4, 13], $ids);
     }
 
     public function testGetWebsiteIds()
@@ -342,7 +342,7 @@ class ProductExternalTest extends \PHPUnit_Framework_TestCase
         $actualCategoryIds = $this->_model->getAvailableInCategories();
         sort($actualCategoryIds);
         // not depend on the order of items
-        $this->assertEquals([10, 11, 12], $actualCategoryIds);
+        $this->assertEquals([10, 11, 12, 13], $actualCategoryIds);
         //Check not visible product
         $this->_model->load(
             $this->productRepository->get('simple-3')->getId()
