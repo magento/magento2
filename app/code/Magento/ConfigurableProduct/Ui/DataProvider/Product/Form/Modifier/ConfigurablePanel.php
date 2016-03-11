@@ -452,7 +452,6 @@ class ConfigurablePanel extends AbstractModifier
                                     'elementTmpl' => 'ui/dynamic-rows/cells/text',
                                     'dataType' => Form\Element\DataType\Text::NAME,
                                     'label' => __('Attributes'),
-                                    //'dataScope' => 'attributes',
                                 ],
                             ],
                         ],
