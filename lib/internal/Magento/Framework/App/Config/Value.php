@@ -15,6 +15,7 @@ namespace Magento\Framework\App\Config;
  * @method \Magento\Framework\App\Config\ValueInterface setScopeId(int $value)
  * @method string getPath()
  * @method \Magento\Framework\App\Config\ValueInterface setPath(string $value)
+ * @method string getValue()
  * @method \Magento\Framework\App\Config\ValueInterface setValue(string $value)
  *
  * @SuppressWarnings(PHPMD.NumberOfChildren)
@@ -68,16 +69,6 @@ class Value extends \Magento\Framework\Model\AbstractModel implements \Magento\F
         $this->_config = $config;
         $this->cacheTypeList = $cacheTypeList;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-    }
-
-    /**
-     * Add availability call after load as public
-     *
-     * @return void
-     */
-    public function afterLoad()
-    {
-        $this->_afterLoad();
     }
 
     /**

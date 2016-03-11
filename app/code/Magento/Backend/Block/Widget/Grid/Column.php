@@ -447,7 +447,7 @@ class Column extends \Magento\Backend\Block\Widget
      */
     protected function _getFilterByType()
     {
-        $type = strtolower($this->getType());
+        $type = $this->getFilterType() ? strtolower($this->getFilterType()) : strtolower($this->getType());
         $filterClass = isset($this->_filterTypes[$type]) ? $this->_filterTypes[$type] : $this->_filterTypes['default'];
 
         return $filterClass;

@@ -148,8 +148,12 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     public function testSaveHandlerIsMutable()
     {
         $this->getModel($this->validatorMock);
-        $this->config->setSaveHandler('user');
+        $this->config->setSaveHandler('redis');
         $this->assertEquals('user', $this->config->getSaveHandler());
+        $this->assertEquals('redis', $this->config->getSaveHandlerName());
+        $this->config->setSaveHandler('files');
+        $this->assertEquals('files', $this->config->getSaveHandler());
+        $this->assertEquals('files', $this->config->getSaveHandlerName());
     }
 
     public function testCookieLifetimeIsMutable()

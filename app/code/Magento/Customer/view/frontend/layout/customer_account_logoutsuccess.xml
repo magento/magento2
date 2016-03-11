@@ -9,7 +9,7 @@
     <body>
         <referenceBlock name="page.main.title">
             <action method="setPageTitle">
-                <argument name="title" translate="true" xsi:type="string">You are signed out.</argument>
+                <argument name="title" translate="true" xsi:type="string">You are signed out</argument>
             </action>
         </referenceBlock>
         <referenceContainer name="content">

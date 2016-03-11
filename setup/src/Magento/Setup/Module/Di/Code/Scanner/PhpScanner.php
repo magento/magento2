@@ -49,7 +49,7 @@ class PhpScanner implements ScannerInterface
                         if (class_exists($missingClassName)) {
                             continue;
                         }
-                    } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                    } catch (\RuntimeException $e) {
                     }
                     $sourceClassName = $this->getSourceClassName($missingClassName, $entityType);
                     if (!class_exists($sourceClassName) && !interface_exists($sourceClassName)) {

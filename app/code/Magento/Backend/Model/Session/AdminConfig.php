@@ -84,6 +84,7 @@ class AdminConfig extends Config
         $adminPath = $this->extractAdminPath();
         $this->setCookiePath($adminPath);
         $this->setName($sessionName);
+        $this->setCookieSecure($this->_httpRequest->isSecure());
     }
 
     /**

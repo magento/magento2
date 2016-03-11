@@ -62,6 +62,9 @@
                                                 <item name="component" xsi:type="string">Magento_Checkout/js/view/cart/shipping-estimation</item>
                                                 <item name="provider" xsi:type="string">checkoutProvider</item>
                                                 <item name="sortOrder" xsi:type="string">1</item>
+                                                <item name="deps" xsi:type="array">
+                                                    <item name="0" xsi:type="string">block-summary.block-shipping.address-fieldsets</item>
+                                                </item>
                                                 <item name="children" xsi:type="array">
                                                     <item name="address-fieldsets" xsi:type="array">
                                                         <item name="component" xsi:type="string">uiComponent</item>
@@ -83,7 +86,7 @@
                                                                 <item name="provider" xsi:type="string">checkoutProvider</item>
                                                             </item>
                                                             <item name="region_id" xsi:type="array">
-                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/select</item>
+                                                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/region</item>
                                                                 <item name="sortOrder" xsi:type="string">112</item>
                                                                 <item name="config" xsi:type="array">
                                                                     <item name="template" xsi:type="string">ui/form/field</item>
@@ -180,8 +183,9 @@
                     </block>
                 </container>
                 <container name="checkout.cart.noitems" as="no-items">
-                    <block class="Magento\Checkout\Block\Cart" name="checkout.cart.empty" before="-" template="cart/noItems.phtml"/>
-                    <container name="checkout.cart.empty.widget" as="checkout_cart_empty_widget" label="Empty Shopping Cart Content Before"/>
+                    <block class="Magento\Checkout\Block\Cart" name="checkout.cart.empty" before="-" template="cart/noItems.phtml">
+                        <container name="checkout.cart.empty.widget" as="checkout_cart_empty_widget" label="Empty Shopping Cart Content Before"/>
+                    </block>
                 </container>
             </block>
         </referenceContainer>

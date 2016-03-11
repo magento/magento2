@@ -76,7 +76,7 @@ class Date extends AbstractFilter
                 }
 
                 if (isset($value['to'])) {
-                    $this->applyFilterByType('lteq', $this->wrappedComponent->convertDate($value['to']));
+                    $this->applyFilterByType('lteq', $this->wrappedComponent->convertDate($value['to'], 23, 59, 59));
                 }
             } else {
                 $this->applyFilterByType('eq', $this->wrappedComponent->convertDate($value));

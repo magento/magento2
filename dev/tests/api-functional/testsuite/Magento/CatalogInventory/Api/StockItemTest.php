@@ -120,7 +120,7 @@ class StockItemTest extends WebapiAbstract
         $stockItem = $stockItemFactory->create();
         /** @var \Magento\CatalogInventory\Model\ResourceModel\Stock\Item $stockItemResource */
         $stockItemResource = $this->objectManager->get('Magento\CatalogInventory\Model\ResourceModel\Stock\Item');
-        $stockItemResource->loadByProductId($stockItem, $stockItemOld['product_id'], $stockItemOld['website_id']);
+        $stockItemResource->loadByProductId($stockItem, $stockItemOld['product_id'], $stockItemOld['stock_id']);
         $expectedResult['item_id'] = $stockItem->getItemId();
         $this->assertEquals($expectedResult, array_intersect_key($stockItem->getData(), $expectedResult));
     }
@@ -136,7 +136,6 @@ class StockItemTest extends WebapiAbstract
                     'item_id' => 222,
                     'product_id' => 222,
                     'stock_id' => 1,
-                    'website_id' => 1,
                     'qty' => '111.0000',
                     'min_qty' => '0.0000',
                     'use_config_min_qty' => 1,
@@ -186,13 +185,11 @@ class StockItemTest extends WebapiAbstract
                     'use_config_enable_qty_inc' => '1',
                     'enable_qty_increments' => '0',
                     'is_decimal_divided' => '0',
-                    'website_id' => '1',
                     'type_id' => 'simple',
                 ],
                 [
                     'item_id' => 1,
                     'product_id' => 10,
-                    'website_id' => 1,
                     'stock_id' => 1,
                     'qty' => 100,
                     'is_in_stock' => 1,

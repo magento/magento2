@@ -15,6 +15,13 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
  */
 class InlineEdit extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+
     /** @var CustomerInterface */
     private $customer;
 
@@ -32,6 +39,9 @@ class InlineEdit extends \Magento\Backend\App\Action
 
     /** @var \Psr\Log\LoggerInterface */
     protected $logger;
+
+    /** @var \Magento\Customer\Helper\EmailNotification */
+    protected $emailNotification;
 
     /**
      * @param Action\Context $context
@@ -58,6 +68,37 @@ class InlineEdit extends \Magento\Backend\App\Action
     }
 
     /**
+     * Set email notification
+     *
+     * @param \Magento\Customer\Helper\EmailNotification $emailNotification
+     * @return void
+     * @deprecated
+     */
+    public function setEmailNotification(\Magento\Customer\Helper\EmailNotification $emailNotification)
+    {
+
+        $this->emailNotification = $emailNotification;
+    }
+
+    /**
+     * Get email notification
+     *
+     * @return \Magento\Customer\Helper\EmailNotification
+     * @deprecated
+     */
+    public function getEmailNotification()
+    {
+
+        if (!($this->emailNotification instanceof \Magento\Customer\Helper\EmailNotification)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Customer\Helper\EmailNotification'
+            );
+        } else {
+            return $this->emailNotification;
+        }
+    }
+
+    /**
      * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()
@@ -75,11 +116,15 @@ class InlineEdit extends \Magento\Backend\App\Action
 
         foreach (array_keys($postItems) as $customerId) {
             $this->setCustomer($this->customerRepository->getById($customerId));
+            $currentCustomer = clone $this->getCustomer();
+
             if ($this->getCustomer()->getDefaultBilling()) {
                 $this->updateDefaultBilling($this->getData($postItems[$customerId]));
             }
             $this->updateCustomer($this->getData($postItems[$customerId], true));
             $this->saveCustomer($this->getCustomer());
+
+            $this->getEmailNotification()->sendNotificationEmailsIfRequired($currentCustomer, $this->getCustomer());
         }
 
         return $resultJson->setData([
@@ -249,15 +294,5 @@ class InlineEdit extends \Magento\Backend\App\Action
     protected function getErrorWithCustomerId($errorText)
     {
         return '[Customer ID: ' . $this->getCustomer()->getId() . '] ' . __($errorText);
-    }
-
-    /**
-     * Customer access rights checking
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Customer::manage');
     }
 }

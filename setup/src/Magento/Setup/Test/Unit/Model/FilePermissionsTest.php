@@ -131,7 +131,11 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
         ];
     }
 
-    public function testGetMissingWritableDirectoriesForInstallation()
+    /**
+     * @covers \Magento\Setup\Model\FilePermissions::getMissingWritableDirectoriesForInstallation
+     * @covers \Magento\Setup\Model\FilePermissions::getMissingWritablePathsForInstallation
+     */
+    public function testGetMissingWritableDirectoriesAndPathsForInstallation()
     {
         $this->setUpDirectoryListInstallation();
         $this->setUpDirectoryWriteInstallation();
@@ -145,6 +149,11 @@ class FilePermissionsTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             $expected,
             array_values($this->filePermissions->getMissingWritableDirectoriesForInstallation())
+        );
+
+        $this->assertEquals(
+            $expected,
+            array_values($this->filePermissions->getMissingWritablePathsForInstallation())
         );
     }
 

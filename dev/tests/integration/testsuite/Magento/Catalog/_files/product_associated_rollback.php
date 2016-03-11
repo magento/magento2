@@ -3,6 +3,7 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /** @var \Magento\Framework\Registry $registry */
 $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
@@ -10,11 +11,14 @@ $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Ma
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-$product->load(1);
-if ($product->getId()) {
+$repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+    'Magento\Catalog\Model\ProductRepository'
+);
+try {
+    $product = $repository->get('simple');
     $product->delete();
+} catch (NoSuchEntityException $e) {
+    //Entity already deleted
 }
 
 $registry->unregister('isSecureArea');

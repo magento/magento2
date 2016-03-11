@@ -95,7 +95,7 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
         $this->setMainFieldsetHtmlId($mainFieldsetHtmlId);
         $fieldset = $this->getForm()->addFieldset(
             $mainFieldsetHtmlId,
-            ['legend' => __('Widget Options'), 'class' => 'fieldset-wide']
+            ['legend' => __('Widget Options'), 'class' => 'fieldset-wide fieldset-widget-options']
         );
         $this->setData('main_fieldset', $fieldset);
 

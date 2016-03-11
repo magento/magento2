@@ -4,6 +4,8 @@
  * See COPYING.txt for license details.
  */
 
+// @codingStandardsIgnoreFile
+
 /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
 $elementName = $block->getElement()->getName() . '[images]';
 ?>
@@ -16,14 +18,41 @@ $elementName = $block->getElement()->getName() . '[images]';
                 class="action-secondary"
                 data-mage-init='{"openVideoModal" : {}}'
                 data-ui-id="widget-button-1">
-            <span><?php /* @escapeNotVerified */ echo __('Add video') ?></span>
+            <span><?php /* @escapeNotVerified */ echo __('Add Video') ?></span>
         </button>
     </div>
 </div>
+
+<?php
+/** @var $block \Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content */
+$element = $block->getElement();
+$elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'toggleValueElements(this, this.parentNode.parentNode.parentNode)';
+foreach ($block->getMediaAttributes() as $attribute) {
+//    if ($attribute->getAttributeCode() === 'image') {
+//        ?>
+<!--        <div class="admin__field-service admin__field-service-gallery" data-config-scope="--><?php ///* @escapeNotVerified */ echo $element->getScopeLabel($attribute) ?><!--">-->
+<!--            --><?php //if ($element->canDisplayUseDefault($attribute)): ?>
+<!--                <input --><?php //if ($element->getReadonly()):?><!-- disabled="disabled"--><?php //endif; ?>
+<!--                    type="checkbox"-->
+<!--                    name="use_default[]"-->
+<!--                    data-form-part="product_form"-->
+<!--                    class="admin__control-checkbox"-->
+<!--                    id="--><?php //echo $element->getDataScopeHtmlId() ?><!--_default"-->
+<!--                    --><?php //if ($element->usedDefault($attribute)): ?><!-- checked="checked"--><?php //endif; ?>
+<!--                    onclick="--><?php ///* @escapeNotVerified */ echo $elementToggleCode; ?><!--"-->
+<!--                    value="--><?php ///* @escapeNotVerified */ echo $attribute->getAttributeCode() ?><!--"/>-->
+<!--                <label for="--><?php //echo $element->getDataScopeHtmlId() ?><!--_default" class="admin__field-label">-->
+<!--                    --><?php ///* @escapeNotVerified */ echo __('Use Default Value') ?>
+<!--                </label>-->
+<!--            --><?php //endif; ?>
+<!--        </div>-->
+<!--        --><?php
+//    }
+}
+?>
+
 <div id="<?php /* @escapeNotVerified */ echo $block->getHtmlId() ?>"
-     class='gallery'
-     data-mage-init='{"productGallery":{"template":"#<?php
-     /* @escapeNotVerified */ echo $block->getHtmlId() ?>-template"}}'
+     class="gallery"
      data-images="<?php /* @escapeNotVerified */ echo $block->escapeHtml($block->getImagesJson()) ?>"
      data-types="<?php /* @escapeNotVerified */ echo $block->escapeHtml(
          $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getImageTypes())
@@ -35,11 +64,13 @@ $elementName = $block->getElement()->getName() . '[images]';
         <div class="image image-placeholder">
             <?php /* @escapeNotVerified */ echo $block->getUploaderHtml();
             ?>
-            <img class="spacer"
-                 src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/spacer.gif')?>"/>
-            <p class="image-placeholder-text">
-                <?php /* @escapeNotVerified */ echo __('Click here or drag and drop to add images.');
-                ?></p>
+            <div class="product-image-wrapper">
+                <img class="spacer"
+                     src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/spacer.gif')?>"/>
+                <p class="image-placeholder-text">
+                    <?php /* @escapeNotVerified */ echo __('Browse to find or drag image here'); ?>
+                </p>
+            </div>
         </div>
         <?php /* @escapeNotVerified */ echo $block->getChildHtml('additional_buttons'); ?>
         <?php
@@ -49,6 +80,7 @@ $elementName = $block->getElement()->getName() . '[images]';
     foreach ($block->getImageTypes() as $typeData) {
         ?>
         <input name="<?php /* @escapeNotVerified */ echo $block->escapeHtml($typeData['name']) ?>"
+               data-form-part="product_form"
                class="image-<?php /* @escapeNotVerified */ echo $block->escapeHtml($typeData['code']) ?>"
                type="hidden"
                value="<?php /* @escapeNotVerified */ echo $block->escapeHtml($typeData['value']) ?>"/>
@@ -56,159 +88,250 @@ $elementName = $block->getElement()->getName() . '[images]';
     }
     ?>
     <script id="<?php /* @escapeNotVerified */ echo $block->getHtmlId() ?>-template" type="text/x-magento-template">
-        <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>"
+        <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>  <% if (data.video_url) { %>video-item<% } %>"
              data-role="image">
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][position]"
                    value="<%- data.position %>"
+                   data-form-part="product_form"
                    class="position"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][media_type]"
-                   value="<%- data.media_type %>"/>
+                   value="<%- data.media_type %>"
+                   data-form-part="product_form"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_provider]"
-                   value="<%- data.video_provider %>"/>
+                   value="<%- data.video_provider %>"
+                   data-form-part="product_form"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][file]"
-                   value="<%- data.file %>"/>
+                   value="<%- data.file %>"
+                   data-form-part="product_form"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][value_id]"
-                   value="<%- data.value_id %>"/>
+                   value="<%- data.value_id %>"
+                   data-form-part="product_form"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][label]"
-                   value="<%- data.label %>"/>
+                   value="<%- data.label %>"
+                   data-form-part="product_form"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][disabled]"
-                   value="<%- data.disabled %>"/>
+                   value="<%- data.disabled %>"
+                   data-form-part="product_form"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][removed]"
-                   value="" class="is-removed"/>
+                   value="" class="is-removed"
+                   data-form-part="product_form"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_url]"
-                   value="<%- data.video_url %>"/>
+                   value="<%- data.video_url %>"
+                   data-form-part="product_form"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_title]"
-                   value="<%- data.video_title %>"/>
+                   value="<%- data.video_title %>"
+                   data-form-part="product_form"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_description]"
-                   value="<%- data.video_description %>"/>
+                   value="<%- data.video_description %>"
+                   data-form-part="product_form"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][video_metadata]"
-                   value="<%- data.video_metadata %>"/>
+                   value="<%- data.video_metadata %>"
+                   data-form-part="product_form"/>
             <input type="hidden"
                    name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][role]"
-                   value="<%- data.video_description %>"/>
-            <ul class="type-labels" style="display: none">
-                <?php
-                foreach ($block->getImageTypes() as $typeData) {
-                    ?>
-                    <li class="type-<?php /* @escapeNotVerified */ echo $block->escapeHtml(
-                        $typeData['code']
-                    ) ?>"><?php /* @escapeNotVerified */ echo $block->escapeHtml($typeData['label']) ?></li>
-                    <?php
-                }
-                ?>
-            </ul>
-            <img class="spacer"
-                 src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/spacer.gif')?>"/>
-            <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
-            <div class="actions" >
-                <button type="button"
-                        class="action-delete"
-                        data-role="delete-button"
-                        title="<% if (data.media_type == 'external-video') {%>
+                   value="<%- data.video_description %>"
+                   data-form-part="product_form"/>
+
+            <div class="product-image-wrapper">
+                <img class="spacer"
+                     src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/spacer.gif')?>"/>
+
+                <img class="product-image"
+                     data-role="image-element"
+                     src="<%- data.url %>"
+                     alt="<%- data.label %>"/>
+
+                <div class="actions">
+                    <button type="button"
+                            class="action-remove"
+                            data-role="delete-button"
+                            title="<% if (data.media_type == 'external-video') {%>
                             <?php /* @escapeNotVerified */ echo __('Delete video') ?>
                         <%} else {%>
                             <?php /* @escapeNotVerified */ echo __('Delete image') ?>
                         <%}%>">
                     <span>
                         <% if (data.media_type == 'external-video') { %>
-                            <?php /* @escapeNotVerified */ echo __('Delete video') ?>
+                        <?php /* @escapeNotVerified */ echo __('Delete video') ?>
                         <% } else {%>
-                            <?php /* @escapeNotVerified */ echo __('Delete image') ?>
+                        <?php /* @escapeNotVerified */ echo __('Delete image') ?>
                         <%} %>
-                    </span >
-                </button>
-                <button type="button"
-                        class="action-make-base"
-                        data-role="make-base-button"
-                        title="<?php /* @escapeNotVerified */ echo __('Make Base') ?>">
-                    <span><?php /* @escapeNotVerified */ echo __('Make Base') ?></span >
-                </button >
-                <div class="draggable-handle" ></div >
-            </div >
-            <div class="image-label"></div>
-            <div class="image-fade"><span><?php /* @escapeNotVerified */ echo __('Hidden') ?></span></div>
+                    </span>
+                    </button>
+                    <div class="draggable-handle"></div>
+                </div>
+                <div class="image-fade"><span><?php /* @escapeNotVerified */ echo __('Hidden') ?></span></div>
+            </div>
+
+            <div class="item-description">
+              <% if (data.media_type !== 'external-video') {%>
+                <div class="item-title" data-role="img-title"><%- data.label %></div>
+                <div class="item-size">
+                  <span data-role="image-dimens"></span>, <span data-role="image-size"><%- data.sizeLabel %></span>
+                  </div>
+              <% } else { %>
+                <div class="item-title" data-role="img-title"><%- data.video_title %></div>
+              <% } %>
+            </div>
+
+            <ul class="item-roles" data-role="roles-labels">
+                <?php
+                foreach ($block->getImageTypes() as $typeData) {
+                    ?>
+                    <li data-role-code="<?php /* @escapeNotVerified */ echo $block->escapeHtml(
+                        $typeData['code']
+                    ) ?>" class="item-role item-role-<?php /* @escapeNotVerified */ echo $block->escapeHtml(
+                        $typeData['code']
+                    ) ?>">
+                        <?php /* @escapeNotVerified */ echo $block->escapeHtml($typeData['label']) ?>
+                    </li>
+                    <?php
+                }
+                ?>
+            </ul>
         </div>
     </script>
-    <script class="dialog-template" type="text/x-magento-template"  data-title="Image Options">
-            <div class="image-panel admin__scope-old ui-tabs-panel ui-widget-content ui-corner-bottom"
-                 data-role="dialog"
-                 style="display: block">
-                <div class="image-panel-preview">
-                    <img src="<%- data.url %>" alt="<%- data.label %>" />
-                </div>
-                <div class="image-panel-controls">
-                    <strong class="image-name"><%- data.label %></strong>
 
-                    <fieldset class="fieldset fieldset-image-panel">
-                        <div class="field field-image-description">
-                            <label class="label" for="image-description">
-                                <span><?php /* @escapeNotVerified */ echo __('Alt Text')?></span>
-                            </label>
-                            <div class="control">
-                                <textarea id="image-description"
-                                          rows="3"
-                                          name="<?php /* @escapeNotVerified */
-                                          echo $elementName
-                                          ?>[<%- data.file_id %>][label]"><%- data.label %></textarea>
-                            </div>
+    <script data-role="img-dialog-container-tmpl" type="text/x-magento-template">
+      <div class="image-panel ui-tabs-panel ui-widget-content ui-corner-bottom" data-role="dialog">
+      </div>
+    </script>
+    <script data-role="img-dialog-tmpl" type="text/x-magento-template">
+            <div class="image-panel-preview">
+                <img src="<%- data.url %>" alt="<%- data.label %>" />
+            </div>
+            <div class="image-panel-controls">
+                <strong class="image-name"><%- data.label %></strong>
+
+                <fieldset class="admin__fieldset fieldset-image-panel">
+                    <div class="admin__field field-image-description">
+                        <label class="admin__field-label" for="image-description">
+                            <span><?php /* @escapeNotVerified */ echo __('Alt Text')?></span>
+                        </label>
+
+                        <div class="admin__field-control">
+                            <textarea id="image-description"
+                                      rows="3"
+                                      class="admin__control-textarea"
+                                      name="<?php /* @escapeNotVerified */
+                                      echo $elementName
+                                      ?>[<%- data.file_id %>][label]"><%- data.label %></textarea>
                         </div>
+                    </div>
 
-                        <div class="field field-image-role">
-                            <label class="label">
-                                <span><?php /* @escapeNotVerified */ echo __('Role')?></span>
-                            </label>
-                            <div class="control">
-                                <ul class="multiselect-alt">
-                                    <?php
-                                    foreach ($block->getMediaAttributes() as $attribute) :
-                                        ?>
-                                        <li class="item">
-                                            <label>
-                                                <input class="image-type"
-                                                       data-role="type-selector"
-                                                       type="checkbox"
-                                                       value="<?php /* @escapeNotVerified */ echo $block->escapeHtml(
-                                                           $attribute->getAttributeCode()
-                                                       ) ?>"
-                                                    />
-                                                <?php /* @escapeNotVerified */ echo $block->escapeHtml(
-                                                    $attribute->getFrontendLabel()
-                                                ) ?>
-                                            </label>
-                                        </li>
-                                    <?php
-                                    endforeach;
+                    <div class="admin__field field-image-role">
+                        <label class="admin__field-label">
+                            <span><?php /* @escapeNotVerified */ echo __('Role')?></span>
+                        </label>
+                        <div class="admin__field-control">
+                            <ul class="multiselect-alt">
+                                <?php
+                                foreach ($block->getMediaAttributes() as $attribute) :
                                     ?>
-                                </ul>
+                                    <li class="item">
+                                        <label>
+                                            <input class="image-type"
+                                                   data-role="type-selector"
+                                                   data-form-part="product_form"
+                                                   type="checkbox"
+                                                   value="<?php /* @escapeNotVerified */ echo $block->escapeHtml(
+                                                       $attribute->getAttributeCode()
+                                                   ) ?>"
+                                                />
+                                            <?php /* @escapeNotVerified */ echo $block->escapeHtml(
+                                                $attribute->getFrontendLabel()
+                                            ) ?>
+                                        </label>
+                                    </li>
+                                <?php
+                                endforeach;
+                                ?>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="admin__field admin__field-inline field-image-size" data-role="size">
+                        <label class="admin__field-label">
+                            <span><?php /* @escapeNotVerified */ echo __('Image Size') ?></span>
+                        </label>
+                        <div class="admin__field-value" data-message="<?php /* @escapeNotVerified */ echo __('{size}') ?>"></div>
+                    </div>
+
+                    <div class="admin__field admin__field-inline field-image-resolution" data-role="resolution">
+                        <label class="admin__field-label">
+                            <span><?php /* @escapeNotVerified */ echo __('Image Resolution') ?></span>
+                        </label>
+                        <div class="admin__field-value" data-message="<?php /* @escapeNotVerified */ echo __('{width}^{height} px') ?>"></div>
+                    </div>
+
+                    <div class="admin__field field-image-hide">
+                        <div class="admin__field-control">
+                            <div class="admin__field admin__field-option">
+                                <input type="checkbox"
+                                       id="hide-from-product-page"
+                                       data-role="visibility-trigger"
+                                       data-form-part="product_form"
+                                       value="1"
+                                       class="admin__control-checkbox"
+                                       name="<?php /* @escapeNotVerified */ echo $elementName ?>[<%- data.file_id %>][disabled]"
+                                <% if (data.disabled == 1) { %>checked="checked"<% } %> />
+
+                                <label for="hide-from-product-page" class="admin__field-label">
+                                    <?php /* @escapeNotVerified */ echo __('Hide from Product Page')?>
+                                </label>
                             </div>
                         </div>
-
-                        <div class="field field-image-hide">
-                            <label class="label">
-                                <input type="checkbox"
-                                       data-role="visibility-trigger"
-                                       value="1"
-                                       name="<?php /* @escapeNotVerified */
-                                       echo $elementName
-                                       ?>[<%- data.file_id %>][disabled]"
-                                <% if (data.disabled == 1) { %>checked="checked"<% } %> />
-                                <span><?php /* @escapeNotVerified */ echo __('Hide from Product Page')?></span>
-                            </label>
-                        </div>
-                    </fieldset>
-                </div>
+                    </div>
+                </fieldset>
             </div>
     </script>
 </div>
+
+<div id="<?php /* @escapeNotVerified */ echo $block->getNewVideoBlockName();?>" style="display:none">
+    <?php /* @escapeNotVerified */ echo $block->getFormHtml();?>
+    <div id="video-player-preview-location" class="video-player-sidebar">
+        <div class="video-player-container"></div>
+        <div class="video-information title">
+            <label><?php /* @escapeNotVerified */ echo __('Title:') ?> </label><span></span>
+        </div>
+        <div class="video-information uploaded">
+            <label><?php /* @escapeNotVerified */ echo __('Uploaded:') ?> </label><span></span>
+        </div>
+        <div class="video-information uploader">
+            <label><?php /* @escapeNotVerified */ echo __('Uploader:') ?> </label><span></span>
+        </div>
+        <div class="video-information duration">
+            <label><?php /* @escapeNotVerified */ echo __('Duration:') ?> </label><span></span>
+        </div>
+    </div>
+</div>
+
+<script>
+require([
+    'jquery',
+    'uiRegistry',
+    'productGallery'
+], function (jQuery, registry) {
+    var $galleryElem = jQuery('#<?php /* @escapeNotVerified */ echo $block->getHtmlId() ?>');
+
+    $galleryElem.productGallery({
+        "template": "#<?php /* @escapeNotVerified */ echo $block->getHtmlId() ?>-template"
+    });
+
+    registry.set('productGalleryWidget', $galleryElem.data('mageProductGallery'));
+
+    jQuery('body').trigger('contentUpdated');
+});
+</script>

@@ -99,7 +99,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
         );
 
         // expected date without time
-        $datetime = new \DateTime();
+        $datetime = new \DateTime('now', new \DateTimeZone('UTC'));
         $storeInterval = new \DateInterval('P' . self::TEST_DAYS_BEFORE . 'D');
         $datetime->sub($storeInterval);
         $dateTimeLib = new \Magento\Framework\Stdlib\DateTime();

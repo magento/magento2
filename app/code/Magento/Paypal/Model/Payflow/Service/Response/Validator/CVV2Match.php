@@ -7,11 +7,12 @@ namespace Magento\Paypal\Model\Payflow\Service\Response\Validator;
 
 use Magento\Framework\DataObject;
 use Magento\Paypal\Model\Payflow\Service\Response\ValidatorInterface;
+use Magento\Paypal\Model\Payflow\Transparent;
 
 /**
  * Class CVV2Match
  */
-class CVV2Match extends AbstractFilterValidator implements ValidatorInterface
+class CVV2Match implements ValidatorInterface
 {
     /**
      * Result of the card security code (CVV2) check
@@ -49,11 +50,12 @@ class CVV2Match extends AbstractFilterValidator implements ValidatorInterface
      * Validate data
      *
      * @param DataObject $response
+     * @param Transparent $transparentModel
      * @return bool
      */
-    public function validate(DataObject $response)
+    public function validate(DataObject $response, Transparent $transparentModel)
     {
-        if ($this->isValidationOff()) {
+        if ($transparentModel->getConfig()->getValue(static::CONFIG_NAME) === static::CONFIG_OFF) {
             return true;
         }
 
@@ -72,16 +74,6 @@ class CVV2Match extends AbstractFilterValidator implements ValidatorInterface
 
         $response->setRespmsg(static::ERROR_MESSAGE);
         return false;
-    }
-
-    /**
-     * Check whether validation is enabled
-     *
-     * @return bool
-     */
-    protected function isValidationOff()
-    {
-        return $this->getConfig()->getValue(static::CONFIG_NAME) == static::CONFIG_OFF;
     }
 
     /**

@@ -82,7 +82,7 @@ class StockRegistryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->stockItem = $this->getMockBuilder('Magento\CatalogInventory\Api\Data\StockItemInterface')
-            ->setMethods(['setProductId', 'getData', 'addData', 'getItemId'])
+            ->setMethods(['setProductId', 'getData', 'addData', 'getItemId', 'getWebsiteId'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->stockStatus = $this->getMockForAbstractClass(

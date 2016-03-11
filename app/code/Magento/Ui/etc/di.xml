@@ -13,12 +13,14 @@
     <preference for="Magento\Framework\View\Element\UiComponent\Config\ManagerInterface" type="Magento\Ui\Model\Manager" />
     <preference for="Magento\Framework\View\Element\UiComponent\ContextInterface" type="Magento\Framework\View\Element\UiComponent\Context" />
     <preference for="Magento\Framework\View\Element\UiComponent\LayoutInterface" type="Magento\Framework\View\Layout\Generic"/>
-    <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\User\Model\Authorization\AdminSessionUserContext"/>
+    <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\Authorization\Model\CompositeUserContext"/>
     <preference for="Magento\Ui\Api\Data\BookmarkSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Ui\Api\BookmarkRepositoryInterface" type="Magento\Ui\Model\ResourceModel\BookmarkRepository"/>
     <preference for="Magento\Ui\Api\Data\BookmarkInterface" type="Magento\Ui\Model\Bookmark"/>
+    <preference for="Magento\Ui\Component\Wysiwyg\ConfigInterface" type="Magento\Ui\Component\Wysiwyg\Config"/>
     <preference for="Magento\Ui\Api\BookmarkManagementInterface" type="Magento\Ui\Model\BookmarkManagement"/>
     <preference for="Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface" type="Magento\Ui\TemplateEngine\Xhtml\Result"/>
+    <preference for="Magento\Framework\Api\Search\ReportingInterface" type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting"/>
     <type name="Magento\Ui\TemplateEngine\Xhtml\Result" shared="false"/>
     <type name="Magento\Framework\View\Element\UiComponent\TemplateAdapter" shared="false" />
     <type name="Magento\Framework\View\TemplateEngineFactory">
@@ -157,6 +159,27 @@
                 <item name="tabs" xsi:type="array">
                     <item name="class" xsi:type="string">Magento\Ui\Component\Layout\Tabs</item>
                     <item name="template" xsi:type="string">templates/layout/tabs</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Layout\Generic">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/html</item>
+                    <item name="componentName" xsi:type="string">html_content</item>
+                    <item name="panelComponentName" xsi:type="string">fieldset</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\Component\Layout\Tabs">
+        <arguments>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/form/components/html</item>
+                    <item name="componentName" xsi:type="string">html_content</item>
                 </item>
             </argument>
         </arguments>

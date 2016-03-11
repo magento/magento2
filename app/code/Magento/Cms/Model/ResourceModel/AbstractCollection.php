@@ -18,11 +18,17 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
     protected $storeManager;
 
     /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource
      */
@@ -32,45 +38,47 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
-        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->storeManager = $storeManager;
+        $this->metadataPool = $metadataPool;
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
     }
 
     /**
      * Perform operations after collection load
      *
      * @param string $tableName
-     * @param string $columnName
+     * @param string|null $linkField
      * @return void
      */
-    protected function performAfterLoad($tableName, $columnName)
+    protected function performAfterLoad($tableName, $linkField)
     {
-        $items = $this->getColumnValues($columnName);
-        if (count($items)) {
+        $linkedIds = $this->getColumnValues($linkField);
+        if (count($linkedIds)) {
             $connection = $this->getConnection();
             $select = $connection->select()->from(['cms_entity_store' => $this->getTable($tableName)])
-                ->where('cms_entity_store.' . $columnName . ' IN (?)', $items);
+                ->where('cms_entity_store.' . $linkField . ' IN (?)', $linkedIds);
             $result = $connection->fetchPairs($select);
             if ($result) {
                 foreach ($this as $item) {
-                    $entityId = $item->getData($columnName);
-                    if (!isset($result[$entityId])) {
+                    $linkedId = $item->getData($linkField);
+                    if (!isset($result[$linkedId])) {
                         continue;
                     }
-                    if ($result[$entityId] == 0) {
+                    if ($result[$linkedId] == 0) {
                         $stores = $this->storeManager->getStores(false, true);
                         $storeId = current($stores)->getId();
                         $storeCode = key($stores);
                     } else {
-                        $storeId = $result[$item->getData($columnName)];
+                        $storeId = $result[$linkedId];
                         $storeCode = $this->storeManager->getStore($storeId)->getCode();
                     }
                     $item->setData('_first_store_id', $storeId);
                     $item->setData('store_code', $storeCode);
-                    $item->setData('store_id', [$result[$entityId]]);
+                    $item->setData('store_id', [$result[$linkedId]]);
                 }
             }
         }
@@ -129,18 +137,18 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
      * Join store relation table if there is store filter
      *
      * @param string $tableName
-     * @param string $columnName
+     * @param string|null $linkField
      * @return void
      */
-    protected function joinStoreRelationTable($tableName, $columnName)
+    protected function joinStoreRelationTable($tableName, $linkField)
     {
         if ($this->getFilter('store')) {
             $this->getSelect()->join(
                 ['store_table' => $this->getTable($tableName)],
-                'main_table.' . $columnName . ' = store_table.' . $columnName,
+                'main_table.' . $linkField . ' = store_table.' . $linkField,
                 []
             )->group(
-                'main_table.' . $columnName
+                'main_table.' . $linkField
             );
         }
         parent::_renderFiltersBefore();

@@ -17,7 +17,8 @@ angular.module('component-grid', ['ngStorage'])
                     $scope.countOfUpdate = 0;
                     $scope.countOfInstall = 0;
                 } else {
-                    $scope.lastSyncDate = $scope.convertDate(data.lastSyncData.lastSyncDate);
+                    $scope.lastSyncDate = data.lastSyncData.lastSyncDate.date;
+                    $scope.lastSyncTime = data.lastSyncData.lastSyncDate.time;
                     $scope.countOfUpdate = data.lastSyncData.countOfUpdate;
                     $scope.countOfInstall = data.lastSyncData.countOfInstall;
                     $scope.enabledInstall = data.lastSyncData.countOfInstall ? true : false;
@@ -67,7 +68,8 @@ angular.module('component-grid', ['ngStorage'])
                 $scope.isHiddenSpinner = false;
                 $http.get('index.php/componentGrid/sync').success(function(data) {
                     if(typeof data.lastSyncData.lastSyncDate !== "undefined") {
-                        $scope.lastSyncDate = $scope.convertDate(data.lastSyncData.lastSyncDate);
+                        $scope.lastSyncDate = data.lastSyncData.lastSyncDate.date;
+                        $scope.lastSyncTime = data.lastSyncData.lastSyncDate.time;
                     }
                     if (data.error !== '') {
                         $scope.syncError = true;
@@ -169,9 +171,6 @@ angular.module('component-grid', ['ngStorage'])
                     $state.go('root.readiness-check-'+type);
                 }
             };
-            $scope.convertDate = function(date) {
-                return new Date(date.replace(/-/g, '/'))
-            }
         }
     ])
     .filter('startFrom', function() {

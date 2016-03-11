@@ -31,8 +31,9 @@ class OptionListTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetItems()
     {
-        $this->product = $this->objectManager->get('Magento\Catalog\Model\Product');
-        $this->product->load(3);
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $this->product = $productRepository->get('bundle-product');
         /**
          * @var \Magento\Bundle\Model\Product\OptionList $optionList
          */

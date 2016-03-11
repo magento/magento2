@@ -26,24 +26,6 @@ use Magento\Sales\Model\AbstractModel;
  */
 class Transaction extends AbstractModel implements TransactionInterface
 {
-    /**#@+
-     * Supported transaction types
-     * @var string
-     */
-    const TYPE_PAYMENT = 'payment';
-
-    const TYPE_ORDER = 'order';
-
-    const TYPE_AUTH = 'authorization';
-
-    const TYPE_CAPTURE = 'capture';
-
-    const TYPE_VOID = 'void';
-
-    const TYPE_REFUND = 'refund';
-
-    /**#@-*/
-
     /**
      * Raw details key in additional info
      */

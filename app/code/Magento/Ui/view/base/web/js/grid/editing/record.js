@@ -198,7 +198,8 @@ define([
             data = this.normalizeData(data);
             data = utils.extend({}, currentData, data);
 
-            this.set('data', data);
+            this.set('data', data)
+                .updateState();
 
             return this;
         },
@@ -293,7 +294,7 @@ define([
          */
         checkChanges: function () {
             var savedData   = this.getSavedData(),
-                data        = this.getData();
+                data        = this.normalizeData(this.getData());
 
             return utils.compare(savedData, data);
         },
@@ -322,9 +323,12 @@ define([
          * @returns {Record} Chainable.
          */
         updateState: function () {
-            var diff = this.checkChanges();
+            var diff = this.checkChanges(),
+                changed = {};
 
             this.hasChanges = !diff.equal;
+            changed[this.index] = this.data;
+            this.editor().set('changed', [changed]);
 
             return this;
         },

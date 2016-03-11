@@ -94,7 +94,7 @@
 <?php else: ?>
     <div class="message info notlogged" id="review-form">
         <div>
-            <?php /* @escapeNotVerified */ echo __('Only registered users can write reviews. Please, <a href="%1">Sign in</a> or <a href="%2">create an account</a>', $block->getLoginLink(), $block->getRegisterUrl()) ?>
+            <?php /* @escapeNotVerified */ echo __('Only registered users can write reviews. Please <a href="%1">Sign in</a> or <a href="%2">create an account</a>', $block->getLoginLink(), $block->getRegisterUrl()) ?>
         </div>
     </div>
 <?php endif ?>

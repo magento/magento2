@@ -34,4 +34,5 @@
             <argument name="attributeRepository" xsi:type="object">Magento\ConfigurableProduct\Ui\Component\Listing\AssociatedProduct\Attribute\Repository</argument>
         </arguments>
     </type>
+    <preference for="Magento\ConfigurableProduct\Model\AttributesListInterface" type="Magento\ConfigurableProduct\Model\AttributesList" />
 </config>

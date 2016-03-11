@@ -71,7 +71,7 @@ Letters,Letters
 "Invalid default decimal value","Invalid default decimal value"
 "Invalid default date","Invalid default date"
 "Invalid entity supplied","Invalid entity supplied"
-"Invalid backend model specified: ","Invalid backend model specified: "
+"Invalid backend model specified: %1","Invalid backend model specified: %1"
 "Source model ""%1"" not found for attribute ""%2""","Source model ""%1"" not found for attribute ""%2"""
 "The value of attribute ""%1"" must be unique","The value of attribute ""%1"" must be unique"
 "Invalid date","Invalid date"
