@@ -91,7 +91,7 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
      */
     public function getStores()
     {
-        return $this->hasData('stores') ? $this->getData('stores') : $this->getData('store_id');
+        return $this->hasData('stores') ? $this->getData('stores') : (array)$this->getData('store_id');
     }
 
     /**
