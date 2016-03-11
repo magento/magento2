@@ -180,7 +180,7 @@ class GitRepo
     public function removeRemote($alias)
     {
         if (isset($this->remoteList[$alias])) {
-            $this->call(sprintf('remote remove %s', $alias));
+            $this->call(sprintf('remote rm %s', $alias));
         }
     }
 
