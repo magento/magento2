@@ -117,6 +117,8 @@ class AssociatedProducts
     }
 
     /**
+     * Get variations product matrix
+     *
      * @return array
      */
     public function getProductMatrix()
@@ -128,6 +130,8 @@ class AssociatedProducts
     }
 
     /**
+     * Get product attributes
+     *
      * @return array
      */
     public function getProductAttributes()
@@ -139,6 +143,8 @@ class AssociatedProducts
     }
 
     /**
+     * Get ids of associated products
+     *
      * @return array
      */
     public function getProductIds()
@@ -150,6 +156,8 @@ class AssociatedProducts
     }
 
     /**
+     * Get ids of product attributes
+     *
      * @return array
      */
     public function getProductAttributesIds()
@@ -164,6 +172,8 @@ class AssociatedProducts
     }
 
     /**
+     * Get codes of product attributes
+     *
      * @return array
      */
     public function getProductAttributesCodes()
@@ -178,6 +188,8 @@ class AssociatedProducts
     }
 
     /**
+     * Get full data of configurable product attributes
+     *
      * @return array
      */
     public function getConfigurableAttributesData()
@@ -294,6 +306,8 @@ class AssociatedProducts
     }
 
     /**
+     * Get JSON string that contains attribute code and value
+     *
      * @param array $options
      * @return string
      */
@@ -328,6 +342,8 @@ class AssociatedProducts
     }
 
     /**
+     * Get variation key
+     *
      * @param array $options
      * @return string
      */
@@ -400,6 +416,8 @@ class AssociatedProducts
     }
 
     /**
+     * Retrieve qty of product
+     *
      * @param Product $product
      * @return float
      */

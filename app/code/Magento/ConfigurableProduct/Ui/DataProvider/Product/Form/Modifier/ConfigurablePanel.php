@@ -477,6 +477,8 @@ class ConfigurablePanel extends AbstractModifier
     }
 
     /**
+     * Get configuration of column
+     *
      * @param string $name
      * @param \Magento\Framework\Phrase $label
      * @param array $editConfig
