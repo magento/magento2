@@ -508,12 +508,14 @@
 //  Global border-box
 //  ---------------------------------------------
 
-.lib-borderbox() {
+.lib-set-default-border-box() {
     html {
         box-sizing: border-box;
     }
 
-    *, *:before, *:after {
+    *,
+    *:before,
+    *:after {
         box-sizing: inherit;
     }
 }
