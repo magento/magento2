@@ -14,6 +14,13 @@ use Magento\Catalog\Model\Product;
  */
 abstract class Rewrite extends Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_UrlRewrite::urlrewrite';
+
     /**#@+
      * Entity types
      */
@@ -42,16 +49,6 @@ abstract class Rewrite extends Action
      * @var \Magento\UrlRewrite\Model\UrlRewrite
      */
     protected $_urlRewrite;
-
-    /**
-     * Check whether this contoller is allowed in admin permissions
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_UrlRewrite::urlrewrite');
-    }
 
     /**
      * Get Category from request

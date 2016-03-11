@@ -10,6 +10,7 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Store\Model\System\Store as SystemStore;
 use Magento\Ui\Component\Listing\Columns\Column;
+use Magento\Store\Model\StoreManagerInterface as StoreManager;
 
 /**
  * Class Store
@@ -29,6 +30,13 @@ class Store extends Column
      * @var SystemStore
      */
     protected $systemStore;
+
+    /**
+     * Store manager
+     *
+     * @var StoreManager
+     */
+    protected $storeManager;
 
     /**
      * @var string
@@ -85,7 +93,9 @@ class Store extends Column
     protected function prepareItem(array $item)
     {
         $content = '';
-        $origStores = $item[$this->storeKey];
+        if (!empty($item[$this->storeKey])) {
+            $origStores = $item[$this->storeKey];
+        }
 
         if (empty($origStores)) {
             return '';
@@ -110,5 +120,34 @@ class Store extends Column
         }
 
         return $content;
+    }
+
+    /**
+     * Prepare component configuration
+     *
+     * @return void
+     */
+    public function prepare()
+    {
+        parent::prepare();
+        if ($this->getStoreManager()->isSingleStoreMode()) {
+            $this->_data['config']['componentDisabled'] = true;
+        }
+    }
+
+    /**
+     * Get StoreManager dependency
+     *
+     * @return StoreManager
+     *
+     * @deprecated
+     */
+    private function getStoreManager()
+    {
+        if ($this->storeManager === null) {
+            $this->storeManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Store\Model\StoreManagerInterface');
+        }
+        return $this->storeManager;
     }
 }

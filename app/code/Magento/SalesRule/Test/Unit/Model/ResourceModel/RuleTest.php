@@ -80,7 +80,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->resourcesMock);
 
         $this->entityManager = $this->getMockBuilder('Magento\Framework\Model\EntityManager')
-            ->setMethods(['load', 'save'])
+            ->setMethods(['load', 'save', 'delete'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -125,7 +125,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
                 'context' => $context,
                 'connectionName' => $connectionName,
                 'associatedEntitiesMap' => $associatedEntitiesMap,
-                'entityManager' => $this->entityManager
+                'entityManager' => $this->entityManager,
             ]
         );
     }
@@ -309,5 +309,39 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->willReturn($actionMock);
 
         return $abstractModelMock;
+    }
+
+    public function testDeleteSuccess()
+    {
+        $this->transactionManagerMock->expects($this->once())->method('start');
+        $abstractModelMock = $this->getMockBuilder('Magento\Rule\Model\AbstractModel')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $abstractModelMock->expects($this->once())->method('beforeDelete');
+        $this->entityManager->expects($this->once())->method('delete');
+        $abstractModelMock->expects($this->once())->method('isDeleted');
+        $abstractModelMock->expects($this->once())->method('afterDelete');
+        $this->transactionManagerMock->expects($this->once())->method('commit');
+
+        $this->model->delete($abstractModelMock);
+    }
+
+    /**
+     * @expectedException \Exception
+     * @expectedExceptionMessage To test exception
+     */
+    public function testDeletionRollbackOnFailure()
+    {
+        $expectedException = new \Exception(__('To test exception'));
+        $this->transactionManagerMock->expects($this->once())->method('start');
+        $abstractModelMock = $this->getMockBuilder('Magento\Rule\Model\AbstractModel')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $abstractModelMock->expects($this->once())->method('beforeDelete')->willThrowException($expectedException);
+        $this->transactionManagerMock->expects($this->once())->method('rollBack');
+
+        $this->model->delete($abstractModelMock);
     }
 }

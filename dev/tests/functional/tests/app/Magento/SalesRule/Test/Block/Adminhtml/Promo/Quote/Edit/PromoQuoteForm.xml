@@ -14,7 +14,7 @@
             <name />
             <description />
             <is_active>
-                <input>select</input>
+                <input>switcher</input>
             </is_active>
             <website_ids>
                 <selector>[name='website_ids']</selector>
@@ -34,7 +34,7 @@
             <to_date />
             <sort_order />
             <is_rss>
-                <input>select</input>
+                <input>switcher</input>
             </is_rss>
         </fields>
     </rule_information>
@@ -44,7 +44,7 @@
         <strategy>xpath</strategy>
         <fields>
             <conditions_serialized>
-                <selector>#rule_conditions_fieldset</selector>
+                <selector>#sales_rule_formrule_conditions_fieldset_</selector>
                 <input>conditions</input>
             </conditions_serialized>
         </fields>
@@ -61,10 +61,10 @@
             <discount_qty />
             <discount_step />
             <apply_to_shipping>
-                <input>select</input>
+                <input>switcher</input>
             </apply_to_shipping>
             <stop_rules_processing>
-                <input>select</input>
+                <input>switcher</input>
             </stop_rules_processing>
             <simple_free_shipping>
                 <input>select</input>

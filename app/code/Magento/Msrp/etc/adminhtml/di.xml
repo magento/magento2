@@ -9,7 +9,7 @@
     <type name="Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes">
         <plugin name="bundle_msrp_plugin" type="Magento\Msrp\Plugin\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Attributes"/>
     </type>
-    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\ModifierPool">
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
         <arguments>
             <argument name="modifiers" xsi:type="array">
                 <item name="mrsp" xsi:type="array">
@@ -18,5 +18,5 @@
                 </item>
             </argument>
         </arguments>
-    </type>
+    </virtualType>
 </config>

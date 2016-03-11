@@ -6,36 +6,55 @@
 
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
-use Magento\Framework\Controller\ResultFactory;
-use Magento\Backend\App\Action\Context;
-use Magento\Ui\Component\MassAction\Filter;
-use Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory;
+use Magento\Search\Controller\Adminhtml\Synonyms;
 
 /**
  * Mass-Delete Controller
  */
-class MassDelete extends \Magento\Backend\App\Action
+class MassDelete extends Synonyms
 {
     /**
-     * @var Filter
+     * @var \Magento\Ui\Component\MassAction\Filter
      */
     protected $filter;
 
     /**
-     * @var CollectionFactory
+     * @var \Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory
      */
     protected $collectionFactory;
 
     /**
-     * @param Context $context
-     * @param Filter $filter
-     * @param CollectionFactory $collectionFactory
+     * MassDelete constructor.
+     *
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
+     * @param \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory
+     * @param \Magento\Framework\Registry $registry
+     * @param \Magento\Search\Model\EngineResolver $engineResolver
+     * @param \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig
+     * @param \Magento\Ui\Component\MassAction\Filter $filter
+     * @param \Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory $collectionFactory
      */
-    public function __construct(Context $context, Filter $filter, CollectionFactory $collectionFactory)
-    {
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
+        \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory,
+        \Magento\Framework\Registry $registry,
+        \Magento\Search\Model\EngineResolver $engineResolver,
+        \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig,
+        \Magento\Ui\Component\MassAction\Filter $filter,
+        \Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory $collectionFactory
+    ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
-        parent::__construct($context);
+        parent::__construct(
+            $context,
+            $resultPageFactory,
+            $forwardFactory,
+            $registry,
+            $engineResolver,
+            $searchFeatureConfig
+        );
     }
 
     /**
@@ -72,7 +91,7 @@ class MassDelete extends \Magento\Backend\App\Action
             );
         }
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-        $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
+        $resultRedirect = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT);
         return $resultRedirect->setPath('*/*/');
     }
 }

@@ -990,14 +990,13 @@ class Category extends AbstractResource
     /**
      * Reset firstly loaded attributes
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @param integer $entityId
      * @param array|null $attributes
      * @return $this
      */
     public function load($object, $entityId, $attributes = [])
     {
-        $this->_attributes = [];
         \Magento\Framework\Profiler::start('EAV:load_entity');
         /**
          * Load object base row data

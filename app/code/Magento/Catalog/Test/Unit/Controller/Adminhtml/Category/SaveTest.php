@@ -431,9 +431,11 @@ class SaveTest extends \PHPUnit_Framework_TestCase
         $this->requestMock->expects($this->atLeastOnce())
             ->method('getPostValue')
             ->willReturn($postData);
+        $addData = $postData;
+        $addData['image_additional_data'] = ['delete' => true];
         $categoryMock->expects($this->once())
             ->method('addData')
-            ->with($postData);
+            ->with($addData);
         $categoryMock->expects($this->any())
             ->method('getId')
             ->will($this->returnValue($categoryId));

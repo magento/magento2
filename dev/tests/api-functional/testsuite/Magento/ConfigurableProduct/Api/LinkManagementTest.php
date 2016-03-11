@@ -43,13 +43,14 @@ class LinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_simple_77.php
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/delete_association.php
      */
     public function testAddChild()
     {
         $productSku = 'configurable';
-        $childSku = 'simple_10';
+        $childSku = 'simple_77';
         $serviceInfo = [
             'rest' => [
                 'resourcePath' => self::RESOURCE_PATH . '/' . $productSku . '/child',

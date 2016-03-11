@@ -95,7 +95,7 @@ class Installer
     /**
      * Deployment configuration reader
      *
-     * @var Writer
+     * @var Reader
      */
     private $deploymentConfigReader;
 
@@ -321,7 +321,7 @@ class Installer
         $script[] = ['Post installation file permissions check...', 'checkApplicationFilePermissions', []];
 
         $estimatedModules = $this->createModulesConfig($request, true);
-        $total = count($script) + 3 * count(array_filter($estimatedModules));
+        $total = count($script) + 4 * count(array_filter($estimatedModules));
         $this->progress = new Installer\Progress($total, 0);
 
         $this->log->log('Starting Magento installation:');
@@ -815,15 +815,19 @@ class Installer
 
         if ($type === 'schema') {
             $this->log->log('Schema post-updates:');
-            foreach ($moduleNames as $moduleName) {
-                $this->log->log("Module '{$moduleName}':");
-                $modulePostUpdater = $this->getSchemaDataHandler($moduleName, 'schema-recurring');
-                if ($modulePostUpdater) {
-                    $this->log->logInline("Running recurring.. ");
-                    $modulePostUpdater->install($setup, $moduleContextList[$moduleName]);
-                }
-                $this->logProgress();
+            $handlerType = 'schema-recurring';
+        } else if ($type === 'data') {
+            $this->log->log('Data post-updates:');
+            $handlerType = 'data-recurring';
+        }
+        foreach ($moduleNames as $moduleName) {
+            $this->log->log("Module '{$moduleName}':");
+            $modulePostUpdater = $this->getSchemaDataHandler($moduleName, $handlerType);
+            if ($modulePostUpdater) {
+                $this->log->logInline('Running ' + str_replace('-', ' ', $handlerType) + '...');
+                $modulePostUpdater->install($setup, $moduleContextList[$moduleName]);
             }
+            $this->logProgress();
         }
     }
 
@@ -1165,6 +1169,10 @@ class Installer
             case 'data-upgrade':
                 $className .= '\UpgradeData';
                 $interface = self::DATA_UPGRADE;
+                break;
+            case 'data-recurring':
+                $className .= '\RecurringData';
+                $interface = self::DATA_INSTALL;
                 break;
             default:
                 throw new \Magento\Setup\Exception("$className does not exist");
