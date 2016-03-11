@@ -4,15 +4,13 @@
  */
 
 define([
-    'Magento_Ui/js/form/element/single-checkbox',
-    'uiRegistry'
-], function (Checkbox, rg) {
+    'Magento_Ui/js/form/element/single-checkbox'
+], function (Checkbox) {
     'use strict';
 
     return Checkbox.extend({
         defaults: {
             inputCheckBoxName: '',
-            value: '',
             prefixElementName: '',
             parentDynamicRowName: 'visual_swatch'
         },
@@ -20,10 +18,9 @@ define([
         /**
          * Parses options and merges the result with instance
          *
-         * @param  {Object} config
          * @returns {Object} Chainable.
          */
-        initConfig: function (config) {
+        initConfig: function () {
             this._super();
             this.configureDataScope();
 
@@ -57,6 +54,13 @@ define([
         dataScopeToHtmlArray: function (dataScopeString) {
             var dataScopeArray, dataScope, reduceFunction;
 
+            /**
+             * Add new level of nesting.
+             *
+             * @param {String} prev
+             * @param {String} curr
+             * @returns {String}
+             */
             reduceFunction = function (prev, curr) {
                 return prev + '[' + curr + ']';
             };
