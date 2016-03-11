@@ -42,13 +42,13 @@ define([
             this.elementName = this.prefixElementName + recordId;
 
             suffixName = '';
-            if (!_.isEmpty(this.suffixName)) {
+            if (!_.isEmpty(this.suffixName) || _.isNumber(this.suffixName)) {
                 suffixName = '[' + this.suffixName + ']';
             }
             this.inputName = prefixName + '[' + this.elementName + ']' + suffixName;
 
             suffixName = '';
-            if (!_.isEmpty(this.suffixName)) {
+            if (!_.isEmpty(this.suffixName) || _.isNumber(this.suffixName)) {
                 suffixName = '.' + this.suffixName;
             }
             this.dataScope = 'data.' + this.prefixName + '.' + this.elementName + this.suffixName;
