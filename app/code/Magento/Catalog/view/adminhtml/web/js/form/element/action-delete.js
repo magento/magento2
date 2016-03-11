@@ -19,18 +19,17 @@ define([
         /**
          * Parses options and merges the result with instance
          *
+         * @param  {Object} config
          * @returns {Object} Chainable.
          */
-        initConfig: function () {
+        initConfig: function (config) {
             this._super();
+
             this.configureDataScope();
 
             return this;
         },
 
-        /**
-         * Configure data scope.
-         */
         configureDataScope: function () {
             var recordId,
                 prefixName,
@@ -57,12 +56,6 @@ define([
             this.links.value = this.provider + ':' + this.dataScope;
         },
 
-        /**
-         * Get HTML array from data scope.
-         *
-         * @param {String} dataScopeString
-         * @returns {String}
-         */
         dataScopeToHtmlArray: function (dataScopeString) {
             var dataScopeArray, dataScope, reduceFunction;
 
@@ -76,6 +69,12 @@ define([
             dataScope += dataScopeArray.reduce(reduceFunction, '');
 
             return dataScope;
+        },
+
+        deleteRecord: function (parents) {
+            this.value(1);
+            parents[1].deleteRecord(parents[0].index, parents[0].recordId);
+            return this;
         }
     });
 });
