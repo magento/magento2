@@ -456,8 +456,13 @@ class BundlePanel extends AbstractModifier
                                 'dataType' => Form\Element\DataType\Text::NAME,
                                 'formElement' => Form\Element\Select::NAME,
                                 'componentType' => Form\Field::NAME,
+                                'component' => 'Magento_Bundle/js/components/bundle-input-type',
+                                'parentContainer' => 'product_bundle_container',
+                                'selections' => 'bundle_selections',
+                                'targetIndex' => 'is_default',
                                 'dataScope' => 'type',
                                 'label' => __('Input Type'),
+                                'sortOrder' => 20,
                                 'options' => [
                                     [
                                         'label' => __('Drop-down'),
@@ -476,7 +481,12 @@ class BundlePanel extends AbstractModifier
                                         'value' => 'multi'
                                     ]
                                 ],
-                                'sortOrder' => 20,
+                                'typeMap' => [
+                                    'select' => 'radio',
+                                    'radio' => 'radio',
+                                    'checkbox' => 'checkbox',
+                                    'multi' => 'checkbox'
+                                ]
                             ],
                         ],
                     ],
@@ -533,15 +543,22 @@ class BundlePanel extends AbstractModifier
                     'arguments' => [
                         'data' => [
                             'config' => [
-                                'component' => 'Magento_Bundle/js/components/bundle-checkbox',
-                                'componentType' => Form\Field::NAME,
-                                'dataType' => Form\Element\DataType\Boolean::NAME,
                                 'formElement' => Form\Element\Checkbox::NAME,
+                                'componentType' => Form\Field::NAME,
+                                'component' => 'Magento_Bundle/js/components/bundle-checkbox',
+                                'parentContainer' => 'product_bundle_container',
+                                'parentSelections' => 'bundle_selections',
+                                'changer' => 'option_info.type',
+                                'dataType' => Form\Element\DataType\Boolean::NAME,
                                 'label' => __('Default'),
                                 'dataScope' => 'is_default',
                                 'prefer' => 'radio',
-                                'value' => '1',
+                                'value' => '0',
                                 'sortOrder' => 50,
+                                'valueMap' => [
+                                    'false' => '0',
+                                    'true' => '1'
+                                ]
                             ],
                         ],
                     ],
