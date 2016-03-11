@@ -232,11 +232,7 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      */
     public function load(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
     {
-        $this->entityManager->load('Magento\CatalogRule\Api\Data\RuleInterface', $object, $value);
-
-        $this->unserializeFields($object);
-        $this->_afterLoad($object);
-
+        $this->entityManager->load(\Magento\CatalogRule\Api\Data\RuleInterface::class, $object, $value);
         return $this;
     }
 
@@ -247,71 +243,23 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
-        if ($object->isDeleted()) {
-            return $this->delete($object);
-        }
-
-        $this->beginTransaction();
-
-        try {
-            if (!$this->isModified($object)) {
-                $this->processNotModifiedSave($object);
-                $this->commit();
-                $object->setHasDataChanges(false);
-                return $this;
-            }
-            $object->validateBeforeSave();
-            $object->beforeSave();
-            if ($object->isSaveAllowed()) {
-                $this->_serializeFields($object);
-                $this->_beforeSave($object);
-                $this->_checkUnique($object);
-                $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
-
-                $this->entityManager->save(
-                    'Magento\CatalogRule\Api\Data\RuleInterface',
-                    $object
-                );
-
-                $this->unserializeFields($object);
-                $this->processAfterSaves($object);
-            }
-            $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
-            $object->setHasDataChanges(false);
-        } catch (\Exception $e) {
-            $this->rollBack();
-            $object->setHasDataChanges(true);
-            throw $e;
-        }
+        $this->entityManager->save(
+            \Magento\CatalogRule\Api\Data\RuleInterface::class,
+            $object
+        );
         return $this;
     }
 
     /**
-     * @param AbstractModel $object
+     * Delete the object
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Exception
      */
-    public function delete(\Magento\Framework\Model\AbstractModel $object)
+    public function delete(AbstractModel $object)
     {
-        //TODO: add object relation processor support (MAGETWO-49297)
-        $this->transactionManager->start($this->getConnection());
-        try {
-            $object->beforeDelete();
-            $this->_beforeDelete($object);
-            $this->entityManager->delete(
-                'Magento\CatalogRule\Api\Data\RuleInterface',
-                $object
-            );
-            $this->_afterDelete($object);
-            $object->isDeleted(true);
-            $object->afterDelete();
-            $this->transactionManager->commit();
-            $object->afterDeleteCommit();
-        } catch (\Exception $e) {
-            $this->transactionManager->rollBack();
-            throw $e;
-        }
-
+        $this->entityManager->delete(\Magento\CatalogRule\Api\Data\RuleInterface::class, $object);
         return $this;
     }
 }

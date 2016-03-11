@@ -617,17 +617,6 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
-     * After load
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return void
-     */
-    public function afterLoad(\Magento\Framework\Model\AbstractModel $object)
-    {
-        $this->_afterLoad($object);
-    }
-
-    /**
      * Perform actions after object load
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
@@ -850,5 +839,67 @@ abstract class AbstractDb extends AbstractResource
     protected function processNotModifiedSave(\Magento\Framework\Model\AbstractModel $object)
     {
         return $this;
+    }
+
+    /**
+     * Perform actions after entity load
+     *
+     * @param \Magento\Framework\DataObject $object
+     */
+    public function afterLoad(\Magento\Framework\DataObject $object)
+    {
+        $this->_afterLoad($object);
+    }
+
+    /**
+     * Perform actions before entity save
+     *
+     * @param \Magento\Framework\DataObject $object
+     */
+    public function beforeSave(\Magento\Framework\DataObject $object)
+    {
+        $this->_beforeSave($object);
+    }
+
+    /**
+     * Perform actions after entity save
+     *
+     * @param \Magento\Framework\DataObject $object
+     */
+    public function afterSave(\Magento\Framework\DataObject $object)
+    {
+        $this->_afterSave($object);
+    }
+
+    /**
+     * Perform actions before entity delete
+     *
+     * @param \Magento\Framework\DataObject $object
+     */
+    public function beforeDelete(\Magento\Framework\DataObject $object)
+    {
+        $this->_beforeDelete($object);
+    }
+
+    /**
+     * Perform actions after entity delete
+     *
+     * @param \Magento\Framework\DataObject $object
+     */
+    public function afterDelete(\Magento\Framework\DataObject $object)
+    {
+        $this->_afterDelete($object);
+    }
+
+    /**
+     * Serialize serializable fields of the object
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return \Magento\Framework\Model\AbstractModel|void
+     */
+    public function serializeFields(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->_serializeFields($object);
+        return $object;
     }
 }
