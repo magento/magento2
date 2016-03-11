@@ -27,7 +27,6 @@ class StockData extends AbstractModifier
         $this->locator = $locator;
     }
 
-
     /**
      * {@inheritdoc}
      */
