@@ -97,7 +97,9 @@ require([
         <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.checkboxCheckCallback = registerUserRole;
         <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.checkCheckboxes = massSelectUsers;
         <?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>.rows.each(function(row){roleUsersRowInit(<?php /* @escapeNotVerified */ echo $myBlock->getJsObjectName() ?>, row)});
-        $('in_role_user_old').value = $('in_role_user').value;
+        if (!$('in_role_user_old').value) {
+            $('in_role_user_old').value = $('in_role_user').value;
+        }
     });
 <?php endif; ?>
 //-->

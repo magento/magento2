@@ -27,9 +27,9 @@ class StockStatusCriteria extends AbstractCriteria implements \Magento\CatalogIn
     /**
      * @inheritdoc
      */
-    public function setWebsiteFilter($website)
+    public function setScopeFilter($scope)
     {
-        $this->data['website_filter'] = $website;
+        $this->data['website_filter'] = $scope;
     }
 
     /**

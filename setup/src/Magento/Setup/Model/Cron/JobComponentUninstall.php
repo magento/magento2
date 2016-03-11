@@ -39,7 +39,7 @@ class JobComponentUninstall extends AbstractJob
     /**
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    private $objectManager;
+    protected $objectManager;
 
     /**
      * @var \Magento\Setup\Model\Updater

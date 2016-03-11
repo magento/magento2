@@ -13,6 +13,8 @@ use Magento\NewRelicReporting\Model\Module;
 
 /**
  * Class CollectTest
+ *
+ * @codingStandardsIgnoreFile
  */
 class CollectTest extends \PHPUnit_Framework_TestCase
 {
@@ -37,17 +39,12 @@ class CollectTest extends \PHPUnit_Framework_TestCase
     protected $fullModuleListMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dateTimeMock;
-
-    /**
      * @var \Magento\NewRelicReporting\Model\ModuleFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $moduleFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $moduleCollectionFactoryMock;
 
@@ -65,11 +62,6 @@ class CollectTest extends \PHPUnit_Framework_TestCase
 
         $this->moduleManagerMock = $this->getMockBuilder('Magento\Framework\Module\Manager')
             ->setMethods(['isOutputEnabled'])
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->dateTimeMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime')
-            ->setMethods(['formatDate'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -93,7 +85,6 @@ class CollectTest extends \PHPUnit_Framework_TestCase
             $this->moduleListMock,
             $this->fullModuleListMock,
             $this->moduleManagerMock,
-            $this->dateTimeMock,
             $this->moduleFactoryMock,
             $this->moduleCollectionFactoryMock
         );

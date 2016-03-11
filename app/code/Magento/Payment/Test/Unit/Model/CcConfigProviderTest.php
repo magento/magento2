@@ -77,7 +77,7 @@ class CcConfigProviderTest extends \PHPUnit_Framework_TestCase
                 [$ccAvailableTypesMock['ae']['fileId']]
             )->willReturn($assetMock);
         $this->assetSourceMock->expects($this->atLeastOnce())
-            ->method('findRelativeSourceFilePath')
+            ->method('findSource')
             ->with($assetMock)
             ->willReturnOnConsecutiveCalls(
                 $ccAvailableTypesMock['vi']['path'],

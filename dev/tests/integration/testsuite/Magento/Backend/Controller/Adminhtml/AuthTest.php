@@ -5,9 +5,12 @@
  */
 namespace Magento\Backend\Controller\Adminhtml;
 
+use Magento\Framework\Message\MessageInterface;
+
 /**
  * Test class for \Magento\Backend\Controller\Adminhtml\Auth
  * @magentoAppArea adminhtml
+ * @magentoDbIsolation enabled
  */
 class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
 {
@@ -63,11 +66,13 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testNotLoggedLoginAction()
     {
         $this->dispatch('backend/admin/auth/login');
-        $this->assertFalse($this->getResponse()->isRedirect());
-
-        $body = $this->getResponse()->getBody();
-        $this->assertSelectCount('form#login-form input#username[type=text]', true, $body);
-        $this->assertSelectCount('form#login-form input#login[type=password]', true, $body);
+        /** @var $backendUrlModel \Magento\Backend\Model\UrlInterface */
+        $backendUrlModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Backend\Model\UrlInterface'
+        );
+        $backendUrlModel->turnOffSecretKey();
+        $url = $backendUrlModel->getUrl('admin');
+        $this->assertRedirect($this->stringStartsWith($url));
     }
 
     /**
@@ -96,12 +101,15 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testNotLoggedLoginActionWithRedirect()
     {
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
         $this->getRequest()->setPostValue(
             [
                 'login' => [
                     'username' => \Magento\TestFramework\Bootstrap::ADMIN_NAME,
                     'password' => \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD,
                 ],
+                'form_key' => $formKey->getFormKey(),
             ]
         );
 
@@ -184,12 +192,21 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testIncorrectLogin($params)
     {
+        /** @var \Magento\Framework\Data\Form\FormKey $formKey */
+        $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
+        $params['form_key'] = $formKey->getFormKey();
         $this->getRequest()->setPostValue($params);
         $this->dispatch('backend/admin/auth/login');
-        $this->assertContains(
-            'You did not sign in correctly or your account is temporarily disabled.',
-            $this->getResponse()->getBody()
+        $this->assertSessionMessages(
+            $this->equalTo(['You did not sign in correctly or your account is temporarily disabled.']),
+            MessageInterface::TYPE_ERROR
         );
+        $backendUrlModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            'Magento\Backend\Model\UrlInterface'
+        );
+        $backendUrlModel->turnOffSecretKey();
+        $url = $backendUrlModel->getUrl('admin');
+        $this->assertRedirect($this->stringStartsWith($url));
     }
 
     public function incorrectLoginDataProvider()

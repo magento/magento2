@@ -170,6 +170,7 @@ class Attribute extends Form
 
         //select attributes
         $this->getAttributesGrid()->resetFilter();
+        $this->getAttributesGrid()->deselectAttributes();
         if ($this->_rootElement->find('[class$=no-data]')->isVisible()) {
             return;
         }
@@ -189,7 +190,7 @@ class Attribute extends Form
     }
 
     /**
-     * @return \Magento\Ui\Test\Block\Adminhtml\DataGrid
+     * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AttributesGrid
      */
     public function getAttributesGrid()
     {
@@ -296,7 +297,10 @@ class Attribute extends Form
                 $optionContainer = $attributeBlock->find(sprintf($this->attributeOptionByName, $label));
             }
             //Select option
-            if (!$optionContainer->find('[type="checkbox"]')->isSelected()) {
+            $isOptionSelected = $optionContainer->find('[type="checkbox"]')->isSelected();
+            if (!$isOptionSelected && $option['include'] === 'Yes') {
+                $optionContainer->find('[type="checkbox"]')->click();
+            } elseif ($isOptionSelected && $option['include'] === 'No') {
                 $optionContainer->find('[type="checkbox"]')->click();
             }
         }

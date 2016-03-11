@@ -4,12 +4,12 @@
  * See COPYING.txt for license details.
  */
 
+require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
+require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
+
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea(
     \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
 );
-
-require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
 
 $review = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     'Magento\Review\Model\Review',

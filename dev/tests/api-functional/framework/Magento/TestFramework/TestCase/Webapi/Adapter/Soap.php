@@ -127,8 +127,6 @@ class Soap implements \Magento\TestFramework\TestCase\Webapi\AdapterInterface
                 ->get('Magento\Store\Model\StoreManagerInterface')
                 ->getStore()
                 ->getCode();
-        } elseif ($storeCode === \Magento\Webapi\Controller\PathProcessor::ALL_STORE_CODE) {
-            $storeCode = \Magento\Store\Model\Store::ADMIN_CODE;
         }
 
         /** TESTS_BASE_URL is initialized in PHPUnit configuration */

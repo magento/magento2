@@ -45,6 +45,11 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
      */
     protected $scopeCode;
 
+    /*
+     * @var \Magento\Framework\App\RequestInterface
+     */
+    protected $request;
+
     /**
      * @param \Magento\Store\Api\StoreRepositoryInterface $storeRepository
      * @param StoreCookieManagerInterface $storeCookieManager
@@ -80,6 +85,12 @@ class StoreResolver implements \Magento\Store\Api\StoreResolverInterface
         list($stores, $defaultStoreId) = $this->getStoresData();
 
         $storeCode = $this->request->getParam(self::PARAM_NAME, $this->storeCookieManager->getStoreCodeFromCookie());
+        if (is_array($storeCode)) {
+            if (!isset($storeCode['_data']['code'])) {
+                throw new \InvalidArgumentException(__('Invalid store parameter.'));
+            }
+            $storeCode = $storeCode['_data']['code'];
+        }
         if ($storeCode) {
             try {
                 $store = $this->getRequestedStoreByCode($storeCode);

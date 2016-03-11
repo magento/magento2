@@ -92,6 +92,7 @@
                                    ng-class="{ 'invalid' : (auth.password.$error.required && !auth.password.$pristine)
                                    || (auth.password.$error.required && user.submitted) }"
                                    required
+                                   autocomplete="off"
                                 >
                             <div class="error-container">
                                 This is a required field.

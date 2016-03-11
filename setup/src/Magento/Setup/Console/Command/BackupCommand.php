@@ -132,6 +132,7 @@ class BackupCommand extends AbstractSetupCommand
                 $inputOptionProvided = true;
             }
             if ($input->getOption(self::INPUT_KEY_DB)) {
+                $this->setAreaCode();
                 $backupHandler->dbBackup($time);
                 $inputOptionProvided = true;
             }
@@ -146,5 +147,21 @@ class BackupCommand extends AbstractSetupCommand
             $output->writeln('<info>Disabling maintenance mode</info>');
             $this->maintenanceMode->set(false);
         }
+    }
+
+    /**
+     * Sets area code to start a session for database backup and rollback
+     *
+     * @return void
+     */
+    private function setAreaCode()
+    {
+        $areaCode = 'adminhtml';
+        /** @var \Magento\Framework\App\State $appState */
+        $appState = $this->objectManager->get('Magento\Framework\App\State');
+        $appState->setAreaCode($areaCode);
+        /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
+        $configLoader = $this->objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
+        $this->objectManager->configure($configLoader->load($areaCode));
     }
 }

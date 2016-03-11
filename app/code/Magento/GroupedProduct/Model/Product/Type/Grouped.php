@@ -310,23 +310,6 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
-     * Save type related data
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return $this
-     */
-    public function save($product)
-    {
-        parent::save($product);
-
-        $data = $product->getGroupedLinkData();
-        if ($data !== null) {
-            $this->productLinks->saveGroupedLinks($product, $data);
-        }
-        return $this;
-    }
-
-    /**
      * @param \Magento\Framework\DataObject $buyRequest
      * @param \Magento\Catalog\Model\Product $product
      * @param bool $isStrictProcessMode

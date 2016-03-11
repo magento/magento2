@@ -6,6 +6,7 @@
 
 namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config;
 
+use Magento\Mtf\Client\ElementInterface;
 use Magento\Mtf\Client\Locator;
 use Magento\Backend\Test\Block\Template;
 use Magento\Mtf\Block\Form;
@@ -62,14 +63,7 @@ class Matrix extends Form
      *
      * @var string
      */
-    protected $variationRow = './/tr[@data-role="row"]';
-
-    /**
-     * Button for assign product to variation
-     *
-     * @var string
-     */
-    protected $configurableAttribute = 'td[data-column="name"] button.action-choose';
+    protected $variationRow = 'tr[data-role="row"]';
 
     // @codingStandardsIgnoreStart
     /**
@@ -77,7 +71,7 @@ class Matrix extends Form
      *
      * @var string
      */
-    protected $selectAssociatedProduct = '//ancestor::div[*[@id="associated-products-container"]]//td[@data-column="entity_id" and (contains(text(),"%s"))]';
+    protected $associatedProductGrid = 'div[data-grid-id="associated-products-container"]';
     // @codingStandardsIgnoreEnd
 
     /**
@@ -86,6 +80,27 @@ class Matrix extends Form
      * @var string
      */
     protected $template = './ancestor::body';
+
+    /**
+     * Delete variation button selector.
+     *
+     * @var string
+     */
+    protected $deleteVariation = '[data-bind*="removeProduct"]';
+
+    /**
+     * Choose a different Product button selector.
+     *
+     * @var string
+     */
+    protected $chooseProduct = '[data-bind*="showGrid"]';
+
+    /**
+     * Action menu
+     *
+     * @var string
+     */
+    protected $actionMenu = '.action-select';
 
     /**
      * Fill variations.
@@ -101,33 +116,32 @@ class Matrix extends Form
                 sprintf($this->variationRowByNumber, $count),
                 Locator::SELECTOR_XPATH
             );
-            ksort($variation);
-            $mapping = $this->dataMapping($variation);
+            ++$count;
 
-            $this->_fill($mapping, $variationRow);
             if (isset($variation['configurable_attribute'])) {
-                $this->assignProduct($variationRow, $variation['configurable_attribute']);
+                $this->assignProduct($variationRow, $variation['sku']);
+                continue;
             }
 
-            ++$count;
+            $mapping = $this->dataMapping($variation);
+            $this->_fill($mapping, $variationRow);
         }
     }
 
     /**
      * Assign product to variation matrix
      *
-     * @param SimpleElement $variationRow
-     * @param int $productId
+     * @param ElementInterface $variationRow
+     * @param string $productSku
      * @return void
      */
-    protected function assignProduct(SimpleElement $variationRow, $productId)
+    protected function assignProduct(ElementInterface $variationRow, $productSku)
     {
-        $variationRow->find($this->configurableAttribute)->click();
+        $variationRow->find($this->actionMenu)->hover();
+        $variationRow->find($this->actionMenu)->click();
+        $variationRow->find($this->chooseProduct)->click();
         $this->getTemplateBlock()->waitLoader();
-        $this->_rootElement->find(
-            sprintf($this->selectAssociatedProduct, $productId),
-            Locator::SELECTOR_XPATH
-        )->click();
+        $this->getAssociatedProductGrid()->searchAndSelect(['sku' => $productSku]);
     }
 
     /**
@@ -138,7 +152,7 @@ class Matrix extends Form
     public function getVariationsData()
     {
         $data = [];
-        $variationRows = $this->_rootElement->getElements($this->variationRow, Locator::SELECTOR_XPATH);
+        $variationRows = $this->_rootElement->getElements($this->variationRow);
 
         foreach ($variationRows as $key => $variationRow) {
             /** @var SimpleElement $variationRow */
@@ -181,6 +195,27 @@ class Matrix extends Form
         return $this->blockFactory->create(
             'Magento\Backend\Test\Block\Template',
             ['element' => $this->_rootElement->find($this->template, Locator::SELECTOR_XPATH)]
+        );
+    }
+
+    public function deleteVariations()
+    {
+        $variations = $this->_rootElement->getElements($this->variationRow);
+        foreach (array_reverse($variations) as $variation) {
+            $variation->find($this->actionMenu)->hover();
+            $variation->find($this->actionMenu)->click();
+            $variation->find($this->deleteVariation)->click();
+        }
+    }
+
+    /**
+     * @return \Magento\Ui\Test\Block\Adminhtml\DataGrid
+     */
+    public function getAssociatedProductGrid()
+    {
+        return $this->blockFactory->create(
+            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\AssociatedProductGrid',
+            ['element' => $this->browser->find($this->associatedProductGrid)]
         );
     }
 }

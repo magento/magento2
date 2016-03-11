@@ -14,6 +14,8 @@
     <xs:include schemaLocation="urn:magento:module:Magento_Ui:etc/ui_components.xsd"/>
     <!-- Components list -->
     <xs:element type="formConfiguration" name="form"/>
+    <xs:element type="modalConfiguration" name="modal"/>
+    <xs:element type="dynamicRowsConfiguration" name="dynamicRows"/>
     <xs:element type="containerConfiguration" name="container"/>
     <xs:element type="listingConfiguration" name="listing"/>
     <!-- Custom configuration -->
@@ -38,8 +40,22 @@
                     <xs:element name="actionsColumn" type="actionsColumn" />
                     <xs:element name="selectionsColumn" type="selectionsColumn" />
                     <xs:element type="exportButton" name="exportButton"/>
+                    <xs:element type="modalConfiguration" name="modal"/>
+                    <xs:element type="insertFormConfiguration" name="insertForm"/>
+                    <xs:element type="insertListingConfiguration" name="insertListing"/>
+                    <xs:element type="columnsControls" name="columnsControls"/>
+                    <xs:element type="listingToolbarConfiguration" name="listingToolbar"/>
+                    <xs:element type="button" name="button"/>
+                    <xs:element type="htmlContent" name="htmlContent"/>
+                    <xs:element type="actionDelete" name="actionDelete"/>
+                    <xs:element type="dynamicRowsConfiguration" name="dynamicRows"/>
                 </xs:choice>
             </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="listingToolbarConfiguration">
+        <xs:complexContent>
+            <xs:extension base="containerConfiguration"/>
         </xs:complexContent>
     </xs:complexType>
     <xs:complexType name="fieldsetConfiguration">
@@ -47,7 +63,13 @@
             <xs:extension base="container">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element type="containerConfiguration" name="container"/>
+                    <xs:element type="fieldsetConfiguration" name="fieldset"/>
                     <xs:element name="field" type="field" />
+                    <xs:element type="insertFormConfiguration" name="insertForm"/>
+                    <xs:element type="insertListingConfiguration" name="insertListing"/>
+                    <xs:element type="modalConfiguration" name="modal"/>
+                    <xs:element type="button" name="button"/>
+                    <xs:element type="dynamicRowsConfiguration" name="dynamicRows"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
@@ -57,6 +79,7 @@
             <xs:extension base="listing">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element type="paging" name="paging"/>
+                    <xs:element type="listingToolbarConfiguration" name="listingToolbar"/>
                     <xs:element type="filtersConfiguration" name="filters"/>
                     <xs:element type="massactionConfiguration" name="massaction"/>
                     <xs:element type="dataSource" name="dataSource"/>
@@ -74,6 +97,9 @@
                     <xs:element type="fieldsetConfiguration" name="fieldset"/>
                     <xs:element type="containerConfiguration" name="container"/>
                     <xs:element type="dataSource" name="dataSource"/>
+                    <xs:element type="insertFormConfiguration" name="insertForm"/>
+                    <xs:element type="insertListingConfiguration" name="insertListing"/>
+                    <xs:element type="modalConfiguration" name="modal"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>
@@ -89,11 +115,42 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+    <xs:complexType name="insertFormConfiguration">
+        <xs:complexContent>
+            <xs:extension base="containerConfiguration">
+                <xs:choice minOccurs="0" maxOccurs="unbounded"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="insertListingConfiguration">
+        <xs:complexContent>
+            <xs:extension base="containerConfiguration">
+                <xs:choice minOccurs="0" maxOccurs="unbounded"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="modalConfiguration">
+        <xs:complexContent>
+            <xs:extension base="containerConfiguration">
+                <xs:choice minOccurs="0" maxOccurs="unbounded"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
     <xs:complexType name="massactionConfiguration">
         <xs:complexContent>
             <xs:extension base="massaction">
                 <xs:choice minOccurs="0" maxOccurs="unbounded">
                     <xs:element name="action" type="action" />
+                </xs:choice>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="dynamicRowsConfiguration">
+        <xs:complexContent>
+            <xs:extension base="dynamicRows">
+                <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element type="containerConfiguration" name="container"/>
+                    <xs:element type="actionDelete" name="actionDelete"/>
                 </xs:choice>
             </xs:extension>
         </xs:complexContent>

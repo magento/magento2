@@ -7,8 +7,8 @@
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
     <testCase name="Magento\Swagger\Test\TestCase\SwaggerUiForRestApiTest" summary="Swagger ui for REST API" ticketId="MAGETWO-41381">
-        <variation name="SwaggerTestVariation1">
-            <data name="description" xsi:type="string">Swagger ui for catalogProductRepositoryV1</data>
+        <variation name="SwaggerTestVariation1" summary="Swagger ui for catalogProductRepositoryV1">
+            <data name="tag" xsi:type="string">test_type:extended_acceptance_test</data>
             <data name="serviceName" xsi:type="string">catalogProductRepositoryV1</data>
             <data name="endpoints" xsi:type="array">
                 <item name="0" xsi:type="string">GetListGet</item>
@@ -22,8 +22,7 @@
             <constraint name="Magento\Swagger\Test\Constraint\AssertServiceContentDisplay" />
             <constraint name="Magento\Swagger\Test\Constraint\AssertEndpointContentDisplay" />
         </variation>
-        <variation name="SwaggerTestVariation2">
-            <data name="description" xsi:type="string">Swagger ui for customerAccountManagementV1</data>
+        <variation name="SwaggerTestVariation2" summary="Swagger ui for customerAccountManagementV1">
             <data name="serviceName" xsi:type="string">customerAccountManagementV1</data>
             <data name="endpoints" xsi:type="array">
                 <item name="0" xsi:type="string">CreateAccountPost</item>
@@ -36,8 +35,7 @@
             <constraint name="Magento\Swagger\Test\Constraint\AssertServiceContentDisplay" />
             <constraint name="Magento\Swagger\Test\Constraint\AssertEndpointContentDisplay" />
         </variation>
-        <variation name="SwaggerTestVariation3">
-            <data name="description" xsi:type="string">Swagger ui for integrationAdminTokenServiceV1</data>
+        <variation name="SwaggerTestVariation3" summary="Swagger ui for integrationAdminTokenServiceV1">
             <data name="serviceName" xsi:type="string">integrationAdminTokenServiceV1</data>
             <data name="endpoints" xsi:type="array">
                 <item name="0" xsi:type="string">CreateAdminAccessTokenPost</item>

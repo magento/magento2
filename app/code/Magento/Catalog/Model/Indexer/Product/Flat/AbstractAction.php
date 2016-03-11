@@ -5,11 +5,13 @@
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
  * Abstract action reindex class
- *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 abstract class AbstractAction
 {
@@ -72,6 +74,12 @@ abstract class AbstractAction
     protected $_flatTableBuilder;
 
     /**
+     * @var MetadataPool
+     */
+    private $metadataPool;
+
+    /**
+     * @param MetadataPool $metadataPool
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
@@ -80,6 +88,7 @@ abstract class AbstractAction
      * @param FlatTableBuilder $flatTableBuilder
      */
     public function __construct(
+        MetadataPool $metadataPool,
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper,
@@ -93,6 +102,7 @@ abstract class AbstractAction
         $this->_connection = $resource->getConnection();
         $this->_tableBuilder = $tableBuilder;
         $this->_flatTableBuilder = $flatTableBuilder;
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -194,6 +204,8 @@ abstract class AbstractAction
             return $this;
         }
 
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+
         foreach ($this->_getProductTypeInstances() as $typeInstance) {
             /** @var $typeInstance \Magento\Catalog\Model\Product\Type\AbstractType */
             if (!$typeInstance->isComposite(null)) {
@@ -210,7 +222,11 @@ abstract class AbstractAction
                 /** @var $select \Magento\Framework\DB\Select */
                 $select = $this->_connection->select()->from(
                     ['t' => $this->_productIndexerHelper->getTable($relation->getTable())],
-                    [$relation->getParentFieldName(), $relation->getChildFieldName(), new \Zend_Db_Expr('1')]
+                    [$relation->getChildFieldName(), new \Zend_Db_Expr('1')]
+                )->join(
+                    ['entity_table' => $this->_connection->getTableName('catalog_product_entity')],
+                    'entity_table.' . $metadata->getLinkField() . 't.' . $relation->getParentFieldName(),
+                    [$relation->getParentFieldName() => 'entity_table.entity_id']
                 )->join(
                     ['e' => $this->_productIndexerHelper->getFlatTableName($storeId)],
                     "e.entity_id = t.{$relation->getChildFieldName()}",
@@ -222,7 +238,7 @@ abstract class AbstractAction
                 if ($productIds !== null) {
                     $cond = [
                         $this->_connection->quoteInto("{$relation->getChildFieldName()} IN(?)", $productIds),
-                        $this->_connection->quoteInto("{$relation->getParentFieldName()} IN(?)", $productIds),
+                        $this->_connection->quoteInto("entity_table.entity_id IN(?)", $productIds),
                     ];
 
                     $select->where(implode(' OR ', $cond));
@@ -247,6 +263,8 @@ abstract class AbstractAction
             return $this;
         }
 
+        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+
         foreach ($this->_getProductTypeInstances() as $typeInstance) {
             /** @var $typeInstance \Magento\Catalog\Model\Product\Type\AbstractType */
             if (!$typeInstance->isComposite(null)) {
@@ -258,11 +276,15 @@ abstract class AbstractAction
                 $select = $this->_connection->select()->distinct(
                     true
                 )->from(
-                    $this->_productIndexerHelper->getTable($relation->getTable()),
-                    "{$relation->getParentFieldName()}"
+                    ['t' => $this->_productIndexerHelper->getTable($relation->getTable())],
+                    []
+                )->join(
+                    ['entity_table' => $this->_connection->getTableName('catalog_product_entity')],
+                    'entity_table.' . $metadata->getLinkField() . 't.' . $relation->getParentFieldName(),
+                    [$relation->getParentFieldName() => 'entity_table.entity_id']
                 );
                 $joinLeftCond = [
-                    "e.entity_id = t.{$relation->getParentFieldName()}",
+                    "e.entity_id = entity_table.entity_id",
                     "e.child_id = t.{$relation->getChildFieldName()}",
                 ];
                 if ($relation->getWhere() !== null) {

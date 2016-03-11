@@ -6,9 +6,9 @@
 define(
     [],
     function () {
-        "use strict";
+        'use strict';
         return {
-            getRules: function() {
+            getRules: function () {
                 return {
                     'postcode': {
                         'required': true

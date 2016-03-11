@@ -62,7 +62,7 @@
             <field name="include_in_menu" xsi:type="string">Yes</field>
         </dataset>
 
-        <dataset name="two_nested_category">
+        <dataset name="two_nested_categories">
             <field name="name" xsi:type="string">Category%isolation%</field>
             <field name="url_key" xsi:type="string">category-%isolation%</field>
             <field name="parent_id" xsi:type="array">

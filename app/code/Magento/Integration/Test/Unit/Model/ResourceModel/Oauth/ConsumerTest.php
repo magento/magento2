@@ -53,15 +53,6 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function testBeforeSave()
-    {
-        $this->consumerMock->expects($this->once())->method('setUpdatedAt');
-        $this->assertInstanceOf(
-            'Magento\Integration\Model\ResourceModel\Oauth\Consumer',
-            $this->consumerResource->_beforeSave($this->consumerMock)
-        );
-    }
-
     public function testAfterDelete()
     {
         $this->connectionMock->expects($this->exactly(2))->method('delete');

@@ -21,83 +21,28 @@
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
                     <item name="update_url" xsi:type="url" path="mui/index/render"/>
                 </item>
             </argument>
         </argument>
-        <argument name="data" xsi:type="array">
-            <item name="js_config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
-            </item>
-        </argument>
     </dataSource>
-    <container name="listing_top">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="template" xsi:type="string">ui/grid/toolbar</item>
-            </item>
-        </argument>
-        <bookmark name="bookmarks">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="namespace" xsi:type="string">sales_order_invoice_grid</item>
-                    </item>
-                </item>
-            </argument>
-        </bookmark>
-        <component name="columns_controls">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="columnsData" xsi:type="array">
-                        <item name="provider" xsi:type="string">sales_order_invoice_grid.sales_order_invoice_grid.sales_order_invoice_columns</item>
-                    </item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
-                    <item name="displayArea" xsi:type="string">dataGridActions</item>
-                </item>
-            </argument>
-        </component>
-        <exportButton name="export_button">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">sales_order_invoice_grid.sales_order_invoice_grid.sales_order_invoice_columns.ids</item>
-                </item>
-            </argument>
-        </exportButton>
-        <filterSearch name="fulltext">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="provider" xsi:type="string">sales_order_invoice_grid.sales_order_invoice_grid_data_source</item>
-                    <item name="chipsProvider" xsi:type="string">sales_order_invoice_grid.sales_order_invoice_grid.listing_top.listing_filters_chips</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">sales_order_invoice_grid.sales_order_invoice_grid.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.search</item>
-                    </item>
-                </item>
-            </argument>
-        </filterSearch>
+    <listingToolbar name="listing_top">
+        <bookmark name="bookmarks"/>
+        <columnsControls name="columns_controls"/>
+        <exportButton name="export_button"/>
+        <filterSearch name="fulltext"/>
         <filters name="listing_filters">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="columnsProvider" xsi:type="string">sales_order_invoice_grid.sales_order_invoice_grid.sales_order_invoice_columns</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">sales_order_invoice_grid.sales_order_invoice_grid.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.filters</item>
-                    </item>
-                    <item name="childDefaults" xsi:type="array">
-                        <item name="provider" xsi:type="string">sales_order_invoice_grid.sales_order_invoice_grid.listing_top.listing_filters</item>
-                        <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">sales_order_invoice_grid.sales_order_invoice_grid.sales_order_invoice_columns.${ $.index }:visible</item>
-                        </item>
-                    </item>
-                </item>
-            </argument>
             <filterSelect name="store_id">
                 <argument name="optionsProvider" xsi:type="configurableObject">
                     <argument name="class" xsi:type="string">Magento\Store\Ui\Component\Listing\Column\Store\Options</argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
+                        <item name="provider" xsi:type="string">${ $.parentName }</item>
+                        <item name="imports" xsi:type="array">
+                            <item name="visible" xsi:type="string">componentType = column, index = ${ $.index }:visible</item>
+                        </item>
                         <item name="caption" xsi:type="string" translate="true">All Store Views</item>
                         <item name="dataScope" xsi:type="string">store_id</item>
                         <item name="label" xsi:type="string" translate="true">Purchased From</item>
@@ -106,12 +51,6 @@
             </filterSelect>
         </filters>
         <massaction name="listing_massaction">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">sales_order_invoice_grid.sales_order_invoice_grid.sales_order_invoice_columns.ids</item>
-                    <item name="indexField" xsi:type="string">entity_id</item>
-                </item>
-            </argument>
             <action name="pdfinvoices_order">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -122,25 +61,11 @@
                 </argument>
             </action>
         </massaction>
-        <paging name="listing_paging">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">sales_order_invoice_grid.sales_order_invoice_grid.listing_top.bookmarks</item>
-                        <item name="namespace" xsi:type="string">current.paging</item>
-                    </item>
-                    <item name="selectProvider" xsi:type="string">sales_order_invoice_grid.sales_order_invoice_grid.sales_order_invoice_columns.ids</item>
-                </item>
-            </argument>
-        </paging>
-    </container>
+        <paging name="listing_paging"/>
+    </listingToolbar>
     <columns name="sales_order_invoice_columns">
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="storageConfig" xsi:type="array">
-                    <item name="provider" xsi:type="string">sales_order_invoice_grid.sales_order_invoice_grid.listing_top.bookmarks</item>
-                    <item name="namespace" xsi:type="string">current</item>
-                </item>
                 <item name="childDefaults" xsi:type="array">
                     <item name="fieldAction" xsi:type="array">
                         <item name="provider" xsi:type="string">sales_order_invoice_grid.sales_order_invoice_grid.sales_order_invoice_columns.actions</item>
@@ -149,11 +74,6 @@
                             <item name="0" xsi:type="string">view</item>
                             <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
                         </item>
-                    </item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">sales_order_invoice_grid.sales_order_invoice_grid.listing_top.bookmarks</item>
-                        <item name="root" xsi:type="string">columns.${ $.index }</item>
-                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
                     </item>
                 </item>
             </item>
@@ -221,11 +141,19 @@
                 </item>
             </argument>
         </column>
-        <column name="grand_total" class="Magento\Sales\Ui\Component\Listing\Column\Price">
+        <column name="base_grand_total" class="Magento\Sales\Ui\Component\Listing\Column\Price">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">textRange</item>
-                    <item name="label" xsi:type="string" translate="true">Amount</item>
+                    <item name="label" xsi:type="string" translate="true">Grand Total (Base)</item>
+                </item>
+            </argument>
+        </column>
+        <column name="grand_total" class="Magento\Sales\Ui\Component\Listing\Column\PurchasedPrice">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">Grand Total (Purchased)</item>
                 </item>
             </argument>
         </column>

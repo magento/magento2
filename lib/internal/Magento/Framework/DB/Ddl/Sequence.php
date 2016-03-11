@@ -15,16 +15,18 @@ class Sequence
      *
      * @param string $name
      * @param int $startNumber
+     * @param string $columnType
+     * @param bool|true $unsigned
      * @return string
      */
-    public function getCreateSequenceDdl($name, $startNumber = 1)
+    public function getCreateSequenceDdl($name, $startNumber = 1, $columnType = Table::TYPE_INTEGER, $unsigned = true)
     {
         $format = "CREATE TABLE %s (
-                     sequence_value %s UNSIGNED NOT NULL AUTO_INCREMENT,
+                     sequence_value %s %s NOT NULL AUTO_INCREMENT,
                      PRIMARY KEY (sequence_value)
             ) AUTO_INCREMENT = %d";
 
-        return sprintf($format, $name, Table::TYPE_INTEGER, $startNumber);
+        return sprintf($format, $name, $columnType, $unsigned ? 'UNSIGNED' : '', $startNumber);
     }
 
     /**

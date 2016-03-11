@@ -62,7 +62,7 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
             ->method('getLabels')
             ->willReturn($options);
 
-        $this->assertSame($expected, $this->object->toOptionArray());
+        $this->assertEquals($expected, $this->object->toOptionArray());
     }
 
     /**
@@ -73,11 +73,11 @@ class ThemeTest extends \PHPUnit_Framework_TestCase
         return [
             [
                 [],
-                [],
+                [['label' => 'Default', 'value' => '']],
             ],
             [
                 [['label' => 'testValue', 'value' => 'testStatus']],
-                [['label' => 'testValue', 'value' => 'testStatus']],
+                [['label' => 'Default', 'value' => ''], ['label' => 'testValue', 'value' => 'testStatus']],
             ],
         ];
     }

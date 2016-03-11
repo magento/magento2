@@ -36,7 +36,6 @@
                 <item name="dataset" xsi:type="string">default_dynamic</item>
             </field>
             <field name="quantity_and_stock_status" xsi:type="array">
-                <item name="qty" xsi:type="string">666</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="weight_type" xsi:type="string">Dynamic</field>
@@ -77,13 +76,12 @@
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="quantity_and_stock_status" xsi:type="array">
-                <item name="qty" xsi:type="string">666</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="weight" xsi:type="string">1</field>
             <field name="weight_type" xsi:type="string">Fixed</field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
-            <field name="status" xsi:type="string">Product online</field>
+            <field name="status" xsi:type="string">Yes</field>
             <field name="shipment_type" xsi:type="string">Together</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
@@ -191,13 +189,12 @@
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
             <field name="quantity_and_stock_status" xsi:type="array">
-                <item name="qty" xsi:type="string">666</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
             <field name="weight" xsi:type="string">1</field>
             <field name="weight_type" xsi:type="string">Fixed</field>
             <field name="product_has_weight" xsi:type="string">Yes</field>
-            <field name="status" xsi:type="string">Product online</field>
+            <field name="status" xsi:type="string">Yes</field>
             <field name="shipment_type" xsi:type="string">Together</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>

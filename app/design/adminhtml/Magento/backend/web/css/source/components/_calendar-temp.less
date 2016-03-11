@@ -27,13 +27,14 @@
         width: 15rem;
         padding-right: 3.5rem;
     }
+
     + .ui-datepicker-trigger {
         .lib-button-reset();
         .lib-icon-font(
         @_icon-font-content: @icon-calendar__content,
         @_icon-font: @icons-admin__font-name,
         @_icon-font-size: 2.1rem,
-        @_icon-font-line-height: @action__height,
+        @_icon-font-line-height: 32px,
         @_icon-font-text-hide: true,
         @_icon-font-position: after,
         @_icon-font-color: @ui-datepicker-icon__color
@@ -45,13 +46,16 @@
         position: absolute;
         vertical-align: top;
         z-index: 1;
+
         &:active {
             .scale(.975);
         }
+
         + .admin__control-support-text,
         + .admin__control-label {
             margin-left: @action__height + .5rem;
         }
+
         img {
             display: none;
         }
@@ -69,6 +73,7 @@
     padding: @ui-datepicker__padding + @ui-datepicker__indent  @ui-datepicker__padding;
     width: auto;
     z-index: 999999 !important;
+
     &:before {
         background: @ui-datepicker__background;
         border: @ui-datepicker__border;
@@ -100,9 +105,11 @@
     position: absolute;
     line-height: 3rem;
     top: 0;
+
     span {
         .lib-visually-hidden();
     }
+
     &:before {
         color: #514943;
         font-size: 34px;
@@ -112,6 +119,7 @@
 
 .ui-datepicker-prev {
     left: 0;
+
     &:before {
         content: '\2039';
     }
@@ -119,6 +127,7 @@
 
 .ui-datepicker-next {
     right: 0;
+
     &:before {
         content: '\203A';
     }
@@ -158,27 +167,33 @@
     border: 0;
     position: relative;
     z-index: 1;
+
     thead {
         background: transparent;
     }
+
     tr {
         background: transparent;
     }
+
     tr th {
         background: transparent;
         border: 0;
         padding: 0;
+
         span {
             font-weight: 700;
             font-size: 12px;
             line-height: 28px;
         }
     }
+
     tr td {
         background: transparent;
         border: 1px solid @ui-datepicker-calendar__border-color;
         padding: 0;
     }
+
     span,
     a {
         box-sizing: border-box;
@@ -191,16 +206,19 @@
         text-decoration: none;
         width: 38px;
     }
+
     .ui-state-disabled {
         span {
             background: #f5f5f5;
             color: #999999;
         }
     }
+
     .ui-state-active {
         background: #514943;
         color: #fff;
     }
+
     .ui-datepicker-today {
         a {
             border: 3px solid @ui-datepicker-calendar__border-color;
@@ -215,6 +233,7 @@
     position: relative;
     white-space: nowrap;
     z-index: 1;
+
     button {
         background: #fff;
         border-radius: 1px;
@@ -228,6 +247,7 @@
         text-align: center;
         width: 49%;
     }
+
     .ui-datepicker-close {
         float: right;
     }

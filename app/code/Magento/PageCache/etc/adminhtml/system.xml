@@ -18,7 +18,7 @@
                     <label>Varnish Configuration</label>
                     <field id="access_list" type="text" translate="label comment" sortOrder="15" showInDefault="1" showInWebsite="0" showInStore="0">
                         <label>Access list</label>
-                        <comment>IPs access list separated with ',' that can purge Varnish configuration for config file generation.
+                        <comment>IPs access list separated with \',\' that can purge Varnish configuration for config file generation.
                             If field is empty default value localhost will be saved.</comment>
                         <backend_model>Magento\PageCache\Model\System\Config\Backend\Varnish</backend_model>
                         <depends>

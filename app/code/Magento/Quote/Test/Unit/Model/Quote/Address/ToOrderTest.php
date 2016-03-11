@@ -82,7 +82,7 @@ class ToOrderTest extends \PHPUnit_Framework_TestCase
         $quote->expects($this->once())->method('getId')->willReturn($quoteId);
         $quote->expects($this->once())->method('getStoreId')->willReturn($storeId);
         $this->objectCopyMock->expects($this->once())->method('getDataFromFieldset')->with(
-            'quote_convert_address',
+            'sales_convert_quote_address',
             'to_order',
             $object
         )->willReturn($orderData);

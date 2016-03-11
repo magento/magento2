@@ -8,6 +8,13 @@ namespace Magento\CheckoutAgreements\Controller\Adminhtml;
 abstract class Agreement extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_CheckoutAgreements::checkoutagreement';
+
+    /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
@@ -43,14 +50,5 @@ abstract class Agreement extends \Magento\Backend\App\Action
             __('Checkout Terms and Conditions')
         );
         return $this;
-    }
-
-    /**
-     * @return bool
-     * @codeCoverageIgnore
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_CheckoutAgreements::checkoutagreement');
     }
 }
