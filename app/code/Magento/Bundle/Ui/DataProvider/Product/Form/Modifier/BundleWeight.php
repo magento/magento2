@@ -40,8 +40,12 @@ class BundleWeight extends AbstractModifier
         if (($groupCode = $this->getGroupCodeByField($meta, ProductAttributeInterface::CODE_WEIGHT)
             ?: $this->getGroupCodeByField($meta, self::CODE_CONTAINER_WEIGHT))
         ) {
-            $weightPath = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_WEIGHT)
-                ?: $this->getElementArrayPath($meta, self::CODE_CONTAINER_WEIGHT);
+            $weightPath = $this->arrayManager->findPath(
+                ProductAttributeInterface::CODE_WEIGHT,
+                $meta,
+                null,
+                'children'
+            ) ?: $this->arrayManager->findPath(static::CODE_CONTAINER_WEIGHT, $meta, null, 'children');
             $meta[$groupCode]['children'][self::CODE_WEIGHT_TYPE] = [
                 'arguments' => [
                     'data' => [
