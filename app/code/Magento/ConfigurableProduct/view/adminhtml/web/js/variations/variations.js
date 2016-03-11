@@ -293,7 +293,7 @@ define([
 
         /**
          * Chose action for the form save button
-         * @param params
+         * @param {Object} params
          */
         saveFormHandler: function(params) {
             if (this.checkForNewAttributes()) {
@@ -305,7 +305,7 @@ define([
 
         /**
          * Check for newly added attributes
-         * @returns {boolean}
+         * @returns {Boolean}
          */
         checkForNewAttributes: function () {
             var element, newAttributes = false;
