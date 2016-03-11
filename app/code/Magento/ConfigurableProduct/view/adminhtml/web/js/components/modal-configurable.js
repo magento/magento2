@@ -24,8 +24,6 @@ define([
 
             if (this.form().source.get('params.invalid') === false) {
                 this._super();
-
-                //this.targetWizard().open();
             }
         }
     });

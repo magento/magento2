@@ -37,7 +37,10 @@ define([
             value: [],
             modules: {
                 associatedProductGrid: '${ $.configurableProductGrid }',
-                wizardButtonElement: '${ $.wizardModalButtonName }'
+                wizardButtonElement: '${ $.wizardModalButtonName }',
+                formElement: '${ $.formName }',
+                attributeSetHandlerModal: '${ $.attributeSetHandler }'
+
             },
             links: {
                 value: '${ $.provider }:${ $.dataScopeVariations }',
@@ -289,6 +292,24 @@ define([
          */
         getCurrencySymbol: function () {
             return this.currencySymbol;
+        },
+        saveFormHandler: function(params) {
+            if (this.checkForNewAttributes()) {
+                this.attributeSetHandlerModal().openModal();
+            } else {
+                this.formElement().save(params);
+            }
+        },
+        checkForNewAttributes: function () {
+            var newAttributes = false;
+            var element;
+            _.each(this.source.get('data.attribute_codes'), function (attribute) {
+                element = registry.get('index = ' + attribute);
+                if (_.isUndefined(element)) {
+                    newAttributes = true;
+                }
+            }, this);
+            return newAttributes;
         }
     });
 });
