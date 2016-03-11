@@ -52,6 +52,9 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
     public function execute()
     {
         $storeId = (int)$this->getRequest()->getParam('store');
+        $store = $this->storeManager->getStore($storeId);
+        $this->storeManager->setCurrentStore($store->getCode());
+
         $categoryId = (int)$this->getRequest()->getParam('id');
 
         if (!$categoryId) {

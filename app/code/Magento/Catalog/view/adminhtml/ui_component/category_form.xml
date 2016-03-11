@@ -272,8 +272,8 @@
                         <item name="dataType" xsi:type="string">boolean</item>
                         <item name="formElement" xsi:type="string">checkbox</item>
                         <item name="valueMap" xsi:type="array">
-                            <item name="true" xsi:type="string">true</item>
-                            <item name="false" xsi:type="string">false</item>
+                            <item name="true" xsi:type="boolean">true</item>
+                            <item name="false" xsi:type="boolean">false</item>
                         </item>
                         <item name="exports" xsi:type="array">
                             <item name="checked" xsi:type="string">ns = ${ $.ns }, index = available_sort_by :disabled</item>

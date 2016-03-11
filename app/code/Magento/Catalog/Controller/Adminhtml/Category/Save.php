@@ -5,6 +5,8 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Class Save
  * 
@@ -44,23 +46,31 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
     ];
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        StoreManagerInterface $storeManager
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -104,6 +114,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $data = $this->stringToBoolConverting($data);
         $data = $this->imagePreprocessing($data);
         $storeId = isset($data['general']['store_id']) ? $data['general']['store_id'] : null;
+        $store = $this->storeManager->getStore($storeId);
+        $this->storeManager->setCurrentStore($store->getCode());
         $parentId = isset($data['general']['parent']) ? $data['general']['parent'] : null;
         if ($data['general']) {
             $category->addData($this->_filterCategoryPostData($data['general']));
@@ -163,7 +175,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 if ($category->hasCustomDesignTo()) {
                     $categoryResource->getAttribute('custom_design_from')->setMaxValue($category->getCustomDesignTo());
                 }
-//                Skipped due to MAGETWO-48956
+
                 $validate = $category->validate();
                 if ($validate !== true) {
                     foreach ($validate as $code => $error) {
