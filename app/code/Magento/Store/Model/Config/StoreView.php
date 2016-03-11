@@ -68,7 +68,7 @@ class StoreView
     }
 
     /**
-     * Retrieves a unique list of locales that are used by store views
+     * Retrieves a unique list of locales that are used by store views and in default
      *
      * @return array
      */
@@ -76,6 +76,11 @@ class StoreView
     {
         $stores = $this->storeManager->getStores();
         $locales = [];
+
+        /**
+         * Default value might differ from any store scope
+         */
+        $locales[] = $this->scopeConfig->getValue(Data::XML_PATH_DEFAULT_LOCALE);
 
         /** @var \Magento\Store\Api\Data\StoreInterface $store */
         foreach ($stores as $store) {
