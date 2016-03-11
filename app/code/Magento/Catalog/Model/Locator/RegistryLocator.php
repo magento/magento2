@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Model\Locator;
 
+use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Registry;
 
 /**
@@ -27,29 +28,37 @@ class RegistryLocator implements LocatorInterface
 
     /**
      * {@inheritdoc}
+     * @throws NotFoundException
      */
     public function getProduct()
     {
-        return $this->registry->registry('current_product');
+        if ($product = $this->registry->registry('current_product')) {
+            return $product;
+        }
+
+        throw new NotFoundException(__('Product was not registered'));
     }
 
     /**
      * {@inheritdoc}
+     * @throws NotFoundException
      */
     public function getStore()
     {
-        return $this->registry->registry('current_store');
-    }
+        if ($currentStore = $this->registry->registry('current_store')) {
+            return $currentStore;
+        }
 
+        throw new NotFoundException(__('Store was not registered'));
+    }
 
     /**
      * {@inheritdoc}
      */
     public function getWebsiteIds()
     {
-        return $this->registry->registry('current_product')->getWebsiteIds();
+        return $this->getProduct()->getWebsiteIds();
     }
-
 
     /**
      * {@inheritdoc}
