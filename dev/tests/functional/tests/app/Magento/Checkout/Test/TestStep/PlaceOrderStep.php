@@ -49,6 +49,7 @@ class PlaceOrderStep implements TestStepInterface
      * @var FixtureFactory
      */
     private $fixtureFactory;
+
     /**
      * @var array
      */
