@@ -228,7 +228,7 @@ class Related extends AbstractModifier
     protected function getRelatedFieldset()
     {
         $content = __(
-            'Related products are shown to shoppers in addition to the item the shopper is looking at.'
+            'Related products are shown to customers in addition to the item the customer is looking at.'
         );
 
         return [
