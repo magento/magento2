@@ -74,7 +74,7 @@ class AdvancedPricing extends AbstractModifier
     /**
      * @var string
      */
-    protected $targetName = 'product_form.product_form';
+    protected $scopeName;
 
     /**
      * @var array
@@ -90,6 +90,7 @@ class AdvancedPricing extends AbstractModifier
      * @param ModuleManager $moduleManager
      * @param Data $directoryHelper
      * @param ArrayManager $arrayManager
+     * @param string $scopeName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -100,7 +101,8 @@ class AdvancedPricing extends AbstractModifier
         SearchCriteriaBuilder $searchCriteriaBuilder,
         ModuleManager $moduleManager,
         Data $directoryHelper,
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        $scopeName = ''
     ) {
         $this->locator = $locator;
         $this->storeManager = $storeManager;
@@ -110,6 +112,7 @@ class AdvancedPricing extends AbstractModifier
         $this->moduleManager = $moduleManager;
         $this->directoryHelper = $directoryHelper;
         $this->arrayManager = $arrayManager;
+        $this->scopeName = $scopeName;
     }
 
     /**
@@ -366,7 +369,7 @@ class AdvancedPricing extends AbstractModifier
                 'template' => 'ui/form/components/button/container',
                 'actions' => [
                     [
-                        'targetName' => $this->targetName . '.advanced_pricing_modal',
+                        'targetName' => $this->scopeName . '.advanced_pricing_modal',
                         'actionName' => 'toggleModal',
                     ]
                 ],
