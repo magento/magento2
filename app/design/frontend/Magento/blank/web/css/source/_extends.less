@@ -34,8 +34,8 @@
 
 @abs-product-options-list: {
     dt {
-        float: left;
         clear: left;
+        float: left;
         margin: 0 @indent__s @indent__xs 0;
 
         &:after {
@@ -119,7 +119,7 @@
 
 .abs-reset-image-wrapper {
     height: auto;
-    padding: 0!important;
+    padding: 0 !important;
     .product-image-photo {
         position: static;
     }
@@ -138,8 +138,8 @@
 .abs-adaptive-images-centered {
     display: block;
     height: auto;
-    max-width: 100%;
     margin: 0 auto;
+    max-width: 100%;
 }
 
 //
@@ -151,10 +151,10 @@
         font-weight: 500;
     }
 
-    padding-bottom: 12px;
-    margin-bottom: 15px;
-    border-bottom: 1px solid @secondary__color;
     .lib-font-size(18);
+    border-bottom: 1px solid @secondary__color;
+    margin-bottom: 15px;
+    padding-bottom: 12px;
 }
 
 //
@@ -303,11 +303,11 @@
 
 .abs-action-remove {
     &:extend(.abs-action-button-as-link all);
-    width: auto;
-    position: absolute;
-    top: 31px;
     left: @indent__s;
     margin-left: 70%;
+    position: absolute;
+    top: 31px;
+    width: auto;
 }
 
 //
@@ -316,8 +316,8 @@
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .abs-action-remove-desktop when not (@form-field-type-label-inline__width = false) and not (@form-field-type-label-inline__width = '') {
-        top: 6px;
         margin-left: @form-field-type-label-inline__width + 50%;
+        top: 6px;
     }
 }
 
@@ -328,6 +328,7 @@
 .abs-add-fields {
     .fieldset {
         margin-bottom: 50px;
+
         .field {
             &:not(.choice) {
                 .control {
@@ -339,6 +340,7 @@
         .actions-toolbar {
             &:not(:first-child) {
                 &:extend(.abs-add-clearfix all);
+
                 > .secondary {
                     .action {
                         &.add {
@@ -550,6 +552,7 @@
             > .field,
             .fields > .field {
                 .lib-form-field-type-revert(@_type: block);
+
                 &:not(:first-child):last-of-type {
                     margin-bottom: 0;
                 }
@@ -584,7 +587,7 @@
 
 .abs-split-button {
     .lib-dropdown-split(
-        @_options-selector : ~".items",
+        @_options-selector : ~'.items',
         @_dropdown-split-button-border-radius-fix: true
     );
     vertical-align: middle;
@@ -669,8 +672,8 @@
     .price-including-tax,
     .price-excluding-tax,
     .weee {
-        display: inline-block;
         .lib-font-size(14);
+        display: inline-block;
         white-space: nowrap;
     }
 
@@ -679,11 +682,11 @@
         .lib-font-size(11);
 
         &:before {
-            content: "("attr(data-label)": ";
+            content: '('attr(data-label)': ';
         }
 
         &:after {
-            content:")";
+            content:')';
         }
     }
 }
@@ -731,8 +734,8 @@
 
 .abs-methods-shipping-title {
     .lib-font-size(14);
-    margin: 0 0 15px;
     font-weight: @font-weight__bold;
+    margin: 0 0 15px;
 }
 
 //
@@ -779,7 +782,7 @@
                     width: 33%;
 
                     &:before {
-                        content: attr(data-th) ":";
+                        content: attr(data-th) ':';
                         display: block;
                         font-weight: @font-weight__bold;
                         padding-bottom: @indent__s;
@@ -820,12 +823,12 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .abs-icon-add-mobile {
         .lib-icon-font(
-            @_icon-font-content: @icon-expand,
-            @_icon-font-size: 10px,
-            @_icon-font-line-height: 10px,
-            @_icon-font-vertical-align: middle,
-            @_icon-font-margin: 0 5px 0 0,
-            @_icon-font-display: block
+        @_icon-font-content: @icon-expand,
+        @_icon-font-size: 10px,
+        @_icon-font-line-height: 10px,
+        @_icon-font-vertical-align: middle,
+        @_icon-font-margin: 0 5px 0 0,
+        @_icon-font-display: block
         );
     }
 }
@@ -856,18 +859,19 @@
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .abs-toggling-title-mobile {
-        border-top: @border-width__base solid @border-color__base;
         border-bottom: @border-width__base solid @border-color__base;
+        border-top: @border-width__base solid @border-color__base;
         cursor: pointer;
         margin-bottom: 0;
         padding: @indent__s @indent__xl @indent__s @layout__width-xs-indent;
         position: relative;
+
         .lib-icon-font(
-            @_icon-font-content: @icon-down,
-            @_icon-font-size: 28px,
-            @_icon-font-text-hide: false,
-            @_icon-font-position: after,
-            @_icon-font-display: block
+        @_icon-font-content: @icon-down,
+        @_icon-font-size: 28px,
+        @_icon-font-text-hide: false,
+        @_icon-font-position: after,
+        @_icon-font-display: block
         );
 
         &:after {
@@ -927,8 +931,8 @@
         .toolbar-amount,
         .limiter,
         .pages {
-            margin-bottom: @indent__m;
             float: none;
+            margin-bottom: @indent__m;
         }
     }
 }
@@ -973,8 +977,8 @@
 
         .pages {
             position: absolute;
-            z-index: 0;
             width: 100%;
+            z-index: 0;
         }
     }
 }
@@ -998,12 +1002,12 @@
         &.continue {
             .lib-link-as-button();
             .lib-button(
-                @_button-padding: 7px 15px 7px 0,
-                @_button-icon-use: true,
-                @_button-font-content: @icon-prev,
-                @_button-icon-font-size: 32px,
-                @_button-icon-font-line-height: 16px,
-                @_button-icon-font-position: before
+            @_button-padding: 7px 15px 7px 0,
+            @_button-icon-use: true,
+            @_button-font-content: @icon-prev,
+            @_button-icon-font-size: 32px,
+            @_button-icon-font-line-height: 16px,
+            @_button-icon-font-position: before
             );
             border-radius: 3px;
             font-weight: bold;
@@ -1046,8 +1050,8 @@
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     .abs-shopping-cart-items-desktop {
         float: left;
-        width: 73%;
         position: relative;
+        width: 73%;
 
         .actions {
             text-align: right;
