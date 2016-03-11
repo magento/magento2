@@ -8,31 +8,73 @@ define([
     'use strict';
 
     return Element.extend({
+        processedFile: {},
+        actionsListOpened: false,
         defaults: {
             fileInputName: ''
+        },
+
+        /**
+         * Initialize observables.
+         *
+         * @returns {Object} Chainable.
+         */
+        initObservable: function () {
+            this._super().observe(['processedFile', 'actionsListOpened']);
+
+            return this;
         },
 
         /**
          * Adds provided file to the files list.
          *
          * @param {Object} file
-         * @returns {FileUploder} Chainable.
+         * @returns {Object} Chainable.
          */
         addFile: function (file) {
-            var processedFile = this.processFile(file),
-                tmpFile = [],
-                resultFile = {
-                'file': processedFile.file,
-                'name': processedFile.name,
-                'url': processedFile.url,
-                'status': processedFile.status ? processedFile.status : 'new'
-            };
+            this.processedFile(this.processFile(file));
 
-            tmpFile[0] = resultFile;
+            this.value(this.processedFile().file);
 
-            this.isMultipleFiles ?
-                this.value.push(tmpFile) :
-                this.value(tmpFile);
+            return this;
+        },
+
+        /**
+         * Toggle actions list.
+         *
+         * @returns {Object} Chainable.
+         */
+        toggleActionsList: function () {
+            if (this.actionsListOpened()) {
+                this.actionsListOpened(false);
+            } else {
+                this.actionsListOpened(true);
+            }
+
+            return this;
+        },
+
+        /**
+         * Close action list.
+         *
+         * @returns {Object} Chainable
+         */
+        closeList: function () {
+            if (this.actionsListOpened()) {
+                this.actionsListOpened(false);
+            }
+
+            return this;
+        },
+
+        /**
+         * Delete Image
+         *
+         * @returns {Object} Chainable
+         */
+        deleteImage: function () {
+            this.processedFile({});
+            this.value(null);
 
             return this;
         }
