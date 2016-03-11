@@ -138,7 +138,8 @@ class Save extends Generic
      * Retrieve target for button
      * @return string
      */
-    protected function getSaveTarget() {
+    protected function getSaveTarget()
+    {
         $target = 'product_form.product_form';
         if ($this->isConfigurableProduct()) {
             $target = 'configurableVariations';
@@ -150,7 +151,8 @@ class Save extends Generic
      * Retrieve action for button
      * @return string
      */
-    protected function getSaveAction() {
+    protected function getSaveAction()
+    {
         $action = 'save';
         if ($this->isConfigurableProduct()) {
             $action = 'saveFormHandler';
@@ -161,7 +163,8 @@ class Save extends Generic
     /**
      * @return boolean
      */
-    protected function isConfigurableProduct() {
+    protected function isConfigurableProduct()
+    {
         return in_array($this->getProduct()->getTypeId(), self::$availableProductTypes);
     }
 }
