@@ -81,7 +81,7 @@ class Composite extends AbstractModifier
                 $data[$productId]['configurable-matrix'] = $this->associatedProducts->getProductMatrix();
                 $data[$productId]['attributes'] = $this->associatedProducts->getProductAttributesIds();
                 $data[$productId]['attribute_codes'] = $this->associatedProducts->getProductAttributesCodes();
-                $data[$productId]['configurable_attributes_data'] =
+                $data[$productId]['product']['configurable_attributes_data'] =
                     $this->associatedProducts->getConfigurableAttributesData();
             }
         }
