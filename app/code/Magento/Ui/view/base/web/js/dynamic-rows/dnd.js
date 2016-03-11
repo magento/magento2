@@ -33,14 +33,14 @@ define([
             vi = vendors.length,
             property;
 
-        if (typeof style.transform != 'undefined') {
+        if (typeof style.transform !== 'undefined') {
             return 'transform';
         }
 
         while (vi--) {
             property = vendors[vi] + base;
 
-            if (typeof style[property] != 'undefined') {
+            if (typeof style[property] !== 'undefined') {
                 return property;
             }
         }
@@ -49,7 +49,8 @@ define([
     return Element.extend({
         defaults: {
             rootSelector: '${ $.recordsProvider }:div.admin__field',
-            tableSelector: '${ $.rootSelector } -> table.admin__dynamic-rows',
+            tableClass: 'table.admin__dynamic-rows',
+            tableSelector: '${ $.rootSelector } -> ${ $.tableClass }',
             separatorsClass: {
                 top: '_dragover-top',
                 bottom: '_dragover-bottom'
@@ -218,7 +219,10 @@ define([
          */
 
         getDepElement: function (curInstance, position) {
-            var recordsCollection = this.table.find('tbody > tr'),
+            var tableSelector = this.tableClass + ' tr',
+                recordsCollection = this.table.find('tbody > tr').filter(function(index, elem){
+                    return !$(elem).parents(tableSelector).length
+                }),
                 curInstancePositionTop = $(curInstance).position().top,
                 curInstancePositionBottom = curInstancePositionTop + $(curInstance).height();
 
