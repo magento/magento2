@@ -297,6 +297,11 @@ class Widget
                 $directive .= sprintf(' %s="%s"', $name, $value);
             }
         }
+
+        if (array_key_exists('show_pager', $params) && (bool)$params['show_pager']) {
+            $directive .= sprintf(' %s="%s"', 'page_var_name', 'p_' . substr(md5(microtime()), 0, 5));
+        }
+
         $directive .= '}}';
 
         if ($asIs) {
