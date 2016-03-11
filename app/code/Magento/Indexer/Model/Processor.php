@@ -66,9 +66,10 @@ class Processor
             /** @var Indexer $indexer */
             $indexer = $this->indexerFactory->create();
             $indexer->load($indexerId);
+            $indexerConfig = $this->config->getIndexer($indexerId);
             if ($indexer->isInvalid()) {
                 // Skip indexers that have shared index that was already
-                if (!in_array($indexer->getSharedIndex(), $sharedIndexesComplete)) {
+                if (!in_array($indexerConfig['shared_index'], $sharedIndexesComplete)) {
                     $indexer->reindexAll();
                 } else {
                     /** @var \Magento\Indexer\Model\Indexer\State $state */
@@ -76,8 +77,8 @@ class Processor
                     $state->setStatus(StateInterface::STATUS_VALID);
                     $state->save();
                 }
-                if ($indexer->getSharedIndex()) {
-                    $sharedIndexesComplete[] = $indexer->getSharedIndex();
+                if ($indexerConfig['shared_index']) {
+                    $sharedIndexesComplete[] = $indexerConfig['shared_index'];
                 }
             }
         }

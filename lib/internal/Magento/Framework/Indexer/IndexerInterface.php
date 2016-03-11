@@ -22,13 +22,6 @@ interface IndexerInterface
     public function getViewId();
 
     /**
-     * Return indexer's shared index
-     *
-     * @return string
-     */
-    public function getSharedIndex();
-
-    /**
      * Return indexer action class
      *
      * @return string

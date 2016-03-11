@@ -138,16 +138,6 @@ class Indexer extends \Magento\Framework\DataObject implements IdxInterface
     }
 
     /**
-     * Return indexer shared index
-     *
-     * @return string
-     */
-    public function getSharedIndex()
-    {
-        return $this->getData('shared_index');
-    }
-
-    /**
      * Return indexer's view ID
      *
      * @return string
