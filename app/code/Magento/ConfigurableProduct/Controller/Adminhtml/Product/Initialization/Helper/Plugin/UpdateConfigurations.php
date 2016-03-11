@@ -63,7 +63,6 @@ class UpdateConfigurations
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,
         \Magento\Catalog\Model\Product $configurableProduct
     ) {
-        //$configurations = $this->request->getParam('configurations', []);
         $configurations = $this->getConfigurations();
         $configurations = $this->variationHandler->duplicateImagesForVariations($configurations);
         foreach ($configurations as $productId => $productData) {
