@@ -12,7 +12,6 @@ define([
     return Checkbox.extend({
         defaults: {
             inputCheckBoxName: '',
-            value: '',
             prefixElementName: '',
             parentDynamicRowName: 'visual_swatch'
         },
