@@ -92,7 +92,6 @@ body._in-resize {
     border: none;
     font-size: @data-grid__font-size;
     margin-bottom: 0;
-    max-width: 100%;
     width: 100%;
 
     &:not(._dragging-copy) {
@@ -136,10 +135,33 @@ body._in-resize {
         &._odd-row {
             td {
                 background-color: @data-grid-td__even__background-color;
+
+                &._update-status-active {
+                    background: @data-grid-td__odd__update__active__background-color;
+                }
+
+                &._update-status-upcoming {
+                    background: @data-grid-td__odd__update__upcoming__background-color;
+                }
+            }
+        }
+
+        &:hover {
+            td {
+                &._update-status-active,
+                &._update-status-upcoming {
+                    background-color: @data-grid-tr__hover__background-color;
+                }
             }
         }
 
         &.data-grid-tr-no-data {
+            td {
+                font-size: @data-grid__no-records__font-size;
+                padding: @data-grid__no-records__padding;
+                text-align: center;
+            }
+
             &:hover {
                 td {
                     background-color: @data-grid-td__odd__background-color;
@@ -272,6 +294,14 @@ body._in-resize {
             text-align: left;
             top: auto;
             z-index: 1;
+        }
+
+        &._update-status-active {
+            background: @data-grid-td__update__active__background-color;
+        }
+
+        &._update-status-upcoming {
+            background: @data-grid-td__update__upcoming__background-color;
         }
     }
 
@@ -958,6 +988,7 @@ body._in-resize {
                 transform: rotate(45deg);
                 width: 1.6rem;
                 z-index: 3;
+
                 .ie9 & {
                     display: none;
                 }
