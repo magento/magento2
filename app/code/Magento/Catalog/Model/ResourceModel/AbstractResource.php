@@ -17,13 +17,6 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
 {
     /**
-     * Store firstly set attributes to filter selected attributes when used specific store_id
-     *
-     * @var array
-     */
-    protected $_attributes = [];
-
-    /**
      * Store manager
      *
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -167,45 +160,6 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         $select = parent::_prepareLoadSelect($selects);
         $select->order('store_id');
         return $select;
-    }
-
-    /**
-     * Initialize attribute value for object
-     *
-     * @param \Magento\Catalog\Model\AbstractModel $object
-     * @param array $valueRow
-     * @return $this
-     */
-    protected function _setAttributeValue($object, $valueRow)
-    {
-        $attribute = $this->getAttribute($valueRow['attribute_id']);
-        if ($attribute) {
-            $attributeCode = $attribute->getAttributeCode();
-            $isDefaultStore = $valueRow['store_id'] == $this->getDefaultStoreId();
-            if (isset($this->_attributes[$valueRow['attribute_id']])) {
-                if ($isDefaultStore) {
-                    $object->setAttributeDefaultValue($attributeCode, $valueRow['value']);
-                } else {
-                    $object->setAttributeDefaultValue(
-                        $attributeCode,
-                        $this->_attributes[$valueRow['attribute_id']]['value']
-                    );
-                }
-            } else {
-                $this->_attributes[$valueRow['attribute_id']] = $valueRow;
-            }
-
-            $value = $valueRow['value'];
-            $valueId = $valueRow['value_id'];
-
-            $object->setData($attributeCode, $value);
-            if (!$isDefaultStore) {
-                $object->setExistsStoreValueFlag($attributeCode);
-            }
-            $attribute->getBackend()->setEntityValueId($object, $valueId);
-        }
-
-        return $this;
     }
 
     /**
@@ -615,19 +569,5 @@ abstract class AbstractResource extends \Magento\Eav\Model\Entity\AbstractEntity
         }
 
         return $attributesData ? $attributesData : false;
-    }
-
-    /**
-     * Reset firstly loaded attributes
-     *
-     * @param \Magento\Framework\DataObject $object
-     * @param integer $entityId
-     * @param array|null $attributes
-     * @return $this
-     */
-    public function load($object, $entityId, $attributes = [])
-    {
-        $this->_attributes = [];
-        return parent::load($object, $entityId, $attributes);
     }
 }
