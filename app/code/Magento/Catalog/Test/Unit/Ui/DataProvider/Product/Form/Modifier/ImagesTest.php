@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Product\Type;
-use Magento\Catalog\Model\AttributeConstantsInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\General;
 
 /**
@@ -32,9 +32,9 @@ class ImagesTest extends AbstractModifierTest
         $data = [
             $modelId => [
                 \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\General::DATA_SOURCE_DEFAULT => [
-                    AttributeConstantsInterface::CODE_SKU => 'product_42',
-                    AttributeConstantsInterface::CODE_PRICE => '42.00',
-                    AttributeConstantsInterface::CODE_STATUS => '1',
+                    ProductAttributeInterface::CODE_SKU => 'product_42',
+                    ProductAttributeInterface::CODE_PRICE => '42.00',
+                    ProductAttributeInterface::CODE_STATUS => '1',
                     \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Images::CODE_MEDIA_GALLERY => [
                         'images' => [
                             [
@@ -55,9 +55,9 @@ class ImagesTest extends AbstractModifierTest
         $expectedData = [
             $modelId => [
                 General::DATA_SOURCE_DEFAULT => [
-                    AttributeConstantsInterface::CODE_SKU => 'product_42',
-                    AttributeConstantsInterface::CODE_PRICE => '42.00',
-                    AttributeConstantsInterface::CODE_STATUS => '1',
+                    ProductAttributeInterface::CODE_SKU => 'product_42',
+                    ProductAttributeInterface::CODE_PRICE => '42.00',
+                    ProductAttributeInterface::CODE_STATUS => '1',
                 ]
             ]
         ];
