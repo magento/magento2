@@ -148,7 +148,11 @@ class Source
             $path = DirectoryList::TMP_MATERIALIZATION_DIR . '/source/' . $chain->getTargetAssetPath();
             $this->varDir->writeFile($path, $chain->getContent());
         }
-        $result = [$dir, $path];
+        if (empty($path)) {
+            $result = false;
+        } else {
+            $result = [$dir, $path];
+        }
         return $result;
     }
 
