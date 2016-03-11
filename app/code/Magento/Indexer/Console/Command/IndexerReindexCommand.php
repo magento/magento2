@@ -6,15 +6,32 @@
 namespace Magento\Indexer\Console\Command;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Indexer\StateInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Indexer\ConfigInterface;
+use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * Command for reindexing indexers.
  */
 class IndexerReindexCommand extends AbstractIndexerManageCommand
 {
+    /**
+     * @var ConfigInterface
+     */
+    protected $config;
+
+    /**
+     * Constructor
+     * @param ObjectManagerFactory $objectManagerFactory
+     */
+    public function __construct(ObjectManagerFactory $objectManagerFactory)
+    {
+        parent::__construct($objectManagerFactory);
+        $this->config = $this->getObjectManager()->create(ConfigInterface::class);
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -38,12 +55,16 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
         foreach ($indexers as $indexer) {
             try {
                 $startTime = microtime(true);
-                // Skip indexers that have shared index that was already
-                if (!in_array($indexer->getSharedIndex(), $sharedIndexesComplete)) {
+                $indexerConfig = $this->config->getIndexer($indexer->getId());
+
+                // Skip indexers having shared index that was already complete
+                if (!in_array($indexerConfig['shared_index'], $sharedIndexesComplete)) {
                     $indexer->reindexAll();
+                } else {
+                    $indexer->getState()->setStatus(StateInterface::STATUS_VALID)->save();
                 }
-                if ($indexer->getSharedIndex()) {
-                    $sharedIndexesComplete[] = $indexer->getSharedIndex();
+                if ($indexerConfig['shared_index']) {
+                    $sharedIndexesComplete[] = $indexerConfig['shared_index'];
                 }
                 $resultTime = microtime(true) - $startTime;
                 $output->writeln(
