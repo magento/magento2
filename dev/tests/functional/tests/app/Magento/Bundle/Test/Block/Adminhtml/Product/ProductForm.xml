@@ -28,7 +28,7 @@
     </product-details>
     <bundle>
         <class>\Magento\Bundle\Test\Block\Adminhtml\Catalog\Product\Edit\Section\Bundle</class>
-        <selector>[data-index="bundle_data"]</selector>
+        <selector>[data-index="bundle-items"]</selector>
         <strategy>css selector</strategy>
         <wrapper>product</wrapper>
         <fields>

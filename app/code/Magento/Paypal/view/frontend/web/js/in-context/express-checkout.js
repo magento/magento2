@@ -8,13 +8,15 @@ define(
         'jquery',
         'uiComponent',
         'paypalInContextExpressCheckout',
+        'Magento_Customer/js/customer-data',
         'domReady!'
     ],
     function (
         _,
         $,
         Component,
-        paypalExpressCheckout
+        paypalExpressCheckout,
+        customerData
     ) {
         'use strict';
 
@@ -53,6 +55,7 @@ define(
                         ).always(
                             function () {
                                 $('body').trigger('processStop');
+                                customerData.invalidate(['cart']);
                             }
                         );
                     }
