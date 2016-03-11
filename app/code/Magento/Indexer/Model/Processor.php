@@ -63,7 +63,7 @@ class Processor
             $indexer->load($indexerId);
             $indexerConfig = $this->config->getIndexer($indexerId);
             if ($indexer->isInvalid()) {
-                // Skip indexers that have shared index that was already
+                // Skip indexers having shared index that was already complete
                 if (!in_array($indexerConfig['shared_index'], $sharedIndexesComplete)) {
                     $indexer->reindexAll();
                 } else {
