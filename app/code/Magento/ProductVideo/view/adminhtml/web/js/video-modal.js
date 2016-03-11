@@ -27,11 +27,15 @@ define([
             this.element.on('openDialog', '.gallery.ui-sortable', $.proxy(this._onOpenDialog, this));
         },
 
+        /**
+         * @private
+         */
         _create: function () {
             this._super();
             this.videoDialog = this.element.find('#new-video');
             this.videoDialog.mage('newVideoDialog', this.videoDialog.data('modalInfo'));
         },
+
         /**
          * Open dialog for external video
          * @private
