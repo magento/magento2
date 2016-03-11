@@ -53,7 +53,6 @@ return [
             'templateUrl' => "$base/marketplace-credentials",
             'title'       => 'System Upgrade',
             'controller'  => 'MarketplaceCredentialsController',
-            'header'      => 'Step 1: Select Version',
             'order'       => 1,
             'nav'         => false,
             'noMenu'      => true,
