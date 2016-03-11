@@ -344,7 +344,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
             while ($bunch = $this->_entityModel->getNextBunch()) {
                 foreach ($bunch as $rowNum => $rowData) {
                     $productData = $newSku[$rowData[\Magento\CatalogImportExport\Model\Import\Product::COL_SKU]];
-                    $productIds[] = $productData['entity_id'];
+                    $productIds[] = $productData[$this->getProductEntityLinkField()];
                 }
                 $this->deleteOptionsAndSelections($productIds);
             }
@@ -359,7 +359,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                     if ($this->_type != $productData['type_id']) {
                         continue;
                     }
-                    $this->parseSelections($rowData, $productData['entity_id']);
+                    $this->parseSelections($rowData, $productData[$this->getProductEntityLinkField()]);
                 }
                 if (!empty($this->_cachedOptions)) {
                     $this->retrieveProducsByCachedSkus();
