@@ -7,6 +7,7 @@
 namespace Magento\Backend\Test\TestCase;
 
 use Magento\Backend\Test\Page\Adminhtml\SystemConfigEdit;
+use Magento\Backend\Test\Page\AdminAuthLogin;
 use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Mtf\TestCase\Injectable;
 
@@ -46,10 +47,14 @@ class ExpireAdminSessionTest extends Injectable
      *
      * @param SystemConfigEdit $systemConfigEdit
      * @param ConfigData $sessionLifetimeConfig
+     * @param AdminAuthLogin $adminAuthLogin
      * @return void
      */
-    public function test(SystemConfigEdit $systemConfigEdit, ConfigData $sessionLifetimeConfig)
-    {
+    public function test(
+        SystemConfigEdit $systemConfigEdit,
+        ConfigData $sessionLifetimeConfig,
+        AdminAuthLogin $adminAuthLogin
+    ) {
         $this->systemConfigEdit = $systemConfigEdit;
         $this->sessionLifetimeConfig = $sessionLifetimeConfig;
         $this->systemConfigEdit->open();
@@ -71,7 +76,7 @@ class ExpireAdminSessionTest extends Injectable
          */
         sleep($section[$keys[0]]['label']);
 
-        $this->systemConfigEdit->open();
+        $adminAuthLogin->open();
     }
 
     /**
