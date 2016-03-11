@@ -112,7 +112,6 @@ class IndexerReindexCommandTest extends AbstractIndexerCommandCommonSetup
 
         $indexer3->expects($this->once())->method('getState')->willReturn($stateMock);
 
-
         $this->collectionFactory->expects($this->never())->method('create');
         $this->indexerFactory->expects($this->at(0))->method('create')->willReturn($indexerOne);
         $this->indexerFactory->expects($this->at(1))->method('create')->willReturn($indexerTwo);
