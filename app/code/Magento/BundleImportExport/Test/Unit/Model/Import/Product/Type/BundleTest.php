@@ -6,6 +6,12 @@
 
 namespace Magento\BundleImportExport\Test\Unit\Model\Import\Product\Type;
 
+/**
+ * Class BundleTest
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
 {
     /**
@@ -98,12 +104,18 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ));
     }
 
+    /**
+     * Set up
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     protected function setUp()
     {
         parent::setUp();
 
         $this->entityModel = $this->getMock(
-            'Magento\CatalogImportExport\Model\Import\Product',
+            \Magento\CatalogImportExport\Model\Import\Product::class,
             [
                 'getErrorAggregator',
                 'getBehavior',
@@ -119,13 +131,13 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         );
         $this->entityModel->method('getErrorAggregator')->willReturn($this->getErrorAggregatorObject());
         $this->connection = $this->getMock(
-            'Magento\Framework\DB\Adapter\Pdo\Mysql',
+            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
             ['select', 'fetchAll', 'fetchPairs', 'joinLeft', 'insertOnDuplicate', 'delete', 'quoteInto', 'fetchAssoc'],
             [],
             '',
             false
         );
-        $this->select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $this->select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
         $this->select->expects($this->any())->method('from')->will($this->returnSelf());
         $this->select->expects($this->any())->method('where')->will($this->returnSelf());
         $this->select->expects($this->any())->method('joinLeft')->will($this->returnSelf());
@@ -136,7 +148,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $this->connection->expects($this->any())->method('delete')->willReturnSelf();
         $this->connection->expects($this->any())->method('quoteInto')->willReturn('');
         $this->resource = $this->getMock(
-            'Magento\Framework\App\ResourceConnection',
+            \Magento\Framework\App\ResourceConnection::class,
             ['getConnection', 'getTableName'],
             [],
             '',
@@ -145,14 +157,14 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $this->resource->expects($this->any())->method('getConnection')->will($this->returnValue($this->connection));
         $this->resource->expects($this->any())->method('getTableName')->will($this->returnValue('tableName'));
         $this->attrSetColFac = $this->getMock(
-            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory',
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $this->setCollection = $this->getMock(
-            'Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection',
+            \Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\Collection::class,
             ['setEntityTypeFilter'],
             [],
             '',
@@ -165,14 +177,14 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ->method('setEntityTypeFilter')
             ->will($this->returnValue([]));
         $this->prodAttrColFac = $this->getMock(
-            'Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory',
+            \Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory::class,
             ['create'],
             [],
             '',
             false
         );
         $attrCollection =
-            $this->getMock('\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection', [], [], '', false);
+            $this->getMock(\Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class, [], [], '', false);
         $attrCollection->expects($this->any())->method('addFieldToFilter')->willReturn([]);
         $this->prodAttrColFac->expects($this->any())->method('create')->will($this->returnValue($attrCollection));
         $this->params = [
@@ -181,7 +193,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         ];
 
         $this->bundle = $this->objectManagerHelper->getObject(
-            'Magento\BundleImportExport\Model\Import\Product\Type\Bundle',
+            \Magento\BundleImportExport\Model\Import\Product\Type\Bundle::class,
             [
                 'attrSetColFac' => $this->attrSetColFac,
                 'prodAttrColFac' => $this->prodAttrColFac,
@@ -189,6 +201,20 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                 'params' => $this->params
             ]
         );
+
+        $metadataMock = $this->getMock(\Magento\Framework\Model\Entity\EntityMetadata::class, [], [], '', false);
+        $metadataMock->expects($this->any())
+            ->method('getLinkField')
+            ->willReturn('entity_id');
+        $metadataPoolMock = $this->getMock(\Magento\Framework\Model\Entity\MetadataPool::class, [], [], '', false);
+        $metadataPoolMock->expects($this->any())
+            ->method('getMetadata')
+            ->with(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->willReturn($metadataMock);
+        $reflection = new \ReflectionClass(\Magento\BundleImportExport\Model\Import\Product\Type\Bundle::class);
+        $reflectionProperty = $reflection->getProperty('metadataPool');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->bundle, $metadataPoolMock);
     }
 
     /**
@@ -257,7 +283,6 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         ]));
         $this->bundle->saveData();
     }
-
 
     /**
      * Data provider for saveData()
@@ -332,7 +357,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
             ['bundle_values' => 'value1', 'sku' => 'sku', 'name' => 'name']
         ]));
         $this->entityModel->expects($this->any())->method('isRowAllowedToImport')->will($this->returnValue(true));
-        $select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $select = $this->getMock(\Magento\Framework\DB\Select::class, [], [], '', false);
         $this->connection->expects($this->any())->method('select')->will($this->returnValue($select));
         $select->expects($this->any())->method('from')->will($this->returnSelf());
         $select->expects($this->any())->method('where')->will($this->returnSelf());
@@ -346,7 +371,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     public function testPrepareAttributesWithDefaultValueForSaveInsideCall()
     {
         $bundleMock = $this->getMock(
-            'Magento\BundleImportExport\Model\Import\Product\Type\Bundle',
+            \Magento\BundleImportExport\Model\Import\Product\Type\Bundle::class,
             ['transformBundleCustomAttributes'],
             [],
             '',
