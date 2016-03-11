@@ -10,28 +10,12 @@ use Magento\Framework\Indexer\StateInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\Indexer\ConfigInterface;
-use Magento\Framework\App\ObjectManagerFactory;
 
 /**
  * Command for reindexing indexers.
  */
 class IndexerReindexCommand extends AbstractIndexerManageCommand
 {
-    /**
-     * @var ConfigInterface
-     */
-    protected $config;
-
-    /**
-     * Constructor
-     * @param ObjectManagerFactory $objectManagerFactory
-     */
-    public function __construct(ObjectManagerFactory $objectManagerFactory)
-    {
-        parent::__construct($objectManagerFactory);
-        $this->config = $this->getObjectManager()->create(ConfigInterface::class);
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -50,12 +34,12 @@ class IndexerReindexCommand extends AbstractIndexerManageCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $indexers = $this->getIndexers($input);
-
+        $config = $this->getObjectManager()->create(ConfigInterface::class);
         $sharedIndexesComplete = [];
         foreach ($indexers as $indexer) {
             try {
                 $startTime = microtime(true);
-                $indexerConfig = $this->config->getIndexer($indexer->getId());
+                $indexerConfig = $config->getIndexer($indexer->getId());
 
                 // Skip indexers having shared index that was already complete
                 if (!in_array($indexerConfig['shared_index'], $sharedIndexesComplete)) {
