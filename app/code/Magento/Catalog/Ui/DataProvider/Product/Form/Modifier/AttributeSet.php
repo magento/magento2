@@ -5,7 +5,7 @@
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Model\AttributeConstantsInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -96,7 +96,7 @@ class AttributeSet extends AbstractModifier
                 'filterUrl' => $this->urlBuilder->getUrl('catalog/product/suggestAttributeSets', ['isAjax' => 'true']),
                 'sortOrder' => $this->getNextAttributeSortOrder(
                     $meta,
-                    [AttributeConstantsInterface::CODE_STATUS],
+                    [ProductAttributeInterface::CODE_STATUS],
                     self::ATTRIBUTE_SET_FIELD_ORDER
                 ),
                 'multiple' => false,
