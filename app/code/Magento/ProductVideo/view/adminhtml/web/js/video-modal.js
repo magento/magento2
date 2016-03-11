@@ -16,7 +16,6 @@ define([
 
     $.widget('mage.productGallery', productGallery, {
 
-
         /**
          * Bind events
          * @private

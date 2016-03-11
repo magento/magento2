@@ -724,10 +724,10 @@ define([
          * @private
          */
         _blockActionButtons: function (status) {
-           this.element
-               .closest('.mage-new-video-dialog')
-               .find('.page-actions-buttons button.video-create-button, .page-actions-buttons button.video-edit')
-               .attr('disabled', status);
+            this.element
+                .closest('.mage-new-video-dialog')
+                .find('.page-actions-buttons button.video-create-button, .page-actions-buttons button.video-edit')
+                .attr('disabled', status);
         },
 
         /**
