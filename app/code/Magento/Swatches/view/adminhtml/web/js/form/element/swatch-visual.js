@@ -325,9 +325,7 @@ define([
          * Configure data scope.
          */
         configureDataScope: function () {
-            var recordId,
-                prefixName,
-                suffixName;
+            var recordId, prefixName;
 
             // Get recordId
             recordId = this.parentName.split('.').last();
@@ -350,6 +348,13 @@ define([
         dataScopeToHtmlArray: function (dataScopeString) {
             var dataScopeArray, dataScope, reduceFunction;
 
+            /**
+             * Add new level of nesting.
+             *
+             * @param {String} prev
+             * @param {String} curr
+             * @returns {String}
+             */
             reduceFunction = function (prev, curr) {
                 return prev + '[' + curr + ']';
             };
