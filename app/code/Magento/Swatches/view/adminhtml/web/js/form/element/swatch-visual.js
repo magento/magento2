@@ -220,7 +220,7 @@ define([
              * Register event for swatch input[type=file] change
              */
             swatchComponents.inputFile.change(function () {
-                var localContainer = $('#' + $(this).attr('data-called-by')).parents().eq(2).children('.swatch_window'),
+                var localContainer = $('.' + $(this).attr('data-called-by')).parents().eq(2).children('.swatch_window'),
 
                     /**
                      * @this {iframe}
@@ -247,7 +247,7 @@ define([
              * Register event for choose "upload image" option
              */
             $(container).on('click', '.btn_choose_file_upload', function () {
-                swatchComponents.inputFile.attr('data-called-by', $(this).attr('id'));
+                swatchComponents.inputFile.attr('data-called-by', $(this).data('class'));
                 swatchComponents.inputFile.click();
             });
 
