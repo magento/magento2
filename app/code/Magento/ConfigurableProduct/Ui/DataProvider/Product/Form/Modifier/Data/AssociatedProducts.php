@@ -178,6 +178,32 @@ class AssociatedProducts
     }
 
     /**
+     * @return array
+     */
+    public function getConfigurableAttributesData()
+    {
+        $result = [];
+
+        foreach ($this->getProductAttributes() as $attribute) {
+            $result[$attribute['id']] = [
+                'attribute_id' => $attribute['id'],
+                'code' => $attribute['code'],
+                'label' => $attribute['label'],
+                'position' => $attribute['position'],
+            ];
+
+            foreach ($attribute['chosen'] as $chosenOption) {
+                $result[$attribute['id']]['values'][$chosenOption['value']] = [
+                    'include' => 1,
+                    'value_index' => $chosenOption['value'],
+                ];
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Prepare variations
      *
      * @return void

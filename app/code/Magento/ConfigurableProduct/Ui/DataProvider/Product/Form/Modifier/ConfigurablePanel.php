@@ -220,15 +220,21 @@ class ConfigurablePanel extends AbstractModifier
             'arguments' => [
                 'data' => [
                     'config' => [
+                        'component' => 'Magento_ConfigurableProduct/js/components/container-configurable-handler',
                         'formElement' => 'container',
                         'componentType' => 'container',
                         'label' => false,
-                        'content' => __(
+                        'content1' => __(
                             'Configurable products allow customers to choose options '
                             . '(Ex: shirt color). You need to create a simple product for each '
                             . 'configuration (Ex: a product for each color).'
                         ),
+                        'content2' => __(
+                            'Configurations cannot be created for a standard product with downloadable files. '
+                            . 'To create configurations, first remove all downloadable files.'
+                        ),
                         'template' => 'ui/form/components/complex',
+                        'createConfigurableButton' => 'ns = ${ $.ns }, index = create_configurable_products_button',
                     ],
                 ],
             ],
@@ -387,6 +393,7 @@ class ConfigurablePanel extends AbstractModifier
                             'component' => 'Magento_ConfigurableProduct/js/components/file-uploader',
                             'elementTmpl' => 'Magento_ConfigurableProduct/components/file-uploader',
                             'fileInputName' => 'image',
+                            'isMultipleFiles' => false,
                             'uploaderConfig' => [
                                 'url' => $this->urlBuilder->addSessionParam()->getUrl(
                                     'catalog/product_gallery/upload'
@@ -488,7 +495,6 @@ class ConfigurablePanel extends AbstractModifier
             'componentType' => Form\Field::NAME,
             'dataScope' => $name,
             'fit' => true,
-            'additionalClasses' => 'admin__field-small',
             'visibleIfCanEdit' => true,
             'imports' => [
                 'visible' => '${$.provider}:${$.parentScope}.canEdit'
@@ -514,7 +520,6 @@ class ConfigurablePanel extends AbstractModifier
             $textConfig
         );
         $container['arguments']['data']['config'] = [
-            'additionalClasses' => 'admin__field',
             'componentType' => Container::NAME,
             'formElement' => Container::NAME,
             'component' => 'Magento_Ui/js/form/components/group',
