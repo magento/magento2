@@ -6,6 +6,8 @@
 
 namespace Magento\Braintree\Test\TestStep;
 
+use Magento\Config\Test\Fixture\ConfigData;
+use Magento\Mtf\ObjectManager;
 use Magento\Sales\Test\Fixture\OrderInjectable;
 use Magento\Sales\Test\Page\Adminhtml\OrderCreditMemoNew;
 use Magento\Sales\Test\Page\Adminhtml\OrderIndex;
@@ -24,42 +26,39 @@ class CreateBraintreeCreditMemoStep implements TestStepInterface
      *
      * @var OrderIndex
      */
-    protected $orderIndex;
+    private $orderIndex;
 
     /**
      * Order View Page.
      *
      * @var SalesOrderView
      */
-    protected $salesOrderView;
+    private $salesOrderView;
 
     /**
      * OrderCreditMemoNew Page.
      *
      * @var OrderCreditMemoNew
      */
-    protected $orderCreditMemoNew;
+    private $orderCreditMemoNew;
 
     /**
      * OrderInjectable fixture.
      *
      * @var OrderInjectable
      */
-    protected $order;
+    private $order;
 
     /**
      * Credit memo data.
      *
      * @var array|null
      */
-    protected $data;
+    private $refundData;
 
     /**
-     * @var Gateway
-     */
-    private $gateway;
-
-    /**
+     * Order invoice view page.
+     *
      * @var OrderInvoiceView
      */
     private $orderInvoiceView;
@@ -71,8 +70,7 @@ class CreateBraintreeCreditMemoStep implements TestStepInterface
      * @param OrderInjectable $order
      * @param OrderInvoiceView $orderInvoiceView
      * @param OrderCreditMemoNew $orderCreditMemoNew
-     * @param Gateway $gateway
-     * @param array|null $data [optional]
+     * @param array|null refundData [optional]
      */
     public function __construct(
         OrderIndex $orderIndex,
@@ -80,15 +78,13 @@ class CreateBraintreeCreditMemoStep implements TestStepInterface
         OrderInjectable $order,
         OrderInvoiceView $orderInvoiceView,
         OrderCreditMemoNew $orderCreditMemoNew,
-        Gateway $gateway,
-        $data = null
+        $refundData = null
     ) {
         $this->orderIndex = $orderIndex;
         $this->salesOrderView = $salesOrderView;
         $this->order = $order;
         $this->orderCreditMemoNew = $orderCreditMemoNew;
-        $this->data = $data;
-        $this->gateway = $gateway;
+        $this->refundData = $refundData;
         $this->orderInvoiceView = $orderInvoiceView;
     }
 
@@ -99,31 +95,21 @@ class CreateBraintreeCreditMemoStep implements TestStepInterface
      */
     public function run()
     {
-        $transactionId = '';
         $this->orderIndex->open();
         $this->orderIndex->getSalesOrderGrid()->searchAndOpen(['id' => $this->order->getId()]);
-        $comment = $this->salesOrderView->getOrderHistoryBlock()->getCommentsHistory();
-        preg_match('/(ID: ")(\w+-*\w+)(")/', $comment, $matches);
-        if (!empty($matches[2])) {
-            $transactionId = $matches[2];
-        }
-        $this->gateway->testing()->settle($transactionId);
         /** @var \Magento\Sales\Test\Block\Adminhtml\Order\View\Tab\Invoices\Grid $invoicesGrid */
         $invoicesGrid = $this->salesOrderView->getOrderForm()->getTab('invoices')->getGridBlock();
-        foreach ($invoiceIds = $invoicesGrid->getIds() as $invoiceId) {
-            $this->salesOrderView->getOrderForm()->openTab('invoices');
-            $invoicesGrid->viewInvoice($invoiceId);
-            $this->salesOrderView->getPageActions()->orderInvoiceCreditMemo();
-            if (!empty($this->data)) {
-                $this->orderCreditMemoNew->getFormBlock()->fillProductData(
-                    $this->data,
-                    $this->order->getEntityId()['products']
-                );
-                $this->orderCreditMemoNew->getFormBlock()->updateQty();
-                $this->orderCreditMemoNew->getFormBlock()->fillFormData($this->data);
-            }
-            $this->orderCreditMemoNew->getFormBlock()->submit();
+        $this->salesOrderView->getOrderForm()->openTab('invoices');
+        $invoicesGrid->viewInvoice();
+        $this->salesOrderView->getPageActions()->orderInvoiceCreditMemo();
+        if (!empty($this->refundData)) {
+            $this->orderCreditMemoNew->getFormBlock()->fillProductData(
+                $this->refundData,
+                $this->order->getEntityId()['products']
+            );
+            $this->orderCreditMemoNew->getFormBlock()->updateQty();
         }
+        $this->orderCreditMemoNew->getFormBlock()->submit();
 
         return ['ids' => ['creditMemoIds' => $this->getCreditMemoIds()]];
     }
@@ -133,7 +119,7 @@ class CreateBraintreeCreditMemoStep implements TestStepInterface
      *
      * @return array
      */
-    protected function getCreditMemoIds()
+    private function getCreditMemoIds()
     {
         $this->salesOrderView->getOrderForm()->openTab('creditmemos');
         return $this->salesOrderView->getOrderForm()->getTab('creditmemos')->getGridBlock()->getIds();

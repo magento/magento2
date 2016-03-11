@@ -19,13 +19,6 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     protected $editLink = '[data-column="increment_id"]';
 
     /**
-     * Invoice 'View' link.
-     *
-     * @var string
-     */
-    protected $invoiceViewLink = 'a.action-menu-item[href$="invoice_id/%d/"]';
-
-    /**
 
     /**
      * Locator for invoice ids
@@ -75,10 +68,10 @@ class Grid extends \Magento\Backend\Test\Block\Widget\Grid
     /**
      * Click the 'View' link for invoice in Invoices grid.
      *
-     * @param $invoiceId
+     * @return void
      */
-    public function viewInvoice($invoiceId)
+    public function viewInvoice()
     {
-        $this->_rootElement->find(sprintf($this->invoiceViewLink, $invoiceId))->click();
+        $this->_rootElement->find($this->invoiceId)->click();
     }
 }
