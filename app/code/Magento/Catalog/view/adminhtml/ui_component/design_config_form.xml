@@ -61,9 +61,7 @@
                             <item name="validation" xsi:type="array">
                                 <item name="validate-digits" xsi:type="boolean">true</item>
                             </item>
-                            <item name="tooltip" xsi:type="array">
-                                <item name="description" xsi:type="string" translate="true">Example format: 200x300.</item>
-                            </item>
+                            <item name="notice" xsi:type="string" translate="true">Example format: 200x300.</item>
                         </item>
                     </argument>
                 </field>
@@ -125,9 +123,7 @@
                             <item name="validation" xsi:type="array">
                                 <item name="validate-digits" xsi:type="boolean">true</item>
                             </item>
-                            <item name="tooltip" xsi:type="array">
-                                <item name="description" xsi:type="string" translate="true">Example format: 200x300.</item>
-                            </item>
+                            <item name="notice" xsi:type="string" translate="true">Example format: 200x300.</item>
                         </item>
                     </argument>
                 </field>
@@ -189,9 +185,7 @@
                             <item name="validation" xsi:type="array">
                                 <item name="validate-digits" xsi:type="boolean">true</item>
                             </item>
-                            <item name="tooltip" xsi:type="array">
-                                <item name="description" xsi:type="string" translate="true">Example format: 200x300.</item>
-                            </item>
+                            <item name="notice" xsi:type="string" translate="true">Example format: 200x300.</item>
                         </item>
                     </argument>
                 </field>
