@@ -59,7 +59,7 @@
         }
     }
 
-    .col(1); //  Kickstart it
+    .col(1); // Kickstart it
 }
 
 .calc-grid-column(@index, @class, @type) when (@type = width) and (@index > 0) {
@@ -99,7 +99,6 @@
 }
 
 //  Basic looping in LESS
-
 .loop-grid-columns(@index, @class, @type) when (@index >= 0) {
     .calc-grid-column(@index, @class, @type);
     //  Next iteration
@@ -107,7 +106,6 @@
 }
 
 //  Create grid for specific class
-
 .make-grid(@class) {
     .float-grid-columns(@class);
     .loop-grid-columns(@grid-columns, @class, width);

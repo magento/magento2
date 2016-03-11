@@ -430,9 +430,11 @@ define([
          * @private
          */
         _RenderFormInput: function (config) {
-            return '<input class="' + this.options.classes.attributeInput + '" ' +
+            return '<input class="' + this.options.classes.attributeInput + ' super-attribute-select" ' +
                 'name="super_attribute[' + config.id + ']" ' +
+                'type="text" ' +
                 'value="" ' +
+                'data-selector="super_attribute[' + config.id + ']" ' +
                 'data-validate="{required:true}" ' +
                 'aria-required="true" ' +
                 'aria-invalid="true" ' +
@@ -500,6 +502,7 @@ define([
             }
 
             $widget._LoadProductMedia();
+            $input.trigger('change');
         },
 
         /**
@@ -524,6 +527,7 @@ define([
             $widget._Rebuild();
             $widget._UpdatePrice();
             $widget._LoadProductMedia();
+            $input.trigger('change');
         },
 
         /**
