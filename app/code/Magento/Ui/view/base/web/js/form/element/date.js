@@ -23,24 +23,24 @@ define([
             listens: {
                 'value': 'onValueChange',
                 'shiftedValue': 'onShiftedValueChange'
-            }
+            },
+
+            /**
+             * Date/time value shifted to corresponding timezone
+             * according to this.timeOffset property.
+             *
+             * @type {String}
+             */
+            shiftedValue: '',
+
+            /**
+             * Date/time format converted to be compatible with
+             * moment.js library.
+             *
+             * @type {String}
+             */
+            momentDatetimeFormat: ''
         },
-
-        /**
-         * Date/time value shifted to corresponding timezone
-         * according to this.timeOffset property.
-         *
-         * @type {String}
-         */
-        shiftedValue: '',
-
-        /**
-         * Date/time format converted to be compatible with
-         * moment.js library.
-         *
-         * @type {String}
-         */
-        momentDatetimeFormat: '',
 
         /**
          * Initializes regular properties of instance.
@@ -59,7 +59,7 @@ define([
 
             this.momentDatetimeFormat = utils.normalizeDate(datetimeFormat);
 
-            jQuery.extend(this.options, options);
+            utils.extend(this.options, options);
 
             return this;
         },
@@ -93,9 +93,10 @@ define([
          * @param {String} value
          */
         onValueChange: function (value) {
-            if (value) {
-                var shiftedValue = moment.utc(value).add(this.timeOffset, 'seconds');
+            var shiftedValue;
 
+            if (value) {
+                shiftedValue = moment.utc(value).add(this.timeOffset, 'seconds');
                 shiftedValue = shiftedValue.format(this.momentDatetimeFormat);
 
                 if (shiftedValue !== this.shiftedValue()) {
@@ -111,9 +112,10 @@ define([
          * @param {String} shiftedValue
          */
         onShiftedValueChange: function (shiftedValue) {
-            if (shiftedValue) {
-                var value = moment.utc(shiftedValue, this.momentDatetimeFormat);
+            var value;
 
+            if (shiftedValue) {
+                value = moment.utc(shiftedValue, this.momentDatetimeFormat);
                 value = value.subtract(this.timeOffset, 'seconds').toISOString();
 
                 if (value !== this.value()) {
