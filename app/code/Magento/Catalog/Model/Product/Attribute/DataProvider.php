@@ -93,14 +93,22 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $storeId = $store->getId();
 
             $meta['manage-titles']['children'] = [
-                'frontend_label[' . $store->getId() . ']' => $this->arrayManager->set('arguments/data/config', [], [
-                    'formElement' => Input::NAME,
-                    'componentType' => Field::NAME,
-                    'label' => $store->getName(),
-                    'dataType' => Text::NAME,
-                    'dataScope' => 'frontend_label[' . $storeId . ']'
-                ]),
+                'frontend_label[' . $store->getId() . ']' => $this->arrayManager->set(
+                    'arguments/data/config',
+                    [],
+                    [
+                        'formElement' => Input::NAME,
+                        'componentType' => Field::NAME,
+                        'label' => $store->getName(),
+                        'dataType' => Text::NAME,
+                        'dataScope' => 'frontend_label[' . $storeId . ']'
+                    ]
+                ),
             ];
+        }
+
+        foreach ($this->storeRepository->getList() as $store) {
+            $storeId = $store->getId();
 
             $meta['attribute_options_select_container']['children']['attribute_options_select']['children']['record']['children']['value_option_' . $storeId] = $this->arrayManager->set(
                 'arguments/data/config',
