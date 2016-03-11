@@ -8,7 +8,6 @@ namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Ui\Component\Modal;
 use Magento\Ui\Component\Form;
-use Magento\Framework\UrlInterface;
 
 /**
  * Data provider for Attribute Set handler in the Configurable products
@@ -16,20 +15,6 @@ use Magento\Framework\UrlInterface;
 class ConfigurableAttributeSetHandler extends AbstractModifier
 {
     const ATTRIBUTE_SET_HANDLER_MODAL = 'configurable_attribute_set_handler_modal';
-
-    /**
-     * @var UrlInterface
-     */
-    private $urlBuilder;
-
-    /**
-     * @param UrlInterface $urlBuilder
-     */
-    public function __construct(
-        UrlInterface $urlBuilder
-    ) {
-        $this->urlBuilder = $urlBuilder;
-    }
 
     /**
      * {@inheritdoc}
