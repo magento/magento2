@@ -335,6 +335,8 @@ define([
 
             _FINISH_UPDATE_INFORMATION_TRIGGER: 'finish_update_information',
 
+            _VIDEO_URL_VALIDATE_TRIGGER: 'validate_video_url',
+
             _videoInformation: null,
 
             _currentVideoUrl: null,
@@ -350,6 +352,23 @@ define([
                         this._currentVideoUrl = null;
                     }, this
                 ));
+                this.element.on(this._VIDEO_URL_VALIDATE_TRIGGER, $.proxy(this._onUrlValidateHandler, this));
+            },
+
+            /**
+             * @private
+             */
+            _onUrlValidateHandler: function (event, callback, forceVideo) {
+                var url = this.element.val(),
+                    videoInfo;
+
+                videoInfo = this._validateURL(url, forceVideo);
+
+                if (videoInfo) {
+                    callback();
+                } else {
+                    this._onRequestError($.mage.__('Invalid video url'));
+                }
             },
 
             /**
@@ -461,7 +480,7 @@ define([
                  * @private
                  */
                 function _onVimeoLoaded(data) {
-                    var tmp = data[0],
+                    var tmp,
                         respData;
 
                     if (data.length < 1) {
