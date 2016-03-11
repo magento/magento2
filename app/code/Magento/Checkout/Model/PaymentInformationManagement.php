@@ -24,12 +24,10 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      */
     protected $cartManagement;
 
-
     /**
      * @var PaymentDetailsFactory
      */
     protected $paymentDetailsFactory;
-
 
     /**
      * @var \Magento\Quote\Api\CartTotalRepositoryInterface
