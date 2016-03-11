@@ -51,6 +51,7 @@
                 <item name="configurablePanel" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePanel</item>
                 <item name="configurablePrice" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurablePrice</item>
                 <item name="configurableQty" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurableQty</item>
+                <item name="configurableAttributeSetHandler" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurableAttributeSetHandler</item>
                 <item name="StockData" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\StockData</item>
             </argument>
         </arguments>
