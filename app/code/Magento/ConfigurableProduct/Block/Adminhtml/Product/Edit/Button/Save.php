@@ -154,7 +154,7 @@ class Save extends Generic
     protected function getSaveAction()
     {
         $action = 'save';
-        if ($this->isConfigurableProduct()){
+        if ($this->isConfigurableProduct()) {
             $action = 'saveFormHandler';
         }
         return $action;
