@@ -144,6 +144,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 'dataType' => 'text',
                 'fit' => true,
                 'sortOrder' => $sortOrder,
+                'component' => 'Magento_Catalog/js/form/element/action-delete',
+                'elementTmpl' => 'Magento_Catalog/form/element/action-delete',
+                'template' => 'Magento_Catalog/form/element/action-delete',
+                'prefixName' => 'option.delete',
+                'prefixElementName' => 'option_',
             ]
         );
         $meta['attribute_options_multiselect_container']['children']['attribute_options_multiselect']['children']['record']['children']['action_delete'] = $this->arrayManager->set(
@@ -154,6 +159,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 'dataType' => 'text',
                 'fit' => true,
                 'sortOrder' => $sortOrder,
+                'component' => 'Magento_Catalog/js/form/element/action-delete',
+                'elementTmpl' => 'Magento_Catalog/form/element/action-delete',
+                'template' => 'Magento_Catalog/form/element/action-delete',
+                'prefixName' => 'option.delete',
+                'prefixElementName' => 'option_',
             ]
         );
 
