@@ -16,14 +16,17 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      * Anchor is product video
      */
     const PATH_ANCHOR_PRODUCT_VIDEO = 'catalog_product_video-link';
+
     /**
      * @var \Magento\ProductVideo\Helper\Media
      */
     protected $mediaHelper;
+
     /**
      * @var \Magento\Framework\UrlInterface
      */
     protected $urlBuilder;
+
     /**
      * @var \Magento\Framework\Json\EncoderInterface
      */
