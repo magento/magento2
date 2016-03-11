@@ -16,6 +16,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Weee\Model\Tax
      */
     protected $model;
+
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
@@ -93,7 +94,6 @@ class TaxTest extends \PHPUnit_Framework_TestCase
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
-
         $className = '\Magento\Framework\Model\Context';
         $this->context = $this->getMock($className, [], [], '', false);
 
@@ -158,10 +158,14 @@ class TaxTest extends \PHPUnit_Framework_TestCase
             ]
         );
     }
+
     /**
      * test GetProductWeeeAttributes
+     * @dataProvider getProductWeeeAttributesDataProvider
+     * @param array $weeeTaxCalculationsByEntity
+     * @param array $expectedFptLabel
      */
-    public function testGetProductWeeeAttributes()
+    public function testGetProductWeeeAttributes($weeeTaxCalculationsByEntity, $expectedFptLabel)
     {
         $product = $this->getMock('\Magento\Catalog\Model\Product', [], [], '', false);
         $website = $this->getMock('\Magento\Store\Model\Website', [], [], '', false);
@@ -233,11 +237,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $this->resource->expects($this->any())
             ->method('fetchWeeeTaxCalculationsByEntity')
             ->willReturn([
-                0 => [
-                    'weee_value' => 1,
-                    'label_value' => 'fpt_label',
-                    'attribute_code' => 'fpt_code',
-                    ]
+                0 => $weeeTaxCalculationsByEntity
             ]);
 
         $result = $this->model->getProductWeeeAttributes($product, null, null, null, true);
@@ -246,6 +246,34 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $obj = $result[0];
         $this->assertEquals(1, $obj->getAmount());
         $this->assertEquals(0.25, $obj->getTaxAmount());
-        $this->assertEquals('fpt_code', $obj->getCode());
+        $this->assertEquals($weeeTaxCalculationsByEntity['attribute_code'], $obj->getCode());
+        $this->assertEquals(__($expectedFptLabel), $obj->getName());
+    }
+
+    /**
+     * @return array
+     */
+    public function getProductWeeeAttributesDataProvider()
+    {
+        return [
+            'store_label_defined' => [
+                'weeeTaxCalculationsByEntity' => [
+                    'weee_value' => 1,
+                    'label_value' => 'fpt_label',
+                    'frontend_label' => 'fpt_label_frontend',
+                    'attribute_code' => 'fpt_code',
+                ],
+                'expectedFptLabel' => 'fpt_label'
+            ],
+            'store_label_not_defined' => [
+                'weeeTaxCalculationsByEntity' => [
+                    'weee_value' => 1,
+                    'label_value' => '',
+                    'frontend_label' => 'fpt_label_frontend',
+                    'attribute_code' => 'fpt_code',
+                ],
+                'expectedFptLabel' => 'fpt_label_frontend'
+            ]
+        ];
     }
 }
