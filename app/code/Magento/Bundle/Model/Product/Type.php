@@ -425,7 +425,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
             /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
             $optionsCollection = $this->_bundleOption->create()
                 ->getResourceCollection();
-            $optionsCollection->setProductIdFilter($product->getData($product->getResource()->getLinkField()));
+            $optionsCollection->setProductIdFilter($product->getEntityId());
             $this->setStoreFilter($product->getStoreId(), $product);
             $optionsCollection->setPositionOrder();
             $storeId = $this->getStoreFilter($product);
