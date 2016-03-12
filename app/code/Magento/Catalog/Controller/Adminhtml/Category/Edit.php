@@ -52,10 +52,9 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
     public function execute()
     {
         $storeId = (int)$this->getRequest()->getParam('store');
-        $parentId = (int)$this->getRequest()->getParam('parent');
         $categoryId = (int)$this->getRequest()->getParam('id');
 
-        if (!$categoryId && !$parentId) {
+        if (!$categoryId) {
             if ($storeId) {
                 $categoryId = (int)$this->storeManager->getStore($storeId)->getRootCategoryId();
             } else {
@@ -74,7 +73,7 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
         }
 
         $category = $this->_initCategory(true);
-        if (!$category) {
+        if (!$category || $categoryId != $category->getId() || !$category->getId()) {
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();
             return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
@@ -90,47 +89,9 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        /**
-         * Build response for ajax request
-         */
-        if ($this->getRequest()->getQuery('isAjax')) {
-            // prepare breadcrumbs of selected category, if any
-            $breadcrumbsPath = $category->getPath();
-            if (empty($breadcrumbsPath)) {
-                // but if no category, and it is deleted - prepare breadcrumbs from path, saved in session
-                $breadcrumbsPath = $this->_objectManager->get(
-                    'Magento\Backend\Model\Auth\Session'
-                )->getDeletedPath(
-                    true
-                );
-                if (!empty($breadcrumbsPath)) {
-                    $breadcrumbsPath = explode('/', $breadcrumbsPath);
-                    // no need to get parent breadcrumbs if deleting category level 1
-                    if (count($breadcrumbsPath) <= 1) {
-                        $breadcrumbsPath = '';
-                    } else {
-                        array_pop($breadcrumbsPath);
-                        $breadcrumbsPath = implode('/', $breadcrumbsPath);
-                    }
-                }
-            }
 
-            $eventResponse = new \Magento\Framework\DataObject([
-                'content' => $resultPage->getLayout()->getUiComponent('category_form')->getFormHtml()
-                    . $resultPage->getLayout()->getBlock('category.tree')
-                        ->getBreadcrumbsJavascript($breadcrumbsPath, 'editingCategoryBreadcrumbs'),
-                'messages' => $resultPage->getLayout()->getMessagesBlock()->getGroupedHtml(),
-                'toolbar' => $resultPage->getLayout()->getBlock('page.actions.toolbar')->toHtml()
-            ]);
-            $this->_eventManager->dispatch(
-                'category_prepare_ajax_response',
-                ['response' => $eventResponse, 'controller' => $this]
-            );
-            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
-            $resultJson = $this->resultJsonFactory->create();
-            $resultJson->setHeader('Content-type', 'application/json', true);
-            $resultJson->setData($eventResponse->getData());
-            return $resultJson;
+        if ($this->getRequest()->getQuery('isAjax')) {
+            return $this->ajaxRequestResponse($category, $resultPage);
         }
 
         $resultPage->setActiveMenu('Magento_Catalog::catalog_categories');
