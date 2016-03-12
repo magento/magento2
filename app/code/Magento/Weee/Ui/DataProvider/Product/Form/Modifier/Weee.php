@@ -197,7 +197,6 @@ class Weee extends AbstractModifier
                                                 'options' => $this->getCountries(),
                                                 'validation' => [
                                                     'required-entry' => true,
-                                                    'validate-fpt-group' => true
                                                 ],
                                             ],
                                         ],
@@ -218,6 +217,23 @@ class Weee extends AbstractModifier
                                                 ],
                                                 'caption' => '*',
                                                 'visible' => true,
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                                'val' => [
+                                    'arguments' => [
+                                        'data' => [
+                                            'config' => [
+                                                'componentType' => Field::NAME,
+                                                'formElement' => Input::NAME,
+                                                'dataType' => Text::NAME,
+                                                'enableLabel' => false,
+                                                'visible' => true,
+                                                'additionalClasses' => 'weee_hidden',
+                                                'validation' => [
+                                                    'validate-fpt-group' => true
+                                                ],
                                             ],
                                         ],
                                     ],

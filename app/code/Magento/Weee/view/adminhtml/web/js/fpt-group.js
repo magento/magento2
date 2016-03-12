@@ -20,13 +20,15 @@ define([
             fieldTemplate: 'ui/form/field',
             breakLine: true,
             validateWholeGroup: false,
-            additionalClasses: {},
-            validUnique: true
+            additionalClasses: {}
         },
         initialize: function() {
-
+            var obj = this;
             validation.addRule('validate-fpt-group', function(value) {
-                return false;
+                if(value.indexOf('?') !== -1) {
+                    return false;
+                }
+                return true;
             }, $t('You must set unique country-state combinations within the same fixed product tax'), 'dsds', 'dsdassd');
 
             this._super();
@@ -37,10 +39,12 @@ define([
          */
         _handleOptionsAvailability: function () {
             var parent,
-                dup;
+                dup,
+                obj;
+            obj = this;
             dup = {};
             parent = uiRegistry.get(uiRegistry.get(this.parentName).parentName);
-            _.each(parent.elems(), function(elem) {
+            _.each(parent.elems(), function (elem) {
                 var country,
                     state,
                     val,
@@ -48,32 +52,29 @@ define([
                     key;
                 country = uiRegistry.get(elem.name + '.countryState.country');
                 state = uiRegistry.get(elem.name + '.countryState.state');
-                state.validUnique = true;
+                val = uiRegistry.get(elem.name + '.countryState.val');
 
-                key = country.value() + ( state.value() ? state.value() : 0);
+                key = country.value() + ( state.value() > 0 ? state.value() : 0);
                 dup[key]++;
                 if (!dup[key]) {
                     dup[key] = 1;
+                    val.value('');
                 } else {
                     dup[key] = dup[key] + 1;
-                    country.validUnique = false;
+                    val.value(country.value() + '?' + country.name);
                 }
             });
         },
         initElement: function (elem) {
-            var obj = this;
+            var country,
+                splitArray,
+                obj;
+            obj = this;
             this._super();
             elem.on('value', function () {
-                obj._handleOptionsAvailability();
+                    obj._handleOptionsAvailability();
             });
             return this;
         }
-/*
-        insertChild: function (elems, position) {
-            this._super();
-            console.log('insert');
-
-        }
-*/
     });
 });
