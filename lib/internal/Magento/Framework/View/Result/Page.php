@@ -7,6 +7,7 @@
 namespace Magento\Framework\View\Result;
 
 use Magento\Framework;
+use Magento\Framework\App\Response\HttpInterface as HttpResponseInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\View;
 
@@ -219,10 +220,19 @@ class Page extends Layout
     }
 
     /**
-     * @param ResponseInterface $response
+     * @param HttpResponseInterface|ResponseInterface $response
      * @return $this
      */
     protected function render(ResponseInterface $response)
+    {
+        return $this->renderHttpResponse($response);
+    }
+
+    /**
+     * @param HttpResponseInterface $httpResponse
+     * @return $this
+     */
+    private function renderHttpResponse(HttpResponseInterface $httpResponse)
     {
         $this->pageConfig->publicBuild();
         if ($this->getPageLayout()) {
@@ -244,9 +254,9 @@ class Page extends Layout
             $this->assign('layoutContent', $output);
             $output = $this->renderPage();
             $this->translateInline->processResponseBody($output);
-            $response->appendBody($output);
+            $httpResponse->appendBody($output);
         } else {
-            parent::render($response);
+            parent::render($httpResponse);
         }
         return $this;
     }
