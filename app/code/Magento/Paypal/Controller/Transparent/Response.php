@@ -80,7 +80,7 @@ class Response extends \Magento\Framework\App\Action\Action
     {
         $parameters = [];
         try {
-            $response = $this->transaction->getResponseObject($this->getRequest()->getPostValue());
+            $response = $this->transaction->getResponseObject($this->getRequest()->getParams());
             $this->responseValidator->validate($response, $this->transparent);
             $this->transaction->savePaymentInQuote($response);
         } catch (LocalizedException $exception) {
