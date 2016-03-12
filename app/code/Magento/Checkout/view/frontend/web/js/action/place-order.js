@@ -47,6 +47,10 @@ define(
                     errorProcessor.process(response, messageContainer);
                     fullScreenLoader.stopLoader();
                 }
+            ).always(
+                function () {
+                    fullScreenLoader.stopLoader();
+                }
             );
         };
     }
