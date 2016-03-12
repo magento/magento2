@@ -66,19 +66,7 @@ class Configurable extends \Magento\CatalogInventory\Model\ResourceModel\Indexer
         $psExpr = $this->_addAttributeToSelect($select, 'status', 'e.' . $metadata->getLinkField(), 'cs.store_id');
         $psCond = $connection->quoteInto($psExpr . '=?', ProductStatus::STATUS_ENABLED);
 
-        if ($this->_isManageStock()) {
-            $statusExpr = $connection->getCheckSql(
-                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
-                1,
-                'cisi.is_in_stock'
-            );
-        } else {
-            $statusExpr = $connection->getCheckSql(
-                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
-                'cisi.is_in_stock',
-                1
-            );
-        }
+        $statusExpr = $this->getStatusExpression($connection);
 
         $optExpr = $connection->getCheckSql("{$psCond} AND le.required_options = 0", 'i.stock_status', 0);
         $stockStatusExpr = $connection->getLeastSql(["MAX({$optExpr})", "MIN({$statusExpr})"]);
