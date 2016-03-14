@@ -85,8 +85,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Customize attribute_code field
      *
-     * @param $meta
-     * @return mixed
+     * @param array $meta
+     * @return array
      */
     private function customizeAttributeCode($meta)
     {
@@ -109,7 +109,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Customize frontend labels
      *
-     * @param $meta
+     * @param array $meta
      * @return array
      */
     private function customizeFrontendLabels($meta)
@@ -141,8 +141,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     /**
      * Customize options
      *
-     * @param $meta
-     * @return mixed
+     * @param array $meta
+     * @return array
      */
     private function customizeOptions($meta)
     {
