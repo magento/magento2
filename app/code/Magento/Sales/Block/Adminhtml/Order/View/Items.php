@@ -13,6 +13,15 @@ use Magento\Sales\Model\ResourceModel\Order\Item\Collection;
 class Items extends \Magento\Sales\Block\Adminhtml\Items\AbstractItems
 {
     /**
+     * @return array
+     */
+    public function getColumns()
+    {
+        $columns = array_key_exists('columns', $this->_data) ? $this->_data['columns'] : [];
+        return $columns;
+    }
+
+    /**
      * Retrieve required options from parent
      *
      * @return void
