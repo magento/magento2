@@ -16,7 +16,7 @@ class AddToWishlist extends \Magento\Framework\View\Element\Template
      *
      * @var array|null
      */
-    protected $_productTypes;
+    private $_productTypes;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
