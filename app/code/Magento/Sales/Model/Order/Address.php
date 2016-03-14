@@ -122,14 +122,14 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
      */
     public function getRegionCode()
     {
-        if (is_string($this->getRegion())) {
-            return $this->getRegion();
-        }
-        $model = $this->regionFactory->create()->load(
-            ((!$this->getRegionId() && is_numeric($this->getRegion())) ? $this->getRegion() : $this->getRegionId())
-        );
+        $regionId = (!$this->getRegionId() && is_numeric($this->getRegion())) ?
+            $this->getRegion() :
+            $this->getRegionId();
+        $model = $this->regionFactory->create()->load($regionId);
         if ($model->getCountryId() == $this->getCountryId()) {
             return $model->getCode();
+        } elseif (is_string($this->getRegion())) {
+            return $this->getRegion();
         } else {
             return null;
         }
@@ -257,6 +257,7 @@ class Address extends AbstractModel implements OrderAddressInterface, AddressMod
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns address_type
      *
