@@ -292,7 +292,8 @@ class Eav extends AbstractModifier
                 $child['arguments']['data']['config']['disabled'] = true;
             }
             // TODO: getAttributeModel() should not be used when MAGETWO-48284 is complete
-            if (($rules = $this->eavValidationRules->build($this->getAttributeModel($attribute), $child))) {
+            $childData = $child['arguments']['data']['config'];
+            if (($rules = $this->eavValidationRules->build($this->getAttributeModel($attribute), $childData))) {
                 $child['arguments']['data']['config']['validation'] = $rules;
             }
 
@@ -711,22 +712,12 @@ class Eav extends AbstractModifier
      */
     private function calculateGroupCode(AttributeGroupInterface $group)
     {
-        $groupName = $group->getAttributeGroupName();
-        $attributeGroupCode = trim(
-            preg_replace(
-                '/[^a-z0-9]+/',
-                '-',
-                $this->translitFilter->filter(strtolower($groupName))
-            ),
-            '-'
-        );
-        if ($attributeGroupCode == 'images') {
+        $attributeGroupCode = $group->getAttributeGroupCode();
+
+        if ($attributeGroupCode === 'images') {
             $attributeGroupCode = 'image-management';
         }
-        if (empty($attributeGroupCode)) {
-            // in the following code md5 is not used for security purposes
-            $attributeGroupCode = md5($groupName);
-        }
+
         return $attributeGroupCode;
     }
 }

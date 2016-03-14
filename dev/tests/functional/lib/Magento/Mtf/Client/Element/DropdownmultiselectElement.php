@@ -32,7 +32,7 @@ class DropdownmultiselectElement extends MultiselectElement
      *
      * @var string
      */
-    protected $optionByValue = './/li[label[contains(normalize-space(.), %s)]]';
+    protected $optionByValue = './/li//label[contains(normalize-space(.), %s)]';
 
     /**
      * Set values.
