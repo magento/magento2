@@ -46,7 +46,10 @@ class ComponentRegistrar implements ComponentRegistrarInterface
     {
         self::validateType($type);
         if (isset(self::$paths[$type][$componentName])) {
-            throw new \LogicException('\'' . $componentName . '\' component already exists');
+            throw new \LogicException(
+                ucfirst($type) . ' \'' . $componentName . '\' from \'' . $path . '\' '
+                . 'has been already defined in \'' . self::$paths[$type][$componentName] . '\'.'
+            );
         } else {
             self::$paths[$type][$componentName] = str_replace('\\', '/', $path);
         }
