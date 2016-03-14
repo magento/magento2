@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\DB;
 
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
@@ -500,5 +501,33 @@ class Select extends \Zend_Db_Select
     public function assemble()
     {
         return $this->selectRenderer->render($this);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function __sleep()
+    {
+        $properties = array_keys(get_object_vars($this));
+        $properties = array_diff(
+            $properties,
+            [
+                '_adapter',
+                'selectRenderer'
+            ]
+        );
+        return $properties;
+    }
+
+    /**
+     * Init not serializable fields
+     *
+     * @return void
+     */
+    public function __wakeup()
+    {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_adapter = $objectManager->get(ResourceConnection::class)->getConnection();
+        $this->selectRenderer = $objectManager->get(\Magento\Framework\DB\Select\SelectRenderer::class);
     }
 }
