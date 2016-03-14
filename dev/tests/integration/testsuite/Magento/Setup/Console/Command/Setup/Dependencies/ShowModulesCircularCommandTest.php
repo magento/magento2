@@ -3,15 +3,15 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Console\Command;
+namespace Magento\Setup\Console\Command\Setup\Dependencies;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Symfony\Component\Console\Tester\CommandTester;
 
-class DependenciesShowModulesCommandTest extends \PHPUnit_Framework_TestCase
+class ShowModulesCircularCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var DependenciesShowModulesCommand
+     * @var ShowModulesCircularCommand
      */
     private $command;
 
@@ -22,10 +22,9 @@ class DependenciesShowModulesCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-
         $modules = [
-            'Magento_A' => __DIR__ . '/_files/root/app/code/Magento/A',
-            'Magento_B' => __DIR__ . '/_files/root/app/code/Magento/B'
+            'Magento_A' => BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/root/app/code/Magento/A',
+            'Magento_B' => BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/root/app/code/Magento/B'
         ];
 
         $objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
@@ -48,35 +47,35 @@ class DependenciesShowModulesCommandTest extends \PHPUnit_Framework_TestCase
             ['Magento\Framework\Component\DirSearch', $dirSearchMock]
         ]));
 
-        $this->command = new DependenciesShowModulesCommand($objectManagerProvider);
+        $this->command = new ShowModulesCircularCommand($objectManagerProvider);
         $this->commandTester = new CommandTester($this->command);
     }
 
     public function tearDown()
     {
-        if (file_exists(__DIR__ . '/_files/output/modules.csv')) {
-            unlink(__DIR__ . '/_files/output/modules.csv');
+        if (file_exists(BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/output/circular.csv')) {
+            unlink(BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/output/circular.csv');
         }
     }
 
     public function testExecute()
     {
         $this->commandTester->execute(
-            ['--output' => __DIR__ . '/_files/output/modules.csv']
+            ['--output' => BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/output/circular.csv']
         );
         $this->assertEquals('Report successfully processed.' . PHP_EOL, $this->commandTester->getDisplay());
-        $fileContents = file_get_contents(__DIR__ . '/_files/output/modules.csv');
+        $fileContents = file_get_contents(BP . '/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/output/circular.csv');
         $this->assertContains(
-            ',All,Hard,Soft' . PHP_EOL . '"Total number of dependencies",2,2,0' . PHP_EOL,
+            '"Circular dependencies:","Total number of chains"' . PHP_EOL . ',2' . PHP_EOL,
             $fileContents
         );
-        $this->assertContains('"Dependencies for each module:",All,Hard,Soft'. PHP_EOL, $fileContents);
+        $this->assertContains('"Circular dependencies for each module:",' . PHP_EOL, $fileContents);
         $this->assertContains(
-            'magento/module-a,1,1,0' . PHP_EOL . '" -- magento/module-b",,1,0' . PHP_EOL,
+            'magento/module-a,1' . PHP_EOL . 'magento/module-a->magento/module-b->magento/module-a' . PHP_EOL,
             $fileContents
         );
         $this->assertContains(
-            'magento/module-b,1,1,0' . PHP_EOL . '" -- magento/module-a",,1,0' . PHP_EOL,
+            'magento/module-b,1' . PHP_EOL . 'magento/module-b->magento/module-a->magento/module-b' . PHP_EOL,
             $fileContents
         );
     }

@@ -3,17 +3,17 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Setup\Console\Command;
+namespace Magento\Setup\Console\Command\I18n;
 
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @magentoComponentsDir Magento/Setup/Console/Command/_files/root/app/code
  */
-class I18nPackCommandTest extends \PHPUnit_Framework_TestCase
+class PackCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var I18nCollectPhrasesCommand
+     * @var PackCommand
      */
     private $command;
 
@@ -24,7 +24,7 @@ class I18nPackCommandTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->command = new I18nPackCommand();
+        $this->command = new PackCommand();
         $this->tester = new CommandTester($this->command);
     }
 
@@ -38,9 +38,9 @@ class I18nPackCommandTest extends \PHPUnit_Framework_TestCase
 
     private function removeCsv($module)
     {
-        if (file_exists(__DIR__ . "/_files/root/app/code/Magento/{$module}/i18n")) {
+        if (file_exists(BP . "/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/root/app/code/Magento/{$module}/i18n")) {
             $helper = new \Magento\Framework\Backup\Filesystem\Helper();
-            $helper->rm(__DIR__ . "/_files/root/app/code/Magento/{$module}/i18n", [], true);
+            $helper->rm(BP . "/dev/tests/integration/testsuite/Magento/Setup/Console/Command/_files/root/app/code/Magento/{$module}/i18n", [], true);
         }
     }
 
