@@ -16,7 +16,7 @@ class AddToWishlist extends \Magento\Framework\View\Element\Template
      *
      * @var array|null
      */
-    private $_productTypes;
+    private $productTypes;
 
     /**
      * @param \Magento\Framework\View\Element\Template\Context $context
@@ -39,14 +39,19 @@ class AddToWishlist extends \Magento\Framework\View\Element\Template
      */
     public function getWishlistOptions()
     {
-        return ['productType' => $this->_getProductTypes()];
+        return ['productType' => $this->getProductTypes()];
     }
 
-    protected function _getProductTypes()
+    /**
+     * Returns an array of product types
+     *
+     * @return array|null
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getProductTypes()
     {
-
-        if($this->_productTypes === null) {
-            $this->_productTypes = [];
+        if($this->productTypes === null) {
+            $this->productTypes = [];
             $block = $this->getLayout()->getBlock('category.products.list');
             if ($block) {
                 $productCollection = $block->getLoadedProductCollection();
@@ -54,15 +59,18 @@ class AddToWishlist extends \Magento\Framework\View\Element\Template
                 foreach ($productCollection as $product) {
                     $productTypes[] = $product->getTypeId();
                 }
-                $this->_productTypes = array_unique($productTypes);
+                $this->productTypes = array_unique($productTypes);
             }
         }
-        return $this->_productTypes;
+        return $this->productTypes;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _toHtml()
     {
-        if(!$this->_getProductTypes()){
+        if(!$this->getProductTypes()){
             return '';
         }
         return parent::_toHtml();
