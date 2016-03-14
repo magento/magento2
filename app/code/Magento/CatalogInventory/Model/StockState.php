@@ -146,7 +146,7 @@ class StockState implements StockStateInterface
      * @param float $qtyToCheck
      * @param float $origQty
      * @param int $scopeId
-     * @return \Magento\Framework\DataObject
+     * @return int
      */
     public function checkQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $scopeId = null)
     {
