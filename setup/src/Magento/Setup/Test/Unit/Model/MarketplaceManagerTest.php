@@ -636,7 +636,6 @@ class MarketplaceManagerTest extends \PHPUnit_Framework_TestCase
             ->method('loadPackagesForInstallFromCache')
             ->will($this->returnValue(false));
 
-
         $this->assertFalse($marketplaceManager->getPackagesForInstall());
     }
 
