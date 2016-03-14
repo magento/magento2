@@ -46,12 +46,13 @@ class AttributesTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAttributesMeta()
     {
-        $meta = $this->dataProvider->getAttributesMeta($this->entityType);
-        $this->assertArrayHasKey('url_key', $meta);
-        $this->assertEquals('text', $meta['url_key']['dataType']);
-        $this->assertEquals('input', $meta['url_key']['formElement']);
-        $this->assertEquals('1', $meta['url_key']['visible']);
-        $this->assertEquals('0', $meta['url_key']['required']);
-        $this->assertEquals('[STORE VIEW]', $meta['url_key']['scope_label']);
+        $meta = $this->dataProvider->getMeta();
+        $this->assertArrayHasKey('url_key', $meta['search_engine_optimization']['children']);
+        $urlKeyData = $meta['search_engine_optimization']['children']['url_key']['arguments']['data']['config'];
+        $this->assertEquals('text', $urlKeyData['dataType']);
+        $this->assertEquals('input', $urlKeyData['formElement']);
+        $this->assertEquals('1', $urlKeyData['visible']);
+        $this->assertEquals('0', $urlKeyData['required']);
+        $this->assertEquals('[STORE VIEW]', $urlKeyData['scopeLabel']);
     }
 }
