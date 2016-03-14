@@ -18,12 +18,12 @@ define(
     --output-file="<output_file>"
     --base-path="<base_path>"
     --repo="<main_repo>"
-    [--file-formats="<comma_separated_list_of_formats>"]
+    [--file-extensions="<comma_separated_list_of_formats>"]
 
 USAGE
 );
 
-$options = getopt('', ['output-file:', 'base-path:', 'repo:', 'file-formats:']);
+$options = getopt('', ['output-file:', 'base-path:', 'repo:', 'file-extensions:']);
 
 $requiredOptions = ['output-file', 'base-path', 'repo'];
 if (!validateInput($options, $requiredOptions)) {
@@ -31,7 +31,7 @@ if (!validateInput($options, $requiredOptions)) {
     exit(1);
 }
 
-$fileExtensions = explode(',', isset($options['file-formats']) ? $options['file-formats'] : 'php');
+$fileExtensions = explode(',', isset($options['file-extensions']) ? $options['file-extensions'] : 'php');
 
 $mainline = 'mainline_' . (string)rand(0, 9999);
 $repo = getRepo($options, $mainline);
@@ -100,7 +100,7 @@ function getRepo($options, $mainline)
  * @param string $branchName
  * @return array
  */
-function retrieveChangesAcrossForks($mainline, $repo, $branchName)
+function retrieveChangesAcrossForks($mainline, GitRepo $repo, $branchName)
 {
     return $repo->compareChanges($mainline, $branchName);
 }
@@ -196,7 +196,7 @@ class GitRepo
     public function fetch($remoteAlias)
     {
         if (!isset($this->remoteList[$remoteAlias])) {
-            throw new LogicException('Alias ' . $remoteAlias . ' is not defined');
+            throw new LogicException('Alias "' . $remoteAlias . '" is not defined');
         }
 
         $this->call(sprintf('fetch %s', $remoteAlias));
@@ -212,14 +212,13 @@ class GitRepo
     public function compareChanges($remoteAlias, $remoteBranch)
     {
         if (!isset($this->remoteList[$remoteAlias])) {
-            throw new LogicException('Alias ' . $remoteAlias . ' is not defined');
+            throw new LogicException('Alias "' . $remoteAlias . '" is not defined');
         }
 
         $result = $this->call(sprintf('log %s/%s..HEAD  --name-status --oneline', $remoteAlias, $remoteBranch));
 
         return is_array($result)
-            ? $this->filterChangedBackFiles(
-                $this->filterChangedFiles($result),
+            ? $this->filterChangedFiles($result,
                 $remoteAlias,
                 $remoteBranch
             )
@@ -227,12 +226,14 @@ class GitRepo
     }
 
     /**
-     * Filters git cli output for changed files
+     * Makes a diff of file for specified remote/branch and filters only those have real changes
      *
      * @param array $changes
+     * @param string $remoteAlias
+     * @param string $remoteBranch
      * @return array
      */
-    protected function filterChangedFiles(array $changes)
+    protected function filterChangedFiles(array $changes, $remoteAlias, $remoteBranch)
     {
         $changedFilesMasks = [
             'M' => "M\t",
@@ -245,35 +246,17 @@ class GitRepo
                     $fileName = str_replace($mask, '', $fileName);
                     $fileName = trim($fileName);
                     if (!in_array($fileName, $filteredChanges) && is_file($this->workTree . '/' . $fileName)) {
-                        $filteredChanges[] = $fileName;
+                        $result = $this->call(sprintf(
+                                'diff HEAD %s/%s -- %s', $remoteAlias, $remoteBranch, $this->workTree . '/' . $fileName)
+                        );
+                        if ($result) {
+                            $filteredChanges[] = $fileName;
+                        }
                     }
                     break;
                 }
             }
         }
-        return $filteredChanges;
-    }
-
-    /**
-     * Makes a diff of file for specified remote/branch and filters only those have real changes
-     *
-     * @param array $changes
-     * @param string $remoteAlias
-     * @param string $remoteBranch
-     * @return array
-     */
-    protected function filterChangedBackFiles(array $changes, $remoteAlias, $remoteBranch)
-    {
-        $filteredChanges = [];
-        foreach ($changes as $fileName) {
-            $result = $this->call(sprintf(
-                    'diff HEAD %s/%s -- %s', $remoteAlias, $remoteBranch, $this->workTree . '/' . $fileName)
-            );
-            if ($result) {
-                $filteredChanges[] = $fileName;
-            }
-        }
-
         return $filteredChanges;
     }
 
@@ -291,7 +274,7 @@ class GitRepo
             escapeshellarg($this->workTree)
         );
         $tmp = sprintf('%s %s', $gitCmd, $command);
-        exec(escapeshellcmd($tmp), $output);
+        exec($tmp, $output);
         return $output;
     }
 }
