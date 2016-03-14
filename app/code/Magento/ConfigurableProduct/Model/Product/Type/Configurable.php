@@ -483,6 +483,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $usedProducts = [];
             $collection = $this->getUsedProductCollection($product)
                 ->addAttributeToSelect('*')
+                ->addAttributeToSelect('price')
 //                ->addAttributeToSelect('media_gallery')
                 ->addFilterByRequiredOptions()
                 ->setStoreId($product->getStoreId());
