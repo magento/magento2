@@ -93,6 +93,8 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     }
 
     /**
+     * Set message to response object
+     *
      * @param DataObject $response
      * @param string[] $messages
      * @return DataObject
@@ -100,7 +102,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
     private function setMessageToResponse($response, $messages)
     {
         $messageKey = $this->getRequest()->getParam('message_key', static::DEFAULT_MESSAGE_KEY);
-        if ($messageKey == static::DEFAULT_MESSAGE_KEY) {
+        if ($messageKey === static::DEFAULT_MESSAGE_KEY) {
             $messages = reset($messages);
         }
         return $response->setData($messageKey, $messages);
