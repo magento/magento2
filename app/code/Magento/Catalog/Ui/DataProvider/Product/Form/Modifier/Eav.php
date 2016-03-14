@@ -528,7 +528,8 @@ class Eav extends AbstractModifier
         }
 
         // TODO: getAttributeModel() should not be used when MAGETWO-48284 is complete
-        if (($rules = $this->eavValidationRules->build($attribute, $meta))) {
+        $childData = $this->arrayManager->get($configPath, $meta, []);
+        if (($rules = $this->eavValidationRules->build($this->getAttributeModel($attribute), $childData))) {
             $meta = $this->arrayManager->merge($configPath, $meta, [
                 'validation' => $rules,
             ]);
