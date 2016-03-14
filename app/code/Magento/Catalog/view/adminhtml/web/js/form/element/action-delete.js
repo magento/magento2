@@ -75,7 +75,7 @@ define([
              *
              * @param {String} prev
              * @param {String} curr
-             * @returns {string}
+             * @returns {String}
              */
             reduceFunction = function (prev, curr) {
                 return prev + '[' + curr + ']';
