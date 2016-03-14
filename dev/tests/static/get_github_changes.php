@@ -18,14 +18,15 @@ define(
     --output-file="<output_file>"
     --base-path="<base_path>"
     --repo="<main_repo>"
+    --branch="<branch>"
     [--file-extensions="<comma_separated_list_of_formats>"]
 
 USAGE
 );
 
-$options = getopt('', ['output-file:', 'base-path:', 'repo:', 'file-extensions:']);
+$options = getopt('', ['output-file:', 'base-path:', 'repo:', 'file-extensions:', 'branch']);
 
-$requiredOptions = ['output-file', 'base-path', 'repo'];
+$requiredOptions = ['output-file', 'base-path', 'repo', 'branch'];
 if (!validateInput($options, $requiredOptions)) {
     echo USAGE;
     exit(1);
@@ -35,7 +36,7 @@ $fileExtensions = explode(',', isset($options['file-extensions']) ? $options['fi
 
 $mainline = 'mainline_' . (string)rand(0, 9999);
 $repo = getRepo($options, $mainline);
-$changes = retrieveChangesAcrossForks($mainline, $repo, 'develop');
+$changes = retrieveChangesAcrossForks($mainline, $repo, $options['branch']);
 $changedFiles = getChangedFiles($changes, $fileExtensions);
 generateChangedFilesList($options['output-file'], $changedFiles);
 cleanup($repo, $mainline);
