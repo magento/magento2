@@ -9,13 +9,9 @@
 
 & when (@media-common = true) {
 
-    .map-popup-wrapper {
-        &.popup {
-            .action {
-                &.close {
-                    .lib-css(top, @popup-button-close__position-top);
-                }
-            }
+    .map-popup-wrapper.popup {
+        .action.close {
+            .lib-css(top, @popup-button-close__position-top);
         }
     }
 
@@ -28,6 +24,7 @@
             @_popup-position-right: false,
             @_popup-position: absolute
         );
+        box-sizing: border-box;
 
         .map-info-price {
             &:extend(.abs-add-clearfix all);
@@ -38,7 +35,7 @@
 
                 .label {
                     &:after {
-                        content: ": ";
+                        content: ': ';
                     }
                 }
             }
