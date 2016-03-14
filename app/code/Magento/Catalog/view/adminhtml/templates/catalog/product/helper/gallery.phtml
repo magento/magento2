@@ -12,7 +12,7 @@ $formName = $block->getFormName();
 ?>
 <div id="<?php echo $block->getHtmlId() ?>"
      class="gallery"
-     data-mage-init='{"productGallery":{}}'
+     data-mage-init='{"productGallery":{"template":"#<?php echo $block->getHtmlId() ?>-template"}}'
      data-images="<?php echo $block->escapeHtml($block->getImagesJson()) ?>"
      data-types="<?php echo $block->escapeHtml(
          $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getImageTypes())
