@@ -269,7 +269,7 @@ class MarketplaceManager
         if ($directory->isExist($this->pathToAuthFile) && $directory->isReadable($this->pathToAuthFile)) {
             try {
                 $authJsonData = $this->getAuthJson();
-                if (isset($authJsonData['http-basic'][$serviceUrl])) {
+                if (isset($authJsonData['http-basic']) && isset($authJsonData['http-basic'][$serviceUrl])) {
                     unset($authJsonData['http-basic'][$serviceUrl]);
                     $path = DirectoryList::COMPOSER_HOME . DIRECTORY_SEPARATOR . $this->pathToAuthFile;
                     if ($authJsonData === ['http-basic' => []]) {
