@@ -111,8 +111,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
 
         $output = "";
         if (file_exists($reportFile)) {
-            $handle = fopen($reportFile, 'r');
-            $output = fread($handle, filesize($reportFile));
+            $output = file_get_contents($reportFile);
         }
         $this->assertEquals(
             0,
@@ -139,8 +138,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
 
         $output = "";
         if (file_exists($reportFile)) {
-            $handle = fopen($reportFile, 'r');
-            $output = fread($handle, filesize($reportFile));
+            $output = file_get_contents($reportFile);
         }
 
         $this->assertEquals(
@@ -172,8 +170,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         $result = $codeSniffer->run(self::getWhitelist(['php']));
         $output = "";
         if (file_exists($reportFile)) {
-            $handle = fopen($reportFile, 'r');
-            $output = fread($handle, filesize($reportFile));
+            $output = file_get_contents($reportFile);
         }
         $this->assertEquals(
             0,
@@ -201,8 +198,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
 
         $output = "";
         if (file_exists($reportFile)) {
-            $handle = fopen($reportFile, 'r');
-            $output = fread($handle, filesize($reportFile));
+            $output = file_get_contents($reportFile);
         }
 
         $this->assertEquals(
@@ -242,8 +238,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
 
         $output = "";
         if (file_exists($reportFile)) {
-            $handle = fopen($reportFile, 'r');
-            $output = fread($handle, filesize($reportFile));
+            $output = file_get_contents($reportFile);
         }
 
         $this->assertTrue(
