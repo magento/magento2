@@ -34,11 +34,11 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
         );
         $objectManagerProvider->expects($this->atLeastOnce())->method('get')->willReturn($this->objectManager);
 
-        $upgradeCommand = $this->getMock('Magento\Setup\Console\Command\UpgradeCommand', [], [], '', false);
+        $upgradeCommand = $this->getMock('Magento\Setup\Console\Command\Setup\UpgradeCommand', [], [], '', false);
         $moduleUninstaller = $this->getMock('Magento\Setup\Model\ModuleUninstaller', [], [], '', false);
         $moduleRegistryUninstaller = $this->getMock('Magento\Setup\Model\ModuleRegistryUninstaller', [], [], '', false);
-        $moduleEnabler = $this->getMock('Magento\Setup\Console\Command\ModuleEnableCommand', [], [], '', false);
-        $moduleDisabler = $this->getMock('Magento\Setup\Console\Command\ModuleDisableCommand', [], [], '', false);
+        $moduleEnabler = $this->getMock('Magento\Setup\Console\Command\Module\EnableCommand', [], [], '', false);
+        $moduleDisabler = $this->getMock('Magento\Setup\Console\Command\Module\DisableCommand', [], [], '', false);
 
         $updater = $this->getMock('Magento\Setup\Model\Updater', [], [], '', false);
         $queue = $this->getMock('Magento\Setup\Model\Cron\Queue', [], [], '', false);
@@ -47,12 +47,12 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
         $returnValueMap = [
             ['Magento\Setup\Model\Updater', $updater],
             ['Magento\Setup\Model\Cron\Status', $status],
-            ['Magento\Setup\Console\Command\UpgradeCommand', $upgradeCommand],
+            ['Magento\Setup\Console\Command\Setup\UpgradeCommand', $upgradeCommand],
             ['Magento\Setup\Model\ObjectManagerProvider', $objectManagerProvider],
             ['Magento\Setup\Model\ModuleUninstaller', $moduleUninstaller],
             ['Magento\Setup\Model\ModuleRegistryUninstaller', $moduleRegistryUninstaller],
-            ['Magento\Setup\Console\Command\ModuleDisableCommand', $moduleDisabler],
-            ['Magento\Setup\Console\Command\ModuleEnableCommand', $moduleEnabler],
+            ['Magento\Setup\Console\Command\Module\DisableCommand', $moduleDisabler],
+            ['Magento\Setup\Console\Command\Module\EnableCommand', $moduleEnabler],
             ['Magento\Setup\Model\Cron\Queue', $queue]
         ];
 

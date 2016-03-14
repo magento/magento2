@@ -8,8 +8,8 @@ namespace Magento\Setup\Test\Unit\Console;
 
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Setup\Console\Command\DiCompileCommand;
-use Magento\Setup\Console\Command\DiCompileMultiTenantCommand;
+use Magento\Setup\Console\Command\Setup\Di\CompileCommand;
+use Magento\Setup\Console\Command\Setup\Di\CompileMultiTenantCommand;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Symfony\Component\Console\Input\ArgvInput;
 
@@ -79,37 +79,37 @@ class CompilerPreparationTest extends \PHPUnit_Framework_TestCase
     {
         return [
             'ST compiler, directory exists' => [
-                'commandName' => DiCompileCommand::NAME,
+                'commandName' => CompileCommand::NAME,
                 'isCompileCommand' => true,
                 'isHelpOption' => false,
                 'dirExists' => true
             ],
             'ST compiler, directory does not exist' => [
-                'commandName' => DiCompileCommand::NAME,
+                'commandName' => CompileCommand::NAME,
                 'isCompileCommand' => true,
                 'isHelpOption' => false,
                 'dirExists' => false
             ],
             'ST compiler, help option' => [
-                'commandName' => DiCompileCommand::NAME,
+                'commandName' => CompileCommand::NAME,
                 'isCompileCommand' => true,
                 'isHelpOption' => true,
                 'dirExists' => false
             ],
             'MT compiler, directory exists' => [
-                'commandName' => DiCompileMultiTenantCommand::NAME,
+                'commandName' => CompileMultiTenantCommand::NAME,
                 'isCompileCommand' => true,
                 'isHelpOption' => false,
                 'dirExists' => true
             ],
             'MT compiler, directory does not exist' => [
-                'commandName' => DiCompileMultiTenantCommand::NAME,
+                'commandName' => CompileMultiTenantCommand::NAME,
                 'isCompileCommand' => true,
                 'isHelpOption' => false,
                 'dirExists' => false
             ],
             'MT compiler, help option' => [
-                'commandName' => DiCompileMultiTenantCommand::NAME,
+                'commandName' => CompileMultiTenantCommand::NAME,
                 'isCompileCommand' => true,
                 'isHelpOption' => true,
                 'dirExists' => true
@@ -129,7 +129,7 @@ class CompilerPreparationTest extends \PHPUnit_Framework_TestCase
 
         $this->inputMock->expects($this->once())
             ->method('getFirstArgument')
-            ->willReturn(DiCompileMultiTenantCommand::NAME);
+            ->willReturn(CompileMultiTenantCommand::NAME);
 
         // Filesystem mock
         $this->filesystemDriverMock->expects($this->once())->method('isExists')->willReturn(true);
@@ -150,14 +150,14 @@ class CompilerPreparationTest extends \PHPUnit_Framework_TestCase
     public function testGenerationDirectoryFromCliOption($commandName)
     {
         $customGenerationDirectory = '/custom/generated/code/directory';
-        $useCliOption = $commandName === DiCompileMultiTenantCommand::NAME;
+        $useCliOption = $commandName === CompileMultiTenantCommand::NAME;
 
         $this->inputMock->expects($this->once())
             ->method('getFirstArgument')
             ->willReturn($commandName);
         $this->inputMock->expects($this->exactly((int)$useCliOption))
             ->method('getParameterOption')
-            ->with(DiCompileMultiTenantCommand::INPUT_KEY_GENERATION)
+            ->with(CompileMultiTenantCommand::INPUT_KEY_GENERATION)
             ->willReturn($customGenerationDirectory);
         // Filesystem mock
         $directoryArgConstraint = $useCliOption
@@ -174,8 +174,8 @@ class CompilerPreparationTest extends \PHPUnit_Framework_TestCase
     public function compilerCommandDataProvider()
     {
         return [
-            [DiCompileCommand::NAME],
-            [DiCompileMultiTenantCommand::NAME]
+            [CompileCommand::NAME],
+            [CompileMultiTenantCommand::NAME]
         ];
     }
 }

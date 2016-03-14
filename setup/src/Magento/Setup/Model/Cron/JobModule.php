@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Model\Cron;
 
-use Magento\Setup\Console\Command\AbstractSetupCommand;
+use Magento\Setup\Console\Command\Setup\AbstractSetupCommand;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;

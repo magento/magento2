@@ -34,7 +34,7 @@ use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\Setup;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\App\State\CleanupFiles;
-use Magento\Setup\Console\Command\InstallCommand;
+use Magento\Setup\Console\Command\Setup\InstallCommand;
 use Magento\Setup\Validator\DbValidator;
 use \Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\SampleData;

@@ -5,7 +5,7 @@
  */
 namespace Magento\Setup\Model\Cron;
 
-use Magento\Setup\Console\Command\AbstractSetupCommand;
+use Magento\Setup\Console\Command\Setup\AbstractSetupCommand;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -29,7 +29,7 @@ class JobUpgrade extends AbstractJob
     /**
      * Constructor
      *
-     * @param \Magento\Setup\Console\Command\AbstractSetupCommand $command
+     * @param \Magento\Setup\Console\Command\Setup\AbstractSetupCommand $command
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param \Magento\Setup\Model\Cron\Queue $queue
@@ -38,7 +38,7 @@ class JobUpgrade extends AbstractJob
      * @param array $params
      */
     public function __construct(
-        \Magento\Setup\Console\Command\AbstractSetupCommand $command,
+        \Magento\Setup\Console\Command\Setup\AbstractSetupCommand $command,
         \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
         \Symfony\Component\Console\Output\OutputInterface $output,
         \Magento\Setup\Model\Cron\Queue $queue,

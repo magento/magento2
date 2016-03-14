@@ -57,7 +57,7 @@ class JobFactory
         switch ($name) {
             case self::JOB_UPGRADE:
                 return new JobUpgrade(
-                    $this->serviceLocator->get('Magento\Setup\Console\Command\UpgradeCommand'),
+                    $this->serviceLocator->get('Magento\Setup\Console\Command\Setup\UpgradeCommand'),
                     $objectManagerProvider,
                     $multipleStreamOutput,
                     $this->serviceLocator->get('Magento\Setup\Model\Cron\Queue'),
@@ -110,7 +110,7 @@ class JobFactory
                 break;
             case self::JOB_MODULE_ENABLE:
                 return new JobModule(
-                    $this->serviceLocator->get('Magento\Setup\Console\Command\ModuleEnableCommand'),
+                    $this->serviceLocator->get('Magento\Setup\Console\Command\Module\EnableCommand'),
                     $objectManagerProvider,
                     $multipleStreamOutput,
                     $cronStatus,
@@ -120,7 +120,7 @@ class JobFactory
                 break;
             case self::JOB_MODULE_DISABLE:
                 return new JobModule(
-                    $this->serviceLocator->get('Magento\Setup\Console\Command\ModuleDisableCommand'),
+                    $this->serviceLocator->get('Magento\Setup\Console\Command\Module\DisableCommand'),
                     $objectManagerProvider,
                     $multipleStreamOutput,
                     $cronStatus,

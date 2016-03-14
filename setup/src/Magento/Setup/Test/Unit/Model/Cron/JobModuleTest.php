@@ -24,7 +24,7 @@ class JobModuleTest extends \PHPUnit_Framework_TestCase
         ];
         $objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValueMap($valueMap));
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
-        $command = $this->getMock('Magento\Setup\Console\Command\ModuleDisableCommand', [], [], '', false);
+        $command = $this->getMock('Magento\Setup\Console\Command\Module\DisableCommand', [], [], '', false);
         $command->expects($this->once())->method('run');
         $status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
         $status->expects($this->atLeastOnce())->method('add');
@@ -56,7 +56,7 @@ class JobModuleTest extends \PHPUnit_Framework_TestCase
         ];
         $objectManager->expects($this->atLeastOnce())->method('get')->will($this->returnValueMap($valueMap));
         $objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
-        $command = $this->getMock('Magento\Setup\Console\Command\ModuleEnableCommand', [], [], '', false);
+        $command = $this->getMock('Magento\Setup\Console\Command\Module\EnableCommand', [], [], '', false);
         $command->expects($this->once())->method('run');
         $status = $this->getMock('Magento\Setup\Model\Cron\Status', [], [], '', false);
         $status->expects($this->atLeastOnce())->method('add');
