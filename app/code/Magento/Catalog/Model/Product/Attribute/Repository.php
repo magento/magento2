@@ -50,6 +50,11 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     protected $searchCriteriaBuilder;
 
     /**
+     * @var \Magento\Catalog\Api\ProductAttributeOptionManagementInterface
+     */
+    private $optionManagement;
+
+    /**
      * @param \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param \Magento\Framework\Filter\FilterManager $filterManager
@@ -57,6 +62,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param \Magento\Catalog\Api\ProductAttributeOptionManagementInterface $optionManagement
      */
     public function __construct(
         \Magento\Catalog\Model\ResourceModel\Attribute $attributeResource,
@@ -65,7 +71,8 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
         \Magento\Eav\Api\AttributeRepositoryInterface $eavAttributeRepository,
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype\ValidatorFactory $validatorFactory,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
+        \Magento\Catalog\Api\ProductAttributeOptionManagementInterface $optionManagement
     ) {
         $this->attributeResource = $attributeResource;
         $this->productHelper = $productHelper;
@@ -74,6 +81,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
         $this->eavConfig = $eavConfig;
         $this->inputtypeValidatorFactory = $validatorFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->optionManagement = $optionManagement;
     }
 
     /**
@@ -171,7 +179,10 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             $attribute->setIsUserDefined(1);
         }
         $this->attributeResource->save($attribute);
-        return $attribute;
+        foreach ($attribute->getOptions() as $option) {
+            $this->optionManagement->add($attribute->getAttributeCode(), $option);
+        }
+        return $this->get($attribute->getAttributeCode());
     }
 
     /**
