@@ -52,7 +52,8 @@ $currencySymbol = $block->getCurrencySymbol();
                         "productUrl": "<?= /* @noEscape */ $block->getUrl('catalog/product/edit', ['id' => '%id%']) ?>",
                         "variations": <?= /* @noEscape */ $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($productMatrix) ?>,
                         "currencySymbol": "<?= /* @noEscape */ $currencySymbol ?>",
-                        "configurableProductGrid": "configurableProductGrid"
+                        "configurableProductGrid": "configurableProductGrid",
+                        "attributeSetCreationUrl": "<?= /* @noEscape */ $block->getUrl('*/product_set/save') ?>"
                     }
                 }
             }

@@ -8,6 +8,7 @@ namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Ui\Component\Modal;
 use Magento\Ui\Component\Form;
+use Magento\Ui\Component\Container;
 use Magento\Framework\UrlInterface;
 
 /**
@@ -63,6 +64,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                         ],
                     ],
                     'children' => [
+                        'affected-attribute-set-error' => $this->getAttributeSetErrorContainer(),
                         'affected-attribute-set-current' => [
                             'arguments' => [
                                 'data' => [
@@ -79,7 +81,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                             'false' => '0',
                                         ],
                                         'value' => 'current',
-                                        'sortOrder' => 10,
+                                        'sortOrder' => 20,
                                     ],
                                 ],
                             ],
@@ -102,7 +104,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                             'false' => '0',
                                         ],
                                         'value' => '0',
-                                        'sortOrder' => 20,
+                                        'sortOrder' => 30,
                                     ],
                                 ],
                             ],
@@ -126,7 +128,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                             'false' => '0',
                                         ],
                                         'value' => '0',
-                                        'sortOrder' => 40,
+                                        'sortOrder' => 50,
                                     ],
                                 ],
                             ],
@@ -171,16 +173,8 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                 'displayAsLink' => true,
                                 'actions' => [
                                     [
-                                        'targetName' => 'ns = ${ $.ns }, index='
-                                            . self::ATTRIBUTE_SET_HANDLER_MODAL,
-                                        'actionName' => 'closeModal',
-                                    ],
-                                    [
-                                        'targetName' => 'product_form.product_form',
-                                        'actionName' => 'save',
-                                        'params' => [
-                                            false
-                                        ]
+                                        'targetName' => 'configurableVariations',
+                                        'actionName' => 'addNewAttributeSetHandler',
                                     ],
                                 ],
                                 'title' => __('Confirm'),
@@ -209,7 +203,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                         'componentType' => Form\Field::NAME,
                         'dataScope' => 'configurable_new_attribute_set_name',
                         'label' => __('New Attribute Set Name'),
-                        'sortOrder' => 30,
+                        'sortOrder' => 40,
                         'validation' => ['required-entry' => true],
                         'imports' => [
                             'visible' => 'ns = ${ $.ns }, index = affected-attribute-set-new:checked',
@@ -247,7 +241,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                 'options' => $options,
                                 'label' => __('Choose existing Attribute Set'),
                                 'dataScope' => 'configurable_existing_attribute_set_id',
-                                'sortOrder' => 50,
+                                'sortOrder' => 60,
                                 'multiple' => false,
                                 'imports' => [
                                     'value' => 'ns = ${ $.ns }, index = attribute_set_id:value',
@@ -263,5 +257,27 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
         }
 
         return $ret;
+    }
+
+    /**
+     * Returns configurations for the messages container
+     *
+     * @return array
+     */
+    protected function getAttributeSetErrorContainer()
+    {
+        return [
+            'arguments' => [
+                'data' => [
+                    'config' => [
+                        'component' => 'Magento_Ui/js/form/components/html',
+                        'componentType' => Container::NAME,
+                        'content' => '',
+                        'sortOrder' => 10,
+                        'visible' => 0,
+                    ],
+                ],
+            ],
+        ];
     }
 }
