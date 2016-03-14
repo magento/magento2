@@ -13,7 +13,7 @@ define([
 
     return fieldset.extend({
 
-        /*eslint-enable no-unused-vars*/
+        /*eslint-disable no-unused-vars*/
         /**
          * Initialize element
          *
@@ -23,8 +23,6 @@ define([
             var obj = this;
 
             this._super();
-
-            /*eslint-enable no-unused-vars*/
 
             async.async('#sales-rule-form-tab-coupons', document.getElementById('container'), function (node) {
                 var useAutoGeneration = uiRegistry.get(
@@ -39,6 +37,8 @@ define([
 
             return this;
         },
+
+        /*eslint-enable no-unused-vars*/
 
         /**
          * Enable/disable fields on Coupons tab
