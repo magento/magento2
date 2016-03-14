@@ -75,8 +75,7 @@ class DataProvider
             $derivedTable->from(
                 ['main_table' => $this->resource->getTableName('catalog_category_product_index')],
                 [
-                    'entity_id' => 'product_id',
-                    'value' => 'category_id',
+                    'value' => 'category_id'
                 ]
             )->where('main_table.store_id = ?', $currentScopeId);
             $derivedTable->joinInner(

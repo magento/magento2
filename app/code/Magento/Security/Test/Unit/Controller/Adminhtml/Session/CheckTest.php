@@ -64,7 +64,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
 
         $this->currentSession =  $this->getMock(
             '\Magento\Security\Model\AdminSessionInfo',
-            ['isActive'],
+            ['isLoggedInStatus'],
             [],
             '',
             false
@@ -92,7 +92,7 @@ class CheckTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->sessionsManager->expects($this->any())->method('getCurrentSession')->willReturn($this->currentSession);
-        $this->currentSession->expects($this->any())->method('isActive')
+        $this->currentSession->expects($this->any())->method('isLoggedInStatus')
             ->will($this->returnValue($result));
         $this->jsonFactory->expects($this->any())->method('create')->willReturn($jsonMock);
         $jsonMock->expects($this->once())
