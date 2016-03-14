@@ -1,3 +1,15 @@
+2.0.3
+=============
+* Fixed bugs:
+    * Fixed HTML escaping issue on user account
+    * Fixed fatal error during import
+* GitHub requests:
+    * [#2852](https://github.com/magento/magento2/issues/2852) -- Fixed an issue where "magento setup:config:set" cleans data
+    * [#2957](https://github.com/magento/magento2/issues/2957) -- Fixed performance issue with products import
+    * [#2628](https://github.com/magento/magento2/issues/2628) -- Fixed issue with missing shipping data in orders API
+* Various improvements:
+    * Fixed performance issue with swatches functionality
+
 2.0.1
 =============
 * Fixed bugs:
