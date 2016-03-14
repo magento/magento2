@@ -29,7 +29,7 @@ define([
             attributesData: {},
             productMatrix: [],
             variations: [],
-            formSaveParams: {},
+            formSaveParams: [],
             productAttributes: [],
             disabledAttributes: [],
             fullAttributes: [],
@@ -293,14 +293,13 @@ define([
 
         /**
          * Chose action for the form save button
-         * @param {Object} params
          */
-        saveFormHandler: function(params) {
+        saveFormHandler: function() {
             if (this.checkForNewAttributes()) {
-                this.formSaveParams = params;
+                this.formSaveParams = arguments;
                 this.attributeSetHandlerModal().openModal();
             } else {
-                this.formElement().save(params);
+                this.formElement().save(arguments[0], arguments[1]);
             }
         },
 
@@ -389,7 +388,7 @@ define([
          */
         closeDialogAndProcessForm: function() {
             this.attributeSetHandlerModal().closeModal();
-            this.formElement().save(this.formSaveParams);
+            this.formElement().save(this.formSaveParams[0], this.formSaveParams[1]);
         }
     });
 });
