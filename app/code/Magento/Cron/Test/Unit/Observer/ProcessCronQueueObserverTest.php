@@ -642,13 +642,14 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
         ];
 
         // This item was scheduled 2 days ago
+        /** @var \Magento\Cron\Model\Schedule|\PHPUnit_Framework_MockObject_MockObject $schedule1 */
         $schedule1 = $this->getMockBuilder(
             'Magento\Cron\Model\Schedule'
         )->disableOriginalConstructor()->setMethods(
             ['getExecutedAt', 'getScheduledAt', 'getStatus', 'delete', '__wakeup']
         )->getMock();
         $schedule1->expects($this->any())->method('getExecutedAt')->will($this->returnValue(null));
-        $schedule1->expects($this->any())->method('getScheduledAt')->will($this->returnValue('-2 day -1 hour'));
+        $schedule1->expects($this->any())->method('getScheduledAt')->will($this->returnValue('-2 day -2 hour'));
         $schedule1->expects($this->any())->method('getStatus')->will($this->returnValue(Schedule::STATUS_MISSED));
         //we expect this job be deleted from the list
         $schedule1->expects($this->once())->method('delete')->will($this->returnValue(true));
