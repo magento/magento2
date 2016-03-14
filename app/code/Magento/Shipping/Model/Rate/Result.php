@@ -91,7 +91,7 @@ class Result
     /**
      * Return all quotes in the result
      *
-     * @return array
+     * @return \Magento\Quote\Model\Quote\Address\RateResult\Method[]
      */
     public function getAllRates()
     {
