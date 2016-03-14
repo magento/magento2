@@ -483,12 +483,9 @@ define([
             var $parent = $this.parents('.' + $widget.options.classes.attributeClass),
                 $label = $parent.find('.' + $widget.options.classes.attributeSelectedOptionLabelClass),
                 attributeId = $parent.attr('attribute-id'),
-                $input = $widget.productForm
-                    .find('.' +
-                        $widget.options.classes.attributeInput +
-                        '[name="super_attribute[' + attributeId +
-                        ']"]'
-                    );
+                $input = $widget.productForm.find(
+                    '.' + $widget.options.classes.attributeInput + '[name="super_attribute[' + attributeId + ']"]'
+                );
 
             if ($this.hasClass('disabled')) {
                 return;
