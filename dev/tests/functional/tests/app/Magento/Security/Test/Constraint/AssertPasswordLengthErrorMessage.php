@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Customer\Test\Constraint;
+namespace Magento\Security\Test\Constraint;
 
 use Magento\Customer\Test\Page\CustomerAccountCreate;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -14,7 +14,7 @@ use Magento\Mtf\Constraint\AbstractConstraint;
  */
 class AssertPasswordLengthErrorMessage extends AbstractConstraint
 {
-    const PASSWORD_LENGTH_ERROR_MESSAGE = 'Please enter a password with at least 8 characters.';
+    const PASSWORD_LENGTH_ERROR_MESSAGE = 'Minimum length of this field must be equal or greater than 8 symbols';
 
     /**
      * Assert that appropriate message is displayed on "Create New Customer Account" page(frontend) if password length
@@ -25,11 +25,11 @@ class AssertPasswordLengthErrorMessage extends AbstractConstraint
      */
     public function processAssert(CustomerAccountCreate $registerPage)
     {
-        $errorMessage = $registerPage->getMessagesBlock()->getErrorMessage();
-        \PHPUnit_Framework_Assert::assertEquals(
+        $errorMessage = $registerPage->getRegisterForm()->getPasswordError();
+        \PHPUnit_Framework_Assert::assertContains(
             self::PASSWORD_LENGTH_ERROR_MESSAGE,
             $errorMessage,
-            'The messages are not equal.'
+            'Incorrect password error message.'
         );
     }
 

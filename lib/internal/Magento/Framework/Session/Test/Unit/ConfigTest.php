@@ -376,7 +376,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
                 [
                     'session.save_handler' => 'files',
                     'session.cache_limiter' => 'files',
-                    'session.cookie_lifetime' => 7200,
+                    'session.cookie_lifetime' => 0,
                     'session.cookie_path' => '/',
                     'session.cookie_domain' => 'init.host',
                     'session.cookie_httponly' => false,
@@ -443,7 +443,6 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $this->configMock = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $getValueReturnMap = [
-            ['test_web/test_cookie/test_cookie_lifetime', 'store', null, 7200],
             ['web/cookie/cookie_path', 'store', null, ''],
         ];
         $this->configMock->method('getValue')
