@@ -50,7 +50,7 @@ class AddToWishlist extends \Magento\Framework\View\Element\Template
      */
     private function getProductTypes()
     {
-        if($this->productTypes === null) {
+        if ($this->productTypes === null) {
             $this->productTypes = [];
             $block = $this->getLayout()->getBlock('category.products.list');
             if ($block) {
@@ -70,7 +70,7 @@ class AddToWishlist extends \Magento\Framework\View\Element\Template
      */
     protected function _toHtml()
     {
-        if(!$this->getProductTypes()){
+        if (!$this->getProductTypes()) {
             return '';
         }
         return parent::_toHtml();
