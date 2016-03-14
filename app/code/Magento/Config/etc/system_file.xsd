@@ -106,6 +106,7 @@
                     <xs:element name="resource" type="typeAclResourceId" />
                     <xs:element ref="group" />
                     <xs:element name="include" type="includeType"/>
+                    <xs:element name="frontend_model" type="typeModel" />
                 </xs:choice>
             </xs:sequence>
 

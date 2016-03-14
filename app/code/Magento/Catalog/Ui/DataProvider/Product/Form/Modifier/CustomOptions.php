@@ -151,38 +151,34 @@ class CustomOptions extends AbstractModifier
      */
     public function modifyData(array $data)
     {
-        if (!in_array($this->locator->getProduct()->getTypeId(), $this->getNotSupportedProductTypes())) {
-            $options = [];
-            $productOptions = $this->locator->getProduct()->getOptions() ?: [];
+        $options = [];
+        $productOptions = $this->locator->getProduct()->getOptions() ?: [];
 
-            /** @var \Magento\Catalog\Model\Product\Option $option */
-            foreach ($productOptions as $index => $option) {
-                $options[$index] = $this->formatFloat(static::FIELD_PRICE_NAME, $option->getData());
-                $values = $option->getValues() ?: [];
+        /** @var \Magento\Catalog\Model\Product\Option $option */
+        foreach ($productOptions as $index => $option) {
+            $options[$index] = $this->formatFloat(static::FIELD_PRICE_NAME, $option->getData());
+            $values = $option->getValues() ?: [];
 
-                /** @var \Magento\Catalog\Model\Product\Option $value */
-                foreach ($values as $value) {
-                    $options[$index][static::GRID_TYPE_SELECT_NAME][] = $this->formatFloat(
-                        static::FIELD_PRICE_NAME,
-                        $value->getData()
-                    );
-                }
+            /** @var \Magento\Catalog\Model\Product\Option $value */
+            foreach ($values as $value) {
+                $options[$index][static::GRID_TYPE_SELECT_NAME][] = $this->formatFloat(
+                    static::FIELD_PRICE_NAME,
+                    $value->getData()
+                );
             }
-
-            return array_replace_recursive(
-                $data,
-                [
-                    $this->locator->getProduct()->getId() => [
-                        static::DATA_SOURCE_DEFAULT => [
-                            static::FIELD_ENABLE => 1,
-                            static::GRID_OPTIONS_NAME => $options
-                        ]
-                    ]
-                ]
-            );
         }
 
-        return $data;
+        return array_replace_recursive(
+            $data,
+            [
+                $this->locator->getProduct()->getId() => [
+                    static::DATA_SOURCE_DEFAULT => [
+                        static::FIELD_ENABLE => 1,
+                        static::GRID_OPTIONS_NAME => $options
+                    ]
+                ]
+            ]
+        );
     }
 
     /**
@@ -210,9 +206,7 @@ class CustomOptions extends AbstractModifier
     {
         $this->meta = $meta;
 
-        if (!in_array($this->locator->getProduct()->getTypeId(), $this->getNotSupportedProductTypes())) {
-            $this->createCustomOptionsPanel();
-        }
+        $this->createCustomOptionsPanel();
 
         return $this->meta;
     }
@@ -244,9 +238,9 @@ class CustomOptions extends AbstractModifier
                         ],
                     ],
                     'children' => [
-                        static::CONTAINER_HEADER_NAME => $this->getHeaderContainerConfig(10),
-                        static::GRID_OPTIONS_NAME => $this->getOptionsGridConfig(20),
-                        static::FIELD_ENABLE => $this->getEnableFieldConfig(30),
+                        static::FIELD_ENABLE => $this->getEnableFieldConfig(10),
+                        static::CONTAINER_HEADER_NAME => $this->getHeaderContainerConfig(20),
+                        static::GRID_OPTIONS_NAME => $this->getOptionsGridConfig(30)
                     ]
                 ]
             ]
@@ -874,7 +868,7 @@ class CustomOptions extends AbstractModifier
                             'dataScope' => static::FIELD_PRICE_TYPE_NAME,
                             'dataType' => Text::NAME,
                             'sortOrder' => $sortOrder,
-                            'options' => $this->getPriceTypes(),
+                            'options' => $this->productOptionsPrice->toOptionArray(),
                         ],
                     ],
                 ],
@@ -1052,33 +1046,6 @@ class CustomOptions extends AbstractModifier
     }
 
     /**
-     * Retrieve price types
-     *
-     * @return array
-     */
-    protected function getPriceTypes()
-    {
-        $priceTypes = $this->productOptionsPrice->toOptionArray();
-        $productType = $this->locator->getProduct()->getTypeId();
-        $exceptions = $this->getNotSupportedPriceTypes();
-
-        if (isset($exceptions[$productType])) {
-            $i = 0;
-
-            while ($i < count($priceTypes)) {
-                if (in_array($priceTypes[$i]['value'], $exceptions[$productType])) {
-                    unset($priceTypes[$i]);
-                    continue;
-                }
-
-                $i += 1;
-            }
-        }
-
-        return $priceTypes;
-    }
-
-    /**
      * Get currency symbol
      *
      * @return string
@@ -1086,27 +1053,5 @@ class CustomOptions extends AbstractModifier
     protected function getCurrencySymbol()
     {
         return $this->storeManager->getStore()->getBaseCurrency()->getCurrencySymbol();
-    }
-
-    /**
-     * Get list of not supported product types
-     *
-     * @return array
-     */
-    protected function getNotSupportedProductTypes()
-    {
-        return ['grouped'];
-    }
-
-    /**
-     * Get list of not supported price types per product type
-     *
-     * @return array
-     */
-    protected function getNotSupportedPriceTypes()
-    {
-        return [
-            'configurable' => ['percent']
-        ];
     }
 }
