@@ -113,7 +113,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $this->copyToStores($data, $productId);
 
                 $this->messageManager->addSuccess(__('You saved the product.'));
-                $this->dataPersistor->clear('catalog_product');
+                $this->getDataPersistor()->clear('catalog_product');
                 if ($product->getSku() != $originalSku) {
                     $this->messageManager->addNotice(
                         __(
