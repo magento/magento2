@@ -237,9 +237,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     public function getDataPersistor()
     {
         if (null === $this->dataPersistor) {
-            $this->dataPersistor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                DataPersistorInterface::class
-            );
+            $this->dataPersistor = $this->_objectManager->get(DataPersistorInterface::class);
         }
 
         return $this->dataPersistor;
