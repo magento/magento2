@@ -132,7 +132,7 @@ class Head implements Layout\ReaderInterface
      */
     private function setMetadata($pageConfigStructure, $node)
     {
-        if (empty($node->getAttribute('name')) && !empty($node->getAttribute('property'))) {
+        if (!$node->getAttribute('name') && $node->getAttribute('property')) {
             $metadataName = $node->getAttribute('property');
         } else {
             $metadataName = $node->getAttribute('name');
