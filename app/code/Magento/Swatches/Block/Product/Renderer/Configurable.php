@@ -327,7 +327,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function isProductHasImage(Product $product, $imageType)
     {
-        return $product->getData($imageType) !== null && $product->getData($imageType) != SwatchData::EMPTY_IMAGE_VALUE;
+        return $product->getData($imageType) !== null && $product->getData($imageType) != 'no_selection';
     }
 
     /**

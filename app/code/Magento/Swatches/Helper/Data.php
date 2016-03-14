@@ -27,11 +27,6 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection as ProductCollection;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * When we init media gallery empty image types contain this value.
-     */
-    const EMPTY_IMAGE_VALUE = 'no_selection';
-
-    /**
      * Default store ID
      */
     const DEFAULT_STORE_ID = 0;
@@ -380,11 +375,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getProductMediaGallery (Product $product)
     {
-        if (!in_array($product->getData('image'), [null, self::EMPTY_IMAGE_VALUE], true)) {
+        if (!in_array($product->getData('image'), [null, 'no_selection'], true)) {
             $baseImage = $product->getData('image');
         } else {
             $productMediaAttributes = array_filter($product->getMediaAttributeValues(), function ($value) {
-                return $value !== self::EMPTY_IMAGE_VALUE && $value !== null;
+                return $value !== 'no_selection' && $value !== null;
             });
             foreach ($productMediaAttributes as $attributeCode => $value) {
                 if ($attributeCode !== 'swatch_image') {
@@ -645,7 +640,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $usedProducts = $configurableProduct->getTypeInstance()->getUsedProducts($configurableProduct);
 
             foreach ($usedProducts as $simpleProduct) {
-                if (!in_array($simpleProduct->getData($attributeCode), [null, self::EMPTY_IMAGE_VALUE], true)
+                if (!in_array($simpleProduct->getData($attributeCode), [null, 'no_selection'], true)
                     && !array_diff_assoc($requiredAttributes, $simpleProduct->getData())
                 ) {
                     return $simpleProduct;
