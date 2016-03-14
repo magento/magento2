@@ -158,20 +158,7 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
         );
         $this->_addAttributeToSelect($select, 'status', "e.$linkField", 'cs.store_id', $condition);
 
-        if ($this->_isManageStock()) {
-            $statusExpr = $connection->getCheckSql(
-                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
-                '1',
-                'cisi.is_in_stock'
-            );
-        } else {
-            $statusExpr = $connection->getCheckSql(
-                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
-                'cisi.is_in_stock',
-                '1'
-            );
-        }
-
+        $statusExpr = $this->getStatusExpression($connection);
         $select->columns(
             [
                 'status' => $connection->getLeastSql(
