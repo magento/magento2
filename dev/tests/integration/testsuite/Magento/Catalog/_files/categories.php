@@ -165,6 +165,20 @@ $category->setId(12)
     ->setPosition(8)
     ->save();
 
+$category = $objectManager->create('Magento\Catalog\Model\Category');
+$category->isObjectNew(true);
+$category->setId(13)
+    ->setName('Category 1.2')
+    ->setParentId(3)
+    ->setPath('1/2/3/13')
+    ->setLevel(3)
+    ->setAvailableSortBy('name')
+    ->setDefaultSortBy('name')
+    ->setIsActive(true)
+    ->setIsAnchor(true)
+    ->setPosition(2)
+    ->save();
+
 /** @var $product \Magento\Catalog\Model\Product */
 $product = $objectManager->create('Magento\Catalog\Model\Product');
 $product->isObjectNew(true);
@@ -183,7 +197,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
 
 $categoryLinkManagement->assignProductToCategories(
     $product->getSku(),
-    [2, 3, 4]
+    [2, 3, 4, 13]
 );
 
 $product = $objectManager->create('Magento\Catalog\Model\Product');
@@ -203,7 +217,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
 
 $categoryLinkManagement->assignProductToCategories(
     $product->getSku(),
-    [5]
+    [5, 4]
 );
 
 $product = $objectManager->create('Magento\Catalog\Model\Product');
@@ -244,5 +258,5 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
 
 $categoryLinkManagement->assignProductToCategories(
     $product->getSku(),
-    [10, 11, 12]
+    [10, 11, 12, 13]
 );
