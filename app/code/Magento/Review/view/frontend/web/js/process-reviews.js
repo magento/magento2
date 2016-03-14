@@ -10,6 +10,7 @@ define([
     function processReviews(url, fromPages) {
         $.ajax({
             url: url,
+            cache: true,
             dataType: 'html'
         }).done(function (data) {
             $('#product-review-container').html(data);
