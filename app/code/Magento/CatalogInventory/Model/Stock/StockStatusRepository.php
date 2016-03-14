@@ -9,6 +9,7 @@ use Magento\CatalogInventory\Api\Data\StockStatusCollectionInterfaceFactory;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatusResource;
+use Magento\CatalogInventory\Model\StockRegistryStorage;
 use Magento\Framework\DB\MapperFactory;
 use Magento\Framework\DB\QueryBuilderFactory;
 use Magento\Framework\Exception\CouldNotDeleteException;
@@ -46,24 +47,32 @@ class StockStatusRepository implements StockStatusRepositoryInterface
     protected $mapperFactory;
 
     /**
+     * @var StockRegistryStorage
+     */
+    protected $stockRegistryStorage;
+
+    /**
      * @param StockStatusResource $resource
      * @param StatusFactory $stockStatusFactory
      * @param StockStatusCollectionInterfaceFactory $collectionFactory
      * @param QueryBuilderFactory $queryBuilderFactory
      * @param MapperFactory $mapperFactory
+     * @param StockRegistryStorage $stockRegistryStorage
      */
     public function __construct(
         StockStatusResource $resource,
         StatusFactory $stockStatusFactory,
         StockStatusCollectionInterfaceFactory $collectionFactory,
         QueryBuilderFactory $queryBuilderFactory,
-        MapperFactory $mapperFactory
+        MapperFactory $mapperFactory,
+        StockRegistryStorage $stockRegistryStorage
     ) {
         $this->resource = $resource;
         $this->stockStatusFactory = $stockStatusFactory;
         $this->stockStatusCollectionFactory = $collectionFactory;
         $this->queryBuilderFactory = $queryBuilderFactory;
         $this->mapperFactory = $mapperFactory;
+        $this->stockRegistryStorage = $stockRegistryStorage;
     }
 
     /**
@@ -76,7 +85,7 @@ class StockStatusRepository implements StockStatusRepositoryInterface
         try {
             $this->resource->save($stockStatus);
         } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__($exception->getMessage()));
+            throw new CouldNotSaveException(__('Unable to save Stock Status'), $exception);
         }
         return $stockStatus;
     }
@@ -115,8 +124,12 @@ class StockStatusRepository implements StockStatusRepositoryInterface
     {
         try {
             $this->resource->delete($stockStatus);
+            $this->stockRegistryStorage->removeStockStatus($stockStatus->getProductId());
         } catch (\Exception $exception) {
-            throw new CouldNotDeleteException(__($exception->getMessage()));
+            throw new CouldNotDeleteException(
+                __('Unable to remove Stock Status for product %1', $stockStatus->getProductId()),
+                $exception
+            );
         }
         return true;
     }
@@ -132,7 +145,10 @@ class StockStatusRepository implements StockStatusRepositoryInterface
             $stockStatus = $this->get($id);
             $this->delete($stockStatus);
         } catch (\Exception $exception) {
-            throw new CouldNotDeleteException(__($exception->getMessage()));
+            throw new CouldNotDeleteException(
+                __('Unable to remove Stock Status for product %1', $id),
+                $exception
+            );
         }
         return true;
     }
