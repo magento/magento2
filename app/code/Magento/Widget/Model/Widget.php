@@ -297,7 +297,7 @@ class Widget
             } elseif (trim($value) == '') {
                 $widget = $this->getConfigAsObject($type);
                 $parameters = $widget->getParameters();
-                if (isset($parameters[$name]) && is_object($parameters[$name])) {
+                if (is_object($parameters[$name])) {
                     $value = $parameters[$name]->getValue();
                 }
             }
@@ -306,7 +306,7 @@ class Widget
             }
         }
 
-        if (array_key_exists('show_pager', $params) && (bool)$params['show_pager']) {
+        if ((bool)$params['show_pager']) {
             $directive .= sprintf(
                 ' %s="%s"',
                 'page_var_name',
