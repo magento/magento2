@@ -276,7 +276,6 @@ class ProductsListTest extends \PHPUnit_Framework_TestCase
         $this->rule->expects($this->once())->method('loadPost')->willReturnSelf();
         $this->rule->expects($this->once())->method('getConditions')->willReturn($conditions);
 
-
         if ($productsPerPage) {
             $this->productsList->setData('products_per_page', $productsPerPage);
         } else {
