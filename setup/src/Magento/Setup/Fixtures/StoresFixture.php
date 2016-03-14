@@ -33,7 +33,6 @@ class StoresFixture extends Fixture
         /** @var \Magento\Store\Model\StoreManager $storeManager */
         $storeManager = $this->fixtureModel->getObjectManager()->create('Magento\Store\Model\StoreManager');
         /** @var $category \Magento\Catalog\Model\Category */
-        $category = $this->fixtureModel->getObjectManager()->create('Magento\Catalog\Model\Category');
 
         /** @var $defaultWebsite \Magento\Store\Model\Website */
         $defaultWebsite = $storeManager->getWebsite();
@@ -76,19 +75,18 @@ class StoresFixture extends Fixture
         //Create $storeGroupsCount websites
         $websiteNumber = 0;
         for ($i = 0; $i < $storeGroupsCount; $i++) {
+            $category = $this->fixtureModel->getObjectManager()->create('Magento\Catalog\Model\Category');
             $websiteId = $websitesId[$websiteNumber];
             $groupId = null;
-            $parentCategoryId = null;
             $categoryPath = '1';
 
             $storeGroupName = sprintf('Store Group %d - website_id_%d', $i + 1, $websiteId);
 
             if ($i == 0 && $websiteId == $defaultWebsiteId) {
                 $groupId = $defaultStoreGroupId;
-                $parentCategoryId = $defaultParentCategoryId;
                 $categoryPath = '1/' . $defaultParentCategoryId;
+                $category->load($defaultParentCategoryId);
             }
-            $category->load($parentCategoryId);
 
             $category->setName("Category $storeGroupName")
                 ->setPath($categoryPath)
