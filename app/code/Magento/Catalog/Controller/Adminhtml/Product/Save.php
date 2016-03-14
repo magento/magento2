@@ -133,11 +133,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_session->setProductData($data);
+                $this->dataPersistor->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             } catch (\Exception $e) {
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                 $this->messageManager->addError($e->getMessage());
                 $this->_session->setProductData($data);
+                $this->dataPersistor->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             }
         } else {
@@ -145,8 +147,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
             $this->messageManager->addError('No data to save');
             return $resultRedirect;
         }
-
-        $this->dataPersistor->set('catalog_product', $data);
 
         if ($redirectBack === 'new') {
             $resultRedirect->setPath(

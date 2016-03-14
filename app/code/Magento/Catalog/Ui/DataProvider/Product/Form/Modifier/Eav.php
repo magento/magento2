@@ -18,6 +18,7 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory as GroupCollectionFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Filter\Translit;
 use Magento\Store\Model\StoreManagerInterface;
@@ -150,8 +151,11 @@ class Eav extends AbstractModifier
     private $attributesToEliminate;
 
     /**
-     * Initialize dependencies
-     *
+     * @var DataPersistorInterface
+     */
+    private $dataPersistor;
+
+    /**
      * @param LocatorInterface $locator
      * @param EavValidationRules $eavValidationRules
      * @param Config $eavConfig
@@ -167,6 +171,7 @@ class Eav extends AbstractModifier
      * @param EavAttributeFactory $eavAttributeFactory
      * @param Translit $translitFilter
      * @param ScopeOverriddenValue $scopeOverriddenValue
+     * @param DataPersistorInterface $dataPersistor
      * @param array $attributesToDisable
      * @param array $attributesToEliminate
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -187,6 +192,7 @@ class Eav extends AbstractModifier
         EavAttributeFactory $eavAttributeFactory,
         Translit $translitFilter,
         ScopeOverriddenValue $scopeOverriddenValue,
+        DataPersistorInterface $dataPersistor,
         $attributesToDisable = [],
         $attributesToEliminate = []
     ) {
@@ -205,6 +211,7 @@ class Eav extends AbstractModifier
         $this->eavAttributeFactory = $eavAttributeFactory;
         $this->translitFilter = $translitFilter;
         $this->scopeOverriddenValue = $scopeOverriddenValue;
+        $this->dataPersistor = $dataPersistor;
         $this->attributesToDisable = $attributesToDisable;
         $this->attributesToEliminate = $attributesToEliminate;
     }
@@ -308,6 +315,10 @@ class Eav extends AbstractModifier
      */
     public function modifyData(array $data)
     {
+        if (!$this->locator->getProduct()->getId() && $this->dataPersistor->get('catalog_product')) {
+            return $this->resolvePersistentData($data);
+        }
+
         /** @var string $groupCode */
         foreach (array_keys($this->getGroups()) as $groupCode) {
             $attributes = !empty($this->getAttributes()[$groupCode]) ? $this->getAttributes()[$groupCode] : [];
@@ -317,6 +328,29 @@ class Eav extends AbstractModifier
                 $data = $this->setAttributeValueToData($data, $attribute->getAttributeCode());
             }
         }
+
+        return $data;
+    }
+
+    /**
+     * Resolve data persistence
+     *
+     * @param array $data
+     * @return array
+     */
+    private function resolvePersistentData(array $data)
+    {
+        $persistentData = $this->dataPersistor->get('catalog_product');
+        $productId = $this->locator->getProduct()->getId();
+
+        if (empty($data[$productId][self::DATA_SOURCE_DEFAULT])) {
+            $data[$productId][self::DATA_SOURCE_DEFAULT] = [];
+        }
+
+        $data[$productId] = array_replace_recursive(
+            $data[$productId][self::DATA_SOURCE_DEFAULT],
+            $persistentData
+        );
 
         return $data;
     }

@@ -5,8 +5,10 @@
  */
 namespace Magento\Catalog\Model\Locator;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Registry;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Class RegistryLocator
@@ -16,7 +18,17 @@ class RegistryLocator implements LocatorInterface
     /**
      * @var Registry
      */
-    protected $registry;
+    private $registry;
+
+    /**
+     * @var ProductInterface
+     */
+    private $product;
+
+    /**
+     * @var StoreInterface
+     */
+    private $store;
 
     /**
      * @param Registry $registry
@@ -32,8 +44,12 @@ class RegistryLocator implements LocatorInterface
      */
     public function getProduct()
     {
+        if (null !== $this->product) {
+            return $this->product;
+        }
+
         if ($product = $this->registry->registry('current_product')) {
-            return $product;
+            return $this->product = $product;
         }
 
         throw new NotFoundException(__('Product was not registered'));
@@ -45,8 +61,12 @@ class RegistryLocator implements LocatorInterface
      */
     public function getStore()
     {
-        if ($currentStore = $this->registry->registry('current_store')) {
-            return $currentStore;
+        if (null !== $this->store) {
+            return $this->store;
+        }
+
+        if ($store = $this->registry->registry('current_store')) {
+            return $this->store = $store;
         }
 
         throw new NotFoundException(__('Store was not registered'));
