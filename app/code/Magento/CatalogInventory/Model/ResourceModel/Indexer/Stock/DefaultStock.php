@@ -7,6 +7,8 @@
 namespace Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock;
 
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
+use Magento\CatalogInventory\Model\Stock;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 
 /**
  * CatalogInventory Default Stock Status Indexer Resource Model
@@ -36,13 +38,19 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     protected $_scopeConfig;
 
     /**
+     * @var QueryProcessorComposite
+     */
+    private $queryProcessorComposite;
+
+    /**
      * Class constructor
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param QueryProcessorComposite $queryProcessorComposite
      * @param string $connectionName
      */
     public function __construct(
@@ -51,9 +59,11 @@ class DefaultStock extends AbstractIndexer implements StockInterface
         \Magento\Eav\Model\Config $eavConfig,
         \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        QueryProcessorComposite $queryProcessorComposite,
         $connectionName = null
     ) {
         $this->_scopeConfig = $scopeConfig;
+        $this->queryProcessorComposite = $queryProcessorComposite;
         parent::__construct($context, $tableStrategy, $eavConfig, $metadataPool, $connectionName);
     }
 
@@ -188,9 +198,10 @@ class DefaultStock extends AbstractIndexer implements StockInterface
             ['cisi' => $this->getTable('cataloginventory_stock_item')],
             'cisi.stock_id = cis.stock_id AND cisi.product_id = e.entity_id',
             []
-        )->columns(['qty' => $qtyExpr])
+        )->columns(['qty' => new \Zend_Db_Expr('SUM(' . $qtyExpr . ')')])
             ->where('cw.website_id != 0')
-            ->where('e.type_id = ?', $this->getTypeId());
+            ->where('e.type_id = ?', $this->getTypeId())
+            ->group('e.entity_id');
 
         // add limitation of status
         $condition = $connection->quoteInto(
@@ -205,21 +216,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
             $condition
         );
 
-        if ($this->_isManageStock()) {
-            $statusExpr = $connection->getCheckSql(
-                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
-                1,
-                'cisi.is_in_stock'
-            );
-        } else {
-            $statusExpr = $connection->getCheckSql(
-                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
-                'cisi.is_in_stock',
-                1
-            );
-        }
-
-        $select->columns(['status' => $statusExpr]);
+        $select->columns(['status' => $this->getStatusExpression($connection, true)]);
 
         if ($entityIds !== null) {
             $select->where('e.entity_id IN(?)', $entityIds);
@@ -238,6 +235,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     {
         $connection = $this->getConnection();
         $select = $this->_getStockStatusSelect($entityIds);
+        $select = $this->queryProcessorComposite->processQuery($select, $entityIds);
         $query = $select->insertFromSelect($this->getIdxTable());
         $connection->query($query);
 
@@ -254,6 +252,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     {
         $connection = $this->getConnection();
         $select = $this->_getStockStatusSelect($entityIds, true);
+        $select = $this->queryProcessorComposite->processQuery($select, $entityIds, true);
         $query = $connection->query($select);
 
         $i = 0;
@@ -263,7 +262,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
             $data[] = [
                 'product_id' => (int)$row['entity_id'],
                 'website_id' => (int)$row['website_id'],
-                'stock_id' => (int)$row['stock_id'],
+                'stock_id' => Stock::DEFAULT_STOCK_ID,
                 'qty' => (double)$row['qty'],
                 'stock_status' => (int)$row['status'],
             ];
@@ -305,5 +304,29 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     public function getIdxTable($table = null)
     {
         return $this->tableStrategy->getTableName('cataloginventory_stock_status');
+    }
+
+    /**
+     * @param AdapterInterface $connection
+     * @param bool $isAggregate
+     * @return mixed
+     */
+    protected function getStatusExpression(AdapterInterface $connection, $isAggregate = false)
+    {
+        $isInStockExpression = $isAggregate ? 'MAX(cisi.is_in_stock)' : 'cisi.is_in_stock';
+        if ($this->_isManageStock()) {
+            $statusExpr = $connection->getCheckSql(
+                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
+                1,
+                $isInStockExpression
+            );
+        } else {
+            $statusExpr = $connection->getCheckSql(
+                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
+                $isInStockExpression,
+                1
+            );
+        }
+        return $statusExpr;
     }
 }

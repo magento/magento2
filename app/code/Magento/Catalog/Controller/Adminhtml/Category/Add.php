@@ -6,14 +6,23 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+/**
+ * Class Add Category
+ *
+ * @package Magento\Catalog\Controller\Adminhtml\Category
+ */
 class Add extends \Magento\Catalog\Controller\Adminhtml\Category
 {
     /**
+     * Forward factory for result
+     *
      * @var \Magento\Backend\Model\View\Result\ForwardFactory
      */
     protected $resultForwardFactory;
 
     /**
+     * Add category constructor
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
      */
@@ -32,8 +41,32 @@ class Add extends \Magento\Catalog\Controller\Adminhtml\Category
      */
     public function execute()
     {
-        /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
-        $resultForward = $this->resultForwardFactory->create();
-        return $resultForward->forward('edit');
+        $parentId = (int)$this->getRequest()->getParam('parent');
+
+        $category = $this->_initCategory(true);
+        if (!$category || !$parentId || $category->getId()) {
+            /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+            $resultRedirect = $this->resultRedirectFactory->create();
+            return $resultRedirect->setPath('catalog/*/', ['_current' => true, 'id' => null]);
+        }
+
+        $resultPageFactory = $this->_objectManager->get('Magento\Framework\View\Result\PageFactory');
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
+        $resultPage = $resultPageFactory->create();
+
+        if ($this->getRequest()->getQuery('isAjax')) {
+            return $this->ajaxRequestResponse($category, $resultPage);
+        }
+
+        $resultPage->setActiveMenu('Magento_Catalog::catalog_categories');
+        $resultPage->getConfig()->getTitle()->prepend(__('New Category'));
+        $resultPage->addBreadcrumb(__('Manage Catalog Categories'), __('Manage Categories'));
+
+        $block = $resultPage->getLayout()->getBlock('catalog.wysiwyg.js');
+        if ($block) {
+            $block->setStoreId(0);
+        }
+
+        return $resultPage;
     }
 }
