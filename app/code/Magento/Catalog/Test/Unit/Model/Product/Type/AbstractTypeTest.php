@@ -80,6 +80,9 @@ class AbstractTypeTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($this->model->getAttributeById(0, $this->product));
     }
 
+    /**
+     * @deprecated
+     */
     public function testGetEditableAttributes()
     {
         $expected = [$this->attribute];
