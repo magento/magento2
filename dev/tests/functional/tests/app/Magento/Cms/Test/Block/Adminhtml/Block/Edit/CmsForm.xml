@@ -12,7 +12,8 @@
             <input>multiselectgrouplist</input>
         </stores>
         <is_active>
-            <input>checkbox</input>
+            <selector>.admin__actions-switch-label</selector>
+            <input>switcher</input>
         </is_active>
     </fields>
 </mapping>
