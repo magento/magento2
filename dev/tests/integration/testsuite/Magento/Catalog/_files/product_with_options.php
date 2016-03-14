@@ -33,6 +33,11 @@ $product->setTypeId(
     \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
 )->setCanSaveCustomOptions(
     true
+)->setStockData(
+    [
+        'qty' => 0,
+        'is_in_stock' => 0
+    ]
 );
 
 $options = [
