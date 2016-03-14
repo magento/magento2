@@ -54,7 +54,6 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager
      * @param \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param DataPersistorInterface $dataPersistor
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -63,15 +62,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         \Magento\Catalog\Model\Product\Copier $productCopier,
         \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager,
         \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        DataPersistorInterface $dataPersistor
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
     ) {
         $this->initializationHelper = $initializationHelper;
         $this->productCopier = $productCopier;
         $this->productTypeManager = $productTypeManager;
         $this->categoryLinkManagement = $categoryLinkManagement;
         $this->productRepository = $productRepository;
-        $this->dataPersistor = $dataPersistor;
         parent::__construct($context, $productBuilder);
     }
 
@@ -138,13 +135,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_session->setProductData($data);
-                $this->dataPersistor->set('catalog_product', $data);
+                $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             } catch (\Exception $e) {
                 $this->_objectManager->get('Psr\Log\LoggerInterface')->critical($e);
                 $this->messageManager->addError($e->getMessage());
                 $this->_session->setProductData($data);
-                $this->dataPersistor->set('catalog_product', $data);
+                $this->getDataPersistor()->set('catalog_product', $data);
                 $redirectBack = $productId ? true : 'new';
             }
         } else {
@@ -230,5 +227,21 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 }
             }
         }
+    }
+
+    /**
+     * Retrieve data persistor
+     *
+     * @return DataPersistorInterface|mixed
+     */
+    public function getDataPersistor()
+    {
+        if (null === $this->dataPersistor) {
+            $this->dataPersistor = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                DataPersistorInterface::class
+            );
+        }
+
+        return $this->dataPersistor;
     }
 }
