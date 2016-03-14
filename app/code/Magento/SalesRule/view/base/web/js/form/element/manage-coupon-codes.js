@@ -12,6 +12,8 @@ define([
     'use strict';
 
     return fieldset.extend({
+
+        /*eslint-enable no-unused-vars*/
         /**
          * Initialize element
          *
@@ -22,11 +24,14 @@ define([
 
             this._super();
 
+            /*eslint-enable no-unused-vars*/
+
             async.async('#sales-rule-form-tab-coupons', document.getElementById('container'), function (node) {
                 var useAutoGeneration = uiRegistry.get(
                     'sales_rule_form.sales_rule_form.rule_information.use_auto_generation'
                 );
-                useAutoGeneration.on('checked', function() {
+
+                useAutoGeneration.on('checked', function () {
                     obj.enableDisableFields();
                 });
                 obj.enableDisableFields();
@@ -37,10 +42,8 @@ define([
 
         /**
          * Enable/disable fields on Coupons tab
-         *
-         * @returns {void}
          */
-        enableDisableFields: function() {
+        enableDisableFields: function () {
             var selector = '[id=sales-rule-form-tab-coupons] input, [id=sales-rule-form-tab-coupons] select, ' +
                     '[id=sales-rule-form-tab-coupons] button',
                 isUseAutoGenerationChecked = !uiRegistry
