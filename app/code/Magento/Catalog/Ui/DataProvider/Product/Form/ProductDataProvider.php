@@ -18,7 +18,7 @@ class ProductDataProvider extends AbstractDataProvider
     /**
      * @var PoolInterface
      */
-    protected $pool;
+    private $pool;
 
     /**
      * @param string $name
@@ -48,9 +48,11 @@ class ProductDataProvider extends AbstractDataProvider
      */
     public function getData()
     {
+        $data = $this->data;
+
         /** @var ModifierInterface $modifier */
         foreach ($this->pool->getModifiersInstances() as $modifier) {
-            $this->data = $modifier->modifyData($this->data);
+            $this->data = $modifier->modifyData($data);
         }
 
         return $this->data;
