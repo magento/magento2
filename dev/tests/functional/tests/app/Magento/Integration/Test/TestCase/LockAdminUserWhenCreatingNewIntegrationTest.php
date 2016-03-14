@@ -107,6 +107,7 @@ class LockAdminUserWhenCreatingNewIntegrationTest extends Injectable
         $this->adminAuthLogin->open();
         $this->adminAuthLogin->getLoginBlock()->fill($customAdmin);
         $this->adminAuthLogin->getLoginBlock()->submit();
+
         // Steps
         $this->integrationIndexPage->open();
         $this->integrationIndexPage->getGridPageActions()->addNew();
@@ -114,6 +115,11 @@ class LockAdminUserWhenCreatingNewIntegrationTest extends Injectable
             $this->integrationNewPage->getIntegrationForm()->fill($integration);
             $this->integrationNewPage->getFormPageActions()->saveNew();
         }
+
+        // Reload page
+        $this->adminAuthLogin->open();
+        $this->adminAuthLogin->getLoginBlock()->fill($customAdmin);
+        $this->adminAuthLogin->getLoginBlock()->submit();
     }
 
     /**

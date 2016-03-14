@@ -89,17 +89,20 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      */
     public function isLoggedInStatus()
     {
+        $this->checkActivity();
         return $this->getData('status') == self::LOGGED_IN;
     }
 
     /**
-     * Check if a user is active
+     * Check if session is timed out and set status accordingly
      *
-     * @return bool
+     * @return void
      */
-    public function isActive()
+    private function checkActivity()
     {
-        return $this->isLoggedInStatus() && !$this->isSessionExpired();
+        if ($this->isSessionExpired()) {
+            $this->setData('status', self::LOGGED_OUT);
+        }
     }
 
     /**
