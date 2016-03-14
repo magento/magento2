@@ -10,10 +10,9 @@ define([
     'use strict';
 
     return select.extend({
+
         /**
          * Hide fields on coupon tab
-         *
-         * @returns {void}
          */
         onUpdate: function () {
 
