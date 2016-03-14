@@ -7,7 +7,9 @@
 <script type="text/x-magento-init">
     {
         "body": {
-            "addToWishlist": <?php echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWishlistOptions()); ?>
+            "addToWishlist": <?php
+                echo $this->helper('Magento\Framework\Json\Helper\Data')->jsonEncode($block->getWishlistOptions());
+            ?>
         }
     }
 </script>
