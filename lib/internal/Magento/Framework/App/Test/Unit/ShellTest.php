@@ -34,7 +34,6 @@ class ShellTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
     public function testExecuteSuccess()
     {
         $output = 'success';
@@ -74,4 +73,3 @@ class ShellTest extends \PHPUnit_Framework_TestCase
         $this->model->execute($command, []);
     }
 }
-

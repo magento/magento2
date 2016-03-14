@@ -11,6 +11,9 @@ use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 
+/**
+ * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+ */
 class UpgradeData implements UpgradeDataInterface
 {
     const PRIVACY_COOKIE_PAGE_ID = 4;
@@ -20,6 +23,9 @@ class UpgradeData implements UpgradeDataInterface
      */
     private $pageFactory;
 
+    /**
+     * @param PageFactory $pageFactory
+     */
     public function __construct(PageFactory $pageFactory)
     {
         $this->pageFactory = $pageFactory;

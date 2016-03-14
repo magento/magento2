@@ -155,6 +155,7 @@ class Filesystem
      * Runs code multi-tenant compiler to generate code and DI information
      *
      * @param OutputInterface $output
+     * @return void
      * @throws LocalizedException
      */
     protected function compile(OutputInterface $output)
