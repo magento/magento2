@@ -9,28 +9,18 @@ use Magento\Mtf\TestCase\Scenario;
 
 /**
  * Preconditions:
- * 1. Configure shipping method.
- * 2. Configure payment method.
- * 3. Create products.
- * 4. Create and setup customer.
- * 5. Create tax rule according to dataset.
+ * 1. PLace order via Briantree PayPal.
  *
  * Steps:
- * 1.  Log in Storefront.
- * 2.  Add products to the Shopping Cart.
- * 3.  Go to one page checkout.
- * 4.  Select a shipping method.
- * 5.  Select a payment method.
- * 6.  Click 'Place Order' button.
- * 7.  Log in to Admin.
- * 8.  Open created order.
- * 9.  Create credit memo.
- * 12. Perform assertions.
+ * 1.  Log in to Admin.
+ * 2.  Open created order.
+ * 3.  Create credit memo.
+ * 4. Perform assertions.
  *
  * @group Braintree_(CS)
- * @ZephyrId MAGETWO-39363
+ * @ZephyrId MAGETWO-48689, MAGETWO-48698
  */
-class CreateOnlineCreditMemoBraintreeTest extends Scenario
+class CreateOnlineCreditMemoBraintreePaypalTest extends Scenario
 {
     /* tags */
     const MVP = 'yes';
@@ -39,7 +29,7 @@ class CreateOnlineCreditMemoBraintreeTest extends Scenario
     /* end tags */
 
     /**
-     * Runs test for online credit memo creation for order placed via Braintree caredit card.
+     * Runs test for online credit memo creation for order placed via Braintree PayPal.
      *
      * @return void
      */
