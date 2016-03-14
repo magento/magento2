@@ -28,7 +28,7 @@ define([
          * @param {Object} data
          */
         processResponseData: function (data) {
-            if (data.params['new_attribute_set_id'] !== undefined) {
+            if (data.params['new_attribute_set_id']) {
                 this.productForm().params = {
                     set: data.params['new_attribute_set_id']
                 };
@@ -55,7 +55,7 @@ define([
                             editForm = self,
                             newAttributeSetName = val,
                             i,
-                            params = [];
+                            params = {};
 
                         if (!newAttributeSetName) {
                             return;
