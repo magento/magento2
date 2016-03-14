@@ -8,6 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
+use Magento\Framework\App\Request\DataPersistorInterface;
 
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 {
@@ -37,6 +38,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $productRepository;
 
     /**
+     * @var DataPersistorInterface
+     */
+    protected $dataPersistor;
+
+    /**
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param Initialization\Helper $initializationHelper
@@ -52,13 +58,15 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         \Magento\Catalog\Model\Product\Copier $productCopier,
         \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager,
         \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        DataPersistorInterface $dataPersistor
     ) {
         $this->initializationHelper = $initializationHelper;
         $this->productCopier = $productCopier;
         $this->productTypeManager = $productTypeManager;
         $this->categoryLinkManagement = $categoryLinkManagement;
         $this->productRepository = $productRepository;
+        $this->dataPersistor = $dataPersistor;
         parent::__construct($context, $productBuilder);
     }
 
@@ -103,6 +111,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $this->copyToStores($data, $productId);
 
                 $this->messageManager->addSuccess(__('You saved the product.'));
+                $this->dataPersistor->clear('catalog_product');
                 if ($product->getSku() != $originalSku) {
                     $this->messageManager->addNotice(
                         __(
@@ -136,6 +145,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
             $this->messageManager->addError('No data to save');
             return $resultRedirect;
         }
+
+        $this->dataPersistor->set('catalog_product', $data);
 
         if ($redirectBack === 'new') {
             $resultRedirect->setPath(
