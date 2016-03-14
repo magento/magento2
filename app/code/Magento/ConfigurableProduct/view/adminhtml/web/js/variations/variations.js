@@ -29,6 +29,7 @@ define([
             attributesData: {},
             productMatrix: [],
             variations: [],
+            formSaveParams: {},
             productAttributes: [],
             disabledAttributes: [],
             fullAttributes: [],
@@ -40,7 +41,6 @@ define([
                 wizardButtonElement: '${ $.wizardModalButtonName }',
                 formElement: '${ $.formName }',
                 attributeSetHandlerModal: '${ $.attributeSetHandler }'
-
             },
             links: {
                 value: '${ $.provider }:${ $.dataScopeVariations }',
@@ -297,6 +297,7 @@ define([
          */
         saveFormHandler: function(params) {
             if (this.checkForNewAttributes()) {
+                this.formSaveParams = params;
                 this.attributeSetHandlerModal().openModal();
             } else {
                 this.formElement().save(params);
@@ -318,6 +319,77 @@ define([
                 }
             }, this);
             return newAttributes;
+        },
+
+        /**
+         * New attributes handler
+         * @returns {Boolean}
+         */
+        addNewAttributeSetHandler: function() {
+            this.formElement().validate();
+            if (this.formElement().source.get('params.invalid') === false) {
+                var choosenAttributeSetOPtion = this.source.get('configurable-affected-attribute-set');
+                if (choosenAttributeSetOPtion === 'new') {
+                    this.createNewAttributeSet();
+                    return false;
+                }
+                if (choosenAttributeSetOPtion === 'existing') {
+                    this.source.set(
+                        'data.new-variations-attribute-set-id',
+                        this.source.get('configurable_existing_attribute_set_id')
+                    );
+                }
+                this.closeDialogAndProcessForm();
+                return true;
+            }
+        },
+
+        /**
+         * Handles new attribute set creation
+         * @returns {Boolean}
+         */
+        createNewAttributeSet: function() {
+            var messageBoxElement = registry.get('index = affected-attribute-set-error');
+
+            messageBoxElement.visible(false);
+
+            $.ajax({
+                type: 'POST',
+                url: this.attributeSetCreationUrl,
+                data: {
+                    gotoEdit: 1,
+                    attribute_set_name: this.source.get('configurable_new_attribute_set_name'),
+                    skeleton_set: this.source.get('data.new-variations-attribute-set-id'),
+                    return_session_messages_only: 1
+                },
+                dataType: 'json',
+                showLoader: true,
+                context: this
+            })
+                .success(function (data) {
+                    if (!data.error) {
+                        this.source.set(
+                            'data.new-variations-attribute-set-id',
+                            data.id
+                        );
+                        messageBoxElement.content(data.messages);
+                        messageBoxElement.visible(true);
+                        this.closeDialogAndProcessForm();
+                    } else {
+                        messageBoxElement.content(data.messages);
+                        messageBoxElement.visible(true);
+                    }
+                    return false;
+                });
+            return false;
+        },
+
+        /**
+         * Closes attribute set handler modal and process product form
+         */
+        closeDialogAndProcessForm: function() {
+            this.attributeSetHandlerModal().closeModal();
+            this.formElement().save(this.formSaveParams);
         }
     });
 });
