@@ -67,33 +67,62 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
+     * Get meta information
+     *
      * @return array
      */
     public function getMeta()
     {
         $meta = parent::getMeta();
 
-        $meta['advanced_fieldset']['children'] = $this->arrayManager->set('attribute_code/arguments/data/config', [], [
-            'notice' => __(
-                'This is used internally. Make sure you don\'t use spaces or more than %1 symbols.',
-                EavAttribute::ATTRIBUTE_CODE_MAX_LENGTH
-            ),
-            'validation' => [
-                'max_text_length' => EavAttribute::ATTRIBUTE_CODE_MAX_LENGTH
+        $meta = $this->customizeAttributeCode($meta);
+        $meta = $this->customizeFrontendLabels($meta);
+        $meta = $this->customizeOptions($meta);
+
+        return $meta;
+    }
+
+    /**
+     * Customize attribute_code field
+     *
+     * @param array $meta
+     * @return array
+     */
+    private function customizeAttributeCode($meta)
+    {
+        $meta['advanced_fieldset']['children'] = $this->arrayManager->set(
+            'attribute_code/arguments/data/config',
+            [],
+            [
+                'notice' => __(
+                    'This is used internally. Make sure you don\'t use spaces or more than %1 symbols.',
+                    EavAttribute::ATTRIBUTE_CODE_MAX_LENGTH
+                ),
+                'validation' => [
+                    'max_text_length' => EavAttribute::ATTRIBUTE_CODE_MAX_LENGTH
+                ]
             ]
-        ]);
+        );
+        return $meta;
+    }
 
-        $sortOrder = 1;
-
+    /**
+     * Customize frontend labels
+     *
+     * @param array $meta
+     * @return array
+     */
+    private function customizeFrontendLabels($meta)
+    {
         foreach ($this->storeRepository->getList() as $store) {
-            if (!$store->getId()) {
+            $storeId = $store->getId();
+
+            if (!$storeId) {
                 continue;
             }
 
-            $storeId = $store->getId();
-
             $meta['manage-titles']['children'] = [
-                'frontend_label[' . $store->getId() . ']' => $this->arrayManager->set(
+                'frontend_label[' . $storeId . ']' => $this->arrayManager->set(
                     'arguments/data/config',
                     [],
                     [
@@ -106,11 +135,23 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 ),
             ];
         }
+        return $meta;
+    }
 
+    /**
+     * Customize options
+     *
+     * @param array $meta
+     * @return array
+     */
+    private function customizeOptions($meta)
+    {
+        $sortOrder = 1;
         foreach ($this->storeRepository->getList() as $store) {
             $storeId = $store->getId();
 
-            $meta['attribute_options_select_container']['children']['attribute_options_select']['children']['record']['children']['value_option_' . $storeId] = $this->arrayManager->set(
+            $meta['attribute_options_select_container']['children']['attribute_options_select']['children']
+            ['record']['children']['value_option_' . $storeId] = $this->arrayManager->set(
                 'arguments/data/config',
                 [],
                 [
@@ -124,8 +165,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                     'label' => $store->getName(),
                     'sortOrder' => $sortOrder,
                     'componentType' => Field::NAME,
-                ]);
-            $meta['attribute_options_multiselect_container']['children']['attribute_options_multiselect']['children']['record']['children']['value_option_' . $storeId] = $this->arrayManager->set(
+                ]
+            );
+            $meta['attribute_options_multiselect_container']['children']['attribute_options_multiselect']['children']
+            ['record']['children']['value_option_' . $storeId] = $this->arrayManager->set(
                 'arguments/data/config',
                 [],
                 [
@@ -139,12 +182,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                     'label' => $store->getName(),
                     'sortOrder' => $sortOrder,
                     'componentType' => Field::NAME,
-                ]);
-
+                ]
+            );
             ++$sortOrder;
         }
 
-        $meta['attribute_options_select_container']['children']['attribute_options_select']['children']['record']['children']['action_delete'] = $this->arrayManager->set(
+        $meta['attribute_options_select_container']['children']['attribute_options_select']['children']
+        ['record']['children']['action_delete'] = $this->arrayManager->set(
             'arguments/data/config',
             [],
             [
@@ -159,7 +203,8 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 'prefixElementName' => 'option_',
             ]
         );
-        $meta['attribute_options_multiselect_container']['children']['attribute_options_multiselect']['children']['record']['children']['action_delete'] = $this->arrayManager->set(
+        $meta['attribute_options_multiselect_container']['children']['attribute_options_multiselect']['children']
+        ['record']['children']['action_delete'] = $this->arrayManager->set(
             'arguments/data/config',
             [],
             [
@@ -174,7 +219,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 'prefixElementName' => 'option_',
             ]
         );
-
         return $meta;
     }
 }

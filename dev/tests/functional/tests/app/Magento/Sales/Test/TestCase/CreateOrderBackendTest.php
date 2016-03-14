@@ -45,7 +45,6 @@ class CreateOrderBackendTest extends Scenario
      */
     public function test()
     {
-        $this->markTestIncomplete('MAGETWO-48742');
         $this->executeScenario();
     }
 }
