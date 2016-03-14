@@ -31,12 +31,12 @@ if (!validateInput($options, $requiredOptions)) {
     exit(1);
 }
 
-$fileFormats = explode(',', isset($options['file-formats']) ? $options['file-formats'] : 'php');
+$fileExtensions = explode(',', isset($options['file-formats']) ? $options['file-formats'] : 'php');
 
 $mainline = 'mainline_' . (string)rand(0, 9999);
 $repo = getRepo($options, $mainline);
-$changes = retrieveChangesAcrossForks($mainline, $repo);
-$changedFiles = getChangedFiles($changes, $fileFormats);
+$changes = retrieveChangesAcrossForks($mainline, $repo, 'develop');
+$changedFiles = getChangedFiles($changes, $fileExtensions);
 generateChangedFilesList($options['output-file'], $changedFiles);
 cleanup($repo, $mainline);
 
@@ -60,16 +60,16 @@ function generateChangedFilesList($outputFile, $changedFiles)
  * Gets list of changed files
  *
  * @param array $changes
- * @param array $fileFormats
+ * @param array $fileExtensions
  * @return array
  */
-function getChangedFiles($changes, $fileFormats)
+function getChangedFiles(array $changes, array $fileExtensions)
 {
     $files = [];
     foreach ($changes as $fileName) {
-        foreach ($fileFormats as $format) {
-            $isFileFormat = strpos($fileName, '.' . $format);
-            if ($isFileFormat) {
+        foreach ($fileExtensions as $extensions) {
+            $isFileExension = strpos($fileName, '.' . $extensions);
+            if ($isFileExension) {
                 $files[] = $fileName;
             }
         }
@@ -82,6 +82,7 @@ function getChangedFiles($changes, $fileFormats)
  * Retrieves changes across forks
  *
  * @param array $options
+ * @param string $mainline
  * @return array
  * @throws Exception
  */
@@ -94,12 +95,14 @@ function getRepo($options, $mainline)
 }
 
 /**
- * @param $repo
+ * @param string $mainline
+ * @param GitRepo $repo
+ * @param string $branchName
  * @return array
  */
-function retrieveChangesAcrossForks($mainline, $repo)
+function retrieveChangesAcrossForks($mainline, $repo, $branchName)
 {
-    return $repo->compareChanges($mainline, 'develop');
+    return $repo->compareChanges($mainline, $branchName);
 }
 
 /**
@@ -181,6 +184,7 @@ class GitRepo
     {
         if (isset($this->remoteList[$alias])) {
             $this->call(sprintf('remote rm %s', $alias));
+            unset($this->remoteList[$alias]);
         }
     }
 
@@ -192,14 +196,14 @@ class GitRepo
     public function fetch($remoteAlias)
     {
         if (!isset($this->remoteList[$remoteAlias])) {
-            throw new LogicException('Alias is not defined');
+            throw new LogicException('Alias ' . $remoteAlias . ' is not defined');
         }
 
         $this->call(sprintf('fetch %s', $remoteAlias));
     }
 
     /**
-     * Returns files changes between branch
+     * Returns files changes between branch and HEAD
      *
      * @param string $remoteAlias
      * @param string $remoteBranch
