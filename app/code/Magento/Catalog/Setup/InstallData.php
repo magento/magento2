@@ -23,6 +23,20 @@ class InstallData implements InstallDataInterface
     private $categorySetupFactory;
 
     /**
+     * Root category ID
+     *
+     * @var int
+     */
+    private $rootCategoryId = 1;
+
+    /**
+     * Default category ID
+     *
+     * @var int
+     */
+    private $defaultCategoryId = 2;
+
+    /**
      * Init
      *
      * @param CategorySetupFactory $categorySetupFactory
@@ -46,10 +60,10 @@ class InstallData implements InstallDataInterface
         $categorySetup->installEntities();
         // Create Root Catalog Node
         $categorySetup->createCategory()
-            ->load(1)
-            ->setId(1)
+            ->load($this->rootCategoryId)
+            ->setId($this->rootCategoryId)
             ->setStoreId(0)
-            ->setPath('1')
+            ->setPath($this->rootCategoryId)
             ->setLevel(0)
             ->setPosition(0)
             ->setChildrenCount(0)
@@ -57,17 +71,18 @@ class InstallData implements InstallDataInterface
             ->setInitialSetupFlag(true)
             ->save();
 
+        // Create Default Catalog Node
         $category = $categorySetup->createCategory();
-
-        $categorySetup->createCategory()
+        $category->load($this->defaultCategoryId)
+            ->setId($this->defaultCategoryId)
             ->setStoreId(0)
-            ->setPath('1')
+            ->setPath($this->rootCategoryId . '/' . $this->defaultCategoryId)
             ->setName('Default Category')
             ->setDisplayMode('PRODUCTS')
-            ->setAttributeSetId($category->getDefaultAttributeSetId())
             ->setIsActive(1)
             ->setLevel(1)
             ->setInitialSetupFlag(true)
+            ->setAttributeSetId($category->getDefaultAttributeSetId())
             ->save();
 
         $data = [
