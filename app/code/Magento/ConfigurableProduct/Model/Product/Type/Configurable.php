@@ -498,7 +498,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
             foreach ($collection as $item) {
                 /** @var \Magento\Catalog\Model\Product $item */
-                $item->getResource()->getAttribute('media_gallery')->getBackend()->afterLoad($item);
+                $item->getResource()->load($item, $item->getId());
                 $usedProducts[] = $item;
             }
 
