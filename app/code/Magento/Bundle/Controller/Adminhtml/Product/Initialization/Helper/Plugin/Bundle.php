@@ -130,6 +130,7 @@ class Bundle
             if ((bool)$optionData['delete']) {
                 continue;
             }
+
             $option = $this->optionFactory->create(['data' => $optionData]);
             $option->setSku($product->getSku());
             $option->setOptionId(null);

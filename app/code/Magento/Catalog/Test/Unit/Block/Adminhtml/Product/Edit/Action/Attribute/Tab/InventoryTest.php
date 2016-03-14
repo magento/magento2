@@ -177,4 +177,14 @@ class InventoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->assertFalse($this->inventory->isHidden());
     }
+
+    /**
+     * Run test isEnabled method
+     *
+     * @return void
+     */
+    public function testIsEnabled()
+    {
+        $this->assertEquals(true, $this->inventory->isAvailable('field'));
+    }
 }
