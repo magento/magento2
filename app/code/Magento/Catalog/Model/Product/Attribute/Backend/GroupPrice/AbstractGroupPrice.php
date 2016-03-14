@@ -166,7 +166,7 @@ abstract class AbstractGroupPrice extends Price
             if (!empty($priceRow['delete'])) {
                 continue;
             }
-            $compare = join(
+            $compare = implode(
                 '-',
                 array_merge(
                     [$priceRow['website_id'], $priceRow['cust_group']],
@@ -191,7 +191,7 @@ abstract class AbstractGroupPrice extends Price
             if ($origPrices) {
                 foreach ($origPrices as $price) {
                     if ($price['website_id'] == 0) {
-                        $compare = join(
+                        $compare = implode(
                             '-',
                             array_merge(
                                 [$price['website_id'], $price['cust_group']],
@@ -215,7 +215,7 @@ abstract class AbstractGroupPrice extends Price
                 continue;
             }
 
-            $globalCompare = join(
+            $globalCompare = implode(
                 '-',
                 array_merge([0, $priceRow['cust_group']], $this->_getAdditionalUniqueFields($priceRow))
             );
@@ -243,7 +243,7 @@ abstract class AbstractGroupPrice extends Price
         $data = [];
         $price = $this->_catalogProductType->priceFactory($productTypeId);
         foreach ($priceData as $v) {
-            $key = join('-', array_merge([$v['cust_group']], $this->_getAdditionalUniqueFields($v)));
+            $key = implode('-', array_merge([$v['cust_group']], $this->_getAdditionalUniqueFields($v)));
             if ($v['website_id'] == $websiteId) {
                 $data[$key] = $v;
                 $data[$key]['website_price'] = $v['price'];
@@ -316,7 +316,7 @@ abstract class AbstractGroupPrice extends Price
         $isGlobal = $this->getAttribute()->isScopeGlobal() || $websiteId == 0;
 
         $priceRows = $object->getData($this->getAttribute()->getName());
-        if ($priceRows === null) {
+        if (null === $priceRows) {
             return $this;
         }
 
@@ -330,7 +330,7 @@ abstract class AbstractGroupPrice extends Price
         }
         foreach ($origPrices as $data) {
             if ($data['website_id'] > 0 || $data['website_id'] == '0' && $isGlobal) {
-                $key = join(
+                $key = implode(
                     '-',
                     array_merge(
                         [$data['website_id'], $data['cust_group']],
@@ -361,7 +361,7 @@ abstract class AbstractGroupPrice extends Price
                 continue;
             }
 
-            $key = join(
+            $key = implode(
                 '-',
                 array_merge([$data['website_id'], $data['cust_group']], $this->_getAdditionalUniqueFields($data))
             );
