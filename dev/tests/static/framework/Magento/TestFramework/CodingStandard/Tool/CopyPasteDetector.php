@@ -81,7 +81,7 @@ class CopyPasteDetector implements ToolInterface, BlacklistInterface
 
         $command = BP . '/vendor/bin/phpcpd' . ' --log-pmd ' . escapeshellarg(
                 $this->reportFile
-            ) . ' --min-lines 13' . $blackListStr . ' ' . implode(' ', $whiteList);
+            ) . '--names-exclude "*Test.php" --min-lines 13' . $blackListStr . ' ' . implode(' ', $whiteList);
 
         exec($command, $output, $exitCode);
 
