@@ -5,8 +5,9 @@
 define([
     'jquery',
     'underscore',
+    'uiRegistry',
     'jquery/ui'
-], function ($, _) {
+], function ($, _, registry) {
     'use strict';
 
     $.widget('mage.productAttributes', {
@@ -68,13 +69,12 @@ define([
         },
 
         _prepareUrl: function () {
-            var name = $('[data-role=product-attribute-search]').val();
+            var productSource = registry.get('product_form.product_form_data_source'),
+                attributeSetId = productSource.data.product['attribute_set_id'];
 
             return this.options.url +
                 (/\?/.test(this.options.url) ? '&' : '?') +
-                'set=' + $('#attribute_set_id').val() +
-                '&attribute[frontend_label]=' +
-                window.encodeURIComponent(name);
+                'set=' + attributeSetId;
         },
 
         _showPopup: function () {
