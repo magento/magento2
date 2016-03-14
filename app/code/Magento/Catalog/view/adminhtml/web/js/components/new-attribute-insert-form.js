@@ -26,13 +26,15 @@ define([
         processResponseStatus: function () {
             if (this.responseStatus()) {
 
-                if (this.productForm().params == undefined) {
+                if (this.productForm().params === undefined) {
                     this.productForm().params = {
                         set: this.attributeSetId
                     };
                 }
 
-                this.productForm().params.id = this.productId;
+                if (this.productId) {
+                    this.productForm().params.id = this.productId;
+                }
                 this.productForm().params.type = this.productType;
 
                 this.productForm().reload();
