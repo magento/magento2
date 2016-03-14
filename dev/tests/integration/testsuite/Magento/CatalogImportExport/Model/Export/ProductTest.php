@@ -87,12 +87,12 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     public function testExportWithProductLinks()
     {
-        $this->_model->setWriter(
+        $this->model->setWriter(
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
                 'Magento\ImportExport\Model\Export\Adapter\Csv'
             )
         );
-        $this->assertNotEmpty($this->_model->export());
+        $this->assertNotEmpty($this->model->export());
     }
 
     /**
