@@ -45,8 +45,6 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        $this->getExistingAttributeSet($meta);
-
         $meta = array_merge_recursive(
             $meta,
             [

@@ -21,7 +21,7 @@ class UpdateConfigurations
     /**
      * @var array
      */
-    private $keysPOST = [
+    private $keysPost = [
         'status',
         'sku',
         'name',
@@ -63,7 +63,6 @@ class UpdateConfigurations
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,
         \Magento\Catalog\Model\Product $configurableProduct
     ) {
-        //$configurations = $this->request->getParam('configurations', []);
         $configurations = $this->getConfigurations();
         $configurations = $this->variationHandler->duplicateImagesForVariations($configurations);
         foreach ($configurations as $productId => $productData) {
@@ -110,7 +109,7 @@ class UpdateConfigurations
     {
         $result = [];
 
-        foreach ($this->keysPOST as $key) {
+        foreach ($this->keysPost as $key) {
             if (isset($item[$key])) {
                 $result[$key] = $item[$key];
             }
