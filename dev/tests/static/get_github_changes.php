@@ -212,7 +212,7 @@ class GitRepo
     public function compareChanges($remoteAlias, $remoteBranch)
     {
         if (!isset($this->remoteList[$remoteAlias])) {
-            throw new LogicException('Alias is not defined');
+            throw new LogicException('Alias ' . $remoteAlias . ' is not defined');
         }
 
         $result = $this->call(sprintf('log %s/%s..HEAD  --name-status --oneline', $remoteAlias, $remoteBranch));
@@ -267,7 +267,7 @@ class GitRepo
         $filteredChanges = [];
         foreach ($changes as $fileName) {
             $result = $this->call(sprintf(
-                    'diff HEAD %s/%s -- %s', $remoteAlias, $remoteBranch, $this->workTree .'/'. $fileName)
+                    'diff HEAD %s/%s -- %s', $remoteAlias, $remoteBranch, $this->workTree . '/' . $fileName)
             );
             if ($result) {
                 $filteredChanges[] = $fileName;
