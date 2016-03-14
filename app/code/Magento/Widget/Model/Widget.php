@@ -62,7 +62,7 @@ class Widget
      * @param \Magento\Framework\View\Asset\Source $assetSource
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Widget\Helper\Conditions $conditionsHelper
-     * @param \Magento\Framework\Math\Random
+     * @param \Magento\Framework\Math\Random $mathRandom
      */
     public function __construct(
         \Magento\Framework\Escaper $escaper,
@@ -307,7 +307,11 @@ class Widget
         }
 
         if (array_key_exists('show_pager', $params) && (bool)$params['show_pager']) {
-            $directive .= sprintf(' %s="%s"', 'page_var_name', 'p' . $this->mathRandom->getRandomString(5, \Magento\Framework\Math\Random::CHARS_LOWERS));
+            $directive .= sprintf(
+                ' %s="%s"',
+                'page_var_name',
+                'p' . $this->mathRandom->getRandomString(5, \Magento\Framework\Math\Random::CHARS_LOWERS)
+            );
         }
 
         $directive .= '}}';
