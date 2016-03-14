@@ -105,7 +105,7 @@ class ProductUrlRewrite extends AbstractModifier
                 'componentType' => Field::NAME,
                 'formElement' => Checkbox::NAME,
                 'dataType' => Text::NAME,
-                'component' => 'Magento_CatalogUrlRewrite/js/components/url-key-handle-changes',
+                'component' => 'Magento_Catalog/js/components/url-key-handle-changes',
                 'valueMap' => [
                     'false' => '',
                     'true' => $urlKey
