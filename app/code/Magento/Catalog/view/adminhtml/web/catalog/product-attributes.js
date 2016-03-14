@@ -69,8 +69,15 @@ define([
         },
 
         _prepareUrl: function () {
-            var productSource = registry.get('product_form.product_form_data_source'),
-                attributeSetId = productSource.data.product['attribute_set_id'];
+            var productSource,
+                attributeSetId = '';
+
+            if (this.options.dataProvider) {
+                try {
+                    productSource = registry.get(this.options.dataProvider);
+                    attributeSetId = productSource.data.product['attribute_set_id'];
+                } catch (e) {}
+            }
 
             return this.options.url +
                 (/\?/.test(this.options.url) ? '&' : '?') +
