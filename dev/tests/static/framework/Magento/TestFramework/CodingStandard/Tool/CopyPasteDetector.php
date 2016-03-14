@@ -56,7 +56,7 @@ class CopyPasteDetector implements ToolInterface, BlacklistInterface
      */
     public function canRun()
     {
-        exec('phpcpd --version', $output, $exitCode);
+        exec(BP. '/vendor/bin/phpcpd --version', $output, $exitCode);
         return $exitCode === 0;
     }
 
@@ -79,7 +79,7 @@ class CopyPasteDetector implements ToolInterface, BlacklistInterface
             $blackListStr .= '--exclude ' . $file . ' ';
         }
 
-        $command = 'phpcpd' . ' --log-pmd ' . escapeshellarg(
+        $command = BP . '/vendor/bin/phpcpd' . ' --log-pmd ' . escapeshellarg(
                 $this->reportFile
             ) . ' --min-lines 13' . $blackListStr . ' ' . implode(' ', $whiteList);
 
