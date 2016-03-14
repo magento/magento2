@@ -15,6 +15,8 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\ValidatorException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -515,8 +517,10 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->getData($exception->getAttributeCode()),
                 $exception
             );
+        } catch (ValidatorException $e) {
+            throw new CouldNotSaveException(__($e->getMessage()));
         } catch (\Exception $e) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(__('Unable to save product'));
+            throw new CouldNotSaveException(__('Unable to save product'));
         }
         unset($this->instances[$product->getSku()]);
         unset($this->instancesById[$product->getId()]);
@@ -532,6 +536,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $productId = $product->getId();
         try {
             $this->resourceModel->delete($product);
+        } catch (ValidatorException $e) {
+            throw new CouldNotSaveException(__($e->getMessage()));
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\StateException(
                 __('Unable to remove product %1', $sku)
