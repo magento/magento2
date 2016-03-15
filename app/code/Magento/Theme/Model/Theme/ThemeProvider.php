@@ -51,9 +51,11 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
         }
         $themeCollection = $this->collectionFactory->create();
         $item = $themeCollection->getThemeByFullPath($fullPath);
-        $themeData = serialize($item);
-        $this->cache->save($themeData, 'theme'. $fullPath);
-        $this->cache->save($themeData, 'theme-by-id-' . $item->getId());
+        if ($item->getId()) {
+            $themeData = serialize($item);
+            $this->cache->save($themeData, 'theme' . $fullPath);
+            $this->cache->save($themeData, 'theme-by-id-' . $item->getId());
+        }
         return $item;
     }
 
@@ -82,7 +84,9 @@ class ThemeProvider implements \Magento\Framework\View\Design\Theme\ThemeProvide
         /** @var $themeModel \Magento\Framework\View\Design\ThemeInterface */
         $themeModel = $this->themeFactory->create();
         $themeModel->load($themeId);
-        $this->cache->save(serialize($themeModel), 'theme-by-id-' . $themeId);
+        if ($themeModel->getId()) {
+            $this->cache->save(serialize($themeModel), 'theme-by-id-' . $themeId);
+        }
         return $themeModel;
     }
 }
