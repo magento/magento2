@@ -306,7 +306,6 @@ define([
                 sectionsNamesForInvalidation;
 
             sectionsNamesForInvalidation = _.contains(sectionNames, '*') ? buffer.keys() : sectionNames;
-            sectionsNamesForInvalidation = sectionConfig.filterClientSideSections(sectionsNamesForInvalidation);
             buffer.remove(sectionsNamesForInvalidation);
             sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
 
