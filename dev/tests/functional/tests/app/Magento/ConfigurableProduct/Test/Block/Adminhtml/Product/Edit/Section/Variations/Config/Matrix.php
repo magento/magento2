@@ -13,13 +13,12 @@ use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
- * Class Matrix
- * Matrix row form
+ * Matrix row form.
  */
 class Matrix extends Form
 {
     /**
-     * Mapping for get optional fields
+     * Mapping for get optional fields.
      *
      * @var array
      */
@@ -61,11 +60,12 @@ class Matrix extends Form
     protected $variationRow = 'tr[class="data-row"], tr[class="data-row _odd-row"]';
 
     /**
-     * Selector for row on product grid by product id
+     * Selector for row on product grid by product id.
      *
      * @var string
      */
-    protected $associatedProductGrid = '[data-bind*="configurable_associated_product_listing.configurable_associated_product_listing"]';
+    protected $associatedProductGrid =
+        '[data-bind*="configurable_associated_product_listing.configurable_associated_product_listing"]';
 
     /**
      * Selector for template block.
