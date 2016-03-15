@@ -556,7 +556,9 @@ Security,Security
 "Add Secret Key to URLs","Add Secret Key to URLs"
 "Login is Case Sensitive","Login is Case Sensitive"
 "Admin Session Lifetime (seconds)","Admin Session Lifetime (seconds)"
-"Values less than 60 are ignored.","Values less than 60 are ignored."
+"Please enter at least 60 and at most 31536000 (one year).","Please enter at least 60 and at most 31536000 (one year)."
+"Admin session lifetime must be less than or equal to 31536000 seconds (one year)","Admin session lifetime must be less than or equal to 31536000 seconds (one year)"
+"Admin session lifetime must be greater than or equal to 60 seconds","Admin session lifetime must be greater than or equal to 60 seconds"
 Web,Web
 "Url Options","Url Options"
 "Add Store Code to Urls","Add Store Code to Urls"
