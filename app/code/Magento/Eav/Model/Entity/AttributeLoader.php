@@ -74,13 +74,13 @@ class AttributeLoader implements AttributeLoaderInterface
         foreach ($attributeCodes as $code) {
             $resource->getAttribute($code);
         }
-       return $resource;
+        return $resource;
     }
-
 
     /**
      * Return default static virtual attribute that doesn't exists in EAV attributes
      *
+     * @param \Magento\Eav\Model\Entity\AbstractEntity $resource
      * @param string $attributeCode
      * @return Attribute
      */
