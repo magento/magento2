@@ -177,9 +177,9 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      */
     public function prolong()
     {
-        $this->setUpdatedAt(time());
         $cookieValue = $this->cookieManager->getCookie($this->getName());
         if ($cookieValue) {
+            $this->setUpdatedAt(time());
             $cookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
                 ->setPath($this->sessionConfig->getCookiePath())
                 ->setDomain($this->sessionConfig->getCookieDomain())
