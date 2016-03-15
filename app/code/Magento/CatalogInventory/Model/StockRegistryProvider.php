@@ -69,19 +69,9 @@ class StockRegistryProvider implements StockRegistryProviderInterface
     protected $stockStatusCriteriaFactory;
 
     /**
-     * @var array
+     * @var StockRegistryStorage
      */
-    protected $stocks = [];
-
-    /**
-     * @var array
-     */
-    protected $stockItems = [];
-
-    /**
-     * @var array
-     */
-    protected $stockStatuses = [];
+    protected $stockRegistryStorage;
 
     /**
      * @param StockRepositoryInterface $stockRepository
@@ -93,6 +83,8 @@ class StockRegistryProvider implements StockRegistryProviderInterface
      * @param StockCriteriaInterfaceFactory $stockCriteriaFactory
      * @param StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory
      * @param StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory
+     * @param StockRegistryStorage $stockRegistryStorage
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         StockRepositoryInterface $stockRepository,
@@ -103,7 +95,8 @@ class StockRegistryProvider implements StockRegistryProviderInterface
         StockStatusInterfaceFactory $stockStatusFactory,
         StockCriteriaInterfaceFactory $stockCriteriaFactory,
         StockItemCriteriaInterfaceFactory $stockItemCriteriaFactory,
-        StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory
+        StockStatusCriteriaInterfaceFactory $stockStatusCriteriaFactory,
+        StockRegistryStorage $stockRegistryStorage
     ) {
         $this->stockRepository = $stockRepository;
         $this->stockFactory = $stockFactory;
@@ -111,10 +104,10 @@ class StockRegistryProvider implements StockRegistryProviderInterface
         $this->stockItemFactory = $stockItemFactory;
         $this->stockStatusRepository = $stockStatusRepository;
         $this->stockStatusFactory = $stockStatusFactory;
-
         $this->stockCriteriaFactory = $stockCriteriaFactory;
         $this->stockItemCriteriaFactory = $stockItemCriteriaFactory;
         $this->stockStatusCriteriaFactory = $stockStatusCriteriaFactory;
+        $this->stockRegistryStorage = $stockRegistryStorage;
     }
 
     /**
@@ -123,18 +116,19 @@ class StockRegistryProvider implements StockRegistryProviderInterface
      */
     public function getStock($scopeId)
     {
-        if (!isset($this->stocks[$scopeId])) {
+        $stock = $this->stockRegistryStorage->getStock($scopeId);
+        if (null === $stock) {
             $criteria = $this->stockCriteriaFactory->create();
             $criteria->setScopeFilter($scopeId);
             $collection = $this->stockRepository->getList($criteria);
             $stock = current($collection->getItems());
             if ($stock && $stock->getStockId()) {
-                $this->stocks[$scopeId] = $stock;
+                $this->stockRegistryStorage->setStock($scopeId, $stock);
             } else {
-                return $this->stockFactory->create();
+                $stock = $this->stockFactory->create();
             }
         }
-        return $this->stocks[$scopeId];
+        return $stock;
     }
 
     /**
@@ -144,19 +138,19 @@ class StockRegistryProvider implements StockRegistryProviderInterface
      */
     public function getStockItem($productId, $scopeId)
     {
-        $key = $scopeId . '/' . $productId;
-        if (!isset($this->stockItems[$key])) {
+        $stockItem = $this->stockRegistryStorage->getStockItem($productId, $scopeId);
+        if (null === $stockItem) {
             $criteria = $this->stockItemCriteriaFactory->create();
             $criteria->setProductsFilter($productId);
             $collection = $this->stockItemRepository->getList($criteria);
             $stockItem = current($collection->getItems());
             if ($stockItem && $stockItem->getItemId()) {
-                $this->stockItems[$key] = $stockItem;
+                $this->stockRegistryStorage->setStockItem($productId, $scopeId, $stockItem);
             } else {
-                return $this->stockItemFactory->create();
+                $stockItem = $this->stockItemFactory->create();
             }
         }
-        return $this->stockItems[$key];
+        return $stockItem;
     }
 
     /**
@@ -166,19 +160,19 @@ class StockRegistryProvider implements StockRegistryProviderInterface
      */
     public function getStockStatus($productId, $scopeId)
     {
-        $key = $scopeId . '/' . $productId;
-        if (!isset($this->stockStatuses[$key])) {
+        $stockStatus = $this->stockRegistryStorage->getStockStatus($productId, $scopeId);
+        if (null === $stockStatus) {
             $criteria = $this->stockStatusCriteriaFactory->create();
             $criteria->setProductsFilter($productId);
             $criteria->setScopeFilter($scopeId);
             $collection = $this->stockStatusRepository->getList($criteria);
             $stockStatus = current($collection->getItems());
             if ($stockStatus && $stockStatus->getProductId()) {
-                $this->stockStatuses[$key] = $stockStatus;
+                $this->stockRegistryStorage->setStockStatus($productId, $scopeId, $stockStatus);
             } else {
-                return $this->stockStatusFactory->create();
+                $stockStatus = $this->stockStatusFactory->create();
             }
         }
-        return $this->stockStatuses[$key];
+        return $stockStatus;
     }
 }
