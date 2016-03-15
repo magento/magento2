@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace  Magento\Upgrade\Test\TestCase;
+namespace Magento\Upgrade\Test\TestCase;
 
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Upgrade\Test\Page\Adminhtml\SetupWizard;
