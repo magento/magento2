@@ -11,6 +11,9 @@ use Magento\Upgrade\Test\Page\Adminhtml\SetupWizard;
 use Magento\Backend\Test\Page\Adminhtml\Dashboard;
 use Magento\Mtf\Fixture\FixtureFactory;
 use Magento\Upgrade\Test\Constraint\AssertSuccessfulReadinessCheck;
+use Magento\Upgrade\Test\Constraint\AssertVersionAndEditionCheck;
+use Magento\Upgrade\Test\Constraint\AssertSuccessMessage;
+use Magento\Upgrade\Test\Constraint\AssertApplicationVersion;
 
 class UpgradeSystemTest extends Injectable
 {
@@ -45,12 +48,18 @@ class UpgradeSystemTest extends Injectable
      * @param array $upgrade
      * @param FixtureFactory $fixtureFactory
      * @param AssertSuccessfulReadinessCheck $assertReadiness
+     * @param AssertVersionAndEditionCheck $assertVersionAndEdition
+     * @param AssertSuccessMessage $assertSuccessMessage
+     * @param AssertApplicationVersion $assertApplicationVersion
      * @return void
      */
     public function test(
         $upgrade = [],
         FixtureFactory $fixtureFactory,
-        AssertSuccessfulReadinessCheck $assertReadiness
+        AssertSuccessfulReadinessCheck $assertReadiness,
+        AssertVersionAndEditionCheck $assertVersionAndEdition,
+        AssertSuccessMessage $assertSuccessMessage,
+        AssertApplicationVersion $assertApplicationVersion
     ) {
         // Create fixture
         $upgradeFixture = $fixtureFactory->create('Magento\Upgrade\Test\Fixture\Upgrade', ['data' => $upgrade]);
@@ -62,7 +71,11 @@ class UpgradeSystemTest extends Injectable
             'Magento\Upgrade\Test\Fixture\Upgrade',
             ['data' => $createBackupConfig]
         );
+        $version = $upgrade['upgradeVersion'];
 
+        if (preg_match('/^[0-9].[0-9].[0-9]/', $version, $out)) {
+            $version = array_shift($out);
+        }
 
         // Authenticate in admin area
         $this->adminDashboard->open();
@@ -79,7 +92,7 @@ class UpgradeSystemTest extends Injectable
         }
 
         // Select upgrade to version
-        $this->setupWizard->getSystemUpgrade()->clickSystemUpgrade();
+        $this->setupWizard->getSystemUpgradeHome()->clickSystemUpgrade();
         $this->setupWizard->getSelectVersion()->fill($upgradeFixture);
         $this->setupWizard->getSelectVersion()->clickNext();
 
@@ -93,6 +106,14 @@ class UpgradeSystemTest extends Injectable
         $this->setupWizard->getCreateBackup()->fill($createBackupFixture);
         $this->setupWizard->getCreateBackup()->clickNext();
 
-        sleep(5);
+        // Check info and press 'Upgrade' button
+        $assertVersionAndEdition->processAssert($this->setupWizard, $upgrade['package'], $version);
+        $this->setupWizard->getSystemUpgrade()->clickSystemUpgrade();
+
+        $assertSuccessMessage->processAssert($this->setupWizard, $upgrade['package']);
+
+        // Check application version
+        $this->adminDashboard->open();
+        $assertApplicationVersion->processAssert($this->adminDashboard, $version);
     }
 }
