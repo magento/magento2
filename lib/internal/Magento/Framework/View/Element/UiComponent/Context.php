@@ -299,6 +299,19 @@ class Context implements ContextInterface
     }
 
     /**
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    public function addHtmlBlocks(array $htmlBlocks, UiComponentInterface $component)
+    {
+        if (!empty($htmlBlocks)) {
+            foreach ($htmlBlocks as $htmlBlock => $blockData) {
+                $this->actionPool->addHtmlBlock($blockData['type'], $blockData['name'], $blockData['arguments']);
+            }
+        }
+    }
+
+    /**
      * Getting requested accept type
      *
      * @return void
