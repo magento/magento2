@@ -24,7 +24,7 @@ define(
 USAGE
 );
 
-$options = getopt('', ['output-file:', 'base-path:', 'repo:', 'file-extensions:', 'branch']);
+$options = getopt('', ['output-file:', 'base-path:', 'repo:', 'file-extensions:', 'branch:']);
 
 $requiredOptions = ['output-file', 'base-path', 'repo', 'branch'];
 if (!validateInput($options, $requiredOptions)) {
