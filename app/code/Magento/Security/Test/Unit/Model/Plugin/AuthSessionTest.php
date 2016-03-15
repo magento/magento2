@@ -86,7 +86,7 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
 
         $this->currentSessionMock = $this->getMock(
             '\Magento\Security\Model\AdminSessionInfo',
-            ['isActive', 'getStatus'],
+            ['isLoggedInStatus', 'getStatus'],
             [],
             '',
             false
@@ -128,7 +128,7 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
         };
 
         $this->currentSessionMock->expects($this->once())
-            ->method('isActive')
+            ->method('isLoggedInStatus')
             ->willReturn(false);
 
         $this->authSessionMock->expects($this->once())
@@ -197,7 +197,7 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
         };
 
         $this->currentSessionMock->expects($this->any())
-            ->method('isActive')
+            ->method('isLoggedInStatus')
             ->willReturn(true);
 
         $this->adminSessionsManagerMock->expects($this->any())
