@@ -317,7 +317,7 @@ class General extends AbstractModifier
                 $this->arrayManager->get($toFieldPath, $meta)
             );
 
-            $meta =  $this->arrayManager->remove($toContainerPath, $meta);
+            $meta = $this->arrayManager->remove($toContainerPath, $meta);
         }
 
         return $meta;
@@ -337,53 +337,44 @@ class General extends AbstractModifier
             ProductAttributeInterface::CODE_SEO_FIELD_META_KEYWORD,
             ProductAttributeInterface::CODE_SEO_FIELD_META_DESCRIPTION,
         ];
+        $textListeners = [
+            ProductAttributeInterface::CODE_SEO_FIELD_META_KEYWORD,
+            ProductAttributeInterface::CODE_SEO_FIELD_META_DESCRIPTION
+        ];
+
         foreach ($listeners as $listener) {
             $listenerPath = $this->getElementArrayPath($meta, $listener);
             $importsConfig = [
-                'arguments' => [
-                    'data' => [
-                        'config' => [
-                            'component' => 'Magento_Catalog/js/components/import-handler',
-                            'imports' => [
-                                'handleChanges' => '${$.provider}:data.product.name',
-                            ],
-                        ],
-                    ],
+                'component' => 'Magento_Catalog/js/components/import-handler',
+                'imports' => [
+                    'handleChanges' => '${$.provider}:data.product.name',
                 ],
             ];
 
-            $meta = $this->arrayManager->merge($listenerPath, $meta, $importsConfig);
+            if (in_array($listener, $textListeners)) {
+                $importsConfig['elementTmpl'] = 'ui/form/element/textarea';
+            }
+
+            $meta = $this->arrayManager->merge($listenerPath . static::META_CONFIG_PATH, $meta, $importsConfig);
         }
 
         $skuPath = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_SKU);
         $meta = $this->arrayManager->merge(
-            $skuPath,
+            $skuPath . static::META_CONFIG_PATH,
             $meta,
             [
-                'arguments' => [
-                    'data' => [
-                        'config' => [
-                            'autoImportIfEmpty' => true,
-                            'allowImport' => $this->locator->getProduct()->getId() ? false : true,
-                        ],
-                    ],
-                ],
+                'autoImportIfEmpty' => true,
+                'allowImport' => $this->locator->getProduct()->getId() ? false : true,
             ]
         );
 
         $namePath = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_NAME);
 
         return $this->arrayManager->merge(
-            $namePath,
+            $namePath . static::META_CONFIG_PATH,
             $meta,
             [
-                'arguments' => [
-                    'data' => [
-                        'config' => [
-                            'valueUpdate' => 'keyup'
-                        ],
-                    ],
-                ],
+                'valueUpdate' => 'keyup'
             ]
         );
     }
