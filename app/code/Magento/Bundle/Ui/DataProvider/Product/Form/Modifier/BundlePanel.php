@@ -599,6 +599,7 @@ class BundlePanel extends AbstractModifier
                     'arguments' => [
                         'data' => [
                             'config' => [
+                                'component' => 'Magento_Bundle/js/components/bundle-option-qty',
                                 'formElement' => Form\Element\Input::NAME,
                                 'componentType' => Form\Field::NAME,
                                 'dataType' => Form\Element\DataType\Number::NAME,
@@ -607,7 +608,11 @@ class BundlePanel extends AbstractModifier
                                 'value' => '1',
                                 'sortOrder' => 100,
                                 'validation' => [
-                                    'validate-zero-or-greater' => true
+                                    'validate-zero-or-greater' => true,
+                                    'required-entry' => true,
+                                ],
+                                'imports' => [
+                                    'isInteger' => '${ $.provider }:${ $.parentScope }.selection_qty_is_integer'
                                 ],
                             ],
                         ],
