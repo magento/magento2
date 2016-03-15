@@ -7,8 +7,11 @@
  */
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+/** @var \Magento\SalesRule\Model\RuleFactory $salesRule */
+$salesRuleFactory = $objectManager->get('Magento\SalesRule\Model\RuleFactory');
+
 /** @var \Magento\SalesRule\Model\Rule $salesRule */
-$salesRule = $objectManager->create('Magento\SalesRule\Model\Rule');
+$salesRule = $salesRuleFactory->create();
 
 $data = [
     'name' => 'Test Coupon',
@@ -27,5 +30,6 @@ $data = [
 ];
 
 $salesRule->loadPost($data)->setUseAutoGeneration(false)->save();
+$objectManager->get('Magento\Framework\Registry')->unregister('Magento/Checkout/_file/discount_10percent');
 $objectManager->get('Magento\Framework\Registry')
-    ->register('Magento/Checkout/_file/discount_10percent', $salesRule->getRuleId(), true);
+    ->register('Magento/Checkout/_file/discount_10percent', $salesRule->getRuleId());
