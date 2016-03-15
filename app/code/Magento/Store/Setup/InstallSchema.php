@@ -10,6 +10,7 @@ use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use \Magento\Framework\DB\Ddl\Table;
+use \Magento\Catalog\Setup\InstallData;
 
 /**
  * @codeCoverageIgnore
@@ -259,7 +260,7 @@ class InstallSchema implements InstallSchemaInterface
                 'group_id' => 1,
                 'website_id' => 1,
                 'name' => 'Main Website Store',
-                'root_category_id' => 2,
+                'root_category_id' => InstallData::DEFAULT_CATEGORY_ID,
                 'default_store_id' => 1
             ]
         );

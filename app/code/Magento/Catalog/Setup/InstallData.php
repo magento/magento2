@@ -34,7 +34,7 @@ class InstallData implements InstallDataInterface
      *
      * @var int
      */
-    private $defaultCategoryId = 2;
+    CONST DEFAULT_CATEGORY_ID = 2;
 
     /**
      * Init
@@ -73,10 +73,10 @@ class InstallData implements InstallDataInterface
 
         // Create Default Catalog Node
         $category = $categorySetup->createCategory();
-        $category->load($this->defaultCategoryId)
-            ->setId($this->defaultCategoryId)
+        $category->load(self::DEFAULT_CATEGORY_ID)
+            ->setId(self::DEFAULT_CATEGORY_ID)
             ->setStoreId(0)
-            ->setPath($this->rootCategoryId . '/' . $this->defaultCategoryId)
+            ->setPath($this->rootCategoryId . '/' . self::DEFAULT_CATEGORY_ID)
             ->setName('Default Category')
             ->setDisplayMode('PRODUCTS')
             ->setIsActive(1)
