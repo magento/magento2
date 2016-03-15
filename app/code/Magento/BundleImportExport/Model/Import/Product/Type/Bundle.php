@@ -419,10 +419,10 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         foreach ($this->_customFieldsMapping as $oldKey => $newKey) {
             if (isset($rowData[$oldKey])) {
                 switch ($newKey) {
-                    case RowCustomizer::BUNDLE_PRICE_VIEW_COL:
+                    case $this->_customFieldsMapping['price_view']:
                         break;
-                    case RowCustomizer::BUNDLE_SHIPMENT_TYPE_COL:
-                        $resultAttrs[$oldKey] = (($rowData[$oldKey] == RowCustomizer::VALUE_SHIPMENT_SEPARATELY) ?
+                    case $this->_customFieldsMapping['shipment_type']:
+                        $resultAttrs[$oldKey] = (($rowData[$oldKey] == 'separately') ?
                             AbstractType::SHIPMENT_SEPARATELY :
                             AbstractType::SHIPMENT_TOGETHER);
                         break;
