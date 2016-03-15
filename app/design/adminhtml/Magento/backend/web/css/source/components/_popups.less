@@ -160,65 +160,65 @@
     .ui-resizable-n {
         cursor: n-resize;
         height: 7px;
-        width: 100%;
-        top: -5px;
         left: 0;
+        top: -5px;
+        width: 100%;
     }
 
     .ui-resizable-s {
+        bottom: 0;
         cursor: s-resize;
         height: 7px;
-        width: 100%;
-        bottom: 0;
         left: 0;
+        width: 100%;
     }
 
     .ui-resizable-e {
         cursor: e-resize;
-        width: 7px;
+        height: 100%;
         right: 0;
         top: 0;
-        height: 100%;
+        width: 7px;
     }
 
     .ui-resizable-w {
         cursor: w-resize;
-        width: 7px;
+        height: 100%;
         left: -7px;
         top: 0;
-        height: 100%;
+        width: 7px;
     }
 
     .ui-resizable-se {
+        bottom: 1px;
         cursor: se-resize;
-        width: 12px;
         height: 12px;
         right: 1px;
-        bottom: 1px;
+        width: 12px;
     }
 
     .ui-resizable-sw {
+        bottom: 0;
         cursor: sw-resize;
-        width: 9px;
         height: 9px;
         left: -5px;
-        bottom: 0;
+        width: 9px;
     }
 
     .ui-resizable-nw {
         cursor: nw-resize;
-        width: 9px;
         height: 9px;
         left: -5px;
         top: -5px;
+        width: 9px;
     }
 
     .ui-resizable-ne {
         cursor: ne-resize;
-        width: 9px;
         height: 9px;
         right: 0;
         top: -5px;
+        width: 9px;
     }
 
     //
@@ -279,8 +279,8 @@
             }
 
             input {
-                border: none;
                 -moz-transform: none;
+                border: none;
                 opacity: 1;
                 position: static;
             }
@@ -562,13 +562,13 @@
 
     .popup {
         background: @popup__background-color;
-        border: 0;
         border-radius: 0;
+        border: 0;
         display: inline-block;
         left: 12.5%;
         position: absolute;
-        top: 5rem;
         text-align: left;
+        top: 5rem;
         width: 75%;
 
         .close {
