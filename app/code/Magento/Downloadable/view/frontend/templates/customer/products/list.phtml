@@ -38,7 +38,9 @@
                     <td data-th="<?php echo $block->escapeHtml(__('Date')) ?>" class="col date"><?php /* @escapeNotVerified */ echo $block->formatDate($_item->getPurchased()->getCreatedAt()) ?></td>
                     <td data-th="<?php echo $block->escapeHtml(__('Title')) ?>" class="col title">
                         <strong class="product-name"><?php echo $block->escapeHtml($_item->getPurchased()->getProductName()) ?></strong>
+                        <?php if ($_item->getStatus() == \Magento\Downloadable\Model\Link\Purchased\Item::LINK_STATUS_AVAILABLE): ?>
                         <a href="<?php /* @escapeNotVerified */ echo $block->getDownloadUrl($_item) ?>" title="<?php echo $block->escapeHtml(__('Start Download')) ?>" class="action download" <?php echo $block->getIsOpenInNewWindow() ? 'onclick="this.target=\'_blank\'"' : ''; ?>><?php echo $block->escapeHtml($_item->getLinkTitle()) ?></a>
+                        <?php endif; ?>
                     </td>
                     <td data-th="<?php echo $block->escapeHtml(__('Status')) ?>" class="col status"><?php /* @escapeNotVerified */ echo __(ucfirst($_item->getStatus())) ?></td>
                     <td data-th="<?php echo $block->escapeHtml(__('Remaining Downloads')) ?>" class="col remaining"><?php /* @escapeNotVerified */ echo $block->getRemainingDownloads($_item) ?></td>
