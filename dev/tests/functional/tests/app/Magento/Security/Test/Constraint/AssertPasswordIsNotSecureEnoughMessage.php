@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Customer\Test\Constraint;
+namespace Magento\Security\Test\Constraint;
 
 use Magento\Customer\Test\Page\CustomerAccountCreate;
 use Magento\Mtf\Constraint\AbstractConstraint;
@@ -23,9 +23,9 @@ class AssertPasswordIsNotSecureEnoughMessage extends AbstractConstraint
      */
     public function processAssert(CustomerAccountCreate $registerPage)
     {
-        $expectedErrorMessage = 'Minimum different classes of characters in password are 3.' .
+        $expectedErrorMessage = 'Minimum of different classes of characters in password is 3.' .
             ' Classes of characters: Lower Case, Upper Case, Digits, Special Characters.';
-        $errorMessage = $registerPage->getMessagesBlock()->getErrorMessage();
+        $errorMessage = $registerPage->getRegisterForm()->getPasswordError();
         \PHPUnit_Framework_Assert::assertEquals(
             $expectedErrorMessage,
             $errorMessage,
