@@ -123,12 +123,14 @@ define([
                 return this;
             }
 
+            self.previousParams = params || {};
+
             $.async({
                 component: this.name
             }, function (el) {
                 self.contentEl = $(el);
                 self.startRender = true;
-                params = _.extend(params || {}, self.params);
+                params = _.extend({}, self.params, params || {});
                 request = self.requestData(params, self.renderSettings);
                 request
                     .done(self.onRender)
