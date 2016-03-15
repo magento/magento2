@@ -184,9 +184,11 @@ define([
             });
         },
         invalidate: function (sectionNames) {
-            var sectionDataIds;
+            var sectionDataIds,
+                sectionsNamesForInvalidation;
 
-            buffer.remove(_.contains(sectionNames, '*') ? buffer.keys() : sectionNames);
+            sectionsNamesForInvalidation = _.contains(sectionNames, '*') ? buffer.keys() : sectionNames;
+            buffer.remove(sectionsNamesForInvalidation);
             sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
 
             // Invalidate section in cookie (increase version of section with 1000)
