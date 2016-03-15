@@ -62,8 +62,8 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                         ],
                     ],
                     'children' => [
-                        'affected-attribute-set-error' => $this->getAttributeSetErrorContainer(),
-                        'affected-attribute-set-current' => [
+                        static::FORM_NAME . '.affectedAttributeSetError' => $this->getAttributeSetErrorContainer(),
+                        'affectedAttributeSetCurrent' => [
                             'arguments' => [
                                 'data' => [
                                     'config' => [
@@ -72,7 +72,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                         'formElement' => Form\Element\Checkbox::NAME,
                                         'prefer' => 'radio',
                                         'description' => __('Add configurable attributes to the current Attribute Set'),
-                                        'dataScope' => 'configurable-affected-attribute-set',
+                                        'dataScope' => 'configurableAffectedAttributeSet',
                                         'label' => ' ',
                                         'valueMap' => [
                                             'true' => 'current',
@@ -84,7 +84,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                 ],
                             ],
                         ],
-                        'affected-attribute-set-new' => [
+                        'affectedAttributeSetNew' => [
                             'arguments' => [
                                 'data' => [
                                     'config' => [
@@ -95,7 +95,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                         'description' => __(
                                             'Add configurable attributes to the new Attribute Set based on current'
                                         ),
-                                        'dataScope' => 'configurable-affected-attribute-set',
+                                        'dataScope' => 'configurableAffectedAttributeSet',
                                         'label' => ' ',
                                         'valueMap' => [
                                             'true' => 'new',
@@ -107,8 +107,8 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                 ],
                             ],
                         ],
-                        'configurable_new_attribute_set_name' => $this->getNewAttributeSet(),
-                        'affected-attribute-set-existing' => [
+                        'configurableNewAttributeSetName' => $this->getNewAttributeSet(),
+                        'affectedAttributeSetExisting' => [
                             'arguments' => [
                                 'data' => [
                                     'config' => [
@@ -119,7 +119,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                         'description' => __(
                                             'Add configurable attributes to the existing Attribute Set'
                                         ),
-                                        'dataScope' => 'configurable-affected-attribute-set',
+                                        'dataScope' => 'configurableAffectedAttributeSet',
                                         'label' => ' ',
                                         'valueMap' => [
                                             'true' => 'existing',
@@ -131,7 +131,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                 ],
                             ],
                         ],
-                        'configurable_existing_attribute_set_id' => $this->getExistingAttributeSet($meta),
+                        'configurableExistingAttributeSetId' => $this->getExistingAttributeSet($meta),
                         'confirmButtonContainer' => $this->getConfirmButton(),
                     ],
                 ],
@@ -199,14 +199,14 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                         'dataType' => Form\Element\DataType\Text::NAME,
                         'formElement' => Form\Element\Input::NAME,
                         'componentType' => Form\Field::NAME,
-                        'dataScope' => 'configurable_new_attribute_set_name',
+                        'dataScope' => 'configurableNewAttributeSetName',
                         'label' => __('New Attribute Set Name'),
                         'sortOrder' => 40,
                         'validation' => ['required-entry' => true],
                         'imports' => [
-                            'visible' => 'ns = ${ $.ns }, index = affected-attribute-set-new:checked',
+                            'visible' => 'ns = ${ $.ns }, index = affectedAttributeSetNew:checked',
                             'disabled' =>
-                                '!ns = ${ $.ns }, index = affected-attribute-set-new:checked',
+                                '!ns = ${ $.ns }, index = affectedAttributeSetNew:checked',
                         ]
                     ],
                 ],
@@ -238,14 +238,14 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                 'componentType' => Form\Field::NAME,
                                 'options' => $options,
                                 'label' => __('Choose existing Attribute Set'),
-                                'dataScope' => 'configurable_existing_attribute_set_id',
+                                'dataScope' => 'configurableExistingAttributeSetId',
                                 'sortOrder' => 60,
                                 'multiple' => false,
                                 'imports' => [
                                     'value' => 'ns = ${ $.ns }, index = attribute_set_id:value',
-                                    'visible' => 'ns = ${ $.ns }, index = affected-attribute-set-existing:checked',
+                                    'visible' => 'ns = ${ $.ns }, index = affectedAttributeSetExisting:checked',
                                     'disabled' =>
-                                        '!ns = ${ $.ns }, index = affected-attribute-set-existing:checked',
+                                        '!ns = ${ $.ns }, index = affectedAttributeSetExisting:checked',
                                 ],
                             ],
                         ],
