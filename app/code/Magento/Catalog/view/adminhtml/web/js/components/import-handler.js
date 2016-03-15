@@ -4,11 +4,11 @@
  */
 
 define([
-    'Magento_Ui/js/form/element/abstract'
-], function (Abstract) {
+    'Magento_Ui/js/form/element/textarea'
+], function (Textarea) {
     'use strict';
 
-    return Abstract.extend({
+    return Textarea.extend({
         defaults: {
             allowImport: true,
             autoImportIfEmpty: false,
