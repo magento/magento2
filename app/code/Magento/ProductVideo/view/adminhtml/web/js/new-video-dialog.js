@@ -960,7 +960,7 @@ define([
          * @private
          */
         _onImageInputChange: function () {
-            var jFile = this.element(this._videoPreviewInputSelector),
+            var jFile = this.element.find(this._videoPreviewInputSelector),
                 file = jFile[0],
                 val = jFile.val(),
                 prev = this._getPreviewImage(),
