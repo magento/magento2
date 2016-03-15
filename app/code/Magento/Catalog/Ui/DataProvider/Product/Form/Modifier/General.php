@@ -157,24 +157,18 @@ class General extends AbstractModifier
     protected function customizeStatusField(array $meta)
     {
         $switcherConfig = [
-            'arguments' => [
-                'data' => [
-                    'config' => [
-                        'dataType' => Form\Element\DataType\Number::NAME,
-                        'formElement' => Form\Element\Checkbox::NAME,
-                        'componentType' => Form\Field::NAME,
-                        'prefer' => 'toggle',
-                        'valueMap' => [
-                            'true' => '1',
-                            'false' => '2'
-                        ],
-                    ],
-                ],
+            'dataType' => Form\Element\DataType\Number::NAME,
+            'formElement' => Form\Element\Checkbox::NAME,
+            'componentType' => Form\Field::NAME,
+            'prefer' => 'toggle',
+            'valueMap' => [
+                'true' => '1',
+                'false' => '2'
             ],
         ];
 
         $path = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_STATUS);
-        $meta = $this->arrayManager->merge($path, $meta, $switcherConfig);
+        $meta = $this->arrayManager->merge($path . static::META_CONFIG_PATH, $meta, $switcherConfig);
 
         return $meta;
     }
@@ -191,25 +185,19 @@ class General extends AbstractModifier
             if ($this->locator->getProduct()->getTypeId() !== \Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL) {
                 $weightPath = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_WEIGHT);
                 $meta = $this->arrayManager->merge(
-                    $weightPath,
+                    $weightPath . static::META_CONFIG_PATH,
                     $meta,
                     [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'dataScope' => ProductAttributeInterface::CODE_WEIGHT,
-                                    'validation' => [
-                                        'validate-number' => true,
-                                    ],
-                                    'additionalClasses' => 'admin__field-small',
-                                    'addafter' => $this->locator->getStore()->getConfig('general/locale/weight_unit'),
-                                    'imports' => [
-                                        'disabled' => '!${$.provider}:' . self::DATA_SCOPE_PRODUCT
-                                            . '.product_has_weight:value'
-                                    ]
-                                ],
-                            ],
+                        'dataScope' => ProductAttributeInterface::CODE_WEIGHT,
+                        'validation' => [
+                            'validate-number' => true,
                         ],
+                        'additionalClasses' => 'admin__field-small',
+                        'addafter' => $this->locator->getStore()->getConfig('general/locale/weight_unit'),
+                        'imports' => [
+                            'disabled' => '!${$.provider}:' . self::DATA_SCOPE_PRODUCT
+                                . '.product_has_weight:value'
+                        ]
                     ]
                 );
 
@@ -217,44 +205,33 @@ class General extends AbstractModifier
                     $meta,
                     static::CONTAINER_PREFIX . ProductAttributeInterface::CODE_WEIGHT
                 );
-                $meta = $this->arrayManager->merge($containerPath, $meta, [
-                    'arguments' => [
-                        'data' => [
-                            'config' => [
-                                'component' => 'Magento_Ui/js/form/components/group',
-                            ],
-                        ],
-                    ],
+                $meta = $this->arrayManager->merge($containerPath . static::META_CONFIG_PATH, $meta, [
+                    'component' => 'Magento_Ui/js/form/components/group',
                 ]);
 
                 $hasWeightPath = $this->arrayManager->slicePath($weightPath, 0, -1) . '/'
                     . ProductAttributeInterface::CODE_HAS_WEIGHT;
                 $meta = $this->arrayManager->set(
-                    $hasWeightPath,
+                    $hasWeightPath . static::META_CONFIG_PATH,
                     $meta,
                     [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'dataType' => 'boolean',
-                                    'formElement' => Form\Element\Select::NAME,
-                                    'componentType' => Form\Field::NAME,
-                                    'dataScope' => 'product_has_weight',
-                                    'label' => '',
-                                    'options' => [
-                                        [
-                                            'label' => __('This item has weight'),
-                                            'value' => 1
-                                        ],
-                                        [
-                                            'label' => __('This item has no weight'),
-                                            'value' => 0
-                                        ],
-                                    ],
-                                    'value' => (int)$this->locator->getProduct()->getTypeInstance()->hasWeight(),
-                                ],
+
+                        'dataType' => 'boolean',
+                        'formElement' => Form\Element\Select::NAME,
+                        'componentType' => Form\Field::NAME,
+                        'dataScope' => 'product_has_weight',
+                        'label' => '',
+                        'options' => [
+                            [
+                                'label' => __('This item has weight'),
+                                'value' => 1
                             ],
-                        ]
+                            [
+                                'label' => __('This item has no weight'),
+                                'value' => 0
+                            ],
+                        ],
+                        'value' => (int)$this->locator->getProduct()->getTypeInstance()->hasWeight(),
                     ]
                 );
             }
@@ -351,8 +328,8 @@ class General extends AbstractModifier
                 ],
             ];
 
-            if (in_array($listener, $textListeners)) {
-                $importsConfig['elementTmpl'] = 'ui/form/element/textarea';
+            if (!in_array($listener, $textListeners)) {
+                $importsConfig['elementTmpl'] = 'ui/form/element/input';
             }
 
             $meta = $this->arrayManager->merge($listenerPath . static::META_CONFIG_PATH, $meta, $importsConfig);
