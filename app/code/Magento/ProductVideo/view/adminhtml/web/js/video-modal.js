@@ -21,7 +21,15 @@ define([
          * @private
          */
         _bind: function () {
+            var events = {};
+
             this._super();
+            events['click ' + this.options.imageSelector] = function (event) {
+                if (!$(event.currentTarget).is('.ui-sortable-helper')) {
+                    var itemId = $(event.currentTarget).find('input')[0].name.match(/\[([^\]]*)\]/g)[2];
+                    this.videoDialog.find('#item_id').val(itemId);
+                }
+            };
             this.element.prev().find('[data-role="add-video-button"]').on('click', this.showModal.bind(this));
             this.element.on('openDialog', '.gallery.ui-sortable', $.proxy(this._onOpenDialog, this));
         },

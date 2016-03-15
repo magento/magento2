@@ -403,8 +403,6 @@ define([
             events['click ' + this.options.imageSelector] = function (event) {
                 if (!$(event.currentTarget).is('.ui-sortable-helper')) {
                     $(event.currentTarget).addClass('active');
-                    var itemId = $(event.currentTarget).find('input')[0].name.match(/\[([^\]]*)\]/g)[2];
-                    $('#item_id').val(itemId);
                     var imageData = $(event.currentTarget).data('imageData');
                     var $imageContainer = this.findElement(imageData);
                     if ($imageContainer.is('.removed')) {
