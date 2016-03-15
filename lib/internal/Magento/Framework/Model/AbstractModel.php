@@ -220,7 +220,19 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     public function __sleep()
     {
         $properties = array_keys(get_object_vars($this));
-        $properties = array_diff($properties, ['_eventManager', '_cacheManager', '_registry', '_appState']);
+        $properties = array_diff(
+            $properties,
+            [
+                '_eventManager',
+                '_cacheManager',
+                '_registry',
+                '_appState',
+                '_actionValidator',
+                '_logger',
+                '_resourceCollection',
+                '_resource',
+            ]
+        );
         return $properties;
     }
 
@@ -232,12 +244,15 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     public function __wakeup()
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->_eventManager = $objectManager->get('Magento\Framework\Event\ManagerInterface');
-        $this->_cacheManager = $objectManager->get('Magento\Framework\App\CacheInterface');
         $this->_registry = $objectManager->get('Magento\Framework\Registry');
+
         $context = $objectManager->get('Magento\Framework\Model\Context');
         if ($context instanceof \Magento\Framework\Model\Context) {
             $this->_appState = $context->getAppState();
+            $this->_eventManager = $context->getEventDispatcher();
+            $this->_cacheManager = $context->getCacheManager();
+            $this->_logger = $context->getLogger();
+            $this->_actionValidator = $context->getActionValidator();
         }
     }
 

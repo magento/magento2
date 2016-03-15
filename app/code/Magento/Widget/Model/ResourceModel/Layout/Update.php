@@ -63,6 +63,7 @@ class Update extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $bind = ['theme_id' => $theme->getId(), 'store_id' => $store->getId()];
         $cacheKey = implode('-', $bind);
         if (!isset($this->layoutUpdateCache[$cacheKey])) {
+            $this->layoutUpdateCache[$cacheKey] = [];
             foreach ($this->getConnection()->fetchAll($this->_getFetchUpdatesByHandleSelect(), $bind) as $layout) {
                 if (!isset($this->layoutUpdateCache[$cacheKey][$layout['handle']])) {
                     $this->layoutUpdateCache[$cacheKey][$layout['handle']] = '';
