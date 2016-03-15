@@ -73,9 +73,11 @@ define([
          * @returns {Object} Chainable.
          */
         initSelector: function () {
+            var name = this.name.replace(/\./g, '_');
+
             this.contentSelector = '.' + this.modalClass;
-            this.options.modalClass = this.name.replace(/\./g, '_');
-            this.rootSelector = '.' + this.options.modalClass;
+            this.options.modalClass += ' ' + name;
+            this.rootSelector = '.' + name;
 
             return this;
         },
