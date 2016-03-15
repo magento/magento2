@@ -6,8 +6,8 @@
  */
  -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/etc/variations.xsd">
-    <testCase name="Magento\Upgrade\Test\TestCase\UpgradeSystemTest" summary="System Upgrade" ticketId="MAGETWO-47681">
-        <variation name="OpenSystemUpgradePage">
+    <testCase name="Magento\Upgrade\Test\TestCase\UpgradeSystemTest" summary="System Upgrade" ticketId="MAGETWO-45592">
+        <variation name="PerformSystemUpgrade">
             <data name="description" xsi:type="string">System Upgrade Page</data>
             <data name="upgrade/upgradeVersion" xsi:type="string">{version}</data>
             <data name="upgrade/package" xsi:type="string">{package}</data>
