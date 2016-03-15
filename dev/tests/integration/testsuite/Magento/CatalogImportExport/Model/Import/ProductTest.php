@@ -22,6 +22,7 @@ use Magento\ImportExport\Model\Import;
  * Class ProductTest
  *
  * @magentoDataFixtureBeforeTransaction Magento/Catalog/_files/enable_reindex_schedule.php
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 {
@@ -54,7 +55,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\CatalogImportExport\Model\Import\Product'
+            \Magento\CatalogImportExport\Model\Import\Product::class
         );
         parent::setUp();
     }
@@ -69,6 +70,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         'price' => '_custom_option_price',
         'sku' => '_custom_option_sku',
         'sort_order' => '_custom_option_sort_order',
+        'max_characters' => '_custom_option_max_characters',
     ];
 
     /**
@@ -86,10 +88,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testSaveProductsVisibility()
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-47449');
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Api\ProductRepositoryInterface'
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
         $id1 = $productRepository->get('simple1')->getId();
         $id2 = $productRepository->get('simple2')->getId();
@@ -98,18 +99,18 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $productsBeforeImport = [];
         foreach ($existingProductIds as $productId) {
             $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\Catalog\Model\Product'
+                \Magento\Catalog\Model\Product::class
             );
             $product->load($productId);
             $productsBeforeImport[] = $product;
         }
 
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Filesystem');
+            ->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => __DIR__ . '/_files/products_to_import.csv',
                 'directory' => $directory
@@ -129,7 +130,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         foreach ($productsBeforeImport as $productBeforeImport) {
             /** @var $productAfterImport \Magento\Catalog\Model\Product */
             $productAfterImport = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\Catalog\Model\Product'
+                \Magento\Catalog\Model\Product::class
             );
             $productAfterImport->load($productBeforeImport->getId());
 
@@ -148,10 +149,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testSaveStockItemQty()
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-47449');
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Api\ProductRepositoryInterface'
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
         $id1 = $productRepository->get('simple1')->getId();
         $id2 = $productRepository->get('simple2')->getId();
@@ -161,7 +161,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         foreach ($existingProductIds as $productId) {
             /** @var $stockRegistry \Magento\CatalogInventory\Model\StockRegistry */
             $stockRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\CatalogInventory\Model\StockRegistry'
+                \Magento\CatalogInventory\Model\StockRegistry::class
             );
 
             $stockItem = $stockRegistry->getStockItem($productId, 1);
@@ -169,10 +169,10 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         }
 
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Filesystem');
+            ->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => __DIR__ . '/_files/products_to_import.csv',
                 'directory' => $directory
@@ -192,7 +192,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         foreach ($stockItems as $productId => $stockItmBeforeImport) {
             /** @var $stockRegistry \Magento\CatalogInventory\Model\StockRegistry */
             $stockRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\CatalogInventory\Model\StockRegistry'
+                \Magento\CatalogInventory\Model\StockRegistry::class
             );
 
             $stockItemAfterImport = $stockRegistry->getStockItem($productId, 1);
@@ -213,12 +213,11 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testStockState()
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-47449');
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Filesystem');
+            ->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => __DIR__ . '/_files/products_to_import_with_qty.csv',
                 'directory' => $directory
@@ -246,14 +245,13 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testSaveCustomOptions($importFile, $sku)
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-47449');
         $pathToFile = __DIR__ . '/_files/' . $importFile;
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Filesystem');
+            ->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => $pathToFile,
                 'directory' => $directory
@@ -273,7 +271,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         );
         $product = $productRepository->get($sku);
 
-        $this->assertInstanceOf('Magento\Catalog\Model\Product', $product);
+        $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $product);
         $options = $product->getOptionInstance()->getProductOptions($product);
 
         $expectedData = $this->getExpectedOptionsData($pathToFile);
@@ -337,10 +335,9 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testSaveDatetimeAttribute()
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-47449');
         /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
         $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Api\ProductRepositoryInterface'
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
         );
         $id1 = $productRepository->get('simple1')->getId();
         $id2 = $productRepository->get('simple2')->getId();
@@ -349,18 +346,18 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $productsBeforeImport = [];
         foreach ($existingProductIds as $productId) {
             $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\Catalog\Model\Product'
+                \Magento\Catalog\Model\Product::class
             );
             $product->load($productId);
             $productsBeforeImport[$product->getSku()] = $product;
         }
 
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Filesystem');
+            ->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => __DIR__ . '/_files/products_to_import_with_datetime.csv',
                 'directory' => $directory
@@ -383,7 +380,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
             /** @var $productAfterImport \Magento\Catalog\Model\Product */
             $productAfterImport = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                'Magento\Catalog\Model\Product'
+                \Magento\Catalog\Model\Product::class
             );
             $productAfterImport->load($productBeforeImport->getId());
             $this->assertEquals(
@@ -563,14 +560,13 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testSaveMediaImage()
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-47449');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Framework\Filesystem');
+            ->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => __DIR__ . '/_files/import_media.csv',
                 'directory' => $directory
@@ -583,7 +579,10 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
                 'import_images_file_dir' => 'pub/media/import'
             ]
         );
-        $appParams = \Magento\TestFramework\Helper\Bootstrap::getInstance()->getBootstrap()->getApplication()->getInitParams()[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
+        $appParams = \Magento\TestFramework\Helper\Bootstrap::getInstance()
+            ->getBootstrap()
+            ->getApplication()
+            ->getInitParams()[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS];
         $uploader = $this->_model->getUploader();
 
         $destDir = $directory->getRelativePath($appParams[DirectoryList::MEDIA][DirectoryList::PATH] . '/catalog/product');
@@ -598,21 +597,22 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         $this->assertTrue($errors->getErrorsCount() == 0);
         $this->_model->importData();
+        $this->assertTrue($this->_model->getErrorAggregator()->getErrorsCount() == 0);
 
-        $resource = $objectManager->get('Magento\Catalog\Model\ResourceModel\Product');
+        $resource = $objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productId = $resource->getIdBySku('simple_new');
 
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->load($productId);
         $this->assertEquals('/m/a/magento_image.jpg', $product->getData('swatch_image'));
         $gallery = $product->getMediaGalleryImages();
-        $this->assertInstanceOf('Magento\Framework\Data\Collection', $gallery);
+        $this->assertInstanceOf(\Magento\Framework\Data\Collection::class, $gallery);
         $items = $gallery->getItems();
         $this->assertCount(1, $items);
         $item = array_pop($items);
-        $this->assertInstanceOf('Magento\Framework\DataObject', $item);
+        $this->assertInstanceOf(\Magento\Framework\DataObject::class, $item);
         $this->assertEquals('/m/a/magento_image.jpg', $item->getFile());
         $this->assertEquals('Image Label', $item->getLabel());
     }
@@ -624,7 +624,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     {
         /** @var \Magento\Framework\Filesystem\Directory\Write $mediaDirectory */
         $mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Filesystem'
+            \Magento\Framework\Filesystem::class
         )->getDirectoryWrite(
             DirectoryList::MEDIA
         );
@@ -640,7 +640,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     {
         /** @var \Magento\Framework\Filesystem\Directory\Write $mediaDirectory */
         $mediaDirectory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Filesystem'
+            \Magento\Framework\Filesystem::class
         )->getDirectoryWrite(
             DirectoryList::MEDIA
         );
@@ -684,15 +684,14 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testInvalidSkuLink()
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-47449');
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/products_to_import_invalid_attribute_set.csv';
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Filesystem'
+            \Magento\Framework\Filesystem::class
         );
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => $pathToFile,
                 'directory' => $directory
@@ -715,7 +714,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->_model->importData();
 
         $productCollection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\ResourceModel\Product\Collection'
+            \Magento\Catalog\Model\ResourceModel\Product\Collection::class
         );
 
         $products = [];
@@ -735,11 +734,11 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     public function testValidateInvalidMultiselectValues()
     {
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Filesystem'
+            \Magento\Framework\Filesystem::class
         );
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => __DIR__ . '/_files/products_with_invalid_multiselect_values.csv',
                 'directory' => $directory
@@ -770,13 +769,12 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testProductsWithMultipleStores()
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-47449');
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        $filesystem = $objectManager->create('Magento\Framework\Filesystem');
+        $filesystem = $objectManager->create(\Magento\Framework\Filesystem::class);
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => __DIR__ . '/_files/products_multiple_stores.csv',
                 'directory' => $directory
@@ -798,10 +796,10 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $product->load($id);
         $this->assertEquals('1', $product->getHasOptions());
 
-        $objectManager->get('Magento\Store\Model\StoreManagerInterface')->setCurrentStore('fixturestore');
+        $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->setCurrentStore('fixturestore');
 
         /** @var \Magento\Catalog\Model\Product $simpleProduct */
-        $simpleProduct = $objectManager->create('Magento\Catalog\Model\Product');
+        $simpleProduct = $objectManager->create(\Magento\Catalog\Model\Product::class);
         $id = $simpleProduct->getIdBySku('Configurable 03-Option 1');
         $simpleProduct->load($id);
         $this->assertTrue(count($simpleProduct->getWebsiteIds()) == 2);
@@ -816,12 +814,12 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/product_to_import_invalid_weight.csv';
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Filesystem'
+            \Magento\Framework\Filesystem::class
         );
 
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => $pathToFile,
                 'directory' => $directory
@@ -848,16 +846,15 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testProductCategories($fixture, $separator)
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-47449');
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/' . $fixture;
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Filesystem'
+            \Magento\Framework\Filesystem::class
         );
 
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => $pathToFile,
                 'directory' => $directory
@@ -877,12 +874,12 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->_model->importData();
 
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $resource = $objectManager->get('Magento\Catalog\Model\ResourceModel\Product');
+        $resource = $objectManager->get(\Magento\Catalog\Model\ResourceModel\Product::class);
         $productId = $resource->getIdBySku('simple1');
         $this->assertTrue(is_numeric($productId));
         /** @var \Magento\Catalog\Model\Product $product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->load($productId);
         $this->assertFalse($product->isObjectNew());
@@ -909,17 +906,16 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testProductDuplicateCategories()
     {
-        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-48871');
         $csvFixture = 'products_duplicate_category.csv';
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/' . $csvFixture;
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Filesystem'
+            \Magento\Framework\Filesystem::class
         );
 
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => $pathToFile,
                 'directory' => $directory
@@ -936,7 +932,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         /** @var \Magento\Catalog\Model\Category $category */
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Category'
+            \Magento\Catalog\Model\Category::class
         );
 
         $category->setStoreId(1);
@@ -951,7 +947,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $this->_model->importData();
 
         $errorProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator'
+            \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator::class
         );
         $errorCount = count($errorProcessor->getAllErrors());
 
@@ -965,7 +961,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
         /** @var \Magento\Catalog\Model\Product $product */
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+            \Magento\Catalog\Model\Product::class
         );
         $product->load(1);
         $categories = $product->getCategoryIds();
@@ -975,7 +971,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     protected function loadCategoryByName($categoryName)
     {
         /* @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
-        $collection = $this->objectManager->create('Magento\Catalog\Model\ResourceModel\Category\Collection');
+        $collection = $this->objectManager->create(\Magento\Catalog\Model\ResourceModel\Category\Collection::class);
         $collection->addNameToResult()->load();
         return $collection->getItemByColumnValue('name', $categoryName);
     }
@@ -990,12 +986,12 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     public function testValidateUrlKeys($importFile, $errorsCount)
     {
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Filesystem'
+            \Magento\Framework\Filesystem::class
         );
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => __DIR__ . '/_files/' . $importFile,
                 'directory' => $directory
@@ -1037,12 +1033,12 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     public function testValidateUrlKeysMultipleStores()
     {
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Framework\Filesystem'
+            \Magento\Framework\Filesystem::class
         );
         $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
 
         $source = $this->objectManager->create(
-            '\Magento\ImportExport\Model\Import\Source\Csv',
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
             [
                 'file' => __DIR__ . '/_files/products_to_check_valid_url_keys_multiple_stores.csv',
                 'directory' => $directory
