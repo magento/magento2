@@ -38,6 +38,6 @@ class AssertApplicationVersion extends AbstractConstraint
      */
     public function toString()
     {
-        return "System Upgrade success message is correct.";
+        return "Application new version is correct.";
     }
 }

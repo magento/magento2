@@ -10,7 +10,7 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Home block.
+ * System Config block.
  */
 class SystemConfig extends Block
 {
@@ -20,7 +20,7 @@ class SystemConfig extends Block
     protected $systemConfig = '.setup-home-item-configuration';
 
     /**
-     * Click on 'Agree and Set up Magento' button.
+     * Click on 'System Configuration' button.
      *
      * @return void
      */

@@ -20,7 +20,7 @@ class Home extends Block
     protected $systemUpgrade = '.setup-home-item-upgrade';
 
     /**
-     * Click on 'Agree and Set up Magento' button.
+     * Click on 'System Upgrade' button.
      *
      * @return void
      */
