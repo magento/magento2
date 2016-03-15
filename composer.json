@@ -80,7 +80,6 @@
         "magento/module-backend": "100.0.2",
         "magento/module-backup": "100.0.2",
         "magento/module-braintree": "100.0.2",
-        "magento/module-braintree-two": "100.0.2",
         "magento/module-bundle": "100.0.2",
         "magento/module-bundle-import-export": "100.0.2",
         "magento/module-cache-invalidate": "100.0.2",

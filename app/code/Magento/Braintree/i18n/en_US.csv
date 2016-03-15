@@ -128,3 +128,18 @@ Debug,Debug
 "3D Secure Verification Settings","3D Secure Verification Settings"
 "3D Secure Verification","3D Secure Verification"
 "Edit My Credit Cards","Edit My Credit Cards"
+"cc_type","Credit Card Type"
+"cc_number","Credit Card Number"
+"avsPostalCodeResponseCode","AVS Postal Code Response Code"
+"avsStreetAddressResponseCode","AVS Street Address Response Code"
+"cvvResponseCode","CVV Response Code"
+"processorAuthorizationCode","Processor Authorization Code"
+"processorResponseCode","Processor Response Code"
+"processorResponseText","Processor Response Text"
+"braintree", "Braintree"
+"liabilityShifted", "Liability Shifted"
+"liabilityShiftPossible", "Liability Shift Possible"
+"riskDataId", "Risk ID"
+"riskDataDecision", "Risk Decision",
+"paymentId", "Payment Id",
+"payerEmail", "Payer Email",
