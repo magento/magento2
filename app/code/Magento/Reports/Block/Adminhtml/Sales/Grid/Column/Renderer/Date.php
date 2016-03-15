@@ -13,6 +13,12 @@ use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
  */
 class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
 {
+
+    /**
+     * @var \Magento\Framework\Locale\ResolverInterface
+     */
+    private $localeResolver;
+
     /**
      * Constructor
      *
@@ -28,7 +34,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
         array $data = []
     ) {
         parent::__construct($context, $dateTimeFormatter, $data);
-        $this->_localeResolver = $localeResolver;
+        $this->localeResolver = $localeResolver;
     }
 
     /**
@@ -41,7 +47,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
         $format = $this->getColumn()->getFormat();
         if (!$format) {
             $dataBundle = new DataBundle();
-            $resourceBundle = $dataBundle->get($this->_localeResolver->getLocale());
+            $resourceBundle = $dataBundle->get($this->localeResolver->getLocale());
             $formats = $resourceBundle['calendar']['gregorian']['availableFormats'];
             switch ($this->getColumn()->getPeriodType()) {
                 case 'month':
@@ -81,7 +87,7 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Date
             } else {
                 $date = $this->_localeDate->date(new \DateTime($data), null, false);
             }
-            return $this->dateTimeFormatter->formatObject($date, $format, $this->_localeResolver->getLocale());
+            return $this->dateTimeFormatter->formatObject($date, $format, $this->localeResolver->getLocale());
         }
         return $this->getColumn()->getDefault();
     }

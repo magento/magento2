@@ -172,13 +172,15 @@ class View extends \Magento\Framework\App\Action\Action
             if ($settings->getPageLayout()) {
                 $page->getConfig()->setPageLayout($settings->getPageLayout());
             }
+
+            $hasChildren = $category->hasChildren();
             if ($category->getIsAnchor()) {
-                $type = $category->hasChildren() ? 'layered' : 'layered_without_children';
+                $type = $hasChildren ? 'layered' : 'layered_without_children';
             } else {
-                $type = $category->hasChildren() ? 'default' : 'default_without_children';
+                $type = $hasChildren ? 'default' : 'default_without_children';
             }
 
-            if (!$category->hasChildren()) {
+            if (!$hasChildren) {
                 // Two levels removed from parent.  Need to add default page type.
                 $parentType = strtok($type, '_');
                 $page->addPageLayoutHandles(['type' => $parentType]);
