@@ -54,12 +54,12 @@ class UpgradeSystemTest extends Injectable
      * @return void
      */
     public function test(
-        $upgrade = [],
         FixtureFactory $fixtureFactory,
         AssertSuccessfulReadinessCheck $assertReadiness,
         AssertVersionAndEditionCheck $assertVersionAndEdition,
         AssertSuccessMessage $assertSuccessMessage,
-        AssertApplicationVersion $assertApplicationVersion
+        AssertApplicationVersion $assertApplicationVersion,
+        $upgrade = []
     ) {
         // Create fixture
         $upgradeFixture = $fixtureFactory->create('Magento\Upgrade\Test\Fixture\Upgrade', ['data' => $upgrade]);
@@ -100,7 +100,6 @@ class UpgradeSystemTest extends Injectable
         $this->setupWizard->getReadiness()->clickReadinessCheck();
         $assertReadiness->processAssert($this->setupWizard);
         $this->setupWizard->getReadiness()->clickNext();
-
 
         // Create Backup page
         $this->setupWizard->getCreateBackup()->fill($createBackupFixture);
