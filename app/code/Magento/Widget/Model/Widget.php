@@ -53,7 +53,7 @@ class Widget
     /**
      * @var \Magento\Framework\Math\Random
      */
-    protected $mathRandom;
+    private $mathRandom;
 
     /**
      * @param \Magento\Framework\Escaper $escaper
@@ -62,7 +62,6 @@ class Widget
      * @param \Magento\Framework\View\Asset\Source $assetSource
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Widget\Helper\Conditions $conditionsHelper
-     * @param \Magento\Framework\Math\Random $mathRandom
      */
     public function __construct(
         \Magento\Framework\Escaper $escaper,
@@ -70,8 +69,7 @@ class Widget
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\Asset\Source $assetSource,
         \Magento\Framework\View\FileSystem $viewFileSystem,
-        \Magento\Widget\Helper\Conditions $conditionsHelper,
-        \Magento\Framework\Math\Random $mathRandom
+        \Magento\Widget\Helper\Conditions $conditionsHelper
     ) {
         $this->escaper = $escaper;
         $this->dataStorage = $dataStorage;
@@ -79,7 +77,20 @@ class Widget
         $this->assetSource = $assetSource;
         $this->viewFileSystem = $viewFileSystem;
         $this->conditionsHelper = $conditionsHelper;
-        $this->mathRandom = $mathRandom;
+    }
+
+    /**
+     * @return \Magento\Framework\Math\Random
+     *
+     * @deprecated
+     */
+    private function getMathRandom()
+    {
+        if ($this->mathRandom === null) {
+            $this->mathRandom = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('\Magento\Framework\Math\Random');
+        }
+        return $this->mathRandom;
     }
 
     /**
@@ -310,7 +321,7 @@ class Widget
             $directive .= sprintf(
                 ' %s="%s"',
                 'page_var_name',
-                'p' . $this->mathRandom->getRandomString(5, \Magento\Framework\Math\Random::CHARS_LOWERS)
+                'p' . $this->getMathRandom()->getRandomString(5, \Magento\Framework\Math\Random::CHARS_LOWERS)
             );
         }
 
