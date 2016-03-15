@@ -11,6 +11,7 @@ namespace Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\Framework\App\ResourceConnection;
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Entity class which provide possibility to import product custom options
@@ -47,8 +48,6 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     const COLUMN_ROW_SKU = '_custom_option_row_sku';
 
-    const COLUMN_MAX_CHARACTERS = '_custom_option_max_characters';
-
     const COLUMN_ROW_SORT = '_custom_option_row_sort';
 
     /**#@-*/
@@ -57,6 +56,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * XML path to page size parameter
      */
     const XML_PATH_PAGE_SIZE = 'import/format_v1/page_size';
+
+    /**
+     * @var string
+     */
+    private $columnMaxCharacters = '_custom_option_max_characters';
 
     /**
      * All stores code-ID pairs
@@ -307,6 +311,20 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected $dateTime;
 
     /**
+     * Product entity link field
+     *
+     * @var string
+     */
+    private $productEntityLinkField;
+
+    /**
+     * Product entity identifier field
+     *
+     * @var string
+     */
+    private $productEntityIdentifierField;
+
+    /**
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
      * @param ResourceConnection $resource
      * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
@@ -363,6 +381,13 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
             $this->_isPriceGlobal = $data['is_price_global'];
         } else {
             $this->_isPriceGlobal = $this->_catalogData->isPriceGlobal();
+        }
+
+        /**
+         * TODO: Make metadataPool a direct constructor dependency, and eliminate its setter & getter
+         */
+        if (isset($data['metadata_pool'])) {
+            $this->metadataPool = $data['metadata_pool'];
         }
 
         $this->errorAggregator = $errorAggregator;
@@ -1108,7 +1133,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $result[self::COLUMN_PREFIX . 'price'] = $result[self::COLUMN_ROW_PRICE];
 
         if (isset($optionRow['max_characters'])) {
-            $result[self::COLUMN_MAX_CHARACTERS] = $optionRow['max_characters'];
+            $result[$this->columnMaxCharacters] = $optionRow['max_characters'];
         }
 
         return $result;
@@ -1219,8 +1244,11 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         if (!$this->_productsSkuToId || !empty($this->_newOptionsNewData)) {
             $columns = ['entity_id', 'sku'];
+            if ($this->getProductEntityLinkField() != $this->getProductIdentifierField()) {
+                $columns[] = $this->getProductEntityLinkField();
+            }
             foreach ($this->_productModel->getProductEntitiesInfo($columns) as $product) {
-                $this->_productsSkuToId[$product['sku']] = $product['entity_id'];
+                $this->_productsSkuToId[$product['sku']] = $product[$this->getProductEntityLinkField()];
             }
         }
 
@@ -1456,7 +1484,7 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     protected function _getProductData(array $rowData, $productId)
     {
         $productData = [
-            'entity_id' => $productId,
+            $this->getProductEntityLinkField() => $productId,
             'has_options' => 1,
             'required_options' => 0,
             'updated_at' => $this->dateTime->date(null, null, false)->format('Y-m-d H:i:s'),
@@ -1821,5 +1849,35 @@ class Option extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $this->_productsSkuToId = null;
         return $this;
+    }
+
+    /**
+     * Get product entity link field
+     *
+     * @return string
+     */
+    private function getProductEntityLinkField()
+    {
+        if (!$this->productEntityLinkField) {
+            $this->productEntityLinkField = $this->getMetadataPool()
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getLinkField();
+        }
+        return $this->productEntityLinkField;
+    }
+
+    /**
+     * Get product entity identifier field
+     *
+     * @return string
+     */
+    private function getProductIdentifierField()
+    {
+        if (!$this->productEntityIdentifierField) {
+            $this->productEntityIdentifierField = $this->getMetadataPool()
+                ->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+                ->getIdentifierField();
+        }
+        return $this->productEntityIdentifierField;
     }
 }
