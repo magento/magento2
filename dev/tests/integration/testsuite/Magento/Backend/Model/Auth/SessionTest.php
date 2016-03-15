@@ -49,33 +49,21 @@ class SessionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Disabled form security in order to prevent exit from the app
-     * @magentoAdminConfigFixture admin/security/session_lifetime 100
+     * @dataProvider loginDataProvider
      */
-    public function testIsLoggedIn()
+    public function testIsLoggedInPositive($loggedIn)
     {
-        $this->_auth->login(
-            \Magento\TestFramework\Bootstrap::ADMIN_NAME,
-            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
-        );
-        $this->assertTrue($this->_model->isLoggedIn());
-
-        $this->_model->setUpdatedAt(time() - 101);
-        $this->assertFalse($this->_model->isLoggedIn());
+        if ($loggedIn) {
+            $this->_auth->login(
+                \Magento\TestFramework\Bootstrap::ADMIN_NAME,
+                \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
+            );
+        }
+        $this->assertEquals($loggedIn, $this->_model->isLoggedIn());
     }
 
-    /**
-     * Disabled form security in order to prevent exit from the app
-     * @magentoConfigFixture current_store admin/security/session_lifetime 59
-     */
-    public function testIsLoggedInWithIgnoredLifetime()
+    public function loginDataProvider()
     {
-        $this->_auth->login(
-            \Magento\TestFramework\Bootstrap::ADMIN_NAME,
-            \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
-        );
-        $this->assertTrue($this->_model->isLoggedIn());
-
-        $this->_model->setUpdatedAt(time() - 101);
-        $this->assertTrue($this->_model->isLoggedIn());
+        return [[true], [false]];
     }
 }
