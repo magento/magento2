@@ -12,18 +12,116 @@ define([
         defaults: {
             allowImport: true,
             autoImportIfEmpty: false,
-            nameValue: '',
-            valueUpdate: 'input'
+            values: {
+                'name': '',
+                'description': '',
+                'sku': '',
+                'color': '',
+                'country_of_manufacture': '',
+                'gender': '',
+                'material': '',
+                'short_description': '',
+                'size': ''
+            },
+            valueUpdate: 'input',
+            mask: ''
         },
 
-        /**
-         * Import value, if it's allowed
-         */
-        handleChanges: function (newValue) {
-            this.nameValue = newValue;
+        handleNameChanges: function (newValue) {
+            this.values.name = newValue;
 
             if (this.allowImport) {
-                this.value(newValue);
+                this.updateValue();
+            }
+        },
+
+        handleDescriptionChanges: function (newValue) {
+            this.values.description = newValue;
+
+            if (this.allowImport) {
+                this.updateValue();
+            }
+        },
+
+        handleSkuChanges: function (newValue) {
+            if (this.code == 'sku') {
+                return;
+            }
+
+            this.values.sku = newValue;
+
+            if (this.allowImport) {
+                this.updateValue();
+            }
+        },
+
+        handleColorChanges: function (newValue) {
+            this.values.color = newValue;
+
+            if (this.allowImport) {
+                this.updateValue();
+            }
+        },
+
+        handleCountryChanges: function (newValue) {
+            this.values.country = newValue;
+
+            if (this.allowImport) {
+                this.updateValue();
+            }
+        },
+
+        handleGenderChanges: function (newValue) {
+            this.values.gender = newValue;
+
+            if (this.allowImport) {
+                this.updateValue();
+            }
+        },
+
+        handleMaterialChanges: function (newValue) {
+            this.values.material = newValue;
+
+            if (this.allowImport) {
+                this.updateValue();
+            }
+        },
+
+        handleShortDescriptionChanges: function (newValue) {
+            this.values.short_description = newValue;
+
+            if (this.allowImport) {
+                this.updateValue();
+            }
+        },
+
+        handleSizeChanges: function (newValue) {
+            this.values.size = newValue;
+
+            if (this.allowImport) {
+                this.updateValue();
+            }
+        },
+
+        updateValue: function () {
+            var str = this.mask;
+            var nonEmptyValueFlag = false;
+            var placeholder;
+            for (var property in this.values) {
+                if (this.values.hasOwnProperty(property)) {
+                    placeholder = '';
+                    placeholder = placeholder.concat('{{', property, '}}');
+                    str = str.replace(placeholder, this.values[property]);
+                    nonEmptyValueFlag = nonEmptyValueFlag || !!this.values[property];
+                }
+            }
+           // strip tags
+            var tmp = document.createElement("div");
+            tmp.innerHTML = str;
+            str =  tmp.textContent || tmp.innerText || "";
+
+            if (nonEmptyValueFlag) {
+                this.value(str);
             }
         },
 
@@ -53,7 +151,7 @@ define([
                 this.allowImport = true;
 
                 if (this.autoImportIfEmpty) {
-                    this.value(this.nameValue);
+                    this.value(this.updateValue());
                 }
             } else {
                 this.allowImport = false;
