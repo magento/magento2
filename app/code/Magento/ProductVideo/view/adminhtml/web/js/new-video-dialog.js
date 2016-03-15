@@ -845,7 +845,7 @@ define([
                         var elName = el.name,
                             start = elName.indexOf(itemId) + itemId.length + 2,
                             fieldName = elName.substring(start, el.name.length - 1),
-                            _field = this._gallery.find('#' + fieldName),
+                            _field = this.element.find('#' + fieldName),
                             _tmp;
 
                         if (_field.length > 0) {
