@@ -292,7 +292,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->getFilterBuilder();
         $this->getSearch();
 
-        if ($this->queryText) {
+        if ($this->queryText !== false) {
             $this->filterBuilder->setField('search_term');
             $this->filterBuilder->setValue($this->queryText);
             $this->searchCriteriaBuilder->addFilter($this->filterBuilder->create());
