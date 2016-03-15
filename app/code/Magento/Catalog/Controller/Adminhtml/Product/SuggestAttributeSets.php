@@ -54,4 +54,3 @@ class SuggestAttributeSets extends \Magento\Backend\App\Action
         return $resultJson;
     }
 }
-
