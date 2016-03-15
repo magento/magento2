@@ -128,7 +128,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $attributeId = (int)$testConfigurable->getId();
         $attributes = $this->model->getUsedProductAttributes($this->product);
         $this->assertArrayHasKey($attributeId, $attributes);
-        $this->assertSame($testConfigurable, $attributes[$attributeId]);
+        $this->assertEquals($testConfigurable->getData(), $attributes[$attributeId]->getData());
     }
 
     public function testGetConfigurableAttributes()
