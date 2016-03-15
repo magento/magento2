@@ -50,14 +50,15 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      * Returns whitelist based on blacklist and git changed files
      *
      * @param array $fileTypes
+     * @param string $changedFilesBaseDir
      * @return array
      */
-    public static function getWhitelist($fileTypes = ['php'])
+    public static function getWhitelist($fileTypes = ['php'], $changedFilesBaseDir = __DIR__)
     {
-        $directoriesToCheck = Files::init()->readLists(__DIR__ . '/_files/whitelist/common.txt');
+        $directoriesToCheck = Files::init()->readLists($changedFilesBaseDir . '/_files/whitelist/common.txt');
 
         $changedFiles = [];
-        foreach (glob(__DIR__ . '/_files/changed_files*') as $listFile) {
+        foreach (glob($changedFilesBaseDir . '/_files/changed_files*') as $listFile) {
             $changedFiles = array_merge($changedFiles, file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
         }
         array_walk(
