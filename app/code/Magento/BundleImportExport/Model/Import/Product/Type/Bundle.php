@@ -416,9 +416,9 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     protected function transformBundleCustomAttributes($rowData)
     {
         $resultAttrs = [];
-        foreach (array_keys($this->_customFieldsMapping) as $oldKey) {
+        foreach ($this->_customFieldsMapping as $oldKey => $newKey) {
             if (isset($rowData[$oldKey])) {
-                switch ($oldKey) {
+                switch ($newKey) {
                     case RowCustomizer::BUNDLE_PRICE_VIEW_COL:
                         break;
                     case RowCustomizer::BUNDLE_SHIPMENT_TYPE_COL:
