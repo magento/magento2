@@ -51,12 +51,18 @@ class Widget
     protected $conditionsHelper;
 
     /**
+     * @var \Magento\Framework\Math\Random
+     */
+    protected $mathRandom;
+
+    /**
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Widget\Model\Config\Data $dataStorage
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
      * @param \Magento\Framework\View\Asset\Source $assetSource
      * @param \Magento\Framework\View\FileSystem $viewFileSystem
      * @param \Magento\Widget\Helper\Conditions $conditionsHelper
+     * @param \Magento\Framework\Math\Random $mathRandom
      */
     public function __construct(
         \Magento\Framework\Escaper $escaper,
@@ -64,7 +70,8 @@ class Widget
         \Magento\Framework\View\Asset\Repository $assetRepo,
         \Magento\Framework\View\Asset\Source $assetSource,
         \Magento\Framework\View\FileSystem $viewFileSystem,
-        \Magento\Widget\Helper\Conditions $conditionsHelper
+        \Magento\Widget\Helper\Conditions $conditionsHelper,
+        \Magento\Framework\Math\Random $mathRandom
     ) {
         $this->escaper = $escaper;
         $this->dataStorage = $dataStorage;
@@ -72,6 +79,7 @@ class Widget
         $this->assetSource = $assetSource;
         $this->viewFileSystem = $viewFileSystem;
         $this->conditionsHelper = $conditionsHelper;
+        $this->mathRandom = $mathRandom;
     }
 
     /**
@@ -289,7 +297,7 @@ class Widget
             } elseif (trim($value) == '') {
                 $widget = $this->getConfigAsObject($type);
                 $parameters = $widget->getParameters();
-                if (isset($parameters[$name]) && is_object($parameters[$name])) {
+                if (is_object($parameters[$name])) {
                     $value = $parameters[$name]->getValue();
                 }
             }
@@ -297,6 +305,15 @@ class Widget
                 $directive .= sprintf(' %s="%s"', $name, $value);
             }
         }
+
+        if ((bool)$params['show_pager']) {
+            $directive .= sprintf(
+                ' %s="%s"',
+                'page_var_name',
+                'p' . $this->mathRandom->getRandomString(5, \Magento\Framework\Math\Random::CHARS_LOWERS)
+            );
+        }
+
         $directive .= '}}';
 
         if ($asIs) {
