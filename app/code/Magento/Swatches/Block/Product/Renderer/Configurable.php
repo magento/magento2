@@ -24,7 +24,8 @@ use Magento\Swatches\Model\Swatch;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable
+class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\Configurable implements
+    \Magento\Framework\DataObject\IdentityInterface
 {
     /**
      * Path to template file with Swatch renderer.
@@ -104,6 +105,26 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
             $configurableAttributeData,
             $data
         );
+    }
+
+    /**
+     * Get Key for caching block content
+     *
+     * @return string
+     */
+    public function getCacheKey()
+    {
+        return parent::getCacheKey() . '-' . $this->getProduct()->getId();
+    }
+
+    /**
+     * Get block cache life time
+     *
+     * @return int
+     */
+    protected function getCacheLifetime()
+    {
+        return parent::hasCacheLifetime() ? parent::getCacheLifetime() : 3600;
     }
 
     /**
@@ -384,5 +405,19 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
     public function getMediaCallback()
     {
         return $this->getBaseUrl() . self::MEDIA_CALLBACK_ACTION;
+    }
+
+    /**
+     * Return unique ID(s) for each object in system
+     *
+     * @return string[]
+     */
+    public function getIdentities()
+    {
+        if ($this->product instanceof \Magento\Framework\DataObject\IdentityInterface) {
+            return $this->product->getIdentities();
+        } else {
+            return [];
+        }
     }
 }
