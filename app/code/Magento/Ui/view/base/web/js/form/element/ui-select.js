@@ -243,6 +243,8 @@ define([
         /**
          * Check options length and set to cache
          * if some options is added
+         *
+         * @param {Array} options - ui select options
          */
         checkOptionsList: function (options) {
             if (options.length > this.cacheOptions.plain.length) {
