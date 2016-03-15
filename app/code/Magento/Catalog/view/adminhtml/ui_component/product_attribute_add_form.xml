@@ -157,6 +157,7 @@
                             <item name="label" xsi:type="string" translate="true">Is Default</item>
                             <item name="prefer" xsi:type="string">radio</item>
                             <item name="sortOrder" xsi:type="string">0</item>
+                            <item name="columnsHeaderClasses" xsi:type="string">control-table-options-th</item>
                         </item>
                     </argument>
                 </field>
@@ -224,7 +225,7 @@
                             <item name="isMultiple" xsi:type="boolean">true</item>
                             <item name="value" xsi:type="string">1</item>
                             <item name="sortOrder" xsi:type="string">0</item>
-                            <item name="fit" xsi:type="boolean">true</item>
+                            <item name="columnsHeaderClasses" xsi:type="string">control-table-options-th</item>
                         </item>
                     </argument>
                 </field>
