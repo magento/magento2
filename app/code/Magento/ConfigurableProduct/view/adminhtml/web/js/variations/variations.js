@@ -317,6 +317,7 @@ define([
                     newAttributes = true;
                 }
             }, this);
+
             return newAttributes;
         },
 
@@ -326,18 +327,22 @@ define([
          */
         addNewAttributeSetHandler: function() {
             this.formElement().validate();
+
             if (this.formElement().source.get('params.invalid') === false) {
                 var choosenAttributeSetOPtion = this.source.get('configurable-affected-attribute-set');
+
                 if (choosenAttributeSetOPtion === 'new') {
                     this.createNewAttributeSet();
                     return false;
                 }
+
                 if (choosenAttributeSetOPtion === 'existing') {
                     this.source.set(
                         'data.new-variations-attribute-set-id',
                         this.source.get('configurable_existing_attribute_set_id')
                     );
                 }
+
                 this.closeDialogAndProcessForm();
                 return true;
             }
@@ -378,8 +383,10 @@ define([
                         messageBoxElement.content(data.messages);
                         messageBoxElement.visible(true);
                     }
+
                     return false;
                 });
+
             return false;
         },
 
