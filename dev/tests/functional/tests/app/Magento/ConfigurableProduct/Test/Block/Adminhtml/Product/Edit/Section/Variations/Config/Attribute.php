@@ -160,8 +160,6 @@ class Attribute extends Form
     protected $selectedAttributes = 'span[data-bind*="selectedAttributes"]';
 
     /**
-
-    /**
      * Fill attributes
      *
      * @param array $attributes

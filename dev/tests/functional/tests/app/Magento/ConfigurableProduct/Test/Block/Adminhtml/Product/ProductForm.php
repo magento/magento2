@@ -35,7 +35,6 @@ class ProductForm extends \Magento\Catalog\Test\Block\Adminhtml\Product\ProductF
         return $this->fillContainers($sections, $element);
     }
 
-
     /**
      * Create data array for filling tabs.
      * Skip Advanced Price tab
