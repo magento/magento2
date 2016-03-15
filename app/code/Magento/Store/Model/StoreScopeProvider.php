@@ -40,11 +40,18 @@ class StoreScopeProvider implements ScopeProviderInterface
     }
 
     /**
+     * @param string $entityType
+     * @param array $entityData
      * @return \Magento\Framework\Model\Entity\ScopeInterface
      */
-    public function getContext()
+    public function getContext($entityType, $entityData = [])
     {
-        $value = (int)$this->storeManager->getStore(true)->getId();
+        if (isset($entityData[Store::STORE_ID])) {
+            $value = $entityData[Store::STORE_ID];
+        } else {
+            $value = (int)$this->storeManager->getStore(true)->getId();
+        }
+
         $identifier = Store::STORE_ID;
         $fallback = null;
         if ($value == 1) {

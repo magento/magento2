@@ -9,6 +9,7 @@ namespace Magento\Eav\Model\ResourceModel;
 use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Model\Entity\ScopeResolver;
 
 /**
  * Class CreateHandler
@@ -36,23 +37,32 @@ class CreateHandler
     private $attributePersistor;
 
     /**
+     * @var ScopeResolver
+     */
+    private $scopeResolver;
+
+
+    /**
      * CreateHandler constructor.
      *
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param AttributePersistor $attributePersistor
+     * @param ScopeResolver $scopeResolver
      */
     public function __construct(
         AttributeRepository $attributeRepository,
         MetadataPool $metadataPool,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        AttributePersistor $attributePersistor
+        AttributePersistor $attributePersistor,
+        ScopeResolver $scopeResolver
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->attributePersistor = $attributePersistor;
+        $this->scopeResolver = $scopeResolver;
     }
 
     /**
@@ -99,7 +109,8 @@ class CreateHandler
                     $processed[$attribute->getAttributeCode()] = $data[$attribute->getAttributeCode()];
                 }
             }
-            $this->attributePersistor->flush($entityType);
+            $context = $this->scopeResolver->getEntityContext($entityType, $data);
+            $this->attributePersistor->flush($entityType, $context);
         }
         return $data;
     }

@@ -13,7 +13,6 @@ use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Model\Entity\MetadataPool;
-use Magento\Framework\Model\Entity\ScopeResolver;
 
 /**
  * Class AttributePersistor
@@ -35,10 +34,6 @@ class AttributePersistor
      */
     private $metadataPool;
 
-    /**
-     * @var ScopeResolver
-     */
-    private $scopeResolver;
     /**
      * @var array
      */
@@ -62,13 +57,11 @@ class AttributePersistor
     public function __construct(
         FormatInterface $localeFormat,
         AttributeRepositoryInterface $attributeRepository,
-        MetadataPool $metadataPool,
-        ScopeResolver $scopeResolver
+        MetadataPool $metadataPool
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
         $this->localeFormat = $localeFormat;
-        $this->scopeResolver = $scopeResolver;
     }
 
     /**
@@ -218,9 +211,8 @@ class AttributePersistor
      * @param string $entityType
      * @return void
      */
-    public function flush($entityType)
+    public function flush($entityType, $context)
     {
-        $context = $this->scopeResolver->getEntityContext($entityType);
         $this->processDeletes($entityType, $context);
         $this->processInserts($entityType, $context);
         $this->processUpdates($entityType, $context);

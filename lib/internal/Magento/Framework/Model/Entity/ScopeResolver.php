@@ -34,11 +34,12 @@ class ScopeResolver
 
     /**
      * @param string $entityType
+     * @param array|null $entityData
      * @return \Magento\Framework\Model\Entity\ScopeInterface[]
      * @throws ConfigurationMismatchException
      * @throws \Exception
      */
-    public function getEntityContext($entityType)
+    public function getEntityContext($entityType, $entityData = [])
     {
         $entityContext = [];
         $metadata = $this->metadataPool->getMetadata($entityType);
@@ -47,7 +48,7 @@ class ScopeResolver
             if (!$contextProvider instanceof ScopeProviderInterface) {
                 throw new ConfigurationMismatchException(__('Wrong configuration for type' . $entityType));
             }
-            $entityContext[] = $contextProvider->getContext();
+            $entityContext[] = $contextProvider->getContext($entityType, $entityData);
         }
         return $entityContext;
     }
