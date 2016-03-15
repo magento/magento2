@@ -163,11 +163,11 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $expectedData = [
             'sku',
             'bundle_price_type',
-            'bundle_shipment_type',
             'bundle_sku_type',
             'bundle_price_view',
             'bundle_weight_type',
-            'bundle_values'
+            'bundle_values',
+            'bundle_shipment_type'
         ];
         $this->assertEquals($expectedData, $this->rowCustomizerMock->addHeaderColumns($productData));
     }
