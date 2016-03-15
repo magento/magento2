@@ -10,7 +10,7 @@ use Magento\Upgrade\Test\Page\Adminhtml\SetupWizard;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
 /**
- * Check that PHP Version, PHP Extensions and File Permission are ok.
+ * Check that Updater, Dependency, PHP Version, PHP Extensions and File Permission are ok.
  */
 class AssertSuccessfulReadinessCheck extends AbstractConstraint
 {

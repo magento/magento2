@@ -12,7 +12,7 @@ use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Perform Authentication block.
+ * Select version block.
  */
 class SelectVersion extends Form
 {

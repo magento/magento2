@@ -10,7 +10,7 @@ use Magento\Mtf\Block\Block;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Home block.
+ * System Upgrade block.
  */
 class SystemUpgrade extends Block
 {
@@ -37,7 +37,7 @@ class SystemUpgrade extends Block
     }
 
     /**
-     * Click on 'Agree and Set up Magento' button.
+     * Click on 'Upgrade' button.
      *
      * @return void
      */
