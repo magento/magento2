@@ -108,7 +108,7 @@ class ReadHandler
         if (!$metadata->getEavEntityType()) {
             return $data;
         }
-        $context = $this->scopeResolver->getEntityContext($entityType);
+        $context = $this->scopeResolver->getEntityContext($entityType, $entityData);
         $connection = $metadata->getEntityConnection();
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
         $attributeTables = [];
@@ -129,12 +129,12 @@ class ReadHandler
                 )
                 ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()]);
             foreach ($context as $scope) {
-                    //TODO: if (in table exists context field)
-                    $select->where(
-                        $metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' IN (?)',
-                        $this->getContextVariables($scope)
-                    )->order('t.' . $scope->getIdentifier() . ' DESC');
-                }
+                //TODO: if (in table exists context field)
+                $select->where(
+                    $metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' IN (?)',
+                    $this->getContextVariables($scope)
+                )->order('t.' . $scope->getIdentifier() . ' DESC');
+            }
             $selects[] = $select;
         }
         $unionSelect = new \Magento\Framework\DB\Sql\UnionExpression(
