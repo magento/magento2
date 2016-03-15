@@ -23,7 +23,7 @@ define([
          * @returns {Object} Chainable.
          */
         initConfig: function (config) {
-            this._super();
+            this._super(config);
 
             this.configureDataScope();
 
@@ -70,6 +70,13 @@ define([
         dataScopeToHtmlArray: function (dataScopeString) {
             var dataScopeArray, dataScope, reduceFunction;
 
+            /**
+             * Reduce
+             *
+             * @param {String} prev
+             * @param {String} curr
+             * @returns {String}
+             */
             reduceFunction = function (prev, curr) {
                 return prev + '[' + curr + ']';
             };
