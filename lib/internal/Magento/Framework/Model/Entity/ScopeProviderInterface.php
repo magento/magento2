@@ -12,7 +12,7 @@ namespace Magento\Framework\Model\Entity;
 interface ScopeProviderInterface
 {
     /**
-     * @param $entityType
+     * @param string $entityType
      * @param array $entityData
      * @return mixed
      */
