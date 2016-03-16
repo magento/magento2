@@ -65,9 +65,9 @@ class AttributePersistor
     }
 
     /**
-     * @param $entityType
-     * @param $link
-     * @param $attributeCode
+     * @param string $entityType
+     * @param int $link
+     * @param string $attributeCode
      * @return void
      */
     public function registerDelete($entityType, $link, $attributeCode)
@@ -209,7 +209,7 @@ class AttributePersistor
      * Flush attributes to storage
      *
      * @param string $entityType
-     * @param $context
+     * @param string $context
      * @return void
      */
     public function flush($entityType, $context)
@@ -221,8 +221,8 @@ class AttributePersistor
     }
 
     /**
-     * @param $entityType
-     * @param $value
+     * @param string $entityType
+     * @param string $value
      * @param AbstractAttribute $attribute
      * @return mixed
      * @throws \Exception

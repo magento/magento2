@@ -39,7 +39,7 @@ class CommitCallback
     }
 
     /**
-     * @param $entityType
+     * @param string $entityType
      * @throws \Exception
      * @return void
      */
@@ -75,7 +75,7 @@ class CommitCallback
     }
 
     /**
-     * @param $entityType
+     * @param string $entityType
      * @throws \Exception
      * @return void
      */
