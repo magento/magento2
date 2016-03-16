@@ -51,6 +51,11 @@ class Widget
     protected $conditionsHelper;
 
     /**
+     * @var \Magento\Framework\Math\Random
+     */
+    private $mathRandom;
+
+    /**
      * @param \Magento\Framework\Escaper $escaper
      * @param \Magento\Widget\Model\Config\Data $dataStorage
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
@@ -72,6 +77,20 @@ class Widget
         $this->assetSource = $assetSource;
         $this->viewFileSystem = $viewFileSystem;
         $this->conditionsHelper = $conditionsHelper;
+    }
+
+    /**
+     * @return \Magento\Framework\Math\Random
+     *
+     * @deprecated
+     */
+    private function getMathRandom()
+    {
+        if ($this->mathRandom === null) {
+            $this->mathRandom = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('\Magento\Framework\Math\Random');
+        }
+        return $this->mathRandom;
     }
 
     /**
@@ -289,7 +308,7 @@ class Widget
             } elseif (trim($value) == '') {
                 $widget = $this->getConfigAsObject($type);
                 $parameters = $widget->getParameters();
-                if (isset($parameters[$name]) && is_object($parameters[$name])) {
+                if (is_object($parameters[$name])) {
                     $value = $parameters[$name]->getValue();
                 }
             }
@@ -297,6 +316,15 @@ class Widget
                 $directive .= sprintf(' %s="%s"', $name, $value);
             }
         }
+
+        if ((bool)$params['show_pager']) {
+            $directive .= sprintf(
+                ' %s="%s"',
+                'page_var_name',
+                'p' . $this->getMathRandom()->getRandomString(5, \Magento\Framework\Math\Random::CHARS_LOWERS)
+            );
+        }
+
         $directive .= '}}';
 
         if ($asIs) {
