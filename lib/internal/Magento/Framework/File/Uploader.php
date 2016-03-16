@@ -244,6 +244,7 @@ class Uploader
      * Validates destination directory to be writable
      *
      * @param string $destinationFolder
+     * @return void
      * @throws \Exception
      */
     private function validateDestination($destinationFolder)
