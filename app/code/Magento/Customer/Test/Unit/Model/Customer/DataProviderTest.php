@@ -94,6 +94,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      * Data provider for testGetAttributesMeta
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getAttributesMetaDataProvider()
     {
