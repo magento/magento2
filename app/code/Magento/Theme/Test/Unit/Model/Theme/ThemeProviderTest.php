@@ -65,8 +65,9 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $theme = $this->getMock('Magento\Theme\Model\Theme', ['__sleep', 'load'], [], '', false);
+        $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
         $theme->expects($this->once())->method('load')->with($themeId)->will($this->returnSelf());
+        $theme->expects($this->once())->method('getId')->will($this->returnValue(1));
         $theme->expects($this->once())->method('__sleep')->will($this->returnValue([]));
 
         $themeFactory = $this->getMock('\Magento\Theme\Model\ThemeFactory', ['create'], [], '', false);
