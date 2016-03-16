@@ -1,0 +1,3 @@
+name,url_key,path,active,is_anchor,include_in_menu,position,display_mode,custom_layout_update,require_media
+Training,training,,1,0,1,5,PAGE,"<referenceContainer name=""catalog.leftnav"" remove=""true""/>",1
+"Video Download",training-video,Training,1,1,1,,,,1

@@ -1,0 +1,10 @@
+country,region,zip,order_subtotal,price
+US,*,*,0,15
+US,*,*,50,10
+US,*,*,100,5
+US,AK,*,0,20
+US,AK,*,50,15
+US,AK,*,100,10
+US,HI,*,0,20
+US,HI,*,50,15
+US,HI,*,100,10

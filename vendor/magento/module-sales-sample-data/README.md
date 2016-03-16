@@ -1,0 +1,1 @@
+Magento_SalesSampleData module consists of installation scripts and fixtures.

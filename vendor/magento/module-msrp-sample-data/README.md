@@ -1,0 +1,1 @@
+Magento_MsrpSampleData module consists of installation scripts and fixtures.

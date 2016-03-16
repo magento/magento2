@@ -1,0 +1,1 @@
+Magento_CatalogRuleSampleData module consists of installation scripts and fixtures.

@@ -1,0 +1,1 @@
+Magento_ConfigurableSampleData module consists of installation scripts and fixtures.

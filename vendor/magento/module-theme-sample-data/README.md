@@ -1,0 +1,1 @@
+Magento_ThemeSampleData module consists of installation scripts.

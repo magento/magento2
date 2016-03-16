@@ -1,0 +1,21 @@
+title,identifier,content
+Giftcard Block,giftcard-block,"<div class=""blocks-promo"">
+    <div class=""block-promo-wrapper block-promo-2columns"">
+        <a href=""{{product sku=""243-MB04""}}"" class=""block-promo giftcard-mailed"">
+            <span class=""content"">
+                <strong class=""title"">Give it away now</strong>
+                <span class=""info"">A gift card always beats a blind guess</span>
+                <span class=""more icon"">Mailed Gift Cards</span>
+            </span>
+            <span class=""image""><img src=""{{media url=""wysiwyg/giftcards/giftcard-mailed.jpg""}}"" alt="""" /></span>
+        </a>
+        <a href=""{{product sku=""243-MB09""}}"" class=""block-promo giftcard-virtual"">
+            <img src=""{{media url=""wysiwyg/giftcards/giftcard-virtual.png""}}"" alt="""" />
+            <span class=""content"">
+                <strong class=""title"">Can't decide?</strong>
+                <span class=""info"">Just remember it's the card that counts</span>
+                <span class=""more icon"">Virtual Gift Cards</span>
+            </span>
+        </a>
+    </div>
+</div>"

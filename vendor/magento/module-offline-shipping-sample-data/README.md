@@ -1,0 +1,1 @@
+Magento_OfflineShippingSampleData module consists of installation scripts and fixtures.

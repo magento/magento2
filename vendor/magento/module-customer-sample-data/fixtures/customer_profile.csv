@@ -1,0 +1,2 @@
+firstname,lastname,email,password,dob,gender,street,city,region,country_id,postcode,telephone
+Veronica,Costello,"roni_cost@example.com","roni_cost@example.com","1973-12-15",2,"a:2:{i:0;s:24:""6146 Honey Bluff Parkway"";i:1;s:0:"""";}",Calder,Michigan,US,"49628-7978","(555) 229-3326"

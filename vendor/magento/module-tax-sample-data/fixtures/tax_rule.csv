@@ -1,0 +1,2 @@
+code,tax_rate,tax_customer_class,tax_product_class,priority,calculate_subtotal,position
+Rule1,US-MI-*-Rate 1,3,2,0,,0

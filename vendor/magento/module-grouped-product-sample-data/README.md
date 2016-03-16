@@ -1,0 +1,1 @@
+Magento_GroupedProductSampleData module consists of installation scripts and fixtures.

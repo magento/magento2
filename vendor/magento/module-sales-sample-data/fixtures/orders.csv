@@ -1,0 +1,3 @@
+customer_email,currency,shipping_method,payment,product,refund
+"roni_cost@example.com",USD,"flatrate_flatrate",checkmo,"a:3:{s:3:""sku"";s:4:""WS03"";s:3:""qty"";s:1:""1"";s:20:""configurable_options"";a:2:{s:4:""size"";s:2:""XS"";s:5:""color"";s:3:""Red"";}}",no
+"roni_cost@example.com",USD,"flatrate_flatrate",checkmo,"a:3:{s:3:""sku"";s:4:""WS08"";s:3:""qty"";s:1:""1"";s:20:""configurable_options"";a:2:{s:4:""size"";s:2:""XS"";s:5:""color"";s:4:""Blue"";}}",yes

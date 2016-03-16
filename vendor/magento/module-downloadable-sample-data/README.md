@@ -1,0 +1,1 @@
+Magento_DownloadableSampleData module consists of installation scripts and fixtures.

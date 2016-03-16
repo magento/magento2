@@ -6,6 +6,25 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    '3919eeb97e98d4648304477f8ef734ba' => $vendorDir . '/phpseclib/phpseclib/phpseclib/Crypt/Random.php',
-    '27a5783f6a5e8d8d1a4f54dff608a187' => $baseDir . '/app/etc/NonComposerComponentRegistration.php',
+    $vendorDir . '/magento/module-catalog-sample-data/registration.php',
+    $vendorDir . '/magento/module-catalog-rule-sample-data/registration.php',
+    $vendorDir . '/magento/module-theme-sample-data/registration.php',
+    $vendorDir . '/magento/module-sales-sample-data/registration.php',
+    $vendorDir . '/magento/module-product-links-sample-data/registration.php',
+    $vendorDir . '/phpseclib/phpseclib/phpseclib/Crypt/Random.php',
+    $vendorDir . '/magento/module-review-sample-data/registration.php',
+    $vendorDir . '/magento/module-sales-rule-sample-data/registration.php',
+    $vendorDir . '/magento/module-swatches-sample-data/registration.php',
+    $vendorDir . '/magento/module-tax-sample-data/registration.php',
+    $vendorDir . '/magento/module-widget-sample-data/registration.php',
+    $vendorDir . '/magento/module-wishlist-sample-data/registration.php',
+    $vendorDir . '/magento/module-bundle-sample-data/registration.php',
+    $vendorDir . '/magento/module-cms-sample-data/registration.php',
+    $vendorDir . '/magento/module-configurable-sample-data/registration.php',
+    $vendorDir . '/magento/module-customer-sample-data/registration.php',
+    $vendorDir . '/magento/module-downloadable-sample-data/registration.php',
+    $vendorDir . '/magento/module-grouped-product-sample-data/registration.php',
+    $vendorDir . '/magento/module-msrp-sample-data/registration.php',
+    $vendorDir . '/magento/module-offline-shipping-sample-data/registration.php',
+    $baseDir . '/app/etc/NonComposerComponentRegistration.php',
 );

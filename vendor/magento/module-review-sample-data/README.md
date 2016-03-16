@@ -1,0 +1,1 @@
+Magento_ReviewSampleData module consists of installation scripts and fixtures.

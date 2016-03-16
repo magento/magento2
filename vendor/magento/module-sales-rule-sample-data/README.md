@@ -1,0 +1,1 @@
+Magento_SalesRuleSampleData module consists of installation scripts and fixtures.

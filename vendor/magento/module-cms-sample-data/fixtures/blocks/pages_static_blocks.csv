@@ -1,0 +1,6 @@
+title,identifier,content
+Login Info Block,login-data,"<div class=""message info"" style=""margin-top: 50px;"">
+    <p><strong>Try Demo Customer Access</strong></p>
+    <p><span style=""display:inline-block; width: 80px; padding-right: 10px;"">Email:</span>roni_cost@example.com</p>
+    <p><span style=""display:inline-block; width: 80px; padding-right: 10px;"">Password:</span>roni_cost@example.com</p>
+</div>"

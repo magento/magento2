@@ -1,0 +1,14 @@
+{
+    "name": "magento/sample-data-media",
+    "description": "Sample Data media files",
+    "version": "100.0.3",
+    "type": "magento2-component",
+    "extra": {
+        "map": [
+            [
+                "*",
+                "pub/media"
+            ]
+        ]
+    }
+}

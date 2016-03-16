@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="Magento_WidgetSampleData" setup_version="2.0.0">
+        <sequence>
+            <module name="Magento_Widget"/>
+            <module name="Magento_SampleData"/>
+            <module name="Magento_CatalogSampleData"/>
+            <module name="Magento_ConfigurableSampleData"/>
+        </sequence>
+    </module>
+</config>

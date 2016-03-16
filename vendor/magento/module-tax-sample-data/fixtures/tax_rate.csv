@@ -1,0 +1,2 @@
+code,tax_country_id,tax_region_id,tax_postcode,rate
+US-MI-*-Rate 1,US,33,*,8.25
