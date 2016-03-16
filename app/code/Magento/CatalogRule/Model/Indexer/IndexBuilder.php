@@ -726,11 +726,8 @@ class IndexBuilder
      */
     protected function roundTime($timeStamp)
     {
-        $date = new \DateTime();
         if (is_numeric($timeStamp) && $timeStamp != 0) {
-            $timeStamp = $date->setTimestamp(
-                $timeStamp
-            )->setTime(0,0,0)->getTimestamp();
+            $timeStamp = $this->dateTime->timestamp($this->dateTime->date('Y-m-d 00:00:00'));
         }
 
         return $timeStamp;
