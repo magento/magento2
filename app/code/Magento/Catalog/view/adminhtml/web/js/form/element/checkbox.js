@@ -27,6 +27,7 @@ define([
             return this;
         },
 
+        /** @inheritdoc */
         initialize: function () {
             this._super();
 
