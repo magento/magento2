@@ -104,6 +104,7 @@
                             <item name="label" xsi:type="string" translate="true">Is Default</item>
                             <item name="prefer" xsi:type="string">radio</item>
                             <item name="sortOrder" xsi:type="string">0</item>
+                            <item name="columnsHeaderClasses" xsi:type="string">control-table-options-th</item>
                         </item>
                     </argument>
                 </field>
@@ -244,6 +245,7 @@
                             <item name="label" xsi:type="string" translate="true">Is Default</item>
                             <item name="prefer" xsi:type="string">radio</item>
                             <item name="sortOrder" xsi:type="string">0</item>
+                            <item name="columnsHeaderClasses" xsi:type="string">control-table-options-th</item>
                         </item>
                     </argument>
                 </field>
