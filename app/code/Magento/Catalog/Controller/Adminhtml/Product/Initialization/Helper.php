@@ -149,10 +149,8 @@ class Helper
             $product->lockAttribute('media');
         }
 
-        if ($this->storeManager->hasSingleStore()) {
-            if (empty($product->getWebsiteIds())) {
-                $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsite()->getId()]);
-            }
+        if ($this->storeManager->hasSingleStore() && empty($product->getWebsiteIds())) {
+            $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsite()->getId()]);
         }
 
         /**
