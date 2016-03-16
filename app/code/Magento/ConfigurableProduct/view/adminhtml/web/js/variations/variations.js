@@ -10,8 +10,9 @@ define([
     'ko',
     'underscore',
     'Magento_Ui/js/modal/alert',
-    'uiRegistry'
-], function (Component, $, ko, _, alert, registry) {
+    'uiRegistry',
+    'mage/translate'
+], function (Component, $, ko, _, alert, registry, $t) {
     'use strict';
 
     function UserException(message) {
@@ -29,6 +30,7 @@ define([
             attributesData: {},
             productMatrix: [],
             variations: [],
+            formSaveParams: [],
             productAttributes: [],
             disabledAttributes: [],
             fullAttributes: [],
@@ -39,13 +41,20 @@ define([
                 associatedProductGrid: '${ $.configurableProductGrid }',
                 wizardButtonElement: '${ $.wizardModalButtonName }',
                 formElement: '${ $.formName }',
-                attributeSetHandlerModal: '${ $.attributeSetHandler }'
+                attributeSetHandlerModal: '${ $.attributeSetHandler }',
+                messageBoxElement: 'ns = ${ $.ns }, index = affectedAttributeSetError'
+            },
+            imports: {
+                attributeSetName: '${ $.provider }:configurableNewAttributeSetName',
+                attributeSetId: '${ $.provider }:configurableExistingAttributeSetId',
+                attributeSetSelection: '${ $.provider }:configurableAffectedAttributeSet'
             },
             links: {
                 value: '${ $.provider }:${ $.dataScopeVariations }',
                 usedAttributes: '${ $.provider }:${ $.dataScopeAttributes }',
                 attributesData: '${ $.provider }:${ $.dataScopeAttributesData }',
-                attributeCodes: '${ $.provider }:${ $.dataScopeAttributeCodes }'
+                attributeCodes: '${ $.provider }:${ $.dataScopeAttributeCodes }',
+                skeletonAttributeSet: '${ $.provider }:data.new-variations-attribute-set-id'
             }
         },
         initialize: function () {
@@ -292,13 +301,13 @@ define([
 
         /**
          * Chose action for the form save button
-         * @param {Object} params
          */
-        saveFormHandler: function(params) {
+        saveFormHandler: function() {
             if (this.checkForNewAttributes()) {
+                this.formSaveParams = arguments;
                 this.attributeSetHandlerModal().openModal();
             } else {
-                this.formElement().save(params);
+                this.formElement().save(arguments[0], arguments[1]);
             }
         },
 
@@ -316,7 +325,97 @@ define([
                     newAttributes = true;
                 }
             }, this);
+
             return newAttributes;
+        },
+
+        /**
+         * New attributes handler
+         * @returns {Boolean}
+         */
+        addNewAttributeSetHandler: function() {
+            this.formElement().validate();
+
+            if (this.formElement().source.get('params.invalid') === false) {
+                var choosenAttributeSetOption = this.attributeSetSelection;
+
+                if (choosenAttributeSetOption === 'new') {
+                    this.createNewAttributeSet();
+                    return false;
+                }
+
+                if (choosenAttributeSetOption === 'existing') {
+                    this.set(
+                        'skeletonAttributeSet',
+                        this.attributeSetId
+                    );
+                }
+
+                this.closeDialogAndProcessForm();
+                return true;
+            }
+        },
+
+        /**
+         * Handles new attribute set creation
+         * @returns {Boolean}
+         */
+        createNewAttributeSet: function() {
+            var ns = this.formElement().ns,
+                messageBoxElement = registry.get('index = ' + ns  + '.affectedAttributeSetError');
+
+            messageBoxElement.visible(false);
+
+            $.ajax({
+                type: 'POST',
+                url: this.attributeSetCreationUrl,
+                data: {
+                    gotoEdit: 1,
+                    attribute_set_name: this.attributeSetName,
+                    skeleton_set: this.skeletonAttributeSet,
+                    return_session_messages_only: 1
+                },
+                dataType: 'json',
+                showLoader: true,
+                context: this
+            })
+
+                .success(function (data) {
+                    if (!data.error) {
+                        this.set(
+                            'skeletonAttributeSet',
+                            data.id
+                        );
+                        messageBoxElement.content(data.messages);
+                        messageBoxElement.visible(true);
+                        this.closeDialogAndProcessForm();
+                    } else {
+                        messageBoxElement.content(data.messages);
+                        messageBoxElement.visible(true);
+                    }
+
+                    return false;
+                })
+
+                .error(function (xhr) {
+                    if (xhr.statusText === 'abort') {
+                        return;
+                    }
+
+                    alert({
+                        content: $t('Something went wrong.')
+                    });
+                });
+
+            return false;
+        },
+
+        /**
+         * Closes attribute set handler modal and process product form
+         */
+        closeDialogAndProcessForm: function() {
+            this.attributeSetHandlerModal().closeModal();
+            this.formElement().save(this.formSaveParams[0], this.formSaveParams[1]);
         }
     });
 });
