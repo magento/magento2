@@ -142,9 +142,6 @@
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="source" xsi:type="string">page</item>
                     <item name="dataScope" xsi:type="string">identifier</item>
-                    <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">true</item>
-                    </item>
                 </item>
             </argument>
         </field>
