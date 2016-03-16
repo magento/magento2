@@ -539,7 +539,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
         $this->resourceModelMock->expects($this->once())->method('save')->with($this->productMock)
             ->willThrowException(new \Magento\Eav\Model\Entity\Attribute\Exception(__('123')));
-        $this->productMock->expects($this->never())->method('getId');
+        $this->productMock->expects($this->once())->method('getId')->willReturn(null);
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')
@@ -574,7 +574,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $this->productMock->expects($this->once())->method('getSku')->willReturn('product-42');
+        $this->productMock->expects($this->exactly(2))->method('getSku')->willReturn('product-42');
+        $this->productMock->expects($this->exactly(2))->method('getId')->willReturn(42);
         $this->resourceModelMock->expects($this->once())->method('delete')->with($this->productMock)
             ->willReturn(true);
         $this->assertTrue($this->model->delete($this->productMock));
@@ -586,7 +587,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteException()
     {
-        $this->productMock->expects($this->once())->method('getSku')->willReturn('product-42');
+        $this->productMock->expects($this->exactly(2))->method('getSku')->willReturn('product-42');
+        $this->productMock->expects($this->exactly(2))->method('getId')->willReturn(42);
         $this->resourceModelMock->expects($this->once())->method('delete')->with($this->productMock)
             ->willThrowException(new \Exception());
         $this->model->delete($this->productMock);
