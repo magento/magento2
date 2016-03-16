@@ -173,7 +173,9 @@ define([
         remove: function (sections) {
             _.each(sections, function (sectionName) {
                 storage.remove(sectionName);
-                storageInvalidation.set(sectionName, true);
+                if (!sectionConfig.isClientSideSection(sectionName)) {
+                    storageInvalidation.set(sectionName, true);
+                }
             });
         }
     };
@@ -311,7 +313,9 @@ define([
 
             // Invalidate section in cookie (increase version of section with 1000)
             _.each(sectionsNamesForInvalidation, function (sectionName) {
-                sectionDataIds[sectionName] += 1000;
+                if (!sectionConfig.isClientSideSection(sectionName)) {
+                    sectionDataIds[sectionName] += 1000;
+                }
             });
             $.cookieStorage.set('section_data_ids', sectionDataIds);
         },
