@@ -14,35 +14,39 @@ define([
      * Get page actions element.
      *
      * @param {String} elem
-     * @param {String} actionsSelector
+     * @param {String} actionsClass
      * @returns {String}
      */
-    function getPageActions(elem, actionsSelector) {
-        var $el = $('<div/>').html(elem),
-            $wrapper = $('<div/>').addClass('page-main-actions');
+    function getPageActions(elem, actionsClass) {
+        var el = document.createElement('div');
 
-        return $wrapper.html($el.find(actionsSelector)).get(0).outerHTML;
+        el.innerHTML = elem;
+
+        return el.getElementsByClassName(actionsClass)[0];
     }
 
     /**
      * Return element without page actions toolbar
      *
      * @param {String} elem
-     * @param {String} actionsSelector
+     * @param {String} actionsClass
      * @returns {String}
      */
-    function removePageActions(elem, actionsSelector) {
-        var $el = $('<div/>').html(elem);
+    function removePageActions(elem, actionsClass) {
+        var el = document.createElement('div'),
+            actions;
 
-        $el.find(actionsSelector).remove();
+        el.innerHTML = elem;
+        actions = el.getElementsByClassName(actionsClass)[0];
+        el.removeChild(actions);
 
-        return $el.html();
+        return el.innerHTML;
     }
 
     return Insert.extend({
         defaults: {
             externalFormName: '${ $.ns }.${ $.ns }',
-            pageActionsSelector: '.page-actions',
+            pageActionsClass: 'page-actions',
             exports: {
                 prefix: '${ $.externalFormName }:selectorPrefix'
             },
@@ -96,12 +100,12 @@ define([
 
         /** @inheritdoc */
         onRender: function (data) {
-            var actions = getPageActions(data, this.pageActionsSelector);
+            var actions = getPageActions(data, this.pageActionsClass);
 
             if (!data.length) {
                 return this;
             }
-            data = removePageActions(data, this.pageActionsSelector);
+            data = removePageActions(data, this.pageActionsClass);
             this.renderActions(actions);
             this._super(data);
         },
