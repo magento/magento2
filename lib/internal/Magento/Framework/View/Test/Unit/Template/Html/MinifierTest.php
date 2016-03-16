@@ -34,7 +34,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     /**
      * Initialize testable object
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->htmlDirectory = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
             ->getMock();
