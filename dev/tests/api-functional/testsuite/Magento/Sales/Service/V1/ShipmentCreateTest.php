@@ -79,11 +79,21 @@ class ShipmentCreateTest extends WebapiAbstract
             'increment_id' => null,
             'created_at' => null,
             'updated_at' => null,
-//            'packages' => null,
             'shipping_label' => null,
-            'tracks' => [],
+            'tracks' => [
+                [
+                    'carrier_code' => 'UPS',
+                    'order_id' => $order->getId(),
+                    'title' => 'ground',
+                    'track_number' => '12345678'
+                ]
+            ],
             'items' => $items,
-            'comments' => [],
+            'comments' => [
+                [
+                    'comment' => 'Shipment-related comment.'
+                ]
+            ],
         ];
         $result = $this->_webApiCall($serviceInfo, ['entity' => $data]);
         $this->assertNotEmpty($result);
