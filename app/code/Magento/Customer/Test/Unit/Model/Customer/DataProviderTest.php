@@ -121,6 +121,29 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                                     ],
                                 ],
                             ],
+                            'test-code-boolean' => [
+                                'arguments' => [
+                                    'data' => [
+                                        'config' => [
+                                            'dataType' => 'frontend_input',
+                                            'formElement' => 'frontend_input',
+                                            'visible' => 'is_visible',
+                                            'required' => 'is_required',
+                                            'label' => 'frontend_label',
+                                            'sortOrder' => 'sort_order',
+                                            'notice' => 'note',
+                                            'default' => 'default_value',
+                                            'size' => 'multiline_count',
+                                            'componentType' => Field::NAME,
+                                            'prefer' => 'toggle',
+                                            'valueMap' => [
+                                                'true' => 1,
+                                                'false' => 0,
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
                         ],
                     ],
                     'address' => [
@@ -140,6 +163,29 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                                             'default' => 'default_value',
                                             'size' => 'multiline_count',
                                             'componentType' => Field::NAME,
+                                        ],
+                                    ],
+                                ],
+                            ],
+                            'test-code-boolean' => [
+                                'arguments' => [
+                                    'data' => [
+                                        'config' => [
+                                            'dataType' => 'frontend_input',
+                                            'formElement' => 'frontend_input',
+                                            'visible' => 'is_visible',
+                                            'required' => 'is_required',
+                                            'label' => 'frontend_label',
+                                            'sortOrder' => 'sort_order',
+                                            'notice' => 'note',
+                                            'default' => 'default_value',
+                                            'size' => 'multiline_count',
+                                            'componentType' => Field::NAME,
+                                            'prefer' => 'toggle',
+                                            'valueMap' => [
+                                                'true' => 1,
+                                                'false' => 0,
+                                            ],
                                         ],
                                     ],
                                 ],
@@ -237,7 +283,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getAllOptions')
             ->willReturn(self::OPTIONS_RESULT);
 
-        $attributeMock->expects($this->once())
+        $attributeMock->expects($this->exactly(2))
             ->method('getAttributeCode')
             ->willReturn(self::ATTRIBUTE_CODE);
 
@@ -255,11 +301,35 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('getSource')
             ->willReturn($sourceMock);
 
+        $attributeBooleanMock = $this->getMockBuilder('Magento\Eav\Model\Entity\Attribute\AbstractAttribute')
+            ->setMethods(['getAttributeCode', 'getDataUsingMethod', 'usesSource', 'getFrontendInput'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $attributeBooleanMock->expects($this->exactly(2))
+            ->method('getAttributeCode')
+            ->willReturn('test-code-boolean');
+        $attributeBooleanMock->expects($this->once())
+            ->method('getFrontendInput')
+            ->willReturn('boolean');
+        $attributeBooleanMock->expects($this->any())
+            ->method('getDataUsingMethod')
+            ->willReturnCallback(
+                function ($origName) {
+                    return $origName;
+                }
+            );
+        $attributeBooleanMock->expects($this->once())
+            ->method('usesSource')
+            ->willReturn(false);
+
         $this->eavValidationRulesMock->expects($this->any())
             ->method('build')
-            ->with($attributeMock, $this->logicalNot($this->isEmpty()));
+            ->willReturnMap([
+                [$attributeMock, $this->logicalNot($this->isEmpty()), []],
+                [$attributeBooleanMock, $this->logicalNot($this->isEmpty()), []],
+            ]);
 
-        return [$attributeMock];
+        return [$attributeMock, $attributeBooleanMock];
     }
 
     public function testGetData()
