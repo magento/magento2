@@ -150,7 +150,9 @@ class Helper
         }
 
         if ($this->storeManager->hasSingleStore()) {
-            $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsite()->getId()]);
+            if (empty($product->getWebsiteIds())) {
+                $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsite()->getId()]);
+            }
         }
 
         /**
