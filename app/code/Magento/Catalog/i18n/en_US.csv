@@ -657,7 +657,7 @@ Overview,Overview
 "Product Details","Product Details"
 Configurations,Configurations
 "Show / Hide Editor","Show / Hide Editor"
-"Is this downloadable Product?","Is this downloadable Product?"
+"Is this a downloadable Product?","Is this a downloadable Product?"
 "Configurable products allow customers to choose options (Ex: shirt color).
 You need to create a simple product for each configuration (Ex: a product for each color).","Configurable products allow customers to choose options (Ex: shirt color).
 You need to create a simple product for each configuration (Ex: a product for each color)."
