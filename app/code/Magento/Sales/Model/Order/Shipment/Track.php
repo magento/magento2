@@ -214,6 +214,7 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Returns track_number
      *
@@ -414,5 +415,6 @@ class Track extends AbstractModel implements ShipmentTrackInterface
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
+
     //@codeCoverageIgnoreEnd
 }
