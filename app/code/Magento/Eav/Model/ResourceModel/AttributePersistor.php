@@ -124,7 +124,7 @@ class AttributePersistor
                 ];
                 foreach ($context as $scope) {
                     $conditions[$metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' = ?']
-                        = $this->prepareScopeValue($scope, $attribute);
+                        = $this->getScopeValue($scope, $attribute);
                 }
                 $metadata->getEntityConnection()->delete(
                     $attribute->getBackend()->getTable(),
@@ -160,7 +160,7 @@ class AttributePersistor
                     'value' => $this->prepareValue($entityType, $attributeValue, $attribute)
                 ];
                 foreach ($context as $scope) {
-                    $data[$scope->getIdentifier()] = $this->prepareScopeValue($scope, $attribute);
+                    $data[$scope->getIdentifier()] = $this->getScopeValue($scope, $attribute);
                 }
                 $metadata->getEntityConnection()->insertOnDuplicate($attribute->getBackend()->getTable(), $data);
             }
@@ -193,7 +193,7 @@ class AttributePersistor
                 ];
                 foreach ($context as $scope) {
                     $conditions[$metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' = ?']
-                        = $this->prepareScopeValue($scope, $attribute);
+                        = $this->getScopeValue($scope, $attribute);
                 }
                 $metadata->getEntityConnection()->update(
                     $attribute->getBackend()->getTable(),
@@ -247,10 +247,10 @@ class AttributePersistor
      * @return string
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function prepareScopeValue(ScopeInterface $scope, AbstractAttribute $attribute, $useDefault = false)
+    protected function getScopeValue(ScopeInterface $scope, AbstractAttribute $attribute, $useDefault = false)
     {
         if ($useDefault && $scope->getFallback()) {
-            return $this->prepareScopeValue($scope->getFallback(), $attribute, $useDefault);
+            return $this->getScopeValue($scope->getFallback(), $attribute, $useDefault);
         }
         return $scope->getValue();
     }
