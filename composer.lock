@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "067dfbcb48b39a11ffb0b0e7d74a7067",
-    "content-hash": "657519643a545c89f0477c4662d521b6",
+    "hash": "6b993cb12b4265dfe234b151486f0005",
+    "content-hash": "d6df2500187fbdd36173a60146769190",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -394,6 +394,55 @@
                 "schema"
             ],
             "time": "2016-01-25 15:43:01"
+        },
+        {
+            "name": "league/climate",
+            "version": "2.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/climate.git",
+                "reference": "28851c909017424f61cc6a62089316313c645d1c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/climate/zipball/28851c909017424f61cc6a62089316313c645d1c",
+                "reference": "28851c909017424f61cc6a62089316313c645d1c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "dev-master",
+                "phpunit/phpunit": "4.1.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "League\\CLImate\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Joe Tannenbaum",
+                    "email": "hey@joe.codes",
+                    "homepage": "http://joe.codes/",
+                    "role": "Developer"
+                }
+            ],
+            "description": "PHP's best friend for the terminal. CLImate allows you to easily output colored text, special formats, and more.",
+            "keywords": [
+                "cli",
+                "colors",
+                "command",
+                "php",
+                "terminal"
+            ],
+            "time": "2015-01-18 14:31:58"
         },
         {
             "name": "magento/composer",
@@ -1018,6 +1067,59 @@
                 "phra"
             ],
             "time": "2015-10-13 18:44:15"
+        },
+        {
+            "name": "sjparkinson/static-review",
+            "version": "4.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sjparkinson/static-review.git",
+                "reference": "493c3410cf146a12fca84209bad126c494e125f0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sjparkinson/static-review/zipball/493c3410cf146a12fca84209bad126c494e125f0",
+                "reference": "493c3410cf146a12fca84209bad126c494e125f0",
+                "shasum": ""
+            },
+            "require": {
+                "league/climate": "~2.0",
+                "php": ">=5.4.0",
+                "symfony/console": "~2.0",
+                "symfony/process": "~2.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "phpunit/phpunit": "~4.0",
+                "sensiolabs/security-checker": "~2.0",
+                "squizlabs/php_codesniffer": "~1.0"
+            },
+            "suggest": {
+                "sensiolabs/security-checker": "Required for ComposerSecurityReview.",
+                "squizlabs/php_codesniffer": "Required for PhpCodeSnifferReview."
+            },
+            "bin": [
+                "bin/static-review.php"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "StaticReview\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Samuel Parkinson",
+                    "email": "sam.james.parkinson@gmail.com",
+                    "homepage": "http://samp.im"
+                }
+            ],
+            "description": "An extendable framework for version control hooks.",
+            "time": "2014-09-22 08:40:36"
         },
         {
             "name": "symfony/console",
@@ -2984,55 +3086,6 @@
             "time": "2016-02-26 07:37:29"
         },
         {
-            "name": "league/climate",
-            "version": "2.6.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thephpleague/climate.git",
-                "reference": "28851c909017424f61cc6a62089316313c645d1c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/climate/zipball/28851c909017424f61cc6a62089316313c645d1c",
-                "reference": "28851c909017424f61cc6a62089316313c645d1c",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "dev-master",
-                "phpunit/phpunit": "4.1.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "League\\CLImate\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Joe Tannenbaum",
-                    "email": "hey@joe.codes",
-                    "homepage": "http://joe.codes/",
-                    "role": "Developer"
-                }
-            ],
-            "description": "PHP's best friend for the terminal. CLImate allows you to easily output colored text, special formats, and more.",
-            "keywords": [
-                "cli",
-                "colors",
-                "command",
-                "php",
-                "terminal"
-            ],
-            "time": "2015-01-18 14:31:58"
-        },
-        {
             "name": "lusitanian/oauth",
             "version": "v0.7.0",
             "source": {
@@ -3141,16 +3194,16 @@
         },
         {
             "name": "phpmd/phpmd",
-            "version": "2.4.1",
+            "version": "2.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpmd/phpmd.git",
-                "reference": "1ce4c586f4071d27a82421e56ae0e9864c89094d"
+                "reference": "fccbdb6b222f6d7a6d35af1c396ba5435cec76a9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/1ce4c586f4071d27a82421e56ae0e9864c89094d",
-                "reference": "1ce4c586f4071d27a82421e56ae0e9864c89094d",
+                "url": "https://api.github.com/repos/phpmd/phpmd/zipball/fccbdb6b222f6d7a6d35af1c396ba5435cec76a9",
+                "reference": "fccbdb6b222f6d7a6d35af1c396ba5435cec76a9",
                 "shasum": ""
             },
             "require": {
@@ -3202,7 +3255,7 @@
                 "phpmd",
                 "pmd"
             ],
-            "time": "2016-03-08 21:43:36"
+            "time": "2016-03-10 17:17:44"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -3805,6 +3858,96 @@
             "time": "2015-06-21 07:55:53"
         },
         {
+            "name": "sebastian/finder-facade",
+            "version": "1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/finder-facade.git",
+                "reference": "2a6f7f57efc0aa2d23297d9fd9e2a03111a8c0b9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/finder-facade/zipball/2a6f7f57efc0aa2d23297d9fd9e2a03111a8c0b9",
+                "reference": "2a6f7f57efc0aa2d23297d9fd9e2a03111a8c0b9",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/finder": "~2.3|~3.0",
+                "theseer/fdomdocument": "~1.3"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian Bergmann",
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
+                }
+            ],
+            "description": "FinderFacade is a convenience wrapper for Symfony's Finder component.",
+            "homepage": "https://github.com/sebastianbergmann/finder-facade",
+            "time": "2016-02-17 07:02:23"
+        },
+        {
+            "name": "sebastian/phpcpd",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sebastianbergmann/phpcpd.git",
+                "reference": "346c909de7adc3979988a6505a80814c8562d6b3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpcpd/zipball/346c909de7adc3979988a6505a80814c8562d6b3",
+                "reference": "346c909de7adc3979988a6505a80814c8562d6b3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3",
+                "phpunit/php-timer": ">=1.0.4",
+                "sebastian/finder-facade": ">=1.1.0",
+                "sebastian/version": ">=1.0.0",
+                "symfony/console": ">=2.2.0",
+                "theseer/fdomdocument": "~1.4"
+            },
+            "bin": [
+                "composer/bin/phpcpd"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Sebastian Bergmann",
+                    "email": "sebastian@phpunit.de",
+                    "role": "lead"
+                }
+            ],
+            "description": "Copy/Paste Detector (CPD) for PHP code.",
+            "homepage": "https://github.com/sebastianbergmann/phpcpd",
+            "time": "2013-11-08 09:05:42"
+        },
+        {
             "name": "sebastian/recursion-context",
             "version": "1.0.2",
             "source": {
@@ -3891,59 +4034,6 @@
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
             "time": "2015-06-21 13:59:46"
-        },
-        {
-            "name": "sjparkinson/static-review",
-            "version": "4.1.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sjparkinson/static-review.git",
-                "reference": "493c3410cf146a12fca84209bad126c494e125f0"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sjparkinson/static-review/zipball/493c3410cf146a12fca84209bad126c494e125f0",
-                "reference": "493c3410cf146a12fca84209bad126c494e125f0",
-                "shasum": ""
-            },
-            "require": {
-                "league/climate": "~2.0",
-                "php": ">=5.4.0",
-                "symfony/console": "~2.0",
-                "symfony/process": "~2.0"
-            },
-            "require-dev": {
-                "mockery/mockery": "~0.9",
-                "phpunit/phpunit": "~4.0",
-                "sensiolabs/security-checker": "~2.0",
-                "squizlabs/php_codesniffer": "~1.0"
-            },
-            "suggest": {
-                "sensiolabs/security-checker": "Required for ComposerSecurityReview.",
-                "squizlabs/php_codesniffer": "Required for PhpCodeSnifferReview."
-            },
-            "bin": [
-                "bin/static-review.php"
-            ],
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "StaticReview\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Samuel Parkinson",
-                    "email": "sam.james.parkinson@gmail.com",
-                    "homepage": "http://samp.im"
-                }
-            ],
-            "description": "An extendable framework for version control hooks.",
-            "time": "2014-09-22 08:40:36"
         },
         {
             "name": "squizlabs/php_codesniffer",
@@ -4232,6 +4322,46 @@
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
             "time": "2016-02-23 07:41:20"
+        },
+        {
+            "name": "theseer/fdomdocument",
+            "version": "1.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/theseer/fDOMDocument.git",
+                "reference": "d9ad139d6c2e8edf5e313ffbe37ff13344cf0684"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/theseer/fDOMDocument/zipball/d9ad139d6c2e8edf5e313ffbe37ff13344cf0684",
+                "reference": "d9ad139d6c2e8edf5e313ffbe37ff13344cf0684",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "lib-libxml": "*",
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Arne Blankerts",
+                    "email": "arne@blankerts.de",
+                    "role": "lead"
+                }
+            ],
+            "description": "The classes contained within this repository extend the standard DOM to use exceptions at all occasions of errors instead of PHP warnings or notices. They also add various custom methods and shortcuts for convenience and to simplify the usage of DOM.",
+            "homepage": "https://github.com/theseer/fDOMDocument",
+            "time": "2015-05-27 22:58:02"
         }
     ],
     "aliases": [],
