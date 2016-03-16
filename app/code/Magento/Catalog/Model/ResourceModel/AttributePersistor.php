@@ -18,11 +18,11 @@ class AttributePersistor extends \Magento\Eav\Model\ResourceModel\AttributePersi
      * @param bool $useDefault
      * @return string
      */
-    protected function prepareScopeValue(ScopeInterface $scope, AbstractAttribute $attribute, $useDefault = false)
+    protected function getScopeValue(ScopeInterface $scope, AbstractAttribute $attribute, $useDefault = false)
     {
         if ($attribute instanceof CatalogEavAttribute) {
             $useDefault = $useDefault || $attribute->isScopeGlobal();
         }
-        return parent::prepareScopeValue($scope, $attribute, $useDefault);
+        return parent::getScopeValue($scope, $attribute, $useDefault);
     }
 }
