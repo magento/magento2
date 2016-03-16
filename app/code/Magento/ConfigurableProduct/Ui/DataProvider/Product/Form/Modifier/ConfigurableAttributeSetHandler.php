@@ -168,7 +168,6 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                 'formElement' => 'container',
                                 'componentType' => 'container',
                                 'component' => 'Magento_Ui/js/form/components/button',
-                                'displayAsLink' => true,
                                 'actions' => [
                                     [
                                         'targetName' => 'configurableVariations',
