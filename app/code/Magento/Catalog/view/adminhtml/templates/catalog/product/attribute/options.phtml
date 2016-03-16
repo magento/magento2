@@ -77,14 +77,15 @@
     <?php
     $values = [];
     foreach($block->getOptionValues() as $value) {
-        array_push($values, $value->getData());
+        $value = $value->getData();
+        $values[] = is_array($value) ? array_map("htmlspecialchars_decode", $value) : $value;
     }
     ?>
     <script type="text/x-magento-init">
         {
             "*": {
                 "Magento_Catalog/js/options": {
-                    "attributesData": <?php /* @escapeNotVerified */ echo json_encode($values); ?>,
+                    "attributesData": <?php /* @escapeNotVerified */ echo json_encode($values, JSON_HEX_QUOT); ?>,
                     "isSortable":  <?php echo (int)(!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) ?>,
                     "isReadOnly": <?php echo (int)$block->getReadOnly(); ?>
                 }
