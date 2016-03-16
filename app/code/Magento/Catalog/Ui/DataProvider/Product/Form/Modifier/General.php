@@ -347,6 +347,8 @@ class General extends AbstractModifier
                             'imports' => [
                                 'handleChanges' => '${$.provider}:data.product.name',
                             ],
+                            'autoImportIfEmpty' => true,
+                            'allowImport' => $this->locator->getProduct()->getId() ? false : true,
                         ],
                     ],
                 ],
@@ -354,22 +356,6 @@ class General extends AbstractModifier
 
             $meta = $this->arrayManager->merge($listenerPath, $meta, $importsConfig);
         }
-
-        $skuPath = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_SKU);
-        $meta = $this->arrayManager->merge(
-            $skuPath,
-            $meta,
-            [
-                'arguments' => [
-                    'data' => [
-                        'config' => [
-                            'autoImportIfEmpty' => true,
-                            'allowImport' => $this->locator->getProduct()->getId() ? false : true,
-                        ],
-                    ],
-                ],
-            ]
-        );
 
         $namePath = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_NAME);
 
