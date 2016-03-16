@@ -39,7 +39,9 @@ class AssertProductAttributeIsRequired extends AbstractConstraint
     ) {
         $catalogProductIndex->open()->getProductGrid()->searchAndOpen(['sku' => $product->getSku()]);
         $productForm = $catalogProductEdit->getProductForm();
-        $productForm->openSection('attributes');
+        if (!$productForm->checkAttributeLabel($attribute)) {
+            $productForm->openSection('attributes');
+        }
         $productForm->getAttributeElement($attribute)->setValue('');
         $catalogProductEdit->getFormPageActions()->save();
         $failedAttributes = $productForm->getRequireNoticeAttributes();
