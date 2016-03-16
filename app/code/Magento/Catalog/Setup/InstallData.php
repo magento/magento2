@@ -34,7 +34,7 @@ class InstallData implements InstallDataInterface
      *
      * @var int
      */
-    CONST DEFAULT_CATEGORY_ID = 2;
+    const DEFAULT_CATEGORY_ID = 2;
 
     /**
      * Init
