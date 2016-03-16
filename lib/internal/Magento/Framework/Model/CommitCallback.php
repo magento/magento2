@@ -41,6 +41,7 @@ class CommitCallback
     /**
      * @param $entityType
      * @throws \Exception
+     * @return void
      */
     public function process($entityType)
     {
@@ -65,6 +66,7 @@ class CommitCallback
      * @param string $entityType
      * @param array $callback
      * @throws \Exception
+     * @return void
      */
     public function attach($entityType, $callback)
     {
@@ -75,6 +77,7 @@ class CommitCallback
     /**
      * @param $entityType
      * @throws \Exception
+     * @return void
      */
     public function clear($entityType)
     {

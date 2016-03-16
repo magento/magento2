@@ -24,6 +24,11 @@ class ScopeResolver
      */
     private $metadataPool;
 
+    /**
+     * ScopeResolver constructor.
+     * @param ObjectManagerInterface $objectManager
+     * @param MetadataPool $metadataPool
+     */
     public function __construct(
         ObjectManagerInterface $objectManager,
         MetadataPool $metadataPool

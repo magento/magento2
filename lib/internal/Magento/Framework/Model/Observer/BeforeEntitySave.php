@@ -22,6 +22,7 @@ class BeforeEntitySave implements ObserverInterface
      *
      * @param Observer $observer
      * @throws \Magento\Framework\Validator\Exception
+     * @return void
      */
     public function execute(Observer $observer)
     {
