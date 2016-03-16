@@ -8,5 +8,8 @@
 
 /** @var \Magento\SalesRule\Model\Rule $salesRule */
 $salesRule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\SalesRule\Model\Rule');
-$salesRule->load('Test Coupon for General', 'name');
+/** @var int $salesRuleId */
+$salesRuleId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry')
+    ->registry('Magento/Checkout/_file/discount_10percent_generalusers');
+$salesRule->load($salesRuleId);
 $salesRule->delete();
