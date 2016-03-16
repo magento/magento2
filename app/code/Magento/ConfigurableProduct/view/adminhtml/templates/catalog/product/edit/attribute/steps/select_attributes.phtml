@@ -10,7 +10,7 @@
 ?>
 <div class="select-attributes-block">
     <div class="select-attributes-actions" data-type="skipKO">
-        <?= /* @escapeNotVerified */  $block->getAddNewAttributeButton(); ?>
+        <?= /* @escapeNotVerified */  $block->getAddNewAttributeButton('product_form.product_form_data_source'); ?>
     </div>
     <h2 class="steps-wizard-title"><?= /* @escapeNotVerified */  __('Step 1: Select Attributes') ?></h2>
     <div class="selected-attributes" data-bind="scope: '<?= /* @escapeNotVerified */  $block->getComponentName()?>'">
