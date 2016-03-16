@@ -27,6 +27,17 @@ define([
             return this;
         },
 
+        /** @inheritdoc */
+        initialize: function () {
+            this._super();
+
+            if (this.rows && this.rows().elems().length === 1) {
+                this.checked(true);
+            }
+
+            return this;
+        },
+
         /**
          * Configure data scope.
          */
