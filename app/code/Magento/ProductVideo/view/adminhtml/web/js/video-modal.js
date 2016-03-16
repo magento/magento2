@@ -21,12 +21,18 @@ define([
          * @private
          */
         _bind: function () {
-            var events = {};
+            var events = {},
+                itemId;
 
             this._super();
+
+            /**
+             * Add item_id value to opened modal
+             * @param {Object} event
+             */
             events['click ' + this.options.imageSelector] = function (event) {
                 if (!$(event.currentTarget).is('.ui-sortable-helper')) {
-                    var itemId = $(event.currentTarget).find('input')[0].name.match(/\[([^\]]*)\]/g)[2];
+                    itemId = $(event.currentTarget).find('input')[0].name.match(/\[([^\]]*)\]/g)[2];
                     this.videoDialog.find('#item_id').val(itemId);
                 }
             };
