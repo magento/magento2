@@ -122,9 +122,6 @@ class AdvancedPricing extends AbstractModifier
     {
         $this->meta = $meta;
 
-        $this->preparePriceFields(ProductAttributeInterface::CODE_PRICE);
-        $this->preparePriceFields(ProductAttributeInterface::CODE_SPECIAL_PRICE);
-        $this->preparePriceFields(ProductAttributeInterface::CODE_COST);
         $this->specialPriceDataToInline();
         $this->customizeTierPrice();
 
@@ -182,7 +179,7 @@ class AdvancedPricing extends AbstractModifier
         $tierPricePath = $this->getElementArrayPath($this->meta, ProductAttributeInterface::CODE_TIER_PRICE);
 
         if ($tierPricePath) {
-            $this->meta = $this->arrayManager->set(
+            $this->meta = $this->arrayManager->merge(
                 $tierPricePath,
                 $this->meta,
                 $this->getTierPriceStructure($tierPricePath)
