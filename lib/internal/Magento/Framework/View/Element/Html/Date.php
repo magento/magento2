@@ -14,6 +14,7 @@ class Date extends \Magento\Framework\View\Element\Template
      * Render block HTML
      *
      * @return string
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _toHtml()
     {
