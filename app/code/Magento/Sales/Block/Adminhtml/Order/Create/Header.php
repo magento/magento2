@@ -81,13 +81,13 @@ class Header extends AbstractCreate
             );
             return $out;
         } elseif (!$customerId && $storeId) {
-            $out .= __('Create New Order for New Customer in %1', $this->getStore()->getName());
+            $out .= __('Create New Order in %1', $this->getStore()->getName());
             return $out;
         } elseif ($customerId && !$storeId) {
             $out .= __('Create New Order for %1', $this->_getCustomerName($customerId));
             return $out;
         } elseif (!$customerId && !$storeId) {
-            $out .= __('Create New Order for New Customer');
+            $out .= __('Create New Order');
             return $out;
         }
 
