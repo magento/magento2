@@ -19,7 +19,6 @@ class Cancel extends Generic
     {
         return [
             'label' => __('Cancel'),
-            'class' => 'action-secondary',
             'data_attribute' => [
                 'mage-init' => [
                     'Magento_Ui/js/form/button-adapter' => [

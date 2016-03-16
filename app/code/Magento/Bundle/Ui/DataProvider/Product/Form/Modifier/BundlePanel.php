@@ -97,7 +97,6 @@ class BundlePanel extends AbstractModifier
                                         'buttons' => [
                                             [
                                                 'text' => __('Cancel'),
-                                                'class' => 'action-secondary',
                                                 'actions' => ['closeModal'],
                                             ],
                                             [
