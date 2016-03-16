@@ -120,7 +120,6 @@ class Attributes extends AbstractModifier
                 'buttons' => [
                     [
                         'text' => 'Cancel',
-                        'class' => 'action-secondary',
                         'actions' => [
                             [
                                 'targetName' => '${ $.name }',
