@@ -75,7 +75,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
     /**
      * Prepare parameters
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->_objectManager = $this->getMockBuilder(
             'Magento\Framework\App\ObjectManager'

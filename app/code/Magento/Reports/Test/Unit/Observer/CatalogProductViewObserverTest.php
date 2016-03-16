@@ -60,7 +60,7 @@ class CatalogProductViewObserverTest extends \PHPUnit_Framework_TestCase
     /**
      * {@inheritDoc}
      */
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -180,7 +180,6 @@ class CatalogProductViewObserverTest extends \PHPUnit_Framework_TestCase
             'visitor_id' => $visitorId,
             'store_id' => $storeId,
         ];
-
 
         $expectedEventData = [
             'event_type_id' => \Magento\Reports\Model\Event::EVENT_PRODUCT_VIEW,

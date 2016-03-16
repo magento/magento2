@@ -60,7 +60,7 @@ class ActionPoolTest extends \PHPUnit_Framework_TestCase
      */
     protected $key = 'id';
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMock(
             'Magento\Framework\View\Element\UiComponent\Context',
