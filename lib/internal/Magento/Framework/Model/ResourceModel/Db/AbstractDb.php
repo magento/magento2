@@ -845,6 +845,7 @@ abstract class AbstractDb extends AbstractResource
      * Perform actions after entity load
      *
      * @param \Magento\Framework\DataObject $object
+     * @return void
      */
     public function afterLoad(\Magento\Framework\DataObject $object)
     {
@@ -855,6 +856,7 @@ abstract class AbstractDb extends AbstractResource
      * Perform actions before entity save
      *
      * @param \Magento\Framework\DataObject $object
+     * @return void
      */
     public function beforeSave(\Magento\Framework\DataObject $object)
     {
@@ -865,6 +867,7 @@ abstract class AbstractDb extends AbstractResource
      * Perform actions after entity save
      *
      * @param \Magento\Framework\DataObject $object
+     * @return void
      */
     public function afterSave(\Magento\Framework\DataObject $object)
     {
@@ -875,6 +878,7 @@ abstract class AbstractDb extends AbstractResource
      * Perform actions before entity delete
      *
      * @param \Magento\Framework\DataObject $object
+     * @return void
      */
     public function beforeDelete(\Magento\Framework\DataObject $object)
     {
@@ -885,6 +889,7 @@ abstract class AbstractDb extends AbstractResource
      * Perform actions after entity delete
      *
      * @param \Magento\Framework\DataObject $object
+     * @return void
      */
     public function afterDelete(\Magento\Framework\DataObject $object)
     {

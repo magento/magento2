@@ -48,12 +48,12 @@ class UpdateHandler
 
     /**
      * UpdateHandler constructor.
-     *
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param AttributePersistor $attributePersistor
      * @param ReadSnapshot $readSnapshot
+     * @param ScopeResolver $scopeResolver
      */
     public function __construct(
         AttributeRepository $attributeRepository,
