@@ -49,7 +49,7 @@ define([
                         curOption = utils.copy(option);
 
                     if (curOption.hasOwnProperty('sort_order')) {
-                        delete curOption.sort_order;
+                        delete curOption['sort_order'];
                     }
 
                     this.source.set(path, curOption);
