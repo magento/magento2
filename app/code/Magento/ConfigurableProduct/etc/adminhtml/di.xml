@@ -53,6 +53,7 @@
                 <item name="configurableQty" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurableQty</item>
                 <item name="configurableAttributeSetHandler" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\ConfigurableAttributeSetHandler</item>
                 <item name="StockData" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\StockData</item>
+                <item name="customOptions" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\CustomOptions</item>
             </argument>
         </arguments>
     </type>
