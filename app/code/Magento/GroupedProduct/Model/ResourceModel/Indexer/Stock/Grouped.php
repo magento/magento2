@@ -76,19 +76,7 @@ class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stoc
         );
         $productStatusCond = $connection->quoteInto($productStatusExpr . '=?', ProductStatus::STATUS_ENABLED);
 
-        if ($this->_isManageStock()) {
-            $statusExpression = $connection->getCheckSql(
-                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
-                1,
-                'cisi.is_in_stock'
-            );
-        } else {
-            $statusExpression = $connection->getCheckSql(
-                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
-                'cisi.is_in_stock',
-                1
-            );
-        }
+        $statusExpression = $this->getStatusExpression($connection);
 
         $optExpr = $connection->getCheckSql("{$productStatusCond} AND le.required_options = 0", 'i.stock_status', 0);
         $stockStatusExpr = $connection->getLeastSql(["MAX({$optExpr})", "MIN({$statusExpression})"]);
