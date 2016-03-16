@@ -2307,12 +2307,13 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     {
         $useConfigFields = array();
         foreach ($rowData as $key => $value) {
+            $useConfigName = self::INVENTORY_USE_CONFIG_PREFIX . $key;
             if (isset($this->defaultStockData[$key])
-                && isset($this->defaultStockData[self::INVENTORY_USE_CONFIG_PREFIX . $key])
+                && isset($this->defaultStockData[$useConfigName])
                 && !empty($value)
-                && empty($rowData[self::INVENTORY_USE_CONFIG_PREFIX . $key])) {
-                $useConfigFields[self::INVENTORY_USE_CONFIG_PREFIX . $key] = ($value == self::INVENTORY_USE_CONFIG)
-                    ? 1 : 0;
+                && empty($rowData[$useConfigName])
+            ) {
+                $useConfigFields[$useConfigName] = ($value == self::INVENTORY_USE_CONFIG) ? 1 : 0;
             }
         }
         $rowData = array_merge($rowData, $useConfigFields);
