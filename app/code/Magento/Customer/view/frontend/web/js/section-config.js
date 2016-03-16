@@ -34,10 +34,14 @@ define(['underscore'], function (_) {
         },
 
         filterClientSideSections: function (sections) {
-            if (_.isArray(sections)) {
+            if (Array.isArray(sections)) {
                 return _.difference(sections, clientSideSections);
             }
             return sections;
+        },
+
+        isClientSideSection: function (sectionName) {
+            return _.contains(clientSideSections, sectionName);
         },
 
         'Magento_Customer/js/section-config': function(options) {
