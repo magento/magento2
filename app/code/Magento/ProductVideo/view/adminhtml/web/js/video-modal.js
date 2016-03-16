@@ -36,6 +36,7 @@ define([
                     this.videoDialog.find('#item_id').val(itemId);
                 }
             };
+            this._on(events);
             this.element.prev().find('[data-role="add-video-button"]').on('click', this.showModal.bind(this));
             this.element.on('openDialog', '.gallery.ui-sortable', $.proxy(this._onOpenDialog, this));
         },
