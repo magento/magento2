@@ -127,7 +127,7 @@ define([
                 this.allowImport = true;
 
                 if (this.autoImportIfEmpty) {
-                    this.value(this.updateValue());
+                    this.updateValue();
                 }
             } else {
                 this.allowImport = false;
