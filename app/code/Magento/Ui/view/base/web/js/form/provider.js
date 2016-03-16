@@ -83,13 +83,17 @@ define([
          * @param {String} parentPath
          */
         setData: function (oldData, newData, current, parentPath) {
+
+            /* eslint-disable eqeqeq */
             _.each(newData, function (val, key) {
                 if (_.isObject(val) || _.isArray(val)) {
                     this.setData(oldData[key], val, current[key], utils.fullPath(parentPath, key));
-                } else if (val !== oldData[key] && oldData[key] === current[key]) {
+                } else if (val !== oldData[key] && oldData[key] == current[key]) {
                     this.set(utils.fullPath(parentPath, key), val);
                 }
             }, this);
+
+            /* eslint-enable eqeqeq */
         }
     });
 });
