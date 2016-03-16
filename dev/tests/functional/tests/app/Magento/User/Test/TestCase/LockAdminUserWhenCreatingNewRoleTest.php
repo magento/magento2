@@ -103,7 +103,7 @@ class LockAdminUserWhenCreatingNewRoleTest extends Injectable
         )->run();
         $customAdmin->persist();
 
-        //Steps
+        // Steps
         $this->adminAuthLogin->open();
         $this->adminAuthLogin->getLoginBlock()->fill($customAdmin);
         $this->adminAuthLogin->getLoginBlock()->submit();
@@ -114,6 +114,11 @@ class LockAdminUserWhenCreatingNewRoleTest extends Injectable
             $this->userRoleEditRole->getRoleFormTabs()->fill($role);
             $this->userRoleEditRole->getPageActions()->save();
         }
+
+        // Reload
+        $this->adminAuthLogin->open();
+        $this->adminAuthLogin->getLoginBlock()->fill($customAdmin);
+        $this->adminAuthLogin->getLoginBlock()->submit();
     }
 
     /**
