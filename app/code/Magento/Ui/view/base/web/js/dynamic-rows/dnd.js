@@ -112,11 +112,17 @@ define([
             }
         },
 
+        /**
+         * Init listens to start drag
+         *
+         * @param {Object} elem - DOM element
+         * @param {Object} data - element data
+         */
         initListeners: function (elem, data) {
             if (isTouchDevice) {
                 $(elem).on('touchstart', this.mousedownHandler.bind(this, data, elem));
             } else {
-                $(elem).on('mousedown', this.mousedownHandler.bind(this, data, elem))
+                $(elem).on('mousedown', this.mousedownHandler.bind(this, data, elem));
             }
         },
 
@@ -246,8 +252,8 @@ define([
 
         getDepElement: function (curInstance, position) {
             var tableSelector = this.tableClass + ' tr',
-                recordsCollection = this.table.find('tbody > tr').filter(function(index, elem){
-                    return !$(elem).parents(tableSelector).length
+                recordsCollection = this.table.find('tbody > tr').filter(function (index, elem) {
+                    return !$(elem).parents(tableSelector).length;
                 }),
                 curInstancePositionTop = $(curInstance).position().top,
                 curInstancePositionBottom = curInstancePositionTop + $(curInstance).height();
