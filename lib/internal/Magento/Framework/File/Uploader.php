@@ -220,7 +220,16 @@ class Uploader
 
         $destinationFile = self::_addDirSeparator($destinationFile) . $fileName;
 
-        $this->_result = $this->_moveFile($this->_file['tmp_name'], $destinationFile);
+        try {
+            $this->_result = $this->_moveFile($this->_file['tmp_name'], $destinationFile);
+        } catch (\Exception $e) {
+            // if the file exists and we had an exception continue anyway
+            if (file_exists($destinationFile)) {
+                $this->_result = true;
+            } else {
+                throw $e;
+            }
+        }
 
         if ($this->_result) {
             $this->chmod($destinationFile);
