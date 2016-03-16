@@ -126,7 +126,8 @@ define([
             self.previousParams = params || {};
 
             $.async({
-                component: this.name
+                component: this.name,
+                ctx: '.' + this.contentSelector
             }, function (el) {
                 self.contentEl = $(el);
                 self.startRender = true;
@@ -235,8 +236,6 @@ define([
         onRender: function (data) {
             this.loading(false);
             this.set('content', data);
-            this.contentEl.children().applyBindings();
-            this.contentEl.trigger('contentUpdated');
             this.isRendered = true;
             this.startRender = false;
         },
