@@ -100,10 +100,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         /** @var \Magento\Sales\Api\Data\OrderSearchResultInterface $searchResult */
         $searchResult = $this->searchResultFactory->create();
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
-            foreach ($filterGroup->getFilters() as $filter) {
-                $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
-                $searchResult->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
-            }
+            $this->addFilterGroupToCollection($filterGroup, $searchResult);
         }
 
         $sortOrders = $searchCriteria->getSortOrders();
@@ -215,5 +212,29 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
             );
         }
         return $this->shippingAssignmentBuilder;
+    }
+
+    /**
+     * Helper function that adds a FilterGroup to the collection.
+     *
+     * @param \Magento\Framework\Api\Search\FilterGroup $filterGroup
+     * @param \Magento\Sales\Api\Data\OrderSearchResultInterface $searchResult
+     * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     */
+    protected function addFilterGroupToCollection(
+        \Magento\Framework\Api\Search\FilterGroup $filterGroup,
+        \Magento\Sales\Api\Data\OrderSearchResultInterface $searchResult
+    ) {
+        $fields = [];
+        $conditions = [];
+        foreach ($filterGroup->getFilters() as $filter) {
+            $condition = $filter->getConditionType() ? $filter->getConditionType() : 'eq';
+            $conditions[] = [$condition => $filter->getValue()];
+            $fields[] = $filter->getField();
+        }
+        if ($fields) {
+            $searchResult->addFieldToFilter($fields, $conditions);
+        }
     }
 }
