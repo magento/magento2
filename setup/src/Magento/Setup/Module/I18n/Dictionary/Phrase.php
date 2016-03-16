@@ -272,6 +272,7 @@ class Phrase
         if (count($matches[0])) {
             $string = preg_replace('/([^\\\\])' . $encloseQuote . ' ?\. ?' . $encloseQuote . '/', '$1', $string);
         }
+        $string = preg_replace('/([^\\\\])(\\\\")/', '$1"', $string);
         return $string;
     }
 }

@@ -49,6 +49,7 @@ class Translate implements RendererInterface
     public function render(array $source, array $arguments)
     {
         $text = end($source);
+        $text = preg_replace('/([^\\\\])(\\\\")/', '$1"', $text);
 
         try {
             $data = $this->translator->getData();
