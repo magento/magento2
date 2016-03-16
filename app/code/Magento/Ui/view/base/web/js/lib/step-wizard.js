@@ -24,16 +24,27 @@ define([
         }
     );
 
-    Wizard = function (steps) {
+    Wizard = function (steps, modalClass) {
         this.steps = steps;
         this.index = 0;
         this.data = {};
-        this.element = $('[data-role=steps-wizard-main]');
-        this.nextLabel = '[data-role="step-wizard-next"]';
-        this.prevLabel = '[data-role="step-wizard-prev"]';
         this.nextLabelText = 'Next';
         this.prevLabelText = 'Back';
-        $(this.element).notification();
+        this.initSelectors = function (modalClass) {
+            this.nextLabel = '[data-role="step-wizard-next"]';
+            this.prevLabel = '[data-role="step-wizard-prev"]';
+            var elemetSelector = '[data-role=steps-wizard-main]';
+
+            if (modalClass) {
+                this.nextLabel = '.' + modalClass + ' ' + this.nextLabel;
+                this.prevLabel = '.' + modalClass + ' ' + this.prevLabel;
+                elemetSelector = '.' + modalClass + elemetSelector;
+            }
+
+            this.element = $(elemetSelector);
+            $(this.element).notification();
+        };
+        this.initSelectors(modalClass);
         this.move = function (newIndex) {
             if (!this.preventSwitch(newIndex)) {
                 if (newIndex > this.index) {
@@ -143,6 +154,7 @@ define([
 
     return Component.extend({
         defaults: {
+            modalClass: '',
             initData: [],
             stepsNames: [],
             selectedStep: '',
@@ -185,7 +197,7 @@ define([
         },
         open: function () {
             this.selectedStep(this.stepsNames.first());
-            this.wizard = new Wizard(this.steps);
+            this.wizard = new Wizard(this.steps, this.modalClass);
         },
         close: function () {
             var modal =  uiRegistry.get(this.initData.configurableModal);
