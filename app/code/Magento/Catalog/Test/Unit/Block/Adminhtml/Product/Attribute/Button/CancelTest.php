@@ -28,7 +28,6 @@ class CancelTest extends GenericTest
         $this->assertEquals(
             [
                 'label' => __('Cancel'),
-                'class' => 'action-secondary',
                 'data_attribute' => [
                     'mage-init' => [
                         'Magento_Ui/js/form/button-adapter' => [

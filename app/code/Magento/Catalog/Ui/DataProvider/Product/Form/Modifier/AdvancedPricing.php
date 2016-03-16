@@ -595,7 +595,6 @@ class AdvancedPricing extends AbstractModifier
                 'buttons' => [
                     [
                         'text' => __('Cancel'),
-                        'class' => 'action-secondary',
                         'actions' => [
                             [
                                 'targetName' => '${ $.name }',
