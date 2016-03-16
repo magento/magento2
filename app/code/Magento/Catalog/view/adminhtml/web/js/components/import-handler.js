@@ -29,84 +29,60 @@ define([
 
         handleNameChanges: function (newValue) {
             this.values.name = newValue;
-
-            if (this.allowImport) {
-                this.updateValue();
-            }
+            this.updateValue();
         },
 
         handleDescriptionChanges: function (newValue) {
             this.values.description = newValue;
-
-            if (this.allowImport) {
-                this.updateValue();
-            }
+            this.updateValue();
         },
 
         handleSkuChanges: function (newValue) {
-            if (this.code == 'sku') {
-                return;
-            }
-
-            this.values.sku = newValue;
-
-            if (this.allowImport) {
+            if (this.code !== 'sku') {
+                this.values.sku = newValue;
                 this.updateValue();
             }
         },
 
         handleColorChanges: function (newValue) {
             this.values.color = newValue;
-
-            if (this.allowImport) {
-                this.updateValue();
-            }
+            this.updateValue();
         },
 
         handleCountryChanges: function (newValue) {
             this.values.country = newValue;
-
-            if (this.allowImport) {
-                this.updateValue();
-            }
+            this.updateValue();
         },
 
         handleGenderChanges: function (newValue) {
             this.values.gender = newValue;
-
-            if (this.allowImport) {
-                this.updateValue();
-            }
+            this.updateValue();
         },
 
         handleMaterialChanges: function (newValue) {
             this.values.material = newValue;
-
-            if (this.allowImport) {
-                this.updateValue();
-            }
+            this.updateValue();
         },
 
         handleShortDescriptionChanges: function (newValue) {
             this.values.short_description = newValue;
-
-            if (this.allowImport) {
-                this.updateValue();
-            }
+            this.updateValue();
         },
 
         handleSizeChanges: function (newValue) {
             this.values.size = newValue;
-
-            if (this.allowImport) {
-                this.updateValue();
-            }
+            this.updateValue();
         },
 
         updateValue: function () {
             var str = this.mask;
             var nonEmptyValueFlag = false;
             var placeholder;
+
+            if (!this.allowImport) {
+                return;
+            }
+
             for (var property in this.values) {
                 if (this.values.hasOwnProperty(property)) {
                     placeholder = '';
