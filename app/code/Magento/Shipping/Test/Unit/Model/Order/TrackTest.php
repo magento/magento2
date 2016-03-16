@@ -52,7 +52,7 @@ class TrackTest extends \PHPUnit_Framework_TestCase
             'Magento\Shipping\Model\Order\Track',
             ['carrierFactory' => $carrierFactory, 'shipmentRepository' => $shipmentRepository]
         );
-
+        $model->setParentId(1);
         $this->assertEquals('trackingInfo', $model->getNumberDetail());
     }
 }
