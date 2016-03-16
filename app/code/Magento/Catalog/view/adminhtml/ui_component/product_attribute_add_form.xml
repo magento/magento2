@@ -157,6 +157,9 @@
                             <item name="label" xsi:type="string" translate="true">Is Default</item>
                             <item name="prefer" xsi:type="string">radio</item>
                             <item name="sortOrder" xsi:type="string">0</item>
+                            <item name="modules" xsi:type="array">
+                                <item name="rows" xsi:type="string">ns = ${ $.ns }, index = attribute_options_select</item>
+                            </item>
                         </item>
                     </argument>
                 </field>
@@ -225,6 +228,9 @@
                             <item name="value" xsi:type="string">1</item>
                             <item name="sortOrder" xsi:type="string">0</item>
                             <item name="fit" xsi:type="boolean">true</item>
+                            <item name="modules" xsi:type="array">
+                                <item name="rows" xsi:type="string">ns = ${ $.ns }, index = attribute_options_multiselect</item>
+                            </item>
                         </item>
                     </argument>
                 </field>
