@@ -192,17 +192,9 @@ class Uploader
     public function save($destinationFolder, $newFileName = null)
     {
         $this->_validateFile();
-
-        if ($this->_allowCreateFolders) {
-            $this->_createDestinationFolder($destinationFolder);
-        }
-
-        if (!is_writable($destinationFolder)) {
-            throw new \Exception('Destination folder is not writable or does not exists.');
-        }
+        $this->validateDestination($destinationFolder);
 
         $this->_result = false;
-
         $destinationFile = $destinationFolder;
         $fileName = isset($newFileName) ? $newFileName : $this->_file['name'];
         $fileName = self::getCorrectFileName($fileName);
@@ -246,6 +238,23 @@ class Uploader
         }
 
         return $this->_result;
+    }
+
+    /**
+     * Validates destination directory to be writable
+     *
+     * @param string $destinationFolder
+     * @throws \Exception
+     */
+    private function validateDestination($destinationFolder)
+    {
+        if ($this->_allowCreateFolders) {
+            $this->_createDestinationFolder($destinationFolder);
+        }
+
+        if (!is_writable($destinationFolder)) {
+            throw new \Exception('Destination folder is not writable or does not exists.');
+        }
     }
 
     /**
