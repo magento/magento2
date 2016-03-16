@@ -48,7 +48,8 @@ define([
             },
             imports: {
                 toolbarSection: '${ $.toolbarContainer }:toolbarSection',
-                prefix: '${ $.toolbarContainer }:rootSelector'
+                prefix: '${ $.toolbarContainer }:rootSelector',
+                messagesClass: '${ $.externalFormName }:messagesClass'
             },
             settings: {
                 ajax: {
@@ -117,9 +118,10 @@ define([
         },
 
         /**
-         * Remove actions tollbar.
+         * Remove actions toolbar.
          */
         removeActions: function () {
+            $(this.formHeader).siblings('.' + this.messagesClass).remove();
             $(this.formHeader).remove();
             this.formHeader = $();
         },
