@@ -43,6 +43,7 @@
         "braintree/braintree_php": "3.7.0",
         "symfony/console": "~2.3 <2.7",
         "symfony/event-dispatcher": "~2.1",
+        "symfony/process": "~2.1",
         "phpseclib/phpseclib": "~0.3",
         "tedivm/jshrink": "~1.0.1",
         "magento/composer": "~1.0.0",
