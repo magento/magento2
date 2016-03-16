@@ -4,15 +4,17 @@
  */
 
 define([
-    'Magento_Ui/js/modal/modal-component'
-], function (Modal) {
+    'Magento_Ui/js/modal/modal-component',
+    'uiRegistry',
+    'underscore'
+], function (Modal, registry, _) {
     'use strict';
 
     return Modal.extend({
         defaults: {
+            stepWizard: '',
             modules: {
-                form: '${ $.formName }',
-                targetWizard: '${ $.wizardName }'
+                form: '${ $.formName }'
             }
         },
 
@@ -23,6 +25,12 @@ define([
             this.form().validate();
 
             if (this.form().source.get('params.invalid') === false) {
+                var stepWizard = registry.get('index='+this.stepWizard);
+
+                if (!_.isUndefined(stepWizard)) {
+                    stepWizard.open();
+                }
+
                 this._super();
             }
         }

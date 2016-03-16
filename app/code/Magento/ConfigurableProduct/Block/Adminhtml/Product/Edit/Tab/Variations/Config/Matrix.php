@@ -133,6 +133,26 @@ class Matrix extends \Magento\Backend\Block\Template
      *
      * @return string
      */
+    public function getModal()
+    {
+        return $this->getData('config/modal');
+    }
+
+    /**
+     * Retrieve form name
+     *
+     * @return string
+     */
+    public function getForm()
+    {
+        return $this->getData('config/form');
+    }
+
+    /**
+     * Retrieve configurable modal name
+     *
+     * @return string
+     */
     public function getConfigurableModal()
     {
         return $this->getData('config/configurableModal');
@@ -258,7 +278,7 @@ class Matrix extends \Magento\Backend\Block\Template
     public function getVariationWizard($initData)
     {
         /** @var \Magento\Ui\Block\Component\StepsWizard $wizardBlock */
-        $wizardBlock = $this->getChildBlock('variation-steps-wizard');
+        $wizardBlock = $this->getChildBlock($this->getData('config/nameStepWizard'));
         if ($wizardBlock) {
             $wizardBlock->setInitData($initData);
             return $wizardBlock->toHtml();

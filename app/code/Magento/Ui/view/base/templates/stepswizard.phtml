@@ -8,7 +8,7 @@
 
 /** @var $block \Magento\Ui\Block\Component\StepsWizard */
 ?>
-    <div data-role="steps-wizard-main" class="steps-wizard" data-bind="scope: '<?= /* @escapeNotVerified */  $block->getComponentName()?>'">
+    <div data-role="steps-wizard-main" class="steps-wizard <?= /* @noEscape */ $block->getData('config/modal')?>" data-bind="scope: '<?= /* @escapeNotVerified */  $block->getComponentName()?>'">
         <div data-role="messages" class="messages"></div>
 
         <div data-role="steps-wizard-controls" class="steps-wizard-navigation">
@@ -63,7 +63,8 @@
                         "<?= /* @escapeNotVerified */  $block->getComponentName()?>": {
                             "component": "Magento_Ui/js/lib/step-wizard",
                             "initData": <?= /* @escapeNotVerified */  $this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getInitData()) ?>,
-                            "stepsNames": <?= /* @escapeNotVerified */  $this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getStepComponents()) ?>
+                            "stepsNames": <?= /* @escapeNotVerified */  $this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getStepComponents()) ?>,
+                            "modalClass": "<?= /* @noEscape */ $block->getData('config/modal')?>"
                         }
                     }
                 }

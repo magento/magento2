@@ -8,9 +8,9 @@
 
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes */
 ?>
-<div class="select-attributes-block">
+<div class="select-attributes-block <?= /* @noEscape */ $block->getData('config/modal') ?>">
     <div class="select-attributes-actions" data-type="skipKO">
-        <?= /* @escapeNotVerified */  $block->getAddNewAttributeButton('product_form.product_form_data_source'); ?>
+        <?= /* @escapeNotVerified */  $block->getAddNewAttributeButton(); ?>
     </div>
     <h2 class="steps-wizard-title"><?= /* @escapeNotVerified */  __('Step 1: Select Attributes') ?></h2>
     <div class="selected-attributes" data-bind="scope: '<?= /* @escapeNotVerified */  $block->getComponentName()?>'">
@@ -26,9 +26,8 @@
                 "components": {
                     "<?= /* @escapeNotVerified */  $block->getComponentName()?>": {
                         "component": "Magento_ConfigurableProduct/js/variations/steps/select_attributes",
-                        "multiselectName":
-                            "product_attributes_listing.product_attributes_listing.product_attributes_columns.ids",
-                        "providerName": "product_attributes_listing.product_attributes_listing_data_source",
+                        "multiselectName": "<?= /* @noEscape */ $block->getData('config/multiselectName') ?>",
+                        "providerName": "<?= /* @noEscape */ $block->getData('config/providerName') ?>",
                         "appendTo": "<?= /* @escapeNotVerified */  $block->getParentComponentName()?>"
                     }
                 }
@@ -38,7 +37,7 @@
 </script>
 <script>
     require(['jquery'], function ($) {
-        $('div.select-attributes-block').applyBindings();
+        $('div.select-attributes-block.<?= /* @noEscape */ $block->getData('config/modal') ?>').applyBindings();
         $('body').trigger('contentUpdated');
     })
 </script>
