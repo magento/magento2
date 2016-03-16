@@ -142,7 +142,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 '__sleep',
                 '__wakeup',
                 'getSku',
-                'getProductLinks'
+                'getProductLinks',
+                'getWebsiteIds'
             ])
             ->disableOriginalConstructor()
             ->getMock();

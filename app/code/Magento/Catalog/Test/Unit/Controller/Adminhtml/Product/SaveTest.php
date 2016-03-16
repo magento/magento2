@@ -91,6 +91,21 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
         );
 
         $additionalParams = ['resultRedirectFactory' => $this->resultRedirectFactory];
+
+        $storeManagerInterfaceMock = $this->getMockForAbstractClass(
+            'Magento\Store\Model\StoreManagerInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['getStore', 'getCode']
+        );
+
+        $storeManagerInterfaceMock->expects($this->any())
+            ->method('getStore')
+            ->will($this->returnSelf());
+
         $this->action = (new ObjectManagerHelper($this))->getObject(
             'Magento\Catalog\Controller\Adminhtml\Product\Save',
             [
@@ -99,6 +114,7 @@ class SaveTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTe
                 'resultPageFactory' => $resultPageFactory,
                 'resultForwardFactory' => $resultForwardFactory,
                 'initializationHelper' => $this->initializationHelper,
+                'storeManager' => $storeManagerInterfaceMock,
             ]
         );
     }
