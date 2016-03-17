@@ -133,6 +133,7 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
      * Initialize the form.
      *
      * @return $this
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function initForm()
     {
@@ -148,7 +149,7 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
 
         $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Newsletter Information')]);
 
-        $subscriptionField = $fieldset->addField(
+        $fieldset->addField(
             'subscription',
             'checkbox',
             [
@@ -160,19 +161,13 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
         );
 
         if ($this->customerAccountManagement->isReadOnly($customerId)) {
-            $subscriptionField->setReadonly(true, true);
+            $form->getElement('subscription')->setReadonly(true, true);
         }
         $isSubscribed = $subscriber->isSubscribed();
         $form->setValues(['subscription' => $isSubscribed ? 'true' : 'false']);
-        $subscriptionField->setIsChecked($isSubscribed);
+        $form->getElement('subscription')->setIsChecked($isSubscribed);
 
-        $data = $this->_backendSession->getCustomerFormData();
-        if (!empty($data)) {
-            $dataCustomerId = isset($data['customer']['entity_id']) ? $data['customer']['entity_id'] : null;
-            if (isset($data['subscription']) && $dataCustomerId == $customerId) {
-                $subscriptionField->setIsChecked($data['subscription']);
-            }
-        }
+        $this->updateFromSession($form, $customerId);
 
         $changedDate = $this->getStatusChangedDate();
         if ($changedDate) {
@@ -189,6 +184,24 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
 
         $this->setForm($form);
         return $this;
+    }
+
+    /**
+     * Update form elements from session data
+     *
+     * @param \Magento\Framework\Data\Form $form
+     * @param int $customerId
+     * @return void
+     */
+    protected function updateFromSession(\Magento\Framework\Data\Form $form, $customerId)
+    {
+        $data = $this->_backendSession->getCustomerFormData();
+        if (!empty($data)) {
+            $dataCustomerId = isset($data['customer']['entity_id']) ? $data['customer']['entity_id'] : null;
+            if (isset($data['subscription']) && $dataCustomerId == $customerId) {
+                $form->getElement('subscription')->setIsChecked($data['subscription']);
+            }
+        }
     }
 
     /**

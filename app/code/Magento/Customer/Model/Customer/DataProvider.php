@@ -19,6 +19,7 @@ use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
 
 /**
  * Class DataProvider
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
 {
