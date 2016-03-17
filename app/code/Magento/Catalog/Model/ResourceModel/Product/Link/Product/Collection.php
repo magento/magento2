@@ -7,6 +7,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Link\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Customer\Api\GroupManagementInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
@@ -78,7 +79,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param GroupManagementInterface $groupManagement
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation
-     * @param MetadataPool $metadataPool
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -103,10 +103,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Framework\Stdlib\DateTime $dateTime,
         GroupManagementInterface $groupManagement,
         \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation,
-        MetadataPool $metadataPool,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
     ) {
-        $this->metadataPool = $metadataPool;
         parent::__construct(
             $entityFactory,
             $logger,
@@ -283,7 +281,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $connection->quoteInto('links.link_type_id = ?', $this->_linkTypeId),
         ];
         $joinType = 'join';
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         if ($this->getProduct() && $this->getProduct()->getId()) {
             $linkFieldId = $this->getProduct()->getData(
                 $linkField
@@ -424,5 +422,17 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             }
         }
         return $this;
+    }
+
+    /**
+     * Get MetadataPool instance
+     * @return MetadataPool
+     */
+    protected function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }
