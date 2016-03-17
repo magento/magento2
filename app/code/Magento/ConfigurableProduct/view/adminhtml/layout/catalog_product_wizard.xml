@@ -24,7 +24,6 @@
                 <arguments>
                     <argument name="config" xsi:type="array">
                         <item name="modal" xsi:type="string">configurableModal</item>
-                        <item name="nameStepWizard" xsi:type="string">variation-steps-wizard</item>
                     </argument>
                 </arguments>
                 <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes" name="step1" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/select_attributes.phtml">
