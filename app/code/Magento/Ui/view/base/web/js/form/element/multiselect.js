@@ -6,9 +6,8 @@
 define([
     'underscore',
     'mageUtils',
-    'uiRegistry',
     './select'
-], function (_, utils, registry, Select) {
+], function (_, utils, Select) {
     'use strict';
 
     return Select.extend({
@@ -18,22 +17,29 @@ define([
         },
 
         /**
-         * Initializes configuration.
-         *
-         * @returns {MultiSelect} Chainable.
+         * @inheritdoc
          */
         initConfig: function () {
             this._super();
 
             this.value = this.normalizeData(this.value);
 
-            return this.setMultipleScopeValue();
+            return this;
         },
 
         /**
-         * Defines initial value.
-         *
-         * @returns {MultiSelect} Chainable.
+         * @inheritdoc
+         */
+        initLinks: function () {
+            var scope = this.source.get(this.dataScope);
+
+            this.multipleScopeValue = _.isArray(scope) ? utils.copy(scope) : undefined;
+
+            return this._super();
+        },
+
+        /**
+         * @inheritdoc
          */
         setInitialValue: function () {
             this._super();
@@ -44,23 +50,7 @@ define([
         },
 
         /**
-         * Caches value from dataProvider for next proper assignment.
-         *
-         * @returns {MultiSelect} Chainable.
-         */
-        setMultipleScopeValue: function () {
-            var provider = registry.get(this.provider),
-                scope = provider.get(this.dataScope);
-
-            this.multipleScopeValue = _.isArray(scope) ? utils.copy(scope) : undefined;
-
-            return this;
-        },
-
-        /**
-         * Splits incoming string value.
-         *
-         * @returns {Array}
+         * @inheritdoc
          */
         normalizeData: function (value) {
             if (utils.isEmpty(value)) {
@@ -71,9 +61,7 @@ define([
         },
 
         /**
-         * Gets initial value of element
-         *
-         * @returns {*} Elements' value.
+         * @inheritdoc
          */
         getInitialValue: function () {
             var values = [this.multipleScopeValue, this.default, this.value.peek(), []],
@@ -87,9 +75,7 @@ define([
         },
 
         /**
-         * Defines if value has changed
-         *
-         * @returns {Boolean}
+         * @inheritdoc
          */
         hasChanged: function () {
             var value = this.value(),
@@ -99,9 +85,7 @@ define([
         },
 
         /**
-         * Restores initial value.
-         *
-         * @returns {MultiSelect} Chainable.
+         * @inheritdoc
          */
         reset: function () {
             this.value(utils.copy(this.initialValue));
@@ -111,9 +95,7 @@ define([
         },
 
         /**
-         * Empties current value.
-         *
-         * @returns {MultiSelect} Chainable.
+         * @inheritdoc
          */
         clear: function () {
             this.value([]);
