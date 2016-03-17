@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7c1c918379516e243a1c15d30911be35",
-    "content-hash": "5d1d861e2de1a56fa93e79fdd555c0aa",
+    "hash": "332dee9cdf6c616c282e1113d2b1b1ff",
+    "content-hash": "f4c1fbfc0f9da8c694b1e5ad0ba80a28",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -325,8 +325,8 @@
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/magento/composer/zipball/1be267e71debac6e0d9fae4e5144f6095cffbe89",
-                "reference": null,
-                "shasum": "6bfdbff4c23aace1e6d14ab598c81c790375aba0"
+                "reference": "1be267e71debac6e0d9fae4e5144f6095cffbe89",
+                "shasum": ""
             },
             "require": {
                 "composer/composer": "1.0.0-alpha10",
@@ -342,11 +342,13 @@
                     "Magento\\Composer\\": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "OSL-3.0",
                 "AFL-3.0"
             ],
-            "description": "Magento composer library helps to instantiate Composer application and run composer commands."
+            "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
+            "time": "2015-10-01 14:39:10"
         },
         {
             "name": "magento/magento-composer-installer",
@@ -4019,7 +4021,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "~5.5.0|~5.6.0|~7.0.0",
+        "php": "~5.5.22|~5.6.0|~7.0.0",
         "lib-libxml": "*",
         "ext-ctype": "*",
         "ext-gd": "*",
