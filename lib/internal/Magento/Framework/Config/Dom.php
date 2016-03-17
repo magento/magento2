@@ -111,6 +111,26 @@ class Dom
     }
 
     /**
+     * Retrieve array of xml errors
+     *
+     * @param $errorFormat
+     * @return string[]
+     */
+    private static function getXmlErrors($errorFormat)
+    {
+        $errors = [];
+        $validationErrors = libxml_get_errors();
+        if (count($validationErrors)) {
+            foreach ($validationErrors as $error) {
+                $errors[] = self::_renderErrorMessage($error, $errorFormat);
+            }
+        } else {
+            $errors[] = 'Unknown validation error';
+        }
+        return $errors;
+    }
+
+    /**
      * Merge $xml into DOM document
      *
      * @param string $xml
@@ -286,18 +306,11 @@ class Dom
         $schema = self::$urnResolver->getRealPath($schema);
         libxml_use_internal_errors(true);
         libxml_set_external_entity_loader([self::$urnResolver, 'registerEntityLoader']);
+        $errors = [];
         try {
             $result = $dom->schemaValidate($schema);
-            $errors = [];
             if (!$result) {
-                $validationErrors = libxml_get_errors();
-                if (count($validationErrors)) {
-                    foreach ($validationErrors as $error) {
-                        $errors[] = self::_renderErrorMessage($error, $errorFormat);
-                    }
-                } else {
-                    $errors[] = 'Unknown validation error';
-                }
+                $errors = self::getXmlErrors($errorFormat);
             }
         } catch (\Exception $exception) {
             libxml_use_internal_errors(false);
@@ -362,7 +375,14 @@ class Dom
     protected function _initDom($xml)
     {
         $dom = new \DOMDocument();
-        $dom->loadXML($xml);
+        $useErrors = libxml_use_internal_errors(true);
+        $res = $dom->loadXML($xml);
+        if (!$res) {
+            $errors = self::getXmlErrors($this->errorFormat);
+            libxml_use_internal_errors($useErrors);
+            throw new \Magento\Framework\Config\Dom\ValidationException(implode("\n", $errors));
+        }
+        libxml_use_internal_errors($useErrors);
         if ($this->validationState->isValidationRequired() && $this->schema) {
             $errors = $this->validateDomDocument($dom, $this->schema, $this->errorFormat);
             if (count($errors)) {
