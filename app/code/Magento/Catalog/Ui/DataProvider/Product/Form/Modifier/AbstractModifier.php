@@ -50,8 +50,8 @@ abstract class AbstractModifier implements ModifierInterface
         $groupCodes = (array)$groupCodes;
 
         foreach ($groupCodes as $groupCode) {
-            if (isset($meta[$groupCode]['sortOrder'])) {
-                return $meta[$groupCode]['sortOrder'] + $iteration;
+            if (isset($meta[$groupCode]['arguments']['data']['config']['sortOrder'])) {
+                return $meta[$groupCode]['arguments']['data']['config']['sortOrder'] + $iteration;
             }
         }
 
@@ -172,40 +172,5 @@ abstract class AbstractModifier implements ModifierInterface
         }
 
         return false;
-    }
-
-    /**
-     * Get path string for specific element
-     *
-     * @param array $meta
-     * @param string $element
-     * @param string $delimiter
-     * @return string|null
-     */
-    protected function getElementArrayPath(array $meta, $element, $delimiter = ArrayManager::DEFAULT_PATH_DELIMITER)
-    {
-        $checkList = ['' => $meta];
-
-        while (!empty($checkList)) {
-            $nextCheckList = [];
-
-            foreach ($checkList as $path => $children) {
-                foreach ($children as $index => $config) {
-                    $childPath = $path . ($path ? $delimiter . 'children' . $delimiter : '') . $index;
-
-                    if ($index === $element) {
-                        return $childPath;
-                    }
-
-                    if (!empty($config['children']) && is_array($config['children'])) {
-                        $nextCheckList[$childPath] = $config['children'];
-                    }
-                }
-            }
-
-            $checkList = $nextCheckList;
-        }
-
-        return null;
     }
 }
