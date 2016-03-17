@@ -509,8 +509,16 @@ class AccountManagement implements AccountManagementInterface
      */
     protected function checkPasswordStrength($password)
     {
-        $configMinPasswordLength = $this->getMinPasswordLength();
         $length = $this->stringHelper->strlen($password);
+        if ($length > self::MAX_PASSWORD_LENGTH) {
+            throw new InputException(
+                __(
+                    'Please enter a password with at most %1 characters.',
+                    self::MAX_PASSWORD_LENGTH
+                )
+            );
+        }
+        $configMinPasswordLength = $this->getMinPasswordLength();
         if ($length < $configMinPasswordLength) {
             throw new InputException(
                 __(
