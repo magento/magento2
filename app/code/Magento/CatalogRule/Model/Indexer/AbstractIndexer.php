@@ -26,7 +26,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     /**
      * @var \Magento\Framework\App\CacheInterface
      */
-    private $cacheManager;
+    protected $cacheManager;
 
     /**
      * @param IndexBuilder $indexBuilder
