@@ -103,16 +103,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
                     ['state' => null, 'country' => 'ES', 'website_id' => '1']
                 ],
                 'expected' => 'You must set unique country-state combinations within the same fixed product tax',
-                ],
-            'withAllAndSPecific' => [
-                'data' => [
-                    ['state' => null, 'country' => 'US', 'website_id' => '1'],
-                    ['state' => null, 'country' => 'ES', 'website_id' => '1'],
-                    ['state' => 12, 'country' => 'US', 'website_id' => '1']
-                ],
-                'expected' => 'When specifying fixed product tax regions within the same country,' .
-                    'select either unique region names or all (\'*\')',
-            ],
+                ]
         ];
     }
 
