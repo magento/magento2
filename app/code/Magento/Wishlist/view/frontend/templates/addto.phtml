@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<script type="text/x-magento-init">
+    {
+        "body": {
+            "addToWishlist": <?php /* @noEscape */ echo $this->helper('Magento\Framework\Json\Helper\Data')
+                ->jsonEncode($block->getWishlistOptions());
+            ?>
+        }
+    }
+</script>
