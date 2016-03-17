@@ -404,7 +404,7 @@ class CustomerRepositoryTest extends WebapiAbstract
             }
         }
 
-        try{
+        try {
             $this->customerRegistry->retrieveByEmail(
                 $customerDataArray[Customer::EMAIL],
                 $customerDataArray[Customer::WEBSITE_ID]
