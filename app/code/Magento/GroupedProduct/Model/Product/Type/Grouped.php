@@ -220,6 +220,14 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function clearAssociatedProductsCache($product)
+    {
+        $product->unsetData($this->_keyAssociatedProducts);
+    }
+
+    /**
      * Add status filter to collection
      *
      * @param  int $status
