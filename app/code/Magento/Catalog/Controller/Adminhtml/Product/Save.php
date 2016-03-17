@@ -37,6 +37,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     protected $productRepository;
 
+    /**
+     * @var StoreManagerInterface
+     */
     private $storeManager;
 
     /**

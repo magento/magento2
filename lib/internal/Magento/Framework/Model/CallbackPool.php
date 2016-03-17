@@ -21,6 +21,7 @@ class CallbackPool
     /**
      * @param string $hashKey
      * @param array $callback
+     * @return void
      */
     public static function attach($hashKey, $callback)
     {
@@ -29,6 +30,7 @@ class CallbackPool
 
     /**
      * @param string $hashKey
+     * @return void
      */
     public static function clear($hashKey)
     {

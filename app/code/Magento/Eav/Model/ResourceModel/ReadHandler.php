@@ -100,6 +100,8 @@ class ReadHandler
      * @return array
      * @throws \Exception
      * @throws \Magento\Framework\Exception\LocalizedException
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function execute($entityType, $entityData)
     {
