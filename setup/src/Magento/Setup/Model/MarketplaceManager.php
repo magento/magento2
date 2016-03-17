@@ -307,11 +307,11 @@ class MarketplaceManager
 
         return $this->getDirectory()->writeFile(
             \Magento\Framework\App\Filesystem\DirectoryList::COMPOSER_HOME .
-                DIRECTORY_SEPARATOR . $this->pathToAuthFile,
+            DIRECTORY_SEPARATOR . $this->pathToAuthFile,
             $jsonContent
         ) && $this->getDirectory()->changePermissions(
             \Magento\Framework\App\Filesystem\DirectoryList::COMPOSER_HOME .
-                DIRECTORY_SEPARATOR . $this->pathToAuthFile,
+            DIRECTORY_SEPARATOR . $this->pathToAuthFile,
             \Magento\Framework\Filesystem\DriverInterface::WRITEABLE_FILE_MODE
         );
     }
