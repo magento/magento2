@@ -1081,15 +1081,4 @@ abstract class AbstractType
     {
         return [];
     }
-
-    /**
-     * Reset cache of associated products
-     *
-     * @param \Magento\Catalog\Model\Product\Type\AbstractType $product
-     * @return void
-     */
-    public function clearAssociatedProductsCache($product)
-    {
-        return;
-    }
 }
