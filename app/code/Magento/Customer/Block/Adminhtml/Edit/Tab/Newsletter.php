@@ -148,7 +148,7 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
 
         $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Newsletter Information')]);
 
-        $fieldset->addField(
+        $subscriptionField = $fieldset->addField(
             'subscription',
             'checkbox',
             [
@@ -160,11 +160,19 @@ class Newsletter extends \Magento\Backend\Block\Widget\Form\Generic implements T
         );
 
         if ($this->customerAccountManagement->isReadOnly($customerId)) {
-            $form->getElement('subscription')->setReadonly(true, true);
+            $subscriptionField->setReadonly(true, true);
         }
         $isSubscribed = $subscriber->isSubscribed();
         $form->setValues(['subscription' => $isSubscribed ? 'true' : 'false']);
-        $form->getElement('subscription')->setIsChecked($isSubscribed);
+        $subscriptionField->setIsChecked($isSubscribed);
+
+        $data = $this->_backendSession->getCustomerFormData();
+        if (!empty($data)) {
+            $dataCustomerId = isset($data['customer']['entity_id']) ? $data['customer']['entity_id'] : null;
+            if (isset($data['subscription']) && $dataCustomerId == $customerId) {
+                $subscriptionField->setIsChecked($data['subscription']);
+            }
+        }
 
         $changedDate = $this->getStatusChangedDate();
         if ($changedDate) {
