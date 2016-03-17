@@ -204,7 +204,7 @@ class Helper
     /**
      * @return LinkResolver
      */
-    protected function getLinkResolver()
+    private function getLinkResolver()
     {
         if (!is_object($this->linkResolver)) {
             $this->linkResolver = ObjectManager::getInstance()->get(LinkResolver::class);
