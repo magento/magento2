@@ -178,7 +178,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\Virtual
      */
     public function hasOptions($product)
     {
-        return $product->getLinksPurchasedSeparately() || parent::hasOptions($product);
+        return parent::hasOptions($product) || $this->hasLinks($product);
     }
 
     /**
