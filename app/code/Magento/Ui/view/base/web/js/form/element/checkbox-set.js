@@ -6,14 +6,16 @@
 define([
     'underscore',
     'mageUtils',
+    'uiRegistry',
     './abstract'
-], function (_, utils, Abstract) {
+], function (_, utils, registry, Abstract) {
     'use strict';
 
     return Abstract.extend({
         defaults: {
             template: 'ui/form/element/checkbox-set',
-            multiple: false
+            multiple: false,
+            multipleScopeValue: null
         },
 
         /**
@@ -26,7 +28,7 @@ define([
 
             this.value = this.normalizeData(this.value);
 
-            return this;
+            return this.setMultipleScopeValue();
         },
 
         /**
@@ -43,12 +45,27 @@ define([
         },
 
         /**
+         * Caches value from dataProvider for next proper assignment.
+         *
+         * @returns {CheckboxSet} Chainable.
+         */
+        setMultipleScopeValue: function () {
+            var provider = registry.get(this.provider),
+                scope = provider.get(this.dataScope);
+
+            this.multipleScopeValue = this.multiple && _.isArray(scope) ? utils.copy(scope) : undefined;
+
+            return this;
+        },
+
+        /**
          * Restores initial value.
          *
          * @returns {CheckboxSet} Chainable.
          */
         reset: function () {
             this.value(utils.copy(this.initialValue));
+            this.error(false);
 
             return this;
         },
@@ -62,6 +79,7 @@ define([
             var value = this.multiple ? [] : '';
 
             this.value(value);
+            this.error(false);
 
             return this;
         },
@@ -77,7 +95,7 @@ define([
                 return this._super();
             }
 
-            return utils.isEmpty(value) ? [] : value;
+            return _.isArray(value) ? utils.copy(value) : [];
         },
 
         /**
@@ -86,7 +104,7 @@ define([
          * @returns {*} Elements' value.
          */
         getInitialValue: function () {
-            var values = [this.value(), this.default],
+            var values = [this.multipleScopeValue, this.default, this.value.peek(), []],
                 value;
 
             if (!this.multiple) {
@@ -94,16 +112,8 @@ define([
             }
 
             values.some(function (v) {
-                value = v;
-
-                return v && !!v.length;
+                return _.isArray(v) && (value = utils.copy(v));
             });
-
-            if (_.isArray(value)) {
-                value = utils.copy(value);
-            } else {
-                value = [];
-            }
 
             return value;
         },
@@ -152,13 +162,6 @@ define([
             return this.multiple ?
                 !utils.equalArrays(value, initial) :
                 this._super();
-        },
-
-        /**
-         * @returns {*}
-         */
-        hasService: function () {
-            return this._super && this._super();
         }
     });
 });

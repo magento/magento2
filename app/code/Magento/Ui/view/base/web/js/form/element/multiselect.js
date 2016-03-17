@@ -6,14 +6,55 @@
 define([
     'underscore',
     'mageUtils',
+    'uiRegistry',
     './select'
-], function (_, utils, Select) {
+], function (_, utils, registry, Select) {
     'use strict';
 
     return Select.extend({
         defaults: {
             size: 5,
             elementTmpl: 'ui/form/element/multiselect'
+        },
+
+        /**
+         * Initializes configuration.
+         *
+         * @returns {MultiSelect} Chainable.
+         */
+        initConfig: function () {
+            this._super();
+
+            this.value = this.normalizeData(this.value);
+
+            return this.setMultipleScopeValue();
+        },
+
+        /**
+         * Defines initial value.
+         *
+         * @returns {MultiSelect} Chainable.
+         */
+        setInitialValue: function () {
+            this._super();
+
+            this.initialValue = utils.copy(this.initialValue);
+
+            return this;
+        },
+
+        /**
+         * Caches value from dataProvider for next proper assignment.
+         *
+         * @returns {MultiSelect} Chainable.
+         */
+        setMultipleScopeValue: function () {
+            var provider = registry.get(this.provider),
+                scope = provider.get(this.dataScope);
+
+            this.multipleScopeValue = _.isArray(scope) ? utils.copy(scope) : undefined;
+
+            return this;
         },
 
         /**
@@ -35,22 +76,14 @@ define([
          * @returns {*} Elements' value.
          */
         getInitialValue: function () {
-            var values = [this.value(), this.default],
+            var values = [this.multipleScopeValue, this.default, this.value.peek(), []],
                 value;
 
             values.some(function (v) {
-                value = v;
-
-                return v && !!v.length;
+                return _.isArray(v) && (value = utils.copy(v));
             });
 
-            if (_.isArray(value)) {
-                value = utils.copy(value);
-            } else {
-                value = [];
-            }
-
-            return utils.copy(value);
+            return value;
         },
 
         /**
@@ -72,6 +105,7 @@ define([
          */
         reset: function () {
             this.value(utils.copy(this.initialValue));
+            this.error(false);
 
             return this;
         },
@@ -83,6 +117,7 @@ define([
          */
         clear: function () {
             this.value([]);
+            this.error(false);
 
             return this;
         }
