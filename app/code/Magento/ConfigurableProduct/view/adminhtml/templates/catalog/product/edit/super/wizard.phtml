@@ -13,10 +13,10 @@ $productMatrix = $block->getProductMatrix();
 $attributes = $block->getProductAttributes();
 $currencySymbol = $block->getCurrencySymbol();
 ?>
-<div class="<?= /* @noEscape */ $block->getModal() ?>" data-role="step-wizard-dialog" data-bind="scope: '<?= /* @noEscape */ $block->getForm() ?>.<?= /* @noEscape */ $block->getModal() ?>'">
+<div class="<?= /* @noEscape */ $block->getData('config/dataScope') ?>" data-role="step-wizard-dialog" data-bind="scope: '<?= /* @noEscape */ $block->getForm() ?>.<?= /* @noEscape */ $block->getModal() ?>'">
     <!-- ko template: getTemplate() --><!-- /ko -->
 </div>
-<div class="<?= /* @noEscape */ $block->getModal() ?>" id="product-variations-matrix" data-role="product-variations-matrix">
+<div class="<?= /* @noEscape */ $block->getData('config/dataScope') ?>" id="product-variations-matrix" data-role="product-variations-matrix">
     <div data-bind="scope: 'configurableVariations'"></div>
 </div>
 <script type="text/x-magento-init">
@@ -24,7 +24,7 @@ $currencySymbol = $block->getCurrencySymbol();
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                    "<?= /* @noEscape */ $block->getForm() ?>.<?= /* @noEscape */ $block->getModal() ?>": {
+                    "<?= /* @noEscape */ $block->getData('config/form') ?>.<?= /* @noEscape */ $block->getModal() ?>": {
                         "component": "Magento_ConfigurableProduct/js/components/modal-configurable",
                         "options": {"type": "slide", "title": "<?= /* @escapeNotVerified */  __('Create Product Configurations') ?>"},
                         "formName": "<?= /* @noEscape */ $block->getForm() ?>",
@@ -61,7 +61,7 @@ $currencySymbol = $block->getCurrencySymbol();
 </script>
 <script>
     require(['jquery'], function ($) {
-        $('.<?= /* @noEscape */ $block->getModal() ?>[data-role=step-wizard-dialog]').applyBindings();
-        $('.<?= /* @noEscape */ $block->getModal() ?>[data-role=product-variations-matrix]').applyBindings();
+        $('.<?= /* @noEscape */ $block->getData('config/dataScope') ?>[data-role=step-wizard-dialog]').applyBindings();
+        $('.<?= /* @noEscape */ $block->getData('config/dataScope') ?>[data-role=product-variations-matrix]').applyBindings();
     })
 </script>

@@ -8,7 +8,7 @@
 
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes */
 ?>
-<div class="select-attributes-block <?= /* @noEscape */ $block->getData('config/modal') ?>">
+<div class="select-attributes-block <?= /* @noEscape */ $block->getData('config/dataScope') ?>" data-role="select-attributes-step">
     <div class="select-attributes-actions" data-type="skipKO">
         <?= /* @escapeNotVerified */  $block->getAddNewAttributeButton(); ?>
     </div>
@@ -37,7 +37,7 @@
 </script>
 <script>
     require(['jquery'], function ($) {
-        $('div.select-attributes-block.<?= /* @noEscape */ $block->getData('config/modal') ?>').applyBindings();
+        $('.<?= /* @noEscape */ $block->getData('config/dataScope') ?>[data-role=select-attributes-step]').applyBindings();
         $('body').trigger('contentUpdated');
     })
 </script>

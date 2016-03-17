@@ -18,12 +18,15 @@
                     <item name="form" xsi:type="string">product_form.product_form</item>
                     <item name="modal" xsi:type="string">configurableModal</item>
                     <item name="nameStepWizard" xsi:type="string">variation-steps-wizard</item>
+                    <item name="dataScope" xsi:type="string">productFormConfigurable</item>
                 </argument>
             </arguments>
             <block class="Magento\Ui\Block\Component\StepsWizard" name="variation-steps-wizard">
                 <arguments>
                     <argument name="config" xsi:type="array">
+                        <item name="form" xsi:type="string">product_form.product_form</item>
                         <item name="modal" xsi:type="string">configurableModal</item>
+                        <item name="dataScope" xsi:type="string">productFormConfigurable</item>
                     </argument>
                 </arguments>
                 <block class="Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes" name="step1" template="Magento_ConfigurableProduct::catalog/product/edit/attribute/steps/select_attributes.phtml">
@@ -33,6 +36,7 @@
                             <item name="modal" xsi:type="string">configurableModal</item>
                             <item name="multiselectName" xsi:type="string">product_attributes_listing.product_attributes_listing.product_attributes_columns.ids</item>
                             <item name="providerName" xsi:type="string">product_attributes_listing.product_attributes_listing_data_source</item>
+                            <item name="dataScope" xsi:type="string">productFormConfigurable</item>
                         </argument>
                     </arguments>
                     <uiComponent name="product_attributes_listing"/>
@@ -42,6 +46,7 @@
                         <argument name="config" xsi:type="array">
                             <item name="form" xsi:type="string">product_form.product_form</item>
                             <item name="modal" xsi:type="string">configurableModal</item>
+                            <item name="dataScope" xsi:type="string">productFormConfigurable</item>
                         </argument>
                     </arguments>
                 </block>
@@ -50,6 +55,7 @@
                         <argument name="config" xsi:type="array">
                             <item name="form" xsi:type="string">product_form.product_form</item>
                             <item name="modal" xsi:type="string">configurableModal</item>
+                            <item name="dataScope" xsi:type="string">productFormConfigurable</item>
                         </argument>
                     </arguments>
                 </block>
@@ -58,6 +64,7 @@
                         <argument name="config" xsi:type="array">
                             <item name="form" xsi:type="string">product_form.product_form</item>
                             <item name="modal" xsi:type="string">configurableModal</item>
+                            <item name="dataScope" xsi:type="string">productFormConfigurable</item>
                         </argument>
                     </arguments>
                 </block>
