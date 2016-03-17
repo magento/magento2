@@ -52,7 +52,7 @@ class ScopeResolver
         foreach ($metadata->getEntityContext() as $contextProviderClass) {
             $contextProvider =  $this->objectManager->get($contextProviderClass);
             if (!$contextProvider instanceof ScopeProviderInterface) {
-                throw new ConfigurationMismatchException(new Phrase('Wrong configuration for type %s', [$entityType]));
+                throw new ConfigurationMismatchException(new Phrase('Wrong configuration for type %1', [$entityType]));
             }
             $entityContext[] = $contextProvider->getContext($entityType, $entityData);
         }
