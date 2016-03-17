@@ -45,12 +45,12 @@ class UpgradeSystemTest extends Injectable
     }
 
     /**
-     * @param array $upgrade
      * @param FixtureFactory $fixtureFactory
      * @param AssertSuccessfulReadinessCheck $assertReadiness
      * @param AssertVersionAndEditionCheck $assertVersionAndEdition
      * @param AssertSuccessMessage $assertSuccessMessage
      * @param AssertApplicationVersion $assertApplicationVersion
+     * @param array $upgrade
      * @return void
      */
     public function test(
