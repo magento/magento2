@@ -906,6 +906,8 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
      */
     public function testProductDuplicateCategories()
     {
+        $this->markTestSkipped('Due to MAGETWO-48956');
+
         $csvFixture = 'products_duplicate_category.csv';
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/' . $csvFixture;

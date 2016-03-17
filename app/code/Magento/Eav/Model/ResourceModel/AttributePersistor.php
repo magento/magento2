@@ -235,6 +235,8 @@ class AttributePersistor
             $value = null;
         } elseif ($type == 'decimal') {
             $value = $this->localeFormat->getNumber($value);
+        } elseif ($type == 'varchar' && is_array($value)) {
+            $value = implode(',', $value);
         }
         $describe = $metadata->getEntityConnection()->describeTable($attribute->getBackendTable());
         return $metadata->getEntityConnection()->prepareColumnValue($describe['value'], $value);
