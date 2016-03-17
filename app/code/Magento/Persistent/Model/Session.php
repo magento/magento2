@@ -289,7 +289,7 @@ class Session extends \Magento\Framework\Model\AbstractModel
      */
     public function removePersistentCookie()
     {
-        $cookieMetadata = $this->_cookieMetadataFactory->createCookieMetadata()
+        $cookieMetadata = $this->_cookieMetadataFactory->createSensitiveCookieMetadata()
             ->setPath($this->sessionConfig->getCookiePath());
         $this->_cookieManager->deleteCookie(self::COOKIE_NAME, $cookieMetadata);
         return $this;
