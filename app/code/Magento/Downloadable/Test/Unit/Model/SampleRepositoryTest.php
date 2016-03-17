@@ -420,7 +420,6 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->service->delete($sampleId);
     }
 
-
     public function testGetList()
     {
         $productSku = 'downloadable_sku';

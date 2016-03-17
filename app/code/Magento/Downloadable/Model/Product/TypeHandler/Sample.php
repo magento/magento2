@@ -16,6 +16,7 @@ class Sample extends AbstractTypeHandler
 {
     const DATA_KEY = 'sample';
     const IDENTIFIER_KEY = 'sample_id';
+
     /**
      * @var \Magento\Downloadable\Model\SampleFactory
      */
