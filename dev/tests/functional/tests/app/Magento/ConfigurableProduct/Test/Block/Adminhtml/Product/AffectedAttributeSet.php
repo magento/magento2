@@ -13,8 +13,7 @@ use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Block\Form as ParentForm;
 
 /**
- * Class AffectedAttributeSet
- * Choose affected attribute set dialog popup window
+ * Choose affected attribute set dialog popup window.
  */
 class AffectedAttributeSet extends ParentForm
 {
@@ -30,7 +29,7 @@ class AffectedAttributeSet extends ParentForm
      *
      * @var string
      */
-    protected $affectedAttributeSetNew = 'input[data-index="affected-attribute-set-new"]';
+    protected $affectedAttributeSetNew = 'input[data-index="affectedAttributeSetNew"]';
 
     /**
      * Fill popup form.
