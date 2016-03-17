@@ -6,9 +6,8 @@
 define([
     'underscore',
     'mageUtils',
-    'uiRegistry',
     './abstract'
-], function (_, utils, registry, Abstract) {
+], function (_, utils, Abstract) {
     'use strict';
 
     return Abstract.extend({
@@ -19,49 +18,29 @@ define([
         },
 
         /**
-         * Initializes configuration.
-         *
-         * @returns {CheckboxSet} Chainable.
+         * @inheritdoc
          */
         initConfig: function () {
             this._super();
 
             this.value = this.normalizeData(this.value);
 
-            return this.setMultipleScopeValue();
-        },
-
-        /**
-         * Defines initial value.
-         *
-         * @returns {CheckboxSet} Chainable.
-         */
-        setInitialValue: function () {
-            this._super();
-
-            this.initialValue = utils.copy(this.initialValue);
-
             return this;
         },
 
         /**
-         * Caches value from dataProvider for next proper assignment.
-         *
-         * @returns {CheckboxSet} Chainable.
+         * @inheritdoc
          */
-        setMultipleScopeValue: function () {
-            var provider = registry.get(this.provider),
-                scope = provider.get(this.dataScope);
+        initLinks: function () {
+            var scope = this.source.get(this.dataScope);
 
             this.multipleScopeValue = this.multiple && _.isArray(scope) ? utils.copy(scope) : undefined;
 
-            return this;
+            return this._super();
         },
 
         /**
-         * Restores initial value.
-         *
-         * @returns {CheckboxSet} Chainable.
+         * @inheritdoc
          */
         reset: function () {
             this.value(utils.copy(this.initialValue));
@@ -71,9 +50,7 @@ define([
         },
 
         /**
-         * Empties current value.
-         *
-         * @returns {CheckboxSet} Chainable.
+         * @inheritdoc
          */
         clear: function () {
             var value = this.multiple ? [] : '';
@@ -85,10 +62,7 @@ define([
         },
 
         /**
-         * Performs data type conversions.
-         *
-         * @param {*} value
-         * @returns {Array|String}
+         * @inheritdoc
          */
         normalizeData: function (value) {
             if (!this.multiple) {
@@ -99,9 +73,18 @@ define([
         },
 
         /**
-         * Gets initial value of element
-         *
-         * @returns {*} Elements' value.
+         * @inheritdoc
+         */
+        setInitialValue: function () {
+            this._super();
+
+            this.initialValue = utils.copy(this.initialValue);
+
+            return this;
+        },
+
+        /**
+         * @inheritdoc
          */
         getInitialValue: function () {
             var values = [this.multipleScopeValue, this.default, this.value.peek(), []],
@@ -150,10 +133,7 @@ define([
         },
 
         /**
-         * Defines if current value has
-         * changed from its' initial state.
-         *
-         * @returns {Boolean}
+         * @inheritdoc
          */
         hasChanged: function () {
             var value = this.value(),
