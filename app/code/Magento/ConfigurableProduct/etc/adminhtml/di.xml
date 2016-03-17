@@ -35,4 +35,14 @@
         </arguments>
     </type>
     <preference for="Magento\ConfigurableProduct\Model\AttributesListInterface" type="Magento\ConfigurableProduct\Model\AttributesList" />
+    <type name="Magento\Ui\DataProvider\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="configurable-custom-options" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\CustomOptions</item>
+                    <item name="sortOrder" xsi:type="number">71</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>
