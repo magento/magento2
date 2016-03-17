@@ -27,7 +27,7 @@ class InstallData implements InstallDataInterface
      *
      * @var int
      */
-    private $rootCategoryId = 1;
+    const ROOT_CATEGORY_ID = 1;
 
     /**
      * Default category ID
@@ -60,10 +60,10 @@ class InstallData implements InstallDataInterface
         $categorySetup->installEntities();
         // Create Root Catalog Node
         $categorySetup->createCategory()
-            ->load($this->rootCategoryId)
-            ->setId($this->rootCategoryId)
+            ->load(self::ROOT_CATEGORY_ID)
+            ->setId(self::ROOT_CATEGORY_ID)
             ->setStoreId(0)
-            ->setPath($this->rootCategoryId)
+            ->setPath(self::ROOT_CATEGORY_ID)
             ->setLevel(0)
             ->setPosition(0)
             ->setChildrenCount(0)
@@ -76,7 +76,7 @@ class InstallData implements InstallDataInterface
         $category->load(self::DEFAULT_CATEGORY_ID)
             ->setId(self::DEFAULT_CATEGORY_ID)
             ->setStoreId(0)
-            ->setPath($this->rootCategoryId . '/' . self::DEFAULT_CATEGORY_ID)
+            ->setPath(self::ROOT_CATEGORY_ID . '/' . self::DEFAULT_CATEGORY_ID)
             ->setName('Default Category')
             ->setDisplayMode('PRODUCTS')
             ->setIsActive(1)
