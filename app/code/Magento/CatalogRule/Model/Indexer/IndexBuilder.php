@@ -724,7 +724,7 @@ class IndexBuilder
      * @param int $timeStamp
      * @return int
      */
-    protected function roundTime($timeStamp)
+    private function roundTime($timeStamp)
     {
         if (is_numeric($timeStamp) && $timeStamp != 0) {
             $timeStamp = $this->dateTime->timestamp($this->dateTime->date('Y-m-d 00:00:00'));
