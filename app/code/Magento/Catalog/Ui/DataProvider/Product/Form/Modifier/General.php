@@ -199,7 +199,7 @@ class General extends AbstractModifier
                                 'config' => [
                                     'dataScope' => ProductAttributeInterface::CODE_WEIGHT,
                                     'validation' => [
-                                        'validate-number' => true,
+                                        'validate-zero-or-greater' => true
                                     ],
                                     'additionalClasses' => 'admin__field-small',
                                     'addafter' => $this->locator->getStore()->getConfig('general/locale/weight_unit'),
