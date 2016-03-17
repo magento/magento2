@@ -950,11 +950,11 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator::class
         );
         $errorCount = count($errorProcessor->getAllErrors());
+        $this->assertTrue($errorCount === 1 , 'Error expected');
 
         $errorMessage = $errorProcessor->getAllErrors()[0]->getErrorMessage();
         $this->assertContains('URL key for specified store already exists' , $errorMessage);
         $this->assertContains('Default Category/Category 2' , $errorMessage);
-        $this->assertTrue($errorCount === 1 , 'Error expected');
 
         $categoryAfter = $this->loadCategoryByName('Category 2');
         $this->assertTrue($categoryAfter === null);
