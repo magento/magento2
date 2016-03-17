@@ -41,7 +41,6 @@ class CreateHandler
      */
     private $scopeResolver;
 
-
     /**
      * CreateHandler constructor.
      *

@@ -11,10 +11,10 @@ namespace Magento\Framework\Model\Entity;
  */
 interface ScopeProviderInterface
 {
-    /***
+    /**
      * @param string $entityType
-     * @param array|null $entityData
-     * @return \Magento\Framework\Model\Entity\ScopeInterface[]
+     * @param array $entityData
+     * @return mixed
      */
     public function getContext($entityType, $entityData = []);
 }
