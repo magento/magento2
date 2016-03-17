@@ -37,7 +37,8 @@ class AbstractIndexerTest extends \PHPUnit_Framework_TestCase
             'Magento\CatalogRule\Model\Indexer\AbstractIndexer',
             [
                 $this->indexBuilder,
-                $this->_eventManagerMock
+                $this->_eventManagerMock,
+                $this->getMock(\Magento\Framework\App\CacheInterface::class)
             ]
         );
     }
