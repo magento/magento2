@@ -683,6 +683,7 @@
                         <depends>
                             <field id="enable_in_context_checkout">1</field>
                         </depends>
+                        <validate>required-entry</validate>
                     </field>
                     <field id="enable_express_checkout_bml" translate="label comment" type="select" sortOrder="23" showInDefault="1" showInWebsite="1">
                         <label>Enable PayPal Credit</label>

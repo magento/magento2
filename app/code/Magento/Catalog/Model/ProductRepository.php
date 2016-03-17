@@ -498,12 +498,16 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $product->setCanSaveCustomOptions(true);
         }
 
-        $validationResult = $this->resourceModel->validate($product);
-        if (true !== $validationResult) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(
-                __('Invalid product data: %1', implode(',', $validationResult))
-            );
+        $useValidation = \Magento\Store\Model\Store::ADMIN_CODE === $this->storeManager->getStore()->getCode();
+        if ($useValidation) {
+            $validationResult = $this->resourceModel->validate($product);
+            if (true !== $validationResult) {
+                throw new \Magento\Framework\Exception\CouldNotSaveException(
+                    __('Invalid product data: %1', implode(',', $validationResult))
+                );
+            }
         }
+
         try {
             if ($tierPrices !== null) {
                 $product->setData('tier_price', $tierPrices);
