@@ -91,8 +91,10 @@ class Builder
             }
         }
 
-        $setId = (int)$request->getParam('set');
-        if ($setId) {
+        $productData = $request->getParam('product');
+        if (!empty($productData['attribute_set_id'])) {
+            $product->setAttributeSetId((int)$productData['attribute_set_id']);
+        } else if ($setId = (int)$request->getParam('set')) {
             $product->setAttributeSetId($setId);
         }
 
