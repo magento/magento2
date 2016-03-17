@@ -40,6 +40,21 @@ class ConfigurablePanel extends AbstractModifier
     private $urlBuilder;
 
     /**
+     * @var string
+     */
+    private $formName;
+
+    /**
+     * @var string
+     */
+    private $dataScopeName;
+
+    /**
+     * @var string
+     */
+    private $dataSourceName;
+
+    /**
      * @var LocatorInterface
      */
     private $locator;
@@ -47,13 +62,22 @@ class ConfigurablePanel extends AbstractModifier
     /**
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
+     * @param string $formName
+     * @param string $dataScopeName
+     * @param string $dataSourceName
      */
     public function __construct(
         LocatorInterface $locator,
-        UrlInterface $urlBuilder
+        UrlInterface $urlBuilder,
+        $formName,
+        $dataScopeName,
+        $dataSourceName
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
+        $this->formName = $formName;
+        $this->dataScopeName = $dataScopeName;
+        $this->dataSourceName = $dataSourceName;
     }
 
     /**
@@ -97,7 +121,7 @@ class ConfigurablePanel extends AbstractModifier
                             'config' => [
                                 'componentType' => Modal::NAME,
                                 'dataScope' => '',
-                                'provider' => static::FORM_NAME . '.product_form_data_source',
+                                'provider' => $this->dataSourceName,
                                 'options' => [
                                     'title' => __('Select Associated Product'),
                                     'buttons' => [
@@ -182,7 +206,7 @@ class ConfigurablePanel extends AbstractModifier
                                             . '.configurable_associated_product_listing.product_columns',
                                         'productsMassAction' => 'configurable_associated_product_listing'
                                             . '.configurable_associated_product_listing.product_columns.ids',
-                                        'modalWithGrid' => 'ns=' . static::FORM_NAME . ', index='
+                                        'modalWithGrid' => 'ns=' . $this->formName . ', index='
                                             . static::ASSOCIATED_PRODUCT_MODAL,
                                     ],
                                 ],
@@ -249,7 +273,7 @@ class ConfigurablePanel extends AbstractModifier
                                 'displayAsLink' => true,
                                 'actions' => [
                                     [
-                                        'targetName' => 'ns=' . static::FORM_NAME . ', index='
+                                        'targetName' => 'ns=' . $this->formName . ', index='
                                             . static::ASSOCIATED_PRODUCT_MODAL,
                                         'actionName' => 'openModal',
                                     ],
@@ -281,13 +305,13 @@ class ConfigurablePanel extends AbstractModifier
                                 'actions' => [
                                     [
                                         'targetName' =>
-                                            'product_form.product_form.configurableModal',
+                                            $this->dataScopeName . '.configurableModal',
                                         'actionName' => 'trigger',
                                         'params' => ['active', true],
                                     ],
                                     [
                                         'targetName' =>
-                                            'product_form.product_form.configurableModal',
+                                            $this->dataScopeName . '.configurableModal',
                                         'actionName' => 'openModal',
                                     ],
                                 ],
@@ -350,7 +374,7 @@ class ConfigurablePanel extends AbstractModifier
                         'sortOrder' => 20,
                         'columnsHeader' => false,
                         'columnsHeaderAfterRender' => true,
-                        'modalWithGrid' => 'ns=' . static::FORM_NAME . ', index='
+                        'modalWithGrid' => 'ns=' . $this->formName . ', index='
                             . static::ASSOCIATED_PRODUCT_MODAL,
                         'gridWithProducts' => 'ns=' . static::ASSOCIATED_PRODUCT_LISTING
                             . ', index=' . static::ASSOCIATED_PRODUCT_LISTING,

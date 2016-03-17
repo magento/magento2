@@ -20,6 +20,7 @@
                         <item name="form" xsi:type="string">product_form.product_form</item>
                         <item name="modal" xsi:type="string">configurableModal</item>
                         <item name="nameStepWizard" xsi:type="string">variation-steps-wizard</item>
+                        <item name="dataScope" xsi:type="string">productFormConfigurable</item>
                     </argument>
                 </arguments>
             </block>
