@@ -5,8 +5,8 @@
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
-use Magento\Catalog\Model\AttributeConstantsInterface;
 use Magento\Directory\Helper\Data;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\Data\GroupInterface;
@@ -22,7 +22,6 @@ use Magento\Ui\Component\Form\Element\Input;
 use Magento\Ui\Component\Form\Element\Select;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Modal;
-use Magento\Catalog\Ui\DataProvider\Grouper;
 use Magento\Framework\Stdlib\ArrayManager;
 
 /**
@@ -36,11 +35,6 @@ class AdvancedPricing extends AbstractModifier
      * @var LocatorInterface
      */
     protected $locator;
-
-    /**
-     * @var Grouper
-     */
-    protected $grouper;
 
     /**
      * @var ModuleManager
@@ -80,7 +74,7 @@ class AdvancedPricing extends AbstractModifier
     /**
      * @var string
      */
-    protected $targetName = 'product_form.product_form';
+    protected $scopeName;
 
     /**
      * @var array
@@ -89,7 +83,6 @@ class AdvancedPricing extends AbstractModifier
 
     /**
      * @param LocatorInterface $locator
-     * @param Grouper $grouper
      * @param StoreManagerInterface $storeManager
      * @param GroupRepositoryInterface $groupRepository
      * @param GroupManagementInterface $groupManagement
@@ -97,21 +90,21 @@ class AdvancedPricing extends AbstractModifier
      * @param ModuleManager $moduleManager
      * @param Data $directoryHelper
      * @param ArrayManager $arrayManager
+     * @param string $scopeName
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         LocatorInterface $locator,
-        Grouper $grouper,
         StoreManagerInterface $storeManager,
         GroupRepositoryInterface $groupRepository,
         GroupManagementInterface $groupManagement,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         ModuleManager $moduleManager,
         Data $directoryHelper,
-        ArrayManager $arrayManager
+        ArrayManager $arrayManager,
+        $scopeName = ''
     ) {
         $this->locator = $locator;
-        $this->grouper = $grouper;
         $this->storeManager = $storeManager;
         $this->groupRepository = $groupRepository;
         $this->groupManagement = $groupManagement;
@@ -119,6 +112,7 @@ class AdvancedPricing extends AbstractModifier
         $this->moduleManager = $moduleManager;
         $this->directoryHelper = $directoryHelper;
         $this->arrayManager = $arrayManager;
+        $this->scopeName = $scopeName;
     }
 
     /**
@@ -128,9 +122,6 @@ class AdvancedPricing extends AbstractModifier
     {
         $this->meta = $meta;
 
-        $this->preparePriceFields(AttributeConstantsInterface::CODE_PRICE);
-        $this->preparePriceFields(AttributeConstantsInterface::CODE_SPECIAL_PRICE);
-        $this->preparePriceFields(AttributeConstantsInterface::CODE_COST);
         $this->specialPriceDataToInline();
         $this->customizeTierPrice();
 
@@ -185,17 +176,17 @@ class AdvancedPricing extends AbstractModifier
      */
     protected function customizeTierPrice()
     {
-        $tierPricePath = $this->getElementArrayPath($this->meta, AttributeConstantsInterface::CODE_TIER_PRICE);
+        $tierPricePath = $this->getElementArrayPath($this->meta, ProductAttributeInterface::CODE_TIER_PRICE);
 
         if ($tierPricePath) {
-            $this->meta = $this->arrayManager->set(
+            $this->meta = $this->arrayManager->merge(
                 $tierPricePath,
                 $this->meta,
                 $this->getTierPriceStructure($tierPricePath)
             );
             $this->meta = $this->arrayManager->set(
                 $this->arrayManager->slicePath($tierPricePath, 0, -3)
-                . '/' . AttributeConstantsInterface::CODE_TIER_PRICE,
+                . '/' . ProductAttributeInterface::CODE_TIER_PRICE,
                 $this->meta,
                 $this->arrayManager->get($tierPricePath, $this->meta)
             );
@@ -246,7 +237,7 @@ class AdvancedPricing extends AbstractModifier
     {
         return $this->locator->getProduct()
             ->getResource()
-            ->getAttribute(AttributeConstantsInterface::CODE_TIER_PRICE)
+            ->getAttribute(ProductAttributeInterface::CODE_TIER_PRICE)
             ->isScopeGlobal();
     }
 
@@ -358,7 +349,7 @@ class AdvancedPricing extends AbstractModifier
      */
     protected function addAdvancedPriceLink()
     {
-        $pricePath = $this->getElementArrayPath($this->meta, AttributeConstantsInterface::CODE_PRICE);
+        $pricePath = $this->getElementArrayPath($this->meta, ProductAttributeInterface::CODE_PRICE);
 
         if ($pricePath) {
             $this->meta = $this->arrayManager->merge(
@@ -375,7 +366,7 @@ class AdvancedPricing extends AbstractModifier
                 'template' => 'ui/form/components/button/container',
                 'actions' => [
                     [
-                        'targetName' => $this->targetName . '.advanced_pricing_modal',
+                        'targetName' => $this->scopeName . '.advanced_pricing_modal',
                         'actionName' => 'toggleModal',
                     ]
                 ],
@@ -445,7 +436,7 @@ class AdvancedPricing extends AbstractModifier
                                         'formElement' => Select::NAME,
                                         'componentType' => Field::NAME,
                                         'dataScope' => 'website_id',
-                                        'label' => __('Web Site'),
+                                        'label' => __('Website'),
                                         'options' => $this->getWebsites(),
                                         'value' => $this->getDefaultWebsite(),
                                         'visible' => $this->isMultiWebsites(),
@@ -613,7 +604,7 @@ class AdvancedPricing extends AbstractModifier
         ];
 
         $this->meta = $this->arrayManager->merge(
-            $this->getElementArrayPath($this->meta, static::CONTAINER_PREFIX . AttributeConstantsInterface::CODE_PRICE),
+            $this->getElementArrayPath($this->meta, static::CONTAINER_PREFIX . ProductAttributeInterface::CODE_PRICE),
             $this->meta,
             [
                 'arguments' => [

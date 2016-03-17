@@ -13,7 +13,6 @@ use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\Store;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Catalog\Ui\DataProvider\Grouper;
 
 /**
  * Class AbstractDataProviderTest
@@ -51,11 +50,6 @@ abstract class AbstractModifierTest extends \PHPUnit_Framework_TestCase
      */
     protected $arrayManagerMock;
 
-    /**
-     * @var Grouper|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $grouperMock;
-
     protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
@@ -77,27 +71,18 @@ abstract class AbstractModifierTest extends \PHPUnit_Framework_TestCase
         $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->grouperMock = $this->getMockBuilder(Grouper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
 
         $this->arrayManagerMock->expects($this->any())
             ->method('replace')
             ->willReturnArgument(1);
         $this->arrayManagerMock->expects($this->any())
             ->method('get')
-            ->willReturnArgument(3);
+            ->willReturnArgument(2);
         $this->arrayManagerMock->expects($this->any())
             ->method('set')
             ->willReturnArgument(1);
         $this->arrayManagerMock->expects($this->any())
             ->method('merge')
-            ->willReturnArgument(1);
-        $this->grouperMock->expects($this->any())
-            ->method('groupMetaElements')
-            ->willReturnArgument(0);
-        $this->grouperMock->expects($this->any())
-            ->method('remove')
             ->willReturnArgument(1);
         $this->arrayManagerMock->expects($this->any())
             ->method('remove')
