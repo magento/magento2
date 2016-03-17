@@ -19,6 +19,7 @@ define(function (require) {
         .addNode('fastForEach');
 
     return {
+        resizable:      require('./resizable'),
         i18n:           require('./i18n'),
         scope:          require('./scope'),
         range:          require('./range'),
@@ -33,6 +34,7 @@ define(function (require) {
         collapsible:    require('./collapsible'),
         staticChecked:  require('./staticChecked'),
         simpleChecked:  require('./simple-checked'),
+        bindHtml:       require('./bind-html'),
         tooltip:        require('./tooltip'),
         repeat:         require('knockoutjs/knockout-repeat'),
         fastForEach:    require('knockoutjs/knockout-fast-foreach')
