@@ -6,10 +6,12 @@
 define([
     'Magento_Ui/js/form/components/group',
     'uiRegistry',
-    "Magento_Ui/js/lib/validation/validator",
-    'mage/translate'
-], function (Group, uiRegistry, validation, $t) {
+    'Magento_Ui/js/lib/validation/validator',
+    'mage/translate',
+    'underscore'
+], function (Group, uiRegistry, validation, $t, _) {
     'use strict';
+
     return Group.extend({
         defaults: {
             visible: true,
@@ -22,58 +24,64 @@ define([
             validateWholeGroup: false,
             additionalClasses: {}
         },
-        initialize: function() {
-            var obj = this;
-            validation.addRule('validate-fpt-group', function(value) {
-                if(value.indexOf('?') !== -1) {
+
+        /** @inheritdoc */
+        initialize: function () {
+            validation.addRule('validate-fpt-group', function (value) {
+                if (value.indexOf('?') !== -1) {
+
                     return false;
                 }
+
                 return true;
-            }, $t('You must set unique country-state combinations within the same fixed product tax'), 'dsds', 'dsdassd');
+            }, $t('You must set unique country-state combinations within the same fixed product tax'));
 
             this._super();
         },
+
         /**
          *
          * @private
          */
         _handleOptionsAvailability: function () {
             var parent,
-                dup,
-                obj;
-            obj = this;
+                dup;
+
             dup = {};
             parent = uiRegistry.get(uiRegistry.get(this.parentName).parentName);
             _.each(parent.elems(), function (elem) {
                 var country,
                     state,
                     val,
-                    website,
                     key;
+
                 country = uiRegistry.get(elem.name + '.countryState.country');
                 state = uiRegistry.get(elem.name + '.countryState.state');
                 val = uiRegistry.get(elem.name + '.countryState.val');
 
-                key = country.value() + ( state.value() > 0 ? state.value() : 0);
+                key = country.value() + (state.value() > 0 ? state.value() : 0);
                 dup[key]++;
+
                 if (!dup[key]) {
                     dup[key] = 1;
                     val.value('');
                 } else {
-                    dup[key] = dup[key] + 1;
+                    dup[key]++;
                     val.value(country.value() + '?' + country.name);
                 }
             });
         },
+
+        /** @inheritdoc */
         initElement: function (elem) {
-            var country,
-                splitArray,
-                obj;
+            var obj;
+
             obj = this;
             this._super();
             elem.on('value', function () {
-                    obj._handleOptionsAvailability();
+                obj._handleOptionsAvailability();
             });
+
             return this;
         }
     });
