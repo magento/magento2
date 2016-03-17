@@ -40,6 +40,10 @@ define([
             }
         },
 
+        _FINISH_CREATE_VIDEO_TRIGGER: 'finish_create_video',
+
+        _FINISH_UPDATE_VIDEO_TRIGGER: 'finish_update_video',
+
         /**
          * @private
          */
@@ -58,14 +62,20 @@ define([
          * @returns {Boolean}
          */
         update: function () {
-            var checkVideoID = $(this.options.container).find('.' + this.options.videoClass).data('code');
+            var checkVideoID = $(this.options.container).find('.' + this.options.videoClass).data('code'),
+                eventVideoData = {
+                    oldVideoId: checkVideoID,
+                    newVideoId: this.options.videoId
+                };
 
             if (checkVideoID && checkVideoID !== this.options.videoId) {
                 this._doUpdate();
+                this.element.trigger(this._FINISH_UPDATE_VIDEO_TRIGGER, eventVideoData);
             } else if (checkVideoID && checkVideoID === this.options.videoId) {
                 return false;
             } else if (!checkVideoID) {
                 this._doUpdate();
+                this.element.trigger(this._FINISH_CREATE_VIDEO_TRIGGER, eventVideoData);
             }
 
         },
@@ -304,41 +314,46 @@ define([
          * @private
          */
         _onGetVideoInformationSuccess: function (e, data) {
-            var player = $(this._videoPlayerSelector).createVideoPlayer({
-                videoId: data.videoId,
-                videoProvider: data.videoProvider,
-                reset: false,
-                metaData: {
-                    DOM: {
-                        title: '.video-information.title span',
-                        uploaded: '.video-information.uploaded span',
-                        uploader: '.video-information.uploader span',
-                        duration: '.video-information.duration span',
-                        all: '.video-information span',
-                        wrapper: '.video-information'
-                    },
-                    data: {
-                        title: data.title,
-                        uploaded: data.uploaded,
-                        uploader: data.channel,
-                        duration: data.duration,
-                        uploaderUrl: data.channelId
+            var player = $(this._videoPlayerSelector);
+            player.on('finish_update_video finish_create_video', $.proxy(function (e, playerData) {
+                    if (!this._isEditPage || playerData.oldVideoId) {
+                        player.updateInputFields({
+                            reset: false,
+                            data: {
+                                title: data.title,
+                                description: data.description
+                            }
+                        });
                     }
-                }
-            });
+                    if (playerData.oldVideoId !== playerData.newVideoId) {
+                        this._loadRemotePreview(data.thumbnail);
+                    }
+                }, this))
+                .createVideoPlayer({
+                    videoId: data.videoId,
+                    videoProvider: data.videoProvider,
+                    reset: false,
+                    metaData: {
+                        DOM: {
+                            title: '.video-information.title span',
+                            uploaded: '.video-information.uploaded span',
+                            uploader: '.video-information.uploader span',
+                            duration: '.video-information.duration span',
+                            all: '.video-information span',
+                            wrapper: '.video-information'
+                        },
+                        data: {
+                            title: data.title,
+                            uploaded: data.uploaded,
+                            uploader: data.channel,
+                            duration: data.duration,
+                            uploaderUrl: data.channelId
+                        }
+                    }
+                })
+                .off('finish_update_video finish_create_video');
 
             this._videoRequestComplete = true;
-
-            if (!this._isEditPage) {
-                player.updateInputFields({
-                    reset: false,
-                    data: {
-                        title: data.title,
-                        description: data.description
-                    }
-                });
-                this._loadRemotePreview(data.thumbnail);
-            }
         },
 
         /**
@@ -356,10 +371,8 @@ define([
                 data: 'remote_image=' + sourceUrl,
                 type: 'post',
                 success: $.proxy(function (result) {
-                    if (!this._isEditPage) {
-                        this._tempPreviewImageData = result;
-                        this._getPreviewImage().attr('src', sourceUrl).show();
-                    }
+                    this._tempPreviewImageData = result;
+                    this._getPreviewImage().attr('src', sourceUrl).show();
                     this._blockActionButtons(false, true);
                 }, self)
             });
