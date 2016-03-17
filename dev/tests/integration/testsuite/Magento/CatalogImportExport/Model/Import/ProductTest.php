@@ -900,7 +900,7 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/category_duplicates.php
      */
@@ -935,7 +935,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             \Magento\Catalog\Model\Category::class
         );
 
-        $category->setStoreId(1);
         $category->load(444);
 
         $this->assertTrue($category !== null);
