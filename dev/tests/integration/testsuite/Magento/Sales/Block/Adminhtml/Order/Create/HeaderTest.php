@@ -48,7 +48,7 @@ class HeaderTest extends \PHPUnit_Framework_TestCase
                 'Create New Order for John Smith in Default Store View',
             ],
             'No store' => [$customerIdFromFixture, null, 'Create New Order for John Smith'],
-            'No customer' => [null, $defaultStoreView, 'Create New Order for New Customer in Default Store View'],
+            'No customer' => [null, $defaultStoreView, 'Create New Order in Default Store View'],
             'No customer, no store' => [null, null, 'Create New Order for New Customer']
         ];
     }
