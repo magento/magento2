@@ -116,7 +116,7 @@ class ProductUrlRewrite extends AbstractModifier
                     'true' => $urlKey
                 ],
                 'imports' => [
-                    'urlKey' => '${ $.provider }:data.product.' . AC::CODE_SEO_FIELD_URL_KEY,
+                    'urlKey' => '${ $.provider }:data.product.' . ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
                     'handleUseDefault' => '${ $.parentName }.url_key:isUseDefault',
                     'handleChanges' => '${ $.provider }:data.product.'
                         . ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
