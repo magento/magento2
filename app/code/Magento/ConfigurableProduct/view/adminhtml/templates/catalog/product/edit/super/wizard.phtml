@@ -37,7 +37,7 @@ $currencySymbol = $block->getCurrencySymbol();
                             }
                         }
                     },
-                    "configurableVariations": {
+                    "<?= /* @noEscape */ $block->getData('config/form') ?>.configurableVariations": {
                         "component": "Magento_ConfigurableProduct/js/variations/variations",
                         "provider": "<?= /* @noEscape */ $block->getProvider() ?>",
                         "dataScopeVariations": "variations",

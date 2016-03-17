@@ -49,8 +49,8 @@
                     "<?= /* @escapeNotVerified */  $block->getComponentName()?>": {
                         "component": "Magento_ConfigurableProduct/js/variations/steps/summary",
                         "appendTo": "<?= /* @escapeNotVerified */  $block->getParentComponentName()?>",
-                        "variationsComponent": "configurableVariations",
-                        "modalComponent": "product_form.product_form.configurableModal"
+                        "variationsComponent": "<?= /* @noEscape */ $block->getData('config/form') ?>.configurableVariations",
+                        "modalComponent": "<?= /* @noEscape */ $block->getData('config/form') ?>.configurableModal"
                     }
                 }
             }
