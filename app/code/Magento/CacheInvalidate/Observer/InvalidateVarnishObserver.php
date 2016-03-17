@@ -48,7 +48,6 @@ class InvalidateVarnishObserver implements ObserverInterface
                 $tags = [];
                 $pattern = "((^|,)%s(,|$))";
                 foreach ($object->getIdentities() as $tag) {
-                    $tags[] = sprintf($pattern, preg_replace("~_\\d+$~", '', $tag));
                     $tags[] = sprintf($pattern, $tag);
                 }
                 $this->purgeCache->sendPurgeRequest(implode('|', array_unique($tags)));

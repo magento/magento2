@@ -308,6 +308,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected $_productIdCached;
 
     /**
+     * @var \Magento\Framework\App\State
+     */
+    private $appState;
+
+    /**
      * List of attributes in ProductInterface
      * @var array
      */
@@ -2263,6 +2268,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
             }
         }
+        if ($this->getAppState()->getAreaCode() === 'frontend') {
+            $identities[] = self::CACHE_TAG;
+        }
         return array_unique($identities);
     }
 
@@ -2547,5 +2555,32 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function setId($value)
     {
         return $this->setData('entity_id', $value);
+    }
+
+    /**
+     * Get application state
+     *
+     * @return \Magento\Framework\App\State
+     */
+    private function getAppState()
+    {
+        if (!$this->appState instanceof \Magento\Framework\App\State) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Framework\App\State');
+        } else {
+            return $this->appState;
+        }
+    }
+
+    /**
+     * Set application state
+     *
+     * @deprecated
+     * @param \Magento\Framework\App\State $appState
+     * @return $this
+     */
+    public function setAppState(\Magento\Framework\App\State $appState)
+    {
+        $this->appState = $appState;
+        return $this;
     }
 }
