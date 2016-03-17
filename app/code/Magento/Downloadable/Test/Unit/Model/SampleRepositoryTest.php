@@ -119,8 +119,7 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
         $metadata = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
         $metadata->expects($this->any())->method('getLinkField')->willReturn('id');
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($metadata);
-        $this->service = new \Magento\Downloadable\Model\SampleRepository(
-            $this->metadataPoolMock,
+        $this->service = new SampleRepository(
             $this->repositoryMock,
             $this->productTypeMock,
             $this->sampleResourceMock,
@@ -129,6 +128,11 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->jsonEncoderMock,
             $this->contentUploaderMock
         );
+
+        $refClass = new \ReflectionClass(SampleRepository::class);
+        $refProperty = $refClass->getProperty('metadataPool');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($this->service, $this->metadataPoolMock);
     }
 
     /**
