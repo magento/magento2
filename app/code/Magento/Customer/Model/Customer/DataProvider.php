@@ -9,6 +9,8 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Customer\Model\ResourceModel\Customer\Collection;
@@ -72,6 +74,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $eavValidationRules;
 
     /**
+     * @var SessionManagerInterface
+     */
+    protected $session;
+
+    /**
      * Constructor
      *
      * @param string $name
@@ -110,6 +117,19 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
+     * Get session object
+     *
+     * @return SessionManagerInterface
+     */
+    protected function getSession()
+    {
+        if ($this->session === null) {
+            $this->session = ObjectManager::getInstance()->get('Magento\Framework\Session\SessionManagerInterface');
+        }
+        return $this->session;
+    }
+
+    /**
      * Get data
      *
      * @return array
@@ -133,6 +153,12 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 $this->prepareAddressData($addressId, $result['address'], $result['customer']);
             }
             $this->loadedData[$customer->getId()] = $result;
+        }
+
+        $data = $this->getSession()->getCustomerFormData();
+        if (!empty($data)) {
+            $customerId = isset($data['customer']['entity_id']) ? $data['customer']['entity_id'] : null;
+            $this->loadedData[$customerId] = $data;
         }
 
         return $this->loadedData;
@@ -195,7 +221,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         ) {
             $addresses[$addressId]['default_shipping'] = $customer['default_shipping'];
         }
-        if (isset($addresses[$addressId]['street'])) {
+        if (isset($addresses[$addressId]['street']) && !is_array($addresses[$addressId]['street'])) {
             $addresses[$addressId]['street'] = explode("\n", $addresses[$addressId]['street']);
         }
     }
