@@ -9,7 +9,7 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory as CustomOption
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory as ProductLinkFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
-use Magento\Catalog\Controller\Adminhtml\Product\Link\Resolver as LinkResolver;
+use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
 use Magento\Framework\App\ObjectManager;
 
 /**
