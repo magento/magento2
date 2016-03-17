@@ -14,6 +14,7 @@ define([
         defaults: {
             template: 'ui/form/components/single/field',
             checked: false,
+            initialChecked: false,
             multiple: false,
             prefer: 'checkbox', // 'radio' | 'checkbox' | 'toggle'
             valueMap: {},
@@ -32,7 +33,7 @@ define([
         },
 
         /**
-         * @returns {Element}
+         * @inheritdoc
          */
         initialize: function () {
             return this
@@ -41,7 +42,7 @@ define([
         },
 
         /**
-         * @returns {Element}
+         * @inheritdoc
          */
         initConfig: function (config) {
             this._super();
@@ -79,14 +80,16 @@ define([
             }
 
             if (this.multiple && !_.isArray(this.value)) {
-                this.value = []; // needed for correct observable assingment
+                this.value = []; // needed for correct observable assignment
             }
+
+            this.initialChecked = this.checked;
 
             return this;
         },
 
         /**
-         * @returns {Element}
+         * @inheritdoc
          */
         initObservable: function () {
             return this
@@ -147,7 +150,7 @@ define([
         },
 
         /**
-         * @returns {Element}
+         * @inheritdoc
          */
         setInitialValue: function () {
             if (_.isEmpty(this.valueMap)) {
@@ -222,7 +225,7 @@ define([
         },
 
         /**
-         * @returns {Element}
+         * @inheritdoc
          */
         onUpdate: function () {
             if (this.hasUnique) {
@@ -230,6 +233,38 @@ define([
             }
 
             return this._super();
+        },
+
+        /**
+         * @inheritdoc
+         */
+        reset: function () {
+            if (this.multiple && this.initialChecked) {
+                this.value.push(this.initialValue);
+            } else if (this.multiple && !this.initialChecked) {
+                this.value.splice(this.value.indexOf(this.initialValue), 1);
+            } else {
+                this.value(this.initialValue);
+            }
+
+            this.error(false);
+
+            return this;
+        },
+
+        /**
+         * @inheritdoc
+         */
+        clear: function () {
+            if (this.multiple) {
+                this.value([]);
+            } else {
+                this.value('');
+            }
+
+            this.error(false);
+
+            return this;
         }
     });
 });
