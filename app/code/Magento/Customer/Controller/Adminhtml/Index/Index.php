@@ -33,6 +33,7 @@ class Index extends \Magento\Customer\Controller\Adminhtml\Index
         $resultPage->addBreadcrumb(__('Manage Customers'), __('Manage Customers'));
 
         $this->_getSession()->unsCustomerData();
+        $this->_getSession()->unsCustomerFormData();
 
         return $resultPage;
     }

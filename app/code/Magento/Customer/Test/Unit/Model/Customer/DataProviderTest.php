@@ -67,7 +67,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->sessionMock = $this
             ->getMockBuilder('Magento\Framework\Session\SessionManagerInterface')
-            ->setMethods(['getCustomerFormData'])
+            ->setMethods(['getCustomerFormData', 'unsCustomerFormData'])
             ->getMockForAbstractClass();
     }
 
@@ -461,6 +461,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
         $this->sessionMock->expects($this->once())
             ->method('getCustomerFormData')
             ->willReturn($customerFormData);
+        $this->sessionMock->expects($this->once())
+            ->method('unsCustomerFormData');
 
         $this->assertEquals([$customerId => $customerFormData], $dataProvider->getData());
     }
