@@ -114,6 +114,7 @@ class Total extends \Magento\Framework\DataObject
     }
 
     //@codeCoverageIgnoreStart
+
     /**
      * Get all total amount values
      *
@@ -133,6 +134,7 @@ class Total extends \Magento\Framework\DataObject
     {
         return $this->baseTotalAmounts;
     }
+    
     //@codeCoverageIgnoreEnd
 
     /**
