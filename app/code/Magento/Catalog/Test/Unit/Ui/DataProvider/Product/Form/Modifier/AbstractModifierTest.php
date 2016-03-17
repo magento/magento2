@@ -77,7 +77,7 @@ abstract class AbstractModifierTest extends \PHPUnit_Framework_TestCase
             ->willReturnArgument(1);
         $this->arrayManagerMock->expects($this->any())
             ->method('get')
-            ->willReturnArgument(3);
+            ->willReturnArgument(2);
         $this->arrayManagerMock->expects($this->any())
             ->method('set')
             ->willReturnArgument(1);
