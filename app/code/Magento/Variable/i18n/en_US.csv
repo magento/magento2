@@ -1,4 +1,21 @@
 "Custom Variables","Custom Variables"
+"Add New Variable","Add New Variable"
+"Save and Continue Edit","Save and Continue Edit"
+"Custom Variable ""%1""","Custom Variable ""%1"""
+"New Custom Variable","New Custom Variable"
+Variable,Variable
+"Variable Code","Variable Code"
+"Variable Name","Variable Name"
+"Use Default Variable Values","Use Default Variable Values"
+No,No
+Yes,Yes
+"Variable HTML Value","Variable HTML Value"
+"Variable Plain Value","Variable Plain Value"
+"You deleted the custom variable.","You deleted the custom variable."
+"You saved the custom variable.","You saved the custom variable."
 "Variable Code must be unique.","Variable Code must be unique."
 "Validation has failed.","Validation has failed."
+%1,%1
 "Insert Variable...","Insert Variable..."
+"Variable ID","Variable ID"
+Name,Name
