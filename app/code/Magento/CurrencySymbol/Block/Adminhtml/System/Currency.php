@@ -37,6 +37,14 @@ class Currency extends \Magento\Backend\Block\Template
             ]
         );
 
+        $onClick = "setLocation('" . $this->getUrl('adminhtml/system_config/edit/section/currency') . "')";
+
+        $this->getToolbar()->addChild(
+            'options_button',
+            'Magento\Backend\Block\Widget\Button',
+            ['label' => __('Options'), 'onclick' => $onClick]
+        );
+
         $this->getToolbar()->addChild(
             'reset_button',
             'Magento\Backend\Block\Widget\Button',
