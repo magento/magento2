@@ -32,7 +32,7 @@ $currencySymbol = $block->getCurrencySymbol();
                         "stepWizard": "<?= /* @noEscape */ $block->getData('config/nameStepWizard') ?>",
                         "children": {
                             "wizard": {
-                                "url": "<?= /* @noEscape */ $block->getUrl('catalog/product/wizard', ['id' => $block->getProduct()->getId()]) ?>",
+                                "url": "<?= /* @noEscape */ $block->getUrl($block->getData('config/urlWizard'), ['id' => $block->getProduct()->getId()]) ?>",
                                 "component": "Magento_Ui/js/form/components/html"
                             }
                         }

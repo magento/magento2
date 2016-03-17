@@ -21,6 +21,7 @@
                         <item name="modal" xsi:type="string">configurableModal</item>
                         <item name="nameStepWizard" xsi:type="string">variation-steps-wizard</item>
                         <item name="dataScope" xsi:type="string">productFormConfigurable</item>
+                        <item name="urlWizard" xsi:type="string">catalog/product/wizard</item>
                     </argument>
                 </arguments>
             </block>
