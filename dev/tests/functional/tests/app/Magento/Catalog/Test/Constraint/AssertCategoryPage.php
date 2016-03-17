@@ -257,7 +257,7 @@ class AssertCategoryPage extends AbstractConstraint
         };
 
         if (isset($categoryData['meta_title'])) {
-            $actual = $this->categoryViewPage->getMetaInformation()->getTitle();
+            $actual = $this->browser->getTitle();
             if ($categoryData['meta_title'] != $actual) {
                 $errorMessage[] = 'Wrong page title.'
                     . "\nExpected: " . $categoryData['meta_title']
