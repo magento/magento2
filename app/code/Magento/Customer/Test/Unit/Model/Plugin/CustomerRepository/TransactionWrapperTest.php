@@ -38,9 +38,9 @@ class TransactionWrapperTest extends \PHPUnit_Framework_TestCase
     protected $customerMock;
 
     /**
-     * @var bool
+     * @var string
      */
-    protected $saveOption = true;
+    protected $passwordHash = true;
 
     const ERROR_MSG = "error occurred";
 
@@ -67,7 +67,7 @@ class TransactionWrapperTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(
             $this->customerMock,
-            $this->model->aroundSave($this->subjectMock, $this->closureMock, $this->customerMock, $this->saveOption)
+            $this->model->aroundSave($this->subjectMock, $this->closureMock, $this->customerMock, $this->passwordHash)
         );
     }
 
@@ -80,6 +80,11 @@ class TransactionWrapperTest extends \PHPUnit_Framework_TestCase
         $this->resourceMock->expects($this->once())->method('beginTransaction');
         $this->resourceMock->expects($this->once())->method('rollBack');
 
-        $this->model->aroundSave($this->subjectMock, $this->rollbackClosureMock, $this->customerMock, $this->saveOption);
+        $this->model->aroundSave(
+            $this->subjectMock,
+            $this->rollbackClosureMock,
+            $this->customerMock,
+            $this->passwordHash
+        );
     }
 }
