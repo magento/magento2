@@ -205,12 +205,12 @@ class AssertCategoryPage extends AbstractConstraint
         //TODO: verify display_mode
 
         if (isset($categoryData['default_sort_by'])) {
-            $sortBy = strtolower($categoryData['default_sort_by']);
-            $sortType = $this->categoryViewPage->getTopToolbar()->getSelectSortType();
-            if ($sortBy != $sortType) {
+            $expected = $categoryData['default_sort_by'];
+            $actual = $this->categoryViewPage->getTopToolbar()->getSelectSortType();
+            if ($expected != $actual) {
                 $errorMessage[] = 'Wrong sorting type.'
-                    . "\nExpected: " . $sortBy
-                    . "\nActual: " . $sortType;
+                    . "\nExpected: " . $expected
+                    . "\nActual: " . $actual;
             }
         }
 
