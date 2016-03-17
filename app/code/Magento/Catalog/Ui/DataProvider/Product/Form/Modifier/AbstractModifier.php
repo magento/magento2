@@ -34,6 +34,9 @@ abstract class AbstractModifier implements ModifierInterface
      */
     const CONTAINER_PREFIX = 'container_';
 
+    /**
+     * Meta config path
+     */
     const META_CONFIG_PATH = '/arguments/data/config';
 
     /**
@@ -143,12 +146,26 @@ abstract class AbstractModifier implements ModifierInterface
             return self::DEFAULT_GENERAL_PANEL;
         }
 
-        $min = self::GENERAL_PANEL_ORDER;
+        return $this->getFirstPanelCode($meta);
+    }
+
+    /**
+     * Retrieve first panel name
+     *
+     * @param array $meta
+     * @return string|null
+     */
+    protected function getFirstPanelCode(array $meta)
+    {
+        $min = null;
         $name = null;
 
         foreach ($meta as $fieldSetName => $fieldSetMeta) {
-            if (isset($fieldSetMeta['sortOrder']) && $fieldSetMeta['sortOrder'] <= $min) {
-                $min = $fieldSetMeta['sortOrder'];
+            if (
+                isset($fieldSetMeta['arguments']['data']['config']['sortOrder'])
+                && (null === $min || $fieldSetMeta['arguments']['data']['config']['sortOrder'] <= $min)
+            ) {
+                $min = $fieldSetMeta['arguments']['data']['config']['sortOrder'];
                 $name = $fieldSetName;
             }
         }
@@ -166,7 +183,10 @@ abstract class AbstractModifier implements ModifierInterface
     protected function getGroupCodeByField(array $meta, $field)
     {
         foreach ($meta as $groupCode => $groupData) {
-            if (isset($groupData['children'][$field]) || isset($groupData['children']['container_' . $field])) {
+            if (
+                isset($groupData['children'][$field])
+                || isset($groupData['children'][static::CONTAINER_PREFIX . $field])
+            ) {
                 return $groupCode;
             }
         }
