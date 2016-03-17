@@ -60,7 +60,7 @@
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                        "<?= /* @escapeNotVerified */  $block->getData('config/nameStepWizard')?>": {
+                        "<?= /* @escapeNotVerified */  $block->getComponentName()?>": {
                             "component": "Magento_Ui/js/lib/step-wizard",
                             "initData": <?= /* @escapeNotVerified */  $this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getInitData()) ?>,
                             "stepsNames": <?= /* @escapeNotVerified */  $this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getStepComponents()) ?>,
