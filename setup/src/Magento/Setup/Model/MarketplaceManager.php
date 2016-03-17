@@ -271,7 +271,8 @@ class MarketplaceManager
                 $authJsonData = $this->getAuthJson();
                 if (isset($authJsonData['http-basic']) && isset($authJsonData['http-basic'][$serviceUrl])) {
                     unset($authJsonData['http-basic'][$serviceUrl]);
-                    $path = DirectoryList::COMPOSER_HOME . DIRECTORY_SEPARATOR . $this->pathToAuthFile;
+                    $path = \Magento\Framework\App\Filesystem\DirectoryList::COMPOSER_HOME
+                        . DIRECTORY_SEPARATOR . $this->pathToAuthFile;
                     if ($authJsonData === ['http-basic' => []]) {
                         return $this->getDirectory()->delete($path);
                     } else {
