@@ -265,8 +265,15 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
+        $storeModel = $this->getMockBuilder('\Magento\Store\Model\Store')
+            ->setMethods(['getStoreId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $dimension->expects($this->once())
             ->method('getValue')
+            ->willReturn($storeModel);
+        $storeModel->expects($this->once())
+            ->method('getStoreId')
             ->willReturn(1);
 
         $this->clientMock->expects($this->once())

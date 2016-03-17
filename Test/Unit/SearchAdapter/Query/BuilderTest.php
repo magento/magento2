@@ -83,11 +83,18 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
+        $storeModel = $this->getMockBuilder('\Magento\Store\Model\Store')
+            ->setMethods(['getStoreId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->request->expects($this->once())
             ->method('getDimensions')
             ->willReturn([$dimension]);
         $dimension->expects($this->once())
             ->method('getValue')
+            ->willReturn($storeModel);
+        $storeModel->expects($this->once())
+            ->method('getStoreId')
             ->willReturn(1);
         $this->request->expects($this->once())
             ->method('getFrom')
