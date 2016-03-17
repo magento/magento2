@@ -195,7 +195,7 @@ class EntityManager
         } catch (\Exception $e) {
             $this->transactionManager->rollBack();
             $this->commitCallback->clear($entityType);
-            throw new $e;
+            throw $e;
         }
         return $result;
     }
