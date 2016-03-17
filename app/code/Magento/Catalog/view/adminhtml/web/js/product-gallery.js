@@ -440,6 +440,7 @@ define([
                 var $imageContainer = $dialog.data('imageContainer');
 
                 $imageContainer.removeClass('active');
+                $dialog.find('#hide-from-product-page').remove();
             });
 
             $dialog.on('change', '[data-role=type-selector]', function () {
