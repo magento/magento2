@@ -19,6 +19,7 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\OrderRepository
      */
     protected $model;
+
     /**
      * @var Metadata|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -72,8 +73,13 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
         $sortOrderMock = $this->getMock('\Magento\Framework\Api\SortOrder', [], [], '', false);
         $itemsMock = $this->getMock('Magento\Sales\Model\Order', [], [], '', false);
 
-
-        $extensionAttributes = $this->getMock('\Magento\Sales\Api\Data\OrderExtension', [], [], '', false);
+        $extensionAttributes = $this->getMock(
+            '\Magento\Sales\Api\Data\OrderExtension',
+            ['getShippingAssignments'],
+            [],
+            '',
+            false
+        );
         $shippingAssignmentBuilder = $this->getMock(
             '\Magento\Sales\Model\Order\ShippingAssignmentBuilder',
             [],
@@ -83,7 +89,7 @@ class OrderRepositoryTest extends \PHPUnit_Framework_TestCase
         );
 
         $itemsMock->expects($this->once())->method('getExtensionAttributes')->willReturn($extensionAttributes);
-        $extensionAttributes->expects($this->once())
+        $extensionAttributes->expects($this->any())
             ->method('getShippingAssignments')
             ->willReturn($shippingAssignmentBuilder);
 
