@@ -319,4 +319,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Customer\Api\CustomerRepositoryInterface">
+        <plugin name="transactionWrapper" type="Magento\Customer\Model\Plugin\CustomerRepository\TransactionWrapper" sortOrder="-1"/>
+    </type>
 </config>
