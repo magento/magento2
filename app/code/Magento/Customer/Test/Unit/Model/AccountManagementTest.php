@@ -745,20 +745,37 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         if ($testNumber == 1) {
             $this->setExpectedException(
                 '\Magento\Framework\Exception\InputException',
-                __('Please enter a password with at least %1 characters.', $minPasswordLength)
+                'Please enter a password with at least ' . $minPasswordLength . ' characters.'
             );
         }
 
         if ($testNumber == 2) {
             $this->setExpectedException(
                 '\Magento\Framework\Exception\InputException',
-                __(
-                    'Minimum different classes of characters in password are %1.' .
-                    ' Classes of characters: Lower Case, Upper Case, Digits, Special Characters.',
-                    $minCharacterSetsNum
-                )
+                'Minimum of different classes of characters in password is ' . $minCharacterSetsNum .
+                '. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.'
             );
         }
+
+        $customer = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')->getMock();
+        $this->accountManagement->createAccount($customer, $password);
+    }
+
+    public function testCreateAccountInputExceptionExtraLongPassword()
+    {
+        $password = '257*chars*************************************************************************************'
+            . '****************************************************************************************************'
+            . '***************************************************************';
+
+        $this->string->expects($this->any())
+            ->method('strlen')
+            ->with($password)
+            ->willReturn(iconv_strlen($password, 'UTF-8'));
+
+        $this->setExpectedException(
+            '\Magento\Framework\Exception\InputException',
+            'Please enter a password with at most 256 characters.'
+        );
 
         $customer = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')->getMock();
         $this->accountManagement->createAccount($customer, $password);
@@ -1442,7 +1459,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException(
             '\Magento\Framework\Exception\InvalidEmailOrPasswordException',
-            __('Invalid login or password.')
+            'Invalid login or password.'
         );
 
         $this->accountManagement->changePassword($email, $currentPassword, $newPassword);
