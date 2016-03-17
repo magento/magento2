@@ -3,6 +3,9 @@
  * Copyright © 2015 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+// @codingStandardsIgnoreFile
+
 namespace Magento\Customer\Test\Unit\Block\Adminhtml\Edit\Tab;
 
 use Magento\Backend\Model\Session;
@@ -129,6 +132,14 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
 
         $this->backendSessionMock->expects($this->once())->method('getCustomerFormData')->willReturn(null);
 
+        $formMock->expects($this->once())
+            ->method('getElement')
+            ->willReturnMap(
+                [
+                    ['subscription', $elementMock],
+                ]
+            );
+
         $elementMock->expects($this->once())
             ->method('setIsChecked')
             ->with(true);
@@ -177,6 +188,14 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
                 ],
                 'subscription' => true,
             ]);
+
+        $formMock->expects($this->exactly(2))
+            ->method('getElement')
+            ->willReturnMap(
+                [
+                    ['subscription', $elementMock],
+                ]
+            );
 
         $elementMock->expects($this->exactly(2))
             ->method('setIsChecked')
