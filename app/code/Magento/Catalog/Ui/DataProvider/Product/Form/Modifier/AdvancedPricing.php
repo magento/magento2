@@ -436,7 +436,7 @@ class AdvancedPricing extends AbstractModifier
                                         'formElement' => Select::NAME,
                                         'componentType' => Field::NAME,
                                         'dataScope' => 'website_id',
-                                        'label' => __('Web Site'),
+                                        'label' => __('Website'),
                                         'options' => $this->getWebsites(),
                                         'value' => $this->getDefaultWebsite(),
                                         'visible' => $this->isMultiWebsites(),
