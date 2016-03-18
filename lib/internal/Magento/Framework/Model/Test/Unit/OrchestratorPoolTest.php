@@ -27,7 +27,7 @@ class OrchestratorPoolTest extends \PHPUnit_Framework_TestCase
      */
     protected $readOperationMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManagerInterface')
             ->disableOriginalConstructor()
