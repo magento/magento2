@@ -53,8 +53,12 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      */
     public function execute()
     {
-        $collection = $this->filter->getCollection($this->collectionFactory->create());
-        $this->attributeHelper->setProductIds($collection->getAllIds());
+        $this->verifyNamespace();
+
+        if ($this->getRequest()->getParam('filters')) {
+            $collection = $this->filter->getCollection($this->collectionFactory->create());
+            $this->attributeHelper->setProductIds($collection->getAllIds());
+        }
 
         if (!$this->_validateProducts()) {
             return $this->resultRedirectFactory->create()->setPath('catalog/product/', ['_current' => true]);
@@ -62,5 +66,18 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $resultPage = $this->resultPageFactory->create();
         $resultPage->getConfig()->getTitle()->prepend(__('Update Attributes'));
         return $resultPage;
+    }
+
+    /**
+     * Check if namespace is specified
+     * @return void
+     */
+    private function verifyNamespace()
+    {
+        if (!$this->getRequest()->getParam('namespace')) {
+            $params = $this->getRequest()->getParams();
+            $params['namespace'] = 'product_listing';
+            $this->getRequest()->setParams($params);
+        }
     }
 }
