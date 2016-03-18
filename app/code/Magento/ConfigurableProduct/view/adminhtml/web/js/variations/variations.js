@@ -47,7 +47,8 @@ define([
             imports: {
                 attributeSetName: '${ $.provider }:configurableNewAttributeSetName',
                 attributeSetId: '${ $.provider }:configurableExistingAttributeSetId',
-                attributeSetSelection: '${ $.provider }:configurableAffectedAttributeSet'
+                attributeSetSelection: '${ $.provider }:configurableAffectedAttributeSet',
+                productPrice: '${ $.provider }:data.product.price'
             },
             links: {
                 value: '${ $.provider }:${ $.dataScopeVariations }',
@@ -416,6 +417,14 @@ define([
         closeDialogAndProcessForm: function() {
             this.attributeSetHandlerModal().closeModal();
             this.formElement().save(this.formSaveParams[0], this.formSaveParams[1]);
+        },
+
+        /**
+         * Retrieves product price
+         * @returns {*}
+         */
+        getProductPrice: function() {
+            return this.productPrice;
         }
     });
 });
