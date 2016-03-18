@@ -37,7 +37,7 @@ class BookmarkRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->bookmarkMock = $this->getMockBuilder('Magento\Ui\Model\Bookmark')
             ->disableOriginalConstructor()
