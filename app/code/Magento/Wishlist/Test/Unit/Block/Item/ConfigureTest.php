@@ -29,7 +29,7 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
      */
     protected $_mockWishlistData;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_mockWishlistData = $this->getMockBuilder(
             'Magento\Wishlist\Helper\Data'

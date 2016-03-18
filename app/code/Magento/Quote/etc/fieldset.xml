@@ -247,6 +247,9 @@
             <field name="row_total">
                 <aspect name="to_order_item" />
             </field>
+            <field name="base_price">
+                <aspect name="to_order_item" />
+            </field>
             <field name="base_original_price">
                 <aspect name="to_order_item" />
             </field>
