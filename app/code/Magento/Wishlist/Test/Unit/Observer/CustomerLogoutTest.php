@@ -19,8 +19,7 @@ class CustomerLogoutTest extends \PHPUnit_Framework_TestCase
      */
     protected $customerSession;
 
-
-    public function setUp()
+    protected function setUp()
     {
         $this->customerSession = $this->getMockBuilder('Magento\Customer\Model\Session')
             ->disableOriginalConstructor()
