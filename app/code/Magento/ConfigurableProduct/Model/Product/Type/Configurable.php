@@ -519,7 +519,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @return GalleryReadHandler
      */
-    private function getGalleryReadHandler()
+    protected function getGalleryReadHandler()
     {
         if ($this->productGalleryReadHandler === null) {
             $this->productGalleryReadHandler = \Magento\Framework\App\ObjectManager::getInstance()
