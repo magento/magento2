@@ -26,7 +26,7 @@ class SynonymsTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->synonymsAnalyzer = $this->getMockBuilder('\Magento\Search\Api\SynonymAnalyzerInterface')
             ->disableOriginalConstructor()

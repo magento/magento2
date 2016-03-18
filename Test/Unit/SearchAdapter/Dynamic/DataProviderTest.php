@@ -85,7 +85,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      * Setup method
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->connectionManager = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\ConnectionManager')
             ->setMethods(['getConnection'])
