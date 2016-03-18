@@ -33,7 +33,7 @@ class AttributeRepositoryTest extends \PHPUnit_Framework_TestCase
     /** @var AttributeRepository */
     protected $component;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->customerMetadataManagement = $this->getMockForAbstractClass(
             'Magento\Customer\Api\CustomerMetadataManagementInterface',

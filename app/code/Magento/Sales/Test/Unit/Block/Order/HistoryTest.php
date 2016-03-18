@@ -42,7 +42,7 @@ class HistoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $pageTitleMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false, false);
         $this->orderCollectionFactory =
