@@ -19,7 +19,7 @@ class RendererTest extends \PHPUnit_Framework_TestCase
     /** @var  \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\View\Asset\Repository */
     private $assetRepo;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $pageConfigMock = $this->getMockBuilder('Magento\Framework\View\Page\Config')
