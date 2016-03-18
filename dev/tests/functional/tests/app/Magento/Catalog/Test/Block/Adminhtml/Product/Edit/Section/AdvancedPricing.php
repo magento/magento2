@@ -98,7 +98,7 @@ class AdvancedPricing extends Section
      */
     public function getTierPriceForm(SimpleElement $element = null)
     {
-        $element = $element ?: $this->_rootElement->find($this->tierPrice);
+        $element = $element ?: $this->browser->find($this->advancedPricingRootElement);
         return $this->blockFactory->create(
             'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\AdvancedPricing\OptionTier',
             ['element' => $element]

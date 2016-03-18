@@ -118,6 +118,21 @@ class ActionPool implements ActionPoolInterface
     }
 
     /**
+     * Add html block
+     *
+     * @param  string $type
+     * @param  string $name
+     * @param  array $arguments
+     * @return void
+     */
+    public function addHtmlBlock($type, $name = '', array $arguments = [])
+    {
+        $toolbar = $this->getToolbar();
+        $container = $this->context->getPageLayout()->createBlock($type, $name, $arguments);
+        $toolbar->setChild($name, $container);
+    }
+
+    /**
      * Create button container
      *
      * @param string $key
