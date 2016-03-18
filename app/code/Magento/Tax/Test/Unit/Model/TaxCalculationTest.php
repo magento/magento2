@@ -55,7 +55,7 @@ class TaxCalculationTest extends \PHPUnit_Framework_TestCase
      */
     private $dataObjectHelperMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->calculationTool = $this->getMock('\Magento\Tax\Model\Calculation', [], [], '', false);
         $this->calculatorFactory = $this->getMock(
