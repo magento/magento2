@@ -81,7 +81,7 @@ class NewActionTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultPageMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMock('Magento\Backend\App\Action\Context', [], [], '', false);
         $this->creditmemoLoaderMock = $this->getMock(
