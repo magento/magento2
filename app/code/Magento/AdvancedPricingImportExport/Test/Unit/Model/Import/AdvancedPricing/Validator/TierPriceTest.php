@@ -33,8 +33,7 @@ class TierPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected $tierPrice;
 
-
-    public function setUp()
+    protected function setUp()
     {
         $this->groupRepository = $this->getMockBuilder('\Magento\Customer\Api\GroupRepositoryInterface')
             ->disableOriginalConstructor()
