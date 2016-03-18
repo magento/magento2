@@ -64,6 +64,8 @@ class Products extends WidgetInstanceForm
         );
         $productGrid->searchAndSelect(['name' => $product->getName()]);
         $this->getTemplateBlock()->waitLoader();
-        $this->_rootElement->find($this->apply, Locator::SELECTOR_XPATH)->click();
+        if (!$this->clickOnElement($this->header, $this->apply, Locator::SELECTOR_CSS, Locator::SELECTOR_XPATH)) {
+            $this->clickOnElement($this->footer, $this->apply, Locator::SELECTOR_CSS, Locator::SELECTOR_XPATH);
+        }
     }
 }
