@@ -27,7 +27,7 @@ class CookieTest extends \PHPUnit_Framework_TestCase
      */
     protected $ipValidatorMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMockBuilder('Magento\Framework\View\Element\Template\Context')
             ->disableOriginalConstructor()
