@@ -154,11 +154,35 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             'template' => 'product/widget/content/grid.phtml',
             'conditions' => $conditions
         ];
+
+        $this->assertInternalType(
+            'string',
+            $this->invokeMethod($this->widget, 'getWidgetPageVarName', [$params])
+        );
+
         $this->conditionsHelper->expects($this->once())->method('encode')->with($conditions)
             ->willReturn('encoded-conditions-string');
         $result = $this->widget->getWidgetDeclaration('Magento\CatalogWidget\Block\Product\ProductsList', $params);
         $this->assertContains('{{widget type="Magento\CatalogWidget\Block\Product\ProductsList"', $result);
         $this->assertContains('conditions_encoded="encoded-conditions-string"', $result);
         $this->assertContains('page_var_name="pasdf"}}', $result);
+    }
+
+    /**
+     * Call protected/private method of a class.
+     *
+     * @param object &$object
+     * @param string $methodName
+     * @param array  $parameters
+     *
+     * @return mixed Method return.
+     */
+    private function invokeMethod(&$object, $methodName, array $parameters = [])
+    {
+        $reflection = new \ReflectionClass(get_class($object));
+        $method = $reflection->getMethod($methodName);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($object, $parameters);
     }
 }
