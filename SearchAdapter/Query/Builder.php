@@ -51,9 +51,9 @@ class Builder
     public function initQuery(RequestInterface $request)
     {
         $dimension = current($request->getDimensions());
-        /** @var \Magento\Store\Model\Store $storeModel */
-        $storeModel = $dimension->getValue();
-        $storeId = $storeModel->getStoreId();
+        /** @var \Magento\Store\Api\Data\StoreInterface $storeInterface */
+        $storeInterface = $dimension->getValue();
+        $storeId = $storeInterface->getId();
         $searchQuery = [
             'index' => $this->searchIndexNameResolver->getIndexName($storeId, $request->getIndex()),
             'type' => $this->clientConfig->getEntityType(),
