@@ -81,7 +81,7 @@ class ProductUrlRewrite extends AbstractModifier
     protected function addUrlRewriteCheckbox(array $meta)
     {
         $urlPath = $this->arrayManager->findPath(
-            AC::CODE_SEO_FIELD_URL_KEY,
+            ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
             $meta,
             null,
             'children'
