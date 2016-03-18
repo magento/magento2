@@ -11,7 +11,7 @@ define([
     return Select.extend({
         defaults: {
             listens: {
-                'value' : 'changeFormSubmitUrl'
+                'value': 'changeFormSubmitUrl'
             },
             modules: {
                 formProvider: '${ $.provider }'
@@ -28,8 +28,10 @@ define([
                 change = '$1' + value + '/';
 
             this.formProvider().client.urls.save = this.formProvider().client.urls.save.replace(pattern, change);
-            this.formProvider().client.urls.beforeSave
-                = this.formProvider().client.urls.beforeSave.replace(pattern, change);
+            this.formProvider().client.urls.beforeSave = this.formProvider().client.urls.beforeSave.replace(
+                pattern,
+                change
+            );
         }
     });
 });
