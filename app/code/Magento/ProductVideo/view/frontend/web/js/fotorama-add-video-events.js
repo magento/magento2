@@ -130,6 +130,7 @@ define([
          */
         _initialize: function () {
             this._loadVideoData();
+
             if (this._checkForVideoExist()) {
                 this._checkFullscreen();
                 this._listenForFullscreen();
@@ -140,6 +141,11 @@ define([
             }
         },
 
+        /**
+         *
+         * @param {Object} options
+         * @private
+         */
         _setOptions: function (options) {
 
             if (options.videoData && options.videoData.length) {
@@ -425,10 +431,8 @@ define([
             }
             fotorama.data.map($.proxy(this._setItemType, this));
 
-
             thumbsParent = fotorama.activeFrame.$navThumbFrame.parent();
             thumbs = thumbsParent.find('.fotorama__nav__frame:visible');
-
 
             for (t = 0; t < thumbs.length; t++) {
                 this._setThumbsIcon(thumbs.eq(t), t);
@@ -440,6 +444,12 @@ define([
             }, this));
         },
 
+        /**
+         *
+         * @param {Object} elem
+         * @param {Number} i
+         * @private
+         */
         _setThumbsIcon: function (elem, i) {
             var fotorama = this.fotoramaItem.data('fotorama');
 
@@ -461,7 +471,7 @@ define([
          * @param {Number} i
          * @private
          */
-        _setItemType: function(item, i) {
+        _setItemType: function (item, i) {
             !item.type && (item.type = this.options.videoData[i].mediaType);
         },
 
@@ -518,6 +528,7 @@ define([
                 if ($image.type === 'image') {
                     $image.$navThumbFrame && $image.$navThumbFrame.removeClass(this.TI);
                     this._hideCloseVideo();
+
                     return;
                 } else if ($image.$navThumbFrame && $image.type === 'video') {
                     !$image.$navThumbFrame.hasClass(this.TI) && $image.$navThumbFrame.addClass(this.TI);
@@ -600,15 +611,23 @@ define([
                 .on('click tap', $.proxy(this._clickHandler, this));
             this._handleBaseVideo(fotorama, number); //check for video is it base and handle it if it's base
         },
+
         /**
          * Hides preview arrows above video player.
          * @private
          */
         _hideVideoArrows: function () {
-            $('.' + this.FTAR).removeClass('fotorama__arr--shown');
-            $('.' + this.FTAR).removeClass('fotorama__arr--hidden');
+            var arrows = $('.' + this.FTAR);
+
+            arrows.removeClass('fotorama__arr--shown');
+            arrows.removeClass('fotorama__arr--hidden');
         },
 
+        /**
+         *
+         * @param {Event} event
+         * @private
+         */
         _clickHandler: function (event) {
             if ($(event.target).hasClass(this.VU) && $(event.target).find('iframe').length === 0) {
 
@@ -707,7 +726,7 @@ define([
                     if ($('.' + self.FTAR + '--prev').is(':focus') || $('.' + self.FTAR + '--next').is(':focus')) {
                         $(self.FTCF).focus();
                     }
-                }                
+                }
             });
         }
     });
