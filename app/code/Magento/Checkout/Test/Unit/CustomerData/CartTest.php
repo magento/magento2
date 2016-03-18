@@ -171,6 +171,9 @@ class CartTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedResult, $this->model->getSectionData());
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
     public function testGetSectionDataWithCompositeProduct()
     {
         $summaryQty = 100;
@@ -210,7 +213,6 @@ class CartTest extends \PHPUnit_Framework_TestCase
             ->with($subtotalValue)
             ->willReturn($subtotalValue);
         $this->checkoutHelperMock->expects($this->once())->method('canOnepageCheckout')->willReturn(true);
-
 
         $quoteMock->expects($this->once())->method('getAllVisibleItems')->willReturn([$quoteItemMock]);
 
