@@ -358,7 +358,7 @@ define([
          * Creates wrapper to hold all modals.
          */
         _createWrapper: function () {
-            this.modalWrapper = $('.' + this.options.wrapperClass);
+            this.modalWrapper = $(this.options.appendTo).find('.' + this.options.wrapperClass);
 
             if (!this.modalWrapper.length) {
                 this.modalWrapper = $('<div></div>')
