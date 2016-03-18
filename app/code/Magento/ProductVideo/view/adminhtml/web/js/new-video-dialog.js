@@ -64,8 +64,8 @@ define([
         update: function () {
             var checkVideoID = $(this.options.container).find('.' + this.options.videoClass).data('code'),
                 eventVideoData = {
-                    oldVideoId: checkVideoID,
-                    newVideoId: this.options.videoId
+                    oldVideoId: checkVideoID ? checkVideoID.toString() : checkVideoID,
+                    newVideoId: this.options.videoId ? this.options.videoId.toString() : this.options.videoId
                 };
 
             if (checkVideoID && checkVideoID !== this.options.videoId) {
