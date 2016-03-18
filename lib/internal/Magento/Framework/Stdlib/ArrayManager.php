@@ -235,7 +235,7 @@ class ArrayManager
         $checkList = [$startPath => ['start' => $startPath === null, 'children' => $data]];
         $paths = [];
 
-        while (!empty($checkList)) {
+        while ($checkList) {
             $nextCheckList = [];
 
             foreach ($checkList as $path => $config) {
@@ -286,7 +286,7 @@ class ArrayManager
     ) {
         $paths = $this->findPaths($indexes, $data, $startPath, $internalPath, 1, $delimiter);
 
-        return !empty($paths) ? $paths[0] : null;
+        return $paths ? reset($paths) : null;
     }
 
     /**
