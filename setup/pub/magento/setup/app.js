@@ -28,7 +28,8 @@ var app = angular.module(
         'updater-success',
         'home',
         'auth-dialog',
-        'system-config'
+        'system-config',
+        'marketplace-credentials'
     ]);
 
 app.config(['$httpProvider', '$stateProvider', function ($httpProvider, $stateProvider) {
