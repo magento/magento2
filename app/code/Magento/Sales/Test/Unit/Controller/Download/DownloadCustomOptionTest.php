@@ -72,7 +72,7 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $resultForwardFactoryMock = $this->getMockBuilder('Magento\Framework\Controller\Result\ForwardFactory')
             ->disableOriginalConstructor()
@@ -307,7 +307,6 @@ class DownloadCustomOptionTest extends \PHPUnit_Framework_TestCase
             ],
         ];
     }
-
 
     public function testExecuteBadSecretKey()
     {
