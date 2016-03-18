@@ -56,7 +56,7 @@ class BasePriceTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp()
     {
         $qty = 1;
         $this->saleableItemMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
