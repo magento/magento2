@@ -11,7 +11,7 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Data\Collection\Filesystem */
     private $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject('Magento\Framework\Data\Collection\Filesystem');
