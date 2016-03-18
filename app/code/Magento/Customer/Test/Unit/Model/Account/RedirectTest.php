@@ -78,7 +78,7 @@ class RedirectTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->request = $this->getMockForAbstractClass('Magento\Framework\App\RequestInterface');
 
