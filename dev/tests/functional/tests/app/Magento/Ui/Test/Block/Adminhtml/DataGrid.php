@@ -239,6 +239,23 @@ class DataGrid extends Grid
     }
 
     /**
+     * Search item and select it.
+     *
+     * @param array $filter
+     * @throws \Exception
+     */
+    public function searchAndSelect(array $filter)
+    {
+        $this->search($filter);
+        $rowItem = $this->getRow($filter);
+        if ($rowItem->isVisible()) {
+            $rowItem->find($this->selectItem)->click();
+        } else {
+            throw new \Exception('Searched item was not found.');
+        }
+    }
+
+    /**
      * Perform selected massaction over checked items.
      *
      * @param array $items
