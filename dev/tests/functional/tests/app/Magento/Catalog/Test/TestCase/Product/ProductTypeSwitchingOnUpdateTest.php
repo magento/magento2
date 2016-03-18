@@ -127,9 +127,9 @@ class ProductTypeSwitchingOnUpdateTest extends Injectable
      */
     protected function deleteVariations()
     {
-        $this->catalogProductEdit->getProductForm()->openTab('variations');
+        $this->catalogProductEdit->getProductForm()->openSection('variations');
         /** @var Config $variationsTab */
-        $variationsTab = $this->catalogProductEdit->getProductForm()->getTab('variations');
+        $variationsTab = $this->catalogProductEdit->getProductForm()->getSection('variations');
         $variationsTab->deleteVariations();
     }
 
@@ -140,9 +140,9 @@ class ProductTypeSwitchingOnUpdateTest extends Injectable
      */
     protected function clearDownloadableData()
     {
-        $this->catalogProductEdit->getProductForm()->openTab('downloadable_information');
+        $this->catalogProductEdit->getProductForm()->openSection('downloadable_information');
         /** @var Downloadable $downloadableInfoTab */
-        $downloadableInfoTab = $this->catalogProductEdit->getProductForm()->getTab('downloadable_information');
+        $downloadableInfoTab = $this->catalogProductEdit->getProductForm()->getSection('downloadable_information');
         $downloadableInfoTab->getDownloadableBlock('Links')->clearDownloadableData();
     }
 }

@@ -492,7 +492,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $product = $this->initializeProductData($productDataArray, empty($existingProduct));
 
         $this->processLinks($product, $productLinks);
-        if (!$product->getMediaGalleryEntries() && isset($productDataArray['media_gallery_entries'])) {
+        if (isset($productDataArray['media_gallery_entries'])) {
             $this->processMediaGallery($product, $productDataArray['media_gallery_entries']);
         }
 
