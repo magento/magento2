@@ -119,7 +119,6 @@ class UpdateHandler
                 if ((!array_key_exists($attribute->getAttributeCode(), $snapshot)
                         || $snapshot[$attribute->getAttributeCode()] === false)
                     && array_key_exists($attribute->getAttributeCode(), $data)
-                    && $data[$attribute->getAttributeCode()] !== false
                     && !$attribute->isValueEmpty($data[$attribute->getAttributeCode()])
                 ) {
                     $this->attributePersistor->registerInsert(
@@ -133,7 +132,6 @@ class UpdateHandler
                 if (array_key_exists($attribute->getAttributeCode(), $snapshot)
                     && $snapshot[$attribute->getAttributeCode()] !== false
                     && array_key_exists($attribute->getAttributeCode(), $data)
-                    && $data[$attribute->getAttributeCode()] !== false
                     && $snapshot[$attribute->getAttributeCode()] != $data[$attribute->getAttributeCode()]
                     && !$attribute->isValueEmpty($data[$attribute->getAttributeCode()])
                 ) {

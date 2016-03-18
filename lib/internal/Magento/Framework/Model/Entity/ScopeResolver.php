@@ -8,6 +8,7 @@ namespace Magento\Framework\Model\Entity;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Exception\ConfigurationMismatchException;
+use Magento\Framework\Phrase;
 
 /**
  * Class ScopeResolver
@@ -51,7 +52,7 @@ class ScopeResolver
         foreach ($metadata->getEntityContext() as $contextProviderClass) {
             $contextProvider =  $this->objectManager->get($contextProviderClass);
             if (!$contextProvider instanceof ScopeProviderInterface) {
-                throw new ConfigurationMismatchException(__('Wrong configuration for type' . $entityType));
+                throw new ConfigurationMismatchException(new Phrase('Wrong configuration for type %1', [$entityType]));
             }
             $entityContext[] = $contextProvider->getContext($entityType, $entityData);
         }
