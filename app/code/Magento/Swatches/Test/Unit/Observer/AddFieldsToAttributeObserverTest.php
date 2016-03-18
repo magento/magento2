@@ -25,7 +25,7 @@ class AddFieldsToAttributeObserverTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Swatches\Observer\AddFieldsToAttributeObserver|\PHPUnit_Framework_MockObject_MockObject */
     protected $observerMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->moduleManagerMock = $this->getMock(
             '\Magento\Framework\Module\Manager',
@@ -82,7 +82,6 @@ class AddFieldsToAttributeObserverTest extends \PHPUnit_Framework_TestCase
         $this->yesNoMock->expects($this->exactly($expected['yesno_count']))->method('toOptionArray');
         $this->observerMock->execute($this->eventObserverMock);
     }
-
 
     public function dataAddFields()
     {
