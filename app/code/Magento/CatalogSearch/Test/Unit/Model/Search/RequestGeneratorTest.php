@@ -18,7 +18,7 @@ class RequestGeneratorTest extends \PHPUnit_Framework_TestCase
     /** @var  CollectionFactory | \PHPUnit_Framework_MockObject_MockObject */
     protected $productAttributeCollectionFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->productAttributeCollectionFactory =
             $this->getMockBuilder('Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory')
