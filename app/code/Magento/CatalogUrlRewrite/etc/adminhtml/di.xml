@@ -25,7 +25,7 @@
     <type name="Magento\Catalog\Model\Category\DataProvider">
         <plugin name="category_ui_form_url_key_plugin" type="Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Category\Tab\Attributes"/>
     </type>
-    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\ModifierPool">
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
         <arguments>
             <argument name="modifiers" xsi:type="array">
                 <item name="ProductUrlRewrite" xsi:type="array">
@@ -34,5 +34,5 @@
                 </item>
             </argument>
         </arguments>
-    </type>
+    </virtualType>
 </config>

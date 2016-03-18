@@ -94,7 +94,7 @@ abstract class AbstractImport implements \Magento\Directory\Model\Currency\Impor
         $data = [];
         $currencies = $this->_getCurrencyCodes();
         $defaultCurrencies = $this->_getDefaultCurrencyCodes();
-        @set_time_limit(0);
+        set_time_limit(0);
         foreach ($defaultCurrencies as $currencyFrom) {
             if (!isset($data[$currencyFrom])) {
                 $data[$currencyFrom] = [];
@@ -111,6 +111,7 @@ abstract class AbstractImport implements \Magento\Directory\Model\Currency\Impor
             }
             ksort($data[$currencyFrom]);
         }
+        ini_restore('max_execution_time');
 
         return $data;
     }

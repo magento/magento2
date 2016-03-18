@@ -42,7 +42,7 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
      */
     protected $price;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
@@ -54,6 +54,8 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
         $layout = $this->getMock('Magento\Framework\View\LayoutInterface');
         $eventManager = $this->getMock('Magento\Framework\Event\ManagerInterface');
         $scopeConfigMock = $this->getMockForAbstractClass('Magento\Framework\App\Config\ScopeConfigInterface');
+        $cacheState = $this->getMockBuilder(\Magento\Framework\App\Cache\StateInterface::class)
+            ->getMockForAbstractClass();
         $storeConfig = $this->getMockBuilder('Magento\Store\Model\Store\Config')
             ->disableOriginalConstructor()
             ->getMock();
@@ -72,6 +74,9 @@ class PriceBoxTest extends \PHPUnit_Framework_TestCase
         $this->context->expects($this->any())
             ->method('getScopeConfig')
             ->will($this->returnValue($scopeConfigMock));
+        $this->context->expects($this->any())
+            ->method('getCacheState')
+            ->will($this->returnValue($cacheState));
 
         $this->saleable = $this->getMock('Magento\Framework\Pricing\SaleableInterface');
 
