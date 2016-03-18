@@ -804,7 +804,7 @@ class Eav extends AbstractModifier
      */
     private function calculateGroupCode(AttributeGroupInterface $group)
     {
-        $attributeGroupCode = $group->getAtributeGroupCode();
+        $attributeGroupCode = $group->getAttributeGroupCode();
 
         if ($attributeGroupCode === 'images') {
             $attributeGroupCode = 'image-management';
