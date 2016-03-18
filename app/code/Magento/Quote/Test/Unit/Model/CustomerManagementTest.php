@@ -14,26 +14,32 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Quote\Model\CustomerManagement
      */
     protected $customerManagement;
+
     /**
      * @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerRepositoryMock;
+
     /**
      * @var \Magento\Customer\Api\AccountManagementInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $accountManagementMock;
+
     /**
      * @var \Magento\Customer\Api\AddressRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerAddressRepositoryMock;
+
     /**
      * @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteMock;
+
     /**
      * @var \Magento\Quote\Model\Quote\Address|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $quoteAddressMock;
+
     /**
      * @var \Magento\Customer\Api\Data\CustomerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -44,7 +50,7 @@ class CustomerManagementTest extends \PHPUnit_Framework_TestCase
      */
     protected $customerAddressMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->customerRepositoryMock = $this->getMockForAbstractClass(
             'Magento\Customer\Api\CustomerRepositoryInterface',
