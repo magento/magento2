@@ -21,7 +21,7 @@ class CommandRendererBackgroundTest extends \PHPUnit_Framework_TestCase
      */
     protected $osInfo;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->osInfo = $this->getMockBuilder('Magento\Framework\OsInfo')->getMock();
     }

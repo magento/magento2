@@ -304,6 +304,7 @@ define([
 
                     uploadInput.fileupload({
                         dataType: 'json',
+                        dropZone: gallery,
                         process: [{
                             action: 'load',
                             fileTypes: /^image\/(gif|jpeg|png)$/
