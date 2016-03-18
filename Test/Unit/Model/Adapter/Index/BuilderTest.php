@@ -31,7 +31,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      * Setup method
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->localeResolver = $this->getMockBuilder('Magento\Framework\Locale\Resolver')
             ->disableOriginalConstructor()

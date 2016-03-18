@@ -17,6 +17,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      * @var Builder
      */
     protected $model;
+
     /**
      * @var Range|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -37,7 +38,7 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->range = $this->getMockBuilder('Magento\Elasticsearch\SearchAdapter\Filter\Builder\Range')
             ->disableOriginalConstructor()
