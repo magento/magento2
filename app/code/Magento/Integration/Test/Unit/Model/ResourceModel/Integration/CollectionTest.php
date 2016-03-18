@@ -20,7 +20,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $collection;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->select = $this->getMockBuilder('Magento\Framework\DB\Select')
             ->disableOriginalConstructor()
