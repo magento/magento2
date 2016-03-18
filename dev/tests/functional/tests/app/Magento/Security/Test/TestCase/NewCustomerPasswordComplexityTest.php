@@ -21,7 +21,7 @@ use Magento\Mtf\TestCase\Injectable;
  *
  * @ZephyrId MAGETWO-49044
  */
-class NewFrontendCustomerPasswordTest extends Injectable
+class NewCustomerPasswordComplexityTest extends Injectable
 {
     /* tags */
     const MVP = 'yes';

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Integration\Test\TestCase;
+namespace Magento\Security\Test\TestCase;
 
 use Magento\Integration\Test\Fixture\Integration;
 use Magento\Integration\Test\Page\Adminhtml\IntegrationIndex;
@@ -32,7 +32,7 @@ use Magento\User\Test\Fixture\User;
 class LockAdminUserWhenCreatingNewIntegrationTest extends Injectable
 {
     /* tags */
-    const MVP = 'no';
+    const MVP = 'yes';
     const DOMAIN = 'PS';
     /* end tags */
 

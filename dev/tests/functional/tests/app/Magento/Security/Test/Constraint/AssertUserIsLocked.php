@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\User\Test\Constraint;
+namespace Magento\Security\Test\Constraint;
 
 use Magento\Backend\Test\Page\AdminAuthLogin;
 use Magento\Mtf\Constraint\AbstractConstraint;

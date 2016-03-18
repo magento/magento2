@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Customer\Test\TestCase;
+namespace Magento\Security\Test\TestCase;
 
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Cms\Test\Page\CmsIndex;
@@ -29,13 +29,13 @@ use Magento\Customer\Test\Page\CustomerAccountLogin;
  * 6. "The password doesn't match this account." appears after each change password attempt.
  * 7. Perform all assertions.
  *
- * @ZephyrId MAGETWO-29411
+ * @ZephyrId MAGETWO-50559
  */
 class LockCustomerOnEditPageTest extends Injectable
 {
     /* tags */
-    const MVP = 'no';
-    const DOMAIN = 'CS';
+    const MVP = 'yes';
+    const DOMAIN = 'PS';
     /* end tags */
 
     /**

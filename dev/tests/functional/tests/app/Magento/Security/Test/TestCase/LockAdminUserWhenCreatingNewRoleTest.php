@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\User\Test\TestCase;
+namespace Magento\Security\Test\TestCase;
 
 use Magento\User\Test\Fixture\Role;
 use Magento\User\Test\Page\Adminhtml\UserRoleEditRole;
@@ -32,7 +32,7 @@ use Magento\Backend\Test\Page\AdminAuthLogin;
 class LockAdminUserWhenCreatingNewRoleTest extends Injectable
 {
     /* tags */
-    const MVP = 'no';
+    const MVP = 'yes';
     const DOMAIN = 'PS';
     /* end tags */
 
