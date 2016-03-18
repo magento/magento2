@@ -41,7 +41,7 @@ class DepersonalizePluginTest extends \PHPUnit_Framework_TestCase
     /**
      * SetUp
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->layoutMock = $this->getMock('Magento\Framework\View\Layout', [], [], '', false);
         $this->eventManagerMock = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);

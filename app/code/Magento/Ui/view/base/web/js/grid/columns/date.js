@@ -32,11 +32,11 @@ define([
          *
          * @returns {String} Formatted date.
          */
-        getLabel: function () {
+        getLabel: function (value, format) {
             var date = moment(this._super());
 
             date = date.isValid() ?
-                date.format(this.dateFormat) :
+                date.format(format || this.dateFormat) :
                 '';
 
             return date;
