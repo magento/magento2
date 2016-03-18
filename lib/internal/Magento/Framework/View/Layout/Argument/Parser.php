@@ -47,6 +47,7 @@ class Parser
                     'argument(/item)+/param' => 'name',
                     'argument(/argument)+' => 'name',
                     'argument((/argument)+(/item)+)+' => 'name',
+                    'argument((/argument)+(/item)+)+/param' => 'name'
                 ],
                 ['argument/updater']
             );
