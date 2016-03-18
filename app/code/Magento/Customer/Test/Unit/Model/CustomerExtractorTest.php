@@ -42,7 +42,7 @@ class CustomerExtractorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Customer\Api\Data\GroupInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerGroup;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->formFactory = $this->getMockForAbstractClass(
             'Magento\Customer\Model\Metadata\FormFactory',
