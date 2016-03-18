@@ -23,7 +23,6 @@
             <field name="dob" xsi:type="filterable" dataType="date"/>
             <field name="gender" xsi:type="filterable" dataType="int"/>
             <field name="taxvat" xsi:type="searchable" dataType="varchar"/>
-            <field name="last_visit_at" xsi:type="filterable" dataType="datetime" handler="LastVisitAtHandler"/>
             <field name="lock_expires" xsi:type="filterable" dataType="timestamp" />
         </fieldset>
 
