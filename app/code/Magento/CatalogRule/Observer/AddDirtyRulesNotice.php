@@ -25,7 +25,6 @@ class AddDirtyRulesNotice  implements ObserverInterface
      */
     public function __construct(\Magento\Framework\Message\ManagerInterface $messageManager)
     {
-
         $this->messageManager = $messageManager;
     }
 
