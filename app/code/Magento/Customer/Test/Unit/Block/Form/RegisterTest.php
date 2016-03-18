@@ -46,7 +46,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
     /** @var Register */
     private $_block;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_moduleManager = $this->getMock('Magento\Framework\Module\Manager', [], [], '', false);
