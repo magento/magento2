@@ -5,12 +5,8 @@
  * See COPYING.txt for license details.
  */
 -->
-<tabs>
+<sections>
     <product-details>
-        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
-        <selector>[data-index='product-details']</selector>
-        <strategy>css selector</strategy>
-        <wrapper>product</wrapper>
         <fields>
             <shipment_type>
                 <input>select</input>
@@ -48,4 +44,4 @@
             </price_view>
         </fields>
     </advanced-pricing>
-</tabs>
+</sections>
