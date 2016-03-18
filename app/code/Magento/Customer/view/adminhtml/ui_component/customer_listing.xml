@@ -245,7 +245,7 @@
                 </item>
             </argument>
         </column>
-        <column name="website_id">
+        <column name="website_id" class="Magento\Customer\Ui\Component\Listing\Column\Websites">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">select</item>

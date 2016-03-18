@@ -22,7 +22,7 @@ class ProductLinksTest extends \PHPUnit_Framework_TestCase
      */
     protected $stockHelperMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->configMock = $this->getMock(
             'Magento\CatalogInventory\Model\Configuration',
@@ -56,7 +56,6 @@ class ProductLinksTest extends \PHPUnit_Framework_TestCase
             ->expects($this->exactly($callCount))
             ->method('addInStockFilterToCollection')
             ->with($collectionMock);
-
 
         $this->assertEquals($collectionMock, $this->model->afterGetProductCollection($subjectMock, $collectionMock));
     }

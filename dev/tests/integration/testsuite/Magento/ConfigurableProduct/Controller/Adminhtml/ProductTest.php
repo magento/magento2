@@ -5,6 +5,10 @@
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml;
 
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Registry;
+use Magento\TestFramework\ObjectManager;
+
 /**
  * @magentoAppArea adminhtml
  */
@@ -25,12 +29,13 @@ class ProductTest extends \Magento\TestFramework\TestCase\AbstractBackendControl
 
         $this->dispatch('backend/catalog/product/save');
 
-        /** @var $objectManager \Magento\TestFramework\ObjectManager */
+        /** @var $objectManager ObjectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = $objectManager->get('Magento\Framework\Registry')->registry('current_product');
-        $this->assertEquals($associatedProductIds, $product->getAssociatedProductIds());
+        /** @var $product Product */
+        $product = $objectManager->get(Registry::class)->registry('current_product');
+
+        self::assertEquals($associatedProductIds, $product->getExtensionAttributes()->getConfigurableProductLinks());
     }
 
     /**

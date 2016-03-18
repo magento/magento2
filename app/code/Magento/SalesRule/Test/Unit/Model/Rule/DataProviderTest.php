@@ -53,16 +53,6 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->searchCriteriaBuilderMock = $this->getMock(
-            'Magento\Framework\Api\SearchCriteriaBuilder',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->storeMock = $this->getMock('Magento\Store\Model\System\Store', [], [], '', false);
-        $this->groupRepositoryMock = $this->getMock('Magento\Customer\Api\GroupRepositoryInterface', [], [], '', false);
-        $this->dataObjectMock = $this->getMock('Magento\Framework\Convert\DataObject', [], [], '', false);
 
         $this->collectionMock = $this->getMock(
             'Magento\SalesRule\Model\ResourceModel\Rule\Collection',
@@ -72,48 +62,16 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->collectionFactoryMock->expects($this->once())->method('create')->willReturn($this->collectionMock);
-        $searchCriteriaMock = $this->getMock('Magento\Framework\Api\SearchCriteriaInterface', [], [], '', false);
-        $groupSearchResultsMock = $this->getMock(
-            'Magento\Customer\Api\Data\GroupSearchResultsInterface',
-            [],
-            [],
-            '',
-            false
-        );
-        $groupsMock = $this->getMock('Magento\Customer\Api\Data\GroupInterface', [], [], '', false);
-
-        $this->searchCriteriaBuilderMock->expects($this->once())->method('create')->willReturn($searchCriteriaMock);
-        $this->groupRepositoryMock->expects($this->once())->method('getList')->with($searchCriteriaMock)
-            ->willReturn($groupSearchResultsMock);
-        $groupSearchResultsMock->expects($this->once())->method('getItems')->willReturn([$groupsMock]);
-        $this->storeMock->expects($this->once())->method('getWebsiteValuesForForm')->willReturn([]);
-        $this->dataObjectMock->expects($this->once())->method('toOptionArray')->with([$groupsMock], 'id', 'code')
-            ->willReturn([]);
-        $ruleFactoryMock = $this->getMock('Magento\SalesRule\Model\RuleFactory', ['create'], [], '', false);
         $ruleMock = $this->getMock('Magento\SalesRule\Model\Rule', [], [], '', false);
-        $ruleFactoryMock->expects($this->once())
-            ->method('create')
-            ->willReturn($ruleMock);
-        $ruleMock->expects($this->once())
-            ->method('getCouponTypes')
-            ->willReturn(
-                [
-                    'key1' => 'couponType1',
-                    'key2' => 'couponType2',
-                ]
-            );
+        $metaDataValueProviderMock = $this->getMockBuilder('Magento\SalesRule\Model\Rule\Metadata\ValueProvider')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
         $registryMock = $this->getMock('Magento\Framework\Registry', [], [], '', false);
         $registryMock->expects($this->once())
             ->method('registry')
             ->willReturn($ruleMock);
-        $ruleMock->expects($this->once())
-            ->method('getStoreLabels')
-            ->willReturn(
-                [
-                    'label0',
-                    'label1',
-                ]
-            );
+        $metaDataValueProviderMock->expects($this->once())->method('getMetadataValues')->willReturn(['data']);
         $this->model = (new ObjectManager($this))->getObject(
             'Magento\SalesRule\Model\Rule\DataProvider',
             [
@@ -121,12 +79,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'primaryFieldName' => 'Primary',
                 'requestFieldName' => 'Request',
                 'collectionFactory' => $this->collectionFactoryMock,
-                'store' => $this->storeMock,
-                'groupRepository' => $this->groupRepositoryMock,
-                'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
-                'objectConverter' => $this->dataObjectMock,
-                'salesRuleFactory' => $ruleFactoryMock,
                 'registry' => $registryMock,
+                'metadataValueProvider' => $metaDataValueProviderMock
             ]
         );
     }
