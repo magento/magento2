@@ -48,7 +48,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         'metadata' => ['DATA_TYPE' => 'text', 'NULLABLE' => true],
     ];
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 
