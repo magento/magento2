@@ -64,7 +64,7 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     private $joinProcessorMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->rateConverterMock = $this->getMock(
             'Magento\Tax\Model\Calculation\Rate\Converter',
@@ -399,7 +399,6 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
         $searchCriteriaMock->expects($this->any())->method('getPageSize')->will($this->returnValue($pageSize));
         $rateMock = $this->getTaxRateMock([]);
 
-
         $collectionMock->expects($this->once())->method('joinRegionTable');
         $collectionMock->expects($this->once())->method('setCurPage')->with($currentPage);
         $collectionMock->expects($this->once())->method('setPageSize')->with($pageSize);
@@ -407,8 +406,6 @@ class RateRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $this->rateFactoryMock->expects($this->once())->method('create')->will($this->returnValue($rateMock));
         $rateMock->expects($this->any())->method('getCollection')->will($this->returnValue($collectionMock));
-
-
 
         $this->searchResultMock->expects($this->once())->method('setItems')->with($items)->willReturnSelf();
         $this->searchResultMock->expects($this->once())->method('setTotalCount')->with(count($items))

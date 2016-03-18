@@ -250,16 +250,8 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
         if ($object->isDeleted()) {
             return $this->delete($object);
         }
-
         $this->beginTransaction();
-
         try {
-            if (!$this->isModified($object)) {
-                $this->processNotModifiedSave($object);
-                $this->commit();
-                $object->setHasDataChanges(false);
-                return $this;
-            }
             $object->validateBeforeSave();
             $object->beforeSave();
             if ($object->isSaveAllowed()) {

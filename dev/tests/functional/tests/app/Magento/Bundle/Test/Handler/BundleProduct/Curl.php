@@ -32,16 +32,16 @@ class Curl extends ProductCurl implements BundleProductInterface
                 'No' => 0,
             ],
             'sku_type' => [
-                'Dynamic' => 0,
-                'Fixed' => 1,
+                'Yes' => 0,
+                'No' => 1,
             ],
             'price_type' => [
-                'Dynamic' => 0,
-                'Fixed' => 1,
+                'Yes' => 0,
+                'No' => 1,
             ],
             'weight_type' => [
-                'Dynamic' => 0,
-                'Fixed' => 1,
+                'Yes' => 0,
+                'No' => 1,
             ],
             'shipment_type' => [
                 'Together' => 0,

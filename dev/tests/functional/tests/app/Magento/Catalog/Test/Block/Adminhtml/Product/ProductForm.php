@@ -43,7 +43,7 @@ class ProductForm extends FormSections
      *
      * @var string
      */
-    protected $customSection = '.admin__collapsible-title';
+    protected $customSection = '[data-index="%s"] .admin__collapsible-title';
 
     /**
      * Attribute block selector.

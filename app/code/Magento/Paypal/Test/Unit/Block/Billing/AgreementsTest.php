@@ -59,7 +59,7 @@ class AgreementsTest extends \PHPUnit_Framework_TestCase
      */
     private $block;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->context = $this->getMock('Magento\Framework\View\Element\Template\Context', [], [], '', false);
         $this->escaper = $this->getMock('Magento\Framework\Escaper', [], [], '', false);

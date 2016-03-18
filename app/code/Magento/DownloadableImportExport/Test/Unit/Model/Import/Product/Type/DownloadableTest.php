@@ -73,7 +73,7 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
      * Set up
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
 

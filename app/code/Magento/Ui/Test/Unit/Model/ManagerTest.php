@@ -75,7 +75,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected $aggregatedFileCollectorFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->componentConfigProvider = $this->getMockBuilder(
             'Magento\Framework\View\Element\UiComponent\Config\Provider\Component\Definition'

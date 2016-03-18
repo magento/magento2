@@ -169,7 +169,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->categoryIndexerMock = $this->getMockForAbstractClass('\Magento\Framework\Indexer\IndexerInterface');
 

@@ -13,7 +13,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $view;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->view = $this->getMock('\Magento\Framework\App\ViewInterface', [], [], '', false);
 

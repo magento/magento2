@@ -19,7 +19,8 @@
         "ext-gd": "*",
         "ext-openssl": "*",
         "lib-libxml": "*",
-        "ext-xsl": "*"
+        "ext-xsl": "*",
+        "symfony/process": "~2.1"
     },
     "suggest": {
         "ext-imagick": "Use Image Magick >=3.0.0 as an optional alternative image processing library"

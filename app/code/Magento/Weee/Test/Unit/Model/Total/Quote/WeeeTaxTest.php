@@ -32,7 +32,7 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManagerHelper;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);

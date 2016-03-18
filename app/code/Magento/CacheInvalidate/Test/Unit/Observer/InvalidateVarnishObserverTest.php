@@ -16,10 +16,8 @@ class InvalidateVarnishObserverTest extends \PHPUnit_Framework_TestCase
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\PageCache\Model\Config */
     protected $configMock;
 
-
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\CacheInvalidate\Model\PurgeCache */
     protected $purgeCache;
-
 
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\DataObject\ */
     protected $observerObject;
@@ -27,7 +25,7 @@ class InvalidateVarnishObserverTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up all mocks and data for test
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->configMock = $this->getMock(
             'Magento\PageCache\Model\Config',

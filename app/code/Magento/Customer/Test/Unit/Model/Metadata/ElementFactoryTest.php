@@ -21,7 +21,7 @@ class ElementFactoryTest extends \PHPUnit_Framework_TestCase
     /** @var ElementFactory */
     private $_elementFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface');
         $this->_attributeMetadata = $this->getMock(

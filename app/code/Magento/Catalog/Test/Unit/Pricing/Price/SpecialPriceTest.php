@@ -18,7 +18,7 @@ class SpecialPriceTest extends \PHPUnit_Framework_TestCase
      */
     protected $priceCurrencyMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->priceCurrencyMock = $this->getMock('\Magento\Framework\Pricing\PriceCurrencyInterface');
 

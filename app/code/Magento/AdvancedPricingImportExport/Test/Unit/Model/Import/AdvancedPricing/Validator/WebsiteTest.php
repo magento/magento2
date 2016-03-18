@@ -25,7 +25,7 @@ class WebsiteTest extends \PHPUnit_Framework_TestCase
      */
     protected $website;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->webSiteModel = $this->getMock(
             '\Magento\Store\Model\WebSite',

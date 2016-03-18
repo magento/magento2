@@ -114,7 +114,7 @@ class FormSections extends AbstractFormContainers
      * @param string $sectionName
      * @return bool
      */
-    public function isCollapsed($sectionName)
+    private function isCollapsed($sectionName)
     {
         return $this->getContainerElement($sectionName)->find($this->opened)->isVisible();
     }

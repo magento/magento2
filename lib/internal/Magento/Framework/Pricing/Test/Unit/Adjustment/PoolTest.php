@@ -14,7 +14,7 @@ class PoolTest extends \PHPUnit_Framework_TestCase
      */
     public $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $adjustmentsData = [
             'adj1' => ['className' => 'adj1_class', 'sortOrder' => 10],

@@ -63,7 +63,7 @@ HTML;
 
     // @codingStandardsIgnoreEnd
 
-    public function setUp()
+    protected function setUp()
     {
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

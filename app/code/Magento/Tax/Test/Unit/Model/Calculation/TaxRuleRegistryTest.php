@@ -32,7 +32,7 @@ class TaxRuleRegistryTest extends \PHPUnit_Framework_TestCase
 
     const TAX_RULE_ID = 1;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
         $this->taxRuleModelFactoryMock = $this->getMockBuilder('Magento\Tax\Model\Calculation\RuleFactory')

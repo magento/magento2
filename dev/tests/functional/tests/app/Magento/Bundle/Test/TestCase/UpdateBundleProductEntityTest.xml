@@ -12,10 +12,10 @@
             <data name="originalProduct/dataset" xsi:type="string">bundle_dynamic_product</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">bundle_dynamic_%isolation%</data>
-            <data name="product/data/sku_type" xsi:type="string">Fixed</data>
+            <data name="product/data/sku_type" xsi:type="string">No</data>
             <data name="product/data/sku" xsi:type="string">bundle_dynamic_%isolation%</data>
             <data name="product/data/price/dataset" xsi:type="string">dynamic-100</data>
-            <data name="product/data/weight_type" xsi:type="string">Fixed</data>
+            <data name="product/data/weight_type" xsi:type="string">No</data>
             <data name="product/data/weight" xsi:type="string">1</data>
             <data name="product/data/description" xsi:type="string">Bundle Product Fixed Required</data>
             <data name="product/data/bundle_shipment_type" xsi:type="string">Together</data>
@@ -35,10 +35,10 @@
             <data name="originalProduct/dataset" xsi:type="string">bundle_fixed_product</data>
             <data name="product/data/url_key" xsi:type="string">bundle-product-%isolation%</data>
             <data name="product/data/name" xsi:type="string">bundle_fixed_%isolation%</data>
-            <data name="product/data/sku_type" xsi:type="string">Dynamic</data>
+            <data name="product/data/sku_type" xsi:type="string">Yes</data>
             <data name="product/data/sku" xsi:type="string">bundle_sku_%isolation%</data>
             <data name="product/data/price/dataset" xsi:type="string">fixed-756</data>
-            <data name="product/data/weight_type" xsi:type="string">Dynamic</data>
+            <data name="product/data/weight_type" xsi:type="string">Yes</data>
             <data name="product/data/category_ids/dataset" xsi:type="string">default_subcategory</data>
             <data name="product/data/bundle_shipment_type" xsi:type="string">Separately</data>
             <data name="product/data/bundle_selections/dataset" xsi:type="string">default_fixed</data>

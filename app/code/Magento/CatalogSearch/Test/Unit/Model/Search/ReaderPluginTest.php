@@ -9,12 +9,14 @@ class ReaderPluginTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\CatalogSearch\Model\Search\RequestGenerator|\PHPUnit_Framework_MockObject_MockObject */
     protected $requestGenerator;
+
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $objectManagerHelper;
+
     /** @var \Magento\CatalogSearch\Model\Search\ReaderPlugin */
     protected $object;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->requestGenerator = $this->getMockBuilder('Magento\\CatalogSearch\\Model\\Search\\RequestGenerator')
             ->disableOriginalConstructor()

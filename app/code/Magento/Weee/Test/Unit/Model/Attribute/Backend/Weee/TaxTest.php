@@ -20,7 +20,7 @@ class TaxTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject('Magento\Weee\Model\Attribute\Backend\Weee\Tax');

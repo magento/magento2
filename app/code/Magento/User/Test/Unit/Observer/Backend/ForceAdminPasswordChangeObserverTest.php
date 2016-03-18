@@ -42,7 +42,7 @@ class ForceAdminPasswordChangeObserverTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\User\Observer\Backend\ForceAdminPasswordChangeObserver */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->authMock = $this->getMockBuilder('Magento\Framework\AuthorizationInterface')
             ->disableOriginalConstructor()

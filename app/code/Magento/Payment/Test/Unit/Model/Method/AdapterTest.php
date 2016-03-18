@@ -59,7 +59,7 @@ class AdapterTest extends \PHPUnit_Framework_TestCase
      */
     private $adapter;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->eventManager = $this->getMock(
             'Magento\Framework\Event\ManagerInterface'

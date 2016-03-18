@@ -47,7 +47,7 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
      */
     protected $addressMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->storeManagerMock = $this->getMock('Magento\Store\Model\StoreManager', [], [], '', false);

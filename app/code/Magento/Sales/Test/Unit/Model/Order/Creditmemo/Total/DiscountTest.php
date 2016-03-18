@@ -15,24 +15,28 @@ class DiscountTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Sales\Model\Order\Creditmemo\Total\Cost
      */
     protected $total;
+
     /**
      * @var \Magento\Sales\Model\Order\Creditmemo|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $creditmemoMock;
+
     /**
      * @var \Magento\Sales\Model\Order\Creditmemo\Item|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $creditmemoItemMock;
+
     /**
      * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderMock;
+
     /**
      * @var \Magento\Sales\Model\Order\Item|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $orderItemMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->orderMock = $this->getMock(
             'Magento\Sales\Model\Order',

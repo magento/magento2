@@ -17,7 +17,7 @@ class AbstractMessageTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->model = new TestingMessage();
     }

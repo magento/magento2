@@ -41,7 +41,7 @@ class GridPoolTest extends \PHPUnit_Framework_TestCase
     /**
      * Prepare mock objects
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->orderGridMock = $this->getMock(
             'Magento\Sales\Model\ResourceModel\Grid', [], [], '', false

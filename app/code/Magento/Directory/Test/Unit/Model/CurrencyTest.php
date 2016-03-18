@@ -22,7 +22,7 @@ class CurrencyTest extends \PHPUnit_Framework_TestCase
      */
     protected $localeCurrencyMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->localeCurrencyMock = $this->getMock('\Magento\Framework\Locale\CurrencyInterface');
 

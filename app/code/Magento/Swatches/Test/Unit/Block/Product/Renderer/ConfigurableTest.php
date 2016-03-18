@@ -58,7 +58,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject  */
     private $urlBuilder;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->arrayUtils = $this->getMock('\Magento\Framework\Stdlib\ArrayUtils', [], [], '', false);
         $this->jsonEncoder = $this->getMock('\Magento\Framework\Json\EncoderInterface', [], [], '', false);

@@ -22,7 +22,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $dbSelect;
 
-    public function setUp()
+    protected function setUp()
     {
         $attribute = $this->getMock('\Magento\Eav\Model\Entity\Attribute\AbstractAttribute', null, [], '', false);
         $eavConfig = $this->getMock('\Magento\Eav\Model\Config', ['getAttribute'], [], '', false);

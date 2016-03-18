@@ -61,4 +61,22 @@ class SelectVersion extends AbstractActionController
 
         return new JsonModel($data);
     }
+
+    /**
+     * Gets installed system package
+     *
+     * @return JsonModel
+     */
+    public function installedSystemPackageAction()
+    {
+        $data = [];
+        try {
+            $data['packages'] = $this->systemPackage->getInstalledSystemPackages([]);
+            $data['responseType'] = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
+        } catch (\Exception $e) {
+            $data['error'] = $e->getMessage();
+            $data['responseType'] = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
+        }
+        return new JsonModel($data);
+    }
 }

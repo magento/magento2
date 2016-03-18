@@ -35,7 +35,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
      */
     protected $resourceCollectionMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMock(
             'Magento\Framework\Model\Context',
