@@ -9,6 +9,7 @@ namespace Magento\Security\Test\TestCase;
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Customer\Test\Fixture\Customer;
 use Magento\Customer\Test\Page\CustomerAccountLogin;
+use Magento\Config\Test\Fixture\ConfigData;
 use Magento\Mtf\Fixture\FixtureFactory;
 
 /**
@@ -74,10 +75,6 @@ class LockCustomerOnLoginPageTest extends Injectable
         $incorrectPassword,
         $configData = null
     ) {
-        $this->markTestIncomplete(
-            "MAGETWO-50404: Failed in Bamboo>>PS-FT-Plan. Needs to be triaged and fixed as part of MLS-13."
-        );
-
         $this->configData = $configData;
 
         // Preconditions
