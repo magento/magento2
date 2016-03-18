@@ -27,7 +27,7 @@ class CustomerPluginTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->subscriberFactory = $this->getMockBuilder('\Magento\Newsletter\Model\SubscriberFactory')
             ->disableOriginalConstructor()
