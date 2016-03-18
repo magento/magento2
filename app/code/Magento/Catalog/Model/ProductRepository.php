@@ -500,16 +500,22 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $product->setCanSaveCustomOptions(true);
         }
 
-        $validationResult = $this->resourceModel->validate($product);
-        if (true !== $validationResult) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(
-                __('Invalid product data: %1', implode(',', $validationResult))
-            );
+        $useValidation = \Magento\Store\Model\Store::ADMIN_CODE === $this->storeManager->getStore()->getCode();
+        if ($useValidation) {
+            $validationResult = $this->resourceModel->validate($product);
+            if (true !== $validationResult) {
+                throw new \Magento\Framework\Exception\CouldNotSaveException(
+                    __('Invalid product data: %1', implode(',', $validationResult))
+                );
+            }
         }
+
         try {
             if ($tierPrices !== null) {
                 $product->setData('tier_price', $tierPrices);
             }
+            unset($this->instances[$product->getSku()]);
+            unset($this->instancesById[$product->getId()]);
             $this->resourceModel->save($product);
         } catch (\Magento\Eav\Model\Entity\Attribute\Exception $exception) {
             throw \Magento\Framework\Exception\InputException::invalidFieldValue(
@@ -535,6 +541,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $sku = $product->getSku();
         $productId = $product->getId();
         try {
+            unset($this->instances[$product->getSku()]);
+            unset($this->instancesById[$product->getId()]);
             $this->resourceModel->delete($product);
         } catch (ValidatorException $e) {
             throw new CouldNotSaveException(__($e->getMessage()));
