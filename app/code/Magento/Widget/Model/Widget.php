@@ -7,6 +7,7 @@ namespace Magento\Widget\Model;
 
 /**
  * Widget model for different purposes
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Widget
 {
