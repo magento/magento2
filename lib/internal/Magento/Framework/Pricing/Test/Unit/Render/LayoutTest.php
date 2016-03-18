@@ -32,7 +32,7 @@ class LayoutTest extends \PHPUnit_Framework_TestCase
      */
     protected $generalLayout;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->layout = $this->getMock('Magento\Framework\View\LayoutInterface');
         $this->generalLayout = $this->getMock('Magento\Framework\View\LayoutInterface');
