@@ -55,7 +55,9 @@ class ClassesScanner implements ClassesScannerInterface
         $classes = [];
         foreach ($recursiveIterator as $fileItem) {
             /** @var $fileItem \SplFileInfo */
-            if ($fileItem->getExtension() !== 'php') {
+            if (!$fileItem->isFile() ||
+                0 === $fileItem->getSize() ||
+                $fileItem->getExtension() !== 'php') {
                 continue;
             }
             foreach ($this->excludePatterns as $excludePatterns) {
