@@ -76,7 +76,7 @@ class CatalogRulePriceTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->saleableItemMock = $this->getMock(
             'Magento\Catalog\Model\Product',
