@@ -51,7 +51,7 @@ class RelationTest extends \PHPUnit_Framework_TestCase
      */
     protected $itemMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->itemResourceMock = $this->getMockBuilder('Magento\Sales\Model\ResourceModel\Order\Shipment\Item')
             ->disableOriginalConstructor()
