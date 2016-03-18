@@ -38,7 +38,7 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
      */
     protected $resourceConnectionMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManagerHelper($this);
         $contextMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\Context')

@@ -33,7 +33,7 @@ class ItemConverterTest extends \PHPUnit_Framework_TestCase
      */
     private $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->configPoolMock = $this->getMock('Magento\Catalog\Helper\Product\ConfigurationPool', [], [], '', false);
         $this->eventManagerMock = $this->getMock('Magento\Framework\Event\ManagerInterface');

@@ -4,35 +4,36 @@
  */
 
 define([
-    'Magento_Ui/js/form/element/abstract'
-], function (Abstract) {
+    'Magento_Ui/js/form/element/single-checkbox'
+], function (Checkbox) {
     'use strict';
 
-    return Abstract.extend({
-
-        /**
-         * Disable checkbox field, when 'url_key' field without changes
-         */
-        handleChanges: function (newValue) {
-            if (newValue !== this.getInitialValue()) {
-                this.disabled(false);
-            } else {
-                this.disabled(true);
+    return Checkbox.extend({
+        defaults: {
+            imports: {
+                handleUseDefault: '${ $.parentName }.use_default.url_key:checked',
+                urlKey: '${ $.provider }:data.url_key'
+            },
+            listens: {
+                urlKey: 'handleChanges'
+            },
+            modules: {
+                useDefault: '${ $.parentName }.use_default.url_key'
             }
         },
 
         /**
-         * Set real 'url_key' to 'url_key_create_redirect' when field is checked
+         * Disable checkbox field, when 'url_key' field without changes or 'use default' field is checked
          */
-        onUpdate: function () {
-            this._super();
+        handleChanges: function (newValue) {
+            this.disabled(newValue === this.valueMap['true'] || this.useDefault.checked);
+        },
 
-            if (this.value()) {
-                this.value(this.initialValue);
-            } else {
-                this.value(0);
-            }
-            this._super();
+        /**
+         * Disable checkbox field, when 'url_key' field without changes or 'use default' field is checked
+         */
+        handleUseDefault: function (checkedUseDefault) {
+            this.disabled(this.urlKey === this.valueMap['true'] || checkedUseDefault);
         }
     });
 });
