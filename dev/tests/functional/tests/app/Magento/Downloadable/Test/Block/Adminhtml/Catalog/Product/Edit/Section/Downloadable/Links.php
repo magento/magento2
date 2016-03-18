@@ -127,7 +127,6 @@ class Links extends Form
         while ($this->_rootElement->find(sprintf($this->rowBlock, $index))->isVisible()) {
             $rowBlock = $this->getRowBlock($index - 1);
             $rowBlock->clickDeleteButton();
-            ++$index;
         }
     }
 

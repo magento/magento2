@@ -12,7 +12,9 @@
         "lines-around-comment": [
             2,
             {
-                "beforeBlockComment": true
+                "beforeBlockComment": true,
+                "allowBlockStart": true,
+                "allowObjectStart": true
             }
         ],
         "max-depth": [2, 2],
