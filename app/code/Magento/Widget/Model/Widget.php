@@ -317,13 +317,7 @@ class Widget
             }
         }
 
-        if ((bool)$params['show_pager']) {
-            $directive .= sprintf(
-                ' %s="%s"',
-                'page_var_name',
-                'p' . $this->getMathRandom()->getRandomString(5, \Magento\Framework\Math\Random::CHARS_LOWERS)
-            );
-        }
+        $directive .= $this->getWidgetPageVarName($params);
 
         $directive .= '}}';
 
@@ -338,6 +332,24 @@ class Widget
             $this->escaper->escapeUrl($directive)
         );
         return $html;
+    }
+
+    /**
+     * @param array $params
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getWidgetPageVarName($params = [])
+    {
+        $pageVarName = '';
+        if (array_key_exists('show_pager', $params) && (bool)$params['show_pager']) {
+            $pageVarName = sprintf(
+                ' %s="%s"',
+                'page_var_name',
+                'p' . $this->getMathRandom()->getRandomString(5, \Magento\Framework\Math\Random::CHARS_LOWERS)
+            );
+        }
+        return $pageVarName;
     }
 
     /**
