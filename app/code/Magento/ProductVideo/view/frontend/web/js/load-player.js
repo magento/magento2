@@ -189,7 +189,8 @@ define(['jquery', 'jquery/ui'], function ($) {
                              */
                             'onReady': function onPlayerReady() {
                                 self._player.getDuration();
-                                self.element.closest('.fotorama__stage__frame').addClass('fotorama__product-video--loaded');
+                                self.element.closest('.fotorama__stage__frame')
+                                    .addClass('fotorama__product-video--loaded');
                             },
 
                             /**
