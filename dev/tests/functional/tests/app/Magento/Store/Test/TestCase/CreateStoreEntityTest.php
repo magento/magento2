@@ -72,7 +72,6 @@ class CreateStoreEntityTest extends Injectable
      */
     public function test(Store $store)
     {
-        $this->markTestIncomplete('MAGETWO-48723');
         //Steps:
         $this->storeIndex->open();
         $this->storeIndex->getGridPageActions()->addStoreView();

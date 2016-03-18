@@ -39,7 +39,7 @@ class StoreTest extends \PHPUnit_Framework_TestCase
      */
     protected $filesystemMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [
