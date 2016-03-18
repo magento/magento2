@@ -5,6 +5,7 @@
  */
 namespace Magento\Review\Controller\Product;
 
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Review\Controller\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 
@@ -20,6 +21,11 @@ class ListAjax extends ProductController
         $this->initProduct();
         /** @var \Magento\Framework\View\Result\Layout $resultLayout */
         $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
+
+        if (!$this->initProduct()) {
+            throw new LocalizedException(__('product not found'));
+        }
+
         return $resultLayout;
     }
 }
