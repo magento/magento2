@@ -109,7 +109,7 @@ class ObsoleteCodeTest extends \PHPUnit_Framework_TestCase
     public function testPhpFiles()
     {
         $invoker = new AggregateInvoker($this);
-        $changedFiles = ChangedFiles::getPhpFiles(__DIR__ . '/_files/changed_files*');
+        $changedFiles = ChangedFiles::getPhpFiles(__DIR__ . '/../_files/changed_files*');
         $blacklistFiles = $this->getBlacklistFiles();
         foreach ($blacklistFiles as $blacklistFile) {
             unset($changedFiles[BP . $blacklistFile]);

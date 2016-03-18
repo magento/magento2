@@ -36,7 +36,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
     /** @var Validator */
     protected $validator;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->scopeConfig = $this->getMockForAbstractClass(
             'Magento\Framework\App\Config\ScopeConfigInterface',

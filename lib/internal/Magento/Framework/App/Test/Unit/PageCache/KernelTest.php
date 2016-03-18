@@ -30,7 +30,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
     /**
      * Setup
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->cacheMock = $this->getMock('Magento\Framework\App\PageCache\Cache', [], [], '', false);
         $this->fullPageCacheMock = $this->getMock('\Magento\PageCache\Model\Cache\Type', [], [], '', false);
