@@ -44,7 +44,7 @@ class NewsletterTest extends \PHPUnit_Framework_TestCase
      */
     protected $urlBuilderMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMock('\Magento\Backend\Block\Template\Context', [], [], '', false);
         $this->registryMock = $this->getMock('\Magento\Framework\Registry', [], [], '', false);

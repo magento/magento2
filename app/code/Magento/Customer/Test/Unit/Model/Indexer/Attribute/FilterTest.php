@@ -31,7 +31,7 @@ class FilterTest extends \PHPUnit_Framework_TestCase
     /** @var Filter */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->resource = $this->getMock('Magento\Framework\App\ResourceConnection', [], [], '', false);
         $this->connection = $this->getMockForAbstractClass(

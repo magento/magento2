@@ -28,7 +28,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
@@ -39,7 +38,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoConfigFixture current_store tax/display/type 1
-     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
@@ -50,7 +48,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoConfigFixture current_store tax/display/type 2
-     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
@@ -62,7 +59,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoConfigFixture current_store tax/display/type 3
-     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
@@ -73,7 +69,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */
@@ -85,7 +80,6 @@ class PriceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/ConfigurableProduct/_files/tax_rule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      */

@@ -29,7 +29,7 @@ class FactoryDecoratorTest extends \PHPUnit_Framework_TestCase
     /** @var  \Magento\Framework\ObjectManager\Profiler\FactoryDecorator */
     private $model;
 
-    public function setUp()
+    protected function setUp()
     {
         require_once __DIR__ . '/../_files/logger_classes.php';
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);

@@ -27,7 +27,7 @@ class Option extends Form
      *
      * @var string
      */
-    protected $selectionBlock = '[data-index="bundle_selections"] tbody tr:nth-child(%d)';
+    protected $selectionBlock = '[data-index="bundle_selections"] > tbody > tr:nth-child(%d)';
 
     /**
      * Selector for 'Add Products to Option' button.
@@ -106,7 +106,7 @@ class Option extends Form
         $mapping = $this->dataMapping($fields);
         $newField = $this->_getData($mapping);
         foreach ($fields['assigned_products'] as $key => $field) {
-            $newField['assigned_products'][$key] = $this->getSelectionBlock($key + 1)->getProductRow($field['data']);
+            $newField['assigned_products'][$key] = $this->getSelectionBlock($key)->getProductRow($field['data']);
         }
         return $newField;
     }

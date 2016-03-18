@@ -45,7 +45,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
     /** @var InlineEdit */
     protected $controller;
 
-    public function setUp()
+    protected function setUp()
     {
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

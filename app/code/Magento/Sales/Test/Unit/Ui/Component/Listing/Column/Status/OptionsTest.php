@@ -24,7 +24,7 @@ class OptionsTest extends \PHPUnit_Framework_TestCase
      */
     protected $collectionFactoryMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
         $this->collectionFactoryMock = $this->getMock(

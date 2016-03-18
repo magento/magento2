@@ -8,7 +8,6 @@ namespace Magento\ProductVideo\Test\Block\Adminhtml\Product\Edit\Tab;
 
 use Magento\Backend\Test\Block\Widget\Tab;
 use Magento\Mtf\Client\Element\SimpleElement;
-use Magento\Mtf\Client\Locator;
 
 /**
  * Product images tab.
@@ -20,7 +19,7 @@ class ImagesAndVideos extends Tab
      *
      * @var string
      */
-    protected $addVideoButton = '#product_info_tabs_image-management_content #add_video_button';
+    protected $addVideoButton = '[data-role="add-video-button"]';
 
     /**
      * Video dialog CSS locator.

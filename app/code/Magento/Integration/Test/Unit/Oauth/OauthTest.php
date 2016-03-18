@@ -55,7 +55,7 @@ class OauthTest extends \PHPUnit_Framework_TestCase
 
     const REQUEST_URL = 'http://magento.ll';
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_consumerFactory = $this->getMockBuilder('Magento\Integration\Model\Oauth\ConsumerFactory')
             ->disableOriginalConstructor()

@@ -100,7 +100,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultRedirectMock;
 
-    public function setUp()
+    protected function setUp()
     {
         // mock objects
         $this->objectManager = new ObjectManager($this);

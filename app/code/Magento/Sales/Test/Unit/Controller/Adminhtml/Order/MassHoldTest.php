@@ -90,7 +90,7 @@ class MassHoldTest extends \PHPUnit_Framework_TestCase
      */
     protected $orderManagementMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->orderManagementMock = $this->getMockBuilder('Magento\Sales\Api\OrderManagementInterface')

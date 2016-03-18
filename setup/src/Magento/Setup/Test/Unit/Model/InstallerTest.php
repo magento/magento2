@@ -27,7 +27,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     private $object;
 
     /**
-     * @var \Magento\Setup\Model\FilePermissions|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\FilePermissions|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filePermissions;
 
@@ -150,7 +150,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->filePermissions = $this->getMock('Magento\Setup\Model\FilePermissions', [], [], '', false);
+        $this->filePermissions = $this->getMock('Magento\Framework\Setup\FilePermissions', [], [], '', false);
         $this->configWriter = $this->getMock('Magento\Framework\App\DeploymentConfig\Writer', [], [], '', false);
         $this->configReader = $this->getMock('Magento\Framework\App\DeploymentConfig\Reader', [], [], '', false);
         $this->config = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);

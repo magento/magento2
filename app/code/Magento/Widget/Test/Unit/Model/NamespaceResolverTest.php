@@ -17,7 +17,7 @@ class NamespaceResolverTest extends \PHPUnit_Framework_TestCase
      */
     protected $moduleListMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->moduleListMock = $this->getMockBuilder('Magento\Framework\Module\ModuleListInterface')

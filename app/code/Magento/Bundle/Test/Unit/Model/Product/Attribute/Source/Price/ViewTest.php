@@ -29,7 +29,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
      */
     protected $attribute;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->option = $this->getMock('Magento\Eav\Model\ResourceModel\Entity\Attribute\Option', [], [], '', false);
         $this->optionFactory = $this->getMock(

@@ -51,7 +51,7 @@ class ReaderTest extends \PHPUnit_Framework_TestCase
      */
     protected $processorInterface;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->processorInterface = $this->getMock(
             'Magento\Framework\View\Layout\ProcessorInterface',

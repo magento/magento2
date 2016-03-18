@@ -25,7 +25,7 @@ class ValidatorTest extends \PHPUnit_Framework_TestCase
      */
     protected $validatorTest;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->validatorTest = $this->getMockForAbstractClass(
             'Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface',

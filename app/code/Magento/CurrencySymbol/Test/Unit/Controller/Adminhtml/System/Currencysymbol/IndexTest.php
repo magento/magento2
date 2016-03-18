@@ -57,7 +57,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
      */
     protected $titleMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManager($this);
 

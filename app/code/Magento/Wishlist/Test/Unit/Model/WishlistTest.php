@@ -87,7 +87,7 @@ class WishlistTest extends \PHPUnit_Framework_TestCase
      */
     protected $productRepository;
 
-    public function setUp()
+    protected function setUp()
     {
         $context = $this->getMockBuilder('Magento\Framework\Model\Context')
             ->disableOriginalConstructor()
