@@ -51,7 +51,7 @@ class ChooserTest extends \PHPUnit_Framework_TestCase
      */
     protected $resultRaw;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->responseMock = $this->getMock('Magento\Framework\App\Response\Http', [], [], '', false);
         $this->requestMock = $this->getMock('Magento\Framework\App\Request\Http', [], [], '', false);
