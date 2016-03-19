@@ -18,12 +18,11 @@ class ListAjax extends ProductController
      */
     public function execute()
     {
-        $this->initProduct();
-        /** @var \Magento\Framework\View\Result\Layout $resultLayout */
-        $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
-
         if (!$this->initProduct()) {
             throw new LocalizedException(__('product not found'));
+        } else {
+            /** @var \Magento\Framework\View\Result\Layout $resultLayout */
+            $resultLayout = $this->resultFactory->create(ResultFactory::TYPE_LAYOUT);
         }
 
         return $resultLayout;
