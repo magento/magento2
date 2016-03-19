@@ -214,7 +214,7 @@ Product.Config.prototype = {
             }
         }
 
-        var roundedPrice = (Math.round(price*100)/100).toString();
+        var roundedPrice = Number(Math.round(price + "e+2") + "e-2").toString();
 
         if (this.prices && this.prices[roundedPrice]) {
             str+= this.prices[roundedPrice];
