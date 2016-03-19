@@ -23,7 +23,7 @@ class UnlockTest extends \PHPUnit_Framework_TestCase
     protected $contextMock;
 
     /**
-     * Account lock manager
+     * Authentication
      *
      * @var AuthenticationInterface
      */

@@ -30,67 +30,67 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var Context | \PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $context;
 
     /**
-     * @var Session | \PHPUnit_Framework_MockObject_MockObject
+     * @var Session|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Customer\Model\AccountManagement | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\AccountManagement|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerAccountManagement;
 
     /**
-     * @var CustomerRepositoryInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerRepository;
 
     /**
-     * @var Validator | \PHPUnit_Framework_MockObject_MockObject
+     * @var Validator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $validator;
 
     /**
-     * @var CustomerExtractor | \PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerExtractor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerExtractor;
 
     /**
-     * @var EmailNotificationInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var EmailNotificationInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $emailNotification;
 
     /**
-     * @var RedirectFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultRedirectFactory;
 
     /**
-     * @var Redirect | \PHPUnit_Framework_MockObject_MockObject
+     * @var Redirect|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultRedirect;
 
     /**
-     * @var Http | \PHPUnit_Framework_MockObject_MockObject
+     * @var Http|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
 
     /**
-     * @var ManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $eventManager;
 
     /**
-     * @var AuthenticationInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var AuthenticationInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $authenticationMock;
 

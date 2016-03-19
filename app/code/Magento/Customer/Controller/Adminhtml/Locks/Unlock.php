@@ -16,7 +16,7 @@ use Magento\Backend\App\Action;
 class Unlock extends \Magento\Backend\App\Action
 {
     /**
-     * Account manager
+     * Authentication
      *
      * @var AuthenticationInterface
      */

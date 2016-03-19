@@ -133,7 +133,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
     protected $addressDataFactoryMock;
 
     /**
-     * @var EmailNotificationInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var EmailNotificationInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $emailNotificationMock;
 
