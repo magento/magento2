@@ -9,6 +9,7 @@
 namespace Magento\Framework\App\Test\Unit\Response;
 
 use \Magento\Framework\App\Response\Http;
+use Magento\Framework\ObjectManagerInterface;
 
 class HttpTest extends \PHPUnit_Framework_TestCase
 {
@@ -72,9 +73,9 @@ class HttpTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         unset($this->model);
-        $magentoObjectManagerFactory = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER);
-        $objectManager = $magentoObjectManagerFactory->create($_SERVER);
-        \Magento\Framework\App\ObjectManager::setInstance($objectManager);
+        /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManagerMock*/
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
     public function testSendVary()

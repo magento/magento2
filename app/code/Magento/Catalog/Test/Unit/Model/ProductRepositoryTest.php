@@ -177,7 +177,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'getProductLinks',
                 'setProductLinks',
                 'validate',
-                'save'
+                'save',
+                'getMediaGalleryEntries'
             ],
             [],
             '',
@@ -256,7 +257,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMockForAbstractClass();
         $storeMock->expects($this->any())->method('getWebsiteId')->willReturn('1');
+        $storeMock->expects($this->any())->method('getCode')->willReturn(\Magento\Store\Model\Store::ADMIN_CODE);
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
+        $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
 
         $this->mediaGalleryProcessor = $this->getMock(
             'Magento\Catalog\Model\Product\Gallery\Processor',
@@ -1246,7 +1249,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('setMediaAttribute')
             ->with($this->initializedProductMock, ['image', 'small_image'], 'filename1');
         $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
-
+        $this->productMock->expects($this->any())->method('getMediaGalleryEntries')->willReturn(null);
         $this->model->save($this->productMock);
         $this->assertEquals($expectedResult, $this->initializedProductMock->getMediaGallery('images'));
     }
