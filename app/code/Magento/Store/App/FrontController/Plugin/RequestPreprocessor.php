@@ -28,21 +28,29 @@ class RequestPreprocessor
     protected $_storeManager;
 
     /**
+     * @var \Magento\Store\Model\BaseUrlChecker
+     */
+    protected $baseUrlChecker;
+
+    /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\ResponseFactory $responseFactory
+     * @param \Magento\Store\Model\BaseUrlChecker $baseUrlChecker
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $url,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\ResponseFactory $responseFactory
+        \Magento\Framework\App\ResponseFactory $responseFactory,
+        \Magento\Store\Model\BaseUrlChecker $baseUrlChecker
     ) {
         $this->_storeManager = $storeManager;
         $this->_url = $url;
         $this->_scopeConfig = $scopeConfig;
         $this->_responseFactory = $responseFactory;
+        $this->baseUrlChecker = $baseUrlChecker;
     }
 
     /**
@@ -61,14 +69,14 @@ class RequestPreprocessor
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        if (!$request->isPost() && $this->_isBaseUrlCheckEnabled()) {
+        if (!$request->isPost() && $this->baseUrlChecker->isEnabled()) {
             $baseUrl = $this->_storeManager->getStore()->getBaseUrl(
                 \Magento\Framework\UrlInterface::URL_TYPE_WEB,
                 $this->_storeManager->getStore()->isCurrentlySecure()
             );
             if ($baseUrl) {
                 $uri = parse_url($baseUrl);
-                if (!$this->_isBaseUrlCorrect($uri, $request)) {
+                if (!$this->baseUrlChecker->execute($uri, $request)) {
                     $redirectUrl = $this->_url->getRedirectUrl(
                         $this->_url->getUrl(ltrim($request->getPathInfo(), '/'), ['_nosid' => true])
                     );
@@ -87,40 +95,5 @@ class RequestPreprocessor
         $request->setDispatched(false);
 
         return $proceed($request);
-    }
-
-    /**
-     * Is base url check enabled
-     *
-     * @return bool
-     */
-    protected function _isBaseUrlCheckEnabled()
-    {
-        return (bool)$this->_scopeConfig->getValue(
-            'web/url/redirect_to_base',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
-    }
-
-    /**
-     * Check if base url enabled
-     *
-     * @param array $uri
-     * @param \Magento\Framework\App\Request\Http $request
-     * @return bool
-     */
-    protected function _isBaseUrlCorrect($uri, $request)
-    {
-        $requestUri = $request->getRequestUri() ? $request->getRequestUri() : '/';
-        return (!isset(
-            $uri['scheme']
-        ) || $uri['scheme'] === $request->getScheme()) && (!isset(
-            $uri['host']
-        ) || $uri['host'] === $request->getHttpHost()) && (!isset(
-            $uri['path']
-        ) || strpos(
-            $requestUri,
-            $uri['path']
-        ) !== false);
     }
 }
