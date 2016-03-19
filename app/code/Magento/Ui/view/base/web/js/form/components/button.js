@@ -16,10 +16,11 @@ define([
             additionalClasses: {},
             displayArea: 'outsideGroup',
             displayAsLink: false,
-            visible: true,
             elementTmpl: 'ui/form/element/button',
             template: 'ui/form/components/button/simple',
-            disabled: false
+            visible: true,
+            disabled: false,
+            title: ''
         },
 
         /**
@@ -37,7 +38,8 @@ define([
             return this._super()
                 .observe([
                     'visible',
-                    'disabled'
+                    'disabled',
+                    'title'
                 ]);
         },
 

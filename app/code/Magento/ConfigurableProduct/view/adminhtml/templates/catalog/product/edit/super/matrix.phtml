@@ -263,3 +263,9 @@ $currencySymbol = $block->getCurrencySymbol();
         }
     }
 </script>
+<script>
+    require(['jquery'], function ($) {
+        $('body').trigger('contentUpdated');
+        $('[data-panel=product-variations]').applyBindings();
+    })
+</script>

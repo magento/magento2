@@ -60,7 +60,7 @@ class AttributeProvider implements AttributeProviderInterface
         $metadata = $this->metadataPool->getMetadata($entityType);
         $searchResult = $this->attributeRepository->getList(
             $metadata->getEavEntityType(),
-            $this->searchCriteriaBuilder->create()
+            $this->searchCriteriaBuilder->addFilter('attribute_set_id', null, 'neq')->create()
         );
         $attributes = [];
         foreach ($searchResult->getItems() as $attribute) {

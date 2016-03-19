@@ -68,7 +68,7 @@ class SystemTest extends AbstractModifierTest
         $this->productMock->expects($this->once())
             ->method('getId')
             ->willReturn($productId);
-        $this->productMock->expects($this->once())
+        $this->productMock->expects($this->exactly(2))
             ->method('getTypeId')
             ->willReturn(Type::TYPE_SIMPLE);
         $this->productMock->expects($this->once())

@@ -19,6 +19,7 @@ define([
             defaultRecord: false,
             columnsHeader: true,
             columnsHeaderAfterRender: false,
+            columnsHeaderClasses: '',
             labels: [],
             recordTemplate: 'record',
             collapsibleHeader: false,
@@ -176,7 +177,8 @@ define([
                     cell.config.labelVisible = false;
                     _.extend(data, {
                         label: cell.config.label,
-                        name: cell.name
+                        name: cell.name,
+                        columnsHeaderClasses: cell.config.columnsHeaderClasses
                     });
 
                     this.labels.push(data);

@@ -81,7 +81,7 @@ class AttributeSet extends AbstractModifier
     {
         if ($name = $this->getGeneralPanelName($meta)) {
             $meta[$name]['children']['attribute_set_id']['arguments']['data']['config']  = [
-                'component' => 'Magento_Ui/js/form/element/ui-select',
+                'component' => 'Magento_Catalog/js/components/attribute-set-select',
                 'disableLabel' => true,
                 'filterOptions' => true,
                 'elementTmpl' => 'ui/grid/filters/elements/ui-select',

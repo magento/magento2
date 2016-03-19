@@ -17,9 +17,9 @@
                     <th if="dndConfig.enabled"/>
 
                     <!-- ko foreach: {data: labels, as: 'item'}  -->
-                    <th text="item.label",
-                        css="$parent.setClasses(item)",
-                        visible="item.visible",
+                    <th text="item.label"
+                        css="item.columnsHeaderClasses"
+                        visible="item.visible"
                         disabled="item.disabled"
                         attr="{'data-name': name}"/>
                     <!-- /ko -->
@@ -29,7 +29,7 @@
                 <tbody data-bind="foreach: elems">
                 <tr class="data-row">
                     <td if="$parent.dndConfig.enabled"
-                        class="_fit"
+                        class="col-draggable"
                         template="name: $parent.dndConfig.template, data: $parent.dnd"/>
 
                     <!-- ko foreach: { data: elems, as: 'elem'}  -->
