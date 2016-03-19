@@ -21,6 +21,7 @@ use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Filter\Translit;
+use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\Component\Form\Fieldset;
@@ -131,6 +132,11 @@ class Eav extends AbstractModifier
     private $translitFilter;
 
     /**
+     * @var ArrayManager
+     */
+    private $arrayManager;
+
+    /**
      * @var ScopeOverriddenValue
      */
     private $scopeOverriddenValue;
@@ -170,6 +176,7 @@ class Eav extends AbstractModifier
      * @param SortOrderBuilder $sortOrderBuilder
      * @param EavAttributeFactory $eavAttributeFactory
      * @param Translit $translitFilter
+     * @param ArrayManager $arrayManager
      * @param ScopeOverriddenValue $scopeOverriddenValue
      * @param DataPersistorInterface $dataPersistor
      * @param array $attributesToDisable
@@ -191,6 +198,7 @@ class Eav extends AbstractModifier
         SortOrderBuilder $sortOrderBuilder,
         EavAttributeFactory $eavAttributeFactory,
         Translit $translitFilter,
+        ArrayManager $arrayManager,
         ScopeOverriddenValue $scopeOverriddenValue,
         DataPersistorInterface $dataPersistor,
         $attributesToDisable = [],
@@ -210,6 +218,7 @@ class Eav extends AbstractModifier
         $this->sortOrderBuilder = $sortOrderBuilder;
         $this->eavAttributeFactory = $eavAttributeFactory;
         $this->translitFilter = $translitFilter;
+        $this->arrayManager = $arrayManager;
         $this->scopeOverriddenValue = $scopeOverriddenValue;
         $this->dataPersistor = $dataPersistor;
         $this->attributesToDisable = $attributesToDisable;
@@ -246,68 +255,75 @@ class Eav extends AbstractModifier
      * @param string $groupCode
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function getAttributesMeta(array $attributes, $groupCode)
     {
         $meta = [];
 
-        foreach ($attributes as $sortKey => $attribute) {
+        foreach ($attributes as $sortOrder => $attribute) {
             if (in_array($attribute->getFrontendInput(), $this->bannedInputTypes)) {
                 continue;
             }
 
-            $code = $attribute->getAttributeCode();
-            if (in_array($code, $this->attributesToEliminate)) {
+            if (in_array($attribute->getAttributeCode(), $this->attributesToEliminate)) {
                 continue;
             }
 
-            $child = $this->setupMetaProperties($attribute);
-            $meta[static::CONTAINER_PREFIX . $code] = [
-                'arguments' => [
-                    'data' => [
-                        'config' => [
-                            'formElement' => 'container',
-                            'componentType' => 'container',
-                            'breakLine' => false,
-                            'label' => __('%1', $attribute->getDefaultFrontendLabel()),
-                            'sortOrder' => $sortKey * self::SORT_ORDER_MULTIPLIER,
-                            'required' => $attribute->getIsRequired(),
-                            'scopeLabel' => $this->getScopeLabel($attribute),
-                        ],
-                    ],
-                ],
-            ];
-
-            if ($attribute->getIsWysiwygEnabled()) {
-                $meta[static::CONTAINER_PREFIX . $code]['arguments']['data']['config']['component'] =
-                    'Magento_Ui/js/form/components/group';
+            if (!($attributeContainer = $this->setupAttributeContainerMeta($attribute))) {
+                continue;
             }
 
-            $child['arguments']['data']['config']['code'] = $code;
-            $child['arguments']['data']['config']['source'] = $groupCode;
-            $child['arguments']['data']['config']['scopeLabel'] = $this->getScopeLabel($attribute);
-            $child['arguments']['data']['config']['globalScope'] = $this->isScopeGlobal($attribute);
-            $child['arguments']['data']['config']['sortOrder'] = $sortKey * self::SORT_ORDER_MULTIPLIER;
+            $attributeContainer = $this->addContainerChildren($attributeContainer, $attribute, $groupCode, $sortOrder);
 
-            if (!isset($child['arguments']['data']['config']['componentType'])) {
-                $child['arguments']['data']['config']['componentType'] = Field::NAME;
-            }
-
-            if (in_array($code, $this->attributesToDisable)) {
-                $child['arguments']['data']['config']['disabled'] = true;
-            }
-            // TODO: getAttributeModel() should not be used when MAGETWO-48284 is complete
-            $childData = $child['arguments']['data']['config'];
-            if (($rules = $this->eavValidationRules->build($this->getAttributeModel($attribute), $childData))) {
-                $child['arguments']['data']['config']['validation'] = $rules;
-            }
-
-            $meta[static::CONTAINER_PREFIX . $code]['children'][$code] = $child;
+            $meta[static::CONTAINER_PREFIX . $attribute->getAttributeCode()] = $attributeContainer;
         }
 
         return $meta;
+    }
+
+    /**
+     * Add container children
+     *
+     * @param array $attributeContainer
+     * @param ProductAttributeInterface $attribute
+     * @param string $groupCode
+     * @param int $sortOrder
+     * @return array
+     */
+    public function addContainerChildren(
+        array $attributeContainer,
+        ProductAttributeInterface $attribute,
+        $groupCode,
+        $sortOrder
+    ) {
+        foreach ($this->getContainerChildren($attribute, $groupCode, $sortOrder) as $childCode => $child) {
+            $attributeContainer['children'][$childCode] = $child;
+        }
+
+        $attributeContainer = $this->arrayManager->merge(
+            ltrim(static::META_CONFIG_PATH, ArrayManager::DEFAULT_PATH_DELIMITER),
+            $attributeContainer,
+            ['sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER]
+        );
+
+        return $attributeContainer;
+    }
+
+    /**
+     * Retrieve container child fields
+     *
+     * @param ProductAttributeInterface $attribute
+     * @param string $groupCode
+     * @param int $sortOrder
+     * @return array
+     */
+    public function getContainerChildren(ProductAttributeInterface $attribute, $groupCode, $sortOrder)
+    {
+        if (!($child = $this->setupAttributeMeta($attribute, $groupCode, $sortOrder))) {
+            return [];
+        }
+
+        return [$attribute->getAttributeCode() => $child];
     }
 
     /**
@@ -319,13 +335,18 @@ class Eav extends AbstractModifier
             return $this->resolvePersistentData($data);
         }
 
+        $productId = $this->locator->getProduct()->getId();
+
         /** @var string $groupCode */
         foreach (array_keys($this->getGroups()) as $groupCode) {
+            /** @var ProductAttributeInterface[] $attributes */
             $attributes = !empty($this->getAttributes()[$groupCode]) ? $this->getAttributes()[$groupCode] : [];
 
-            /* @var EavAttribute $attribute */
             foreach ($attributes as $attribute) {
-                $data = $this->setAttributeValueToData($data, $attribute->getAttributeCode());
+                if (null !== ($attributeValue = $this->setupAttributeData($attribute))) {
+                    $data[$productId][self::DATA_SOURCE_DEFAULT][$attribute->getAttributeCode()] = $attributeValue;
+                }
+
             }
         }
 
@@ -489,42 +510,84 @@ class Eav extends AbstractModifier
      * Initial meta setup
      *
      * @param ProductAttributeInterface $attribute
+     * @param string $groupCode
+     * @param int $sortOrder
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function setupMetaProperties(ProductAttributeInterface $attribute)
+    public function setupAttributeMeta(ProductAttributeInterface $attribute, $groupCode, $sortOrder)
     {
-        $meta = [
-            'arguments' => [
-                'data' => [
-                    'config' => [
-                        'dataType' => $attribute->getFrontendInput(),
-                        'formElement' => $this->getFormElementsMapValue($attribute->getFrontendInput()),
-                        'visible' => $attribute->getIsVisible(),
-                        'required' => $attribute->getIsRequired(),
-                        'notice' => $attribute->getNote(),
-                        'default' => $attribute->getDefaultValue(),
-                        'label' => __('%1', $attribute->getDefaultFrontendLabel()),
-                    ],
-                ],
-            ],
-        ];
-        foreach ($meta as $key => $value) {
-            if ($value === null) {
-                unset($meta[$key]);
-            }
-        }
+        $configPath = ltrim(static::META_CONFIG_PATH, ArrayManager::DEFAULT_PATH_DELIMITER);
+
+        $meta = $this->arrayManager->set($configPath, [], [
+            'dataType' => $attribute->getFrontendInput(),
+            'formElement' => $this->getFormElementsMapValue($attribute->getFrontendInput()),
+            'visible' => $attribute->getIsVisible(),
+            'required' => $attribute->getIsRequired(),
+            'notice' => $attribute->getNote(),
+            'default' => $attribute->getDefaultValue(),
+            'label' => $attribute->getDefaultFrontendLabel(),
+            'code' => $attribute->getAttributeCode(),
+            'source' => $groupCode,
+            'scopeLabel' => $this->getScopeLabel($attribute),
+            'globalScope' => $this->isScopeGlobal($attribute),
+            'sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER,
+        ]);
 
         // TODO: Refactor to $attribute->getOptions() when MAGETWO-48289 is done
         $attributeModel = $this->getAttributeModel($attribute);
         if ($attributeModel->usesSource()) {
-            $meta['arguments']['data']['config']['options'] = $attributeModel->getSource()->getAllOptions();
+            $meta = $this->arrayManager->merge($configPath, $meta, [
+                'options' => $attributeModel->getSource()->getAllOptions(),
+            ]);
         }
 
-        $meta = $this->addWysiwyg($attribute, $meta);
-        $meta = $this->customizeCheckbox($attribute, $meta);
-        $meta = $this->customizePriceAttribute($attribute, $meta);
+        if ($this->canDisplayUseDefault($attribute)) {
+            $meta = $this->arrayManager->merge($configPath, $meta, [
+                'service' => [
+                    'template' => 'ui/form/element/helper/service',
+                ]
+            ]);
+        }
+
+        if (!$this->arrayManager->exists($configPath . '/componentType', $meta)) {
+            $meta = $this->arrayManager->merge($configPath, $meta, [
+                'componentType' => Field::NAME,
+            ]);
+        }
+
+        if (in_array($attribute->getAttributeCode(), $this->attributesToDisable)) {
+            $meta = $this->arrayManager->merge($configPath, $meta, [
+                'disabled' => true,
+            ]);
+        }
+
+        // TODO: getAttributeModel() should not be used when MAGETWO-48284 is complete
+        $childData = $this->arrayManager->get($configPath, $meta, []);
+        if (($rules = $this->eavValidationRules->build($this->getAttributeModel($attribute), $childData))) {
+            $meta = $this->arrayManager->merge($configPath, $meta, [
+                'validation' => $rules,
+            ]);
+        }
+
         $meta = $this->addUseDefaultValueCheckbox($attribute, $meta);
+
+        switch ($attribute->getFrontendInput()) {
+            case 'boolean':
+                $meta = $this->customizeCheckbox($attribute, $meta);
+                break;
+            case 'textarea':
+                $meta = $this->customizeWysiwyg($attribute, $meta);
+                break;
+            case 'price':
+                $meta = $this->customizePriceAttribute($attribute, $meta);
+                break;
+            case 'gallery':
+                // Gallery attribute is being handled by "Images And Videos" section
+                $meta = [];
+                break;
+        }
 
         return $meta;
     }
@@ -550,6 +613,60 @@ class Eav extends AbstractModifier
             );
         }
         return $meta;
+    }
+
+    /**
+     * Setup attribute container meta
+     *
+     * @param ProductAttributeInterface $attribute
+     * @return array
+     */
+    public function setupAttributeContainerMeta(ProductAttributeInterface $attribute)
+    {
+        $containerMeta = $this->arrayManager->set(
+            'arguments/data/config',
+            [],
+            [
+                'formElement' => 'container',
+                'componentType' => 'container',
+                'breakLine' => false,
+                'label' => $attribute->getDefaultFrontendLabel(),
+                'required' => $attribute->getIsRequired(),
+            ]
+        );
+
+        if ($attribute->getIsWysiwygEnabled()) {
+            $containerMeta = $this->arrayManager->merge(
+                'arguments/data/config',
+                $containerMeta,
+                [
+                    'component' => 'Magento_Ui/js/form/components/group'
+                ]
+            );
+        }
+
+        return $containerMeta;
+    }
+
+    /**
+     * Setup attribute data
+     *
+     * @param ProductAttributeInterface $attribute
+     * @return mixed|null
+     */
+    public function setupAttributeData(ProductAttributeInterface $attribute)
+    {
+        $product = $this->locator->getProduct();
+        $productId = $product->getId();
+        $prevSetId = $this->getPrevSetId();
+        $notUsed = !$prevSetId
+            || ($prevSetId && !in_array($attribute->getAttributeCode(), $this->getPrevSetAttributes()));
+
+        if ($productId && $notUsed) {
+            return $this->getValue($attribute);
+        }
+
+        return null;
     }
 
     /**
@@ -597,7 +714,7 @@ class Eav extends AbstractModifier
      * @param array $meta
      * @return array
      */
-    private function addWysiwyg(ProductAttributeInterface $attribute, array $meta)
+    private function customizeWysiwyg(ProductAttributeInterface $attribute, array $meta)
     {
         if (!$attribute->getIsWysiwygEnabled()) {
             return $meta;
@@ -623,40 +740,17 @@ class Eav extends AbstractModifier
     }
 
     /**
-     * Set attribute to loaded data
-     *
-     * @param array $data
-     * @param string $attributeCode
-     * @return $this
-     */
-    protected function setAttributeValueToData(array $data, $attributeCode)
-    {
-        $product = $this->locator->getProduct();
-        $productId = $product->getId();
-        $prevSetId = $this->getPrevSetId();
-        $notUsed = !$prevSetId || ($prevSetId && !in_array($attributeCode, $this->getPrevSetAttributes()));
-
-        if ($productId && $notUsed) {
-            if (null !== ($value = $this->getValue($attributeCode))) {
-                $data[$productId][self::DATA_SOURCE_DEFAULT][$attributeCode] = $value;
-            }
-        }
-
-        return $data;
-    }
-
-    /**
      * Retrieve attribute value
      *
-     * @param string $attributeCode
+     * @param ProductAttributeInterface $attribute
      * @return mixed
      */
-    protected function getValue($attributeCode)
+    protected function getValue(ProductAttributeInterface $attribute)
     {
         /** @var Product $product */
         $product = $this->locator->getProduct();
 
-        return $product->getData($attributeCode);
+        return $product->getData($attribute->getAttributeCode());
     }
 
     /**
@@ -746,22 +840,12 @@ class Eav extends AbstractModifier
      */
     private function calculateGroupCode(AttributeGroupInterface $group)
     {
-        $groupName = $group->getAttributeGroupName();
-        $attributeGroupCode = trim(
-            preg_replace(
-                '/[^a-z0-9]+/',
-                '-',
-                $this->translitFilter->filter(strtolower($groupName))
-            ),
-            '-'
-        );
-        if ($attributeGroupCode == 'images') {
+        $attributeGroupCode = $group->getAttributeGroupCode();
+
+        if ($attributeGroupCode === 'images') {
             $attributeGroupCode = 'image-management';
         }
-        if (empty($attributeGroupCode)) {
-            // in the following code md5 is not used for security purposes
-            $attributeGroupCode = md5($groupName);
-        }
+
         return $attributeGroupCode;
     }
 }
