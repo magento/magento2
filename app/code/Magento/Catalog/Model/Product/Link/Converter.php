@@ -41,8 +41,6 @@ class Converter
             if ($link->getLinkType() == 'associated') {
                 $info['id'] = $associatedProducts[$link->getLinkedProductSku()]->getId();
             }
-//            $info['sku'] = $link->getLinkedProductSku();
-//            $info['position'] = $link->getPosition();
             $info = array_merge($info, $link->getExtensionAttributes()->__toArray());
             $linksAsArray[$link->getLinkType()][] = $info;
         }
