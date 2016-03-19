@@ -3,14 +3,14 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Security\Helper;
+namespace Magento\Security\Model;
 
 use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 
 /**
  * Security cookie helper
  */
-class SecurityCookie extends \Magento\Framework\App\Helper\AbstractHelper
+class SecurityCookie
 {
     /**
      * Cookie name
@@ -20,22 +20,22 @@ class SecurityCookie extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
      */
-    protected $phpCookieManager;
+    private $phpCookieManager;
 
     /**
      * @var \Magento\Backend\Helper\Data
      */
-    protected $backendData;
+    private $backendData;
 
     /**
      * @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadataFactory
      */
-    protected $cookieMetadataFactory;
+    private $cookieMetadataFactory;
 
     /**
      * @var CookieReaderInterface
      */
-    protected $cookieReader;
+    private $cookieReader;
 
     /**
      * @param \Magento\Framework\Stdlib\Cookie\PhpCookieManager $phpCookieManager
@@ -109,7 +109,7 @@ class SecurityCookie extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata
      */
-    protected function createCookieMetaData()
+    private function createCookieMetaData()
     {
         return $this->cookieMetadataFactory->create();
     }

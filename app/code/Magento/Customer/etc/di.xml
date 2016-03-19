@@ -43,8 +43,14 @@
                 type="Magento\Customer\Model\Metadata\AddressMetadataManagement" />
     <preference for="Magento\Customer\Api\CustomerManagementInterface"
                 type="Magento\Customer\Model\CustomerManagement" />
+    <preference for="Magento\Customer\Model\AuthenticationInterface"
+                type="Magento\Customer\Model\Authentication" />
+    <preference for="Magento\Customer\Model\EmailNotificationInterface"
+                type="Magento\Customer\Model\EmailNotification" />
     <preference for="Magento\Customer\Api\CustomerNameGenerationInterface"
                 type="Magento\Customer\Helper\View" />
+    <preference for="Magento\Customer\Model\CredentialsChangeProcessorInterface"
+                type="Magento\Customer\Model\CredentialsChangeProcessor" />
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>

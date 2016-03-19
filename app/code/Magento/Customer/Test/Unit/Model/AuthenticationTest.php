@@ -3,16 +3,15 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Test\Unit\Helper;
+namespace Magento\Customer\Test\Unit\Model;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Model\Authentication;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
-/**
- * Class AccountManagementTest
- * @package Magento\Customer\Test\Unit\Helper
- */
-class AccountManagementTest extends \PHPUnit_Framework_TestCase
+class AuthenticationTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Backend configuration interface
@@ -20,11 +19,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Backend\App\ConfigInterface
      */
     protected $backendConfigMock;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime
-     */
-    protected $dateTimeMock;
 
     /**
      * @var \Magento\Customer\Model\CustomerRegistry
@@ -37,14 +31,9 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     protected $encryptorMock;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var CustomerRepositoryInterface
      */
-    protected $eventManagerMock;
-
-    /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
-     */
-    protected $scopeConfigMock;
+    protected $customerRepositoryMock;
 
     /**
      * @var \Magento\Customer\Model\Data\CustomerSecure
@@ -52,9 +41,9 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     protected $customerSecure;
 
     /**
-     * @var \Magento\Customer\Helper\AccountManagement
+     * @var \Magento\Customer\Model\Authentication
      */
-    protected $helper;
+    protected $authentication;
 
     protected function setUp()
     {
@@ -62,13 +51,6 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMockForAbstractClass();
-        $this->dateTimeMock = $this->getMock(
-            'Magento\Framework\Stdlib\DateTime',
-            [],
-            [],
-            '',
-            false
-        );
         $this->customerRegistryMock = $this->getMock(
             'Magento\Customer\Model\CustomerRegistry',
             ['retrieveSecureData', 'retrieve'],
@@ -76,27 +58,12 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->encryptorMock = $this->getMock(
-            'Magento\Framework\Encryption\EncryptorInterface',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->eventManagerMock = $this->getMock(
-            'Magento\Framework\Event\ManagerInterface',
-            [],
-            [],
-            '',
-            false
-        );
-        $this->scopeConfigMock =  $this->getMock(
-            '\Magento\Framework\App\Config\ScopeConfigInterface',
-            ['getValue', 'isSetFlag'],
-            [],
-            '',
-            false
-        );
+        $this->customerRepositoryMock = $this->getMockBuilder(CustomerRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->encryptorMock = $this->getMockBuilder(\Magento\Framework\Encryption\EncryptorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->customerSecure = $this->getMock(
             'Magento\Customer\Model\Data\CustomerSecure',
             [
@@ -115,15 +82,13 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         );
         $objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->helper = $objectManagerHelper->getObject(
-            'Magento\Customer\Helper\AccountManagement',
+        $this->authentication = $objectManagerHelper->getObject(
+            Authentication::class,
             [
                 'customerRegistry' => $this->customerRegistryMock,
                 'backendConfig' => $this->backendConfigMock,
-                'dateTime' => $this->dateTimeMock,
+                'customerRepository' => $this->customerRepositoryMock,
                 'encryptor' => $this->encryptorMock,
-                'eventManager' => $this->eventManagerMock,
-                'scopeConfig' => $this->scopeConfigMock
             ]
         );
     }
@@ -137,15 +102,15 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->backendConfigMock->expects($this->exactly(2))
             ->method('getValue')
             ->withConsecutive(
-                [\Magento\Customer\Helper\AccountManagement::LOCKOUT_THRESHOLD_PATH],
-                [\Magento\Customer\Helper\AccountManagement::MAX_FAILURES_PATH]
+                [\Magento\Customer\Model\Authentication::LOCKOUT_THRESHOLD_PATH],
+                [\Magento\Customer\Model\Authentication::MAX_FAILURES_PATH]
             )
             ->willReturnOnConsecutiveCalls(0, 0);
         $this->customerRegistryMock->expects($this->once())
             ->method('retrieveSecureData')
             ->with($customerId)
             ->willReturn($this->customerSecure);
-        $this->helper->processCustomerLockoutData($customerId);
+        $this->authentication->processAuthenticationFailure($customerId);
     }
 
     /**
@@ -157,8 +122,8 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->backendConfigMock->expects($this->exactly(2))
             ->method('getValue')
             ->withConsecutive(
-                [\Magento\Customer\Helper\AccountManagement::LOCKOUT_THRESHOLD_PATH],
-                [\Magento\Customer\Helper\AccountManagement::MAX_FAILURES_PATH]
+                [\Magento\Customer\Model\Authentication::LOCKOUT_THRESHOLD_PATH],
+                [\Magento\Customer\Model\Authentication::MAX_FAILURES_PATH]
             )
             ->willReturnOnConsecutiveCalls(10, 5);
 
@@ -166,13 +131,23 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('retrieveSecureData')
             ->with($customerId)
             ->willReturn($this->customerSecure);
+        $customerMock = $this->getMockBuilder(CustomerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customerMock);
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($customerMock);
 
         $this->customerSecure->expects($this->once())->method('getFailuresNum')->willReturn(0);
         $this->customerSecure->expects($this->once())->method('getFirstFailure')->willReturn(0);
         $this->customerSecure->expects($this->once())->method('setFirstFailure');
         $this->customerSecure->expects($this->once())->method('setFailuresNum');
 
-        $this->helper->processCustomerLockoutData($customerId);
+        $this->authentication->processAuthenticationFailure($customerId);
     }
 
     /**
@@ -187,8 +162,8 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->backendConfigMock->expects($this->exactly(2))
             ->method('getValue')
             ->withConsecutive(
-                [\Magento\Customer\Helper\AccountManagement::LOCKOUT_THRESHOLD_PATH],
-                [\Magento\Customer\Helper\AccountManagement::MAX_FAILURES_PATH]
+                [\Magento\Customer\Model\Authentication::LOCKOUT_THRESHOLD_PATH],
+                [\Magento\Customer\Model\Authentication::MAX_FAILURES_PATH]
             )
             ->willReturnOnConsecutiveCalls(10, 5);
 
@@ -196,6 +171,16 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('retrieveSecureData')
             ->with($customerId)
             ->willReturn($this->customerSecure);
+        $customerMock = $this->getMockBuilder(CustomerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customerMock);
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($customerMock);
 
         $this->customerSecure->expects($this->once())->method('getFailuresNum')->willReturn(5);
         $this->customerSecure->expects($this->once())
@@ -204,7 +189,7 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
         $this->customerSecure->expects($this->once())->method('setLockExpires');
         $this->customerSecure->expects($this->once())->method('setFailuresNum');
 
-        $this->helper->processCustomerLockoutData($customerId);
+        $this->authentication->processAuthenticationFailure($customerId);
     }
 
     /**
@@ -217,84 +202,20 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             ->method('retrieveSecureData')
             ->with($customerId)
             ->willReturn($this->customerSecure);
+        $customerMock = $this->getMockBuilder(CustomerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customerMock);
+        $this->customerRepositoryMock->expects($this->once())
+            ->method('save')
+            ->with($customerMock);
         $this->customerSecure->expects($this->once())->method('setFailuresNum')->with(0);
         $this->customerSecure->expects($this->once())->method('setFirstFailure')->with(null);
         $this->customerSecure->expects($this->once())->method('setLockExpires')->with(null);
-        $this->helper->processUnlockData($customerId);
-    }
-
-    /**
-     * @param bool $result
-     * @dataProvider validatePasswordAndLockStatusDataProvider
-     */
-    public function testValidatePasswordAndLockStatus($result)
-    {
-        $customerId = 7;
-        $password = '1234567';
-        $hash = '1b2af329dd0';
-        $email = 'test@example.com';
-
-        $customerMock = $this->getMock(
-            'Magento\Customer\Api\Data\CustomerInterface',
-            [],
-            [],
-            '',
-            false
-        );
-        $customerMock->expects($this->any())
-            ->method('getId')
-            ->willReturn($customerId);
-
-        $this->customerSecure->expects($this->any())
-            ->method('getId')
-            ->willReturn($customerId);
-
-        $this->customerSecure->expects($this->once())
-            ->method('getPasswordHash')
-            ->willReturn($hash);
-
-        $this->customerRegistryMock->expects($this->once())
-            ->method('retrieveSecureData')
-            ->with($customerId)
-            ->willReturn($this->customerSecure);
-
-        $this->encryptorMock->expects($this->once())
-            ->method('validateHash')
-            ->with($password, $hash)
-            ->willReturn($result);
-
-        if ($result) {
-            $this->assertEquals($this->helper, $this->helper->validatePasswordAndLockStatus($customerMock, $password));
-        } else {
-            $customerMock->expects($this->once())
-                ->method('getEmail')
-                ->willReturn($email);
-
-            $this->eventManagerMock->expects($this->once())
-                ->method('dispatch')
-                ->with(
-                    'customer_password_invalid',
-                    [
-                        'username' => $email,
-                        'password' => $password
-                    ]
-                );
-
-            $this->customerSecure->expects($this->once())
-                ->method('isCustomerLocked')
-                ->willReturn(false);
-
-            $this->customerRegistryMock->expects($this->once())
-                ->method('retrieve')
-                ->with($customerId)
-                ->willReturn($this->customerSecure);
-
-            $this->setExpectedException(
-                '\Magento\Framework\Exception\InvalidEmailOrPasswordException',
-                __('The password doesn\'t match this account.')
-            );
-            $this->helper->validatePasswordAndLockStatus($customerMock, $password);
-        }
+        $this->authentication->unlock($customerId);
     }
 
     /**
@@ -311,7 +232,29 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
     public function testCheckIfLocked()
     {
         $customerId = 7;
-        $email = 'test@example.com';
+
+        $customerModelMock = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerModelMock->expects($this->once())
+            ->method('isCustomerLocked');
+        $this->customerRegistryMock->expects($this->once())
+            ->method('retrieve')
+            ->with($customerId)
+            ->willReturn($customerModelMock);
+
+        $this->authentication->isLocked($customerId);
+    }
+
+    /**
+     * @param bool $result
+     * @dataProvider validateCustomerPassword
+     */
+    public function testValidateCustomerPassword($result)
+    {
+        $customerId = 7;
+        $password = '1234567';
+        $hash = '1b2af329dd0';
 
         $customerMock = $this->getMock(
             'Magento\Customer\Api\Data\CustomerInterface',
@@ -320,29 +263,64 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $customerMock->expects($this->once())
+        $this->customerRepositoryMock->expects($this->any())
+            ->method('getById')
+            ->willReturn($customerMock);
+
+        $this->customerSecure->expects($this->any())
             ->method('getId')
             ->willReturn($customerId);
 
         $this->customerSecure->expects($this->once())
-            ->method('isCustomerLocked')
-            ->willReturn(true);
+            ->method('getPasswordHash')
+            ->willReturn($hash);
 
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with('contact/email/recipient_email')
-            ->willReturn($email);
-
-        $this->customerRegistryMock->expects($this->once())
-            ->method('retrieve')
+        $this->customerRegistryMock->expects($this->any())
+            ->method('retrieveSecureData')
             ->with($customerId)
             ->willReturn($this->customerSecure);
 
-        $this->setExpectedException(
-            '\Magento\Framework\Exception\State\UserLockedException',
-            __('The account is locked. Please wait and try again or contact %1.', $email)
-        );
+        $this->encryptorMock->expects($this->once())
+            ->method('validateHash')
+            ->with($password, $hash)
+            ->willReturn($result);
 
-        $this->helper->checkIfLocked($customerMock);
+        if ($result) {
+            $this->assertTrue($this->authentication->authenticate($customerId, $password));
+        } else {
+            $this->backendConfigMock->expects($this->exactly(2))
+                ->method('getValue')
+                ->withConsecutive(
+                    [\Magento\Customer\Model\Authentication::LOCKOUT_THRESHOLD_PATH],
+                    [\Magento\Customer\Model\Authentication::MAX_FAILURES_PATH]
+                )
+                ->willReturnOnConsecutiveCalls(1, 1);
+            $this->customerSecure->expects($this->once())
+                ->method('isCustomerLocked')
+                ->willReturn(false);
+
+            $this->customerRegistryMock->expects($this->once())
+                ->method('retrieve')
+                ->with($customerId)
+                ->willReturn($this->customerSecure);
+
+            $this->customerRepositoryMock->expects($this->once())
+                ->method('save')
+                ->willReturn($customerMock);
+
+            $this->setExpectedException('\Magento\Framework\Exception\InvalidEmailOrPasswordException');
+            $this->authentication->authenticate($customerId, $password);
+        }
+    }
+
+    /**
+     * @return array
+     */
+    public function validateCustomerPassword()
+    {
+        return [
+            [true],
+            [false],
+        ];
     }
 }

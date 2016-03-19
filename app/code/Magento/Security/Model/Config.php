@@ -3,25 +3,17 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Security\Helper;
+namespace Magento\Security\Model;
 
-use \Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Config\ScopeInterface;
+use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 
 /**
- * Security config helper
+ * Security config
  */
-class SecurityConfig extends \Magento\Framework\App\Helper\AbstractHelper
+class Config implements ConfigInterface
 {
-    /**
-     * Admin area code
-     */
-    const ADMIN_AREA_SCOPE = 0;
-
-    /**
-     * Fronted area code
-     */
-    const FRONTED_AREA_SCOPE = 1;
-
     /**
      * Period of time which will be used to calculate all types of limitations (s)
      */
@@ -63,7 +55,31 @@ class SecurityConfig extends \Magento\Framework\App\Helper\AbstractHelper
     const XML_PATH_EMAIL_RECIPIENT = 'contact/email/recipient_email';
 
     /**
-     * Get Email of a customer service
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @var ScopeInterface
+     */
+    private $scope;
+
+    /**
+     * SecurityConfig constructor.
+     *
+     * @param ScopeConfigInterface $scopeConfig
+     * @param ScopeInterface $scope
+     */
+    public function __construct(
+        ScopeConfigInterface $scopeConfig,
+        ScopeInterface $scope
+    ) {
+        $this->scopeConfig = $scopeConfig;
+        $this->scope = $scope;
+    }
+
+    /**
+     * {@inheritDoc}
      *
      * @return string
      */
@@ -71,22 +87,22 @@ class SecurityConfig extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             self::XML_PATH_EMAIL_RECIPIENT,
-            ScopeInterface::SCOPE_STORE
+            StoreScopeInterface::SCOPE_STORE
         );
     }
 
     /**
-     * Return period of time which will be used to calculate all types of limitations (s)
+     * {@inheritDoc}
      *
      * @return int
      */
-    public function getTimePeriodToCalculateLimitations()
+    public function getLimitationTimePeriod()
     {
         return self::TIME_PERIOD_TO_CALCULATE_LIMITATIONS;
     }
 
     /**
-     * Check if admin account sharing enabled
+     * {@inheritDoc}
      *
      * @return bool
      */
@@ -94,12 +110,12 @@ class SecurityConfig extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->isSetFlag(
             self::XML_PATH_ADMIN_ACCOUNT_SHARING,
-            ScopeInterface::SCOPE_STORE
+            StoreScopeInterface::SCOPE_STORE
         );
     }
 
     /**
-     * Get Admin Session lifetime setting value
+     * {@inheritDoc}
      *
      * @return int
      */
@@ -109,79 +125,57 @@ class SecurityConfig extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Get xml path by scope
+     * {@inheritDoc}
      *
-     * @param int $scope
      * @return string
      */
-    protected function getXmlPathByScope($scope)
+    protected function getXmlPathPrefix()
     {
-        if ($scope == self::FRONTED_AREA_SCOPE) {
-            return self::XML_PATH_FRONTED_AREA;
-        } elseif ($scope == self::ADMIN_AREA_SCOPE) {
+        if ($this->scope->getCurrentScope() == \Magento\Framework\App\Area::AREA_ADMINHTML) {
             return self::XML_PATH_ADMIN_AREA;
         }
+        return self::XML_PATH_FRONTED_AREA;
     }
 
     /**
-     * Get limit password reset requests method
+     * Get type of limit on password resets (e.g. limit requests per email, per IP address, or both)
      *
-     * @param int $scope
      * @return int
      */
-    public function getLimitPasswordResetRequestsMethod($scope)
+    public function getPasswordResetProtectionType()
     {
         return (int) $this->scopeConfig->getValue(
-            $this->getXmlPathByScope($scope) . self::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD,
-            ScopeInterface::SCOPE_STORE
+            $this->getXmlPathPrefix() . self::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD,
+            StoreScopeInterface::SCOPE_STORE
         );
     }
 
     /**
-     * Get limit number password reset requests
+     * {@inheritDoc}
      *
      * @param int $scope
      * @return int
      */
-    public function getLimitNumberPasswordResetRequests($scope)
+    public function getMaxNumberPasswordResetRequests()
     {
         return (int) $this->scopeConfig->getValue(
-            $this->getXmlPathByScope($scope) . self::XML_PATH_LIMIT_NUMBER_REQUESTS,
-            ScopeInterface::SCOPE_STORE
+            $this->getXmlPathPrefix() . self::XML_PATH_LIMIT_NUMBER_REQUESTS,
+            StoreScopeInterface::SCOPE_STORE
         );
     }
 
     /**
-     * Get limit time between password reset requests (s)
+     * {@inheritDoc}
      *
      * @param int $scope
      * @return int
      */
-    public function getLimitTimeBetweenPasswordResetRequests($scope)
+    public function getMinTimeBetweenPasswordResets()
     {
         $timeInMin = $this->scopeConfig->getValue(
-            $this->getXmlPathByScope($scope) . self::XML_PATH_LIMIT_TIME_BETWEEN_REQUESTS,
-            ScopeInterface::SCOPE_STORE
+            $this->getXmlPathPrefix() . self::XML_PATH_LIMIT_TIME_BETWEEN_REQUESTS,
+            StoreScopeInterface::SCOPE_STORE
         );
         return $timeInMin * 60;
-    }
-
-    /**
-     * Get remote user Ip
-     *
-     * @param bool $ipToLong converting IP to long format
-     * @return string|int
-     */
-    public function getRemoteIp($ipToLong = true)
-    {
-        return $this->_remoteAddress->getRemoteAddress($ipToLong);
-    }
-
-    /**
-     * @return int
-     */
-    public function getCurrentTimestamp()
-    {
-        return time();
     }
 }

@@ -10,6 +10,7 @@ use Magento\Framework\Exception\IntegrationException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Integration\Model\Integration as IntegrationModel;
 use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Security\Model\SecurityCookie;
 
 /**
  * Integration Save controller
@@ -19,34 +20,22 @@ use Magento\Framework\Exception\State\UserLockedException;
 class Save extends \Magento\Integration\Controller\Adminhtml\Integration
 {
     /**
-     * @var \Magento\Security\Helper\SecurityCookie
+     * @var SecurityCookie
      */
-    protected $securityCookieHelper;
-
-    /**
-     * Set security cookie helper
-     *
-     * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
-     * @return void
-     * @deprecated
-     */
-    public function setSecurityCookieHelper(\Magento\Security\Helper\SecurityCookie $securityCookieHelper)
-    {
-        $this->securityCookieHelper = $securityCookieHelper;
-    }
+    private $securityCookie;
 
     /**
      * Get security cookie helper
      *
-     * @return \Magento\Security\Helper\SecurityCookie
+     * @return SecurityCookie
      * @deprecated
      */
-    public function getSecurityCookieHelper()
+    private function getSecurityCookie()
     {
-        if (!($this->securityCookieHelper instanceof \Magento\Security\Helper\SecurityCookie)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Security\Helper\SecurityCookie');
+        if (!($this->securityCookie instanceof SecurityCookie)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(SecurityCookie::class);
         } else {
-            return $this->securityCookieHelper;
+            return $this->securityCookie;
         }
     }
 
@@ -74,7 +63,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
             $this->processData($integrationData);
         } catch (UserLockedException $e) {
             $this->_auth->logout();
-            $this->getSecurityCookieHelper()->setLogoutReasonCookie(
+            $this->getSecurityCookie()->setLogoutReasonCookie(
                 \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
             );
             $this->_redirect('*');

@@ -4,10 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Security\Test\Unit\Helper;
+namespace Magento\Security\Test\Unit\Model;
+
+use Magento\Security\Model\SecurityCookie;
 
 /**
- * Test class for \Magento\Security\Helper\SecurityCookie testing
+ * Test class for \Magento\Security\Model\SecurityCookie testing
  */
 class SecurityCookieTest extends \PHPUnit_Framework_TestCase
 {
@@ -26,8 +28,8 @@ class SecurityCookieTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata */
     protected $backendDataMock;
 
-    /** @var \Magento\Security\Helper\SecurityCookie */
-    protected $helper;
+    /** @var SecurityCookie */
+    protected $model;
 
     /**
      * Init mocks for tests
@@ -76,8 +78,8 @@ class SecurityCookieTest extends \PHPUnit_Framework_TestCase
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->helper = $objectManager->getObject(
-            'Magento\Security\Helper\SecurityCookie',
+        $this->model = $objectManager->getObject(
+            SecurityCookie::class,
             [
                 'phpCookieManager' => $this->phpCookieManagerMock,
                 'cookieMetadataFactory' => $this->cookieMetadataFactoryMock,
@@ -98,12 +100,12 @@ class SecurityCookieTest extends \PHPUnit_Framework_TestCase
         $this->cookieReaderMock->expects($this->once())
             ->method('getCookie')
             ->with(
-                \Magento\Security\Helper\SecurityCookie::LOGOUT_REASON_CODE_COOKIE_NAME,
+                SecurityCookie::LOGOUT_REASON_CODE_COOKIE_NAME,
                 -1
             )
             ->willReturn($cookie);
 
-        $this->assertEquals(intval($cookie), $this->helper->getLogoutReasonCookie());
+        $this->assertEquals(intval($cookie), $this->model->getLogoutReasonCookie());
     }
 
     /**
@@ -129,13 +131,13 @@ class SecurityCookieTest extends \PHPUnit_Framework_TestCase
         $this->phpCookieManagerMock->expects($this->once())
             ->method('setPublicCookie')
             ->with(
-                \Magento\Security\Helper\SecurityCookie::LOGOUT_REASON_CODE_COOKIE_NAME,
+                SecurityCookie::LOGOUT_REASON_CODE_COOKIE_NAME,
                 intval($status),
                 $this->cookieMetadataMock
             )
             ->willReturnSelf();
 
-        $this->assertEquals($this->helper, $this->helper->setLogoutReasonCookie($status));
+        $this->assertEquals($this->model, $this->model->setLogoutReasonCookie($status));
     }
 
     /**
@@ -165,13 +167,13 @@ class SecurityCookieTest extends \PHPUnit_Framework_TestCase
         $this->phpCookieManagerMock->expects($this->once())
             ->method('setPublicCookie')
             ->with(
-                \Magento\Security\Helper\SecurityCookie::LOGOUT_REASON_CODE_COOKIE_NAME,
+                SecurityCookie::LOGOUT_REASON_CODE_COOKIE_NAME,
                 '',
                 $this->cookieMetadataMock
             )
             ->willReturnSelf();
 
-        $this->assertEquals($this->helper, $this->helper->deleteLogoutReasonCookie());
+        $this->assertEquals($this->model, $this->model->deleteLogoutReasonCookie());
     }
 
     /**

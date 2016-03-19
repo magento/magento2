@@ -3,13 +3,15 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+namespace Magento\Security\Test\Unit\Model;
 
-namespace Magento\Security\Test\Unit\Helper;
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use Magento\Security\Model\ConfigInterface;
 
 /**
- * Test class for \Magento\Security\Helper\SecurityConfig testing
+ * Test class for \Magento\Security\Model\SecurityConfig testing
  */
-class SecurityConfigTest extends \PHPUnit_Framework_TestCase
+class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -17,14 +19,14 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\HTTP\PhpEnvironment\RemoteAddress
+     * @var \Magento\Framework\Config\ScopeInterface
      */
-    protected $remoteAddressMock;
+    protected $scopeMock;
 
     /**
-     * @var \Magento\Security\Helper\SecurityConfig
+     * @var ConfigInterface
      */
-    protected $helper;
+    protected $model;
 
     /**
      * Init mocks for tests
@@ -33,27 +35,27 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->scopeConfigMock =  $this->getMock(
-            '\Magento\Framework\App\Config\ScopeConfigInterface',
+            \Magento\Framework\App\Config\ScopeConfigInterface::class,
             ['getValue', 'isSetFlag'],
             [],
             '',
             false
         );
 
-        $this->remoteAddressMock =  $this->getMock(
-            '\Magento\Framework\HTTP\PhpEnvironment\RemoteAddress',
-            ['getRemoteAddress'],
+        $this->scopeMock =  $this->getMock(
+            \Magento\Framework\Config\ScopeInterface::class,
+            [],
             [],
             '',
             false
         );
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->helper = $objectManager->getObject(
-            'Magento\Security\Helper\SecurityConfig',
+        $this->model = $objectManager->getObject(
+            \Magento\Security\Model\Config::class,
             [
                 'scopeConfig' => $this->scopeConfigMock,
-                'remoteAddress' => $this->remoteAddressMock
+                'scope' => $this->scopeMock
             ]
         );
     }
@@ -65,8 +67,8 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
     public function testGetTimePeriodToCalculateLimitations()
     {
         $this->assertEquals(
-            \Magento\Security\Helper\SecurityConfig::TIME_PERIOD_TO_CALCULATE_LIMITATIONS,
-            $this->helper->getTimePeriodToCalculateLimitations()
+            \Magento\Security\Model\Config::TIME_PERIOD_TO_CALCULATE_LIMITATIONS,
+            $this->model->getLimitationTimePeriod()
         );
     }
 
@@ -80,13 +82,13 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
-                \Magento\Security\Helper\SecurityConfig::XML_PATH_EMAIL_RECIPIENT,
+                \Magento\Security\Model\Config::XML_PATH_EMAIL_RECIPIENT,
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             )
             ->will(
                 $this->returnValue($email)
             );
-        $this->assertEquals($email, $this->helper->getCustomerServiceEmail());
+        $this->assertEquals($email, $this->model->getCustomerServiceEmail());
     }
 
     /**
@@ -102,7 +104,7 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValue($lifetime)
             );
-        $this->assertEquals($lifetime, $this->helper->getAdminSessionLifetime());
+        $this->assertEquals($lifetime, $this->model->getAdminSessionLifetime());
     }
 
     /**
@@ -113,26 +115,11 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('isSetFlag')
-            ->with(\Magento\Security\Helper\SecurityConfig::XML_PATH_ADMIN_ACCOUNT_SHARING)
+            ->with(\Magento\Security\Model\Config::XML_PATH_ADMIN_ACCOUNT_SHARING)
             ->will(
                 $this->returnValue($isShared)
             );
-        $this->assertEquals($isShared, $this->helper->isAdminAccountSharingEnabled());
-    }
-
-    /**
-     * @param bool $ipToLong
-     * @dataProvider dataProviderBoolValues
-     */
-    public function testGetRemoteIp($ipToLong)
-    {
-        $this->remoteAddressMock->expects($this->once())
-            ->method('getRemoteAddress')
-            ->will(
-                $this->returnValue($ipToLong)
-            );
-
-        $this->assertEquals($ipToLong, $this->helper->getRemoteIp($ipToLong));
+        $this->assertEquals($isShared, $this->model->isAdminAccountSharingEnabled());
     }
 
     /**
@@ -153,13 +140,14 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->getXmlPathByScope($scope)
-                . \Magento\Security\Helper\SecurityConfig::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD
+                $this->getXmlPathPrefix($scope)
+                . \Magento\Security\Model\Config::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD
             )
-            ->will(
-                $this->returnValue($resetMethod)
-            );
-        $this->assertEquals($resetMethod, $this->helper->getLimitPasswordResetRequestsMethod($scope));
+            ->willReturn($resetMethod);
+        $this->scopeMock->expects($this->once())
+            ->method('getCurrentScope')
+            ->willReturn($scope);
+        $this->assertEquals($resetMethod, $this->model->getPasswordResetProtectionType($scope));
     }
 
     /**
@@ -168,15 +156,15 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
     public function dataProviderResetMethodValues()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $model = $objectManager->getObject(
-            'Magento\Security\Model\Config\Source\ResetMethod'
+        $resetMethodSource = $objectManager->getObject(
+            \Magento\Security\Model\Config\Source\ResetMethod::class
         );
 
-        $optionKeys = array_keys($model->toArray());
+        $optionKeys = array_keys($resetMethodSource->toArray());
         $data = [];
         foreach ($optionKeys as $key) {
-            $data[] = [$key, \Magento\Security\Helper\SecurityConfig::FRONTED_AREA_SCOPE];
-            $data[] = [$key, \Magento\Security\Helper\SecurityConfig::ADMIN_AREA_SCOPE];
+            $data[] = [$key, \Magento\Framework\App\Area::AREA_ADMINHTML];
+            $data[] = [$key, \Magento\Framework\App\Area::AREA_FRONTEND];
         }
 
         return $data;
@@ -188,15 +176,13 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
      * @param int $scope
      * @return string
      */
-    protected function getXmlPathByScope($scope)
+    protected function getXmlPathPrefix($scope)
     {
-        if ($scope == \Magento\Security\Helper\SecurityConfig::FRONTED_AREA_SCOPE) {
-            return \Magento\Security\Helper\SecurityConfig::XML_PATH_FRONTED_AREA;
-        } elseif ($scope == \Magento\Security\Helper\SecurityConfig::ADMIN_AREA_SCOPE) {
-            return \Magento\Security\Helper\SecurityConfig::XML_PATH_ADMIN_AREA;
+        if ($scope == \Magento\Framework\App\Area::AREA_ADMINHTML) {
+            return \Magento\Security\Model\Config::XML_PATH_ADMIN_AREA;
         }
+        return \Magento\Security\Model\Config::XML_PATH_FRONTED_AREA;
     }
-
 
     /**
      * @param int $limitNumber
@@ -208,13 +194,14 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->getXmlPathByScope($scope)
-                . \Magento\Security\Helper\SecurityConfig::XML_PATH_LIMIT_NUMBER_REQUESTS
+                $this->getXmlPathPrefix($scope)
+                . \Magento\Security\Model\Config::XML_PATH_LIMIT_NUMBER_REQUESTS
             )
-            ->will(
-                $this->returnValue($limitNumber)
-            );
-        $this->assertEquals($limitNumber, $this->helper->getLimitNumberPasswordResetRequests($scope));
+            ->willReturn($limitNumber);
+        $this->scopeMock->expects($this->once())
+            ->method('getCurrentScope')
+            ->willReturn($scope);
+        $this->assertEquals($limitNumber, $this->model->getMaxNumberPasswordResetRequests());
     }
 
     /**
@@ -227,13 +214,14 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->getXmlPathByScope($scope)
-                . \Magento\Security\Helper\SecurityConfig::XML_PATH_LIMIT_TIME_BETWEEN_REQUESTS
+                $this->getXmlPathPrefix($scope)
+                . \Magento\Security\Model\Config::XML_PATH_LIMIT_TIME_BETWEEN_REQUESTS
             )
-            ->will(
-                $this->returnValue($limitTime)
-            );
-        $this->assertEquals($limitTime * 60, $this->helper->getLimitTimeBetweenPasswordResetRequests($scope));
+            ->willReturn($limitTime);
+        $this->scopeMock->expects($this->once())
+            ->method('getCurrentScope')
+            ->willReturn($scope);
+        $this->assertEquals($limitTime * 60, $this->model->getMinTimeBetweenPasswordResets());
     }
 
     /**
@@ -242,16 +230,8 @@ class SecurityConfigTest extends \PHPUnit_Framework_TestCase
     public function dataProviderNumberValueWithScope()
     {
         return [
-            [5, \Magento\Security\Helper\SecurityConfig::FRONTED_AREA_SCOPE],
-            [5, \Magento\Security\Helper\SecurityConfig::ADMIN_AREA_SCOPE]
+            [5, \Magento\Framework\App\Area::AREA_ADMINHTML],
+            [5, \Magento\Framework\App\Area::AREA_FRONTEND]
         ];
-    }
-
-    /**
-     * @return void
-     */
-    public function testGetCurrentTimestamp()
-    {
-        $this->assertEquals(true, is_int($this->helper->getCurrentTimestamp()));
     }
 }
