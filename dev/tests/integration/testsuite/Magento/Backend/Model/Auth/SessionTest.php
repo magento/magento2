@@ -48,10 +48,9 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Disabled form security in order to prevent exit from the app
      * @dataProvider loginDataProvider
      */
-    public function testIsLoggedInPositive($loggedIn)
+    public function testIsLoggedIn($loggedIn)
     {
         if ($loggedIn) {
             $this->_auth->login(
