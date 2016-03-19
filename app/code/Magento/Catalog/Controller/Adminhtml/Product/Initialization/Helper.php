@@ -202,6 +202,7 @@ class Helper
     }
 
     /**
+     * @deprecated
      * @return LinkResolver
      */
     private function getLinkResolver()
