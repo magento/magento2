@@ -32,15 +32,17 @@ class Converter
     public function convertLinksToGroupedArray($entity)
     {
         $basicData = $entity->getProductLinks();
-        $additionalData = $entity->getTypeInstance()->getAssociatedProducts($entity);
-        $additionalData = $this->indexBySku($additionalData);
+        $associatedProducts = $entity->getTypeInstance()->getAssociatedProducts($entity);
+        $associatedProducts = $this->indexBySku($associatedProducts);
 
         /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $link */
         foreach ($basicData as $link) {
-            $info = [];
-            $info['id'] = $additionalData[$link->getLinkedProductSku()]->getId();
-            $info['sku'] = $link->getLinkedProductSku();
-            $info['position'] = $link->getPosition();
+            $info = $link->getData();
+            if ($link->getLinkType() == 'associated') {
+                $info['id'] = $associatedProducts[$link->getLinkedProductSku()]->getId();
+            }
+//            $info['sku'] = $link->getLinkedProductSku();
+//            $info['position'] = $link->getPosition();
             $info = array_merge($info, $link->getExtensionAttributes()->__toArray());
             $linksAsArray[$link->getLinkType()][] = $info;
         }
