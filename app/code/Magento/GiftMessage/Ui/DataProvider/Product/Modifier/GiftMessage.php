@@ -72,7 +72,6 @@ class GiftMessage extends AbstractModifier
         return $data;
     }
 
-
     /**
      * {@inheritdoc}
      */
@@ -95,8 +94,13 @@ class GiftMessage extends AbstractModifier
             return $meta;
         }
 
-        $containerPath = $this->getElementArrayPath($meta, 'container_' . static::FIELD_MESSAGE_AVAILABLE);
-        $fieldPath = $this->getElementArrayPath($meta, static::FIELD_MESSAGE_AVAILABLE);
+        $containerPath = $this->arrayManager->findPath(
+            'container_' . static::FIELD_MESSAGE_AVAILABLE,
+            $meta,
+            null,
+            'children'
+        );
+        $fieldPath = $this->arrayManager->findPath(static::FIELD_MESSAGE_AVAILABLE, $meta, null, 'children');
         $groupConfig = $this->arrayManager->get($containerPath, $meta);
         $fieldConfig = $this->arrayManager->get($fieldPath, $meta);
 
