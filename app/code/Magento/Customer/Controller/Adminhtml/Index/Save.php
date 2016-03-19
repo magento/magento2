@@ -308,7 +308,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
     }
 
     /**
-     * Get login information change processor
+     * Get email notification
      *
      * @return EmailNotificationInterface
      * @deprecated

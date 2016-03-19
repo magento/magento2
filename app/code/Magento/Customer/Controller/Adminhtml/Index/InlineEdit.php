@@ -70,7 +70,7 @@ class InlineEdit extends \Magento\Backend\App\Action
     }
 
     /**
-     * Get login information change processor
+     * Get email notification
      *
      * @return EmailNotificationInterface
      * @deprecated

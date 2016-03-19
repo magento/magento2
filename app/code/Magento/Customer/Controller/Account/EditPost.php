@@ -110,7 +110,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     }
 
     /**
-     * Get login information change processor
+     * Get email notification
      *
      * @return EmailNotificationInterface
      * @deprecated

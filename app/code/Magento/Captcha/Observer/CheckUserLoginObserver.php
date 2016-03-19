@@ -53,7 +53,7 @@ class CheckUserLoginObserver implements ObserverInterface
     protected $customerRepository;
 
     /**
-     * Account lock manager
+     * Authentication
      *
      * @var AuthenticationInterface
      */

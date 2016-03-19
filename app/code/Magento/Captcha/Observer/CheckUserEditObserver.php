@@ -46,7 +46,7 @@ class CheckUserEditObserver implements ObserverInterface
     protected $captchaStringResolver;
 
     /**
-     * Account manager
+     * Authentication
      *
      * @var AuthenticationInterface
      */
