@@ -66,7 +66,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     /**
      * @var AuthenticationInterface
      */
-    protected $authentication;
+    private $authentication;
 
     /**
      * @param Context $context
