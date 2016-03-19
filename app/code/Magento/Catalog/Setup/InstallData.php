@@ -9,6 +9,7 @@ namespace Magento\Catalog\Setup;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Catalog\Helper\DefaultCategory;
 
 /**
  * @codeCoverageIgnore
@@ -23,18 +24,22 @@ class InstallData implements InstallDataInterface
     private $categorySetupFactory;
 
     /**
-     * Root category ID
-     *
-     * @var int
+     * @var DefaultCategory
      */
-    const ROOT_CATEGORY_ID = 1;
+    private $defaultCategory;
 
     /**
-     * Default category ID
-     *
-     * @var int
+     * @deprecated
+     * @return DefaultCategory
      */
-    const DEFAULT_CATEGORY_ID = 2;
+    private function getDefaultCategory()
+    {
+        if ($this->defaultCategory === null) {
+            $this->defaultCategory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(DefaultCategory::class);
+        }
+        return $this->defaultCategory;
+    }
 
     /**
      * Init
@@ -56,14 +61,16 @@ class InstallData implements InstallDataInterface
     {
         /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
         $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+        $rootCategoryId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
+        $defaultCategoryId = $this->getDefaultCategory()->getId();
 
         $categorySetup->installEntities();
         // Create Root Catalog Node
         $categorySetup->createCategory()
-            ->load(self::ROOT_CATEGORY_ID)
-            ->setId(self::ROOT_CATEGORY_ID)
+            ->load($rootCategoryId)
+            ->setId($rootCategoryId)
             ->setStoreId(0)
-            ->setPath(self::ROOT_CATEGORY_ID)
+            ->setPath($rootCategoryId)
             ->setLevel(0)
             ->setPosition(0)
             ->setChildrenCount(0)
@@ -73,10 +80,10 @@ class InstallData implements InstallDataInterface
 
         // Create Default Catalog Node
         $category = $categorySetup->createCategory();
-        $category->load(self::DEFAULT_CATEGORY_ID)
-            ->setId(self::DEFAULT_CATEGORY_ID)
+        $category->load($defaultCategoryId)
+            ->setId($defaultCategoryId)
             ->setStoreId(0)
-            ->setPath(self::ROOT_CATEGORY_ID . '/' . self::DEFAULT_CATEGORY_ID)
+            ->setPath($rootCategoryId . '/' . $defaultCategoryId)
             ->setName('Default Category')
             ->setDisplayMode('PRODUCTS')
             ->setIsActive(1)
