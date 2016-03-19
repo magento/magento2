@@ -24,27 +24,11 @@ class CustomOptionsTest extends AbstractModifierTest
         );
     }
 
-    public function testModifyMetaNotConfigurable()
-    {
-        $meta = ['meta'];
-
-        $this->productMock->expects($this->once())
-            ->method('getTypeId')
-            ->willReturn('simple');
-        $this->arrayManagerMock->expects($this->never())
-            ->method('findPaths');
-
-        $this->assertSame($meta, $this->getModel()->modifyMeta($meta));
-    }
-
     public function testModifyMeta()
     {
         $meta = ['meta'];
         $paths = ['path1', 'path2'];
 
-        $this->productMock->expects($this->once())
-            ->method('getTypeId')
-            ->willReturn(CustomOptionsModifier::PRODUCT_TYPE_CONFIGURABLE);
         $this->arrayManagerMock->expects($this->once())
             ->method('findPaths')
             ->willReturn($paths);
