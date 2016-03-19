@@ -62,4 +62,19 @@ class TypeTest extends \PHPUnit_Framework_TestCase
         $result = $this->connectionMock->fetchAll($select);
         $this->assertCount(1, $result);
     }
+
+    /**
+     * @magentoDataFixture Magento/Bundle/_files/product_with_multiple_options.php
+     * @covers \Magento\Bundle\Model\Product\Type::getOptionsCollection
+     */
+    public function testGetOptionsCollection()
+    {
+        $productRepository = $this->objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        /** @var \Magento\Catalog\Model\Product $bundleProduct */
+        $bundleProduct = $productRepository->get('bundle-product');
+        $bundleType = $bundleProduct->getTypeInstance();
+        /** @var \Magento\Bundle\Model\Product\Type $bundleType */
+        $options = $bundleType->getOptionsCollection($bundleProduct);
+        $this->assertCount(5, $options->getItems());
+    }
 }

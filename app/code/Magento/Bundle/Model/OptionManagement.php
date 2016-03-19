@@ -37,7 +37,7 @@ class OptionManagement implements \Magento\Bundle\Api\ProductOptionManagementInt
      */
     public function save(\Magento\Bundle\Api\Data\OptionInterface $option)
     {
-        $product = $this->productRepository->get($option->getSku());
+        $product = $this->productRepository->get($option->getSku(), true);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             throw new InputException(__('Only implemented for bundle product'));
         }
