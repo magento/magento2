@@ -22,8 +22,6 @@ $formName = $block->getFormName();
         <div class="image image-placeholder">
             <?php echo $block->getUploaderHtml(); ?>
             <div class="product-image-wrapper">
-                <img class="spacer"
-                     src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/spacer.gif')?>"/>
                 <p class="image-placeholder-text">
                     <?php /* @escapeNotVerified */ echo __('Browse to find or drag image here'); ?>
                 </p>
@@ -76,9 +74,6 @@ $formName = $block->getFormName();
                    class="is-removed"/>
 
             <div class="product-image-wrapper">
-                <img class="spacer"
-                     src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/spacer.gif')?>"/>
-
                 <img class="product-image"
                      data-role="image-element"
                      src="<%- data.url %>"
@@ -128,6 +123,7 @@ $formName = $block->getFormName();
       <div class="image-panel" data-role="dialog">
       </div>
     </script>
+
     <script data-role="img-dialog-tmpl" type="text/x-magento-template">
             <div class="image-panel-preview">
                 <img src="<%- data.url %>" alt="<%- data.label %>" />
