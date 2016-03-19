@@ -441,6 +441,8 @@ class IndexBuilder
                     }
                 }
 
+                $ruleData['from_time'] = $this->roundTime($ruleData['from_time']);
+                $ruleData['to_time'] = $this->roundTime($ruleData['to_time']);
                 /**
                  * Build prices for each day
                  */
@@ -716,5 +718,18 @@ class IndexBuilder
     protected function critical($e)
     {
         $this->logger->critical($e);
+    }
+
+    /**
+     * @param int $timeStamp
+     * @return int
+     */
+    private function roundTime($timeStamp)
+    {
+        if (is_numeric($timeStamp) && $timeStamp != 0) {
+            $timeStamp = $this->dateTime->timestamp($this->dateTime->date('Y-m-d 00:00:00'));
+        }
+
+        return $timeStamp;
     }
 }

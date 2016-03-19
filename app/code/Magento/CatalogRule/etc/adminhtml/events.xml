@@ -9,4 +9,7 @@
     <event name="catalog_product_get_final_price">
         <observer name="catalogrule" instance="Magento\CatalogRule\Observer\ProcessAdminFinalPriceObserver" />
     </event>
+    <event name="catalogrule_dirty_notice">
+        <observer name="catalogrule" instance="Magento\CatalogRule\Observer\AddDirtyRulesNotice" />
+    </event>
 </config>
