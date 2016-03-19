@@ -13,6 +13,7 @@ define([
     'Magento_Ui/js/lib/collapsible',
     'mage/template',
     'Magento_Ui/js/modal/alert',
+    'Magento_Catalog/js/product-gallery',
     'jquery/file-uploader',
     'mage/translate',
     'Magento_ConfigurableProduct/js/variations/variations'
@@ -295,22 +296,25 @@ define([
         bindGalleries: function () {
             $('[data-role=bulk-step] [data-role=gallery]').each(function (index, element) {
                 var gallery = $(element),
-                    uploadInput = $(gallery.find('[name=image]'));
+                    uploadInput = $(gallery.find('[name=image]')),
+                    dropZone = $(gallery).find('.image-placeholder');
 
                 if (!gallery.data('gallery-initialized')) {
                     gallery.mage('productGallery', {
-                        template: '[data-template=gallery-content]'
+                        template: '[data-template=gallery-content]',
+                        dialogTemplate: '.dialog-template',
+                        dialogContainerTmpl: '[data-role=img-dialog-container-tmpl]'
                     });
 
                     uploadInput.fileupload({
                         dataType: 'json',
-                        dropZone: gallery,
+                        dropZone: dropZone,
                         process: [{
                             action: 'load',
                             fileTypes: /^image\/(gif|jpeg|png)$/
                         }, {
                             action: 'resize',
-                            maxWidth: 1920 ,
+                            maxWidth: 1920,
                             maxHeight: 1200
                         }, {
                             action: 'save'
