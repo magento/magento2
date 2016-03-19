@@ -104,7 +104,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      */
     protected $_specialAttributes = [
         'price_type',
-        'shipment_type',
         'weight_type',
         'sku_type',
     ];
