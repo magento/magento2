@@ -64,7 +64,7 @@ class SaveHandler
             $this->optionRepository->delete($option);
         }
 
-        $options = $entity->getExtensionAttributes()->getBundleProductOptions() ?: [];
+        $options = $bundleProductOptions ?: [];
         foreach ($options as $option) {
             $option->setOptionId(null);
             $this->optionRepository->save($entity, $option);

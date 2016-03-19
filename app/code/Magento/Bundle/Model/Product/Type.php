@@ -247,7 +247,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         return $this->_bundleSelection->getChildrenIds($parentId, $required);
     }
 
-  /**
+    /**
      * Retrieve parent ids array by required child
      *
      * @param int|array $childId

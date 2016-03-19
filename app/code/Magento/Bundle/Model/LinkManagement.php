@@ -87,7 +87,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
      */
     public function getChildren($productSku, $optionId = null)
     {
-        $product = $this->productRepository->get($productSku);
+        $product = $this->productRepository->get($productSku, true);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             throw new InputException(__('Only implemented for bundle product'));
         }
@@ -111,7 +111,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
     public function addChildByProductSku($sku, $optionId, \Magento\Bundle\Api\Data\LinkInterface $linkedProduct)
     {
         /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->productRepository->get($sku);
+        $product = $this->productRepository->get($sku, true);
         return $this->addChild($product, $optionId, $linkedProduct);
     }
 
@@ -124,7 +124,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
         $sku,
         \Magento\Bundle\Api\Data\LinkInterface $linkedProduct
     ) {
-        $product = $this->productRepository->get($sku);
+        $product = $this->productRepository->get($sku, true);
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             throw new InputException(
                 __('Product with specified sku: "%1" is not a bundle product', [$product->getSku()])
@@ -277,7 +277,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
      */
     public function removeChild($sku, $optionId, $childSku)
     {
-        $product = $this->productRepository->get($sku);
+        $product = $this->productRepository->get($sku, true);
 
         if ($product->getTypeId() != \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) {
             throw new InputException(__('Product with specified sku: %1 is not a bundle product', $sku));
