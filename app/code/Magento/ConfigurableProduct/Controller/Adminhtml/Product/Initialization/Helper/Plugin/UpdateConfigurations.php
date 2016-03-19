@@ -19,6 +19,23 @@ class UpdateConfigurations
     protected $variationHandler;
 
     /**
+     * @var array
+     */
+    private $keysPost = [
+        'status',
+        'sku',
+        'name',
+        'price',
+        'configurable_attribute',
+        'weight',
+        'media_gallery',
+        'swatch_image',
+        'small_image',
+        'thumbnail',
+        'image'
+    ];
+
+    /**
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\ConfigurableProduct\Model\Product\VariationHandler $variationHandler
@@ -46,7 +63,7 @@ class UpdateConfigurations
         \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $subject,
         \Magento\Catalog\Model\Product $configurableProduct
     ) {
-        $configurations = $this->request->getParam('configurations', []);
+        $configurations = $this->getConfigurations();
         $configurations = $this->variationHandler->duplicateImagesForVariations($configurations);
         foreach ($configurations as $productId => $productData) {
             /** @var \Magento\Catalog\Model\Product $product */
@@ -58,5 +75,46 @@ class UpdateConfigurations
             }
         }
         return $configurableProduct;
+    }
+
+    /**
+     * Get configurations from request
+     *
+     * @return array
+     */
+    protected function getConfigurations()
+    {
+        $result = [];
+        $configurableMatrix = $this->request->getParam('configurable-matrix', []);
+        foreach ($configurableMatrix as $item) {
+            if (!$item['newProduct']) {
+                $result[$item['id']] = $this->mapData($item);
+
+                if (isset($item['qty'])) {
+                    $result[$item['id']]['quantity_and_stock_status']['qty'] = $item['qty'];
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Map data from POST
+     *
+     * @param array $item
+     * @return array
+     */
+    private function mapData(array $item)
+    {
+        $result = [];
+
+        foreach ($this->keysPost as $key) {
+            if (isset($item[$key])) {
+                $result[$key] = $item[$key];
+            }
+        }
+
+        return $result;
     }
 }

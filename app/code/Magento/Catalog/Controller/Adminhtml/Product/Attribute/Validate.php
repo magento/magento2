@@ -6,8 +6,12 @@
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 
+use Magento\Framework\DataObject;
+
 class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
 {
+    const DEFAULT_MESSAGE_KEY = 'message';
+
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
@@ -46,7 +50,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
      */
     public function execute()
     {
-        $response = new \Magento\Framework\DataObject();
+        $response = new DataObject();
         $response->setError(false);
 
         $attributeCode = $this->getRequest()->getParam('attribute_code');
@@ -61,16 +65,14 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
         );
 
         if ($attribute->getId() && !$attributeId) {
-            if (strlen($this->getRequest()->getParam('attribute_code'))) {
-                $response->setMessage(
-                    __('An attribute with this code already exists.')
-                );
-            } else {
-                $response->setMessage(
-                    __('An attribute with the same code (%1) already exists.', $attributeCode)
-                );
-            }
+            $message = strlen($this->getRequest()->getParam('attribute_code'))
+                ? __('An attribute with this code already exists.')
+                : __('An attribute with the same code (%1) already exists.', $attributeCode);
+
+            $this->setMessageToResponse($response, [$message]);
+
             $response->setError(true);
+            $response->setProductAttribute($attribute->toArray());
         }
         if ($this->getRequest()->has('new_attribute_set_name')) {
             $setName = $this->getRequest()->getParam('new_attribute_set_name');
@@ -88,5 +90,21 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product\Attribute
             }
         }
         return $this->resultJsonFactory->create()->setJsonData($response->toJson());
+    }
+
+    /**
+     * Set message to response object
+     *
+     * @param DataObject $response
+     * @param string[] $messages
+     * @return DataObject
+     */
+    private function setMessageToResponse($response, $messages)
+    {
+        $messageKey = $this->getRequest()->getParam('message_key', static::DEFAULT_MESSAGE_KEY);
+        if ($messageKey === static::DEFAULT_MESSAGE_KEY) {
+            $messages = reset($messages);
+        }
+        return $response->setData($messageKey, $messages);
     }
 }
