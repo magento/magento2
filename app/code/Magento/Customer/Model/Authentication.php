@@ -3,22 +3,18 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Customer\Helper;
+namespace Magento\Customer\Model;
 
-use Magento\Customer\Model\Customer as CustomerModel;
-use Magento\Customer\Model\CustomerRegistry;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Backend\App\ConfigInterface;
+use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
-use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 
 /**
- * Customer helper for account management.
- *
- * Class AccountManagement
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Customer account Authentication manager
  */
-class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
+class Authentication implements AuthenticationInterface
 {
     /**
      * Configuration path to customer lockout threshold
@@ -53,22 +49,27 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
     protected $encryptor;
 
     /**
+     * @var CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
      * AccountManagement constructor
      *
-     * @param \Magento\Framework\App\Helper\Context $context
+     * @param CustomerRepositoryInterface $customerRepository
      * @param CustomerRegistry $customerRegistry
      * @param ConfigInterface $backendConfig
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param Encryptor $encryptor
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
+        CustomerRepositoryInterface $customerRepository,
         CustomerRegistry $customerRegistry,
         ConfigInterface $backendConfig,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         Encryptor $encryptor
     ) {
-        parent::__construct($context);
+        $this->customerRepository = $customerRepository;
         $this->customerRegistry = $customerRegistry;
         $this->backendConfig = $backendConfig;
         $this->dateTime = $dateTime;
@@ -76,12 +77,12 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Processes customer lockout data
+     * Lock customer. Returns true if customer is locked; false if customer is not yet locked
      *
      * @param int $customerId
-     * @return void
+     * @return boolean True if customer is locked; false if customer is not yet locked
      */
-    public function processCustomerLockoutData($customerId)
+    public function processAuthenticationFailure($customerId)
     {
         $now = new \DateTime();
         $lockThreshold = $this->getLockThreshold();
@@ -89,7 +90,7 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
         $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
 
         if (!($lockThreshold && $maxFailures)) {
-            return;
+            return false;
         }
         $failuresNum = (int)$customerSecure->getFailuresNum() + 1;
 
@@ -109,6 +110,7 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         $customerSecure->setFailuresNum($failuresNum);
+        $this->customerRepository->save($this->customerRepository->getById($customerId));
     }
 
     /**
@@ -117,12 +119,13 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
      * @param int $customerId
      * @return void
      */
-    public function processUnlockData($customerId)
+    public function unlock($customerId)
     {
         $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
         $customerSecure->setFailuresNum(0);
         $customerSecure->setFirstFailure(null);
         $customerSecure->setLockExpires(null);
+        $this->customerRepository->save($this->customerRepository->getById($customerId));
     }
 
     /**
@@ -146,49 +149,37 @@ class AccountManagement extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Validate that password is correct and customer is not locked
+     * Check if a customer is locked
      *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
-     * @param string $password
-     * @return $this
-     * @throws InvalidEmailOrPasswordException
+     * @param int $customerId
+     * @return boolean
      */
-    public function validatePasswordAndLockStatus(\Magento\Customer\Api\Data\CustomerInterface $customer, $password)
+    public function isLocked($customerId)
     {
-        $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
-        $hash = $customerSecure->getPasswordHash();
-        if (!$this->encryptor->validateHash($password, $hash)) {
-            $this->_eventManager->dispatch(
-                'customer_password_invalid',
-                [
-                    'username' => $customer->getEmail(),
-                    'password' => $password
-                ]
-            );
-            $this->checkIfLocked($customer);
-            throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
-        }
-        return $this;
+        $currentCustomer = $this->customerRegistry->retrieve($customerId);
+        return $currentCustomer->isCustomerLocked();
     }
 
     /**
-     * Check if customer is locked and throw exception.
+     * Authenticate customer
      *
-     * @api
-     * @param \Magento\Customer\Api\Data\CustomerInterface $customer
-     * @throws \Magento\Framework\Exception\State\UserLockedException
-     * @return void
+     * @param int $customerId
+     * @param string $password
+     * @return boolean
+     * @throws InvalidEmailOrPasswordException
+     * @throws UserLockedException
      */
-    public function checkIfLocked(\Magento\Customer\Api\Data\CustomerInterface $customer)
+    public function authenticate($customerId, $password)
     {
-        $currentCustomer = $this->customerRegistry->retrieve($customer->getId());
-        if ($currentCustomer->isCustomerLocked()) {
-            throw new UserLockedException(
-                __(
-                    'The account is locked. Please wait and try again or contact %1.',
-                    $this->scopeConfig->getValue('contact/email/recipient_email')
-                )
-            );
+        $customerSecure = $this->customerRegistry->retrieveSecureData($customerId);
+        $hash = $customerSecure->getPasswordHash();
+        if (!$this->encryptor->validateHash($password, $hash)) {
+            $this->processAuthenticationFailure($customerId);
+            if ($this->isLocked($customerId)) {
+                throw new UserLockedException(__('The account is locked.'));
+            }
+            throw new InvalidEmailOrPasswordException(__('Invalid login or password.'));
         }
+        return true;
     }
 }

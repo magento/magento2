@@ -126,7 +126,10 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             $this->formkeyValidator,
             $this->accountRedirect
         );
-        $this->controller->setScopeConfig($this->scopeConfig);
+        $reflection = new \ReflectionClass(get_class($this->controller));
+        $reflectionProperty = $reflection->getProperty('scopeConfig');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->controller, $this->scopeConfig);
     }
 
     /**

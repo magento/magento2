@@ -6,6 +6,8 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Security\Model\ConfigInterface" type="Magento\Security\Model\Config" />
+    <preference for="Magento\Security\Model\EmailNotificationInterface" type="Magento\Security\Model\EmailNotification" />
     <type name="Magento\Customer\Model\AccountManagement">
         <plugin name="security_check_customer_password_reset_attempt" type="Magento\Security\Model\Plugin\AccountManagement" />
     </type>

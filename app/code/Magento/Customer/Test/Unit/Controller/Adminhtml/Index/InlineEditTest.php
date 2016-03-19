@@ -5,6 +5,8 @@
  */
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
 
+use Magento\Customer\Model\EmailNotificationInterface;
+
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
@@ -61,7 +63,7 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
     /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject*/
     protected $logger;
 
-    /** @var \Magento\Customer\Helper\EmailNotification | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var EmailNotificationInterface | \PHPUnit_Framework_MockObject_MockObject */
     protected $emailNotification;
 
     /** @var array */
@@ -129,9 +131,8 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
         );
         $this->logger = $this->getMockForAbstractClass('Psr\Log\LoggerInterface', [], '', false);
 
-        $this->emailNotification = $this->getMockBuilder('Magento\Customer\Helper\EmailNotification')
+        $this->emailNotification = $this->getMockBuilder(EmailNotificationInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['sendNotificationEmailsIfRequired'])
             ->getMock();
 
         $this->context = $objectManager->getObject(
@@ -155,7 +156,10 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
                 'logger' => $this->logger,
             ]
         );
-        $this->controller->setEmailNotification($this->emailNotification);
+        $reflection = new \ReflectionClass(get_class($this->controller));
+        $reflectionProperty = $reflection->getProperty('emailNotification');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->controller, $this->emailNotification);
 
         $this->items = [
             14 => [
@@ -264,16 +268,13 @@ class InlineEditTest extends \PHPUnit_Framework_TestCase
             ->method('getDefaultBilling')
             ->willReturn(23);
 
-        $currentCustomerData = clone $this->customerData;
-
         $this->prepareMocksForUpdateDefaultBilling();
         $this->customerRepository->expects($this->once())
             ->method('save')
             ->with($this->customerData);
 
         $this->emailNotification->expects($this->once())
-            ->method('sendNotificationEmailsIfRequired')
-            ->with($currentCustomerData, $this->customerData)
+            ->method('credentialsChanged')
             ->willReturnSelf();
 
         $this->prepareMocksForErrorMessagesProcessing();
