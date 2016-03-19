@@ -31,7 +31,7 @@ define([
         initialize: function () {
             this._super();
 
-            if (this.rows && this.rows().elems().length === 1) {
+            if (this.rows && this.rows().elems().length === 0) {
                 this.checked(true);
             }
 
