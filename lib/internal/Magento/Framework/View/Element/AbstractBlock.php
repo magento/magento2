@@ -996,7 +996,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $tags[] = self::CACHE_GROUP;
 
         if ($this instanceof IdentityInterface) {
-            $tags += $this->getIdentities();
+            $tags = array_merge($tags, $this->getIdentities());
         }
         return $tags;
     }

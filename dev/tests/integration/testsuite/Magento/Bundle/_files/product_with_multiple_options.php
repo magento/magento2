@@ -38,6 +38,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
     ->setPriceView(1)
     ->setPriceType(1)
     ->setPrice(10.0)
+    ->setShipmentType(0)
     ->setBundleOptionsData(
         [
             // Required "Drop-down" option

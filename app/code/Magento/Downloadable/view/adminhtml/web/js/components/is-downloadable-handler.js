@@ -10,8 +10,7 @@ define([
     return Element.extend({
         defaults: {
             listens: {
-                disabled: 'changeVisibility',
-                checked: 'changeVisibility'
+                disabled: 'changeVisibility'
             },
             modules: {
                 samplesFieldset: '${ $.samplesFieldset }',
@@ -32,6 +31,16 @@ define([
                     this.linksFieldset().visible(false);
                 }
             }
+        },
+
+        /**
+         * Handle checked state changes for checkbox / radio button.
+         *
+         * @param {Boolean} newChecked
+         */
+        onCheckedChanged: function (newChecked) {
+            this.changeVisibility();
+            this._super(newChecked);
         }
     });
 });

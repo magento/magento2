@@ -17,7 +17,6 @@
                     <item name="buttons" xsi:type="array">
                         <item name="0" xsi:type="array">
                             <item name="text" xsi:type="string">Cancel</item>
-                            <item name="class" xsi:type="string">action-secondary</item>
                             <item name="actions" xsi:type="array">
                                 <item name="0" xsi:type="array">
                                     <item name="targetName" xsi:type="string">${ $.name }</item>
