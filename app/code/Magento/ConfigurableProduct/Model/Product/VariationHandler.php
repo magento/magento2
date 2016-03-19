@@ -210,10 +210,10 @@ class VariationHandler
                 $newFile = $this->mediaGalleryProcessor->duplicateImageFromTmp($file);
                 $productsData[$variationId]['media_gallery']['images'][$imageId]['file'] = $newFile;
                 foreach ($this->mediaGalleryProcessor->getMediaAttributeCodes() as $attribute) {
-                    if (isset($productsData[$variationId][$attribute->getAttributeCode()])
-                        && $productsData[$variationId][$attribute->getAttributeCode()] == $file
+                    if (isset($productsData[$variationId][$attribute])
+                        && $productsData[$variationId][$attribute] == $file
                     ) {
-                        $productsData[$variationId][$attribute->getAttributeCode()] = $newFile;
+                        $productsData[$variationId][$attribute] = $newFile;
                     }
                 }
             }
