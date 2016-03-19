@@ -143,7 +143,7 @@ abstract class AbstractFile implements WriterInterface
      * @param bool $recursive Allows the creation of nested directories specified in the $destinationPath
      * @return void
      */
-    protected function _createDirectoryIfNotExist($destinationPath, $mode = 0750, $recursive = true)
+    protected function _createDirectoryIfNotExist($destinationPath, $mode = 0711, $recursive = true)
     {
         if (!is_dir($destinationPath)) {
             mkdir($destinationPath, $mode, $recursive);

@@ -91,7 +91,7 @@ class Collection extends \Magento\Framework\Data\Collection\Filesystem
         $filename = '.htaccess';
         if (!$this->_varDirectory->isFile($filename)) {
             $this->_varDirectory->writeFile($filename, 'deny from all');
-            $this->_varDirectory->changePermissions($filename, 0640);
+            $this->_varDirectory->changePermissions($filename, 0644);
         }
     }
 

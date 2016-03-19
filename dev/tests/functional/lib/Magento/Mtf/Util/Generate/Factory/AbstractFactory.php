@@ -127,7 +127,7 @@ abstract class AbstractFactory
      * @param bool $recursive
      * @return bool
      */
-    protected function mkDir($dir, $mode = 0770, $recursive = true)
+    protected function mkDir($dir, $mode = 0711, $recursive = true)
     {
         return @mkdir($dir, $mode, $recursive);
     }
