@@ -105,15 +105,15 @@ class AccountManagementTest extends WebapiAbstract
 
         if ($this->config->getConfigDataValue(
             Config::XML_PATH_FRONTED_AREA .
-            Config::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD
+            Config::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE
         ) != 0) {
             $this->configValue = $this->config
                 ->getConfigDataValue(
                     Config::XML_PATH_FRONTED_AREA .
-                    Config::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD
+                    Config::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE
                 );
             $this->config->setDataByPath(
-                Config::XML_PATH_FRONTED_AREA . Config::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD,
+                Config::XML_PATH_FRONTED_AREA . Config::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE,
                 0
             );
             $this->config->save();
@@ -142,7 +142,7 @@ class AccountManagementTest extends WebapiAbstract
             }
         }
         $this->config->setDataByPath(
-            Config::XML_PATH_FRONTED_AREA . Config::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD,
+            Config::XML_PATH_FRONTED_AREA . Config::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE,
             $this->configValue
         );
         $this->config->save();
