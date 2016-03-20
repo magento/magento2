@@ -40,14 +40,14 @@ class Config implements ConfigInterface
     const XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD = 'limit_password_reset_requests_method';
 
     /**
-     * Configuration key to limit number password reset requests
+     * Configuration key to max number password reset requests
      */
-    const XML_PATH_LIMIT_NUMBER_REQUESTS = 'limit_number_password_reset_requests';
+    const XML_PATH_MAX_NUMBER_REQUESTS = 'max_number_password_reset_requests';
 
     /**
-     * Configuration key to limit time between password reset requests
+     * Configuration key to minimum time between password reset requests
      */
-    const XML_PATH_LIMIT_TIME_BETWEEN_REQUESTS = 'limit_time_between_password_reset_requests';
+    const XML_PATH_MIN_TIME_BETWEEN_REQUESTS = 'min_time_between_password_reset_requests';
 
     /**
      * Recipient email config path
@@ -138,7 +138,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Get type of limit on password resets (e.g. limit requests per email, per IP address, or both)
+     * {@inheritdoc}
      *
      * @return int
      */
@@ -159,7 +159,7 @@ class Config implements ConfigInterface
     public function getMaxNumberPasswordResetRequests()
     {
         return (int) $this->scopeConfig->getValue(
-            $this->getXmlPathPrefix() . self::XML_PATH_LIMIT_NUMBER_REQUESTS,
+            $this->getXmlPathPrefix() . self::XML_PATH_MAX_NUMBER_REQUESTS,
             StoreScopeInterface::SCOPE_STORE
         );
     }
@@ -173,7 +173,7 @@ class Config implements ConfigInterface
     public function getMinTimeBetweenPasswordResets()
     {
         $timeInMin = $this->scopeConfig->getValue(
-            $this->getXmlPathPrefix() . self::XML_PATH_LIMIT_TIME_BETWEEN_REQUESTS,
+            $this->getXmlPathPrefix() . self::XML_PATH_MIN_TIME_BETWEEN_REQUESTS,
             StoreScopeInterface::SCOPE_STORE
         );
         return $timeInMin * 60;

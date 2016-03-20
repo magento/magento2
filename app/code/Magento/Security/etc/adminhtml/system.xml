@@ -18,12 +18,12 @@
                     <label>Limit Password Reset Requests Method</label>
                     <source_model>Magento\Security\Model\Config\Source\ResetMethod</source_model>
                 </field>
-                <field id="limit_number_password_reset_requests" translate="label comment" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="max_number_password_reset_requests" translate="label comment" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Limit Number of Password Reset Requests</label>
                     <comment>Limit the number of password reset request per hour. Use 0 to disable.</comment>
                     <validate>required-entry validate-zero-or-greater</validate>
                 </field>
-                <field id="limit_time_between_password_reset_requests" translate="label comment" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="min_time_between_password_reset_requests" translate="label comment" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Limit Time Between Password Reset Requests</label>
                     <comment>Delay in minutes between password reset requests. Use 0 to disable.</comment>
                     <validate>required-entry validate-zero-or-greater</validate>
@@ -36,12 +36,12 @@
                     <label>Limit Password Reset Requests Method</label>
                     <source_model>Magento\Security\Model\Config\Source\ResetMethod</source_model>
                 </field>
-                <field id="limit_number_password_reset_requests" translate="label comment" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="max_number_password_reset_requests" translate="label comment" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Limit Number of Password Reset Requests</label>
                     <comment>Limit the number of password reset request per hour. Use 0 to disable.</comment>
                     <validate>required-entry validate-zero-or-greater</validate>
                 </field>
-                <field id="limit_time_between_password_reset_requests" translate="label comment" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="min_time_between_password_reset_requests" translate="label comment" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Limit Time Between Password Reset Requests</label>
                     <comment>Delay in minutes between password reset requests. Use 0 to disable.</comment>
                     <validate>required-entry validate-zero-or-greater</validate>
