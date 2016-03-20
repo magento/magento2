@@ -357,7 +357,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * Get account lock manager
+     * Get authentication
      *
      * @return AuthenticationInterface
      */
@@ -789,7 +789,7 @@ class AccountManagement implements AccountManagementInterface
     }
 
     /**
-     * Change customer password.
+     * Change customer password
      *
      * @param CustomerInterface $customer
      * @param string $currentPassword

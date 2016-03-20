@@ -9,28 +9,28 @@ use Magento\Customer\Model\AuthenticationInterface;
 
 class CheckUserEditObserverTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Captcha\Helper\Data |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Captcha\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
     protected $helperMock;
 
-    /** @var \Magento\Framework\App\ActionFlag |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ActionFlag|\PHPUnit_Framework_MockObject_MockObject */
     protected $actionFlagMock;
 
-    /* @var \Magento\Framework\Message\ManagerInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /* @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $messageManagerMock;
 
-    /** @var \Magento\Framework\App\Response\RedirectInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $redirectMock;
 
-    /** @var \Magento\Captcha\Observer\CaptchaStringResolver |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Captcha\Observer\CaptchaStringResolver|\PHPUnit_Framework_MockObject_MockObject */
     protected $captchaStringResolverMock;
 
-    /** @var AuthenticationInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AuthenticationInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $authenticationMock;
 
-    /** @var \Magento\Customer\Model\Session |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerSessionMock;
 
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $scopeConfigMock;
 
     /** @var \Magento\Captcha\Observer\CheckUserEditObserver */

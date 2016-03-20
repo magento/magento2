@@ -18,12 +18,12 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
      *
      * @var \Magento\Backend\App\ConfigInterface
      */
-    protected $backendConfigMock;
+    private $backendConfigMock;
 
     /**
      * @var \Magento\Customer\Model\CustomerRegistry
      */
-    protected $customerRegistryMock;
+    private $customerRegistryMock;
 
     /**
      * @var \Magento\Framework\Encryption\EncryptorInterface
@@ -33,17 +33,17 @@ class AuthenticationTest extends \PHPUnit_Framework_TestCase
     /**
      * @var CustomerRepositoryInterface
      */
-    protected $customerRepositoryMock;
+    private $customerRepositoryMock;
 
     /**
      * @var \Magento\Customer\Model\Data\CustomerSecure
      */
-    protected $customerSecure;
+    private $customerSecure;
 
     /**
      * @var \Magento\Customer\Model\Authentication
      */
-    protected $authentication;
+    private $authentication;
 
     protected function setUp()
     {

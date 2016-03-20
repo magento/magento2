@@ -14,7 +14,7 @@ use Magento\Framework\Event\ObserverInterface;
 class CustomerLoginSuccessObserver implements ObserverInterface
 {
     /**
-     * Account lock manager
+     * Authentication
      *
      * @var AuthenticationInterface
      */

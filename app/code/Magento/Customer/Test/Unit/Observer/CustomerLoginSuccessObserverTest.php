@@ -15,7 +15,7 @@ use Magento\Customer\Observer\CustomerLoginSuccessObserver;
 class CustomerLoginSuccessObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Account lock manager
+     * Authentication
      *
      * @var AuthenticationInterface
      */
