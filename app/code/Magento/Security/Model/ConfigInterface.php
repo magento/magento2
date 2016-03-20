@@ -18,7 +18,7 @@ interface ConfigInterface
     public function getCustomerServiceEmail();
 
     /**
-     * Get time period for limiting rate of password reset requests
+     * Get time period limitation of password reset requests
      *
      * @return int
      */
@@ -32,14 +32,14 @@ interface ConfigInterface
     public function isAdminAccountSharingEnabled();
 
     /**
-     * Get admin session lifetime from config
+     * Get admin session lifetime
      *
      * @return int
      */
     public function getAdminSessionLifetime();
 
     /**
-     * Get type of limit on password resets
+     * Get password reset protection type
      *
      * @return int
      */

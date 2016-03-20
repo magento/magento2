@@ -5,11 +5,10 @@
  */
 namespace Magento\Security\Test\Unit\Model;
 
-use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Security\Model\ConfigInterface;
 
 /**
- * Test class for \Magento\Security\Model\SecurityConfig testing
+ * Test class for \Magento\Security\Model\Config testing
  */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
@@ -195,7 +194,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 $this->getXmlPathPrefix($scope)
-                . \Magento\Security\Model\Config::XML_PATH_LIMIT_NUMBER_REQUESTS
+                . \Magento\Security\Model\Config::XML_PATH_MAX_NUMBER_REQUESTS
             )
             ->willReturn($limitNumber);
         $this->scopeMock->expects($this->once())
@@ -215,7 +214,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->method('getValue')
             ->with(
                 $this->getXmlPathPrefix($scope)
-                . \Magento\Security\Model\Config::XML_PATH_LIMIT_TIME_BETWEEN_REQUESTS
+                . \Magento\Security\Model\Config::XML_PATH_MIN_TIME_BETWEEN_REQUESTS
             )
             ->willReturn($limitTime);
         $this->scopeMock->expects($this->once())
