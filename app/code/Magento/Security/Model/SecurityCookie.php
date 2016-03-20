@@ -7,9 +7,6 @@ namespace Magento\Security\Model;
 
 use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
 
-/**
- * Security cookie helper
- */
 class SecurityCookie
 {
     /**
