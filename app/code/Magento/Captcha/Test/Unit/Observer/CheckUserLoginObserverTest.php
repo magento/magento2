@@ -10,28 +10,28 @@ use Zend\Server\Reflection\ReflectionMethod;
 
 class CheckUserLoginObserverTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Captcha\Helper\Data |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Captcha\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
     protected $helperMock;
 
-    /** @var \Magento\Framework\App\ActionFlag |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Framework\App\ActionFlag|\PHPUnit_Framework_MockObject_MockObject */
     protected $actionFlagMock;
 
-    /* @var \Magento\Framework\Message\ManagerInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /* @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $messageManagerMock;
 
-    /** @var \Magento\Customer\Model\Session |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerSessionMock;
 
-    /** @var \Magento\Captcha\Observer\CaptchaStringResolver |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Captcha\Observer\CaptchaStringResolver|\PHPUnit_Framework_MockObject_MockObject */
     protected $captchaStringResolverMock;
 
-    /** @var \Magento\Customer\Model\Url |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Model\Url|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerUrlMock;
 
-    /** @var \Magento\Customer\Api\CustomerRepositoryInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Customer\Api\CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $customerRepositoryMock;
 
-    /** @var AuthenticationInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var AuthenticationInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $authenticationMock;
 
     /** @var \Magento\Captcha\Observer\CheckUserLoginObserver */

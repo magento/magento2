@@ -8,9 +8,6 @@ namespace Magento\Customer\Model;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
 
-/**
- * Customer account authentication manager
- */
 interface AuthenticationInterface
 {
     /**

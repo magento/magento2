@@ -11,9 +11,6 @@ use Magento\Framework\Encryption\EncryptorInterface as Encryptor;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
 
-/**
- * Customer account Authentication manager
- */
 class Authentication implements AuthenticationInterface
 {
     /**
@@ -54,8 +51,6 @@ class Authentication implements AuthenticationInterface
     protected $customerRepository;
 
     /**
-     * AccountManagement constructor
-     *
      * @param CustomerRepositoryInterface $customerRepository
      * @param CustomerRegistry $customerRegistry
      * @param ConfigInterface $backendConfig
