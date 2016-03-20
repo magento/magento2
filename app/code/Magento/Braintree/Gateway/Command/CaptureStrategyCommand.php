@@ -21,6 +21,7 @@ use Magento\Sales\Api\Data\TransactionInterface;
 
 /**
  * Class CaptureStrategyCommand
+ * @SuppressWarnings(PHPMD)
  */
 class CaptureStrategyCommand implements CommandInterface
 {
