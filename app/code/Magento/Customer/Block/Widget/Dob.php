@@ -181,6 +181,11 @@ class Dob extends AbstractWidget
             'value' => $this->getValue(),
             'date_format' => $this->getDateFormat(),
             'image' => $this->getViewFileUrl('Magento_Theme::calendar.png'),
+            'years_range' => '-120y:c+nn',
+            'max_date' => '-1d',
+            'change_month' => 'true',
+            'change_year' => 'true',
+            'show_on' => 'both'
         ]);
         return $this->dateElement->getHtml();
     }
