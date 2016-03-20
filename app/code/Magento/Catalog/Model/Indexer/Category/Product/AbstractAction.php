@@ -9,7 +9,7 @@
 namespace Magento\Catalog\Model\Indexer\Category\Product;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class AbstractAction

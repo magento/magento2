@@ -108,7 +108,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
     protected $groupRepository;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadataPool;
 
@@ -291,7 +291,7 @@ class AdvancedPricingTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->metadataPool = $this->getMock(
-            '\Magento\Framework\Model\Entity\MetadataPool',
+            '\Magento\Framework\EntityManager\MetadataPool',
             [],
             [],
             '',

@@ -38,7 +38,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     protected $categoryResource;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
+     * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPool;
 
@@ -58,13 +58,13 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool
     ) {
         $this->categoryFactory = $categoryFactory;
         $this->categoryResource = $categoryResource;

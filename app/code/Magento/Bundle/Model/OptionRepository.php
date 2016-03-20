@@ -62,7 +62,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
     protected $dataObjectHelper;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
+     * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPool;
 
@@ -76,7 +76,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
      * @param Product\OptionList $productOptionList
      * @param Product\LinksList $linkList
      * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -89,7 +89,7 @@ class OptionRepository implements \Magento\Bundle\Api\ProductOptionRepositoryInt
         \Magento\Bundle\Model\Product\OptionList $productOptionList,
         \Magento\Bundle\Model\Product\LinksList $linkList,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool
     ) {
         $this->metadataPool = $metadataPool;
         $this->productRepository = $productRepository;

@@ -29,14 +29,14 @@ class Sample extends AbstractTypeHandler
     /**
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\Downloadable\Helper\File $downloadableFile
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Downloadable\Model\SampleFactory $sampleFactory
      * @param \Magento\Downloadable\Model\ResourceModel\SampleFactory $sampleResourceFactory
      */
     public function __construct(
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\Downloadable\Helper\File $downloadableFile,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         \Magento\Downloadable\Model\SampleFactory $sampleFactory,
         \Magento\Downloadable\Model\ResourceModel\SampleFactory $sampleResourceFactory
     ) {

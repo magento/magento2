@@ -16,7 +16,7 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
     protected $service;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Model\Entity\MetadataPool
+     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPoolMock;
 
@@ -62,7 +62,7 @@ class SampleRepositoryTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $this->metadataPoolMock = $this->getMock('Magento\Framework\EntityManager\MetadataPool', [], [], '', false);
         $this->repositoryMock = $this->getMock('\Magento\Catalog\Api\ProductRepositoryInterface', [], [], '', false);
         $this->productTypeMock = $this->getMock('\Magento\Downloadable\Model\Product\Type', [], [], '', false);
         $this->sampleResourceMock = $this->getMock(

@@ -36,7 +36,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     protected $relation;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadataPoolMock;
 
@@ -59,7 +59,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         );
         $this->metadataMock = $this->getMock(\Magento\Framework\Model\Entity\EntityMetadata::class, [], [], '', false);
         $this->metadataPoolMock = $this->getMock(
-            \Magento\Framework\Model\Entity\MetadataPool::class,
+            \Magento\Framework\EntityManager\MetadataPool::class,
             [],
             [],
             '',

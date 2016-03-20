@@ -17,7 +17,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Store\Model\Store;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

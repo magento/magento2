@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Model\Test\Unit\Operation;
 
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\Entity\Action\ReadMain;
 use Magento\Framework\Model\Entity\Action\ReadExtension;
 use Magento\Framework\Model\Entity\Action\ReadRelation;

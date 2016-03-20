@@ -15,7 +15,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
+     * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPool;
 
@@ -47,7 +47,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $configuration
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
@@ -56,7 +56,7 @@ class Link extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Framework\App\Config\ScopeConfigInterface $configuration,
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->_catalogData = $catalogData;

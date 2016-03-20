@@ -1000,7 +1000,7 @@ class Category extends AbstractResource
         $this->_attributes = [];
         $this->loadAttributesMetadata($attributes);
         $object = $this->entityManager->load(CategoryInterface::class, $object, $entityId);
-        if (!$this->entityManager->has(\Magento\Catalog\Api\Data\CategoryInterface::class, $entityId)) {
+        if (!$this->entityManager->has(\Magento\Catalog\Api\Data\CategoryInterface::class, $object)) {
             $object->isObjectNew(true);
         }
         return $this;

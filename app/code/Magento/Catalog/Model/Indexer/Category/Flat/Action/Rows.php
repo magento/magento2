@@ -7,7 +7,7 @@ namespace Magento\Catalog\Model\Indexer\Category\Flat\Action;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
 {

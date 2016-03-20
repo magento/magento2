@@ -35,7 +35,7 @@
         <!-- WebSerivice Type. Possible values: soap, rest -->
         <const name="TESTS_WEB_API_ADAPTER" value="rest"/>
         <!-- Webserver URL -->
-        <const name="TESTS_BASE_URL" value="http://magento.url"/>
+        <const name="TESTS_BASE_URL" value="http://magento-ee.localhost"/>
         <!-- Webserver API user -->
         <const name="TESTS_WEBSERVICE_USER" value="admin"/>
         <!-- Webserver API key -->

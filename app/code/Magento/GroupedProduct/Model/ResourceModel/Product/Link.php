@@ -6,7 +6,7 @@
 namespace Magento\GroupedProduct\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class Link

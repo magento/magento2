@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\Product\Option;
 
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 use Magento\Catalog\Model\Product\OptionFactory;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class ReadHandler

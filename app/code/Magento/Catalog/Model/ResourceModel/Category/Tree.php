@@ -7,7 +7,7 @@ namespace Magento\Catalog\Model\ResourceModel\Category;
 
 use Magento\Framework\Data\Tree\Dbp;
 use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

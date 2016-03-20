@@ -16,7 +16,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
+     * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPool;
 
@@ -48,7 +48,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
@@ -56,7 +56,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->_currencyFactory = $currencyFactory;

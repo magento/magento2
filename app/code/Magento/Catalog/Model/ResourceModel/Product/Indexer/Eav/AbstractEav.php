@@ -27,7 +27,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param string $connectionName
      */
@@ -35,7 +35,7 @@ abstract class AbstractEav extends \Magento\Catalog\Model\ResourceModel\Product\
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         $connectionName = null
     ) {

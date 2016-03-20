@@ -7,7 +7,7 @@
 namespace Magento\Framework\Model\Test\Unit\Entity;
 
 use Magento\Framework\Model\Entity\EntityHydrator;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\Entity\EntityMetadata;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Model\Entity\SequenceFactory;

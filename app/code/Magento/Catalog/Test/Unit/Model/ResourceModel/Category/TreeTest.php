@@ -10,7 +10,7 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Category;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\Model\Entity\EntityMetadata;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 class TreeTest extends \PHPUnit_Framework_TestCase
 {

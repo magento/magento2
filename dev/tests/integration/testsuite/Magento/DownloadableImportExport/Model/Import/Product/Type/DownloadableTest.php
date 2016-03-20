@@ -55,8 +55,8 @@ class DownloadableTest extends \PHPUnit_Framework_TestCase
         $this->model = $this->objectManager->create(
             \Magento\CatalogImportExport\Model\Import\Product::class
         );
-        /** @var \Magento\Framework\Model\Entity\MetadataPool $metadataPool */
-        $metadataPool = $this->objectManager->get(\Magento\Framework\Model\Entity\MetadataPool::class);
+        /** @var \Magento\Framework\EntityManager\MetadataPool $metadataPool */
+        $metadataPool = $this->objectManager->get(\Magento\Framework\EntityManager\MetadataPool::class);
         $this->productMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
     }
 

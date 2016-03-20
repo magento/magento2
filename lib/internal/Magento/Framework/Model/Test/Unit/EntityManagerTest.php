@@ -28,7 +28,7 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
     protected $hydrator;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadataPool;
 
@@ -71,7 +71,7 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->metadataPool = $this->getMock(
-            'Magento\Framework\Model\Entity\MetadataPool',
+            'Magento\Framework\EntityManager\MetadataPool',
             [],
             [],
             '',
