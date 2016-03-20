@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -117,6 +117,26 @@ class Matrix extends \Magento\Backend\Block\Template
     public function getVariations()
     {
         return $this->variationMatrix->getVariations($this->getAttributes());
+    }
+
+    /**
+     * Retrieve data source for variations data
+     *
+     * @return string
+     */
+    public function getProvider()
+    {
+        return $this->getData('config/provider');
+    }
+
+    /**
+     * Retrieve configurable modal name
+     *
+     * @return string
+     */
+    public function getConfigurableModal()
+    {
+        return $this->getData('config/configurableModal');
     }
 
     /**

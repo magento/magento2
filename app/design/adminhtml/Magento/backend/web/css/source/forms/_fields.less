@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -213,14 +213,8 @@
                 line-height: 1;
                 margin-left: 10px;
                 position: absolute;
-                top: 1.2rem;
+                margin-top: .2rem;
                 z-index: 1;
-            }
-
-            &[data-config-scope] {
-                &:after {
-                    top: .2rem;
-                }
             }
         }
     }
@@ -608,6 +602,7 @@
                 margin: 0;
                 opacity: 1;
                 position: static;
+                text-align: left;
             }
         }
 
@@ -663,38 +658,9 @@
     margin-bottom: 3rem;
     padding-left: @indent__s;
 
-    .admin_field-complex-title {
-        clear: both;
-        color: @collapsible-title__color;
-        font-size: @collapsible-title__font-size;
-        font-weight: @font-weight__semibold;
-        letter-spacing: .025em;
-        margin-bottom: @indent__s;
+    .admin__field:not(._hidden) + & {
+        margin-top: 3rem;
     }
-
-    .admin_field-complex-elements {
-        float: right;
-        max-width: 40%;
-
-        button {
-            margin-left: @indent__m;
-        }
-    }
-
-    .admin_field-complex-content {
-        max-width: 60%;
-        overflow: hidden;
-    }
-}
-
-//
-//  Complex Field
-//  _____________________________________________
-
-.admin_field-complex {
-    &:extend(.abs-clearfix all);
-    margin-bottom: 3rem;
-    padding-left: @indent__s;
 
     .admin_field-complex-title {
         clear: both;

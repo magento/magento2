@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model;
@@ -105,6 +105,7 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
                 $searchResult->addFieldToFilter($filter->getField(), [$condition => $filter->getValue()]);
             }
         }
+        $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setCurPage($searchCriteria->getCurrentPage());
         $searchResult->setPageSize($searchCriteria->getPageSize());
         foreach ($searchResult->getItems() as $order) {
