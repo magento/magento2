@@ -1,14 +1,13 @@
 <?php
-
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Security\Model;
 
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
-/**
- * Class SecurityManagerTest
- * @package Magento\Security\Model
- */
 class SecurityManagerTest extends \PHPUnit_Framework_TestCase
 {
     /**
