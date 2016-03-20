@@ -388,10 +388,10 @@ class CustomOptions extends AbstractModifier
                                 ],
                             ],
                             'children' => [
+                                static::FIELD_SORT_ORDER_NAME => $this->getPositionFieldConfig(40),
                                 static::CONTAINER_COMMON_NAME => $this->getCommonContainerConfig(10),
                                 static::CONTAINER_TYPE_STATIC_NAME => $this->getStaticTypeContainerConfig(20),
-                                static::GRID_TYPE_SELECT_NAME => $this->getSelectTypeGridConfig(30),
-                                static::FIELD_SORT_ORDER_NAME => $this->getPositionFieldConfig(40)
+                                static::GRID_TYPE_SELECT_NAME => $this->getSelectTypeGridConfig(30)
                             ]
                         ],
                     ]
