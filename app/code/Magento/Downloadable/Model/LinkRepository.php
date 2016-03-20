@@ -13,7 +13,7 @@ use \Magento\Downloadable\Model\Product\Type as DownloadableType;
 use Magento\Downloadable\Model\Link\ContentValidator;
 use Magento\Downloadable\Helper\File;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Downloadable\Model\ResourceModel\Link as LinkResource;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;

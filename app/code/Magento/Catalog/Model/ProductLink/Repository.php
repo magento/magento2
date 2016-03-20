@@ -14,7 +14,7 @@ use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks as LinksIni
 use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class Repository

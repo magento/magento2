@@ -7,7 +7,7 @@ namespace Magento\SalesRule\Test\Unit\Model\ResourceModel;
 
 use Magento\SalesRule\Model\ResourceModel\ReadHandler;
 use Magento\SalesRule\Model\ResourceModel\Rule;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\SalesRule\Api\Data\RuleInterface;
 
 /**
@@ -44,7 +44,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         $className = 'Magento\SalesRule\Model\ResourceModel\Rule';
         $this->ruleResource = $this->getMock($className, [], [], '', false);
 
-        $className = 'Magento\Framework\Model\Entity\MetadataPool';
+        $className = 'Magento\Framework\EntityManager\MetadataPool';
         $this->metadataPool = $this->getMock($className, [], [], '', false);
 
         $this->model = $this->objectManager->getObject(

@@ -6,7 +6,7 @@
 namespace Magento\Cms\Model\ResourceModel\Page\Relation\Store;
 
 use Magento\Cms\Model\ResourceModel\Page;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 class SaveHandler
 {

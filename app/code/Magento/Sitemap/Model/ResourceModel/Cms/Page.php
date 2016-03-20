@@ -6,7 +6,7 @@
 namespace Magento\Sitemap\Model\ResourceModel\Cms;
 
 use Magento\Cms\Api\Data\PageInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Cms\Model\Page as CmsPage;

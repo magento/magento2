@@ -100,7 +100,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
     protected $dataObjectHelperMock;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadataPoolMock;
 
@@ -158,7 +158,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             '\Magento\Bundle\Model\ResourceModel\Option\CollectionFactory', ['create'], [], '', false
         );
         $this->storeManagerMock = $this->getMock('\Magento\Store\Model\StoreManagerInterface', [], [], '', false);
-        $this->metadataPoolMock = $this->getMockBuilder('\Magento\Framework\Model\Entity\MetadataPool')
+        $this->metadataPoolMock = $this->getMockBuilder('\Magento\Framework\EntityManager\MetadataPool')
             ->disableOriginalConstructor()
             ->getMock();
         $this->metadataMock = $this->getMockBuilder('\Magento\Framework\Model\Entity\EntityMetadata')

@@ -34,8 +34,8 @@ class CatalogPriceRulesFixture extends Fixture
         $category = $this->fixtureModel->getObjectManager()->get('Magento\Catalog\Model\Category');
         /** @var $model  \Magento\CatalogRule\Model\Rule*/
         $model = $this->fixtureModel->getObjectManager()->get('Magento\CatalogRule\Model\Rule');
-        /** @var \Magento\Framework\Model\Entity\MetadataPool $metadataPool */
-        $metadataPool = $this->fixtureModel->getObjectManager()->get('Magento\Framework\Model\Entity\MetadataPool');
+        /** @var \Magento\Framework\EntityManager\MetadataPool $metadataPool */
+        $metadataPool = $this->fixtureModel->getObjectManager()->get('Magento\Framework\EntityManager\MetadataPool');
         $metadata = $metadataPool->getMetadata('Magento\CatalogRule\Api\Data\RuleInterface');
 
         //Get all websites

@@ -985,7 +985,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
     private function getAdvancedPricingMock($methods = [])
     {
         $metadataPoolMock = $this->getMock(
-            \Magento\Framework\Model\Entity\MetadataPool::class,
+            \Magento\Framework\EntityManager\MetadataPool::class,
             [],
             [],
             '',

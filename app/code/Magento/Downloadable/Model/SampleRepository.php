@@ -11,7 +11,7 @@ use Magento\Downloadable\Api\Data\SampleInterfaceFactory;
 use Magento\Downloadable\Api\Data\SampleInterface;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Downloadable\Model\Sample\ContentValidator;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Downloadable\Model\ResourceModel\Sample as ResourceModel;
 use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Downloadable\Helper\File;

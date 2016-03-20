@@ -7,7 +7,7 @@ namespace Magento\CatalogUrlRewrite\Service\V1;
 
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Api\Data\ProductInterface;
 
 /**

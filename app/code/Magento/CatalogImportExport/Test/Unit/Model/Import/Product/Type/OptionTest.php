@@ -209,7 +209,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
     protected $errorAggregator;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
+     * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPoolMock;
 
@@ -241,7 +241,7 @@ class OptionTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $date = new \DateTime();
         $timezoneInterface->expects($this->any())->method('date')->willReturn($date);
         $this->metadataPoolMock = $this->getMock(
-            \Magento\Framework\Model\Entity\MetadataPool::class,
+            \Magento\Framework\EntityManager\MetadataPool::class,
             [],
             [],
             '',

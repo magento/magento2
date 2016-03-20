@@ -57,7 +57,7 @@ class CreateHandler
     protected $fileStorageDb;
 
     /**
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository
      * @param \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
@@ -66,7 +66,7 @@ class CreateHandler
      * @param \Magento\MediaStorage\Helper\File\Storage\Database $fileStorageDb
      */
     public function __construct(
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $attributeRepository,
         \Magento\Catalog\Model\ResourceModel\Product\Gallery $resourceModel,
         \Magento\Framework\Json\Helper\Data $jsonHelper,

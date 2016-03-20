@@ -292,7 +292,7 @@ class ConfigurableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
             'testattr3v3' => '6',
         ]));
 
-        $metadataPoolMock = $this->getMock(\Magento\Framework\Model\Entity\MetadataPool::class, [], [], '', false);
+        $metadataPoolMock = $this->getMock(\Magento\Framework\EntityManager\MetadataPool::class, [], [], '', false);
         $entityMetadataMock = $this->getMock(\Magento\Framework\Model\Entity\EntityMetadata::class, [], [], '', false);
         $metadataPoolMock->expects($this->any())
             ->method('getMetadata')

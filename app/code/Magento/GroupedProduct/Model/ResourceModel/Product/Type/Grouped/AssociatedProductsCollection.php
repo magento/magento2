@@ -7,7 +7,7 @@
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped;
 
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

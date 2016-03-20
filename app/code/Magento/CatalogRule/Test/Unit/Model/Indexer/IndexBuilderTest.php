@@ -69,7 +69,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     protected $connection;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadataPool;
 
@@ -142,7 +142,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
-        $this->metadataPool = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $this->metadataPool = $this->getMock('Magento\Framework\EntityManager\MetadataPool', [], [], '', false);
         $metadata = $this->getMockBuilder('Magento\Framework\Model\Entity\EntityMetadata')
             ->disableOriginalConstructor()
             ->getMock();

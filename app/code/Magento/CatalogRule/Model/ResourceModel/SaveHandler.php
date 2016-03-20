@@ -6,7 +6,7 @@
 namespace Magento\CatalogRule\Model\ResourceModel;
 
 use Magento\CatalogRule\Model\ResourceModel\Rule;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 class SaveHandler
 {

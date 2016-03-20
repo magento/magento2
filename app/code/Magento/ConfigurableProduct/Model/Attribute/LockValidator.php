@@ -7,7 +7,7 @@ namespace Magento\ConfigurableProduct\Model\Attribute;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Attribute\LockValidatorInterface;
 
 /**

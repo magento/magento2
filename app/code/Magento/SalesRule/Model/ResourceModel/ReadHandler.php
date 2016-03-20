@@ -6,7 +6,7 @@
 namespace Magento\SalesRule\Model\ResourceModel;
 
 use Magento\SalesRule\Model\ResourceModel\Rule;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 class ReadHandler
 {

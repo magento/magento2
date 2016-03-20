@@ -6,7 +6,7 @@
 
 namespace Magento\Framework\Model\Test\Unit\Operation\Write;
 
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\Entity\Action\UpdateMain;
 use Magento\Framework\Model\Entity\Action\UpdateExtension;
 use Magento\Framework\Model\Entity\Action\UpdateRelation;
