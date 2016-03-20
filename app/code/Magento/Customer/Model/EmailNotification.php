@@ -19,7 +19,7 @@ use Magento\Framework\Exception\LocalizedException;
  */
 class EmailNotification implements EmailNotificationInterface
 {
-    /**
+    /**#@+
      * Configuration paths for email templates and identities
      */
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'customer/password/forgot_email_identity';
@@ -36,8 +36,9 @@ class EmailNotification implements EmailNotificationInterface
     const XML_PATH_REMIND_EMAIL_TEMPLATE = 'customer/password/remind_email_template';
 
     const XML_PATH_REGISTER_EMAIL_IDENTITY = 'customer/create_account/email_identity';
+    /**#@-*/
 
-    /**
+    /**#@+
      * Configuration paths for email templates and identities
      */
     const XML_PATH_REGISTER_EMAIL_TEMPLATE = 'customer/create_account/email_template';
@@ -47,6 +48,7 @@ class EmailNotification implements EmailNotificationInterface
     const XML_PATH_CONFIRM_EMAIL_TEMPLATE = 'customer/create_account/email_confirmation_template';
 
     const XML_PATH_CONFIRMED_EMAIL_TEMPLATE = 'customer/create_account/email_confirmed_template';
+    /**#@-*/
 
     /**
      * @var CustomerRegistry

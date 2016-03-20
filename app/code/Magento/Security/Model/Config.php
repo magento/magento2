@@ -15,7 +15,7 @@ use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 class Config implements ConfigInterface
 {
     /**
-     * Period of time which will be used to calculate all types of limitations
+     * Period of time which will be used to limit frequency of password reset requests
      */
     const LIMITATION_TIME_PERIOD = 3600;
 
