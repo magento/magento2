@@ -154,6 +154,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             'template' => 'product/widget/content/grid.phtml',
             'conditions' => $conditions
         ];
+
         $this->conditionsHelper->expects($this->once())->method('encode')->with($conditions)
             ->willReturn('encoded-conditions-string');
         $result = $this->widget->getWidgetDeclaration('Magento\CatalogWidget\Block\Product\ProductsList', $params);
