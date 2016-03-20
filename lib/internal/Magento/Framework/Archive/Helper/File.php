@@ -91,7 +91,7 @@ class File
      * @throws LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function open($mode = 'w+', $chmod = DriverInterface::WRITEABLE_FILE_MODE)
+    public function open($mode = 'w+', $chmod = null)
     {
         $this->_isInWriteMode = $this->_isWritableMode($mode);
 
@@ -182,7 +182,7 @@ class File
         $this->_close();
         $this->_fileHandler = false;
 
-        if ($this->_isInWriteMode) {
+        if ($this->_isInWriteMode && isset($this->_chmod)) {
             @chmod($this->_filePath, $this->_chmod);
         }
     }
