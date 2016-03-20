@@ -220,7 +220,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->scopeMock->expects($this->once())
             ->method('getCurrentScope')
             ->willReturn($scope);
-        $this->assertEquals($limitTime * 60, $this->model->getMinTimeBetweenPasswordResets());
+        $this->assertEquals($limitTime * 60, $this->model->getMinTimeBetweenPasswordResetRequests());
     }
 
     /**

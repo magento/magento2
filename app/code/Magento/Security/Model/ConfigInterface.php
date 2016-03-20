@@ -57,5 +57,5 @@ interface ConfigInterface
      *
      * @return int
      */
-    public function getMinTimeBetweenPasswordResets();
+    public function getMinTimeBetweenPasswordResetRequests();
 }

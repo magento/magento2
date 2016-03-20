@@ -15,9 +15,9 @@ use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 class Config implements ConfigInterface
 {
     /**
-     * Period of time which will be used to calculate all types of limitations (s)
+     * Period of time which will be used to calculate all types of limitations
      */
-    const TIME_PERIOD_TO_CALCULATE_LIMITATIONS = 3600;
+    const LIMITATION_TIME_PERIOD = 3600;
 
     /**
      * Configuration path to admin area
@@ -37,17 +37,17 @@ class Config implements ConfigInterface
     /**
      * Configuration key to limit password reset requests method
      */
-    const XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD = 'limit_password_reset_requests_method';
+    const XML_PATH_PASSWORD_RESET_PROTECTION_TYPE = 'password_reset_protection_type';
 
     /**
      * Configuration key to max number password reset requests
      */
-    const XML_PATH_MAX_NUMBER_REQUESTS = 'max_number_password_reset_requests';
+    const XML_PATH_MAX_NUMBER_PASSWORD_RESET_REQUESTS = 'max_number_password_reset_requests';
 
     /**
      * Configuration key to minimum time between password reset requests
      */
-    const XML_PATH_MIN_TIME_BETWEEN_REQUESTS = 'min_time_between_password_reset_requests';
+    const XML_PATH_MIN_TIME_BETWEEN_PASSWORD_RESET_REQUESTS = 'min_time_between_password_reset_requests';
 
     /**
      * Recipient email config path
@@ -98,7 +98,7 @@ class Config implements ConfigInterface
      */
     public function getLimitationTimePeriod()
     {
-        return self::TIME_PERIOD_TO_CALCULATE_LIMITATIONS;
+        return self::LIMITATION_TIME_PERIOD;
     }
 
     /**
@@ -145,7 +145,7 @@ class Config implements ConfigInterface
     public function getPasswordResetProtectionType()
     {
         return (int) $this->scopeConfig->getValue(
-            $this->getXmlPathPrefix() . self::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD,
+            $this->getXmlPathPrefix() . self::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE,
             StoreScopeInterface::SCOPE_STORE
         );
     }
@@ -159,7 +159,7 @@ class Config implements ConfigInterface
     public function getMaxNumberPasswordResetRequests()
     {
         return (int) $this->scopeConfig->getValue(
-            $this->getXmlPathPrefix() . self::XML_PATH_MAX_NUMBER_REQUESTS,
+            $this->getXmlPathPrefix() . self::XML_PATH_MAX_NUMBER_PASSWORD_RESET_REQUESTS,
             StoreScopeInterface::SCOPE_STORE
         );
     }
@@ -170,10 +170,10 @@ class Config implements ConfigInterface
      * @param int $scope
      * @return int
      */
-    public function getMinTimeBetweenPasswordResets()
+    public function getMinTimeBetweenPasswordResetRequests()
     {
         $timeInMin = $this->scopeConfig->getValue(
-            $this->getXmlPathPrefix() . self::XML_PATH_MIN_TIME_BETWEEN_REQUESTS,
+            $this->getXmlPathPrefix() . self::XML_PATH_MIN_TIME_BETWEEN_PASSWORD_RESET_REQUESTS,
             StoreScopeInterface::SCOPE_STORE
         );
         return $timeInMin * 60;
