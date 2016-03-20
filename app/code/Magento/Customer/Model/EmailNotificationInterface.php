@@ -31,7 +31,7 @@ interface EmailNotificationInterface
     const NEW_ACCOUNT_EMAIL_CONFIRMED = 'confirmed';
 
     /**
-     * Send notification to customer when email or/and password changed
+     * Send notification to customer when email and/or password changed
      *
      * @param CustomerInterface $savedCustomer
      * @param string $origCustomerEmail
