@@ -60,7 +60,7 @@ class Frequency implements SecurityCheckerInterface
     public function check($securityEventType, $accountReference = null, $longIp = null)
     {
         $isEnabled = $this->securityConfig->getPasswordResetProtectionType() != ResetMethod::OPTION_NONE;
-        $limitTimeBetweenRequests = $this->securityConfig->getMinTimeBetweenPasswordResets();
+        $limitTimeBetweenRequests = $this->securityConfig->getMinTimeBetweenPasswordResetRequests();
         if ($isEnabled && $limitTimeBetweenRequests) {
             if (null === $longIp) {
                 $longIp = $this->remoteAddress->getRemoteAddress();

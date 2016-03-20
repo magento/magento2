@@ -213,7 +213,7 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($requestsMethod));
 
         $this->securityConfigMock->expects($this->once())
-            ->method('getMinTimeBetweenPasswordResets')
+            ->method('getMinTimeBetweenPasswordResetRequests')
             ->will($this->returnValue($limitTimeBetweenPasswordResetRequests));
 
         $this->securityConfigMock->expects($this->any())
