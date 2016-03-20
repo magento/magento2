@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -804,22 +804,12 @@ class Eav extends AbstractModifier
      */
     private function calculateGroupCode(AttributeGroupInterface $group)
     {
-        $groupName = $group->getAttributeGroupName();
-        $attributeGroupCode = trim(
-            preg_replace(
-                '/[^a-z0-9]+/',
-                '-',
-                $this->translitFilter->filter(strtolower($groupName))
-            ),
-            '-'
-        );
-        if ($attributeGroupCode == 'images') {
+        $attributeGroupCode = $group->getAttributeGroupCode();
+
+        if ($attributeGroupCode === 'images') {
             $attributeGroupCode = 'image-management';
         }
-        if (empty($attributeGroupCode)) {
-            // in the following code md5 is not used for security purposes
-            $attributeGroupCode = md5($groupName);
-        }
+
         return $attributeGroupCode;
     }
 }
