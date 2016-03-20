@@ -15,7 +15,7 @@ class Write extends Read implements WriteInterface
      *
      * @var int
      */
-    protected $permissions = DriverInterface::WRITEABLE_DIRECTORY_MODE;
+    protected $permissions = 0777;
 
     /**
      * Constructor
