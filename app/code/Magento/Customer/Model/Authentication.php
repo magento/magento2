@@ -72,10 +72,7 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * Lock customer. Returns true if customer is locked; false if customer is not yet locked
-     *
-     * @param int $customerId
-     * @return boolean True if customer is locked; false if customer is not yet locked
+     * {@inheritdoc}
      */
     public function processAuthenticationFailure($customerId)
     {
@@ -109,10 +106,7 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * Unlock customer
-     *
-     * @param int $customerId
-     * @return void
+     * {@inheritdoc}
      */
     public function unlock($customerId)
     {
@@ -124,7 +118,7 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * Retrieve lock threshold
+     * Get lock threshold
      *
      * @return int
      */
@@ -134,7 +128,7 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * Retrieve max password login failure number
+     * Get max failures
      *
      * @return int
      */
@@ -144,10 +138,7 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * Check if a customer is locked
-     *
-     * @param int $customerId
-     * @return boolean
+     * {@inheritdoc}
      */
     public function isLocked($customerId)
     {
@@ -156,13 +147,7 @@ class Authentication implements AuthenticationInterface
     }
 
     /**
-     * Authenticate customer
-     *
-     * @param int $customerId
-     * @param string $password
-     * @return boolean
-     * @throws InvalidEmailOrPasswordException
-     * @throws UserLockedException
+     * {@inheritdoc}
      */
     public function authenticate($customerId, $password)
     {
