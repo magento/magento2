@@ -54,7 +54,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
     protected $eventManager;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadataPool;
 
@@ -184,7 +184,7 @@ class IndexTest extends \PHPUnit_Framework_TestCase
             ])
             ->getMock();
 
-        $this->metadataPool = $this->getMockBuilder('\Magento\Framework\Model\Entity\MetadataPool')
+        $this->metadataPool = $this->getMockBuilder('\Magento\Framework\EntityManager\MetadataPool')
             ->disableOriginalConstructor()
             ->setMethods([
                 'getMetadata',
