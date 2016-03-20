@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Model\Auth;
@@ -177,7 +177,16 @@ class Session extends \Magento\Framework\Session\SessionManager implements \Mage
      */
     public function prolong()
     {
-        $this->setUpdatedAt(time());
+        $cookieValue = $this->cookieManager->getCookie($this->getName());
+        if ($cookieValue) {
+            $this->setUpdatedAt(time());
+            $cookieMetadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
+                ->setPath($this->sessionConfig->getCookiePath())
+                ->setDomain($this->sessionConfig->getCookieDomain())
+                ->setSecure($this->sessionConfig->getCookieSecure())
+                ->setHttpOnly($this->sessionConfig->getCookieHttpOnly());
+            $this->cookieManager->setPublicCookie($this->getName(), $cookieValue, $cookieMetadata);
+        }
     }
 
     /**

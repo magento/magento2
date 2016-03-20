@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,7 +30,14 @@ class Downloadable extends Section
      *
      * @var string
      */
-    protected $downloadableBlock = '[data-index="downloadable"] > div > fieldset';
+    protected $downloadableBlock = '[data-index="container_%s"]';
+
+    /**
+     * Locator for is downloadable product checkbox.
+     *
+     * @var string
+     */
+    protected $isDownloadableProduct = '[name="is_downloadable"]';
 
     /**
      * Get Downloadable block.
@@ -44,7 +51,7 @@ class Downloadable extends Section
         $element = $element ?: $this->_rootElement;
         return $this->blockFactory->create(
             'Magento\Downloadable\Test\Block\Adminhtml\Catalog\Product\Edit\Section\Downloadable\\' . $type,
-            ['element' => $element->find($this->downloadableBlock, Locator::SELECTOR_CSS)]
+            ['element' => $element->find(sprintf($this->downloadableBlock, strtolower($type)), Locator::SELECTOR_CSS)]
         );
     }
 
@@ -78,11 +85,15 @@ class Downloadable extends Section
      *
      * @param array $fields
      * @param SimpleElement|null $element
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return $this
      */
     public function setFieldsData(array $fields, SimpleElement $element = null)
     {
+        $context = $element ?: $this->_rootElement;
+        $isDownloadable = $context->find($this->isDownloadableProduct);
+        if ($isDownloadable->isVisible()) {
+            $isDownloadable->click();
+        }
         if (isset($fields['downloadable_sample']['value'])) {
             $this->getDownloadableBlock('Samples')->fillSamples($fields['downloadable_sample']['value']);
         }
