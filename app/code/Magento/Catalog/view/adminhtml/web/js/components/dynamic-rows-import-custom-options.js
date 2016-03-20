@@ -4,11 +4,12 @@
  */
 
 define([
-    'Magento_Ui/js/dynamic-rows/dynamic-rows'
-], function (dynamicRows) {
+    'Magento_Ui/js/dynamic-rows/dynamic-rows',
+    'mageUtils'
+], function (DynamicRows, utils) {
     'use strict';
 
-    return dynamicRows.extend({
+    return DynamicRows.extend({
         defaults: {
             dataProvider: '',
             insertData: [],
@@ -44,10 +45,15 @@ define([
 
             data.each(function (options) {
                 options.options.each(function (option) {
-                    var path = this.dataScope + '.' + this.index + '.' + this.recordIterator;
+                    var path = this.dataScope + '.' + this.index + '.' + this.recordIterator,
+                        curOption = utils.copy(option);
 
-                    this.source.set(path, option);
-                    this.addChild(option, false);
+                    if (curOption.hasOwnProperty('sort_order')) {
+                        delete curOption['sort_order'];
+                    }
+
+                    this.source.set(path, curOption);
+                    this.addChild(curOption, false);
                 }, this);
             }, this);
         },

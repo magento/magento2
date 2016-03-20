@@ -21,7 +21,7 @@ define([
             var self = this;
 
             this.modal = $('<div id="create_new_attribute"/>').modal({
-                title: $.mage.__('New Attribute'),
+                 title: $.mage.__('New Attribute'),
                 type: 'slide',
                 buttons: [],
                 opened: function () {
@@ -32,7 +32,7 @@ define([
                     });
                     self.modal.append(self.iframe);
                     self._changeIframeSize();
-                    $(window).off().on('resize', _.debounce(self._changeIframeSize.bind(self), 400));
+                    $(window).off().on('resize.modal', _.debounce(self._changeIframeSize.bind(self), 400));
                 },
                 closed: function () {
                     var doc = self.iframe.get(0).document;
@@ -43,6 +43,7 @@ define([
                         self.iframe.remove();
                     }
                     self.modal.data('modal').modal.remove();
+                    $(window).off('resize.modal');
                 }
             });
         },
