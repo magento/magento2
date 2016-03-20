@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -17,10 +17,10 @@
                     <th if="dndConfig.enabled"/>
 
                     <!-- ko foreach: {data: labels, as: 'item'}  -->
-                    <th text="item.label",
-                        css="$parent.setClasses(item)",
-                        visible="item.visible",
-                        disable="item.disabled"
+                    <th text="item.label"
+                        css="$parent.setClasses(item)"
+                        visible="item.visible"
+                        disabled="item.disabled"
                         attr="{'data-name': name}"/>
                     <!-- /ko -->
                 </tr>
@@ -29,7 +29,7 @@
                 <tbody data-bind="foreach: elems">
                 <tr class="data-row">
                     <td if="$parent.dndConfig.enabled"
-                        class="_fit"
+                        class="col-draggable"
                         template="name: $parent.dndConfig.template, data: $parent.dnd"/>
 
                     <!-- ko foreach: { data: elems, as: 'elem'}  -->
