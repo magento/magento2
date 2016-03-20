@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -177,7 +177,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'getProductLinks',
                 'setProductLinks',
                 'validate',
-                'save'
+                'save',
+                'getMediaGalleryEntries'
             ],
             [],
             '',
@@ -1248,7 +1249,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('setMediaAttribute')
             ->with($this->initializedProductMock, ['image', 'small_image'], 'filename1');
         $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
-
+        $this->productMock->expects($this->any())->method('getMediaGalleryEntries')->willReturn(null);
         $this->model->save($this->productMock);
         $this->assertEquals($expectedResult, $this->initializedProductMock->getMediaGallery('images'));
     }

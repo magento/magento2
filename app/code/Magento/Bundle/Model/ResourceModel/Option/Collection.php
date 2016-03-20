@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\ResourceModel\Option;
@@ -85,10 +85,26 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             'cpe.'.$linkField.' = main_table.parent_id',
             []
         )->where(
-            'cpe.entity_id = ?',
+            "cpe.entity_id = ?",
             $productId
         );
 
+        return $this;
+    }
+
+    /**
+     * Set product link filter
+     *
+     * @param int $productLinkFieldValue
+     *
+     * @return $this
+     */
+    public function setProductLinkFilter($productLinkFieldValue)
+    {
+        $this->getSelect()->where(
+            'main_table.parent_id = ?',
+            $productLinkFieldValue
+        );
         return $this;
     }
 
