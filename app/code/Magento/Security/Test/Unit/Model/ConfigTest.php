@@ -59,14 +59,10 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /**
-     * Test get time period to calculate limitations
-     * @return void
-     */
-    public function testGetTimePeriodToCalculateLimitations()
+    public function testGetLimitationTimePeriod()
     {
         $this->assertEquals(
-            \Magento\Security\Model\Config::TIME_PERIOD_TO_CALCULATE_LIMITATIONS,
+            \Magento\Security\Model\Config::LIMITATION_TIME_PERIOD,
             $this->model->getLimitationTimePeriod()
         );
     }
@@ -134,13 +130,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * @param int $scope
      * @dataProvider dataProviderResetMethodValues
      */
-    public function testGetLimitPasswordResetRequestsMethod($resetMethod, $scope)
+    public function testGetPasswordResetProtectionType($resetMethod, $scope)
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
                 $this->getXmlPathPrefix($scope)
-                . \Magento\Security\Model\Config::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD
+                . \Magento\Security\Model\Config::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE
             )
             ->willReturn($resetMethod);
         $this->scopeMock->expects($this->once())
@@ -188,13 +184,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * @param int $scope
      * @dataProvider dataProviderNumberValueWithScope
      */
-    public function testGetLimitNumberPasswordResetRequests($limitNumber, $scope)
+    public function testGetMaxNumberPasswordResetRequests($limitNumber, $scope)
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
                 $this->getXmlPathPrefix($scope)
-                . \Magento\Security\Model\Config::XML_PATH_MAX_NUMBER_REQUESTS
+                . \Magento\Security\Model\Config::XML_PATH_MAX_NUMBER_PASSWORD_RESET_REQUESTS
             )
             ->willReturn($limitNumber);
         $this->scopeMock->expects($this->once())
@@ -208,13 +204,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
      * @param int $scope
      * @dataProvider dataProviderNumberValueWithScope
      */
-    public function testGetLimitTimeBetweenPasswordResetRequests($limitTime, $scope)
+    public function testGetMinTimeBetweenPasswordResetRequests($limitTime, $scope)
     {
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
                 $this->getXmlPathPrefix($scope)
-                . \Magento\Security\Model\Config::XML_PATH_MIN_TIME_BETWEEN_REQUESTS
+                . \Magento\Security\Model\Config::XML_PATH_MIN_TIME_BETWEEN_PASSWORD_RESET_REQUESTS
             )
             ->willReturn($limitTime);
         $this->scopeMock->expects($this->once())
