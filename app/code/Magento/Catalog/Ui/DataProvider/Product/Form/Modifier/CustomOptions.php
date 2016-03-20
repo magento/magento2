@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -238,9 +238,9 @@ class CustomOptions extends AbstractModifier
                         ],
                     ],
                     'children' => [
-                        static::CONTAINER_HEADER_NAME => $this->getHeaderContainerConfig(10),
-                        static::GRID_OPTIONS_NAME => $this->getOptionsGridConfig(20),
-                        static::FIELD_ENABLE => $this->getEnableFieldConfig(30),
+                        static::FIELD_ENABLE => $this->getEnableFieldConfig(10),
+                        static::CONTAINER_HEADER_NAME => $this->getHeaderContainerConfig(20),
+                        static::GRID_OPTIONS_NAME => $this->getOptionsGridConfig(30)
                     ]
                 ]
             ]
