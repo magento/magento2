@@ -14,7 +14,6 @@ use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Customer email notification
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class EmailNotification implements EmailNotificationInterface
@@ -36,11 +35,7 @@ class EmailNotification implements EmailNotificationInterface
     const XML_PATH_REMIND_EMAIL_TEMPLATE = 'customer/password/remind_email_template';
 
     const XML_PATH_REGISTER_EMAIL_IDENTITY = 'customer/create_account/email_identity';
-    /**#@-*/
 
-    /**#@+
-     * Configuration paths for email templates and identities
-     */
     const XML_PATH_REGISTER_EMAIL_TEMPLATE = 'customer/create_account/email_template';
 
     const XML_PATH_REGISTER_NO_PASSWORD_EMAIL_TEMPLATE = 'customer/create_account/email_no_password_template';
