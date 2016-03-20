@@ -16,17 +16,17 @@ class LoginController
     /**
      * @var \Magento\Framework\Message\ManagerInterface
      */
-    protected $messageManager;
+    private $messageManager;
 
     /**
      * @var AdminSessionsManager
      */
-    protected $sessionsManager;
+    private $sessionsManager;
 
     /**
      * @var \Magento\Security\Model\SecurityCookie
      */
-    protected $securityCookie;
+    private $securityCookie;
 
     /**
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
@@ -66,7 +66,7 @@ class LoginController
      * @param Login $login
      * @return bool
      */
-    protected function isLoginForm(Login $login)
+    private function isLoginForm(Login $login)
     {
         return $login->getRequest()->getUri() == $login->getUrl('*');
     }

@@ -25,7 +25,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration
     private $securityCookie;
 
     /**
-     * Get security cookie helper
+     * Get security cookie
      *
      * @return SecurityCookie
      * @deprecated
