@@ -101,7 +101,7 @@ class CheckUserLoginObserver implements ObserverInterface
     }
 
     /**
-     * Get account lock manager
+     * Get authentication
      *
      * @return AuthenticationInterface
      */
@@ -118,7 +118,7 @@ class CheckUserLoginObserver implements ObserverInterface
     }
 
     /**
-     * Check Captcha On User Login Page
+     * Check captcha on user login page
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @throws NoSuchEntityException

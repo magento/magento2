@@ -93,7 +93,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     }
 
     /**
-     * Get account lock manager
+     * Get authentication
      *
      * @return AuthenticationInterface
      */

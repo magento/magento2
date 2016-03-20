@@ -16,17 +16,17 @@ class AuthSession
     /**
      * @var \Magento\Framework\App\RequestInterface
      */
-    protected $request;
+    private $request;
 
     /**
      * @var \Magento\Framework\Message\ManagerInterface
      */
-    protected $messageManager;
+    private $messageManager;
 
     /**
      * @var AdminSessionsManager
      */
-    protected $sessionsManager;
+    private $sessionsManager;
 
     /**
      * @var \Magento\Security\Model\SecurityCookie
@@ -77,7 +77,7 @@ class AuthSession
      *
      * @return $this
      */
-    protected function addUserLogoutNotification()
+    private function addUserLogoutNotification()
     {
         if ($this->isAjaxRequest()) {
             $this->securityCookie->setLogoutReasonCookie(
@@ -95,7 +95,7 @@ class AuthSession
      *
      * @return bool
      */
-    protected function isSessionCheckRequest()
+    private function isSessionCheckRequest()
     {
         return $this->request->getModuleName() == 'security' && $this->request->getActionName() == 'check';
     }
@@ -105,7 +105,7 @@ class AuthSession
      *
      * @return bool
      */
-    protected function isAjaxRequest()
+    private function isAjaxRequest()
     {
         return (bool) $this->request->getParam('isAjax');
     }

@@ -20,7 +20,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
     private $securityCookie;
 
     /**
-     * Get security cookie helper
+     * Get security cookie
      *
      * @return SecurityCookie
      * @deprecated
