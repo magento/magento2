@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product;
@@ -19,7 +19,7 @@ class SkuProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected $skuProcessor;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->productFactory = $this->getMock(\Magento\Catalog\Model\ProductFactory::class, [], [], '', false);
         $this->skuProcessor = $this->getMock(

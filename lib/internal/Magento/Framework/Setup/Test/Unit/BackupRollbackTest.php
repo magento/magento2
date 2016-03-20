@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Setup\Test\Unit;
@@ -56,7 +56,7 @@ class BackupRollbackTest extends \PHPUnit_Framework_TestCase
      */
     private $path;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = $this->getMock('Magento\Framework\ObjectManagerInterface', [], [], '', false);
         $this->log = $this->getMock('Magento\Framework\Setup\LoggerInterface', [], [], '', false);

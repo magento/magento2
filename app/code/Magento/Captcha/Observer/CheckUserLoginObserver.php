@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Observer;
@@ -160,7 +160,9 @@ class CheckUserLoginObserver implements ObserverInterface
         $captchaModel = $this->_helper->getCaptcha($formId);
         $controller = $observer->getControllerAction();
         $loginParams = $controller->getRequest()->getPost('login');
-        $login = array_key_exists('username', $loginParams) ? $loginParams['username'] : null;
+        $login = (is_array($loginParams) && array_key_exists('username', $loginParams))
+            ? $loginParams['username']
+            : null;
         if ($captchaModel->isRequired($login)) {
             $word = $this->captchaStringResolver->resolve($controller->getRequest(), $formId);
             if (!$captchaModel->isCorrect($word)) {
