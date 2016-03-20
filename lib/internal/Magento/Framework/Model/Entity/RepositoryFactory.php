@@ -50,7 +50,8 @@ class RepositoryFactory
     public function create($entityType)
     {
         if (!isset($this->entities[$entityType])) {
-            throw new NotFoundException(__('Repository for entity type %s is not declared', $entityType));
+            $message = sprintf('Repository for entity type %s is not declared', $entityType);
+            throw new NotFoundException(new \Magento\Framework\Phrase($message));
         }
         return $this->objectManager->get($this->entities[$entityType]);
     }
