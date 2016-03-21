@@ -97,6 +97,11 @@ class HelperTest extends \PHPUnit_Framework_TestCase
     protected $customOptionMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $linkResolverMock;
+
+    /**
      * @var ProductLinks
      */
     protected $productLinksMock;
@@ -176,6 +181,14 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             'productLinkFactory' => $this->productLinkFactoryMock,
             'productRepository' => $this->productRepositoryMock,
         ]);
+
+        $this->linkResolverMock = $this->getMockBuilder(\Magento\Catalog\Model\Product\Link\Resolver::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $helperReflection = new \ReflectionClass(get_class($this->helper));
+        $resolverProperty = $helperReflection->getProperty('linkResolver');
+        $resolverProperty->setAccessible(true);
+        $resolverProperty->setValue($this->helper, $this->linkResolverMock);
     }
 
     /**
@@ -249,10 +262,7 @@ class HelperTest extends \PHPUnit_Framework_TestCase
             ->method('getPost')
             ->with('use_default')
             ->willReturn($useDefaults);
-        $this->requestMock->expects($this->at(3))
-            ->method('getPost')
-            ->with('options_use_default')
-            ->willReturn(true);
+        $this->linkResolverMock->expects($this->once())->method('getLinks')->willReturn([]);
         $this->stockFilterMock->expects($this->once())
             ->method('filter')
             ->with(['stock_data'])
