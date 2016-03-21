@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -151,7 +151,7 @@ class AdvancedPricing extends AbstractModifier
      */
     protected function preparePriceFields($fieldCode)
     {
-        $pricePath = $this->getElementArrayPath($this->meta, $fieldCode);
+        $pricePath = $this->arrayManager->findPath($fieldCode, $this->meta, null, 'children');
 
         if ($pricePath) {
             $this->meta = $this->arrayManager->set(
@@ -176,7 +176,12 @@ class AdvancedPricing extends AbstractModifier
      */
     protected function customizeTierPrice()
     {
-        $tierPricePath = $this->getElementArrayPath($this->meta, ProductAttributeInterface::CODE_TIER_PRICE);
+        $tierPricePath = $this->arrayManager->findPath(
+            ProductAttributeInterface::CODE_TIER_PRICE,
+            $this->meta,
+            null,
+            'children'
+        );
 
         if ($tierPricePath) {
             $this->meta = $this->arrayManager->merge(
@@ -349,7 +354,12 @@ class AdvancedPricing extends AbstractModifier
      */
     protected function addAdvancedPriceLink()
     {
-        $pricePath = $this->getElementArrayPath($this->meta, ProductAttributeInterface::CODE_PRICE);
+        $pricePath = $this->arrayManager->findPath(
+            ProductAttributeInterface::CODE_PRICE,
+            $this->meta,
+            null,
+            'children'
+        );
 
         if ($pricePath) {
             $this->meta = $this->arrayManager->merge(
@@ -511,8 +521,9 @@ class AdvancedPricing extends AbstractModifier
      */
     protected function specialPriceDataToInline()
     {
-        $pathFrom = $this->getElementArrayPath($this->meta, 'special_from_date');
-        $pathTo = $this->getElementArrayPath($this->meta, 'special_to_date');
+        $pathFrom = $this->arrayManager->findPath('special_from_date', $this->meta, null, 'children');
+        $pathTo = $this->arrayManager->findPath('special_to_date', $this->meta, null, 'children');
+
         if ($pathFrom && $pathTo) {
             $this->meta = $this->arrayManager->merge(
                 $this->arrayManager->slicePath($pathFrom, 0, -2) . '/arguments/data/config',
@@ -575,20 +586,10 @@ class AdvancedPricing extends AbstractModifier
             'componentType' => Modal::NAME,
             'dataScope' => '',
             'provider' => 'product_form.product_form_data_source',
-            'onCancel' => 'actionCancel',
+            'onCancel' => 'actionDone',
             'options' => [
                 'title' => __('Advanced Pricing'),
                 'buttons' => [
-                    [
-                        'text' => __('Cancel'),
-                        'class' => 'action-secondary',
-                        'actions' => [
-                            [
-                                'targetName' => '${ $.name }',
-                                'actionName' => 'actionCancel'
-                            ]
-                        ]
-                    ],
                     [
                         'text' => __('Done'),
                         'class' => 'action-primary',
@@ -604,7 +605,12 @@ class AdvancedPricing extends AbstractModifier
         ];
 
         $this->meta = $this->arrayManager->merge(
-            $this->getElementArrayPath($this->meta, static::CONTAINER_PREFIX . ProductAttributeInterface::CODE_PRICE),
+            $this->arrayManager->findPath(
+                static::CONTAINER_PREFIX . ProductAttributeInterface::CODE_PRICE,
+                $this->meta,
+                null,
+                'children'
+            ),
             $this->meta,
             [
                 'arguments' => [

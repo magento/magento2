@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -1159,6 +1159,46 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         );
         foreach ($products as $productSku => $productUrlKey) {
             $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
+        }
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testProductWithUseConfigSettings()
+    {
+        $products = [
+            'simple1' => true,
+            'simple2' => true,
+            'simple3' => false
+        ];
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Framework\Filesystem');
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            '\Magento\ImportExport\Model\Import\Source\Csv',
+            [
+                'file' => __DIR__ . '/_files/products_to_import_with_use_config_settings.csv',
+                'directory' => $directory
+            ]
+        );
+
+        $errors = $this->_model->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+
+        foreach ($products as $sku => $manageStockUseConfig) {
+            /** @var \Magento\CatalogInventory\Model\StockRegistry $stockRegistry */
+            $stockRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                'Magento\CatalogInventory\Model\StockRegistry'
+            );
+            $stockItem = $stockRegistry->getStockItemBySku($sku);
+            $this->assertEquals($manageStockUseConfig, $stockItem->getUseConfigManageStock());
         }
     }
 }
