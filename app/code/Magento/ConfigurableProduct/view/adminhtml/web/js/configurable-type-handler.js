@@ -1,17 +1,15 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
     'jquery',
     'Magento_Catalog/catalog/type-events',
-    'Magento_ConfigurableProduct/js/advanced-pricing-handler',
-    'Magento_ConfigurableProduct/js/options/price-type-handler',
     'collapsible',
     'Magento_Ui/js/modal/modal',
     'mage/translate',
     'domReady!'
-], function ($, productType, advancedPricingHandler, priceTypeHandler) {
+], function ($, productType) {
     'use strict';
 
     return {
@@ -84,7 +82,9 @@ define([
          * @private
          */
         _initType: function () {
-            var suggestContainer = $('#product-template-suggest-container .action-dropdown > .action-toggle');
+
+            /*var suggestContainer = $('#product-template-suggest-container .action-dropdown > .action-toggle');
+
 
             if (productType.type.current === 'configurable') {
                 this._setElementDisabled(suggestContainer.addClass('disabled'), true);
@@ -98,12 +98,15 @@ define([
                 this._setElementDisabled($('#inventory_stock_availability'), true);
                 this._setElementDisabled($('#qty'), false, true);
             }
+            */
 
-            if (['simple', 'virtual', 'configurable'].indexOf(productType.type.current) < 0) {
+            /*if (['simple', 'virtual', 'configurable'].indexOf(productType.type.current) < 0) {
                 this.hide();
             } else {
                 this.show();
-            }
+            }*/
+
+            this.show();
         },
 
         /**
@@ -114,12 +117,13 @@ define([
             this.$block = $(data.blockId + ' input[name="attributes[]"]');
             this.hasVariations = data.hasVariations;
 
-            advancedPricingHandler.init();
-            priceTypeHandler.init();
+            //advancedPricingHandler.init();
+            //priceTypeHandler.init();
 
-            if (productType.type.init === 'configurable' && !this.hasVariations) {
+            /*if (productType.type.init === 'configurable' && !this.hasVariations) {
                 $(document).trigger('setTypeProduct', 'simple');
-            }
+            }*/
+            $(document).trigger('setTypeProduct', 'simple');
 
             this.bindAll();
             this._initType();

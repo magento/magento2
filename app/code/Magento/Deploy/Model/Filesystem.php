@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Deploy\Model;
@@ -8,6 +8,8 @@ namespace Magento\Deploy\Model;
 use Magento\Framework\App\State;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\LocalizedException;
+use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Class Filesystem
@@ -18,11 +20,15 @@ class Filesystem
 {
     /**
      * File access permissions
+     *
+     * @deprecated
      */
     const PERMISSIONS_FILE = 0640;
 
     /**
      * Directory access permissions
+     *
+     * @deprecated
      */
     const PERMISSIONS_DIR = 0750;
 
@@ -52,7 +58,7 @@ class Filesystem
     /** @var \Magento\Store\Model\Config\StoreView */
     private $storeView;
 
-    /** @var \Magento\Framework\Shell */
+    /** @var \Magento\Framework\ShellInterface */
     private $shell;
 
     /** @var  string */
@@ -76,7 +82,7 @@ class Filesystem
         \Magento\Framework\App\Filesystem\DirectoryList $directoryList,
         \Magento\Framework\Filesystem\Driver\File $driverFile,
         \Magento\Store\Model\Config\StoreView $storeView,
-        \Magento\Framework\Shell $shell
+        \Magento\Framework\ShellInterface $shell
     ) {
         $this->writer = $writer;
         $this->reader = $reader;
@@ -92,11 +98,11 @@ class Filesystem
     /**
      * Regenerate static
      *
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param OutputInterface $output
      * @return void
      */
     public function regenerateStatic(
-        \Symfony\Component\Console\Output\OutputInterface $output
+        OutputInterface $output
     ) {
         // Сlean up /var/generation, /var/di/, /var/view_preprocessed and /pub/static directories
         $this->cleanupFilesystem(
@@ -107,39 +113,35 @@ class Filesystem
                 DirectoryList::TMP_MATERIALIZATION_DIR
             ]
         );
-        $this->changePermissions(
-            [
-                DirectoryList::STATIC_VIEW
-            ],
-            self::PERMISSIONS_DIR,
-            self::PERMISSIONS_DIR
-        );
-
         // Trigger static assets compilation and deployment
         $this->deployStaticContent($output);
         // Trigger code generation
         $this->compile($output);
-        $this->lockStaticResources();
     }
 
     /**
      * Deploy static content
      *
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param OutputInterface $output
      * @return void
      * @throws \Exception
      */
     protected function deployStaticContent(
-        \Symfony\Component\Console\Output\OutputInterface $output
+        OutputInterface $output
     ) {
-        $output->writeln('Static content deployment start');
+        $output->writeln('Starting static content deployment');
         $cmd = $this->functionCallPath . 'setup:static-content:deploy '
             . implode(' ', $this->storeView->retrieveLocales());
 
         /**
          * @todo build a solution that does not depend on exec
          */
-        $execOutput = $this->shell->execute($cmd);
+        try {
+            $execOutput = $this->shell->execute($cmd);
+        } catch (LocalizedException $e) {
+            $output->writeln('Something went wrong while deploying static content. See the error log for details.');
+            throw $e;
+        }
         $output->writeln($execOutput);
         $output->writeln('Static content deployment complete');
     }
@@ -147,13 +149,13 @@ class Filesystem
     /**
      * Runs code multi-tenant compiler to generate code and DI information
      *
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param OutputInterface $output
      * @return void
+     * @throws LocalizedException
      */
-    protected function compile(
-        \Symfony\Component\Console\Output\OutputInterface $output
-    ) {
-        $output->writeln('Start compilation');
+    protected function compile(OutputInterface $output)
+    {
+        $output->writeln('Starting compilation');
         $this->cleanupFilesystem(
             [
                 DirectoryList::CACHE,
@@ -169,7 +171,12 @@ class Filesystem
          *
          * @todo build a solution that does not depend on exec
          */
-        $execOutput = $this->shell->execute($cmd);
+        try {
+            $execOutput = $this->shell->execute($cmd);
+        } catch (LocalizedException $e) {
+            $output->writeln('Something went wrong while compiling generated code. See the error log for details.');
+            throw $e;
+        }
         $output->writeln($execOutput);
         $output->writeln('Compilation complete');
     }
@@ -215,6 +222,8 @@ class Filesystem
      * @param int $dirPermissions
      * @param int $filePermissions
      * @return void
+     *
+     * @deprecated
      */
     protected function changePermissions($directoryCodeList, $dirPermissions, $filePermissions)
     {
@@ -233,6 +242,8 @@ class Filesystem
      * Chenge permissions on static resources
      *
      * @return void
+     *
+     * @deprecated
      */
     public function lockStaticResources()
     {

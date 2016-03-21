@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -58,7 +58,7 @@ class BuiltinPluginTest extends \PHPUnit_Framework_TestCase
     /**
      * SetUp
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->configMock = $this->getMock('Magento\PageCache\Model\Config', [], [], '', false);
         $this->versionMock = $this->getMock('Magento\Framework\App\PageCache\Version', [], [], '', false);

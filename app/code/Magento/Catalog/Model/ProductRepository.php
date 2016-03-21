@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -15,6 +15,8 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -498,16 +500,22 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $product->setCanSaveCustomOptions(true);
         }
 
-        $validationResult = $this->resourceModel->validate($product);
-        if (true !== $validationResult) {
-            throw new \Magento\Framework\Exception\CouldNotSaveException(
-                __('Invalid product data: %1', implode(',', $validationResult))
-            );
+        $useValidation = \Magento\Store\Model\Store::ADMIN_CODE === $this->storeManager->getStore()->getCode();
+        if ($useValidation) {
+            $validationResult = $this->resourceModel->validate($product);
+            if (true !== $validationResult) {
+                throw new \Magento\Framework\Exception\CouldNotSaveException(
+                    __('Invalid product data: %1', implode(',', $validationResult))
+                );
+            }
         }
+
         try {
             if ($tierPrices !== null) {
                 $product->setData('tier_price', $tierPrices);
             }
+            unset($this->instances[$product->getSku()]);
+            unset($this->instancesById[$product->getId()]);
             $this->resourceModel->save($product);
         } catch (\Magento\Eav\Model\Entity\Attribute\Exception $exception) {
             throw \Magento\Framework\Exception\InputException::invalidFieldValue(
@@ -515,6 +523,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->getData($exception->getAttributeCode()),
                 $exception
             );
+        } catch (ValidatorException $e) {
+            throw new CouldNotSaveException(__($e->getMessage()));
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(__('Unable to save product'));
         }
@@ -531,6 +541,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $sku = $product->getSku();
         $productId = $product->getId();
         try {
+            unset($this->instances[$product->getSku()]);
+            unset($this->instancesById[$product->getId()]);
             $this->resourceModel->delete($product);
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\StateException(
