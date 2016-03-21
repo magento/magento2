@@ -28,10 +28,16 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $table = $setup->getConnection()->newTable(
                 $setup->getTable('oauth_token_request_log')
             )->addColumn(
-                'user_login',
+                'log_id',
+                \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                null,
+                ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
+                'Log Id'
+            )->addColumn(
+                'user_name',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                 255,
-                ['nullable' => false, 'primary' => true],
+                ['nullable' => false],
                 'Customer email or admin login'
             )->addColumn(
                 'user_type',
@@ -49,11 +55,16 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'lock_expires_at',
                 \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 null,
-                [],
+                ['nullable' => false],
                 'Lock expiration time'
             )->addIndex(
-                $setup->getIdxName('oauth_token_request_log', ['user_login', 'user_type']),
-                ['user_login', 'user_type']
+                $setup->getIdxName(
+                    'oauth_token_request_log',
+                    ['user_name', 'user_type'],
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                ),
+                ['user_name', 'user_type'],
+                ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )->setComment(
                 'Log of token request authentication failures.'
             );

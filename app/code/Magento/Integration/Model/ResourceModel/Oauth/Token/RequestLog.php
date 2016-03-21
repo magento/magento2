@@ -58,11 +58,10 @@ class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getFailuresCount($userName, $userType)
     {
         $select = $this->getConnection()->select();
-        $select->columns('failures_count')
-            ->from($this->getMainTable())
-            ->where('user_login = ? AND user_type = ?', [$userName, $userType]);
+        $select->from($this->getMainTable(), 'failures_count')
+            ->where('user_name = :user_name AND user_type = :user_type');
 
-        return (int)$this->getConnection()->fetchOne($select);
+        return (int)$this->getConnection()->fetchOne($select, ['user_name' => $userName, 'user_type' => $userType]);
     }
 
     /**
@@ -72,7 +71,7 @@ class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $this->getConnection()->delete(
             $this->getMainTable(),
-            ['user_login = ?' => $userName, 'user_type = ?' => $userType]
+            ['user_name = ?' => $userName, 'user_type = ?' => $userType]
         );
     }
 
@@ -83,15 +82,20 @@ class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $date = (new \DateTime())->setTimestamp($this->dateTime->gmtTimestamp());
         $date->add(new \DateInterval('PT' . $this->requestLogConfig->getLockTimeout() . 'S'));
+        $dateTime = $date->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
+
         $this->getConnection()->insertOnDuplicate(
             $this->getMainTable(),
             [
-                'user_login' => $userName,
+                'user_name' => $userName,
                 'user_type' => $userType,
                 'failures_count' => 1,
-                'lock_expires_at' => $date
+                'lock_expires_at' => $dateTime
             ],
-            ['failures_count' => new \Zend_Db_Expr('failures_count+1'), 'lock_expires_at' => $date]
+            [
+                'failures_count' => new \Zend_Db_Expr('failures_count+1'),
+                'lock_expires_at' => new \Zend_Db_Expr("'" . $dateTime . "'")
+            ]
         );
     }
 
@@ -100,8 +104,10 @@ class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function clearExpiredFailures()
     {
+        $date = (new \DateTime())->setTimestamp($this->dateTime->gmtTimestamp());
+        $dateTime = $date->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
         $select = $this->getConnection()->select();
-        $select->from($this->getMainTable())->where('lock_expires_at <= ?', $this->dateTime->gmtTimestamp());
+        $select->from($this->getMainTable())->where('lock_expires_at <= ?', $dateTime);
         $this->getConnection()->delete($select);
     }
 }
