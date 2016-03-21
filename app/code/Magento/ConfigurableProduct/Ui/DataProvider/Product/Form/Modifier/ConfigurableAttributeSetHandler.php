@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
@@ -73,6 +73,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                         'prefer' => 'radio',
                                         'description' => __('Add configurable attributes to the current Attribute Set'),
                                         'dataScope' => 'configurableAffectedAttributeSet',
+                                        'label' => ' ',
                                         'valueMap' => [
                                             'true' => 'current',
                                             'false' => '0',
@@ -95,6 +96,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                             'Add configurable attributes to the new Attribute Set based on current'
                                         ),
                                         'dataScope' => 'configurableAffectedAttributeSet',
+                                        'label' => ' ',
                                         'valueMap' => [
                                             'true' => 'new',
                                             'false' => '0',
@@ -118,6 +120,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                             'Add configurable attributes to the existing Attribute Set'
                                         ),
                                         'dataScope' => 'configurableAffectedAttributeSet',
+                                        'label' => ' ',
                                         'valueMap' => [
                                             'true' => 'existing',
                                             'false' => '0',

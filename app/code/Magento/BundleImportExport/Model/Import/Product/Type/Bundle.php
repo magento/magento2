@@ -3,12 +3,14 @@
 /**
  * Import entity of bundle product type
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
 
 use \Magento\Bundle\Model\Product\Price as BundlePrice;
+use \Magento\BundleImportExport\Model\Export\RowCustomizer;
+use \Magento\Catalog\Model\Product\Type\AbstractType;
 
 /**
  * Class Bundle
@@ -113,6 +115,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      */
     protected $_customFieldsMapping = [
         'price_type' => 'bundle_price_type',
+        'shipment_type' => 'bundle_shipment_type',
         'price_view' => 'bundle_price_view',
         'weight_type' => 'bundle_weight_type',
         'sku_type' => 'bundle_sku_type',
@@ -413,13 +416,20 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     protected function transformBundleCustomAttributes($rowData)
     {
         $resultAttrs = [];
-
-        foreach (array_keys($this->_customFieldsMapping) as $oldKey) {
+        foreach ($this->_customFieldsMapping as $oldKey => $newKey) {
             if (isset($rowData[$oldKey])) {
-                if ($oldKey != self::NOT_FIXED_DYNAMIC_ATTRIBUTE) {
-                    $resultAttrs[$oldKey] = (($rowData[$oldKey] == self::VALUE_FIXED) ?
-                        BundlePrice::PRICE_TYPE_FIXED :
-                        BundlePrice::PRICE_TYPE_DYNAMIC);
+                switch ($newKey) {
+                    case $this->_customFieldsMapping['price_view']:
+                        break;
+                    case $this->_customFieldsMapping['shipment_type']:
+                        $resultAttrs[$oldKey] = (($rowData[$oldKey] == 'separately') ?
+                            AbstractType::SHIPMENT_SEPARATELY :
+                            AbstractType::SHIPMENT_TOGETHER);
+                        break;
+                    default:
+                        $resultAttrs[$oldKey] = (($rowData[$oldKey] == self::VALUE_FIXED) ?
+                            BundlePrice::PRICE_TYPE_FIXED :
+                            BundlePrice::PRICE_TYPE_DYNAMIC);
                 }
             }
         }
