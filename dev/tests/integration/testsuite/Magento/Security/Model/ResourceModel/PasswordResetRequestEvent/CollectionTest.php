@@ -6,6 +6,8 @@
 
 namespace Magento\Security\Model\ResourceModel\PasswordResetRequestEvent;
 
+use Magento\Framework\Stdlib\DateTime\DateTime;
+
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -76,9 +78,9 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testFilterByLifetime()
     {
         $startTime = strtotime('2016-01-19 15:42:13') - 10;
-        $securityConfig = $this->objectManager
-            ->create('\Magento\Security\Helper\SecurityConfig');
-        $currentTime = $securityConfig->getCurrentTimestamp();
+        $dateTime = $this->objectManager
+            ->create(DateTime::class);
+        $currentTime = $dateTime->gmtTimestamp();
         $sessionLifetime = $currentTime - $startTime;
 
         $this->collectionModel->filterByLifetime($sessionLifetime)
