@@ -133,8 +133,6 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * @param Option\Type\Factory $optionFactory
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param Option\Validator\Pool $validatorPool
-     * @param \Magento\Catalog\Model\Product\Option\Repository $optionRepository ,
-     * @param MetadataPool $metadataPool
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
@@ -149,8 +147,6 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         \Magento\Catalog\Model\Product\Option\Type\Factory $optionFactory,
         \Magento\Framework\Stdlib\StringUtils $string,
         Option\Validator\Pool $validatorPool,
-        \Magento\Catalog\Model\Product\Option\Repository $optionRepository,
-        MetadataPool $metadataPool,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
@@ -159,8 +155,6 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         $this->optionTypeFactory = $optionFactory;
         $this->validatorPool = $validatorPool;
         $this->string = $string;
-        $this->optionRepository = $optionRepository;
-        $this->metadataPool = $metadataPool;
         parent::__construct(
             $context,
             $registry,
@@ -469,7 +463,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      */
     public function getProductOptions(Product $product)
     {
-        return $this->optionRepository->getProductOptions($product, $this->getAddRequiredFilter());
+        return $this->getOptionRepository()->getProductOptions($product, $this->getAddRequiredFilter());
     }
 
     /**
@@ -840,7 +834,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         $collection = clone $this->getCollection();
         $collection->addFieldToFilter(
             'product_id',
-            $product->getData($this->metadataPool->getMetadata(ProductInterface::class)->getLinkField())
+            $product->getData($this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField())
         )->addTitleToResult(
             $product->getStoreId()
         )->addPriceToResult(
@@ -871,6 +865,30 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
         \Magento\Catalog\Api\Data\ProductCustomOptionExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * @return Option\Repository
+     */
+    private function getOptionRepository()
+    {
+        if (null === $this->optionRepository) {
+            $this->optionRepository = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Model\Product\Option\Repository');
+        }
+        return $this->optionRepository;
+    }
+
+    /**
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
     }
     //@codeCoverageIgnoreEnd
 }
