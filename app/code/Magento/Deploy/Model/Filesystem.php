@@ -10,6 +10,7 @@ use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\User\Model\ResourceModel\User\Collection as UserCollection;
 
 /**
  * Class Filesystem
@@ -37,32 +38,55 @@ class Filesystem
      */
     const DEFAULT_THEME = 'Magento/blank';
 
-    /** @var \Magento\Framework\App\DeploymentConfig\Writer */
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig\Writer
+     */
     private $writer;
 
-    /** @var \Magento\Framework\App\DeploymentConfig\Reader */
+    /**
+     * @var \Magento\Framework\App\DeploymentConfig\Reader
+     */
     private $reader;
 
-    /** @var \Magento\Framework\ObjectManagerInterface */
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
     private $objectManager;
 
-    /** @var \Magento\Framework\Filesystem */
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
     private $filesystem;
 
-    /** @var \Magento\Framework\App\Filesystem\DirectoryList */
+    /**
+     * @var \Magento\Framework\App\Filesystem\DirectoryList
+     */
     private $directoryList;
 
-    /** @var \Magento\Framework\Filesystem\Driver\File */
+    /**
+     * @var \Magento\Framework\Filesystem\Driver\File
+     */
     private $driverFile;
 
-    /** @var \Magento\Store\Model\Config\StoreView */
+    /**
+     * @var \Magento\Store\Model\Config\StoreView
+     */
     private $storeView;
 
-    /** @var \Magento\Framework\ShellInterface */
+    /**
+     * @var \Magento\Framework\ShellInterface
+     */
     private $shell;
 
-    /** @var  string */
+    /**
+     * @var string
+     */
     private $functionCallPath;
+
+    /**
+     * @var UserCollection
+     */
+    private $userCollection;
 
     /**
      * @param \Magento\Framework\App\DeploymentConfig\Writer $writer
@@ -131,7 +155,7 @@ class Filesystem
     ) {
         $output->writeln('Starting static content deployment');
         $cmd = $this->functionCallPath . 'setup:static-content:deploy '
-            . implode(' ', $this->storeView->retrieveLocales());
+            . implode(' ', $this->getUsedLocales());
 
         /**
          * @todo build a solution that does not depend on exec
@@ -144,6 +168,49 @@ class Filesystem
         }
         $output->writeln($execOutput);
         $output->writeln('Static content deployment complete');
+    }
+
+    /**
+     * Get admin user locales
+     *
+     * @return []string
+     */
+    private function getAdminUserInterfaceLocales()
+    {
+        $locales = [];
+        foreach ($this->getUserCollection() as $user) {
+            $locales[] = $user->getInterfaceLocale();
+        }
+        return array_unique($locales);
+    }
+
+    /**
+     * Get used store and admin user locales
+     *
+     * @return []string
+     */
+    private function getUsedLocales()
+    {
+        return array_merge(
+            $this->storeView->retrieveLocales(),
+            $this->getAdminUserInterfaceLocales()
+        );
+    }
+
+    /**
+     * Get user collection
+     *
+     * @return UserCollection
+     * @deprecated
+     */
+    private function getUserCollection()
+    {
+        if (!($this->userCollection instanceof UserCollection)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+                UserCollection::class
+            );
+        }
+        return $this->userCollection;
     }
 
     /**
