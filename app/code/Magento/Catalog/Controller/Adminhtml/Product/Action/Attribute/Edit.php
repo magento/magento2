@@ -53,8 +53,6 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
      */
     public function execute()
     {
-        $this->verifyNamespace();
-
         if ($this->getRequest()->getParam('filters')) {
             $collection = $this->filter->getCollection($this->collectionFactory->create());
             $this->attributeHelper->setProductIds($collection->getAllIds());
@@ -66,18 +64,5 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product\Action\Attribut
         $resultPage = $this->resultPageFactory->create();
         $resultPage->getConfig()->getTitle()->prepend(__('Update Attributes'));
         return $resultPage;
-    }
-
-    /**
-     * Check if namespace is specified
-     * @return void
-     */
-    private function verifyNamespace()
-    {
-        if (!$this->getRequest()->getParam('namespace')) {
-            $params = $this->getRequest()->getParams();
-            $params['namespace'] = 'product_listing';
-            $this->getRequest()->setParams($params);
-        }
     }
 }

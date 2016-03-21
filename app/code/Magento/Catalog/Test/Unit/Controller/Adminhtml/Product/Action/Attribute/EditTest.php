@@ -103,12 +103,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
     public function testExecutePageRequested()
     {
-        $this->request->expects($this->any())->method('getParam')->willReturnMap(
-            [
-                ['namespace', null, 'product_listing'],
-                ['filters', null, ['placeholder' => true]]
-            ]
-        );
+        $this->request->expects($this->any())->method('getParam')->with('filters')->willReturn(['placeholder' => true]);
         $this->request->expects($this->any())->method('getParams')->willReturn(
             [
                 'namespace' => 'product_listing',
@@ -141,12 +136,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
     public function testExecutePageReload()
     {
-        $this->request->expects($this->any())->method('getParam')->willReturnMap(
-            [
-                ['namespace', null, null],
-                ['filters', null, null]
-            ]
-        );
+        $this->request->expects($this->any())->method('getParam')->with('filters')->willReturn(null);
         $this->request->expects($this->any())->method('getParams')->willReturn([]);
 
         $this->attributeHelper->expects($this->any())->method('getProductIds')->willReturn([1, 2, 3]);
@@ -166,12 +156,7 @@ class EditTest extends \PHPUnit_Framework_TestCase
 
     public function testExecutePageDirectAccess()
     {
-        $this->request->expects($this->any())->method('getParam')->willReturnMap(
-            [
-                ['namespace', null, null],
-                ['filters', null, null]
-            ]
-        );
+        $this->request->expects($this->any())->method('getParam')->with('filters')->willReturn(null);
         $this->request->expects($this->any())->method('getParams')->willReturn([]);
         $this->attributeHelper->expects($this->any())->method('getProductIds')->willReturn(null);
 
