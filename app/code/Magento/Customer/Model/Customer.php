@@ -1353,7 +1353,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     /**
      * Check if customer is locked
      *
-     * @return bool
+     * @return boolean
      */
     public function isCustomerLocked()
     {
