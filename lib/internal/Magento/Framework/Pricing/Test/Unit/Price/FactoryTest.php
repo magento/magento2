@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -23,7 +23,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManagerMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
 

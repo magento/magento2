@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit\PageCache;
@@ -30,7 +30,7 @@ class KernelTest extends \PHPUnit_Framework_TestCase
     /**
      * Setup
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->cacheMock = $this->getMock('Magento\Framework\App\PageCache\Cache', [], [], '', false);
         $this->fullPageCacheMock = $this->getMock('\Magento\PageCache\Model\Cache\Type', [], [], '', false);
