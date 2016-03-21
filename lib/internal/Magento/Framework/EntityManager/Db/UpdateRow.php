@@ -76,10 +76,11 @@ class UpdateRow
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
         $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
-        return $connection->update(
+        $connection->update(
             $metadata->getEntityTable(),
             $this->prepareData($metadata, $connection, $data),
             [$metadata->getLinkField() . ' = ?' => $data[$metadata->getLinkField()]]
         );
+        return $data;
     }
 }

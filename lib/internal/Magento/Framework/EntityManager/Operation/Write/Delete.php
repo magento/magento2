@@ -12,7 +12,7 @@ use Magento\Framework\EntityManager\Operation\Write\Delete\DeleteAttributes;
 use Magento\Framework\EntityManager\Operation\Write\Delete\DeleteExtensions;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\EntityManager\EventManager;
 use Magento\Framework\Model\ResourceModel\Db\TransactionManagerInterface;
 
 /**
@@ -31,7 +31,7 @@ class Delete
     private $resourceConnection;
 
     /**
-     * @var ManagerInterface
+     * @var EventManager
      */
     private $eventManager;
 
@@ -39,8 +39,6 @@ class Delete
      * @var TransactionManagerInterface
      */
     private $transactionManager;
-
-    private $validateDelete;
 
     /**
      * @var DeleteMain
@@ -62,9 +60,8 @@ class Delete
      *
      * @param MetadataPool $metadataPool
      * @param ResourceConnection $resourceConnection
-     * @param ManagerInterface $eventManager
+     * @param EventManager $eventManager
      * @param TransactionManagerInterface $transactionManager
-     * @param ValidateDelete $validateDelete
      * @param DeleteMain $deleteMain
      * @param DeleteAttributes $deleteAttributes
      * @param DeleteExtensions $deleteExtensions
@@ -72,9 +69,8 @@ class Delete
     public function __construct(
         MetadataPool $metadataPool,
         ResourceConnection $resourceConnection,
-        ManagerInterface $eventManager,
+        EventManager $eventManager,
         TransactionManagerInterface $transactionManager,
-        ValidateDelete $validateDelete,
         DeleteMain $deleteMain,
         DeleteAttributes $deleteAttributes,
         DeleteExtensions $deleteExtensions
@@ -83,7 +79,6 @@ class Delete
         $this->resourceConnection = $resourceConnection;
         $this->eventManager = $eventManager;
         $this->transactionManager = $transactionManager;
-        $this->validateDelete = $validateDelete;
         $this->deleteMain = $deleteMain;
         $this->deleteAttributes = $deleteAttributes;
         $this->deleteExtensions = $deleteExtensions;
@@ -97,16 +92,29 @@ class Delete
      */
     public function execute($entityType, $entity)
     {
-        $this->validateDelete->execute($entityType, $entity);
         $metadata = $this->metadataPool->getMetadata($entityType);
         $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
         $this->transactionManager->start($connection);
         try {
-            $this->eventManager->dispatch('entity_delete_before', ['entity_type' => $entityType, 'entity' => $entity]);
+            $this->eventManager->dispatch(
+                'entity_manager_delete_before',
+                [
+                    'entity_type' => $entityType,
+                    'entity' => $entity
+                ]
+            );
+            $this->eventManager->dispatchEntityEvent($entityType, 'delete_before', ['entity' => $entity]);
             $entity = $this->deleteMain->execute($entityType, $entity);
             $entity = $this->deleteAttributes->execute($entityType, $entity);
             $entity = $this->deleteExtensions->execute($entityType, $entity);
-            $this->eventManager->dispatch('entity_delete_before', ['entity_type' => $entityType, 'entity' => $entity]);
+            $this->eventManager->dispatchEntityEvent($entityType, 'delete_after', ['entity' => $entity]);
+            $this->eventManager->dispatch(
+                'entity_manager_delete_before',
+                [
+                    'entity_type' => $entityType,
+                    'entity' => $entity
+                ]
+            );
             $this->transactionManager->commit();
         } catch (\Exception $e) {
             $this->transactionManager->rollBack();

@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Model\Observer;
+namespace Magento\Framework\EntityManager\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
@@ -12,9 +12,9 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
- * Class AfterEntitySave
+ * Class BeforeEntityDelete
  */
-class AfterEntitySave implements ObserverInterface
+class BeforeEntityDelete implements ObserverInterface
 {
     /**
      * Apply model save operation
@@ -27,13 +27,8 @@ class AfterEntitySave implements ObserverInterface
     {
         $entity = $observer->getEvent()->getEntity();
         if ($entity instanceof AbstractModel) {
-            $entity->getResource()->afterSave($entity);
-            $entity->afterSave();
-            $entity->getResource()->addCommitCallback([$entity, 'afterCommitCallback']);
-            if ($entity->getResource() instanceof  AbstractDb) {
-                $entity->getResource()->unserializeFields($entity);
-            }
-            $entity->setHasDataChanges(false);
+            $entity->beforeDelete();
+            $entity->getResource()->beforeDelete($entity);
         }
     }
 }

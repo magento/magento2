@@ -12,7 +12,7 @@ use Magento\Framework\EntityManager\Operation\Write\Update\UpdateAttributes;
 use Magento\Framework\EntityManager\Operation\Write\Update\UpdateExtensions;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\EntityManager\EventManager;
 
 /**
  * Class Update
@@ -30,14 +30,9 @@ class Update
     private $resourceConnection;
 
     /**
-     * @var ManagerInterface
+     * @var EventManager
      */
     private $eventManager;
-
-    /**
-     * @var ValidateUpdate
-     */
-    private $validateUpdate;
 
     /**
      * @var UpdateMain
@@ -59,8 +54,7 @@ class Update
      *
      * @param MetadataPool $metadataPool
      * @param ResourceConnection $resourceConnection
-     * @param ManagerInterface $eventManager
-     * @param ValidateUpdate $validateUpdate
+     * @param EventManager $eventManager
      * @param UpdateMain $updateMain
      * @param UpdateAttributes $updateAttributes
      * @param UpdateExtensions $updateExtensions
@@ -68,8 +62,7 @@ class Update
     public function __construct(
         MetadataPool $metadataPool,
         ResourceConnection $resourceConnection,
-        ManagerInterface $eventManager,
-        ValidateUpdate $validateUpdate,
+        EventManager $eventManager,
         UpdateMain $updateMain,
         UpdateAttributes $updateAttributes,
         UpdateExtensions $updateExtensions
@@ -77,7 +70,6 @@ class Update
         $this->metadataPool = $metadataPool;
         $this->resourceConnection = $resourceConnection;
         $this->eventManager = $eventManager;
-        $this->validateUpdate = $validateUpdate;
         $this->updateMain = $updateMain;
         $this->updateAttributes = $updateAttributes;
         $this->updateExtensions = $updateExtensions;
@@ -91,16 +83,29 @@ class Update
      */
     public function execute($entityType, $entity)
     {
-        $this->validateUpdate->execute($entityType, $entity);
         $metadata = $this->metadataPool->getMetadata($entityType);
         $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
         $connection->beginTransaction();
         try {
-            $this->eventManager->dispatch('entity_save_before', ['entity_type' => $entityType, 'entity' => $entity]);
+            $this->eventManager->dispatch(
+                'entity_manager_save_before',
+                [
+                    'entity_type' => $entityType,
+                    'entity' => $entity
+                ]
+            );
+            $this->eventManager->dispatchEntityEvent($entityType, 'save_before', ['entity' => $entity]);
             $entity = $this->updateMain->execute($entityType, $entity);
             $entity = $this->updateAttributes->execute($entityType, $entity);
             $entity = $this->updateExtensions->execute($entityType, $entity);
-            $this->eventManager->dispatch('entity_save_after', ['entity_type' => $entityType, 'entity' => $entity]);
+            $this->eventManager->dispatchEntityEvent($entityType, 'save_after', ['entity' => $entity]);
+            $this->eventManager->dispatch(
+                'entity_manager_save_after',
+                [
+                    'entity_type' => $entityType,
+                    'entity' => $entity
+                ]
+            );
             $connection->commit();
         } catch (\Exception $e) {
             $connection->rollBack();

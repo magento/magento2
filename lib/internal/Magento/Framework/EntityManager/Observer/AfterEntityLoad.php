@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Framework\Model\Observer;
+namespace Magento\Framework\EntityManager\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Event\Observer;
@@ -12,11 +12,10 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
- * Class BeforeEntitySave
+ * Class AfterEntityLoad
  */
-class BeforeEntitySave implements ObserverInterface
+class AfterEntityLoad implements ObserverInterface
 {
-
     /**
      * Apply model save operation
      *
@@ -29,12 +28,11 @@ class BeforeEntitySave implements ObserverInterface
         $entity = $observer->getEvent()->getEntity();
         if ($entity instanceof AbstractModel) {
             if ($entity->getResource() instanceof  AbstractDb) {
-                $entity = $entity->getResource()->serializeFields($entity);
+                $entity->getResource()->unserializeFields($entity);
             }
-            $entity->validateBeforeSave();
-            $entity->beforeSave();
-            $entity->setParentId((int)$entity->getParentId());
-            $entity->getResource()->beforeSave($entity);
+            $entity->getResource()->afterLoad($entity);
+            $entity->afterLoad();
+            $entity->setHasDataChanges(false);
         }
     }
 }
