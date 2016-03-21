@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -9,13 +9,9 @@
 
 & when (@media-common = true) {
 
-    .map-popup-wrapper {
-        &.popup {
-            .action {
-                &.close {
-                    .lib-css(top, @popup-button-close__position-top);
-                }
-            }
+    .map-popup-wrapper.popup {
+        .action.close {
+            .lib-css(top, @popup-button-close__position-top);
         }
     }
 
@@ -28,6 +24,8 @@
             @_popup-position-right: false,
             @_popup-position: absolute
         );
+        box-sizing: border-box;
+
         .map-info-price {
             &:extend(.abs-add-clearfix all);
             margin: 0 0 @indent__base;
@@ -37,7 +35,7 @@
 
                 .label {
                     &:after {
-                        content: ": ";
+                        content: ': ';
                     }
                 }
             }
@@ -73,6 +71,9 @@
     .map-old-price,
     .product-item .map-old-price,
     .product-info-price .map-show-info {
+        display: inline-block;
+        min-width: 10rem;
+
         &:not(:last-child) {
             margin-right: @indent__s;
         }
