@@ -44,14 +44,18 @@ class CategoryLinkManagementTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
         $this->model = new \Magento\Catalog\Model\CategoryLinkManagement(
             $this->categoryRepositoryMock,
-            $productRepositoryMock,
-            $productResource,
-            $categoryLinkRepository,
-            $this->productLinkFactoryMock,
-            $indexerRegistry
+            $this->productLinkFactoryMock
         );
+
+        $this->setProperties($this->model, [
+            'productResource' => $productResource,
+            'categoryLinkRepository' => $categoryLinkRepository,
+            'productLinkFactory' => $this->productLinkFactoryMock,
+            'indexerRegistry' => $indexerRegistry
+        ]);
     }
 
     public function testGetAssignedProducts()
@@ -93,5 +97,21 @@ class CategoryLinkManagementTest extends \PHPUnit_Framework_TestCase
             ->with($categoryId)
             ->willReturnSelf();
         $this->assertEquals([$categoryProductLinkMock], $this->model->getAssignedProducts($categoryId));
+    }
+
+    /**
+     * @param $object
+     * @param array $properties
+     */
+    private function setProperties($object, $properties = [])
+    {
+        $reflectionClass = new \ReflectionClass(get_class($object));
+        foreach ($properties as $key => $value) {
+            if ($reflectionClass->hasProperty($key)) {
+                $reflectionProperty = $reflectionClass->getProperty($key);
+                $reflectionProperty->setAccessible(true);
+                $reflectionProperty->setValue($object, $value);
+            }
+        }
     }
 }
