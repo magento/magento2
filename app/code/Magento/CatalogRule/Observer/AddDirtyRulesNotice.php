@@ -11,7 +11,7 @@ use Magento\Framework\Event\ObserverInterface;
 /**
  * Class AddDirtyRulesNotice
  */
-class AddDirtyRulesNotice  implements ObserverInterface
+class AddDirtyRulesNotice implements ObserverInterface
 {
     /**
      * @var \Magento\Framework\Message\ManagerInterface
