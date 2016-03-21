@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\Data\ProductLinkInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Framework\Phrase;
@@ -127,8 +129,6 @@ class Grouped extends AbstractModifier
         $modelId = $product->getId();
         if ($modelId) {
             $storeId = $this->locator->getStore()->getId();
-            /** @var \Magento\Framework\Currency $currency */
-            $currency = $this->localeCurrency->getCurrency($this->locator->getBaseCurrencyCode());
             $data[$product->getId()]['links'][self::LINK_TYPE] = [];
             foreach ($this->productLinkRepository->getList($product) as $linkItem) {
                 if ($linkItem->getLinkType() !== self::LINK_TYPE) {
@@ -136,24 +136,39 @@ class Grouped extends AbstractModifier
                 }
                 /** @var \Magento\Catalog\Api\Data\ProductInterface $linkedProduct */
                 $linkedProduct = $this->productRepository->get($linkItem->getLinkedProductSku(), false, $storeId);
-                $data[$modelId]['links'][self::LINK_TYPE][] = [
-                    'id' => $linkedProduct->getId(),
-                    'name' => $linkedProduct->getName(),
-                    'sku' => $linkItem->getLinkedProductSku(),
-                    'price' => $currency->toCurrency(sprintf("%f", $linkedProduct->getPrice())),
-                    'qty' => $linkItem->getExtensionAttributes()->getQty(),
-                    'position' => $linkItem->getPosition(),
-                    'thumbnail' => $this->imageHelper->init($linkedProduct, 'product_listing_thumbnail')->getUrl(),
-                    'type_id' => $linkedProduct->getTypeId(),
-                    'status' => $this->status->getOptionText($linkedProduct->getStatus()),
-                    'attribute_set' => $this->attributeSetRepository
-                        ->get($linkedProduct->getAttributeSetId())
-                        ->getAttributeSetName(),
-                ];
+                $data[$modelId]['links'][self::LINK_TYPE][] = $this->fillData($linkedProduct, $linkItem);
             }
             $data[$modelId][self::DATA_SOURCE_DEFAULT]['current_store_id'] = $storeId;
         }
         return $data;
+    }
+
+    /**
+     * Fill data column
+     *
+     * @param ProductInterface $linkedProduct
+     * @param ProductLinkInterface $linkItem
+     * @return array
+     */
+    protected function fillData(ProductInterface $linkedProduct, ProductLinkInterface $linkItem)
+    {
+        /** @var \Magento\Framework\Currency $currency */
+        $currency = $this->localeCurrency->getCurrency($this->locator->getBaseCurrencyCode());
+
+        return [
+            'id' => $linkedProduct->getId(),
+            'name' => $linkedProduct->getName(),
+            'sku' => $linkItem->getLinkedProductSku(),
+            'price' => $currency->toCurrency(sprintf("%f", $linkedProduct->getPrice())),
+            'qty' => $linkItem->getExtensionAttributes()->getQty(),
+            'position' => $linkItem->getPosition(),
+            'thumbnail' => $this->imageHelper->init($linkedProduct, 'product_listing_thumbnail')->getUrl(),
+            'type_id' => $linkedProduct->getTypeId(),
+            'status' => $this->status->getOptionText($linkedProduct->getStatus()),
+            'attribute_set' => $this->attributeSetRepository
+                ->get($linkedProduct->getAttributeSetId())
+                ->getAttributeSetName(),
+        ];
     }
 
     /**
@@ -273,7 +288,6 @@ class Grouped extends AbstractModifier
                             'buttons' => [
                                 [
                                     'text' => __('Cancel'),
-                                    'class' => 'action-secondary',
                                     'actions' => ['closeModal']
                                 ],
                                 [
@@ -452,74 +466,84 @@ class Grouped extends AbstractModifier
                         ],
                     ],
                 ],
-                'children' => [
-                    'id' => $this->getTextColumn('id', true, __('ID'), 10),
-                    'thumbnail' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'componentType' => Form\Field::NAME,
-                                    'formElement' => Form\Element\Input::NAME,
-                                    'elementTmpl' => 'ui/dynamic-rows/cells/thumbnail',
-                                    'dataType' => Form\Element\DataType\Text::NAME,
-                                    'dataScope' => 'thumbnail',
-                                    'fit' => true,
-                                    'label' => __('Thumbnail'),
-                                    'sortOrder' => 20,
-                                ],
+                'children' => $this->fillMeta(),
+            ],
+        ];
+    }
+
+    /**
+     * Fill meta columns
+     *
+     * @return array
+     */
+    protected function fillMeta()
+    {
+        return [
+            'id' => $this->getTextColumn('id', true, __('ID'), 10),
+            'thumbnail' => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'componentType' => Form\Field::NAME,
+                            'formElement' => Form\Element\Input::NAME,
+                            'elementTmpl' => 'ui/dynamic-rows/cells/thumbnail',
+                            'dataType' => Form\Element\DataType\Text::NAME,
+                            'dataScope' => 'thumbnail',
+                            'fit' => true,
+                            'label' => __('Thumbnail'),
+                            'sortOrder' => 20,
+                        ],
+                    ],
+                ],
+            ],
+            'name' => $this->getTextColumn('name', false, __('Name'), 30),
+            'attribute_set' => $this->getTextColumn('attribute_set', false, __('Attribute Set'), 40),
+            'status' => $this->getTextColumn('status', true, __('Status'), 50),
+            'sku' => $this->getTextColumn('sku', false, __('SKU'), 60),
+            'price' => $this->getTextColumn('price', true, __('Price'), 70),
+            'qty' => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'dataType' => Form\Element\DataType\Number::NAME,
+                            'formElement' => Form\Element\Input::NAME,
+                            'componentType' => Form\Field::NAME,
+                            'dataScope' => 'qty',
+                            'label' => __('Default Quantity'),
+                            'fit' => true,
+                            'additionalClasses' => 'admin__field-small',
+                            'sortOrder' => 80,
+                            'validation' => [
+                                'validate-number' => true,
                             ],
                         ],
                     ],
-                    'name' => $this->getTextColumn('name', false, __('Name'), 30),
-                    'attribute_set' => $this->getTextColumn('attribute_set', false, __('Attribute Set'), 40),
-                    'status' => $this->getTextColumn('status', true, __('Status'), 50),
-                    'sku' => $this->getTextColumn('sku', false, __('SKU'), 60),
-                    'price' => $this->getTextColumn('price', true, __('Price'), 70),
-                    'qty' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'dataType' => Form\Element\DataType\Number::NAME,
-                                    'formElement' => Form\Element\Input::NAME,
-                                    'componentType' => Form\Field::NAME,
-                                    'dataScope' => 'qty',
-                                    'label' => __('Default Quantity'),
-                                    'fit' => true,
-                                    'additionalClasses' => 'admin__field-small',
-                                    'sortOrder' => 80,
-                                    'validation' => [
-                                        'validate-zero-or-greater' => true
-                                    ],
-                                ],
-                            ],
+                ],
+            ],
+            'actionDelete' => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'additionalClasses' => 'data-grid-actions-cell',
+                            'componentType' => 'actionDelete',
+                            'dataType' => Form\Element\DataType\Text::NAME,
+                            'label' => __('Actions'),
+                            'sortOrder' => 90,
+                            'fit' => true,
                         ],
                     ],
-                    'actionDelete' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'additionalClasses' => 'data-grid-actions-cell',
-                                    'componentType' => 'actionDelete',
-                                    'dataType' => Form\Element\DataType\Text::NAME,
-                                    'label' => __('Actions'),
-                                    'sortOrder' => 90,
-                                    'fit' => true,
-                                ],
-                            ],
-                        ],
-                    ],
-                    'position' => [
-                        'arguments' => [
-                            'data' => [
-                                'config' => [
-                                    'dataType' => Form\Element\DataType\Number::NAME,
-                                    'formElement' => Form\Element\Input::NAME,
-                                    'componentType' => Form\Field::NAME,
-                                    'dataScope' => 'position',
-                                    'sortOrder' => 100,
-                                    'visible' => false,
-                                ],
-                            ],
+                ],
+            ],
+            'position' => [
+                'arguments' => [
+                    'data' => [
+                        'config' => [
+                            'dataType' => Form\Element\DataType\Number::NAME,
+                            'formElement' => Form\Element\Input::NAME,
+                            'componentType' => Form\Field::NAME,
+                            'dataScope' => 'position',
+                            'sortOrder' => 100,
+                            'visible' => false,
                         ],
                     ],
                 ],

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -48,57 +48,39 @@
             </field>
             <field name="matrix" xsi:type="array">
                 <item name="attribute_key_0:option_key_0 attribute_key_1:option_key_0" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_0 attribute_key_1:option_key_1" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_0 attribute_key_1:option_key_2" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_1 attribute_key_1:option_key_0" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_1 attribute_key_1:option_key_1" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_1 attribute_key_1:option_key_2" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_2 attribute_key_1:option_key_0" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_2 attribute_key_1:option_key_1" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_2 attribute_key_1:option_key_2" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
             </field>
@@ -120,9 +102,7 @@
             </field>
             <field name="matrix" xsi:type="array">
                 <item name="attribute_key_0:option_key_0" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
             </field>
@@ -144,9 +124,7 @@
             </field>
             <field name="matrix" xsi:type="array">
                 <item name="attribute_key_0:option_key_0" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
             </field>
@@ -174,15 +152,11 @@
             </field>
             <field name="matrix" xsi:type="array">
                 <item name="attribute_key_0:option_key_0" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_1" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">20</item>
-                    </item>
+                    <item name="qty" xsi:type="string">20</item>
                     <item name="weight" xsi:type="string">2</item>
                 </item>
             </field>
@@ -210,15 +184,11 @@
             </field>
             <field name="matrix" xsi:type="array">
                 <item name="attribute_key_0:option_key_0" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_1" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">20</item>
-                    </item>
+                    <item name="qty" xsi:type="string">20</item>
                     <item name="weight" xsi:type="string">2</item>
                 </item>
             </field>
@@ -247,15 +217,11 @@
             </field>
             <field name="matrix" xsi:type="array">
                 <item name="attribute_key_0:option_key_0" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_1" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">20</item>
-                    </item>
+                    <item name="qty" xsi:type="string">20</item>
                     <item name="weight" xsi:type="string">2</item>
                 </item>
             </field>
@@ -288,15 +254,11 @@
             </field>
             <field name="matrix" xsi:type="array">
                 <item name="attribute_key_0:option_key_0" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">100</item>
-                    </item>
+                    <item name="qty" xsi:type="string">100</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_1" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">100</item>
-                    </item>
+                    <item name="qty" xsi:type="string">100</item>
                     <item name="weight" xsi:type="string">2</item>
                 </item>
             </field>
@@ -362,15 +324,11 @@
             </field>
             <field name="matrix" xsi:type="array">
                 <item name="attribute_key_0:option_key_0" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_1" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">20</item>
-                    </item>
+                    <item name="qty" xsi:type="string">20</item>
                     <item name="weight" xsi:type="string">2</item>
                 </item>
             </field>
@@ -402,15 +360,11 @@
             </field>
             <field name="matrix" xsi:type="array">
                 <item name="attribute_key_0:option_key_0" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_1" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">20</item>
-                    </item>
+                    <item name="qty" xsi:type="string">20</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
             </field>
@@ -449,27 +403,19 @@
             </field>
             <field name="matrix" xsi:type="array">
                 <item name="attribute_key_0:option_key_0 attribute_key_1:option_key_0" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">100</item>
-                    </item>
+                    <item name="qty" xsi:type="string">100</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_0 attribute_key_1:option_key_1" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">100</item>
-                    </item>
+                    <item name="qty" xsi:type="string">100</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_1 attribute_key_1:option_key_0" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">100</item>
-                    </item>
+                    <item name="qty" xsi:type="string">100</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_1 attribute_key_1:option_key_1" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">100</item>
-                    </item>
+                    <item name="qty" xsi:type="string">100</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
             </field>
@@ -495,15 +441,11 @@
             </field>
             <field name="matrix" xsi:type="array">
                 <item name="attribute_key_0:option_key_0" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_1" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
             </field>
@@ -533,21 +475,15 @@
             </field>
             <field name="matrix" xsi:type="array">
                 <item name="attribute_key_0:option_key_0" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_1" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_2" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">10</item>
-                    </item>
+                    <item name="qty" xsi:type="string">10</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
             </field>
@@ -594,15 +530,11 @@
             </field>
             <field name="matrix" xsi:type="array">
                 <item name="attribute_key_0:option_key_0" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">100</item>
-                    </item>
+                    <item name="qty" xsi:type="string">100</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_1" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">200</item>
-                    </item>
+                    <item name="qty" xsi:type="string">200</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
             </field>
@@ -630,15 +562,11 @@
             </field>
             <field name="matrix" xsi:type="array">
                 <item name="attribute_key_0:option_key_0" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">100</item>
-                    </item>
+                    <item name="qty" xsi:type="string">100</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_1" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">200</item>
-                    </item>
+                    <item name="qty" xsi:type="string">200</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
             </field>
@@ -670,15 +598,11 @@
             </field>
             <field name="matrix" xsi:type="array">
                 <item name="attribute_key_0:option_key_0" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">100</item>
-                    </item>
+                    <item name="qty" xsi:type="string">100</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
                 <item name="attribute_key_0:option_key_1" xsi:type="array">
-                    <item name="quantity_and_stock_status" xsi:type="array">
-                        <item name="qty" xsi:type="string">200</item>
-                    </item>
+                    <item name="qty" xsi:type="string">200</item>
                     <item name="weight" xsi:type="string">1</item>
                 </item>
             </field>
