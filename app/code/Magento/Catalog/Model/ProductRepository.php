@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -544,6 +544,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             unset($this->instances[$product->getSku()]);
             unset($this->instancesById[$product->getId()]);
             $this->resourceModel->delete($product);
+        } catch (ValidatorException $e) {
+            throw new CouldNotSaveException(__($e->getMessage()));
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\StateException(
                 __('Unable to remove product %1', $sku)
