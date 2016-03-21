@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -350,6 +350,8 @@ class General extends AbstractModifier
                             'imports' => [
                                 'handleChanges' => '${$.provider}:data.product.name',
                             ],
+                            'autoImportIfEmpty' => true,
+                            'allowImport' => $this->locator->getProduct()->getId() ? false : true,
                         ],
                     ],
                 ],
@@ -357,22 +359,6 @@ class General extends AbstractModifier
 
             $meta = $this->arrayManager->merge($listenerPath, $meta, $importsConfig);
         }
-
-        $skuPath = $this->arrayManager->findPath(ProductAttributeInterface::CODE_SKU, $meta, null, 'children');
-        $meta = $this->arrayManager->merge(
-            $skuPath,
-            $meta,
-            [
-                'arguments' => [
-                    'data' => [
-                        'config' => [
-                            'autoImportIfEmpty' => true,
-                            'allowImport' => $this->locator->getProduct()->getId() ? false : true,
-                        ],
-                    ],
-                ],
-            ]
-        );
 
         $namePath = $this->arrayManager->findPath(ProductAttributeInterface::CODE_NAME, $meta, null, 'children');
 
