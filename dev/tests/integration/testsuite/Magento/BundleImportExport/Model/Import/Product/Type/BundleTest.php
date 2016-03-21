@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
@@ -90,8 +90,7 @@ class BundleTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($product->isObjectNew());
         $this->assertEquals(self::TEST_PRODUCT_NAME, $product->getName());
         $this->assertEquals(self::TEST_PRODUCT_TYPE, $product->getTypeId());
-        //TODO: Uncomment assertion after MAGETWO-49157 fix
-        //$this->assertEquals(1, $product->getShipmentType());
+        $this->assertEquals(1, $product->getShipmentType());
 
         $optionIdList = $resource->getProductsIdsBySkus($this->optionSkuList);
         $bundleOptionCollection = $product->getExtensionAttributes()->getBundleProductOptions();

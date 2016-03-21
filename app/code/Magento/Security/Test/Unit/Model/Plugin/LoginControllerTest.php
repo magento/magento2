@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Security\Test\Unit\Model\Plugin;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Security\Model\SecurityCookie;
 
 /**
  * Test class for \Magento\Security\Model\Plugin\LoginController testing
@@ -22,8 +23,8 @@ class LoginControllerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Security\Model\AdminSessionsManager */
     protected $adminSessionsManagerMock;
 
-    /** @var \Magento\Security\Helper\SecurityCookie */
-    protected $securityCookieHelperMock;
+    /** @var SecurityCookie */
+    protected $securityCookieMock;
 
     /** @var \Magento\Backend\Controller\Adminhtml\Auth\Login */
     protected $backendControllerAuthLoginMock;
@@ -58,8 +59,8 @@ class LoginControllerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->securityCookieHelperMock = $this->getMock(
-            '\Magento\Security\Helper\SecurityCookie',
+        $this->securityCookieMock = $this->getMock(
+            SecurityCookie::class,
             ['getLogoutReasonCookie', 'deleteLogoutReasonCookie'],
             [],
             '',
@@ -87,7 +88,7 @@ class LoginControllerTest extends \PHPUnit_Framework_TestCase
             [
                 'messageManager' => $this->messageManagerMock,
                 'sessionsManager' => $this->adminSessionsManagerMock,
-                'securityCookieHelper' => $this->securityCookieHelperMock
+                'securityCookie' => $this->securityCookieMock
             ]
         );
     }
@@ -101,7 +102,7 @@ class LoginControllerTest extends \PHPUnit_Framework_TestCase
         $uri = '/uri/';
         $errorMessage = 'Error Message';
 
-        $this->securityCookieHelperMock->expects($this->once())
+        $this->securityCookieMock->expects($this->once())
             ->method('getLogoutReasonCookie')
             ->willReturn($logoutReasonCode);
 
@@ -126,7 +127,7 @@ class LoginControllerTest extends \PHPUnit_Framework_TestCase
             ->method('addError')
             ->with($errorMessage);
 
-        $this->securityCookieHelperMock->expects($this->once())
+        $this->securityCookieMock->expects($this->once())
             ->method('deleteLogoutReasonCookie')
             ->willReturnSelf();
 

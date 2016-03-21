@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Model;
 
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory;
 
 /**
@@ -23,7 +24,7 @@ class AdminSessionsManager
     const LOGOUT_REASON_USER_LOCKED = 10;
 
     /**
-     * @var \Magento\Security\Helper\SecurityConfig
+     * @var ConfigInterface
      */
     protected $securityConfig;
 
@@ -48,21 +49,37 @@ class AdminSessionsManager
     protected $currentSession;
 
     /**
-     * @param \Magento\Security\Helper\SecurityConfig $securityConfig
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    private $dateTime;
+
+    /**
+     * @var RemoteAddress
+     */
+    private $remoteAddress;
+
+    /**
+     * @param ConfigInterface $securityConfig
      * @param \Magento\Backend\Model\Auth\Session $authSession
      * @param AdminSessionInfoFactory $adminSessionInfoFactory
      * @param CollectionFactory $adminSessionInfoCollectionFactory
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param RemoteAddress $remoteAddress
      */
     public function __construct(
-        \Magento\Security\Helper\SecurityConfig $securityConfig,
+        ConfigInterface $securityConfig,
         \Magento\Backend\Model\Auth\Session $authSession,
         \Magento\Security\Model\AdminSessionInfoFactory $adminSessionInfoFactory,
-        \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory $adminSessionInfoCollectionFactory
+        \Magento\Security\Model\ResourceModel\AdminSessionInfo\CollectionFactory $adminSessionInfoCollectionFactory,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
+        RemoteAddress $remoteAddress
     ) {
         $this->securityConfig = $securityConfig;
         $this->authSession = $authSession;
         $this->adminSessionInfoFactory = $adminSessionInfoFactory;
         $this->adminSessionInfoCollectionFactory = $adminSessionInfoCollectionFactory;
+        $this->dateTime = $dateTime;
+        $this->remoteAddress = $remoteAddress;
     }
 
     /**
@@ -74,7 +91,7 @@ class AdminSessionsManager
     {
         $this->createNewSession();
 
-        $olderThen = $this->securityConfig->getCurrentTimestamp() - $this->securityConfig->getAdminSessionLifetime();
+        $olderThen = $this->dateTime->gmtTimestamp() - $this->securityConfig->getAdminSessionLifetime();
         if (!$this->securityConfig->isAdminAccountSharingEnabled()) {
             $result = $this->createAdminSessionInfoCollection()->updateActiveSessionsStatus(
                 AdminSessionInfo::LOGGED_OUT_BY_LOGIN,
@@ -83,7 +100,7 @@ class AdminSessionsManager
                 $olderThen
             );
             if ($result) {
-                $this->currentSession->setIsOtherSessionsTerminated(true);
+                $this->getCurrentSession()->setIsOtherSessionsTerminated(true);
             }
         }
 
@@ -228,7 +245,7 @@ class AdminSessionsManager
     public function cleanExpiredSessions()
     {
         $this->createAdminSessionInfoCollection()->deleteSessionsOlderThen(
-            $this->securityConfig->getCurrentTimestamp() - self::ADMIN_SESSION_LIFETIME
+            $this->dateTime->gmtTimestamp() - self::ADMIN_SESSION_LIFETIME
         );
 
         return $this;
@@ -247,7 +264,7 @@ class AdminSessionsManager
                 [
                     'session_id' => $this->authSession->getSessionId(),
                     'user_id' => $this->authSession->getUser()->getId(),
-                    'ip' => $this->securityConfig->getRemoteIp(),
+                    'ip' => $this->remoteAddress->getRemoteAddress(),
                     'status' => AdminSessionInfo::LOGGED_IN
                 ]
             )->save();

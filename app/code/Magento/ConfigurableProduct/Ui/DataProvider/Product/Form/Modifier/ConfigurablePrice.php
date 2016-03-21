@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 
 /**
  * Data provider for price in the Configurable products
@@ -19,6 +21,20 @@ class ConfigurablePrice extends AbstractModifier
      * @var string
      */
     private static $advancedPricingButton = 'advanced_pricing_button';
+
+    /**
+     * @var LocatorInterface
+     */
+    private $locator;
+
+    /**
+     * @param LocatorInterface $locator
+     */
+    public function __construct(
+        LocatorInterface $locator
+    ) {
+        $this->locator = $locator;
+    }
 
     /**
      * {@inheritdoc}
@@ -58,6 +74,17 @@ class ConfigurablePrice extends AbstractModifier
                 );
             }
             if (!empty($meta[$groupCode]['children'][self::CODE_GROUP_PRICE])) {
+                $productTypeId = $this->locator->getProduct()->getTypeId();
+                $visibilityConfig = ($productTypeId === ConfigurableType::TYPE_CODE)
+                    ? ['visible' => 0, 'disabled' => 1]
+                    : [
+                        'imports' => [
+                            'disabled' => '!ns = ${ $.ns }, index = '
+                                . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                            'visible' => 'ns = ${ $.ns }, index = '
+                                . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                        ]
+                    ];
                 $meta[$groupCode]['children'][self::CODE_GROUP_PRICE] = array_replace_recursive(
                     $meta[$groupCode]['children'][self::CODE_GROUP_PRICE],
                     [
@@ -65,14 +92,7 @@ class ConfigurablePrice extends AbstractModifier
                             self::$advancedPricingButton => [
                                 'arguments' => [
                                     'data' => [
-                                        'config' => [
-                                            'imports' => [
-                                                'disabled' => '!ns = ${ $.ns }, index = '
-                                                    . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
-                                                'visible' => 'ns = ${ $.ns }, index = '
-                                                    . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
-                                            ],
-                                        ],
+                                        'config' => $visibilityConfig,
                                     ],
                                 ],
                             ],

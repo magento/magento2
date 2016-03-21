@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -488,7 +488,7 @@
 
     .admin__field:nth-child(n+2):not(.admin__field-option):not(.admin__field-group-show-label) {
         > .admin__field-label {
-            .extend__visually-hidden();
+            &:extend(.abs-visually-hidden all);
         }
     }
 
@@ -532,7 +532,7 @@
 
             &:not(.admin__field-option):not(.admin__field-group-show-label):not(.admin__field-date) {
                 > .admin__field-label {
-                    .lib-visually-hidden();
+                    &:extend(.abs-visually-hidden all);
                 }
             }
         }
@@ -609,7 +609,7 @@
         &:nth-child(n+2) {
             &:not(.admin__field-option):not(.admin__field-group-show-label):not(.admin__field-date) {
                 > .admin__field-label[class] {
-                    .lib-visually-hidden-reset();
+                    &:extend(.abs-visually-hidden-reset all);
                 }
             }
         }
