@@ -13,38 +13,33 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Backend\Model\Auth
      */
-    protected $_auth;
+    private $auth;
 
     /**
      * @var \Magento\Backend\Model\Auth\Session
      */
-    protected $_model;
+    private $authSession;
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    private $objectManager;
 
     protected function setUp()
     {
         parent::setUp();
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Config\ScopeInterface'
-        )->setCurrentScope(
-            \Magento\Backend\App\Area\FrontNameResolver::AREA_CODE
-        );
-        $this->_auth = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Backend\Model\Auth'
-        );
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Backend\Model\Auth\Session'
-        );
-        $this->_auth->setAuthStorage($this->_model);
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class)
+            ->setCurrentScope(\Magento\Backend\App\Area\FrontNameResolver::AREA_CODE);
+        $this->auth = $this->objectManager->create(\Magento\Backend\Model\Auth::class);
+        $this->authSession = $this->objectManager->create(\Magento\Backend\Model\Auth\Session::class);
+        $this->auth->setAuthStorage($this->authSession);
     }
 
     protected function tearDown()
     {
-        $this->_model = null;
-        \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-            'Magento\Framework\Config\ScopeInterface'
-        )->setCurrentScope(
-            null
-        );
+        $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class)->setCurrentScope(null);
+        $this->auth->logout();
     }
 
     /**
@@ -53,12 +48,12 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     public function testIsLoggedIn($loggedIn)
     {
         if ($loggedIn) {
-            $this->_auth->login(
+            $this->auth->login(
                 \Magento\TestFramework\Bootstrap::ADMIN_NAME,
                 \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD
             );
         }
-        $this->assertEquals($loggedIn, $this->_model->isLoggedIn());
+        $this->assertEquals($loggedIn, $this->authSession->isLoggedIn());
     }
 
     public function loginDataProvider()
