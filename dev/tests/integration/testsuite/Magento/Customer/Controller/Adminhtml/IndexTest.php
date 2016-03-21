@@ -9,7 +9,7 @@ use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Controller\RegistryConstants;
-use Magento\Newsletter\Model\Subscriber;
+use Magento\Customer\Model\EmailNotification;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -382,7 +382,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             $customerId,
             $newEmail
         );
-        $this->addEmailMockToClass($transportBuilderMock, 'Magento\Customer\Helper\EmailNotification');
+        $this->addEmailMockToClass($transportBuilderMock, EmailNotification::class);
         $post = [
             'customer' => ['entity_id' => $customerId,
                 'middlename' => 'test middlename',
@@ -428,7 +428,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
             $customerId,
             $newEmail
         );
-        $this->addEmailMockToClass($transportBuilderMock, 'Magento\Customer\Helper\EmailNotification');
+        $this->addEmailMockToClass($transportBuilderMock, EmailNotification::class);
         $post = [
             'items' => [
                 $customerId => [

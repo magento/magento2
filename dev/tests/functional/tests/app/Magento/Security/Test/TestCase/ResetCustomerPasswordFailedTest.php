@@ -26,7 +26,7 @@ use Magento\Customer\Test\Page\CustomerAccountForgotPassword;
 class ResetCustomerPasswordFailedTest extends Injectable
 {
     /* tags */
-    const MVP = 'no';
+    const MVP = 'yes';
     const DOMAIN = 'PS';
     /* end tags */
 

@@ -4,14 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Integration\Test\TestCase;
+namespace Magento\Security\Test\TestCase;
 
-use Magento\Integration\Test\Fixture\Integration;
-use Magento\Integration\Test\Page\Adminhtml\IntegrationIndex;
-use Magento\Integration\Test\Page\Adminhtml\IntegrationNew;
+use Magento\User\Test\Fixture\Role;
+use Magento\User\Test\Page\Adminhtml\UserRoleEditRole;
+use Magento\User\Test\Page\Adminhtml\UserRoleIndex;
 use Magento\Mtf\TestCase\Injectable;
-use Magento\Backend\Test\Page\AdminAuthLogin;
 use Magento\User\Test\Fixture\User;
+use Magento\Backend\Test\Page\AdminAuthLogin;
 
 /**
  * Preconditions:
@@ -20,35 +20,35 @@ use Magento\User\Test\Fixture\User;
  *
  * Steps:
  * 1. Log in to backend as admin user.
- * 2. Navigate to System > Extensions > Integrations.
- * 3. Start to create new Integration.
+ * 2. Navigate to System > Extensions > User Roles.
+ * 3. Start to create new User Role.
  * 4. Fill in all data according to data set (password is incorrect).
  * 5. Perform action 4 specified number of times.
  * 6. "You have entered an invalid password for current user." appears after each attempt.
  * 7. Perform all assertions.
  *
- * @ZephyrId MAGETWO-49038
+ * @ZephyrId MAGETWO-49036
  */
-class LockAdminUserWhenCreatingNewIntegrationTest extends Injectable
+class LockAdminUserWhenCreatingNewRoleTest extends Injectable
 {
     /* tags */
-    const MVP = 'no';
+    const MVP = 'yes';
     const DOMAIN = 'PS';
     /* end tags */
 
     /**
-     * Integration grid page.
+     * UserRoleIndex page.
      *
-     * @var IntegrationIndex
+     * @var UserRoleIndex
      */
-    protected $integrationIndexPage;
+    protected $userRoleIndex;
 
     /**
-     * Integration new page.
+     * UserRoleEditRole page.
      *
-     * @var IntegrationNew
+     * @var UserRoleEditRole
      */
-    protected $integrationNewPage;
+    protected $userRoleEditRole;
 
     /**
      * Configuration setting.
@@ -58,39 +58,38 @@ class LockAdminUserWhenCreatingNewIntegrationTest extends Injectable
     protected $configData;
 
     /**
-     * @var AdminAuthLogin
+     * @var AdminAuthLogin page
      */
     protected $adminAuthLogin;
 
     /**
-     * Preparing pages for test.
+     * Setup data for test.
      *
-     * @param IntegrationIndex $integrationIndex
-     * @param IntegrationNew $integrationNew
+     * @param UserRoleIndex $userRoleIndex
+     * @param UserRoleEditRole $userRoleEditRole
      * @param AdminAuthLogin $adminAuthLogin
-     * @return void
      */
     public function __inject(
-        IntegrationIndex $integrationIndex,
-        IntegrationNew $integrationNew,
+        UserRoleIndex $userRoleIndex,
+        UserRoleEditRole $userRoleEditRole,
         AdminAuthLogin $adminAuthLogin
     ) {
-        $this->integrationIndexPage = $integrationIndex;
-        $this->integrationNewPage = $integrationNew;
+        $this->userRoleIndex = $userRoleIndex;
+        $this->userRoleEditRole = $userRoleEditRole;
         $this->adminAuthLogin = $adminAuthLogin;
     }
 
     /**
-     * Run Lock user when creating new integration test.
+     * Runs Lock admin user when creating new role test.
      *
-     * @param Integration $integration
+     * @param Role $role
      * @param int $attempts
-     * @param User $customAdmin
+     * @param User $customAdmin,
      * @param string $configData
      * @return void
      */
-    public function test(
-        Integration $integration,
+    public function testLockAdminUser(
+        Role $role,
         $attempts,
         User $customAdmin,
         $configData = null
@@ -104,19 +103,19 @@ class LockAdminUserWhenCreatingNewIntegrationTest extends Injectable
         )->run();
         $customAdmin->persist();
 
+        // Steps
         $this->adminAuthLogin->open();
         $this->adminAuthLogin->getLoginBlock()->fill($customAdmin);
         $this->adminAuthLogin->getLoginBlock()->submit();
 
-        // Steps
-        $this->integrationIndexPage->open();
-        $this->integrationIndexPage->getGridPageActions()->addNew();
+        $this->userRoleIndex->open();
+        $this->userRoleIndex->getRoleActions()->addNew();
         for ($i = 0; $i < $attempts; $i++) {
-            $this->integrationNewPage->getIntegrationForm()->fill($integration);
-            $this->integrationNewPage->getFormPageActions()->saveNew();
+            $this->userRoleEditRole->getRoleFormTabs()->fill($role);
+            $this->userRoleEditRole->getPageActions()->save();
         }
 
-        // Reload page
+        // Reload
         $this->adminAuthLogin->open();
         $this->adminAuthLogin->getLoginBlock()->fill($customAdmin);
         $this->adminAuthLogin->getLoginBlock()->submit();
