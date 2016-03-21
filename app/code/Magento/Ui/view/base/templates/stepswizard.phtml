@@ -46,8 +46,8 @@
     </div>
     <div data-role="steps-wizard-tab">
         <?php foreach ($block->getSteps() as $step) { ?>
-            <div data-bind="visible: selectedStep() == $element.id"
-                 class="content" id="<?= /* @escapeNotVerified */ $step->getComponentName() ?>"
+            <div data-bind="visible: selectedStep() == $element.id, css: {'no-display':false}"
+                 class="content no-display" id="<?= /* @escapeNotVerified */ $step->getComponentName() ?>"
                  data-role="content">
                 <?= /* @escapeNotVerified */  $step->getContent() ?>
             </div>

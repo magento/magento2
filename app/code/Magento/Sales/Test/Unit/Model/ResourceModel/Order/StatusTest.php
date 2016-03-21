@@ -40,7 +40,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
      */
     protected $selectMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->selectMock = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
         $this->selectMock->expects($this->any())->method('from')->will($this->returnSelf());

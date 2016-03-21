@@ -3,8 +3,9 @@
  * See COPYING.txt for license details.
  */
 define([
-    'Magento_Ui/js/form/element/file-uploader'
-], function (Element) {
+    'Magento_Ui/js/form/element/file-uploader',
+    'underscore'
+], function (Element, _) {
     'use strict';
 
     return Element.extend({
@@ -21,6 +22,17 @@ define([
          */
         initObservable: function () {
             this._super().observe(['processedFile', 'actionsListOpened']);
+
+            return this;
+        },
+
+        /** @inheritdoc */
+        setInitialValue: function () {
+            var value = this.getInitialValue();
+
+            if (!_.isString(value)) {
+                this._super();
+            }
 
             return this;
         },

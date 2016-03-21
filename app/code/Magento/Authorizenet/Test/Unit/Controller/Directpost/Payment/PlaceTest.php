@@ -33,6 +33,7 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
      * @var ObjectManager
      */
     protected $objectManager;
+
     /**
      * @var Place
      */
@@ -98,7 +99,7 @@ class PlaceTest extends \PHPUnit_Framework_TestCase
      */
     protected $checkoutSessionMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->directpostSessionMock = $this
             ->getMockBuilder('Magento\Authorizenet\Model\Directpost\Session')

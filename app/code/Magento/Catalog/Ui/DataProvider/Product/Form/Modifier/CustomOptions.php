@@ -273,7 +273,7 @@ class CustomOptions extends AbstractModifier
                         'componentType' => Container::NAME,
                         'template' => 'ui/form/components/complex',
                         'sortOrder' => $sortOrder,
-                        'content' => __('Custom options let shoppers choose the product variations they want.'),
+                        'content' => __('Custom options let customers choose the product variations they want.'),
                     ],
                 ],
             ],

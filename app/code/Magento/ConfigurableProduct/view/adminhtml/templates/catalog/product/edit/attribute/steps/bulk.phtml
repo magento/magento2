@@ -89,6 +89,16 @@
                     </div>
                 </div>
 
+                <?php foreach ($block->getImageTypes() as $typeData) {
+                    ?>
+                    <input name="<?php echo $block->escapeHtml($typeData['name']) ?>"
+                           class="image-<?php echo $block->escapeHtml($typeData['code']) ?>"
+                           type="hidden"
+                           value="<?php echo $block->escapeHtml($typeData['value']) ?>"/>
+                    <?php
+
+                } ?>
+
                 <script data-template="uploader" type="text/x-magento-template">
                     <div id="<%- data.id %>" class="file-row">
                         <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
@@ -123,7 +133,7 @@
                         <input type="hidden"
                                name="product[media_gallery][images][<%- data.file_id %>][removed]"/>
                         <div class="product-image-wrapper">
-                            <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
+                            <img class="product-image" data-role="image-element" src="<%- data.url %>" alt="<%- data.label %>"/>
                             <div class="actions">
                                 <button type="button"
                                         class="action-remove"
@@ -135,9 +145,27 @@
                             </div>
                             <div class="image-fade"><span><?= /* @escapeNotVerified */  __('Hidden') ?></span></div>
                         </div>
-                        <!--<ul class="item-roles">
-                            <li class="item-role item-role-base">Base</li>
-                        </ul>-->
+                        <div class="item-description">
+                            <div class="item-title" data-role="img-title"><%- data.label %></div>
+                            <div class="item-size">
+                                <span data-role="image-dimens"></span>, <span data-role="image-size"><%- data.sizeLabel %></span>
+                            </div>
+                        </div>
+                        <ul class="item-roles" data-role="roles-labels">
+                            <?php
+                            foreach ($block->getMediaAttributes() as $attribute) {
+                                ?>
+                                <li data-role-code="<?php /* @escapeNotVerified */ echo $block->escapeHtml(
+                                    $attribute->getAttributeCode()
+                                ) ?>" class="item-role item-role-<?php /* @escapeNotVerified */ echo $block->escapeHtml(
+                                    $attribute->getAttributeCode()
+                                ) ?>">
+                                    <?php /* @escapeNotVerified */ echo $block->escapeHtml($attribute->getFrontendLabel()) ?>
+                                </li>
+                                <?php
+                            }
+                            ?>
+                        </ul>
                     </div>
                 </script>
 
@@ -145,6 +173,7 @@
                     <div class="image">
                         <div class="product-image-wrapper">
                             <img class="product-image"
+                                 data-role="image-element"
                                  src="<%- data.url %>"
                                  data-position="<%- data.position %>"
                                  alt="<%- data.label %>" />
@@ -168,72 +197,97 @@
                     </div>
                 </script>
 
-                <script class="dialog-template" type="text/x-magento-template" data-title="Image Options">
-                    <div class="image-panel admin__scope-old" data-role="dialog">
-                        <div class="image-panel-preview">
-                            <img src="<%- data.url %>" alt="<%- data.label %>" />
-                        </div>
-                        <div class="image-panel-controls">
-                            <strong class="image-name"><%- data.label %></strong>
-
-                            <fieldset class="admin__fieldset fieldset-image-panel">
-                                <div class="field field-image-description">
-                                    <label class="field field-image-description">
-                                        <span><?= /* @escapeNotVerified */  __('Alt Text') ?></span>
-                                    </label>
-                                    <div class="control">
-                                        <textarea id="image-description"
-                                                  class="admin__control-textarea"
-                                                  rows="3"
-                                                  name="product[media_gallery][images][<%- data.file_id %>][label]"
-                                            ><%- data.label %></textarea>
-                                    </div>
-                                </div>
-
-                                <div class="field field-image-role">
-                                    <label class="label">
-                                        <span><?= /* @escapeNotVerified */  __('Role') ?></span>
-                                    </label>
-                                    <div class="control">
-                                        <ul class="multiselect-alt">
-                                            <?php
-                                            foreach ($block->getMediaAttributes() as $attribute) : ?>
-                                                <li class="item">
-                                                    <label>
-                                                        <input class="image-type"
-                                                               data-role="type-selector"
-                                                               type="checkbox"
-                                                               value="<?php /* @noEscape */ echo $block->escapeHtml(
-                                                                   $attribute->getAttributeCode()
-                                                               ) ?>"
-                                                            />
-                                                        <?php /* @noEscape */ echo $block->escapeHtml(
-                                                            $attribute->getFrontendLabel()
-                                                        ) ?>
-                                                    </label>
-                                                </li>
-                                                <?php
-                                            endforeach;
-                                            ?>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <div class="field field-image-hide">
-                                    <label class="label">
-                                        <input type="checkbox"
-                                               data-role="visibility-trigger"
-                                               value="1"
-                                               name="product[media_gallery][images][<%- data.file_id %>][disabled]"
-                                        <% if (data.disabled == 1) { %>checked="checked"<% } %> />
-                                        <span><?= /* @escapeNotVerified */  __('Hide from Product Page') ?></span>
-                                    </label>
-                                </div>
-                            </fieldset>
-                        </div>
+                <script data-role="img-dialog-container-tmpl" type="text/x-magento-template">
+                    <div class="image-panel ui-tabs-panel ui-widget-content ui-corner-bottom" data-role="dialog">
                     </div>
                 </script>
 
+                <script class="dialog-template" type="text/x-magento-template" data-title="Image Options">
+                    <div class="image-panel-preview">
+                        <img src="<%- data.url %>" alt="<%- data.label %>" />
+                    </div>
+                    <div class="image-panel-controls">
+                        <strong class="image-name"><%- data.label %></strong>
+
+                        <fieldset class="admin__fieldset fieldset-image-panel">
+                            <div class="admin__field field-image-description">
+                                <label class="admin__field-label" for="image-description">
+                                    <span><?php /* @escapeNotVerified */ echo __('Alt Text')?></span>
+                                </label>
+
+                                <div class="admin__field-control">
+                            <textarea data-role="image-description"
+                                      rows="3"
+                                      class="admin__control-textarea"
+                                      name="product[media_gallery][images][<%- data.file_id %>][label]"
+                                ><%- data.label %></textarea>
+                                </div>
+                            </div>
+
+                            <div class="admin__field field-image-role">
+                                <label class="admin__field-label">
+                                    <span><?php /* @escapeNotVerified */ echo __('Role')?></span>
+                                </label>
+                                <div class="admin__field-control">
+                                    <ul class="multiselect-alt">
+                                        <?php
+                                        foreach ($block->getMediaAttributes() as $attribute) :
+                                            ?>
+                                            <li class="item">
+                                                <label>
+                                                    <input class="image-type"
+                                                           data-role="type-selector"
+                                                           type="checkbox"
+                                                           value="<?php /* @escapeNotVerified */ echo $block->escapeHtml(
+                                                               $attribute->getAttributeCode()
+                                                           ) ?>"
+                                                        />
+                                                    <?php /* @escapeNotVerified */ echo $block->escapeHtml(
+                                                        $attribute->getFrontendLabel()
+                                                    ) ?>
+                                                </label>
+                                            </li>
+                                            <?php
+                                        endforeach;
+                                        ?>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="admin__field admin__field-inline field-image-size" data-role="size">
+                                <label class="admin__field-label">
+                                    <span><?php /* @escapeNotVerified */ echo __('Image Size') ?></span>
+                                </label>
+                                <div class="admin__field-value" data-message="<?php /* @escapeNotVerified */ echo __('{size}') ?>"></div>
+                            </div>
+
+                            <div class="admin__field admin__field-inline field-image-resolution" data-role="resolution">
+                                <label class="admin__field-label">
+                                    <span><?php /* @escapeNotVerified */ echo __('Image Resolution') ?></span>
+                                </label>
+                                <div class="admin__field-value" data-message="<?php /* @escapeNotVerified */ echo __('{width}^{height} px') ?>"></div>
+                            </div>
+
+                            <div class="admin__field field-image-hide">
+                                <div class="admin__field-control">
+                                    <div class="admin__field admin__field-option">
+                                        <input type="checkbox"
+                                               id="hide-from-product-page"
+                                               data-role="visibility-trigger"
+                                               value="1"
+                                               class="admin__control-checkbox"
+                                               name="product[media_gallery][images][<%- data.file_id %>][disabled]"
+                                        <% if (data.disabled == 1) { %>checked="checked"<% } %> />
+
+                                        <label for="hide-from-product-page" class="admin__field-label">
+                                            <?php /* @escapeNotVerified */ echo __('Hide from Product Page')?>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </script>
             </div>
         </div>
 
@@ -289,6 +343,16 @@
                             </div>
                         </div>
 
+                        <?php foreach ($block->getImageTypes() as $typeData) {
+                            ?>
+                            <input name="<?php echo $block->escapeHtml($typeData['name']) ?>"
+                                   class="image-<?php echo $block->escapeHtml($typeData['code']) ?>"
+                                   type="hidden"
+                                   value="<?php echo $block->escapeHtml($typeData['value']) ?>"/>
+                            <?php
+
+                        } ?>
+
                         <script data-template="uploader" type="text/x-magento-template">
                             <div id="<%- data.id %>" class="file-row">
                                 <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
@@ -325,7 +389,7 @@
                                        value=""
                                        class="is-removed"/>
                                 <div class="product-image-wrapper">
-                                    <img class="product-image" src="<%- data.url %>" alt="<%- data.label %>"/>
+                                    <img class="product-image" data-role="image-element" src="<%- data.url %>" alt="<%- data.label %>"/>
                                     <div class="actions">
                                         <button type="button"
                                                 class="action-remove"
@@ -337,9 +401,27 @@
                                     </div>
                                     <div class="image-fade"><span><?= /* @escapeNotVerified */  __('Hidden') ?></span></div>
                                 </div>
-                                <!--<ul class="item-roles">
-                                    <li class="item-role item-role-base">Base</li>
-                                </ul>-->
+                                <div class="item-description">
+                                    <div class="item-title" data-role="img-title"><%- data.label %></div>
+                                    <div class="item-size">
+                                        <span data-role="image-dimens"></span>, <span data-role="image-size"><%- data.sizeLabel %></span>
+                                    </div>
+                                </div>
+                                <ul class="item-roles" data-role="roles-labels">
+                                    <?php
+                                    foreach ($block->getMediaAttributes() as $attribute) {
+                                        ?>
+                                        <li data-role-code="<?php /* @escapeNotVerified */ echo $block->escapeHtml(
+                                            $attribute->getAttributeCode()
+                                        ) ?>" class="item-role item-role-<?php /* @escapeNotVerified */ echo $block->escapeHtml(
+                                            $attribute->getAttributeCode()
+                                        ) ?>">
+                                            <?php /* @escapeNotVerified */ echo $block->escapeHtml($attribute->getFrontendLabel()) ?>
+                                        </li>
+                                        <?php
+                                    }
+                                    ?>
+                                </ul>
                             </div>
                         </script>
 
@@ -348,6 +430,7 @@
                                 <div class="product-image-wrapper">
                                     <img class="product-image"
                                          src="<%- data.url %>"
+                                         data-role="image-element"
                                          data-position="<%- data.position %>"
                                          alt="<%- data.label %>" />
                                     <div class="actions">
@@ -367,72 +450,97 @@
                             </div>
                         </script>
 
-                        <script class="dialog-template" type="text/x-magento-template" data-title="Image Options">
-                            <div class="image-panel admin__scope-old" data-role="dialog">
-                                <div class="image-panel-preview">
-                                    <img src="<%- data.url %>" alt="<%- data.label %>" />
-                                </div>
-                                <div class="image-panel-controls">
-                                    <strong class="image-name"><%- data.label %></strong>
-
-                                    <fieldset class="admin__fieldset fieldset-image-panel">
-                                        <div class="field field-image-description">
-                                            <label class="label" for="image-description">
-                                                <span><?= /* @escapeNotVerified */  __('Alt Text') ?></span>
-                                            </label>
-                                            <div class="control">
-                                                <textarea
-                                                    id="image-description"
-                                                    rows="3"
-                                                    name="product[media_gallery][images][<%- data.file_id %>][label]"><%- data.label %></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="field field-image-role">
-                                            <label class="label">
-                                                <span><?= /* @escapeNotVerified */  __('Role') ?></span>
-                                            </label>
-                                            <div class="control">
-                                                <ul class="multiselect-alt">
-                                                    <?php
-                                                    foreach ($block->getMediaAttributes() as $attribute) :
-                                                        ?>
-                                                        <li class="item">
-                                                            <label>
-                                                                <input class="image-type"
-                                                                       data-role="type-selector"
-                                                                       type="checkbox"
-                                                                       value="<?php /* @noEscape */ echo $block->escapeHtml(
-                                                                           $attribute->getAttributeCode()
-                                                                       ) ?>"
-                                                                    />
-                                                                <?php /* @noEscape */ echo $block->escapeHtml(
-                                                                    $attribute->getFrontendLabel()
-                                                                ) ?>
-                                                            </label>
-                                                        </li>
-                                                        <?php
-                                                    endforeach;
-                                                    ?>
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                                        <div class="field field-image-hide">
-                                            <label class="label">
-                                                <input type="checkbox"
-                                                       data-role="visibility-trigger"
-                                                       value="1"
-                                                       name="product[media_gallery][images][<%- data.file_id %>][disabled]"
-                                                       <% if (data.disabled == 1) { %>checked="checked"<% } %> />
-                                                <span><?= /* @escapeNotVerified */  __('Hide from Product Page') ?></span>
-                                            </label>
-                                        </div>
-                                    </fieldset>
-                                </div>
+                        <script data-role="img-dialog-container-tmpl" type="text/x-magento-template">
+                            <div class="image-panel ui-tabs-panel ui-widget-content ui-corner-bottom" data-role="dialog">
                             </div>
                         </script>
 
+                        <script class="dialog-template" type="text/x-magento-template" data-title="Image Options">
+                            <div class="image-panel-preview">
+                                <img src="<%- data.url %>" alt="<%- data.label %>" />
+                            </div>
+                            <div class="image-panel-controls">
+                                <strong class="image-name"><%- data.label %></strong>
+
+                                <fieldset class="admin__fieldset fieldset-image-panel">
+                                    <div class="admin__field field-image-description">
+                                        <label class="admin__field-label" for="image-description">
+                                            <span><?php /* @escapeNotVerified */ echo __('Alt Text')?></span>
+                                        </label>
+
+                                        <div class="admin__field-control">
+                                            <textarea data-role="image-description"
+                                                      rows="3"
+                                                      class="admin__control-textarea"
+                                                      name="product[media_gallery][images][<%- data.file_id %>][label]"
+                                                ><%- data.label %></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field field-image-role">
+                                        <label class="admin__field-label">
+                                            <span><?php /* @escapeNotVerified */ echo __('Role')?></span>
+                                        </label>
+                                        <div class="admin__field-control">
+                                            <ul class="multiselect-alt">
+                                                <?php
+                                                foreach ($block->getMediaAttributes() as $attribute) :
+                                                    ?>
+                                                    <li class="item">
+                                                        <label>
+                                                            <input class="image-type"
+                                                                   data-role="type-selector"
+                                                                   type="checkbox"
+                                                                   value="<?php /* @escapeNotVerified */ echo $block->escapeHtml(
+                                                                       $attribute->getAttributeCode()
+                                                                   ) ?>"
+                                                                />
+                                                            <?php /* @escapeNotVerified */ echo $block->escapeHtml(
+                                                                $attribute->getFrontendLabel()
+                                                            ) ?>
+                                                        </label>
+                                                    </li>
+                                                    <?php
+                                                endforeach;
+                                                ?>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="admin__field admin__field-inline field-image-size" data-role="size">
+                                        <label class="admin__field-label">
+                                            <span><?php /* @escapeNotVerified */ echo __('Image Size') ?></span>
+                                        </label>
+                                        <div class="admin__field-value" data-message="<?php /* @escapeNotVerified */ echo __('{size}') ?>"></div>
+                                    </div>
+
+                                    <div class="admin__field admin__field-inline field-image-resolution" data-role="resolution">
+                                        <label class="admin__field-label">
+                                            <span><?php /* @escapeNotVerified */ echo __('Image Resolution') ?></span>
+                                        </label>
+                                        <div class="admin__field-value" data-message="<?php /* @escapeNotVerified */ echo __('{width}^{height} px') ?>"></div>
+                                    </div>
+
+                                    <div class="admin__field field-image-hide">
+                                        <div class="admin__field-control">
+                                            <div class="admin__field admin__field-option">
+                                                <input type="checkbox"
+                                                       id="hide-from-product-page"
+                                                       data-role="visibility-trigger"
+                                                       value="1"
+                                                       class="admin__control-checkbox"
+                                                       name="product[media_gallery][images][<%- data.file_id %>][disabled]"
+                                                <% if (data.disabled == 1) { %>checked="checked"<% } %> />
+
+                                                <label for="hide-from-product-page" class="admin__field-label">
+                                                    <?php /* @escapeNotVerified */ echo __('Hide from Product Page')?>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </script>
                     </div>
                 </li>
                 <!-- /ko -->
