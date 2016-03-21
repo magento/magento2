@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 // jscs:disable jsDoc
@@ -184,22 +184,14 @@ define([
             this.selectedStep(this.wizard.prev());
         },
         open: function () {
-            /*
-            var $form = $('[data-form=edit-product]');
-
-            if (!$form.valid()) {
-                $form.data('validator').focusInvalid();
-            } else {
-            */
-            require('uiRegistry').get('product_form.product_form').validate();
-            if (!require('uiRegistry').get('product_form.product_form').source.get('params.invalid')) {
-                this.selectedStep(this.stepsNames.first());
-                this.wizard = new Wizard(this.steps);
-                $('[data-role=step-wizard-dialog]').trigger('openModal');
-            }
+            this.selectedStep(this.stepsNames.first());
+            this.wizard = new Wizard(this.steps);
         },
         close: function () {
-            $('[data-role=step-wizard-dialog]').trigger('closeModal');
+            var modal =  uiRegistry.get(this.initData.configurableModal);
+            if (!_.isUndefined(modal)) {
+                modal.closeModal();
+            }
         },
         showSpecificStep: function () {
             var index = _.indexOf(this.stepsNames, event.target.hash.substr(1)),

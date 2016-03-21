@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Backend\App\Action;
+use Magento\Customer\Model\EmailNotificationInterface;
+use Magento\Customer\Test\Block\Form\Login;
 use Magento\Customer\Ui\Component\Listing\AttributeRepository;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -40,8 +42,8 @@ class InlineEdit extends \Magento\Backend\App\Action
     /** @var \Psr\Log\LoggerInterface */
     protected $logger;
 
-    /** @var \Magento\Customer\Helper\EmailNotification */
-    protected $emailNotification;
+    /** @var EmailNotificationInterface */
+    private $emailNotification;
 
     /**
      * @param Action\Context $context
@@ -68,30 +70,16 @@ class InlineEdit extends \Magento\Backend\App\Action
     }
 
     /**
-     * Set email notification
-     *
-     * @param \Magento\Customer\Helper\EmailNotification $emailNotification
-     * @return void
-     * @deprecated
-     */
-    public function setEmailNotification(\Magento\Customer\Helper\EmailNotification $emailNotification)
-    {
-
-        $this->emailNotification = $emailNotification;
-    }
-
-    /**
      * Get email notification
      *
-     * @return \Magento\Customer\Helper\EmailNotification
+     * @return EmailNotificationInterface
      * @deprecated
      */
-    public function getEmailNotification()
+    private function getEmailNotification()
     {
-
-        if (!($this->emailNotification instanceof \Magento\Customer\Helper\EmailNotification)) {
+        if (!($this->emailNotification instanceof EmailNotificationInterface)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Customer\Helper\EmailNotification'
+                EmailNotificationInterface::class
             );
         } else {
             return $this->emailNotification;
@@ -124,7 +112,7 @@ class InlineEdit extends \Magento\Backend\App\Action
             $this->updateCustomer($this->getData($postItems[$customerId], true));
             $this->saveCustomer($this->getCustomer());
 
-            $this->getEmailNotification()->sendNotificationEmailsIfRequired($currentCustomer, $this->getCustomer());
+            $this->getEmailNotification()->credentialsChanged($this->getCustomer(), $currentCustomer->getEmail());
         }
 
         return $resultJson->setData([
