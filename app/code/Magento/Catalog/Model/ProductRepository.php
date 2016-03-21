@@ -623,4 +623,15 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $collection->addFieldToFilter($fields);
         }
     }
+
+    /**
+     * Clean internal product cache
+     *
+     * @return void
+     */
+    public function cleanCache()
+    {
+        $this->instances = null;
+        $this->instancesById = null;
+    }
 }

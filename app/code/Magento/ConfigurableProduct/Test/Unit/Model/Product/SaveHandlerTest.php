@@ -172,7 +172,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
         $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributeId', 'loadByProductAndAttribute'])
+            ->setMethods(['getAttributeId', 'loadByProductAndAttribute', 'setId'])
             ->getMock();
         $this->processSaveOptions($attribute, $product, $attributeId, $sku, $id);
 
@@ -254,6 +254,10 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $attribute->expects(static::once())
             ->method('loadByProductAndAttribute')
             ->with($product, $eavAttribute)
+            ->willReturnSelf();
+        $attribute->expects(static::once())
+            ->method('setId')
+            ->with(null)
             ->willReturnSelf();
 
         $this->optionRepository->expects(static::once())
