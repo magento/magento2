@@ -2,13 +2,14 @@
 /**
  * \Magento\Integration\Controller\Adminhtml
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml;
 
 use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
 use Magento\Integration\Model\Integration as IntegrationModel;
+use Magento\Security\Model\SecurityCookie;
 
 /**
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -43,8 +44,8 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $_backendActionCtxMock;
 
-    /** @var \Magento\Security\Helper\SecurityCookie|\PHPUnit_Framework_MockObject_MockObject */
-    protected $securityCookieHelperMock;
+    /** @var SecurityCookie|\PHPUnit_Framework_MockObject_MockObject */
+    protected $securityCookieMock;
 
     /** @var \Magento\Integration\Api\IntegrationServiceInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $_integrationSvcMock;
@@ -192,7 +193,7 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->pageTitleMock = $this->getMockBuilder('Magento\Framework\View\Page\Title')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->securityCookieHelperMock = $this->getMockBuilder('\Magento\Security\Helper\SecurityCookie')
+        $this->securityCookieMock = $this->getMockBuilder(SecurityCookie::class)
             ->disableOriginalConstructor()
             ->setMethods(['setLogoutReasonCookie'])
             ->getMock();
@@ -319,7 +320,10 @@ abstract class IntegrationTest extends \PHPUnit_Framework_TestCase
             $subControllerParams
         );
         if ($actionName == 'Save') {
-            $controller->setSecurityCookieHelper($this->securityCookieHelperMock);
+            $reflection = new \ReflectionClass(get_class($controller));
+            $reflectionProperty = $reflection->getProperty('securityCookie');
+            $reflectionProperty->setAccessible(true);
+            $reflectionProperty->setValue($controller, $this->securityCookieMock);
         }
         return $controller;
     }

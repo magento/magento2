@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Test\Unit\Model\Checks\CanUseForCountry;
@@ -17,7 +17,7 @@ class CountryProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $directoryMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->directoryMock = $this->getMock('Magento\Directory\Helper\Data', [], [], '', false, false);
         $this->model = new \Magento\Payment\Model\Checks\CanUseForCountry\CountryProvider($this->directoryMock);

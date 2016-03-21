@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,7 +28,7 @@ class RulesApplierTest extends \PHPUnit_Framework_TestCase
      */
     protected $validatorUtility;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->calculatorFactory = $this->getMock(
             'Magento\SalesRule\Model\Rule\Action\Discount\CalculatorFactory',
