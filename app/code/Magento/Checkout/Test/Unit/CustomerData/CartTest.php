@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,7 +43,7 @@ class CartTest extends \PHPUnit_Framework_TestCase
      */
     protected $layoutMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->checkoutSessionMock = $this->getMock('\Magento\Checkout\Model\Session', [], [], '', false);
         $this->catalogUrlMock = $this->getMock(
