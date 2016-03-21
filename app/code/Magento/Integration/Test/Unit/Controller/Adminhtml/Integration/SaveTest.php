@@ -249,7 +249,7 @@ class SaveTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Integ
         $this->_authMock->expects($this->once())
             ->method('logout');
 
-        $this->securityCookieHelperMock->expects($this->once())
+        $this->securityCookieMock->expects($this->once())
             ->method('setLogoutReasonCookie')
             ->with(\Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED);
 

@@ -92,7 +92,6 @@ class Mode
      */
     public function enableProductionModeMinimal()
     {
-        $this->filesystem->lockStaticResources();
         $this->setStoreMode(State::MODE_PRODUCTION);
     }
 

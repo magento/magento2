@@ -9,7 +9,6 @@
  */
 error_reporting(E_ALL);
 #ini_set('display_errors', 1);
-umask(0);
 
 /* PHP version validation */
 if (version_compare(phpversion(), '5.5.0', '<') === true) {
