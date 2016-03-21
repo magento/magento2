@@ -46,18 +46,18 @@ class Matrix extends Form
     ];
 
     /**
-     * Selector for variation row by number
+     * Selector for variation row by number.
      *
      * @var string
      */
     protected $variationRowByNumber = './/tr[@class="data-row" or @class="data-row _odd-row"][%d]';
 
     /**
-     * Selector for variation row
+     * Selector for variation row.
      *
      * @var string
      */
-    protected $variationRow = 'tr[class="data-row"], tr[class="data-row _odd-row"]';
+    protected $variationRow = './/tr[contains(@class, "data-row")]';
 
     /**
      * Selector for row on product grid by product id.
@@ -145,7 +145,7 @@ class Matrix extends Form
     public function getVariationsData()
     {
         $data = [];
-        $variationRows = $this->_rootElement->getElements($this->variationRow);
+        $variationRows = $this->_rootElement->getElements($this->variationRow, Locator::SELECTOR_XPATH);
 
         foreach ($variationRows as $key => $variationRow) {
             /** @var SimpleElement $variationRow */
@@ -193,7 +193,7 @@ class Matrix extends Form
 
     public function deleteVariations()
     {
-        $variations = $this->_rootElement->getElements($this->variationRow);
+        $variations = $this->_rootElement->getElements($this->variationRow, Locator::SELECTOR_XPATH);
         foreach (array_reverse($variations) as $variation) {
             $variation->find($this->actionMenu)->hover();
             $variation->find($this->actionMenu)->click();

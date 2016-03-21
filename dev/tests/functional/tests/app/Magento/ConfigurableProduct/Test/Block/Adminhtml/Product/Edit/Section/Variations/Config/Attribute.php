@@ -157,7 +157,7 @@ class Attribute extends Form
      *
      * @var string
      */
-    protected $selectedAttributes = 'span[data-bind*="selectedAttributes"]';
+    private $selectedAttributes = 'span[data-bind*="selectedAttributes"]';
 
     /**
      * Fill attributes
