@@ -85,7 +85,7 @@
         {
             "*": {
                 "Magento_Catalog/js/options": {
-                    "attributesData": <?php /* @escapeNotVerified */ echo json_encode($values, JSON_HEX_QUOT); ?>,
+                    "attributesData": <?php /* @noEscape */ echo json_encode($values, JSON_HEX_QUOT); ?>,
                     "isSortable":  <?php echo (int)(!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) ?>,
                     "isReadOnly": <?php echo (int)$block->getReadOnly(); ?>
                 }
