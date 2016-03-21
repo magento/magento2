@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Block\Form;
 
 use Magento\Customer\Model\AccountManagement;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Test class for \Magento\Customer\Block\Form\Edit
@@ -13,7 +14,7 @@ use Magento\Customer\Model\AccountManagement;
 class EditTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Customer\Helper\AccountManagement
+     * @var ScopeConfigInterface
      */
     protected $scopeConfigMock;
 
@@ -28,13 +29,9 @@ class EditTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->scopeConfigMock =  $this->getMock(
-            '\Magento\Customer\Helper\AccountManagement',
-            ['getValue'],
-            [],
-            '',
-            false
-        );
+        $this->scopeConfigMock =  $this->getMockBuilder(ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         /** @var \Magento\Framework\View\Element\Template\Context | \PHPUnit_Framework_MockObject_MockObject $context */
         $context = $this->getMock(

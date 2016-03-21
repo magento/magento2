@@ -29,7 +29,7 @@ class ResetpasswordTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->scopeConfigMock =  $this->getMock(
-            '\Magento\Customer\Helper\AccountManagement',
+            \Magento\Framework\App\Config::class,
             ['getValue'],
             [],
             '',
