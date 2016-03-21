@@ -30,27 +30,24 @@ class RequestPreprocessor
     /**
      * @var \Magento\Store\Model\BaseUrlChecker
      */
-    protected $baseUrlChecker;
+    private $baseUrlChecker;
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\UrlInterface $url
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Framework\App\ResponseFactory $responseFactory
-     * @param \Magento\Store\Model\BaseUrlChecker $baseUrlChecker
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\UrlInterface $url,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Framework\App\ResponseFactory $responseFactory,
-        \Magento\Store\Model\BaseUrlChecker $baseUrlChecker
+        \Magento\Framework\App\ResponseFactory $responseFactory
     ) {
         $this->_storeManager = $storeManager;
         $this->_url = $url;
         $this->_scopeConfig = $scopeConfig;
         $this->_responseFactory = $responseFactory;
-        $this->baseUrlChecker = $baseUrlChecker;
     }
 
     /**
@@ -69,14 +66,14 @@ class RequestPreprocessor
         \Closure $proceed,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        if (!$request->isPost() && $this->baseUrlChecker->isEnabled()) {
+        if (!$request->isPost() && $this->getBaseUrlChecker()->isEnabled()) {
             $baseUrl = $this->_storeManager->getStore()->getBaseUrl(
                 \Magento\Framework\UrlInterface::URL_TYPE_WEB,
                 $this->_storeManager->getStore()->isCurrentlySecure()
             );
             if ($baseUrl) {
                 $uri = parse_url($baseUrl);
-                if (!$this->baseUrlChecker->execute($uri, $request)) {
+                if (!$this->getBaseUrlChecker()->execute($uri, $request)) {
                     $redirectUrl = $this->_url->getRedirectUrl(
                         $this->_url->getUrl(ltrim($request->getPathInfo(), '/'), ['_nosid' => true])
                     );
@@ -95,5 +92,22 @@ class RequestPreprocessor
         $request->setDispatched(false);
 
         return $proceed($request);
+    }
+
+    /**
+     * Gets base URL checker.
+     *
+     * @return \Magento\Store\Model\BaseUrlChecker
+     * @deprecated
+     */
+    private function getBaseUrlChecker()
+    {
+        if ($this->baseUrlChecker === null) {
+            $this->baseUrlChecker = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Store\Model\BaseUrlChecker'
+            );
+        }
+
+        return $this->baseUrlChecker;
     }
 }
