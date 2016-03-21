@@ -89,9 +89,9 @@ class ChangeTest extends \PHPUnit_Framework_TestCase
                 'resource' => $this->resourceMock,
                 'transactionManager' => $this->tansactionMock,
                 'relationProcessor' => $this->objRelationMock,
-                'random' => $this->randomMock
             ]
         );
+        $this->model->setRandom($this->randomMock);
     }
 
     private function setUpChangeEncryptionKey()

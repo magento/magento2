@@ -58,7 +58,6 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Config\Model\Config\Structure $structure
      * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Framework\App\DeploymentConfig\Writer $writer
-     * @param \Magento\Framework\Math\Random $random
      * @param string $connectionName
      */
     public function __construct(
@@ -135,6 +134,16 @@ class Change extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->random = ObjectManager::getInstance()->get('\Magento\Framework\Math\Random');
         }
         return $this->random;
+    }
+
+    /**
+     * Set Random
+     *
+     * @param \Magento\Framework\Math\Random $random
+     */
+    public function setRandom(\Magento\Framework\Math\Random $random)
+    {
+        $this->random = $random;
     }
 
     /**
