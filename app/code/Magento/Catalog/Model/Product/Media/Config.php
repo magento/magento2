@@ -32,15 +32,10 @@ class Config implements ConfigInterface
 
     /**
      * @param StoreManagerInterface $storeManager
-     * @param Attribute $attributeHelper
      */
-    public function __construct(
-        StoreManagerInterface $storeManager,
-        Attribute $attributeHelper
-    )
+    public function __construct(StoreManagerInterface $storeManager)
     {
         $this->storeManager = $storeManager;
-        $this->attributeHelper = $attributeHelper;
     }
 
     /**
@@ -175,6 +170,18 @@ class Config implements ConfigInterface
      */
     public function getMediaAttributeCodes()
     {
-        return $this->attributeHelper->getAttributeCodesByFrontendType('media_image');
+        return $this->getAttributeHelper()->getAttributeCodesByFrontendType('media_image');
+    }
+
+    /**
+     * @return Attribute
+     */
+    private function getAttributeHelper()
+    {
+        if (null === $this->attributeHelper) {
+            $this->attributeHelper = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Eav\Model\Entity\Attribute');
+        }
+        return $this->attributeHelper;
     }
 }
