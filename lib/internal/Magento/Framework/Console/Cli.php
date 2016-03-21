@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,7 @@ use Magento\Framework\Shell\ComplexParameter;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\Setup\FilePermissions;
 
 /**
  * Magento2 CLI Application. This is the hood for all command line tools supported by Magento.
@@ -46,6 +47,23 @@ class Cli extends SymfonyApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
+        // Check to make sure var/generation/Magento folder dir have read/execute permission for the current user
+        /** @var \Magento\Setup\Model\ObjectManagerProvider $omProvider */
+        $omProvider = $this->serviceManager->get('Magento\Setup\Model\ObjectManagerProvider');
+        /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
+        $objectManager = $omProvider->get();
+        /** @var \Magento\Framework\Setup\Filepermissions $filePermissions */
+        $filePermissions = $objectManager->get('Magento\Framework\Setup\FilePermissions');
+        if ($filePermissions->checkDirectoryPermissionForCLIUser() === false) {
+            $output->writeln(
+                "<error>Command line user ("
+                . get_current_user()
+                . ") may not have proper read+execute permissions for directories under \"var/generation/\" . "
+                . "Please address this issue before using Magento command line."
+            );
+            return 0;
+        }
+
         $exitCode = parent::doRun($input, $output);
         if ($this->initException) {
             $output->writeln(

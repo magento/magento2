@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -71,9 +71,10 @@ class UpdateHandler
     protected function getAttributes($entityType)
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
+
         $searchResult = $this->attributeRepository->getList(
             $metadata->getEavEntityType(),
-            $this->searchCriteriaBuilder->create()
+            $this->searchCriteriaBuilder->addFilter('attribute_set_id', null, 'neq')->create()
         );
         return $searchResult->getItems();
     }
@@ -134,6 +135,7 @@ class UpdateHandler
                 if ((!array_key_exists($attribute->getAttributeCode(), $snapshot)
                     || $snapshot[$attribute->getAttributeCode()] === false)
                     && array_key_exists($attribute->getAttributeCode(), $data)
+                    && $data[$attribute->getAttributeCode()] !== false
                     && !$attribute->isValueEmpty($data[$attribute->getAttributeCode()])
                 ) {
                     $this->attributePersistor->registerInsert(
@@ -147,6 +149,7 @@ class UpdateHandler
                 if (array_key_exists($attribute->getAttributeCode(), $snapshot)
                     && $snapshot[$attribute->getAttributeCode()] !== false
                     && array_key_exists($attribute->getAttributeCode(), $data)
+                    && $data[$attribute->getAttributeCode()] !== false
                     && $snapshot[$attribute->getAttributeCode()] != $data[$attribute->getAttributeCode()]
                     && !$attribute->isValueEmpty($data[$attribute->getAttributeCode()])
                 ) {

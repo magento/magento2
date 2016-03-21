@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,6 +38,7 @@ return [
             'Magento\Setup\Controller\Marketplace',
             'Magento\Setup\Controller\SystemConfig',
             'Magento\Setup\Controller\InstallExtensionGrid',
+            'Magento\Setup\Controller\MarketplaceCredentials',
             'Magento\Setup\Controller\Session'
         ],
         'instance' => [

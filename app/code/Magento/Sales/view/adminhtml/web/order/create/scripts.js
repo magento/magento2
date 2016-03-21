@@ -1,6 +1,6 @@
 // jscs:disable
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -539,7 +539,7 @@ define([
                             if (this._isSummarizePrice()) {
                                 productPrice += this.productPriceBase[productId];
                             }
-                            productPrice = parseFloat(productPrice);
+                            productPrice = parseFloat(Math.round(productPrice + "e+2") + "e-2");
                             priceColl.innerHTML = this.currencySymbol + productPrice.toFixed(2);
                             // and set checkbox checked
                             grid.setCheckboxChecked(checkbox, true);
