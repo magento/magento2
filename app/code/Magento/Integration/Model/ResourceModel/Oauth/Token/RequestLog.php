@@ -106,8 +106,6 @@ class RequestLog extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     {
         $date = (new \DateTime())->setTimestamp($this->dateTime->gmtTimestamp());
         $dateTime = $date->format(\Magento\Framework\Stdlib\DateTime::DATETIME_PHP_FORMAT);
-        $select = $this->getConnection()->select();
-        $select->from($this->getMainTable())->where('lock_expires_at <= ?', $dateTime);
-        $this->getConnection()->delete($select);
+        $this->getConnection()->delete($this->getMainTable(), ['lock_expires_at <= ?' => $dateTime]);
     }
 }
