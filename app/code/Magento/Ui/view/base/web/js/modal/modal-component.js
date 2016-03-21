@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -73,9 +73,11 @@ define([
          * @returns {Object} Chainable.
          */
         initSelector: function () {
+            var modalClass = this.name.replace(/\./g, '_');
+
             this.contentSelector = '.' + this.modalClass;
-            this.options.modalClass = this.name.replace(/\./g, '_');
-            this.rootSelector = '.' + this.options.modalClass;
+            this.options.modalClass = this.options.modalClass + ' ' + modalClass;
+            this.rootSelector = '.' + modalClass;
 
             return this;
         },
@@ -284,14 +286,15 @@ define([
          */
         triggerAction: function (action) {
             var targetName = action.targetName,
-                params = action.params,
+                params = action.params || [],
                 actionName = action.actionName,
                 target;
 
             target = registry.async(targetName);
 
             if (target && typeof target === 'function' && actionName) {
-                target(actionName, params);
+                params.unshift(actionName);
+                target.apply(target, params);
             }
         },
 
