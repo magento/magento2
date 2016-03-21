@@ -153,14 +153,14 @@
                         </div>
                         <ul class="item-roles" data-role="roles-labels">
                             <?php
-                            foreach ($block->getImageTypes() as $typeData) {
+                            foreach ($block->getMediaAttributes() as $attribute) {
                                 ?>
                                 <li data-role-code="<?php /* @escapeNotVerified */ echo $block->escapeHtml(
-                                    $typeData['code']
+                                    $attribute->getAttributeCode()
                                 ) ?>" class="item-role item-role-<?php /* @escapeNotVerified */ echo $block->escapeHtml(
-                                    $typeData['code']
+                                    $attribute->getAttributeCode()
                                 ) ?>">
-                                    <?php /* @escapeNotVerified */ echo $block->escapeHtml($typeData['label']) ?>
+                                    <?php /* @escapeNotVerified */ echo $block->escapeHtml($attribute->getFrontendLabel()) ?>
                                 </li>
                                 <?php
                             }
@@ -409,14 +409,14 @@
                                 </div>
                                 <ul class="item-roles" data-role="roles-labels">
                                     <?php
-                                    foreach ($block->getImageTypes() as $typeData) {
+                                    foreach ($block->getMediaAttributes() as $attribute) {
                                         ?>
                                         <li data-role-code="<?php /* @escapeNotVerified */ echo $block->escapeHtml(
-                                            $typeData['code']
+                                            $attribute->getAttributeCode()
                                         ) ?>" class="item-role item-role-<?php /* @escapeNotVerified */ echo $block->escapeHtml(
-                                            $typeData['code']
+                                            $attribute->getAttributeCode()
                                         ) ?>">
-                                            <?php /* @escapeNotVerified */ echo $block->escapeHtml($typeData['code']) ?>
+                                            <?php /* @escapeNotVerified */ echo $block->escapeHtml($attribute->getFrontendLabel()) ?>
                                         </li>
                                         <?php
                                     }
