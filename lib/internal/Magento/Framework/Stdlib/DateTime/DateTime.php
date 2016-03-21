@@ -105,7 +105,7 @@ class DateTime
     public function gmtTimestamp($input = null)
     {
         if ($input === null) {
-            return gmdate('U');
+            return (int)gmdate('U');
         } elseif (is_numeric($input)) {
             $result = $input;
         } else {

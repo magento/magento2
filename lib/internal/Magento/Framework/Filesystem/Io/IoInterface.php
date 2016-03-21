@@ -35,7 +35,7 @@ interface IoInterface
      * @param bool $recursive
      * @return bool
      */
-    public function mkdir($dir, $mode = DriverInterface::WRITEABLE_DIRECTORY_MODE, $recursive = true);
+    public function mkdir($dir, $mode = 0777, $recursive = true);
 
     /**
      * Delete a directory

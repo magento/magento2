@@ -194,7 +194,7 @@ class File implements DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function createDirectory($path, $permissions)
+    public function createDirectory($path, $permissions = 0777)
     {
         return $this->mkdirRecursive($path, $permissions);
     }
@@ -207,7 +207,7 @@ class File implements DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    private function mkdirRecursive($path, $permissions)
+    private function mkdirRecursive($path, $permissions = 0777)
     {
         $path = $this->getScheme() . $path;
         if (is_dir($path)) {
