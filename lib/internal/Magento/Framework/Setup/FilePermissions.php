@@ -304,10 +304,11 @@ class FilePermissions
      * Checks if directory has permissions needed for CLI user (valid directory, readable, and executable.)
      * Ignores executable permission for Windows.
      *
-     * @param $dir
+     * @param string $dir
      * @return bool
      */
-    private function directoryPermissionForCLIUserValid($dir) {
+    private function directoryPermissionForCLIUserValid($dir)
+    {
         return (is_dir($dir) && is_readable($dir) && (is_executable($dir) || $this->osInfo->isWindows()));
     }
 }
