@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -71,6 +71,7 @@ class System extends AbstractModifier
                 'popup' => 1,
                 'componentJson' => 1,
                 'prev_set_id' => $attributeSetId,
+                'type' => $this->locator->getProduct()->getTypeId()
             ]
         );
 

@@ -3,7 +3,7 @@
 /**
  * Import entity of bundle product type
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\BundleImportExport\Model\Import\Product\Type;
@@ -104,7 +104,6 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
      */
     protected $_specialAttributes = [
         'price_type',
-        'shipment_type',
         'weight_type',
         'sku_type',
     ];
@@ -390,6 +389,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
         if (isset($rowData['bundle_price_type']) && $rowData['bundle_price_type'] == 'dynamic') {
             $rowData['price'] = isset($rowData['price']) && $rowData['price'] ? $rowData['price'] : '0.00';
         }
+
         return parent::isRowValid($rowData, $rowNum, $isNewProduct);
     }
 
@@ -433,6 +433,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
                 }
             }
         }
+
         return $resultAttrs;
     }
 
@@ -630,12 +631,24 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     protected function _initAttributes()
     {
         parent::_initAttributes();
-        if (isset(self::$attributeCodeToId['price_type']) && $id = self::$attributeCodeToId['price_type']) {
-            self::$commonAttributesCache[$id]['type'] = 'select';
-            self::$commonAttributesCache[$id]['options'] = [
-                self::VALUE_DYNAMIC => BundlePrice::PRICE_TYPE_DYNAMIC,
-                self::VALUE_FIXED => BundlePrice::PRICE_TYPE_FIXED,
-            ];
+
+        $options = [
+            self::VALUE_DYNAMIC => BundlePrice::PRICE_TYPE_DYNAMIC,
+            self::VALUE_FIXED => BundlePrice::PRICE_TYPE_FIXED,
+        ];
+
+        foreach ($this->_specialAttributes as $attributeCode) {
+            if (isset(self::$attributeCodeToId[$attributeCode]) && $id = self::$attributeCodeToId[$attributeCode]) {
+                self::$commonAttributesCache[$id]['type'] = 'select';
+                self::$commonAttributesCache[$id]['options'] = $options;
+
+                foreach ($this->_attributes as $attrSetName => $attrSetValue) {
+                    if (isset($attrSetValue[$attributeCode])) {
+                        $this->_attributes[$attrSetName][$attributeCode]['type'] = 'select';
+                        $this->_attributes[$attrSetName][$attributeCode]['options'] = $options;
+                    }
+                }
+            }
         }
     }
 

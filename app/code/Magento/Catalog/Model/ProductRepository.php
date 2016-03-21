@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -15,6 +15,8 @@ use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
+use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -521,6 +523,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
                 $product->getData($exception->getAttributeCode()),
                 $exception
             );
+        } catch (ValidatorException $e) {
+            throw new CouldNotSaveException(__($e->getMessage()));
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(__('Unable to save product'));
         }
@@ -540,6 +544,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             unset($this->instances[$product->getSku()]);
             unset($this->instancesById[$product->getId()]);
             $this->resourceModel->delete($product);
+        } catch (ValidatorException $e) {
+            throw new CouldNotSaveException(__($e->getMessage()));
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\StateException(
                 __('Unable to remove product %1', $sku)

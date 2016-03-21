@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductVideo\Test\Unit\Block\Adminhtml\Product\Edit;
@@ -95,7 +95,8 @@ class NewVideoTest extends \PHPUnit_Framework_TestCase
             'saveVideoUrl' => $saveVideoUrl,
             'saveRemoteVideoUrl' => $saveRemoteVideoUrl,
             'htmlId' => 'id_' . $rand,
-            'youTubeApiKey' => null
+            'youTubeApiKey' => null,
+            'videoSelector' => '#media_gallery_content'
         ];
         $this->jsonEncoderMock->expects($this->once())->method('encode')->with(
             $value
