@@ -1,7 +1,7 @@
 <?php
 /**
  * @api
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -105,7 +105,7 @@ abstract class AbstractFactory
      * @return bool
      * @throws \Exception
      */
-    protected function checkAndCreateFolder($folder, $mode = DriverInterface::WRITEABLE_DIRECTORY_MODE)
+    protected function checkAndCreateFolder($folder, $mode = 0777)
     {
         if (is_dir($folder)) {
             return true;
@@ -127,7 +127,7 @@ abstract class AbstractFactory
      * @param bool $recursive
      * @return bool
      */
-    protected function mkDir($dir, $mode = 0770, $recursive = true)
+    protected function mkDir($dir, $mode = 0777, $recursive = true)
     {
         return @mkdir($dir, $mode, $recursive);
     }
