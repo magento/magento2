@@ -154,23 +154,25 @@ define([
                     attribute[option['attribute_code']] = option.value;
 
                     return _.extend(memo, attribute);
-                }, {});
-                var gallery = {images: {}};
-                var defaultImage = null;
+                }, {}),
+                    gallery = {
+                        images: {}
+                    },
+                    types = {};
 
                 _.each(variation.images.images, function (image) {
-                    gallery.images[image.file_id] = {
+                    gallery.images[image['file_id']] = {
                         position: image.position,
                         file: image.file,
                         disabled: image.disabled,
-                        label: ''
+                        label: image.label || ''
                     };
-                    if (image.position == 1) {
-                        defaultImage = image.file;
-                    }
+                    _.each(image.galleryTypes, function (type) {
+                        types[type] = image.file;
+                    });
                 }, this);
 
-                tmpArray.push(_.extend(variation, {
+                tmpArray.push(_.extend(variation, types, {
                     productId: variation.productId || null,
                     name: variation.name || variation.sku,
                     priceCurrency: this.currencySymbol,
@@ -181,11 +183,7 @@ define([
                     productUrl: this.buildProductUrl(variation.productId),
                     status: variation.status === undefined ? 1 : parseInt(variation.status, 10),
                     newProduct: variation.productId ? 0 : 1,
-                    media_gallery: gallery,
-                    swatch_image: defaultImage,
-                    small_image: defaultImage,
-                    thumbnail: defaultImage,
-                    image: defaultImage
+                    'media_gallery': gallery
                 }));
             }, this);
 

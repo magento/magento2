@@ -25,7 +25,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
      */
     protected $filesystemCollection;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->collectionFactory =
             $this->getMockBuilder('Magento\Theme\Model\ResourceModel\Theme\Data\CollectionFactory')

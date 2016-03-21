@@ -47,13 +47,13 @@ class Environment extends AbstractActionController
     /**
      * Constructor
      *
-     * @param \Magento\Setup\Model\FilePermissions $permissions
+     * @param \Magento\Framework\Setup\FilePermissions $permissions
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Setup\Model\CronScriptReadinessCheck $cronScriptReadinessCheck
      * @param \Magento\Setup\Model\PhpReadinessCheck $phpReadinessCheck
      */
     public function __construct(
-        \Magento\Setup\Model\FilePermissions $permissions,
+        \Magento\Framework\Setup\FilePermissions $permissions,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Setup\Model\CronScriptReadinessCheck $cronScriptReadinessCheck,
         \Magento\Setup\Model\PhpReadinessCheck $phpReadinessCheck
