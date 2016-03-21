@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Product\Type;
@@ -9,6 +9,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 
 /**
  * Configurable product type implementation
@@ -144,6 +145,11 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @var MetadataPool
      */
     private $metadataPool;
+
+    /**
+     * @var GalleryReadHandler
+     */
+    private $productGalleryReadHandler;
 
     /**
      * @codingStandardsIgnoreStart/End
@@ -497,7 +503,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
             foreach ($collection as $item) {
                 /** @var \Magento\Catalog\Model\Product $item */
-                $item->getResource()->getAttribute('media_gallery')->getBackend()->afterLoad($item);
+                $this->getGalleryReadHandler()->execute('', $item);
                 $usedProducts[] = $item;
             }
 
@@ -505,6 +511,20 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
         \Magento\Framework\Profiler::stop('CONFIGURABLE:' . __METHOD__);
         return $product->getData($this->_usedProducts);
+    }
+
+    /**
+     * Retrieve GalleryReadHandler
+     *
+     * @return GalleryReadHandler
+     */
+    protected function getGalleryReadHandler()
+    {
+        if ($this->productGalleryReadHandler === null) {
+            $this->productGalleryReadHandler = ObjectManager::getInstance()
+                ->get(GalleryReadHandler::class);
+        }
+        return $this->productGalleryReadHandler;
     }
 
     /**
