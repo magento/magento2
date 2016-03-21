@@ -22,10 +22,12 @@ define([
          * Open modal
          */
         openModal: function () {
+            var stepWizard = {};
+
             this.form().validate();
 
             if (this.form().source.get('params.invalid') === false) {
-                var stepWizard = registry.get('index='+this.stepWizard);
+                stepWizard = registry.get('index = ' + this.stepWizard);
 
                 if (!_.isUndefined(stepWizard)) {
                     stepWizard.open();

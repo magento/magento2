@@ -22,7 +22,7 @@ class PathProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var string */
     private $endpointPath = '/V1/path/of/endpoint';
 
-    public function setUp()
+    protected function setUp()
     {
         $this->storeManagerMock = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->disableOriginalConstructor()

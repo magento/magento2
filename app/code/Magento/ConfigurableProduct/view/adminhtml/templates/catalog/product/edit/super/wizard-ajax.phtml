@@ -23,7 +23,7 @@ $attributes = $block->getProductAttributes();
         $('.<?= /* @noEscape */ $block->getData('config/dataScope')?>[data-role=steps-wizard-main]').applyBindings();
 
         registry.async('<?= /* @noEscape */ $block->getData('config/nameStepWizard')?>')(function (component) {
-            _.delay(component.open.bind(component), 600); // TODO: MAGETWO-50246
+            _.delay(component.open.bind(component), 500); // TODO: MAGETWO-50246
         })
     });
 </script>
