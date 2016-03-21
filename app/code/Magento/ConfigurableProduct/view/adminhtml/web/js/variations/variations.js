@@ -46,7 +46,8 @@ define([
             imports: {
                 attributeSetName: '${ $.provider }:configurableNewAttributeSetName',
                 attributeSetId: '${ $.provider }:configurableExistingAttributeSetId',
-                attributeSetSelection: '${ $.provider }:configurableAffectedAttributeSet'
+                attributeSetSelection: '${ $.provider }:configurableAffectedAttributeSet',
+                productPrice: '${ $.provider }:data.product.price'
             },
             links: {
                 value: '${ $.provider }:${ $.dataScopeVariations }',
@@ -358,8 +359,7 @@ define([
          * @returns {Boolean}
          */
         createNewAttributeSet: function() {
-            var ns = this.formElement().ns,
-                messageBoxElement = registry.get('index = ' + ns  + '.affectedAttributeSetError');
+            var messageBoxElement = registry.get('index = affectedAttributeSetError');
 
             messageBoxElement.visible(false);
 
@@ -413,6 +413,14 @@ define([
         closeDialogAndProcessForm: function() {
             this.attributeSetHandlerModal().closeModal();
             this.formElement().save(this.formSaveParams[0], this.formSaveParams[1]);
+        },
+
+        /**
+         * Retrieves product price
+         * @returns {*}
+         */
+        getProductPrice: function() {
+            return this.productPrice;
         }
     });
 });
