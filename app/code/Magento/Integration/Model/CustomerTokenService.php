@@ -13,6 +13,7 @@ use Magento\Integration\Model\Oauth\Token as Token;
 use Magento\Integration\Model\Oauth\TokenFactory as TokenModelFactory;
 use Magento\Integration\Model\ResourceModel\Oauth\Token\CollectionFactory as TokenCollectionFactory;
 use Magento\Integration\Model\Oauth\Token\RequestThrottler;
+use Magento\Framework\Exception\AuthenticationException;
 
 class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServiceInterface
 {
@@ -78,7 +79,9 @@ class CustomerTokenService implements \Magento\Integration\Api\CustomerTokenServ
             $customerDataObject = $this->accountManagement->authenticate($username, $password);
         } catch (\Exception $e) {
             $this->getRequestThrottler()->logAuthenticationFailure($username, RequestThrottler::USER_TYPE_CUSTOMER);
-            throw $e;
+            throw new AuthenticationException(
+                __('You did not sign in correctly or your account is temporarily disabled.')
+            );
         }
         $this->getRequestThrottler()->resetAuthenticationFailuresCount($username, RequestThrottler::USER_TYPE_CUSTOMER);
         return $this->tokenModelFactory->create()->createCustomerToken($customerDataObject->getId())->getToken();
