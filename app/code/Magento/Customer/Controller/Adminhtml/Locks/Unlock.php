@@ -1,15 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Locks;
 
+use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Backend\App\Action;
-use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Unlock Customer Controller
@@ -17,31 +16,24 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 class Unlock extends \Magento\Backend\App\Action
 {
     /**
-     * Account manager
+     * Authentication
      *
-     * @var AccountManagementHelper
+     * @var AuthenticationInterface
      */
-    protected $accountManagementHelper;
-
-    /**
-     * @var CustomerRepositoryInterface
-     */
-    protected $customerRepository;
+    protected $authentication;
 
     /**
      * Unlock constructor.
+     *
      * @param Action\Context $context
-     * @param AccountManagementHelper $accountManagementHelper
-     * @param CustomerRepositoryInterface $customerRepository
+     * @param AuthenticationInterface $authentication
      */
     public function __construct(
         Action\Context $context,
-        AccountManagementHelper $accountManagementHelper,
-        CustomerRepositoryInterface $customerRepository
+        AuthenticationInterface $authentication
     ) {
         parent::__construct($context);
-        $this->accountManagementHelper = $accountManagementHelper;
-        $this->customerRepository = $customerRepository;
+        $this->authentication = $authentication;
     }
 
     /**
@@ -55,9 +47,7 @@ class Unlock extends \Magento\Backend\App\Action
         try {
             // unlock customer
             if ($customerId) {
-                $customer = $this->customerRepository->getById($customerId);
-                $this->accountManagementHelper->processUnlockData($customerId);
-                $this->customerRepository->save($customer);
+                $this->authentication->unlock($customerId);
                 $this->getMessageManager()->addSuccess(__('Customer has been unlocked successfully.'));
             }
         } catch (\Exception $e) {

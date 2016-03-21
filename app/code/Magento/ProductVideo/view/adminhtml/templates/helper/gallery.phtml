@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -46,8 +46,6 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
             <?php /* @escapeNotVerified */ echo $block->getUploaderHtml();
             ?>
             <div class="product-image-wrapper">
-                <img class="spacer"
-                     src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/spacer.gif')?>"/>
                 <p class="image-placeholder-text">
                     <?php /* @escapeNotVerified */ echo __('Browse to find or drag image here'); ?>
                 </p>
@@ -133,9 +131,6 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                    data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"/>
 
             <div class="product-image-wrapper">
-                <img class="spacer"
-                     src="<?php /* @escapeNotVerified */ echo $block->getViewFileUrl('images/spacer.gif')?>"/>
-
                 <img class="product-image"
                      data-role="image-element"
                      src="<%- data.url %>"
@@ -193,9 +188,10 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
     </script>
 
     <script data-role="img-dialog-container-tmpl" type="text/x-magento-template">
-      <div class="image-panel ui-tabs-panel ui-widget-content ui-corner-bottom" data-role="dialog">
+      <div class="image-panel" data-role="dialog">
       </div>
     </script>
+
     <script data-role="img-dialog-tmpl" type="text/x-magento-template">
             <div class="image-panel-preview">
                 <img src="<%- data.url %>" alt="<%- data.label %>" />
