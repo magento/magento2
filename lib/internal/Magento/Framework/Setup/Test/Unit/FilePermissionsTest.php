@@ -349,6 +349,7 @@ namespace Magento\Framework\Setup;
  *
  * @param string $filename
  * @return true
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 function is_dir($filename)
 {
@@ -361,6 +362,7 @@ function is_dir($filename)
  *
  * @param string $filename
  * @return true
+ * @SuppressWarnings(PHPMD.UnusedFormalParameter)
  */
 function is_readable($filename)
 {
