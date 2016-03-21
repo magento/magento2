@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order;
@@ -52,7 +52,7 @@ class ShipmentLoaderTest extends \PHPUnit_Framework_TestCase
      */
     protected $loader;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->shipmentRepositoryMock = $this->getMockBuilder('Magento\Sales\Model\Order\ShipmentRepository')
             ->disableOriginalConstructor()

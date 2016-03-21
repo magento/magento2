@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Model\Export;
@@ -80,6 +80,19 @@ class ProductTest extends \PHPUnit_Framework_TestCase
         $this->assertContains('Option 1 Value 1', $exportData);
         $this->assertContains('test_option_code_2', $exportData);
         $this->assertContains('max_characters=10', $exportData);
+    }
+
+    /**
+     * @magentoDataFixture Magento/CatalogImportExport/_files/product_export_with_product_links_data.php
+     */
+    public function testExportWithProductLinks()
+    {
+        $this->model->setWriter(
+            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                'Magento\ImportExport\Model\Export\Adapter\Csv'
+            )
+        );
+        $this->assertNotEmpty($this->model->export());
     }
 
     /**

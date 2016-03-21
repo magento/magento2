@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Magento\Framework\DataObject as MagentoObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -83,12 +84,6 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerMock = $this->getMock('Magento\Framework\App\ObjectManager', [], [], '', false);
 
-        try {
-            $this->objectManagerBackup = \Magento\Framework\App\ObjectManager::getInstance();
-        } catch (\RuntimeException $e) {
-            $this->objectManagerBackup = \Magento\Framework\App\Bootstrap::createObjectManagerFactory(BP, $_SERVER)
-                ->create($_SERVER);
-        }
         \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerMock);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -98,7 +93,9 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
     protected function tearDown()
     {
         parent::tearDown();
-        \Magento\Framework\App\ObjectManager::setInstance($this->objectManagerBackup);
+        /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManagerMock*/
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        \Magento\Framework\App\ObjectManager::setInstance($objectManagerMock);
     }
 
     protected function getUut()
