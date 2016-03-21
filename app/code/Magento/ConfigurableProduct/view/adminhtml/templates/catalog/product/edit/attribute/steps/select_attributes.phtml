@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,7 @@
 ?>
 <div class="select-attributes-block">
     <div class="select-attributes-actions" data-type="skipKO">
-        <?= /* @escapeNotVerified */  $block->getAddNewAttributeButton(); ?>
+        <?= /* @escapeNotVerified */  $block->getAddNewAttributeButton('product_form.product_form_data_source'); ?>
     </div>
     <h2 class="steps-wizard-title"><?= /* @escapeNotVerified */  __('Step 1: Select Attributes') ?></h2>
     <div class="selected-attributes" data-bind="scope: '<?= /* @escapeNotVerified */  $block->getComponentName()?>'">
@@ -35,4 +35,10 @@
             }
         }
     }
+</script>
+<script>
+    require(['jquery'], function ($) {
+        $('div.select-attributes-block').applyBindings();
+        $('body').trigger('contentUpdated');
+    })
 </script>
