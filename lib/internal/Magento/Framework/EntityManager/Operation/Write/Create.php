@@ -12,7 +12,7 @@ use Magento\Framework\EntityManager\Operation\Write\Create\CreateAttributes;
 use Magento\Framework\EntityManager\Operation\Write\Create\CreateExtensions;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\EntityManager\EventManager;
 
 /**
  * Class Create
@@ -30,14 +30,9 @@ class Create
     private $resourceConnection;
 
     /**
-     * @var ManagerInterface
+     * @var EventManager
      */
     private $eventManager;
-
-    /**
-     * @var ValidateCreate
-     */
-    private $validateCreate;
 
     /**
      * @var CreateMain
@@ -59,8 +54,7 @@ class Create
      *
      * @param MetadataPool $metadataPool
      * @param ResourceConnection $resourceConnection
-     * @param ManagerInterface $eventManager
-     * @param ValidateCreate $validateCreate
+     * @param EventManager $eventManager
      * @param CreateMain $createMain
      * @param CreateAttributes $createAttributes
      * @param CreateExtensions $createExtensions
@@ -68,8 +62,7 @@ class Create
     public function __construct(
         MetadataPool $metadataPool,
         ResourceConnection $resourceConnection,
-        ManagerInterface $eventManager,
-        ValidateCreate $validateCreate,
+        EventManager $eventManager,
         CreateMain $createMain,
         CreateAttributes $createAttributes,
         CreateExtensions $createExtensions
@@ -77,7 +70,6 @@ class Create
         $this->metadataPool = $metadataPool;
         $this->resourceConnection = $resourceConnection;
         $this->eventManager = $eventManager;
-        $this->validateCreate = $validateCreate;
         $this->createMain = $createMain;
         $this->createAttributes = $createAttributes;
         $this->createExtensions = $createExtensions;
@@ -91,16 +83,29 @@ class Create
      */
     public function execute($entityType, $entity)
     {
-        $this->validateCreate->execute($entityType, $entity);
         $metadata = $this->metadataPool->getMetadata($entityType);
         $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
         $connection->beginTransaction();
         try {
-            $this->eventManager->dispatch('entity_save_before', ['entity_type' => $entityType, 'entity' => $entity]);
+            $this->eventManager->dispatch(
+                'entity_manager_save_before',
+                [
+                    'entity_type' => $entityType,
+                    'entity' => $entity
+                ]
+            );
+            $this->eventManager->dispatchEntityEvent($entityType, 'save_before', ['entity' => $entity]);
             $entity = $this->createMain->execute($entityType, $entity);
             $entity = $this->createAttributes->execute($entityType, $entity);
             $entity = $this->createExtensions->execute($entityType, $entity);
-            $this->eventManager->dispatch('entity_save_after', ['entity_type' => $entityType, 'entity' => $entity]);
+            $this->eventManager->dispatchEntityEvent($entityType, 'save_after', ['entity' => $entity]);
+            $this->eventManager->dispatch(
+                'entity_manager_save_after',
+                [
+                    'entity_type' => $entityType,
+                    'entity' => $entity
+                ]
+            );
             $connection->commit();
         } catch (\Exception $e) {
             $connection->rollBack();

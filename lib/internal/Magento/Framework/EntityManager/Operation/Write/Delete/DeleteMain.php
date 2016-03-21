@@ -41,11 +41,12 @@ class DeleteMain
     /**
      * @param string $entityType
      * @param object $entity
-     * @return int
+     * @return object
      */
     public function execute($entityType, $entity)
     {
         $hydrator = $this->hydratorPool->getHydrator($entityType);
-        return $this->deleteRow->execute($entityType, $hydrator->extract($entity));
+        $this->deleteRow->execute($entityType, $hydrator->extract($entity));
+        return $entity;
     }
 }
