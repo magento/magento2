@@ -66,7 +66,9 @@ class RequestThrottler
     {
         $count = $this->requestLogReader->getFailuresCount($userName, $userType);
         if ($count >= $this->requestLogConfig->getMaxFailuresCount()) {
-            throw new AuthenticationException(__('Provided credentials are invalid or user account is locked.'));
+            throw new AuthenticationException(
+                __('You did not sign in correctly or your account is temporarily disabled.')
+            );
         }
     }
 
