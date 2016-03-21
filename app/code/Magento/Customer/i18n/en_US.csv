@@ -120,14 +120,15 @@ Download,Download
 "If you are a registered VAT customer, please <a href=""%1"">click here</a> to enter your billing address for proper VAT calculation.","If you are a registered VAT customer, please <a href=""%1"">click here</a> to enter your billing address for proper VAT calculation."
 "Account Information","Account Information"
 "You saved the account information.","You saved the account information."
+"The account is locked. Please wait and try again or contact %1.","The account is locked. Please wait and try again or contact %1."
 "Password confirmation doesn\'t match entered password.","Password confirmation doesn\'t match entered password."
+"The password doesn\'t match this account.","The password doesn\'t match this account."
 "Please correct the email address.","Please correct the email address."
 "We\'re unable to send the password reset email.","We\'re unable to send the password reset email."
 "Please enter your email.","Please enter your email."
 "If there is an account associated with %1 you will receive an email with a link to reset your password.","If there is an account associated with %1 you will receive an email with a link to reset your password."
 "My Account","My Account"
 "This account is not confirmed. <a href=""%1"">Click here</a> to resend confirmation email.","This account is not confirmed. <a href=""%1"">Click here</a> to resend confirmation email."
-"The account is locked. Please wait and try again or contact %1.","The account is locked. Please wait and try again or contact %1."
 "Invalid login or password.","Invalid login or password."
 "An unspecified error occurred. Please contact us for assistance.","An unspecified error occurred. Please contact us for assistance."
 "A login and a password are required.","A login and a password are required."
@@ -172,11 +173,12 @@ Customers,Customers
 "Login successful.","Login successful."
 """%1"" section source is not supported","""%1"" section source is not supported"
 "%1 doesn\'t extend \Magento\Customer\CustomerData\SectionSourceInterface","%1 doesn\'t extend \Magento\Customer\CustomerData\SectionSourceInterface"
-"The password doesn\'t match this account.","The password doesn\'t match this account."
 "No confirmation needed.","No confirmation needed."
 "Account already active","Account already active"
 "Invalid confirmation token","Invalid confirmation token"
+"The account is locked.","The account is locked."
 "This account is not confirmed.","This account is not confirmed."
+"Please enter a password with at most %1 characters.","Please enter a password with at most %1 characters."
 "Please enter a password with at least %1 characters.","Please enter a password with at least %1 characters."
 "The password can\'t begin or end with a space.","The password can\'t begin or end with a space."
 "Minimum of different classes of characters in password is %1. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.","Minimum of different classes of characters in password is %1. Classes of characters: Lower Case, Upper Case, Digits, Special Characters."
@@ -268,12 +270,12 @@ message,message
 NoSuchEntityException,NoSuchEntityException
 Exception,Exception
 InputException.,InputException.
+"New Password and Confirm New Password values didn\'t match.","New Password and Confirm New Password values didn\'t match."
 InputException,InputException
 "Exception message","Exception message"
 "Validator Exception","Validator Exception"
 "Localized Exception","Localized Exception"
 "some error","some error"
-"Minimum different classes of characters in password are %1. Classes of characters: Lower Case, Upper Case, Digits, Special Characters.","Minimum different classes of characters in password are %1. Classes of characters: Lower Case, Upper Case, Digits, Special Characters."
 Label,Label
 Select...,Select...
 Edit,Edit
@@ -494,7 +496,6 @@ Group,Group
 Phone,Phone
 ZIP,ZIP
 "Customer Since","Customer Since"
-"Last Logged In","Last Logged In"
 "Confirmed email","Confirmed email"
 "Account Created in","Account Created in"
 "Tax VAT Number","Tax VAT Number"
