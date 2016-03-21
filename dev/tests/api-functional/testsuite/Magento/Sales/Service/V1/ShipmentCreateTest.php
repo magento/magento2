@@ -85,6 +85,7 @@ class ShipmentCreateTest extends WebapiAbstract
                     'carrier_code' => 'UPS',
                     'order_id' => $order->getId(),
                     'title' => 'ground',
+                    'description' => null,
                     'track_number' => '12345678'
                 ]
             ],
