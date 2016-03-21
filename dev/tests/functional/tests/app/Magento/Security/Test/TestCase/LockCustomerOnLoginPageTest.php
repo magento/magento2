@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Customer\Test\TestCase;
+namespace Magento\Security\Test\TestCase;
 
 use Magento\Mtf\TestCase\Injectable;
 use Magento\Customer\Test\Fixture\Customer;
@@ -28,7 +28,7 @@ use Magento\Mtf\Fixture\FixtureFactory;
 class LockCustomerOnLoginPageTest extends Injectable
 {
     /* tags */
-    const MVP = 'no';
+    const MVP = 'yes';
     const DOMAIN = 'PS';
     /* end tags */
 
@@ -75,10 +75,6 @@ class LockCustomerOnLoginPageTest extends Injectable
         $incorrectPassword,
         $configData = null
     ) {
-        $this->markTestIncomplete(
-            "MAGETWO-50404: Failed in Bamboo>>PS-FT-Plan. Needs to be triaged and fixed as part of MLS-13."
-        );
-
         $this->configData = $configData;
 
         // Preconditions
