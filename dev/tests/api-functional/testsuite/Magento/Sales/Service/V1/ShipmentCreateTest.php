@@ -79,7 +79,6 @@ class ShipmentCreateTest extends WebapiAbstract
             'increment_id' => null,
             'created_at' => null,
             'updated_at' => null,
-//            'packages' => null,
             'shipping_label' => null,
             'tracks' => [
                 [
@@ -98,7 +97,10 @@ class ShipmentCreateTest extends WebapiAbstract
             'items' => $items,
             'comments' => [
                 [
-                    'comment' => 'Shipment-related comment.'
+                    'comment' => 'Shipment-related comment.',
+                    'is_customer_notified' => null,
+                    'is_visible_on_front' => null,
+                    'parent_id' => null
                 ]
             ],
         ];
