@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,7 +43,7 @@ class ProductForm extends FormSections
      *
      * @var string
      */
-    protected $customSection = '.admin__collapsible-title';
+    protected $customSection = '[data-index="%s"] .admin__collapsible-title';
 
     /**
      * Attribute block selector.

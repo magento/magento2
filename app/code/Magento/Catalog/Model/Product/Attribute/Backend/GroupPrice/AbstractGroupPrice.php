@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -156,6 +156,8 @@ abstract class AbstractGroupPrice extends Price
     {
         $attribute = $this->getAttribute();
         $priceRows = $object->getData($attribute->getName());
+        $priceRows = array_filter((array)$priceRows);
+
         if (empty($priceRows)) {
             return true;
         }
@@ -243,6 +245,9 @@ abstract class AbstractGroupPrice extends Price
         $data = [];
         $price = $this->_catalogProductType->priceFactory($productTypeId);
         foreach ($priceData as $v) {
+            if (!array_filter($v)) {
+                continue;
+            }
             $key = implode('-', array_merge([$v['cust_group']], $this->_getAdditionalUniqueFields($v)));
             if ($v['website_id'] == $websiteId) {
                 $data[$key] = $v;
@@ -319,6 +324,8 @@ abstract class AbstractGroupPrice extends Price
         if (null === $priceRows) {
             return $this;
         }
+
+        $priceRows = array_filter((array)$priceRows);
 
         $old = [];
         $new = [];

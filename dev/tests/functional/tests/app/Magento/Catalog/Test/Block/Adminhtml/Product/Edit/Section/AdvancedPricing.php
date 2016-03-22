@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -98,7 +98,7 @@ class AdvancedPricing extends Section
      */
     public function getTierPriceForm(SimpleElement $element = null)
     {
-        $element = $element ?: $this->_rootElement->find($this->tierPrice);
+        $element = $element ?: $this->browser->find($this->advancedPricingRootElement);
         return $this->blockFactory->create(
             'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\AdvancedPricing\OptionTier',
             ['element' => $element]
