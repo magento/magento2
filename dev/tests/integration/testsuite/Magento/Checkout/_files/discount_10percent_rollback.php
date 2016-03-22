@@ -6,15 +6,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\Api\SearchCriteriaBuilder $criteriaBuilder */
-$criteriaBuilder = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\Framework\Api\SearchCriteriaBuilder');
-$criteriaBuilder->addFilter('name', 'Test Coupon');
-
-/** @var \Magento\SalesRule\Api\RuleRepositoryInterface $salesRuleRepository */
-$salesRuleRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->get('Magento\SalesRule\Api\RuleRepositoryInterface');
-$list = $salesRuleRepository->getList($criteriaBuilder->create());
-foreach ($list->getItems() as $item) {
-    $salesRuleRepository->deleteById($item->getRuleId());
-}
+/** @var \Magento\SalesRule\Model\Rule $salesRule */
+$salesRule = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create('Magento\SalesRule\Model\Rule');
+/** @var int $salesRuleId */
+$salesRuleId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get('Magento\Framework\Registry')
+    ->registry('Magento/Checkout/_file/discount_10percent');
+$salesRule->load($salesRuleId);
+$salesRule->delete();
