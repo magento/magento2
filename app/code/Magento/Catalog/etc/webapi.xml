@@ -97,19 +97,19 @@
     <route url="/V1/products/types" method="GET">
         <service class="Magento\Catalog\Api\ProductTypeListInterface" method="getProductTypes"/>
         <resources>
-            <resource ref="Magento_Catalog::attributes_attributes"/>
+            <resource ref="Magento_Catalog::products"/>
         </resources>
     </route>
     <route url="/V1/products/attribute-sets/sets/list" method="GET">
         <service class="Magento\Catalog\Api\AttributeSetRepositoryInterface" method="getList"/>
         <resources>
-            <resource ref="Magento_Catalog::attributes_attributes"/>
+            <resource ref="Magento_Catalog::sets"/>
         </resources>
     </route>
     <route url="/V1/products/attribute-sets/:attributeSetId" method="GET">
         <service class="Magento\Catalog\Api\AttributeSetRepositoryInterface" method="get"/>
         <resources>
-            <resource ref="Magento_Catalog::attributes_attributes"/>
+            <resource ref="Magento_Catalog::sets"/>
         </resources>
     </route>
     <route url="/V1/products/attribute-sets/:attributeSetId" method="DELETE">
@@ -175,7 +175,7 @@
     <route url="/V1/products/attributes/:attributeCode/options" method="GET">
         <service class="Magento\Catalog\Api\ProductAttributeOptionManagementInterface" method="getItems"/>
         <resources>
-            <resource ref="Magento_Catalog::sets" />
+            <resource ref="Magento_Catalog::attributes_attributes" />
         </resources>
     </route>
     <route url="/V1/products/attributes/:attributeCode/options" method="POST">
@@ -199,7 +199,7 @@
     <route url="/V1/products/:sku/media/:entryId" method="GET">
         <service class="Magento\Catalog\Api\ProductAttributeMediaGalleryManagementInterface" method="get"/>
         <resources>
-            <resource ref="Magento_Catalog::catalog"/>
+            <resource ref="Magento_Catalog::attributes_attributes"/>
         </resources>
     </route>
     <route url="/V1/products/:sku/media" method="POST">

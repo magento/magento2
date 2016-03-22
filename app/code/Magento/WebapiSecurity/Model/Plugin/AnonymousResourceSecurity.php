@@ -51,7 +51,8 @@ class AnonymousResourceSecurity
         }
         $useInsecure = $this->config->getValue(self::XML_ALLOW_INSECURE);
         if ($useInsecure) {
-            foreach ($this->resources as $route => $requestType) {
+            foreach (array_keys($this->resources) as $resource) {
+                list($route, $requestType) = explode("::", $resource);
                 if ($result = $this->getNode($route, $requestType, $nodes["routes"])) {
                     if (isset($result[$requestType]['resources'])) {
                         $result[$requestType]['resources'] = ['anonymous' => true];
