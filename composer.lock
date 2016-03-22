@@ -383,7 +383,7 @@
                     "email": "igor@wiedler.ch"
                 },
                 {
-                    "name": "Robert Schönthal",
+                    "name": "Robert Schonthal",
                     "email": "seroscho@googlemail.com"
                 }
             ],
@@ -532,7 +532,7 @@
                     "email": "flyingmana@googlemail.com"
                 },
                 {
-                    "name": "Jörg Weller",
+                    "name": "Jorg Weller",
                     "email": "weller@flagbit.de"
                 },
                 {
@@ -562,12 +562,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/zf1.git",
-                "reference": "c9d607bfd9454bc18b9deff737ccd5d044e2ab10"
+                "reference": "dbdf178992bfa52d6e978e62131162301ff6b76f"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/magento/zf1/zipball/c9d607bfd9454bc18b9deff737ccd5d044e2ab10",
-                "reference": "c9d607bfd9454bc18b9deff737ccd5d044e2ab10",
+                "reference": "dbdf178992bfa52d6e978e62131162301ff6b76f",
                 "shasum": ""
             },
             "require": {
@@ -601,7 +601,7 @@
                 "ZF1",
                 "framework"
             ],
-            "time": "2015-10-29 14:34:55"
+            "time": "2015-09-30 13:04:03"
         },
         {
             "name": "monolog/monolog",
@@ -718,7 +718,7 @@
                     "homepage": "https://github.com/agar"
                 },
                 {
-                    "name": "Martin Jantošovič",
+                    "name": "Martin Jantosovic",
                     "homepage": "https://github.com/Mordred"
                 },
                 {
@@ -786,7 +786,7 @@
                     "email": "typo3-coding@oliverklee.de"
                 },
                 {
-                    "name": "Roman Ožana",
+                    "name": "Roman Ozana",
                     "email": "ozana@omdesign.cz"
                 }
             ],
@@ -864,7 +864,7 @@
                     "role": "Developer"
                 },
                 {
-                    "name": "Hans-Jürgen Petrich",
+                    "name": "Hans-Jurgen Petrich",
                     "email": "petrich@tronic-media.com",
                     "role": "Developer"
                 }
@@ -1461,7 +1461,7 @@
             ],
             "authors": [
                 {
-                    "name": "Túbal Martín",
+                    "name": "Tubal Martin",
                     "homepage": "http://tubalmartin.me/"
                 }
             ],
@@ -2825,7 +2825,7 @@
             "license": [
                 "BSD-3-Clause"
             ],
-            "description": "a component that aids in manipulating and validating » Uniform Resource Identifiers (URIs)",
+            "description": "a component that aids in manipulating and validating � Uniform Resource Identifiers (URIs)",
             "homepage": "https://github.com/zendframework/zend-uri",
             "keywords": [
                 "uri",
@@ -3074,7 +3074,7 @@
             ],
             "authors": [
                 {
-                    "name": "Dariusz Rumiński",
+                    "name": "Dariusz Ruminski",
                     "email": "dariusz.ruminski@gmail.com"
                 },
                 {
@@ -3240,7 +3240,7 @@
                     "role": "Contributors"
                 },
                 {
-                    "name": "Marc Würth",
+                    "name": "Marc Wurth",
                     "email": "ravage@bluewin.ch",
                     "homepage": "https://github.com/ravage84",
                     "role": "Project Maintainer"
