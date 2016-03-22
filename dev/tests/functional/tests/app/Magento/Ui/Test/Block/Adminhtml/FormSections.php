@@ -45,6 +45,13 @@ class FormSections extends AbstractFormContainers
     protected $opened = '._show';
 
     /**
+     * Locator for error messages.
+     *
+     * @var string
+     */
+    protected $errorMessages = '[data-ui-id="messages-message-error"]';
+
+    /**
      * Get Section class.
      *
      * @param string $sectionName
@@ -132,6 +139,38 @@ class FormSections extends AbstractFormContainers
         if (!empty($errors)) {
             $data['attributes'] = $errors;
         }
+
+        return $data;
+    }
+
+
+    /**
+     * Get unique notice attributes.
+     *
+     * @return array
+     */
+    public function getUniqueNoticeAttributes()
+    {
+        $data = [];
+        $errorMessage = $this->browser->find($this->errorMessages)->getText();
+        $error = $this->getError($errorMessage);
+        if (!empty($error)) {
+            $data['attributes'] = $error;
+        }
+        return $data;
+    }
+
+    /**
+     * Get error.
+     *
+     * @param string $errorMessage
+     * @return array
+     */
+    private function getError($errorMessage)
+    {
+        $data = [];
+        $label = preg_match('/\"(.*?)\"/', $errorMessage, $matches) ? $matches[1] : '';
+        $data[$label] = $errorMessage;
 
         return $data;
     }
