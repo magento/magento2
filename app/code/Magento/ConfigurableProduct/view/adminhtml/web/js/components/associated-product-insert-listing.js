@@ -58,7 +58,9 @@ define([
          * @returns {Array}
          */
         getUsedProductIds: function () {
-            return this.source.get(this.dataScopeAssociatedProduct);
+            var usedProductsIds = this.source.get(this.dataScopeAssociatedProduct);
+
+            return usedProductsIds.slice()
         },
 
         /**
@@ -141,12 +143,13 @@ define([
                 attrCodes,
                 usedProductIds,
                 attributes;
+                params = _.omit(params);
 
             if (!this.paramsUpdated) {
                 this.gridInitialized = true;
                 this.paramsUpdated = true;
 
-                attrCodes = this._getAttributesCodes(),
+                attrCodes = this._getAttributesCodes();
                 usedProductIds = this.getUsedProductIds();
 
                 if (this.currentProductId) {
