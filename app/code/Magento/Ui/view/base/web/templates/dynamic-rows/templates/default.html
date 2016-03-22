@@ -18,9 +18,9 @@
 
                     <!-- ko foreach: {data: labels, as: 'item'}  -->
                     <th text="item.label"
-                        css="$parent.setClasses(item)"
+                        css="item.columnsHeaderClasses"
                         visible="item.visible"
-                        disabled="item.disabled"
+                        disable="item.disabled"
                         attr="{'data-name': name}"/>
                     <!-- /ko -->
                 </tr>
