@@ -56,6 +56,18 @@ class ComponentRegistrar implements ComponentRegistrarInterface
     }
 
     /**
+     * Returns if a component is already registered with the system
+     *
+     * @param $type
+     * @param $componentName
+     * @return bool
+     */
+    public static function checkRegisteredComponent($type, $componentName)
+    {
+        return isset(self::$paths[$type][$componentName]);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getPaths($type)
