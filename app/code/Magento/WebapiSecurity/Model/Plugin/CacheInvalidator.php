@@ -23,10 +23,12 @@ class CacheInvalidator
     }
 
     /**
+     * Invalidate WebApi cache if needed.
+     * 
      * @param \Magento\Framework\App\Config\Value $subject
      * @param \Magento\Framework\App\Config\Value $result
-     *
      * @return \Magento\Framework\App\Config\Value
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterAfterSave(
         \Magento\Framework\App\Config\Value $subject,
