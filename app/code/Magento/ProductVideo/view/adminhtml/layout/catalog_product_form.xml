@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -18,6 +18,9 @@
                     <item name="componentType" xsi:type="string">fieldset</item>
                 </argument>
             </arguments>
+            <block class="Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery\Content" as="content">
+                <block class="Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo" name="new-video" template="Magento_ProductVideo::product/edit/slideout/form.phtml"/>
+            </block>
         </block>
     </referenceContainer>
 </layout>

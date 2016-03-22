@@ -1,10 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Security\Test\Unit\Model\ResourceModel\AdminSessionInfo;
+
+use Magento\Security\Model\ConfigInterface;
 
 /**
  * Test class for \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection testing
@@ -13,9 +15,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection */
     protected $collectionMock;
-
-    /** @var \Magento\Security\Helper\SecurityConfig */
-    protected $securityConfigMock;
 
     /** @var \Magento\Framework\Stdlib\DateTime */
     protected $dateTimeMock;
@@ -29,14 +28,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->securityConfigMock = $this->getMock(
-            '\Magento\Security\Helper\SecurityConfig',
-            ['getCurrentTimestamp'],
-            [],
-            '',
-            false
-        );
-
         $this->dateTimeMock = $this->getMock(
             '\Magento\Framework\Stdlib\DateTime',
             [],
@@ -101,7 +92,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             '\Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection',
             ['addFieldToFilter'],
             [$entityFactory, $logger, $fetchStrategy, $eventManager,
-                $this->securityConfigMock, $this->dateTimeMock,
+                $this->dateTimeMock,
                 $connection, $this->resourceMock],
             '',
             true
@@ -110,7 +101,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->collectionMock->expects($this->any())
             ->method('getResource')
             ->willReturn($this->resourceMock);
-
     }
 
     /**
@@ -145,8 +135,8 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $sessionLifeTime = '600';
         $timestamp = time();
 
-        $this->securityConfigMock->expects($this->once())
-            ->method('getCurrentTimestamp')
+        $this->dateTimeMock->expects($this->once())
+            ->method('gmDate')
             ->willReturn($timestamp);
 
         $this->collectionMock->expects($this->once())
