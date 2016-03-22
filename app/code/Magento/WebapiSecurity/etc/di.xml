@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Webapi\Model\Config\Converter">
+        <plugin name="webapiResourceSecurity" type="Magento\WebapiSecurity\Model\Plugin\AnonymousResourceSecurity" />
+    </type>
+    <type name="\Magento\Framework\App\Config\Value">
+        <plugin name="webapiResourceSecurityCacheInvalidate" type="Magento\WebapiSecurity\Model\Plugin\CacheInvalidator" />
+    </type>
+
+    <type name="Magento\WebapiSecurity\Model\Plugin\AnonymousResourceSecurity">
+        <arguments>
+            <argument name="resources" xsi:type="array">
+                <item name="/V1/products" xsi:type="string">GET</item>
+                <item name="/V1/products/:sku" xsi:type="string">GET</item>
+                <item name="/V1/products/attributes/:attributeCode" xsi:type="string">GET</item>
+                <item name="/V1/products/types" xsi:type="string">GET</item>
+                <item name="/V1/products/attribute-sets/sets/list" xsi:type="string">GET</item>
+                <item name="/V1/products/attribute-sets/:attributeSetId" xsi:type="string">GET</item>
+                <item name="/V1/products/attribute-sets/:attributeSetId/attributes" xsi:type="string">GET</item>
+                <item name="/V1/products/attribute-sets/groups/list" xsi:type="string">GET</item>
+                <item name="/V1/products/attributes/:attributeCode/options" xsi:type="string">GET</item>
+                <item name="/V1/products/media/types/:attributeSetName" xsi:type="string">GET</item>
+                <item name="/V1/products/:sku/media/:entryId" xsi:type="string">GET</item>
+                <item name="/V1/products/:sku/media" xsi:type="string">GET</item>
+                <item name="/V1/products/:sku/group-prices/:customerGroupId/tiers" xsi:type="string">GET</item>
+                <item name="/V1/categories/:categoryId" xsi:type="string">GET</item>
+                <item name="/V1/categories" xsi:type="string">GET</item>
+                <item name="/V1/products/:sku/options" xsi:type="string">GET</item>
+                <item name="/V1/products/:sku/options/:optionId" xsi:type="string">GET</item>
+                <item name="/V1/products/links/types" xsi:type="string">GET</item>
+                <item name="/V1/products/links/:type/attributes" xsi:type="string">GET</item>
+                <item name="/V1/products/:sku/links/:type" xsi:type="string">GET</item>
+                <item name="/V1/categories/:categoryId/products" xsi:type="string">GET</item>
+                <item name="/V1/stockStatuses/:productSku" xsi:type="string">GET</item>
+                <item name="/V1/configurable-products/:sku/children" xsi:type="string">GET</item>
+                <item name="/V1/configurable-products/:sku/options/:id" xsi:type="string">GET</item>
+                <item name="/V1/configurable-products/:sku/options/all" xsi:type="string">GET</item>
+                <item name="/V1/cmsPage/:pageId" xsi:type="string">GET</item>
+                <item name="/V1/cmsBlock/:blockId" xsi:type="string">GET</item>
+                <item name="/V1/store/storeViews" xsi:type="string">GET</item>
+                <item name="/V1/store/storeGroups" xsi:type="string">GET</item>
+                <item name="/V1/store/websites" xsi:type="string">GET</item>
+                <item name="/V1/store/storeConfigs" xsi:type="string">GET</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
