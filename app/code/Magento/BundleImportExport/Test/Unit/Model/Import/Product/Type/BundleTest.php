@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -253,6 +253,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                         'sku' => '1',
                         'price' => '10',
                         'price_type' => 'fixed',
+                        'shipment_type' => '1',
                         'default_qty' => '1',
                         'is_defaul' => '1',
                         'position' => '1',
@@ -274,6 +275,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                         'sku' => '222',
                         'price' => '10',
                         'price_type' => 'percent',
+                        'shipment_type' => 0,
                         'default_qty' => '2',
                         'is_defaul' => '1',
                         'position' => '6',
@@ -323,6 +325,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
                          . 'sku=1,'
                          . 'price=10,'
                          . 'price_type=fixed,'
+                         . 'shipment_type=separately,'
                          . 'default_qty=1,'
                          . 'is_defaul=1,'
                          . 'position=1,'
@@ -403,6 +406,7 @@ class BundleTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractIm
         $this->entityModel->expects($this->any())->method('getRowScope')->will($this->returnValue(-1));
         $rowData = [
             'bundle_price_type' => 'dynamic',
+            'bundle_shipment_type' => 'separately',
             'bundle_price_view' => 'bundle_price_view'
         ];
         $this->assertEquals($this->bundle->isRowValid($rowData, 0), true);

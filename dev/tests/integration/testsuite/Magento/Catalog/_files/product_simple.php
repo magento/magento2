@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,11 +8,6 @@
 
 /** @var \Magento\TestFramework\ObjectManager $objectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
-/** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-$storeManager = $objectManager->get('Magento\Store\Model\StoreManagerInterface');
-$store = $storeManager->getStore(\Magento\Store\Model\Store::ADMIN_CODE);
-$storeManager->setCurrentStore($store->getCode());
 
 /** @var \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement */
 $categoryLinkManagement = $objectManager->create('Magento\Catalog\Api\CategoryLinkManagementInterface');
