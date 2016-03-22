@@ -34,7 +34,7 @@ class Converter
         $basicData = $entity->getProductLinks();
         $associatedProducts = $entity->getTypeInstance()->getAssociatedProducts($entity);
         $associatedProducts = $this->indexBySku($associatedProducts);
-
+        $linksAsArray = [];
         /** @var \Magento\Catalog\Api\Data\ProductLinkInterface $link */
         foreach ($basicData as $link) {
             $info = $link->getData();
