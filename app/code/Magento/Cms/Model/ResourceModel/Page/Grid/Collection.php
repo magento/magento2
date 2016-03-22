@@ -23,7 +23,7 @@ class Collection extends PageCollection implements SearchResultInterface
     /**
      * @var \Magento\Framework\View\Element\UiComponent\DataProvider\Document[]
      */
-    private $loadedData;
+    private $loadedData = [];
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
@@ -151,7 +151,7 @@ class Collection extends PageCollection implements SearchResultInterface
      */
     public function getItems()
     {
-        if (isset($this->loadedData)) {
+        if ($this->loadedData) {
             return $this->loadedData;
         }
         /** @var \Magento\Cms\Model\Page $page */
