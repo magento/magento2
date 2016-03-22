@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -81,15 +81,6 @@ class CustomOptionsTest extends AbstractModifierTest
         ]);
     }
 
-    public function testModifyDataForGroupedProduct()
-    {
-        $this->productMock->expects($this->once())
-            ->method('getTypeId')
-            ->willReturn('grouped');
-
-        $this->assertSame($this->getSampleData(), $this->getModel()->modifyData($this->getSampleData()));
-    }
-
     public function testModifyData()
     {
         $productId = 111;
@@ -140,19 +131,6 @@ class CustomOptionsTest extends AbstractModifierTest
             ->willReturn($options);
 
         $this->assertSame($resultData, $this->getModel()->modifyData($originalData));
-    }
-
-    public function testModifyMetaForGroupedProduct()
-    {
-        $meta = [
-            'sample' => 'meta'
-        ];
-
-        $this->productMock->expects($this->once())
-            ->method('getTypeId')
-            ->willReturn('grouped');
-
-        $this->assertEquals($meta, $this->getModel()->modifyMeta($meta));
     }
 
     public function testModifyMeta()
