@@ -9,6 +9,9 @@ use Magento\Webapi\Model\Config\Converter;
 
 class AnonymousResourceSecurity
 {
+    /**
+     * Config path
+     */
     const XML_ALLOW_INSECURE = 'webapi/webapisecurity/allow_insecure';
 
     /**
@@ -34,9 +37,12 @@ class AnonymousResourceSecurity
     }
 
     /**
+     * Filter config values.
+     *
      * @param Converter $subject
      * @param array $nodes
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterConvert(Converter $subject, $nodes)
     {
@@ -68,6 +74,8 @@ class AnonymousResourceSecurity
     }
 
     /**
+     * Get node by path.
+     *
      * @param string $route
      * @param string $requestType
      * @param array $source
