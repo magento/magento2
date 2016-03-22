@@ -153,7 +153,7 @@ class Filesystem
     protected function deployStaticContent(
         OutputInterface $output
     ) {
-        $output->writeln('Starting static content deployment');
+        $output->writeln('Starting deployment of static content');
         $cmd = $this->functionCallPath . 'setup:static-content:deploy '
             . implode(' ', $this->getUsedLocales());
 
@@ -167,7 +167,7 @@ class Filesystem
             throw $e;
         }
         $output->writeln($execOutput);
-        $output->writeln('Static content deployment complete');
+        $output->writeln('Deployment of static content complete');
     }
 
     /**
@@ -181,7 +181,7 @@ class Filesystem
         foreach ($this->getUserCollection() as $user) {
             $locales[] = $user->getInterfaceLocale();
         }
-        return array_unique($locales);
+        return $locales;
     }
 
     /**
@@ -191,10 +191,11 @@ class Filesystem
      */
     private function getUsedLocales()
     {
-        return array_merge(
+        $usedLocales = array_merge(
             $this->storeView->retrieveLocales(),
             $this->getAdminUserInterfaceLocales()
         );
+        return array_unique($usedLocales);
     }
 
     /**
