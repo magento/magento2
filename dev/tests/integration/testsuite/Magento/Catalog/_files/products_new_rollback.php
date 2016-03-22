@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,7 +16,7 @@ $registry->register('isSecureArea', true);
 $productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
 
 try {
-    $firstProduct = $productRepository->get('simple');
+    $firstProduct = $productRepository->get('simple', false, null, true);
     $productRepository->delete($firstProduct);
 } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
     //Product already removed

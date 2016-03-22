@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -446,7 +446,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->setMethods(['getData', 'hasData', 'setData', 'getIdentities', 'getId'])
+            ->setMethods(['getData', 'hasData', 'setData', 'getIdentities', 'getId', 'getStoreId'])
             ->disableOriginalConstructor()
             ->getMock();
         $product->expects($this->once())->method('hasData')->with($configurableAttributes)->willReturn(false);

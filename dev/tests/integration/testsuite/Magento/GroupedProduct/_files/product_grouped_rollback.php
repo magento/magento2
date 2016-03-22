@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -18,7 +18,7 @@ $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 try {
     /** @var $simpleProduct \Magento\Catalog\Model\Product */
-    $simpleProduct = $productRepository->get('simple-1');
+    $simpleProduct = $productRepository->get('simple-1', false, null, true);
     $simpleProduct->delete();
 } catch (NoSuchEntityException $e) {
     //already deleted
@@ -35,7 +35,7 @@ if ($virtualProduct->getId()) {
 
 try {
     /** @var $groupedProduct \Magento\Catalog\Model\Product */
-    $groupedProduct = $productRepository->get('grouped-product');
+    $groupedProduct = $productRepository->get('grouped-product', false, null, true);
     $groupedProduct->delete();
 } catch (NoSuchEntityException $e) {
     //already deleted
