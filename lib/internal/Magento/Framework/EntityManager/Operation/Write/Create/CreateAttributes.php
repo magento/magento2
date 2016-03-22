@@ -41,12 +41,13 @@ class CreateAttributes
     /**
      * @param string $entityType
      * @param object $entity
+     * @param array $arguments
      * @return object
      */
-    public function execute($entityType, $entity, $data = [])
+    public function execute($entityType, $entity, $arguments = [])
     {
         $hydrator = $this->hydratorPool->getHydrator($entityType);
-        $entityData = array_merge($hydrator->extract($entity), $data);
+        $entityData = array_merge($hydrator->extract($entity), $arguments);
         $actions = $this->attributePool->getActions($entityType, 'create');
         foreach ($actions as $action) {
             $action->execute($entityType, $entityData);

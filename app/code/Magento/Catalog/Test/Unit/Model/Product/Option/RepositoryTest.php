@@ -65,7 +65,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $metadataPool = $this->getMockBuilder('Magento\Framework\EntityManager\MetadataPool')
             ->disableOriginalConstructor()
             ->getMock();
-        $metadata = $this->getMockBuilder('Magento\Framework\Model\Entity\EntityMetadata')
+        $metadata = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
             ->disableOriginalConstructor()
             ->getMock();
         $metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);

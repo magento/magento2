@@ -129,7 +129,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
                 'catalog_product_entity'
             );
         $this->metadataPoolMock = $this->getMock('Magento\Framework\EntityManager\MetadataPool', [], [], '', false);
-        $metadata = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $metadata = $this->getMock('Magento\Framework\EntityManager\EntityMetadata', [], [], '', false);
         $metadata->expects($this->any())->method('getLinkField')->willReturn('id');
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($metadata);
         $this->selectMock->expects($this->exactly(2))->method('join');

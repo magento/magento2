@@ -110,7 +110,7 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $metadata = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $metadata = $this->getMock('Magento\Framework\EntityManager\EntityMetadata', [], [], '', false);
         $metadata->expects($this->any())->method('getLinkField')->willReturn('id');
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($metadata);
         $this->service = new \Magento\Downloadable\Model\LinkRepository(

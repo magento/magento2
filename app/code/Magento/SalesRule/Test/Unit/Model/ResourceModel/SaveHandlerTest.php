@@ -66,7 +66,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             'rule_id' => 1
         ];
 
-        $className = '\Magento\Framework\Model\Entity\EntityMetadata';
+        $className = '\Magento\Framework\EntityManager\EntityMetadata';
         $metadata = $this->getMock($className, [], [], '', false);
 
         $metadata->expects($this->once())
@@ -95,7 +95,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
 
 
-        $className = '\Magento\Framework\Model\Entity\EntityMetadata';
+        $className = '\Magento\Framework\EntityManager\EntityMetadata';
         $metadata = $this->getMock($className, [], [], '', false);
 
         $metadata->expects($this->once())
@@ -125,7 +125,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             'customer_group_ids' => $customers
         ];
 
-        $className = '\Magento\Framework\Model\Entity\EntityMetadata';
+        $className = '\Magento\Framework\EntityManager\EntityMetadata';
         $metadata = $this->getMock($className, [], [], '', false);
 
         $metadata->expects($this->once())

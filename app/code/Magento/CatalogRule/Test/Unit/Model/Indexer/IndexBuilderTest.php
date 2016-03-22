@@ -143,7 +143,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         );
         $this->select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
         $this->metadataPool = $this->getMock('Magento\Framework\EntityManager\MetadataPool', [], [], '', false);
-        $metadata = $this->getMockBuilder('Magento\Framework\Model\Entity\EntityMetadata')
+        $metadata = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
             ->disableOriginalConstructor()
             ->getMock();
         $this->metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);

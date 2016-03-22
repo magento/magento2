@@ -992,7 +992,7 @@ class AdvancedPricingTest extends \Magento\ImportExport\Test\Unit\Model\Import\A
             false
         );
         $metadataMock = $this->getMock(
-            \Magento\Framework\Model\Entity\EntityMetadata::class,
+            \Magento\Framework\EntityManager\EntityMetadata::class,
             [],
             [],
             '',

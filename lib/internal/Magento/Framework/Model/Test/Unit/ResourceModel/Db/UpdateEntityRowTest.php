@@ -50,7 +50,7 @@ class UpdateEntityRowTest extends \PHPUnit_Framework_TestCase
         $output['test_column_name'] = 'test_column_name';
         $expectedResult = true;
 
-        $entityMetadataMock = $this->getMockBuilder('Magento\Framework\Model\Entity\EntityMetadata')
+        $entityMetadataMock = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
             ->disableOriginalConstructor()
             ->getMock();
         $connectionMock = $this->getMockBuilder('Magento\Framework\DB\Adapter\AdapterInterface')

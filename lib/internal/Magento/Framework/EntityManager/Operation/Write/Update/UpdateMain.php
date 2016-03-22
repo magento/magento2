@@ -41,14 +41,15 @@ class UpdateMain
     /**
      * @param string $entityType
      * @param object $entity
+     * @param array $arguments
      * @return object
      */
-    public function execute($entityType, $entity, $data = [])
+    public function execute($entityType, $entity, $arguments = [])
     {
         $hydrator = $this->hydratorPool->getHydrator($entityType);
         $entityData = $this->updateRow->execute(
             $entityType,
-            array_merge($hydrator->extract($entity), $data)
+            array_merge($hydrator->extract($entity), $arguments)
         );
         $entity = $hydrator->hydrate($entity, $entityData);
         return $entity;

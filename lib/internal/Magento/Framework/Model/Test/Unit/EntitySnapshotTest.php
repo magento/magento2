@@ -7,7 +7,7 @@
 namespace Magento\Framework\Model\Test\Unit;
 
 use Magento\Framework\Model\Entity\EntityHydrator;
-use Magento\Framework\Model\Entity\EntityMetadata;
+use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\EntitySnapshot;
 use Magento\Framework\Model\EntitySnapshot\AttributeProvider;

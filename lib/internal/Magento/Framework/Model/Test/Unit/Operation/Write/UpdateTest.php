@@ -10,7 +10,7 @@ use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Model\Entity\Action\UpdateMain;
 use Magento\Framework\Model\Entity\Action\UpdateExtension;
 use Magento\Framework\Model\Entity\Action\UpdateRelation;
-use Magento\Framework\Model\Entity\EntityMetadata;
+use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\Model\Operation\Write\Update;
 
 class UpdateTest extends \PHPUnit_Framework_TestCase

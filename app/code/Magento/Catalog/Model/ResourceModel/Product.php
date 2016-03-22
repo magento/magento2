@@ -98,7 +98,7 @@ class Product extends AbstractResource
         \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory,
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
-        \Magento\Framework\Model\EntityManager $entityManager,
+        \Magento\Framework\EntityManager\EntityManager $entityManager,
         $data = []
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
@@ -302,7 +302,7 @@ class Product extends AbstractResource
      */
     public function delete($object)
     {
-        $this->entityManager->delete(\Magento\Catalog\Api\Data\ProductInterface::class, $object);
+        $this->entityManager->delete($object, \Magento\Catalog\Api\Data\ProductInterface::class);
         $this->eventManager->dispatch(
             'catalog_product_delete_after_done',
             ['product' => $object]
@@ -654,7 +654,9 @@ class Product extends AbstractResource
     public function load($object, $entityId, $attributes = [])
     {
         $this->loadAttributesMetadata($attributes);
-        $this->entityManager->load(\Magento\Catalog\Api\Data\ProductInterface::class, $object, $entityId);
+        $this->entityManager->load(
+            $object, $entityId, \Magento\Catalog\Api\Data\ProductInterface::class
+        );
         return $this;
     }
 
@@ -694,7 +696,7 @@ class Product extends AbstractResource
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
-        $this->entityManager->save(ProductInterface::class, $object);
+        $this->entityManager->save($object, ProductInterface::class);
         return $this;
     }
 }

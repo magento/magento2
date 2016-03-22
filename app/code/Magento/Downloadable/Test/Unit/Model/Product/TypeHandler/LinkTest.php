@@ -51,7 +51,7 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->metadataPoolMock = $this->getMockBuilder('Magento\Framework\EntityManager\MetadataPool')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadataMock = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
+        $this->metadataMock = $this->getMock('Magento\Framework\EntityManager\EntityMetadata', [], [], '', false);
         $this->metadataMock->expects($this->any())->method('getLinkField')->willReturn('id');
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($this->metadataMock);
         $this->target = $objectManagerHelper->getObject(

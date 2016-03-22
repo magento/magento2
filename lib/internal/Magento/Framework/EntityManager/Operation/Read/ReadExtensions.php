@@ -32,13 +32,14 @@ class ReadExtensions
     /**
      * @param string $entityType
      * @param object $entity
+     * @param array $arguments
      * @return object
      */
-    public function execute($entityType, $entity)
+    public function execute($entityType, $entity, $arguments = [])
     {
         $actions = $this->extensionPool->getActions($entityType, 'read');
         foreach ($actions as $action) {
-            $entity = $action->execute($entityType, $entity);
+            $entity = $action->execute($entityType, $entity, $arguments);
         }
         return $entity;
     }

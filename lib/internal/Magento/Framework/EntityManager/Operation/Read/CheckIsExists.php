@@ -50,10 +50,11 @@ class CheckIsExists
     /**
      * @param string $entityType
      * @param object $entity
+     * @param array $arguments
      * @return bool
      * @throws \Exception
      */
-    public function execute($entityType, $entity)
+    public function execute($entityType, $entity, $arguments = [])
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
         $hydrator = $this->hydratorPool->getHydrator($entityType);
