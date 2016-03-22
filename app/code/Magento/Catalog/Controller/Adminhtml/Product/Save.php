@@ -8,6 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 {
@@ -37,6 +38,13 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $productRepository;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * Save constructor.
+     *
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param Initialization\Helper $initializationHelper
@@ -44,6 +52,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager
      * @param \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -52,13 +61,15 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         \Magento\Catalog\Model\Product\Copier $productCopier,
         \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager,
         \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        StoreManagerInterface $storeManager
     ) {
         $this->initializationHelper = $initializationHelper;
         $this->productCopier = $productCopier;
         $this->productTypeManager = $productTypeManager;
         $this->categoryLinkManagement = $categoryLinkManagement;
         $this->productRepository = $productRepository;
+        $this->storeManager = $storeManager;
         parent::__construct($context, $productBuilder);
     }
 
@@ -71,7 +82,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     public function execute()
     {
-        $storeId = $this->getRequest()->getParam('store');
+        $storeId = $this->getRequest()->getParam('store', 0);
+        $store = $this->storeManager->getStore($storeId);
+        $this->storeManager->setCurrentStore($store->getCode());
         $redirectBack = $this->getRequest()->getParam('back', false);
         $productId = $this->getRequest()->getParam('id');
         $resultRedirect = $this->resultRedirectFactory->create();
