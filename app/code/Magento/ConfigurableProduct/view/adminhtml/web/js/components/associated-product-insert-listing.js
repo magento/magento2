@@ -24,7 +24,8 @@ define([
                 productsProvider: '${ $.productsProvider }',
                 productsColumns: '${ $.productsColumns }',
                 productsMassAction: '${ $.productsMassAction }',
-                modalWithGrid: '${ $.modalWithGrid }'
+                modalWithGrid: '${ $.modalWithGrid }',
+                productsFilters: '${ $.productsFilters }'
             },
             exports: {
                 externalProviderParams: '${ $.externalProvider }:params'
@@ -74,6 +75,7 @@ define([
 
             if (this.gridInitialized) {
                 this.paramsUpdated = false;
+                this.productsFilters().clear();
                 this._setFilters(this.externalProviderParams);
                 this._setVisibilityMassActionColumn();
             }
@@ -176,6 +178,8 @@ define([
                     }));
 
                     params.filters = attributes;
+                } else {
+                    params.filters = {};
                 }
 
                 params['attributes_codes'] = attrCodes;
