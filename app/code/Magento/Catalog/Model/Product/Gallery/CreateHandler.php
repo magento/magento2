@@ -7,12 +7,13 @@ namespace Magento\Catalog\Model\Product\Gallery;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\MediaStorage\Model\File\Uploader as FileUploader;
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Create handler for catalog product gallery.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreateHandler
+class CreateHandler implements ExtensionInterface
 {
     /**
      * @var \Magento\Framework\EntityManager\EntityMetadata
@@ -85,13 +86,14 @@ class CreateHandler
 
     /**
      * @param string $entityType
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @param object $product
+     * @param array $arguments
+     * @return object
+     * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function execute($entityType, $product)
+    public function execute($entityType, $product, $arguments = [])
     {
         $attrCode = $this->getAttribute()->getAttributeCode();
 

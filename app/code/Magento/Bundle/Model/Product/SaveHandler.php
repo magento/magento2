@@ -8,13 +8,13 @@ namespace Magento\Bundle\Model\Product;
 
 use Magento\Bundle\Api\ProductOptionRepositoryInterface as OptionRepository;
 use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\Model\ResourceModel\Db\ProcessEntityRelationInterface;
 use Magento\Bundle\Api\ProductLinkManagementInterface;
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class SaveHandler
  */
-class SaveHandler
+class SaveHandler implements ExtensionInterface
 {
     /**
      * @var MetadataPool
@@ -52,7 +52,7 @@ class SaveHandler
      * @return object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, $entity)
+    public function execute($entityType, $entity, $arguments = [])
     {
         $bundleProductOptions = $entity->getExtensionAttributes()->getBundleProductOptions();
         if ($entity->getTypeId() !== 'bundle' || empty($bundleProductOptions)) {

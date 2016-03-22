@@ -7,11 +7,12 @@
 namespace Magento\Downloadable\Model\Sample;
 
 use Magento\Downloadable\Api\SampleRepositoryInterface as SampleRepository;
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class ReadHandler
  */
-class ReadHandler
+class ReadHandler implements ExtensionInterface
 {
     /**
      * @var SampleRepository
@@ -32,7 +33,14 @@ class ReadHandler
      * @return \Magento\Catalog\Api\Data\ProductInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, $entity)
+    /**
+     * @param string $entityType
+     * @param object $entity
+     * @param array $arguments
+     * @return \Magento\Catalog\Api\Data\ProductInterface|object
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function execute($entityType, $entity, $arguments = [])
     {
         /** @var $entity \Magento\Catalog\Api\Data\ProductInterface */
         if ($entity->getTypeId() != \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
