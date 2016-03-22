@@ -61,7 +61,7 @@ define([
         getUsedProductIds: function () {
             var usedProductsIds = this.source.get(this.dataScopeAssociatedProduct);
 
-            return usedProductsIds.slice()
+            return usedProductsIds.slice();
         },
 
         /**
@@ -145,7 +145,8 @@ define([
                 attrCodes,
                 usedProductIds,
                 attributes;
-                params = _.omit(params);
+
+            params = _.omit(params);
 
             if (!this.paramsUpdated) {
                 this.gridInitialized = true;
