@@ -2268,7 +2268,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
             }
         }
-        if ($this->getAppState()->getAreaCode() === \Magento\Framework\App\Area::AREA_FRONTEND) {
+        if ($this->getAppState()->getAreaCode() == \Magento\Framework\App\Area::AREA_FRONTEND) {
             $identities[] = self::CACHE_TAG;
         }
         return array_unique($identities);
