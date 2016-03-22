@@ -16,18 +16,18 @@ use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Tab\Options\Opti
 class Options extends SimpleElement
 {
     /**
-     * 'Add Value' button.
+     * 'Add Option' button.
      *
      * @var string
      */
-    protected $addValue = 'button[data-action="add_new_row"]';
+    protected $addOption = '#add_new_option_button';
 
     /**
      * Option form selector.
      *
      * @var string
      */
-    protected $option = '[data-index="attribute_options_select"] tr.data-row';
+    protected $option = '.ui-sortable tr';
 
     /**
      * Set value.
@@ -38,7 +38,7 @@ class Options extends SimpleElement
     {
         foreach ($preset as $option) {
             if (isset($option['admin'])) {
-                $this->find($this->addValue)->click();
+                $this->find($this->addOption)->click();
                 $this->getFormInstance()->fillOptions($option);
             }
         }
