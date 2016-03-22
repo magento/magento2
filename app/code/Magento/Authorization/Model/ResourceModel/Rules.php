@@ -103,6 +103,8 @@ class Rules extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
                     $connection->insert($this->getMainTable(), $insertData);
                 } else {
+                    /** Give basic admin permissions to any admin */
+                    $postedResources[] = \Magento\Backend\App\AbstractAction::ADMIN_RESOURCE;
                     $acl = $this->_aclBuilder->getAcl();
                     /** @var $resource \Magento\Framework\Acl\AclResource */
                     foreach ($acl->getResources() as $resourceId) {
