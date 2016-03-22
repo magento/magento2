@@ -58,8 +58,8 @@ class ComponentRegistrar implements ComponentRegistrarInterface
     /**
      * Returns if a component is already registered with the system
      *
-     * @param $type
-     * @param $componentName
+     * @param string $type component type
+     * @param string $componentName Fully-qualified component name
      * @return bool
      */
     public static function checkRegisteredComponent($type, $componentName)
