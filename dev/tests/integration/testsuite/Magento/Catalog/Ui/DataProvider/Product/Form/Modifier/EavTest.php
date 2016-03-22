@@ -16,6 +16,7 @@ class EavTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
+
     /**
      * @var \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav
      */
