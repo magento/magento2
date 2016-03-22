@@ -50,7 +50,9 @@ class InvalidateVarnishObserver implements ObserverInterface
                 foreach ($object->getIdentities() as $tag) {
                     $tags[] = sprintf($pattern, $tag);
                 }
-                $this->purgeCache->sendPurgeRequest(implode('|', array_unique($tags)));
+                if (!empty($tags)) {
+                    $this->purgeCache->sendPurgeRequest(implode('|', array_unique($tags)));
+                }
             }
         }
     }
