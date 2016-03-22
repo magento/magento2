@@ -570,7 +570,7 @@
                     <item name="eavEntityType" xsi:type="string">catalog_product</item>
                     <item name="identifierField" xsi:type="string">entity_id</item>
                     <item name="entityContext" xsi:type="array">
-                        <item name="store_id" xsi:type="string">store_id</item>
+                        <item name="store" xsi:type="string">Magento\Store\Model\StoreScopeProvider</item>
                     </item>
                 </item>
                 <item name="Magento\Catalog\Api\Data\CategoryInterface" xsi:type="array">
@@ -578,7 +578,7 @@
                     <item name="eavEntityType" xsi:type="string">catalog_category</item>
                     <item name="identifierField" xsi:type="string">entity_id</item>
                     <item name="entityContext" xsi:type="array">
-                        <item name="store_id" xsi:type="string">store_id</item>
+                        <item name="store" xsi:type="string">Magento\Store\Model\StoreScopeProvider</item>
                     </item>
                 </item>
             </argument>
