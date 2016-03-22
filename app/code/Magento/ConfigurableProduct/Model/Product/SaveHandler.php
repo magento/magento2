@@ -98,7 +98,11 @@ class SaveHandler
             $data = $attribute->getData();
             $attribute->loadByProductAndAttribute($product, $eavAttribute);
             $attribute->setData(array_replace_recursive($attribute->getData(), $data));
-            $attribute->setId(null);
+
+            if ($attribute->getId()) {
+                $this->optionRepository->deleteById($product->getSku(), $attribute->getId());
+                $attribute->setId(null);
+            }
 
             $ids[] = $this->optionRepository->save($product->getSku(), $attribute);
         }
