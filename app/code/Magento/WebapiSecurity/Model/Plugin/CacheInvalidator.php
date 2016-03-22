@@ -22,12 +22,19 @@ class CacheInvalidator
         $this->cacheTypeList = $cacheTypeList;
     }
 
+    /**
+     * @param \Magento\Framework\App\Config\Value $subject
+     * @param \Magento\Framework\App\Config\Value $result
+     *
+     * @return \Magento\Framework\App\Config\Value
+     */
     public function afterAfterSave(
         \Magento\Framework\App\Config\Value $subject,
-        $result
-    )
-    {
-        if ($result->getPath() == "system/webapisecurity/allow_insecure" && $result->isValueChanged()) {
+        \Magento\Framework\App\Config\Value $result
+    ) {
+        if ($result->getPath() == \Magento\WebapiSecurity\Model\Plugin\AnonymousResourceSecurity::XML_ALLOW_INSECURE
+            && $result->isValueChanged()
+        ) {
             $this->cacheTypeList->invalidate(\Magento\Webapi\Model\Cache\Type\Webapi::TYPE_IDENTIFIER);
         }
 
