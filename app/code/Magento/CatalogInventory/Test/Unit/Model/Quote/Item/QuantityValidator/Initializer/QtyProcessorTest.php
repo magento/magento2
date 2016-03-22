@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Model\Quote\Item\QuantityValidator\Initializer;
@@ -24,7 +24,7 @@ class QtyProcessorTest extends \PHPUnit_Framework_TestCase
      */
     protected $itemMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->quoteItemQtyList = $this->getMockBuilder(
             'Magento\CatalogInventory\Model\Quote\Item\QuantityValidator\QuoteItemQtyList'

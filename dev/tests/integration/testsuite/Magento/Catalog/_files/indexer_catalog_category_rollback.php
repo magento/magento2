@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@ $productRepository = $objectManager->create('Magento\Catalog\Api\ProductReposito
 
 foreach (['simple 01', 'simple 02', 'simple 03'] as $sku) {
     try {
-        $product = $productRepository->get($sku);
+        $product = $productRepository->get($sku, false, null, true);
         $productRepository->delete($product);
     } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
         //Product already removed
