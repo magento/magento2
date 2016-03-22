@@ -14,6 +14,7 @@ use Zend\Code\Reflection\ParameterReflection;
  * Type processor of config reader properties
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class TypeProcessor
 {
@@ -423,7 +424,7 @@ class TypeProcessor
      * Check if given type is valid to use as an argument type declaration
      *
      * @see http://php.net/manual/en/functions.arguments.php#functions.arguments.type-declaration
-     * @param $type
+     * @param string $type
      * @return bool
      */
     public function isValidTypeDeclaration($type)
