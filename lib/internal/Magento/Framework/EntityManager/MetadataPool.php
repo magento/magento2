@@ -25,7 +25,7 @@ class MetadataPool
     protected $metadata;
 
     /**
-     * @var \Magento\Framework\Model\Entity\EntityMetadata[]
+     * @var \Magento\Framework\EntityManager\EntityMetadata[]
      */
     protected $registry;
 

@@ -290,7 +290,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $metadataMock = $this->getMock(
-            'Magento\Framework\Model\Entity\EntityMetadata',
+            'Magento\Framework\EntityManager\EntityMetadata',
             [],
             [],
             '',
@@ -347,7 +347,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $metadataMock = $this->getMock(
-            'Magento\Framework\Model\Entity\EntityMetadata',
+            'Magento\Framework\EntityManager\EntityMetadata',
             [],
             [],
             '',
@@ -411,7 +411,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $metadataMock = $this->getMock(
-            'Magento\Framework\Model\Entity\EntityMetadata',
+            'Magento\Framework\EntityManager\EntityMetadata',
             [],
             [],
             '',

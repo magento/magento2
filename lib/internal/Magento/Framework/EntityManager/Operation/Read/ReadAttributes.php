@@ -41,15 +41,16 @@ class ReadAttributes
     /**
      * @param string $entityType
      * @param object $entity
+     * @param array $arguments
      * @return object
      */
-    public function execute($entityType, $entity)
+    public function execute($entityType, $entity, $arguments = [])
     {
         $hydrator = $this->hydratorPool->getHydrator($entityType);
         $entityData = $hydrator->extract($entity);
         $actions = $this->attributePool->getActions($entityType, 'read');
         foreach ($actions as $action) {
-            $entityData = array_merge($entityData, $action->execute($entityType, $entityData));
+            $entityData = array_merge($entityData, $action->execute($entityType, $entityData, $arguments));
         }
         $entity = $hydrator->hydrate($entity, $entityData);
         return $entity;

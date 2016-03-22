@@ -42,34 +42,37 @@ class EntityManager
     }
 
     /**
-     * @param string $entityType
      * @param object $entity
      * @param string $identifier
-     * @return object
-     * @throws \Exception
+     * @param string|null $entityType
+     * @param array $arguments
+     * @return mixed
      */
-    public function load($entityType, $entity, $identifier)
+    public function load($entity, $identifier, $entityType = null, $arguments = [])
     {
         $operation = $this->operationPool->getOperation($entityType, 'read');
-        $entity = $operation->execute($entityType, $entity, $identifier);
+        $entity = $operation->execute($entityType, $entity, $identifier, $arguments);
         return $entity;
     }
 
     /**
-     * @param string $entityType
      * @param object $entity
-     * @return bool|object
+     * @param string|null $entityType
+     * @param array $arguments
+     * @return object
      * @throws \Exception
      */
-    public function save($entityType, $entity)
+    public function save($entity, $entityType = null, $arguments = [])
     {
-        if ($this->has($entityType, $entity)) {
+
+        //@todo add EntityTypeResolver
+        if ($this->has($entity, $entityType, $arguments)) {
             $operation = $this->operationPool->getOperation($entityType, 'update');
         } else {
             $operation = $this->operationPool->getOperation($entityType, 'create');
         }
         try {
-        $entity = $operation->execute($entityType, $entity);
+        $entity = $operation->execute($entityType, $entity, $arguments);
             $this->callbackHandler->process($entityType);
         } catch (\Exception $e) {
             $this->callbackHandler->clear($entityType);
@@ -79,27 +82,28 @@ class EntityManager
     }
 
     /**
-     * @param string $entityType
      * @param object $entity
+     * @param string|null $entityType
+     * @param array $arguments
      * @return bool
      */
-    public function has($entityType, $entity)
+    public function has($entity, $entityType = null, $arguments = [])
     {
         $operation = $this->operationPool->getOperation($entityType, 'checkIsExists');
-        return $operation->execute($entityType, $entity);
+        return $operation->execute($entityType, $entity, $arguments);
     }
 
     /**
-     * @param string $entityType
      * @param object $entity
-     * @return bool|object
-     * @throws \Exception
+     * @param string|null $entityType
+     * @param array $arguments
+     * @return bool
      */
-    public function delete($entityType, $entity)
+    public function delete($entity, $entityType = null, $arguments = [])
     {
         $operation = $this->operationPool->getOperation($entityType, 'delete');
         try {
-            $result = $operation->execute($entityType, $entity);
+            $result = $operation->execute($entityType, $entity, $arguments);
             $this->callbackHandler->process($entityType);
         } catch (\Exception $e) {
             $this->callbackHandler->clear($entityType);

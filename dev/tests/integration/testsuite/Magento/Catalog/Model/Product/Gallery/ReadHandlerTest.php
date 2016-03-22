@@ -46,7 +46,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         /**
-         * @var $entityMetadata \Magento\Framework\Model\Entity\EntityMetadata
+         * @var $entityMetadata \Magento\Framework\EntityManager\EntityMetadata
          */
         $entityMetadata = $this->objectManager
             ->get(MetadataPool::class)

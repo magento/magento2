@@ -40,7 +40,7 @@ class DeleteEntityRowTest extends \PHPUnit_Framework_TestCase
         );
 
         $metadata = $this->getMock(
-            'Magento\Framework\Model\Entity\EntityMetadata',
+            'Magento\Framework\EntityManager\EntityMetadata',
             [],
             [],
             '',

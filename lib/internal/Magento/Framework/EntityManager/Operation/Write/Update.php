@@ -78,10 +78,11 @@ class Update
     /**
      * @param string $entityType
      * @param object $entity
+     * @param array $arguments
      * @return object
      * @throws \Exception
      */
-    public function execute($entityType, $entity)
+    public function execute($entityType, $entity, $arguments = [])
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
         $connection = $this->resourceConnection->getConnectionByName($metadata->getEntityConnectionName());
@@ -95,9 +96,9 @@ class Update
                 ]
             );
             $this->eventManager->dispatchEntityEvent($entityType, 'save_before', ['entity' => $entity]);
-            $entity = $this->updateMain->execute($entityType, $entity);
-            $entity = $this->updateAttributes->execute($entityType, $entity);
-            $entity = $this->updateExtensions->execute($entityType, $entity);
+            $entity = $this->updateMain->execute($entityType, $entity, $arguments);
+            $entity = $this->updateAttributes->execute($entityType, $entity, $arguments);
+            $entity = $this->updateExtensions->execute($entityType, $entity, $arguments);
             $this->eventManager->dispatchEntityEvent($entityType, 'save_after', ['entity' => $entity]);
             $this->eventManager->dispatch(
                 'entity_manager_save_after',

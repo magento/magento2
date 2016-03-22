@@ -69,7 +69,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         $customers = [1, 2];
         $websites = [3, 4, 5];
 
-        $className = '\Magento\Framework\Model\Entity\EntityMetadata';
+        $className = '\Magento\Framework\EntityManager\EntityMetadata';
         $metadata = $this->getMock($className, [], [], '', false);
 
         $metadata->expects($this->once())

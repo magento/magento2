@@ -92,7 +92,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->metadataMock = $this->getMock(
-            'Magento\Framework\Model\Entity\EntityMetadata',
+            'Magento\Framework\EntityManager\EntityMetadata',
             [],
             [],
             '',

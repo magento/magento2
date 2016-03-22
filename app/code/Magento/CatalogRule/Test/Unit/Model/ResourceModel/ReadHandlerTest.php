@@ -45,7 +45,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
         $websiteIds = [4, 5, 6];
 
         $metadataMock = $this->getMock(
-            '\Magento\Framework\Model\Entity\EntityMetadata',
+            '\Magento\Framework\EntityManager\EntityMetadata',
             ['getLinkField'],
             [],
             '',

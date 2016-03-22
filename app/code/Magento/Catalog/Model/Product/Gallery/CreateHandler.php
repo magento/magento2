@@ -15,7 +15,7 @@ use Magento\MediaStorage\Model\File\Uploader as FileUploader;
 class CreateHandler
 {
     /**
-     * @var \Magento\Framework\Model\Entity\EntityMetadata
+     * @var \Magento\Framework\EntityManager\EntityMetadata
      */
     protected $metadata;
 

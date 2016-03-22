@@ -79,34 +79,50 @@ class Read
      * @param string $entityType
      * @param object $entity
      * @param string $identifier
+     * @param array $arguments
      * @return object
      * @throws \Exception
      */
-    public function execute($entityType, $entity, $identifier)
+    public function execute($entityType, $entity, $identifier, $arguments = [])
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
-        $eventPrefix = strtolower(str_replace("\\", "_", $entityType));
         $hydrator = $this->hydratorPool->getHydrator($entityType);
-        $entity = $this->readMain->execute($entityType, $entity, $identifier);
         $this->eventManager->dispatch(
             'entity_manager_load_before',
             [
                 'entity_type' => $entityType,
-                'identifier' => $identifier
+                'identifier' => $identifier,
+                'arguments' => $arguments
             ]
         );
-        $this->eventManager->dispatchEntityEvent($entityType, 'load_before', ['identifier' => $identifier]);
+        $this->eventManager->dispatchEntityEvent(
+            $entityType,
+            'load_before',
+            [
+                'identifier' => $identifier,
+                'arguments' => $arguments
+            ]
+        );
+        $entity = $this->readMain->execute($entityType, $entity, $identifier, $arguments);
         $entityData = $hydrator->extract($entity);
         if (isset($entityData[$metadata->getLinkField()])) {
-            $entity = $this->readAttributes->execute($entityType, $entity);
-            $entity = $this->readExtensions->execute($entityType, $entity);
+            $entity = $this->readAttributes->execute($entityType, $entity, $arguments);
+            $entity = $this->readExtensions->execute($entityType, $entity, $arguments);
         }
-        $this->eventManager->dispatchEntityEvent($entityType, 'load_after', ['entity' => $entity]);
+        $this->eventManager->dispatchEntityEvent(
+            $entityType,
+            'load_after',
+            [
+                'entity' => $entity,
+                'arguments' => $arguments
+            ]
+        );
         $this->eventManager->dispatch(
             'entity_manager_load_after',
             [
                 'entity_type' => $entityType,
-                'entity' => $entity
+                'entity' => $entity,
+                'arguments' => $arguments
             ]
         );
 

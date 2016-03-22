@@ -108,7 +108,7 @@ class ReadHandler
     {
         $data = [];
         $metadata = $this->metadataPool->getMetadata($entityType);
-        if (!$metadata->getEavEntityType()) {
+        if (!$metadata->getEavEntityType()) {//todo hasCustomAttributes
             return $data;
         }
         $context = $this->scopeResolver->getEntityContext($entityType, $entityData);
@@ -131,6 +131,14 @@ class ReadHandler
                     ['value' => 't.value', 'attribute_id' => 't.attribute_id']
                 )
                 ->where($metadata->getLinkField() . ' = ?', $entityData[$metadata->getLinkField()]);
+            foreach ($context as $scope) {
+                //TODO: if (in table exists context field)
+                $select->where(
+                    $metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' IN (?)',
+                    $this->getContextVariables($scope)
+                )->order('t.' . $scope->getIdentifier() . ' DESC');
+            }
+//            array_intersect($arguments, $metadata->getS);
             foreach ($context as $scope) {
                 //TODO: if (in table exists context field)
                 $select->where(

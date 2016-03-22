@@ -61,7 +61,7 @@ class ReadEntityRowTest extends \PHPUnit_Framework_TestCase
             ->willReturnArgument(0);
 
         $metadata = $this->getMock(
-            'Magento\Framework\Model\Entity\EntityMetadata',
+            'Magento\Framework\EntityManager\EntityMetadata',
             [],
             [],
             '',

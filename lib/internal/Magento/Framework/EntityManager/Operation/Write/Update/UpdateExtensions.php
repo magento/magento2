@@ -31,9 +31,10 @@ class UpdateExtensions
     /**
      * @param string $entityType
      * @param object $entity
+     * @param array $arguments
      * @return object
      */
-    public function execute($entityType, $entity)
+    public function execute($entityType, $entity, $arguments = [])
     {
         $actions = $this->extensionPool->getActions($entityType, 'update');
         foreach ($actions as $action) {

@@ -31,13 +31,14 @@ class DeleteExtensions
     /**
      * @param string $entityType
      * @param object $entity
+     * @param array $arguments
      * @return object
      */
-    public function execute($entityType, $entity)
+    public function execute($entityType, $entity, $arguments = [])
     {
         $actions = $this->extensionPool->getActions($entityType, 'delete');
         foreach ($actions as $action) {
-            $entity = $action->execute($entityType, $entity);
+            $action->execute($entityType, $entity, $arguments);
         }
         return $entity;
     }

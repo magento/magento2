@@ -6,7 +6,7 @@
 
 namespace Magento\Eav\Model\ResourceModel;
 
-use Magento\Framework\Model\Entity\EntityMetadata;
+use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**

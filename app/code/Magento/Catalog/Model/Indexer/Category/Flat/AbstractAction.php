@@ -55,7 +55,7 @@ class AbstractAction
     protected $connection;
 
     /**
-     * @var \Magento\Framework\Model\Entity\EntityMetadata
+     * @var \Magento\Framework\EntityManager\EntityMetadata
      */
     protected $categoryMetadata;
 

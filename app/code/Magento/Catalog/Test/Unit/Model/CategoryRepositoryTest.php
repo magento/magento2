@@ -66,7 +66,7 @@ class CategoryRepositoryTest extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         $metadataMock = $this->getMock(
-            'Magento\Framework\Model\Entity\EntityMetadata',
+            'Magento\Framework\EntityManager\EntityMetadata',
             [],
             [],
             '',

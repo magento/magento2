@@ -43,21 +43,21 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     private $queryProcessorComposite;
 
     /**
-     * Class constructor
+     * DefaultStock constructor.
      *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
+     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param QueryProcessorComposite $queryProcessorComposite
-     * @param string $connectionName
+     * @param null $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
+        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         QueryProcessorComposite $queryProcessorComposite,
         $connectionName = null

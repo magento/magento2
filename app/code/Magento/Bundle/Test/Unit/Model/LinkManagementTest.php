@@ -105,7 +105,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
     protected $metadataPoolMock;
 
     /**
-     * @var \Magento\Framework\Model\Entity\EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadataMock;
 
@@ -161,7 +161,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
         $this->metadataPoolMock = $this->getMockBuilder('\Magento\Framework\EntityManager\MetadataPool')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->metadataMock = $this->getMockBuilder('\Magento\Framework\Model\Entity\EntityMetadata')
+        $this->metadataMock = $this->getMockBuilder('\Magento\Framework\EntityManager\EntityMetadata')
             ->disableOriginalConstructor()
             ->getMock();
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')

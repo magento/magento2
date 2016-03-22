@@ -11,7 +11,7 @@ use Magento\Framework\Model\Entity\Action\ReadMain;
 use Magento\Framework\Model\Entity\Action\ReadExtension;
 use Magento\Framework\Model\Entity\Action\ReadRelation;
 use Magento\Framework\Model\Operation\Read;
-use Magento\Framework\Model\Entity\EntityMetadata;
+use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\Model\Entity\HydratorInterface;
 
 /**
