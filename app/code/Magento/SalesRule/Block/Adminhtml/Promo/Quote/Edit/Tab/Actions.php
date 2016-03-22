@@ -169,7 +169,7 @@ class Actions extends \Magento\Backend\Block\Widget\Form\Generic implements
     {
         if (!$model) {
             $id = $this->getRequest()->getParam('id');
-            $model = $this->ruleFactory->create();
+            $model = $this->getRuleFactory()->create();
             $model->load($id);
         }
 
