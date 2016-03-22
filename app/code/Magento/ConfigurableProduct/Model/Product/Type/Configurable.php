@@ -377,7 +377,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             ['group' => 'CONFIGURABLE', 'method' => __METHOD__]
         );
         if (!$product->hasData($this->_configurableAttributes)) {
-            $cacheId =  __CLASS__ . $product->getId();
+            $cacheId =  __CLASS__ . $product->getId() . '_' . $product->getStoreId();
             $configurableAttributes = $this->cache->load($cacheId);
             if ($configurableAttributes) {
                 $configurableAttributes = unserialize($configurableAttributes);
@@ -595,7 +595,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
     public function save($product)
     {
         parent::save($product);
-        $cacheId =  __CLASS__ . $product->getId();
+        $cacheId =  __CLASS__ . $product->getId() . '_' . $product->getStoreId();
         $this->cache->remove($cacheId);
 
         $extensionAttributes = $product->getExtensionAttributes();
