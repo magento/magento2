@@ -9,58 +9,68 @@ namespace Magento\Eav\Model\ResourceModel;
 use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Model\Entity\ScopeResolver;
 
 /**
  * Class UpdateHandler
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateHandler
 {
     /**
      * @var AttributeRepository
      */
-    protected $attributeRepository;
+    private $attributeRepository;
 
     /**
      * @var MetadataPool
      */
-    protected $metadataPool;
+    private $metadataPool;
 
     /**
      * @var SearchCriteriaBuilder
      */
-    protected $searchCriteriaBuilder;
+    private $searchCriteriaBuilder;
 
     /**
      * @var AttributePersistor
      */
-    protected $attributePersistor;
+    private $attributePersistor;
 
     /**
      * @var ReadSnapshot
      */
-    protected $readSnapshot;
+    private $readSnapshot;
+
+    /**
+     * @var ScopeResolver
+     */
+    private $scopeResolver;
 
     /**
      * UpdateHandler constructor.
-     *
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param AttributePersistor $attributePersistor
      * @param ReadSnapshot $readSnapshot
+     * @param ScopeResolver $scopeResolver
      */
     public function __construct(
         AttributeRepository $attributeRepository,
         MetadataPool $metadataPool,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         AttributePersistor $attributePersistor,
-        ReadSnapshot $readSnapshot
+        ReadSnapshot $readSnapshot,
+        ScopeResolver $scopeResolver
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->attributePersistor = $attributePersistor;
         $this->readSnapshot = $readSnapshot;
+        $this->scopeResolver = $scopeResolver;
     }
 
     /**
@@ -83,28 +93,6 @@ class UpdateHandler
      * @param string $entityType
      * @param array $data
      * @return array
-     */
-    protected function getActionContext($entityType, $data)
-    {
-        $metadata = $this->metadataPool->getMetadata($entityType);
-        $contextFields = $metadata->getEntityContext();
-        $context = [];
-        foreach ($contextFields as $field) {
-            if ('store_id' == $field && array_key_exists($field, $data) && $data[$field] == 1) {
-                $context[$field] = 0;
-                continue;
-            }
-            if (isset($data[$field])) {
-                $context[$field] = $data[$field];
-            }
-        }
-        return $context;
-    }
-
-    /**
-     * @param string $entityType
-     * @param array $data
-     * @return array
      * @throws \Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -114,7 +102,6 @@ class UpdateHandler
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
         $metadata = $this->metadataPool->getMetadata($entityType);
         if ($metadata->getEavEntityType()) {
-            $context = $this->getActionContext($entityType, $data);
             $snapshot = $this->readSnapshot->execute($entityType, $data);
             $processed = [];
             foreach ($this->getAttributes($entityType) as $attribute) {
@@ -139,9 +126,8 @@ class UpdateHandler
                     );
                 }
                 if ((!array_key_exists($attribute->getAttributeCode(), $snapshot)
-                    || $snapshot[$attribute->getAttributeCode()] === false)
+                        || $snapshot[$attribute->getAttributeCode()] === false)
                     && array_key_exists($attribute->getAttributeCode(), $data)
-                    && $data[$attribute->getAttributeCode()] !== false
                     && !$attribute->isValueEmpty($data[$attribute->getAttributeCode()])
                 ) {
                     $this->attributePersistor->registerInsert(
@@ -155,7 +141,6 @@ class UpdateHandler
                 if (array_key_exists($attribute->getAttributeCode(), $snapshot)
                     && $snapshot[$attribute->getAttributeCode()] !== false
                     && array_key_exists($attribute->getAttributeCode(), $data)
-                    && $data[$attribute->getAttributeCode()] !== false
                     && $snapshot[$attribute->getAttributeCode()] != $data[$attribute->getAttributeCode()]
                     && !$attribute->isValueEmpty($data[$attribute->getAttributeCode()])
                 ) {
@@ -168,6 +153,7 @@ class UpdateHandler
                     $processed[$attribute->getAttributeCode()] = $data[$attribute->getAttributeCode()];
                 }
             }
+            $context = $this->scopeResolver->getEntityContext($entityType, $data);
             $this->attributePersistor->flush($entityType, $context);
         }
         return $data;
