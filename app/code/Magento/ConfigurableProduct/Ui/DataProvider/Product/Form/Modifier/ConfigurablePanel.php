@@ -182,6 +182,8 @@ class ConfigurablePanel extends AbstractModifier
                                             . '.configurable_associated_product_listing.product_columns',
                                         'productsMassAction' => 'configurable_associated_product_listing'
                                             . '.configurable_associated_product_listing.product_columns.ids',
+                                        'productsFilters' => 'configurable_associated_product_listing'
+                                            . '.configurable_associated_product_listing.listing_top.listing_filters',
                                         'modalWithGrid' => 'ns=' . static::FORM_NAME . ', index='
                                             . static::ASSOCIATED_PRODUCT_MODAL,
                                     ],
