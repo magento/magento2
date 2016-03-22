@@ -35,14 +35,18 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
     }
 
     /**
-     * @return \Magento\SalesRule\Model\RuleFactory
+     * The getter function to get the new StoreManager dependency
+     *
+     * @return \Magento\Store\Model\StoreManagerInterface
+     *
      * @deprecated
      */
-    public function getStoreManager()
+    private function getStoreManager()
     {
-        if ($this->_storeManager instanceof \Magento\Store\Model\StoreManagerInterface) {
-            $this->_storeManager = ObjectManager::getInstance()->get('\Magento\Store\Model\StoreManagerInterface');
+        if ($this->_storeManager === null) {
+            $this->_storeManager = ObjectManager::getInstance()->get('Magento\Store\Model\StoreManagerInterface');
         }
+        return $this->_storeManager;
     }
 
     /**
