@@ -73,10 +73,10 @@ class SaveHandler
         }
 
         $configurableLinks = (array) $extensionAttributes->getConfigurableProductLinks();
-        $this->resourceModel->saveProducts($entity, $configurableLinks);
         if (empty($configurableLinks) || !empty($ids)) {
             $this->deleteConfigurableProductAttributes($entity, $ids);
         }
+        $this->resourceModel->saveProducts($entity, $configurableLinks);
 
         return $entity;
     }
