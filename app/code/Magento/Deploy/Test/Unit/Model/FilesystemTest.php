@@ -126,8 +126,8 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
 
     public function testRegenerateStatic()
     {
-        $storeLocales = ['fr_FR'];
-        $adminUserInterfaceLocales = ['en_US'];
+        $storeLocales = ['fr_FR', 'de_DE', 'nl_NL'];
+        $adminUserInterfaceLocales = ['de_DE', 'en_US'];
         $this->storeViewMock->expects($this->once())
             ->method('retrieveLocales')
             ->willReturn($storeLocales);
@@ -145,13 +145,12 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([$userMock]));
 
+        $usedLocales = array_unique(
+            array_merge($storeLocales, $adminUserInterfaceLocales)
+        );
         $staticContentDeployCmd = $this->cmdPrefix . 'setup:static-content:deploy '
-            . implode(
-                ' ',
-                array_merge($storeLocales, $adminUserInterfaceLocales)
-            );
+            . implode(' ', $usedLocales);
         $setupDiCompileCmd = $this->cmdPrefix . 'setup:di:compile';
-
         $this->shellMock->expects($this->at(0))
             ->method('execute')
             ->with($staticContentDeployCmd);
@@ -162,15 +161,12 @@ class FilesystemTest extends \PHPUnit_Framework_TestCase
         $this->outputMock->expects($this->at(0))
             ->method('writeln')
             ->with('Starting deployment of static content');
-
         $this->outputMock->expects($this->at(2))
             ->method('writeln')
             ->with('Deployment of static content complete');
-
         $this->outputMock->expects($this->at(3))
             ->method('writeln')
             ->with('Starting compilation');
-
         $this->outputMock->expects($this->at(5))
             ->method('writeln')
             ->with('Compilation complete');
