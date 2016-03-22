@@ -19,6 +19,7 @@ use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Api\ExtensionAttributesFactory;
 
 /**
  * Class AddAttributeToTemplate
@@ -73,6 +74,11 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
     protected $logger;
 
     /**
+     * @var ExtensionAttributesFactory
+     */
+    protected $extensionAttributesFactory;
+
+    /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param Builder $productBuilder
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
@@ -84,6 +90,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
      * @param SortOrderBuilder $sortOrderBuilder
      * @param AttributeManagementInterface $attributeManagement
      * @param LoggerInterface $logger
+     * @param ExtensionAttributesFactory $extensionAttributesFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -97,7 +104,8 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
         SearchCriteriaBuilder $searchCriteriaBuilder,
         SortOrderBuilder $sortOrderBuilder,
         AttributeManagementInterface $attributeManagement,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        ExtensionAttributesFactory $extensionAttributesFactory
     ) {
         parent::__construct($context, $productBuilder);
         $this->resultJsonFactory = $resultJsonFactory;
@@ -109,6 +117,7 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
         $this->sortOrderBuilder = $sortOrderBuilder;
         $this->attributeManagement = $attributeManagement;
         $this->logger = $logger;
+        $this->extensionAttributesFactory = $extensionAttributesFactory;
     }
 
     /**
@@ -153,10 +162,14 @@ class AddAttributeToTemplate extends \Magento\Catalog\Controller\Adminhtml\Produ
                 $attributeGroup = $this->attributeGroupFactory->create();
             }
 
-            $attributeGroup->setAttributeGroupCode($groupCode);
-            $attributeGroup->setSortOrder($groupSortOrder);
+            $extensionAttributes = $attributeGroup->getExtensionAttributes()
+                ?: $this->extensionAttributesFactory->create(AttributeGroupInterface::class);
+
+            $extensionAttributes->setAttributeGroupCode($groupCode);
+            $extensionAttributes->setSortOrder($groupSortOrder);
             $attributeGroup->setAttributeGroupName($groupName);
             $attributeGroup->setAttributeSetId($attributeSet->getAttributeSetId());
+            $attributeGroup->setExtensionAttributes($extensionAttributes);
 
             $this->attributeGroupRepository->save($attributeGroup);
 
