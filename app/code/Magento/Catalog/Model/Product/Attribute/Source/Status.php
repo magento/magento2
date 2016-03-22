@@ -5,9 +5,12 @@
  */
 namespace Magento\Catalog\Model\Product\Attribute\Source;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Eav\Model\Entity\Attribute\Source\AbstractSource;
 use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
  * Product status functionality model
@@ -22,6 +25,13 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
     const STATUS_DISABLED = 2;
 
     /**#@-*/
+
+    /**
+     * Metadata Pool
+     *
+     * @var MetadataPool
+     */
+    protected $metadataPool;
 
     /**
      * Retrieve Visible Status Ids
@@ -95,13 +105,14 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
         $attributeCode = $this->getAttribute()->getAttributeCode();
         $attributeId = $this->getAttribute()->getId();
         $attributeTable = $this->getAttribute()->getBackend()->getTable();
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
 
         if ($this->getAttribute()->isScopeGlobal()) {
             $tableName = $attributeCode . '_t';
 
             $collection->getSelect()->joinLeft(
                 [$tableName => $attributeTable],
-                "e.entity_id={$tableName}.entity_id" .
+                "e.entity_id={$tableName}.{$linkField}" .
                 " AND {$tableName}.attribute_id='{$attributeId}'" .
                 " AND {$tableName}.store_id='0'",
                 []
@@ -114,13 +125,13 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
 
             $collection->getSelect()->joinLeft(
                 [$valueTable1 => $attributeTable],
-                "e.entity_id={$valueTable1}.entity_id" .
+                "e.entity_id={$valueTable1}.{$linkField}" .
                 " AND {$valueTable1}.attribute_id='{$attributeId}'" .
                 " AND {$valueTable1}.store_id='0'",
                 []
             )->joinLeft(
                 [$valueTable2 => $attributeTable],
-                "e.entity_id={$valueTable2}.entity_id" .
+                "e.entity_id={$valueTable2}.{$linkField}" .
                 " AND {$valueTable2}.attribute_id='{$attributeId}'" .
                 " AND {$valueTable2}.store_id='{$collection->getStoreId()}'",
                 []
@@ -136,5 +147,18 @@ class Status extends AbstractSource implements SourceInterface, OptionSourceInte
         $collection->getSelect()->order($valueExpr . ' ' . $dir);
 
         return $this;
+    }
+
+    /**
+     * Get product metadata pool
+     *
+     * @return MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

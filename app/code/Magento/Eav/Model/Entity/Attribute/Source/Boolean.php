@@ -5,6 +5,9 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute\Source;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Model\Entity\MetadataPool;
+
 class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
@@ -18,6 +21,13 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * @var \Magento\Eav\Model\ResourceModel\Entity\AttributeFactory
      */
     protected $_eavAttrEntity;
+
+    /**
+     * Metadata Pool
+     *
+     * @var MetadataPool
+     */
+    protected $metadataPool;
 
     /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\AttributeFactory $eavAttrEntity
@@ -155,13 +165,17 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
         $attributeCode = $this->getAttribute()->getAttributeCode();
         $attributeId = $this->getAttribute()->getId();
         $attributeTable = $this->getAttribute()->getBackend()->getTable();
+        
+        // FIXME: we can not use \Magento\Catalog\Api\Data\ProductInterface::class
+        $linkField = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->getLinkField();
 
         if ($this->getAttribute()->isScopeGlobal()) {
             $tableName = $attributeCode . '_t';
             $collection->getSelect()
                 ->joinLeft(
                     [$tableName => $attributeTable],
-                    "e.entity_id={$tableName}.entity_id"
+                    "e.entity_id={$tableName}.{$linkField}"
                     . " AND {$tableName}.attribute_id='{$attributeId}'"
                     . " AND {$tableName}.store_id='0'",
                     []
@@ -173,14 +187,14 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
             $collection->getSelect()
                 ->joinLeft(
                     [$valueTable1 => $attributeTable],
-                    "e.entity_id={$valueTable1}.entity_id"
+                    "e.entity_id={$valueTable1}.{$linkField}"
                     . " AND {$valueTable1}.attribute_id='{$attributeId}'"
                     . " AND {$valueTable1}.store_id='0'",
                     []
                 )
                 ->joinLeft(
                     [$valueTable2 => $attributeTable],
-                    "e.entity_id={$valueTable2}.entity_id"
+                    "e.entity_id={$valueTable2}.{$linkField}"
                     . " AND {$valueTable2}.attribute_id='{$attributeId}'"
                     . " AND {$valueTable2}.store_id='{$collection->getStoreId()}'",
                     []
@@ -194,5 +208,18 @@ class Boolean extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 
         $collection->getSelect()->order($valueExpr . ' ' . $dir);
         return $this;
+    }
+
+    /**
+     * Get product metadata pool
+     *
+     * @return MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

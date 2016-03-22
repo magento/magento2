@@ -5,6 +5,9 @@
  */
 namespace Magento\Eav\Model\Entity\Attribute\Source;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Model\Entity\MetadataPool;
+
 class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
 {
     /**
@@ -23,6 +26,13 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory
      */
     protected $_attrOptionFactory;
+
+    /**
+     * Metadata Pool
+     *
+     * @var MetadataPool
+     */
+    protected $metadataPool;
 
     /**
      * @param \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory $attrOptionCollectionFactory
@@ -140,15 +150,20 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     {
         $valueTable1 = $this->getAttribute()->getAttributeCode() . '_t1';
         $valueTable2 = $this->getAttribute()->getAttributeCode() . '_t2';
+
+        // FIXME: we can not use \Magento\Catalog\Api\Data\ProductInterface::class
+        $linkField = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class)
+            ->getLinkField();
+
         $collection->getSelect()->joinLeft(
             [$valueTable1 => $this->getAttribute()->getBackend()->getTable()],
-            "e.entity_id={$valueTable1}.entity_id" .
+            "e.entity_id={$valueTable1}.{$linkField}" .
             " AND {$valueTable1}.attribute_id='{$this->getAttribute()->getId()}'" .
             " AND {$valueTable1}.store_id=0",
             []
         )->joinLeft(
             [$valueTable2 => $this->getAttribute()->getBackend()->getTable()],
-            "e.entity_id={$valueTable2}.entity_id" .
+            "e.entity_id={$valueTable2}.{$linkField}" .
             " AND {$valueTable2}.attribute_id='{$this->getAttribute()->getId()}'" .
             " AND {$valueTable2}.store_id='{$collection->getStoreId()}'",
             []
@@ -240,5 +255,18 @@ class Table extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractSource
     public function getFlatUpdateSelect($store)
     {
         return $this->_attrOptionFactory->create()->getFlatUpdateSelect($this->getAttribute(), $store);
+    }
+
+    /**
+     * Get product metadata pool
+     *
+     * @return MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }
