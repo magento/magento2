@@ -5,13 +5,13 @@
   -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <section id="system">
+        <section id="webapi" translate="label" type="text" sortOrder="102" showInDefault="1" showInWebsite="1" showInStore="1">
             <group id="webapisecurity" translate="label" type="text" sortOrder="250" showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>Webapi Security</label>
+                <label>Web API Security</label>
                 <field id="allow_insecure" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Allow insecure anonymous access for some CMS, Catalog and Store services</label>
+                    <label>Allow insecure anonymous access</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                    <comment>Full list can be viewed at Magento/app/code/Magento/WebapiSecurity/etc/di.xml</comment>
+                    <comment>Anonymous access would be provided for some CMS, Catalog and Store services</comment>
                 </field>
             </group>
         </section>

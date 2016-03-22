@@ -9,38 +9,41 @@ use Magento\Webapi\Model\Config\Converter;
 
 class AnonymousResourceSecurity
 {
-    const XML_ALLOW_INSECURE = 'system/webapisecurity/allow_insecure';
+    const XML_ALLOW_INSECURE = 'webapi/webapisecurity/allow_insecure';
 
     /**
-     * @var \Magento\Backend\App\ConfigInterface
+     * @var \Magento\Framework\App\Config\ReinitableConfigInterface
      */
-    protected $backendConfig;
+    protected $config;
 
     /**
-     * @var string
+     * @var array
      */
     protected $resources;
 
     /**
      * AnonymousResourceSecurity constructor.
      *
-     * @param \Magento\Backend\App\ConfigInterface $backendConfig
-     * @param $resources
+     * @param \Magento\Framework\App\Config\ReinitableConfigInterface $config
+     * @param array $resources
      */
-    public function __construct(\Magento\Backend\App\ConfigInterface $backendConfig, $resources)
+    public function __construct(\Magento\Framework\App\Config\ReinitableConfigInterface $config, $resources)
     {
-        $this->backendConfig = $backendConfig;
+        $this->config = $config;
         $this->resources = $resources;
     }
 
-    public function afterConvert(
-        Converter $subject,
-        $nodes
-    ) {
+    /**
+     * @param Converter $subject
+     * @param array $nodes
+     * @return array
+     */
+    public function afterConvert(Converter $subject, $nodes)
+    {
         if (empty($nodes)) {
             return $nodes;
         }
-        $useInsecure = $this->backendConfig->isSetFlag(self::XML_ALLOW_INSECURE);
+        $useInsecure = $this->config->getValue(self::XML_ALLOW_INSECURE);
         if ($useInsecure) {
             foreach ($this->resources as $route => $requestType) {
                 if ($result = $this->getNode($route, $requestType, $nodes["routes"])) {
@@ -63,6 +66,12 @@ class AnonymousResourceSecurity
         return $nodes;
     }
 
+    /**
+     * @param string $route
+     * @param string $requestType
+     * @param array $source
+     * @return array|null
+     */
     private function getNode($route, $requestType, $source)
     {
         if (isset($source[$route][$requestType])) {
