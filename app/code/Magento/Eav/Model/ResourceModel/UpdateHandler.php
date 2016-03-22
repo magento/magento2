@@ -13,6 +13,8 @@ use Magento\Framework\Model\Entity\ScopeResolver;
 
 /**
  * Class UpdateHandler
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateHandler
 {
