@@ -5,10 +5,12 @@
  */
 namespace Magento\Catalog\Model\Product\Gallery;
 
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
+
 /**
  * Read handler for catalog product gallery.
  */
-class ReadHandler
+class ReadHandler implements ExtensionInterface
 {
     /**
      * @var \Magento\Catalog\Api\Data\ProductAttributeInterface
