@@ -32,6 +32,7 @@ class CartPlugin
     /**
      * @param \Magento\Checkout\Controller\Cart $subject
      * @param \Magento\Framework\App\RequestInterface $request
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeDispatch(
