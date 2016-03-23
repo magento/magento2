@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Test\Unit\Helper;
@@ -182,10 +182,10 @@ class StockTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $stockStatusMock = $this->getMockBuilder('Magento\CatalogInventory\Model\ResourceModel\Stock\Status')
             ->disableOriginalConstructor()
-            ->setMethods(['addIsInStockFilterToCollection'])
+            ->setMethods(['addStockDataToCollection'])
             ->getMock();
         $stockStatusMock->expects($this->once())
-            ->method('addIsInStockFilterToCollection')
+            ->method('addStockDataToCollection')
             ->with($collectionMock);
         $this->statusFactoryMock->expects($this->once())
             ->method('create')

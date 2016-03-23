@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define(
@@ -8,13 +8,15 @@ define(
         'jquery',
         'uiComponent',
         'paypalInContextExpressCheckout',
+        'Magento_Customer/js/customer-data',
         'domReady!'
     ],
     function (
         _,
         $,
         Component,
-        paypalExpressCheckout
+        paypalExpressCheckout,
+        customerData
     ) {
         'use strict';
 
@@ -53,6 +55,7 @@ define(
                         ).always(
                             function () {
                                 $('body').trigger('processStop');
+                                customerData.invalidate(['cart']);
                             }
                         );
                     }

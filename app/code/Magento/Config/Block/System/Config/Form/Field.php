@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -180,7 +180,7 @@ class Field extends \Magento\Backend\Block\Template implements \Magento\Framewor
      * @param string $html
      * @return string
      */
-    protected function _decorateRowHtml($element, $html)
+    protected function _decorateRowHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element, $html)
     {
         return '<tr id="row_' . $element->getHtmlId() . '">' . $html . '</tr>';
     }

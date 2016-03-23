@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Controller\Adminhtml\Session;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Security\Helper\SecurityCookie;
 use Magento\Security\Model\AdminSessionsManager;
 
 /**
@@ -17,15 +18,14 @@ class Check extends \Magento\Backend\App\Action
     /**
      * @var JsonFactory
      */
-    protected $jsonFactory;
+    private $jsonFactory;
 
     /**
      * @var AdminSessionsManager
      */
-    protected $sessionsManager;
+    private $sessionsManager;
 
     /**
-     * Check constructor.
      * @param Context $context
      * @param JsonFactory $jsonFactory
      * @param AdminSessionsManager $sessionsManager
@@ -48,7 +48,7 @@ class Check extends \Magento\Backend\App\Action
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         return $this->jsonFactory->create()->setData(
             [
-                'isActive' => $this->sessionsManager->getCurrentSession()->isActive()
+                'isActive' => $this->sessionsManager->getCurrentSession()->isLoggedInStatus()
             ]
         );
     }

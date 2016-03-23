@@ -2,7 +2,7 @@
 /**
  * Unit test for \Magento\Framework\Validator\Factory
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Validator\Test\Unit;
@@ -28,6 +28,8 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Validator\Config
      */
     protected $_validatorConfig;
+
+    private $cache;
 
     /**
      * @var \Magento\Framework\Translate\AdapterInterface|null
@@ -88,6 +90,9 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $this->_translateAdapter = $this->getMockBuilder(
             'Magento\Framework\TranslateInterface'
         )->disableOriginalConstructor()->getMock();
+
+        $this->cache = $this->getMockBuilder(\Magento\Framework\Cache\FrontendInterface::class)
+            ->getMockForAbstractClass();
     }
 
     /**
@@ -107,7 +112,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new \Magento\Framework\Validator\Factory(
             $this->_objectManager,
             $this->_config,
-            $this->_translateAdapter
+            $this->cache
         );
         $actualConfig = $factory->getValidatorConfig();
         $this->assertInstanceOf(
@@ -147,7 +152,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new \Magento\Framework\Validator\Factory(
             $this->_objectManager,
             $this->_config,
-            $this->_translateAdapter
+            $this->cache
         );
         $this->assertInstanceOf(
             'Magento\Framework\Validator\Builder',
@@ -174,7 +179,7 @@ class FactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new \Magento\Framework\Validator\Factory(
             $this->_objectManager,
             $this->_config,
-            $this->_translateAdapter
+            $this->cache
         );
         $this->assertInstanceOf('Magento\Framework\Validator', $factory->createValidator('test', 'class', []));
     }

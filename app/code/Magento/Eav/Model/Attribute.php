@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,7 @@ namespace Magento\Eav\Model;
 
 use Magento\Store\Model\Website;
 
-abstract class Attribute extends \Magento\Eav\Model\Entity\Attribute
+class Attribute extends \Magento\Eav\Model\Entity\Attribute
 {
     /**
      * Name of the module

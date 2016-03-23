@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -34,8 +34,8 @@
         <field name="description" is_required="0" group="content" />
         <field name="enable_googlecheckout" is_required="0" />
         <field name="gallery" is_required="0" />
-        <field name="gift_message_available" is_required="0" group="autosettings" />
-        <field name="use_config_gift_message_available" is_required="0" group="autosettings" />
+        <field name="gift_message_available" is_required="0" group="gift-options" />
+        <field name="use_config_gift_message_available" is_required="0" group="gift-options" />
         <field name="has_options" is_required="0" />
         <field name="image" is_required="0" />
         <field name="image_label" is_required="0" />
@@ -80,7 +80,7 @@
         <field name="updated_at" is_required="1" />
         <field name="url_key" is_required="0" group="search-engine-optimization" />
         <field name="url_path" is_required="0" />
-        <field name="visibility" is_required="0" group="autosettings" />
+        <field name="visibility" is_required="0" group="product-details" />
         <field name="id" />
         <field name="bundle_selections" is_required="1" group="bundle" source="Magento\Bundle\Test\Fixture\BundleProduct\BundleSelections" repository="Magento\Bundle\Test\Repository\BundleProduct\BundleSelection" />
         <field name="checkout_data" is_required="1" group="null" repository="Magento\Bundle\Test\Repository\BundleProduct\CheckoutData" />
