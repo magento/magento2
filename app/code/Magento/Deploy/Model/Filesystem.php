@@ -5,16 +5,14 @@
  */
 namespace Magento\Deploy\Model;
 
+use Symfony\Component\Console\Output\OutputInterface;
 use Magento\Framework\App\State;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
-use Symfony\Component\Console\Output\OutputInterface;
 use Magento\User\Model\ResourceModel\User\Collection as UserCollection;
 
 /**
- * A class to manage Magento modes
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Filesystem
