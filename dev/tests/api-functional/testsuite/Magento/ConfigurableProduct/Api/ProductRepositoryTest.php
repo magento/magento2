@@ -193,7 +193,6 @@ class ProductRepositoryTest extends WebapiAbstract
         $optionId = $option['id'];
         $productId = $option['product_id'];
         $updatedOption = [
-            'id' => $optionId,
             'attribute_id' => $option['attribute_id'],
             'label' => $newLabel,
             'position' => 1,
@@ -216,6 +215,7 @@ class ProductRepositoryTest extends WebapiAbstract
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_options"];
         $this->assertEquals(1, count($resultConfigurableProductOptions));
 
+        unset($resultConfigurableProductOptions[0]['id']);
         $this->assertEquals($updatedOption, $resultConfigurableProductOptions[0]);
     }
 
