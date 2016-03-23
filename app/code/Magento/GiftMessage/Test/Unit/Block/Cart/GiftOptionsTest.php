@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Test\Unit\Block\Cart;
@@ -27,7 +27,7 @@ class GiftOptionsTest extends \PHPUnit_Framework_TestCase
     /** @var array  */
     protected $jsLayout = ['root' => 'node'];
 
-    public function setUp()
+    protected function setUp()
     {
         $this->context = $this->getMock('Magento\Backend\Block\Template\Context', [], [], '', false);
         $this->jsonEncoderMock = $this->getMock('Magento\Framework\Json\Encoder', [], [], '', false);
