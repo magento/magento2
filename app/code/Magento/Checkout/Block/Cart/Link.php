@@ -65,7 +65,7 @@ class Link extends \Magento\Framework\View\Element\Html\Link
      */
     protected function _toHtml()
     {
-        if ($this->_moduleManager->isOutputEnabled('Magento_Checkout')) {
+        if (!$this->_moduleManager->isOutputEnabled('Magento_Checkout')) {
             return '';
         }
         return parent::_toHtml();
