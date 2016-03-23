@@ -13,6 +13,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\User\Model\ResourceModel\User\Collection as UserCollection;
 
 /**
+ * Generate static files, compile; clear var/generation, var/di/, var/view_preprocessed and pub/static directories
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Filesystem
@@ -126,7 +128,7 @@ class Filesystem
     public function regenerateStatic(
         OutputInterface $output
     ) {
-        // Сlean up /var/generation, /var/di/, /var/view_preprocessed and /pub/static directories
+        // Сlear var/generation, var/di/, var/view_preprocessed and pub/static directories
         $this->cleanupFilesystem(
             [
                 DirectoryList::CACHE,
@@ -156,7 +158,7 @@ class Filesystem
             . implode(' ', $this->getUsedLocales());
 
         /**
-         * @todo build a solution that does not depend on exec
+         * @todo eliminate exec
          */
         try {
             $execOutput = $this->shell->execute($cmd);
@@ -213,7 +215,7 @@ class Filesystem
     }
 
     /**
-     * Runs code multi-tenant compiler to generate code and DI information
+     * Runs compiler
      *
      * @param OutputInterface $output
      * @return void
@@ -235,7 +237,7 @@ class Filesystem
          * exec command is necessary for now to isolate the autoloaders in the compiler from the memory state
          * of this process, which would prevent some classes from being generated
          *
-         * @todo build a solution that does not depend on exec
+         * @todo eliminate exec
          */
         try {
             $execOutput = $this->shell->execute($cmd);
@@ -288,7 +290,6 @@ class Filesystem
      * @param int $dirPermissions
      * @param int $filePermissions
      * @return void
-     *
      * @deprecated
      */
     protected function changePermissions($directoryCodeList, $dirPermissions, $filePermissions)
@@ -308,7 +309,6 @@ class Filesystem
      * Chenge permissions on static resources
      *
      * @return void
-     *
      * @deprecated
      */
     public function lockStaticResources()
