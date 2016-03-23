@@ -62,7 +62,7 @@ class AdminTokenServiceTest extends WebapiAbstract
      */
     public function testCreateAdminAccessToken()
     {
-        $adminUserNameFromFixture = 'adminUser';
+        $adminUserNameFromFixture = 'webapi_user';
 
         $serviceInfo = [
             'rest' => [
@@ -143,7 +143,7 @@ class AdminTokenServiceTest extends WebapiAbstract
      */
     public function testThrottlingMaxAttempts()
     {
-        $adminUserNameFromFixture = 'adminUser';
+        $adminUserNameFromFixture = 'webapi_user';
 
         $serviceInfo = [
             'rest' => [
@@ -181,11 +181,11 @@ class AdminTokenServiceTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/User/_files/user_with_role.php
+     * @magentoApiDataFixture Magento/Webapi/_files/webapi_user.php
      */
     public function testThrottlingAccountLockout()
     {
-        $adminUserNameFromFixture = 'adminUser';
+        $adminUserNameFromFixture = 'webapi_user';
 
         $serviceInfo = [
             'rest' => [
