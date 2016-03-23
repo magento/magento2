@@ -58,7 +58,7 @@ class AdminTokenServiceTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/User/_files/user_with_role.php
+     * @magentoApiDataFixture Magento/Webapi/_files/webapi_user.php
      */
     public function testCreateAdminAccessToken()
     {
@@ -139,7 +139,7 @@ class AdminTokenServiceTest extends WebapiAbstract
     }
 
     /**
-     * @magentoApiDataFixture Magento/User/_files/user_with_role.php
+     * @magentoApiDataFixture Magento/Webapi/_files/webapi_user.php
      */
     public function testThrottlingMaxAttempts()
     {
