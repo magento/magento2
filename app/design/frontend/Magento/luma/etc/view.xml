@@ -203,7 +203,7 @@
             <var name="fullscreen">
                 <var name="nav">thumbs</var> <!-- Fullscreen navigation style (false/thumbs/dots) -->
                 <var name="loop">true</var> <!-- Fullscreen navigation loop (true/false/null) -->
-                <var name="arrows">false</var> <!-- Turn on/off arrows on the sides preview in fullscreen (true/false/null) -->
+                <var name="arrows">true</var> <!-- Turn on/off arrows on the sides preview in fullscreen (true/false/null) -->
                 <var name="caption">false</var> <!-- Display alt text as image title in fullscreen(true/false) -->
                 <var name="navdir">horizontal</var> <!--Sliding direction of thumbnails in fullscreen(horizontal/vertical)  -->
                 <var name="navarrows">false</var> <!-- Turn on/off on the thumbs navigation sides arrows(true/false) -->
