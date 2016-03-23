@@ -41,11 +41,12 @@ class ReadHandler implements ExtensionInterface
 
     /**
      * @param string $entityType
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product
+     * @param object $entity
+     * @param array $arguments
+     * @return object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, $product)
+    public function execute($entityType, $entity, $arguments = [])
     {
         $value = [];
         $value['images'] = [];
@@ -53,7 +54,7 @@ class ReadHandler implements ExtensionInterface
         $localAttributes = ['label', 'position', 'disabled'];
 
         $mediaEntries = $this->resourceModel->loadProductGalleryByAttributeId(
-            $product,
+            $entity,
             $this->getAttribute()->getAttributeId()
         );
 
@@ -67,12 +68,12 @@ class ReadHandler implements ExtensionInterface
             $value['images'][] = $mediaEntry;
         }
 
-        $product->setData(
+        $entity->setData(
             $this->getAttribute()->getAttributeCode(),
             $value
         );
 
-        return $product;
+        return $entity;
     }
 
     /**
