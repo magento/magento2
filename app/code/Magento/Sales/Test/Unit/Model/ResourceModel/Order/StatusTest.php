@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,7 +40,7 @@ class StatusTest extends \PHPUnit_Framework_TestCase
      */
     protected $selectMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->selectMock = $this->getMock('\Magento\Framework\DB\Select', [], [], '', false);
         $this->selectMock->expects($this->any())->method('from')->will($this->returnSelf());

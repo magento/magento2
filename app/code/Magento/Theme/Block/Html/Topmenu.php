@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Block\Html;
@@ -49,7 +49,6 @@ class Topmenu extends Template implements IdentityInterface
         TreeFactory $treeFactory,
         array $data = []
     ) {
-        $this->setCacheLifetime(30 * 60);
         parent::__construct($context, $data);
         $this->_menu = $nodeFactory->create(
             [
@@ -58,6 +57,16 @@ class Topmenu extends Template implements IdentityInterface
                 'tree' => $treeFactory->create()
             ]
         );
+    }
+
+    /**
+     * Get block cache life time
+     *
+     * @return int
+     */
+    protected function getCacheLifetime()
+    {
+        return parent::getCacheLifetime() ?: 3600;
     }
 
     /**

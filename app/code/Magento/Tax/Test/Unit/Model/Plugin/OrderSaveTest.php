@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,7 +39,7 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
      */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->orderTaxFactoryMock = $this->getMockBuilder(
             '\Magento\Tax\Model\Sales\Order\TaxFactory'
@@ -132,7 +132,7 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
         $index = 0;
         $itemTaxes = [];
         foreach ($expectedItemTaxes as $itemTax) {
-            $itemTaxMock = $this->getMockBuilder('\Magento\Tax\Model\Sales\Order\Tax\Item')
+            $itemTaxMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Tax\Item')
                 ->disableOriginalConstructor()
                 ->setMethods(
                     [
@@ -176,7 +176,6 @@ class OrderSaveTest extends \PHPUnit_Framework_TestCase
         $extensionAttributeMock->expects($this->any())
             ->method('getItemAppliedTaxes')
             ->willReturn($itemAppliedTaxes);
-
 
         $orderItemMock = $this->getMockBuilder('\Magento\Sales\Model\Order\Item')
             ->disableOriginalConstructor()

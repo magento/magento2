@@ -84,6 +84,8 @@ Reset,Reset
 "Unable to post data to consumer due to an unexpected error","Unable to post data to consumer due to an unexpected error"
 "Consumer with ID \'%1\' does not exist.","Consumer with ID \'%1\' does not exist."
 "Invalid token to except","Invalid token to except"
+"The integration \'%1\' has been deleted.","The integration \'%1\' has been deleted."
+"Uninstall the extension to remove integration \'%1\'.","Uninstall the extension to remove integration \'%1\'."
 "Integration with ID '%1' doesn't exist.","Integration with ID '%1' doesn't exist."
 "Your account is temporarily disabled.","Your account is temporarily disabled."
 "You have entered an invalid password for current user.","You have entered an invalid password for current user."
