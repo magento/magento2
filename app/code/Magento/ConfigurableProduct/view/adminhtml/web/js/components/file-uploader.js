@@ -11,6 +11,8 @@ define([
     return Element.extend({
         processedFile: {},
         actionsListOpened: false,
+        thumbnailUrl: '',
+        thumbnail: null,
         defaults: {
             fileInputName: ''
         },
@@ -21,7 +23,7 @@ define([
          * @returns {Object} Chainable.
          */
         initObservable: function () {
-            this._super().observe(['processedFile', 'actionsListOpened']);
+            this._super().observe(['processedFile', 'actionsListOpened', 'thumbnailUrl', 'thumbnail']);
 
             return this;
         },
