@@ -109,7 +109,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
 
-        $extensionAttributes->expects(static::once())
+        $extensionAttributes->expects(static::exactly(2))
             ->method('getConfigurableProductOptions')
             ->willReturn([]);
         $extensionAttributes->expects(static::once())
@@ -152,7 +152,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $product->expects(static::once())
+        $product->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
 
@@ -179,7 +179,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $configurableAttributes = [
             $attribute
         ];
-        $extensionAttributes->expects(static::once())
+        $extensionAttributes->expects(static::exactly(2))
             ->method('getConfigurableProductOptions')
             ->willReturn($configurableAttributes);
 

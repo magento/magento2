@@ -57,7 +57,10 @@ class SaveHandler
             return $entity;
         }
 
-        $this->deleteConfigurableProductAttributes($entity);
+        if ($extensionAttributes->getConfigurableProductOptions() !== null) {
+            $this->deleteConfigurableProductAttributes($entity);
+        }
+
         $configurableOptions = (array) $extensionAttributes->getConfigurableProductOptions();
         if (!empty($configurableOptions)) {
             $this->saveConfigurableProductAttributes($entity, $configurableOptions);
