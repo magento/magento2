@@ -9,7 +9,7 @@
      attr="'data-level': $data.level, 'data-index': index"
      data-bind="visible: $data.visible === undefined ? true: $data.visible">
     <div class="fieldset-wrapper-title"
-         tabindex="0"
+         attr="tabindex: !collapsible ? -1 : 0"
          click="toggleOpened"
          keyboard="13: toggleOpened"
          if="label">
