@@ -11,7 +11,7 @@
 $productMatrix = $block->getProductMatrix();
 $attributes = $block->getProductAttributes();
 
-/* @escapeNotVerified */ echo $block->getVariationWizard([
+/* @noEscape */ echo $block->getVariationWizard([
     'attributes' => $attributes,
     'configurations' => $productMatrix,
     'configurableModal' => $block->getForm() . '.' . $block->getModal()
