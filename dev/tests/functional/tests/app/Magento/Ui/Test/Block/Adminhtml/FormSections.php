@@ -143,7 +143,6 @@ class FormSections extends AbstractFormContainers
         return $data;
     }
 
-
     /**
      * Get unique notice attributes.
      *
