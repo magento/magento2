@@ -250,7 +250,7 @@
     .__collapsible-title-pattern();
 
     > i {
-        // ToDo UI: change to .collapsible-sub-title
+        //  ToDo UI: change to .collapsible-sub-title
         display: block;
         font-size: @collapsible-title-support-text__font-size;
         font-style: italic;
@@ -300,7 +300,7 @@
 
         &.open {
             &:empty {
-                background: #fff url(../../../../../../web/mui/images/ajax-loader-big.gif) no-repeat center;
+                background: @color-white url(../../../../../../web/mui/images/ajax-loader-big.gif) no-repeat center;
                 height: 100px;
             }
         }
@@ -342,7 +342,7 @@
     .config {
         .comment a,
         .link-more {
-            color: #007dbd;
+            color: @color-blue-pure;
             font-size: @font-size__base;
             font-weight: 400;
 
@@ -405,7 +405,7 @@
         }
 
         .label {
-            color: #303030;
+            color: @color-gray19;
             float: none;
             font-size: 14px;
             font-weight: 600;
@@ -429,19 +429,19 @@
         }
 
         .scope-label {
-            color: #999;
+            color: @color-gray60;
             font-size: @font-size__s;
             letter-spacing: .05em;
             padding: 31px 1.5rem 0 0;
         }
 
         .note {
-            color: #303030;
+            color: @color-gray19;
             font-size: 12px;
             margin: 5px 0;
 
             a {
-                color: #007dbd;
+                color: @color-blue-pure;
                 font-size: 12px;
                 font-weight: 400;
 
@@ -473,7 +473,7 @@
                 }
 
                 .tooltip-content {
-                    background: #31302b;
+                    background: @color-very-dark-gray-black2;
                     background: rgba(49, 48, 43, .8);
                     border-radius: 5px;
                     bottom: 100%;
@@ -489,7 +489,7 @@
                         border-bottom: 0;
                         border-left: 5px solid transparent;
                         border-right: 5px solid transparent;
-                        border-top: 5px solid #31302b;
+                        border-top: 5px solid @color-very-dark-gray-black2;
                         bottom: -5px;
                         content: '';
                         height: 0;
@@ -544,7 +544,7 @@
     }
 
     .paypal-selection {
-        border-bottom: 2px solid #c0bbaf;
+        border-bottom: 2px solid @color-gray75;
         margin: 10px;
         width: 98%;
 
@@ -562,7 +562,7 @@
     }
 
     .custom-options {
-        border: 1px solid #999;
+        border: 1px solid @color-gray60;
         margin: 0 0 20px;
         padding: 0 10px;
     }

@@ -69,23 +69,21 @@
 //  _____________________________________________
 
 //  Unchecked checkbox state
-
 .form-el-checkbox {
     + .form-label {
         &:before {
             background-color: @checkbox__background-color;
             border-color: @checkbox__border-color;
             border-radius: @form-el__border-radius;
+            font-size: @checkbox-check__font-size;
             height: 1.6rem;
             line-height: @checkbox-check__line-height;
             width: 1.6rem;
-            font-size: @checkbox-check__font-size;
         }
     }
 }
 
 //  Checked checkbox state
-
 .form-el-checkbox {
     &:checked {
         + .form-label {
@@ -102,7 +100,6 @@
 //  _____________________________________________
 
 //  Unchecked radio state
-
 .form-el-radio {
     + .form-label {
         &:before {
