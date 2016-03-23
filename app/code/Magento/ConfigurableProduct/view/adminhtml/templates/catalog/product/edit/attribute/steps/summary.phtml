@@ -8,8 +8,8 @@
 
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary */
 ?>
-<div data-bind="scope: '<?= /* @escapeNotVerified */  $block->getComponentName()?>'">
-    <h2 class="steps-wizard-title"><?= /* @escapeNotVerified */  __('Step 4: Summary') ?></h2>
+<div data-bind="scope: '<?= /* @noEscape */  $block->getComponentName()?>'">
+    <h2 class="steps-wizard-title"><?= /* @noEscape */  __('Step 4: Summary') ?></h2>
 
     <div class="admin__data-grid-wrap admin__data-grid-wrap-static">
         <!-- ko if: gridNew().length -->
@@ -46,9 +46,9 @@
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                    "<?= /* @escapeNotVerified */  $block->getComponentName()?>": {
+                    "<?= /* @noEscape */  $block->getComponentName()?>": {
                         "component": "Magento_ConfigurableProduct/js/variations/steps/summary",
-                        "appendTo": "<?= /* @escapeNotVerified */  $block->getParentComponentName()?>",
+                        "appendTo": "<?= /* @noEscape */  $block->getParentComponentName()?>",
                         "variationsComponent": "<?= /* @noEscape */ $block->getData('config/form') ?>.configurableVariations",
                         "modalComponent": "<?= /* @noEscape */ $block->getData('config/form') ?>.configurableModal"
                     }
