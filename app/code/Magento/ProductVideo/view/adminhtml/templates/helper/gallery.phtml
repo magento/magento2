@@ -59,7 +59,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
     foreach ($block->getImageTypes() as $typeData):
         ?>
         <input name="<?php echo $block->escapeHtml($typeData['name']) ?>"
-               data-form-part="<?php echo $formName ?>"
+               data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                class="image-<?php echo $block->escapeHtml($typeData['code']) ?>"
                type="hidden"
                value="<?php echo $block->escapeHtml($typeData['value']) ?>"/>
