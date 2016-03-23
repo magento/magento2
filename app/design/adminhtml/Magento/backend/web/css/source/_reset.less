@@ -11,7 +11,7 @@ html {
     box-sizing: border-box;
     //  Prevent iOS text size adjust after orientation change, without disabling user zoom.
     -webkit-text-size-adjust: 100%;
-        -ms-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
 }
 
 * {
@@ -88,6 +88,7 @@ template {
 
 a {
     background-color: transparent; // Remove the gray background color from active links in IE 10.
+
     //  Improve readability when focused and also mouse hovered in all browsers.
     &:active,
     &:hover {
@@ -95,6 +96,7 @@ a {
     }
 }
 
+//
 //  Text-level semantics
 //  ---------------------------------------------
 
@@ -132,11 +134,11 @@ sup {
 }
 
 sup {
-    top: -0.5em;
+    top: -.5em;
 }
 
 sub {
-    bottom: -0.25em;
+    bottom: -.25em;
 }
 
 //
@@ -175,7 +177,7 @@ figure {
 //  Address differences between Firefox and other browsers.
 hr {
     -moz-box-sizing: content-box;
-         box-sizing: content-box;
+    box-sizing: content-box;
     height: 0;
 }
 
@@ -254,14 +256,14 @@ input {
 }
 
 //  Firefox's implementation doesn't respect box-sizing, padding, or width.
-input[type="checkbox"],
-input[type="radio"] {
+input[type='checkbox'],
+input[type='radio'] {
     box-sizing: border-box; // Address box sizing set to 'content-box' in IE 8/9/10.
     padding: 0; // Remove excess padding in IE 8/9/10.
 }
 
 //  Fix the cursor style for Chrome's increment/decrement buttons. For certain 'font-size' values of the 'input', it causes the cursor style of the decrement button to change from 'default' to 'text'.
-input[type="number"] {
+input[type='number'] {
     &::-webkit-inner-spin-button,
     &::-webkit-outer-spin-button {
         height: auto;
@@ -269,13 +271,13 @@ input[type="number"] {
 }
 
 //  Address 'appearance' set to 'searchfield' in Safari and Chrome.
-input[type="search"] {
+input[type='search'] {
     -webkit-appearance: textfield;
 }
 
 //  Remove inner padding and search cancel button in Safari and Chrome on OS X.
 //  Safari (but not Chrome) clips the cancel button when the search input has padding (and 'textfield' appearance).
-input[type="search"] {
+input[type='search'] {
     &::-webkit-search-cancel-button,
     &::-webkit-search-decoration {
         -webkit-appearance: none;

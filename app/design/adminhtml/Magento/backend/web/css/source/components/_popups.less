@@ -15,8 +15,8 @@
     .appearing__off();
     background: @popup__background-color;
     min-width: 40%;
-    transform: scale(0.7);
-    transition: all 0.3s;
+    transform: scale(.7);
+    transition: all .3s;
     width: 75%;
 
     &.ui-dialog-active {
@@ -93,8 +93,8 @@
         }
 
         span {
-            position: static;
             overflow: auto;
+            position: static;
         }
     }
 
@@ -145,9 +145,9 @@
     }
 
     .ui-resizable-handle {
-        position: absolute;
-        font-size: 0.1px;
         display: block;
+        font-size: 0.1px;
+        position: absolute;
     }
 
     .ui-resizable-disabled,
@@ -296,9 +296,9 @@
             border: 1px solid @color-gray68;
             display: inline-block;
             margin: 0 @indent__xs 15px 0;
+            overflow: hidden;
             padding: 3px;
             width: 100px;
-            overflow: hidden;
 
             &.selected {
                 border-color: @color-blue-dodger;
@@ -404,8 +404,8 @@
         padding-left: @indent__s;
 
         b {
-            margin-left: -@indent__s;
             display: inline-block;
+            margin-left: -@indent__s;
         }
     }
 }

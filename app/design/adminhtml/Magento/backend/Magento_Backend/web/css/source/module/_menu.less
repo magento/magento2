@@ -246,8 +246,8 @@
             position: absolute;
             top: 0;
             transform: translateX(-100%);
-            transition-property: transform, visibility;
             transition-duration: .3s;
+            transition-property: transform, visibility;
             transition-timing-function: ease-in-out;
             visibility: hidden;
             z-index: @submenu__z-index - 1;
@@ -258,7 +258,7 @@
             }
         }
 
-        &._show  {
+        &._show {
             > .submenu {
                 transform: translateX(0);
                 visibility: visible;
@@ -283,9 +283,9 @@
                 }
 
                 &:active {
-                    padding-top: @submenu-link__padding-vertical + .1rem;
-                    padding-bottom: @submenu-link__padding-vertical - .1rem;
                     background-color: @submenu-link__active__background-color;
+                    padding-bottom: @submenu-link__padding-vertical - .1rem;
+                    padding-top: @submenu-link__padding-vertical + .1rem;
                 }
             }
         }
