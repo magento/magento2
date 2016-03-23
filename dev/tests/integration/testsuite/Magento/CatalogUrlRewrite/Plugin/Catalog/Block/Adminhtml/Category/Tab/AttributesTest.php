@@ -53,6 +53,6 @@ class AttributesTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('input', $urlKeyData['formElement']);
         $this->assertEquals('1', $urlKeyData['visible']);
         $this->assertEquals('0', $urlKeyData['required']);
-        $this->assertEquals('[STORE VIEW]', $urlKeyData['scopeLabel']);
+        $this->assertEquals('', $urlKeyData['scopeLabel']);
     }
 }
