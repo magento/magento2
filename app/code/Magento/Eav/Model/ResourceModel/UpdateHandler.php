@@ -13,6 +13,8 @@ use Magento\Framework\Model\Entity\ScopeResolver;
 
 /**
  * Class UpdateHandler
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateHandler
 {
@@ -104,6 +106,12 @@ class UpdateHandler
             $processed = [];
             foreach ($this->getAttributes($entityType) as $attribute) {
                 if ($attribute->isStatic()) {
+                    continue;
+                }
+                /**
+                 * Only scalar values can be stored in generic tables
+                 */
+                if (isset($data[$attribute->getAttributeCode()]) && !is_scalar($data[$attribute->getAttributeCode()])) {
                     continue;
                 }
                 if (isset($snapshot[$attribute->getAttributeCode()])

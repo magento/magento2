@@ -379,8 +379,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         if (!$product->hasData($this->_configurableAttributes)) {
             $cacheId =  __CLASS__ . $product->getId() . '_' . $product->getStoreId();
             $configurableAttributes = $this->cache->load($cacheId);
+            $configurableAttributes = $this->hasCacheData($configurableAttributes);
             if ($configurableAttributes) {
-                $configurableAttributes = unserialize($configurableAttributes);
                 $configurableAttributes->setProductFilter($product);
             } else {
                 $configurableAttributes = $this->getConfigurableAttributeCollection($product);
@@ -396,6 +396,24 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         }
         \Magento\Framework\Profiler::stop('CONFIGURABLE:' . __METHOD__);
         return $product->getData($this->_configurableAttributes);
+    }
+
+    /**
+     * @param mixed $configurableAttributes
+     * @return bool
+     */
+    protected function hasCacheData($configurableAttributes)
+    {
+        $configurableAttributes = unserialize($configurableAttributes);
+        if ($configurableAttributes && count($configurableAttributes)) {
+            foreach ($configurableAttributes as $attribute) {
+                /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute */
+                if ($attribute->getData('options')) {
+                    return $configurableAttributes;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -488,8 +506,10 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
         if (!$product->hasData($this->_usedProducts)) {
             $usedProducts = [];
             $collection = $this->getUsedProductCollection($product)
-                ->addAttributeToSelect('*')
-                ->addAttributeToSelect('media_gallery')
+                ->addAttributeToSelect('name')
+                ->addAttributeToSelect('price')
+//                ->addAttributeToSelect('msrp')
+//                ->addAttributeToSelect('media_gallery')
                 ->addFilterByRequiredOptions()
                 ->setStoreId($product->getStoreId());
 
@@ -990,12 +1010,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
 
         $attributes = $this->getConfigurableAttributes($product);
         if (count($attributes)) {
-            foreach ($attributes as $attribute) {
-                /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute */
-                if ($attribute->getData('options')) {
-                    return true;
-                }
-            }
+            return true;
         }
 
         return false;
