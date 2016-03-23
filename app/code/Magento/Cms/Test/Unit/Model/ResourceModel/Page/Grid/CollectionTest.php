@@ -20,6 +20,7 @@ use Magento\Framework\DB\Select;
 
 /**
  * Class CollectionTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
