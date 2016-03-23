@@ -13,9 +13,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Magento\User\Model\ResourceModel\User\Collection as UserCollection;
 
 /**
- * Class Filesystem
- *
  * A class to manage Magento modes
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Filesystem
 {
