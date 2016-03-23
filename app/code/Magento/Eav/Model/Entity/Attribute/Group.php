@@ -13,6 +13,14 @@ use Magento\Framework\Api\AttributeValueFactory;
  *
  * @method \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group _getResource()
  * @method \Magento\Eav\Model\ResourceModel\Entity\Attribute\Group getResource()
+ * @method int getSortOrder()
+ * @method \Magento\Eav\Model\Entity\Attribute\Group setSortOrder(int $value)
+ * @method int getDefaultId()
+ * @method \Magento\Eav\Model\Entity\Attribute\Group setDefaultId(int $value)
+ * @method string getAttributeGroupCode()
+ * @method \Magento\Eav\Model\Entity\Attribute\Group setAttributeGroupCode(string $value)
+ * @method string getTabGroupCode()
+ * @method \Magento\Eav\Model\Entity\Attribute\Group setTabGroupCode(string $value)
  */
 class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Eav\Api\Data\AttributeGroupInterface
@@ -162,70 +170,6 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     public function setAttributeSetId($attributeSetId)
     {
         return $this->setData(self::ATTRIBUTE_SET_ID, $attributeSetId);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getSortOrder()
-    {
-        return $this->getData(self::SORT_ORDER);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setSortOrder($sortOrder)
-    {
-        return $this->setData(self::SORT_ORDER, $sortOrder);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultId()
-    {
-        return $this->getData(self::DEFAULT_ID);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setDefaultId($defaultId)
-    {
-        return $this->setData(self::DEFAULT_ID, $defaultId);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getAttributeGroupCode()
-    {
-        return $this->getData(self::ATTRIBUTE_GROUP_CODE);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setAttributeGroupCode($attributeGroupCode)
-    {
-        return $this->setData(self::ATTRIBUTE_GROUP_CODE, $attributeGroupCode);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getScopeCode()
-    {
-        return $this->getData(self::SCOPE_CODE);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function setScopeCode($scopeCode)
-    {
-        return $this->setData(self::SCOPE_CODE, $scopeCode);
     }
 
     /**
