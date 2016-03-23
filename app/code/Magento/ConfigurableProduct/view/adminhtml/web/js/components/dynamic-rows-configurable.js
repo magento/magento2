@@ -163,7 +163,7 @@ define([
                 result = [];
 
             _.each(source, function (data) {
-                result.push(data)
+                result.push(data);
             });
 
             return result;
