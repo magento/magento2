@@ -209,7 +209,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $categoryData = $this->addUseConfigSettings($categoryData);
             $categoryData = $this->filterFields($categoryData);
             if (isset($categoryData['image'])) {
-                $categoryData['savedImage']['value'] = $category->getImageUrl();
+                unset($categoryData['image']);
+                $categoryData['image'][0]['name'] = $category->getData('image');
+                $categoryData['image'][0]['url'] = $category->getImageUrl();
             }
             $this->loadedData[$category->getId()] = $categoryData;
         }
@@ -235,7 +237,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
             foreach ($this->metaProperties as $metaName => $origName) {
                 $value = $attribute->getDataUsingMethod($origName);
-                $meta[$code][$metaName] = ($metaName === 'label') ? __($value) : $value;
+                $meta[$code][$metaName] = $value;
                 if ('frontend_input' === $origName) {
                     $meta[$code]['formElement'] = isset($this->formElement[$value])
                         ? $this->formElement[$value]
@@ -251,7 +253,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
                 $meta[$code]['validation'] = $rules;
             }
 
-            $meta[$code]['scope_label'] = $this->getScopeLabel($attribute);
+            $meta[$code]['scopeLabel'] = $this->getScopeLabel($attribute);
             $meta[$code]['componentType'] = Field::NAME;
         }
 
@@ -382,16 +384,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $result['use_config.default_sort_by']['default'] = true;
         $result['use_config.filter_price_range']['default'] = true;
         if ($this->request->getParam('store') && $this->request->getParam('id')) {
+            $result['use_default.url_key']['checked'] = true;
             $result['use_default.url_key']['default'] = true;
             $result['use_default.url_key']['visible'] = true;
         } else {
+            $result['use_default.url_key']['checked'] = false;
             $result['use_default.url_key']['default'] = false;
             $result['use_default.url_key']['visible'] = false;
         }
-
-        // image fields
-        $result['savedImage.value']['default'] = '';
-        $result['savedImage.delete']['default'] = false;
 
         return $result;
     }
@@ -413,8 +413,6 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             'content' =>
                 [
                     'image',
-                    'savedImage.delete',
-                    'savedImage.value',
                     'description',
                     'landing_page',
                 ],

@@ -14,7 +14,7 @@ use Zend\View\Model\JsonModel;
 class EnvironmentTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Setup\Model\FilePermissions|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Setup\FilePermissions|\PHPUnit_Framework_MockObject_MockObject
      */
     private $permissions;
 
@@ -41,7 +41,7 @@ class EnvironmentTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->filesystem = $this->getMock('Magento\Framework\Filesystem', [], [], '', false);
-        $this->permissions = $this->getMock('Magento\Setup\Model\FilePermissions', [], [], '', false);
+        $this->permissions = $this->getMock('Magento\Framework\Setup\FilePermissions', [], [], '', false);
         $this->cronScriptReadinessCheck = $this->getMock(
             'Magento\Setup\Model\CronScriptReadinessCheck',
             [],

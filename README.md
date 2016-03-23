@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/magento/magento2.svg?branch=master)](https://travis-ci.org/magento/magento2)
+[![Build Status](https://travis-ci.org/magento/magento2.svg?branch=develop)](https://travis-ci.org/magento/magento2)
 [![Gitter](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/magento/magento2?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 <h2>Welcome</h2>
 Welcome to Magento 2 installation! We're glad you chose to install Magento 2, a cutting edge, feature-rich eCommerce solution that gets results.
@@ -33,7 +33,7 @@ Use the following table to verify you have the correct prerequisites to install 
 		<td><a href="http://devdocs.magento.com/guides/v2.0/install-gde/prereq/apache.html">Apache</a></td>
 	</tr>
 	<tr>
-		<td>PHP 5.5.x or 5.6.x</td>
+		<td>PHP ~5.5.22 or 5.6.x</td>
 		<td><code>php -v</code></td>
 		<td><a href="http://devdocs.magento.com/guides/v2.0/install-gde/prereq/php-ubuntu.html">PHP Ubuntu</a><br><a href="http://devdocs.magento.com/guides/v2.0/install-gde/prereq/php-centos.html">PHP CentOS</a></td>
 	</tr>

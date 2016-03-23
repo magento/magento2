@@ -189,10 +189,13 @@ class Collection extends \Magento\Customer\Model\ResourceModel\Customer\Collecti
             $connection = $this->orderResource->getConnection();
             $baseSubtotalRefunded = $connection->getIfNullSql('orders.base_subtotal_refunded', 0);
             $baseSubtotalCanceled = $connection->getIfNullSql('orders.base_subtotal_canceled', 0);
+            $baseDiscountCanceled = $connection->getIfNullSql('orders.base_discount_canceled', 0);
 
             $totalExpr = $this->_addOrderStatFilter ?
-                "(orders.base_subtotal-{$baseSubtotalCanceled}-{$baseSubtotalRefunded})*orders.base_to_global_rate" :
-                "orders.base_subtotal-{$baseSubtotalCanceled}-{$baseSubtotalRefunded}";
+                "(orders.base_subtotal-{$baseSubtotalCanceled}-{$baseSubtotalRefunded} - {$baseDiscountCanceled}"
+                    . " - ABS(orders.base_discount_amount))*orders.base_to_global_rate" :
+                "orders.base_subtotal-{$baseSubtotalCanceled}-{$baseSubtotalRefunded} - {$baseDiscountCanceled}"
+                    . " - ABS(orders.base_discount_amount)";
 
             $select = $this->orderResource->getConnection()->select();
             $select->from(

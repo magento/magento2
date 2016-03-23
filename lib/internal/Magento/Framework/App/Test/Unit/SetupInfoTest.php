@@ -8,7 +8,6 @@ namespace Magento\Framework\App\Test\Unit;
 
 use \Magento\Framework\App\SetupInfo;
 
-
 class SetupInfoTest extends \PHPUnit_Framework_TestCase
 {
     /**
@@ -92,7 +91,10 @@ class SetupInfoTest extends \PHPUnit_Framework_TestCase
         return [
             [self::$fixture, ''],
             [self::$fixture + ['HTTP_HOST' => ''], ''],
-            [['DOCUMENT_ROOT' => '/foo/bar', 'SCRIPT_FILENAME' => '/other/baz.php', 'HTTP_HOST' => 'example.com'], ''],
+            [
+                ['DOCUMENT_ROOT' => '/foo/bar', 'SCRIPT_FILENAME' => '/other/baz.php', 'HTTP_HOST' => 'example.com'],
+                'http://example.com/'
+            ],
             [self::$fixture + ['HTTP_HOST' => 'example.com'], 'http://example.com/dir/'],
             [
                 ['DOCUMENT_ROOT' => '/foo/bar', 'SCRIPT_FILENAME' => '/foo/bar/baz.php', 'HTTP_HOST' => 'example.com'],

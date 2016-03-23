@@ -60,6 +60,13 @@ class Content extends Tab
     protected $contentHeading = '[name="content_heading"]';
 
     /**
+     * Header locator.
+     *
+     * @var string
+     */
+    protected $header = 'header.page-header';
+
+    /**
      * Clicking in content tab 'Insert Variable' button.
      *
      * @param SimpleElement $element [optional]
@@ -85,7 +92,12 @@ class Content extends Tab
         $context = $element === null ? $this->_rootElement : $element;
         $addWidgetButton = $context->find($this->addWidgetButton);
         if ($addWidgetButton->isVisible()) {
-            $addWidgetButton->click();
+            try {
+                $addWidgetButton->click();
+            } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
+                $this->browser->find($this->header)->hover();
+                $addWidgetButton->click();
+            }
         }
     }
 

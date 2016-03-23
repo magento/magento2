@@ -75,7 +75,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
     /**
      * Prepare parameters
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->_objectManager = $this->getMockBuilder(
             'Magento\Framework\App\ObjectManager'
@@ -110,6 +110,18 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->timezone = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $this->timezone->expects($this->any())->method('scopeTimeStamp')->will($this->returnValue(time()));
+
+        $phpExecutableFinder = $this->getMock('Symfony\Component\Process\PhpExecutableFinder', [], [], '', false);
+        $phpExecutableFinder->expects($this->any())->method('find')->willReturn('php');
+        $phpExecutableFinderFactory = $this->getMock(
+            'Magento\Framework\Process\PhpExecutableFinderFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $phpExecutableFinderFactory->expects($this->any())->method('create')->willReturn($phpExecutableFinder);
+
         $this->_observer = new ProcessCronQueueObserver(
             $this->_objectManager,
             $this->_scheduleFactory,
@@ -118,7 +130,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
             $this->_scopeConfig,
             $this->_request,
             $this->_shell,
-            $this->timezone
+            $this->timezone,
+            $phpExecutableFinderFactory
         );
     }
 
@@ -642,13 +655,14 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
         ];
 
         // This item was scheduled 2 days ago
+        /** @var \Magento\Cron\Model\Schedule|\PHPUnit_Framework_MockObject_MockObject $schedule1 */
         $schedule1 = $this->getMockBuilder(
             'Magento\Cron\Model\Schedule'
         )->disableOriginalConstructor()->setMethods(
             ['getExecutedAt', 'getScheduledAt', 'getStatus', 'delete', '__wakeup']
         )->getMock();
         $schedule1->expects($this->any())->method('getExecutedAt')->will($this->returnValue(null));
-        $schedule1->expects($this->any())->method('getScheduledAt')->will($this->returnValue('-2 day -1 hour'));
+        $schedule1->expects($this->any())->method('getScheduledAt')->will($this->returnValue('-2 day -2 hour'));
         $schedule1->expects($this->any())->method('getStatus')->will($this->returnValue(Schedule::STATUS_MISSED));
         //we expect this job be deleted from the list
         $schedule1->expects($this->once())->method('delete')->will($this->returnValue(true));
