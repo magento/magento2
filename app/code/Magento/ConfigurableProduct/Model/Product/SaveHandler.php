@@ -21,7 +21,6 @@ class SaveHandler
     private $optionRepository;
 
     /**
-    /**
      * @var ResourceModelConfigurable
      */
     private $resourceModel;
