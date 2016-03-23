@@ -31,17 +31,18 @@ define([
         this.nextLabelText = 'Next';
         this.prevLabelText = 'Back';
         this.initSelectors = function (modalClass) {
+            var elementSelector = '[data-role=steps-wizard-main]';
+
             this.nextLabel = '[data-role="step-wizard-next"]';
             this.prevLabel = '[data-role="step-wizard-prev"]';
-            var elemetSelector = '[data-role=steps-wizard-main]';
 
             if (modalClass) {
                 this.nextLabel = '.' + modalClass + ' ' + this.nextLabel;
                 this.prevLabel = '.' + modalClass + ' ' + this.prevLabel;
-                elemetSelector = '.' + modalClass + elemetSelector;
+                elementSelector = '.' + modalClass + elementSelector;
             }
 
-            this.element = $(elemetSelector);
+            this.element = $(elementSelector);
             $(this.element).notification();
         };
         this.initSelectors(modalClass);
