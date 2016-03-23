@@ -105,7 +105,7 @@ define([
          */
         getPaymentMethodNonce: function () {
             var self = this;
-            
+
             fullScreenLoader.startLoader();
 
             $.get(self.nonceUrl, {
@@ -115,6 +115,7 @@ define([
                 self.placeOrder();
             }).fail(function (response) {
                 var failed = JSON.parse(response.responseText);
+
                 self.error(failed.message);
             }).always(function () {
                 fullScreenLoader.stopLoader();
