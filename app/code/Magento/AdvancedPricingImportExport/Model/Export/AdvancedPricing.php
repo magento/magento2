@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdvancedPricingImportExport\Model\Export;
@@ -142,8 +142,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
             $attributeColFactory,
             $_typeFactory,
             $linkTypeProvider,
-            $rowCustomizer,
-            $metadataPool
+            $rowCustomizer
         );
     }
 
@@ -356,6 +355,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 }
             }
             try {
+                $productEntityLinkField = $this->getProductEntityLinkField();
                 $select = $this->_connection->select()
                     ->from(
                         ['cpe' => $this->_resource->getTableName('catalog_product_entity')],
@@ -363,7 +363,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                     )
                     ->joinInner(
                         ['ap' => $this->_resource->getTableName($table)],
-                        'ap.entity_id = cpe.entity_id',
+                        'ap.' . $productEntityLinkField . ' = cpe.' . $productEntityLinkField,
                         []
                     )
                     ->where('cpe.entity_id IN (?)', $listSku);

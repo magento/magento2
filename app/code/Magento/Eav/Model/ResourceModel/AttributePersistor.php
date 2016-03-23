@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,32 +22,32 @@ class AttributePersistor
     /**
      * @var AttributeRepositoryInterface
      */
-    protected $attributeRepository;
+    private $attributeRepository;
 
     /**
      * @var FormatInterface
      */
-    protected $localeFormat;
+    private $localeFormat;
 
     /**
      * @var MetadataPool
      */
-    protected $metadataPool;
+    private $metadataPool;
 
     /**
      * @var array
      */
-    protected $insert = [];
+    private $insert = [];
 
     /**
      * @var array
      */
-    protected $update = [];
+    private $update = [];
 
     /**
      * @var array
      */
-    protected $delete = [];
+    private $delete = [];
 
     /**
      * @param FormatInterface $localeFormat
@@ -101,7 +101,7 @@ class AttributePersistor
 
     /**
      * @param string $entityType
-     * @param array $context
+     * @param \Magento\Framework\Model\Entity\ScopeInterface[] $context
      * @return void
      * @throws \Exception
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -121,8 +121,9 @@ class AttributePersistor
                     $metadata->getLinkField() . ' = ?' => $link,
                     'attribute_id = ?' => $attribute->getAttributeId()
                 ];
-                foreach ($context as $field => $value) {
-                    $conditions[$metadata->getEntityConnection()->quoteIdentifier($field) . ' = ?'] = $value;
+                foreach ($context as $scope) {
+                    $conditions[$metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' = ?']
+                        = $scope->getValue();
                 }
                 $metadata->getEntityConnection()->delete(
                     $attribute->getBackend()->getTable(),
@@ -134,7 +135,7 @@ class AttributePersistor
 
     /**
      * @param string $entityType
-     * @param array $context
+     * @param \Magento\Framework\Model\Entity\ScopeInterface[] $context
      * @return void
      * @throws \Exception
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -157,8 +158,8 @@ class AttributePersistor
                     'attribute_id' => $attribute->getAttributeId(),
                     'value' => $this->prepareValue($entityType, $attributeValue, $attribute)
                 ];
-                foreach ($context as $field => $value) {
-                    $data[$field] = $value;
+                foreach ($context as $scope) {
+                    $data[$scope->getIdentifier()] = $scope->getValue();
                 }
                 $metadata->getEntityConnection()->insert($attribute->getBackend()->getTable(), $data);
             }
@@ -167,7 +168,7 @@ class AttributePersistor
 
     /**
      * @param string $entityType
-     * @param array $context
+     * @param \Magento\Framework\Model\Entity\ScopeInterface[] $context
      * @return void
      * @throws \Exception
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -189,8 +190,9 @@ class AttributePersistor
                     $metadata->getLinkField() . ' = ?' => $link,
                     'attribute_id = ?' => $attribute->getAttributeId(),
                 ];
-                foreach ($context as $field => $value) {
-                    $conditions[$metadata->getEntityConnection()->quoteIdentifier($field) . ' = ?'] = $value;
+                foreach ($context as $scope) {
+                    $conditions[$metadata->getEntityConnection()->quoteIdentifier($scope->getIdentifier()) . ' = ?']
+                        = $scope->getValue();
                 }
                 $metadata->getEntityConnection()->update(
                     $attribute->getBackend()->getTable(),
@@ -207,7 +209,7 @@ class AttributePersistor
      * Flush attributes to storage
      *
      * @param string $entityType
-     * @param array $context
+     * @param string $context
      * @return void
      */
     public function flush($entityType, $context)
@@ -215,7 +217,6 @@ class AttributePersistor
         $this->processDeletes($entityType, $context);
         $this->processInserts($entityType, $context);
         $this->processUpdates($entityType, $context);
-
         unset($this->delete, $this->insert, $this->update);
     }
 
@@ -223,7 +224,7 @@ class AttributePersistor
      * @param string $entityType
      * @param string $value
      * @param AbstractAttribute $attribute
-     * @return string
+     * @return mixed
      * @throws \Exception
      */
     protected function prepareValue($entityType, $value, AbstractAttribute $attribute)
@@ -234,6 +235,8 @@ class AttributePersistor
             $value = null;
         } elseif ($type == 'decimal') {
             $value = $this->localeFormat->getNumber($value);
+        } elseif ($type == 'varchar' && is_array($value)) {
+            $value = implode(',', $value);
         }
         $describe = $metadata->getEntityConnection()->describeTable($attribute->getBackendTable());
         return $metadata->getEntityConnection()->prepareColumnValue($describe['value'], $value);
