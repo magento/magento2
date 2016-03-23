@@ -109,12 +109,15 @@ class AttributeRepository implements \Magento\Eav\Api\AttributeRepositoryInterfa
             []
         );
         $entityType = $this->eavConfig->getEntityType($entityTypeCode);
+
         $additionalTable = $entityType->getAdditionalAttributeTable();
-        $attributeCollection->join(
-            ['additional_table' => $attributeCollection->getTable($additionalTable)],
-            'main_table.attribute_id = additional_table.attribute_id',
-            []
-        );
+        if ($additionalTable) {
+            $attributeCollection->join(
+                ['additional_table' => $attributeCollection->getTable($additionalTable)],
+                'main_table.attribute_id = additional_table.attribute_id',
+                []
+            );
+        }
         //Add filters from root filter group to the collection
         foreach ($searchCriteria->getFilterGroups() as $group) {
             $this->addFilterGroupToCollection($group, $attributeCollection);
