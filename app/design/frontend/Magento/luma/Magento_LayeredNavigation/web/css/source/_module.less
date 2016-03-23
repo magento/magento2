@@ -32,7 +32,7 @@
 
                 &[data-count]:after {
                     .lib-css(color, @color-white);
-                    background: @color-orange-red4;
+                    background: @color-orange-red1;
                     border-radius: 2px;
                     content: attr(data-count);
                     display: inline-block;
@@ -201,9 +201,13 @@
 //  Mobile
 //  _____________________________________________
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     body {
         &.filter-active {
+            .page-header {
+                display: none;
+            }
+
             .page-wrapper {
                 height: 0;
                 margin-top: -999999em;
@@ -380,7 +384,7 @@
     }
 }
 
-.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
 
     .filter {
         &.block {

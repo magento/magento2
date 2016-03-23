@@ -43,6 +43,11 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     protected $metadataPool;
 
     /**
+     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
+     */
+    private $extensibleDataObjectConverter;
+
+    /**
      * List of fields that can used config values in case when value does not defined directly
      *
      * @var array
@@ -53,21 +58,18 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
      * @param \Magento\Catalog\Model\CategoryFactory $categoryFactory
      * @param \Magento\Catalog\Model\ResourceModel\Category $categoryResource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
      * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         \Magento\Catalog\Model\ResourceModel\Category $categoryResource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
-        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool
     ) {
         $this->categoryFactory = $categoryFactory;
         $this->categoryResource = $categoryResource;
         $this->storeManager = $storeManager;
         $this->metadataPool = $metadataPool;
-        $this->extensibleDataObjectConverter = $extensibleDataObjectConverter;
     }
 
     /**
@@ -76,7 +78,7 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
     public function save(\Magento\Catalog\Api\Data\CategoryInterface $category)
     {
         $storeId = (int)$this->storeManager->getStore()->getId();
-        $existingData = $this->extensibleDataObjectConverter
+        $existingData = $this->getExtensibleDataObjectConverter()
             ->toNestedArray($category, [], 'Magento\Catalog\Api\Data\CategoryInterface');
         $existingData = array_diff_key($existingData, array_flip(['path', 'level', 'parent_id']));
         $existingData['store_id'] = $storeId;
@@ -199,5 +201,19 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
             }
         }
         $category->unsetData('use_post_data_config');
+    }
+
+    /**
+     * @return \Magento\Framework\Api\ExtensibleDataObjectConverter
+     *
+     * @deprecated
+     */
+    private function getExtensibleDataObjectConverter()
+    {
+        if ($this->extensibleDataObjectConverter === null) {
+            $this->extensibleDataObjectConverter = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Api\ExtensibleDataObjectConverter');
+        }
+        return $this->extensibleDataObjectConverter;
     }
 }

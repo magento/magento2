@@ -11,6 +11,8 @@ use Magento\ConfigurableProduct\Api\Data\OptionValueInterfaceFactory;
 use Magento\ConfigurableProduct\Helper\Product\Options\Loader;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection;
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
 use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
@@ -52,10 +54,13 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
 
         $this->configurable = $this->getMockBuilder(Configurable::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getConfigurableAttributes'])
+            ->setMethods(['getConfigurableAttributeCollection'])
             ->getMock();
 
-        $this->loader = new Loader($this->optionValueFactory);
+        $extensionAttributesJoinProcessor = $this->getMockBuilder(JoinProcessorInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->loader = new Loader($this->optionValueFactory, $extensionAttributesJoinProcessor);
     }
 
     /**
@@ -75,12 +80,17 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getOptions', 'setValues'])
             ->getMock();
+
         $attributes = [$attribute];
+        
+        $iterator = $this->getMockBuilder(Collection::class)->disableOriginalConstructor()->getMock();
+        $iterator->expects($this->once())->method('getIterator')
+            ->willReturn(new \ArrayIterator($attributes));
 
         $this->configurable->expects(static::once())
-            ->method('getConfigurableAttributes')
+            ->method('getConfigurableAttributeCollection')
             ->with($this->product)
-            ->willReturn($attributes);
+            ->willReturn($iterator);
 
         $attribute->expects(static::once())
             ->method('getOptions')

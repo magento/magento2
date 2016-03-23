@@ -14,6 +14,13 @@ use Magento\Framework\Exception\LocalizedException;
 class Save extends \Magento\Backend\App\Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Cms::save';
+
+    /**
      * @var PostDataProcessor
      */
     protected $dataProcessor;
@@ -36,14 +43,6 @@ class Save extends \Magento\Backend\App\Action
         $this->dataProcessor = $dataProcessor;
         $this->dataPersistor = $dataPersistor;
         parent::__construct($context);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Cms::save');
     }
 
     /**

@@ -36,8 +36,11 @@
     <preference for="Magento\Sales\Api\Data\ShipmentSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment\Collection"/>
     <preference for="Magento\Sales\Api\Data\ShipmentTrackInterface" type="Magento\Sales\Model\Order\Shipment\Track"/>
     <preference for="Magento\Sales\Api\Data\ShipmentTrackSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Shipment\Track\Collection"/>
+    <preference for="Magento\Sales\Api\Data\ShippingInterface" type="Magento\Sales\Model\Order\Shipping"/>
+    <preference for="Magento\Sales\Api\Data\ShippingAssignmentInterface" type="Magento\Sales\Model\Order\ShippingAssignment"/>
     <preference for="Magento\Sales\Api\Data\TransactionInterface" type="Magento\Sales\Model\Order\Payment\Transaction"/>
     <preference for="Magento\Sales\Api\Data\TransactionSearchResultInterface" type="Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\Collection"/>
+    <preference for="Magento\Sales\Api\Data\TotalInterface" type="Magento\Sales\Model\Order\ShippingTotal"/>
     <preference for="Magento\Sales\Api\CreditmemoCommentRepositoryInterface" type="Magento\Sales\Api\Data\CreditmemoComment\Repository"/>
     <preference for="Magento\Sales\Api\CreditmemoItemRepositoryInterface" type="Magento\Sales\Api\Data\CreditmemoItem\Repository"/>
     <preference for="Magento\Sales\Api\CreditmemoRepositoryInterface" type="Magento\Sales\Model\Order\CreditmemoRepository"/>
@@ -777,12 +780,6 @@
             <argument name="state" xsi:type="object">Magento\Framework\App\State\Proxy</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">sales_order_grid</argument>
-            <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\ResourceModel\Order</argument>
-        </arguments>
-    </virtualType>
     <virtualType name="Magento\Sales\Model\ResourceModel\Order\Invoice\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
         <arguments>
             <argument name="mainTable" xsi:type="string">sales_invoice_grid</argument>
