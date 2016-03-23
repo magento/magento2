@@ -675,9 +675,21 @@ define([
          * @param {Object} event - current event
          */
         setTargetData: function (event) {
+            var timestamp = event.timeStamp;
+
             tooltipData.event = event;
-            tooltipData.targetElement = event.type === 'mousemove' ?
-                event.target : event.currentTarget;
+
+            //TODO: bug chrome v.49; Link to issue https://bugs.chromium.org/p/chromium/issues/detail?id=161464
+            if (timestamp - (tooltipData.timestamp || 0) < 1) {
+                return;
+            }
+
+            if (event.type === 'mousemove') {
+                tooltipData.targetElement = event.target;
+            } else {
+                tooltipData.targetElement = event.currentTarget;
+                tooltipData.timestamp = timestamp;
+            }
         },
 
         /**
