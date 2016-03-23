@@ -179,6 +179,13 @@ define([
 
             return this;
         },
+        destroy: function () {
+            _.each(this.steps, function (step) {
+                step.destroy();
+            });
+
+            this._super();
+        },
         wrapDisabledBackButton: function (stepName) {
             if (_.first(this.stepsNames) === stepName) {
                 this.disabled(true);
