@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Block\Adminhtml\Report\Filter\Form;
@@ -81,7 +81,12 @@ class Coupon extends \Magento\Sales\Block\Adminhtml\Report\Filter\Form
             $fieldset->addField(
                 'rules_list',
                 'multiselect',
-                ['name' => 'rules_list', 'values' => $rulesListOptions, 'display' => 'none'],
+                [
+                    'name' => 'rules_list',
+                    'label' => '',
+                    'values' => $rulesListOptions,
+                    'display' => 'none'
+                ],
                 'price_rule_type'
             );
 

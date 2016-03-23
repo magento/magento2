@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller;
@@ -70,7 +70,7 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
                 'form_key' => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
                 'firstname' => 'James',
                 'lastname' => 'Bond',
-                'company' => 'Ebay',
+                'company' => 'Magento Commerce Inc.',
                 'telephone' => '1112223333',
                 'fax' => '2223334444',
                 'street' => ['1234 Monterey Rd', 'Apt 13'],
@@ -117,7 +117,7 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
                 'form_key' => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
                 'firstname' => 'James',
                 'lastname' => 'Bond',
-                'company' => 'Ebay',
+                'company' => 'Magento Commerce Inc.',
                 'telephone' => '1112223333',
                 'fax' => '2223334444',
                 // omit street and city to fail validation

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model\Cron;
@@ -48,7 +48,28 @@ class JobDbRollbackTest extends \PHPUnit_Framework_TestCase
         $output = $this->getMockForAbstractClass('Symfony\Component\Console\Output\OutputInterface', [], '', false);
         $this->objectManagerProvider = $this->getMock('Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
 
+        $appState = $this->getMock(
+            'Magento\Framework\App\State',
+            [],
+            [],
+            '',
+            false
+        );
+        $configLoader = $this->getMockForAbstractClass(
+            'Magento\Framework\ObjectManager\ConfigLoaderInterface',
+            [],
+            '',
+            false
+        );
+        $configLoader->expects($this->any())->method('load')->willReturn([]);
         $objectManager = $this->getMockForAbstractClass('Magento\Framework\ObjectManagerInterface', [], '', false);
+        $objectManager->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap([
+                ['Magento\Framework\App\State', $appState],
+                ['Magento\Framework\ObjectManager\ConfigLoaderInterface', $configLoader],
+            ]));
+
         $this->objectManagerProvider->expects($this->once())->method('get')->willReturn($objectManager);
 
         $this->jobDbRollback = new JobDbRollback(

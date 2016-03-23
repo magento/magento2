@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -17,16 +17,15 @@ define([
             templates: {
                 base: {
                     parent: '${ $.$data.group.name }',
-                    provider: '${ $.$data.group.provider }'
+                    provider: '${ $.$data.group.provider }',
+                    template: 'ui/grid/filters/field'
                 },
                 date: {
                     component: 'Magento_Ui/js/form/element/date',
-                    template: 'ui/grid/filters/elements/date',
                     dateFormat: 'MM/dd/YYYY'
                 },
                 text: {
-                    component: 'Magento_Ui/js/form/element/abstract',
-                    template: 'ui/grid/filters/elements/input'
+                    component: 'Magento_Ui/js/form/element/abstract'
                 },
                 ranges: {
                     from: {

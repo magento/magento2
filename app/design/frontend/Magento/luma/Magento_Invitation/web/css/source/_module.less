@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -11,19 +11,23 @@
 
 .form-add-invitations {
     &:extend(.abs-add-fields all);
+
     .fields {
         .label {
             &:extend(.abs-visually-hidden all);
         }
     }
+
     .additional,
     .field.message {
         .lib-css(margin-top, @form-field__vertical-indent);
     }
+
     .action {
         &.remove {
             top: 4px;
         }
+
         &.add {
             .lib-button-icon(
                 @_icon-font-content: @icon-expand,

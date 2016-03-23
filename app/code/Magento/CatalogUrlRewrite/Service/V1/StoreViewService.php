@@ -1,12 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Service\V1;
 
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Store view service
@@ -24,15 +26,23 @@ class StoreViewService
     protected $connection;
 
     /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * @param Config $eavConfig
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param MetadataPool $metadataPool
      */
     public function __construct(
         Config $eavConfig,
-        ResourceConnection $resource
+        ResourceConnection $resource,
+        MetadataPool $metadataPool
     ) {
         $this->eavConfig = $eavConfig;
         $this->connection = $resource->getConnection();
+        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -79,10 +89,18 @@ class StoreViewService
         if (!$attribute) {
             throw new \InvalidArgumentException(sprintf('Cannot retrieve attribute for entity type "%s"', $entityType));
         }
+        $linkFieldName = $attribute->getEntity()->getLinkField();
+        if (!$linkFieldName) {
+            $linkFieldName = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        }
         $select = $this->connection->select()
-            ->from($attribute->getBackendTable(), 'store_id')
-            ->where('attribute_id = ?', $attribute->getId())
-            ->where('entity_id = ?', $entityId);
+            ->from(['e' => $attribute->getEntity()->getEntityTable()], [])
+            ->join(
+                ['e_attr' => $attribute->getBackendTable()],
+                "e.{$linkFieldName} = e_attr.{$linkFieldName}",
+                'store_id'
+            )->where('e_attr.attribute_id = ?', $attribute->getId())
+            ->where('e.entity_id = ?', $entityId);
 
         return in_array($storeId, $this->connection->fetchCol($select));
     }

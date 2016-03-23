@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model\Oauth;
@@ -87,7 +87,6 @@ class Consumer extends \Magento\Framework\Model\AbstractModel implements Consume
      */
     public function beforeSave()
     {
-        $this->setUpdatedAt(time());
         $this->validate();
         parent::beforeSave();
         return $this;

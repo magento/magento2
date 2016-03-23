@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -105,12 +105,14 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test for setting session name for admin
-     *
+     * Test for setting session name and secure_cookie for admin
+     * @dataProvider requestSecureDataProvider
+     * @param $secureRequest
      */
-    public function testSetSessionNameByConstructor()
+    public function testSetSessionSettingsByConstructor($secureRequest)
     {
         $sessionName = 'admin';
+        $this->requestMock->expects($this->once())->method('isSecure')->willReturn($secureRequest);
 
         $validatorMock = $this->getMockBuilder('Magento\Framework\Validator\ValidatorInterface')
             ->disableOriginalConstructor()
@@ -136,5 +138,11 @@ class AdminConfigTest extends \PHPUnit_Framework_TestCase
             ]
         );
         $this->assertSame($sessionName, $adminConfig->getName());
+        $this->assertSame($secureRequest, $adminConfig->getCookieSecure());
+    }
+
+    public function requestSecureDataProvider()
+    {
+        return [[true], [false]];
     }
 }

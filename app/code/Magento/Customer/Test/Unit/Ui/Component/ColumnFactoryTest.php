@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Ui\Component;
@@ -30,7 +30,7 @@ class ColumnFactoryTest extends \PHPUnit_Framework_TestCase
     /** @var ColumnFactory */
     protected $columnFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->context = $this->getMockForAbstractClass(
             'Magento\Framework\View\Element\UiComponent\ContextInterface',
@@ -91,7 +91,8 @@ class ColumnFactoryTest extends \PHPUnit_Framework_TestCase
                             'label' => 'Label',
                             'value' => 'Value'
                         ]
-                    ]
+                    ],
+                    'component' => 'Magento_Ui/js/grid/columns/column',
                 ],
             ],
             'context' => $this->context,

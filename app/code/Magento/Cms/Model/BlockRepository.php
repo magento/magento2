@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model;
@@ -15,6 +15,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Cms\Model\ResourceModel\Block as ResourceBlock;
 use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollectionFactory;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Class BlockRepository
@@ -58,6 +59,11 @@ class BlockRepository implements BlockRepositoryInterface
     protected $dataBlockFactory;
 
     /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @param ResourceBlock $resource
      * @param BlockFactory $blockFactory
      * @param Data\BlockInterfaceFactory $dataBlockFactory
@@ -65,6 +71,7 @@ class BlockRepository implements BlockRepositoryInterface
      * @param Data\BlockSearchResultsInterfaceFactory $searchResultsFactory
      * @param DataObjectHelper $dataObjectHelper
      * @param DataObjectProcessor $dataObjectProcessor
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         ResourceBlock $resource,
@@ -73,7 +80,8 @@ class BlockRepository implements BlockRepositoryInterface
         BlockCollectionFactory $blockCollectionFactory,
         Data\BlockSearchResultsInterfaceFactory $searchResultsFactory,
         DataObjectHelper $dataObjectHelper,
-        DataObjectProcessor $dataObjectProcessor
+        DataObjectProcessor $dataObjectProcessor,
+        StoreManagerInterface $storeManager
     ) {
         $this->resource = $resource;
         $this->blockFactory = $blockFactory;
@@ -82,6 +90,7 @@ class BlockRepository implements BlockRepositoryInterface
         $this->dataObjectHelper = $dataObjectHelper;
         $this->dataBlockFactory = $dataBlockFactory;
         $this->dataObjectProcessor = $dataObjectProcessor;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -93,6 +102,8 @@ class BlockRepository implements BlockRepositoryInterface
      */
     public function save(Data\BlockInterface $block)
     {
+        $storeId = $this->storeManager->getStore()->getId();
+        $block->setStoreId($storeId);
         try {
             $this->resource->save($block);
         } catch (\Exception $exception) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Console\Command;
@@ -58,9 +58,30 @@ class BackupCommandTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->backupRollback);
         $this->deploymentConfig = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
+        $appState = $this->getMock(
+            'Magento\Framework\App\State',
+            [],
+            [],
+            '',
+            false
+        );
+        $configLoader = $this->getMockForAbstractClass(
+            'Magento\Framework\ObjectManager\ConfigLoaderInterface',
+            [],
+            '',
+            false
+        );
+        $configLoader->expects($this->any())->method('load')->willReturn([]);
+
         $this->objectManager->expects($this->any())
             ->method('get')
-            ->will($this->returnValue($this->backupRollbackFactory));
+            ->will(
+                $this->returnValueMap([
+                    ['Magento\Framework\Setup\BackupRollbackFactory', $this->backupRollbackFactory],
+                    ['Magento\Framework\App\State', $appState],
+                    ['Magento\Framework\ObjectManager\ConfigLoaderInterface', $configLoader],
+                ])
+            );
         $command = new BackupCommand(
             $objectManagerProvider,
             $maintenanceMode,

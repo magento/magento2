@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -21,7 +21,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
 
     const CHANGE_PASSWORD_URL = 'http://localhost/index.php/account/edit/changepass/1';
 
-    const EMAIL_ADDRESS = 'john.doe@ebay.com';
+    const EMAIL_ADDRESS = 'john.doe@example.com';
 
     /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\View\Element\Template\Context */
     private $_context;
@@ -54,7 +54,7 @@ class InfoTest extends \PHPUnit_Framework_TestCase
      */
     protected $currentCustomer;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->currentCustomer = $this->getMock(
             'Magento\Customer\Helper\Session\CurrentCustomer',

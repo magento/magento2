@@ -2,7 +2,7 @@
 /**
  * Unit test for customer service layer \Magento\Customer\Model\Customer
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -241,5 +241,27 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
                 'prefix'     => 'Prefix',
         ]);
         $this->_model->sendNewAccountEmail('registered');
+    }
+
+    /**
+     * @param $lockExpires
+     * @param $expectedResult
+     * @dataProvider isCustomerLockedDataProvider
+     */
+    public function testIsCustomerLocked($lockExpires, $expectedResult)
+    {
+        $this->_model->setLockExpires($lockExpires);
+        $this->assertEquals($expectedResult, $this->_model->isCustomerLocked());
+    }
+
+    /**
+     * @return array
+     */
+    public function isCustomerLockedDataProvider()
+    {
+        return [
+            ['lockExpirationDate' => date("F j, Y", strtotime('-1 days')), 'expectedResult' => false],
+            ['lockExpirationDate' => date("F j, Y", strtotime('+1 days')), 'expectedResult' => true]
+        ];
     }
 }

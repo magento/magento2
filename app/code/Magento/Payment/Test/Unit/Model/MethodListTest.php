@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -58,10 +58,7 @@ class MethodListTest extends \PHPUnit_Framework_TestCase
             ->method('getPayment')
             ->will($this->returnValue($this->getMock('\Magento\Quote\Model\Quote\Payment', [], [], '', false)));
 
-        $methodMock = $this->getMock('Magento\Payment\Model\Method\AbstractMethod', ['setInfoInstance', 'getCode'], [], '', false);
-        $methodMock->expects($this->once())
-            ->method('getCode')
-            ->willReturn(Free::PAYMENT_METHOD_FREE_CODE);
+        $methodMock = $this->getMock('Magento\Payment\Model\Method\AbstractMethod', [], [], '', false);
 
         $compositeMock = $this->getMock('\Magento\Payment\Model\Checks\Composite', [], [], '', false);
         $compositeMock->expects($this->atLeastOnce())

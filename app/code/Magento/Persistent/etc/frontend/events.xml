@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -37,9 +37,6 @@
         <observer name="persistent_quote" instance="Magento\Persistent\Observer\CheckExpirePersistentQuoteObserver" />
         <observer name="persistent_customer" instance="Magento\Persistent\Observer\EmulateCustomerObserver" />
         <observer name="persistent_checkout" instance="Magento\Persistent\Observer\PreventExpressCheckoutObserver" />
-    </event>
-    <event name="checkout_allow_guest">
-        <observer name="persistent" instance="Magento\Persistent\Observer\DisableGuestCheckoutObserver" />
     </event>
     <event name="customer_customer_authenticated">
         <observer name="persistent" instance="Magento\Persistent\Observer\CustomerAuthenticatedEventObserver" />

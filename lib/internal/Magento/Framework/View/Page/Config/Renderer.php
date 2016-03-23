@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Page\Config;
@@ -106,7 +106,7 @@ class Renderer implements RendererInterface
      */
     public function renderTitle()
     {
-        return '<title>' . $this->pageConfig->getTitle()->get() . '</title>' . "\n";
+        return '<title>' . $this->escaper->escapeHtml($this->pageConfig->getTitle()->get()) . '</title>' . "\n";
     }
 
     /**

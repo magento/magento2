@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,11 +38,11 @@
                         <label for="custom_<%- i %>">Custom:</label>
                     </th>
                     <td class="value">
-                        <input name="translate[<%- i %>][original]" type="hidden" value="<%- data.escape(item.original) %>"/>
+                        <input name="translate[<%- i %>][original]" type="hidden" value="<%- item.original %>"/>
                         <input id="custom_<%- i %>"
                                name="translate[<%- i %>][custom]"
                                class="input-text"
-                               value="<%- data.escape(item.translated) %>" />
+                               value="<%- item.translated %>" />
                     </td>
                 </tr>
             </table></div>

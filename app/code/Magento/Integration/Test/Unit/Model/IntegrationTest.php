@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Test\Unit\Model;
@@ -26,11 +26,6 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
     protected $registryMock;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $dateTimeMock;
-
-    /**
      * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resourceMock;
@@ -40,7 +35,7 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
      */
     protected $resourceCollectionMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMock(
             'Magento\Framework\Model\Context',
@@ -68,13 +63,6 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->dateTimeMock = $this->getMock(
-            'Magento\Framework\Stdlib\DateTime',
-            [],
-            [],
-            '',
-            false
-        );
         $this->resourceMock = $this->getMockForAbstractClass(
             'Magento\Framework\Model\ResourceModel\AbstractResource',
             [],
@@ -94,21 +82,9 @@ class IntegrationTest extends \PHPUnit_Framework_TestCase
         $this->integrationModel = new \Magento\Integration\Model\Integration(
             $this->contextMock,
             $this->registryMock,
-            $this->dateTimeMock,
             $this->resourceMock,
             $this->resourceCollectionMock
         );
-    }
-
-    public function testBeforeSave()
-    {
-        $timeStamp = '0000';
-        $this->dateTimeMock->expects($this->exactly(2))
-            ->method('formatDate')
-            ->will($this->returnValue($timeStamp));
-        $this->integrationModel->beforeSave();
-        $this->assertEquals($timeStamp, $this->integrationModel->getCreatedAt());
-        $this->assertEquals($timeStamp, $this->integrationModel->getUpdatedAt());
     }
 
     public function testLoadByConsumerId()

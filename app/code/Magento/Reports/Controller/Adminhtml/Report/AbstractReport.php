@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,7 +11,7 @@
  */
 namespace Magento\Reports\Controller\Adminhtml\Report;
 
-use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 abstract class AbstractReport extends \Magento\Backend\App\Action
 {
@@ -26,26 +26,26 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
     protected $_dateFilter;
 
     /**
-     * @var DateTimeFormatterInterface
+     * @var TimezoneInterface
      */
-    protected $dateTimeFormatter;
+    protected $timezone;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-     * @param DateTimeFormatterInterface $dateTimeFormatter
+     * @param TimezoneInterface $timezone
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        DateTimeFormatterInterface $dateTimeFormatter
+        TimezoneInterface $timezone
     ) {
         parent::__construct($context);
         $this->_fileFactory = $fileFactory;
         $this->_dateFilter = $dateFilter;
-        $this->dateTimeFormatter = $dateTimeFormatter;
+        $this->timezone = $timezone;
     }
 
     /**
@@ -134,14 +134,10 @@ abstract class AbstractReport extends \Magento\Backend\App\Action
         $flag = $this->_objectManager->create('Magento\Reports\Model\Flag')->setReportFlagCode($flagCode)->loadSelf();
         $updatedAt = 'undefined';
         if ($flag->hasData()) {
-            $updatedAt =  $this->dateTimeFormatter->formatObject(
-                $this->_objectManager->get(
-                    'Magento\Framework\Stdlib\DateTime\TimezoneInterface'
-                )->scopeDate(
-                    0,
-                    $flag->getLastUpdate(),
-                    true
-                )
+            $updatedAt =  $this->timezone->formatDate(
+                $flag->getLastUpdate(),
+                \IntlDateFormatter::MEDIUM,
+                true
             );
         }
 

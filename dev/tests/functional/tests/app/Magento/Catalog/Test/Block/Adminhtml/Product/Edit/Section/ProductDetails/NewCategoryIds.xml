@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<mapping strict="0">
+    <fields>
+        <name>
+            <selector>[name="name"]</selector>
+        </name>
+        <parent_category>
+            <selector>div[data-index="parent"]>div</selector>
+            <class>Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\ProductDetails\CategoryIds</class>
+        </parent_category>
+    </fields>
+</mapping>

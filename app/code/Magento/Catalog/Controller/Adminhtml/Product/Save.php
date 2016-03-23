@@ -1,13 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 {
@@ -27,22 +28,48 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $productTypeManager;
 
     /**
+     * @var \Magento\Catalog\Api\CategoryLinkManagementInterface
+     */
+    protected $categoryLinkManagement;
+
+    /**
+     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     */
+    protected $productRepository;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * Save constructor.
+     *
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param Initialization\Helper $initializationHelper
      * @param \Magento\Catalog\Model\Product\Copier $productCopier
      * @param \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager
+     * @param \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement
+     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         Product\Builder $productBuilder,
         Initialization\Helper $initializationHelper,
         \Magento\Catalog\Model\Product\Copier $productCopier,
-        \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager
+        \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager,
+        \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement,
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
+        StoreManagerInterface $storeManager
     ) {
         $this->initializationHelper = $initializationHelper;
         $this->productCopier = $productCopier;
         $this->productTypeManager = $productTypeManager;
+        $this->categoryLinkManagement = $categoryLinkManagement;
+        $this->productRepository = $productRepository;
+        $this->storeManager = $storeManager;
         parent::__construct($context, $productBuilder);
     }
 
@@ -55,17 +82,20 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     public function execute()
     {
-        $storeId = $this->getRequest()->getParam('store');
+        $storeId = $this->getRequest()->getParam('store', 0);
+        $store = $this->storeManager->getStore($storeId);
+        $this->storeManager->setCurrentStore($store->getCode());
         $redirectBack = $this->getRequest()->getParam('back', false);
         $productId = $this->getRequest()->getParam('id');
         $resultRedirect = $this->resultRedirectFactory->create();
-
         $data = $this->getRequest()->getPostValue();
         $productAttributeSetId = $this->getRequest()->getParam('set');
         $productTypeId = $this->getRequest()->getParam('type');
         if ($data) {
             try {
-                $product = $this->initializationHelper->initialize($this->productBuilder->build($this->getRequest()));
+                $product = $this->initializationHelper->initialize(
+                    $this->productBuilder->build($this->getRequest())
+                );
                 $this->productTypeManager->processProduct($product);
 
                 if (isset($data['product'][$product->getIdFieldName()])) {
@@ -74,22 +104,16 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 
                 $originalSku = $product->getSku();
                 $product->save();
-                $productId = $product->getId();
+                $this->handleImageRemoveError($data, $product->getId());
+                $this->categoryLinkManagement->assignProductToCategories(
+                    $product->getSku(),
+                    $product->getCategoryIds()
+                );
+                $productId = $product->getEntityId();
                 $productAttributeSetId = $product->getAttributeSetId();
                 $productTypeId = $product->getTypeId();
 
-                /**
-                 * Do copying data to stores
-                 */
-                if (isset($data['copy_to_stores'])) {
-                    foreach ($data['copy_to_stores'] as $storeTo => $storeFrom) {
-                        $this->_objectManager->create('Magento\Catalog\Model\Product')
-                            ->setStoreId($storeFrom)
-                            ->load($productId)
-                            ->setStoreId($storeTo)
-                            ->save();
-                    }
-                }
+                $this->copyToStores($data, $productId);
 
                 $this->messageManager->addSuccess(__('You saved the product.'));
                 if ($product->getSku() != $originalSku) {
@@ -101,10 +125,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                         )
                     );
                 }
-
                 $this->_eventManager->dispatch(
                     'controller_action_catalog_product_save_entity_after',
-                    ['controller' => $this]
+                    ['controller' => $this, 'product' => $product]
                 );
 
                 if ($redirectBack === 'duplicate') {
@@ -135,7 +158,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         } elseif ($redirectBack === 'duplicate' && isset($newProduct)) {
             $resultRedirect->setPath(
                 'catalog/*/edit',
-                ['id' => $newProduct->getId(), 'back' => null, '_current' => true]
+                ['id' => $newProduct->getEntityId(), 'back' => null, '_current' => true]
             );
         } elseif ($redirectBack) {
             $resultRedirect->setPath(
@@ -146,5 +169,63 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
             $resultRedirect->setPath('catalog/*/', ['store' => $storeId]);
         }
         return $resultRedirect;
+    }
+
+    /**
+     * Notify customer when image was not deleted in specific case.
+     * TODO: temporary workaround must be eliminated in MAGETWO-45306
+     *
+     * @param array $postData
+     * @param int $productId
+     * @return void
+     */
+    private function handleImageRemoveError($postData, $productId)
+    {
+        if (isset($postData['product']['media_gallery']['images'])) {
+            $removedImagesAmount = 0;
+            foreach ($postData['product']['media_gallery']['images'] as $image) {
+                if (!empty($image['removed'])) {
+                    $removedImagesAmount++;
+                }
+            }
+            if ($removedImagesAmount) {
+                $expectedImagesAmount = count($postData['product']['media_gallery']['images']) - $removedImagesAmount;
+                $product = $this->productRepository->getById($productId);
+                if ($expectedImagesAmount != count($product->getMediaGallery('images'))) {
+                    $this->messageManager->addNotice(
+                        __('The image cannot be removed as it has been assigned to the other image role')
+                    );
+                }
+            }
+        }
+    }
+
+    /**
+     * Do copying data to stores
+     *
+     * @param array $data
+     * @param int $productId
+     * @return void
+     */
+    protected function copyToStores($data, $productId)
+    {
+        if (!empty($data['product']['copy_to_stores'])) {
+            foreach ($data['product']['copy_to_stores'] as $websiteId => $group) {
+                if (isset($data['product']['website_ids'][$websiteId])
+                    && (bool)$data['product']['website_ids'][$websiteId]) {
+                    foreach ($group as $store) {
+                        $copyFrom = (isset($store['copy_from'])) ? $store['copy_from'] : 0;
+                        $copyTo = (isset($store['copy_to'])) ? $store['copy_to'] : 0;
+                        if ($copyTo) {
+                            $this->_objectManager->create('Magento\Catalog\Model\Product')
+                                ->setStoreId($copyFrom)
+                                ->load($productId)
+                                ->setStoreId($copyTo)
+                                ->save();
+                        }
+                    }
+                }
+            }
+        }
     }
 }

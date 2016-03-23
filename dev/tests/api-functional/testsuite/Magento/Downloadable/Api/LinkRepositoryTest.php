@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Api;
@@ -34,6 +34,7 @@ class LinkRepositoryTest extends WebapiAbstract
 
     protected function setUp()
     {
+        $this->markTestSkipped('Test skiped due to MAGETWO-46832');
         $this->createServiceInfo = [
             'rest' => [
                 'resourcePath' => '/V1/products/downloadable-product/downloadable-links',
@@ -98,7 +99,7 @@ class LinkRepositoryTest extends WebapiAbstract
      */
     protected function getTargetLink(Product $product, $linkId = null)
     {
-        $links = $product->getTypeInstance()->getLinks($product);
+        $links = $product->getExtensionAttributes()->getDownloadableProductLinks();
         if ($linkId !== null) {
             return isset($links[$linkId]) ? $links[$linkId] : null;
         }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,6 +19,10 @@ $catalogRule
     ->setDiscountAmount(10)
     ->setWebsiteIds([0 => 1])
     ->setSimpleAction('by_percent')
+    ->setStopRulesProcessing(false)
+    ->setSortOrder(0)
+    ->setSubIsEnable(0)
+    ->setSubDiscountAmount(0)
     ->save();
 
 /** @var \Magento\CatalogRule\Model\Indexer\IndexBuilder $indexBuilder */

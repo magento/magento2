@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,7 +10,6 @@ use Magento\Framework\Composer\ComposerInformation;
 use Composer\Package\Version\VersionParser;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Composer\MagentoComposerApplicationFactory;
 
 /**
@@ -43,7 +42,7 @@ class UpdatePackagesCache
     private $directory;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     private $dateTime;
 
@@ -57,19 +56,19 @@ class UpdatePackagesCache
      *
      * @param MagentoComposerApplicationFactory $applicationFactory
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param ComposerInformation $composerInformation
+     * @param ObjectManagerProvider $objectManagerProvider
      * @throws \Exception
      */
     public function __construct(
         MagentoComposerApplicationFactory $applicationFactory,
         Filesystem $filesystem,
-        DateTime $dateTime,
-        ComposerInformation $composerInformation
+        ComposerInformation $composerInformation,
+        ObjectManagerProvider $objectManagerProvider
     ) {
         $this->application = $applicationFactory->create();
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->dateTime = $dateTime;
+        $this->dateTime = $objectManagerProvider->get()->get('Magento\Framework\Stdlib\DateTime\DateTime');
         $this->composerInformation = $composerInformation;
     }
 
@@ -173,7 +172,7 @@ class UpdatePackagesCache
     private function savePackagesForUpdateToCache($availableVersions)
     {
         $syncInfo = [];
-        $syncInfo['lastSyncDate'] = str_replace('-', '/', $this->dateTime->formatDate(true));
+        $syncInfo['lastSyncDate'] = $this->dateTime->gmtTimestamp();
         $syncInfo['packages'] = $availableVersions;
         $data = json_encode($syncInfo, JSON_UNESCAPED_SLASHES);
         try {

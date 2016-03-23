@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*global define*/
@@ -70,7 +70,7 @@ define([
             hasActiveOptions: function() {
                 var regionData = this.getRegion('additionalOptions');
                 var options = regionData();
-                for (var i in options) {
+                for (var i = 0; i < options.length; i++) {
                     if (options[i].isActive()) {
                         return true;
                     }
@@ -78,12 +78,7 @@ define([
                 return false;
             },
             isActive: function() {
-                switch (this.itemId) {
-                    case 'orderLevel':
-                        return this.model.getConfigValue('isOrderLevelGiftOptionsEnabled') == true;
-                    default:
-                        return this.model.getConfigValue('isItemLevelGiftOptionsEnabled') == true;
-                }
+                return this.model.isGiftMessageAvailable();
             },
             submitOptions: function() {
                 giftOptionsService(this.model);

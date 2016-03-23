@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -88,9 +88,12 @@ class FeedTest extends \PHPUnit_Framework_TestCase
 
         $this->deploymentConfig = $this->getMockBuilder('Magento\Framework\App\DeploymentConfig')
             ->disableOriginalConstructor()->getMock();
+
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
-        $this->productMetadata = $this->getMock('Magento\Framework\App\ProductMetadata');
+        $this->productMetadata = $this->getMockBuilder('Magento\Framework\App\ProductMetadata')
+            ->disableOriginalConstructor()->getMock();
+
         $this->urlBuilder = $this->getMock('Magento\Framework\UrlInterface');
 
         $this->feed = $this->objectManagerHelper->getObject(

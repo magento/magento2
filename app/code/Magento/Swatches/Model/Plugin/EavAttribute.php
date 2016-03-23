@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Model\Plugin;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Swatches\Model\Swatch;
+use Magento\Framework\Exception\InputException;
 
 /**
  * Plugin model for Catalog Resource Attribute
@@ -74,6 +75,7 @@ class EavAttribute
     {
         if ($this->swatchHelper->isSwatchAttribute($attribute)) {
             $this->setProperOptionsArray($attribute);
+            $this->validateOptions($attribute);
             $this->swatchHelper->assembleAdditionalDataEavAttribute($attribute);
         }
         $this->convertSwatchToDropdown($attribute);
@@ -103,6 +105,7 @@ class EavAttribute
      */
     protected function setProperOptionsArray(Attribute $attribute)
     {
+        $canReplace = false;
         if ($this->swatchHelper->isVisualSwatch($attribute)) {
             $canReplace = true;
             $defaultValue = $attribute->getData('defaultvisual');
@@ -171,7 +174,7 @@ class EavAttribute
     {
         if (isset($optionsArray['value']) && is_array($optionsArray['value'])) {
             foreach (array_keys($optionsArray['value']) as $optionId) {
-                if ($optionsArray['delete'][$optionId] == 1) {
+                if (isset($optionsArray['delete']) && $optionsArray['delete'][$optionId] == 1) {
                     unset($optionsArray['value'][$optionId]);
                 }
             }
@@ -378,10 +381,59 @@ class EavAttribute
         if (!empty($defaultValue)) {
             /** @var \Magento\Swatches\Model\Swatch $swatch */
             $swatch = $this->swatchFactory->create();
-            if (substr($defaultValue, 0, 6) == self::BASE_OPTION_TITLE) {
+            // created and removed on frontend option not exists in dependency array
+            if (
+                substr($defaultValue, 0, 6) == self::BASE_OPTION_TITLE &&
+                isset($this->dependencyArray[$defaultValue])
+            ) {
                 $defaultValue = $this->dependencyArray[$defaultValue];
             }
             $swatch->getResource()->saveDefaultSwatchOption($attribute->getId(), $defaultValue);
         }
+    }
+
+    /**
+     * Validate that attribute options exist
+     *
+     * @param Attribute $attribute
+     * @return bool
+     * @throws InputException
+     */
+    protected function validateOptions(Attribute $attribute)
+    {
+        $options = null;
+        if ($this->swatchHelper->isVisualSwatch($attribute)) {
+            $options = $attribute->getData('optionvisual');
+        } elseif ($this->swatchHelper->isTextSwatch($attribute)) {
+            $options = $attribute->getData('optiontext');
+        }
+        if ($options && !$this->isOptionsValid($options, $attribute)) {
+            throw new InputException(__('Admin is a required field in the each row'));
+        }
+        return true;
+    }
+
+    /**
+     * Check if attribute options are valid
+     *
+     * @param array $options
+     * @param Attribute $attribute
+     * @return bool
+     */
+    protected function isOptionsValid(array $options, Attribute $attribute)
+    {
+        if (!isset($options['value'])) {
+            return false;
+        }
+        foreach ($options['value'] as $optionId => $option) {
+            // do not validate options marked as deleted
+            if ($this->isOptionForDelete($attribute, $optionId)) {
+                continue;
+            }
+            if (empty($option[0])) {
+                return false;
+            }
+        }
+        return true;
     }
 }

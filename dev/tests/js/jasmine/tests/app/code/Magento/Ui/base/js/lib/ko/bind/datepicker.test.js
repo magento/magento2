@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -7,7 +7,7 @@ define([
     'ko',
     'jquery',
     'moment',
-    'Magento_Ui/js/lib/ko/bind/datepicker'
+    'Magento_Ui/js/lib/knockout/bindings/datepicker'
 ], function (ko, $, moment) {
     'use strict';
 

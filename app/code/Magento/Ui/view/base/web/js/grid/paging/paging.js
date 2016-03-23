@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@ define([
             totalTmpl: 'ui/grid/paging-total',
             pageSize: 20,
             current: 1,
-            selectProvider: '',
+            selectProvider: 'ns = ${ $.ns }, index = ids',
 
             sizesConfig: {
                 component: 'Magento_Ui/js/grid/paging/sizes',

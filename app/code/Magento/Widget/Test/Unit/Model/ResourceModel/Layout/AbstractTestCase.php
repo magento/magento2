@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Test\Unit\Model\ResourceModel\Layout;
@@ -99,7 +99,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
         );
 
         // expected date without time
-        $datetime = new \DateTime();
+        $datetime = new \DateTime('now', new \DateTimeZone('UTC'));
         $storeInterval = new \DateInterval('P' . self::TEST_DAYS_BEFORE . 'D');
         $datetime->sub($storeInterval);
         $dateTimeLib = new \Magento\Framework\Stdlib\DateTime();

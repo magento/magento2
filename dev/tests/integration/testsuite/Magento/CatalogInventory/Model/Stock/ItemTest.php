@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Stock;
@@ -28,7 +28,7 @@ class ItemTest extends \PHPUnit_Framework_TestCase
         $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get('Magento\Catalog\Model\Product');
 
-        $product->load(1);
+        $product->loadByAttribute('sku', 'simple');
 
         /** @var \Magento\CatalogInventory\Model\Stock\StockItemRepository $stockItemRepository */
         $stockItemRepository = $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

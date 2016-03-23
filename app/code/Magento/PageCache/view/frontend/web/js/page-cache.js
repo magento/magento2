@@ -1,7 +1,7 @@
 /**
  * Handles additional ajax request for rendering user private content
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -50,28 +50,6 @@ define([
 
         return elements;
     };
-
-    /**
-     * MsgBox Widget checks if message box is displayed and sets cookie
-     */
-    $.widget('mage.msgBox', {
-        options: {
-            msgBoxCookieName: 'message_box_display',
-            msgBoxSelector: '.main div.messages'
-        },
-
-        /**
-         * Creates widget 'mage.msgBox'
-         * @private
-         */
-        _create: function () {
-            if ($.mage.cookies.get(this.options.msgBoxCookieName)) {
-                $.mage.cookies.clear(this.options.msgBoxCookieName);
-            } else {
-                $(this.options.msgBoxSelector).hide();
-            }
-        }
-    });
 
     /**
      * FormKey Widget - this widget is generating from key, saves it to cookie and
@@ -272,14 +250,12 @@ define([
 
     domReady(function () {
         $('body')
-            .msgBox()
             .formKey();
     });
 
     return {
         'pageCache': $.mage.pageCache,
-        'formKey': $.mage.formKey,
-        'msgBox': $.mage.msgBox
+        'formKey': $.mage.formKey
     };
 
     /**

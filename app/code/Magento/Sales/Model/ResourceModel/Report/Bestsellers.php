@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\ResourceModel\Report;
@@ -41,8 +41,8 @@ class Bestsellers extends AbstractReport
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Sales\Model\ResourceModel\Helper $salesResourceHelper
      * @param array $ignoredProductTypes
@@ -54,8 +54,8 @@ class Bestsellers extends AbstractReport
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Catalog\Model\ResourceModel\Product $productResource,
         \Magento\Sales\Model\ResourceModel\Helper $salesResourceHelper,
         $connectionName = null,
@@ -66,8 +66,8 @@ class Bestsellers extends AbstractReport
             $logger,
             $localeDate,
             $reportsFlagFactory,
-            $dateTime,
             $timezoneValidator,
+            $dateTime,
             $connectionName
         );
         $this->_productResource = $productResource;

@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel;
+
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Product entity resource model
@@ -57,9 +59,19 @@ class Product extends AbstractResource
     protected $typeFactory;
 
     /**
+     * @var \Magento\Framework\Model\EntityManager
+     */
+    protected $entityManager;
+
+    /**
      * @var \Magento\Catalog\Model\Product\Attribute\DefaultAttributes
      */
     protected $defaultAttributes;
+
+    /**
+     * @var array
+     */
+    protected $availableCategoryIdsCache = [];
 
     /**
      * @param \Magento\Eav\Model\Entity\Context $context
@@ -71,6 +83,7 @@ class Product extends AbstractResource
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
+     * @param \Magento\Framework\Model\EntityManager $entityManager
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -85,6 +98,7 @@ class Product extends AbstractResource
         \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory,
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
+        \Magento\Framework\Model\EntityManager $entityManager,
         $data = []
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
@@ -92,6 +106,7 @@ class Product extends AbstractResource
         $this->eventManager = $eventManager;
         $this->setFactory = $setFactory;
         $this->typeFactory = $typeFactory;
+        $this->entityManager = $entityManager;
         $this->defaultAttributes = $defaultAttributes;
         parent::__construct(
             $context,
@@ -163,7 +178,7 @@ class Product extends AbstractResource
         $connection = $this->getConnection();
 
         if ($product instanceof \Magento\Catalog\Model\Product) {
-            $productId = $product->getId();
+            $productId = $product->getEntityId();
         } else {
             $productId = $product;
         }
@@ -287,12 +302,12 @@ class Product extends AbstractResource
      */
     public function delete($object)
     {
-        $result = parent::delete($object);
+        $this->entityManager->delete(\Magento\Catalog\Api\Data\ProductInterface::class, $object);
         $this->eventManager->dispatch(
             'catalog_product_delete_after_done',
             ['product' => $object]
         );
-        return $result;
+        return $this;
     }
 
     /**
@@ -318,14 +333,14 @@ class Product extends AbstractResource
         if (!empty($insert)) {
             $data = [];
             foreach ($insert as $websiteId) {
-                $data[] = ['product_id' => (int)$product->getId(), 'website_id' => (int)$websiteId];
+                $data[] = ['product_id' => (int)$product->getEntityId(), 'website_id' => (int)$websiteId];
             }
             $connection->insertMultiple($this->getProductWebsiteTable(), $data);
         }
 
         if (!empty($delete)) {
             foreach ($delete as $websiteId) {
-                $condition = ['product_id = ?' => (int)$product->getId(), 'website_id = ?' => (int)$websiteId];
+                $condition = ['product_id = ?' => (int)$product->getEntityId(), 'website_id = ?' => (int)$websiteId];
 
                 $connection->delete($this->getProductWebsiteTable(), $condition);
             }
@@ -370,7 +385,7 @@ class Product extends AbstractResource
                 }
                 $data[] = [
                     'category_id' => (int)$categoryId,
-                    'product_id' => (int)$object->getId(),
+                    'product_id' => (int)$object->getEntityId(),
                     'position' => 1,
                 ];
             }
@@ -381,7 +396,7 @@ class Product extends AbstractResource
 
         if (!empty($delete)) {
             foreach ($delete as $categoryId) {
-                $where = ['product_id = ?' => (int)$object->getId(), 'category_id = ?' => (int)$categoryId];
+                $where = ['product_id = ?' => (int)$object->getEntityId(), 'category_id = ?' => (int)$categoryId];
 
                 $connection->delete($this->getProductCategoryTable(), $where);
             }
@@ -413,7 +428,7 @@ class Product extends AbstractResource
             null
         )->addFieldToFilter(
             'product_id',
-            (int)$product->getId()
+            (int)$product->getEntityId()
         );
         return $collection;
     }
@@ -428,18 +443,22 @@ class Product extends AbstractResource
     {
         // is_parent=1 ensures that we'll get only category IDs those are direct parents of the product, instead of
         // fetching all parent IDs, including those are higher on the tree
-        $select = $this->getConnection()->select()->distinct()->from(
-            $this->getTable('catalog_category_product_index'),
-            ['category_id']
-        )->where(
-            'product_id = ? AND is_parent = 1',
-            (int)$object->getEntityId()
-        )->where(
-            'visibility != ?',
-            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE
-        );
-
-        return $this->getConnection()->fetchCol($select);
+        $entityId = (int)$object->getEntityId();
+        if (!isset($this->availableCategoryIdsCache[$entityId])) {
+            $this->availableCategoryIdsCache[$entityId] = $this->getConnection()->fetchCol(
+                $this->getConnection()->select()->distinct()->from(
+                    $this->getTable('catalog_category_product_index'),
+                    ['category_id']
+                )->where(
+                    'product_id = ? AND is_parent = 1',
+                    $entityId
+                )->where(
+                    'visibility != ?',
+                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE
+                )
+            );
+        }
+        return $this->availableCategoryIdsCache[$entityId];
     }
 
     /**
@@ -466,7 +485,7 @@ class Product extends AbstractResource
             'product_id'
         )->where(
             'product_id = ?',
-            (int)$product->getId()
+            (int)$product->getEntityId()
         )->where(
             'category_id = ?',
             (int)$categoryId
@@ -496,11 +515,11 @@ class Product extends AbstractResource
                 [
                     'attribute_id',
                     'store_id',
-                    'entity_id' => new \Zend_Db_Expr($connection->quote($newId)),
+                    $this->getLinkField() => new \Zend_Db_Expr($connection->quote($newId)),
                     'value'
                 ]
             )->where(
-                'entity_id = ?',
+                $this->getLinkField() . ' = ?',
                 $oldId
             )->where(
                 'store_id > ?',
@@ -511,7 +530,7 @@ class Product extends AbstractResource
                 $connection->insertFromSelect(
                     $select,
                     $tableName,
-                    ['attribute_id', 'store_id', 'entity_id', 'value'],
+                    ['attribute_id', 'store_id', $this->getLinkField(), 'value'],
                     \Magento\Framework\DB\Adapter\AdapterInterface::INSERT_ON_DUPLICATE
                 )
             );
@@ -522,7 +541,7 @@ class Product extends AbstractResource
         $statusAttributeId = $statusAttribute->getAttributeId();
         $statusAttributeTable = $statusAttribute->getBackend()->getTable();
         $updateCond[] = 'store_id > 0';
-        $updateCond[] = $connection->quoteInto('entity_id = ?', $newId);
+        $updateCond[] = $connection->quoteInto($this->getLinkField() . ' = ?', $newId);
         $updateCond[] = $connection->quoteInto('attribute_id = ?', $statusAttributeId);
         $connection->update(
             $statusAttributeTable,
@@ -596,44 +615,6 @@ class Product extends AbstractResource
     }
 
     /**
-     * Return assigned images for specific stores
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @param int|array $storeIds
-     * @return array
-     *
-     */
-    public function getAssignedImages($product, $storeIds)
-    {
-        if (!is_array($storeIds)) {
-            $storeIds = [$storeIds];
-        }
-
-        $mainTable = $product->getResource()->getAttribute('image')->getBackend()->getTable();
-        $connection = $this->getConnection();
-        $select = $connection->select()->from(
-            ['images' => $mainTable],
-            ['value as filepath', 'store_id']
-        )->joinLeft(
-            ['attr' => $this->getTable('eav_attribute')],
-            'images.attribute_id = attr.attribute_id',
-            ['attribute_code']
-        )->where(
-            'entity_id = ?',
-            $product->getId()
-        )->where(
-            'store_id IN (?)',
-            $storeIds
-        )->where(
-            'attribute_code IN (?)',
-            ['small_image', 'thumbnail', 'image']
-        );
-
-        $images = $connection->fetchAll($select);
-        return $images;
-    }
-
-    /**
      * Get total number of records in the system
      *
      * @return int
@@ -660,5 +641,60 @@ class Product extends AbstractResource
         }
 
         return parent::validate($object);
+    }
+
+    /**
+     * Reset firstly loaded attributes
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param integer $entityId
+     * @param array|null $attributes
+     * @return $this
+     */
+    public function load($object, $entityId, $attributes = [])
+    {
+        $this->loadAttributesMetadata($attributes);
+        $this->entityManager->load(\Magento\Catalog\Api\Data\ProductInterface::class, $object, $entityId);
+        return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    protected function evaluateDelete($object, $id, $connection)
+    {
+        $where = [$this->getLinkField() . '=?' => $id];
+        $this->objectRelationProcessor->delete(
+            $this->transactionManager,
+            $connection,
+            $this->getEntityTable(),
+            $this->getConnection()->quoteInto(
+                $this->getLinkField() . '=?',
+                $id
+            ),
+            [$this->getLinkField() => $id]
+        );
+
+        $this->loadAllAttributes($object);
+        foreach ($this->getAttributesByTable() as $table => $attributes) {
+            $this->getConnection()->delete(
+                $table,
+                $where
+            );
+        }
+    }
+
+    /**
+     * Save entity's attributes into the object's resource
+     *
+     * @param  \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     * @throws \Exception
+     */
+    public function save(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->entityManager->save(ProductInterface::class, $object);
+        return $this;
     }
 }

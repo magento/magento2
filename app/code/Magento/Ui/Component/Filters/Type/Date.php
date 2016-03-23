@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Filters\Type;
@@ -76,7 +76,7 @@ class Date extends AbstractFilter
                 }
 
                 if (isset($value['to'])) {
-                    $this->applyFilterByType('lteq', $this->wrappedComponent->convertDate($value['to']));
+                    $this->applyFilterByType('lteq', $this->wrappedComponent->convertDate($value['to'], 23, 59, 59));
                 }
             } else {
                 $this->applyFilterByType('eq', $this->wrappedComponent->convertDate($value));

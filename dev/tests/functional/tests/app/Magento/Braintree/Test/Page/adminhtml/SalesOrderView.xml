@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../vendor/magento/mtf/etc/pages.xsd">
+    <page name="SalesOrderView" area="Adminhtml" mca="sales/order/view" module="Magento_Sales">
+        <block name="BraintreeInfoBlock" class="Magento\Braintree\Test\Block\Info" locator="//div[contains(@class, 'admin__page-section-item order-payment-method')]" strategy="xpath"/>
+    </page>
+</config>

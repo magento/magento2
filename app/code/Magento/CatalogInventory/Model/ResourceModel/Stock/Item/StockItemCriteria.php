@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -45,9 +45,9 @@ class StockItemCriteria extends AbstractCriteria implements \Magento\CatalogInve
     /**
      * @inheritdoc
      */
-    public function setWebsiteFilter($website)
+    public function setScopeFilter($scope)
     {
-        $this->data['website_filter'] = $website;
+        $this->data['website_filter'] = $scope;
         return true;
     }
 

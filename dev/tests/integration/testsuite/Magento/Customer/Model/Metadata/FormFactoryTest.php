@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\Metadata;
@@ -21,7 +21,7 @@ class FormFactoryTest extends \PHPUnit_Framework_TestCase
             'id' => 13,
             'default_shipping' => true,
             'default_billing' => false,
-            'company' => 'eBay Inc.',
+            'company' => 'Magento Commerce Inc.',
             'middlename' => 'MiddleName',
             'prefix' => 'Mr.',
             'suffix' => 'Esq.',

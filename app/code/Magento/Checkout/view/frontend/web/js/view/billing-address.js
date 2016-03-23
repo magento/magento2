@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true*/
@@ -46,8 +46,9 @@ define(
             },
             countryData = customerData.get('directory-data'),
             addressOptions = addressList().filter(function (address) {
-            return address.getType() == 'customer-address';
-        });
+                return address.getType() == 'customer-address';
+            });
+
         addressOptions.push(newAddressOption);
 
         return Component.extend({
@@ -93,6 +94,8 @@ define(
 
                     if (newAddress != null && newAddress.saveInAddressBook !== undefined) {
                         this.saveInAddressBook(newAddress.saveInAddressBook);
+                    } else {
+                        this.saveInAddressBook(true);
                     }
                     this.isAddressDetailsVisible(true);
                 }, this);

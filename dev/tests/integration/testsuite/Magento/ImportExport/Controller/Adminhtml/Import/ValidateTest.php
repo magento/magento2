@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Controller\Adminhtml\Import;
@@ -26,7 +26,7 @@ class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         $formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey');
         $this->getRequest()->setPostValue('form_key', $formKey->getFormKey());
         $this->getRequest()->setPostValue('entity', 'catalog_product');
-        $this->getRequest()->setPostValue('behavior', 'replace');
+        $this->getRequest()->setPostValue('behavior', 'append');
         $this->getRequest()->setPostValue('_import_field_separator', ',');
 
 

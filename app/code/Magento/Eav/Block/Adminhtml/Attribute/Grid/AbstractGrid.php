@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Block\Adminhtml\Attribute\Grid;
@@ -53,7 +53,7 @@ abstract class AbstractGrid extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->addColumn(
             'frontend_label',
             [
-                'header' => __('Default label'),
+                'header' => __('Default Label'),
                 'sortable' => true,
                 'index' => 'frontend_label',
                 'header_css_class' => 'col-label',

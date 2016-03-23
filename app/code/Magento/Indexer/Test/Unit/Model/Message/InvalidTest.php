@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Indexer\Test\Unit\Model\Message;
@@ -38,10 +38,19 @@ class InvalidTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $urlBuilder = $this->getMock(
+            '\Magento\Framework\UrlInterface',
+            [],
+            [],
+            '',
+            false
+        );
+
         $collectionMock->expects($this->any())->method('getItems')->with()->willReturn([$this->indexerMock]);
 
         $this->model = new \Magento\Indexer\Model\Message\Invalid(
-            $collectionMock
+            $collectionMock,
+            $urlBuilder
         );
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -156,6 +156,9 @@ class CustomerRegistry
         $customerSecure->setRpToken($customer->getRpToken());
         $customerSecure->setRpTokenCreatedAt($customer->getRpTokenCreatedAt());
         $customerSecure->setDeleteable($customer->isDeleteable());
+        $customerSecure->setFailuresNum($customer->getFailuresNum());
+        $customerSecure->setFirstFailure($customer->getFirstFailure());
+        $customerSecure->setLockExpires($customer->getLockExpires());
         $this->customerSecureRegistryById[$customer->getId()] = $customerSecure;
 
         return $customerSecure;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -137,7 +137,7 @@ class DataObjectHelper
     }
 
     /**
-     * @param ExtensibleDataInterface $dataObject
+     * @param mixed $dataObject
      * @param string $getterMethodName
      * @param string $methodName
      * @param array $value
@@ -145,7 +145,7 @@ class DataObjectHelper
      * @return $this
      */
     protected function setComplexValue(
-        ExtensibleDataInterface $dataObject,
+        $dataObject,
         $getterMethodName,
         $methodName,
         array $value,

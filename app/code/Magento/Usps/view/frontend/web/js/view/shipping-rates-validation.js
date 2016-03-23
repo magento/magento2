@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -19,7 +19,7 @@ define(
         uspsShippingRatesValidator,
         uspsShippingRatesValidationRules
     ) {
-        "use strict";
+        'use strict';
         defaultShippingRatesValidator.registerValidator('usps', uspsShippingRatesValidator);
         defaultShippingRatesValidationRules.registerRules('usps', uspsShippingRatesValidationRules);
         return Component;

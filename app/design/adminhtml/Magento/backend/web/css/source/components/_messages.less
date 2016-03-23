@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -49,8 +49,8 @@
 
 .message {
     background: @alert__background-color;
-    border: none;
     border-radius: 0;
+    border: none;
     color: @alert__color;
     font-size: @alert__font-size;
     margin: 0 0 1px;
@@ -95,6 +95,7 @@
 
 .message-error {
     background: @alert__error__background-color;
+
     &:before {
         color: @alert-icon__error__color;
         content: @alert-icon__error__content;
@@ -115,6 +116,7 @@
     &:before {
         display: none;
     }
+
     .spinner {
         font-size: @alert__spinner__font-size;
         left: 1.5rem;

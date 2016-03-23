@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,7 +28,7 @@ class Calculator extends Validator
         $address = $item->getAddress();
         $item->setFreeShipping(false);
 
-        foreach ($this->_getRules() as $rule) {
+        foreach ($this->_getRules($address) as $rule) {
             /* @var $rule \Magento\SalesRule\Model\Rule */
             if (!$this->validatorUtility->canProcessRule($rule, $address)) {
                 continue;

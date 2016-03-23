@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -63,7 +63,7 @@ class ToOrder
     public function convert(Address $object, $data = [])
     {
         $orderData = $this->objectCopyService->getDataFromFieldset(
-            'quote_convert_address',
+            'sales_convert_quote_address',
             'to_order',
             $object
         );

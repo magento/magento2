@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
@@ -69,7 +69,6 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
 
         $optionData = [
             AttributeOptionInterface::LABEL => 'new color',
-            AttributeOptionInterface::VALUE => 'grey',
             AttributeOptionInterface::SORT_ORDER => 100,
             AttributeOptionInterface::IS_DEFAULT => true,
             AttributeOptionInterface::STORE_LABELS => [

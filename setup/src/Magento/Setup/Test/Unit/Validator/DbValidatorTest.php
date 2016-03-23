@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -47,28 +47,35 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
             ->expects($this->atLeastOnce())
             ->method('query')
             ->willReturn($pdo);
-        $pdo->expects($this->once())
+
+        $listOfPrivileges = [
+            ['SELECT'],
+            ['INSERT'],
+            ['UPDATE'],
+            ['DELETE'],
+            ['CREATE'],
+            ['DROP'],
+            ['REFERENCES'],
+            ['INDEX'],
+            ['ALTER'],
+            ['CREATE TEMPORARY TABLES'],
+            ['LOCK TABLES'],
+            ['EXECUTE'],
+            ['CREATE VIEW'],
+            ['SHOW VIEW'],
+            ['CREATE ROUTINE'],
+            ['ALTER ROUTINE'],
+            ['EVENT'],
+            ['TRIGGER'],
+        ];
+        $accessibleDbs = ['some_db', 'name', 'another_db'];
+
+        $pdo->expects($this->atLeastOnce())
             ->method('fetchAll')
-            ->willReturn(
+            ->willReturnMap(
                 [
-                    ['SELECT'],
-                    ['INSERT'],
-                    ['UPDATE'],
-                    ['DELETE'],
-                    ['CREATE'],
-                    ['DROP'],
-                    ['REFERENCES'],
-                    ['INDEX'],
-                    ['ALTER'],
-                    ['CREATE TEMPORARY TABLES'],
-                    ['LOCK TABLES'],
-                    ['EXECUTE'],
-                    ['CREATE VIEW'],
-                    ['SHOW VIEW'],
-                    ['CREATE ROUTINE'],
-                    ['ALTER ROUTINE'],
-                    ['EVENT'],
-                    ['TRIGGER'],
+                    [\PDO::FETCH_COLUMN, 0, $accessibleDbs],
+                    [\PDO::FETCH_NUM, null, $listOfPrivileges]
                 ]
             );
         $this->assertEquals(true, $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password'));
@@ -90,7 +97,41 @@ class DbValidatorTest extends \PHPUnit_Framework_TestCase
             ->expects($this->atLeastOnce())
             ->method('query')
             ->willReturn($pdo);
-        $pdo->expects($this->atLeastOnce())->method('fetchAll')->willReturn([['SELECT']]);
+        $listOfPrivileges = [['SELECT']];
+        $accessibleDbs = ['some_db', 'name', 'another_db'];
+
+        $pdo->expects($this->atLeastOnce())
+            ->method('fetchAll')
+            ->willReturnMap(
+                [
+                    [\PDO::FETCH_COLUMN, 0, $accessibleDbs],
+                    [\PDO::FETCH_NUM, null, $listOfPrivileges]
+                ]
+            );
+        $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password');
+    }
+
+    /**
+     * @expectedException \Magento\Setup\Exception
+     * @expectedExceptionMessage Database 'name' does not exist or specified database server user does not have
+     */
+    public function testCheckDatabaseConnectionDbNotAccessible()
+    {
+        $this->connection
+            ->expects($this->once())
+            ->method('fetchOne')
+            ->with('SELECT version()')
+            ->willReturn('5.6.0-0ubuntu0.12.04.1');
+        $pdo = $this->getMockForAbstractClass('Zend_Db_Statement_Interface', [], '', false);
+        $this->connection
+            ->expects($this->atLeastOnce())
+            ->method('query')
+            ->willReturn($pdo);
+        $accessibleDbs = ['some_db', 'another_db'];
+
+        $pdo->expects($this->atLeastOnce())
+            ->method('fetchAll')
+            ->willReturn($accessibleDbs);
         $this->dbValidator->checkDatabaseConnection('name', 'host', 'user', 'password');
     }
 

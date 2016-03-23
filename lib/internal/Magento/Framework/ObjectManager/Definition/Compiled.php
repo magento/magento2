@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Definition;
@@ -18,15 +18,15 @@ abstract class Compiled implements \Magento\Framework\ObjectManager\DefinitionIn
     protected $_definitions;
 
     /**
-     * @var \Magento\Framework\Code\Reader\ClassReader
+     * @var \Magento\Framework\Code\Reader\ClassReaderInterface
      */
     protected $reader ;
 
     /**
      * @param array $definitions
-     * @param \Magento\Framework\Code\Reader\ClassReader $reader
+     * @param \Magento\Framework\Code\Reader\ClassReaderInterface $reader
      */
-    public function __construct(array $definitions, \Magento\Framework\Code\Reader\ClassReader $reader = null)
+    public function __construct(array $definitions, \Magento\Framework\Code\Reader\ClassReaderInterface $reader = null)
     {
         list($this->_signatures, $this->_definitions) = $definitions;
         $this->reader = $reader ?: new \Magento\Framework\Code\Reader\ClassReader();

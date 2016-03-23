@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,49 +11,48 @@ use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * Class FormAction
- * Form action
+ * Product Form page actions.
  */
 class FormPageActions extends ParentFormPageActions
 {
     /**
-     * Save and create new product - 'Save & New'
+     * Save and create new product - 'Save & New'.
      */
-    const SAVE_NEW = 'new';
+    const SAVE_NEW = '0';
 
     /**
-     * Save and create a duplicate product - 'Save & Duplicate'
+     * Save and create a duplicate product - 'Save & Duplicate'.
      */
-    const SAVE_DUPLICATE = 'duplicate';
+    const SAVE_DUPLICATE = '1';
 
     /**
-     * Save and close the product page - 'Save & Close'
+     * Save and close the product page - 'Save & Close'.
      */
-    const SAVE_CLOSE = 'close';
+    const SAVE_CLOSE = '2';
 
     /**
-     * CSS selector toggle "Save button"
+     * CSS selector toggle "Save button".
      *
      * @var string
      */
-    protected $toggleButton = '[data-ui-id="page-actions-toolbar-save-split-button-dropdown"]';
+    protected $toggleButton = '[data-ui-id="save-button-dropdown"]';
 
     /**
-     * Save type item
+     * Save type item.
      *
      * @var string
      */
-    protected $saveTypeItem = '#save-split-button-%s-button';
+    protected $saveTypeItem = '[data-ui-id="save-button-item-%d"]';
 
     /**
-     * "Save" button
+     * "Save" button.
      *
      * @var string
      */
-    protected $saveButton = '#save-split-button-button';
+    protected $saveButton = '[data-ui-id="save-button"]';
 
     /**
-     * Click on "Save" button
+     * Click on "Save" button.
      *
      * @param FixtureInterface|null $product [optional]
      * @return void

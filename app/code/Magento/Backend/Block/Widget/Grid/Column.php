@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backend\Block\Widget\Grid;
@@ -447,7 +447,7 @@ class Column extends \Magento\Backend\Block\Widget
      */
     protected function _getFilterByType()
     {
-        $type = strtolower($this->getType());
+        $type = $this->getFilterType() ? strtolower($this->getFilterType()) : strtolower($this->getType());
         $filterClass = isset($this->_filterTypes[$type]) ? $this->_filterTypes[$type] : $this->_filterTypes['default'];
 
         return $filterClass;

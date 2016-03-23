@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,6 @@
  */
 error_reporting(E_ALL);
 #ini_set('display_errors', 1);
-umask(0);
 
 /* PHP version validation */
 if (version_compare(phpversion(), '5.5.0', '<') === true) {
@@ -41,6 +40,5 @@ if (!empty($_SERVER['MAGE_PROFILER'])
         !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_X_REQUESTED_WITH'] == 'XMLHttpRequest'
     );
 }
-if (ini_get('date.timezone') == '') {
-    date_default_timezone_set('UTC');
-}
+
+date_default_timezone_set('UTC');

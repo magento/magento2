@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,9 +16,10 @@ $orderAdminDate = $block->formatDate(
     true
 );
 $orderStoreDate = $block->formatDate(
-    $block->getCreatedAtStoreDate($_order->getStore(), $_order->getCreatedAt()),
+    $_order->getCreatedAt(),
     \IntlDateFormatter::MEDIUM,
-    true
+    true,
+    $block->getTimezoneForStore($_order->getStore())
 );
 ?>
 
@@ -54,10 +55,7 @@ $orderStoreDate = $block->formatDate(
                     <tr>
                         <th><?php /* @escapeNotVerified */ echo __(
                                 'Order Date (%1)',
-                                $block->getTimezoneForStore(
-                                    $_order->getStore(),
-                                    $_order->getCreatedAt()
-                                )
+                                $block->getTimezoneForStore($_order->getStore())
                             ) ?></th>
                         <td><?php /* @escapeNotVerified */ echo $orderStoreDate ?></td>
                     </tr>
@@ -132,7 +130,7 @@ $orderStoreDate = $block->formatDate(
                     </tr>
                     <tr>
                         <th><?php /* @escapeNotVerified */ echo __('Email') ?></th>
-                        <td><a href="mailto:<?php /* @escapeNotVerified */ echo $_order->getCustomerEmail() ?>"><?php /* @escapeNotVerified */ echo $_order->getCustomerEmail() ?></a></td>
+                        <td><a href="mailto:<?php echo $block->escapeHtml($_order->getCustomerEmail()) ?>"><?php echo $block->escapeHtml($_order->getCustomerEmail()) ?></a></td>
                     </tr>
                     <?php if ($_groupName = $block->getCustomerGroupName()) : ?>
                         <tr>

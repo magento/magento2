@@ -2,7 +2,7 @@
 /**
  * Customer address entity resource model
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model\ResourceModel;
@@ -287,13 +287,20 @@ class AddressRepository implements \Magento\Customer\Api\AddressRepositoryInterf
             $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'countryId']));
         }
 
-        if ($customerAddressModel->getCountryModel()->getRegionCollection()->getSize()
-            && !\Zend_Validate::is($customerAddressModel->getRegionId(), 'NotEmpty')
-            && $this->directoryData->isRegionRequired($customerAddressModel->getCountryId())
-        ) {
-            $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'regionId']));
+        if ($this->directoryData->isRegionRequired($customerAddressModel->getCountryId())) {
+            $regionCollection = $customerAddressModel->getCountryModel()->getRegionCollection();
+            if (!$regionCollection->count() && empty($customerAddressModel->getRegion())) {
+                $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'region']));
+            } elseif (
+                $regionCollection->count()
+                && !in_array(
+                    $customerAddressModel->getRegionId(),
+                    array_column($regionCollection->getData(), 'region_id')
+                )
+            ) {
+                $exception->addError(__(InputException::REQUIRED_FIELD, ['fieldName' => 'regionId']));
+            }
         }
-
         return $exception;
     }
 }

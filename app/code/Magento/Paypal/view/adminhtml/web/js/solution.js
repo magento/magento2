@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -33,6 +33,12 @@ define([
              * An attribute of the element responsible for the activation of the Payflow Express (data attribute)
              */
             enableExpress:  '[data-enable="express"]',
+
+            /**
+             * An attribute of the element responsible for the activation of the
+             * PayPal Express In-Context Checkout Experience (data attribute)
+             */
+            enableInContextPayPal: '[data-enable="in-context-api"]',
 
             /**
              * An attribute of the element responsible for the activation of the Payflow Bml (data attribute)
@@ -148,6 +154,7 @@ define([
                                 buttonConfiguration: this.buttonConfiguration,
                                 enableButton: this.enableButton,
                                 enableExpress: this.enableExpress,
+                                enableInContextPayPal: this.enableInContextPayPal,
                                 enableBml: this.enableBml,
                                 enableBmlPayPal: this.enableBmlPayPal,
                                 solutionsElements: this.solutionsElements,

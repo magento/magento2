@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -41,7 +41,7 @@ class ToOrderPaymentTest extends \PHPUnit_Framework_TestCase
      */
     protected $converter;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->paymentMock = $this->getMock(
             'Magento\Quote\Model\Quote\Payment',

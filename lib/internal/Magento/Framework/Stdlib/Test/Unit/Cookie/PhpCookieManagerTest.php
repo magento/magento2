@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,7 +43,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie {
         const COOKIE_HTTP_ONLY = true;
         const COOKIE_NOT_HTTP_ONLY = false;
         const COOKIE_EXPIRE_END_OF_SESSION = 0;
-        const MAX_NUM_COOKIES = 20;
+        const MAX_NUM_COOKIES = 50;
         const MAX_COOKIE_SIZE = 4096;
 
         /**

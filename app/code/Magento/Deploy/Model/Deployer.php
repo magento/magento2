@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -285,6 +285,9 @@ class Deployer
         $translator = $this->objectManager->get('Magento\Framework\TranslateInterface');
         $translator->setLocale($locale);
         $translator->loadData($area, true);
+        /** @var \Magento\Framework\Locale\ResolverInterface $localeResolver */
+        $localeResolver = $this->objectManager->get('Magento\Framework\Locale\ResolverInterface');
+        $localeResolver->setLocale($locale);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -49,8 +49,8 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Reports\Model\FlagFactory $reportsFlagFactory
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Catalog\Model\ResourceModel\Product $productResource
      * @param \Magento\Reports\Model\ResourceModel\Helper $resourceHelper
      * @param string $connectionName
@@ -60,8 +60,8 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Reports\Model\FlagFactory $reportsFlagFactory,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Framework\Stdlib\DateTime\Timezone\Validator $timezoneValidator,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Catalog\Model\ResourceModel\Product $productResource,
         \Magento\Reports\Model\ResourceModel\Helper $resourceHelper,
         $connectionName = null
@@ -71,8 +71,8 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
             $logger,
             $localeDate,
             $reportsFlagFactory,
-            $dateTime,
             $timezoneValidator,
+            $dateTime,
             $connectionName
         );
         $this->_productResource = $productResource;
@@ -156,6 +156,7 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
             \Magento\Reports\Model\Event::EVENT_PRODUCT_VIEW
         );
 
+        $productLinkField = $this->_productResource->getLinkField();
         $select->joinInner(
             ['product' => $this->getTable('catalog_product_entity')],
             'product.entity_id = source_table.object_id',
@@ -165,13 +166,13 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
         // join product attributes Name & Price
         $nameAttribute = $this->_productResource->getAttribute('name');
         $joinExprProductName = [
-            'product_name.entity_id = product.entity_id',
+            "product_name.{$productLinkField} = product.{$productLinkField}",
             'product_name.store_id = source_table.store_id',
             $connection->quoteInto('product_name.attribute_id = ?', $nameAttribute->getAttributeId()),
         ];
         $joinExprProductName = implode(' AND ', $joinExprProductName);
         $joinProductName = [
-            'product_default_name.entity_id = product.entity_id',
+            "product_default_name.{$productLinkField} = product.{$productLinkField}",
             'product_default_name.store_id = 0',
             $connection->quoteInto('product_default_name.attribute_id = ?', $nameAttribute->getAttributeId()),
         ];
@@ -187,14 +188,14 @@ class Viewed extends \Magento\Sales\Model\ResourceModel\Report\AbstractReport
         );
         $priceAttribute = $this->_productResource->getAttribute('price');
         $joinExprProductPrice = [
-            'product_price.entity_id = product.entity_id',
+            "product_price.{$productLinkField} = product.{$productLinkField}",
             'product_price.store_id = source_table.store_id',
             $connection->quoteInto('product_price.attribute_id = ?', $priceAttribute->getAttributeId()),
         ];
         $joinExprProductPrice = implode(' AND ', $joinExprProductPrice);
 
         $joinProductPrice = [
-            'product_default_price.entity_id = product.entity_id',
+            "product_default_price.{$productLinkField} = product.{$productLinkField}",
             'product_default_price.store_id = 0',
             $connection->quoteInto('product_default_price.attribute_id = ?', $priceAttribute->getAttributeId()),
         ];

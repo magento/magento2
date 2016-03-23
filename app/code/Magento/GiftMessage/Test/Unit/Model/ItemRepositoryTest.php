@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Test\Unit\Model;
@@ -82,7 +82,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
         );
         $this->messageMock = $this->getMock('Magento\GiftMessage\Model\Message', [], [], '', false);
         $this->quoteItemMock = $this->getMock(
-            '\Magento\Qote\Model\Quote\Item',
+            '\Magento\Quote\Model\Quote\Item',
             [
                 'getGiftMessageId',
                 '__wakeup'
@@ -184,7 +184,7 @@ class ItemRepositoryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
-     * @expectedExceptionMessage Gift Messages is not applicable for virtual products
+     * @expectedExceptionMessage Gift Messages are not applicable for virtual products
      */
     public function testSaveWithInvalidTransitionException()
     {

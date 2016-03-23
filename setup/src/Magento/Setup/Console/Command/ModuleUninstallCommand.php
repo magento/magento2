@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -280,6 +280,7 @@ class ModuleUninstallCommand extends AbstractModuleCommand
         }
         if ($input->getOption(self::INPUT_KEY_BACKUP_DB)) {
             $dbBackup = $this->backupRollbackFactory->create($output);
+            $this->setAreaCode();
             $dbBackup->dbBackup($time);
         }
     }
@@ -358,5 +359,21 @@ class ModuleUninstallCommand extends AbstractModuleCommand
             }
         }
         return $messages;
+    }
+
+    /**
+     * Sets area code to start a session for database backup and rollback
+     *
+     * @return void
+     */
+    private function setAreaCode()
+    {
+        $areaCode = 'adminhtml';
+        /** @var \Magento\Framework\App\State $appState */
+        $appState = $this->objectManager->get('Magento\Framework\App\State');
+        $appState->setAreaCode($areaCode);
+        /** @var \Magento\Framework\ObjectManager\ConfigLoaderInterface $configLoader */
+        $configLoader = $this->objectManager->get('Magento\Framework\ObjectManager\ConfigLoaderInterface');
+        $this->objectManager->configure($configLoader->load($areaCode));
     }
 }

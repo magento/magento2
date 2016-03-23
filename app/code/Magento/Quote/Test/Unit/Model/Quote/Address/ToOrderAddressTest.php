@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Quote\Test\Unit\Model\Quote\Address;
@@ -69,7 +69,7 @@ class ToOrderAddressTest extends \PHPUnit_Framework_TestCase
          */
         $object = $this->getMock('Magento\Quote\Model\Quote\Address', [], [], '', false);
         $this->objectCopyMock->expects($this->once())->method('getDataFromFieldset')->with(
-            'quote_convert_address',
+            'sales_convert_quote_address',
             'to_order_address',
             $object
         )->willReturn($orderData);
