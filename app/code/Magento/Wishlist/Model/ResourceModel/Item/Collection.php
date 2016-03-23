@@ -267,7 +267,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $productCollection->addPriceData()
             ->addTaxPercents()
             ->addIdFilter($this->_productIds)
-            ->addAttributeToSelect('*')
+            ->addAttributeToSelect('name')
             ->addOptionsToResult()
             ->addUrlRewrite();
 
