@@ -10,6 +10,7 @@ use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\ConfigurableProduct\Api\OptionRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as ResourceModelConfigurable;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class SaveHandler
@@ -98,6 +99,14 @@ class SaveHandler
             $data = $attribute->getData();
             $attribute->loadByProductAndAttribute($product, $eavAttribute);
             $attribute->setData(array_replace_recursive($attribute->getData(), $data));
+
+            if ($attribute->getId()) {
+                try {
+                    $this->optionRepository->deleteById($product->getSku(), $attribute->getId());
+                } catch (NoSuchEntityException $e) {
+                }
+                $attribute->setId(null);
+            }
 
             $ids[] = $this->optionRepository->save($product->getSku(), $attribute);
         }
