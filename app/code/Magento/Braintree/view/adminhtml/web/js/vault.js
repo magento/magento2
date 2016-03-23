@@ -105,6 +105,7 @@ define([
          */
         getPaymentMethodNonce: function () {
             var self = this;
+            
             fullScreenLoader.startLoader();
 
             $.get(self.nonceUrl, {
