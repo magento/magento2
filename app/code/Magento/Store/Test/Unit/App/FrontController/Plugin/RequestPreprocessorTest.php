@@ -47,6 +47,11 @@ class RequestPreprocessorTest extends \PHPUnit_Framework_TestCase
      */
     protected $subjectMock;
 
+    /**
+     * @var \Magento\Store\Model\BaseUrlChecker|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $baseUrlChecker;
+
     protected function setUp()
     {
         $this->_storeMock = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
@@ -58,19 +63,32 @@ class RequestPreprocessorTest extends \PHPUnit_Framework_TestCase
         $this->_urlMock = $this->getMock('\Magento\Framework\Url', [], [], '', false);
         $this->_scopeConfigMock = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
         $this->subjectMock = $this->getMock('Magento\Framework\App\FrontController', [], [], '', false);
+
+        $this->baseUrlChecker = $this->getMock('Magento\Store\Model\BaseUrlChecker', [], [], '', false);
+        $this->baseUrlChecker->expects($this->any())
+            ->method('execute')
+            ->willReturn(true);
+
         $this->_model = new \Magento\Store\App\FrontController\Plugin\RequestPreprocessor(
             $this->_storeManagerMock,
             $this->_urlMock,
             $this->_scopeConfigMock,
             $this->getMock('\Magento\Framework\App\ResponseFactory', [], [], '', false)
         );
+
+        $modelProperty = (new \ReflectionClass(get_class($this->_model)))
+            ->getProperty('baseUrlChecker');
+
+        $modelProperty->setAccessible(true);
+        $modelProperty->setValue($this->_model, $this->baseUrlChecker);
     }
 
     public function testAroundDispatchIfRedirectCodeNotExist()
     {
         $this->_requestMock->expects($this->once())->method('setDispatched')->with(false);
-        $this->_scopeConfigMock->expects($this->once())->method('getValue')->with('web/url/redirect_to_base');
+        $this->_scopeConfigMock->expects($this->never())->method('getValue')->with('web/url/redirect_to_base');
         $this->_requestMock->expects($this->never())->method('getRequestUri');
+        $this->baseUrlChecker->expects($this->any())->method('isEnabled')->willReturn(false);
         $this->assertEquals(
             'Expected',
             $this->_model->aroundDispatch($this->subjectMock, $this->closureMock, $this->_requestMock)
@@ -80,15 +98,6 @@ class RequestPreprocessorTest extends \PHPUnit_Framework_TestCase
     public function testAroundDispatchIfRedirectCodeExist()
     {
         $this->_requestMock->expects($this->once())->method('setDispatched')->with(false);
-        $this->_scopeConfigMock->expects(
-            $this->once()
-        )->method(
-            'getValue'
-        )->with(
-            'web/url/redirect_to_base'
-        )->will(
-            $this->returnValue(302)
-        );
         $this->_storeManagerMock->expects(
             $this->any()
         )->method(
@@ -98,6 +107,7 @@ class RequestPreprocessorTest extends \PHPUnit_Framework_TestCase
         );
         $this->_storeMock->expects($this->once())->method('getBaseUrl');
         $this->_requestMock->expects($this->never())->method('getRequestUri');
+        $this->baseUrlChecker->expects($this->any())->method('isEnabled')->willReturn(true);
         $this->assertEquals(
             'Expected',
             $this->_model->aroundDispatch($this->subjectMock, $this->closureMock, $this->_requestMock)
@@ -107,15 +117,6 @@ class RequestPreprocessorTest extends \PHPUnit_Framework_TestCase
     public function testAroundDispatchIfBaseUrlNotExists()
     {
         $this->_requestMock->expects($this->once())->method('setDispatched')->with(false);
-        $this->_scopeConfigMock->expects(
-            $this->once()
-        )->method(
-            'getValue'
-        )->with(
-            'web/url/redirect_to_base'
-        )->will(
-            $this->returnValue(302)
-        );
         $this->_storeManagerMock->expects(
             $this->any()
         )->method(
@@ -125,6 +126,7 @@ class RequestPreprocessorTest extends \PHPUnit_Framework_TestCase
         );
         $this->_storeMock->expects($this->once())->method('getBaseUrl')->will($this->returnValue(false));
         $this->_requestMock->expects($this->never())->method('getRequestUri');
+        $this->baseUrlChecker->expects($this->any())->method('isEnabled')->willReturn(true);
         $this->assertEquals(
             'Expected',
             $this->_model->aroundDispatch($this->subjectMock, $this->closureMock, $this->_requestMock)
