@@ -34,11 +34,7 @@ define([
          * Call method save() for tinyMCE instance before submit data
          */
         onSave: function () {
-            var tinyEditor = tinyMCE || null;
-
-            if (tinyEditor) {
-                tinyEditor.editors[this.textarea.id].save();
-            }
+            tinyMCE.editors[this.textarea.id].save();
         },
 
         /**
