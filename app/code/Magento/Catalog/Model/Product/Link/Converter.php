@@ -19,7 +19,7 @@ class Converter
     protected function indexBySku(array $products)
     {
         $converted = [];
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $converted[$product->getSku()] = $product;
         }
         return $converted;
