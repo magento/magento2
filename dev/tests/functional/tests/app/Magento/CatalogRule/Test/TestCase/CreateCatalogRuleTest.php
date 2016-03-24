@@ -60,7 +60,7 @@ class CreateCatalogRuleTest extends AbstractCatalogRuleEntityTest
         $this->catalogRuleNew->getEditForm()->fill($catalogPriceRule, null, $replace);
         $this->catalogRuleNew->getFormPageActions()->save();
 
-        if ($catalogPriceRule->getData('is_active') !== false) {
+        if ($catalogPriceRule->getData('without_apply') === true) {
             // Apply Catalog Price Rule
             $this->catalogRuleIndex->getGridPageActions()->applyRules();
         }
