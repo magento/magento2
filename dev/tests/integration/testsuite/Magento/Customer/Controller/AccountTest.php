@@ -9,6 +9,7 @@
 namespace Magento\Customer\Controller;
 
 use Magento\Framework\Message\MessageInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
@@ -164,10 +165,13 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store customer/create_account/confirm 0
      */
     public function testNoConfirmCreatePostAction()
     {
+        Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
+            ->setValue('customer/create_account/confirm', 0, ScopeInterface::SCOPE_WEBSITES, null);
+
         // Setting data for request
         $this->getRequest()
             ->setMethod('POST')
@@ -200,10 +204,13 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store customer/create_account/confirm 1
      */
     public function testWithConfirmCreatePostAction()
     {
+        Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
+            ->setValue('customer/create_account/confirm', 1, ScopeInterface::SCOPE_WEBSITES, null);
+
         // Setting data for request
         $email = 'test2@email.com';
         $this->getRequest()
