@@ -28,9 +28,6 @@ class CategoryLinkManagementTest extends \PHPUnit_Framework_TestCase
     {
         $this->categoryRepositoryMock = $this->getMock('\Magento\Catalog\Model\CategoryRepository', [], [], '', false);
         $productResource = $this->getMock('Magento\Catalog\Model\ResourceModel\Product', [], [], '', false);
-        $productRepositoryMock = $this->getMockBuilder('Magento\Catalog\Api\ProductRepositoryInterface')
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
         $categoryLinkRepository = $this->getMockBuilder('Magento\Catalog\Api\CategoryLinkRepositoryInterface')
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
