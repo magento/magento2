@@ -2268,10 +2268,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     private function createLimitationFilters()
     {
-        if (null === $this->_productLimitationFilters) {
-            $this->_productLimitationFilters = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation');
-        }
-        return $this->_productLimitationFilters;
+        return \Magento\Framework\App\ObjectManager::getInstance()
+                ->create('Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation');
     }
 }

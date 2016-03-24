@@ -51,8 +51,7 @@ class Builder
         Logger $logger,
         Registry $registry,
         WysiwygModel\Config $wysiwygConfig
-    )
-    {
+    ) {
         $this->productFactory = $productFactory;
         $this->logger = $logger;
         $this->registry = $registry;

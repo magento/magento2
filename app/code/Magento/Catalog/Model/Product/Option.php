@@ -119,6 +119,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
      * @var Option\Validator\Pool
      */
     protected $validatorPool;
+
     /**
      * @var MetadataPool
      */
@@ -670,6 +671,7 @@ class Option extends AbstractExtensibleModel implements ProductCustomOptionInter
     {
         return $this->getData(self::KEY_IMAGE_SIZE_Y);
     }
+
     /**
      * Set product SKU
      *

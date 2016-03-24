@@ -21,6 +21,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection as Produ
  * @method \Magento\Catalog\Model\Product\Link setLinkTypeId(int $value)
  *
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Link extends \Magento\Framework\Model\AbstractModel
 {

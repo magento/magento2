@@ -22,9 +22,11 @@ class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
     protected $metadataPool;
 
     /**
+     * Link constructor.
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param Relation $catalogProductRelation
      * @param MetadataPool $metadataPool
-     * @param null $connectionName
+     * @param string|null $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
