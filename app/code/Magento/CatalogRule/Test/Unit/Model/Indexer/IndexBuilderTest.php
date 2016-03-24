@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -67,6 +67,11 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $connection;
+
+    /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPool;
 
     /**
      * @var \Magento\Framework\DB\Select|\PHPUnit_Framework_MockObject_MockObject
@@ -137,6 +142,11 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->select = $this->getMock('Magento\Framework\DB\Select', [], [], '', false);
+        $this->metadataPool = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $metadata = $this->getMockBuilder('Magento\Framework\Model\Entity\EntityMetadata')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);
         $this->connection = $this->getMock('Magento\Framework\DB\Adapter\AdapterInterface');
         $this->db = $this->getMock('Zend_Db_Statement_Interface', [], [], '', false);
         $this->website = $this->getMock('Magento\Store\Model\Website', [], [], '', false);
@@ -192,7 +202,8 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             $this->eavConfig,
             $this->dateFormat,
             $this->dateTime,
-            $this->productFactory
+            $this->productFactory,
+            $this->metadataPool
         );
     }
 

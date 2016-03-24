@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,7 +9,10 @@
  */
 error_reporting(E_ALL);
 #ini_set('display_errors', 1);
-umask(0);
+
+/* Custom umask value may be provided in MAGE_UMASK environment variable */
+$mask = isset($_SERVER['MAGE_UMASK']) ? octdec($_SERVER['MAGE_UMASK']) : 002;
+umask($mask);
 
 /* PHP version validation */
 if (version_compare(phpversion(), '5.5.0', '<') === true) {

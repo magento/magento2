@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model;
@@ -146,7 +146,7 @@ class StockState implements StockStateInterface
      * @param float $qtyToCheck
      * @param float $origQty
      * @param int $scopeId
-     * @return \Magento\Framework\DataObject
+     * @return int
      */
     public function checkQuoteItemQty($productId, $itemQty, $qtyToCheck, $origQty, $scopeId = null)
     {

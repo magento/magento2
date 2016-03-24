@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
@@ -15,10 +15,14 @@ class ReviewTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
      */
     public function testEditActionProductNameXss()
     {
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $productRepository = $objectManager->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $product = $productRepository->get('product-with-xss');
+
         $reviewId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             'Magento\Review\Model\Review'
         )->load(
-            1,
+            $product->getId(),
             'entity_pk_value'
         )->getId();
         $this->dispatch('backend/review/product/edit/id/' . $reviewId);

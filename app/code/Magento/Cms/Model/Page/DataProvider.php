@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\Page;
 
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
-use Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool;
+use Magento\Framework\App\Request\DataPersistorInterface;
 
 /**
  * Class DataProvider
@@ -19,9 +19,9 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $collection;
 
     /**
-     * @var FilterPool
+     * @var DataPersistorInterface
      */
-    protected $filterPool;
+    protected $dataPersistor;
 
     /**
      * @var array
@@ -29,13 +29,11 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected $loadedData;
 
     /**
-     * Constructor
-     *
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
      * @param CollectionFactory $pageCollectionFactory
-     * @param FilterPool $filterPool
+     * @param DataPersistorInterface $dataPersistor
      * @param array $meta
      * @param array $data
      */
@@ -44,13 +42,13 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         $primaryFieldName,
         $requestFieldName,
         CollectionFactory $pageCollectionFactory,
-        FilterPool $filterPool,
+        DataPersistorInterface $dataPersistor,
         array $meta = [],
         array $data = []
     ) {
-        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->collection = $pageCollectionFactory->create();
-        $this->filterPool = $filterPool;
+        $this->dataPersistor = $dataPersistor;
+        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
     /**
@@ -63,10 +61,19 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if (isset($this->loadedData)) {
             return $this->loadedData;
         }
-        $items = $this->collection->getItems();
-        /** @var \Magento\Cms\Model\Page $page */
-        foreach ($items as $page) {
+        foreach ($this->collection->getAllIds() as $pageId) {
+            /** @var \Magento\Cms\Model\Page $page */
+            $page = $this->collection->getNewEmptyItem();
+            /** Load every record separately to make sure the list of associated stores is available */
+            $this->loadedData[$pageId] = $page->load($pageId)->getData();
+        }
+
+        $data = $this->dataPersistor->get('cms_page');
+        if (!empty($data)) {
+            $page = $this->collection->getNewEmptyItem();
+            $page->setData($data);
             $this->loadedData[$page->getId()] = $page->getData();
+            $this->dataPersistor->clear('cms_page');
         }
 
         return $this->loadedData;

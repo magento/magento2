@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -419,7 +419,7 @@
     );
 
     > tbody > tr > th {
-        background-color: @_table-th-background-color-responsive !important;
+        .lib-css(background-color, @_table-th-background-color-responsive ~'!important');
     }
 }
 
@@ -458,7 +458,7 @@
     );
 
     > tbody > tr > th {
-        background-color: @_table-th-background-color-responsive !important;
+        .lib-css(background-color, @_table-th-background-color-responsive ~'!important');
     }
 }
 

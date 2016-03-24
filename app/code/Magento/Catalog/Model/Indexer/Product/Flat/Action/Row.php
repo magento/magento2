@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat\Action;
 
 use Magento\Catalog\Model\Indexer\Product\Flat\FlatTableBuilder;
 use Magento\Catalog\Model\Indexer\Product\Flat\TableBuilder;
+use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
  * Class Row reindex action
@@ -24,6 +25,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
     protected $flatItemEraser;
 
     /**
+     * @param MetadataPool $metadataPool
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
@@ -34,6 +36,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
      * @param Eraser $flatItemEraser
      */
     public function __construct(
+        MetadataPool $metadataPool,
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper,
@@ -44,6 +47,7 @@ class Row extends \Magento\Catalog\Model\Indexer\Product\Flat\AbstractAction
         Eraser $flatItemEraser
     ) {
         parent::__construct(
+            $metadataPool,
             $resource,
             $storeManager,
             $productHelper,

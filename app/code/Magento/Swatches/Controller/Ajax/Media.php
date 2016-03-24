@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Swatches\Controller\Ajax;
@@ -85,10 +85,10 @@ class Media extends \Magento\Framework\App\Action\Action
 
         $product = $this->swatchHelper->loadVariationByFallback($currentConfigurable, $resultAttributes);
         if (!$product || (!$product->getImage() || $product->getImage() == 'no_selection')) {
-            $product = $this->swatchHelper->loadFirstVariationWithImage(
-                $currentConfigurable,
-                $resultAttributes
-            );
+            $product = $this->swatchHelper->loadFirstVariationWithSwatchImage($currentConfigurable, $resultAttributes);
+        }
+        if (!$product) {
+            $product = $this->swatchHelper->loadFirstVariationWithImage($currentConfigurable, $resultAttributes);
         }
         return $product;
     }

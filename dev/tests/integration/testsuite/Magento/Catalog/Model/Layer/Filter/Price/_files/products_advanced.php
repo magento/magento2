@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -68,8 +68,6 @@ foreach ($prices as $price) {
     $productId = $lastProductId + 1;
     $product->setTypeId(
         \Magento\Catalog\Model\Product\Type::TYPE_SIMPLE
-    )->setId(
-        $productId
     )->setAttributeSetId(
         $installer->getAttributeSetId('catalog_product', 'Default')
     )->setStoreId(

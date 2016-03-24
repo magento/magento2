@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,7 +38,7 @@ define(
         return function (couponCode, isApplied, isLoading) {
             var quoteId = quote.getQuoteId();
             var url = urlManager.getApplyCouponUrl(couponCode, quoteId);
-            var message = $t('Your coupon was successfully applied');
+            var message = $t('Your coupon was successfully applied.');
             return storage.put(
                 url,
                 {},

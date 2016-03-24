@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -230,13 +230,12 @@
                 </item>
             </argument>
         </column>
-        <column name="websites">
+        <column name="websites" class="Magento\Catalog\Ui\Component\Listing\Columns\Websites">
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\Store\Model\ResourceModel\Website\Collection</item>
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="add_field" xsi:type="boolean">true</item>
-                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="dataType" xsi:type="string">text</item>
                     <item name="label" xsi:type="string" translate="true">Websites</item>
                     <item name="sortOrder" xsi:type="number">100</item>
                 </item>

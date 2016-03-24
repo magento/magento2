@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model;
@@ -9,10 +9,11 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Payment\Gateway\ConfigInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\PaymentTokenRepositoryInterface;
-use Magento\Vault\Model\Adminhtml\Source\VaultPayment;
+use Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap;
 
 /**
  * Class PaymentTokenRepositoryProxy
+ * @api
  */
 class PaymentTokenRepositoryProxy implements PaymentTokenRepositoryInterface
 {
@@ -29,12 +30,7 @@ class PaymentTokenRepositoryProxy implements PaymentTokenRepositoryInterface
     /**
      * @var PaymentTokenRepositoryInterface
      */
-    private $nullRepository;
-
-    /**
-     * @var VaultPaymentInterface
-     */
-    private $vaultPayment;
+    private $defaultRepository;
 
     /**
      * @var ConfigInterface
@@ -49,22 +45,19 @@ class PaymentTokenRepositoryProxy implements PaymentTokenRepositoryInterface
     /**
      * Constructor
      *
-     * @param PaymentTokenRepositoryInterface $nullRepository
-     * @param VaultPaymentInterface $vaultPayment
+     * @param PaymentTokenRepositoryInterface $defaultRepository
      * @param ConfigInterface $config
      * @param ObjectManagerInterface $objectManager
      * @param PaymentTokenRepositoryInterface[] $repositories
      */
     public function __construct(
-        PaymentTokenRepositoryInterface $nullRepository,
-        VaultPaymentInterface $vaultPayment,
+        PaymentTokenRepositoryInterface $defaultRepository,
         ConfigInterface $config,
         ObjectManagerInterface $objectManager,
         array $repositories
     ) {
         $this->repositories = $repositories;
-        $this->nullRepository = $nullRepository;
-        $this->vaultPayment = $vaultPayment;
+        $this->defaultRepository = $defaultRepository;
         $this->config = $config;
         $this->objectManager = $objectManager;
     }
@@ -86,15 +79,11 @@ class PaymentTokenRepositoryProxy implements PaymentTokenRepositoryInterface
      */
     private function getInstance()
     {
-        if (!$this->vaultPayment->isActive()) {
-            return $this->nullRepository;
-        }
-
-        $methodCode = $this->config->getValue(VaultPayment::VALUE_CODE);
+        $methodCode = $this->config->getValue(VaultProvidersMap::VALUE_CODE);
 
         return isset($this->repositories[$methodCode])
             ? $this->objectManager->get($this->repositories[$methodCode])
-            : $this->nullRepository;
+            : $this->defaultRepository;
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -174,7 +174,7 @@ class ConfigurableProductsFixture extends Fixture
                 'has_options' => '0',
                 'image' => '',
                 'image_label' => '',
-                'is_returnable' => 'Use config',
+                'is_returnable' => 'no',
                 'manufacturer' => '',
                 'meta_description' => 'Configurable Product %s <p>Configurable product description 1</p>',
                 'meta_keyword' => 'Configurable Product 1',
@@ -280,7 +280,7 @@ class ConfigurableProductsFixture extends Fixture
                 'has_options' => '0',
                 'image' => '',
                 'image_label' => '',
-                'is_returnable' => 'Use config',
+                'is_returnable' => 'no',
                 'manufacturer' => '',
                 'meta_description' => 'Configurable Product %s <p>Configurable product description 1</p>',
                 'meta_keyword' => 'Configurable Product 1',
@@ -383,7 +383,7 @@ class ConfigurableProductsFixture extends Fixture
                 'has_options' => '0',
                 'image' => '',
                 'image_label' => '',
-                'is_returnable' => 'Use config',
+                'is_returnable' => 'no',
                 'manufacturer' => '',
                 'meta_description' => 'Configurable Product %s <p>Configurable product description 1</p>',
                 'meta_keyword' => 'Configurable Product 1',
@@ -486,7 +486,7 @@ class ConfigurableProductsFixture extends Fixture
                 'has_options' => '1',
                 'image' => '',
                 'image_label' => '',
-                'is_returnable' => 'Use config',
+                'is_returnable' => 'no',
                 'manufacturer' => '',
                 'meta_description' => 'Configurable Product %s <p>Configurable product description %s</p>',
                 'meta_keyword' => 'Configurable Product %s',

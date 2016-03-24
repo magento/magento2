@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\AdvancedPricingImportExport\Model\Export;
@@ -95,8 +95,10 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      * @param \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory
      * @param \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider
      * @param \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param ImportProduct\StoreResolver $storeResolver
      * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -117,6 +119,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
         \Magento\CatalogImportExport\Model\Export\Product\Type\Factory $_typeFactory,
         \Magento\Catalog\Model\Product\LinkTypeProvider $linkTypeProvider,
         \Magento\CatalogImportExport\Model\Export\RowCustomizerInterface $rowCustomizer,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver,
         \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
     ) {
@@ -352,6 +355,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 }
             }
             try {
+                $productEntityLinkField = $this->getProductEntityLinkField();
                 $select = $this->_connection->select()
                     ->from(
                         ['cpe' => $this->_resource->getTableName('catalog_product_entity')],
@@ -359,7 +363,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                     )
                     ->joinInner(
                         ['ap' => $this->_resource->getTableName($table)],
-                        'ap.entity_id = cpe.entity_id',
+                        'ap.' . $productEntityLinkField . ' = cpe.' . $productEntityLinkField,
                         []
                     )
                     ->where('cpe.entity_id IN (?)', $listSku);

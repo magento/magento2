@@ -2,7 +2,7 @@
 /**
  * Customer resource setup model
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Setup;
@@ -229,7 +229,7 @@ class CustomerSetup extends EavSetup
                     ],
                     'dob' => [
                         'type' => 'static',
-                        'label' => 'Date Of Birth',
+                        'label' => 'Date of Birth',
                         'input' => 'date',
                         'frontend' => 'Magento\Eav\Model\Entity\Attribute\Frontend\Datetime',
                         'backend' => 'Magento\Eav\Model\Entity\Attribute\Backend\Datetime',

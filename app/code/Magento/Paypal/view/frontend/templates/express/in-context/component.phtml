@@ -1,0 +1,37 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+use Magento\Paypal\Block\Express\InContext\Minicart\Button;
+
+/** @var \Magento\Paypal\Block\Express\InContext\Component $block */
+
+$configuration = [
+    '*' => [
+        'Magento_Paypal/js/in-context/express-checkout' => [
+            'id' => Button::PAYPAL_BUTTON_ID,
+            'path' => $block->getUrl(
+                'paypal/express/gettoken',
+                [
+                    '_secure' => $block->getRequest()->isSecure()
+                ]
+            ),
+            'merchantId' => $block->getMerchantId(),
+            'button' => $block->isButtonContext(),
+            'clientConfig' => [
+                'locale' => $block->getLocale(),
+                'environment' => $block->getEnvironment(),
+                'button' => [
+                    Button::PAYPAL_BUTTON_ID,
+                ],
+            ]
+        ]
+    ]
+];
+
+?>
+<div style="display: none;" id="<?php /* @noEscape */ echo Button::PAYPAL_BUTTON_ID; ?>"></div>
+<script type="text/x-magento-init">
+    <?php /* @noEscape */ echo json_encode($configuration); ?>
+</script>

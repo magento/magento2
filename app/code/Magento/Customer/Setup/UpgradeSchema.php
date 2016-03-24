@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -75,6 +75,35 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'nullable' => false,
                     'default' => '0',
                     'comment' => 'Is Searchable in Grid'
+                ]
+            );
+        }
+
+        if (version_compare($context->getVersion(), '2.0.7', '<')) {
+            $setup->getConnection()->addColumn(
+                $setup->getTable('customer_entity'),
+                'failures_num',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_SMALLINT,
+                    'nullable' => true,
+                    'default' => '0',
+                    'comment' => 'Failure Number'
+                ]
+            );
+            $setup->getConnection()->addColumn(
+                $setup->getTable('customer_entity'),
+                'first_failure',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                    'comment' => 'First Failure'
+                ]
+            );
+            $setup->getConnection()->addColumn(
+                $setup->getTable('customer_entity'),
+                'lock_expires',
+                [
+                    'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                    'comment' => 'Lock Expiration Date'
                 ]
             );
         }

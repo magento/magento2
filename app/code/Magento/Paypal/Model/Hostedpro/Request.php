@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Model\Hostedpro;
@@ -8,10 +8,10 @@ namespace Magento\Paypal\Model\Hostedpro;
 use Magento\Customer\Helper\Address;
 use Magento\Framework\DataObject;
 use Magento\Framework\Locale\Resolver;
+use Magento\Payment\Helper\Formatter;
 use Magento\Paypal\Model\Hostedpro;
 use Magento\Sales\Model\Order;
 use Magento\Tax\Helper\Data;
-use Magento\Paypal\Helper\Formatter;
 
 /**
  *  Website Payments Pro Hosted Solution request model to get token.
@@ -181,8 +181,11 @@ class Request extends DataObject
      */
     private function getNonTaxableAmount(Order $order)
     {
+        // PayPal denied transaction with 0 amount
+        $subtotal = $order->getBaseSubtotal() ? : $order->getPayment()->getBaseAmountAuthorized();
+
         return [
-            'subtotal' => $this->formatPrice($order->getBaseSubtotal()),
+            'subtotal' => $this->formatPrice($subtotal),
             'total' => $this->formatPrice($order->getPayment()->getBaseAmountAuthorized()),
             'tax' => $this->formatPrice($order->getBaseTaxAmount()),
             'shipping' => $this->formatPrice($order->getBaseShippingAmount()),
@@ -198,6 +201,7 @@ class Request extends DataObject
     private function getTaxableAmount(Order $order)
     {
         $amount = $this->formatPrice($order->getPayment()->getBaseAmountAuthorized());
+
         return [
             'amount' => $amount,
             'subtotal' => $amount // subtotal always is required

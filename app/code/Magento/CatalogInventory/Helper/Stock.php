@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Helper;
@@ -69,12 +69,12 @@ class Stock
      * Assign stock status information to product
      *
      * @param Product $product
-     * @param int $stockStatus
+     * @param int $status
      * @return void
      */
-    public function assignStatusToProduct(Product $product, $stockStatus = null)
+    public function assignStatusToProduct(Product $product, $status = null)
     {
-        if ($stockStatus === null) {
+        if ($status === null) {
             $websiteId = $product->getStore()->getWebsiteId();
             $stockStatus = $this->stockRegistryProvider->getStockStatus($product->getId(), $websiteId);
             $status = $stockStatus->getStockStatus();
@@ -139,8 +139,16 @@ class Stock
      */
     public function addIsInStockFilterToCollection($collection)
     {
-        $resource = $this->getStockStatusResource();
-        $resource->addIsInStockFilterToCollection($collection);
+        $stockFlag = 'has_stock_status_filter';
+        if (!$collection->hasFlag($stockFlag)) {
+            $isShowOutOfStock = $this->scopeConfig->getValue(
+                \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            );
+            $resource = $this->getStockStatusResource();
+            $resource->addStockDataToCollection($collection, !$isShowOutOfStock);
+            $collection->setFlag($stockFlag, true);
+        }
     }
 
     /**

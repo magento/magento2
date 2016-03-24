@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Gateway\Config;
 
 use Magento\Payment\Gateway\ConfigInterface;
-use Magento\Vault\Model\Adminhtml\Source\VaultPayment;
+use Magento\Vault\Model\Adminhtml\Source\VaultProvidersMap;
 use Magento\Payment\Gateway\Config\ValueHandlerInterface;
 
 /**
@@ -32,10 +32,10 @@ class ActiveHandler implements ValueHandlerInterface
      */
     public function handle(array $subject, $storeId = null)
     {
-        $vaultPaymentCode = $this->config->getValue(VaultPayment::VALUE_CODE, $storeId);
+        $vaultPaymentCode = $this->config->getValue(VaultProvidersMap::VALUE_CODE, $storeId);
 
         return (int) ((int)$this->config->getValue('active', $storeId) === 1
             && $vaultPaymentCode
-            && $vaultPaymentCode !== VaultPayment::EMPTY_VALUE);
+            && $vaultPaymentCode !== VaultProvidersMap::EMPTY_VALUE);
     }
 }

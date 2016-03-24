@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -43,6 +43,12 @@
                 type="Magento\Customer\Model\Metadata\AddressMetadataManagement" />
     <preference for="Magento\Customer\Api\CustomerManagementInterface"
                 type="Magento\Customer\Model\CustomerManagement" />
+    <preference for="Magento\Customer\Model\AuthenticationInterface"
+                type="Magento\Customer\Model\Authentication" />
+    <preference for="Magento\Customer\Model\EmailNotificationInterface"
+                type="Magento\Customer\Model\EmailNotification" />
+    <preference for="Magento\Customer\Api\CustomerNameGenerationInterface"
+                type="Magento\Customer\Helper\View" />
     <type name="Magento\Customer\Model\Session">
         <arguments>
             <argument name="configShare" xsi:type="object">Magento\Customer\Model\Config\Share\Proxy</argument>
@@ -203,26 +209,6 @@
             <argument name="concatExpression" xsi:type="object">BillingAddressExpression</argument>
         </arguments>
     </virtualType>
-    <virtualType name="LastVisitAtHandler" type="Magento\Framework\Indexer\Handler\ConcatHandler">
-        <arguments>
-            <argument name="concatExpression" xsi:type="object">LastVisitAtSubSelect</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="LastVisitAtSubSelect" type="Magento\Framework\DB\Sql\LookupExpression">
-        <arguments>
-            <argument name="targetTable" xsi:type="string">customer_visitor</argument>
-            <argument name="targetColumn" xsi:type="string">last_visit_at</argument>
-            <argument name="referenceColumns" xsi:type="array">
-                <item name="customer_id" xsi:type="array">
-                    <item name="tableAlias" xsi:type="string">e</item>
-                    <item name="columnName" xsi:type="string">entity_id</item>
-                </item>
-            </argument>
-            <argument name="sortOrder" xsi:type="array">
-                <item name="DESC" xsi:type="string">last_visit_at</item>
-            </argument>
-        </arguments>
-    </virtualType>
     <virtualType name="CustomerNameExpression" type="Magento\Framework\DB\Sql\ConcatExpression">
         <arguments>
             <argument name="tableName" xsi:type="string">e</argument>
@@ -316,5 +302,8 @@
                 <item name="upgradeHashAlgorithmCommand" xsi:type="object">Magento\Customer\Console\Command\UpgradeHashAlgorithmCommand</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Customer\Api\CustomerRepositoryInterface">
+        <plugin name="transactionWrapper" type="Magento\Customer\Model\Plugin\CustomerRepository\TransactionWrapper" sortOrder="-1"/>
     </type>
 </config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Block\Role\Tab;
@@ -8,7 +8,6 @@ namespace Magento\User\Block\Role\Tab;
 /**
  * Class \Magento\User\Block\Role\Tab\Users
  *
- * @SuppressWarnings(PHPMD.LongVariable)
  */
 class Users extends \Magento\Backend\Block\Widget\Tabs
 {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Helper;
@@ -43,7 +43,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
             'Magento\Backend\App\ConfigInterface'
         );
         $this->assertEquals(
-            1,
+            2,
             (int)$configModel->getValue(
                 \Magento\User\Helper\Data::XML_PATH_ADMIN_RESET_PASSWORD_LINK_EXPIRATION_PERIOD
             )

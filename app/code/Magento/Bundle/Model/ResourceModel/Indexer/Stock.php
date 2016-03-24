@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\ResourceModel\Indexer;
+
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Bundle Stock Status Indexer Resource Model
@@ -45,11 +47,17 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
     protected function _prepareBundleOptionStockData($entityIds = null, $usePrimaryTable = false)
     {
         $this->_cleanBundleOptionStockData();
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $idxTable = $usePrimaryTable ? $this->getMainTable() : $this->getIdxTable();
         $connection = $this->getConnection();
         $select = $connection->select()->from(
+            ['product' => $this->getTable('catalog_product_entity')],
+            ['entity_id']
+        );
+        $select->join(
             ['bo' => $this->getTable('catalog_product_bundle_option')],
-            ['parent_id']
+            "bo.parent_id = product.$linkField",
+            []
         );
         $this->_addWebsiteJoinToSelect($select, false);
         $status = new \Zend_Db_Expr(
@@ -77,13 +85,13 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
         )->where(
             'cw.website_id != 0'
         )->group(
-            ['bo.parent_id', 'cw.website_id', 'cis.stock_id', 'bo.option_id']
+            ['product.entity_id', 'cw.website_id', 'cis.stock_id', 'bo.option_id']
         )->columns(
             ['option_id' => 'bo.option_id', 'status' => $status]
         );
 
         if ($entityIds !== null) {
-            $select->where('bo.parent_id IN(?)', $entityIds);
+            $select->where('product.entity_id IN(?)', $entityIds);
         }
 
         // clone select for bundle product without required bundle options
@@ -110,7 +118,7 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
         $this->_prepareBundleOptionStockData($entityIds, $usePrimaryTable);
-
+        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
         $connection = $this->getConnection();
         $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
@@ -148,22 +156,9 @@ class Stock extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\
             '=?',
             \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
         );
-        $this->_addAttributeToSelect($select, 'status', 'e.entity_id', 'cs.store_id', $condition);
+        $this->_addAttributeToSelect($select, 'status', "e.$linkField", 'cs.store_id', $condition);
 
-        if ($this->_isManageStock()) {
-            $statusExpr = $connection->getCheckSql(
-                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
-                '1',
-                'cisi.is_in_stock'
-            );
-        } else {
-            $statusExpr = $connection->getCheckSql(
-                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
-                'cisi.is_in_stock',
-                '1'
-            );
-        }
-
+        $statusExpr = $this->getStatusExpression($connection);
         $select->columns(
             [
                 'status' => $connection->getLeastSql(

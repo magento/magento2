@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Api;
@@ -81,8 +81,29 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
     {
         $attributeCode = 'label_attr_code3df4tr3';
         $attribute = $this->createAttribute($attributeCode);
-        $this->assertArrayHasKey('attribute_id', $attribute);
-        $this->assertEquals($attributeCode, $attribute['attribute_code']);
+
+        $expectedData = [
+            'attribute_code' => $attributeCode,
+            'is_required' => true,
+            "frontend_input" => "select",
+            "is_visible_on_front" => true,
+            "is_searchable" => true,
+            "is_visible_in_advanced_search" => true,
+            "is_filterable" => true,
+            "is_filterable_in_search" => true,
+        ];
+
+        $this->assertEquals('front_lbl', $attribute['default_frontend_label']);
+        foreach ($expectedData as $key => $value) {
+            $this->assertEquals($value, $attribute[$key]);
+        }
+        //Validate options
+        //'Blue' should be first as it has sort_order = 0
+        $this->assertEquals('Default Blue', $attribute['options'][1]['label']);
+        $this->assertArrayHasKey('default_value', $attribute);
+        //'Blue' should be set as default
+        $this->assertEquals($attribute['default_value'], $attribute['options'][1]['value']);
+        $this->assertEquals('Default Red', $attribute['options'][2]['label']);
     }
 
     /**
@@ -102,46 +123,111 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_attribute.php
+     * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
      */
     public function testUpdate()
     {
-        $attributeCode = 'test_attribute_code_333';
-        $attribute = $this->getAttribute($attributeCode);
+        $attributeCode = 'label_attr_code3df4tr3';
+        $attribute = $this->createAttribute($attributeCode);
 
+        //Make sure that 'Blue' is set as default
+        $this->assertEquals($attribute['default_value'], $attribute['options'][1]['value']);
         $attributeData = [
             'attribute' => [
                 'attribute_id' => $attribute['attribute_id'],
                 'frontend_labels' => [
                     ['store_id' => 0, 'label' => 'front_lbl_new'],
                 ],
-                'default_value' => 'default value new',
+                "options" => [
+                    //Update existing
+                    [
+                        "value" => $attribute['options'][1]['value'],
+                        "label" => "New Label",
+                        "store_labels" => [
+                            [
+                                "store_id" => 1,
+                                "label" => "Default Blue Updated"
+                            ]
+                        ]
+                    ],
+                    //Add new option
+                    [
+                        "label" => "Green",
+                        "value" => "",
+                        "sort_order" => 200,
+                        "is_default" => true,
+                        "store_labels" => [
+                            [
+                                "store_id" => 0,
+                                "label" => "Admin Green"
+                            ],
+                            [
+                                "store_id" => 1,
+                                "label" => "Default Green"
+                            ]
+                        ]
+                    ]
+                ],
                 'is_required' => false,
-                'frontend_input' => 'text',
+                'frontend_input' => 'select',
             ],
         ];
-
-        $serviceInfo = [
-            'rest' => [
-                'resourcePath' => self::RESOURCE_PATH . '/' . $attributeCode,
-                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
-            ],
-            'soap' => [
-                'service' => self::SERVICE_NAME,
-                'serviceVersion' => self::SERVICE_VERSION,
-                'operation' => self::SERVICE_NAME . 'Save',
-            ],
-        ];
-
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $attributeData['attribute']['attributeCode'] = $attributeCode;
-        }
-        $result = $this->_webApiCall($serviceInfo, $attributeData);
+        $result = $this->updateAttribute($attributeCode, $attributeData);
 
         $this->assertEquals($attribute['attribute_id'], $result['attribute_id']);
         $this->assertEquals($attributeCode, $result['attribute_code']);
-        $this->assertEquals('default value new', $result['default_value']);
         $this->assertEquals('front_lbl_new', $result['default_frontend_label']);
+        //New option set as default
+        $this->assertEquals($result['options'][3]['value'], $result['default_value']);
+        $this->assertEquals("Default Blue Updated", $result['options'][1]['label']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/Model/Product/Attribute/_files/create_attribute_service.php
+     */
+    public function testUpdateNotExistingOption()
+    {
+        $attributeCode = 'label_attr_code3df4tr3';
+        $attribute = $this->createAttribute($attributeCode);
+        $expectedMessage = 'Attribute %1 does not contain option with Id %2';
+
+        $attributeData = [
+            'attribute' => [
+                'attribute_id' => $attribute['attribute_id'],
+                'is_required' => true,
+                'frontend_labels' => [
+                    ['store_id' => 0, 'label' => 'front_lbl_new'],
+                ],
+                "options" => [
+                    [
+                        "value" => 1,
+                        "label" => "New Label",
+                        "store_labels" => [
+                            [
+                                "store_id" => 1,
+                                "label" => "new label"
+                            ]
+                        ]
+                    ],
+                ],
+                'frontend_input' => 'select',
+            ]
+        ];
+
+        try {
+            $this->updateAttribute($attributeCode, $attributeData);
+            $this->fail("Expected exception");
+        } catch (\SoapFault $e) {
+            $this->assertContains(
+                $expectedMessage,
+                $e->getMessage(),
+                "SoapFault does not contain expected message."
+            );
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+            $this->assertEquals([$attributeCode, 1], $errorObj['parameters']);
+        }
     }
 
     /**
@@ -153,9 +239,6 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
         $this->assertTrue($this->deleteAttribute($attributeCode));
     }
 
-    /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_attribute.php
-     */
     public function testDeleteNoSuchEntityException()
     {
         $attributeCode = 'some_test_code';
@@ -200,11 +283,53 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
             'attribute' => [
                 'attribute_code' => $attributeCode,
                 'frontend_labels' => [
-                    ['store_id' => 0, 'label' => 'front_lbl'],
+                    [
+                        'store_id' => 0,
+                        'label' => 'front_lbl'
+                    ],
                 ],
-                'default_value' => 'default value',
-                'frontend_input' => 'textarea',
                 'is_required' => true,
+                "default_value" => "",
+                "frontend_input" => "select",
+                "is_visible_on_front" => true,
+                "is_searchable" => true,
+                "is_visible_in_advanced_search" => true,
+                "is_filterable" => true,
+                "is_filterable_in_search" => true,
+                "options" => [
+                    [
+                        "label" => "Red",
+                        "value" => "",
+                        "sort_order" => 100,
+                        "is_default" => false,
+                        "store_labels" => [
+                            [
+                                "store_id" => 0,
+                                "label" => "Admin Red"
+                            ],
+                            [
+                                "store_id" => 1,
+                                "label" => "Default Red"
+                            ]
+                        ]
+                    ],
+                    [
+                        "label" => "Blue",
+                        "value" => "",
+                        "sort_order" => 0,
+                        "is_default" => true,
+                        "store_labels" => [
+                            [
+                                "store_id" => 0,
+                                "label" => "Admin Blue"
+                            ],
+                            [
+                                "store_id" => 1,
+                                "label" => "Default Blue"
+                            ]
+                        ]
+                    ]
+                ]
             ],
         ];
 
@@ -263,5 +388,30 @@ class ProductAttributeRepositoryTest extends \Magento\TestFramework\TestCase\Web
             ],
         ];
         return $this->_webApiCall($serviceInfo, ['attributeCode' => $attributeCode]);
+    }
+
+    /**
+     * Update attribute by code
+     *
+     * @param $attributeCode
+     * @return array|bool|float|int|string
+     */
+    protected function updateAttribute($attributeCode, $attributeData)
+    {
+        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+            $attributeData['attribute']['attributeCode'] = $attributeCode;
+        }
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $attributeCode,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+        return $this->_webApiCall($serviceInfo, $attributeData);
     }
 }

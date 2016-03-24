@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model;
@@ -134,7 +134,6 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
         $ruleInterfaceName = 'Magento\SalesRule\Api\Data\RuleInterface';
         $this->extensionAttributesJoinProcessor->process($collection, $ruleInterfaceName);
 
-        $collection->addWebsitesToResult();
         //Add filters from root filter group to the collection
         /** @var FilterGroup $group */
         foreach ($searchCriteria->getFilterGroups() as $group) {
@@ -160,7 +159,7 @@ class RuleRepository implements \Magento\SalesRule\Api\RuleRepositoryInterface
         $rules = [];
         /** @var \Magento\SalesRule\Model\Rule $ruleModel */
         foreach ($collection->getItems() as $ruleModel) {
-            $ruleModel->getCustomerGroupIds();
+            $ruleModel->load($ruleModel->getId());
             $ruleModel->getStoreLabels();
             $rules[] = $this->toDataModelConverter->toDataModel($ruleModel);
         }

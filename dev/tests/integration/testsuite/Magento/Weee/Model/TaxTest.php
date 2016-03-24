@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -85,8 +85,8 @@ class TaxTest extends \PHPUnit_Framework_TestCase
         $shipping = new \Magento\Framework\DataObject([
             'quote' =>  $quote,
         ]);
-        $product = Bootstrap::getObjectManager()->create('Magento\Catalog\Model\Product');
-        $product->load(101);
+        $productRepository = Bootstrap::getObjectManager()->create('Magento\Catalog\Api\ProductRepositoryInterface');
+        $product = $productRepository->get('simple-with-ftp');
 
         $amount = $this->_model->getProductWeeeAttributes($product, $shipping, null, null, true);
         $this->assertTrue(is_array($amount));

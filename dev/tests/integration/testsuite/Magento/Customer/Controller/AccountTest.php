@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -175,8 +175,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setParam('lastname', 'lastname1')
             ->setParam('company', '')
             ->setParam('email', 'test1@email.com')
-            ->setParam('password', 'password')
-            ->setParam('password_confirmation', 'password')
+            ->setParam('password', '_Password1')
+            ->setParam('password_confirmation', '_Password1')
             ->setParam('telephone', '5123334444')
             ->setParam('street', ['1234 fake street', ''])
             ->setParam('city', 'Austin')
@@ -212,8 +212,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setParam('lastname', 'lastname2')
             ->setParam('company', '')
             ->setParam('email', $email)
-            ->setParam('password', 'password')
-            ->setParam('password_confirmation', 'password')
+            ->setParam('password', '_Password1')
+            ->setParam('password_confirmation', '_Password1')
             ->setParam('telephone', '5123334444')
             ->setParam('street', ['1234 fake street', ''])
             ->setParam('city', 'Austin')
@@ -250,8 +250,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setParam('lastname', 'lastname')
             ->setParam('company', '')
             ->setParam('email', 'customer@example.com')
-            ->setParam('password', 'password')
-            ->setParam('password_confirmation', 'password')
+            ->setParam('password', '_Password1')
+            ->setParam('password_confirmation', '_Password1')
             ->setParam('telephone', '5123334444')
             ->setParam('street', ['1234 fake street', ''])
             ->setParam('city', 'Austin')
@@ -311,6 +311,12 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         );
     }
 
+    /**
+     * @magentoConfigFixture current_store customer/password/limit_password_reset_requests_method 0
+     * @magentoConfigFixture current_store customer/password/forgot_email_template customer_password_forgot_email_template
+     * @magentoConfigFixture current_store customer/password/forgot_email_identity support
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     */
     public function testForgotPasswordPostAction()
     {
         $email = 'customer@example.com';
@@ -379,8 +385,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setQueryValue('id', 1)
             ->setQueryValue('token', '8ed8677e6c79e68b94e61658bd756ea5')
             ->setPostValue([
-                'password' => 'new-password',
-                'password_confirmation' => 'new-password',
+                'password' => 'new-Password1',
+                'password_confirmation' => 'new-Password1',
             ]);
 
         $this->dispatch('customer/account/resetPasswordPost');
@@ -404,8 +410,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode(), $body);
         $this->assertContains('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is not checked
-        $this->assertContains('<input type="checkbox" name="change_password" id="change-password" value="1" ' .
-            'title="Change Password" class="checkbox"/>', $body);
+        $this->assertContains('<input type="checkbox" name="change_password" id="change-password" '
+            .'data-role="change-password" value="1" title="Change Password" class="checkbox" />', $body);
     }
 
     /**
@@ -421,11 +427,16 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode(), $body);
         $this->assertContains('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is checked
-        $this->assertContains('<input type="checkbox" name="change_password" id="change-password" value="1" ' .
-            'title="Change Password" checked="checked" class="checkbox"/>', $body);
+        $this->assertContains(
+            '<input type="checkbox" name="change_password" id="change-password" '
+            .'data-role="change-password" value="1" title="Change Password" checked="checked" class="checkbox" />',
+            $body
+        );
     }
 
     /**
+     * @magentoConfigFixture current_store customer/account_information/change_email_template customer_account_information_change_email_and_password_template
+     * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     public function testEditPostAction()
@@ -446,6 +457,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
                 'firstname' => 'John',
                 'lastname'  => 'Doe',
                 'email'     => 'johndoe@email.com',
+                'change_email'     => 1,
+                'current_password' => 'password'
             ]);
 
         $this->dispatch('customer/account/editPost');
@@ -463,6 +476,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
+     * @magentoConfigFixture current_store customer/account_information/change_email_and_password_template customer_account_information_change_email_and_password_template
+     * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     public function testChangePasswordEditPostAction()
@@ -484,9 +499,10 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
                 'lastname'         => 'Doe',
                 'email'            => 'johndoe@email.com',
                 'change_password'  => 1,
+                'change_email'     => 1,
                 'current_password' => 'password',
-                'password'         => 'new-password',
-                'password_confirmation' => 'new-password',
+                'password'         => 'new-Password1',
+                'password_confirmation' => 'new-Password1',
             ]);
 
         $this->dispatch('customer/account/editPost');
@@ -515,6 +531,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
                 'form_key'  => $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey(),
                 'firstname' => 'John',
                 'lastname'  => 'Doe',
+                'change_email'  => 1,
+                'current_password'  => 'password',
                 'email'     => 'bad-email',
             ]);
 
@@ -522,7 +540,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertRedirect($this->stringEndsWith('customer/account/edit/'));
         $this->assertSessionMessages(
-            $this->equalTo(['Invalid input']),
+            $this->equalTo(['Invalid value of "bad-email" provided for the email field.']),
             MessageInterface::TYPE_ERROR
         );
     }
@@ -579,7 +597,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertRedirect($this->stringEndsWith('customer/account/edit/'));
         $this->assertSessionMessages(
-            $this->equalTo(['Confirm your new password.']),
+            $this->equalTo(['Password confirmation doesn\'t match entered password.']),
             MessageInterface::TYPE_ERROR
         );
     }

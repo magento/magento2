@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
@@ -41,10 +41,15 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     public function execute()
     {
+        /** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
+        $storeManager = $this->_objectManager->get('Magento\Store\Model\StoreManagerInterface');
+        $storeId = (int) $this->getRequest()->getParam('store', 0);
+        $store = $storeManager->getStore($storeId);
+        $storeManager->setCurrentStore($store->getCode());
         $productId = (int) $this->getRequest()->getParam('id');
         $product = $this->productBuilder->build($this->getRequest());
 
-        if ($productId && !$product->getId()) {
+        if ($productId && !$product->getEntityId()) {
             $this->messageManager->addError(__('This product no longer exists.'));
             /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
             $resultRedirect = $this->resultRedirectFactory->create();

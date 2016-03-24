@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -11,12 +11,16 @@ $rule = Bootstrap::getObjectManager()->get('Magento\CatalogRule\Model\RuleFactor
 $rule->loadPost([
     'name' => 'test_rule',
     'is_active' => '1',
+    'stop_rules_processing' => 0,
     'website_ids' => [1],
     'customer_group_ids' => [0, 1],
     'discount_amount' => 2,
     'simple_action' => 'by_percent',
     'from_date' => '',
     'to_date' => '',
+    'sort_order' => 0,
+    'sub_is_enable' => 0,
+    'sub_discount_amount' => 0,
     'conditions' => [
         '1' => [
             'type' => 'Magento\CatalogRule\Model\Rule\Condition\Combine',

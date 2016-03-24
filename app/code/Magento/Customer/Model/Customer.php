@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -1348,5 +1348,21 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             'confirmation' => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
         ];
         return $types;
+    }
+
+    /**
+     * Check if customer is locked
+     *
+     * @return boolean
+     */
+    public function isCustomerLocked()
+    {
+        if ($this->getLockExpires()) {
+            $lockExpires = new \DateTime($this->getLockExpires());
+            if ($lockExpires > new \DateTime()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

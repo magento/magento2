@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -15,7 +15,11 @@ define([
             changed: false,
             loading: false,
             error: false,
-            opened: false
+            opened: false,
+            level: 0,
+            visible: true,
+            disabled: false,
+            additionalClasses: {}
         },
 
         /**
@@ -25,17 +29,19 @@ define([
         initialize: function () {
             _.bindAll(this, 'onChildrenUpdate', 'onChildrenError', 'onContentLoading');
 
-            return this._super();
+            return this._super()
+                       ._setClasses();
         },
 
         /**
          * Calls initObservable of parent class.
          * Defines observable properties of instance.
-         * @return {Object} - reference to instance
+         *
+         * @returns {Object} Reference to instance
          */
         initObservable: function () {
             this._super()
-                .observe('changed loading error');
+                .observe('changed loading error visible');
 
             return this;
         },
@@ -43,17 +49,27 @@ define([
         /**
          * Calls parent's initElement method.
          * Assignes callbacks on various events of incoming element.
+         *
          * @param  {Object} elem
          * @return {Object} - reference to instance
          */
         initElement: function (elem) {
-            this._super();
+            elem.initContainer(this);
 
             elem.on({
                 'update':   this.onChildrenUpdate,
                 'loading':  this.onContentLoading,
                 'error':  this.onChildrenError
             });
+
+            if (this.disabled) {
+                try {
+                    elem.disabled(true);
+                }
+                catch (e) {
+
+                }
+            }
 
             return this;
         },
@@ -70,6 +86,34 @@ define([
             }
 
             this.changed(hasChanged);
+        },
+
+        /**
+         * Extends 'additionalClasses' object.
+         *
+         * @returns {Group} Chainable.
+         */
+        _setClasses: function () {
+            var addtional = this.additionalClasses,
+                classes;
+
+            if (_.isString(addtional)) {
+                addtional = this.additionalClasses.split(' ');
+                classes = this.additionalClasses = {};
+
+                addtional.forEach(function (name) {
+                    classes[name] = true;
+                }, this);
+            }
+
+            _.extend(this.additionalClasses, {
+                'admin__collapsible-block-wrapper': this.collapsible,
+                _show: this.opened,
+                _hide: !this.opened,
+                _disabled: this.disabled
+            });
+
+            return this;
         },
 
         /**

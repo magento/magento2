@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Store\App\Action\Plugin;
 
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\Phrase;
 use Magento\Store\Api\StoreCookieManagerInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -77,12 +78,19 @@ class Context
         /** @var \Magento\Store\Model\Store $defaultStore */
         $defaultStore = $this->storeManager->getWebsite()->getDefaultStore();
 
-        $requestedStoreCode = $this->httpRequest->getParam(
+        $storeCode = $this->httpRequest->getParam(
             StoreResolverInterface::PARAM_NAME,
             $this->storeCookieManager->getStoreCodeFromCookie()
         );
+
+        if (is_array($storeCode)) {
+            if (!isset($storeCode['_data']['code'])) {
+                throw new \InvalidArgumentException(new Phrase('Invalid store parameter.'));
+            }
+            $storeCode = $storeCode['_data']['code'];
+        }
         /** @var \Magento\Store\Model\Store $currentStore */
-        $currentStore = $requestedStoreCode ? $this->storeManager->getStore($requestedStoreCode) : $defaultStore;
+        $currentStore = $storeCode ? $this->storeManager->getStore($storeCode) : $defaultStore;
 
         $this->httpContext->setValue(
             StoreManagerInterface::CONTEXT_STORE,

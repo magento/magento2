@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Payment\Model\Method;
@@ -79,43 +79,6 @@ class Cc extends \Magento\Payment\Model\Method\AbstractMethod
         );
         $this->_moduleList = $moduleList;
         $this->_localeDate = $localeDate;
-    }
-
-    /**
-     * Assign data to info model instance
-     *
-     * @param \Magento\Framework\DataObject|mixed $data
-     * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    public function assignData(\Magento\Framework\DataObject $data)
-    {
-        if (!$data instanceof \Magento\Framework\DataObject) {
-            $data = new \Magento\Framework\DataObject($data);
-        }
-        $info = $this->getInfoInstance();
-        $info->setCcType(
-            $data->getCcType()
-        )->setCcOwner(
-            $data->getCcOwner()
-        )->setCcLast4(
-            substr($data->getCcNumber(), -4)
-        )->setCcNumber(
-            $data->getCcNumber()
-        )->setCcCid(
-            $data->getCcCid()
-        )->setCcExpMonth(
-            $data->getCcExpMonth()
-        )->setCcExpYear(
-            $data->getCcExpYear()
-        )->setCcSsIssue(
-            $data->getCcSsIssue()
-        )->setCcSsStartMonth(
-            $data->getCcSsStartMonth()
-        )->setCcSsStartYear(
-            $data->getCcSsStartYear()
-        );
-        return $this;
     }
 
     /**
