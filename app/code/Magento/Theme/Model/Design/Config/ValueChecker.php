@@ -96,7 +96,7 @@ class ValueChecker
     {
         $result = true;
         if (count($value) !== count($defaultValue)) {
-           return false;
+            return false;
         }
         foreach ($value as $key => $elem) {
             if (is_array($elem)) {
