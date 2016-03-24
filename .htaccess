@@ -196,6 +196,7 @@
 
     AddDefaultCharset Off
     #AddDefaultCharset UTF-8
+    AddType 'text/html; charset=UTF-8' html
 
 <IfModule mod_expires.c>
 
