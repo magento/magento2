@@ -23,7 +23,6 @@ class Resolver
         $this->request = $request;
     }
 
-
     /**
      * Get stored value.
      * Fallback to request if none.
