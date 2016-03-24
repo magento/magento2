@@ -2,6 +2,8 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/* eslint-disable no-undef */
 define([
     'Magento_Ui/js/lib/view/utils/async',
     'underscore',
@@ -32,7 +34,11 @@ define([
          * Call method save() for tinyMCE instance before submit data
          */
         onSave: function () {
-            tinyMCE.editors[this.textarea.id].save();
+            var tinyEditor = tinyMCE || null;
+
+            if (tinyEditor) {
+                tinyEditor.editors[this.textarea.id].save();
+            }
         },
 
         /**
