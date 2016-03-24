@@ -101,7 +101,7 @@
     # Insert filter on all content
     ###SetOutputFilter DEFLATE
     # Insert filter on selected content types only
-    #AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript
+    #AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/x-javascript application/json image/svg+xml
 
     # Netscape 4.x has some problems...
     #BrowserMatch ^Mozilla/4 gzip-only-text/html
@@ -190,6 +190,7 @@
 
     AddDefaultCharset Off
     #AddDefaultCharset UTF-8
+    AddType 'text/html; charset=UTF-8' html
 
 <IfModule mod_expires.c>
 
