@@ -168,9 +168,22 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testNoConfirmCreatePostAction()
     {
-        Bootstrap::getObjectManager()
-            ->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
-            ->setValue('customer/create_account/confirm', 0, ScopeInterface::SCOPE_WEBSITES, null);
+        /** @var \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableScopeConfig */
+        $mutableScopeConfig = Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\Config\MutableScopeConfigInterface');
+
+        $scopeValue = $mutableScopeConfig->getValue(
+            'customer/create_account/confirm',
+            ScopeInterface::SCOPE_WEBSITES,
+            null
+        );
+
+        $mutableScopeConfig->setValue(
+            'customer/create_account/confirm',
+            0,
+            ScopeInterface::SCOPE_WEBSITES,
+            null
+        );
 
         // Setting data for request
         $this->getRequest()
@@ -199,6 +212,13 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             $this->equalTo(['Thank you for registering with Main Website Store.']),
             MessageInterface::TYPE_SUCCESS
         );
+
+        $mutableScopeConfig->setValue(
+            'customer/create_account/confirm',
+            $scopeValue,
+            ScopeInterface::SCOPE_WEBSITES,
+            null
+        );
     }
 
     /**
@@ -207,9 +227,22 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     public function testWithConfirmCreatePostAction()
     {
-        Bootstrap::getObjectManager()
-            ->get('Magento\Framework\App\Config\MutableScopeConfigInterface')
-            ->setValue('customer/create_account/confirm', 1, ScopeInterface::SCOPE_WEBSITES, null);
+        /** @var \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableScopeConfig */
+        $mutableScopeConfig = Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\Config\MutableScopeConfigInterface');
+
+        $scopeValue = $mutableScopeConfig->getValue(
+            'customer/create_account/confirm',
+            ScopeInterface::SCOPE_WEBSITES,
+            null
+        );
+
+        $mutableScopeConfig->setValue(
+            'customer/create_account/confirm',
+            1,
+            ScopeInterface::SCOPE_WEBSITES,
+            null
+        );
 
         // Setting data for request
         $email = 'test2@email.com';
@@ -242,6 +275,13 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
                 . $email . '/">click here</a> for a new link.'
             ]),
             MessageInterface::TYPE_SUCCESS
+        );
+
+        $mutableScopeConfig->setValue(
+            'customer/create_account/confirm',
+            $scopeValue,
+            ScopeInterface::SCOPE_WEBSITES,
+            null
         );
     }
 
