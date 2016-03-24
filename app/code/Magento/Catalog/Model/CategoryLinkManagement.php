@@ -53,7 +53,6 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->productLinkFactory = $productLinkFactory;
-
     }
 
     /**
@@ -115,7 +114,7 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
     /**
      * Retrieve product repository instance
      *
-     * @return \Magento\Catalog\Api\ProductRepositoryInterface|mixed
+     * @return \Magento\Catalog\Api\ProductRepositoryInterface
      */
     private function getProductRepository()
     {
@@ -129,7 +128,7 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
     /**
      * Retrieve product resource instance
      *
-     * @return ResourceModel\Product|mixed
+     * @return ResourceModel\Product
      */
     private function getProductResource()
     {
@@ -143,7 +142,7 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
     /**
      * Retrieve category link repository instance
      *
-     * @return \Magento\Catalog\Api\CategoryLinkRepositoryInterface|mixed
+     * @return \Magento\Catalog\Api\CategoryLinkRepositoryInterface
      */
     private function getCategoryLinkRepository()
     {
@@ -157,7 +156,7 @@ class CategoryLinkManagement implements \Magento\Catalog\Api\CategoryLinkManagem
     /**
      * Retrieve indexer registry instance
      *
-     * @return \Magento\Framework\Indexer\IndexerRegistry|mixed
+     * @return \Magento\Framework\Indexer\IndexerRegistry
      */
     private function getIndexerRegistry()
     {
