@@ -9,7 +9,11 @@
 define([
     'jquery',
     'mage/template',
-    'uiRegistry'
+    'uiRegistry',
+    'jquery/ui',
+    'prototype',
+    'form',
+    'validation'
 ], function (jQuery, mageTemplate, rg) {
     'use strict';
 
@@ -136,11 +140,7 @@ define([
                 }
             };
 
-        $('manage-options-panel').on(
-            'click',
-            '#add_new_option_button',
-            attributeOption.add.bind(attributeOption, {}, true)
-        );
+        Event.observe('add_new_option_button', 'click', attributeOption.add.bind(attributeOption, {}, true));
         $('manage-options-panel').on('click', '.delete-option', function (event) {
             attributeOption.remove(event);
         });
