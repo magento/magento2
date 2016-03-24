@@ -148,6 +148,7 @@
                         <item name="dataType" xsi:type="string">boolean</item>
                         <item name="formElement" xsi:type="string">checkbox</item>
                         <item name="source" xsi:type="string">customer</item>
+                        <item name="prefer" xsi:type="string">checkbox</item>
                         <item name="description" xsi:type="string" translate="true">Disable Automatic Group Change Based on VAT ID</item>
                         <item name="valueMap" xsi:type="array">
                             <item name="true" xsi:type="string">1</item>

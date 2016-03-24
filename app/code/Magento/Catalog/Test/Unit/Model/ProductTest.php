@@ -167,6 +167,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
     protected $mediaConfig;
 
     /**
+     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $appStateMock;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -365,6 +370,14 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
+        $this->appStateMock = $this->getMockBuilder(\Magento\Framework\App\State::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+        $modelReflection = new \ReflectionClass(get_class($this->model));
+        $appStateReflection = $modelReflection->getProperty('appState');
+        $appStateReflection->setAccessible(true);
+        $appStateReflection->setValue($this->model, $this->appStateMock);
     }
 
     public function testGetAttributes()
