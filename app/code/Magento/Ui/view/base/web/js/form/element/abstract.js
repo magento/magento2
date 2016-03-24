@@ -34,7 +34,6 @@ define([
             customScope: '',
             default: '',
             isDifferedFromDefault: false,
-            returnFocus: false,
             showFallbackReset: false,
             additionalClasses: {},
             isUseDefault: '',
@@ -408,10 +407,7 @@ define([
          */
         restoreToDefault: function () {
             this.value(this.default);
-
-            if (this.returnFocus) {
-                this.focused(true);
-            }
+            this.focused(true);
         },
 
         /**
