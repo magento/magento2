@@ -14,6 +14,8 @@ use Magento\Framework\EntityManager\Operation\AttributeInterface;
 
 /**
  * Class UpdateHandler
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class UpdateHandler implements AttributeInterface
 {
@@ -107,6 +109,12 @@ class UpdateHandler implements AttributeInterface
             $processed = [];
             foreach ($this->getAttributes($entityType) as $attribute) {
                 if ($attribute->isStatic()) {
+                    continue;
+                }
+                /**
+                 * Only scalar values can be stored in generic tables
+                 */
+                if (isset($data[$attribute->getAttributeCode()]) && !is_scalar($data[$attribute->getAttributeCode()])) {
                     continue;
                 }
                 if (isset($snapshot[$attribute->getAttributeCode()])

@@ -265,7 +265,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                     'adminhtml_customer_save_after',
                     ['customer' => $customer, 'request' => $request]
                 );
-                $this->_getSession()->unsCustomerData();
+                $this->_getSession()->unsCustomerFormData();
                 // Done Saving customer, finish save action
                 $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
                 $this->messageManager->addSuccess(__('You saved the customer.'));
@@ -276,15 +276,15 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                     $messages = $exception->getMessage();
                 }
                 $this->_addSessionErrorMessages($messages);
-                $this->_getSession()->setCustomerData($originalRequestData);
+                $this->_getSession()->setCustomerFormData($originalRequestData);
                 $returnToEdit = true;
             } catch (LocalizedException $exception) {
                 $this->_addSessionErrorMessages($exception->getMessage());
-                $this->_getSession()->setCustomerData($originalRequestData);
+                $this->_getSession()->setCustomerFormData($originalRequestData);
                 $returnToEdit = true;
             } catch (\Exception $exception) {
                 $this->messageManager->addException($exception, __('Something went wrong while saving the customer.'));
-                $this->_getSession()->setCustomerData($originalRequestData);
+                $this->_getSession()->setCustomerFormData($originalRequestData);
                 $returnToEdit = true;
             }
         }
