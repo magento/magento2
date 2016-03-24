@@ -88,7 +88,6 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Framework\EntityManager\MetadataPool">
     <type name="Magento\Framework\Model\Entity\RepositoryFactory">
         <arguments>
             <argument name="entities" xsi:type="array">
@@ -97,7 +96,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\Model\Entity\MetadataPool">
+    <type name="Magento\Framework\EntityManager\MetadataPool">
         <arguments>
             <argument name="metadata" xsi:type="array">
                 <item name="Magento\Cms\Api\Data\PageInterface" xsi:type="array">
