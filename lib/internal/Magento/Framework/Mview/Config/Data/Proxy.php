@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mview\Config\Data;
@@ -8,7 +8,8 @@ namespace Magento\Framework\Mview\Config\Data;
 /**
  * Proxy class for \Magento\Framework\Mview\Config\Data
  */
-class Proxy extends \Magento\Framework\Mview\Config\Data
+class Proxy extends \Magento\Framework\Mview\Config\Data implements
+    \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
     /**
      * Object Manager instance
@@ -58,7 +59,7 @@ class Proxy extends \Magento\Framework\Mview\Config\Data
      */
     public function __sleep()
     {
-        return ['_subject', '_isShared'];
+        return ['subject', 'isShared'];
     }
 
     /**

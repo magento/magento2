@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -25,7 +25,7 @@ use Magento\Mtf\Fixture\InjectableFixture;
 class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
 {
     /* tags */
-    const TEST_TYPE = 'acceptance_test';
+    const TEST_TYPE = 'acceptance_test, extended_acceptance_test';
     const MVP = 'yes';
     const DOMAIN = 'MX';
     /* end tags */
@@ -70,6 +70,7 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
         $productsToVerify,
         CheckoutCart $checkoutCart
     ) {
+        $this->markTestIncomplete('MAGETWO-50178');
         // Preconditions
         $this->createProducts($products);
         $this->assignPromotedProducts($promotedProducts, 'related_products');

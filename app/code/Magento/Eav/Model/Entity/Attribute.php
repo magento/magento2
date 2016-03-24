@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity;
@@ -462,5 +462,29 @@ class Attribute extends \Magento\Eav\Model\Entity\Attribute\AbstractAttribute im
     public function getIdentities()
     {
         return [self::CACHE_TAG . '_' . $this->getId()];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __sleep()
+    {
+        return array_diff(
+            parent::__sleep(),
+            ['_localeDate', '_localeResolver', 'reservedAttributeList', 'dateTimeFormatter']
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function __wakeup()
+    {
+        parent::__wakeup();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_localeDate = $objectManager->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
+        $this->_localeResolver = $objectManager->get(\Magento\Catalog\Model\Product\ReservedAttributeList::class);
+        $this->reservedAttributeList = $objectManager->get(\Magento\Framework\Locale\ResolverInterface::class);
+        $this->dateTimeFormatter = $objectManager->get(DateTimeFormatterInterface::class);
     }
 }

@@ -2,7 +2,7 @@
 /**
  * \Magento\Wishlist\Block\Item\Configure
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Test\Unit\Block\Item;
@@ -29,7 +29,7 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
      */
     protected $_mockWishlistData;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_mockWishlistData = $this->getMockBuilder(
             'Magento\Wishlist\Helper\Data'

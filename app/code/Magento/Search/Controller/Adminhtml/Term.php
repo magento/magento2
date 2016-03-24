@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Controller\Adminhtml;
@@ -11,6 +11,13 @@ use Magento\Framework\Controller\ResultFactory;
 abstract class Term extends Action
 {
     /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Search::search';
+
+    /**
      * @return \Magento\Backend\Model\View\Result\Page
      */
     protected function createPage()
@@ -20,13 +27,5 @@ abstract class Term extends Action
         $resultPage->setActiveMenu('Magento_Search::search_term')
             ->addBreadcrumb(__('Search'), __('Search'));
         return $resultPage;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Search::search');
     }
 }

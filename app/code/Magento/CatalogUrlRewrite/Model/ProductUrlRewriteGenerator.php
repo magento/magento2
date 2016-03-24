@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Model;
@@ -110,7 +110,7 @@ class ProductUrlRewriteGenerator
     protected function generateForGlobalScope($productCategories)
     {
         $urls = [];
-        $productId = $this->product->getId();
+        $productId = $this->product->getEntityId();
         foreach ($this->product->getStoreIds() as $id) {
             if (!$this->isGlobalScope($id)
                 && !$this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore($id, $productId, Product::ENTITY)

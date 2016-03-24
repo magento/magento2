@@ -2,7 +2,7 @@
 /**
  * Proxy generator
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\ObjectManager\Code\Generator;
@@ -13,6 +13,11 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
      * Entity type
      */
     const ENTITY_TYPE = 'proxy';
+
+    /**
+     * Marker interface
+     */
+    const NON_INTERCEPTABLE_INTERFACE = '\Magento\Framework\ObjectManager\NoninterceptableInterface';
 
     /**
      * @param string $modelClassName
@@ -76,7 +81,7 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         $methods = [$construct];
         $methods[] = [
             'name' => '__sleep',
-            'body' => 'return array(\'_subject\', \'_isShared\');',
+            'body' => 'return [\'_subject\', \'_isShared\', \'_instanceName\'];',
             'docblock' => ['tags' => [['name' => 'return', 'description' => 'array']]],
         ];
         $methods[] = [
@@ -131,9 +136,10 @@ class Proxy extends \Magento\Framework\Code\Generator\EntityAbstract
         $reflection = new \ReflectionClass($typeName);
 
         if ($reflection->isInterface()) {
-            $this->_classGenerator->setImplementedInterfaces([$typeName]);
+            $this->_classGenerator->setImplementedInterfaces([$typeName, self::NON_INTERCEPTABLE_INTERFACE]);
         } else {
             $this->_classGenerator->setExtendedClass($typeName);
+            $this->_classGenerator->setImplementedInterfaces([self::NON_INTERCEPTABLE_INTERFACE]);
         }
         return parent::_generateCode();
     }

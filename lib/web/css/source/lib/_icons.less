@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -294,23 +294,28 @@
     @_icon-image-position-x,
     @_icon-image-position-y
 ) {
+    .lib-url-check(@_icon-image);
+
+    .lib-css(background-image, @lib-url-check-output); // @lib-url-check-output is a returned variable of .lib-url-check() mixin
+    .lib-css(background-position-x, @_icon-image-position-x);
+    .lib-css(background-position-y, @_icon-image-position-y);
     .lib-css(line-height, @_icon-image-height);
     .lib-css(margin, @_icon-image-margin);
     .lib-css(vertical-align, @_icon-image-vertical-align);
-    background: url(@_icon-image) no-repeat @_icon-image-position-x @_icon-image-position-y;
+    ._lib-icon-image-size(
+        @_icon-image-width,
+        @_icon-image-height
+    );
+    background-repeat: no-repeat;
     content: '';
     display: inline-block;
-    ._lib-icon-image-size(
-    @_icon-image-width,
-    @_icon-image-height
-    );
 }
 
 ._lib-icon-image-position(
     @_icon-image-position-x,
     @_icon-image-position-y
 ) {
-    background-position: @_icon-image-position-x @_icon-image-position-y;
+    .lib-css(background-position, @_icon-image-position-x @_icon-image-position-y);
 }
 
 ._lib-icon-image-size(
@@ -326,7 +331,7 @@
     @_icon-sprite-position-y,
     @_icon-sprite-grid
 ) {
-    background-position: -(@_icon-sprite-position-x*@_icon-sprite-grid) -(@_icon-sprite-position-y*@_icon-sprite-grid);
+    .lib-css(background-position, -(@_icon-sprite-position-x*@_icon-sprite-grid) -(@_icon-sprite-position-y*@_icon-sprite-grid));
 }
 
 ._lib-icon-font(

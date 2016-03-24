@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -147,13 +147,13 @@ class Date extends AbstractElement
      */
     public function getElementHtml()
     {
-        $this->addClass('input-text');
+        $this->addClass('admin__control-text  input-text');
         $dateFormat = $this->getDateFormat() ?: $this->getFormat();
         $timeFormat = $this->getTimeFormat();
         if (empty($dateFormat)) {
             throw new \Exception(
                 'Output format is not specified. ' .
-                'Please, specify "format" key in constructor, or set it using setFormat().'
+                'Please specify "format" key in constructor, or set it using setFormat().'
             );
         }
 

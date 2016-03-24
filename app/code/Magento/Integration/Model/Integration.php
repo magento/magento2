@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model;
@@ -35,6 +35,8 @@ class Integration extends \Magento\Framework\Model\AbstractModel
     const STATUS_INACTIVE = 0;
 
     const STATUS_ACTIVE = 1;
+
+    const STATUS_RECREATED = 2;
 
     /**#@-*/
 

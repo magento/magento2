@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\TestFramework\TestCase;
@@ -46,6 +46,7 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
         $this->_session = $this->_auth->getAuthStorage();
         $credentials = $this->_getAdminCredentials();
         $this->_auth->login($credentials['user'], $credentials['password']);
+        $this->_objectManager->get('Magento\Security\Model\Plugin\Auth')->afterLogin($this->_auth);
     }
 
     /**

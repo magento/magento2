@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('adminhtml');
@@ -26,12 +26,6 @@ $product->setTypeId('simple')
     ->setName('Simple Product')
     ->setSku('simple')
     ->setPrice(10)
-    ->setStockData([
-    'use_config_manage_stock' => 1,
-    'qty' => 100,
-    'is_qty_decimal' => 0,
-    'is_in_stock' => 100,
-])
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->save();

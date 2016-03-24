@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Model;
@@ -333,10 +333,25 @@ class DefaultModel extends \Zend_Captcha_Image implements \Magento\Captcha\Model
         if ($this->_isEnabled() && in_array($this->_formId, $this->_getTargetForms())) {
             $this->_getResourceModel()->logAttempt($login);
             if ($this->_isOverLimitLoginAttempts($login)) {
-                $this->_session->setData($this->_getFormIdKey('show_captcha'), 1);
+                $this->setShowCaptchaInSession(true);
             }
         }
         return $this;
+    }
+
+    /**
+     * Set show_captcha flag in session
+     *
+     * @param bool $value
+     * @return void
+     */
+    public function setShowCaptchaInSession($value = true)
+    {
+        if ($value !== true) {
+            $value = false;
+        }
+
+        $this->_session->setData($this->_getFormIdKey('show_captcha'), $value);
     }
 
     /**

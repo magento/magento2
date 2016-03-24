@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Block\Checkout;
@@ -147,7 +147,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                                             'customEntry' => 'billingAddress' . $paymentCode . '.region',
                                         ],
                                         'validation' => [
-                                            'validate-select' => true,
+                                            'required-entry' => true,
                                         ],
                                         'filterBy' => [
                                             'target' => '${ $.provider }:${ $.parentScope }.country_id',
@@ -173,7 +173,7 @@ class LayoutProcessor implements \Magento\Checkout\Block\Checkout\LayoutProcesso
                                     'telephone' => [
                                         'config' => [
                                             'tooltip' => [
-                                                'description' => 'For delivery questions.',
+                                                'description' => __('For delivery questions.'),
                                             ],
                                         ],
                                     ],

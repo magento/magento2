@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Model;
@@ -117,6 +117,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->quoteRepository->getActive($cartId);
         $this->validateQuote($quote);
+        $quote->setIsMultiShipping(false);
 
         $saveInAddressBook = $address->getSaveInAddressBook() ? 1 : 0;
         $sameAsBilling = $address->getSameAsBilling() ? 1 : 0;
@@ -148,7 +149,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
             $this->totalsCollector->collectAddressTotals($quote, $address);
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new InputException(__('Unable to save address. Please, check input data.'));
+            throw new InputException(__('Unable to save address. Please check input data.'));
         }
 
         if (!$address->getShippingRateByCode($address->getShippingMethod())) {
@@ -171,7 +172,7 @@ class ShippingInformationManagement implements \Magento\Checkout\Api\ShippingInf
             $this->quoteRepository->save($quote);
         } catch (\Exception $e) {
             $this->logger->critical($e);
-            throw new InputException(__('Unable to save shipping information. Please, check input data.'));
+            throw new InputException(__('Unable to save shipping information. Please check input data.'));
         }
 
         /** @var \Magento\Checkout\Api\Data\PaymentDetailsInterface $paymentDetails */

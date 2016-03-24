@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer;
@@ -120,8 +120,10 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $indexData = new \ArrayObject([]);
         $this->storeManager->expects($this->once())->method('getStores')->willReturn($stores);
         $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
-        $this->saveHandler->expects($this->exactly(count($stores)))->method('saveIndex');
-        $this->fullAction->expects($this->exactly(count($stores)))->method('rebuildStoreIndex')->willReturn($indexData);
+        $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
+        $this->fullAction->expects($this->exactly(2))
+            ->method('rebuildStoreIndex')
+            ->willReturn(new \ArrayObject([$indexData, $indexData]));
 
         $this->model->execute($ids);
     }
@@ -132,8 +134,10 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $indexData = new \ArrayObject([]);
         $this->storeManager->expects($this->once())->method('getStores')->willReturn($stores);
         $this->saveHandler->expects($this->exactly(count($stores)))->method('cleanIndex');
-        $this->saveHandler->expects($this->exactly(count($stores)))->method('saveIndex');
-        $this->fullAction->expects($this->exactly(count($stores)))->method('rebuildStoreIndex')->willReturn($indexData);
+        $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
+        $this->fullAction->expects($this->exactly(2))
+            ->method('rebuildStoreIndex')
+            ->willReturn(new \ArrayObject([$indexData, $indexData]));
         $this->fulltextResource->expects($this->once())->method('resetSearchResults');
         $this->searchRequestConfig->expects($this->once())->method('reset');
 
@@ -147,8 +151,10 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $indexData = new \ArrayObject([]);
         $this->storeManager->expects($this->once())->method('getStores')->willReturn($stores);
         $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
-        $this->saveHandler->expects($this->exactly(count($stores)))->method('saveIndex');
-        $this->fullAction->expects($this->exactly(count($stores)))->method('rebuildStoreIndex')->willReturn($indexData);
+        $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
+        $this->fullAction->expects($this->exactly(2))
+            ->method('rebuildStoreIndex')
+            ->willReturn(new \ArrayObject([$indexData, $indexData]));
 
         $this->model->executeList($ids);
     }
@@ -160,8 +166,10 @@ class FulltextTest extends \PHPUnit_Framework_TestCase
         $indexData = new \ArrayObject([]);
         $this->storeManager->expects($this->once())->method('getStores')->willReturn($stores);
         $this->saveHandler->expects($this->exactly(count($stores)))->method('deleteIndex');
-        $this->saveHandler->expects($this->exactly(count($stores)))->method('saveIndex');
-        $this->fullAction->expects($this->exactly(count($stores)))->method('rebuildStoreIndex')->willReturn($indexData);
+        $this->saveHandler->expects($this->exactly(2))->method('saveIndex');
+        $this->fullAction->expects($this->exactly(2))
+            ->method('rebuildStoreIndex')
+            ->willReturn(new \ArrayObject([$indexData, $indexData]));
 
         $this->model->executeRow($id);
     }

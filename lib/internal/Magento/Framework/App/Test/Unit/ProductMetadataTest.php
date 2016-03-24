@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Test\Unit;
@@ -16,8 +16,16 @@ class ProductMetadataTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $composerJsonFinder = $this->getMockBuilder('Magento\Framework\Composer\ComposerJsonFinder')
+            ->disableOriginalConstructor()->setMethods(['findComposerJson'])->getMock();
+        $composerJsonFinder->expects($this->any())->method('findComposerJson')
+            ->willReturn(realpath(__DIR__ . '/_files/test.composer.json'));
+
         $objectManager = new ObjectManager($this);
-        $this->productMetadata = $objectManager->getObject('Magento\Framework\App\ProductMetadata');
+        $this->productMetadata = $objectManager->getObject(
+            'Magento\Framework\App\ProductMetadata',
+            ['composerJsonFinder' => $composerJsonFinder]
+        );
     }
 
     public function testGetVersion()

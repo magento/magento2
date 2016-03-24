@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\ResourceModel\Page\Grid;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Framework\Search\AggregationInterface;
+use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Cms\Model\ResourceModel\Page\Collection as PageCollection;
 
 /**
@@ -21,11 +21,17 @@ class Collection extends PageCollection implements SearchResultInterface
     protected $aggregations;
 
     /**
+     * @var \Magento\Framework\View\Element\UiComponent\DataProvider\Document[]
+     */
+    private $loadedData;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param mixed|null $mainTable
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $eventPrefix
      * @param mixed $eventObject
@@ -33,7 +39,7 @@ class Collection extends PageCollection implements SearchResultInterface
      * @param string $model
      * @param null $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource
-     * 
+     *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -42,6 +48,7 @@ class Collection extends PageCollection implements SearchResultInterface
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
+        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         $mainTable,
         $eventPrefix,
         $eventObject,
@@ -56,6 +63,7 @@ class Collection extends PageCollection implements SearchResultInterface
             $fetchStrategy,
             $eventManager,
             $storeManager,
+            $metadataPool,
             $connection,
             $resource
         );
@@ -80,20 +88,6 @@ class Collection extends PageCollection implements SearchResultInterface
     public function setAggregations($aggregations)
     {
         $this->aggregations = $aggregations;
-    }
-
-
-    /**
-     * Retrieve all ids for collection
-     * Backward compatibility with EAV collection
-     *
-     * @param int $limit
-     * @param int $offset
-     * @return array
-     */
-    public function getAllIds($limit = null, $offset = null)
-    {
-        return $this->getConnection()->fetchCol($this->_getAllIdsSelect($limit, $offset), $this->_bindParams);
     }
 
     /**
@@ -150,5 +144,26 @@ class Collection extends PageCollection implements SearchResultInterface
     public function setItems(array $items = null)
     {
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getItems()
+    {
+        if (isset($this->loadedData)) {
+            return $this->loadedData;
+        }
+        /** @var \Magento\Cms\Model\Page $page */
+        $page = $this->_entityFactory->create(\Magento\Cms\Model\Page::class);
+        /** Load every record separately to make sure the list of associated stores is available */
+        /** @var \Magento\Framework\View\Element\UiComponent\DataProvider\Document $pageDocument */
+        foreach (parent::getItems() as $pageDocument) {
+            $this->loadedData[$pageDocument->getId()] = $pageDocument->setData(
+                $page->load($pageDocument->getId())->getData()
+            );
+        }
+
+        return $this->loadedData;
     }
 }

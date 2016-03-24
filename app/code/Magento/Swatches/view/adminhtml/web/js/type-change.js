@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 require([
@@ -16,7 +16,7 @@ require([
                 enabledTypes = ['select', 'swatch_visual', 'swatch_text'],
                 warning = $('<label>')
                     .hide()
-                    .text($.mage.__('This changes affect all related products'))
+                    .text($.mage.__('These changes affect all related products.'))
                     .addClass('mage-error')
                     .attr({
                         generated: true, for: select.attr('id')

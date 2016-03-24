@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Block\Adminhtml\Shopcart\Product;
@@ -33,7 +33,7 @@ class GridTest extends \Magento\Reports\Block\Adminhtml\Shopcart\GridTestAbstrac
         $quoteItem = $result->getFirstItem();
         $this->assertInstanceOf('Magento\Quote\Model\Quote\Item', $quoteItem);
 
-        $this->assertEquals(1, $quoteItem->getProductId());
+        $this->assertGreaterThan(0, (int)$quoteItem->getProductId());
         $this->assertEquals('Simple Product', $quoteItem->getName());
     }
 }

@@ -2,7 +2,7 @@
 /**
  * Service Input Processor
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Webapi;
@@ -17,7 +17,6 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Framework\Phrase;
 use Zend\Code\Reflection\ClassReflection;
-use Magento\Framework\Webapi\ServicePayloadConverterInterface;
 use Magento\Framework\Reflection\MethodsMap;
 
 /**

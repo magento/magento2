@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -110,7 +110,7 @@
             }
 
             > .level1 {
-                font-weight: @font-weight__semibold;
+                .lib-css(font-weight, @font-weight__semibold);
             }
 
             &.active,
@@ -124,7 +124,7 @@
                     .lib-css(text-decoration, @_nav-level0-item-text-decoration-active);
 
                     span:not(.ui-menu-icon) {
-                        margin-left: -@_submenu-item__active__border;
+                        .lib-css(margin-left, -@_submenu-item__active__border);
                     }
                 }
             }
@@ -156,7 +156,7 @@
 
                 > li {
                     > a {
-                        padding-left: @_nav__indent-side;
+                        .lib-css(padding-left, @_nav__indent-side);
                     }
 
                     &:last-child {
@@ -203,7 +203,7 @@
                 .level1 {
                     &.active {
                         > a {
-                            padding-left: @_nav__indent-side - @_submenu-item__active__border;
+                            .lib-css(padding-left, @_nav__indent-side - @_submenu-item__active__border);
                         }
                     }
                 }

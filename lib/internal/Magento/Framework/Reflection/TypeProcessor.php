@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Reflection;
@@ -421,12 +421,6 @@ class TypeProcessor
 
     /**
      * Get item type of the array.
-     * Example:
-     * <pre>
-     *  ComplexType[] => ComplexType
-     *  string[] => string
-     *  int[] => integer
-     * </pre>
      *
      * @param string $arrayType
      * @return string
@@ -678,11 +672,16 @@ class TypeProcessor
      * @param string $serviceName API service name
      * @param string $methodName
      * @return $this
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function processInterfaceCallInfo($interface, $serviceName, $methodName)
     {
         foreach ($interface as $direction => $interfaceData) {
             $direction = ($direction == 'in') ? 'requiredInput' : 'returned';
+            if ($direction == 'returned' && !isset($interfaceData['parameters'])) {
+                /** No return value means that service method is asynchronous */
+                return $this;
+            }
             foreach ($interfaceData['parameters'] as $parameterData) {
                 if (!$this->isTypeSimple($parameterData['type']) && !$this->isTypeAny($parameterData['type'])) {
                     $operation = $this->getOperationName($serviceName, $methodName);

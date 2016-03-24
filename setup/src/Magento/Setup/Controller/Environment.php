@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Controller;
@@ -47,13 +47,13 @@ class Environment extends AbstractActionController
     /**
      * Constructor
      *
-     * @param \Magento\Setup\Model\FilePermissions $permissions
+     * @param \Magento\Framework\Setup\FilePermissions $permissions
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Setup\Model\CronScriptReadinessCheck $cronScriptReadinessCheck
      * @param \Magento\Setup\Model\PhpReadinessCheck $phpReadinessCheck
      */
     public function __construct(
-        \Magento\Setup\Model\FilePermissions $permissions,
+        \Magento\Framework\Setup\FilePermissions $permissions,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Setup\Model\CronScriptReadinessCheck $cronScriptReadinessCheck,
         \Magento\Setup\Model\PhpReadinessCheck $phpReadinessCheck
@@ -148,7 +148,7 @@ class Environment extends AbstractActionController
     public function filePermissionsAction()
     {
         $responseType = ResponseTypeInterface::RESPONSE_TYPE_SUCCESS;
-        if ($this->permissions->getMissingWritableDirectoriesForInstallation()) {
+        if ($this->permissions->getMissingWritablePathsForInstallation()) {
             $responseType = ResponseTypeInterface::RESPONSE_TYPE_ERROR;
         }
 

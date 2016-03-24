@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\DB\Adapter;
@@ -1114,4 +1114,13 @@ interface AdapterInterface
      * @return \Zend_Db_Expr
      */
     public function getCaseSql($valueName, $casesResults, $defaultValue = null);
+
+    /**
+     * Returns auto increment field if exists
+     *
+     * @param string $tableName
+     * @param string|null $schemaName
+     * @return string|bool
+     */
+    public function getAutoIncrementField($tableName, $schemaName = null);
 }

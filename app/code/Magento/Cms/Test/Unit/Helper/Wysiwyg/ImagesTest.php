@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Helper\Wysiwyg;
@@ -370,7 +370,7 @@ class ImagesTest extends \PHPUnit_Framework_TestCase
         $this->directoryWriteMock->expects($this->any())
             ->method('create')
             ->willThrowException(
-                new \Magento\Framework\Exception\FileSystemException(__('Could not create directory.'))
+                new \Magento\Framework\Exception\FileSystemException(__('Could not create a directory.'))
             );
 
         $this->imagesHelper->getCurrentPath();

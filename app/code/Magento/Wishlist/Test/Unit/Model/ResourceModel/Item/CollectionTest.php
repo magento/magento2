@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,8 +8,10 @@ namespace Magento\Wishlist\Test\Unit\Model\ResourceModel\Item;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
 {
+    use \Magento\Framework\TestFramework\Unit\Helper\SelectRendererTrait;
+
     /**
-     * @var \Magento\Framework\Message\Collection
+     * @var \Magento\Wishlist\Model\ResourceModel\Item\Collection
      */
     protected $collection;
 
@@ -37,21 +39,25 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $connection = $this->getMock(
             'Magento\Framework\DB\Adapter\Pdo\Mysql',
-            ['quote'],
+            ['quote', 'select'],
             [],
             '',
             false
         );
+        $select = new \Magento\Framework\DB\Select($connection, $this->getSelectRenderer($this->objectManager));
         $connection
             ->expects($this->any())
             ->method('quote')
             ->will($this->returnValue('\'TestProductName\''));
-
+        $connection
+            ->expects($this->any())
+            ->method('select')
+            ->willReturn($select);
         $resource = $this->getMock(
             'Magento\Wishlist\Model\ResourceModel\Item',
             ['getConnection', 'getMainTable', 'getTableName', 'getTable'],
@@ -97,7 +103,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityTypeId')
             ->will($this->returnValue(4));
 
-
         $catalogConfFactory
             ->expects($this->once())
             ->method('create')
@@ -124,7 +129,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue($this->attrId));
 
-
         $catalogAttrFactory = $this->getMock(
             'Magento\Catalog\Model\Entity\AttributeFactory',
             ['create'],
@@ -132,6 +136,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
         $catalogAttrFactory
             ->expects($this->once())
             ->method('create')

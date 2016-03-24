@@ -2,12 +2,12 @@
 /**
  * A helper for handling Magento-specific class names in various use cases
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\App\Utility;
 
-use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Component\ComponentRegistrar;
 
 class Classes
 {
@@ -186,21 +186,18 @@ class Classes
      */
     public static function collectModuleClasses($subTypePattern = '[A-Za-z]+')
     {
-        $pattern = '/^' . preg_quote(
-            Files::init()->getPathToSource(),
-            '/'
-        ) . '\/app\/code\/([A-Za-z]+)\/([A-Za-z]+)\/(' . $subTypePattern . '\/.+)\.php$/';
+        $componentRegistrar = new ComponentRegistrar();
         $result = [];
-        foreach (Files::init()->getPhpFiles(Files::INCLUDE_APP_CODE | Files::INCLUDE_NON_CLASSES) as $file) {
-            if (preg_match($pattern, $file, $matches)) {
-                $module = "{$matches[1]}_{$matches[2]}";
-                $class = "{$module}" . '\\' . str_replace(
-                    '/',
-                    '\\',
-                    $matches[3]
-                );
-                $key = str_replace('_', '\\', $class);
-                $result[$key] = $module;
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $modulePath) {
+            $pattern = '/^' . preg_quote($modulePath, '/') . '\/(' . $subTypePattern . '\/.+)\.php$/';
+            foreach (Files::init()->getFiles([$modulePath], '*.php') as $file) {
+                if (preg_match($pattern, $file)) {
+                    $partialFileName = substr($file, strlen($modulePath) + 1);
+                    $partialFileName = substr($partialFileName, 0, strlen($partialFileName) - strlen('.php'));
+                    $partialClassName = str_replace('/', '\\', $partialFileName);
+                    $className = str_replace('_', '\\', $moduleName) . '\\' . $partialClassName;
+                    $result[$className] = $moduleName;
+                }
             }
         }
         return $result;

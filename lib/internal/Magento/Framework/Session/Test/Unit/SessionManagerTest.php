@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 // @codingStandardsIgnoreStart
@@ -50,7 +50,7 @@ namespace Magento\Framework\Session\Test\Unit {
          */
         public static $isIniSetInvoked;
 
-        public function setUp()
+        protected function setUp()
         {
             $this->markTestSkipped('To be fixed in MAGETWO-34751');
             global $mockPHPFunctions;

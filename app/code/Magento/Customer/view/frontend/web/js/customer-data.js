@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -93,10 +93,17 @@ define([
      * @return {*}
      */
     ko.extenders.disposableCustomerData = function (target, sectionName) {
-        storage.remove(sectionName);
+        var sectionDataIds, newSectionDataIds = {};
         target.subscribe(function () {
             setTimeout(function () {
                 storage.remove(sectionName);
+                sectionDataIds = $.cookieStorage.get('section_data_ids') || {};
+                _.each(sectionDataIds, function (data, name) {
+                    if (name != sectionName) {
+                        newSectionDataIds[name] = data;
+                    }
+                });
+                $.cookieStorage.set('section_data_ids', newSectionDataIds);
             }, 3000);
         });
 
@@ -166,7 +173,9 @@ define([
         remove: function (sections) {
             _.each(sections, function (sectionName) {
                 storage.remove(sectionName);
-                storageInvalidation.set(sectionName, true);
+                if (!sectionConfig.isClientSideSection(sectionName)) {
+                    storageInvalidation.set(sectionName, true);
+                }
             });
         }
     };
@@ -176,9 +185,14 @@ define([
         /**
          * Customer data initialization
          */
-        init: function () {
+        init: function() {
+            var countryData,
+                privateContent = $.cookieStorage.get('private_content_version');
+
             if (_.isEmpty(storage.keys())) {
-                this.reload([], false);
+                if (!_.isEmpty(privateContent)) {
+                    this.reload([], false);
+                }
             } else if (this.needReload()) {
                 _.each(dataProvider.getFromStorage(storage.keys()), function (sectionData, sectionName) {
                     buffer.notify(sectionName, sectionData);
@@ -191,6 +205,13 @@ define([
 
                 if (!_.isEmpty(storageInvalidation.keys())) {
                     this.reload(storageInvalidation.keys(), false);
+                }
+            }
+
+            if (!_.isEmpty(privateContent)) {
+                countryData = this.get('directory-data');
+                if (_.isEmpty(countryData())) {
+                    customerData.reload(['directory-data'], false);
                 }
             }
         },
@@ -292,7 +313,9 @@ define([
 
             // Invalidate section in cookie (increase version of section with 1000)
             _.each(sectionsNamesForInvalidation, function (sectionName) {
-                sectionDataIds[sectionName] += 1000;
+                if (!sectionConfig.isClientSideSection(sectionName)) {
+                    sectionDataIds[sectionName] += 1000;
+                }
             });
             $.cookieStorage.set('section_data_ids', sectionDataIds);
         },

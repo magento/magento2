@@ -5,6 +5,12 @@
 #   SetEnv MAGE_MODE developer
 
 ############################################
+## overrides default umask value to allow using different
+## file permissions
+
+#   SetEnv MAGE_UMASK 022
+
+############################################
 ## uncomment these lines for CGI mode
 ## make sure to specify the correct cgi php binary file name
 ## it might be /cgi-bin/php-cgi
@@ -243,10 +249,6 @@
         order allow,deny
         deny from all
     </Files>
-    <Files CONTRIBUTOR_LICENSE_AGREEMENT.html>
-        order allow,deny
-        deny from all
-    </Files>
     <Files COPYING.txt>
         order allow,deny
         deny from all
@@ -285,10 +287,3 @@
 ## http://developer.yahoo.com/performance/rules.html#etags
 
     #FileETag none
-
-############################################
-## Add custom headers
-<IfModule mod_headers.c>
-    Header set X-Content-Type-Options "nosniff"
-    Header set X-XSS-Protection "1; mode=block"
-</IfModule>

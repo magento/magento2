@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Encryption\EncryptorInterface;
+use Magento\Framework\Intl\DateTimeFactory;
+use Magento\Sales\Api\Data\OrderPaymentInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Vault\Api\Data;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
@@ -57,12 +60,24 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
     protected $searchCriteriaBuilder;
 
     /**
+     * @var EncryptorInterface
+     */
+    private $encryptor;
+
+    /**
+     * @var DateTimeFactory
+     */
+    private $dateTimeFactory;
+
+    /**
      * @param PaymentTokenRepositoryInterface $repository
      * @param PaymentTokenResourceModel $paymentTokenResourceModel
      * @param PaymentTokenFactory $paymentTokenFactory
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param PaymentTokenSearchResultsInterfaceFactory $searchResultsFactory
+     * @param EncryptorInterface $encryptor
+     * @param DateTimeFactory $dateTimeFactory
      */
     public function __construct(
         PaymentTokenRepositoryInterface $repository,
@@ -70,7 +85,9 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
         PaymentTokenFactory $paymentTokenFactory,
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        PaymentTokenSearchResultsInterfaceFactory $searchResultsFactory
+        PaymentTokenSearchResultsInterfaceFactory $searchResultsFactory,
+        EncryptorInterface $encryptor,
+        DateTimeFactory $dateTimeFactory
     ) {
         $this->paymentTokenRepository = $repository;
         $this->paymentTokenResourceModel = $paymentTokenResourceModel;
@@ -78,6 +95,8 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
         $this->filterBuilder = $filterBuilder;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchResultsFactory = $searchResultsFactory;
+        $this->encryptor = $encryptor;
+        $this->dateTimeFactory = $dateTimeFactory;
     }
 
     /**
@@ -89,7 +108,7 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
     public function getListByCustomerId($customerId)
     {
         $filters[] = $this->filterBuilder
-            ->setField(Data\PaymentTokenInterface::CUSTOMER_ID)
+            ->setField(PaymentTokenInterface::CUSTOMER_ID)
             ->setValue($customerId)
             ->create();
         $entities = $this->paymentTokenRepository->getList(
@@ -102,10 +121,46 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
     }
 
     /**
+     * Searches for all visible, non-expired tokens
+     *
+     * @param int $customerId
+     * @param string $providerCode
+     * @return Data\PaymentTokenInterface[]
+     */
+    public function getVisibleAvailableTokens($customerId, $providerCode)
+    {
+        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::CUSTOMER_ID)
+            ->setValue($customerId)
+            ->create();
+        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::IS_VISIBLE)
+            ->setValue(1)
+            ->create();
+        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::IS_ACTIVE)
+            ->setValue(1)
+            ->create();
+        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::PAYMENT_METHOD_CODE)
+            ->setValue($providerCode)
+            ->create();
+        $filters[] = $this->filterBuilder->setField(PaymentTokenInterface::EXPIRES_AT)
+            ->setConditionType('gt')
+            ->setValue(
+                $this->dateTimeFactory->create(
+                    'now',
+                    new \DateTimeZone('UTC')
+                )->format('Y-m-d 00:00:00')
+            )
+            ->create();
+        $searchCriteria = $this->searchCriteriaBuilder->addFilters($filters)
+            ->create();
+
+        return $this->paymentTokenRepository->getList($searchCriteria)->getItems();
+    }
+
+    /**
      * Get payment token by token Id.
      *
      * @param int $paymentId The payment token ID.
-     * @return \Magento\Vault\Api\Data\PaymentTokenInterface|null Payment token interface.
+     * @return PaymentTokenInterface|null Payment token interface.
      */
     public function getByPaymentId($paymentId)
     {
@@ -117,31 +172,63 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
     /**
      * Get payment token by gateway token.
      *
-     * @param int $customerId Customer ID.
      * @param string $token The gateway token.
-     * @return \Magento\Vault\Api\Data\PaymentTokenInterface|null Payment token interface.
+     * @param string $paymentMethodCode
+     * @param int $customerId Customer ID.
+     * @return PaymentTokenInterface|null Payment token interface.
      */
-    public function getByGatewayToken($customerId, $token)
+    public function getByGatewayToken($token, $paymentMethodCode, $customerId)
     {
-        $tokenData = $this->paymentTokenResourceModel->getByGatewayToken($customerId, $token);
+        $tokenData = $this->paymentTokenResourceModel->getByGatewayToken($token, $paymentMethodCode, $customerId);
+        $tokenModel = !empty($tokenData) ? $this->paymentTokenFactory->create(['data' => $tokenData]) : null;
+        return $tokenModel;
+    }
+
+    /**
+     * Get payment token by public hash.
+     *
+     * @param string $hash Public hash.
+     * @param int $customerId Customer ID.
+     * @return PaymentTokenInterface|null Payment token interface.
+     */
+    public function getByPublicHash($hash, $customerId)
+    {
+        $tokenData = $this->paymentTokenResourceModel->getByPublicHash($hash, $customerId);
         $tokenModel = !empty($tokenData) ? $this->paymentTokenFactory->create(['data' => $tokenData]) : null;
         return $tokenModel;
     }
 
     /**
      * @param PaymentTokenInterface $token
-     * @param Payment $payment
+     * @param OrderPaymentInterface $payment
      * @return bool
      */
-    public function saveTokenWithPaymentLink(PaymentTokenInterface $token, Payment $payment)
+    public function saveTokenWithPaymentLink(PaymentTokenInterface $token, OrderPaymentInterface $payment)
     {
-        $result = true;
-        $entityId = (int)$token->getEntityId();
-        $this->paymentTokenRepository->save($token);
-        if (0 === $entityId) {
-            # Add link only once during first token's saving
-            $result = $this->addLinkToOrderPayment($token->getEntityId(), $payment->getId());
+        $tokenDuplicate = $this->getByPublicHash(
+            $token->getPublicHash(),
+            $token->getCustomerId()
+        );
+
+        if (!empty($tokenDuplicate)) {
+            if ($token->getIsVisible() || $tokenDuplicate->getIsVisible()) {
+                $token->setEntityId($tokenDuplicate->getEntityId());
+                $token->setIsVisible(true);
+            } elseif ($token->getIsVisible() === $tokenDuplicate->getIsVisible()) {
+                $token->setEntityId($tokenDuplicate->getEntityId());
+            } else {
+                $token->setPublicHash(
+                    $this->encryptor->getHash(
+                        $token->getPublicHash() . $token->getGatewayToken()
+                    )
+                );
+            }
         }
+
+        $this->paymentTokenRepository->save($token);
+
+        $result = $this->addLinkToOrderPayment($token->getEntityId(), $payment->getEntityId());
+
         return $result;
     }
 
@@ -152,7 +239,7 @@ class PaymentTokenManagement implements PaymentTokenManagementInterface
      * @param int $orderPaymentId Order payment ID.
      * @return bool
      */
-    protected function addLinkToOrderPayment($paymentTokenId, $orderPaymentId)
+    public function addLinkToOrderPayment($paymentTokenId, $orderPaymentId)
     {
         return $this->paymentTokenResourceModel->addLinkToOrderPayment($paymentTokenId, $orderPaymentId);
     }

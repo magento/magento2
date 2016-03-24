@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogImportExport\Test\Unit\Model\Export;
@@ -97,6 +97,11 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\CatalogImportExport\Model\Export\RowCustomizer\Composite|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $rowCustomizer;
+
+    /**
+     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $metadataPool;
 
     /**
      * @var \Magento\ImportExport\Model\Export\Adapter\AbstractAdapter| \PHPUnit_Framework_MockObject_MockObject
@@ -270,6 +275,13 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->metadataPool = $this->getMock(
+            '\Magento\Framework\Model\Entity\MetadataPool',
+            [],
+            [],
+            '',
+            false
+        );
 
         $this->writer = $this->getMock(
             'Magento\ImportExport\Model\Export\Adapter\AbstractAdapter',
@@ -332,7 +344,8 @@ class ProductTest extends \PHPUnit_Framework_TestCase
             $this->attributeColFactory,
             $this->typeFactory,
             $this->linkTypeProvider,
-            $this->rowCustomizer
+            $this->rowCustomizer,
+            $this->metadataPool
         );
 
         $this->object = new StubProduct();

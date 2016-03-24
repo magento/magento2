@@ -1,23 +1,28 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
     'Magento_Ui/js/lib/view/utils/async',
     'underscore',
     'ko',
-    'Magento_Ui/js/form/components/html',
+    './abstract',
     'Magento_Variable/variables'
-], function ($, _, ko, Html) {
+], function ($, _, ko, Abstract) {
     'use strict';
 
-    return Html.extend({
+    return Abstract.extend({
         defaults: {
             elementSelector: 'textarea',
             value: '',
             links: {
                 value: '${ $.provider }:${ $.dataScope }'
-            }
+            },
+            template: 'ui/form/field',
+            elementTmpl: 'ui/form/element/wysiwyg',
+            content:        '',
+            showSpinner:    false,
+            loading:        false
         },
 
         /**

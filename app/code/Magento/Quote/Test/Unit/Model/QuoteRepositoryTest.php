@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -366,7 +366,6 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $sortOrderMock->expects($this->once())->method('getDirection')->will($this->returnValue($direction));
         $this->quoteCollectionMock->expects($this->once())->method('addOrder')->with('id', $expectedDirection);
 
-
         $searchCriteriaMock->expects($this->once())->method('getCurrentPage')->will($this->returnValue(1));
         $searchCriteriaMock->expects($this->once())->method('getPageSize')->will($this->returnValue(10));
         $this->quoteCollectionMock->expects($this->once())->method('setCurPage')->with(1);
@@ -381,6 +380,18 @@ class QuoteRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->quoteCollectionMock->expects($this->once())->method('getItems')->willReturn([$cartMock]);
         $searchResult->expects($this->once())->method('setItems')->with([$cartMock]);
 
+        $this->model = $this->getMock(
+            'Magento\Quote\Model\QuoteRepository',
+            ['getQuoteCollection'],
+            [
+                'quoteFactory' => $this->quoteFactoryMock,
+                'storeManager' => $this->storeManagerMock,
+                'quoteCollection' => $this->quoteCollectionMock,
+                'searchResultsDataFactory' => $this->searchResultsDataFactory,
+                'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock
+            ]
+        );
+        $this->model->expects($this->once())->method('getQuoteCollection')->willReturn($this->quoteCollectionMock);
         $this->assertEquals($searchResult, $this->model->getList($searchCriteriaMock));
     }
 

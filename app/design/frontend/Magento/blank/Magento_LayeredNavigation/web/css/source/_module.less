@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -21,10 +21,30 @@
         }
     }
 
-    .filter-subtitle {
-        display: none;
+    .block-subtitle {
+        display: inline-block;
+        margin-bottom: @indent__s;
     }
-    
+
+    .filter-current {
+        .item {
+            margin-bottom: @indent__s;
+        }
+
+        .filter-label {
+            display: block;
+            font-weight: @font-weight__bold;
+
+            &:after {
+                content: ':';
+            }
+        }
+
+        + .filter-actions {
+            margin-bottom: @indent__l;
+        }
+    }
+
     .filter-options-content {
         .filter-count-label {
             &:extend(.abs-visually-hidden all);
@@ -42,6 +62,7 @@
 
         .filter-options-content {
             margin: 0 0 @indent__m;
+
             .item {
                 margin-bottom: 3px;
             }
@@ -70,9 +91,9 @@
         }
 
         .item {
-            position: relative;
-            padding-left: 22px;
             margin-bottom: 6px;
+            padding-left: 22px;
+            position: relative;
 
             .label {
                 font-weight: @font-weight__bold;
@@ -80,8 +101,8 @@
 
             .action.remove {
                 &:extend(.abs-remove-button-for-blocks all);
-                position: absolute;
                 left: -6px;
+                position: absolute;
                 top: 0;
             }
         }
@@ -96,7 +117,7 @@
 //  Mobile
 //  _____________________________________________
 
-.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .page-with-filter {
         .columns {
             .sidebar-main {

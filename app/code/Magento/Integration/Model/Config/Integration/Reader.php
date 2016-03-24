@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Model\Config\Integration;
@@ -9,6 +9,7 @@ namespace Magento\Integration\Model\Config\Integration;
  * Service config data reader.
  *
  * @codeCoverageIgnore
+ * @deprecated
  */
 class Reader extends \Magento\Framework\Config\Reader\Filesystem
 {

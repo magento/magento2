@@ -1,0 +1,260 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../vendor/magento/mtf/Magento/Mtf/Repository/etc/repository.xsd">
+    <repository class="Magento\Config\Test\Repository\ConfigData">
+        <dataset name="braintree">
+            <field name="payment/braintree_section/braintree/braintree_required/merchant_id" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">PAYMENT_BRAINTREE_MERCHANT_ID</item>
+            </field>
+            <field name="payment/braintree_section/braintree/braintree_required/public_key" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">PAYMENT_PAYMENT_BRAINTREE_PUBLIC_KEY</item>
+            </field>
+            <field name="payment/braintree_section/braintree/braintree_required/private_key" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">PAYMENT_BRAINTREE_PRIVATE_KEY</item>
+            </field>
+            <field name="payment/braintree_section/braintree/braintree_advanced/merchant_account_id" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="string">PAYMENT_BRAINTREE_MERCHANT_ACCOUNT_ID</item>
+            </field>
+            <field name="payment/braintree_section/braintree/braintree_required/payment_action" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Authorize</item>
+                <item name="value" xsi:type="string">authorize</item>
+            </field>
+            <field name="payment/braintree_section/braintree/braintree_advanced/debug" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/braintree_section/braintree/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+        <dataset name="braintree_rollback">
+            <field name="payment/braintree/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+        <dataset name="braintree_sale">
+            <field name="payment/braintree_section/braintree/braintree_required/merchant_id" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">PAYMENT_BRAINTREE_MERCHANT_ID</item>
+            </field>
+            <field name="payment/braintree_section/braintree/braintree_required/public_key" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">PAYMENT_PAYMENT_BRAINTREE_PUBLIC_KEY</item>
+            </field>
+            <field name="payment/braintree_section/braintree/braintree_required/private_key" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string"/>
+                <item name="value" xsi:type="string">PAYMENT_BRAINTREE_PRIVATE_KEY</item>
+            </field>
+            <field name="payment/braintree_section/braintree/braintree_advanced/merchant_account_id" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="string">PAYMENT_BRAINTREE_MERCHANT_ACCOUNT_ID</item>
+            </field>
+            <field name="payment/braintree/payment_action" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Authorize and Capture</item>
+                <item name="value" xsi:type="string">authorize_capture</item>
+            </field>
+            <field name="payment/braintree/debug" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/braintree/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+        <dataset name="braintree_sale_rollback">
+            <field name="payment/braintree/active" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+        <dataset name="braintree_3d_secure">
+            <field name="payment/braintree_section/braintree/braintree_3dsecure/verify_3dsecure" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+        </dataset>
+        <dataset name="braintree_3d_secure_rollback">
+            <field name="payment/braintree_section/braintree/braintree_3dsecure/verify_3dsecure" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+        <dataset name="braintree_3d_secure_uk">
+            <field name="payment/braintree/verify_3dsecure" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/braintree_section/braintree/braintree_3dsecure/allowspecific" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/braintree_section/braintree/braintree_3dsecure/specificcountry" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="value" xsi:type="array">
+                    <item name="United Kingdom" xsi:type="string">GB</item>
+                </item>
+            </field>
+        </dataset>
+        <dataset name="braintree_3d_secure_uk_rollback">
+            <field name="payment/braintree_section/braintree/braintree_3dsecure/verify_3dsecure" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="payment/braintree_section/braintree/braintree_3dsecure/allowspecific" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+        <dataset name="braintree_3d_secure_not_triggered_due_threshold">
+            <field name="payment/braintree/verify_3dsecure" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/braintree/threshold_amount" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">300</item>
+            </field>
+        </dataset>
+        <dataset name="braintree_3d_secure_not_triggered_due_threshold_rollback">
+            <field name="payment/braintree/verify_3dsecure" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="payment/braintree/threshold_amount" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+        <dataset name="braintree_use_vault">
+            <field name="payment/vault/vault_payment" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Braintree</item>
+                <item name="value" xsi:type="string">braintree</item>
+            </field>
+        </dataset>
+        <dataset name="braintree_use_vault_rollback">
+            <field name="payment/vault/vault_payment" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Select vault provider</item>
+                <item name="value" xsi:type="string">null</item>
+            </field>
+        </dataset>
+        <dataset name="braintree_paypal">
+            <field name="payment/braintree_section/braintree/active_braintree_paypal" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/braintree_section/braintree/braintree_paypal/payment_action" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Authorize</item>
+                <item name="value" xsi:type="string">authorize</item>
+            </field>
+        </dataset>
+        <dataset name="braintree_paypal_rollback">
+            <field name="payment/braintree_section/braintree/active_braintree_paypal" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+        </dataset>
+        <dataset name="braintree_paypal_sale">
+            <field name="payment/braintree_section/braintree/active_braintree_paypal" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">1</item>
+            </field>
+            <field name="payment/braintree_section/braintree/braintree_paypal/payment_action" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Authorize and Capture</item>
+                <item name="value" xsi:type="string">authorize_capture</item>
+            </field>
+        </dataset>
+        <dataset name="braintree_paypal_sale_rollback">
+            <field name="payment/braintree_section/braintree/active_braintree_paypal" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Yes</item>
+                <item name="value" xsi:type="number">0</item>
+            </field>
+            <field name="payment/braintree_section/braintree/braintree_paypal/payment_action" xsi:type="array">
+                <item name="scope" xsi:type="string">payment</item>
+                <item name="scope_id" xsi:type="number">1</item>
+                <item name="label" xsi:type="string">Authorize</item>
+                <item name="value" xsi:type="string">authorize</item>
+            </field>
+        </dataset>
+    </repository>
+</config>

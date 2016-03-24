@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*global define*/
@@ -248,7 +248,7 @@ define(
                     emailValidationResult = customer.isLoggedIn();
 
                 if (!quote.shippingMethod()) {
-                    this.errorValidationMessage('Please specify a shipping method');
+                    this.errorValidationMessage('Please specify a shipping method.');
 
                     return false;
                 }
@@ -284,9 +284,14 @@ define(
 
                         if (addressData.hasOwnProperty(field) &&
                             shippingAddress.hasOwnProperty(field) &&
-                            typeof addressData[field] != 'function'
+                            typeof addressData[field] != 'function' &&
+                            _.isEqual(shippingAddress[field], addressData[field])
                         ) {
                             shippingAddress[field] = addressData[field];
+                        } else if (typeof addressData[field] != 'function' &&
+                            !_.isEqual(shippingAddress[field], addressData[field])) {
+                            shippingAddress = addressData;
+                            break;
                         }
                     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Attribute\Backend;
@@ -64,11 +64,10 @@ class PriceTest extends \PHPUnit_Framework_TestCase
      */
     public function testAfterSave()
     {
-        /** @var $product \Magento\Catalog\Model\Product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            'Magento\Catalog\Model\Product'
+        $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\ProductRepository'
         );
-        $product->load(1);
+        $product = $repository->get('simple');
         $product->setOrigData();
         $product->setPrice(9.99);
         $product->setStoreId(0);
