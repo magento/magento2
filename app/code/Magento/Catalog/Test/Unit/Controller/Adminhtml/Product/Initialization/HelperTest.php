@@ -23,6 +23,9 @@ use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
 /**
  * Class HelperTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class HelperTest extends \PHPUnit_Framework_TestCase
 {
@@ -147,7 +150,8 @@ class HelperTest extends \PHPUnit_Framework_TestCase
                 '__sleep',
                 '__wakeup',
                 'getSku',
-                'getProductLinks'
+                'getProductLinks',
+                'getWebsiteIds'
             ])
             ->disableOriginalConstructor()
             ->getMock();

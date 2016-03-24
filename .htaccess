@@ -5,6 +5,12 @@
 #   SetEnv MAGE_MODE developer
 
 ############################################
+## overrides default umask value to allow using different
+## file permissions
+
+#   SetEnv MAGE_UMASK 022
+
+############################################
 ## uncomment these lines for CGI mode
 ## make sure to specify the correct cgi php binary file name
 ## it might be /cgi-bin/php-cgi
