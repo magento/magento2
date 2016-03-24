@@ -28,7 +28,7 @@ class TopToolbar extends Block
      */
     public function getSelectSortType()
     {
-        return $this->_rootElement->find($this->sorter)->getValue();
+        return $this->_rootElement->find("#sorter")->getElements('option[selected]')[0]->getText();
     }
 
     /**
