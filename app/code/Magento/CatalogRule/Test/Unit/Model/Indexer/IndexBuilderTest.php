@@ -42,7 +42,6 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected $priceCurrency;
 
-
     /**
      * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
      */

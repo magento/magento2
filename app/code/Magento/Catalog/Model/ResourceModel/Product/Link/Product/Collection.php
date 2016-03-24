@@ -129,7 +129,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         );
     }
 
-
     /**
      * Declare link model and initialize type attributes join
      *

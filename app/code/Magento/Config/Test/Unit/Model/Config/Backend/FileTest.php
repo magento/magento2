@@ -17,6 +17,10 @@ use Magento\Framework\Registry;
 use Magento\MediaStorage\Model\File\Uploader;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 
+/**
+ * Class FileTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FileTest extends \PHPUnit_Framework_TestCase
 {
     /** @var File */
