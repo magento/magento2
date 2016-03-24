@@ -696,7 +696,13 @@ class Product extends AbstractResource
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
-        $this->entityManager->save($object, ProductInterface::class);
+        $this->entityManager->save(
+            $object,
+            ProductInterface::class,
+            [
+                'store_id' => $this->_storeManager->getStore()->getId()
+            ]
+        );
         return $this;
     }
 }

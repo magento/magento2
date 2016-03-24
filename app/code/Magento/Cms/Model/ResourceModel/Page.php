@@ -171,7 +171,7 @@ class Page extends AbstractDb
     {
         $pageId = $this->getPageId($object, $value, $field);
         if ($pageId) {
-            $this->entityManager->load($object, $value, PageInterface::class, []);
+            $this->entityManager->load($object, $pageId, PageInterface::class, []);
         }
         return $this;
     }
