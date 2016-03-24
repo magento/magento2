@@ -139,8 +139,8 @@ define([
         $('manage-options-panel').on(
             'click',
             '#add_new_option_button',
-            attributeOption.add.bind(attributeOption, {}, true))
-        ;
+            attributeOption.add.bind(attributeOption, {}, true)
+        );
         $('manage-options-panel').on('click', '.delete-option', function (event) {
             attributeOption.remove(event);
         });
