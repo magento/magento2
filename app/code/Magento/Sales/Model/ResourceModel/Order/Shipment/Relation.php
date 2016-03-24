@@ -64,11 +64,13 @@ class Relation implements RelationInterface
         }
         if (null !== $object->getTracks()) {
             foreach ($object->getTracks() as $track) {
+                $track->setParentId($object->getId());
                 $this->shipmentTrackResource->save($track);
             }
         }
         if (null !== $object->getComments()) {
             foreach ($object->getComments() as $comment) {
+                $comment->setParentId($object->getId());
                 $this->shipmentCommentResource->save($comment);
             }
         }
