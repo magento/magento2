@@ -9,11 +9,7 @@
 define([
     'jquery',
     'mage/template',
-    'uiRegistry',
-    'jquery/ui',
-    'prototype',
-    'form',
-    'validation'
+    'uiRegistry'
 ], function (jQuery, mageTemplate, rg) {
     'use strict';
 
@@ -57,6 +53,7 @@ define([
 
                     if (render) {
                         this.render();
+                        this.updateItemsCountField();
                     }
                 },
                 remove: function (event) {
@@ -139,10 +136,7 @@ define([
                 }
             };
 
-        if ($('add_new_option_button')) {
-            Event.observe('add_new_option_button', 'click', attributeOption.add.bind(attributeOption, {}, true));
-        }
-
+        $('manage-options-panel').on('click', '#add_new_option_button', attributeOption.add.bind(attributeOption, {}, true));
         $('manage-options-panel').on('click', '.delete-option', function (event) {
             attributeOption.remove(event);
         });
