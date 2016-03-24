@@ -89,16 +89,6 @@ class AuthSession
     }
 
     /**
-     * Check if a request is session check
-     *
-     * @return bool
-     */
-    private function isSessionCheckRequest()
-    {
-        return $this->request->getModuleName() == 'security' && $this->request->getActionName() == 'check';
-    }
-
-    /**
      * Check if a request is AJAX request
      *
      * @return bool
