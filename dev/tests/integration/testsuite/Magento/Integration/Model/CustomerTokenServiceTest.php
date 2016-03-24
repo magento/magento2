@@ -70,8 +70,8 @@ class CustomerTokenServiceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InvalidEmailOrPasswordException
-     * @expectedExceptionMessage Invalid login or password.
+     * @expectedException \Magento\Framework\Exception\AuthenticationException
+     * @expectedExceptionMessage You did not sign in correctly or your account is temporarily disabled.
      */
     public function testCreateCustomerAccessTokenInvalidCustomer()
     {
