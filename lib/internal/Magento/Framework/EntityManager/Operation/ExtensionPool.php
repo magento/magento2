@@ -44,12 +44,12 @@ class ExtensionPool
     public function getActions($entityType, $actionName)
     {
         $actions = [];
-        foreach ($this->actions as $name => $actionGroup) {
-            if (isset($actionGroup[$entityType][$actionName])) {
-                $actions[$name] = $this->objectManager->get($actionGroup[$entityType][$actionName]);
-            } elseif (isset($actionGroup['default'][$actionName])) {
-                $actions[$name] = $this->objectManager->get($actionGroup['default'][$actionName]);
-            }
+        if (!isset($this->actions[$entityType][$actionName])) {
+            return $actions;
+        }
+        foreach ($this->actions[$entityType][$actionName] as $actionClassName) {
+            $action = $this->objectManager->get($actionClassName);
+            $actions[] = $action;
         }
         return $actions;
     }
