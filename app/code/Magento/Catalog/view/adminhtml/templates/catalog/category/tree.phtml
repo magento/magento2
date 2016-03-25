@@ -148,8 +148,9 @@
                 },
 
                 selectCurrentNode: function () {
-                    if (this.currentNodeId) {
-                        var selectedNode = this.getNodeById(this.currentNodeId);
+                    var selectedNode = this.getNodeById(this.currentNodeId);
+
+                    if (selectedNode) {
                         if ((typeof selectedNode.attributes.path) != 'undefined') {
                             var path = selectedNode.attributes.path;
                             if (!this.storeId) {
