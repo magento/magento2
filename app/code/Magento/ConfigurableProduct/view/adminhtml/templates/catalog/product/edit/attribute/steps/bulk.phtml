@@ -12,8 +12,9 @@
 <div data-bind="scope: '<?= /* @noEscape */  $block->getComponentName()?>'" data-role="bulk-step">
     <h2 class="steps-wizard-title"><?php echo $block->escapeHtml(__('Step 3: Bulk Images, Price and Quantity')); ?></h2>
     <div class="steps-wizard-info">
-        <?php echo $block->escapeHtml(__('Based on your selections <span class="new-products-count" data-bind="text:countVariations"></span>
-        new products will be created. Use this step to customize images and price for your new products.'));?>
+        <?php echo $block->escapeHtml(
+            __('Based on your selections <span class="new-products-count" data-bind="text:countVariations"></span> new products will be created. Use this step to customize images and price for your new products.')
+        ); ?>
     </div>
 
     <div data-bind="with: sections().images" class="steps-wizard-section">
@@ -47,7 +48,7 @@
                                value="each"
                                data-bind="checked:type">
                         <label for="apply-unique-images-radio" class="admin__field-label">
-                            <span><?= /* @noEscape */  __('Apply unique images by attribute to each SKU') ?></span>
+                            <span><?php echo $block->escapeHtml(__('Apply unique images by attribute to each SKU')) ?></span>
                         </label>
                     </div>
                 </li>
@@ -60,7 +61,7 @@
                                checked
                                data-bind="checked:type">
                         <label for="skip-images-uploading-radio" class="admin__field-label">
-                            <span><?= /* @noEscape */  __('Skip image uploading at this time') ?></span>
+                            <span><?php echo $block->escapeHtml(__('Skip image uploading at this time')) ?></span>
                         </label>
                     </div>
                 </li>
@@ -79,7 +80,7 @@
                     <div class="image image-placeholder">
                         <div data-role="uploader" class="uploader">
                             <div class="image-browse">
-                                <span><?= /* @noEscape */  __('Browse Files...') ?></span>
+                                <span><?php echo $block->escapeHtml(__('Browse Files...')) ?></span>
                                 <input type="file"
                                        id=""
                                        name="image"
@@ -89,7 +90,7 @@
                             </div>
                         </div>
                         <div class="product-image-wrapper">
-                            <p class="image-placeholder-text"><?= /* @noEscape */  __('Browse to find or drag image here') ?></p>
+                            <p class="image-placeholder-text"><?php echo $block->escapeHtml(__('Browse to find or drag image here')) ?></p>
                         </div>
                     </div>
 
