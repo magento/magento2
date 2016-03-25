@@ -33,6 +33,6 @@ class AsyncSending extends \Magento\Framework\App\Config\Value
             );
         }
 
-        return $this;
+        return parent::afterSave();;
     }
 }
