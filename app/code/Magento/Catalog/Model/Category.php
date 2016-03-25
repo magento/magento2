@@ -662,7 +662,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         $image = $this->getImage();
         if ($image) {
             if (is_string($image)) {
-                return $this->_storeManager->getStore()->getBaseUrl(
+                $url = $this->_storeManager->getStore()->getBaseUrl(
                     \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
                 ) . 'catalog/category/' . $image;
             } else {
