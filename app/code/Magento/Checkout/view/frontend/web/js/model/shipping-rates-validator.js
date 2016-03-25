@@ -66,7 +66,7 @@ define(
                         postcodeElement = elem;
                     }
                     
-                    if (elem.index === 'region_id') {
+                    if (elem.index === 'region_id') { 
                         self.bindHandler(elem, delay);
                     }
                 });
