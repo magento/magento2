@@ -3,17 +3,16 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Observer;
+namespace Magento\Catalog\Plugin\Block;
 
 use Magento\Catalog\Model\Category;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Tree\Node;
-use Magento\Framework\Event\ObserverInterface;
 
 /**
- * Observer that add Categories Tree to Topmenu
+ * Plugin for top menu block
  */
-class AddCatalogToTopmenuItemsObserver implements ObserverInterface
+class TopMenu
 {
     /**
      * Catalog category
@@ -38,11 +37,11 @@ class AddCatalogToTopmenuItemsObserver implements ObserverInterface
     private $layerResolver;
 
     /**
+     * Initialize dependencies.
+     *
      * @param \Magento\Catalog\Helper\Category $catalogCategory
-     * @param \Magento\Catalog\Model\Indexer\Category\Flat\State $categoryFlatState
      * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      */
     public function __construct(
@@ -58,16 +57,15 @@ class AddCatalogToTopmenuItemsObserver implements ObserverInterface
     }
 
     /**
-     * Checking whether the using static urls in WYSIWYG allowed event
+     * Set appropriate Cache-Control headers
+     * We have to set public headers in order to tell Varnish and Builtin app that page should be cached
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param \Magento\Theme\Block\Html\Topmenu $subject
      * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function beforeToHtml(\Magento\Theme\Block\Html\Topmenu $subject)
     {
-        $block = $observer->getEvent()->getBlock();
-        $menuRootNode = $observer->getEvent()->getMenu();
-        $block->addIdentity(Category::CACHE_TAG);
+        $subject->addIdentity(Category::CACHE_TAG);
 
         $rootId = $this->storeManager->getStore()->getRootCategoryId();
         $storeId = $this->storeManager->getStore()->getId();
@@ -77,7 +75,7 @@ class AddCatalogToTopmenuItemsObserver implements ObserverInterface
 
         $currentCategory = $this->getCurrentCategory();
 
-        $mapping = [$rootId => $menuRootNode];  // use nodes stack to avoid recursion
+        $mapping = [$rootId => $subject->getMenu()];  // use nodes stack to avoid recursion
         foreach ($collection as $category) {
             if (!isset($mapping[$category->getParentId()])) {
                 continue;
@@ -95,7 +93,7 @@ class AddCatalogToTopmenuItemsObserver implements ObserverInterface
 
             $mapping[$category->getId()] = $categoryNode; //add node in stack
 
-            $block->addIdentity(Category::CACHE_TAG . '_' . $category->getId());
+            $subject->addIdentity(Category::CACHE_TAG . '_' . $category->getId());
         }
     }
 
