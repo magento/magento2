@@ -152,20 +152,6 @@ class ProcessLayoutRenderElementTest extends \PHPUnit_Framework_TestCase
     public function processLayoutRenderDataProvider()
     {
         return [
-            'full_page type and Varnish enabled, public scope, ttl is set' => [
-                true,
-                true,
-                false,
-                360,
-                '<esi:include src="page_cache/block/wrapesi/with/handles/and/other/stuff" />',
-            ],
-            'full_page type and Varnish enabled, public scope, ttl is not set' => [
-                true,
-                true,
-                false,
-                null,
-                'test output html',
-            ],
             'full_page type enabled, Varnish disabled, public scope, ttl is set' => [
                 true,
                 false,

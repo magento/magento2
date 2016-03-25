@@ -21,6 +21,13 @@ class LayoutPlugin
     protected $response;
 
     /**
+     * Is varnish enabled flag
+     *
+     * @var bool
+     */
+    protected $isVarnishEnabled;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\App\ResponseInterface $response
@@ -62,12 +69,10 @@ class LayoutPlugin
         if ($subject->isCacheable() && $this->config->isEnabled()) {
             $tags = [];
             foreach ($subject->getAllBlocks() as $block) {
+                if ($this->isCacheableByVarnish($block)) {
+                    continue;
+                }
                 if ($block instanceof \Magento\Framework\DataObject\IdentityInterface) {
-                    $isEsiBlock = $block->getTtl() > 0;
-                    $isVarnish = $this->config->getType() == \Magento\PageCache\Model\Config::VARNISH;
-                    if ($isVarnish && $isEsiBlock) {
-                        continue;
-                    }
                     $tags = array_merge($tags, $block->getIdentities());
                 }
             }
@@ -75,5 +80,77 @@ class LayoutPlugin
             $this->response->setHeader('X-Magento-Tags', implode(',', $tags));
         }
         return $result;
+    }
+
+    /**
+     * Replace actual block output with ESI include if Varnish is enabled and the block has TTL specified.
+     *
+     * @param \Magento\Framework\View\Layout $subject
+     * @param \Closure $proceed
+     * @param string $name
+     * @param bool $useCache
+     * @return string
+     */
+    public function aroundRenderElement(
+        \Magento\Framework\View\Layout $subject,
+        \Closure $proceed,
+        $name,
+        $useCache = true
+    ) {
+        $layout = $subject;
+        if ($this->config->isEnabled() && $layout->isCacheable()) {
+            $block = $layout->getBlock($name);
+            if ($this->isCacheableByVarnish($block)) {
+                return $this->generateEsiInclude($block, $layout);
+            }
+        }
+        return $proceed($name, $useCache);
+    }
+
+    /**
+     * Check if provided block should be cached by varnish.
+     *
+     * @param \Magento\Framework\View\Element\BlockInterface $block
+     * @return bool
+     */
+    private function isCacheableByVarnish($block)
+    {
+        return $this->isVarnishEnabled()
+            && ($block instanceof \Magento\Framework\View\Element\AbstractBlock)
+            && ($block->getTtl() > 0);
+    }
+
+    /**
+     * Check if varnish cache engine is enabled.
+     *
+     * @return bool
+     */
+    private function isVarnishEnabled()
+    {
+        if ($this->isVarnishEnabled === null) {
+            $this->isVarnishEnabled = ($this->config->getType() == \Magento\PageCache\Model\Config::VARNISH);
+        }
+        return $this->isVarnishEnabled;
+    }
+
+    /**
+     * Generate ESI include directive for the specified block.
+     *
+     * @param \Magento\Framework\View\Element\AbstractBlock $block
+     * @param \Magento\Framework\View\Layout $layout
+     * @return string
+     */
+    private function generateEsiInclude(
+        \Magento\Framework\View\Element\AbstractBlock $block,
+        \Magento\Framework\View\Layout $layout
+    ) {
+        $url = $block->getUrl(
+            'page_cache/block/esi',
+            [
+                'blocks' => json_encode([$block->getNameInLayout()]),
+                'handles' => json_encode($layout->getUpdate()->getHandles())
+            ]
+        );
+        return sprintf('<esi:include src="%s" />', $url);
     }
 }
