@@ -56,6 +56,7 @@ class Shipping extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 
         $address->setWeight(0);
         $address->setFreeMethodWeight(0);
+        $address->setFreeShipping(false);
 
         $addressWeight = $address->getWeight();
         $freeMethodWeight = $address->getFreeMethodWeight();
