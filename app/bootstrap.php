@@ -15,14 +15,14 @@ $mask = isset($_SERVER['MAGE_UMASK']) ? octdec($_SERVER['MAGE_UMASK']) : 002;
 umask($mask);
 
 /* PHP version validation */
-if (version_compare(phpversion(), '5.5.0', '<') === true) {
+if (!defined('PHP_VERSION_ID') || PHP_VERSION_ID < 50522) {
     if (PHP_SAPI == 'cli') {
-        echo 'Magento supports PHP 5.5.0 or later. ' .
+        echo 'Magento supports PHP 5.5.22 or later. ' .
             'Please read http://devdocs.magento.com/guides/v1.0/install-gde/system-requirements.html';
     } else {
         echo <<<HTML
 <div style="font:12px/1.35em arial, helvetica, sans-serif;">
-    <p>Magento supports PHP 5.5.0 or later. Please read
+    <p>Magento supports PHP 5.5.22 or later. Please read
     <a target="_blank" href="http://devdocs.magento.com/guides/v1.0/install-gde/system-requirements.html">
     Magento System Requirements</a>.
 </div>
