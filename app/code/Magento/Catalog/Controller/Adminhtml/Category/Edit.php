@@ -87,10 +87,10 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
          */
         $data = $this->_getSession()->getCategoryData(true);
         if (isset($data['general'])) {
-            if (!isset($data['general']['image']['delete'])) {
-                unset($data['general']['image']);
-            } else {
+            if (isset($data['general']['image']['delete'])) {
                 $data['general']['image'] = null;
+            } else {
+                unset($data['general']['image']);
             }
             $category->addData($data['general']);
         }
