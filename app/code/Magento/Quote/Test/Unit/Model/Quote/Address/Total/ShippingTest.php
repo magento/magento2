@@ -200,7 +200,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
         $this->cartItem->expects($this->atLeastOnce())
             ->method('getQty')
             ->willReturn(2);
-        $this->address->expects($this->once())
+        $this->address->expects($this->atLeastOnce())
             ->method('getFreeShipping')
             ->willReturn(true);
         $this->cartItem->expects($this->once())
