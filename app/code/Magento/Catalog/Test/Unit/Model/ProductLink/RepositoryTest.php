@@ -18,6 +18,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject
      */
+    private $hydratorPoolMock;
+
+    /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
     protected $hydratorMock;
 
     /**
@@ -57,6 +62,11 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     protected $linkInitializerMock;
 
     /**
+     * @var \PHPUnit_Framework_MockObject_MockObject
+     */
+    private $mediaGalleryProcessorMock;
+
+    /**
      * Test method
      */
     protected function setUp()
@@ -84,9 +94,16 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->hydratorPoolMock = $this->getMock(
+            'Magento\Framework\EntityManager\HydratorPool',
+            [],
+            [],
+            '',
+            false
+        );
         $this->hydratorMock = $this->getMock(
             'Magento\Framework\Model\Entity\EntityHydrator',
-            [],
+            ['extract'],
             [],
             '',
             false
@@ -112,7 +129,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->metadataPoolMock->expects($this->any())->method('getHydrator')->willReturn($this->hydratorMock);
+        $this->hydratorPoolMock->expects($this->any())->method('getHydrator')->willReturn($this->hydratorMock);
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($this->metadataMock);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManager->getObject(
@@ -123,6 +140,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
                 'linkInitializer' => $this->linkInitializerMock,
                 'linkManagement' => $linkManagementMock,
                 'metadataPool' => $this->metadataPoolMock,
+                'hydratorPool' => $this->hydratorPoolMock,
                 'linkTypeProvider' => $this->linkTypeProvider,
                 'linkResource' => $this->linkResourceMock
             ]

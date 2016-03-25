@@ -15,6 +15,7 @@ use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\HydratorPool;
 
 /**
  * Class Repository
@@ -78,6 +79,11 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     protected $productLinkExtensionFactory;
 
     /**
+     * @var HydratorPool
+     */
+    private $hydratorPool;
+
+    /**
      * Repository constructor.
      *
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
@@ -104,7 +110,8 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
         LinkTypeProvider $linkTypeProvider,
         ProductLinkInterfaceFactory $productLinkFactory,
         ProductLinkExtensionFactory $productLinkExtensionFactory,
-        MetadataPool $metadataPool
+        MetadataPool $metadataPool,
+        HydratorPool $hydratorPool
     ) {
         $this->productRepository = $productRepository;
         $this->entityCollectionProvider = $entityCollectionProvider;
@@ -117,6 +124,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
         $this->productLinkFactory = $productLinkFactory;
         $this->productLinkExtensionFactory = $productLinkExtensionFactory;
         $this->metadataPool = $metadataPool;
+        $this->hydratorPool = $hydratorPool;
     }
 
     /**
@@ -142,7 +150,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
 
         try {
             $linkTypesToId = $this->linkTypeProvider->getLinkTypes();
-            $productData = $this->metadataPool->getHydrator(ProductInterface::class)->extract($product);
+            $productData = $this->hydratorPool->getHydrator(ProductInterface::class)->extract($product);
             $this->linkResource->saveProductLinks(
                 $productData[$this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()],
                 $links,
@@ -204,7 +212,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
         $linkedProduct = $this->productRepository->get($entity->getLinkedProductSku());
         $product = $this->productRepository->get($entity->getSku());
         $linkTypesToId = $this->linkTypeProvider->getLinkTypes();
-        $productData = $this->metadataPool->getHydrator(ProductInterface::class)->extract($product);
+        $productData = $this->hydratorPool->getHydrator(ProductInterface::class)->extract($product);
         $linkId = $this->linkResource->getProductLinkId(
             $productData[$this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()],
             $linkedProduct->getId(),
