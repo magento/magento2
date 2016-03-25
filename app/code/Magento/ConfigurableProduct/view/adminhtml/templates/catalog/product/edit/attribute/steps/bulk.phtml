@@ -10,12 +10,10 @@
 ?>
 
 <div data-bind="scope: '<?= /* @noEscape */  $block->getComponentName()?>'" data-role="bulk-step">
-    <h2 class="steps-wizard-title"><?= /* @noEscape */  __('Step 3: Bulk Images, Price and Quantity') ?></h2>
+    <h2 class="steps-wizard-title"><?php echo $block->escapeHtml(__('Step 3: Bulk Images, Price and Quantity')); ?></h2>
     <div class="steps-wizard-info">
-        <?php echo $block->escapeHtml(
-            __('Based on your selections <span class="new-products-count" data-bind="text:countVariations"></span>
-        new products will be created. Use this step to customize images and price for your new products.')
-        );?>
+        <?php echo $block->escapeHtml(__('Based on your selections <span class="new-products-count" data-bind="text:countVariations"></span>
+        new products will be created. Use this step to customize images and price for your new products.'));?>
     </div>
 
     <div data-bind="with: sections().images" class="steps-wizard-section">
@@ -145,11 +143,11 @@
                                             class="action-remove"
                                             data-role="delete-button"
                                             title="<?= $block->escapeHtml(__('Remove image')) ?>">
-                                        <span><?= /* @noEscape */  __('Remove image') ?></span>
+                                        <span><?php echo $block->escapeHtml(__('Remove image')) ?></span>
                                     </button>
                                     <div class="draggable-handle"></div>
                                 </div>
-                                <div class="image-fade"><span><?= /* @noEscape */  __('Hidden') ?></span></div>
+                                <div class="image-fade"><span><?php echo $block->escapeHtml(__('Hidden')) ?></span></div>
                             </div>
                             <div class="item-description">
                                 <div class="item-title" data-role="img-title"><%- data.label %></div>
@@ -189,13 +187,13 @@
                                             class="action-remove"
                                             data-role="delete-button"
                                             title="<?= $block->escapeHtml(__('Remove image')) ?>">
-                                        <span><?= /* @noEscape */  __('Remove image') ?></span>
+                                        <span><?php echo $block->escapeHtml(__('Remove image')) ?></span>
                                     </button>
 
                                     <div class="draggable-handle"></div>
                                 </div>
 
-                                <div class="image-fade"><span><?= /* @noEscape */  __('Hidden') ?></span></div>
+                                <div class="image-fade"><span><?php echo $block->escapeHtml(__('Hidden')) ?></span></div>
                             </div>
                             <!--<ul class="item-roles">
                                 <li class="item-role item-role-base">Base</li>
@@ -218,7 +216,7 @@
                             <fieldset class="admin__fieldset fieldset-image-panel">
                                 <div class="admin__field field-image-description">
                                     <label class="admin__field-label" for="image-description">
-                                        <span><?php /* @escapeNotVerified */ echo __('Alt Text')?></span>
+                                        <span><?php echo $block->escapeHtml(__('Alt Text')) ?></span>
                                     </label>
 
                                     <div class="admin__field-control">
@@ -468,11 +466,11 @@
                                                     class="action-remove"
                                                     data-role="delete-button"
                                                     title="<?= $block->escapeHtml(__('Remove image')) ?>">
-                                                <span><?= /* @noEscape */  __('Remove image') ?></span>
+                                                <span><?php echo $block->escapeHtml(__('Remove image')) ?></span>
                                             </button>
                                             <div class="draggable-handle"></div>
                                         </div>
-                                        <div class="image-fade"><span><?= /* @noEscape */  __('Hidden') ?></span></div>
+                                        <div class="image-fade"><span><?php echo $block->escapeHtml(__('Hidden')) ?></span></div>
                                     </div>
                                     <!--<ul class="item-roles">
                                         <li class="item-role item-role-base">Base</li>
@@ -711,7 +709,7 @@
     <div data-bind="with: sections().quantity" class="steps-wizard-section">
         <div data-role="section">
             <div class="steps-wizard-section-title">
-                <span><?php /* @noEscape */ echo  __('Quantity') ?></span>
+                <span><?php echo $block->escapeHtml(__('Quantity')) ?></span>
             </div>
             <ul class="steps-wizard-section-list">
                 <li>
@@ -722,7 +720,7 @@
                                value="single"
                                data-bind="checked: type" />
                         <label for="apply-single-inventory-radio" class="admin__field-label">
-                            <span><?php /* @noEscape */ echo  __('Apply single quantity to each SKUs') ?></span>
+                            <span><?php echo $block->escapeHtml(__('Apply single quantity to each SKUs')) ?></span>
                         </label>
                     </div>
                 </li>
@@ -734,7 +732,7 @@
                                value="each"
                                data-bind="checked: type" />
                         <label for="apply-unique-inventory-radio" class="admin__field-label">
-                            <span><?php /* @noEscape */ echo  __('Apply unique quantity by attribute to each SKU') ?></span>
+                            <span><?php echo $block->escapeHtml(__('Apply unique quantity by attribute to each SKU')) ?></span>
                         </label>
                     </div>
                 </li>
@@ -747,7 +745,7 @@
                                checked
                                data-bind="checked: type" />
                         <label for="skip-inventory-radio" class="admin__field-label">
-                            <span><?php /* @noEscape */ echo  __('Skip quantity at this time') ?></span>
+                            <span><?php echo $block->escapeHtml(__('Skip quantity at this time')) ?></span>
                         </label>
                     </div>
                 </li>
@@ -757,7 +755,7 @@
                 <fieldset class="admin__fieldset bulk-attribute-values" data-bind="visible: type() == 'single'">
                     <div class="admin__field _required">
                         <label for="apply-single-inventory-input" class="admin__field-label">
-                            <span><?php /* @noEscape */ echo  __('Quantity') ?></span>
+                            <span><?php echo $block->escapeHtml(__('Quantity')) ?></span>
                         </label>
                         <div class="admin__field-control">
                             <input type="text"
@@ -773,7 +771,7 @@
                 <fieldset class="admin__fieldset bulk-attribute-values">
                     <div class="admin__field _required">
                         <label for="apply-single-price-input-qty" class="admin__field-label">
-                            <span><?php /* @noEscape */ echo  __('Select attribute') ?></span>
+                            <span><?php echo $block->escapeHtml(__('Select attribute')) ?></span>
                         </label>
                         <div class="admin__field-control">
                             <select id="apply-single-price-input-qty" class="admin__control-select" data-bind="
