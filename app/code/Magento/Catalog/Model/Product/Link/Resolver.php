@@ -17,6 +17,10 @@ class Resolver
      */
     protected $links = null;
 
+    /**
+     * Resolver constructor.
+     * @param \Magento\Framework\App\RequestInterface $request
+     */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request
     ) {
@@ -41,6 +45,7 @@ class Resolver
      * Override link data from request
      *
      * @param array|null $links
+     * @return void
      */
     public function override($links)
     {
