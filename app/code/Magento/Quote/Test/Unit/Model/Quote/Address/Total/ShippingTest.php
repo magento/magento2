@@ -176,8 +176,7 @@ class ShippingTest extends \PHPUnit_Framework_TestCase
             ->with($this->quote, [$this->cartItem])
             ->willReturn(true);
         $this->address->expects($this->atLeastOnce())
-            ->method('setFreeShipping')
-            ->with(true);
+            ->method('setFreeShipping');
         $this->total->expects($this->atLeastOnce())
             ->method('setTotalAmount');
         $this->total->expects($this->atLeastOnce())
