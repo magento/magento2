@@ -30,11 +30,10 @@ class Login extends GenericButton implements ButtonProviderInterface
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\AuthorizationInterface $authorization
+        \Magento\Framework\Registry $registry
     ) {
         parent::__construct($context, $registry);
-        $this->_authorization = $authorization;
+        $this->_authorization = $context->getAuthorization();
     }
 
     /**
