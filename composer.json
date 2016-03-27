@@ -69,7 +69,7 @@
     "require-dev": {
         "phpunit/phpunit": "4.1.0",
         "squizlabs/php_codesniffer": "1.5.3",
-        "phpmd/phpmd": "@stable",
+        "phpmd/phpmd": "2.3.*",
         "pdepend/pdepend": "2.2.2",
         "sjparkinson/static-review": "~4.1",
         "fabpot/php-cs-fixer": "~1.2",
@@ -171,6 +171,7 @@
         "magento/module-variable": "100.0.3",
         "magento/module-version": "100.0.3",
         "magento/module-webapi": "100.0.3",
+        "magento/module-webapi-security": "100.0.0",
         "magento/module-weee": "100.0.3",
         "magento/module-widget": "100.0.3",
         "magento/module-wishlist": "100.0.3",

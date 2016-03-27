@@ -76,12 +76,15 @@ class Date extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRe
     {
         if ($data = $row->getData($this->getColumn()->getIndex())) {
             $timezone = $this->getColumn()->getTimezone() !== false ? $this->_localeDate->getConfigTimezone() : 'UTC';
+            if (!($data instanceof \DateTime)) {
+                $localeDate = new \DateTime($data, new \DateTimeZone($timezone));
+            } else {
+                $data->setTimezone(new \DateTimeZone($timezone));
+                $localeDate = $data;
+            }
             return $this->dateTimeFormatter->formatObject(
                 $this->_localeDate->date(
-                    new \DateTime(
-                        $data,
-                        new \DateTimeZone($timezone)
-                    )
+                    $localeDate
                 ),
                 $this->_getFormat()
             );
