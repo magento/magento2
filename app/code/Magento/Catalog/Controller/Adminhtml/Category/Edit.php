@@ -52,6 +52,9 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
     public function execute()
     {
         $storeId = (int)$this->getRequest()->getParam('store');
+        $store = $this->storeManager->getStore($storeId);
+        $this->storeManager->setCurrentStore($store->getCode());
+
         $categoryId = (int)$this->getRequest()->getParam('id');
 
         if (!$categoryId) {
@@ -84,6 +87,11 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
          */
         $data = $this->_getSession()->getCategoryData(true);
         if (isset($data['general'])) {
+            if (isset($data['general']['image']['delete'])) {
+                $data['general']['image'] = null;
+            } else {
+                unset($data['general']['image']);
+            }
             $category->addData($data['general']);
         }
 

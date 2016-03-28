@@ -9,6 +9,8 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory as CustomOption
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory as ProductLinkFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
+use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Helper
@@ -55,6 +57,11 @@ class Helper
      * @var ProductLinks
      */
     protected $productLinks;
+
+    /**
+     * @var LinkResolver
+     */
+    private $linkResolver;
 
     /**
      * @param \Magento\Framework\App\RequestInterface $request
@@ -149,7 +156,7 @@ class Helper
             $product->lockAttribute('media');
         }
 
-        if ($this->storeManager->hasSingleStore()) {
+        if ($this->storeManager->hasSingleStore() && empty($product->getWebsiteIds())) {
             $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsite()->getId()]);
         }
 
@@ -195,6 +202,18 @@ class Helper
     }
 
     /**
+     * @deprecated
+     * @return LinkResolver
+     */
+    private function getLinkResolver()
+    {
+        if (!is_object($this->linkResolver)) {
+            $this->linkResolver = ObjectManager::getInstance()->get(LinkResolver::class);
+        }
+        return $this->linkResolver;
+    }
+
+    /**
      * Setting product links
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -203,7 +222,7 @@ class Helper
      */
     protected function setProductLinks(\Magento\Catalog\Model\Product $product)
     {
-        $links = (array)$this->request->getParam('links', []);
+        $links = $this->getLinkResolver()->getLinks();
 
         $product->setProductLinks([]);
 

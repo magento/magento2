@@ -62,7 +62,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                         ],
                     ],
                     'children' => [
-                        static::FORM_NAME . '.affectedAttributeSetError' => $this->getAttributeSetErrorContainer(),
+                        'affectedAttributeSetError' => $this->getAttributeSetErrorContainer(),
                         'affectedAttributeSetCurrent' => [
                             'arguments' => [
                                 'data' => [
@@ -170,7 +170,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                                 'component' => 'Magento_Ui/js/form/components/button',
                                 'actions' => [
                                     [
-                                        'targetName' => 'configurableVariations',
+                                        'targetName' => 'product_form.product_form.configurableVariations',
                                         'actionName' => 'addNewAttributeSetHandler',
                                     ],
                                 ],

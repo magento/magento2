@@ -263,7 +263,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         } else {
             unset($this->instances[$productData['sku']]);
             $product = $this->get($productData['sku']);
-            $this->initializationHelper->initialize($product);
         }
 
         foreach ($productData as $key => $value) {
@@ -544,6 +543,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             unset($this->instances[$product->getSku()]);
             unset($this->instancesById[$product->getId()]);
             $this->resourceModel->delete($product);
+        } catch (ValidatorException $e) {
+            throw new CouldNotSaveException(__($e->getMessage()));
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\StateException(
                 __('Unable to remove product %1', $sku)
@@ -631,5 +632,16 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         if ($fields) {
             $collection->addFieldToFilter($fields);
         }
+    }
+
+    /**
+     * Clean internal product cache
+     *
+     * @return void
+     */
+    public function cleanCache()
+    {
+        $this->instances = null;
+        $this->instancesById = null;
     }
 }
