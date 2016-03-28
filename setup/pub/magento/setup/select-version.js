@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,7 +28,7 @@ angular.module('select-version', ['ngStorage'])
         $http.get('index.php/select-version/systemPackage', {'responseType' : 'json'})
             .success(function (data) {
                 if (data.responseType != 'error') {
-                    if (data.packages.length <= 1) {
+                    if (data.packages.length == 1 && data.packages[0].versions.length <=1) {
                         $scope.upgradeProcessError = true;
                         $scope.upgradeProcessErrorMessage = "You're already using the latest version, there's nothing for us to do.";
                     } else {

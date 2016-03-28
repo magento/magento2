@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -404,7 +404,7 @@ class Tar extends \Magento\Framework\Archive\AbstractArchive implements \Magento
 
             if (in_array($header['type'], ["0", chr(0), ''])) {
                 if (!file_exists($dirname)) {
-                    $mkdirResult = @mkdir($dirname, DriverInterface::WRITEABLE_DIRECTORY_MODE, true);
+                    $mkdirResult = @mkdir($dirname, 0777, true);
 
                     if (false === $mkdirResult) {
                         throw new \Magento\Framework\Exception\LocalizedException(

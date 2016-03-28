@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -205,12 +205,12 @@ class AssertCategoryPage extends AbstractConstraint
         //TODO: verify display_mode
 
         if (isset($categoryData['default_sort_by'])) {
-            $sortBy = strtolower($categoryData['default_sort_by']);
-            $sortType = $this->categoryViewPage->getTopToolbar()->getSelectSortType();
-            if ($sortBy != $sortType) {
+            $expected = $categoryData['default_sort_by'];
+            $actual = $this->categoryViewPage->getTopToolbar()->getSelectSortType();
+            if ($expected != $actual) {
                 $errorMessage[] = 'Wrong sorting type.'
-                    . "\nExpected: " . $sortBy
-                    . "\nActual: " . $sortType;
+                    . "\nExpected: " . $expected
+                    . "\nActual: " . $actual;
             }
         }
 
@@ -257,7 +257,7 @@ class AssertCategoryPage extends AbstractConstraint
         };
 
         if (isset($categoryData['meta_title'])) {
-            $actual = $this->categoryViewPage->getMetaInformation()->getTitle();
+            $actual = $this->browser->getTitle();
             if ($categoryData['meta_title'] != $actual) {
                 $errorMessage[] = 'Wrong page title.'
                     . "\nExpected: " . $categoryData['meta_title']

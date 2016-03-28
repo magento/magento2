@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Persistent\Test\Unit\Model;
@@ -91,7 +91,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
     {
         $cookiePath = 'some_path';
         $this->configMock->expects($this->once())->method('getCookiePath')->will($this->returnValue($cookiePath));
-        $cookieMetadataMock = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\CookieMetadata')
+        $cookieMetadataMock = $this->getMockBuilder('Magento\Framework\Stdlib\Cookie\SensitiveCookieMetadata')
             ->disableOriginalConstructor()
             ->getMock();
         $cookieMetadataMock->expects($this->once())
@@ -99,7 +99,7 @@ class SessionTest extends \PHPUnit_Framework_TestCase
             ->with($cookiePath)
             ->will($this->returnSelf());
         $this->cookieMetadataFactoryMock->expects($this->once())
-            ->method('createCookieMetadata')
+            ->method('createSensitiveCookieMetadata')
             ->will($this->returnValue($cookieMetadataMock));
         $this->cookieManagerMock->expects(
             $this->once()
