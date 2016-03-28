@@ -151,7 +151,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         $this->_model = $this->_objectHelper->getObject(
-            'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+            Configurable::class,
             [
                 'typeConfigurableFactory' => $this->_typeConfigurableFactory,
                 'configurableAttributeFactory' => $this->_configurableAttributeFactoryMock,
@@ -164,10 +164,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'logger' => $logger,
                 'productRepository' => $this->productRepository,
                 'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
-                'cache' => $this->cache,
-                'metadataPool' => $this->metadataPool,
+                'cache' => $this->cache
             ]
         );
+        $refClass = new \ReflectionClass(Configurable::class);
+        $refProperty = $refClass->getProperty('metadataPool');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($this->_model, $this->metadataPool);
     }
 
     public function testHasWeightTrue()
