@@ -1,17 +1,19 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Api;
 
 use Magento\Customer\Api\Data\CustomerInterface as Customer;
+use Magento\Customer\Api\Data\AddressInterface as Address;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Test class for Magento\Customer\Api\CustomerRepositoryInterface
@@ -343,6 +345,83 @@ class CustomerRepositoryTest extends WebapiAbstract
             $this->assertEquals($expectedMessage, $errorObj['message']);
             $this->assertEquals(['fieldName' => 'customerId', 'fieldValue' => -1], $errorObj['parameters']);
             $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
+        }
+    }
+
+    /**
+     * Test creating a customer with absent required address fields
+     */
+    public function testCreateCustomerWithoutAddressRequiresException()
+    {
+        $customerDataArray = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->customerHelper->createSampleCustomerDataObject(),
+            '\Magento\Customer\Api\Data\CustomerInterface'
+        );
+
+        foreach ($customerDataArray[Customer::KEY_ADDRESSES] as & $address) {
+            $address[Address::FIRSTNAME] = null;
+        }
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => \Magento\Framework\Webapi\Rest\Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+        $requestData = ['customer' => $customerDataArray];
+        try {
+            $this->_webApiCall($serviceInfo, $requestData);
+            $this->fail('Expected exception did not occur.');
+        } catch (\Exception $e) {
+            if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
+                $expectedException = new InputException();
+                $expectedException->addError(
+                    __(
+                        InputException::REQUIRED_FIELD,
+                        ['fieldName' => Address::FIRSTNAME]
+                    )
+                );
+                $this->assertInstanceOf('SoapFault', $e);
+                $this->checkSoapFault(
+                    $e,
+                    $expectedException->getRawMessage(),
+                    'env:Sender',
+                    $expectedException->getParameters() // expected error parameters
+                );
+            } else {
+                $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+                $exceptionData = $this->processRestExceptionResult($e);
+                $expectedExceptionData = [
+                    'message' => InputException::REQUIRED_FIELD,
+                    'parameters' => ['fieldName' => Address::FIRSTNAME],
+                ];
+                $this->assertEquals($expectedExceptionData, $exceptionData);
+            }
+        }
+
+        try {
+            $this->customerRegistry->retrieveByEmail(
+                $customerDataArray[Customer::EMAIL],
+                $customerDataArray[Customer::WEBSITE_ID]
+            );
+            $this->fail('An expected NoSuchEntityException was not thrown.');
+        } catch (NoSuchEntityException $e) {
+            $exception = NoSuchEntityException::doubleField(
+                'email',
+                $customerDataArray[Customer::EMAIL],
+                'websiteId',
+                $customerDataArray[Customer::WEBSITE_ID]
+            );
+            $this->assertEquals(
+                $exception->getMessage(),
+                $e->getMessage(),
+                'Exception message does not match expected message.'
+            );
         }
     }
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Ui\Component\Listing\Column;
@@ -93,12 +93,13 @@ class Store extends Column
     protected function prepareItem(array $item)
     {
         $content = '';
+        if (!empty($item[$this->storeKey])) {
+            $origStores = $item[$this->storeKey];
+        }
 
-        if (empty($item[$this->storeKey])) {
+        if (empty($origStores)) {
             return '';
         }
-        $origStores = $item[$this->storeKey];
-
         if (!is_array($origStores)) {
             $origStores = [$origStores];
         }

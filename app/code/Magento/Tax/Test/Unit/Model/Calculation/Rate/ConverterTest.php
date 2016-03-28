@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Tax\Test\Unit\Model\Calculation\Rate;
@@ -29,7 +29,7 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->taxRateDataObjectFactory = $this->getMockBuilder(
             '\Magento\Tax\Api\Data\TaxRateInterfaceFactory'
@@ -75,7 +75,6 @@ class ConverterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals([], $this->converter->createTitleArrayFromServiceObject($taxRateMock));
     }
-
 
     public function testCreateArrayFromServiceObject()
     {

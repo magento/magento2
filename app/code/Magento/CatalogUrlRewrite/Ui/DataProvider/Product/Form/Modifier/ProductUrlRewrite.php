@@ -1,15 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Catalog\Model\AttributeConstantsInterface as AC;
 use Magento\Ui\Component\Form\Element\Checkbox;
 use Magento\Ui\Component\Form\Element\DataType\Text;
 use Magento\Ui\Component\Form\Field;
@@ -80,7 +80,12 @@ class ProductUrlRewrite extends AbstractModifier
      */
     protected function addUrlRewriteCheckbox(array $meta)
     {
-        $urlPath = $this->getElementArrayPath($meta, AC::CODE_SEO_FIELD_URL_KEY);
+        $urlPath = $this->arrayManager->findPath(
+            ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
+            $meta,
+            null,
+            'children'
+        );
 
         if ($urlPath) {
             $containerPath = $this->arrayManager->slicePath($urlPath, 0, -2);
@@ -105,13 +110,16 @@ class ProductUrlRewrite extends AbstractModifier
                 'componentType' => Field::NAME,
                 'formElement' => Checkbox::NAME,
                 'dataType' => Text::NAME,
-                'component' => 'Magento_CatalogUrlRewrite/js/components/url-key-handle-changes',
+                'component' => 'Magento_Catalog/js/components/url-key-handle-changes',
                 'valueMap' => [
                     'false' => '',
                     'true' => $urlKey
                 ],
                 'imports' => [
-                    'handleChanges' => '${ $.provider }:data.product.' . AC::CODE_SEO_FIELD_URL_KEY,
+                    'urlKey' => '${ $.provider }:data.product.' . ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
+                    'handleUseDefault' => '${ $.parentName }.url_key:isUseDefault',
+                    'handleChanges' => '${ $.provider }:data.product.'
+                        . ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
                 ],
                 'description' => __('Create Permanent Redirect for old URL'),
                 'dataScope' => 'url_key_create_redirect',

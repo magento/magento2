@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Block\Widget;
@@ -24,7 +24,7 @@ class AbstractWidgetTest extends \PHPUnit_Framework_TestCase
     /** @var AbstractWidget */
     private $_block;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_addressHelper = $this->getMock('Magento\Customer\Helper\Address', [], [], '', false);
 

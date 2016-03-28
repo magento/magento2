@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework;
@@ -72,20 +72,18 @@ class Escaper extends \Zend\Escaper\Escaper
 
     /**
      * Escape xss in urls
+     * Remove `javascript:`, `vbscript:`, `data:` words from url
      *
      * @param string $data
      * @return string
      */
     public function escapeXssInUrl($data)
     {
-        $result = $data;
-        $urlQuery = parse_url($data, PHP_URL_QUERY);
-        if ($urlQuery !== null && strpos($urlQuery, 'javascript') !== false) {
-            $result = str_replace($urlQuery, '', $data);
-        } elseif (parse_url($data, PHP_URL_HOST) === null) {
-            $result = str_replace('javascript', '', $data);
-        }
-        return htmlspecialchars($result, ENT_COMPAT, 'UTF-8', false);
+        $pattern = '/((javascript(\\\\x3a|:|%3A))|(data(\\\\x3a|:|%3A))|(vbscript:))|'
+            . '((\\\\x6A\\\\x61\\\\x76\\\\x61\\\\x73\\\\x63\\\\x72\\\\x69\\\\x70\\\\x74(\\\\x3a|:|%3A))|'
+            . '(\\\\x64\\\\x61\\\\x74\\\\x61(\\\\x3a|:|%3A)))/i';
+        $result = preg_replace($pattern, ':', $data);
+        return htmlspecialchars($result, ENT_COMPAT | ENT_HTML5 | ENT_HTML401, 'UTF-8', false);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Controller\Account;
@@ -35,7 +35,7 @@ class CreateTest extends \PHPUnit_Framework_TestCase
      */
     protected $orderCustomerService;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->checkoutSession = $this->getMock('\Magento\Checkout\Model\Session', ['getLastOrderId'], [], '', false);

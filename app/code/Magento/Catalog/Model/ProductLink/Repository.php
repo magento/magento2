@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -214,7 +214,7 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
         if (!$linkId) {
             throw new NoSuchEntityException(
                 __(
-                    'Product with SKU %1 is not linked to product with SKU %2',
+                    'Product with SKU \'%1\' is not linked to product with SKU \'%2\'',
                     $entity->getLinkedProductSku(),
                     $entity->getSku()
                 )
