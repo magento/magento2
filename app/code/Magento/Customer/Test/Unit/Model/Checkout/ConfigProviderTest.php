@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Model\Checkout;
@@ -41,7 +41,7 @@ class ConfigProviderTest extends \PHPUnit_Framework_TestCase
      */
     protected $store;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->storeManager = $this->getMockForAbstractClass(
             'Magento\Store\Model\StoreManagerInterface',

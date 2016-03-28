@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -69,8 +69,8 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             'No' => 0
         ],
         'product_has_weight' => [
-            'Yes' => 1,
-            'No' => 0,
+            'This item has weight' => 1,
+            'This item has no weight' => 0,
         ],
         'use_config_enable_qty_increments' => [
             'Yes' => 1,
