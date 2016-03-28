@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Api;
@@ -13,7 +13,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Customer as CustomerHelper;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\Framework\Webapi\Exception as HTTPExceptionCodes;
-use Magento\Security\Helper\SecurityConfig;
+use Magento\Security\Model\Config;
 
 /**
  * Test class for Magento\Customer\Api\AccountManagementInterface
@@ -104,16 +104,16 @@ class AccountManagementTest extends WebapiAbstract
         );
 
         if ($this->config->getConfigDataValue(
-            SecurityConfig::XML_PATH_FRONTED_AREA .
-            SecurityConfig::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD
+            Config::XML_PATH_FRONTED_AREA .
+            Config::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE
         ) != 0) {
             $this->configValue = $this->config
                 ->getConfigDataValue(
-                    SecurityConfig::XML_PATH_FRONTED_AREA .
-                    SecurityConfig::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD
+                    Config::XML_PATH_FRONTED_AREA .
+                    Config::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE
                 );
             $this->config->setDataByPath(
-                SecurityConfig::XML_PATH_FRONTED_AREA . SecurityConfig::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD,
+                Config::XML_PATH_FRONTED_AREA . Config::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE,
                 0
             );
             $this->config->save();
@@ -142,7 +142,7 @@ class AccountManagementTest extends WebapiAbstract
             }
         }
         $this->config->setDataByPath(
-            SecurityConfig::XML_PATH_FRONTED_AREA . SecurityConfig::XML_PATH_LIMIT_PASSWORD_RESET_REQUESTS_METHOD,
+            Config::XML_PATH_FRONTED_AREA . Config::XML_PATH_PASSWORD_RESET_PROTECTION_TYPE,
             $this->configValue
         );
         $this->config->save();

@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -213,14 +213,8 @@
                 line-height: 1;
                 margin-left: 10px;
                 position: absolute;
-                top: 1.2rem;
+                margin-top: .2rem;
                 z-index: 1;
-            }
-
-            &[data-config-scope] {
-                &:after {
-                    top: .2rem;
-                }
             }
         }
     }
@@ -312,6 +306,7 @@
 
     //  If there is a tooltip
     &._with-tooltip {
+        > .admin__control-addon,
         > .admin__field-option,
         > .admin__control-select,
         > .admin__control-text,
@@ -330,6 +325,7 @@
 
     //  If there is a fallback reset button
     &._with-reset {
+        > .admin__control-addon,
         > .admin__control-text,
         > .admin__control-textarea {
             width: ~'calc(100% - @{field-fallback-reset__width} - @{field-fallback-reset-icon__margin-left} - 4px)'; // Minus space size
@@ -343,6 +339,7 @@
 
         //  If both
         &._with-tooltip {
+            > .admin__control-addon,
             > .admin__control-text,
             > .admin__control-textarea {
                 width: ~'calc(100% - @{field-fallback-reset__width} - @{field-fallback-reset-icon__margin-left} - @{field-tooltip__width} - 8px)'; // Minus 2 space sizes
@@ -494,7 +491,7 @@
 
     .admin__field:nth-child(n+2):not(.admin__field-option):not(.admin__field-group-show-label) {
         > .admin__field-label {
-            .extend__visually-hidden();
+            &:extend(.abs-visually-hidden all);
         }
     }
 
@@ -538,7 +535,7 @@
 
             &:not(.admin__field-option):not(.admin__field-group-show-label):not(.admin__field-date) {
                 > .admin__field-label {
-                    .lib-visually-hidden();
+                    &:extend(.abs-visually-hidden all);
                 }
             }
         }
@@ -608,13 +605,14 @@
                 margin: 0;
                 opacity: 1;
                 position: static;
+                text-align: left;
             }
         }
 
         &:nth-child(n+2) {
             &:not(.admin__field-option):not(.admin__field-group-show-label):not(.admin__field-date) {
                 > .admin__field-label[class] {
-                    .lib-visually-hidden-reset();
+                    &:extend(.abs-visually-hidden-reset all);
                 }
             }
         }
@@ -663,38 +661,9 @@
     margin-bottom: 3rem;
     padding-left: @indent__s;
 
-    .admin_field-complex-title {
-        clear: both;
-        color: @collapsible-title__color;
-        font-size: @collapsible-title__font-size;
-        font-weight: @font-weight__semibold;
-        letter-spacing: .025em;
-        margin-bottom: @indent__s;
+    .admin__field:not(._hidden) + & {
+        margin-top: 3rem;
     }
-
-    .admin_field-complex-elements {
-        float: right;
-        max-width: 40%;
-
-        button {
-            margin-left: @indent__m;
-        }
-    }
-
-    .admin_field-complex-content {
-        max-width: 60%;
-        overflow: hidden;
-    }
-}
-
-//
-//  Complex Field
-//  _____________________________________________
-
-.admin_field-complex {
-    &:extend(.abs-clearfix all);
-    margin-bottom: 3rem;
-    padding-left: @indent__s;
 
     .admin_field-complex-title {
         clear: both;
