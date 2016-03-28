@@ -43,6 +43,8 @@ define(
                             this.selectPaymentMethod();
                             setPaymentMethodAction(this.messageContainer).done(
                                 function () {
+                                    $('body').trigger('processStart');
+
                                     $.get(
                                         this.path,
                                         {
