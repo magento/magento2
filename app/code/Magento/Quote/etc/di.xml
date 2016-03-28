@@ -87,4 +87,6 @@
     <preference for="Magento\Quote\Model\Quote\Address\FreeShippingInterface" type="Magento\Quote\Model\Quote\Address\FreeShipping" />
     <preference for="Magento\Quote\Model\GuestCart\GuestShippingMethodManagementInterface" type="Magento\Quote\Model\GuestCart\GuestShippingMethodManagement" />
     <preference for="Magento\Quote\Model\ShippingMethodManagementInterface" type="Magento\Quote\Model\ShippingMethodManagement" />
+    <preference for="Magento\Quote\Api\Data\ShippingInterface" type="Magento\Quote\Model\Shipping" />
+    <preference for="Magento\Quote\Api\Data\ShippingAssignmentInterface" type="Magento\Quote\Model\ShippingAssignment" />
 </config>
