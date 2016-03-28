@@ -35,14 +35,18 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
     }
 
     /**
-     * @return \Magento\SalesRule\Model\RuleFactory
+     * The getter function to get the new StoreManager dependency
+     *
+     * @return \Magento\Store\Model\StoreManagerInterface
+     *
      * @deprecated
      */
-    public function getStoreManager()
+    private function getStoreManager()
     {
-        if ($this->_storeManager instanceof \Magento\Store\Model\StoreManagerInterface) {
-            $this->_storeManager = ObjectManager::getInstance()->get('\Magento\Store\Model\StoreManagerInterface');
+        if ($this->_storeManager === null) {
+            $this->_storeManager = ObjectManager::getInstance()->get('Magento\Store\Model\StoreManagerInterface');
         }
+        return $this->_storeManager;
     }
 
     /**
@@ -57,15 +61,15 @@ class Order extends \Magento\Backend\Helper\Dashboard\AbstractDashboard
         if ($this->getParam('store')) {
             $this->_collection->addFieldToFilter('store_id', $this->getParam('store'));
         } elseif ($this->getParam('website')) {
-            $storeIds = $this->_storeManager->getWebsite($this->getParam('website'))->getStoreIds();
+            $storeIds = $this->getStoreManager()->getWebsite($this->getParam('website'))->getStoreIds();
             $this->_collection->addFieldToFilter('store_id', ['in' => implode(',', $storeIds)]);
         } elseif ($this->getParam('group')) {
-            $storeIds = $this->_storeManager->getGroup($this->getParam('group'))->getStoreIds();
+            $storeIds = $this->getStoreManager()->getGroup($this->getParam('group'))->getStoreIds();
             $this->_collection->addFieldToFilter('store_id', ['in' => implode(',', $storeIds)]);
         } elseif (!$this->_collection->isLive()) {
             $this->_collection->addFieldToFilter(
                 'store_id',
-                ['eq' => $this->_storeManager->getStore(\Magento\Store\Model\Store::ADMIN_CODE)->getId()]
+                ['eq' => $this->getStoreManager()->getStore(\Magento\Store\Model\Store::ADMIN_CODE)->getId()]
             );
         }
         $this->_collection->load();
