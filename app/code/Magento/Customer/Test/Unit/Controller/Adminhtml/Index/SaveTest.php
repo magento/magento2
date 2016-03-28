@@ -167,7 +167,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->sessionMock = $this->getMockBuilder('Magento\Backend\Model\Session')
             ->disableOriginalConstructor()
-            ->setMethods(['unsCustomerData', 'setCustomerData'])
+            ->setMethods(['unsCustomerFormData', 'setCustomerFormData'])
             ->getMock();
         $this->formFactoryMock = $this->getMockBuilder('Magento\Customer\Model\Metadata\FormFactory')
             ->disableOriginalConstructor()
@@ -500,7 +500,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('unsubscribeCustomerById');
 
         $this->sessionMock->expects($this->once())
-            ->method('unsCustomerData');
+            ->method('unsCustomerFormData');
 
         $this->registryMock->expects($this->once())
             ->method('register')
@@ -749,7 +749,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('subscribeCustomerById');
 
         $this->sessionMock->expects($this->once())
-            ->method('unsCustomerData');
+            ->method('unsCustomerFormData');
 
         $this->registryMock->expects($this->once())
             ->method('register')
@@ -888,7 +888,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('create');
 
         $this->sessionMock->expects($this->never())
-            ->method('unsCustomerData');
+            ->method('unsCustomerFormData');
 
         $this->registryMock->expects($this->never())
             ->method('register');
@@ -901,7 +901,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with(new \Magento\Framework\Message\Error('Validator Exception'));
 
         $this->sessionMock->expects($this->once())
-            ->method('setCustomerData')
+            ->method('setCustomerFormData')
             ->with($postValue);
 
         /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $redirectMock */
@@ -1028,7 +1028,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('create');
 
         $this->sessionMock->expects($this->never())
-            ->method('unsCustomerData');
+            ->method('unsCustomerFormData');
 
         $this->registryMock->expects($this->never())
             ->method('register');
@@ -1041,7 +1041,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with(new \Magento\Framework\Message\Error('Localized Exception'));
 
         $this->sessionMock->expects($this->once())
-            ->method('setCustomerData')
+            ->method('setCustomerFormData')
             ->with($postValue);
 
         /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $redirectMock */
@@ -1169,7 +1169,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->method('create');
 
         $this->sessionMock->expects($this->never())
-            ->method('unsCustomerData');
+            ->method('unsCustomerFormData');
 
         $this->registryMock->expects($this->never())
             ->method('register');
@@ -1182,7 +1182,7 @@ class SaveTest extends \PHPUnit_Framework_TestCase
             ->with($exception, __('Something went wrong while saving the customer.'));
 
         $this->sessionMock->expects($this->once())
-            ->method('setCustomerData')
+            ->method('setCustomerFormData')
             ->with($postValue);
 
         /** @var Redirect|\PHPUnit_Framework_MockObject_MockObject $redirectMock */
