@@ -40,31 +40,31 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
     >
 
     <?php
-    if (!$block->getElement()->getReadonly()) {
+    if (!$block->getElement()->getReadonly()):
         ?>
         <div class="image image-placeholder">
             <?php /* @escapeNotVerified */ echo $block->getUploaderHtml();
             ?>
             <div class="product-image-wrapper">
                 <p class="image-placeholder-text">
-                    <?php /* @escapeNotVerified */ echo __('Browse to find or drag image here'); ?>
+                    <?php /* @noEscape */ echo __('Browse to find or drag image here'); ?>
                 </p>
             </div>
         </div>
         <?php /* @escapeNotVerified */ echo $block->getChildHtml('additional_buttons'); ?>
         <?php
-    }
+    endif;
     ?>
     <?php
-    foreach ($block->getImageTypes() as $typeData) {
+    foreach ($block->getImageTypes() as $typeData):
         ?>
-        <input name="<?php /* @escapeNotVerified */ echo $block->escapeHtml($typeData['name']) ?>"
+        <input name="<?php echo $block->escapeHtml($typeData['name']) ?>"
                data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
-               class="image-<?php /* @escapeNotVerified */ echo $block->escapeHtml($typeData['code']) ?>"
+               class="image-<?php echo $block->escapeHtml($typeData['code']) ?>"
                type="hidden"
-               value="<?php /* @escapeNotVerified */ echo $block->escapeHtml($typeData['value']) ?>"/>
+               value="<?php echo $block->escapeHtml($typeData['value']) ?>"/>
         <?php
-    }
+    endforeach;
     ?>
     <script id="<?php /* @escapeNotVerified */ echo $block->getHtmlId() ?>-template" data-template="image" type="text/x-magento-template">
         <div class="image item <% if (data.disabled == 1) { %>hidden-for-front<% } %>  <% if (data.video_url) { %>video-item<% } %>"
@@ -141,21 +141,21 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                             class="action-remove"
                             data-role="delete-button"
                             title="<% if (data.media_type == 'external-video') {%>
-                            <?php /* @escapeNotVerified */ echo __('Delete video') ?>
+                            <?php /* @noEscape */echo __('Delete video') ?>
                         <%} else {%>
-                            <?php /* @escapeNotVerified */ echo __('Delete image') ?>
+                            <?php /* @noEscape */ echo __('Delete image') ?>
                         <%}%>">
                     <span>
                         <% if (data.media_type == 'external-video') { %>
-                        <?php /* @escapeNotVerified */ echo __('Delete video') ?>
+                        <?php /* @noEscape */ echo __('Delete video') ?>
                         <% } else {%>
-                        <?php /* @escapeNotVerified */ echo __('Delete image') ?>
+                        <?php /* @noEscape */ echo __('Delete image') ?>
                         <%} %>
                     </span>
                     </button>
                     <div class="draggable-handle"></div>
                 </div>
-                <div class="image-fade"><span><?php /* @escapeNotVerified */ echo __('Hidden') ?></span></div>
+                <div class="image-fade"><span><?php /* @noEscape */ echo __('Hidden') ?></span></div>
             </div>
 
             <div class="item-description">
@@ -171,17 +171,17 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
 
             <ul class="item-roles" data-role="roles-labels">
                 <?php
-                foreach ($block->getImageTypes() as $typeData) {
+                foreach ($block->getImageTypes() as $typeData):
                     ?>
-                    <li data-role-code="<?php /* @escapeNotVerified */ echo $block->escapeHtml(
+                    <li data-role-code="<?php echo $block->escapeHtml(
                         $typeData['code']
-                    ) ?>" class="item-role item-role-<?php /* @escapeNotVerified */ echo $block->escapeHtml(
+                    ) ?>" class="item-role item-role-<?php echo $block->escapeHtml(
                         $typeData['code']
                     ) ?>">
-                        <?php /* @escapeNotVerified */ echo $block->escapeHtml($typeData['label']) ?>
+                        <?php echo $block->escapeHtml($typeData['label']) ?>
                     </li>
                     <?php
-                }
+                endforeach;
                 ?>
             </ul>
         </div>
@@ -217,7 +217,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
 
                     <div class="admin__field field-image-role">
                         <label class="admin__field-label">
-                            <span><?php /* @escapeNotVerified */ echo __('Role')?></span>
+                            <span><?php /* @noEscape */ echo __('Role')?></span>
                         </label>
                         <div class="admin__field-control">
                             <ul class="multiselect-alt">
@@ -230,7 +230,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                                                    data-role="type-selector"
                                                    data-form-part="<?php /* @escapeNotVerified */ echo $formName ?>"
                                                    type="checkbox"
-                                                   value="<?php /* @escapeNotVerified */ echo $block->escapeHtml(
+                                                   value="<?php echo $block->escapeHtml(
                                                        $attribute->getAttributeCode()
                                                    ) ?>"
                                                 />
@@ -273,7 +273,7 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                                 <% if (data.disabled == 1) { %>checked="checked"<% } %> />
 
                                 <label for="hide-from-product-page" class="admin__field-label">
-                                    <?php /* @escapeNotVerified */ echo __('Hide from Product Page')?>
+                                    <?php /* @noEscape */ echo __('Hide from Product Page')?>
                                 </label>
                             </div>
                         </div>
@@ -281,21 +281,21 @@ $elementToggleCode = $element->getToggleCode() ? $element->getToggleCode() : 'to
                 </fieldset>
             </div>
     </script>
-    <div id="<?php /* @escapeNotVerified */ echo $block->getNewVideoBlockName();?>" style="display:none">
+    <div id="<?php /* @noEscape */ echo $block->getNewVideoBlockName();?>" style="display:none">
         <?php /* @escapeNotVerified */ echo $block->getFormHtml();?>
         <div id="video-player-preview-location" class="video-player-sidebar">
             <div class="video-player-container"></div>
             <div class="video-information title">
-                <label><?php /* @escapeNotVerified */ echo __('Title:') ?> </label><span></span>
+                <label><?php /* @noEscape */ echo __('Title:') ?> </label><span></span>
             </div>
             <div class="video-information uploaded">
-                <label><?php /* @escapeNotVerified */ echo __('Uploaded:') ?> </label><span></span>
+                <label><?php /* @noEscape */ echo __('Uploaded:') ?> </label><span></span>
             </div>
             <div class="video-information uploader">
-                <label><?php /* @escapeNotVerified */ echo __('Uploader:') ?> </label><span></span>
+                <label><?php /* @noEscape */ echo __('Uploader:') ?> </label><span></span>
             </div>
             <div class="video-information duration">
-                <label><?php /* @escapeNotVerified */ echo __('Duration:') ?> </label><span></span>
+                <label><?php /* @noEscape */ echo __('Duration:') ?> </label><span></span>
             </div>
         </div>
     </div>
