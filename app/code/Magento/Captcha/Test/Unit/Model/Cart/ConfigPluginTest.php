@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Test\Unit\Model\Cart;
@@ -17,7 +17,7 @@ class ConfigPluginTest extends \PHPUnit_Framework_TestCase
      */
     protected $configProviderMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->configProviderMock = $this->getMock('\Magento\Captcha\Model\Checkout\ConfigProvider', [], [], '', false);
         $this->model = new \Magento\Captcha\Model\Cart\ConfigPlugin(

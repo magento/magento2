@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Test\Unit\Model\Entity\Collection;
@@ -69,7 +69,7 @@ class AbstractCollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $statementMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->coreEntityFactoryMock = $this->getMock(
             'Magento\Framework\Data\Collection\EntityFactory',

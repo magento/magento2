@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,7 @@
 namespace Magento\Bundle\Test\Unit\Model;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Bundle\Model\LinkManagement;
 
 /**
  * Class LinkManagementTest
@@ -172,7 +173,7 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->model = $helper->getObject(
-            '\Magento\Bundle\Model\LinkManagement',
+            LinkManagement::class,
             [
                 'productRepository' => $this->productRepository,
                 'linkFactory' => $this->linkFactory,
@@ -181,9 +182,12 @@ class LinkManagementTest extends \PHPUnit_Framework_TestCase
                 'optionCollection' => $this->optionCollectionFactoryMock,
                 'storeManager' => $this->storeManagerMock,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
-                'metadataPool' => $this->metadataPoolMock
             ]
         );
+        $refClass = new \ReflectionClass(LinkManagement::class);
+        $refProperty = $refClass->getProperty('metadataPool');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($this->model, $this->metadataPoolMock);
     }
 
     public function testGetChildren()
