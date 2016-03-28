@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Test\Unit\Component\Control;
@@ -60,7 +60,7 @@ class ActionPoolTest extends \PHPUnit_Framework_TestCase
      */
     protected $key = 'id';
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMock(
             'Magento\Framework\View\Element\UiComponent\Context',

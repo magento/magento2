@@ -2,7 +2,7 @@
 /**
  * Grouped product type implementation
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Model\Product\Type;
@@ -464,6 +464,8 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function beforeSave($product)
     {
+        //clear cached associated links
+        $product->unsetData($this->_keyAssociatedProducts);
         if ($product->hasData('product_options') && !empty($product->getData('product_options'))) {
             throw new \Exception('Custom options for grouped product type are not supported');
         }

@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\ResourceModel\Page\Grid;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Framework\Search\AggregationInterface;
+use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Cms\Model\ResourceModel\Page\Collection as PageCollection;
 
 /**
@@ -19,6 +19,11 @@ class Collection extends PageCollection implements SearchResultInterface
      * @var AggregationInterface
      */
     protected $aggregations;
+
+    /**
+     * @var \Magento\Framework\View\Element\UiComponent\DataProvider\Document[]
+     */
+    private $loadedData;
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
@@ -85,20 +90,6 @@ class Collection extends PageCollection implements SearchResultInterface
         $this->aggregations = $aggregations;
     }
 
-
-    /**
-     * Retrieve all ids for collection
-     * Backward compatibility with EAV collection
-     *
-     * @param int $limit
-     * @param int $offset
-     * @return array
-     */
-    public function getAllIds($limit = null, $offset = null)
-    {
-        return $this->getConnection()->fetchCol($this->_getAllIdsSelect($limit, $offset), $this->_bindParams);
-    }
-
     /**
      * Get search criteria.
      *
@@ -153,5 +144,26 @@ class Collection extends PageCollection implements SearchResultInterface
     public function setItems(array $items = null)
     {
         return $this;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getItems()
+    {
+        if (isset($this->loadedData)) {
+            return $this->loadedData;
+        }
+        /** @var \Magento\Cms\Model\Page $page */
+        $page = $this->_entityFactory->create(\Magento\Cms\Model\Page::class);
+        /** Load every record separately to make sure the list of associated stores is available */
+        /** @var \Magento\Framework\View\Element\UiComponent\DataProvider\Document $pageDocument */
+        foreach (parent::getItems() as $pageDocument) {
+            $this->loadedData[$pageDocument->getId()] = $pageDocument->setData(
+                $page->load($pageDocument->getId())->getData()
+            );
+        }
+
+        return $this->loadedData;
     }
 }

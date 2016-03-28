@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -900,12 +900,14 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
 
     /**
      * @magentoAppArea adminhtml
-     * @magentoDbIsolation disabled
+     * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/category_duplicates.php
      */
     public function testProductDuplicateCategories()
     {
+        $this->markTestSkipped('Due to MAGETWO-48956');
+
         $csvFixture = 'products_duplicate_category.csv';
         // import data from CSV file
         $pathToFile = __DIR__ . '/_files/' . $csvFixture;
@@ -935,7 +937,6 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             \Magento\Catalog\Model\Category::class
         );
 
-        $category->setStoreId(1);
         $category->load(444);
 
         $this->assertTrue($category !== null);
@@ -950,11 +951,11 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             \Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregator::class
         );
         $errorCount = count($errorProcessor->getAllErrors());
+        $this->assertTrue($errorCount === 1 , 'Error expected');
 
         $errorMessage = $errorProcessor->getAllErrors()[0]->getErrorMessage();
         $this->assertContains('URL key for specified store already exists' , $errorMessage);
         $this->assertContains('Default Category/Category 2' , $errorMessage);
-        $this->assertTrue($errorCount === 1 , 'Error expected');
 
         $categoryAfter = $this->loadCategoryByName('Category 2');
         $this->assertTrue($categoryAfter === null);
@@ -1051,5 +1052,154 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         )->validateData();
 
         $this->assertTrue($errors->getErrorsCount() == 0);
+    }
+
+    /**
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     */
+    public function testProductWithLinks()
+    {
+        $linksData = [
+            'upsell' => [
+                'simple1' => '3',
+                'simple3' => '1'
+            ],
+            'crosssell' => [
+                'simple2' => '1',
+                'simple3' => '2'
+            ],
+            'related' => [
+                'simple1' => '2',
+                'simple2' => '1'
+            ]
+        ];
+        // import data from CSV file
+        $pathToFile = __DIR__ . '/_files/products_to_import_with_product_links.csv';
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Framework\Filesystem'
+        );
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            '\Magento\ImportExport\Model\Import\Source\Csv',
+            [
+                'file' => $pathToFile,
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setSource(
+            $source
+        )->setParameters(
+            [
+                'behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND,
+                'entity' => 'catalog_product'
+            ]
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $resource = $objectManager->get('Magento\Catalog\Model\ResourceModel\Product');
+        $productId = $resource->getIdBySku('simple4');
+        /** @var \Magento\Catalog\Model\Product $product */
+        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Model\Product'
+        );
+        $product->load($productId);
+        $productLinks = [
+            'upsell' => $product->getUpSellProducts(),
+            'crosssell' => $product->getCrossSellProducts(),
+            'related' => $product->getRelatedProducts()
+        ];
+        $importedProductLinks = [];
+        foreach ($productLinks as $linkType => $linkedProducts) {
+            foreach ($linkedProducts as $linkedProductData) {
+                $importedProductLinks[$linkType][$linkedProductData->getSku()] = $linkedProductData->getPosition();
+            }
+        }
+        $this->assertEquals($linksData, $importedProductLinks);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoAppIsolation enabled
+     */
+    public function testExistingProductWithUrlKeys()
+    {
+        $this->markTestSkipped('Test must be unskiped after implementation MAGETWO-48871');
+        $products = [
+            'simple1' => 'url-key1',
+            'simple2' => 'url-key2',
+            'simple3' => 'url-key3'
+        ];
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Framework\Filesystem');
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            '\Magento\ImportExport\Model\Import\Source\Csv',
+            [
+                'file' => __DIR__ . '/_files/products_to_import_with_valid_url_keys.csv',
+                'directory' => $directory
+            ]
+        );
+
+        $errors = $this->_model->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            'Magento\Catalog\Api\ProductRepositoryInterface'
+        );
+        foreach ($products as $productSku => $productUrlKey) {
+            $this->assertEquals($productUrlKey, $productRepository->get($productSku)->getUrlKey());
+        }
+    }
+
+    /**
+     * @magentoAppIsolation enabled
+     */
+    public function testProductWithUseConfigSettings()
+    {
+        $products = [
+            'simple1' => true,
+            'simple2' => true,
+            'simple3' => false
+        ];
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Framework\Filesystem');
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            '\Magento\ImportExport\Model\Import\Source\Csv',
+            [
+                'file' => __DIR__ . '/_files/products_to_import_with_use_config_settings.csv',
+                'directory' => $directory
+            ]
+        );
+
+        $errors = $this->_model->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+
+        foreach ($products as $sku => $manageStockUseConfig) {
+            /** @var \Magento\CatalogInventory\Model\StockRegistry $stockRegistry */
+            $stockRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                'Magento\CatalogInventory\Model\StockRegistry'
+            );
+            $stockItem = $stockRegistry->getStockItemBySku($sku);
+            $this->assertEquals($manageStockUseConfig, $stockItem->getUseConfigManageStock());
+        }
     }
 }

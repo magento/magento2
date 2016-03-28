@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
@@ -52,6 +52,9 @@ class Edit extends \Magento\Catalog\Controller\Adminhtml\Category
     public function execute()
     {
         $storeId = (int)$this->getRequest()->getParam('store');
+        $store = $this->storeManager->getStore($storeId);
+        $this->storeManager->setCurrentStore($store->getCode());
+
         $categoryId = (int)$this->getRequest()->getParam('id');
 
         if (!$categoryId) {
