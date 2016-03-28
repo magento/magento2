@@ -1,12 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Security\Test\Unit\Model\SecurityChecker;
 
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Security\Model\ConfigInterface;
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 /**
  * Test class for \Magento\Security\Model\SecurityChecker\Frequency testing
@@ -19,24 +22,34 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Security\Helper\SecurityConfig
+     * @var ConfigInterface
      */
     protected $securityConfigMock;
 
     /**
      * @var \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory
      */
-    protected $passwordResetRequestEventCollectionFactoryMock;
+    protected $collectionFactoryMock;
 
     /**
      * @var \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection
      */
-    protected $passwordResetRequestEventCollectionMock;
+    protected $collectionMock;
+
+    /**
+     * @var DateTime
+     */
+    protected $dateTimeMock;
 
     /**
      * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
      */
     protected $objectManager;
+
+    /*
+     * @var RemoteAddress
+     */
+    protected $remoteAddressMock;
 
     /**
      * Init mocks for tests
@@ -45,21 +58,19 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->securityConfigMock = $this->getMock(
-            'Magento\Security\Helper\SecurityConfig',
-            [
-                'getRemoteIp',
-                'getLimitPasswordResetRequestsMethod',
-                'getLimitTimeBetweenPasswordResetRequests',
-                'getCustomerServiceEmail',
-                'getCurrentTimestamp'
-            ],
-            [],
-            '',
-            false
-        );
+        $this->securityConfigMock =  $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->securityConfigMock->expects($this->any())
+            ->method('getScopeByEventType')
+            ->willReturnMap(
+                [
+                    [0, 1],
+                    [1, 0]
+                ]
+            );
 
-        $this->passwordResetRequestEventCollectionFactoryMock = $this->getMock(
+        $this->collectionFactoryMock = $this->getMock(
             '\Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory',
             ['create'],
             [],
@@ -67,7 +78,7 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->passwordResetRequestEventCollectionMock = $this->getMock(
+        $this->collectionMock = $this->getMock(
             '\Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection',
             ['addFieldToFilter', 'filterLastItem', 'getFirstItem'],
             [],
@@ -75,11 +86,21 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->dateTimeMock =  $this->getMockBuilder(DateTime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->remoteAddressMock =  $this->getMockBuilder(RemoteAddress::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = $this->objectManager->getObject(
             'Magento\Security\Model\SecurityChecker\Frequency',
             [
                 'securityConfig' => $this->securityConfigMock,
-                'passwordResetRequestEventCollectionFactory' => $this->passwordResetRequestEventCollectionFactoryMock
+                'collectionFactory' => $this->collectionFactoryMock,
+                'dateTime' => $this->dateTimeMock,
+                'remoteAddress' => $this->remoteAddressMock
             ]
         );
     }
@@ -96,8 +117,8 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
 
         $this->prepareTestCheck($requestsMethod, $limitTimeBetweenPasswordResetRequests);
 
-        $this->securityConfigMock->expects($this->once())
-            ->method('getCurrentTimestamp')
+        $this->dateTimeMock->expects($this->once())
+            ->method('gmtTimestamp')
             ->willReturn($timestamp);
 
         /** @var \Magento\Security\Model\PasswordResetRequestEvent $record */
@@ -106,7 +127,7 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
             date("Y-m-d H:i:s", $timestamp - $limitTimeBetweenPasswordResetRequests)
         );
 
-        $this->passwordResetRequestEventCollectionMock->expects($this->once())
+        $this->collectionMock->expects($this->once())
             ->method('getFirstItem')
             ->willReturn($record);
 
@@ -127,8 +148,8 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
 
         $this->prepareTestCheck($requestsMethod, $limitTimeBetweenPasswordResetRequests);
 
-        $this->securityConfigMock->expects($this->once())
-            ->method('getCurrentTimestamp')
+        $this->dateTimeMock->expects($this->once())
+            ->method('gmtTimestamp')
             ->willReturn($timestamp);
 
         /** @var \Magento\Security\Model\PasswordResetRequestEvent $record */
@@ -137,7 +158,7 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
             date("Y-m-d H:i:s", $timestamp - $limitTimeBetweenPasswordResetRequests + 1)
         );
 
-        $this->passwordResetRequestEventCollectionMock->expects($this->once())
+        $this->collectionMock->expects($this->once())
             ->method('getFirstItem')
             ->willReturn($record);
 
@@ -183,31 +204,31 @@ class FrequencyTest extends \PHPUnit_Framework_TestCase
      */
     protected function prepareTestCheck($requestsMethod, $limitTimeBetweenPasswordResetRequests)
     {
-        $this->securityConfigMock->expects($this->once())
-            ->method('getRemoteIp')
+        $this->remoteAddressMock->expects($this->once())
+            ->method('getRemoteAddress')
             ->will($this->returnValue(12345));
 
         $this->securityConfigMock->expects($this->any())
-            ->method('getLimitPasswordResetRequestsMethod')
+            ->method('getPasswordResetProtectionType')
             ->will($this->returnValue($requestsMethod));
 
         $this->securityConfigMock->expects($this->once())
-            ->method('getLimitTimeBetweenPasswordResetRequests')
+            ->method('getMinTimeBetweenPasswordResetRequests')
             ->will($this->returnValue($limitTimeBetweenPasswordResetRequests));
 
         $this->securityConfigMock->expects($this->any())
             ->method('getCustomerServiceEmail')
             ->will($this->returnValue('test@host.com'));
 
-        $this->passwordResetRequestEventCollectionFactoryMock->expects($this->once())
+        $this->collectionFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($this->passwordResetRequestEventCollectionMock);
+            ->willReturn($this->collectionMock);
 
-        $this->passwordResetRequestEventCollectionMock->expects($this->any())
+        $this->collectionMock->expects($this->any())
             ->method('addFieldToFilter')
             ->willReturnSelf();
 
-        $this->passwordResetRequestEventCollectionMock->expects($this->once())
+        $this->collectionMock->expects($this->once())
             ->method('filterLastItem')
             ->willReturnSelf();
     }

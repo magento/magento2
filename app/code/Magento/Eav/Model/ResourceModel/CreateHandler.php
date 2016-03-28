@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ namespace Magento\Eav\Model\ResourceModel;
 use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Eav\Api\AttributeRepositoryInterface as AttributeRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Model\Entity\ScopeResolver;
 
 /**
  * Class CreateHandler
@@ -18,39 +19,49 @@ class CreateHandler
     /**
      * @var AttributeRepository
      */
-    protected $attributeRepository;
+    private $attributeRepository;
 
     /**
      * @var MetadataPool
      */
-    protected $metadataPool;
+    private $metadataPool;
 
     /**
      * @var SearchCriteriaBuilder
      */
-    protected $searchCriteriaBuilder;
+    private $searchCriteriaBuilder;
 
     /**
      * @var AttributePersistor
      */
-    protected $attributePersistor;
+    private $attributePersistor;
 
     /**
+     * @var ScopeResolver
+     */
+    private $scopeResolver;
+
+    /**
+     * CreateHandler constructor.
+     *
      * @param AttributeRepository $attributeRepository
      * @param MetadataPool $metadataPool
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param AttributePersistor $attributePersistor
+     * @param ScopeResolver $scopeResolver
      */
     public function __construct(
         AttributeRepository $attributeRepository,
         MetadataPool $metadataPool,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        AttributePersistor $attributePersistor
+        AttributePersistor $attributePersistor,
+        ScopeResolver $scopeResolver
     ) {
         $this->attributeRepository = $attributeRepository;
         $this->metadataPool = $metadataPool;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->attributePersistor = $attributePersistor;
+        $this->scopeResolver = $scopeResolver;
     }
 
     /**
@@ -63,28 +74,9 @@ class CreateHandler
         $metadata = $this->metadataPool->getMetadata($entityType);
         $searchResult = $this->attributeRepository->getList(
             $metadata->getEavEntityType(),
-            $this->searchCriteriaBuilder->create()
+            $this->searchCriteriaBuilder->addFilter('attribute_set_id', null, 'neq')->create()
         );
         return $searchResult->getItems();
-    }
-
-    /**
-     * @param string $entityType
-     * @param array $data
-     * @return array
-     */
-    protected function getActionContext($entityType, $data)
-    {
-        $metadata = $this->metadataPool->getMetadata($entityType);
-        $contextFields = $metadata->getEntityContext();
-        $context = [];
-        foreach ($contextFields as $field) {
-            if (isset($data[$field])) {
-                $data[$field] = 0;
-                $context[$field] = $data[$field];
-            }
-        }
-        return $context;
     }
 
     /**
@@ -99,7 +91,6 @@ class CreateHandler
 
         $metadata = $this->metadataPool->getMetadata($entityType);
         if ($metadata->getEavEntityType()) {
-            $context = $this->getActionContext($entityType, $data);
             $processed = [];
             foreach ($this->getAttributes($entityType) as $attribute) {
                 if ($attribute->isStatic()) {
@@ -117,6 +108,7 @@ class CreateHandler
                     $processed[$attribute->getAttributeCode()] = $data[$attribute->getAttributeCode()];
                 }
             }
+            $context = $this->scopeResolver->getEntityContext($entityType, $data);
             $this->attributePersistor->flush($entityType, $context);
         }
         return $data;

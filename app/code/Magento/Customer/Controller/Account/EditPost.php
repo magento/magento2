@@ -1,11 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
 
+use Magento\Customer\Model\AuthenticationInterface;
+use Magento\Customer\Model\EmailNotificationInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -13,8 +16,6 @@ use Magento\Customer\Model\CustomerExtractor;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\InputException;
-use Magento\Customer\Helper\EmailNotification;
-use Magento\Customer\Helper\AccountManagement;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\State\UserLockedException;
 
@@ -54,13 +55,18 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      */
     protected $session;
 
-    /** @var EmailNotification */
-    protected $emailNotification;
+    /** @var EmailNotificationInterface */
+    private $emailNotification;
 
     /**
-     * @var AccountManagement
+     * @var ScopeConfigInterface
      */
-    protected $accountManagementHelper;
+    private $scopeConfig;
+
+    /**
+     * @var AuthenticationInterface
+     */
+    private $authentication;
 
     /**
      * @param Context $context
@@ -87,58 +93,33 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     }
 
     /**
-     * Set account management helper
+     * Get authentication
      *
-     * @param AccountManagement $accountManagementHelper
-     * @return void
-     * @deprecated
+     * @return AuthenticationInterface
      */
-    public function setAccountManagementHelper(AccountManagement $accountManagementHelper)
+    private function getAuthentication()
     {
-        $this->accountManagementHelper = $accountManagementHelper;
-    }
 
-    /**
-     * Get account management helper
-     *
-     * @return AccountManagement
-     * @deprecated
-     */
-    public function getAccountManagementHelper()
-    {
-        if (!($this->accountManagementHelper instanceof \Magento\Customer\Helper\AccountManagement)) {
+        if (!($this->authentication instanceof AuthenticationInterface)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Customer\Helper\AccountManagement'
+                \Magento\Customer\Model\AuthenticationInterface::class
             );
         } else {
-            return $this->accountManagementHelper;
+            return $this->authentication;
         }
-    }
-
-    /**
-     * Set email notification
-     *
-     * @param \Magento\Customer\Helper\EmailNotification $emailNotification
-     * @return void
-     * @deprecated
-     */
-    public function setEmailNotification(\Magento\Customer\Helper\EmailNotification $emailNotification)
-    {
-
-        $this->emailNotification = $emailNotification;
     }
 
     /**
      * Get email notification
      *
-     * @return \Magento\Customer\Helper\EmailNotification
+     * @return EmailNotificationInterface
      * @deprecated
      */
-    public function getEmailNotification()
+    private function getEmailNotification()
     {
-        if (!($this->emailNotification instanceof \Magento\Customer\Helper\EmailNotification)) {
+        if (!($this->emailNotification instanceof EmailNotificationInterface)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Customer\Helper\EmailNotification'
+                EmailNotificationInterface::class
             );
         } else {
             return $this->emailNotification;
@@ -154,12 +135,10 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     {
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        if (!$this->formKeyValidator->validate($this->getRequest())) {
-            return $resultRedirect->setPath('*/*/edit');
-        }
+        $validFormKey = $this->formKeyValidator->validate($this->getRequest());
 
-        if ($this->getRequest()->isPost()) {
-            $currentCustomerDataObject = $this->getCurrentCustomerDataObject();
+        if ($validFormKey && $this->getRequest()->isPost()) {
+            $currentCustomerDataObject = $this->getCustomerDataObject($this->session->getCustomerId());
             $customerCandidateDataObject = $this->populateNewCustomerDataObject(
                 $this->_request,
                 $currentCustomerDataObject
@@ -167,15 +146,15 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
 
             try {
                 // whether a customer enabled change email option
-                $this->changeEmail($currentCustomerDataObject);
+                $this->processChangeEmailRequest($currentCustomerDataObject);
 
                 // whether a customer enabled change password option
-                $isPasswordChanged = $this->changePassword($currentCustomerDataObject);
+                $isPasswordChanged = $this->changeCustomerPassword($currentCustomerDataObject->getEmail());
 
                 $this->customerRepository->save($customerCandidateDataObject);
-                $this->getEmailNotification()->sendNotificationEmailsIfRequired(
-                    $currentCustomerDataObject,
+                $this->getEmailNotification()->credentialsChanged(
                     $customerCandidateDataObject,
+                    $currentCustomerDataObject->getEmail(),
                     $isPasswordChanged
                 );
                 $this->dispatchSuccessEvent($customerCandidateDataObject);
@@ -184,9 +163,13 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
             } catch (InvalidEmailOrPasswordException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (UserLockedException $e) {
+                $message = __(
+                    'The account is locked. Please wait and try again or contact %1.',
+                    $this->getScopeConfig()->getValue('contact/email/recipient_email')
+                );
                 $this->session->logout();
                 $this->session->start();
-                $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addError($message);
                 return $resultRedirect->setPath('customer/account/login');
             } catch (InputException $e) {
                 $this->messageManager->addError($e->getMessage());
@@ -200,48 +183,25 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
             }
 
             $this->session->setCustomerFormData($this->getRequest()->getPostValue());
-            return $resultRedirect->setPath('*/*/edit');
         }
 
         return $resultRedirect->setPath('*/*/edit');
     }
 
     /**
-     * Change email if required
+     * Get scope config
      *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $currentCustomerDataObject
-     * @return $this
-     * @throws InvalidEmailOrPasswordException
+     * @return ScopeConfigInterface
      */
-    protected function changeEmail(\Magento\Customer\Api\Data\CustomerInterface $currentCustomerDataObject)
+    private function getScopeConfig()
     {
-        if ($this->getRequest()->getParam('change_email')) {
-            $this->getAccountManagementHelper()->validatePasswordAndLockStatus(
-                $currentCustomerDataObject,
-                $this->getRequest()->getPost('current_password')
+        if (!($this->scopeConfig instanceof \Magento\Framework\App\Config\ScopeConfigInterface)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Framework\App\Config\ScopeConfigInterface::class
             );
+        } else {
+            return $this->scopeConfig;
         }
-
-        return $this;
-    }
-
-    /**
-     * Change password if required
-     *
-     * @param \Magento\Customer\Api\Data\CustomerInterface $currentCustomerDataObject
-     * @return bool
-     * @throws InputException
-     */
-    protected function changePassword(\Magento\Customer\Api\Data\CustomerInterface $currentCustomerDataObject)
-    {
-        $isPasswordChanged = false;
-        if ($this->getRequest()->getParam('change_password')) {
-            $isPasswordChanged = $this->changeCustomerPassword(
-                $currentCustomerDataObject->getEmail()
-            );
-        }
-
-        return $isPasswordChanged;
     }
 
     /**
@@ -250,7 +210,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * @param \Magento\Customer\Api\Data\CustomerInterface $customerCandidateDataObject
      * @return void
      */
-    protected function dispatchSuccessEvent(\Magento\Customer\Api\Data\CustomerInterface $customerCandidateDataObject)
+    private function dispatchSuccessEvent(\Magento\Customer\Api\Data\CustomerInterface $customerCandidateDataObject)
     {
         $this->_eventManager->dispatch(
             'customer_account_edited',
@@ -259,13 +219,15 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
     }
 
     /**
+     * Get customer data object
+     *
+     * @param int $customerId
+     *
      * @return \Magento\Customer\Api\Data\CustomerInterface
      */
-    protected function getCurrentCustomerDataObject()
+    private function getCustomerDataObject($customerId)
     {
-        return $this->customerRepository->getById(
-            $this->session->getCustomerId()
-        );
+        return $this->customerRepository->getById($customerId);
     }
 
     /**
@@ -275,7 +237,7 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * @param \Magento\Customer\Api\Data\CustomerInterface $currentCustomerData
      * @return \Magento\Customer\Api\Data\CustomerInterface
      */
-    protected function populateNewCustomerDataObject(
+    private function populateNewCustomerDataObject(
         \Magento\Framework\App\RequestInterface $inputData,
         \Magento\Customer\Api\Data\CustomerInterface $currentCustomerData
     ) {
@@ -295,18 +257,46 @@ class EditPost extends \Magento\Customer\Controller\AbstractAccount
      * Change customer password
      *
      * @param string $email
-     * @return bool
+     * @return boolean
      * @throws InvalidEmailOrPasswordException|InputException
      */
     protected function changeCustomerPassword($email)
     {
-        $currPass = $this->getRequest()->getPost('current_password');
-        $newPass = $this->getRequest()->getPost('password');
-        $confPass = $this->getRequest()->getPost('password_confirmation');
-        if ($newPass != $confPass) {
-            throw new InputException(__('Password confirmation doesn\'t match entered password.'));
+        $isPasswordChanged = false;
+        if ($this->getRequest()->getParam('change_password')) {
+            $currPass = $this->getRequest()->getPost('current_password');
+            $newPass = $this->getRequest()->getPost('password');
+            $confPass = $this->getRequest()->getPost('password_confirmation');
+            if ($newPass != $confPass) {
+                throw new InputException(__('Password confirmation doesn\'t match entered password.'));
+            }
+
+            $isPasswordChanged = $this->customerAccountManagement->changePassword($email, $currPass, $newPass);
         }
 
-        return $this->customerAccountManagement->changePassword($email, $currPass, $newPass);
+        return $isPasswordChanged;
+    }
+
+    /**
+     * Process change email request
+     *
+     * @param \Magento\Customer\Api\Data\CustomerInterface $currentCustomerDataObject
+     * @return void
+     * @throws InvalidEmailOrPasswordException
+     * @throws UserLockedException
+     */
+    private function processChangeEmailRequest(\Magento\Customer\Api\Data\CustomerInterface $currentCustomerDataObject)
+    {
+        if ($this->getRequest()->getParam('change_email')) {
+            // authenticate user for changing email
+            try {
+                $this->getAuthentication()->authenticate(
+                    $currentCustomerDataObject->getId(),
+                    $this->getRequest()->getPost('current_password')
+                );
+            } catch (InvalidEmailOrPasswordException $e) {
+                throw new InvalidEmailOrPasswordException(__('The password doesn\'t match this account.'));
+            }
+        }
     }
 }

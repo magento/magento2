@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Observer;
 
+use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Customer\Observer\CustomerLoginSuccessObserver;
 
@@ -14,21 +15,11 @@ use Magento\Customer\Observer\CustomerLoginSuccessObserver;
 class CustomerLoginSuccessObserverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Account manager
+     * Authentication
      *
-     * @var \Magento\Customer\Helper\AccountManagement
+     * @var AuthenticationInterface
      */
-    protected $accountManagementHelperMock;
-
-    /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface
-     */
-    protected $customerRepositoryMock;
-
-    /**
-     * @var \Magento\Customer\Model\Data\Customer
-     */
-    protected $customerDataMock;
+    protected $authenticationMock;
 
     /**
      * @var \Magento\Customer\Model\Customer
@@ -45,20 +36,14 @@ class CustomerLoginSuccessObserverTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $this->accountManagementHelperMock = $this->getMock(
-            'Magento\Customer\Helper\AccountManagement',
-            ['processUnlockData'],
+        $this->authenticationMock = $this->getMock(
+            AuthenticationInterface::class,
+            [],
             [],
             '',
             false
         );
-        $this->customerDataMock = $this->getMock(
-            'Magento\Customer\Model\Data\Customer',
-            ['getId'],
-            [],
-            '',
-            false
-        );
+
         $this->customerModelMock = $this->getMock(
             'Magento\Customer\Model\Customer',
             ['getId'],
@@ -66,13 +51,8 @@ class CustomerLoginSuccessObserverTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
-        $this->customerRepositoryMock = $this->getMockBuilder('Magento\Customer\Api\CustomerRepositoryInterface')
-            ->setMethods(['getById', 'save'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
         $this->customerLoginSuccessObserver = new CustomerLoginSuccessObserver(
-            $this->accountManagementHelperMock,
-            $this->customerRepositoryMock
+            $this->authenticationMock
         );
     }
 
@@ -94,16 +74,9 @@ class CustomerLoginSuccessObserverTest extends \PHPUnit_Framework_TestCase
         $this->customerModelMock->expects($this->once())
             ->method('getId')
             ->willReturn($customerId);
-        $this->customerRepositoryMock->expects($this->once())
-            ->method('getById')
-            ->willReturn($this->customerDataMock);
-        $this->customerDataMock->expects($this->once())->method('getId')->willReturn($customerId);
-        $this->accountManagementHelperMock->expects($this->once())
-            ->method('processUnlockData')
+        $this->authenticationMock->expects($this->once())
+            ->method('unlock')
             ->with($customerId);
-        $this->customerRepositoryMock->expects($this->once())
-            ->method('save')
-            ->with($this->customerDataMock);
         $this->customerLoginSuccessObserver->execute($observerMock);
     }
 }

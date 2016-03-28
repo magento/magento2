@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,10 +12,11 @@ namespace Magento\Directory\Model\Currency\Import;
 class Webservicex extends \Magento\Directory\Model\Currency\Import\AbstractImport
 {
     /**
-     * @var string
+     * Currency converter url
      */
-    const CURRENCY_CONVERTER_URL = 'http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate?' .
-        'FromCurrency={{CURRENCY_FROM}}&ToCurrency={{CURRENCY_TO}}';
+    // @codingStandardsIgnoreStart
+    const CURRENCY_CONVERTER_URL = 'http://www.webservicex.net/CurrencyConvertor.asmx/ConversionRate?FromCurrency={{CURRENCY_FROM}}&ToCurrency={{CURRENCY_TO}}';
+    // @codingStandardsIgnoreEnd
 
     /**
      * Http Client Factory

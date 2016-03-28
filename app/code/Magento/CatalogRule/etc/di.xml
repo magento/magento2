@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -62,6 +62,13 @@
     </virtualType>
     <preference for="Magento\CatalogRule\Api\Data\RuleInterface" type="Magento\CatalogRule\Model\Rule" />
     <preference for="Magento\CatalogRule\Api\CatalogRuleRepositoryInterface" type="Magento\CatalogRule\Model\CatalogRuleRepository" />
+    <type name="Magento\Framework\Model\Entity\RepositoryFactory">
+        <arguments>
+            <argument name="entities" xsi:type="array">
+                <item name="Magento\CatalogRule\Api\Data\RuleInterface" xsi:type="string">Magento\CatalogRule\Api\CatalogRuleRepositoryInterface</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\Framework\Model\Entity\MetadataPool">
         <arguments>
             <argument name="metadata" xsi:type="array">
