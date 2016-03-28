@@ -54,6 +54,19 @@ foreach ($options as $option) {
 
     $product = $productRepository->save($product);
 
+    /** @var \Magento\CatalogInventory\Model\Stock\Item $stockItem */
+    $stockItem = Bootstrap::getObjectManager()->create('Magento\CatalogInventory\Model\Stock\Item');
+    $stockItem->load($productId, 'product_id');
+
+    if (!$stockItem->getProductId()) {
+        $stockItem->setProductId($productId);
+    }
+    $stockItem->setUseConfigManageStock(1);
+    $stockItem->setQty(1000);
+    $stockItem->setIsQtyDecimal(0);
+    $stockItem->setIsInStock(1);
+    $stockItem->save();
+
     $attributeValues[] = [
         'label' => 'test',
         'attribute_id' => $attribute->getId(),
@@ -85,6 +98,20 @@ $extensionConfigurableAttributes->setConfigurableProductOptions($configurableOpt
 $extensionConfigurableAttributes->setConfigurableProductLinks($associatedProductIds);
 
 $product->setExtensionAttributes($extensionConfigurableAttributes);
+
+// Remove any previously created product with the same id.
+/** @var \Magento\Framework\Registry $registry */
+$registry = Bootstrap::getObjectManager()->get('Magento\Framework\Registry');
+$registry->unregister('isSecureArea');
+$registry->register('isSecureArea', true);
+try {
+    $productToDelete = $productRepository->getById(1);
+    $productRepository->delete($productToDelete);
+} catch (\Exception $e) {
+    // Nothing to remove
+}
+$registry->unregister('isSecureArea');
+$registry->register('isSecureArea', false);
 
 $product->setTypeId(Configurable::TYPE_CODE)
     ->setId(1)
