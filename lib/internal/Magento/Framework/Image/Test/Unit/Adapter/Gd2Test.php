@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Image\Test\Unit\Adapter;
@@ -38,7 +38,7 @@ class Gd2Test extends \PHPUnit_Framework_TestCase
     /**
      * Setup testing object
      */
-    public function setUp()
+    protected function setUp()
     {
         require_once __DIR__ . '/_files/global_php_mock.php';
         $this->objectManager = new ObjectManager($this);

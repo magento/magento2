@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint browser:true jquery:true*/
@@ -249,7 +249,7 @@ define([
 
                     this.responseList.indexList
                         .on('click', function (e) {
-                            this.responseList.selected = $(e.target);
+                            this.responseList.selected = $(e.currentTarget);
                             this.searchForm.trigger('submit');
                         }.bind(this))
                         .on('mouseenter mouseleave', function (e) {

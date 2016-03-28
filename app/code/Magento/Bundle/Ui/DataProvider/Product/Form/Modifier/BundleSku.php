@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Ui\Component\Form;
 use Magento\Framework\Stdlib\ArrayManager;
 
 /**
@@ -16,7 +14,6 @@ use Magento\Framework\Stdlib\ArrayManager;
 class BundleSku extends AbstractModifier
 {
     const CODE_SKU_TYPE = 'sku_type';
-    const SORT_ORDER = 31;
 
     /**
      * @var ArrayManager
@@ -36,36 +33,19 @@ class BundleSku extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        if ($groupCode = $this->getGroupCodeByField($meta, ProductAttributeInterface::CODE_SKU)) {
-            $skuPath = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_SKU);
-            $meta[$groupCode]['children'][self::CODE_SKU_TYPE] = [
-                'arguments' => [
-                    'data' => [
-                        'config' => [
-                            'sortOrder' => $this->getNextAttributeSortOrder(
-                                $meta,
-                                [ProductAttributeInterface::CODE_SKU],
-                                self::SORT_ORDER
-                            ),
-                            'formElement' => Form\Element\Checkbox::NAME,
-                            'componentType' => Form\Field::NAME,
-                            'dataType' => Form\Element\DataType\Number::NAME,
-                            'label' => __('Dynamic SKU'),
-                            'prefer' => 'toggle',
-                            'additionalClasses' => 'admin__field-x-small',
-                            'templates' => ['checkbox' => 'ui/form/components/single/switcher'],
-                            'valueMap' => [
-                                'false' => '1',
-                                'true' => '0',
-                            ],
-                            'dataScope' => self::CODE_SKU_TYPE,
-                            'value' => '0',
-                            'scopeLabel' => $this->arrayManager->get($skuPath . '/scopeLabel', $meta),
-                        ],
-                    ],
+        $meta = $this->arrayManager->merge(
+            $this->arrayManager->findPath(static::CODE_SKU_TYPE, $meta, null, 'children') . static::META_CONFIG_PATH,
+            $meta,
+            [
+                'valueMap' => [
+                    'false' => '1',
+                    'true' => '0'
                 ],
-            ];
-        }
+                'validation' => [
+                    'required-entry' => false
+                ]
+            ]
+        );
 
         return $meta;
     }
