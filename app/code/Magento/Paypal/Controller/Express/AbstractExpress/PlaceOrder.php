@@ -62,15 +62,21 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      */
     public function execute()
     {
-        try {
-            if ($this->isValidationRequired() &&
-                !$this->agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))
-            ) {
-                throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Please agree to all the terms and conditions before placing the order.')
-                );
-            }
+        if ($this->isValidationRequired() &&
+            !$this->agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))
+        ) {
+            $e = new \Magento\Framework\Exception\LocalizedException(
+                __('Please agree to all the terms and conditions before placing the order.')
+            );
+            $this->messageManager->addExceptionMessage(
+                $e,
+                $e->getMessage()
+            );
+            $this->_redirect('*/*/review');
+            return;
+        }
 
+        try {
             $this->_initCheckout();
             $this->_checkout->place($this->_initToken());
 
@@ -108,12 +114,6 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
             return;
         } catch (ApiProcessableException $e) {
             $this->_processPaypalApiError($e);
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $this->messageManager->addExceptionMessage(
-                $e,
-                $e->getMessage()
-            );
-            $this->_redirect('*/*/review');
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
