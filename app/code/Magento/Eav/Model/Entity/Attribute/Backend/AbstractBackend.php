@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Attribute\Backend;
@@ -228,7 +228,12 @@ abstract class AbstractBackend implements \Magento\Eav\Model\Entity\Attribute\Ba
         $attribute = $this->getAttribute();
         $attrCode = $attribute->getAttributeCode();
         $value = $object->getData($attrCode);
-        if ($attribute->getIsVisible() && $attribute->getIsRequired() && $attribute->isValueEmpty($value)) {
+
+        if ($attribute->getIsVisible()
+            && $attribute->getIsRequired()
+            && $attribute->isValueEmpty($value)
+            && $attribute->isValueEmpty($attribute->getDefaultValue())
+        ) {
             throw new LocalizedException(__('The value of attribute "%1" must be set', $attrCode));
         }
 

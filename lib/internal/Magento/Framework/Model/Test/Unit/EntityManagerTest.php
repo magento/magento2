@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model\Test\Unit;
@@ -49,6 +49,7 @@ class EntityManagerTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        $this->markTestSkipped('Due to MAGETWO-48956');
         $this->metadata = $this->getMock(
             'Magento\Framework\Model\Entity\EntityMetadata',
             [],

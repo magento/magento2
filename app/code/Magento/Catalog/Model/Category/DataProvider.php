@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Category;
@@ -277,12 +277,14 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     protected function addUseConfigSettings($categoryData)
     {
         foreach ($this->elementsWithUseConfigSetting as $elementsWithUseConfigSetting) {
-            if (!isset($categoryData[$elementsWithUseConfigSetting]) ||
-                ($categoryData[$elementsWithUseConfigSetting] == '')
-            ) {
-                $categoryData['use_config'][$elementsWithUseConfigSetting] = true;
-            } else {
-                $categoryData['use_config'][$elementsWithUseConfigSetting] = false;
+            if (!isset($categoryData['use_config'][$elementsWithUseConfigSetting])) {
+                if (!isset($categoryData[$elementsWithUseConfigSetting]) ||
+                    ($categoryData[$elementsWithUseConfigSetting] == '')
+                ) {
+                    $categoryData['use_config'][$elementsWithUseConfigSetting] = true;
+                } else {
+                    $categoryData['use_config'][$elementsWithUseConfigSetting] = false;
+                }
             }
         }
         return $categoryData;

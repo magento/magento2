@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -123,7 +123,7 @@
                     <item name="source" xsi:type="string">sales_rule</item>
                     <item name="dataScope" xsi:type="string">website_ids</item>
                     <item name="tooltip" xsi:type="array">
-                        <item name="link" xsi:type="string">http://www.magentocommerce.com/knowledge-base/entry/understanding-store-scopes</item>
+                        <item name="link" xsi:type="string">http://docs.magento.com/m2/ce/user_guide/configuration/scope.html</item>
                         <item name="description" xsi:type="string">What is this?</item>
                     </item>
                 </item>
@@ -211,7 +211,7 @@
                             </item>
                         </item>
                     </item>
-                    <item name="component" xsi:type="string">Magento_SalesRule/js/form/element/coupon-tab-updater-select</item>
+                    <item name="component" xsi:type="string">Magento_SalesRule/js/form/element/coupon-type</item>
                     <item name="displayOnlyForCouponType" xsi:type="string">2</item>
                 </item>
             </argument>
@@ -239,7 +239,11 @@
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">boolean</item>
                     <item name="formElement" xsi:type="string">checkbox</item>
-                    <item name="elementTmpl" xsi:type="string">ui/form/element/checkbox</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="number">1</item>
+                        <item name="false" xsi:type="number">0</item>
+                    </item>
+                    <item name="default" xsi:type="number">0</item>
                     <item name="source" xsi:type="string">sales_rule</item>
                     <item name="dataScope" xsi:type="string">use_auto_generation</item>
                     <item name="notice" xsi:type="string" translate="true">
@@ -268,7 +272,6 @@
                             </item>
                         </item>
                     </item>
-                    <item name="component" xsi:type="string">Magento_SalesRule/js/form/element/coupon-tab-updater-checkbox</item>
                 </item>
             </argument>
         </field>

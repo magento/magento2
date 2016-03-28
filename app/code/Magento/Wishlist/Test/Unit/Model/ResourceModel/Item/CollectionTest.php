@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -39,7 +39,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $connection = $this->getMock(
@@ -103,7 +103,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getEntityTypeId')
             ->will($this->returnValue(4));
 
-
         $catalogConfFactory
             ->expects($this->once())
             ->method('create')
@@ -130,7 +129,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->will($this->returnValue($this->attrId));
 
-
         $catalogAttrFactory = $this->getMock(
             'Magento\Catalog\Model\Entity\AttributeFactory',
             ['create'],
@@ -138,6 +136,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
         $catalogAttrFactory
             ->expects($this->once())
             ->method('create')
