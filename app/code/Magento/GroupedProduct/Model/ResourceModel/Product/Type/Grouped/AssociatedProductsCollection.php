@@ -7,8 +7,6 @@
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Product\Type\Grouped;
 
-use Magento\Framework\Model\Entity\MetadataPool;
-
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -51,7 +49,6 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation
-     * @param MetadataPool $metadataPool
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Catalog\Model\ProductTypes\ConfigInterface $config
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
@@ -79,7 +76,6 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
         \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation $productLimitation,
-        MetadataPool $metadataPool,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Catalog\Model\ProductTypes\ConfigInterface $config,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
@@ -107,7 +103,6 @@ class AssociatedProductsCollection extends \Magento\Catalog\Model\ResourceModel\
             $dateTime,
             $groupManagement,
             $productLimitation,
-            $metadataPool,
             $connection
         );
     }

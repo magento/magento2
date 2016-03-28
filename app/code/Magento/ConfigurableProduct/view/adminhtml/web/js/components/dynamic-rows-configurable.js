@@ -365,6 +365,7 @@ define([
                     'media_gallery': row['media_gallery'],
                     'swatch_image': row['swatch_image'],
                     'small_image': row['small_image'],
+                    image: row.image,
                     'thumbnail': row.thumbnail,
                     'attributes': attributesText
                 };
