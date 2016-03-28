@@ -145,10 +145,6 @@ location /media/import/ {
     deny all;
 }
 
-location ~ cron\.php {
-    deny all;
-}
-
 location ~ (index|get|static|report|404|503)\.php$ {
     try_files $uri =404;
     fastcgi_pass   fastcgi_backend;
@@ -185,3 +181,7 @@ gzip_types
     application/xml+rss
     image/svg+xml;
 gzip_vary on;
+
+location ~ \.php$ {
+    deny all;
+}
