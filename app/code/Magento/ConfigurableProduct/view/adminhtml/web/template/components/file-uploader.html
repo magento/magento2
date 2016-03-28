@@ -10,7 +10,10 @@
         <!-- ko if: $data.processedFile().url -->
         <img class="file-uploader-image" attr="src: $data.processedFile().url, alt: $data.processedFile().name"/>
         <!-- /ko -->
-        <!-- ko if: !$data.processedFile().url -->
+        <!-- ko if: !$data.processedFile().url && $data.thumbnail() && $data.thumbnailUrl() -->
+        <img class="file-uploader-image" attr="src: $data.thumbnailUrl()"/>
+        <!-- /ko -->
+        <!-- ko if: !$data.processedFile().url && !$data.thumbnail() -->
         <text args="$data.processedFile().name"/>
         <!-- /ko -->
         <div class="file-uploader-area">
@@ -22,7 +25,7 @@
             <span class="file-uploader-spinner"/>
         </div>
     </div>
-    <!-- ko if: $data.processedFile().url -->
+    <!-- ko if: $data.processedFile().url || $data.thumbnail() -->
     <div class="action-select-wrap" data-bind="
     css : {'_active': $data.actionsListOpened()},
     outerClick: $data.closeList.bind($data)"
