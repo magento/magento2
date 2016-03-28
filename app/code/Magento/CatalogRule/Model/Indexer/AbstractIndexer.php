@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model\Indexer;
@@ -22,6 +22,11 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * @var \Magento\Framework\Event\ManagerInterface
      */
     protected $_eventManager;
+
+    /**
+     * @var \Magento\Framework\App\CacheInterface
+     */
+    private $cacheManager;
 
     /**
      * @param IndexBuilder $indexBuilder
@@ -55,6 +60,8 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     {
         $this->indexBuilder->reindexFull();
         $this->_eventManager->dispatch('clean_cache_by_tags', ['object' => $this]);
+        //TODO: remove after fix fpc. MAGETWO-49121
+        $this->getCacheManager()->clean($this->getIdentities());
     }
 
     /**
@@ -67,7 +74,8 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     {
         return [
             \Magento\Catalog\Model\Category::CACHE_TAG,
-            \Magento\Catalog\Model\Product::CACHE_TAG
+            \Magento\Catalog\Model\Product::CACHE_TAG,
+            \Magento\Framework\App\Cache\Type\Block::CACHE_TAG
         ];
     }
 
@@ -121,4 +129,19 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * @return void
      */
     abstract protected function doExecuteRow($id);
+
+    /**
+     * @return \Magento\Framework\App\CacheInterface|mixed
+     *
+     * @deprecated
+     */
+    private function getCacheManager()
+    {
+        if ($this->cacheManager === null) {
+            $this->cacheManager = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                'Magento\Framework\App\CacheInterface'
+            );
+        }
+        return $this->cacheManager;
+    }
 }

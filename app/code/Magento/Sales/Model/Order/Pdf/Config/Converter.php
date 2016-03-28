@@ -2,7 +2,7 @@
 /**
  * Converter of pdf configuration from \DOMDocument to array
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Model\Order\Pdf\Config;

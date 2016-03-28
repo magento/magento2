@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Contact\Test\Unit\Model\System\Config\Backend;
@@ -14,7 +14,7 @@ class LinksTest extends \PHPUnit_Framework_TestCase
      */
     protected $_model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_model = (new ObjectManager($this))->getObject('Magento\Contact\Model\System\Config\Backend\Links');
     }
