@@ -35,6 +35,9 @@ class DeleteHandler implements ExtensionInterface
      */
     public function execute($entityType, $entity, $arguments = [])
     {
+        if ($entity->getTypeId() != \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
+            return $entity;
+        }
         /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
         foreach ($this->linkRepository->getList($entity->getSku()) as $link) {
             $this->linkRepository->delete($link->getId());
