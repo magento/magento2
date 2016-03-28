@@ -2,7 +2,7 @@
 /**
  * \Magento\Widget\Model\Widget\Instance
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Test\Unit\Model\Widget;
@@ -40,7 +40,7 @@ class InstanceTest extends \PHPUnit_Framework_TestCase
      */
     protected $_directoryMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_widgetModelMock = $this->getMockBuilder(
             'Magento\Widget\Model\Widget'
