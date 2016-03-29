@@ -1,53 +1,36 @@
-All,All
-"Are you sure?","Are you sure?"
-No,No
-Action,Action
-Edit,Edit
-Results,Results
-Uses,Uses
-Delete,Delete
-Store,Store
-Yes,Yes
 Home,Home
-Search,Search
-"Search Query","Search Query"
-"Redirect URL","Redirect URL"
 "Go to Home Page","Go to Home Page"
+"Catalog Advanced Search","Catalog Advanced Search"
+All,All
+Yes,Yes
+No,No
+Results,Results
 Grid,Grid
 List,List
-"Catalog Advanced Search","Catalog Advanced Search"
+"Search Weight","Search Weight"
 Relevance,Relevance
 "Search results for: '%1'","Search results for: '%1'"
 "Minimum Search query length is %1","Minimum Search query length is %1"
-"Your search query can't be longer than %1, so we had to shorten your query.","Your search query can't be longer than %1, so we had to shorten your query."
-"Sorry, but the maximum word count is %1. We left out this part of your search: %2.","Sorry, but the maximum word count is %1. We left out this part of your search: %2."
 "Please specify at least one search term.","Please specify at least one search term."
 "%1 and greater","%1 and greater"
 "up to %1","up to %1"
-"Attribute setting change related with Search Index. Please run <a href=""%1"">Rebuild Search Index</a> process.","Attribute setting change related with Search Index. Please run <a href=""%1"">Rebuild Search Index</a> process."
-"Catalog Search","Catalog Search"
-"Rebuild Catalog product fulltext search index","Rebuild Catalog product fulltext search index"
-"Please specify correct data.","Please specify correct data."
+Category,Category
+"%1 and above","%1 and above"
+"%1 - %2","%1 - %2"
+"Bucket do not exists","Bucket do not exists"
+Product,Product
 "Search Settings","Search Settings"
+Search,Search
+"Advanced Search","Advanced Search"
 "<strong>%1 item</strong> were found using the following search criteria","<strong>%1 item</strong> were found using the following search criteria"
 "<strong>%1 items</strong> were found using the following search criteria","<strong>%1 items</strong> were found using the following search criteria"
-"No items were found using the following search criteria.","No items were found using the following search criteria."
-"Modify your search","Modify your search"
+"We can\'t find any items matching these search criteria.","We can\'t find any items matching these search criteria."
+"Modify your search.","Modify your search."
 name,name
 "Don't see what you're looking for?","Don't see what you're looking for?"
-"Search entire store here...","Search entire store here..."
-"Advanced Search","Advanced Search"
-"Your search returns no results.","Your search returns no results."
-"There are no search terms available.","There are no search terms available."
+"Your search returned no results.","Your search returned no results."
 "Popular Search Terms","Popular Search Terms"
+"Catalog Search","Catalog Search"
 "Minimal Query Length","Minimal Query Length"
 "Maximum Query Length","Maximum Query Length"
-"Maximum Query Words Count","Maximum Query Words Count"
-"Applies for ""Like"" search type only","Applies for ""Like"" search type only"
-"Search Type","Search Type"
-"Apply Layered Navigation if Search Results are Less Than","Apply Layered Navigation if Search Results are Less Than"
-"Enter ""0"" to enable layered navigation for any number of results.","Enter ""0"" to enable layered navigation for any number of results."
-Synonym,Synonym
-"Suggested Terms","Suggested Terms"
-yes,yes
-no,no
+"Rebuild Catalog product fulltext search index","Rebuild Catalog product fulltext search index"

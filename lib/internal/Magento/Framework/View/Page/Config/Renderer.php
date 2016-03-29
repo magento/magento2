@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Page\Config;
@@ -148,6 +148,10 @@ class Renderer implements RendererInterface
      */
     protected function getMetadataTemplate($name)
     {
+        if (strpos($name, 'og:') === 0) {
+            return '<meta property="' . $name . '" content="%content"/>' . "\n";
+        }
+
         switch ($name) {
             case 'charset':
                 $metadataTemplate = '<meta charset="%content"/>' . "\n";

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -66,7 +66,7 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
      */
     protected $requestMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->requestMock = $this->getMock('Magento\Framework\App\RequestInterface', [], [], '', false);
@@ -184,7 +184,6 @@ class ViewfileTest extends \PHPUnit_Framework_TestCase
                     ['Magento\MediaStorage\Helper\File\Storage', $this->storage]
                 ]
             );
-
 
         $this->urlDecoderMock->expects($this->once())->method('decode')->with($decodedFile)->willReturn($file);
 

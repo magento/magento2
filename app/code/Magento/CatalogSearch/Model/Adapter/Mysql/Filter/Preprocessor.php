@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Filter;
@@ -70,7 +70,6 @@ class Preprocessor implements PreprocessorInterface
      * @param Config $config
      * @param ResourceConnection $resource
      * @param TableMapper $tableMapper
-     * @param MetadataPool $metadataPool
      * @param string $attributePrefix
      */
     public function __construct(
@@ -79,7 +78,6 @@ class Preprocessor implements PreprocessorInterface
         Config $config,
         ResourceConnection $resource,
         TableMapper $tableMapper,
-        MetadataPool $metadataPool,
         $attributePrefix
     ) {
         $this->conditionManager = $conditionManager;
@@ -88,7 +86,6 @@ class Preprocessor implements PreprocessorInterface
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
         $this->attributePrefix = $attributePrefix;
-        $this->metadataPool = $metadataPool;
         $this->tableMapper = $tableMapper;
     }
 
@@ -110,7 +107,7 @@ class Preprocessor implements PreprocessorInterface
     {
         /** @var Attribute $attribute */
         $attribute = $this->config->getAttribute(Product::ENTITY, $filter->getField());
-        $linkIdField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkIdField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         if ($filter->getField() === 'price') {
             $resultQuery = str_replace(
                 $this->connection->quoteIdentifier('price'),
@@ -182,7 +179,7 @@ class Preprocessor implements PreprocessorInterface
         $tableSuffix = $attribute->getBackendType() === 'decimal' ? '_decimal' : '';
         $table = $this->resource->getTableName("catalog_product_index_eav{$tableSuffix}");
         $select = $this->connection->select();
-        $linkIdField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkIdField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
 
         $currentStoreId = $this->scopeResolver->getScope()->getId();
 
@@ -228,5 +225,19 @@ class Preprocessor implements PreprocessorInterface
         );
 
         return $resultQuery;
+    }
+
+    /**
+     * Get product metadata pool
+     *
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    protected function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Model\Entity\MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Model\Attribute\Backend\Weee;
@@ -70,18 +70,15 @@ class Tax extends \Magento\Catalog\Model\Product\Attribute\Backend\Price
             return $this;
         }
         $dup = [];
-
         foreach ($taxes as $tax) {
             if (!empty($tax['delete'])) {
                 continue;
             }
-
-            $state = isset($tax['state']) ? $tax['state'] : '0';
+            $state = isset($tax['state']) ? ($tax['state'] > 0 ? $tax['state'] : 0) : '0';
             $key1 = implode('-', [$tax['website_id'], $tax['country'], $state]);
-
             if (!empty($dup[$key1])) {
                 throw new LocalizedException(
-                    __('We found a duplicate of website, country and state fields for a fixed product tax')
+                    __('You must set unique country-state combinations within the same fixed product tax')
                 );
             }
             $dup[$key1] = 1;
