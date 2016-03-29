@@ -8,8 +8,10 @@ namespace Magento\Catalog\Model;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\Product\Gallery\MimeTypeExtensionMap;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
+use Magento\Framework\Api\ImageContentValidatorInterface;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
@@ -74,7 +76,17 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      */
     protected $resourceModel;
 
-    /*
+    /**
+     * @var Product\Initialization\Helper\ProductLinks
+     */
+    protected $linkInitializer;
+
+    /**
+     * @var Product\LinkTypeProvider
+     */
+    protected $linkTypeProvider;
+
+    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
@@ -88,6 +100,11 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
      */
     protected $metadataService;
+
+    /**
+     * @var \Magento\Framework\Api\ExtensibleDataObjectConverter
+     */
+    protected $extensibleDataObjectConverter;
 
     /**
      * @var \Magento\Framework\Filesystem
@@ -115,6 +132,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     protected $mediaGalleryProcessor;
 
     /**
+     * ProductRepository constructor.
      * @param ProductFactory $productFactory
      * @param \Magento\Catalog\Controller\Adminhtml\Product\Initialization\Helper $initializationHelper
      * @param \Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory $searchResultsFactory
@@ -128,12 +146,15 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface
      * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
+     * @param Product\Option\Converter $optionConverter
      * @param \Magento\Framework\Filesystem $fileSystem
+     * @param ImageContentValidatorInterface $contentValidator
      * @param ImageContentInterfaceFactory $contentFactory
+     * @param MimeTypeExtensionMap $mimeTypeExtensionMap
      * @param ImageProcessorInterface $imageProcessor
      * @param \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
-     * @param Product\Gallery\Processor $mediaGalleryProcessor
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ProductFactory $productFactory,
@@ -149,11 +170,13 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Catalog\Api\ProductAttributeRepositoryInterface $metadataServiceInterface,
         \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
+        \Magento\Catalog\Model\Product\Option\Converter $optionConverter,
         \Magento\Framework\Filesystem $fileSystem,
+        ImageContentValidatorInterface $contentValidator,
         ImageContentInterfaceFactory $contentFactory,
+        MimeTypeExtensionMap $mimeTypeExtensionMap,
         ImageProcessorInterface $imageProcessor,
-        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor,
-        \Magento\Catalog\Model\Product\Gallery\Processor $mediaGalleryProcessor
+        \Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface $extensionAttributesJoinProcessor
     ) {
         $this->productFactory = $productFactory;
         $this->collectionFactory = $collectionFactory;
@@ -172,7 +195,6 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
         $this->contentFactory = $contentFactory;
         $this->imageProcessor = $imageProcessor;
         $this->extensionAttributesJoinProcessor = $extensionAttributesJoinProcessor;
-        $this->mediaGalleryProcessor = $mediaGalleryProcessor;
     }
 
     /**
@@ -317,7 +339,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             throw new StateException(__('Requested product does not support images.'));
         }
 
-        $imageFileUri = $this->mediaGalleryProcessor->addImage(
+        $imageFileUri = $this->getMediaGalleryProcessor()->addImage(
             $product,
             $tmpFilePath,
             isset($newEntry['types']) ? $newEntry['types'] : [],
@@ -325,7 +347,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             isset($newEntry['disabled']) ? $newEntry['disabled'] : true
         );
         // Update additional fields that are still empty after addImage call
-        $this->mediaGalleryProcessor->updateImage(
+        $this->getMediaGalleryProcessor()->updateImage(
             $product,
             $imageFileUri,
             [
@@ -432,12 +454,12 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $newEntries = $mediaGalleryEntries;
         }
 
-        $this->mediaGalleryProcessor->clearMediaAttribute($product, array_keys($product->getMediaAttributes()));
+        $this->getMediaGalleryProcessor()->clearMediaAttribute($product, array_keys($product->getMediaAttributes()));
         $images = $product->getMediaGallery('images');
         if ($images) {
             foreach ($images as $image) {
                 if (!isset($image['removed']) && !empty($image['types'])) {
-                    $this->mediaGalleryProcessor->setMediaAttribute($product, $image['types'], $image['file']);
+                    $this->getMediaGalleryProcessor()->setMediaAttribute($product, $image['types'], $image['file']);
                 }
             }
         }
@@ -643,5 +665,17 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
     {
         $this->instances = null;
         $this->instancesById = null;
+    }
+
+    /**
+     * @return Product\Gallery\Processor
+     */
+    private function getMediaGalleryProcessor()
+    {
+        if (null === $this->mediaGalleryProcessor) {
+            $this->mediaGalleryProcessor = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Model\Product\Gallery\Processor');
+        }
+        return $this->mediaGalleryProcessor;
     }
 }
