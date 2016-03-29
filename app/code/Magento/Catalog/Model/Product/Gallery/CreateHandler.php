@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
@@ -142,8 +142,7 @@ class CreateHandler
         }
 
         /* @var $mediaAttribute \Magento\Catalog\Api\Data\ProductAttributeInterface */
-        foreach ($product->getMediaAttributes() as $mediaAttribute) {
-            $mediaAttrCode = $mediaAttribute->getAttributeCode();
+        foreach ($this->mediaConfig->getMediaAttributeCodes() as $mediaAttrCode) {
             $attrData = $product->getData($mediaAttrCode);
 
             if (in_array($attrData, $clearImages)) {

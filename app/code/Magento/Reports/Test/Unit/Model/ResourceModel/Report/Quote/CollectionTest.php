@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Report\Quote;
@@ -40,7 +40,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $collection->expects($this->once())->method('getSelect')->willReturn($this->selectMock);
+        $collection->expects($this->atLeastOnce())->method('getSelect')->willReturn($this->selectMock);
         $this->selectMock->expects($this->atLeastOnce())->method('reset')->willReturnSelf();
         $this->selectMock->expects($this->once())
             ->method('columns')

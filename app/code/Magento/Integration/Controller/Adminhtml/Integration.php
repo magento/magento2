@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Integration\Controller\Adminhtml;
@@ -15,6 +15,13 @@ use Magento\Integration\Api\OauthServiceInterface as IntegrationOauthService;
  */
 abstract class Integration extends Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Integration::integrations';
+
     /** Param Key for extracting integration id from Request */
     const PARAM_INTEGRATION_ID = 'id';
 
@@ -86,16 +93,6 @@ abstract class Integration extends Action
         $this->escaper = $escaper;
         $this->_integrationCollection = $integrationCollection;
         parent::__construct($context);
-    }
-
-    /**
-     * Check ACL.
-     *
-     * @return boolean
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Integration::integrations');
     }
 
     /**

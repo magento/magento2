@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Form\Element;
@@ -53,6 +53,7 @@ abstract class AbstractOptionsField extends AbstractElement
             } else {
                 $options = array_values($this->options);
             }
+            $options = $this->convertOptionsValueToString($options);
             $config['options'] = array_values(array_merge_recursive($options, $config['options']));
         }
         $this->setData('config', (array)$config);
@@ -69,5 +70,21 @@ abstract class AbstractOptionsField extends AbstractElement
     public function getIsSelected($optionValue)
     {
         return $this->getValue() == $optionValue;
+    }
+
+    /**
+     * Convert options value to string
+     *
+     * @param array $options
+     * @return array
+     */
+    protected function convertOptionsValueToString(array $options)
+    {
+        array_walk($options, function (&$value) {
+            if (isset($value['value']) && is_scalar($value['value'])) {
+                $value['value'] = (string)$value['value'];
+            }
+        });
+        return $options;
     }
 }

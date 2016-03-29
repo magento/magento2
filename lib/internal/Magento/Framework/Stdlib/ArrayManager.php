@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib;
@@ -43,11 +43,11 @@ class ArrayManager
      *
      * @param string $path
      * @param array $data
-     * @param string $delimiter
      * @param null $defaultValue
+     * @param string $delimiter
      * @return mixed|null
      */
-    public function get($path, array $data, $delimiter = self::DEFAULT_PATH_DELIMITER, $defaultValue = null)
+    public function get($path, array $data, $defaultValue = null, $delimiter = self::DEFAULT_PATH_DELIMITER)
     {
         return $this->find($path, $data, $delimiter) ? $this->parentNode[$this->nodeIndex] : $defaultValue;
     }
@@ -89,6 +89,33 @@ class ArrayManager
     }
 
     /**
+     * Move value from one location to another
+     *
+     * @param string $path
+     * @param string $targetPath
+     * @param array $data
+     * @param bool $overwrite
+     * @param string $delimiter
+     * @return array
+     */
+    public function move($path, $targetPath, array $data, $overwrite = false, $delimiter = self::DEFAULT_PATH_DELIMITER)
+    {
+        if ($this->find($path, $data, $delimiter)) {
+            $parentNode = &$this->parentNode;
+            $nodeIndex = &$this->nodeIndex;
+
+            if ((!$this->find($targetPath, $data, $delimiter) || $overwrite)
+                && $this->find($targetPath, $data, $delimiter, true)
+            ) {
+                $this->parentNode[$this->nodeIndex] = $parentNode[$nodeIndex];
+                unset($parentNode[$nodeIndex]);
+            }
+        }
+
+        return $data;
+    }
+
+    /**
      * Merge value with node and return modified data
      *
      * @param string $path
@@ -105,6 +132,21 @@ class ArrayManager
                 $value
             );
         }
+
+        return $data;
+    }
+
+    /**
+     * Populate nested array if possible and needed
+     *
+     * @param string $path
+     * @param array $data
+     * @param string $delimiter
+     * @return array
+     */
+    public function populate($path, array $data, $delimiter = self::DEFAULT_PATH_DELIMITER)
+    {
+        $this->find($path, $data, $delimiter, true);
 
         return $data;
     }
@@ -163,6 +205,88 @@ class ArrayManager
         }
 
         return true;
+    }
+
+    /**
+     * Get matching paths for elements with specified indexes
+     *
+     * @param array|mixed $indexes
+     * @param array $data
+     * @param string|array|null $startPath
+     * @param string|array|null $internalPath
+     * @param int|null $maxResults
+     * @param string $delimiter
+     * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function findPaths(
+        $indexes,
+        array $data,
+        $startPath = null,
+        $internalPath = null,
+        $maxResults = null,
+        $delimiter = self::DEFAULT_PATH_DELIMITER
+    ) {
+        $indexes = (array)$indexes;
+        $startPath = is_array($startPath) ? implode($delimiter, $startPath) : $startPath;
+        $internalPath = is_array($internalPath) ? implode($delimiter, $internalPath) : $internalPath;
+        $data = $startPath !== null ? $this->get($startPath, $data, [], $delimiter) : $data;
+        $checkList = [$startPath => ['start' => $startPath === null, 'children' => $data]];
+        $paths = [];
+
+        while ($checkList) {
+            $nextCheckList = [];
+
+            foreach ($checkList as $path => $config) {
+                foreach ($config['children'] as $childIndex => $childData) {
+                    $childPath = $path . (!$config['start'] ? $delimiter : '') . $childIndex;
+
+                    if (in_array($childIndex, $indexes, true)) {
+                        $paths[] = $childPath;
+
+                        if ($maxResults !== null && count($paths) >= $maxResults) {
+                            return $paths;
+                        }
+                    }
+
+                    $searchData = $internalPath !== null && is_array($childData)
+                        ? $this->get($internalPath, $childData, null, $delimiter)
+                        : $childData;
+
+                    if (!empty($searchData) && is_array($searchData)) {
+                        $searchPath = $childPath . ($internalPath !== null ? $delimiter . $internalPath : '');
+                        $nextCheckList[$searchPath] = ['start' => false, 'children' => $searchData];
+                    }
+                }
+            }
+
+            $checkList = $nextCheckList;
+        }
+
+        return $paths;
+    }
+
+    /**
+     * Get first matching path for elements with specified indexes
+     *
+     * @param array|mixed $indexes
+     * @param array $data
+     * @param string|array|null $startPath
+     * @param string|array|null $internalPath
+     * @param string $delimiter
+     * @return string|null
+     */
+    public function findPath(
+        $indexes,
+        array $data,
+        $startPath = null,
+        $internalPath = null,
+        $delimiter = self::DEFAULT_PATH_DELIMITER
+    ) {
+        $paths = $this->findPaths($indexes, $data, $startPath, $internalPath, 1, $delimiter);
+
+        return $paths ? reset($paths) : null;
     }
 
     /**

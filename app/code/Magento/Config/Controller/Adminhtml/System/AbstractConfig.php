@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,6 +13,13 @@ use Magento\Config\Controller\Adminhtml\System\ConfigSectionChecker;
  */
 abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Config::config';
+
     /**
      * @var \Magento\Config\Model\Config\Structure
      */
@@ -60,7 +67,7 @@ abstract class AbstractConfig extends \Magento\Backend\App\AbstractAction
     protected function _isAllowed()
     {
         $sectionId = $this->_request->getParam('section');
-        return $this->_authorization->isAllowed('Magento_Config::config')
+        return parent::_isAllowed()
             || $this->_configStructure->getElement($sectionId)->isAllowed();
     }
 

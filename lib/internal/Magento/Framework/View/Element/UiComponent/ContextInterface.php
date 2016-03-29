@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\UiComponent;
@@ -121,6 +121,15 @@ interface ContextInterface
      * @return void
      */
     public function addButtons(array $buttons, UiComponentInterface $component);
+
+    /**
+     * Add html block in the actions toolbar
+     *
+     * @param array $htmlBlocks
+     * @param UiComponentInterface $component
+     * @return void
+     */
+    public function addHtmlBlocks(array $htmlBlocks, UiComponentInterface $component);
 
     /**
      * Get render engine

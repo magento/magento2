@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -92,7 +92,7 @@ abstract class AbstractStockqty extends \Magento\Framework\View\Element\Template
      */
     public function getProductStockQty($product)
     {
-        return $this->stockState->getStockQty($product->getId(), $product->getStore()->getWebsiteId());
+        return $this->stockRegistry->getStockStatus($product->getId(), $product->getStore()->getWebsiteId())->getQty();
     }
 
     /**

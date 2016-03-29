@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,6 +19,7 @@ define([
             defaultRecord: false,
             columnsHeader: true,
             columnsHeaderAfterRender: false,
+            columnsHeaderClasses: '',
             labels: [],
             recordTemplate: 'record',
             collapsibleHeader: false,
@@ -34,6 +35,8 @@ define([
             deleteProperty: 'delete',
             identificationProperty: 'record_id',
             deleteValue: true,
+            isDifferedFromDefault: false,
+            fallbackResetTpl: 'ui/form/element/helper/fallback-reset-link',
             dndConfig: {
                 name: '${ $.name }_dnd',
                 component: 'Magento_Ui/js/dynamic-rows/dnd',
@@ -56,7 +59,8 @@ define([
                 visible: 'setVisible',
                 disabled: 'setDisabled',
                 childTemplate: 'initHeader',
-                recordTemplate: 'onUpdateRecordTemplate'
+                recordTemplate: 'onUpdateRecordTemplate',
+                recordData: 'setDifferedFromDefault'
             },
             modules: {
                 dnd: '${ $.dndConfig.name }'
@@ -93,7 +97,8 @@ define([
                     'columnsHeader',
                     'visible',
                     'disabled',
-                    'labels'
+                    'labels',
+                    'isDifferedFromDefault'
                 ]);
 
             return this;
@@ -172,7 +177,8 @@ define([
                     cell.config.labelVisible = false;
                     _.extend(data, {
                         label: cell.config.label,
-                        name: cell.name
+                        name: cell.name,
+                        columnsHeaderClasses: cell.config.columnsHeaderClasses
                     });
 
                     this.labels.push(data);
@@ -350,7 +356,7 @@ define([
          * Set new data to dataSource,
          * delete element
          *
-         * @param {Object} data - record data
+         * @param {Array} data - record data
          */
         _updateData: function (data) {
             var elems = utils.copy(this.elems()),
@@ -358,7 +364,7 @@ define([
 
             this.recordData([]);
             elems = utils.copy(this.elems());
-            data.each(function (rec, idx) {
+            data.forEach(function (rec, idx) {
                 elems[idx].recordId = rec[this.identificationProperty];
                 path = this.dataScope + '.' + this.index + '.' + idx;
                 this.source.set(path, rec);
@@ -518,6 +524,27 @@ define([
             layout([child]);
 
             return this;
+        },
+
+        /**
+         * Restore value to default
+         */
+        restoreToDefault: function () {
+            this.recordData(utils.copy(this.default));
+            this.reload();
+        },
+
+        /**
+         * Update whether value differs from default value
+         */
+        setDifferedFromDefault: function () {
+            var recordData = utils.copy(this.recordData());
+
+            Array.isArray(recordData) && recordData.forEach(function (item) {
+                delete item['record_id'];
+            });
+
+            this.isDifferedFromDefault(!_.isEqual(recordData, this.default));
         }
     });
 });

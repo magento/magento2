@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import\ErrorProcessing;
@@ -39,7 +39,7 @@ class ProcessingErrorAggregatorTest extends \PHPUnit_Framework_TestCase
     /**
      * Preparing mock objects
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->processingErrorFactoryMock = $this->getMock(
             '\Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorFactory',

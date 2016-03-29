@@ -1,15 +1,25 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Authorizenet\Controller\Directpost\Payment;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Payment\Block\Transparent\Iframe;
+use Magento\Framework\Escaper;
 
+/**
+ * Class Redirect
+ */
 class Redirect extends \Magento\Authorizenet\Controller\Directpost\Payment
 {
+    /**
+     * @var Escaper
+     */
+    private $escaper;
+
     /**
      * Retrieve params and put javascript into iframe
      *
@@ -19,7 +29,7 @@ class Redirect extends \Magento\Authorizenet\Controller\Directpost\Payment
     {
         $helper = $this->dataFactory->create('frontend');
 
-        $redirectParams = $this->getRequest()->getParams();
+        $redirectParams = $this->filterData($this->getRequest()->getParams());
         $params = [];
         if (!empty($redirectParams['success'])
             && isset($redirectParams['x_invoice_num'])
@@ -43,5 +53,31 @@ class Redirect extends \Magento\Authorizenet\Controller\Directpost\Payment
         $this->_coreRegistry->register(Iframe::REGISTRY_KEY, array_merge($params, $redirectParams));
         $this->_view->addPageLayoutHandles();
         $this->_view->loadLayout(false)->renderLayout();
+    }
+
+    /**
+     * Escape xss in request data
+     * @param array $data
+     * @return array
+     */
+    private function filterData(array $data)
+    {
+        $self = $this;
+        array_walk($data, function (&$item) use ($self) {
+            $item = $self->getEscaper()->escapeXssInUrl($item);
+        });
+        return $data;
+    }
+
+    /**
+     * Get Escaper instance
+     * @return Escaper
+     */
+    private function getEscaper()
+    {
+        if (!$this->escaper) {
+            $this->escaper = ObjectManager::getInstance()->get(Escaper::class);
+        }
+        return $this->escaper;
     }
 }

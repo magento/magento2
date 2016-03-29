@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -687,15 +687,9 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $this->model->setPassword($newPassword)
             ->setId(1)
             ->setOrigData('password', $oldPassword);
-        $this->encryptorMock->expects($this->once())
+        $this->encryptorMock->expects($this->atLeastOnce())
             ->method('isValidHash')
-            ->with($newPassword, $oldPassword)
-            ->willReturn(false);
-
-        $this->encryptorMock->expects($this->once())
-            ->method('getHash')
-            ->with($newPassword, false)
-            ->willReturn($newPasswordHash);
+            ->will($this->onConsecutiveCalls(false, true));
 
         $this->resourceMock->expects($this->once())->method('getOldPasswords')->willReturn(['hash1', $newPasswordHash]);
 
@@ -719,20 +713,13 @@ class UserTest extends \PHPUnit_Framework_TestCase
         $validatorMock->expects($this->once())->method('isValid')->willReturn(true);
 
         $newPassword = "NEWmYn3wpassw0rd";
-        $newPasswordHash = "new password hash";
         $oldPassword = "OLDmYn3wpassw0rd";
         $this->model->setPassword($newPassword)
             ->setId(1)
             ->setOrigData('password', $oldPassword);
-        $this->encryptorMock->expects($this->once())
+        $this->encryptorMock->expects($this->atLeastOnce())
             ->method('isValidHash')
-            ->with($newPassword, $oldPassword)
-            ->willReturn(false);
-
-        $this->encryptorMock->expects($this->once())
-            ->method('getHash')
-            ->with($newPassword, false)
-            ->willReturn($newPasswordHash);
+            ->will($this->onConsecutiveCalls(false, false, false));
 
         $this->resourceMock->expects($this->once())->method('getOldPasswords')->willReturn(['hash1', 'hash2']);
 

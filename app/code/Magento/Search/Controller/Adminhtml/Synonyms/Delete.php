@@ -1,15 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
+use Magento\Search\Controller\Adminhtml\Synonyms;
+
 /**
  * Delete Controller
  */
-class Delete extends \Magento\Backend\App\Action
+class Delete extends Synonyms
 {
     /**
      * Delete action

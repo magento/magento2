@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element\UiComponent;
@@ -296,6 +296,19 @@ class Context implements ContextInterface
         $sortOrderB = isset($itemB['sort_order']) ? intval($itemB['sort_order']) : 0;
 
         return $sortOrderA - $sortOrderB;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    public function addHtmlBlocks(array $htmlBlocks, UiComponentInterface $component)
+    {
+        if (!empty($htmlBlocks)) {
+            foreach ($htmlBlocks as $htmlBlock => $blockData) {
+                $this->actionPool->addHtmlBlock($blockData['type'], $blockData['name'], $blockData['arguments']);
+            }
+        }
     }
 
     /**
