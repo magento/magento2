@@ -322,14 +322,14 @@ class Attribute extends Form
     }
 
     /**
-     * Get attribute form block
+     * Get attribute form block.
      *
-     * @return \Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm
+     * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Attribute\NewAttributeForm
      */
     protected function getEditAttributeForm()
     {
         return $this->blockFactory->create(
-            'Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm',
+            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Attribute\NewAttributeForm',
             ['element' => $this->browser->find($this->newAttribute)]
         );
     }

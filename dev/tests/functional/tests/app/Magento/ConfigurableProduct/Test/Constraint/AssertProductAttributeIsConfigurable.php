@@ -36,9 +36,9 @@ class AssertProductAttributeIsConfigurable extends AbstractConstraint
         $productGrid->getGridPageActionBlock()->addProduct('configurable');
         $productBlockForm = $newProductPage->getProductForm();
         $productBlockForm->fill($assertProduct);
-        $productBlockForm->openTab('variations');
+        $productBlockForm->openSection('variations');
         /** @var \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config  $variationsTab */
-        $variationsTab = $productBlockForm->getTab('variations');
+        $variationsTab = $productBlockForm->getSection('variations');
         $variationsTab->createConfigurations();
         $attributesGrid = $variationsTab->getAttributeBlock()->getAttributesGrid();
         \PHPUnit_Framework_Assert::assertTrue(
