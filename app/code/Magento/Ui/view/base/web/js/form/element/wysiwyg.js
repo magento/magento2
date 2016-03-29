@@ -2,6 +2,8 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/* eslint-disable no-undef */
 define([
     'Magento_Ui/js/lib/view/utils/async',
     'underscore',
@@ -18,11 +20,21 @@ define([
             links: {
                 value: '${ $.provider }:${ $.dataScope }'
             },
+            listens: {
+                '${ $.provider }:data.save': 'onSave'
+            },
             template: 'ui/form/field',
             elementTmpl: 'ui/form/element/wysiwyg',
             content:        '',
             showSpinner:    false,
             loading:        false
+        },
+
+        /**
+         * Call method save() for tinyMCE instance before submit data
+         */
+        onSave: function () {
+            tinyMCE.editors[this.textarea.id].save();
         },
 
         /**
@@ -65,6 +77,7 @@ define([
          * @param {HTMLElement} node
          */
         setElementNode: function (node) {
+            this.textarea = node;
             $(node).bindings({
                 value: this.value
             });
