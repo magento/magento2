@@ -7,8 +7,9 @@
 define([
     'jquery',
     'uiComponent',
-    'Magento_Ui/js/modal/alert'
-], function ($, Class, alert) {
+    'Magento_Ui/js/modal/alert',
+    'Magento_Checkout/js/model/full-screen-loader'
+], function ($, Class, alert, fullScreenLoader) {
     'use strict';
 
     return Class.extend({
@@ -83,7 +84,7 @@ define([
         submitOrder: function () {
             this.$selector.validate().form();
             this.$selector.trigger('afterValidate.beforeSubmit');
-            $('body').trigger('processStop');
+            fullScreenLoader.stopLoader();
 
             // validate parent form
             if (this.$selector.validate().errorList.length) {
@@ -105,21 +106,20 @@ define([
         getPaymentMethodNonce: function () {
             var self = this;
 
-            $('body').trigger('processStart');
+            fullScreenLoader.startLoader();
+
             $.get(self.nonceUrl, {
                 'public_hash': self.publicHash
-            })
-                .done(function (response) {
-                    $('body').trigger('processStop');
-                    self.setPaymentDetails(response.paymentMethodNonce);
-                    self.placeOrder();
-                })
-                .fail(function (response) {
-                    var failed = JSON.parse(response.responseText);
+            }).done(function (response) {
+                self.setPaymentDetails(response.paymentMethodNonce);
+                self.placeOrder();
+            }).fail(function (response) {
+                var failed = JSON.parse(response.responseText);
 
-                    $('body').trigger('processStop');
-                    self.error(failed.message);
-                });
+                self.error(failed.message);
+            }).always(function () {
+                fullScreenLoader.stopLoader();
+            });
         },
 
         /**
