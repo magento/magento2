@@ -4221,5 +4221,5 @@ return [
     ['Magento\Braintree\Test\Unit\Model\VaultTest'],
     ['Magento\Braintree\Test\Unit\Observer\DeleteBraintreeCustomerTest'],
     ['Magento\Braintree\Test\Unit\Observer\ProcessBraintreeAddressTest'],
-    ['Magento\Braintree\Test\Unit\Observer\ProcessBraintreePaymentTest']
+    ['Magento\Braintree\Test\Unit\Observer\ProcessBraintreePaymentTest'],
 ];
