@@ -65,8 +65,9 @@ class SaveHandler
     {
         /** @var \Magento\Quote\Model\Quote $quote */
         // Quote Item processing
-        if ($quote->getItems()) {
-            foreach ($quote->getItems() as $item) {
+        $items = $quote->getItems();
+        if ($items) {
+            foreach ($items as $item) {
                 /** @var \Magento\Quote\Model\Quote\Item $item */
                 if (!$item->isDeleted()) {
                     $quote->setLastAddedItem($this->cartItemPersister->save($quote, $item));
@@ -75,13 +76,15 @@ class SaveHandler
         }
 
         // Billing Address processing
-        if ($quote->getBillingAddress() && $quote->getIsActive()) {
-            $this->billingAddressPersister->save($quote, $quote->getBillingAddress());
+        $billingAddress = $quote->getBillingAddress();
+        if ($billingAddress && $quote->getIsActive()) {
+            $this->billingAddressPersister->save($quote, $billingAddress);
         }
 
         // Shipping Assignments processing
-        if ($quote->getExtensionAttributes() && $quote->getExtensionAttributes()->getShippingAssignments()) {
-            $shippingAssignments = $quote->getExtensionAttributes()->getShippingAssignments();
+        $extensionAttributes = $quote->getExtensionAttributes();
+        if (!$quote->isVirtual() && $extensionAttributes && $extensionAttributes->getShippingAssignments()) {
+            $shippingAssignments = $extensionAttributes->getShippingAssignments();
             if (count($shippingAssignments) > 1) {
                 throw new InputException(__("Only 1 shipping assignment can be set"));
             }
