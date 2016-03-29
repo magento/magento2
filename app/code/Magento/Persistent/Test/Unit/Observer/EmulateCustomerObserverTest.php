@@ -57,7 +57,8 @@ class EmulateCustomerObserverTest extends \PHPUnit_Framework_TestCase
             'setDefaultTaxBillingAddress',
             'setCustomerId',
             'setCustomerGroupId',
-            'isLoggedIn'
+            'isLoggedIn',
+            'setIsCustomerEmulated'
         ];
         $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', $methods, [], '', false);
         $this->sessionHelperMock = $this->getMock('Magento\Persistent\Helper\Session', [], [], '', false);
@@ -168,7 +169,15 @@ class EmulateCustomerObserverTest extends \PHPUnit_Framework_TestCase
             ->method('setCustomerId')
             ->with($customerId)
             ->will($this->returnSelf());
-        $this->customerSessionMock->expects($this->once())->method('setCustomerGroupId')->with($customerGroupId);
+        $this->customerSessionMock
+            ->expects($this->once())
+            ->method('setCustomerGroupId')
+            ->with($customerGroupId)->willReturnSelf();
+        $this->customerSessionMock
+            ->expects($this->once())
+            ->method('setIsCustomerEmulated')
+            ->with(true)
+            ->will($this->returnSelf());
         $this->model->execute($this->observerMock);
     }
 
