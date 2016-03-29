@@ -22,7 +22,7 @@
             </is_required>
             <options>
                 <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Options</class>
-                <selector>[data-index="attribute_options_select_container"</selector>
+                <selector>[data-index="attribute_options_select_container"]</selector>
                 <strategy>css selector</strategy>
             </options>
         </fields>
