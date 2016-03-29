@@ -82,6 +82,16 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     protected $searchIndexNameResolver;
 
     /**
+     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scopeResolver;
+
+    /**
+     * @var \Magento\Framework\App\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scopeInterface;
+
+    /**
      * Setup method
      * @return void
      */
@@ -158,6 +168,20 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->scopeResolver = $this->getMockForAbstractClass(
+            'Magento\Framework\App\ScopeResolverInterface',
+            [],
+            '',
+            false
+        );
+
+        $this->scopeInterface = $this->getMockForAbstractClass(
+            'Magento\Framework\App\ScopeInterface',
+            [],
+            '',
+            false
+        );
+
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
             '\Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider',
@@ -170,7 +194,8 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
                 'storeManager' => $this->storeManager,
                 'customerSession' => $this->customerSession,
                 'searchIndexNameResolver' => $this->searchIndexNameResolver,
-                'indexerId' => 'catalogsearch_fulltext'
+                'indexerId' => 'catalogsearch_fulltext',
+                'scopeResolver' => $this->scopeResolver
             ]
         );
     }
@@ -223,6 +248,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetInterval()
     {
+        $dimensionValue = 1;
         $bucket = $this->getMockBuilder('Magento\Framework\Search\Request\BucketInterface')
             ->disableOriginalConstructor()
             ->getMock();
@@ -235,7 +261,13 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $dimension->expects($this->once())
             ->method('getValue')
-            ->willReturn(1);
+            ->willReturn($dimensionValue);
+        $this->scopeResolver->expects($this->once())
+            ->method('getScope')
+            ->willReturn($this->scopeInterface);
+        $this->scopeInterface->expects($this->once())
+            ->method('getId')
+            ->willReturn($dimensionValue);
         $this->intervalFactory->expects($this->once())
             ->method('create')
             ->willReturn($interval);
@@ -255,6 +287,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetAggregation()
     {
+        $dimensionValue = 1;
         $expectedResult = [
             1 => 1,
         ];
@@ -265,16 +298,15 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
-        $storeModel = $this->getMockBuilder('\Magento\Store\Model\Store')
-            ->setMethods(['getId'])
-            ->disableOriginalConstructor()
-            ->getMock();
         $dimension->expects($this->once())
             ->method('getValue')
-            ->willReturn($storeModel);
-        $storeModel->expects($this->once())
+            ->willReturn($dimensionValue);
+        $this->scopeResolver->expects($this->once())
+            ->method('getScope')
+            ->willReturn($this->scopeInterface);
+        $this->scopeInterface->expects($this->once())
             ->method('getId')
-            ->willReturn(1);
+            ->willReturn($dimensionValue);
 
         $this->clientMock->expects($this->once())
             ->method('query')

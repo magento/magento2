@@ -10,6 +10,7 @@ use Magento\Framework\Indexer\SaveHandler\Batch;
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
 use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
+use Magento\Framework\App\ScopeResolverInterface;
 
 class IndexerHandler implements IndexerInterface
 {
@@ -49,12 +50,18 @@ class IndexerHandler implements IndexerInterface
     private $batchSize;
 
     /**
+     * @var ScopeResolverInterface
+     */
+    private $scopeResolver;
+
+    /**
      * @param IndexStructureInterface $indexStructure
      * @param ElasticsearchAdapter $adapter
      * @param IndexNameResolver $indexNameResolver
      * @param Batch $batch
      * @param array $data
      * @param int $batchSize
+     * @param ScopeResolverInterface $scopeResolver
      */
     public function __construct(
         IndexStructureInterface $indexStructure,
@@ -62,7 +69,8 @@ class IndexerHandler implements IndexerInterface
         IndexNameResolver $indexNameResolver,
         Batch $batch,
         array $data = [],
-        $batchSize = self::DEFAULT_BATCH_SIZE
+        $batchSize = self::DEFAULT_BATCH_SIZE,
+        ScopeResolverInterface $scopeResolver
     ) {
         $this->indexStructure = $indexStructure;
         $this->adapter = $adapter;
@@ -70,6 +78,7 @@ class IndexerHandler implements IndexerInterface
         $this->batch = $batch;
         $this->data = $data;
         $this->batchSize = $batchSize;
+        $this->scopeResolver = $scopeResolver;
     }
 
     /**
@@ -78,7 +87,7 @@ class IndexerHandler implements IndexerInterface
     public function saveIndex($dimensions, \Traversable $documents)
     {
         $dimension = current($dimensions);
-        $storeId = $dimension->getValue();
+        $storeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
         foreach ($this->batch->getItems($documents, $this->batchSize) as $documentsBatch) {
             $docs = $this->adapter->prepareDocsPerStore($documentsBatch, $storeId);
             $this->adapter->addDocs($docs, $storeId, $this->getIndexerId());
@@ -93,7 +102,7 @@ class IndexerHandler implements IndexerInterface
     public function deleteIndex($dimensions, \Traversable $documents)
     {
         $dimension = current($dimensions);
-        $storeId = $dimension->getValue();
+        $storeId = $this->scopeResolver->getScope($dimension->getValue())->getId();;
         $documentIds = [];
         foreach ($documents as $document) {
             $documentIds[$document] = $document;
