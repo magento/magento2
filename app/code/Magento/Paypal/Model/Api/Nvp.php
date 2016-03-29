@@ -1291,7 +1291,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         $firstError = $errors[0]['code'];
         $exception = $this->_isProcessableError($firstError)
             ? $this->_processableExceptionFactory->create(
-                ['phrase' => $exceptionPhrase, 'code' => $errors[0]['code']]
+                ['phrase' => $exceptionPhrase, 'code' => $firstError]
             )
             : $this->_frameworkExceptionFactory->create(
                 ['phrase' => $exceptionPhrase]
