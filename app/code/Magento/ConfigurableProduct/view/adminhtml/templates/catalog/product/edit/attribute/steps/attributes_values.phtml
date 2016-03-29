@@ -106,7 +106,7 @@
             <button class="action-create-new action-tertiary"
                     type="button"
                     data-action="addOption"
-                    data-bind="click: $parent.createOption">
+                    data-bind="click: $parent.createOption, visible: canCreateOption">
                 <span><?php echo $block->escapeHtml(
                         __('Create New Value')
                     ); ?></span>
