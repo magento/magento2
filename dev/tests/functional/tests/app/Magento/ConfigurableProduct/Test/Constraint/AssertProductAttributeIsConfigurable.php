@@ -9,7 +9,7 @@ namespace Magento\ConfigurableProduct\Test\Constraint;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductIndex;
 use Magento\Catalog\Test\Page\Adminhtml\CatalogProductNew;
-use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config as TabVariation;
+use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config as SectionVariation;
 use Magento\ConfigurableProduct\Test\Fixture\ConfigurableProduct;
 use Magento\Mtf\Constraint\AbstractConstraint;
 
@@ -37,10 +37,10 @@ class AssertProductAttributeIsConfigurable extends AbstractConstraint
         $productBlockForm = $newProductPage->getProductForm();
         $productBlockForm->fill($assertProduct);
         $productBlockForm->openSection('variations');
-        /** @var \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config  $variationsTab */
-        $variationsTab = $productBlockForm->getSection('variations');
-        $variationsTab->createConfigurations();
-        $attributesGrid = $variationsTab->getAttributeBlock()->getAttributesGrid();
+        /** @var SectionVariation  $variationsSection */
+        $variationsSection = $productBlockForm->getSection('variations');
+        $variationsSection->createConfigurations();
+        $attributesGrid = $variationsSection->getAttributeBlock()->getAttributesGrid();
         \PHPUnit_Framework_Assert::assertTrue(
             $attributesGrid->isRowVisible(['frontend_label' => $attribute->getFrontendLabel()]),
             "Product attribute is absent on the product page."

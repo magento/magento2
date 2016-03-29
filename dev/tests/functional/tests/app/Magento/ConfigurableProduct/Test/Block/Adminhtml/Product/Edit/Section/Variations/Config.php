@@ -4,21 +4,21 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations;
+namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations;
 
 use Magento\Backend\Test\Block\Template;
-use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\Ui\Test\Block\Adminhtml\Section;
 use Magento\Mtf\Client\Element;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Adminhtml catalog super product configurable tab.
+ * Adminhtml catalog super product configurable section.
  */
-class Config extends Tab
+class Config extends Section
 {
     /** @var string */
-    protected $createConfigurationsButton = '[data-action=open-steps-wizard]';
+    protected $createConfigurationsButton = '[data-index="create_configurable_products_button"] > span';
 
     /**
      * Selector for trigger show/hide "Variations" tab.
@@ -46,7 +46,7 @@ class Config extends Tab
      *
      * @var string
      */
-    protected $variationsMatrix = '[data-role="product-variations-matrix"]';
+    protected $variationsMatrix = 'div[data-index="configurable-matrix"]';
 
     /**
      * Selector for template block.
@@ -77,7 +77,6 @@ class Config extends Tab
             ? $fields['configurable_attributes_data']['value']
             : [];
 
-        $this->showContent();
         $attributesValue = isset($fields['configurable_attributes_data']['source'])
             ? $fields['configurable_attributes_data']['source']->getAttributesData()
             : [];
@@ -92,20 +91,6 @@ class Config extends Tab
         }
 
         return $this;
-    }
-
-    /**
-     * Show "Variations" tab content.
-     *
-     * @return void
-     */
-    public function showContent()
-    {
-        $content = $this->_rootElement->find($this->variationsTabContent);
-        if (!$content->isVisible()) {
-            $this->_rootElement->find($this->variationsTabTrigger)->click();
-            $this->waitForElementVisible($this->variationsTabContent);
-        }
     }
 
     /**
@@ -132,12 +117,12 @@ class Config extends Tab
     /**
      * Get block of attributes.
      *
-     * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Attribute
+     * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config\Attribute
      */
     public function getAttributeBlock()
     {
         return $this->blockFactory->create(
-            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Attribute',
+            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config\Attribute',
             ['element' => $this->_rootElement]
         );
     }
@@ -145,12 +130,12 @@ class Config extends Tab
     /**
      * Get block of variations.
      *
-     * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix
+     * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config\Matrix
      */
     public function getVariationsBlock()
     {
         return $this->blockFactory->create(
-            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Matrix',
+            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config\Matrix',
             ['element' => $this->_rootElement->find($this->variationsMatrix)]
         );
     }
@@ -180,8 +165,6 @@ class Config extends Tab
     public function getFieldsData($fields = null, SimpleElement $element = null)
     {
         $data = [];
-
-        $this->showContent();
         $data['matrix'] = $this->getVariationsBlock()->getVariationsData();
 
         return ['configurable_attributes_data' => $data];
