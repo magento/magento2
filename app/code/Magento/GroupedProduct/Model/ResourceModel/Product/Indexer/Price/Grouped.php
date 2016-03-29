@@ -58,7 +58,7 @@ class Grouped extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price
         }
         $connection = $this->getConnection();
         $table = $this->getIdxTable();
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
             'entity_id'
