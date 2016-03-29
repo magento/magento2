@@ -7,9 +7,9 @@
 namespace Magento\Catalog\Test\TestStep;
 
 use Magento\Mtf\ObjectManager;
-use Magento\Mtf\Client\BrowserInterface;
 use Magento\Mtf\TestStep\TestStepInterface;
 use Magento\Catalog\Test\Fixture\CatalogProductAttribute;
+use Magento\Catalog\Test\Page\Adminhtml\CatalogProductEdit;
 
 /**
  * Click "Save" button on attribute form on product page.
@@ -31,40 +31,26 @@ class SaveAttributeOnProductPageStep implements TestStepInterface
     protected $objectManager;
 
     /**
-     * Browser instance.
+     * Catalog product edit page.
      *
-     * @var BrowserInterface
+     * @var CatalogProductEdit
      */
-    protected $browser;
-
-    /**
-     * New Attribute modal locator.
-     *
-     * @var string
-     */
-    protected $newAttributeModal = '.product_form_product_form_add_attribute_modal_create_new_attribute_modal';
-
-    /**
-     * "Save" button.
-     *
-     * @var string
-     */
-    protected $save = 'button#save';
+    protected $catalogProductEdit;
 
     /**
      * @constructor
      * @param CatalogProductAttribute $attribute
      * @param ObjectManager $objectManager
-     * @param BrowserInterface $browser
+     * @param CatalogProductEdit $catalogProductEdit
      */
     public function __construct(
         CatalogProductAttribute $attribute,
         ObjectManager $objectManager,
-        BrowserInterface $browser
+        CatalogProductEdit $catalogProductEdit
     ) {
         $this->attribute = $attribute;
         $this->objectManager = $objectManager;
-        $this->browser = $browser;
+        $this->catalogProductEdit = $catalogProductEdit;
     }
 
     /**
@@ -74,7 +60,7 @@ class SaveAttributeOnProductPageStep implements TestStepInterface
      */
     public function run()
     {
-        $this->browser->find($this->newAttributeModal)->find($this->save)->click();
+        $this->catalogProductEdit->getNewAttributeModal()->saveAttribute();
     }
 
     /**
