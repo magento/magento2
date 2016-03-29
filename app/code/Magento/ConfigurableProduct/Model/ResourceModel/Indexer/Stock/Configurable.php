@@ -25,7 +25,7 @@ class Configurable extends \Magento\CatalogInventory\Model\ResourceModel\Indexer
      */
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
-        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $connection = $this->getConnection();
         $idxTable = $usePrimaryTable ? $this->getMainTable() : $this->getIdxTable();
         $select = $connection->select()->from(['e' => $this->getTable('catalog_product_entity')], ['entity_id']);
