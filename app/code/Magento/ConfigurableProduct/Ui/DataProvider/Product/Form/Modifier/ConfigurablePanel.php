@@ -228,7 +228,7 @@ class ConfigurablePanel extends AbstractModifier
                                         'productsFilters' => $this->associatedListingPrefix
                                             . 'configurable_associated_product_listing'
                                             . '.' . $this->associatedListingPrefix
-                                            . '.configurable_associated_product_listing.listing_top.listing_filters',
+                                            . 'configurable_associated_product_listing.listing_top.listing_filters',
                                     ],
                                 ],
                             ],
