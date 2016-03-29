@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Indexer\Eav;
@@ -29,7 +29,6 @@ class Source extends AbstractEav
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param string $connectionName
      */
@@ -37,13 +36,12 @@ class Source extends AbstractEav
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         $connectionName = null
     ) {
         $this->_resourceHelper = $resourceHelper;
-        parent::__construct($context, $tableStrategy, $eavConfig, $metadataPool, $eventManager, $connectionName);
+        parent::__construct($context, $tableStrategy, $eavConfig, $eventManager, $connectionName);
     }
 
     /**
@@ -120,7 +118,7 @@ class Source extends AbstractEav
         if (!$attrIds) {
             return $this;
         }
-        $productIdField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $productIdField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
 
         /**@var $subSelect \Magento\Framework\DB\Select*/
         $subSelect = $connection->select()->from(
@@ -225,7 +223,7 @@ class Source extends AbstractEav
         if (!$attrIds) {
             return $this;
         }
-        $productIdField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $productIdField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
 
         // load attribute options
         $options = [];

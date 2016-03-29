@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define(
@@ -10,7 +10,8 @@ define(
         'Magento_Paypal/js/action/set-payment-method',
         'Magento_Checkout/js/model/payment/additional-validators',
         'Magento_Ui/js/lib/view/utils/dom-observer',
-        'paypalInContextExpressCheckout'
+        'paypalInContextExpressCheckout',
+        'Magento_Customer/js/customer-data'
     ],
     function (
         _,
@@ -19,7 +20,8 @@ define(
         setPaymentMethodAction,
         additionalValidators,
         domObserver,
-        paypalExpressCheckout
+        paypalExpressCheckout,
+        customerData
     ) {
         'use strict';
 
@@ -41,6 +43,8 @@ define(
                             this.selectPaymentMethod();
                             setPaymentMethodAction(this.messageContainer).done(
                                 function () {
+                                    $('body').trigger('processStart');
+
                                     $.get(
                                         this.path,
                                         {
@@ -65,6 +69,7 @@ define(
                                     ).always(
                                         function () {
                                             $('body').trigger('processStop');
+                                            customerData.invalidate(['cart']);
                                         }
                                     );
 

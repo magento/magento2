@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model;
@@ -597,5 +597,23 @@ class Rule extends \Magento\Rule\Model\AbstractModel
             return $address->getId();
         }
         return $address;
+    }
+
+    /**
+     * @param string $formName
+     * @return string
+     */
+    public function getConditionsFieldSetId($formName = '')
+    {
+        return $formName . 'rule_conditions_fieldset_' . $this->getId();
+    }
+
+    /**
+     * @param string $formName
+     * @return string
+     */
+    public function getActionsFieldSetId($formName = '')
+    {
+        return $formName . 'rule_actions_fieldset_' . $this->getId();
     }
 }

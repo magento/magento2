@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Search\Model;
@@ -69,7 +69,7 @@ class QueryFactory implements QueryFactoryInterface
             $maxQueryLength = $this->getMaxQueryLength();
             $rawQueryText = $this->getRawQueryText();
             $preparedQueryText = $this->getPreparedQueryText($rawQueryText, $maxQueryLength);
-            $query = $this->create()->loadByQuery($preparedQueryText);
+            $query = $this->create()->loadByQueryText($preparedQueryText);
             if (!$query->getId()) {
                 $query->setQueryText($preparedQueryText);
             }

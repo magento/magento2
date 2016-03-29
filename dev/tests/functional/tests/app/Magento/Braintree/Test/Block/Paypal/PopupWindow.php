@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Block\Paypal;
@@ -47,7 +47,14 @@ class PopupWindow extends Block
         $this->browser->selectWindow();
         $this->waitForFormLoaded();
         $this->browser->find($this->submitButton)->click();
-        $this->waitForElementNotVisible($this->selector);
+        /**
+         * This try/catch is intended as workaround in case if popup window is closed instantly and #login-preview
+         * selector cannot be found.
+         */
+        try {
+            $this->waitForElementNotVisible($this->selector);
+        } catch (\PHPUnit_Extensions_Selenium2TestCase_WebDriverException $e) {
+        }
         $this->browser->selectWindow();
         $this->waitForElementNotVisible($this->loader);
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml;
@@ -26,6 +26,13 @@ use Magento\Framework\Api\DataObjectHelper;
  */
 abstract class Index extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Customer::manage';
+
     /**
      * @var \Magento\Framework\Validator
      */
@@ -298,15 +305,5 @@ abstract class Index extends \Magento\Backend\App\Action
             }
         }
         return $customersUpdated;
-    }
-
-    /**
-     * Customer access rights checking
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Customer::manage');
     }
 }

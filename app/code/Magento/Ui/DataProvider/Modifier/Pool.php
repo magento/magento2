@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\DataProvider\Modifier;
@@ -10,7 +10,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * Class Pool
  */
-class Pool
+class Pool implements \Magento\Ui\DataProvider\Modifier\PoolInterface
 {
     /**
      * @var array

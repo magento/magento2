@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Store\Model;
@@ -1242,6 +1242,22 @@ class Store extends AbstractExtensibleModel implements
     {
         $parsedUrl = parse_url($this->getBaseUrl());
         return isset($parsedUrl['path']) ? $parsedUrl['path'] : '/';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getScopeType()
+    {
+        return ScopeInterface::SCOPE_STORE;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getScopeTypeName()
+    {
+        return 'Store View';
     }
 
     /**

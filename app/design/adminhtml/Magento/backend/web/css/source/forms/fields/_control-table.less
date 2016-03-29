@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -106,10 +106,10 @@
     }
 
     th {
-        vertical-align: bottom;
         color: @color-very-dark-gray-black;
         font-size: @font-size__base;
         font-weight: @font-weight__semibold;
+        vertical-align: bottom;
 
         &._required {
             span {
@@ -130,6 +130,12 @@
         padding-top: 1.8rem;
         text-align: center;
         width: 1%;
+    }
+
+    //  Column with option
+    .control-table-options-th {
+        text-align: center;
+        width: 10rem;
     }
 
     //  Static text in row
@@ -162,7 +168,6 @@
 
     .draggable-handle {
         &:extend(.abs-draggable-handle all);
-        margin-top: .4rem;
         padding: 0;
     }
 
@@ -190,5 +195,17 @@
                 padding: 0;
             }
         }
+    }
+
+    td {
+        > .admin__field {
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+    }
+
+    .admin__field-option {
+        text-align: center;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,8 +14,8 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
     {
         $returnValueMap = [
             [
-                'Magento\Setup\Model\FilePermissions',
-                $this->getMock('Magento\Setup\Model\FilePermissions', [], [], '', false),
+                'Magento\Framework\Setup\FilePermissions',
+                $this->getMock('Magento\Framework\Setup\FilePermissions', [], [], '', false),
             ],
             [
                 'Magento\Framework\App\DeploymentConfig\Writer',

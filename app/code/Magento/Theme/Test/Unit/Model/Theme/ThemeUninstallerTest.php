@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Theme;
@@ -34,7 +34,7 @@ class ThemeUninstallerTest extends \PHPUnit_Framework_TestCase
      */
     private $output;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->themePackageInfo = $this->getMock('Magento\Theme\Model\Theme\ThemePackageInfo', [], [], '', false);
         $this->remove = $this->getMock('Magento\Framework\Composer\Remove', [], [], '', false);

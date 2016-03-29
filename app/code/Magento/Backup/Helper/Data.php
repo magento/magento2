@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Backup\Helper;
@@ -122,7 +122,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             \Magento\Framework\Backup\Factory::TYPE_SYSTEM_SNAPSHOT => 'tgz',
             \Magento\Framework\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA => 'tgz',
             \Magento\Framework\Backup\Factory::TYPE_MEDIA => 'tgz',
-            \Magento\Framework\Backup\Factory::TYPE_DB => 'gz'
+            \Magento\Framework\Backup\Factory::TYPE_DB => 'sql'
         ];
     }
 

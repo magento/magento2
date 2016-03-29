@@ -1,13 +1,20 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sales\Controller\Adminhtml\Order;
 
 class Address extends \Magento\Sales\Controller\Adminhtml\Order
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Sales::actions_edit';
+
     /**
      * Edit order address form
      *
@@ -30,13 +37,5 @@ class Address extends \Magento\Sales\Controller\Adminhtml\Order
         } else {
             return $this->resultRedirectFactory->create()->setPath('sales/*/');
         }
-    }
-
-    /**
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Magento_Sales::actions_edit');
     }
 }

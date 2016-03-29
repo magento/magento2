@@ -1,12 +1,16 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Category;
 
+use Magento\Store\Model\StoreManagerInterface;
+
 /**
  * Class Save
+ * 
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Save extends \Magento\Catalog\Controller\Adminhtml\Category
 {
@@ -37,10 +41,14 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             'include_in_menu',
             'is_anchor',
             'use_default' => ['url_key'],
-            'use_config' => ['available_sort_by', 'filter_price_range', 'default_sort_by'],
-            'savedImage' => ['delete']
+            'use_config' => ['available_sort_by', 'filter_price_range', 'default_sort_by']
         ]
     ];
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * Constructor
@@ -49,17 +57,20 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory
+        \Magento\Framework\View\LayoutFactory $layoutFactory,
+        StoreManagerInterface $storeManager
     ) {
         parent::__construct($context);
         $this->resultRawFactory = $resultRawFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -103,6 +114,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
         $data = $this->stringToBoolConverting($data);
         $data = $this->imagePreprocessing($data);
         $storeId = isset($data['general']['store_id']) ? $data['general']['store_id'] : null;
+        $store = $this->storeManager->getStore($storeId);
+        $this->storeManager->setCurrentStore($store->getCode());
         $parentId = isset($data['general']['parent']) ? $data['general']['parent'] : null;
         if ($data['general']) {
             $category->addData($this->_filterCategoryPostData($data['general']));
@@ -121,10 +134,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 foreach ($generalPost['use_config'] as $attributeCode => $attributeValue) {
                     if ($attributeValue) {
                         $useConfig[] = $attributeCode;
+                        $category->setData($attributeCode, null);
                     }
-                }
-                foreach ($useConfig as $attributeCode) {
-                    $category->setData($attributeCode, null);
                 }
             }
 
@@ -148,7 +159,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
             if (isset($generalPost['use_default']) && !empty($generalPost['use_default'])) {
                 foreach ($generalPost['use_default'] as $attributeCode => $attributeValue) {
                     if ($attributeValue) {
-                        $category->setData($attributeCode, false);
+                        $category->setData($attributeCode, null);
                     }
                 }
             }
@@ -164,6 +175,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 if ($category->hasCustomDesignTo()) {
                     $categoryResource->getAttribute('custom_design_from')->setMaxValue($category->getCustomDesignTo());
                 }
+
                 $validate = $category->validate();
                 if ($validate !== true) {
                     foreach ($validate as $code => $error) {
@@ -173,7 +185,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                                 __('Attribute "%1" is required.', $attribute)
                             );
                         } else {
-                            throw new \Magento\Framework\Exception\LocalizedException(__($error));
+                            throw new \Exception($error);
                         }
                     }
                 }
@@ -183,6 +195,10 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
                 $category->save();
                 $this->messageManager->addSuccess(__('You saved the category.'));
             } catch (\Magento\Framework\Exception\AlreadyExistsException $e) {
+                $this->messageManager->addError($e->getMessage());
+                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+                $this->_getSession()->setCategoryData($data);
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
                 $this->_getSession()->setCategoryData($data);
@@ -232,13 +248,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category
      */
     public function imagePreprocessing($data)
     {
-        if (!isset($_FILES) || (isset($_FILES['image']) && $_FILES['image']['name'] === '' )) {
+        if (empty($data['general']['image'])) {
             unset($data['general']['image']);
-            if (isset($data['general']['savedImage']['delete']) &&
-                $data['general']['savedImage']['delete']
-            ) {
-                $data['general']['image']['delete'] = $data['general']['savedImage']['delete'];
-            }
+            $data['general']['image']['delete'] = true;
         }
         return $data;
     }

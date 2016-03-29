@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Model;
@@ -298,9 +298,8 @@ class User extends AbstractModel implements StorageInterface, UserInterface
             }
 
             // Check whether password was used before
-            $passwordHash = $this->_encryptor->getHash($password, false);
             foreach ($this->getResource()->getOldPasswords($this) as $oldPasswordHash) {
-                if ($passwordHash === $oldPasswordHash) {
+                if ($this->_encryptor->isValidHash($password, $oldPasswordHash)) {
                     return [$errorMessage];
                 }
             }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -15,7 +15,7 @@ $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create('Magento\Catalog\Api\ProductRepositoryInterface');
 
 try {
-    $product = $productRepository->get('virtual-product');
+    $product = $productRepository->get('virtual-product', false, null, true);
     $productRepository->delete($product);
 } catch (\Magento\Framework\Exception\NoSuchEntityException $exception) {
     //Product already removed
