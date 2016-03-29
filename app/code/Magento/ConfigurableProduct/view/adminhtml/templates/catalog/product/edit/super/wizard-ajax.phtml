@@ -11,20 +11,19 @@
 $productMatrix = $block->getProductMatrix();
 $attributes = $block->getProductAttributes();
 
-/* @escapeNotVerified */ echo $block->getVariationWizard([
+/* @noEscape */ echo $block->getVariationWizard([
     'attributes' => $attributes,
     'configurations' => $productMatrix,
-    'configurableModal' => $block->getConfigurableModal()
+    'configurableModal' => $block->getForm() . '.' . $block->getModal()
 ]);
 ?>
 <script>
     require(['jquery', 'uiRegistry', 'underscore'], function ($, registry, _) {
         $('body').trigger('contentUpdated');
-        $('[data-role=steps-wizard-main]').applyBindings();
+        $('.<?= /* @noEscape */ $block->getData('config/dataScope')?>[data-role=steps-wizard-main]').applyBindings();
 
-        registry.async('variation-steps-wizard')(function (component) {
-            _.delay(component.open.bind(component), 600); // TODO: MAGETWO-50246
+        registry.async('<?= /* @noEscape */ $block->getData('config/nameStepWizard')?>')(function (component) {
+            _.delay(component.open.bind(component), 500); // TODO: MAGETWO-50246
         })
     });
 </script>
-
