@@ -69,20 +69,6 @@ class AssertProductAttributeIsUnique extends AbstractConstraint
     }
 
     /**
-     * Get actual message.
-     *
-     * @param array $errors
-     * @param string $attributeLabel
-     * @return mixed
-     */
-    private function getActualMessage(array $errors, $attributeLabel)
-    {
-        return isset($errors['attributes'][$attributeLabel])
-            ? $errors['attributes'][$attributeLabel]
-            : null;
-    }
-
-    /**
      * Create simple product fixture.
      *
      * @param CatalogProductSimple $product
