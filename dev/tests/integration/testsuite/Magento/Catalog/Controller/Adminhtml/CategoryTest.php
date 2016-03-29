@@ -339,7 +339,7 @@ class CategoryTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         );
         $this->dispatch('backend/catalog/category/save');
         $this->assertSessionMessages(
-            $this->equalTo(['Something went wrong while saving the category.']),
+            $this->equalTo(['The value of attribute "is_active" must be set']),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }
