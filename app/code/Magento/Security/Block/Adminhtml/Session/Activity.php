@@ -1,9 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Block\Adminhtml\Session;
+
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
+use Magento\Security\Model\ConfigInterface;
 
 /**
  * Block Session Activity
@@ -11,7 +14,7 @@ namespace Magento\Security\Block\Adminhtml\Session;
 class Activity extends \Magento\Backend\Block\Template
 {
     /**
-     * @var \Magento\Security\Helper\SecurityConfig
+     * @var ConfigInterface
      */
     protected $securityConfig;
 
@@ -26,18 +29,26 @@ class Activity extends \Magento\Backend\Block\Template
     protected $sessionsInfoCollection;
 
     /**
+     * @var RemoteAddress
+     */
+    private $remoteAddress;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Security\Helper\SecurityConfig $securityConfig
+     * @param ConfigInterface $securityConfig
      * @param \Magento\Security\Model\AdminSessionsManager $sessionsManager
+     * @param RemoteAddress $remoteAddress
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
-        \Magento\Security\Helper\SecurityConfig $securityConfig,
-        \Magento\Security\Model\AdminSessionsManager $sessionsManager
+        ConfigInterface $securityConfig,
+        \Magento\Security\Model\AdminSessionsManager $sessionsManager,
+        RemoteAddress $remoteAddress
     ) {
         parent::__construct($context);
         $this->securityConfig = $securityConfig;
         $this->sessionsManager = $sessionsManager;
+        $this->remoteAddress = $remoteAddress;
     }
 
     /**
@@ -64,7 +75,7 @@ class Activity extends \Magento\Backend\Block\Template
      */
     public function getRemoteIp()
     {
-        return $this->securityConfig->getRemoteIp(false);
+        return $this->remoteAddress->getRemoteAddress(false);
     }
 
     /**

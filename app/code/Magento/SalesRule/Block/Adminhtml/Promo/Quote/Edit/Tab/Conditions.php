@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
@@ -56,14 +56,18 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
+     * The getter function to get the new RuleFactory dependency
+     *
      * @return \Magento\SalesRule\Model\RuleFactory
+     *
      * @deprecated
      */
-    public function getRuleFactory()
+    private function getRuleFactory()
     {
-        if ($this->ruleFactory instanceof \Magento\SalesRule\Model\RuleFactory) {
-            $this->ruleFactory = ObjectManager::getInstance()->get('\Magento\SalesRule\Model\RuleFactory');
+        if ($this->ruleFactory === null) {
+            $this->ruleFactory = ObjectManager::getInstance()->get('Magento\SalesRule\Model\RuleFactory');
         }
+        return $this->ruleFactory;
     }
 
     /**
@@ -156,7 +160,7 @@ class Conditions extends \Magento\Backend\Block\Widget\Form\Generic implements
     {
         if (!$model) {
             $id = $this->getRequest()->getParam('id');
-            $model = $this->ruleFactory->create();
+            $model = $this->getRuleFactory()->create();
             $model->load($id);
         }
         $conditionsFieldSetId = $model->getConditionsFieldSetId($formName);

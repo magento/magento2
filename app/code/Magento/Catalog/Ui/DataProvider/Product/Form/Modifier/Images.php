@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
@@ -41,7 +41,9 @@ class Images extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        return $this->customizeImagesTab($meta);
+        unset($meta[self::CODE_IMAGE_MANAGEMENT_GROUP]);
+
+        return $meta;
     }
 
     /**
@@ -49,43 +51,6 @@ class Images extends AbstractModifier
      */
     public function modifyData(array $data)
     {
-        $modelId = $this->locator->getProduct()->getId();
-
-        if ($modelId != null) {
-            if (isset($data[$modelId][self::DATA_SOURCE_DEFAULT][self::CODE_MEDIA_GALLERY])) {
-                unset($data[$modelId][self::DATA_SOURCE_DEFAULT][self::CODE_MEDIA_GALLERY]);
-            }
-            if (isset($data[$modelId][self::DATA_SOURCE_DEFAULT][self::CODE_IMAGE])) {
-                unset($data[$modelId][self::DATA_SOURCE_DEFAULT][self::CODE_IMAGE]);
-            }
-            if (isset($data[$modelId][self::DATA_SOURCE_DEFAULT][self::CODE_SMALL_IMAGE])) {
-                unset($data[$modelId][self::DATA_SOURCE_DEFAULT][self::CODE_SMALL_IMAGE]);
-            }
-            if (isset($data[$modelId][self::DATA_SOURCE_DEFAULT][self::CODE_THUMBNAIL])) {
-                unset($data[$modelId][self::DATA_SOURCE_DEFAULT][self::CODE_THUMBNAIL]);
-            }
-            if (isset($data[$modelId][self::DATA_SOURCE_DEFAULT][self::CODE_SWATCH_IMAGE])) {
-                unset($data[$modelId][self::DATA_SOURCE_DEFAULT][self::CODE_SWATCH_IMAGE]);
-            }
-        }
-
         return $data;
-    }
-
-    /**
-     * Remove Images tab from meta because it's block is rendered in layout
-     *
-     * @param array $meta
-     * @return array
-     */
-    protected function customizeImagesTab(array $meta)
-    {
-        foreach (array_keys($meta) as $groupName) {
-            if ($groupName === self::CODE_IMAGE_MANAGEMENT_GROUP) {
-                unset($meta[self::CODE_IMAGE_MANAGEMENT_GROUP]);
-            }
-        }
-
-        return $meta;
     }
 }

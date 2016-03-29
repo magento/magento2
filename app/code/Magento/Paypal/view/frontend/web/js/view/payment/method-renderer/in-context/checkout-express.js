@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define(
@@ -43,6 +43,8 @@ define(
                             this.selectPaymentMethod();
                             setPaymentMethodAction(this.messageContainer).done(
                                 function () {
+                                    $('body').trigger('processStart');
+
                                     $.get(
                                         this.path,
                                         {

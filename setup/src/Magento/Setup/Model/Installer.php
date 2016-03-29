@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,6 +38,7 @@ use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Validator\DbValidator;
 use \Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\SampleData;
+use Magento\Framework\Setup\FilePermissions;
 
 /**
  * Class Installer contains the logic to install Magento application.
