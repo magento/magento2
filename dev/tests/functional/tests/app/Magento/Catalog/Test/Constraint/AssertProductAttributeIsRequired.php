@@ -44,8 +44,8 @@ class AssertProductAttributeIsRequired extends AbstractConstraint
         }
         $productForm->getAttributeElement($attribute)->setValue('');
         $catalogProductEdit->getFormPageActions()->save();
-        $failedAttributes = $productForm->getRequireNoticeAttributes();
-        $actualMessage = $failedAttributes['attributes'][$attribute->getFrontendLabel()];
+        $failedFields = $productForm->getRequireNoticeFields($product);
+        $actualMessage = $failedFields['attributes'][$attribute->getFrontendLabel()];
 
         \PHPUnit_Framework_Assert::assertEquals(
             self::REQUIRE_MESSAGE,

@@ -127,50 +127,35 @@ class FormSections extends AbstractFormContainers
     }
 
     /**
-     * Get Require Notice Attributes.
+     * Get require notice fields.
      *
+     * @param InjectableFixture $product
      * @return array
      */
-    public function getRequireNoticeAttributes()
+    public function getRequireNoticeFields(InjectableFixture $product)
     {
         $data = [];
-        $section = $this->getSection('attributes');
-        $errors = $section->getJsErrors();
-        if (!empty($errors)) {
-            $data['attributes'] = $errors;
+        $sections = $this->getFixtureFieldsByContainers($product);
+        foreach (array_keys($sections) as $sectionName) {
+            $section = $this->getSection($sectionName);
+            $this->openSection($sectionName);
+            $errors = $section->getValidationErrors();
+            if (!empty($errors)) {
+                $data[$sectionName] = $errors;
+            }
         }
 
         return $data;
     }
 
     /**
-     * Get unique notice attributes.
+     * Check if section is visible.
      *
-     * @return array
+     * @param string $sectionName
+     * @return bool
      */
-    public function getUniqueNoticeAttributes()
+    public function isSectionVisible($sectionName)
     {
-        $data = [];
-        $errorMessage = $this->browser->find($this->errorMessages)->getText();
-        $error = $this->getError($errorMessage);
-        if (!empty($error)) {
-            $data['attributes'] = $error;
-        }
-        return $data;
-    }
-
-    /**
-     * Get error.
-     *
-     * @param string $errorMessage
-     * @return array
-     */
-    private function getError($errorMessage)
-    {
-        $data = [];
-        $label = preg_match('/\"(.*?)\"/', $errorMessage, $matches) ? $matches[1] : '';
-        $data[$label] = $errorMessage;
-
-        return $data;
+        return ($this->isCollapsible($sectionName) && !$this->isCollapsed($sectionName));
     }
 }

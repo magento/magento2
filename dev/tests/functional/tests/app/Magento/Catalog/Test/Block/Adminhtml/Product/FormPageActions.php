@@ -56,7 +56,7 @@ class FormPageActions extends ParentFormPageActions
      *
      * @var string
      */
-    protected $addAttribute = '[data-ui-id="addattribute-button"]';
+    private $addAttribute = '[data-ui-id="addattribute-button"]';
 
     /**
      * Click on "Save" button.
