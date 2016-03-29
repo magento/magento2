@@ -48,7 +48,6 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Directory\Model\CurrencyFactory $currencyFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
@@ -56,13 +55,11 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Directory\Model\CurrencyFactory $currencyFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->_currencyFactory = $currencyFactory;
         $this->_storeManager = $storeManager;
         $this->_config = $config;
-        $this->metadataPool = $metadataPool;
         parent::__construct($context, $connectionName);
     }
 
@@ -493,7 +490,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['cpe' => $this->getTable('catalog_product_entity')],
             sprintf(
                 'cpe.%s = product_option.product_id',
-                $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
+                $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()
             ),
             []
         )->joinLeft(
@@ -540,7 +537,7 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ['cpe' => $this->getTable('catalog_product_entity')],
             sprintf(
                 'cpe.%s = product_option.product_id',
-                $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
+                $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField()
             ),
             []
         )->join(
@@ -561,5 +558,17 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return $searchData;
+    }
+
+    /**
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
     }
 }
