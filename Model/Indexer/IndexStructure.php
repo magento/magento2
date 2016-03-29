@@ -41,8 +41,8 @@ class IndexStructure implements IndexStructureInterface
         array $dimensions = []
     ) {
         $dimension = current($dimensions);
-        $storeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
-        $this->adapter->cleanIndex($storeId, $indexerId);
+        $scopeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
+        $this->adapter->cleanIndex($scopeId, $indexerId);
     }
 
     /**
@@ -55,7 +55,7 @@ class IndexStructure implements IndexStructureInterface
         array $dimensions = []
     ) {
         $dimension = current($dimensions);
-        $storeId = $this->scopeResolver->getScope($dimension->getValue())->getId();;
-        $this->adapter->checkIndex($storeId, $indexerId, false);
+        $scopeId = $this->scopeResolver->getScope($dimension->getValue())->getId();;
+        $this->adapter->checkIndex($scopeId, $indexerId, false);
     }
 }

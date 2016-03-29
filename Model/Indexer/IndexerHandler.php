@@ -59,18 +59,18 @@ class IndexerHandler implements IndexerInterface
      * @param ElasticsearchAdapter $adapter
      * @param IndexNameResolver $indexNameResolver
      * @param Batch $batch
+     * @param ScopeResolverInterface $scopeResolver
      * @param array $data
      * @param int $batchSize
-     * @param ScopeResolverInterface $scopeResolver
      */
     public function __construct(
         IndexStructureInterface $indexStructure,
         ElasticsearchAdapter $adapter,
         IndexNameResolver $indexNameResolver,
         Batch $batch,
+        ScopeResolverInterface $scopeResolver,
         array $data = [],
-        $batchSize = self::DEFAULT_BATCH_SIZE,
-        ScopeResolverInterface $scopeResolver
+        $batchSize = self::DEFAULT_BATCH_SIZE
     ) {
         $this->indexStructure = $indexStructure;
         $this->adapter = $adapter;
@@ -87,12 +87,12 @@ class IndexerHandler implements IndexerInterface
     public function saveIndex($dimensions, \Traversable $documents)
     {
         $dimension = current($dimensions);
-        $storeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
+        $scopeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
         foreach ($this->batch->getItems($documents, $this->batchSize) as $documentsBatch) {
-            $docs = $this->adapter->prepareDocsPerStore($documentsBatch, $storeId);
-            $this->adapter->addDocs($docs, $storeId, $this->getIndexerId());
+            $docs = $this->adapter->prepareDocsPerStore($documentsBatch, $scopeId);
+            $this->adapter->addDocs($docs, $scopeId, $this->getIndexerId());
         }
-        $this->adapter->updateAlias($storeId, $this->getIndexerId());
+        $this->adapter->updateAlias($scopeId, $this->getIndexerId());
         return $this;
     }
 
@@ -102,12 +102,12 @@ class IndexerHandler implements IndexerInterface
     public function deleteIndex($dimensions, \Traversable $documents)
     {
         $dimension = current($dimensions);
-        $storeId = $this->scopeResolver->getScope($dimension->getValue())->getId();;
+        $scopeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
         $documentIds = [];
         foreach ($documents as $document) {
             $documentIds[$document] = $document;
         }
-        $this->adapter->deleteDocs($documentIds, $storeId, $this->getIndexerId());
+        $this->adapter->deleteDocs($documentIds, $scopeId, $this->getIndexerId());
         return $this;
     }
 
