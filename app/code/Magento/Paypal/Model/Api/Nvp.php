@@ -1288,7 +1288,8 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
         $exceptionPhrase = __('PayPal gateway has rejected request. %1', $errorMessages);
 
         /** @var \Magento\Framework\Exception\LocalizedException $exception */
-        $exception = $this->_isProcessableError($errors[0]['code'])
+        $firstError = $errors[0]['code'];
+        $exception = $this->_isProcessableError($firstError)
             ? $this->_processableExceptionFactory->create(
                 ['phrase' => $exceptionPhrase, 'code' => $errors[0]['code']]
             )
