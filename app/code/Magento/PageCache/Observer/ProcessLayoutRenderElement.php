@@ -8,6 +8,9 @@ namespace Magento\PageCache\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Built-in cache observer for layout elements rendering.
+ */
 class ProcessLayoutRenderElement implements ObserverInterface
 {
     /**
@@ -16,13 +19,6 @@ class ProcessLayoutRenderElement implements ObserverInterface
      * @var \Magento\PageCache\Model\Config
      */
     protected $_config;
-
-    /**
-     * Is varnish enabled flag
-     *
-     * @var bool
-     */
-    protected $isVarnishEnabled;
 
     /**
      * Is full page cache enabled flag
@@ -42,27 +38,6 @@ class ProcessLayoutRenderElement implements ObserverInterface
     }
 
     /**
-     * Replace the output of the block, containing ttl attribute, with ESI tag
-     *
-     * @param \Magento\Framework\View\Element\AbstractBlock $block
-     * @param \Magento\Framework\View\Layout $layout
-     * @return string
-     */
-    protected function _wrapEsi(
-        \Magento\Framework\View\Element\AbstractBlock $block,
-        \Magento\Framework\View\Layout $layout
-    ) {
-        $url = $block->getUrl(
-            'page_cache/block/esi',
-            [
-                'blocks' => json_encode([$block->getNameInLayout()]),
-                'handles' => json_encode($layout->getUpdate()->getHandles())
-            ]
-        );
-        return sprintf('<esi:include src="%s" />', $url);
-    }
-
-    /**
      * Is full page cache enabled
      *
      * @return bool
@@ -76,21 +51,9 @@ class ProcessLayoutRenderElement implements ObserverInterface
     }
 
     /**
-     * Is varnish cache engine enabled
+     * Add comment cache containers to private blocks.
      *
-     * @return bool
-     */
-    protected function isVarnishEnabled()
-    {
-        if ($this->isVarnishEnabled === null) {
-            $this->isVarnishEnabled = ($this->_config->getType() == \Magento\PageCache\Model\Config::VARNISH);
-        }
-        return $this->isVarnishEnabled;
-    }
-
-    /**
-     * Add comment cache containers to private blocks
-     * Blocks are wrapped only if page is cacheable
+     * Blocks are wrapped only if page is cacheable.
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
@@ -105,18 +68,12 @@ class ProcessLayoutRenderElement implements ObserverInterface
             /** @var \Magento\Framework\View\Element\AbstractBlock $block */
             $block = $layout->getBlock($name);
             $transport = $event->getTransport();
-            if ($block instanceof \Magento\Framework\View\Element\AbstractBlock) {
-                $blockTtl = $block->getTtl();
-                $output = $transport->getData('output');
-                if (isset($blockTtl) && $this->isVarnishEnabled()) {
-                    $output = $this->_wrapEsi($block, $layout);
-                } elseif ($block->isScopePrivate()) {
-                    $output = sprintf(
-                        '<!-- BLOCK %1$s -->%2$s<!-- /BLOCK %1$s -->',
-                        $block->getNameInLayout(),
-                        $output
-                    );
-                }
+            if ($block instanceof \Magento\Framework\View\Element\AbstractBlock && $block->isScopePrivate()) {
+                $output = sprintf(
+                    '<!-- BLOCK %1$s -->%2$s<!-- /BLOCK %1$s -->',
+                    $block->getNameInLayout(),
+                    $transport->getData('output')
+                );
                 $transport->setData('output', $output);
             }
         }

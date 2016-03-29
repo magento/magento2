@@ -364,4 +364,14 @@ class Topmenu extends Template implements IdentityInterface
     {
         return array_merge(parent::getCacheTags(), $this->getIdentities());
     }
+
+    /**
+     * Get menu object.
+     *
+     * @return Node
+     */
+    public function getMenu()
+    {
+        return $this->_menu;
+    }
 }

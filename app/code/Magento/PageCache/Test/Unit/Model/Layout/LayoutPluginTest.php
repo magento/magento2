@@ -36,7 +36,7 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
             false,
             true,
             true,
-            ['isCacheable', 'getAllBlocks']
+            ['isCacheable', 'getAllBlocks', 'getBlock', 'getUpdate', 'getHandles']
         );
         $this->responseMock = $this->getMock('\Magento\Framework\App\Response\Http', [], [], '', false);
         $this->configMock = $this->getMock('Magento\PageCache\Model\Config', [], [], '', false);
@@ -143,6 +143,122 @@ class LayoutPluginTest extends \PHPUnit_Framework_TestCase
                 $tags,
                 \Magento\PageCache\Model\Config::BUILT_IN,
                 100,
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider aroundRenderElementDataProvider
+     * @param bool $isCacheEnabled
+     * @param string $cacheType
+     * @param bool $isLayoutCacheable
+     * @param int|null $blockTtl
+     * @param bool $useBlockCache
+     * @param string $expectedOutput
+     */
+    public function testAroundRenderElement(
+        $isCacheEnabled,
+        $cacheType,
+        $isLayoutCacheable,
+        $blockTtl,
+        $useBlockCache,
+        $expectedOutput
+    ) {
+        $blockName = 'blockName';
+        
+        $closure = function ($nameParam, $useCacheParam) {
+            return $useCacheParam ? "cached {$nameParam} output" : "non-cached {$nameParam} output";
+        };
+
+        $blockMock = $this->getMockForAbstractClass(
+            '\Magento\Framework\View\Element\AbstractBlock',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['getUrl', 'getData']
+        );
+
+        $this->configMock->expects($this->any())->method('isEnabled')->will($this->returnValue($isCacheEnabled));
+        $this->configMock->expects($this->any())->method('getType')->will($this->returnValue($cacheType));
+
+        if ($isCacheEnabled) {
+            $this->layoutMock->expects($this->once())
+                ->method('isCacheable')
+                ->will($this->returnValue($isLayoutCacheable));
+
+            $this->layoutMock->expects($this->any())
+                ->method('getUpdate')
+                ->will($this->returnSelf());
+
+            $this->layoutMock->expects($this->any())
+                ->method('getHandles')
+                ->will($this->returnValue([]));
+
+            $this->layoutMock->expects($this->once())
+                ->method('getBlock')
+                ->with($blockName)
+                ->willReturn($blockMock);
+
+            if ($blockTtl && $cacheType == \Magento\PageCache\Model\Config::VARNISH) {
+                $blockMock->expects($this->once())
+                    ->method('getData')
+                    ->with('ttl')
+                    ->will($this->returnValue($blockTtl));
+                $blockMock->expects($this->any())
+                    ->method('getUrl')
+                    ->with('page_cache/block/esi')
+                    ->willReturn('page_cache/block/wrapesi/with/handles/and/other/stuff');
+            }
+        }
+        
+        $output = $this->model->aroundRenderElement($this->layoutMock, $closure, $blockName, $useBlockCache);
+        $this->assertEquals($expectedOutput, $output);
+    }
+
+    public function aroundRenderElementDataProvider()
+    {
+        return [
+            'full_page type and Varnish enabled, ttl is set' => [
+                true,
+                \Magento\PageCache\Model\Config::VARNISH,
+                true,
+                360,
+                true,
+                '<esi:include src="page_cache/block/wrapesi/with/handles/and/other/stuff" />',
+            ],
+            'full_page type and Varnish enabled, ttl is not set, block cache true' => [
+                true,
+                \Magento\PageCache\Model\Config::VARNISH,
+                true,
+                null,
+                true,
+                'cached blockName output',
+            ],
+            'full_page type disabled and Varnish enabled, ttl is set, block cache false' => [
+                false,
+                \Magento\PageCache\Model\Config::VARNISH,
+                true,
+                360,
+                false,
+                'non-cached blockName output',
+            ],
+            'full_page type enabled and Varnish disabled, ttl is set, block cache false' => [
+                true,
+                \Magento\PageCache\Model\Config::BUILT_IN,
+                true,
+                360,
+                false,
+                'non-cached blockName output',
+            ],
+            'full_page type disabled and Varnish disabled, ttl is set, block cache false' => [
+                false,
+                \Magento\PageCache\Model\Config::BUILT_IN,
+                true,
+                360,
+                false,
+                'non-cached blockName output',
             ]
         ];
     }
