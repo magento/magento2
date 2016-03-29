@@ -57,7 +57,7 @@ class Search implements SearchInterface
     {
         $this->requestBuilder->setRequestName($searchCriteria->getRequestName());
 
-        $scope = $this->scopeResolver->getScope();
+        $scope = $this->scopeResolver->getScope()->getId();
         $this->requestBuilder->bindDimension('scope', $scope);
 
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
