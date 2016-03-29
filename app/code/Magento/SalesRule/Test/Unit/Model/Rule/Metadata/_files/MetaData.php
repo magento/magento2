@@ -101,7 +101,7 @@ return [
                                                             ],
                                                             [
                                                                 'label' => __('Fixed amount discount for whole cart'),
-                                                                'value' => 'by_percent',
+                                                                'value' => 'cart_fixed',
                                                             ],
                                                             [
                                                                 'label' => __(
