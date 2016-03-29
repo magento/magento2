@@ -40,6 +40,26 @@ class ConfigurablePanel extends AbstractModifier
     private $urlBuilder;
 
     /**
+     * @var string
+     */
+    private $formName;
+
+    /**
+     * @var string
+     */
+    private $dataScopeName;
+
+    /**
+     * @var string
+     */
+    private $dataSourceName;
+
+    /**
+     * @var string
+     */
+    private $associatedListingPrefix;
+
+    /**
      * @var LocatorInterface
      */
     private $locator;
@@ -47,13 +67,25 @@ class ConfigurablePanel extends AbstractModifier
     /**
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
+     * @param string $formName
+     * @param string $dataScopeName
+     * @param string $dataSourceName
+     * @param string $associatedListingPrefix
      */
     public function __construct(
         LocatorInterface $locator,
-        UrlInterface $urlBuilder
+        UrlInterface $urlBuilder,
+        $formName,
+        $dataScopeName,
+        $dataSourceName,
+        $associatedListingPrefix = ''
     ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
+        $this->formName = $formName;
+        $this->dataScopeName = $dataScopeName;
+        $this->dataSourceName = $dataSourceName;
+        $this->associatedListingPrefix = $associatedListingPrefix;
     }
 
     /**
@@ -162,11 +194,15 @@ class ConfigurablePanel extends AbstractModifier
                                         'componentType' => 'insertListing',
                                         'component' => 'Magento_ConfigurableProduct/js'
                                             .'/components/associated-product-insert-listing',
-                                        'dataScope' => static::ASSOCIATED_PRODUCT_LISTING,
-                                        'externalProvider' => static::ASSOCIATED_PRODUCT_LISTING . '.data_source',
-                                        'selectionsProvider' => static::ASSOCIATED_PRODUCT_LISTING . '.'
+                                        'dataScope' => $this->associatedListingPrefix
+                                            . static::ASSOCIATED_PRODUCT_LISTING,
+                                        'externalProvider' => $this->associatedListingPrefix
+                                            . static::ASSOCIATED_PRODUCT_LISTING . '.data_source',
+                                        'selectionsProvider' => $this->associatedListingPrefix
+                                            . static::ASSOCIATED_PRODUCT_LISTING . '.'
+                                            . $this->associatedListingPrefix
                                             . static::ASSOCIATED_PRODUCT_LISTING . '.product_columns.ids',
-                                        'ns' => static::ASSOCIATED_PRODUCT_LISTING,
+                                        'ns' => $this->associatedListingPrefix . static::ASSOCIATED_PRODUCT_LISTING,
                                         'render_url' => $this->urlBuilder->getUrl('mui/index/render'),
                                         'realTimeLink' => true,
                                         'behaviourType' => 'simple',
@@ -177,15 +213,22 @@ class ConfigurablePanel extends AbstractModifier
                                             'exports' => true
                                         ],
                                         'changeProductProvider' => 'change_product',
-                                        'productsProvider' => 'configurable_associated_product_listing.data_source',
-                                        'productsColumns' => 'configurable_associated_product_listing'
-                                            . '.configurable_associated_product_listing.product_columns',
-                                        'productsMassAction' => 'configurable_associated_product_listing'
-                                            . '.configurable_associated_product_listing.product_columns.ids',
-                                        'productsFilters' => 'configurable_associated_product_listing'
-                                            . '.configurable_associated_product_listing.listing_top.listing_filters',
-                                        'modalWithGrid' => 'ns=' . static::FORM_NAME . ', index='
+                                        'productsProvider' => $this->associatedListingPrefix
+                                            . 'configurable_associated_product_listing.data_source',
+                                        'productsColumns' => $this->associatedListingPrefix
+                                            . 'configurable_associated_product_listing'
+                                            . '.' . $this->associatedListingPrefix
+                                            . 'configurable_associated_product_listing.product_columns',
+                                        'productsMassAction' => $this->associatedListingPrefix
+                                            . 'configurable_associated_product_listing'
+                                            . '.' . $this->associatedListingPrefix
+                                            . 'configurable_associated_product_listing.product_columns.ids',
+                                        'modalWithGrid' => 'ns=' . $this->formName . ', index='
                                             . static::ASSOCIATED_PRODUCT_MODAL,
+                                        'productsFilters' => $this->associatedListingPrefix
+                                            . 'configurable_associated_product_listing'
+                                            . '.' . $this->associatedListingPrefix
+                                            . '.configurable_associated_product_listing.listing_top.listing_filters',
                                     ],
                                 ],
                             ],

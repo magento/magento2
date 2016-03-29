@@ -88,7 +88,8 @@ class AddCatalogToTopmenuItemsObserverTest extends \PHPUnit_Framework_TestCase
                     'addFieldToFilter',
                     'addAttributeToFilter',
                     'addUrlRewriteToResult',
-                    'getIterator'
+                    'getIterator',
+                    'setStoreId'
                 ]
             )->disableOriginalConstructor()
             ->getMock();

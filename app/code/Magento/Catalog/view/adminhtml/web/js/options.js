@@ -41,9 +41,6 @@ define([
                         data.intype = this.getOptionInputType();
                     }
 
-                    if (!this.totalItems) {
-                        data.checked = 'checked';
-                    }
                     element = this.template({
                         data: data
                     });

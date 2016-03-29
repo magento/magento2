@@ -199,12 +199,12 @@ class GroupRepository implements \Magento\Eav\Api\AttributeGroupRepositoryInterf
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return null|string
      */
-    protected function retrieveAttributeGroupCodeFromSearchCriteria(
+    private function retrieveAttributeGroupCodeFromSearchCriteria(
         \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
     ) {
         foreach ($searchCriteria->getFilterGroups() as $group) {
             foreach ($group->getFilters() as $filter) {
-                if ($filter->getField() == 'attribute_group_code') {
+                if ($filter->getField() === 'attribute_group_code') {
                     return $filter->getValue();
                 }
             }
