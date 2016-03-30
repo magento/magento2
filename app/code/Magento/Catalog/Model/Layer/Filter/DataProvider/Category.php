@@ -112,13 +112,17 @@ class Category
             /** @var CategoryModel|null $category */
             $category = null;
             if ($this->categoryId !== null) {
-                $category = $this->categoryFactory->create()
-                    ->setStoreId(
-                        $this->getLayer()
-                            ->getCurrentStore()
-                            ->getId()
-                    )
-                    ->load($this->categoryId);
+                if ($this->coreRegistry->registry('current_category')->getId() == $this->categoryId) {
+                    $category = $this->coreRegistry->registry('current_category');
+                } else {
+                    $category = $this->categoryFactory->create()
+                        ->setStoreId(
+                            $this->getLayer()
+                                ->getCurrentStore()
+                                ->getId()
+                        )
+                        ->load($this->categoryId);
+                }
             }
 
             if ($category === null || !$category->getId()) {
