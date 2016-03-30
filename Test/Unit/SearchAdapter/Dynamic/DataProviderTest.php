@@ -5,6 +5,9 @@
  */
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Dynamic;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
