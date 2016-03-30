@@ -63,9 +63,6 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->readFactoryMock->expects($this->any())
-            ->method('create')
-            ->willReturn($this->directoryMock);
         $this->rulePoolMock->expects($this->any())
             ->method('getRule')
             ->with('type')
@@ -100,6 +97,9 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
             $expectedParams['theme'] = $this->getMockForTheme($expectedParams['theme']);
         }
 
+        $this->readFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->directoryMock);
         $this->ruleMock->expects($this->once())
             ->method('getPatternDirs')
             ->with($expectedParams)
@@ -200,11 +200,48 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
         $this->readFactoryMock->expects($this->any())
             ->method('create')
             ->willReturnMap([
+                ['var/test', DriverPool::FILE, $this->directoryMock],
                 ['lib_web', DriverPool::FILE, $directoryWeb],
                 [false, DriverPool::FILE, $fileRead]
             ]);
 
         $this->object->resolve('type', '../file.ext', '', null, '', '');
+    }
+
+    public function testResolveSecurity()
+    {
+        $this->ruleMock->expects($this->once())
+            ->method('getPatternDirs')
+            ->willReturn([
+                'var/test'
+            ]);
+        $directoryWeb = clone $this->directoryMock;
+        $fileRead = clone $this->directoryMock;
+
+        $this->directoryMock->expects($this->once())
+            ->method('isExist')
+            ->willReturn(true);
+        $this->directoryListMock->expects($this->once())
+            ->method('getPath')
+            ->willReturn('lib_web');
+        $this->readFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturnMap([
+                ['var/test', DriverPool::FILE, $this->directoryMock],
+                ['lib_web', DriverPool::FILE, $directoryWeb],
+                [false, DriverPool::FILE, $fileRead]
+            ]);
+        $directoryWeb->expects($this->once())
+            ->method('getAbsolutePath')
+            ->willReturn('var/test/web');
+        $fileRead->expects($this->once())
+            ->method('getAbsolutePath')
+            ->willReturn('var/test/web/css');
+
+        $this->assertEquals(
+            'var/test/../file.ext',
+            $this->object->resolve('type', '../file.ext', '', null, '', '')
+        );
     }
 
     public function testResolveNoPatterns()
@@ -227,6 +264,9 @@ class SimpleTest extends \PHPUnit_Framework_TestCase
 
     public function testResolveNonexistentFile()
     {
+        $this->readFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->directoryMock);
         $this->ruleMock->expects($this->once())
             ->method('getPatternDirs')
             ->willReturn(['some/dir']);
