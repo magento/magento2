@@ -77,6 +77,19 @@ class SaveHandler
             $this->billingAddressPersister->save($quote, $billingAddress);
         }
 
+        $this->processShippingAssignment($quote);
+
+        $this->quoteResourceModel->save($quote->collectTotals());
+        return $quote;
+    }
+
+    /**
+     * @param \Magento\Quote\Model\Quote $quote
+     * @return void
+     * @throws InputException
+     */
+    private function processShippingAssignment($quote)
+    {
         // Shipping Assignments processing
         $extensionAttributes = $quote->getExtensionAttributes();
         if (!$quote->isVirtual() && $extensionAttributes && $extensionAttributes->getShippingAssignments()) {
@@ -86,8 +99,5 @@ class SaveHandler
             }
             $this->shippingAssignmentPersister->save($quote, $shippingAssignments[0]);
         }
-
-        $this->quoteResourceModel->save($quote->collectTotals());
-        return $quote;
     }
 }
