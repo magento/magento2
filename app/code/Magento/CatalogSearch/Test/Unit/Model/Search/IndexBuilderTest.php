@@ -298,7 +298,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @param $name
      * @param $value
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
     private function createDimension($name, $value)
     {
