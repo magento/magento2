@@ -5,22 +5,18 @@
  */
 namespace Magento\Quote\Model\QuoteRepository;
 
-use Magento\Quote\Model\Quote\Address\BillingAddressPersister;
-use Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister;
-use Magento\Quote\Model\Quote\Item\CartItemPersister;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Framework\Exception\InputException;
-use Magento\Quote\Model\ResourceModel\Quote;
 
 class SaveHandler
 {
     /**
-     * @var CartItemPersister
+     * @var \Magento\Quote\Model\Quote\Item\CartItemPersister
      */
     private $cartItemPersister;
 
     /**
-     * @var BillingAddressPersister
+     * @var \Magento\Quote\Model\Quote\Address\BillingAddressPersister
      */
     private $billingAddressPersister;
 
@@ -30,21 +26,21 @@ class SaveHandler
     private $quoteResourceModel;
 
     /**
-     * @var ShippingAssignmentPersister
+     * @var \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister
      */
     private $shippingAssignmentPersister;
 
     /**
-     * @param Quote $quoteResource
-     * @param CartItemPersister $cartItemPersister
-     * @param BillingAddressPersister $billingAddressPersister
-     * @param ShippingAssignmentPersister $shippingAssignmentPersister
+     * @param \Magento\Quote\Model\ResourceModel\Quote $quoteResource
+     * @param \Magento\Quote\Model\Quote\Item\CartItemPersister $cartItemPersister
+     * @param \Magento\Quote\Model\Quote\Address\BillingAddressPersister $billingAddressPersister
+     * @param \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister $shippingAssignmentPersister
      */
     public function __construct(
-        Quote $quoteResource,
-        CartItemPersister $cartItemPersister,
-        BillingAddressPersister $billingAddressPersister,
-        ShippingAssignmentPersister $shippingAssignmentPersister
+        \Magento\Quote\Model\ResourceModel\Quote $quoteResource,
+        \Magento\Quote\Model\Quote\Item\CartItemPersister $cartItemPersister,
+        \Magento\Quote\Model\Quote\Address\BillingAddressPersister $billingAddressPersister,
+        \Magento\Quote\Model\Quote\ShippingAssignment\ShippingAssignmentPersister $shippingAssignmentPersister
     ) {
         $this->quoteResourceModel = $quoteResource;
         $this->cartItemPersister = $cartItemPersister;
