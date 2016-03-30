@@ -46,6 +46,16 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $target;
 
+    /**
+     * @var \Magento\Framework\App\ScopeResolverInterface|\MockObject
+     */
+    private $dimensionScopeResolver;
+
+    /**
+     * @var \Magento\Framework\App\ScopeInterface|\MockObject
+     */
+    private $scopeInterface;
+
     protected function setUp()
     {
         $this->select = $this->getMockBuilder('\Magento\Framework\DB\Select')
@@ -118,6 +128,16 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             ->method('addTables')
             ->with($this->select, $this->request)
             ->willReturnArgument(0);
+        $this->dimensionScopeResolver = $this->getMockForAbstractClass(
+            '\Magento\Framework\App\ScopeResolverInterface',
+            [],
+            '',
+            false);
+        $this->scopeInterface = $this->getMockForAbstractClass(
+            '\Magento\Framework\App\ScopeInterface',
+            [],
+            '',
+            false);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->target = $objectManagerHelper->getObject(
@@ -129,6 +149,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
                 'conditionManager' => $this->conditionManager,
                 'scopeResolver' => $this->scopeResolver,
                 'tableMapper' => $this->tableMapper,
+                'dimensionScopeResolver' => $this->dimensionScopeResolver
             ]
         );
     }
@@ -167,6 +188,12 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $this->request->expects($this->exactly(2))
             ->method('getDimensions')
             ->willReturn($dimensions);
+        $this->dimensionScopeResolver->expects($this->once())
+            ->method('getScope')
+            ->willReturn($this->scopeInterface);
+        $this->scopeInterface->expects($this->once())
+            ->method('getId')
+            ->willReturn('someValue');
 
         $this->mockBuild($index, $tableSuffix, false);
 
