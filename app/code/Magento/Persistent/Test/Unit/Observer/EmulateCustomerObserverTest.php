@@ -172,7 +172,7 @@ class EmulateCustomerObserverTest extends \PHPUnit_Framework_TestCase
         $this->customerSessionMock
             ->expects($this->once())
             ->method('setCustomerGroupId')
-            ->with($customerGroupId)->willReturnSelf();
+            ->with($customerGroupId)->will($this->returnSelf());
         $this->customerSessionMock
             ->expects($this->once())
             ->method('setIsCustomerEmulated')
