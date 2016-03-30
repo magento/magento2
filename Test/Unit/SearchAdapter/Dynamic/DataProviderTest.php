@@ -5,13 +5,10 @@
  */
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Dynamic;
 
-use Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-
 class DataProviderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var DataProvider
+     * @var \Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider
      */
     protected $model;
 
@@ -180,7 +177,7 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->setUpMockObjects();
 
-        $objectManagerHelper = new ObjectManagerHelper($this);
+        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
             '\Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider',
             [
