@@ -160,43 +160,32 @@ define([
          */
         processingUnionInsertData: function (data) {
             var dataInc = 0,
-                diff = 0,
                 dataCount,
-                elemsCount,
-                lastRecord;
+                elemsCount;
 
             this.source.remove(this.dataScope + '.' + this.index);
             this.isEmpty(data.length === 0);
 
             _.each(data, function (row) {
-                _.each(row, function (value, key) {
-                    var path = this.dataScope + '.' + this.index + '.' + dataInc + '.' + key;
+                var path = this.dataScope + '.' + this.index + '.' + dataInc;
 
-                    this.source.set(path, value);
-                }, this);
-
+                this.source.set(path, row);
                 ++dataInc;
             }, this);
+
+            this.getPagesData(data);
 
             // Render
             dataCount = data.length;
             elemsCount = this.elems().length;
 
             if (dataCount > elemsCount) {
-                for (diff = dataCount - elemsCount; diff > 0; diff--) {
-                    this.addChild(data, false);
-                }
+                this.getChildItems().each(function (data, index) {
+                    this.pageSizeChecker(data, this.startIndex + index)
+                }, this);
             } else {
-                for (diff = elemsCount - dataCount; diff > 0; diff--) {
-                    lastRecord =
-                        _.findWhere(this.elems(), {
-                            index: this.recordIterator - 1
-                        }) ||
-                        _.findWhere(this.elems(), {
-                            index: (this.recordIterator - 1).toString()
-                        });
-                    lastRecord.destroy();
-                    --this.recordIterator;
+                for (elemsCount; elemsCount > dataCount; elemsCount--) {
+                    this.elems()[elemsCount - 1].destroy();
                 }
             }
 
