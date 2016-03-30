@@ -116,6 +116,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->sessionMock = $this->getMock('Magento\Customer\Model\Session', [], [], '', false);
         $this->dateTimeMock = $this->getMock('Magento\Framework\Stdlib\DateTime');
         $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->prepareObjectManager([
+            [
+                'Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation',
+                $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation')
+            ]
+        ]);
+
         $this->collection = $this->objectManagerHelper->getObject(
             'Magento\Catalog\Model\ResourceModel\Product\Link\Product\Collection',
             [
@@ -150,5 +157,21 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $product->expects($this->any())->method('getStore')->will($this->returnValue($productStore));
         $this->collection->setProduct($product);
         $this->assertEquals(33, $this->collection->getStoreId());
+    }
+
+    /**
+     * @param $map
+     */
+    public function prepareObjectManager($map)
+    {
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($map));
+        $reflectionClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
+        $reflectionProperty = $reflectionClass->getProperty('_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock);
     }
 }
