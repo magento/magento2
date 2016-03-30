@@ -65,6 +65,15 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         $this->_checkFaultsDeclaration($wsdlContent);
     }
 
+    public function testNoAuthorizedServices()
+    {
+        $wsdlUrl = $this->_getBaseWsdlUrl() . 'testModule5AllSoapAndRestV2';
+        $connection = curl_init($wsdlUrl);
+        curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1);
+        $responseContent = curl_exec($connection);
+        $this->assertContains("Consumer is not authorized to access %resources", $responseContent);
+    }
+
     public function testInvalidWsdlUrlNoServices()
     {
         $responseContent = $this->_getWsdlContent($this->_getBaseWsdlUrl());
