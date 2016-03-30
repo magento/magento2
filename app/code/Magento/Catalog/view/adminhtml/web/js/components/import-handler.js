@@ -105,7 +105,7 @@ define([
          * @param {String} newValue
          */
         handleShortDescriptionChanges: function (newValue) {
-            this.values.short_description = newValue;
+            this.values['short_description'] = newValue;
             this.updateValue();
         },
 
@@ -141,7 +141,7 @@ define([
                     nonEmptyValueFlag = nonEmptyValueFlag || !!this.values[property];
                 }
             }
-           // strip tags
+            // strip tags
             tmpElement = document.createElement('div');
             tmpElement.innerHTML = str;
             str =  tmpElement.textContent || tmpElement.innerText || '';
@@ -177,7 +177,7 @@ define([
                 this.allowImport = true;
 
                 if (this.autoImportIfEmpty) {
-                        this.updateValue();
+                    this.updateValue();
                 }
             } else {
                 this.allowImport = false;
