@@ -7,10 +7,19 @@ namespace Magento\Theme\Test\Unit\Model\Theme;
 
 use Magento\Framework\App\Area;
 use Magento\Framework\View\Design\ThemeInterface;
-use \Magento\Theme\Model\Theme\ThemeProvider;
+use Magento\Theme\Model\Theme\ThemeProvider;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 class ThemeProviderTest extends \PHPUnit_Framework_TestCase
 {
+    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    protected $objectManager;
+
+    protected function setUp()
+    {
+        $this->objectManager = new ObjectManagerHelper($this);
+    }
+
     public function testGetByFullPath()
     {
         $path = 'frontend/Magento/luma';
@@ -35,7 +44,14 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
         $collectionFactory->expects($this->once())->method('create')->will($this->returnValue($collectionMock));
         $themeFactory = $this->getMock('\Magento\Theme\Model\ThemeFactory', [], [], '', false);
 
-        $themeProvider = new ThemeProvider($collectionFactory, $themeFactory);
+        $themeProvider = $this->objectManager->getObject(
+            'Magento\Theme\Model\Theme\ThemeProvider',
+            [
+                'collectionFactory' => $collectionFactory,
+                'themeFactory' => $themeFactory
+            ]
+        );
+
         $this->assertSame($theme, $themeProvider->getThemeByFullPath($path));
     }
 
@@ -51,10 +67,29 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
         );
         $theme = $this->getMock('Magento\Theme\Model\Theme', [], [], '', false);
         $theme->expects($this->once())->method('load')->with($themeId)->will($this->returnSelf());
+        $theme->expects($this->once())->method('getId')->will($this->returnValue(1));
+        $theme->expects($this->once())->method('__sleep')->will($this->returnValue([]));
+
         $themeFactory = $this->getMock('\Magento\Theme\Model\ThemeFactory', ['create'], [], '', false);
         $themeFactory->expects($this->once())->method('create')->will($this->returnValue($theme));
 
-        $themeProvider = new ThemeProvider($collectionFactory, $themeFactory);
+        $cacheMock = $this->getMockBuilder('Magento\Framework\App\CacheInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $cacheMock->expects($this->once())
+            ->method('load')
+            ->with('theme-by-id-' . $themeId)
+            ->willReturn(false);
+
+        $themeProvider = $this->objectManager->getObject(
+            'Magento\Theme\Model\Theme\ThemeProvider',
+            [
+                'collectionFactory' => $collectionFactory,
+                'themeFactory' => $themeFactory,
+                'cache' => $cacheMock
+            ]
+        );
+
         $this->assertSame($theme, $themeProvider->getThemeById($themeId));
     }
 
@@ -84,9 +119,14 @@ class ThemeProviderTest extends \PHPUnit_Framework_TestCase
             ->with(ThemeInterface::TYPE_VIRTUAL)
             ->willReturnSelf();
 
-        /** @var \Magento\Theme\Model\ResourceModel\Theme\CollectionFactory $collectionFactory */
-        /** @var \Magento\Theme\Model\ThemeFactory $themeFactory */
-        $themeProvider = new ThemeProvider($collectionFactory, $themeFactory);
+        $themeProvider = $this->objectManager->getObject(
+            'Magento\Theme\Model\Theme\ThemeProvider',
+            [
+                'collectionFactory' => $collectionFactory,
+                'themeFactory' => $themeFactory
+            ]
+        );
+
         $this->assertInstanceOf(get_class($collection), $themeProvider->getThemeCustomizations());
     }
 }
