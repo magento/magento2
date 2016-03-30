@@ -8,6 +8,8 @@ namespace Magento\CatalogSearch\Test\Unit\Model\Search;
 
 /**
  * Test for \Magento\CatalogSearch\Model\Search\IndexBuilder
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class IndexBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -296,7 +298,7 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     /**
      * @param $name
      * @param $value
-     * @return MockObject
+     * @return PHPUnit_Framework_MockObject_MockObject
      */
     private function createDimension($name, $value)
     {
