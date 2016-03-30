@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\ResourceModel\Entity;
@@ -133,10 +133,10 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Delete entity
      *
-     * @param \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $object
+     * @param \Magento\Framework\Model\AbstractMode $object
      * @return $this
      */
-    public function deleteEntity(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute $object)
+    public function deleteEntity(\Magento\Framework\Model\AbstractModel $object)
     {
         if (!$object->getEntityAttributeId()) {
             return $this;

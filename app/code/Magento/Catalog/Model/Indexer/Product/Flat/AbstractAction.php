@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
@@ -79,7 +79,6 @@ abstract class AbstractAction
     private $metadataPool;
 
     /**
-     * @param MetadataPool $metadataPool
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper
@@ -88,7 +87,6 @@ abstract class AbstractAction
      * @param FlatTableBuilder $flatTableBuilder
      */
     public function __construct(
-        MetadataPool $metadataPool,
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Helper\Product\Flat\Indexer $productHelper,
@@ -102,7 +100,6 @@ abstract class AbstractAction
         $this->_connection = $resource->getConnection();
         $this->_tableBuilder = $tableBuilder;
         $this->_flatTableBuilder = $flatTableBuilder;
-        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -204,7 +201,7 @@ abstract class AbstractAction
             return $this;
         }
 
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
 
         foreach ($this->_getProductTypeInstances() as $typeInstance) {
             /** @var $typeInstance \Magento\Catalog\Model\Product\Type\AbstractType */
@@ -263,7 +260,7 @@ abstract class AbstractAction
             return $this;
         }
 
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
 
         foreach ($this->_getProductTypeInstances() as $typeInstance) {
             /** @var $typeInstance \Magento\Catalog\Model\Product\Type\AbstractType */
@@ -335,5 +332,17 @@ abstract class AbstractAction
         }
 
         return $this->_flatTablesExist[$storeId];
+    }
+
+    /**
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
     }
 }

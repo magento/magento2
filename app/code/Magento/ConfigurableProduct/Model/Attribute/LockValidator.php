@@ -1,14 +1,15 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\Attribute;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Attribute\LockValidatorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Model\Entity\MetadataPool;
-use Magento\Catalog\Model\Attribute\LockValidatorInterface;
 
 /**
  * Class LockValidator
@@ -29,14 +30,11 @@ class LockValidator implements LockValidatorInterface
      * Constructor
      *
      * @param ResourceConnection $resource
-     * @param MetadataPool $metadataPool
      */
     public function __construct(
-        ResourceConnection $resource,
-        MetadataPool $metadataPool
+        ResourceConnection $resource
     ) {
         $this->resource = $resource;
-        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -49,7 +47,7 @@ class LockValidator implements LockValidatorInterface
      */
     public function validate(\Magento\Framework\Model\AbstractModel $object, $attributeSet = null)
     {
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $connection = $this->resource->getConnection();
 
         $bind = ['attribute_id' => $object->getAttributeId()];
@@ -76,5 +74,17 @@ class LockValidator implements LockValidatorInterface
                 __('This attribute is used in configurable products.')
             );
         }
+    }
+
+    /**
+     * Get MetadataPool instance
+     * @return MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

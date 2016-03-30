@@ -2,7 +2,7 @@
 /**
  * CatalogInventory Configurable Products Stock Status Indexer Resource Model
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Indexer\Stock;
@@ -25,7 +25,7 @@ class Configurable extends \Magento\CatalogInventory\Model\ResourceModel\Indexer
      */
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
-        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $connection = $this->getConnection();
         $idxTable = $usePrimaryTable ? $this->getMainTable() : $this->getIdxTable();
         $select = $connection->select()->from(['e' => $this->getTable('catalog_product_entity')], ['entity_id']);

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -290,9 +290,7 @@ class ConfigurableAttributesData extends DataSource
                     'configurable_attribute' => $product->getId(),
                     'name' => $product->getName(),
                     'sku' => $product->getSku(),
-                    'quantity_and_stock_status' => [
-                        'qty' => $quantityAndStockStatus['qty'],
-                    ],
+                    'qty' => $quantityAndStockStatus['qty'],
                     'weight' => $product->getWeight(),
                     'price' => $product->getPrice()
                 ];
@@ -302,9 +300,7 @@ class ConfigurableAttributesData extends DataSource
                     $this->variationsMatrix[$key],
                     [
                         'weight' => 1,
-                        'quantity_and_stock_status' => [
-                            'qty' => 10,
-                        ],
+                        'qty' => 10,
                     ],
                     $row
                 );
@@ -384,7 +380,7 @@ class ConfigurableAttributesData extends DataSource
             'name',
             'sku',
             'price',
-            'quantity_and_stock_status',
+            'qty',
             'weight',
         ];
 

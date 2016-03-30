@@ -1,16 +1,20 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Security\Test\Unit\Model;
 
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Security\Model\AdminSessionsManager;
+use Magento\Security\Model\ConfigInterface;
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 
 /**
  * Test class for AdminSessionsManager testing
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,7 +27,7 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Backend\Model\Auth\Session */
     protected $authSessionMock;
 
-    /** @var \Magento\Security\Helper\SecurityConfig */
+    /** @var ConfigInterface */
     protected $securityConfigMock;
 
     /** @var \Magento\User\Model\User */
@@ -38,8 +42,18 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Security\Model\AdminSessionInfoFactory */
     protected $adminSessionInfoFactoryMock;
 
+    /**
+     * @var DateTime
+     */
+    protected $dateTimeMock;
+
     /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
     protected $objectManager;
+
+    /*
+     * @var RemoteAddress
+     */
+    protected $remoteAddressMock;
 
     /**
      * Init mocks for tests
@@ -106,13 +120,9 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->securityConfigMock = $this->getMock(
-            '\Magento\Security\Helper\SecurityConfig',
-            ['getAdminSessionLifetime', 'isAdminAccountSharingEnabled', 'getRemoteIp', 'getCurrentTimestamp'],
-            [],
-            '',
-            false
-        );
+        $this->securityConfigMock = $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->userMock = $this->getMock(
             '\Magento\User\Model\User',
@@ -122,6 +132,14 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->dateTimeMock =  $this->getMockBuilder(DateTime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->remoteAddressMock =  $this->getMockBuilder(RemoteAddress::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->model = $this->objectManager->getObject(
             '\Magento\Security\Model\AdminSessionsManager',
             [
@@ -129,7 +147,8 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
                 'authSession' => $this->authSessionMock,
                 'adminSessionInfoFactory' => $this->adminSessionInfoFactoryMock,
                 'adminSessionInfoCollectionFactory' => $this->adminSessionInfoCollectionFactoryMock,
-
+                'dateTime' => $this->dateTimeMock,
+                'remoteAddress' => $this->remoteAddressMock
             ]
         );
     }
@@ -162,8 +181,8 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getId')
             ->willReturn($useId);
 
-        $this->securityConfigMock->expects($this->once())
-            ->method('getRemoteIp')
+        $this->remoteAddressMock->expects($this->once())
+            ->method('getRemoteAddress')
             ->willReturn($ip);
 
         $this->currentSessionMock->expects($this->once())
@@ -174,8 +193,8 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
             ->method('save')
             ->willReturnSelf();
 
-        $this->securityConfigMock
-            ->method('getCurrentTimestamp')
+        $this->dateTimeMock->expects($this->once())
+            ->method('gmtTimestamp')
             ->willReturn($timestamp);
 
         $this->securityConfigMock->expects($this->once())
@@ -238,7 +257,6 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
         $this->authSessionMock->expects($this->once())
             ->method('getUpdatedAt')
             ->willReturn($updatedAt);
-
 
         $this->currentSessionMock->expects($this->once())
             ->method('setData')
@@ -316,8 +334,8 @@ class AdminSessionsManagerTest extends \PHPUnit_Framework_TestCase
             ->method('create')
             ->willReturn($this->adminSessionInfoCollectionMock);
 
-        $this->securityConfigMock->expects($this->once())
-            ->method('getCurrentTimestamp')
+        $this->dateTimeMock->expects($this->once())
+            ->method('gmtTimestamp')
             ->willReturn($timestamp);
 
         $this->adminSessionInfoCollectionMock->expects($this->once())->method('deleteSessionsOlderThen')

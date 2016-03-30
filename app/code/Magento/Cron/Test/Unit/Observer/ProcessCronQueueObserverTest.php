@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Test\Unit\Observer;
@@ -75,7 +75,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
     /**
      * Prepare parameters
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->_objectManager = $this->getMockBuilder(
             'Magento\Framework\App\ObjectManager'
@@ -110,6 +110,18 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
 
         $this->timezone = $this->getMock('Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $this->timezone->expects($this->any())->method('scopeTimeStamp')->will($this->returnValue(time()));
+
+        $phpExecutableFinder = $this->getMock('Symfony\Component\Process\PhpExecutableFinder', [], [], '', false);
+        $phpExecutableFinder->expects($this->any())->method('find')->willReturn('php');
+        $phpExecutableFinderFactory = $this->getMock(
+            'Magento\Framework\Process\PhpExecutableFinderFactory',
+            [],
+            [],
+            '',
+            false
+        );
+        $phpExecutableFinderFactory->expects($this->any())->method('create')->willReturn($phpExecutableFinder);
+
         $this->_observer = new ProcessCronQueueObserver(
             $this->_objectManager,
             $this->_scheduleFactory,
@@ -118,7 +130,8 @@ class ProcessCronQueueObserverTest extends \PHPUnit_Framework_TestCase
             $this->_scopeConfig,
             $this->_request,
             $this->_shell,
-            $this->timezone
+            $this->timezone,
+            $phpExecutableFinderFactory
         );
     }
 

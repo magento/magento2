@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\View\Element;
@@ -996,7 +996,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
         $tags[] = self::CACHE_GROUP;
 
         if ($this instanceof IdentityInterface) {
-            $tags += $this->getIdentities();
+            $tags = array_merge($tags, $this->getIdentities());
         }
         return $tags;
     }
