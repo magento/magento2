@@ -85,7 +85,7 @@ class Simple implements Fallback\ResolverInterface
     /**
      * Validate the file path to be secured
      *
-     * @param $filePath
+     * @param string $filePath
      * @return bool
      */
     private function checkFilePathAccess($filePath)
@@ -100,7 +100,7 @@ class Simple implements Fallback\ResolverInterface
         );
         $fileRead = $this->readFactory->create($realPath);
 
-        if (strpos($fileRead->getAbsolutePath(), $directoryWeb->getAbsolutePath()) !== false) {
+        if (strpos($fileRead->getAbsolutePath(), $directoryWeb->getAbsolutePath()) === 0) {
             return true;
         }
 
