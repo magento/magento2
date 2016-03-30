@@ -2,7 +2,7 @@
 /**
  * SalesRule 10% discount coupon
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,5 +28,6 @@ $data = [
 ];
 
 $salesRule->loadPost($data)->setUseAutoGeneration(false)->save();
+$objectManager->get('Magento\Framework\Registry')->unregister('Magento/Checkout/_file/discount_10percent_generalusers');
 $objectManager->get('Magento\Framework\Registry')
-    ->register('Magento/Checkout/_file/discount_10percent_generalusers', $salesRule->getRuleId(), true);
+    ->register('Magento/Checkout/_file/discount_10percent_generalusers', $salesRule->getRuleId());

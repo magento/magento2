@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -11,21 +11,11 @@
             <item name="config" xsi:type="array">
                 <item name="dataScope" xsi:type="string">data.product</item>
                 <item name="provider" xsi:type="string">product_form.product_form_data_source</item>
-                <item name="onCancel" xsi:type="string">actionCancel</item>
+                <item name="onCancel" xsi:type="string">actionDone</item>
                 <item name="options" xsi:type="array">
                     <item name="title" xsi:type="string">Advanced Inventory</item>
                     <item name="buttons" xsi:type="array">
                         <item name="0" xsi:type="array">
-                            <item name="text" xsi:type="string">Cancel</item>
-                            <item name="class" xsi:type="string">action-secondary</item>
-                            <item name="actions" xsi:type="array">
-                                <item name="0" xsi:type="array">
-                                    <item name="targetName" xsi:type="string">${ $.name }</item>
-                                    <item name="actionName" xsi:type="string">actionCancel</item>
-                                </item>
-                            </item>
-                        </item>
-                        <item name="1" xsi:type="array">
                             <item name="text" xsi:type="string">Done</item>
                             <item name="class" xsi:type="string">action-primary</item>
                             <item name="actions" xsi:type="array">

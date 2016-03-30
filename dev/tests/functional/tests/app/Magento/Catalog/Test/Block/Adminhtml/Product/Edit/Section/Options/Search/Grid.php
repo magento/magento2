@@ -1,35 +1,27 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Search;
 
-use Magento\Backend\Test\Block\Widget\Grid as GridInterface;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 
 /**
- * Class Grid
- * 'Import custom options to product' grid
+ * 'Import custom options to product' grid.
  */
-class Grid extends GridInterface
+class Grid extends DataGrid
 {
     /**
-     * Selector for 'Import' button
+     * Selector for 'Import' button.
      *
      * @var string
      */
-    protected $importProducts = '#import-custom-options-apply-button';
+    protected $importProducts = '[data-role="action"]';
 
     /**
-     * An element locator which allows to select entities in grid
-     *
-     * @var string
-     */
-    protected $selectItem = 'tbody tr .col-id';
-
-    /**
-     * Filters param for grid
+     * Filters param for grid.
      *
      * @var array
      */
@@ -40,7 +32,7 @@ class Grid extends GridInterface
     ];
 
     /**
-     * Press 'Import' button
+     * Press 'Import' button.
      *
      * @return void
      */

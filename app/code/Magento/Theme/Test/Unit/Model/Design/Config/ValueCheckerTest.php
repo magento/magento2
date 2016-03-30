@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Config;
@@ -30,26 +30,26 @@ class ValueCheckerTest extends \PHPUnit_Framework_TestCase
             false
         );
         $this->appConfig = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
-
         $this->valueProcessor = $this->getMockBuilder('Magento\Theme\Model\Design\Config\ValueProcessor')
             ->disableOriginalConstructor()
             ->getMock();
-    }
 
-    public function testIsDifferentFromDefault()
-    {
-        $valueChecker = new ValueChecker(
+        $this->valueChecker  = new ValueChecker(
             $this->fallbackResolver,
             $this->appConfig,
             $this->valueProcessor
         );
+    }
+
+    public function testIsDifferentFromDefault()
+    {
         $this->fallbackResolver->expects($this->once())
             ->method('getFallbackScope')
             ->with('default', 0)
             ->willReturn([null, null]);
 
         $this->assertTrue(
-            $valueChecker->isDifferentFromDefault(
+            $this->valueChecker->isDifferentFromDefault(
                 'value',
                 'default',
                 0,
@@ -60,11 +60,6 @@ class ValueCheckerTest extends \PHPUnit_Framework_TestCase
 
     public function testIsDifferentFromDefaultWithWebsiteScope()
     {
-        $valueChecker = new ValueChecker(
-            $this->fallbackResolver,
-            $this->appConfig,
-            $this->valueProcessor
-        );
         $this->fallbackResolver->expects($this->once())
             ->method('getFallbackScope')
             ->with('website', 1)
@@ -78,11 +73,45 @@ class ValueCheckerTest extends \PHPUnit_Framework_TestCase
             ->willReturnArgument(0);
 
         $this->assertTrue(
-            $valueChecker->isDifferentFromDefault(
+            $this->valueChecker->isDifferentFromDefault(
                 'value',
                 'website',
                 1,
                 'design/head/default_title'
+            )
+        );
+    }
+
+    public function testIsDifferentFromDefaultWithArrays()
+    {
+        $path = 'design/head/default_title';
+        $this->fallbackResolver->expects($this->once())
+            ->method('getFallbackScope')
+            ->with('website', 1)
+            ->willReturn(['default', 0]);
+        $this->appConfig
+            ->expects($this->once())
+            ->method('getValue')
+            ->with($path, 'default', 0)
+            ->willReturn([
+                [
+                    'qwe' => 123
+                ],
+            ]);
+        $this->valueProcessor->expects($this->atLeastOnce())
+            ->method('process')
+            ->willReturnArgument(0);
+        $this->assertTrue(
+            $this->valueChecker->isDifferentFromDefault(
+                [
+                    [
+                        'sdf' => 1
+                    ],
+
+                ],
+                'website',
+                1,
+                $path
             )
         );
     }

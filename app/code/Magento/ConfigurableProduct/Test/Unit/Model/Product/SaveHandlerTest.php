@@ -5,8 +5,6 @@
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Product;
 
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\ConfigurableProduct\Api\Data\OptionInterface;
@@ -41,11 +39,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
     private $configurable;
 
     /**
-     * @var ProductAttributeRepositoryInterface|MockObject
-     */
-    private $productAttributeRepository;
-
-    /**
      * @var SaveHandler
      */
     private $saveHandler;
@@ -62,12 +55,9 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->initConfigurableFactoryMock();
 
-        $this->productAttributeRepository = $this->getMock(ProductAttributeRepositoryInterface::class);
-
         $this->saveHandler = new SaveHandler(
             $this->configurable,
-            $this->optionRepository,
-            $this->productAttributeRepository
+            $this->optionRepository
         );
     }
 
@@ -119,7 +109,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
 
-        $extensionAttributes->expects(static::once())
+        $extensionAttributes->expects(static::exactly(2))
             ->method('getConfigurableProductOptions')
             ->willReturn([]);
         $extensionAttributes->expects(static::once())
@@ -133,9 +123,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $this->optionRepository->expects(static::never())
             ->method('deleteById');
 
-        $this->productAttributeRepository->expects(static::never())
-            ->method('get');
-
         $entity = $this->saveHandler->execute('Entity', $product);
         static::assertSame($product, $entity);
     }
@@ -145,7 +132,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecute()
     {
-        $attributeId = 90;
         $sku = 'config-1';
         $id = 25;
         $configurableProductLinks = [1, 2, 3];
@@ -157,7 +143,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $product->expects(static::once())
             ->method('getTypeId')
             ->willReturn(ConfigurableModel::TYPE_CODE);
-        $product->expects(static::exactly(2))
+        $product->expects(static::exactly(3))
             ->method('getSku')
             ->willReturn($sku);
 
@@ -166,15 +152,15 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $product->expects(static::once())
+        $product->expects(static::atLeastOnce())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);
 
         $attribute = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAttributeId', 'loadByProductAndAttribute'])
+            ->setMethods(['getAttributeId', 'loadByProductAndAttribute', 'setId', 'getId'])
             ->getMock();
-        $this->processSaveOptions($attribute, $product, $attributeId, $sku, $id);
+        $this->processSaveOptions($attribute, $sku, $id);
 
         $option = $this->getMockForAbstractClass(OptionInterface::class);
         $option->expects(static::once())
@@ -186,13 +172,14 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             ->method('getList')
             ->with($sku)
             ->willReturn($list);
-        $this->optionRepository->expects(static::never())
-            ->method('deleteById');
+        $this->optionRepository->expects(static::once())
+            ->method('deleteById')
+            ->with($sku, $id);
 
         $configurableAttributes = [
             $attribute
         ];
-        $extensionAttributes->expects(static::once())
+        $extensionAttributes->expects(static::exactly(2))
             ->method('getConfigurableProductOptions')
             ->willReturn($configurableAttributes);
 
@@ -234,26 +221,15 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
      * Mock for options save
      *
      * @param MockObject $attribute
-     * @param MockObject $product
-     * @param $attributeId
      * @param $sku
      * @param $id
      * @return void
      */
-    private function processSaveOptions(MockObject $attribute, MockObject $product, $attributeId, $sku, $id)
+    private function processSaveOptions(MockObject $attribute, $sku, $id)
     {
         $attribute->expects(static::once())
-            ->method('getAttributeId')
-            ->willReturn($attributeId);
-
-        $eavAttribute = $this->getMock(ProductAttributeInterface::class);
-        $this->productAttributeRepository->expects(static::once())
-            ->method('get')
-            ->with($attributeId)
-            ->willReturn($eavAttribute);
-        $attribute->expects(static::once())
-            ->method('loadByProductAndAttribute')
-            ->with($product, $eavAttribute)
+            ->method('setId')
+            ->with(null)
             ->willReturnSelf();
 
         $this->optionRepository->expects(static::once())
