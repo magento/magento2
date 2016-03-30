@@ -27,7 +27,6 @@ class TotalsConverter
         $this->factory = $factory;
     }
 
-
     /**
      * @param \Magento\Quote\Model\Quote\Address\Total[] $addressTotals
      * @return \Magento\Quote\Api\Data\TotalSegmentInterface[]
