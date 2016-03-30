@@ -18,6 +18,6 @@ class Datashare extends \Magento\Framework\App\Config\Value
      */
     public function afterSave()
     {
-        return parent::afterSave();
+        return $this;
     }
 }

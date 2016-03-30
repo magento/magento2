@@ -29,6 +29,6 @@ class Cache extends \Magento\Framework\App\Config\Value
         if ($this->isValueChanged()) {
             $this->_cacheManager->clean($this->_cacheTags);
         }
-        return parent::afterSave();
+        return $this;
     }
 }
