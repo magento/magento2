@@ -4,18 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Attribute;
+namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit;
 
-use Magento\Backend\Test\Block\Widget\FormTabs;
-use Magento\Backend\Test\Block\Widget\Tab;
+use Magento\Ui\Test\Block\Adminhtml\FormSections;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
 use Magento\Mtf\Fixture\FixtureInterface;
 
 /**
- * New attribute form on catalog product edit page.
+ * New attribute form on configurable product page.
  */
-class NewAttributeForm extends FormTabs
+class NewConfigurableAttributeForm extends FormSections
 {
     /**
      * Iframe locator.
@@ -32,22 +31,11 @@ class NewAttributeForm extends FormTabs
     protected $saveButton = '#save';
 
     /**
-     * Attribute to determine whether tab is opened.
+     * Attribute to check whether section is opened.
      *
      * @var string
      */
-    protected $isTabOpened = '.opened ';
-
-    /**
-     * Initialize block. Switch to frame.
-     *
-     * @return void
-     */
-    protected function init()
-    {
-        parent::init();
-        $this->browser->switchToFrame(new Locator($this->iFrame));
-    }
+    private $isSectionOpened = 'active';
 
     /**
      * Fill the attribute form.
@@ -58,6 +46,7 @@ class NewAttributeForm extends FormTabs
      */
     public function fill(FixtureInterface $fixture, SimpleElement $element = null)
     {
+        $this->browser->switchToFrame(new Locator($this->iFrame));
         $browser = $this->browser;
         $selector = $this->saveButton;
         $this->browser->waitUntil(
@@ -70,20 +59,19 @@ class NewAttributeForm extends FormTabs
     }
 
     /**
-     * Open tab.
+     * Open section.
      *
-     * @param string $tabName
-     * @return Tab
+     * @param string $sectionName
+     * @return FormSections
      */
-    public function openTab($tabName)
+    public function openSection($sectionName)
     {
-        $selector = $this->getTabs()[$tabName]['selector'];
-        $strategy = isset($this->getTabs()[$tabName]['strategy'])
-            ? $this->getTabs()[$tabName]['strategy']
+        $selector = $this->getContainerElement($sectionName)->getLocator()['value'];
+        $strategy = null !== $this->getContainerElement($sectionName)->getLocator()['using']
+            ? $this->getContainerElement($sectionName)->getLocator()['using']
             : Locator::SELECTOR_CSS;
-
-        $isTabOpened = $this->_rootElement->find($this->isTabOpened . $selector, $strategy);
-        if (!$isTabOpened->isVisible()) {
+        $sectionClass = $this->_rootElement->find($selector, $strategy)->getAttribute('class');
+        if (strpos($sectionClass, $this->isSectionOpened) === false) {
             $this->_rootElement->find($selector, $strategy)->click();
         }
 
@@ -97,6 +85,7 @@ class NewAttributeForm extends FormTabs
      */
     public function saveAttributeForm()
     {
+        $this->browser->switchToFrame(new Locator($this->iFrame));
         $this->browser->find($this->saveButton)->click();
         $this->browser->switchToFrame();
     }
