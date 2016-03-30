@@ -5,9 +5,9 @@
  * See COPYING.txt for license details.
  */
 -->
-<tabs>
+<sections>
     <properties>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
         <selector>#edit_form</selector>
         <strategy>css selector</strategy>
         <fields>
@@ -22,13 +22,13 @@
             </is_required>
             <options>
                 <class>\Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit\Options</class>
-                <selector>[data-index="attribute_options_select_container"]</selector>
+                <selector>#manage-options-panel</selector>
                 <strategy>css selector</strategy>
             </options>
         </fields>
     </properties>
     <advanced-properties>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
         <selector>[data-target="#advanced_fieldset-content"]</selector>
         <strategy>css selector</strategy>
         <fields>
@@ -46,7 +46,7 @@
         </fields>
     </advanced-properties>
     <manage-labels>
-        <class>\Magento\Backend\Test\Block\Widget\Tab</class>
+        <class>\Magento\Ui\Test\Block\Adminhtml\Section</class>
         <selector>[data-target="#manage-titles-content"]</selector>
         <strategy>css selector</strategy>
         <fields>
@@ -92,4 +92,4 @@
             </used_for_sort_by>
         </fields>
     </frontend-properties>
-</tabs>
+</sections>

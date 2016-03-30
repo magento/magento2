@@ -9,19 +9,19 @@ namespace Magento\Catalog\Test\Block\Adminhtml\Product\Modal;
 use Magento\Ui\Test\Block\Adminhtml\FormSections;
 
 /**
- * New product attribute form.
+ * Product new attribute modal.
  */
 class NewAttribute extends FormSections
 {
     /**
-     * "Save" button.
+     * Selector for "Save" button.
      *
      * @var string
      */
-    protected $save = 'button#save';
+    private $save = 'button#save';
 
     /**
-     * Click "Save Attribute" button on attribute form..
+     * Click "Save Attribute" button on attribute form.
      *
      * @return void
      */
