@@ -93,7 +93,13 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         $this->billingAddressMock = $this->getMock(\Magento\Quote\Model\Quote\Address::class, [], [], '', false);
         $this->extensionAttributeMock = $this->getMock(\Magento\Quote\Api\Data\CartExtensionInterface::class);
         $this->shippingAssignmentMock =
-            $this->getMock(\Magento\Quote\Api\Data\CartExtension::class, ['getShippingAssignments'], [], '', false);
+            $this->getMock(
+                \Magento\Quote\Api\Data\CartExtension::class,
+                ['getShippingAssignments', 'setShippingAssignments'],
+                [],
+                '',
+                false
+            );
         $this->saveHandler = new SaveHandler(
             $this->quoteResourceModel,
             $this->cartItemPersister,
