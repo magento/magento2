@@ -58,7 +58,8 @@ class EmulateCustomerObserverTest extends \PHPUnit_Framework_TestCase
             'setCustomerId',
             'setCustomerGroupId',
             'isLoggedIn',
-            'setIsCustomerEmulated'
+            'setIsCustomerEmulated',
+            '__wakeUp'
         ];
         $this->customerSessionMock = $this->getMock('Magento\Customer\Model\Session', $methods, [], '', false);
         $this->sessionHelperMock = $this->getMock('Magento\Persistent\Helper\Session', [], [], '', false);
