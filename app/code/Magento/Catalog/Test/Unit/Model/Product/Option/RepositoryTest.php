@@ -46,6 +46,7 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->converterMock = $this->getMock('\Magento\Catalog\Model\Product\Option\Converter', [], [], '', false);
         $this->optionMock = $this->getMock('\Magento\Catalog\Model\Product\Option', [], [], '', false);
         $this->productMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $optionFactory = $this->getMock(
@@ -69,12 +70,20 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $metadataPool->expects($this->any())->method('getMetadata')->willReturn($metadata);
+
         $this->optionRepository = new Repository(
             $this->productRepositoryMock,
             $this->optionResourceMock,
-            $optionFactory,
-            $optionCollectionFactory,
-            $metadataPool
+            $this->converterMock
+        );
+
+        $this->setProperties(
+            $this->optionRepository,
+            [
+                'optionFactory' => $optionFactory,
+                'optionCollectionFactory' => $optionCollectionFactory,
+                'metadataPool' => $metadataPool
+            ]
         );
     }
 
@@ -199,5 +208,21 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->with($this->productMock)
             ->willThrowException(new \Exception());
         $this->assertTrue($this->optionRepository->deleteByIdentifier($productSku, $optionId));
+    }
+
+    /**
+     * @param $object
+     * @param array $properties
+     */
+    private function setProperties($object, $properties = [])
+    {
+        $reflectionClass = new \ReflectionClass(get_class($object));
+        foreach ($properties as $key => $value) {
+            if ($reflectionClass->hasProperty($key)) {
+                $reflectionProperty = $reflectionClass->getProperty($key);
+                $reflectionProperty->setAccessible(true);
+                $reflectionProperty->setValue($object, $value);
+            }
+        }
     }
 }

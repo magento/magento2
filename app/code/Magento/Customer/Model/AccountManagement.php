@@ -632,10 +632,10 @@ class AccountManagement implements AccountManagementInterface
     {
         // load customer by id
         $customer = $this->customerRepository->getById($customerId);
-        if (!$customer->getConfirmation()) {
-            return self::ACCOUNT_CONFIRMED;
-        }
         if ($this->isConfirmationRequired($customer)) {
+            if (!$customer->getConfirmation()) {
+                return self::ACCOUNT_CONFIRMED;
+            }
             return self::ACCOUNT_CONFIRMATION_REQUIRED;
         }
         return self::ACCOUNT_CONFIRMATION_NOT_REQUIRED;
@@ -1084,9 +1084,12 @@ class AccountManagement implements AccountManagementInterface
         if ($this->canSkipConfirmation($customer)) {
             return false;
         }
-        $storeId = $customer->getStoreId() ? $customer->getStoreId() : null;
 
-        return (bool)$this->scopeConfig->getValue(self::XML_PATH_IS_CONFIRM, ScopeInterface::SCOPE_STORE, $storeId);
+        return (bool)$this->scopeConfig->getValue(
+            self::XML_PATH_IS_CONFIRM,
+            ScopeInterface::SCOPE_WEBSITES,
+            $customer->getWebsiteId()
+        );
     }
 
     /**

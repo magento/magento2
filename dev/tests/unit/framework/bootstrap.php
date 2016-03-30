@@ -6,11 +6,6 @@
 
 require_once __DIR__ . '/../../../../app/autoload.php';
 
-$updateAppBootstrap = __DIR__ . '/../../../../update/app/bootstrap.php';
-if (file_exists($updateAppBootstrap)) {
-    require_once $updateAppBootstrap;
-}
-
 if (!defined('TESTS_TEMP_DIR')) {
     define('TESTS_TEMP_DIR', dirname(__DIR__) . '/tmp');
 }
