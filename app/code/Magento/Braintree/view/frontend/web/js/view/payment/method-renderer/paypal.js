@@ -205,7 +205,7 @@ define([
                 container: 'paypal-container',
                 singleUse: true,
                 headless: true,
-                amount: this.amount,
+                amount: this.grandTotalAmount,
                 currency: totals['base_currency_code'],
                 locale: this.getLocale(),
                 enableShippingAddress: true,
