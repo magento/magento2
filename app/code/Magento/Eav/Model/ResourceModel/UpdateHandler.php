@@ -105,7 +105,12 @@ class UpdateHandler implements AttributeInterface
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
         $metadata = $this->metadataPool->getMetadata($entityType);
         if ($metadata->getEavEntityType()) {
-            $snapshot = $this->readSnapshot->execute($entityType, $entityData);
+            $snapshot = $this->readSnapshot->execute(
+                $entityType,
+                [
+                    $metadata->getLinkField() => $entityData[$metadata->getLinkField()]
+                ]
+            );
             $processed = [];
             foreach ($this->getAttributes($entityType) as $attribute) {
                 if ($attribute->isStatic()) {
