@@ -26,18 +26,20 @@ class CacheInvalidator
      * Invalidate WebApi cache if needed.
      * 
      * @param \Magento\Framework\App\Config\Value $subject
-     * @param \Magento\Framework\App\Config\Value $result
-     * @return \Magento\Framework\App\Config\Value
+     * @param \Magento\Framework\App\Config\Value|null $result
+     * @return \Magento\Framework\App\Config\Value|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterAfterSave(
         \Magento\Framework\App\Config\Value $subject,
-        \Magento\Framework\App\Config\Value $result
+        $result
     ) {
-        if ($result->getPath() == \Magento\WebapiSecurity\Model\Plugin\AnonymousResourceSecurity::XML_ALLOW_INSECURE
-            && $result->isValueChanged()
-        ) {
-            $this->cacheTypeList->invalidate(\Magento\Framework\App\Cache\Type\Webapi::TYPE_IDENTIFIER);
+        if (!is_null($result)) {
+            if ($result->getPath() == \Magento\WebapiSecurity\Model\Plugin\AnonymousResourceSecurity::XML_ALLOW_INSECURE
+                && $result->isValueChanged()
+            ) {
+                $this->cacheTypeList->invalidate(\Magento\Framework\App\Cache\Type\Webapi::TYPE_IDENTIFIER);
+            }
         }
 
         return $result;
