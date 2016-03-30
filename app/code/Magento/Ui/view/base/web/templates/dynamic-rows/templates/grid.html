@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 -->
+
 <div class="admin__field"
      visible="visible"
      disable="disabled"
@@ -14,6 +15,15 @@
     </label>
 
     <div class="admin__field-control" data-role="grid-wrapper">
+        <div class="admin__control-table-pagination">
+            <div class="admin__data-grid-pager">
+                <button class="action-previous" type="button" data-bind="attr: {title: $t('Previous Page')}, click: previousPage, disable: isFirst()"></button>
+                <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage">
+                <label class="admin__control-support-text" data-bind="attr: {for: ko.uid}, text: 'of ' + pages()"></label>
+                <button class="action-next" type="button" data-bind="attr: {title: $t('Next Page')}, click: nextPage, disable: isLast()"></button>
+            </div>
+        </div>
+
         <div class="admin__control-table-wrapper">
             <table class="admin__dynamic-rows data-grid" data-role="grid">
                 <thead if="element.columnsHeader">

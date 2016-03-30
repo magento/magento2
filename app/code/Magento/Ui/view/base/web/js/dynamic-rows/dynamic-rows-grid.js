@@ -20,15 +20,10 @@ define([
             identificationProperty: 'id',
             listens: {
                 'insertData': 'processingInsertData',
-                'elems': 'mappingValue'
+                'recordData': 'initElements setToInsertData'
             }
         },
 
-        /**
-         * Calls 'initObservable' of parent
-         *
-         * @returns {Object} Chainable.
-         */
         initObservable: function () {
             this._super()
                 .observe([
@@ -38,67 +33,41 @@ define([
             return this;
         },
 
-        /**
-         * Initialize children,
-         * set data from server to grid dataScope
-         */
-        initChildren: function () {
-            var insertData = [];
+        setToInsertData: function () {
+            var insertData = [],
+                obj;
 
-            if (this.recordData().length) {
+            if (this.recordData().length && !this.update) {
                 this.recordData.each(function (recordData) {
-                    insertData.push(this.unmappingValue(recordData));
+                    obj = {};
+                    obj[this.map[this.identificationProperty]] = recordData[this.identificationProperty];
+                    insertData.push(obj);
                 }, this);
 
                 this.source.set(this.dataProvider, insertData);
             }
+        },
+
+        initChildren: function () {
+            this.getChildItems().each(function (data, index) {
+                this.pageSizeChecker(data, this.startIndex + index, data.id)
+            }, this);
 
             return this;
         },
 
-        /**
-         * Unmapping value,
-         * unmapping data from server to grid dataScope
-         *
-         * @param {Object} data - data object
-         */
-        unmappingValue: function (data) {
-            var obj = {};
+        initElements: function (data) {
+            var newData = this.getNewData(data);
 
-            _.each(this.map, function (prop, index) {
-                obj[prop] = data[index];
-            }, this);
+            this.getPagesData(data);
 
-            return obj;
-        },
-
-        /**
-         * Rerender dynamic-rows elems
-         */
-        reload: function () {
-            this.cacheGridData = [];
-            this._super();
-        },
-
-        /**
-         * Parsed data
-         *
-         * @param {Array} data - array with data
-         * about selected records
-         */
-        processingInsertData: function (data) {
-            var changes;
-
-            if (!data.length) {
-                this.elems([]);
+            if (newData.length) {
+                if (this.insertData().length) {
+                    this.processingAddChild(newData[0], data.length - 1 , newData[0].id);
+                }
             }
 
-            changes = this._checkGridData(data);
-            this.cacheGridData = data;
-
-            changes.each(function (changedObject) {
-                this.addChild(changedObject, false, parseInt(changedObject[this.map.id], 10));
-            }, this);
+            return this;
         },
 
         /**
@@ -110,57 +79,10 @@ define([
         deleteRecord: function (index, recordId) {
             var data = this.getElementData(this.insertData(), recordId);
 
-            this.mapping = true;
             this._super();
             this.insertData(_.reject(this.source.get(this.dataProvider), function (recordData) {
                 return parseInt(recordData[this.map.id], 10) === parseInt(data[this.map.id], 10);
             }, this));
-            this.mapping = false;
-        },
-
-        /**
-         * Check changed records
-         *
-         * @param {Array} data - array with records data
-         * @returns {Array} Changed records
-         */
-        _checkGridData: function (data) {
-            var cacheLength = this.cacheGridData.length,
-                curData = data.length,
-                max = cacheLength > curData ? this.cacheGridData : data,
-                changes = [],
-                obj = {};
-
-            max.each(function (record, index) {
-                obj[this.map.id] = record[this.map.id];
-
-                if (!_.where(this.cacheGridData, obj).length) {
-                    changes.push(data[index]);
-                }
-            }, this);
-
-            return changes;
-        },
-
-        /**
-         * Mapped value
-         */
-        mappingValue: function () {
-            var path,
-                data,
-                elements = this.elems();
-
-            if (this.mapping) {
-                return false;
-            }
-
-            elements.each(function (record) {
-                data = this.getElementData(this.insertData(), record.recordId);
-                _.each(this.map, function (prop, index) {
-                    path = record.dataScope + '.' + index;
-                    this.source.set(path, data[prop]);
-                }, this);
-            }, this);
         },
 
         /**
@@ -182,6 +104,73 @@ define([
             result = _.findWhere(array, obj);
 
             return result;
+        },
+
+        processingAddChild: function (ctx, index, prop) {
+            if (this._elems.length > this.pageSize) {
+                return false;
+            }
+
+            this.addChild(ctx, index, prop);
+        },
+
+        getNewData: function (data) {
+            var changes = [];
+
+            if (data.length !== this.relatedData) {
+                data.each(function(obj) {
+                    if (!_.findWhere(this.relatedData, {id: obj.id})) {
+                        changes.push(obj);
+                    }
+                }, this)
+            }
+
+            return changes;
+        },
+
+        processingInsertData: function (data) {
+            var changes,
+                id;
+
+            changes = this._checkGridData(data);
+            this.cacheGridData = data;
+
+            changes.each(function (changedObject) {
+                id = parseInt(changedObject[this.map.id], 10);
+                this.mappingValue(changedObject)
+            }, this);
+        },
+
+        mappingValue: function (data) {
+            var obj = {};
+
+            _.each(this.map, function (prop, index) {
+                obj[index] = data[prop];
+            }, this);
+
+            if (_.findWhere(this.recordData(), {id: obj.id})) {
+                return false;
+            }
+
+            this.source.set(this.dataScope + '.' + this.index + '.' + this.recordData().length, obj);
+        },
+
+        _checkGridData: function (data) {
+            var cacheLength = this.cacheGridData.length,
+                curData = data.length,
+                max = cacheLength > curData ? this.cacheGridData : data,
+                changes = [],
+                obj = {};
+
+            max.each(function (record, index) {
+                obj[this.map.id] = record[this.map.id];
+
+                if (!_.where(this.cacheGridData, obj).length) {
+                    changes.push(data[index]);
+                }
+            }, this);
+
+            return changes;
         }
     });
 });

@@ -30,7 +30,6 @@ define([
             addButton: true,
             addButtonLabel: $t('Add'),
             recordData: [],
-            recordIterator: 0,
             maxPosition: 0,
             deleteProperty: 'delete',
             identificationProperty: 'record_id',
@@ -60,11 +59,93 @@ define([
                 disabled: 'setDisabled',
                 childTemplate: 'initHeader',
                 recordTemplate: 'onUpdateRecordTemplate',
-                recordData: 'setDifferedFromDefault'
+                recordData: 'setDifferedFromDefault getPagesData',
+                currentPage: 'changePage'
             },
             modules: {
                 dnd: '${ $.dndConfig.name }'
+            },
+            pages: 1,
+            pageSize: 5,
+            totalRecords: 0,
+            relatedData: [],
+            currentPage: 1,
+            cachedCurrentPage: 1,
+            startIndex: 0
+        },
+
+        getPagesData: function (data) {
+            var pages;
+
+            this.relatedData = _.filter(data, function (elem) {
+                return !this.deleteProperty || elem[this.deleteProperty] !== this.deleteValue
+            }, this);
+
+            this.totalRecords = this.relatedData.length;
+            pages = Math.ceil(this.totalRecords / this.pageSize) || 1;
+            this.pages(pages);
+        },
+
+        getChildItems: function () {
+            this.startIndex = (parseInt(this.currentPage(), 10) - 1) * this.pageSize;
+
+            return this.relatedData.slice(this.startIndex, this.startIndex + this.pageSize);
+        },
+
+        pageSizeChecker: function (data, index, id) {
+            this.addChild(data, index, id);
+        },
+
+        processingAddChild: function (ctx, index, prop) {
+            if (this.totalRecords && this.totalRecords % this.pageSize === 0) {
+                this.clear();
+                this.pages(this.pages() + 1);
+                this.currentPage(this.pages());
+            } else if (parseInt(this.currentPage(), 10) !== this.pages()) {
+                this.currentPage(this.pages());
             }
+
+            this.addChild(ctx, index, prop);
+        },
+
+        processingDeleteRecord: function (index, recordId) {
+            this.deleteRecord(index, recordId);
+
+            if (this.currentPage() !== this.pages()) {
+
+            } else if (this.getChildItems().length <= 0) {
+                this.pages(this.pages()-1);
+                this.currentPage(this.pages());
+            }
+        },
+
+        changePage: function (page) {
+
+            if (parseInt(page, 10) > this.pages() || parseInt(page, 10) < 1 || page === this.cachedCurrentPage) {
+                this.currentPage(this.cachedCurrentPage);
+
+                return false;
+            }
+
+            this.cachedCurrentPage = page;
+            this.clear();
+            this.initChildren();
+        },
+
+        isFirst: function () {
+            return this.currentPage() <= 1;
+        },
+
+        isLast: function () {
+            return this.currentPage() >= this.pages();
+        },
+
+        nextPage: function () {
+            this.currentPage(this.currentPage() + 1);
+        },
+
+        previousPage: function () {
+            this.currentPage(this.currentPage() - 1);
         },
 
         /**
@@ -93,6 +174,8 @@ define([
             this._super()
                 .track('childTemplate')
                 .observe([
+                    'pages',
+                    'currentPage',
                     'recordData',
                     'columnsHeader',
                     'visible',
@@ -313,19 +396,29 @@ define([
                 this.recordData()[recordInstance.index][this.deleteProperty] = this.deleteValue;
                 this.recordData.valueHasMutated();
             } else {
-                lastRecord =
-                    _.findWhere(this.elems(), {
-                        index: this.recordIterator - 1
-                    }) ||
-                    _.findWhere(this.elems(), {
-                        index: (this.recordIterator - 1).toString()
-                    });
-                lastRecord.destroy();
+                this.update = true;
+                if (parseInt(this.currentPage()) === this.pages()) {
+                    lastRecord =
+                        _.findWhere(this.elems(), {
+                            index: this.startIndex + this.getChildItems().length - 1
+                        }) ||
+                        _.findWhere(this.elems(), {
+                            index: (this.startIndex + this.getChildItems().length - 1).toString()
+                        });
+
+                    lastRecord.destroy();
+                }
+
                 this.removeMaxPosition();
                 recordsData = this._getDataByProp(recordId);
                 this._updateData(recordsData);
-                --this.recordIterator;
+                this.update = false;
             }
+
+            if (this.pages() < parseInt(this.currentPage())) {
+                this.currentPage(this.pages());
+            }
+
             this._sort();
         },
 
@@ -338,7 +431,7 @@ define([
         _getDataByProp: function (id, prop) {
             prop = prop || this.identificationProperty;
 
-            return _.reject(this.source.get(this.dataScope + '.' + this.index), function (recordData) {
+            return _.reject(this.getChildItems(), function (recordData) {
                 return parseInt(recordData[prop], 10) === parseInt(id, 10);
             }, this);
         },
@@ -360,13 +453,15 @@ define([
          */
         _updateData: function (data) {
             var elems = utils.copy(this.elems()),
-                path;
+                path,
+                dataArr;
 
-            this.recordData([]);
+            dataArr = this.recordData.splice(this.startIndex, this.recordData().length - this.startIndex);
+            dataArr.splice(0, this.pageSize);
             elems = utils.copy(this.elems());
-            data.forEach(function (rec, idx) {
-                elems[idx].recordId = rec[this.identificationProperty];
-                path = this.dataScope + '.' + this.index + '.' + idx;
+            data.concat(dataArr).forEach(function (rec, idx) {
+                elems[idx] ? elems[idx].recordId = rec[this.identificationProperty] : false;
+                path = this.dataScope + '.' + this.index + '.' + (this.startIndex + idx);
                 this.source.set(path, rec);
             }, this);
 
@@ -390,7 +485,6 @@ define([
             this.elems.each(function (elem) {
                 elem.destroy();
             }, this);
-            this.recordIterator = 0;
 
             return this;
         },
@@ -445,7 +539,9 @@ define([
          * Initialize children
          */
         initChildren: function () {
-            this.recordData.each(this.addChild, this);
+            this.getChildItems().each(function (data, index) {
+                this.pageSizeChecker(data, this.startIndex + index)
+            }, this);
 
             return this;
         },
@@ -508,8 +604,8 @@ define([
             var template = this.templates.record,
                 child;
 
-            index = !index && !_.isNumber(index) ? this.recordIterator : index;
-            prop = _.isNumber(prop) ? prop : index;
+            index = !index && !_.isNumber(index) ? this.recordData().length : index;
+            prop = prop || prop === 0 ? prop : index;
 
             _.extend(this.templates.record, {
                 recordId: prop
@@ -520,7 +616,6 @@ define([
                 index: index
             });
 
-            ++this.recordIterator;
             layout([child]);
 
             return this;
