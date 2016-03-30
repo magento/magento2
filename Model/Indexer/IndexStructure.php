@@ -55,7 +55,7 @@ class IndexStructure implements IndexStructureInterface
         array $dimensions = []
     ) {
         $dimension = current($dimensions);
-        $scopeId = $this->scopeResolver->getScope($dimension->getValue())->getId();;
+        $scopeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
         $this->adapter->checkIndex($scopeId, $indexerId, false);
     }
 }

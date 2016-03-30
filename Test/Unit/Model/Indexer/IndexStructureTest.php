@@ -30,7 +30,6 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
      */
     private $scopeInterface;
 
-
     /**
      * Set up test environment.
      *
@@ -69,7 +68,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $storeId = 9;
+        $scopeId = 9;
         $dimension = $this->getMockBuilder('Magento\Framework\Search\Request\Dimension')
             ->disableOriginalConstructor()
             ->getMock();
@@ -81,14 +80,14 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->scopeInterface);
         $this->scopeInterface->expects($this->once())
             ->method('getId')
-            ->willReturn($storeId);
+            ->willReturn($scopeId);
 
         $this->model->delete('product', [$dimension]);
     }
 
     public function testCreate()
     {
-        $storeId = 9;
+        $scopeId = 9;
         $dimension = $this->getMockBuilder('Magento\Framework\Search\Request\Dimension')
             ->disableOriginalConstructor()
             ->getMock();
@@ -99,7 +98,7 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->scopeInterface);
         $this->scopeInterface->expects($this->once())
             ->method('getId')
-            ->willReturn($storeId);
+            ->willReturn($scopeId);
 
         $this->model->create('product', [], [$dimension]);
     }

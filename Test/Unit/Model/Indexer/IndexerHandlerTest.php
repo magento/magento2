@@ -137,7 +137,6 @@ class IndexerHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result);
     }
 
-
     public function testDeleteIndex()
     {
         $dimensionValue = 3;
