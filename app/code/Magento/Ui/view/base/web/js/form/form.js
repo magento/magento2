@@ -250,7 +250,6 @@ define([
             this.validate();
 
             if (!this.additionalInvalid && !this.source.get('params.invalid')) {
-                this.source.trigger('data.save');
                 this.setAdditionalData(data)
                     .submit(redirect);
             }
