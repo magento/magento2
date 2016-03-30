@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Test\Unit\Pricing\Render;
@@ -21,7 +21,7 @@ class FinalPriceBoxTest extends \PHPUnit_Framework_TestCase
      */
     protected $saleableItem;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->saleableItem = $this->getMock('Magento\Framework\Pricing\SaleableInterface');
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Component;
@@ -46,7 +46,10 @@ class ComponentRegistrar implements ComponentRegistrarInterface
     {
         self::validateType($type);
         if (isset(self::$paths[$type][$componentName])) {
-            throw new \LogicException('\'' . $componentName . '\' component already exists');
+            throw new \LogicException(
+                ucfirst($type) . ' \'' . $componentName . '\' from \'' . $path . '\' '
+                . 'has been already defined in \'' . self::$paths[$type][$componentName] . '\'.'
+            );
         } else {
             self::$paths[$type][$componentName] = str_replace('\\', '/', $path);
         }

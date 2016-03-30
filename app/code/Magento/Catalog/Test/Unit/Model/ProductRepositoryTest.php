@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -177,7 +177,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
                 'getProductLinks',
                 'setProductLinks',
                 'validate',
-                'save'
+                'save',
+                'getMediaGalleryEntries'
             ],
             [],
             '',
@@ -256,7 +257,9 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->setMethods([])
             ->getMockForAbstractClass();
         $storeMock->expects($this->any())->method('getWebsiteId')->willReturn('1');
+        $storeMock->expects($this->any())->method('getCode')->willReturn(\Magento\Store\Model\Store::ADMIN_CODE);
         $this->storeManagerMock->expects($this->any())->method('getStore')->willReturn($storeMock);
+        $this->storeManagerMock->expects($this->any())->method('getWebsites')->willReturn([1 => 'default']);
 
         $this->mediaGalleryProcessor = $this->getMock(
             'Magento\Catalog\Model\Product\Gallery\Processor',
@@ -467,7 +470,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->productMock));
-        $this->initializationHelperMock->expects($this->once())->method('initialize')->with($this->productMock);
+        $this->initializationHelperMock->expects($this->never())->method('initialize');
         $this->resourceModelMock->expects($this->once())->method('validate')->with($this->productMock)
             ->willReturn(true);
         $this->resourceModelMock->expects($this->once())->method('save')->with($this->productMock)->willReturn(true);
@@ -487,7 +490,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->productMock));
-        $this->initializationHelperMock->expects($this->never())->method('initialize')->with($this->productMock);
+        $this->initializationHelperMock->expects($this->never())->method('initialize');
         $this->resourceModelMock->expects($this->once())->method('validate')->with($this->productMock)
             ->willReturn(true);
         $this->resourceModelMock->expects($this->once())->method('save')->with($this->productMock)->willReturn(true);
@@ -510,7 +513,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->will($this->returnValue($this->productMock));
-        $this->initializationHelperMock->expects($this->never())->method('initialize')->with($this->productMock);
+        $this->initializationHelperMock->expects($this->never())->method('initialize');
         $this->resourceModelMock->expects($this->once())->method('validate')->with($this->productMock)
             ->willReturn(true);
         $this->resourceModelMock->expects($this->once())->method('save')->with($this->productMock)
@@ -534,12 +537,12 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->will($this->returnValue($this->productMock));
-        $this->initializationHelperMock->expects($this->never())->method('initialize')->with($this->productMock);
+        $this->initializationHelperMock->expects($this->never())->method('initialize');
         $this->resourceModelMock->expects($this->once())->method('validate')->with($this->productMock)
             ->willReturn(true);
         $this->resourceModelMock->expects($this->once())->method('save')->with($this->productMock)
             ->willThrowException(new \Magento\Eav\Model\Entity\Attribute\Exception(__('123')));
-        $this->productMock->expects($this->never())->method('getId');
+        $this->productMock->expects($this->once())->method('getId')->willReturn(null);
         $this->extensibleDataObjectConverterMock
             ->expects($this->once())
             ->method('toNestedArray')
@@ -559,7 +562,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productFactoryMock->expects($this->exactly(2))
             ->method('create')
             ->will($this->returnValue($this->productMock));
-        $this->initializationHelperMock->expects($this->never())->method('initialize')->with($this->productMock);
+        $this->initializationHelperMock->expects($this->never())->method('initialize');
         $this->resourceModelMock->expects($this->once())->method('validate')->with($this->productMock)
             ->willReturn(['error1', 'error2']);
         $this->productMock->expects($this->never())->method('getId');
@@ -574,7 +577,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $this->productMock->expects($this->once())->method('getSku')->willReturn('product-42');
+        $this->productMock->expects($this->exactly(2))->method('getSku')->willReturn('product-42');
+        $this->productMock->expects($this->exactly(2))->method('getId')->willReturn(42);
         $this->resourceModelMock->expects($this->once())->method('delete')->with($this->productMock)
             ->willReturn(true);
         $this->assertTrue($this->model->delete($this->productMock));
@@ -586,7 +590,8 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     public function testDeleteException()
     {
-        $this->productMock->expects($this->once())->method('getSku')->willReturn('product-42');
+        $this->productMock->expects($this->exactly(2))->method('getSku')->willReturn('product-42');
+        $this->productMock->expects($this->exactly(2))->method('getId')->willReturn(42);
         $this->resourceModelMock->expects($this->once())->method('delete')->with($this->productMock)
             ->willThrowException(new \Exception());
         $this->model->delete($this->productMock);
@@ -753,8 +758,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->initializedProductMock));
-        $this->initializationHelperMock->expects($this->once())->method('initialize')
-            ->with($this->initializedProductMock);
+        $this->initializationHelperMock->expects($this->never())->method('initialize');
         $this->resourceModelMock->expects($this->once())->method('validate')->with($this->initializedProductMock)
             ->willReturn(true);
         $this->resourceModelMock->expects($this->once())->method('save')
@@ -922,8 +926,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->initializedProductMock));
-        $this->initializationHelperMock->expects($this->once())->method('initialize')
-            ->with($this->initializedProductMock);
+        $this->initializationHelperMock->expects($this->never())->method('initialize');
         $this->resourceModelMock->expects($this->once())->method('validate')->with($this->initializedProductMock)
             ->willReturn(true);
         $this->resourceModelMock->expects($this->once())->method('save')
@@ -1089,8 +1092,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productFactoryMock->expects($this->any())
             ->method('create')
             ->will($this->returnValue($this->initializedProductMock));
-        $this->initializationHelperMock->expects($this->once())->method('initialize')
-            ->with($this->initializedProductMock);
+        $this->initializationHelperMock->expects($this->never())->method('initialize');
         $this->resourceModelMock->expects($this->once())->method('validate')->with($this->initializedProductMock)
             ->willReturn(true);
         $this->resourceModelMock->expects($this->once())->method('save')
@@ -1244,7 +1246,7 @@ class ProductRepositoryTest extends \PHPUnit_Framework_TestCase
             ->method('setMediaAttribute')
             ->with($this->initializedProductMock, ['image', 'small_image'], 'filename1');
         $this->initializedProductMock->expects($this->once())->method('getWebsiteIds')->willReturn([]);
-
+        $this->productMock->expects($this->any())->method('getMediaGalleryEntries')->willReturn(null);
         $this->model->save($this->productMock);
         $this->assertEquals($expectedResult, $this->initializedProductMock->getMediaGallery('images'));
     }

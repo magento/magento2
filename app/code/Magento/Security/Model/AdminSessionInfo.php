@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Model;
@@ -46,16 +46,22 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
     protected $isOtherSessionsTerminated = false;
 
     /**
-     * @var \Magento\Security\Helper\SecurityConfig
+     * @var ConfigInterface
      */
     protected $securityConfig;
+
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    private $dateTime;
 
     /**
      * AdminSessionInfo constructor
      *
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Security\Helper\SecurityConfig $securityConfig
+     * @param ConfigInterface $securityConfig
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
@@ -63,13 +69,15 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\Security\Helper\SecurityConfig $securityConfig,
+        ConfigInterface $securityConfig,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->securityConfig = $securityConfig;
+        $this->dateTime = $dateTime;
     }
 
     /**
@@ -89,17 +97,20 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
      */
     public function isLoggedInStatus()
     {
+        $this->checkActivity();
         return $this->getData('status') == self::LOGGED_IN;
     }
 
     /**
-     * Check if a user is active
+     * Check if session is timed out and set status accordingly
      *
-     * @return bool
+     * @return void
      */
-    public function isActive()
+    private function checkActivity()
     {
-        return $this->isLoggedInStatus() && !$this->isSessionExpired();
+        if ($this->isSessionExpired()) {
+            $this->setData('status', self::LOGGED_OUT);
+        }
     }
 
     /**
@@ -110,7 +121,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\AbstractModel
     public function isSessionExpired()
     {
         $lifetime = $this->securityConfig->getAdminSessionLifetime();
-        $currentTime = $this->securityConfig->getCurrentTimestamp();
+        $currentTime = $this->dateTime->gmtTimestamp();
         $lastUpdatedTime = $this->getUpdatedAt();
         if (!is_numeric($lastUpdatedTime)) {
             $lastUpdatedTime = strtotime($lastUpdatedTime);

@@ -2,7 +2,7 @@
 /**
  * Configurable product type resource model
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Type;
@@ -131,14 +131,18 @@ class Configurable extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function getChildrenIds($parentId, $required = true)
     {
         $select = $this->getConnection()->select()->from(
-            ['e' => $this->getTable('catalog_product_entity')],
-            ['l.product_id']
-        )->join(
             ['l' => $this->getMainTable()],
-            'l.parent_id = e.' . $this->getProductEntityLinkField(),
+            ['product_id', 'parent_id']
+        )->join(
+            ['p' => $this->getTable('catalog_product_entity')],
+            'p.' . $this->getProductEntityLinkField() . ' = l.parent_id',
+            []
+        )->join(
+            ['e' => $this->getTable('catalog_product_entity')],
+            'e.entity_id = l.product_id AND e.required_options = 0',
             []
         )->where(
-            'e.entity_id IN (?) AND e.required_options = 0',
+            'p.entity_id IN (?)',
             $parentId
         );
 

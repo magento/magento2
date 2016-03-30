@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -31,7 +31,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function setUp()
+    protected function setUp()
     {
         $entityFactory = $this->getMock('Magento\Framework\Data\Collection\EntityFactory', [], [], '', false);
         $logger = $this->getMockBuilder('Psr\Log\LoggerInterface')
@@ -112,6 +112,13 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $entityMock->expects($this->any())->method('getTable')->willReturnArgument(0);
         $this->connectionMock->expects($this->atLeastOnce())->method('select')->willReturn($this->selectMock);
         $helper = new ObjectManager($this);
+
+        $this->prepareObjectManager([
+            [
+                'Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation',
+                $this->getMock('Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation')
+            ]
+        ]);
         $this->collection = $helper->getObject(
             'Magento\Catalog\Model\ResourceModel\Product\Collection',
             [
@@ -164,5 +171,21 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ['e.entity_id IN (1,2)']
         )->willReturnSelf();
         $this->collection->addCategoriesFilter([$conditionType => $values]);
+    }
+
+    /**
+     * @param $map
+     */
+    private function prepareObjectManager($map)
+    {
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($map));
+        $reflectionClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
+        $reflectionProperty = $reflectionClass->getProperty('_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock);
     }
 }

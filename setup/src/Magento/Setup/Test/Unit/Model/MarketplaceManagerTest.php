@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -486,9 +486,12 @@ class MarketplaceManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getCredentialBaseUrl')
             ->will($this->returnValue($this->checkingCredentialsUrl));
         $marketplaceManager
-            ->expects($this->never())
+            ->expects($this->once())
             ->method('getDirectory')
             ->will($this->returnValue($directory));
+        $directory
+            ->expects($this->once())
+            ->method('delete');
         $directory
             ->expects($this->never())
             ->method('writeFile');
@@ -632,7 +635,6 @@ class MarketplaceManagerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->once())
             ->method('loadPackagesForInstallFromCache')
             ->will($this->returnValue(false));
-
 
         $this->assertFalse($marketplaceManager->getPackagesForInstall());
     }

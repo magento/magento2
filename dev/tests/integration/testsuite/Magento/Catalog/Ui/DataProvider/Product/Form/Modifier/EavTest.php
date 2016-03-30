@@ -1,11 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 /**
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  * @magentoAppArea adminhtml
  */
 class EavTest extends \PHPUnit_Framework_TestCase
@@ -14,6 +16,7 @@ class EavTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\ObjectManagerInterface
      */
     protected $objectManager;
+
     /**
      * @var \Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav
      */
@@ -68,7 +71,7 @@ class EavTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/product_simple_with_admin_store.php
      */
     public function testModifyData()
     {
