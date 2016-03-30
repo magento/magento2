@@ -12,10 +12,8 @@ use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Webapi\Exception;
-use Psr\Log\LoggerInterface;
-use Magento\Vault\Model\Ui\TokenUiComponentProviderInterface;
-use Magento\CheckoutAgreements;
 use Magento\Theme;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class GetNonce
