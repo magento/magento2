@@ -46,7 +46,7 @@
     <type name="Magento\Customer\Model\ResourceModel\Visitor">
         <plugin name="catalogLog" type="Magento\Catalog\Model\Plugin\Log" />
     </type>
-    <type name="Magento\Theme\Block\Html\TopMenu">
+    <type name="Magento\Theme\Block\Html\Topmenu">
         <plugin name="catalogTopMenu" type="Magento\Catalog\Plugin\Block\TopMenu" />
     </type>
     <type name="Magento\Framework\Mview\View\StateInterface">
