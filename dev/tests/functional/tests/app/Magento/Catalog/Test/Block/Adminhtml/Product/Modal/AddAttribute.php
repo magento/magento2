@@ -14,14 +14,14 @@ use Magento\Ui\Test\Block\Adminhtml\FormSections;
 class AddAttribute extends FormSections
 {
     /**
-     * "Create New Attribute" button.
+     * Selector for "Create New Attribute" button.
      *
      * @var string
      */
-    protected $createNewAttribute = 'button[data-index="add_new_attribute_button"]';
+    private $createNewAttribute = 'button[data-index="add_new_attribute_button"]';
 
     /**
-     * Create new attribute.
+     * Click on "Create new attribute" button.
      *
      * @return void
      */

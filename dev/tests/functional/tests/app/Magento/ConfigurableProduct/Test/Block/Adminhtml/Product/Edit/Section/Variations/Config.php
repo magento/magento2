@@ -63,6 +63,13 @@ class Config extends Section
     protected $variationsContent = '#product_info_tabs_super_config_content';
 
     /**
+     * Locator for Configurations section.
+     *
+     * @var string
+     */
+    private $configurationsSection = '[data-index="configurable"]';
+
+    /**
      * Fill variations fieldset.
      *
      * @param array $fields
@@ -100,6 +107,7 @@ class Config extends Section
      */
     public function createConfigurations()
     {
+        $this->_rootElement->find($this->configurationsSection)->hover();
         $this->_rootElement->find($this->createConfigurationsButton)->click();
     }
 

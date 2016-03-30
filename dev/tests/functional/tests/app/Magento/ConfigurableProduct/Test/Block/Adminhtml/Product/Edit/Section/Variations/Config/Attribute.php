@@ -225,8 +225,9 @@ class Attribute extends Form
         );
 
         $this->browser->find($this->createNewVariationSet)->click();
-        $this->getEditAttributeForm()->fill($attributeFixture);
-        $this->getEditAttributeForm()->saveAttributeForm();
+        $newAttributeForm = $this->getNewAttributeForm();
+        $newAttributeForm->fill($attributeFixture);
+        $newAttributeForm->saveAttributeForm();
         $this->waitBlock($this->newAttributeFrame);
     }
 
@@ -333,14 +334,14 @@ class Attribute extends Form
     }
 
     /**
-     * Get attribute form block.
+     * Get new attribute form block.
      *
-     * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Attribute\NewAttributeForm
+     * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\NewConfigurableAttributeForm
      */
-    protected function getEditAttributeForm()
+    protected function getNewAttributeForm()
     {
         return $this->blockFactory->create(
-            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Attribute\NewAttributeForm',
+            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\NewConfigurableAttributeForm',
             ['element' => $this->browser->find($this->newAttribute)]
         );
     }
