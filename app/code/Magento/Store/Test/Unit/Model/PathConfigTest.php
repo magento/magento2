@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -26,7 +26,7 @@ class PathConfigTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Store\Model\RouteConfig */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->scopeConfigMock = $this->getMockBuilder('Magento\Framework\App\Config\ScopeConfigInterface')
             ->disableOriginalConstructor()

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Controller\Cart;
@@ -57,7 +57,7 @@ class ConfigureTest extends \PHPUnit_Framework_TestCase
      */
     protected $cartMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMock('Magento\Framework\App\Action\Context', [], [], '', false);
         $this->objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');

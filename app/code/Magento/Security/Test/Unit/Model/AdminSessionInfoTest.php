@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Security\Test\Unit\Model;
 
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Security\Model\ConfigInterface;
 
 /**
  * Test class for \Magento\Security\Model\AdminSessionInfo testing
@@ -19,9 +20,14 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var \Magento\Security\Helper\SecurityConfig
+     * @var \PHPUnit_Framework_MockObject_MockObject | ConfigInterface
      */
     protected $securityConfigMock;
+
+    /**
+     * @var DateTime
+     */
+    protected $dateTimeMock;
 
     /**
      * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -35,18 +41,18 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->objectManager = new ObjectManager($this);
-        $this->securityConfigMock =  $this->getMock(
-            'Magento\Security\Helper\SecurityConfig',
-            ['getAdminSessionLifetime', 'getCurrentTimestamp'],
-            [],
-            '',
-            false
-        );
+        $this->securityConfigMock =  $this->getMockBuilder(\Magento\Security\Model\ConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dateTimeMock =  $this->getMockBuilder(DateTime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = $this->objectManager->getObject(
             '\Magento\Security\Model\AdminSessionInfo',
             [
-                'securityConfig' => $this->securityConfigMock
+                'securityConfig' => $this->securityConfigMock,
+                'dateTime' => $this->dateTimeMock,
             ]
         );
     }
@@ -57,7 +63,27 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
     public function testIsLoggedInStatus()
     {
         $this->model->setData('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_IN);
+        $this->model->setUpdatedAt(901);
+        $this->securityConfigMock->expects($this->once())->method('getAdminSessionLifetime')->willReturn(100);
+        $this->dateTimeMock->expects($this->once())
+            ->method('gmtTimestamp')
+            ->willReturn(1000);
         $this->assertEquals(true, $this->model->isLoggedInStatus());
+    }
+
+    /**
+     * @return void
+     */
+    public function testIsLoggedInStatusExpired()
+    {
+        $this->model->setData('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_IN);
+        $this->model->setUpdatedAt(899);
+        $this->securityConfigMock->expects($this->once())->method('getAdminSessionLifetime')->willReturn(100);
+        $this->dateTimeMock->expects($this->once())
+            ->method('gmtTimestamp')
+            ->willReturn(1000);
+        $this->assertEquals(false, $this->model->isLoggedInStatus());
+        $this->assertEquals(\Magento\Security\Model\AdminSessionInfo::LOGGED_OUT, $this->model->getStatus());
     }
 
     /**
@@ -73,8 +99,8 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
             ->method('getAdminSessionLifetime')
             ->will($this->returnValue($sessionLifetime));
 
-        $this->securityConfigMock->expects($this->once())
-            ->method('getCurrentTimestamp')
+        $this->dateTimeMock->expects($this->once())
+            ->method('gmtTimestamp')
             ->willReturn($timestamp);
 
         $this->model->setUpdatedAt(
@@ -93,37 +119,6 @@ class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
             ['expectedResult' => true, 'sessionLifetime' => '0'],
             ['expectedResult' => true, 'sessionLifetime' => '1'],
             ['expectedResult' => false, 'sessionLifetime' => '2']
-        ];
-    }
-
-    /**
-     * @param bool $expectedResult
-     * @param bool $sessionLifetime
-     * @dataProvider dataProviderIsActive
-     */
-    public function testIsActive($expectedResult, $sessionLifetime)
-    {
-        $this->model->setData('status', \Magento\Security\Model\AdminSessionInfo::LOGGED_IN);
-        $this->securityConfigMock->expects($this->any())
-            ->method('getAdminSessionLifetime')
-            ->will($this->returnValue($sessionLifetime));
-        $this->securityConfigMock->expects($this->any())
-            ->method('getCurrentTimestamp')
-            ->will($this->returnValue(10));
-        $this->model->setUpdatedAt(9);
-
-        $this->assertEquals($expectedResult, $this->model->isActive());
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderIsActive()
-    {
-        return [
-            ['expectedResult' => false, 'sessionLifetime' => '0'],
-            ['expectedResult' => false, 'sessionLifetime' => '1'],
-            ['expectedResult' => true, 'sessionLifetime' => '2']
         ];
     }
 

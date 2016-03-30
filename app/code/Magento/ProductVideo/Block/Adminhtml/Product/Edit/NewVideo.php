@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductVideo\Block\Adminhtml\Product\Edit;
@@ -16,18 +16,26 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
      * Anchor is product video
      */
     const PATH_ANCHOR_PRODUCT_VIDEO = 'catalog_product_video-link';
+
     /**
      * @var \Magento\ProductVideo\Helper\Media
      */
     protected $mediaHelper;
+
     /**
      * @var \Magento\Framework\UrlInterface
      */
     protected $urlBuilder;
+
     /**
      * @var \Magento\Framework\Json\EncoderInterface
      */
     protected $jsonEncoder;
+
+    /**
+     * @var string
+     */
+    protected $videoSelector = '#media_gallery_content';
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -197,7 +205,8 @@ class NewVideo extends \Magento\Backend\Block\Widget\Form\Generic
                 'saveVideoUrl' => $this->getUrl('catalog/product_gallery/upload'),
                 'saveRemoteVideoUrl' => $this->getUrl('product_video/product_gallery/retrieveImage'),
                 'htmlId' => $this->getHtmlId(),
-                'youTubeApiKey' => $this->mediaHelper->getYouTubeApiKey()
+                'youTubeApiKey' => $this->mediaHelper->getYouTubeApiKey(),
+                'videoSelector' => $this->videoSelector
             ]
         );
     }

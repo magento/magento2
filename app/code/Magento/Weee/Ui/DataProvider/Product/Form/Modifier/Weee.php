@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Ui\DataProvider\Product\Form\Modifier;
@@ -178,7 +178,7 @@ class Weee extends AbstractModifier
                                 'data' => [
                                     'config' => [
                                         'componentType' => Container::NAME,
-                                        'component' => 'Magento_Ui/js/form/components/group',
+                                        'component' => 'Magento_Weee/js/fpt-group',
                                         'visible' => true,
                                         'label' => __('Country/State'),
                                     ],
@@ -196,7 +196,7 @@ class Weee extends AbstractModifier
                                                 'visible' => true,
                                                 'options' => $this->getCountries(),
                                                 'validation' => [
-                                                    'required-entry' => true
+                                                    'required-entry' => true,
                                                 ],
                                             ],
                                         ],
@@ -217,8 +217,22 @@ class Weee extends AbstractModifier
                                                 ],
                                                 'caption' => '*',
                                                 'visible' => true,
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                                'val' => [
+                                    'arguments' => [
+                                        'data' => [
+                                            'config' => [
+                                                'componentType' => Field::NAME,
+                                                'formElement' => Input::NAME,
+                                                'dataType' => Text::NAME,
+                                                'enableLabel' => false,
+                                                'visible' => true,
+                                                'additionalClasses' => 'weee_hidden',
                                                 'validation' => [
-                                                    'required-entry' => true
+                                                    'validate-fpt-group' => true
                                                 ],
                                             ],
                                         ],
