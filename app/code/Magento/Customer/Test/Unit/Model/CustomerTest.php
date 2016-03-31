@@ -11,12 +11,15 @@
  */
 namespace Magento\Customer\Test\Unit\Model;
 
+use Magento\Customer\Model\Customer;
+use Magento\Store\Model\ScopeInterface;
+
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CustomerTest extends \PHPUnit_Framework_TestCase
 {
-    /** @var \Magento\Customer\Model\Customer */
+    /** @var Customer */
     protected $_model;
 
     /** @var \Magento\Store\Model\Website|\PHPUnit_Framework_MockObject_MockObject */
@@ -262,6 +265,53 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         return [
             ['lockExpirationDate' => date("F j, Y", strtotime('-1 days')), 'expectedResult' => false],
             ['lockExpirationDate' => date("F j, Y", strtotime('+1 days')), 'expectedResult' => true]
+        ];
+    }
+
+    /**
+     * @param int $customerId
+     * @param int $websiteId
+     * @param string|null $skipConfirmationIfEmail
+     * @param bool $expected
+     * @dataProvider dataProviderIsConfirmationRequired
+     */
+    public function testIsConfirmationRequired(
+        $customerId,
+        $websiteId,
+        $skipConfirmationIfEmail,
+        $expected
+    ) {
+        $customerEmail = 'test1@example.com';
+
+        $this->registryMock->expects($this->any())
+            ->method('registry')
+            ->with('skip_confirmation_if_email')
+            ->willReturn($skipConfirmationIfEmail);
+
+        $this->_scopeConfigMock->expects($this->any())
+            ->method('getValue')
+            ->with(Customer::XML_PATH_IS_CONFIRM, ScopeInterface::SCOPE_WEBSITES, $websiteId)
+            ->willReturn($expected);
+
+        $this->_model->setData('id', $customerId);
+        $this->_model->setData('website_id', $websiteId);
+        $this->_model->setData('email', $customerEmail);
+
+        $this->assertEquals($expected, $this->_model->isConfirmationRequired());
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderIsConfirmationRequired()
+    {
+        return [
+            [null, null, null, false],
+            [1, 1, null, false],
+            [1, 1, 'test1@example.com', false],
+            [1, 1, 'test2@example.com', true],
+            [1, 0, 'test2@example.com', true],
+            [1, null, 'test2@example.com', true],
         ];
     }
 }
