@@ -53,7 +53,7 @@ class MessageController
     public function lock(EnvelopeInterface $envelope, $consumerName)
     {
         $lock = $this->lockFactory->create();
-        $code = $consumerName . '-' . $envelope->getMessageId();
+        $code = $consumerName . '-' . $envelope->getProperties()['message_id'];
         $code = md5($code);
         $this->reader->read($lock, $code);
         if ($lock->getId()) {

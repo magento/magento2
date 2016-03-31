@@ -90,7 +90,8 @@ class Publisher implements PublisherInterface
                 'properties' => [
                     'reply_to' => $replyTo,
                     'delivery_mode' => 2,
-                    'correlation_id' => rand()
+                    'correlation_id' => rand(),
+                    'message_id' => md5(uniqid($topicName))
                 ]
             ]
         );
@@ -110,7 +111,8 @@ class Publisher implements PublisherInterface
             $data,
             [
                 'correlation_id' => $messageProperties['correlation_id'],
-                'delivery_mode' => 2
+                'delivery_mode' => 2,
+                'message_id' => $messageProperties['message_id']
             ]
         );
         $this->amqpConfig->getChannel()->basic_publish($msg, '', $queue);

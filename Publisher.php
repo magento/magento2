@@ -72,7 +72,12 @@ class Publisher implements PublisherInterface
     {
         $this->messageValidator->validate($topicName, $data);
         $data = $this->messageEncoder->encode($topicName, $data);
-        $envelope = $this->envelopeFactory->create(['body' => $data]);
+        $envelope = $this->envelopeFactory->create(
+            [
+                'body' => $data,
+                'properties' => ['message_id' => md5(uniqid($topicName))]
+            ]
+        );
         $connectionName = $this->messageQueueConfig->getConnectionByTopic($topicName);
         $exchange = $this->exchangeRepository->getByConnectionName($connectionName);
         $exchange->enqueue($topicName, $envelope);
