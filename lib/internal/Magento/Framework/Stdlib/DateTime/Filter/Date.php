@@ -52,6 +52,12 @@ class Date implements \Zend_Filter_Interface
      */
     public function filter($value)
     {
-        return $this->_normalToLocalFilter->filter($this->_localToNormalFilter->filter($value));
+        $value = $this->_normalToLocalFilter->filter($this->_localToNormalFilter->filter($value));
+
+        /**
+         * its not a space in str_replace, don't delete it, it would cause a bug
+         * @todo MAGETWO-51391
+         */
+        return str_replace(' ', '', $value);
     }
 }
