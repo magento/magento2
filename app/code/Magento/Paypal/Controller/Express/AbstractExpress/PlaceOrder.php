@@ -141,6 +141,9 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
             case ApiProcessableException::API_DO_EXPRESS_CHECKOUT_FAIL:
                 $this->_redirectSameToken();
                 break;
+            case ApiProcessableException::API_ADDRESS_MATCH_FAIL:
+                $this->_redirectToOrderReviewPageAndShowError($exception->getUserMessage());
+                break;
             case ApiProcessableException::API_UNABLE_TRANSACTION_COMPLETE:
                 if ($this->_config->getPaymentAction() == \Magento\Payment\Model\Method\AbstractMethod::ACTION_ORDER) {
                     $paypalTransactionData = $this->_getCheckoutSession()->getPaypalTransactionData();
@@ -180,6 +183,18 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
     {
         $this->messageManager->addErrorMessage($errorMessage);
         $this->_redirect('checkout/cart');
+    }
+
+    /**
+     * Redirect customer to the paypal order review page and show error message
+     *
+     * @param string $errorMessage
+     * @return void
+     */
+    protected function _redirectToOrderReviewPageAndShowError($errorMessage)
+    {
+        $this->messageManager->addErrorMessage($errorMessage);
+        $this->_redirect('*/*/review');
     }
 
     /**
