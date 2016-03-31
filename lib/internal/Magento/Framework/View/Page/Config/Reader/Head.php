@@ -90,7 +90,7 @@ class Head implements Layout\ReaderInterface
                     break;
 
                 case self::HEAD_META:
-                    $pageConfigStructure->setMetaData($node->getAttribute('name'), $node->getAttribute('content'));
+                    $this->setMetadata($pageConfigStructure, $node);
                     break;
 
                 case self::HEAD_ATTRIBUTE:
@@ -121,5 +121,23 @@ class Head implements Layout\ReaderInterface
             $attributes[$attrName] = (string)$attrValue;
         }
         return $attributes;
+    }
+
+    /**
+     * Set metadata
+     *
+     * @param \Magento\Framework\View\Page\Config\Structure $pageConfigStructure
+     * @param \Magento\Framework\View\Layout\Element $node
+     * @return void
+     */
+    private function setMetadata($pageConfigStructure, $node)
+    {
+        if (!$node->getAttribute('name') && $node->getAttribute('property')) {
+            $metadataName = $node->getAttribute('property');
+        } else {
+            $metadataName = $node->getAttribute('name');
+        }
+
+        $pageConfigStructure->setMetaData($metadataName, $node->getAttribute('content'));
     }
 }
