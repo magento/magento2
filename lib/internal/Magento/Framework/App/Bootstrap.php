@@ -117,6 +117,20 @@ class Bootstrap
      */
     public static function create($rootDir, array $initParams, ObjectManagerFactory $factory = null)
     {
+        if (file_exists(BP . '/var/.regenerate')) {
+            $generationPath = isset($initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::GENERATION])
+                ? $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::GENERATION]
+                : BP . '/var/generation';
+            $diPath = isset($initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::DI])
+                ? $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::DI] : BP . '/var/di';
+            if (is_dir($generationPath)) {
+                \Magento\Framework\Filesystem\Io\File::rmdirRecursive($generationPath);
+            }
+            if (is_dir($diPath)) {
+                \Magento\Framework\Filesystem\Io\File::rmdirRecursive($diPath);
+            }
+            unlink(BP . '/var/.regenerate');
+        }
         self::populateAutoloader($rootDir, $initParams);
         if ($factory === null) {
             $factory = self::createObjectManagerFactory($rootDir, $initParams);
