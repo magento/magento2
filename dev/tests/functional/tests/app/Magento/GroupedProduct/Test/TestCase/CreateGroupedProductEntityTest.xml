@@ -13,11 +13,12 @@
             <data name="product/data/name" xsi:type="string">GroupedProduct %isolation%</data>
             <data name="product/data/sku" xsi:type="string">GroupedProduct_sku%isolation%</data>
             <data name="product/data/category" xsi:type="string">category_%isolation%</data>
-            <data name="product/data/associated/products" xsi:type="string">catalogProductSimple::simple_big_qty,downloadableProduct::one_dollar_product_with_no_separated_link,catalogProductVirtual::required_fields_with_category</data>
+            <data name="product/data/associated/products" xsi:type="string">catalogProductSimple::simple_big_qty,downloadableProduct::one_dollar_product_with_no_separated_link,catalogProductVirtual::default</data>
             <data name="product/data/associated/dataset" xsi:type="string">simple_downloadable_virtual</data>
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductSaveMessage" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductVisibleInCategory" />
             <constraint name="Magento\Catalog\Test\Constraint\AssertProductPage" />
+            <constraint name="Magento\GroupedProduct\Test\Constraint\AssertGroupedProductsDefaultQty" />
         </variation>
         <variation name="CreateGroupedProductEntityTestVariation2" summary="Create with required products and description">
             <data name="product/data/url_key" xsi:type="string">test-grouped-product-%isolation%</data>

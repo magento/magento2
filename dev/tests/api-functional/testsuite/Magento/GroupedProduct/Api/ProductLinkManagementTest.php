@@ -41,7 +41,7 @@ class ProductLinkManagementTest extends \Magento\TestFramework\TestCase\WebapiAb
             [
                 'sku' => 'grouped-product',
                 'link_type' => 'associated',
-                'linked_product_sku' => 'simple-1',
+                'linked_product_sku' => 'simple',
                 'linked_product_type' => 'simple',
                 'position' => 1,
             ],

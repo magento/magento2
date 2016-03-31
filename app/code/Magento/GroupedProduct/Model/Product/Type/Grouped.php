@@ -202,7 +202,7 @@ class Grouped extends \Magento\Catalog\Model\Product\Type\AbstractType
             $collection = $this->getAssociatedProductCollection(
                 $product
             )->addAttributeToSelect(
-                '*'
+                ['name', 'price']
             )->addFilterByRequiredOptions()->setPositionOrder()->addStoreFilter(
                 $this->getStoreFilter($product)
             )->addAttributeToFilter(
