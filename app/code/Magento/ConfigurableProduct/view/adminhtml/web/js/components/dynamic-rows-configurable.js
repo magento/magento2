@@ -163,7 +163,7 @@ define([
                 dataCount,
                 elemsCount;
 
-            this.source.remove(this.dataScope + '.' + this.index);
+            this.source.set(this.dataScope + '.' + this.index, []);
             this.isEmpty(data.length === 0);
 
             _.each(data, function (row) {
@@ -180,8 +180,8 @@ define([
             elemsCount = this.elems().length;
 
             if (dataCount > elemsCount) {
-                this.getChildItems().each(function (data, index) {
-                    this.pageSizeChecker(data, this.startIndex + index)
+                this.getChildItems().each(function (elemData, index) {
+                    this.addChild(elemData, this.startIndex + index);
                 }, this);
             } else {
                 for (elemsCount; elemsCount > dataCount; elemsCount--) {
