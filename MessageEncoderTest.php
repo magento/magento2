@@ -43,7 +43,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
         $encodedCustomerData = json_decode($this->encoder->encode('customer.created', $customer), true);
         $createdAt = $customer->getCreatedAt();
         $expectedEncodedCustomerData = json_decode($this->getCustomerDataAsJson($createdAt), true);
-        $this->assertEquals($expectedEncodedCustomerData['data'], $encodedCustomerData['data']);
+        $this->assertEquals($expectedEncodedCustomerData, $encodedCustomerData);
     }
 
     /**
@@ -63,7 +63,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
         $encodedCustomerData = json_decode($this->encoder->encode('customer.list.retrieved', [$customer]), true);
         $createdAt = $customer->getCreatedAt();
         $expectedEncodedCustomerData = json_decode($this->getCustomerDataAsJson($createdAt), true);
-        $this->assertEquals($expectedEncodedCustomerData['data'], $encodedCustomerData['data'][0]);
+        $this->assertEquals($expectedEncodedCustomerData, $encodedCustomerData[0]);
     }
 
     public function testDecode()
@@ -111,7 +111,7 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
      */
     public function testDecodeInvalidMessage()
     {
-        $this->encoder->decode('customer.created', '{"data": {"not_existing_field": "value"}}');
+        $this->encoder->decode('customer.created', '{"not_existing_field": "value"}');
     }
 
     /**
@@ -164,52 +164,49 @@ class MessageEncoderTest extends \PHPUnit_Framework_TestCase
     {
         return <<<JSON
 {
-    "data":
-    {
-        "id": 1,
-        "group_id": 1,
-        "default_billing": "1",
-        "default_shipping": "1",
-        "created_at": "{$createdAt}",
-        "updated_at": "{$createdAt}",
-        "email": "customer@example.com",
-        "firstname": "John",
-        "lastname": "Smith",
-        "middlename": "A",
-        "prefix": "Mr.",
-        "suffix": "Esq.",
-        "gender": 0,
-        "store_id": 1,
-        "taxvat": "12",
-        "website_id": 1,
-        "addresses": [
-            {
-                "id": 1,
-                "customer_id": 1,
-                "region": {
-                    "region_code": "AL",
-                    "region": "Alabama",
-                    "region_id": 1
-                },
-                "region_id": 1,
-                "country_id": "US",
-                "street": [
-                    "Green str, 67"
-                ],
-                "company": "CompanyName",
-                "telephone": "3468676",
-                "postcode": "75477",
-                "city": "CityM",
-                "firstname": "John",
-                "lastname": "Smith",
-                "default_shipping": true,
-                "default_billing": true
-            }
-        ],
-        "disable_auto_group_change": 0,
-        "extension_attributes": {
-            "test_group_code": "Some Group Code"
+    "id": 1,
+    "group_id": 1,
+    "default_billing": "1",
+    "default_shipping": "1",
+    "created_at": "{$createdAt}",
+    "updated_at": "{$createdAt}",
+    "email": "customer@example.com",
+    "firstname": "John",
+    "lastname": "Smith",
+    "middlename": "A",
+    "prefix": "Mr.",
+    "suffix": "Esq.",
+    "gender": 0,
+    "store_id": 1,
+    "taxvat": "12",
+    "website_id": 1,
+    "addresses": [
+        {
+            "id": 1,
+            "customer_id": 1,
+            "region": {
+                "region_code": "AL",
+                "region": "Alabama",
+                "region_id": 1
+            },
+            "region_id": 1,
+            "country_id": "US",
+            "street": [
+                "Green str, 67"
+            ],
+            "company": "CompanyName",
+            "telephone": "3468676",
+            "postcode": "75477",
+            "city": "CityM",
+            "firstname": "John",
+            "lastname": "Smith",
+            "default_shipping": true,
+            "default_billing": true
         }
+    ],
+    "disable_auto_group_change": 0,
+    "extension_attributes": {
+        "test_group_code": "Some Group Code"
     }
 }
 JSON;
