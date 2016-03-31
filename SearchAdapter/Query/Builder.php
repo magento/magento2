@@ -9,6 +9,7 @@ use Magento\Framework\Search\RequestInterface;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Elasticsearch\SearchAdapter\Query\Builder\Aggregation as AggregationBuilder;
+use Magento\Framework\App\ScopeResolverInterface;
 
 class Builder
 {
@@ -28,18 +29,26 @@ class Builder
     protected $aggregationBuilder;
 
     /**
+     * @var ScopeResolverInterface
+     */
+    protected $scopeResolver;
+
+    /**
      * @param Config $clientConfig
      * @param SearchIndexNameResolver $searchIndexNameResolver
      * @param AggregationBuilder $aggregationBuilder
+     * @param ScopeResolverInterface $scopeResolver
      */
     public function __construct(
         Config $clientConfig,
         SearchIndexNameResolver $searchIndexNameResolver,
-        AggregationBuilder $aggregationBuilder
+        AggregationBuilder $aggregationBuilder,
+        ScopeResolverInterface $scopeResolver
     ) {
         $this->clientConfig = $clientConfig;
         $this->searchIndexNameResolver = $searchIndexNameResolver;
         $this->aggregationBuilder = $aggregationBuilder;
+        $this->scopeResolver = $scopeResolver;
     }
 
     /**
@@ -51,7 +60,7 @@ class Builder
     public function initQuery(RequestInterface $request)
     {
         $dimension = current($request->getDimensions());
-        $storeId = $dimension->getValue();
+        $storeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
         $searchQuery = [
             'index' => $this->searchIndexNameResolver->getIndexName($storeId, $request->getIndex()),
             'type' => $this->clientConfig->getEntityType(),

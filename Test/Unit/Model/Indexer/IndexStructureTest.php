@@ -20,6 +20,15 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
      */
     private $adapter;
 
+    /**
+     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeResolver;
+
+    /**
+     * @var \Magento\Framework\App\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $scopeInterface;
 
     /**
      * Set up test environment.
@@ -32,35 +41,64 @@ class IndexStructureTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->scopeResolver = $this->getMockForAbstractClass(
+            'Magento\Framework\App\ScopeResolverInterface',
+            [],
+            '',
+            false
+        );
+
+        $this->scopeInterface = $this->getMockForAbstractClass(
+            'Magento\Framework\App\ScopeInterface',
+            [],
+            '',
+            false
+        );
+
         $objectManager = new ObjectManagerHelper($this);
 
         $this->model = $objectManager->getObject(
             'Magento\Elasticsearch\Model\Indexer\IndexStructure',
             [
                 'adapter' => $this->adapter,
+                'scopeResolver' => $this->scopeResolver
             ]
         );
     }
 
     public function testDelete()
     {
+        $scopeId = 9;
         $dimension = $this->getMockBuilder('Magento\Framework\Search\Request\Dimension')
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->adapter->expects($this->any())
             ->method('cleanIndex');
+        $this->scopeResolver->expects($this->once())
+            ->method('getScope')
+            ->willReturn($this->scopeInterface);
+        $this->scopeInterface->expects($this->once())
+            ->method('getId')
+            ->willReturn($scopeId);
 
         $this->model->delete('product', [$dimension]);
     }
 
     public function testCreate()
     {
+        $scopeId = 9;
         $dimension = $this->getMockBuilder('Magento\Framework\Search\Request\Dimension')
             ->disableOriginalConstructor()
             ->getMock();
         $this->adapter->expects($this->any())
             ->method('checkIndex');
+        $this->scopeResolver->expects($this->once())
+            ->method('getScope')
+            ->willReturn($this->scopeInterface);
+        $this->scopeInterface->expects($this->once())
+            ->method('getId')
+            ->willReturn($scopeId);
 
         $this->model->create('product', [], [$dimension]);
     }

@@ -7,6 +7,7 @@ namespace Magento\Elasticsearch\Model\Indexer;
 
 use Magento\Framework\Indexer\IndexStructureInterface;
 use Magento\Elasticsearch\Model\Adapter\Elasticsearch as ElasticsearchAdapter;
+use Magento\Framework\App\ScopeResolverInterface;
 
 class IndexStructure implements IndexStructureInterface
 {
@@ -16,12 +17,20 @@ class IndexStructure implements IndexStructureInterface
     private $adapter;
 
     /**
+     * @var ScopeResolverInterface
+     */
+    private $scopeResolver;
+
+    /**
      * @param ElasticsearchAdapter $adapter
+     * @param ScopeResolverInterface $scopeResolver
      */
     public function __construct(
-        ElasticsearchAdapter $adapter
+        ElasticsearchAdapter $adapter,
+        ScopeResolverInterface $scopeResolver
     ) {
         $this->adapter = $adapter;
+        $this->scopeResolver = $scopeResolver;
     }
 
     /**
@@ -32,8 +41,8 @@ class IndexStructure implements IndexStructureInterface
         array $dimensions = []
     ) {
         $dimension = current($dimensions);
-        $storeId = $dimension->getValue();
-        $this->adapter->cleanIndex($storeId, $indexerId);
+        $scopeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
+        $this->adapter->cleanIndex($scopeId, $indexerId);
     }
 
     /**
@@ -46,7 +55,7 @@ class IndexStructure implements IndexStructureInterface
         array $dimensions = []
     ) {
         $dimension = current($dimensions);
-        $storeId = $dimension->getValue();
-        $this->adapter->checkIndex($storeId, $indexerId, false);
+        $scopeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
+        $this->adapter->checkIndex($scopeId, $indexerId, false);
     }
 }

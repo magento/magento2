@@ -48,6 +48,11 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
     protected $indexerId;
 
     /**
+     * @var \Magento\Framework\App\ScopeResolverInterface
+     */
+    protected $scopeResolver;
+
+    /**
      * @param \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager
      * @param \Magento\Elasticsearch\Model\Adapter\FieldMapperInterface $fieldMapper
      * @param \Magento\Catalog\Model\Layer\Filter\Price\Range $range
@@ -56,6 +61,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver $searchIndexNameResolver
      * @param string $indexerId
+     * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
      */
     public function __construct(
         \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager,
@@ -65,7 +71,8 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         \Magento\Elasticsearch\Model\Config $clientConfig,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver $searchIndexNameResolver,
-        $indexerId
+        $indexerId,
+        \Magento\Framework\App\ScopeResolverInterface $scopeResolver
     ) {
         $this->connectionManager = $connectionManager;
         $this->fieldMapper = $fieldMapper;
@@ -75,6 +82,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         $this->storeManager = $storeManager;
         $this->searchIndexNameResolver = $searchIndexNameResolver;
         $this->indexerId = $indexerId;
+        $this->scopeResolver = $scopeResolver;
     }
 
     /**
@@ -153,7 +161,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         $entityIds = $entityStorage->getSource();
         $fieldName = $this->fieldMapper->getFieldName('price');
         $dimension = current($dimensions);
-        $storeId = $dimension->getValue();
+        $storeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
 
         return $this->intervalFactory->create([
             'entityIds' => $entityIds,
@@ -175,7 +183,7 @@ class DataProvider implements \Magento\Framework\Search\Dynamic\DataProviderInte
         $entityIds = $entityStorage->getSource();
         $fieldName = $this->fieldMapper->getFieldName($bucket->getField());
         $dimension = current($dimensions);
-        $storeId = $dimension->getValue();
+        $storeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
         $requestQuery = [
             'index' => $this->searchIndexNameResolver->getIndexName($storeId, $this->indexerId),
             'type' => $this->clientConfig->getEntityType(),

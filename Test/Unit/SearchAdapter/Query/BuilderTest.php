@@ -40,10 +40,20 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
     protected $request;
 
     /**
+     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scopeResolver;
+
+    /**
+     * @var \Magento\Framework\App\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $scopeInterface;
+
+    /**
      * Setup method
      * @return void
      */
-    protected function setUp()
+    public function setUp()
     {
         $this->clientConfig = $this->getMockBuilder('Magento\Elasticsearch\Model\Config')
             ->setMethods(['getEntityType'])
@@ -62,6 +72,18 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
         $this->request = $this->getMockBuilder('Magento\Framework\Search\RequestInterface')
             ->disableOriginalConstructor()
             ->getMock();
+        $this->scopeResolver = $this->getMockForAbstractClass(
+            'Magento\Framework\App\ScopeResolverInterface',
+            [],
+            '',
+            false
+        );
+        $this->scopeInterface = $this->getMockForAbstractClass(
+            'Magento\Framework\App\ScopeInterface',
+            [],
+            '',
+            false
+        );
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
@@ -69,7 +91,8 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
             [
                 'clientConfig' => $this->clientConfig,
                 'searchIndexNameResolver' => $this->searchIndexNameResolver,
-                'aggregationBuilder' => $this->aggregationBuilder
+                'aggregationBuilder' => $this->aggregationBuilder,
+                'scopeResolver' => $this->scopeResolver
             ]
         );
     }
@@ -79,16 +102,24 @@ class BuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testInitQuery()
     {
+        $dimensionValue = 1;
         $dimension = $this->getMockBuilder('Magento\Framework\Search\Request\Dimension')
             ->setMethods(['getValue'])
             ->disableOriginalConstructor()
             ->getMock();
+
         $this->request->expects($this->once())
             ->method('getDimensions')
             ->willReturn([$dimension]);
         $dimension->expects($this->once())
             ->method('getValue')
-            ->willReturn(1);
+            ->willReturn($dimensionValue);
+        $this->scopeResolver->expects($this->once())
+            ->method('getScope')
+            ->willReturn($this->scopeInterface);
+        $this->scopeInterface->expects($this->once())
+            ->method('getId')
+            ->willReturn($dimensionValue);
         $this->request->expects($this->once())
             ->method('getFrom')
             ->willReturn(0);
