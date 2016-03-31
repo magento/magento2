@@ -15,8 +15,40 @@ define([
 
             timeOffset: 0,
 
+            showsTime: false,
+
+            dateFormat: 'MM/dd/y', // ICU Date Format
             timeFormat: 'HH:mm', // ICU Time Format
-            dateFormat: 'dd/MM/yyyy', // ICU Date Format
+
+            /**
+             * Format of date that comes from the
+             * server (ICU Date Format).
+             *
+             * Used only in date picker mode
+             * (this.showsTime == false).
+             *
+             * @type {String}
+             */
+            inputDateFormat: 'y-MM-dd',
+
+            /**
+             * Format of date that should be sent to the
+             * server (ICU Date Format).
+             *
+             * Used only in date picker mode
+             * (this.showsTime == false).
+             *
+             * @type {String}
+             */
+            outputDateFormat: 'MM/dd/y',
+
+            /**
+             * Date/time format that is used to display date in
+             * the input field.
+             *
+             * @type {String}
+             */
+            datetimeFormat: '',
 
             elementTmpl: 'ui/form/element/date',
 
@@ -27,19 +59,12 @@ define([
 
             /**
              * Date/time value shifted to corresponding timezone
-             * according to this.timeOffset property.
+             * according to this.timeOffset property. This value
+             * will be sent to the server.
              *
              * @type {String}
              */
-            shiftedValue: '',
-
-            /**
-             * Date/time format converted to be compatible with
-             * moment.js library.
-             *
-             * @type {String}
-             */
-            momentDatetimeFormat: ''
+            shiftedValue: ''
         },
 
         /**
@@ -51,15 +76,14 @@ define([
             this._super();
 
             var options = {
+                showsTime: this.showsTime,
                 timeFormat: this.timeFormat,
                 dateFormat: this.dateFormat
             };
 
-            var datetimeFormat = this.dateFormat + ' ' + this.timeFormat;
-
-            this.momentDatetimeFormat = utils.normalizeDate(datetimeFormat);
-
             utils.extend(this.options, options);
+
+            this.prepareDatetimeFormats();
 
             return this;
         },
@@ -72,23 +96,8 @@ define([
         },
 
         /**
-         * Formats provided value according to 'dateFormat' property.
-         *
-         * @returns {String}
-         */
-        normalizeData: function () {
-            var value = this._super();
-
-            if (value) {
-                value = moment(value).format(this.momentDatetimeFormat);
-            }
-
-            return value;
-        },
-
-        /**
-         * Prepares and sets 'shifted' (that only will be displayed
-         * on frontend) date/time value.
+         * Prepares and sets date/time value that will be displayed
+         * in the input field.
          *
          * @param {String} value
          */
@@ -96,8 +105,17 @@ define([
             var shiftedValue;
 
             if (value) {
-                shiftedValue = moment.utc(value).add(this.timeOffset, 'seconds');
-                shiftedValue = shiftedValue.format(this.momentDatetimeFormat);
+                if (this.showsTime) {
+                    shiftedValue = moment.utc(value).add(this.timeOffset, 'seconds');
+                } else {
+                    shiftedValue = moment(value, this.outputDateFormat);
+
+                    if (!this.shiftedValue()) {
+                        shiftedValue = moment(value, this.inputDateFormat);
+                    }
+                }
+
+                shiftedValue = shiftedValue.format(this.datetimeFormat);
 
                 if (shiftedValue !== this.shiftedValue()) {
                     this.shiftedValue(shiftedValue);
@@ -106,8 +124,8 @@ define([
         },
 
         /**
-         * Prepares and sets 'real' (that will be sent to backend)
-         * date/time value.
+         * Prepares and sets date/time value that will be sent
+         * to the server.
          *
          * @param {String} shiftedValue
          */
@@ -115,13 +133,35 @@ define([
             var value;
 
             if (shiftedValue) {
-                value = moment.utc(shiftedValue, this.momentDatetimeFormat);
-                value = value.subtract(this.timeOffset, 'seconds').toISOString();
+                if (this.showsTime) {
+                    value = moment.utc(shiftedValue, this.datetimeFormat);
+                    value = value.subtract(this.timeOffset, 'seconds').toISOString();
+                } else {
+                    value = moment(shiftedValue, this.datetimeFormat);
+                    value = value.format(this.outputDateFormat);
+                }
 
                 if (value !== this.value()) {
                     this.value(value);
                 }
             }
+        },
+
+        /**
+         * Prepares and converts all date/time formats to be compatible
+         * with moment.js library.
+         */
+        prepareDatetimeFormats: function () {
+            this.datetimeFormat = this.dateFormat;
+
+            if (this.showsTime) {
+                this.datetimeFormat += ' ' + this.timeFormat;
+            }
+
+            this.datetimeFormat = utils.normalizeDate(this.datetimeFormat);
+
+            this.inputDateFormat = utils.normalizeDate(this.inputDateFormat);
+            this.outputDateFormat = utils.normalizeDate(this.outputDateFormat);
         }
     });
 });
