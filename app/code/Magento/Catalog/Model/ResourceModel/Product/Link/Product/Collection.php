@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Link\Product;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Catalog product linked products collection

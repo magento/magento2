@@ -230,13 +230,13 @@ class Preprocessor implements PreprocessorInterface
     /**
      * Get product metadata pool
      *
-     * @return \Magento\Framework\Model\Entity\MetadataPool
+     * @return \Magento\Framework\EntityManager\MetadataPool
      */
     protected function getMetadataPool()
     {
         if (!$this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Model\Entity\MetadataPool::class);
+                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         }
         return $this->metadataPool;
     }

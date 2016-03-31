@@ -22,7 +22,7 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
     protected $_eavConfig;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool
+     * @var \Magento\Framework\EntityManager\MetadataPool
      */
     protected $metadataPool;
 
@@ -230,13 +230,13 @@ abstract class AbstractIndexer extends \Magento\Indexer\Model\ResourceModel\Abst
     }
 
     /**
-     * @return \Magento\Framework\Model\Entity\MetadataPool
+     * @return \Magento\Framework\EntityManager\MetadataPool
      */
     protected function getMetadataPool()
     {
         if (null === $this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\Entity\MetadataPool');
+                ->get('Magento\Framework\EntityManager\MetadataPool');
         }
         return $this->metadataPool;
     }

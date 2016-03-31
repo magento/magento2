@@ -135,7 +135,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $this->selectMock->expects($this->exactly(2))->method('join');
 
         $this->prepareObjectManager([
-            ['Magento\Framework\Model\Entity\MetadataPool', $this->metadataPoolMock],
+            ['Magento\Framework\EntityManager\MetadataPool', $this->metadataPoolMock],
             ['Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface', $this->joinProcessor]
         ]);
 

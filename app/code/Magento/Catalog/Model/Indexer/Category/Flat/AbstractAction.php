@@ -473,7 +473,7 @@ class AbstractAction
     {
         if (null === $this->categoryMetadata) {
             $metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\Entity\MetadataPool');
+                ->get('Magento\Framework\EntityManager\MetadataPool');
             $this->categoryMetadata = $metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
         }
         return $this->categoryMetadata;

@@ -13,7 +13,7 @@ use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks as LinksIni
 use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class Repository
@@ -283,13 +283,13 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     }
 
     /**
-     * @return \Magento\Framework\Model\Entity\MetadataPool
+     * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()
     {
         if (null === $this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\Entity\MetadataPool');
+                ->get('Magento\Framework\EntityManager\MetadataPool');
         }
         return $this->metadataPool;
     }

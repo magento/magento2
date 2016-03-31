@@ -701,11 +701,11 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         );
 
         $metadataPoolMock = $this
-            ->getMock('Magento\Framework\Model\Entity\MetadataPool', ['getLinkField'], [], '', false);
+            ->getMock('Magento\Framework\EntityManager\MetadataPool', ['getLinkField'], [], '', false);
         $metadataPoolMock->expects($this->any())->method('getMetadata')->willReturnSelf();
 
         $this->prepareObjectManager([
-            ['Magento\Framework\Model\Entity\MetadataPool', $metadataPoolMock],
+            ['Magento\Framework\EntityManager\MetadataPool', $metadataPoolMock],
         ]);
 
         $this->downloadableModelMock = $this->objectManagerHelper->getObject(
