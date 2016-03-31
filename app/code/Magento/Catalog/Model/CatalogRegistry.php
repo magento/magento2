@@ -7,7 +7,7 @@
 namespace Magento\Catalog\Model;
 
 use Magento\Framework\Model\EntityRegistry;
-use Magento\Framework\Model\EntityManager;
+use Magento\Framework\EntityManager\EntityManager;
 
 /**
  * Class CatalogRegistry
