@@ -215,6 +215,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                                 ->setStoreId($copyFrom)
                                 ->load($productId)
                                 ->setStoreId($copyTo)
+                                ->setCopyFromView(true)
                                 ->save();
                         }
                     }
