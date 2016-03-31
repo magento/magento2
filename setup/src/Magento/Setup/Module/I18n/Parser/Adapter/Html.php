@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\I18n\Parser\Adapter;
@@ -17,7 +17,7 @@ class Html extends AbstractAdapter
      * <span><!-- ko i18n: 'Next'--><!-- /ko --></span>
      * <th class="col col-method" data-bind="i18n: 'Select Method'"></th>
      */
-    const HTML_FILTER = "/i18n:\s?'(?<value>.*)'/i";
+    const HTML_FILTER = "/i18n:\s?'(?<value>[^'\\\\]*(?:\\\\.[^'\\\\]*)*)'/i";
 
     /**
      * {@inheritdoc}

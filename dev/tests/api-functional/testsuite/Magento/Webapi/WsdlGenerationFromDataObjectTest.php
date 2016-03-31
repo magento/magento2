@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -97,8 +97,10 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
      */
     protected function _getWsdlContent($wsdlUrl)
     {
+        $accessCredentials = \Magento\TestFramework\Authentication\OauthHelper::getApiAccessCredentials()['key'];
         $connection = curl_init($wsdlUrl);
         curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($connection, CURLOPT_HTTPHEADER, ['header' => "Authorization: Bearer " . $accessCredentials]);
         $responseContent = curl_exec($connection);
         $responseDom = new \DOMDocument();
         $this->assertTrue(

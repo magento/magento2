@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 (function (factory) {
@@ -20,6 +20,9 @@ directPost.prototype = {
         var prepare = function (event, method) {
             if (method === 'authorizenet_directpost') {
                 this.preparePayment();
+            } else {
+                jQuery('#edit_form')
+                    .off('submitOrder.authorizenet');
             }
         };
         this.iframeId = iframeId;
@@ -76,7 +79,7 @@ directPost.prototype = {
         this.changeInputOptions('autocomplete', 'off');
         jQuery('#edit_form')
             .off('submitOrder')
-            .on('submitOrder', this.submitAdminOrder.bind(this));
+            .on('submitOrder.authorizenet', this.submitAdminOrder.bind(this));
         if ($(this.iframeId)) {
             // Temporary solution will be removed after refactoring Authorize.Net (sales) functionality
             jQuery('.scalable.save:not(disabled)').removeAttr('onclick');

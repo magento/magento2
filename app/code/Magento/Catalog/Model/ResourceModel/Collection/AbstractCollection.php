@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel\Collection;
@@ -69,6 +69,17 @@ class AbstractCollection extends \Magento\Eav\Model\Entity\Collection\AbstractCo
             $universalFactory,
             $connection
         );
+    }
+
+    /**
+     * Retrieve Entity Primary Key
+     *
+     * @param \Magento\Eav\Model\Entity\AbstractEntity $entity
+     * @return string
+     */
+    protected function getEntityPkName(\Magento\Eav\Model\Entity\AbstractEntity $entity)
+    {
+        return $entity->getLinkField();
     }
 
     /**

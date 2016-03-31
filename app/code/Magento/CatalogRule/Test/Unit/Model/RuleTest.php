@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -163,7 +163,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             'created_at' => '2014-06-25 13:14:30',
             'updated_at' => '2014-06-25 14:37:15'
         ];
-        $this->storeManager->expects($this->any())->method('getWebsites')->with(true)
+        $this->storeManager->expects($this->any())->method('getWebsites')->with(false)
             ->will($this->returnValue([$this->websiteModel, $this->websiteModel]));
         $this->websiteModel->expects($this->at(0))->method('getId')
             ->will($this->returnValue('1'));
@@ -354,5 +354,13 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             [['name', 'description'], ['name', 'description'], true, true],
             [['name', 'description'], ['name', 'important_data'], true, true],
         ];
+    }
+
+    public function testGetConditionsFieldSetId()
+    {
+        $formName = 'form_name';
+        $this->rule->setId(100);
+        $expectedResult = 'form_namerule_conditions_fieldset_100';
+        $this->assertEquals($expectedResult, $this->rule->getConditionsFieldSetId($formName));
     }
 }

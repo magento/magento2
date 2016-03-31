@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Mtf\Util\ModuleResolver;
@@ -63,7 +63,8 @@ class SequenceSorter implements SequenceSorterInterface
         $modules = array_keys($this->getModuleSequence());
         foreach ($modules as $module) {
             foreach ($paths as $key => $path) {
-                $modulePath = realpath(MTF_TESTS_PATH . str_replace('_', '/', $module));
+                $modulePath = realpath(MTF_TESTS_PATH . str_replace('_', DIRECTORY_SEPARATOR, $module));
+                $path = realpath($path);
                 if (strpos($path, $modulePath) !== false) {
                     $sortedPaths[] = $path;
                     unset($paths[$key]);

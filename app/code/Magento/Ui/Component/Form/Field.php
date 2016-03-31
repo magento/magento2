@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Ui\Component\Form;
@@ -84,6 +84,7 @@ class Field extends AbstractComponent
         $this->wrappedComponent->setData(
             'config',
             array_replace_recursive(
+                ['dataScope' => $this->getName()],
                 (array) $this->wrappedComponent->getData('config'),
                 (array) $this->getData('config')
             )

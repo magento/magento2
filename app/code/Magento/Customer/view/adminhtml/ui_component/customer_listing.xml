@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -245,7 +245,7 @@
                 </item>
             </argument>
         </column>
-        <column name="website_id">
+        <column name="website_id" class="Magento\Customer\Ui\Component\Listing\Column\Websites">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">select</item>
@@ -257,21 +257,10 @@
                 </item>
             </argument>
         </column>
-        <column name="last_visit_at" class="Magento\Ui\Component\Listing\Columns\Date">
+        <column name="confirmation" class="Magento\Customer\Ui\Component\Listing\Column\Confirmation">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
-                    <item name="filter" xsi:type="string">dateRange</item>
-                    <item name="visible" xsi:type="boolean">false</item>
-                    <item name="dataType" xsi:type="string">date</item>
-                    <item name="label" xsi:type="string" translate="true">Last Logged In</item>
-                    <item name="sortOrder" xsi:type="number">120</item>
-                </item>
-            </argument>
-        </column>
-        <column name="confirmation">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">select</item>
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">Confirmed email</item>
                     <item name="sortOrder" xsi:type="number">130</item>
@@ -415,6 +404,15 @@
                     <item name="visible" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">Billing Lastname</item>
                     <item name="sortOrder" xsi:type="number">260</item>
+                </item>
+            </argument>
+        </column>
+        <column name="lock_expires" class="Magento\Customer\Ui\Component\Listing\Column\AccountLock">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="label" xsi:type="string" translate="true">Account Lock</item>
+                    <item name="sortOrder" xsi:type="number">270</item>
                 </item>
             </argument>
         </column>

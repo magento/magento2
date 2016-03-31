@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -814,7 +814,8 @@
     @_line-height: @form-field-label-asterisk__line-height,
     @_margin: @form-field-label-asterisk__margin
 ) {
-    &.required > .label {
+    &.required > .label,
+    &._required > .label {
         &:after {
             content: '*';
             .lib-typography(

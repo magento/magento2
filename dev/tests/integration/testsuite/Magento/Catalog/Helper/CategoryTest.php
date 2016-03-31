@@ -1,10 +1,17 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper;
 
+/**
+ * Class CategoryTest
+ * @package Magento\Catalog\Helper
+ *
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
+ */
 class CategoryTest extends \PHPUnit_Framework_TestCase
 {
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab;
@@ -15,9 +15,12 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf(
             'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels',
             \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                'Magento\Framework\View\LayoutInterface'
-            )->createBlock(
-                'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels'
+                'Magento\Framework\View\Element\UiComponent\Argument\Interpreter\ConfigurableObject'
+            )->evaluate(
+                [
+                    'name' => 'block',
+                    'value' => 'Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\Tab\Labels'
+                ]
             )
         );
     }

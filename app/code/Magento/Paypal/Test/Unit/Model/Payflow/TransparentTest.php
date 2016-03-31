@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Test\Unit\Model\Payflow;
@@ -390,6 +390,12 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $this->paymentMock->expects($this->once())
             ->method('setIsTransactionClosed')
             ->with(0);
+        $this->paymentMock->expects($this->once())
+            ->method('getCcExpYear')
+            ->willReturn('2017');
+        $this->paymentMock->expects($this->once())
+            ->method('getCcExpMonth')
+            ->willReturn('12');
         $this->paymentMock->expects(static::any())
             ->method('getAdditionalInformation')
             ->willReturnMap(
@@ -398,6 +404,7 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
                     [Transparent::PNREF, 'test-pnref']
                 ]
             );
+
         $this->paymentTokenFactory->expects(static::once())
             ->method('create')
             ->willReturn($paymentTokenMock);
@@ -407,6 +414,10 @@ class TransparentTest extends \PHPUnit_Framework_TestCase
         $paymentTokenMock->expects(static::once())
             ->method('setTokenDetails')
             ->with(json_encode($ccDetails));
+        $paymentTokenMock->expects(static::once())
+            ->method('setExpiresAt')
+            ->with('2018-01-01 00:00:00');
+
         $this->paymentMock->expects(static::once())
             ->method('getExtensionAttributes')
             ->willReturn($extensionAttributes);

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -44,6 +44,7 @@ define([
         options: {
             type: 'popup',
             title: '',
+            subTitle: '',
             modalClass: '',
             focus: '[data-role="closeBtn"]',
             autoOpen: false,
@@ -56,6 +57,8 @@ define([
             innerScrollClass: '_inner-scroll',
             responsive: false,
             innerScroll: false,
+            modalTitle: '[data-role="title"]',
+            modalSubTitle: '[data-role="subTitle"]',
             modalBlock: '[data-role="modal"]',
             modalCloseBtn: '[data-role="closeBtn"]',
             modalContent: '[data-role="content"]',
@@ -81,28 +84,28 @@ define([
                 click: function (event) {
                     this.closeModal(event);
                 }
-            }]
-        },
-        keyEventHandlers: {
+            }],
+            keyEventHandlers: {
 
-            /**
-             * Tab key press handler,
-             * set focus to elements
-             */
-            tabKey: function () {
-                if (document.activeElement === this.modal[0]) {
-                    this._setFocus('start');
-                }
-            },
+                /**
+                 * Tab key press handler,
+                 * set focus to elements
+                 */
+                tabKey: function () {
+                    if (document.activeElement === this.modal[0]) {
+                        this._setFocus('start');
+                    }
+                },
 
-            /**
-             * Escape key press handler,
-             * close modal window
-             */
-            escapeKey: function () {
-                if (this.options.isOpen && this.modal.find(document.activeElement).length ||
-                    this.options.isOpen && this.modal[0] === document.activeElement) {
-                    this.closeModal();
+                /**
+                 * Escape key press handler,
+                 * close modal window
+                 */
+                escapeKey: function () {
+                    if (this.options.isOpen && this.modal.find(document.activeElement).length ||
+                        this.options.isOpen && this.modal[0] === document.activeElement) {
+                        this.closeModal();
+                    }
                 }
             }
         },
@@ -118,7 +121,6 @@ define([
                 'closeModal'
             );
 
-            _.extend(this.keyEventHandlers, this.options.keyEventHandlers);
             this.options.transitionEvent = transitionEvent;
             this._createWrapper();
             this._renderModal();
@@ -169,9 +171,32 @@ define([
         keyEventSwitcher: function (event) {
             var key = keyCodes[event.keyCode];
 
-            if (this.keyEventHandlers.hasOwnProperty(key)) {
-                this.keyEventHandlers[key].apply(this, arguments);
+            if (this.options.keyEventHandlers.hasOwnProperty(key)) {
+                this.options.keyEventHandlers[key].apply(this, arguments);
             }
+        },
+
+        /**
+         * Set title for modal.
+         *
+         * @param {String} title
+         */
+        setTitle: function (title) {
+            var $title = $(this.options.modalTitle),
+                $subTitle = this.modal.find(this.options.modalSubTitle);
+
+            $title.text(title);
+            $title.append($subTitle);
+        },
+
+        /**
+         * Set sub title for modal.
+         *
+         * @param {String} subTitle
+         */
+        setSubTitle: function (subTitle) {
+            this.options.subTitle = subTitle;
+            this.modal.find(this.options.modalSubTitle).html(subTitle);
         },
 
         /**
@@ -332,7 +357,7 @@ define([
          * Creates wrapper to hold all modals.
          */
         _createWrapper: function () {
-            this.modalWrapper = $('.' + this.options.wrapperClass);
+            this.modalWrapper = $(this.options.appendTo).find('.' + this.options.wrapperClass);
 
             if (!this.modalWrapper.length) {
                 this.modalWrapper = $('<div></div>')
@@ -351,24 +376,34 @@ define([
                     data: this.options
                 })).appendTo(this.modalWrapper);
             this.modal = this.modalWrapper.find(this.options.modalBlock).last();
-            this.element.show().appendTo(this._getElem(this.options.modalContent));
+            this.element.appendTo(this._getElem(this.options.modalContent));
+
+            if (this.element.is(':hidden')) {
+                this.element.show();
+            }
         },
 
         /**
          * Creates buttons pane.
          */
         _createButtons: function () {
-            var that = this;
-
             this.buttons = this._getElem(this.options.modalAction);
             _.each(this.options.buttons, function (btn, key) {
-                var button = that.buttons[key];
+                var button = this.buttons[key];
 
                 if (btn.attr) {
                     $(button).attr(btn.attr);
                 }
-                $(button).on('click', _.bind(btn.click, that));
-            });
+
+                if (btn.class) {
+                    $(button).addClass(btn.class);
+                }
+
+                if (!btn.click) {
+                    btn.click = this.closeModal;
+                }
+                $(button).on('click', _.bind(btn.click, this));
+            }, this);
         },
 
         /**

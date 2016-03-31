@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
@@ -372,21 +372,13 @@ class DataProvider
                 ['main' => $this->getTable($relation->getTable())],
                 [$relation->getChildFieldName()]
             );
-            //TODO: Will be removed in MAGETWO-47395
-            if ($typeId === 'configurable') {
-                $select->where(
-                    $relation->getParentFieldName() . ' = ?',
-                    $productId
-                );
-            } else {
-                $select->join(
-                    ['e' => $this->resource->getTableName('catalog_product_entity')],
-                    'e.' . $this->metadata->getLinkField() . ' = main.' . $relation->getParentFieldName()
-                )->where(
-                    'e.entity_id = ?',
-                    $productId
-                );
-            }
+            $select->join(
+                ['e' => $this->resource->getTableName('catalog_product_entity')],
+                'e.' . $this->metadata->getLinkField() . ' = main.' . $relation->getParentFieldName()
+            )->where(
+                'e.entity_id = ?',
+                $productId
+            );
 
             if ($relation->getWhere() !== null) {
                 $select->where($relation->getWhere());

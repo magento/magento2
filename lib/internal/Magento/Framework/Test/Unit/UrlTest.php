@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,6 +18,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\Framework\Url\RouteParamsResolver|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $routeParamsResolverMock;
+
+    /**
+     * @var \Magento\Framework\Url\RouteParamsPreprocessorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $routeParamsPreprocessorMock;
 
     /**
      * @var \Magento\Framework\Url\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -49,6 +54,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
      */
     protected $scopeConfig;
 
+    /**
+     * @var \Magento\Framework\Url\ModifierInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $urlModifier;
+
     protected function setUp()
     {
         $this->routeParamsResolverMock = $this->getMock(
@@ -58,6 +68,17 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->routeParamsPreprocessorMock = $this->getMockForAbstractClass(
+            'Magento\Framework\Url\RouteParamsPreprocessorInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            []
+        );
+
         $this->scopeResolverMock = $this->getMock('Magento\Framework\Url\ScopeResolverInterface');
         $this->scopeMock = $this->getMock('Magento\Framework\Url\ScopeInterface');
         $this->queryParamsResolverMock = $this->getMock(
@@ -70,6 +91,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->sidResolverMock = $this->getMock('Magento\Framework\Session\SidResolverInterface');
         $this->sessionMock = $this->getMock('Magento\Framework\Session\Generic', [], [], '', false);
         $this->scopeConfig = $this->getMock('\Magento\Framework\App\Config\ScopeConfigInterface');
+
+        $this->urlModifier = $this->getMock('Magento\Framework\Url\ModifierInterface');
+        $this->urlModifier->expects($this->any())
+            ->method('execute')
+            ->willReturnArgument(0);
     }
 
     /**
@@ -110,7 +136,15 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         $arguments = array_merge($arguments, ['scopeType' => \Magento\Store\Model\ScopeInterface::SCOPE_STORE]);
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        return $objectManager->getObject('Magento\Framework\Url', $arguments);
+        $model = $objectManager->getObject('Magento\Framework\Url', $arguments);
+
+        $modelProperty = (new \ReflectionClass(get_class($model)))
+            ->getProperty('urlModifier');
+
+        $modelProperty->setAccessible(true);
+        $modelProperty->setValue($model, $this->urlModifier);
+
+        return $model;
     }
 
     /**
@@ -190,7 +224,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
                 'scopeResolver' => $this->scopeResolverMock,
                 'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(),
                 'queryParamsResolver' => $this->queryParamsResolverMock,
-                'request' => $requestMock, 'routeConfig' => $routeConfigMock,
+                'request' => $requestMock,
+                'routeConfig' => $routeConfigMock,
+                'routeParamsPreprocessor' => $this->routeParamsPreprocessorMock
             ]
         );
 
@@ -204,6 +240,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
         $this->routeParamsResolverMock->expects($this->any())->method('getType')->will($this->returnValue($urlType));
         $this->routeParamsResolverMock->expects($this->any())->method('getRouteParams')
             ->will($this->returnValue(['id' => 100]));
+
+        $this->routeParamsPreprocessorMock->expects($this->once())
+            ->method('execute')
+            ->willReturnArgument(2);
+
         $requestMock->expects($this->once())->method('isDirectAccessFrontendName')->will($this->returnValue(true));
         $routeConfigMock->expects($this->once())->method('getRouteFrontName')->will($this->returnValue('catalog'));
         $this->queryParamsResolverMock->expects($this->once())->method('getQuery')
@@ -272,12 +313,18 @@ class UrlTest extends \PHPUnit_Framework_TestCase
     {
         $this->routeParamsResolverMock->expects($this->any())->method('getRouteParams')
             ->will($this->returnValue(['foo' => 'bar']));
+
+        $this->routeParamsPreprocessorMock->expects($this->once())
+            ->method('execute')
+            ->willReturnArgument(2);
+
         $request = $this->getRequestMock();
         $request->expects($this->once())->method('getAlias')->will($this->returnValue('/catalog/product/view/'));
         $model = $this->getUrlModel([
             'scopeResolver' => $this->scopeResolverMock,
             'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(),
             'request' => $request,
+            'routeParamsPreprocessor' => $this->routeParamsPreprocessorMock
         ]);
 
         $this->scopeResolverMock->expects($this->any())
@@ -345,7 +392,9 @@ class UrlTest extends \PHPUnit_Framework_TestCase
                 'scopeResolver' => $this->scopeResolverMock,
                 'routeParamsResolverFactory' => $this->getRouteParamsResolverFactory(),
                 'queryParamsResolver' => $this->queryParamsResolverMock,
-                'request' => $requestMock, 'routeConfig' => $routeConfigMock,
+                'request' => $requestMock,
+                'routeConfig' => $routeConfigMock,
+                'routeParamsPreprocessor' => $this->routeParamsPreprocessorMock
             ]
         );
 
@@ -357,6 +406,11 @@ class UrlTest extends \PHPUnit_Framework_TestCase
             ->method('getScope')
             ->will($this->returnValue($this->scopeMock));
         $this->routeParamsResolverMock->expects($this->any())->method('getType')->will($this->returnValue($urlType));
+
+        $this->routeParamsPreprocessorMock->expects($this->once())
+            ->method('execute')
+            ->willReturnArgument(2);
+
         $requestMock->expects($this->once())->method('isDirectAccessFrontendName')->will($this->returnValue(true));
 
         $url = $model->getDirectUrl('direct-url');

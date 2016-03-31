@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Mview\Test\Unit;
@@ -232,7 +232,7 @@ class ViewTest extends \PHPUnit_Framework_TestCase
         $this->changelogMock->expects($this->once())
             ->method('drop');
         $subscriptionMock = $this->getMock(
-            'Magento\Framework\Mview\View\Subscription',
+            \Magento\Framework\Mview\View\Subscription::class,
             ['remove'],
             [],
             '',

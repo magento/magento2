@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
@@ -8,6 +8,9 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory as CustomOptionFactory;
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory as ProductLinkFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
+use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
+use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Helper
@@ -29,11 +32,6 @@ class Helper
      * @var StockDataFilter
      */
     protected $stockFilter;
-
-    /**
-     * @var \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks
-     */
-    protected $productLinks;
 
     /**
      * @var \Magento\Backend\Helper\Js
@@ -61,15 +59,23 @@ class Helper
     protected $productRepository;
 
     /**
+     * @var ProductLinks
+     */
+    protected $productLinks;
+
+    /**
+     * @var LinkResolver
+     */
+    private $linkResolver;
+
+    /**
+     * Helper constructor.
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param StockDataFilter $stockFilter
-     * @param \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks
+     * @param ProductLinks $productLinks
      * @param \Magento\Backend\Helper\Js $jsHelper
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-     * @param CustomOptionFactory $customOptionFactory
-     * @param ProductLinkFactory $productLinkFactory
-     * @param ProductRepository $productRepository
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -77,10 +83,7 @@ class Helper
         StockDataFilter $stockFilter,
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks,
         \Magento\Backend\Helper\Js $jsHelper,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        CustomOptionFactory $customOptionFactory,
-        ProductLinkFactory $productLinkFactory,
-        ProductRepository $productRepository
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
@@ -88,9 +91,6 @@ class Helper
         $this->productLinks = $productLinks;
         $this->jsHelper = $jsHelper;
         $this->dateFilter = $dateFilter;
-        $this->customOptionFactory = $customOptionFactory;
-        $this->productLinkFactory = $productLinkFactory;
-        $this->productRepository = $productRepository;
     }
 
     /**
@@ -104,7 +104,7 @@ class Helper
      */
     public function initialize(\Magento\Catalog\Model\Product $product)
     {
-        $productData = $this->request->getPost('product');
+        $productData = (array)$this->request->getPost('product', []);
         unset($productData['custom_attributes']);
         unset($productData['extension_attributes']);
 
@@ -113,9 +113,21 @@ class Helper
             $productData['stock_data'] = $this->stockFilter->filter($stockData);
         }
 
+        $productData = $this->normalize($productData);
+
+        if (!empty($productData['is_downloadable'])) {
+            $productData['product_has_weight'] = 0;
+        }
+
         foreach (['category_ids', 'website_ids'] as $field) {
             if (!isset($productData[$field])) {
                 $productData[$field] = [];
+            }
+        }
+
+        foreach ($productData['website_ids'] as $websiteId => $checkboxValue) {
+            if (!$checkboxValue) {
+                unset($productData['website_ids'][$websiteId]);
             }
         }
 
@@ -144,66 +156,22 @@ class Helper
             $product->lockAttribute('media');
         }
 
-        if ($this->storeManager->hasSingleStore()) {
+        if ($this->storeManager->hasSingleStore() && empty($product->getWebsiteIds())) {
             $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsite()->getId()]);
         }
 
         /**
          * Check "Use Default Value" checkboxes values
          */
-        $useDefaults = $this->request->getPost('use_default');
-        if ($useDefaults) {
-            foreach ($useDefaults as $attributeCode) {
-                $product->setData($attributeCode, false);
+        $useDefaults = (array)$this->request->getPost('use_default', []);
+
+        foreach ($useDefaults as $attributeCode => $useDefaultState) {
+            if ($useDefaultState) {
+                $product->setData($attributeCode, null);
             }
         }
 
-        $links = $this->request->getPost('links');
-        $links = is_array($links) ? $links : [];
-        $linkTypes = ['related', 'upsell', 'crosssell'];
-        foreach ($linkTypes as $type) {
-            if (isset($links[$type])) {
-                $links[$type] = $this->jsHelper->decodeGridSerializedInput($links[$type]);
-            }
-        }
-        $product = $this->productLinks->initializeLinks($product, $links);
-        $productLinks = [];
-        $savedLinksByType = [];
-        foreach ($product->getProductLinks() as $link) {
-            $savedLinksByType[$link->getLinkType()][] = $link;
-        }
-        $this->dropRelationProductsCache($product);
-
-        $linkTypes = [
-            'related' => $product->getRelatedReadonly(),
-            'upsell' => $product->getUpsellReadonly(),
-            'crosssell' => $product->getCrosssellReadonly()
-        ];
-        foreach ($linkTypes as $linkType => $readonly) {
-            if (isset($links[$linkType]) && !$readonly) {
-                foreach ($links[$linkType] as $linkId => $linkData) {
-                    $linkProduct = $this->productRepository->getById($linkId);
-                    $link = $this->productLinkFactory->create();
-                    $link->setSku($product->getSku())
-                        ->setLinkedProductSku($linkProduct->getSku())
-                        ->setLinkType($linkType)
-                        ->setPosition(isset($linkData['position']) ? (int)$linkData['position'] : 0);
-                    $productLinks[] = $link;
-                }
-            } else {
-                if (array_key_exists($linkType, $savedLinksByType)) {
-                    $productLinks = array_merge($productLinks, $savedLinksByType[$linkType]);
-                }
-            }
-            if (isset($savedLinksByType[$linkType])) {
-                unset($savedLinksByType[$linkType]);
-            }
-        }
-
-        foreach ($savedLinksByType as $links) {
-            $productLinks = array_merge($productLinks, $links);
-        }
-        $product->setProductLinks($productLinks);
+        $product = $this->setProductLinks($product);
 
         /**
          * Initialize product options
@@ -216,8 +184,8 @@ class Helper
             );
             $customOptions = [];
             foreach ($options as $customOptionData) {
-                if (!(bool)$customOptionData['is_delete']) {
-                    $customOption = $this->customOptionFactory->create(['data' => $customOptionData]);
+                if (empty($customOptionData['is_delete'])) {
+                    $customOption = $this->getCustomOptionFactory()->create(['data' => $customOptionData]);
                     $customOption->setProductSku($product->getSku());
                     $customOption->setOptionId(null);
                     $customOptions[] = $customOption;
@@ -227,10 +195,76 @@ class Helper
         }
 
         $product->setCanSaveCustomOptions(
-            (bool)$this->request->getPost('affect_product_custom_options') && !$product->getOptionsReadonly()
+            !empty($productData['affect_product_custom_options']) && !$product->getOptionsReadonly()
         );
 
         return $product;
+    }
+
+    /**
+     * Setting product links
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return \Magento\Catalog\Model\Product
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    protected function setProductLinks(\Magento\Catalog\Model\Product $product)
+    {
+        $links = $this->getLinkResolver()->getLinks();
+
+        $product->setProductLinks([]);
+
+        $product = $this->productLinks->initializeLinks($product, $links);
+        $productLinks = $product->getProductLinks();
+        $linkTypes = [
+            'related' => $product->getRelatedReadonly(),
+            'upsell' => $product->getUpsellReadonly(),
+            'crosssell' => $product->getCrosssellReadonly()
+        ];
+
+        foreach ($linkTypes as $linkType => $readonly) {
+            if (isset($links[$linkType]) && !$readonly) {
+                foreach ((array) $links[$linkType] as $linkData) {
+                    if (empty($linkData['id'])) {
+                        continue;
+                    }
+
+                    $linkProduct = $this->getProductRepository()->getById($linkData['id']);
+                    $link = $this->getProductLinkFactory()->create();
+                    $link->setSku($product->getSku())
+                        ->setLinkedProductSku($linkProduct->getSku())
+                        ->setLinkType($linkType)
+                        ->setPosition(isset($linkData['position']) ? (int)$linkData['position'] : 0);
+                    $productLinks[] = $link;
+                }
+            }
+        }
+
+        return $product->setProductLinks($productLinks);
+    }
+
+    /**
+     * Internal normalization
+     * TODO: Remove this method
+     *
+     * @param array $productData
+     * @return array
+     */
+    protected function normalize(array $productData)
+    {
+        foreach ($productData as $key => $value) {
+            if (is_scalar($value)) {
+                if ($value === 'true') {
+                    $productData[$key] = '1';
+                } elseif ($value === 'false') {
+                    $productData[$key] = '0';
+                }
+            } elseif (is_array($value)) {
+                $productData[$key] = $this->normalize($value);
+            }
+        }
+
+        return $productData;
     }
 
     /**
@@ -260,16 +294,50 @@ class Helper
     }
 
     /**
-     * @param \Magento\Catalog\Model\Product $product
-     * @return void
+     * @return CustomOptionFactory
      */
-    private function dropRelationProductsCache(\Magento\Catalog\Model\Product $product)
+    private function getCustomOptionFactory()
     {
-        $product->unsetData('up_sell_products');
-        $product->unsetData('up_sell_products_ids');
-        $product->unsetData('related_products');
-        $product->unsetData('related_products_ids');
-        $product->unsetData('cross_sell_products');
-        $product->unsetData('cross_sell_products_ids');
+        if (null === $this->customOptionFactory) {
+            $this->customOptionFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory');
+        }
+        return $this->customOptionFactory;
+    }
+
+    /**
+     * @return ProductLinkFactory
+     */
+    private function getProductLinkFactory()
+    {
+        if (null === $this->productLinkFactory) {
+            $this->productLinkFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Api\Data\ProductLinkInterfaceFactory');
+        }
+        return $this->productLinkFactory;
+    }
+
+    /**
+     * @return ProductRepository
+     */
+    private function getProductRepository()
+    {
+        if (null === $this->productRepository) {
+            $this->productRepository = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Api\ProductRepositoryInterface\Proxy');
+        }
+        return $this->productRepository;
+    }
+
+    /**
+     * @deprecated
+     * @return LinkResolver
+     */
+    private function getLinkResolver()
+    {
+        if (!is_object($this->linkResolver)) {
+            $this->linkResolver = ObjectManager::getInstance()->get(LinkResolver::class);
+        }
+        return $this->linkResolver;
     }
 }

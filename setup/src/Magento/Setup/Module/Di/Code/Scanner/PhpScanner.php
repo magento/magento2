@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Module\Di\Code\Scanner;
@@ -49,7 +49,7 @@ class PhpScanner implements ScannerInterface
                         if (class_exists($missingClassName)) {
                             continue;
                         }
-                    } catch (\Magento\Framework\Exception\LocalizedException $e) {
+                    } catch (\RuntimeException $e) {
                     }
                     $sourceClassName = $this->getSourceClassName($missingClassName, $entityType);
                     if (!class_exists($sourceClassName) && !interface_exists($sourceClassName)) {

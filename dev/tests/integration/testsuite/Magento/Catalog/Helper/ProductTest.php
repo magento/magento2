@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Helper;
@@ -191,6 +191,7 @@ class ProductTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/categories.php
+     * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
      */
     public function testInitProduct()

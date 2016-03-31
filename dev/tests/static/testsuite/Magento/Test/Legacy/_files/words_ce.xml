@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -51,6 +51,13 @@
         </item>
         <item>
             <path>composer.lock</path>
+        </item>
+        <item>
+            <path>app/code/Magento/Customer/view/frontend/web/js/zxcvbn.js</path>
+            <word>twig</word>
+        </item>
+        <item>
+            <path>dev/build/publication/sanity/ce.xml</path>
         </item>
     </whitelist>
 </config>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel;
@@ -38,7 +38,6 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
      * @param \Magento\Eav\Model\ResourceModel\Entity\Type $eavEntityType
      * @param \Magento\Eav\Model\Config $eavConfig
      * @param LockValidatorInterface $lockValidator
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param string $connectionName
      */
     public function __construct(
@@ -47,12 +46,10 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
         \Magento\Eav\Model\ResourceModel\Entity\Type $eavEntityType,
         \Magento\Eav\Model\Config $eavConfig,
         LockValidatorInterface $lockValidator,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->attrLockValidator = $lockValidator;
         $this->_eavConfig = $eavConfig;
-        $this->metadataPool = $metadataPool;
         parent::__construct($context, $storeManager, $eavEntityType, $connectionName);
     }
 
@@ -123,17 +120,10 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
             return $this;
         }
 
-        $select = $this->getConnection()->select()->from(
-            $this->getTable('eav_entity_attribute')
-        )->where(
-            'entity_attribute_id = ?',
-            (int)$object->getEntityAttributeId()
-        );
-        $result = $this->getConnection()->fetchRow($select);
-
+        $result = $this->getEntityAttribute($object->getEntityAttributeId());
         if ($result) {
             $attribute = $this->_eavConfig->getAttribute(
-                \Magento\Catalog\Model\Product::ENTITY,
+                $object->getEntityTypeId(),
                 $result['attribute_id']
             );
 
@@ -147,7 +137,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
 
             $backendTable = $attribute->getBackend()->getTable();
             if ($backendTable) {
-                $linkField = $this->metadataPool
+                $linkField = $this->getMetadataPool()
                     ->getMetadata(ProductInterface::class)
                     ->getLinkField();
 
@@ -171,5 +161,17 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
         $this->getConnection()->delete($this->getTable('eav_entity_attribute'), $condition);
 
         return $this;
+    }
+
+    /**
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
     }
 }

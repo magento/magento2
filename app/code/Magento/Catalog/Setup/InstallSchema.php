@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -1232,18 +1232,6 @@ class InstallSchema implements InstallSchemaInterface
             ->addIndex(
                 $installer->getIdxName('catalog_category_product', ['product_id']),
                 ['product_id']
-            )
-            ->addForeignKey(
-                $installer->getFkName(
-                    'catalog_category_product',
-                    'category_id',
-                    'catalog_category_entity',
-                    'entity_id'
-                ),
-                'category_id',
-                $installer->getTable('catalog_category_entity'),
-                'entity_id',
-                \Magento\Framework\DB\Ddl\Table::ACTION_CASCADE
             )
             ->addForeignKey(
                 $installer->getFkName('catalog_category_product', 'product_id', 'catalog_product_entity', 'entity_id'),

@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Setup;
 
+use Magento\Framework\App\Response\HeaderProvider\XssProtection;
 use Magento\Setup\Mvc\View\Http\InjectTemplateListener;
 use Zend\EventManager\EventInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
@@ -50,6 +51,10 @@ class Module implements
                 $headers->addHeaderLine('Pragma', 'no-cache');
                 $headers->addHeaderLine('Expires', '1970-01-01');
                 $headers->addHeaderLine('X-Frame-Options: SAMEORIGIN');
+                $headers->addHeaderLine('X-Content-Type-Options: nosniff');
+                $xssHeaderValue = strpos($_SERVER['HTTP_USER_AGENT'], XssProtection::IE_8_USER_AGENT) === false
+                    ? XssProtection::HEADER_ENABLED : XssProtection::HEADER_DISABLED;
+                $headers->addHeaderLine('X-XSS-Protection: ' . $xssHeaderValue);
             }
         }
     }

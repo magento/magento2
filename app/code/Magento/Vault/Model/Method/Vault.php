@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Vault\Model\Method;
@@ -180,7 +180,7 @@ final class Vault implements VaultPaymentInterface
      */
     public function getTitle()
     {
-        return $this->getVaultProvider()->getTitle();
+        return 'Stored Cards';
     }
 
     /**

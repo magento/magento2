@@ -1,13 +1,14 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action;
 use Magento\Catalog\Controller\Adminhtml\Product;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Save extends \Magento\Catalog\Controller\Adminhtml\Product
 {
@@ -37,12 +38,18 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $productRepository;
 
     /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * Save constructor.
+     *
      * @param Action\Context $context
      * @param Builder $productBuilder
      * @param Initialization\Helper $initializationHelper
      * @param \Magento\Catalog\Model\Product\Copier $productCopier
      * @param \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager
-     * @param \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      */
     public function __construct(
@@ -51,13 +58,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         Initialization\Helper $initializationHelper,
         \Magento\Catalog\Model\Product\Copier $productCopier,
         \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager,
-        \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement,
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
     ) {
         $this->initializationHelper = $initializationHelper;
         $this->productCopier = $productCopier;
         $this->productTypeManager = $productTypeManager;
-        $this->categoryLinkManagement = $categoryLinkManagement;
         $this->productRepository = $productRepository;
         parent::__construct($context, $productBuilder);
     }
@@ -71,7 +76,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      */
     public function execute()
     {
-        $storeId = $this->getRequest()->getParam('store');
+        $storeId = $this->getRequest()->getParam('store', 0);
+        $store = $this->getStoreManager()->getStore($storeId);
+        $this->getStoreManager()->setCurrentStore($store->getCode());
         $redirectBack = $this->getRequest()->getParam('back', false);
         $productId = $this->getRequest()->getParam('id');
         $resultRedirect = $this->resultRedirectFactory->create();
@@ -92,7 +99,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $originalSku = $product->getSku();
                 $product->save();
                 $this->handleImageRemoveError($data, $product->getId());
-                $this->categoryLinkManagement->assignProductToCategories(
+                $this->getCategoryLinkManagement()->assignProductToCategories(
                     $product->getSku(),
                     $product->getCategoryIds()
                 );
@@ -100,18 +107,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $productAttributeSetId = $product->getAttributeSetId();
                 $productTypeId = $product->getTypeId();
 
-                /**
-                 * Do copying data to stores
-                 */
-                if (isset($data['copy_to_stores'])) {
-                    foreach ($data['copy_to_stores'] as $storeTo => $storeFrom) {
-                        $this->_objectManager->create('Magento\Catalog\Model\Product')
-                            ->setStoreId($storeFrom)
-                            ->load($productId)
-                            ->setStoreId($storeTo)
-                            ->save();
-                    }
-                }
+                $this->copyToStores($data, $productId);
+
                 $this->messageManager->addSuccess(__('You saved the product.'));
                 if ($product->getSku() != $originalSku) {
                     $this->messageManager->addNotice(
@@ -195,5 +192,58 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 }
             }
         }
+    }
+
+    /**
+     * Do copying data to stores
+     *
+     * @param array $data
+     * @param int $productId
+     * @return void
+     */
+    protected function copyToStores($data, $productId)
+    {
+        if (!empty($data['product']['copy_to_stores'])) {
+            foreach ($data['product']['copy_to_stores'] as $websiteId => $group) {
+                if (isset($data['product']['website_ids'][$websiteId])
+                    && (bool)$data['product']['website_ids'][$websiteId]) {
+                    foreach ($group as $store) {
+                        $copyFrom = (isset($store['copy_from'])) ? $store['copy_from'] : 0;
+                        $copyTo = (isset($store['copy_to'])) ? $store['copy_to'] : 0;
+                        if ($copyTo) {
+                            $this->_objectManager->create('Magento\Catalog\Model\Product')
+                                ->setStoreId($copyFrom)
+                                ->load($productId)
+                                ->setStoreId($copyTo)
+                                ->save();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * @return \Magento\Catalog\Api\CategoryLinkManagementInterface
+     */
+    private function getCategoryLinkManagement()
+    {
+        if (null === $this->categoryLinkManagement) {
+            $this->categoryLinkManagement = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Api\CategoryLinkManagementInterface');
+        }
+        return $this->categoryLinkManagement;
+    }
+
+    /**
+     * @return StoreManagerInterface
+     */
+    private function getStoreManager()
+    {
+        if (null === $this->storeManager) {
+            $this->storeManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Store\Model\StoreManagerInterface');
+        }
+        return $this->storeManager;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -17,6 +17,7 @@ use Magento\Framework\Exception\EmailNotConfirmedException;
 use Magento\Framework\Exception\InvalidEmailOrPasswordException;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Indexer\StateInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Customer model
@@ -774,12 +775,13 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         if ($this->canSkipConfirmation()) {
             return false;
         }
-        $storeId = $this->getStoreId() ? $this->getStoreId() : null;
+
+        $websiteId = $this->getWebsiteId() ? $this->getWebsiteId() : null;
 
         return (bool)$this->_scopeConfig->getValue(
             self::XML_PATH_IS_CONFIRM,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
-            $storeId
+            ScopeInterface::SCOPE_WEBSITES,
+            $websiteId
         );
     }
 
@@ -823,13 +825,13 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     {
         /** @var \Magento\Framework\Mail\TransportInterface $transport */
         $transport = $this->_transportBuilder->setTemplateIdentifier(
-            $this->_scopeConfig->getValue($template, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
+            $this->_scopeConfig->getValue($template, ScopeInterface::SCOPE_STORE, $storeId)
         )->setTemplateOptions(
             ['area' => \Magento\Framework\App\Area::AREA_FRONTEND, 'store' => $storeId]
         )->setTemplateVars(
             $templateParams
         )->setFrom(
-            $this->_scopeConfig->getValue($sender, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId)
+            $this->_scopeConfig->getValue($sender, ScopeInterface::SCOPE_STORE, $storeId)
         )->addTo(
             $this->getEmail(),
             $this->getName()
@@ -872,7 +874,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             $storeId = $this->getStoreId() ? $this->getStoreId() : $this->_storeManager->getStore()->getId();
             $groupId = $this->_scopeConfig->getValue(
                 GroupManagement::XML_PATH_DEFAULT_ID,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                ScopeInterface::SCOPE_STORE,
                 $storeId
             );
             $this->setData('group_id', $groupId);
@@ -1348,5 +1350,21 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             'confirmation' => self::XML_PATH_CONFIRM_EMAIL_TEMPLATE,
         ];
         return $types;
+    }
+
+    /**
+     * Check if customer is locked
+     *
+     * @return boolean
+     */
+    public function isCustomerLocked()
+    {
+        if ($this->getLockExpires()) {
+            $lockExpires = new \DateTime($this->getLockExpires());
+            if ($lockExpires > new \DateTime()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

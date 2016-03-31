@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Reflection;
@@ -421,12 +421,6 @@ class TypeProcessor
 
     /**
      * Get item type of the array.
-     * Example:
-     * <pre>
-     *  ComplexType[] => ComplexType
-     *  string[] => string
-     *  int[] => integer
-     * </pre>
      *
      * @param string $arrayType
      * @return string

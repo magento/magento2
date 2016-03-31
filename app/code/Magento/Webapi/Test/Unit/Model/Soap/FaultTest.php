@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Model\Soap;
@@ -25,7 +25,7 @@ class FaultTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Webapi\Model\Soap\Fault */
     protected $_soapFault;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject*/
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $_localeResolverMock;
 
     /**
@@ -37,11 +37,10 @@ class FaultTest extends \PHPUnit_Framework_TestCase
     {
         $this->_requestMock = $this->getMock('\Magento\Framework\App\RequestInterface');
         /** Initialize SUT. */
-        $message = "Soap fault reason.";
         $details = ['param1' => 'value1', 'param2' => 2];
         $code = 111;
         $webapiException = new \Magento\Framework\Webapi\Exception(
-            __($message),
+            __('Soap fault reason.'),
             $code,
             \Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR,
             $details
@@ -211,7 +210,7 @@ XML;
         $details = ['param1' => 'value1', 'param2' => 2];
         $code = 111;
         $webapiException = new \Magento\Framework\Webapi\Exception(
-            __($message),
+            __('Soap fault reason.'),
             $code,
             \Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR,
             $details

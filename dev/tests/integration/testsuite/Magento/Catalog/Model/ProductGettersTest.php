@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model;
@@ -14,6 +14,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @see \Magento\Catalog\Model\ProductExternalTest
  * @see \Magento\Catalog\Model\ProductPriceTest
  * @magentoDataFixture Magento/Catalog/_files/categories.php
+ * @magentoDbIsolation enabled
+ * @magentoAppIsolation enabled
  */
 class ProductGettersTest extends \PHPUnit_Framework_TestCase
 {

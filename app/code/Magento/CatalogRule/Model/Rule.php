@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Model;
@@ -85,6 +85,11 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
     protected $_relatedCacheTypes;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime
+     */
+    protected $dateTime;
+
+    /**
      * @var \Magento\Framework\Model\ResourceModel\Iterator
      */
     protected $_resourceIterator;
@@ -130,6 +135,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
     protected $ruleConditionConverter;
 
     /**
+     * Rule constructor.
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -145,8 +151,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\CatalogRule\Helper\Data $catalogRuleData
      * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypesList
+     * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param Indexer\Rule\RuleProductProcessor $ruleProductProcessor
-     * @param Data\Condition\Converter $ruleConditionConverter
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $relatedCacheTypes
@@ -170,8 +176,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
         \Magento\Customer\Model\Session $customerSession,
         \Magento\CatalogRule\Helper\Data $catalogRuleData,
         \Magento\Framework\App\Cache\TypeListInterface $cacheTypesList,
+        \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor $ruleProductProcessor,
-        \Magento\CatalogRule\Model\Data\Condition\Converter $ruleConditionConverter,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $relatedCacheTypes = [],
@@ -187,8 +193,8 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
         $this->_catalogRuleData = $catalogRuleData;
         $this->_cacheTypesList = $cacheTypesList;
         $this->_relatedCacheTypes = $relatedCacheTypes;
+        $this->dateTime = $dateTime;
         $this->_ruleProductProcessor = $ruleProductProcessor;
-        $this->ruleConditionConverter = $ruleConditionConverter;
 
         parent::__construct(
             $context,
@@ -337,7 +343,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
     protected function _getWebsitesMap()
     {
         $map = [];
-        $websites = $this->_storeManager->getWebsites(true);
+        $websites = $this->_storeManager->getWebsites();
         foreach ($websites as $website) {
             // Continue if website has no store to be able to create catalog rule for website without store
             if ($website->getDefaultStore() === null) {
@@ -572,7 +578,17 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
         return $result;
     }
 
+    /**
+     * @param string $formName
+     * @return string
+     */
+    public function getConditionsFieldSetId($formName = '')
+    {
+        return $formName . 'rule_conditions_fieldset_' . $this->getId();
+    }
+
     //@codeCoverageIgnoreStart
+
     /**
      * {@inheritdoc}
      */
@@ -642,7 +658,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
      */
     public function getRuleCondition()
     {
-        return $this->ruleConditionConverter->arrayToDataModel($this->getConditions()->asArray());
+        return $this->getRuleConditionConverter()->arrayToDataModel($this->getConditions()->asArray());
     }
 
     /**
@@ -652,7 +668,7 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
     {
         $this->getConditions()
             ->setConditions([])
-            ->loadArray($this->ruleConditionConverter->dataModelToArray($condition));
+            ->loadArray($this->getRuleConditionConverter()->dataModelToArray($condition));
         return $this;
     }
 
@@ -755,6 +771,18 @@ class Rule extends \Magento\Rule\Model\AbstractModel implements \Magento\Catalog
     public function setExtensionAttributes(\Magento\CatalogRule\Api\Data\RuleExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * @return Data\Condition\Converter
+     */
+    private function getRuleConditionConverter()
+    {
+        if (null === $this->ruleConditionConverter) {
+            $this->ruleConditionConverter = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\CatalogRule\Model\Data\Condition\Converter');
+        }
+        return $this->ruleConditionConverter;
     }
     //@codeCoverageIgnoreEnd
 }

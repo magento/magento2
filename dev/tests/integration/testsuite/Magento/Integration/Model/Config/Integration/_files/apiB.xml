@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -14,6 +14,7 @@
     </integration>
     <integration name="TestIntegration3">
         <resources>
+            <resource name="Magento_Catalog::product_read" />
             <resource name="Magento_Sales::create" />
             <resource name="Magento_SalesRule::quote" />
         </resources>

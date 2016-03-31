@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Eav\Model\Entity\Collection;
@@ -1514,7 +1514,7 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     public function toArray($arrAttributes = [])
     {
         $arr = [];
-        foreach ($this->_items as $key => $item) {
+        foreach ($this->getItems() as $key => $item) {
             $arr[$key] = $item->toArray($arrAttributes);
         }
         return $arr;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -69,8 +69,8 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             'No' => 0
         ],
         'product_has_weight' => [
-            'Yes' => 1,
-            'No' => 0,
+            'This item has weight' => 1,
+            'This item has no weight' => 0,
         ],
         'use_config_enable_qty_increments' => [
             'Yes' => 1,
@@ -94,8 +94,8 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
             'Main Website' => 1
         ],
         'status' => [
-            'Product offline' => 2,
-            'Product online' => 1
+            'No' => 2,
+            'Yes' => 1
         ],
         'is_require' => [
             'Yes' => 1,
@@ -322,7 +322,7 @@ class Curl extends AbstractCurl implements CatalogProductSimpleInterface
     {
         $this->fields['product']['status'] = isset($this->fields['product']['status'])
             ? $this->fields['product']['status']
-            : 'Product online';
+            : 'Yes';
     }
 
     /**

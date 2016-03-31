@@ -1,9 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel;
+
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Product entity resource model
@@ -67,6 +69,11 @@ class Product extends AbstractResource
     protected $defaultAttributes;
 
     /**
+     * @var array
+     */
+    protected $availableCategoryIdsCache = [];
+
+    /**
      * @param \Magento\Eav\Model\Entity\Context $context
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Factory $modelFactory
@@ -76,7 +83,6 @@ class Product extends AbstractResource
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
-     * @param \Magento\Framework\Model\EntityManager $entityManager
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -91,7 +97,6 @@ class Product extends AbstractResource
         \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory,
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
-        \Magento\Framework\Model\EntityManager $entityManager,
         $data = []
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
@@ -99,7 +104,6 @@ class Product extends AbstractResource
         $this->eventManager = $eventManager;
         $this->setFactory = $setFactory;
         $this->typeFactory = $typeFactory;
-        $this->entityManager = $entityManager;
         $this->defaultAttributes = $defaultAttributes;
         parent::__construct(
             $context,
@@ -295,36 +299,7 @@ class Product extends AbstractResource
      */
     public function delete($object)
     {
-        try {
-            $this->transactionManager->start($this->getConnection());
-            if (is_numeric($object)) {
-                //$id = (int) $object;
-            } elseif ($object instanceof \Magento\Framework\Model\AbstractModel) {
-                $object->beforeDelete();
-                //$id = (int) $object->getData($this->getLinkField());
-            }
-            $this->_beforeDelete($object);
-            $this->entityManager->delete(\Magento\Catalog\Api\Data\ProductInterface::class, $object);
-            //$this->evaluateDelete(
-            //    $object,
-            //    $id,
-            //    $connection
-            //);
-
-            $this->_afterDelete($object);
-
-            if ($object instanceof \Magento\Framework\Model\AbstractModel) {
-                $object->isDeleted(true);
-                $object->afterDelete();
-            }
-            $this->transactionManager->commit();
-            if ($object instanceof \Magento\Framework\Model\AbstractModel) {
-                $object->afterDeleteCommit();
-            }
-        } catch (\Exception $e) {
-            $this->transactionManager->rollBack();
-            throw $e;
-        }
+        $this->getEntityManager()->delete(\Magento\Catalog\Api\Data\ProductInterface::class, $object);
         $this->eventManager->dispatch(
             'catalog_product_delete_after_done',
             ['product' => $object]
@@ -465,18 +440,22 @@ class Product extends AbstractResource
     {
         // is_parent=1 ensures that we'll get only category IDs those are direct parents of the product, instead of
         // fetching all parent IDs, including those are higher on the tree
-        $select = $this->getConnection()->select()->distinct()->from(
-            $this->getTable('catalog_category_product_index'),
-            ['category_id']
-        )->where(
-            'product_id = ? AND is_parent = 1',
-            (int)$object->getEntityId()
-        )->where(
-            'visibility != ?',
-            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE
-        );
-
-        return $this->getConnection()->fetchCol($select);
+        $entityId = (int)$object->getEntityId();
+        if (!isset($this->availableCategoryIdsCache[$entityId])) {
+            $this->availableCategoryIdsCache[$entityId] = $this->getConnection()->fetchCol(
+                $this->getConnection()->select()->distinct()->from(
+                    $this->getTable('catalog_category_product_index'),
+                    ['category_id']
+                )->where(
+                    'product_id = ? AND is_parent = 1',
+                    $entityId
+                )->where(
+                    'visibility != ?',
+                    \Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE
+                )
+            );
+        }
+        return $this->availableCategoryIdsCache[$entityId];
     }
 
     /**
@@ -664,7 +643,7 @@ class Product extends AbstractResource
     /**
      * Reset firstly loaded attributes
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param \Magento\Framework\Model\AbstractModel $object
      * @param integer $entityId
      * @param array|null $attributes
      * @return $this
@@ -672,23 +651,8 @@ class Product extends AbstractResource
     public function load($object, $entityId, $attributes = [])
     {
         $this->loadAttributesMetadata($attributes);
-
-        $this->entityManager->load(\Magento\Catalog\Api\Data\ProductInterface::class, $object, $entityId);
-
-        $this->_afterLoad($object);
-
+        $this->getEntityManager()->load(\Magento\Catalog\Api\Data\ProductInterface::class, $object, $entityId);
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function processSave($object)
-    {
-        $this->entityManager->save(
-            \Magento\Catalog\Api\Data\ProductInterface::class,
-            $object
-        );
     }
 
     /**
@@ -716,5 +680,30 @@ class Product extends AbstractResource
                 $where
             );
         }
+    }
+
+    /**
+     * Save entity's attributes into the object's resource
+     *
+     * @param  \Magento\Framework\Model\AbstractModel $object
+     * @return $this
+     * @throws \Exception
+     */
+    public function save(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->getEntityManager()->save(ProductInterface::class, $object);
+        return $this;
+    }
+
+    /**
+     * @return \Magento\Framework\Model\EntityManager
+     */
+    private function getEntityManager()
+    {
+        if (null === $this->entityManager) {
+            $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Model\EntityManager');
+        }
+        return $this->entityManager;
     }
 }

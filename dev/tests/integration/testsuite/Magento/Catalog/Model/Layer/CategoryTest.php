@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Layer;
@@ -9,6 +9,8 @@ namespace Magento\Catalog\Model\Layer;
  * Test class for \Magento\Catalog\Model\Layer.
  *
  * @magentoDataFixture Magento/Catalog/_files/categories.php
+ * @magentoAppIsolation enabled
+ * @magentoDbIsolation enabled
  */
 class CategoryTest extends \PHPUnit_Framework_TestCase
 {

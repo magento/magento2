@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data;
@@ -865,5 +865,31 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     public function hasFlag($flag)
     {
         return array_key_exists($flag, $this->_flags);
+    }
+
+    /**
+     * @return string[]
+     */
+    public function __sleep()
+    {
+        $properties = array_keys(get_object_vars($this));
+        $properties = array_diff(
+            $properties,
+            [
+                '_entityFactory',
+            ]
+        );
+        return $properties;
+    }
+
+    /**
+     * Init not serializable fields
+     *
+     * @return void
+     */
+    public function __wakeup()
+    {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->_entityFactory = $objectManager->get(EntityFactoryInterface::class);
     }
 }

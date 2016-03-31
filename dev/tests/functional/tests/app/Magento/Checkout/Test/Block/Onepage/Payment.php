@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,7 +20,7 @@ class Payment extends Block
      *
      * @var string
      */
-    protected $paymentMethodInput = '[id^="%s"]';
+    protected $paymentMethodInput = '[id*="%s"]';
 
     /**
      * Labels for payment methods.
@@ -34,7 +34,7 @@ class Payment extends Block
      *
      * @var string
      */
-    protected $paymentMethodLabel = '[for^="%s"]';
+    protected $paymentMethodLabel = '[for*="%s"]';
 
     /**
      * Continue checkout button.

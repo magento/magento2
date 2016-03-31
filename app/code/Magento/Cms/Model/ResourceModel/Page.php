@@ -1,10 +1,8 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
 
 namespace Magento\Cms\Model\ResourceModel;
 
@@ -90,6 +88,14 @@ class Page extends AbstractDb
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getConnection()
+    {
+        return $this->metadataPool->getMetadata(PageInterface::class)->getEntityConnection();
+    }
+
+    /**
      * Process page data before saving
      *
      * @param AbstractModel $object
@@ -154,7 +160,6 @@ class Page extends AbstractDb
 
         if ($isId) {
             $this->entityManager->load(PageInterface::class, $object, $value);
-            $this->_afterLoad($object);
         }
         return $this;
     }
@@ -216,7 +221,7 @@ class Page extends AbstractDb
             ->where('cp.identifier = ?', $identifier)
             ->where('cps.store_id IN (?)', $store);
 
-        if (!is_null($isActive)) {
+        if ($isActive !== null) {
             $select->where('cp.is_active = ?', $isActive);
         }
 
@@ -373,43 +378,20 @@ class Page extends AbstractDb
     }
 
     /**
-     * @param AbstractModel $object
-     * @return $this
-     * @throws \Exception
+     * @inheritDoc
      */
     public function save(AbstractModel $object)
     {
-        if ($object->isDeleted()) {
-            return $this->delete($object);
-        }
+        $this->entityManager->save(PageInterface::class, $object);
+        return $this;
+    }
 
-        $this->beginTransaction();
-
-        try {
-            if (!$this->isModified($object)) {
-                $this->processNotModifiedSave($object);
-                $this->commit();
-                $object->setHasDataChanges(false);
-                return $this;
-            }
-            $object->validateBeforeSave();
-            $object->beforeSave();
-            if ($object->isSaveAllowed()) {
-                $this->_serializeFields($object);
-                $this->_beforeSave($object);
-                $this->_checkUnique($object);
-                $this->objectRelationProcessor->validateDataIntegrity($this->getMainTable(), $object->getData());
-                $this->entityManager->save(PageInterface::class, $object);
-                $this->unserializeFields($object);
-                $this->processAfterSaves($object);
-            }
-            $this->addCommitCallback([$object, 'afterCommitCallback'])->commit();
-            $object->setHasDataChanges(false);
-        } catch (\Exception $e) {
-            $this->rollBack();
-            $object->setHasDataChanges(true);
-            throw $e;
-        }
+    /**
+     * @inheritDoc
+     */
+    public function delete(AbstractModel $object)
+    {
+        $this->entityManager->delete(PageInterface::class, $object);
         return $this;
     }
 }

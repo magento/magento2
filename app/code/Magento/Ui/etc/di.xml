@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,13 +13,14 @@
     <preference for="Magento\Framework\View\Element\UiComponent\Config\ManagerInterface" type="Magento\Ui\Model\Manager" />
     <preference for="Magento\Framework\View\Element\UiComponent\ContextInterface" type="Magento\Framework\View\Element\UiComponent\Context" />
     <preference for="Magento\Framework\View\Element\UiComponent\LayoutInterface" type="Magento\Framework\View\Layout\Generic"/>
-    <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\User\Model\Authorization\AdminSessionUserContext"/>
+    <preference for="Magento\Authorization\Model\UserContextInterface" type="Magento\Authorization\Model\CompositeUserContext"/>
     <preference for="Magento\Ui\Api\Data\BookmarkSearchResultsInterface" type="Magento\Framework\Api\SearchResults" />
     <preference for="Magento\Ui\Api\BookmarkRepositoryInterface" type="Magento\Ui\Model\ResourceModel\BookmarkRepository"/>
     <preference for="Magento\Ui\Api\Data\BookmarkInterface" type="Magento\Ui\Model\Bookmark"/>
-    <preference for="Magento\Ui\Api\BookmarkManagementInterface" type="Magento\Ui\Model\BookmarkManagement"/>
     <preference for="Magento\Ui\Component\Wysiwyg\ConfigInterface" type="Magento\Ui\Component\Wysiwyg\Config"/>
+    <preference for="Magento\Ui\Api\BookmarkManagementInterface" type="Magento\Ui\Model\BookmarkManagement"/>
     <preference for="Magento\Framework\View\TemplateEngine\Xhtml\ResultInterface" type="Magento\Ui\TemplateEngine\Xhtml\Result"/>
+    <preference for="Magento\Framework\Api\Search\ReportingInterface" type="Magento\Framework\View\Element\UiComponent\DataProvider\Reporting"/>
     <type name="Magento\Ui\TemplateEngine\Xhtml\Result" shared="false"/>
     <type name="Magento\Framework\View\Element\UiComponent\TemplateAdapter" shared="false" />
     <type name="Magento\Framework\View\TemplateEngineFactory">

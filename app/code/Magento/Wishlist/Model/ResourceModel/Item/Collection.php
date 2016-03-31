@@ -1,9 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Model\ResourceModel\Item;
+
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
  * Wishlist item collection
@@ -133,6 +136,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_appState;
 
     /**
+     * @var MetadataPool
+     */
+    protected $metadataPool;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -198,6 +206,20 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         $this->_init('Magento\Wishlist\Model\Item', 'Magento\Wishlist\Model\ResourceModel\Item');
         $this->addFilterToMap('store_id', 'main_table.store_id');
+    }
+
+    /**
+     * Get metadata pool object
+     *
+     * @return MetadataPool
+     */
+    protected function getMetadataPool()
+    {
+        if ($this->metadataPool == null) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
     }
 
     /**
@@ -267,7 +289,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $productCollection->addPriceData()
             ->addTaxPercents()
             ->addIdFilter($this->_productIds)
-            ->addAttributeToSelect('*')
+            ->addAttributeToSelect('name')
             ->addOptionsToResult()
             ->addUrlRewrite();
 
@@ -479,12 +501,14 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
             $storeId = $this->_storeManager->getStore(\Magento\Store\Model\Store::ADMIN_CODE)->getId();
 
+            $entityMetadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+
             $this->getSelect()->join(
                 ['product_name_table' => $attribute->getBackendTable()],
-                'product_name_table.entity_id=main_table.product_id' .
-                ' AND product_name_table.store_id=' .
+                'product_name_table.' . $entityMetadata->getLinkField() . ' = main_table.product_id' .
+                ' AND product_name_table.store_id = ' .
                 $storeId .
-                ' AND product_name_table.attribute_id=' .
+                ' AND product_name_table.attribute_id = ' .
                 $attribute->getId(),
                 []
             );

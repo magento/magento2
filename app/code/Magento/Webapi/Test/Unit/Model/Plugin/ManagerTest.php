@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Test\Unit\Model\Plugin;
@@ -9,13 +9,6 @@ use Magento\Integration\Model\Integration;
 
 class ManagerTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * API Integration config
-     *
-     * @var \Magento\Integration\Model\IntegrationConfig|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $integrationConfigMock;
-
     /**
      * Integration service mock
      *
@@ -42,14 +35,13 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
      */
     protected $subjectMock;
 
-    public function setUp()
-    {
-        $this->integrationConfigMock = $this->getMockBuilder(
-            '\Magento\Integration\Model\IntegrationConfig'
-        )->disableOriginalConstructor()->setMethods(
-            ['getIntegrations']
-        )->getMock();
+    /**
+     * @var \Magento\Integration\Model\IntegrationConfig|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $integrationConfigMock;
 
+    protected function setUp()
+    {
         $this->integrationServiceMock = $this->getMockBuilder(
             '\Magento\Integration\Api\IntegrationServiceInterface'
         )->disableOriginalConstructor()->setMethods(
@@ -82,10 +74,16 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+
+        $this->integrationConfigMock = $this->getMockBuilder('Magento\Integration\Model\IntegrationConfig')
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMock();
+
         $this->apiSetupPlugin = new \Magento\Webapi\Model\Plugin\Manager(
-            $this->integrationConfigMock,
             $this->integrationAuthorizationServiceMock,
-            $this->integrationServiceMock
+            $this->integrationServiceMock,
+            $this->integrationConfigMock
         );
     }
 
@@ -121,14 +119,74 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
                 ]
             )
         );
+        $firstInegrationId = 1;
+        $integrationsData1 = new \Magento\Framework\DataObject(
+            [
+                'id' => $firstInegrationId,
+                Integration::NAME => 'TestIntegration1',
+                Integration::EMAIL => 'test-integration1@magento.com',
+                Integration::ENDPOINT => 'http://endpoint.com',
+                Integration::SETUP_TYPE => 1,
+            ]
+        );
+        $secondIntegrationId = 2;
+        $integrationsData2 = new \Magento\Framework\DataObject(
+            [
+                'id' => $secondIntegrationId,
+                Integration::NAME => 'TestIntegration2',
+                Integration::EMAIL => 'test-integration2@magento.com',
+                Integration::SETUP_TYPE => 1,
+            ]
+        );
+        $this->integrationServiceMock->expects(
+            $this->at(0)
+        )->method(
+            'findByName'
+        )->with(
+            'TestIntegration1'
+        )->will(
+            $this->returnValue($integrationsData1)
+        );
+        $this->integrationServiceMock->expects(
+            $this->at(1)
+        )->method(
+            'findByName'
+        )->with(
+            'TestIntegration2'
+        )->will(
+            $this->returnValue($integrationsData2)
+        );
+        $this->apiSetupPlugin->afterProcessIntegrationConfig(
+            $this->subjectMock,
+            ['TestIntegration1', 'TestIntegration2']
+        );
+    }
 
+    public function testAfterProcessConfigBasedIntegrationsNoIntegrations()
+    {
+        $this->integrationServiceMock->expects($this->never())->method('findByName');
+        $this->apiSetupPlugin->afterProcessConfigBasedIntegrations($this->subjectMock, []);
+    }
+
+    /**
+     * @return void
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testAfterProcessConfigBasedIntegrationsSuccess()
+    {
         $firstInegrationId = 1;
         $integrationsData1 = [
             'id' => $firstInegrationId,
             Integration::NAME => 'TestIntegration1',
             Integration::EMAIL => 'test-integration1@magento.com',
             Integration::ENDPOINT => 'http://endpoint.com',
-            Integration::SETUP_TYPE => 1
+            Integration::SETUP_TYPE => 1,
+            'resource' => [
+                'Magento_Customer::manage',
+                'Magento_Customer::online',
+                'Magento_Sales::create',
+                'Magento_SalesRule::quote',
+            ]
         ];
         $integrationsData1Object = new \Magento\Framework\DataObject($integrationsData1);
 
@@ -137,7 +195,8 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             'id' => $secondIntegrationId,
             Integration::NAME => 'TestIntegration2',
             Integration::EMAIL => 'test-integration2@magento.com',
-            Integration::SETUP_TYPE => 1
+            Integration::SETUP_TYPE => 1,
+            'resource' => ['Magento_Catalog::product_read']
         ];
         $integrationsData2Object = new \Magento\Framework\DataObject($integrationsData2);
 
@@ -161,7 +220,7 @@ class ManagerTest extends \PHPUnit_Framework_TestCase
             $this->returnValue($integrationsData2Object)
         );
 
-        $this->apiSetupPlugin->afterProcessIntegrationConfig(
+        $this->apiSetupPlugin->afterProcessConfigBasedIntegrations(
             $this->subjectMock,
             ['TestIntegration1' => $integrationsData1, 'TestIntegration2' => $integrationsData2]
         );
