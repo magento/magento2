@@ -87,7 +87,7 @@ class RuleTest extends \PHPUnit_Framework_TestCase
             ->method('getResources')
             ->willReturn($this->resourcesMock);
 
-        $this->entityManager = $this->getMockBuilder('Magento\Framework\Model\EntityManager')
+        $this->entityManager = $this->getMockBuilder('Magento\Framework\EntityManager\EntityManager')
             ->setMethods(['load', 'save', 'delete'])
             ->disableOriginalConstructor()
             ->getMock();

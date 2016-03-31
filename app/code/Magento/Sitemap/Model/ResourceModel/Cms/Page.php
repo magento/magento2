@@ -11,7 +11,7 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Cms\Model\Page as CmsPage;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Model\EntityManager;
+use Magento\Framework\EntityManager\EntityManager;
 
 /**
  * Sitemap cms page collection model

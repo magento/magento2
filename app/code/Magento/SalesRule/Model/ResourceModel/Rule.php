@@ -9,7 +9,7 @@ use \Magento\SalesRule\Model\Rule as SalesRule;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\DB\Select;
 use Magento\Rule\Model\ResourceModel\AbstractResource;
-use Magento\Framework\Model\EntityManager;
+use Magento\Framework\EntityManager\EntityManager;
 use Magento\SalesRule\Api\Data\RuleInterface;
 
 /**

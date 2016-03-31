@@ -11,7 +11,7 @@
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
-use Magento\Framework\Model\EntityManager;
+use Magento\Framework\EntityManager\EntityManager;
 use Magento\Catalog\Api\Data\CategoryInterface;
 
 /**
@@ -993,8 +993,8 @@ class Category extends AbstractResource
     {
         $this->_attributes = [];
         $this->loadAttributesMetadata($attributes);
-        $object = $this->getEntityManager()->load(CategoryInterface::class, $object, $entityId);
-        if (!$this->getEntityManager()->has(\Magento\Catalog\Api\Data\CategoryInterface::class, $entityId)) {
+        $object = $this->getEntityManager()->load($object, $entityId, CategoryInterface::class, []);
+        if (!$this->getEntityManager()->has($object, \Magento\Catalog\Api\Data\CategoryInterface::class, [])) {
             $object->isObjectNew(true);
         }
         return $this;
@@ -1005,7 +1005,7 @@ class Category extends AbstractResource
      */
     public function delete($object)
     {
-        $this->getEntityManager()->delete(CategoryInterface::class, $object);
+        $this->getEntityManager()->delete($object, CategoryInterface::class, []);
         $this->_eventManager->dispatch(
             'catalog_category_delete_after_done',
             ['product' => $object]
@@ -1022,7 +1022,7 @@ class Category extends AbstractResource
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
-        $this->getEntityManager()->save(CategoryInterface::class, $object);
+        $this->getEntityManager()->save($object, CategoryInterface::class, []);
         return $this;
     }
 
@@ -1033,7 +1033,7 @@ class Category extends AbstractResource
     {
         if (null === $this->entityManager) {
             $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\EntityManager');
+                ->get('Magento\Framework\EntityManager\EntityManager');
         }
         return $this->entityManager;
     }
