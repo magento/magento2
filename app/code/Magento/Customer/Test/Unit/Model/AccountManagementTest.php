@@ -1464,4 +1464,69 @@ class AccountManagementTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($customerData, $this->accountManagement->authenticate($username, $password));
     }
+
+    /**
+     * @param string|null $skipConfirmationIfEmail
+     * @param int $isConfirmationRequired
+     * @param string|null $confirmation
+     * @param string $expected
+     * @dataProvider dataProviderGetConfirmationStatus
+     */
+    public function testGetConfirmationStatus(
+        $skipConfirmationIfEmail,
+        $isConfirmationRequired,
+        $confirmation,
+        $expected
+    ) {
+        $websiteId = 1;
+        $customerId = 1;
+        $customerEmail = 'test1@example.com';
+
+        $customerMock = $this->getMockBuilder('Magento\Customer\Api\Data\CustomerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $customerMock->expects($this->once())
+            ->method('getId')
+            ->willReturn($customerId);
+        $customerMock->expects($this->any())
+            ->method('getConfirmation')
+            ->willReturn($confirmation);
+        $customerMock->expects($this->any())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
+        $customerMock->expects($this->any())
+            ->method('getWebsiteId')
+            ->willReturn($websiteId);
+
+        $this->registry->expects($this->once())
+            ->method('registry')
+            ->with('skip_confirmation_if_email')
+            ->willReturn($skipConfirmationIfEmail);
+
+        $this->scopeConfig->expects($this->any())
+            ->method('getValue')
+            ->with(AccountManagement::XML_PATH_IS_CONFIRM, ScopeInterface::SCOPE_WEBSITES, $websiteId)
+            ->willReturn($isConfirmationRequired);
+
+        $this->customerRepository->expects($this->once())
+            ->method('getById')
+            ->with($customerId)
+            ->willReturn($customerMock);
+
+        $this->assertEquals($expected, $this->accountManagement->getConfirmationStatus($customerId));
+    }
+
+    /**
+     * @return array
+     */
+    public function dataProviderGetConfirmationStatus()
+    {
+        return [
+            [null, 0, null, AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED],
+            ['test1@example.com', 0, null, AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED],
+            ['test2@example.com', 0, null, AccountManagement::ACCOUNT_CONFIRMATION_NOT_REQUIRED],
+            ['test2@example.com', 1, null, AccountManagement::ACCOUNT_CONFIRMED],
+            ['test2@example.com', 1, 'test', AccountManagement::ACCOUNT_CONFIRMATION_REQUIRED],
+        ];
+    }
 }
