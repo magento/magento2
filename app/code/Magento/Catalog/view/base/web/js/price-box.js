@@ -184,7 +184,7 @@ define([
                     var type = $(element).data('priceType'),
                         amount = parseFloat($(element).data('priceAmount'));
 
-                    if (type && amount) {
+                    if (type && !isNaN(amount)) {
                         prices[type] = {
                             amount: amount
                         };
