@@ -493,6 +493,9 @@ class AdvancedPricing extends AbstractModifier
                                         'label' => __('Price'),
                                         'enableLabel' => true,
                                         'dataScope' => 'price',
+                                        'addbefore' => $this->locator->getStore()
+                                                                     ->getBaseCurrency()
+                                                                     ->getCurrencySymbol(),
                                     ],
                                 ],
                             ],
