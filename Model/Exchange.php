@@ -69,6 +69,7 @@ class Exchange implements ExchangeInterface
         $exchange = $this->queueConfig->getExchangeByTopic($topic);
         $responseBody = null;
 
+        $msg = new AMQPMessage($envelope->getBody(), $envelope->getProperties());
         if ($isSync) {
             $correlationId = $envelope->getProperties()['correlation_id'];
             /** @var AMQPMessage $response */
@@ -95,7 +96,6 @@ class Exchange implements ExchangeInterface
                 false,
                 $callback
             );
-            $msg = new AMQPMessage($envelope->getBody(), $envelope->getProperties());
             $channel->basic_publish($msg, $exchange, $topic);
             while ($responseBody === null) {
                 try {
@@ -110,7 +110,6 @@ class Exchange implements ExchangeInterface
                 }
             }
         } else {
-            $msg = new AMQPMessage($envelope->getBody(), ['delivery_mode' => 2]);
             $channel->basic_publish($msg, $exchange, $topic);
         }
         return $responseBody;
