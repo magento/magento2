@@ -459,6 +459,7 @@ class BundlePanel extends AbstractModifier
                                 'parentContainer' => 'product_bundle_container',
                                 'selections' => 'bundle_selections',
                                 'targetIndex' => 'is_default',
+                                'targetCheckbox' => 'selection_can_change_qty',
                                 'dataScope' => 'type',
                                 'label' => __('Input Type'),
                                 'sortOrder' => 20,

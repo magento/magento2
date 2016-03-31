@@ -32,7 +32,25 @@ define([
                 }
             }
 
+            this.toggleCheckbox(type === 'radio');
+
             this._super();
+        },
+
+        /**
+         * Toggle 'User Defined' checkbox in selections
+         * @param {Boolean} visibility
+         */
+        toggleCheckbox: function(visibility) {
+            var records = registry.get(this.retrieveParentName(this.parentContainer) + '.' + this.selections);
+
+            records.elems.each(function (record) {
+                record.elems.filter(function (comp) {
+                    return comp.index === this.targetCheckbox;
+                }, this).each(function (comp) {
+                    comp.visible(visibility);
+                });
+            }, this);
         },
 
         /**
