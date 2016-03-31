@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ProductVideo\Test\Unit\Model\Plugin\Catalog\Product\Gallery;
@@ -38,7 +38,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected $mediaGalleryReadHandler;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->product = $this->getMock(
             'Magento\Catalog\Model\Product',

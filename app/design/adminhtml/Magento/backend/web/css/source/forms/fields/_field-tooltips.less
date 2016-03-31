@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -20,6 +20,7 @@
 @field-tooltip-content__border-color: @color-dark-grayish-orange;
 @field-tooltip-content__padding: 1.5rem 2.5rem;
 @field-tooltip-content__width: 32rem;
+@field-tooltip-content__z-index: 1;
 
 @field-tooltip-action__margin-left: 2rem;
 
@@ -47,6 +48,9 @@
     .admin__field-tooltip-action {
         display: inline-block;
         margin-left: @field-tooltip-action__margin-left;
+        position: relative;
+        z-index: @field-tooltip-content__z-index + 1;
+
         .lib-icon-font(
             @icon-help__content,
             @icons-admin__font-name,
@@ -104,5 +108,5 @@
     padding: @field-tooltip-content__padding;
     position: absolute;
     width: @field-tooltip-content__width;
-    z-index: 1;
+    z-index: @field-tooltip-content__z-index;
 }
