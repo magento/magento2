@@ -7,6 +7,9 @@ namespace Magento\Framework\Session\SaveHandler\Redis;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State;
+use Magento\Framework\Config\ScopeInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 
 class Config implements \Cm\RedisSession\Handler\ConfigInterface
 {
@@ -96,6 +99,16 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     const PARAM_BREAK_AFTER             = 'session/redis/break_after';
 
     /**
+     * Cookie Lifetime config path
+     */
+    const XML_PATH_COOKIE_LIFETIME = 'web/cookie/cookie_lifetime';
+
+    /**
+     * Admin Session Lifetime config path
+     */
+    const XML_PATH_ADMIN_SESSION_LIFETIME = 'admin/security/session_lifetime';
+
+    /**
      * Deployment config
      *
      * @var DeploymentConfig $deploymentConfig
@@ -103,13 +116,31 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     private $deploymentConfig;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @var ScopeInterface
+     */
+    private $scope;
+
+    /**
      * @param DeploymentConfig $deploymentConfig
      * @param State $appState
+     * @param ScopeConfigInterface $scopeConfig
+     * @param ScopeInterface $scope
      */
-    public function __construct(DeploymentConfig $deploymentConfig, State $appState)
-    {
+    public function __construct(
+        DeploymentConfig $deploymentConfig,
+        State $appState,
+        ScopeConfigInterface $scopeConfig,
+        ScopeInterface $scope
+    ) {
         $this->deploymentConfig = $deploymentConfig;
         $this->appState = $appState;
+        $this->scopeConfig = $scopeConfig;
+        $this->scope = $scope;
     }
 
     /**
@@ -197,7 +228,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
      */
     public function getMaxLifetime()
     {
-        return $this->deploymentConfig->get(self::PARAM_MAX_LIFETIME);
+        return max($this->deploymentConfig->get(self::PARAM_MAX_LIFETIME), $this->getLifetime());
     }
 
     /**
@@ -246,5 +277,19 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     public function getBreakAfter()
     {
         return $this->deploymentConfig->get(self::PARAM_BREAK_AFTER . '_' . $this->appState->getAreaCode());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLifetime()
+    {
+        if ($this->scope->getCurrentScope() == \Magento\Framework\App\Area::AREA_ADMINHTML) {
+            return (int)$this->scopeConfig->getValue(
+                self::XML_PATH_ADMIN_SESSION_LIFETIME,
+                StoreScopeInterface::SCOPE_STORE
+            );
+        }
+        return (int)$this->scopeConfig->getValue(self::XML_PATH_COOKIE_LIFETIME, StoreScopeInterface::SCOPE_WEBSITE);
     }
 }
