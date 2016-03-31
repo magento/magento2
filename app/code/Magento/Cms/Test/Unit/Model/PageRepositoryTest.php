@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Model;
@@ -61,7 +61,7 @@ class PageRepositoryTest extends \PHPUnit_Framework_TestCase
     /**
      * Initialize repository
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->pageResource = $this->getMockBuilder('Magento\Cms\Model\ResourceModel\Page')
             ->disableOriginalConstructor()

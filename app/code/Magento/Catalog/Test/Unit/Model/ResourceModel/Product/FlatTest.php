@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
@@ -22,7 +22,7 @@ class FlatTest extends \PHPUnit_Framework_TestCase
      */
     protected $_storeManagerInterface;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_store = $this->getMock('\Magento\Store\Model\Store', [], [], '', false);
 

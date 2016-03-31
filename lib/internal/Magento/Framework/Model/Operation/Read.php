@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model\Operation;
@@ -60,9 +60,11 @@ class Read implements ReadInterface
     {
         $metadata = $this->metadataPool->getMetadata($entityType);
 
+        $hydrator = $this->metadataPool->getHydrator($entityType);
         $entity = $this->readMain->execute($entityType, $entity, $identifier);
 
-        if (isset($entity[$metadata->getLinkField()])) {
+        $entityData = $hydrator->extract($entity);
+        if (isset($entityData[$metadata->getLinkField()])) {
             $entity = $this->readExtension->execute($entityType, $entity);
             $entity = $this->readRelation->execute($entityType, $entity);
         }

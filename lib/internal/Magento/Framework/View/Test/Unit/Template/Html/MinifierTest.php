@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -34,7 +34,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     /**
      * Initialize testable object
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->htmlDirectory = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
             ->getMock();
@@ -81,7 +81,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
         $baseContent = <<<TEXT
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 ?>
@@ -96,6 +96,12 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
         <?php echo \$block->someMethod(); ?>
         <div style="width: 800px" class="<?php echo \$block->getClass() ?>" />
         <script>
+            var i = 1;// comment
+            var j = 1;// <?php echo 'hi' ?>
+//<?php ?> ')){
+// if (<?php echo __('hi')) { ?>
+// if (<?php )) {
+// comment
             //<![CDATA[
             var someVar = 123;
             testFunctionCall(function () {
@@ -110,12 +116,19 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
         </script>
         <?php echo "http://some.link.com/" ?>
         <em>inline text</em>
+        <a href="http://www.<?php echo 'hi' ?>"></a>
     </body>
 </html>
 TEXT;
 
         $expectedContent = <<<TEXT
-<?php /** * Copyright © 2015 Magento. All rights reserved. * See COPYING.txt for license details. */ ?> <?php ?> <html><head><title>Test title</title></head><body><a href="http://somelink.com/text.html">Text Link</a> <img src="test.png" alt="some text" /><?php echo \$block->someMethod(); ?> <div style="width: 800px" class="<?php echo \$block->getClass() ?>" /><script>
+<?php /** * Copyright © 2016 Magento. All rights reserved. * See COPYING.txt for license details. */ ?> <?php ?> <html><head><title>Test title</title></head><body><a href="http://somelink.com/text.html">Text Link</a> <img src="test.png" alt="some text" /><?php echo \$block->someMethod(); ?> <div style="width: 800px" class="<?php echo \$block->getClass() ?>" /><script>
+            var i = 1;
+            var j = 1;
+
+
+
+
             //<![CDATA[
             var someVar = 123;
             testFunctionCall(function () {
@@ -127,7 +140,7 @@ TEXT;
                 }
             });
             //]]>
-</script><?php echo "http://some.link.com/" ?> <em>inline text</em></body></html>
+</script><?php echo "http://some.link.com/" ?> <em>inline text</em> <a href="http://www.<?php echo 'hi' ?>"></a></body></html>
 TEXT;
 
         $this->appDirectory->expects($this->once())

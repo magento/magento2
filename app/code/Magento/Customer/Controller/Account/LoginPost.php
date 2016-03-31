@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Account;
@@ -67,24 +67,12 @@ class LoginPost extends \Magento\Customer\Controller\AbstractAccount
     }
 
     /**
-     * Set scope config
-     *
-     * @param ScopeConfigInterface $scopeConfig
-     * @return void
-     * @deprecated
-     */
-    public function setScopeConfig(ScopeConfigInterface $scopeConfig)
-    {
-        $this->scopeConfig = $scopeConfig;
-    }
-
-    /**
      * Get scope config
      *
      * @return ScopeConfigInterface
      * @deprecated
      */
-    public function getScopeConfig()
+    private function getScopeConfig()
     {
         if (!($this->scopeConfig instanceof \Magento\Framework\App\Config\ScopeConfigInterface)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(

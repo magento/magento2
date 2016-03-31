@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -151,7 +151,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         $this->_model = $this->_objectHelper->getObject(
-            'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+            Configurable::class,
             [
                 'typeConfigurableFactory' => $this->_typeConfigurableFactory,
                 'configurableAttributeFactory' => $this->_configurableAttributeFactoryMock,
@@ -164,10 +164,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'logger' => $logger,
                 'productRepository' => $this->productRepository,
                 'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
-                'cache' => $this->cache,
-                'metadataPool' => $this->metadataPool,
+                'cache' => $this->cache
             ]
         );
+        $refClass = new \ReflectionClass(Configurable::class);
+        $refProperty = $refClass->getProperty('metadataPool');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($this->_model, $this->metadataPool);
     }
 
     public function testHasWeightTrue()
@@ -210,7 +213,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'getConfigurableProductLinks'
             ])
             ->getMockForAbstractClass();
-        $this->entityMetadata->expects(static::once())
+        $this->entityMetadata->expects($this->exactly(2))
             ->method('getLinkField')
             ->willReturn('link');
         $dataMap = [
@@ -446,15 +449,25 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
 
         /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $product */
         $product = $this->getMockBuilder('Magento\Catalog\Model\Product')
-            ->setMethods(['getData', 'hasData', 'setData', 'getIdentities', 'getId'])
+            ->setMethods(['getData', 'hasData', 'setData', 'getIdentities', 'getId', 'getStoreId'])
             ->disableOriginalConstructor()
             ->getMock();
         $product->expects($this->once())->method('hasData')->with($configurableAttributes)->willReturn(false);
         $product->expects($this->once())->method('setData')->willReturnSelf();
-        $product->expects($this->once())->method('getData')->with($configurableAttributes)->willReturn($expectedData);
+        $product->expects($this->exactly(2))
+            ->method('getData')
+            ->willReturnMap(
+                [
+                    [$configurableAttributes, null, $expectedData],
+                    ['link', null, 1],
+                ]
+            );
         $product->expects($this->once())->method('getIdentities')->willReturn([1,2,3]);
 
-        
+        $this->entityMetadata->expects($this->once())
+            ->method('getLinkField')
+            ->willReturn('link');
+
         $attributeCollection = $this->getMockBuilder(
             'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection'
         )
@@ -507,7 +520,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $attributeMock = $this->getMockBuilder('\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute')
-            ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -518,7 +530,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $productMock->expects($this->once())
             ->method('getData')
             ->with('_cache_instance_configurable_attributes')->willReturn([$attributeMock]);
-        $attributeMock->expects($this->once())->method('getData')->with('options')->willReturn(5);
 
         $this->assertTrue($this->_model->hasOptions($productMock));
     }
