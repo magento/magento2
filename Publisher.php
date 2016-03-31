@@ -75,7 +75,10 @@ class Publisher implements PublisherInterface
         $envelope = $this->envelopeFactory->create(
             [
                 'body' => $data,
-                'properties' => ['message_id' => md5(uniqid($topicName))]
+                'properties' => [
+                    'delivery_mode' => 2,
+                    'message_id' => md5(uniqid($topicName))
+                ]
             ]
         );
         $connectionName = $this->messageQueueConfig->getConnectionByTopic($topicName);
