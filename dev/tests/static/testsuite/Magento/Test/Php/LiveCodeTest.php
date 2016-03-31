@@ -248,58 +248,6 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
         );
     }
 
-    public function testDeadCode()
-    {
-        if (!class_exists('SebastianBergmann\PHPDCD\Analyser')) {
-            $this->markTestSkipped('PHP Dead Code Detector is not available.');
-        }
-        $analyser = new \SebastianBergmann\PHPDCD\Analyser();
-        $declared = [];
-        $called = [];
-        $collectedFiles = Files::init()->getPhpFiles(
-            Files::INCLUDE_APP_CODE
-            | Files::INCLUDE_PUB_CODE
-            | Files::INCLUDE_LIBS
-            | Files::INCLUDE_TEMPLATES
-            | Files::INCLUDE_TESTS
-            | Files::AS_DATA_SET
-            | Files::INCLUDE_NON_CLASSES
-        );
-        foreach ($collectedFiles as $file) {
-            $file = array_pop($file);
-            $analyser->analyseFile($file);
-            foreach ($analyser->getFunctionDeclarations() as $function => $declaration) {
-                $declaration = $declaration; //avoid "unused local variable" error and non-effective array_keys call
-                if (strpos($function, '::') === false) {
-                    $method = $function;
-                } else {
-                    list($class, $method) = explode('::', $function);
-                }
-                $declared[$method] = $function;
-            }
-            foreach ($analyser->getFunctionCalls() as $function => $usages) {
-                $usages = $usages; //avoid "unused local variable" error and non-effective array_keys call
-                if (strpos($function, '::') === false) {
-                    $method = $function;
-                } else {
-                    list($class, $method) = explode('::', $function);
-                }
-                $called[$method] = 1;
-            }
-        }
-
-        foreach ($called as $method => $value) {
-            $value = $value; //avoid "unused local variable" error and non-effective array_keys call
-            unset($declared[$method]);
-        }
-        $declared = $this->filterUsedObserverMethods($declared);
-        $declared = $this->filterUsedPersistentObserverMethods($declared);
-        $declared = $this->filterUsedCrontabObserverMethods($declared);
-        if ($declared) {
-            $this->fail('Dead code detected:' . PHP_EOL . implode(PHP_EOL, $declared));
-        }
-    }
-
     /**
      * @param string[] $methods
      * @return string[]
