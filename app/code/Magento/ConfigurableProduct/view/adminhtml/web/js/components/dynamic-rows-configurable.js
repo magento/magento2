@@ -173,7 +173,7 @@ define([
                 ++dataInc;
             }, this);
 
-            this.getPagesData(data);
+            this.parsePagesData(data);
 
             // Render
             dataCount = data.length;

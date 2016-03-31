@@ -79,7 +79,7 @@ define([
         initElements: function (data) {
             var newData = this.getNewData(data);
 
-            this.getPagesData(data);
+            this.parsePagesData(data);
 
             if (newData.length) {
                 if (this.insertData().length) {
@@ -95,6 +95,7 @@ define([
          * update data provider dataScope
          *
          * @param {String|Number} index - record index
+         * @param {String|Number} recordId
          */
         deleteRecord: function (index, recordId) {
             var data = this.getElementData(this.insertData(), recordId);

@@ -60,7 +60,7 @@ define([
                 disabled: 'setDisabled',
                 childTemplate: 'initHeader',
                 recordTemplate: 'onUpdateRecordTemplate',
-                recordData: 'setDifferedFromDefault getPagesData',
+                recordData: 'setDifferedFromDefault parsePagesData',
                 currentPage: 'changePage',
                 elems: 'checkSpinner'
             },
@@ -69,7 +69,6 @@ define([
             },
             pages: 1,
             pageSize: 5,
-            totalRecords: 0,
             relatedData: [],
             currentPage: 1,
             cachedCurrentPage: 1,
@@ -153,6 +152,8 @@ define([
 
         /**
          * Init default record
+         *
+         * @returns Chainable.
          */
         initDefaultRecord: function () {
             if (this.defaultRecord && !this.recordData().length) {
@@ -244,7 +245,7 @@ define([
         },
 
         /**
-         * checkSpinner
+         * Showed or hided spinner
          *
          * @param {Array} elems
          */
@@ -257,19 +258,18 @@ define([
         },
 
         /**
-         * Set filtered data to relatedData and calc pages
+         * Filtered data to relatedData and calc pages
          *
          * @param {Array} data
          */
-        getPagesData: function (data) {
+        parsePagesData: function (data) {
             var pages;
 
             this.relatedData = _.filter(data, function (elem) {
                 return !this.deleteProperty || elem[this.deleteProperty] !== this.deleteValue;
             }, this);
 
-            this.totalRecords = this.relatedData.length;
-            pages = Math.ceil(this.totalRecords / this.pageSize) || 1;
+            pages = Math.ceil(this.relatedData.length / this.pageSize) || 1;
             this.pages(pages);
         },
 
@@ -292,7 +292,7 @@ define([
          * @param {Number|String} prop - additional property to element
          */
         processingAddChild: function (ctx, index, prop) {
-            if (this.totalRecords && this.totalRecords % this.pageSize === 0) {
+            if (this.relatedData.length && this.relatedData.length % this.pageSize === 0) {
                 this.clear();
                 this.pages(this.pages() + 1);
                 this.currentPage(this.pages());
@@ -324,13 +324,16 @@ define([
          * @param {Number} page - current page
          */
         changePage: function (page) {
-            if (parseInt(page, 10) > this.pages() || parseInt(page, 10) < 1 || page === this.cachedCurrentPage) {
-                this.currentPage(this.cachedCurrentPage);
+            if (parseInt(page, 10) > this.pages()) {
+                this.currentPage(this.pages());
+
+                return false;
+            } else if (parseInt(page, 10) < 1) {
+                this.currentPage(1);
 
                 return false;
             }
 
-            this.cachedCurrentPage = page;
             this.clear();
             this.initChildren();
         },
@@ -341,7 +344,7 @@ define([
          * @returns {Boolean} is page first or not
          */
         isFirst: function () {
-            return this.currentPage() <= 1;
+            return this.currentPage() === 1;
         },
 
         /**
@@ -350,7 +353,7 @@ define([
          * @returns {Boolean} is page last or not
          */
         isLast: function () {
-            return this.currentPage() >= this.pages();
+            return this.currentPage() === this.pages();
         },
 
         /**
@@ -511,13 +514,17 @@ define([
         _updateData: function (data) {
             var elems = utils.copy(this.elems()),
                 path,
-                dataArr;
+                index,
+                splicedArray;
 
-            dataArr = this.recordData.splice(this.startIndex, this.recordData().length - this.startIndex);
-            dataArr.splice(0, this.pageSize);
+            index = this.recordData().length - this.startIndex + this.pageSize;
+            splicedArray = this.recordData.splice(this.startIndex, index);
             elems = utils.copy(this.elems());
-            data.concat(dataArr).forEach(function (rec, idx) {
-                elems[idx] ? elems[idx].recordId = rec[this.identificationProperty] : false;
+            data.concat(splicedArray).forEach(function (rec, idx) {
+                if (elems[idx]) {
+                    elems[idx].recordId = rec[this.identificationProperty];
+                }
+
                 path = this.dataScope + '.' + this.index + '.' + (this.startIndex + idx);
                 this.source.set(path, rec);
             }, this);
@@ -664,8 +671,8 @@ define([
             var template = this.templates.record,
                 child;
 
-            index = !index && !_.isNumber(index) ? this.recordData().length : index;
-            prop = prop || prop === 0 ? prop : index;
+            index = index || _.isNumber(index) ? index : this.recordData().length;
+            prop = prop || _.isNumber(prop) ? prop : index;
 
             _.extend(this.templates.record, {
                 recordId: prop
