@@ -34,6 +34,7 @@ define([
             deleteProperty: 'delete',
             identificationProperty: 'record_id',
             deleteValue: true,
+            showSpinner: true,
             isDifferedFromDefault: false,
             fallbackResetTpl: 'ui/form/element/helper/fallback-reset-link',
             dndConfig: {
@@ -60,7 +61,8 @@ define([
                 childTemplate: 'initHeader',
                 recordTemplate: 'onUpdateRecordTemplate',
                 recordData: 'setDifferedFromDefault getPagesData',
-                currentPage: 'changePage'
+                currentPage: 'changePage',
+                elems: 'checkSpinner'
             },
             modules: {
                 dnd: '${ $.dndConfig.name }'
@@ -72,80 +74,6 @@ define([
             currentPage: 1,
             cachedCurrentPage: 1,
             startIndex: 0
-        },
-
-        getPagesData: function (data) {
-            var pages;
-
-            this.relatedData = _.filter(data, function (elem) {
-                return !this.deleteProperty || elem[this.deleteProperty] !== this.deleteValue
-            }, this);
-
-            this.totalRecords = this.relatedData.length;
-            pages = Math.ceil(this.totalRecords / this.pageSize) || 1;
-            this.pages(pages);
-        },
-
-        getChildItems: function () {
-            this.startIndex = (parseInt(this.currentPage(), 10) - 1) * this.pageSize;
-
-            return this.relatedData.slice(this.startIndex, this.startIndex + this.pageSize);
-        },
-
-        pageSizeChecker: function (data, index, id) {
-            this.addChild(data, index, id);
-        },
-
-        processingAddChild: function (ctx, index, prop) {
-            if (this.totalRecords && this.totalRecords % this.pageSize === 0) {
-                this.clear();
-                this.pages(this.pages() + 1);
-                this.currentPage(this.pages());
-            } else if (parseInt(this.currentPage(), 10) !== this.pages()) {
-                this.currentPage(this.pages());
-            }
-
-            this.addChild(ctx, index, prop);
-        },
-
-        processingDeleteRecord: function (index, recordId) {
-            this.deleteRecord(index, recordId);
-
-            if (this.currentPage() !== this.pages()) {
-
-            } else if (this.getChildItems().length <= 0) {
-                this.pages(this.pages()-1);
-                this.currentPage(this.pages());
-            }
-        },
-
-        changePage: function (page) {
-
-            if (parseInt(page, 10) > this.pages() || parseInt(page, 10) < 1 || page === this.cachedCurrentPage) {
-                this.currentPage(this.cachedCurrentPage);
-
-                return false;
-            }
-
-            this.cachedCurrentPage = page;
-            this.clear();
-            this.initChildren();
-        },
-
-        isFirst: function () {
-            return this.currentPage() <= 1;
-        },
-
-        isLast: function () {
-            return this.currentPage() >= this.pages();
-        },
-
-        nextPage: function () {
-            this.currentPage(this.currentPage() + 1);
-        },
-
-        previousPage: function () {
-            this.currentPage(this.currentPage() - 1);
         },
 
         /**
@@ -160,7 +88,8 @@ define([
                 .initChildren()
                 .initDnd()
                 .setColumnsHeaderListener()
-                .initDefaultRecord();
+                .initDefaultRecord()
+                .checkSpinner();
 
             return this;
         },
@@ -181,6 +110,7 @@ define([
                     'visible',
                     'disabled',
                     'labels',
+                    'showSpinner',
                     'isDifferedFromDefault'
                 ]);
 
@@ -208,7 +138,7 @@ define([
          */
         setColumnsHeaderListener: function () {
             if (this.columnsHeaderAfterRender) {
-                this.on('elems', this.renderColumnsHeader.bind(this));
+                this.on('recordData', this.renderColumnsHeader.bind(this));
             }
 
             return this;
@@ -218,7 +148,7 @@ define([
          * Render column header
          */
         renderColumnsHeader: function () {
-            this.elems().length ? this.columnsHeader(true) : this.columnsHeader(false);
+            this.recordData().length ? this.columnsHeader(true) : this.columnsHeader(false);
         },
 
         /**
@@ -228,6 +158,8 @@ define([
             if (this.defaultRecord && !this.recordData().length) {
                 this.addChild();
             }
+
+            return this;
         },
 
         /**
@@ -309,6 +241,130 @@ define([
 
             updatedCollection = this.updatePosition(sorted, position, elem.name);
             this.elems(updatedCollection);
+        },
+
+        /**
+         * checkSpinner
+         *
+         * @param {Array} elems
+         */
+        checkSpinner: function (elems) {
+            if (!this.recordData().length || elems && elems.length === this.getChildItems().length) {
+                this.showSpinner(false);
+            } else {
+                this.showSpinner(true);
+            }
+        },
+
+        /**
+         * Set filtered data to relatedData and calc pages
+         *
+         * @param {Array} data
+         */
+        getPagesData: function (data) {
+            var pages;
+
+            this.relatedData = _.filter(data, function (elem) {
+                return !this.deleteProperty || elem[this.deleteProperty] !== this.deleteValue;
+            }, this);
+
+            this.totalRecords = this.relatedData.length;
+            pages = Math.ceil(this.totalRecords / this.pageSize) || 1;
+            this.pages(pages);
+        },
+
+        /**
+         * Get items to rendering on current page
+         *
+         * @returns {Array} data
+         */
+        getChildItems: function () {
+            this.startIndex = (parseInt(this.currentPage(), 10) - 1) * this.pageSize;
+
+            return this.relatedData.slice(this.startIndex, this.startIndex + this.pageSize);
+        },
+
+        /**
+         * Processing pages before addChild
+         *
+         * @param {Object} ctx - element context
+         * @param {Number|String} index - element index
+         * @param {Number|String} prop - additional property to element
+         */
+        processingAddChild: function (ctx, index, prop) {
+            if (this.totalRecords && this.totalRecords % this.pageSize === 0) {
+                this.clear();
+                this.pages(this.pages() + 1);
+                this.currentPage(this.pages());
+            } else if (parseInt(this.currentPage(), 10) !== this.pages()) {
+                this.currentPage(this.pages());
+            }
+
+            this.addChild(ctx, index, prop);
+        },
+
+        /**
+         * Processing pages before deleteRecord
+         *
+         * @param {Number|String} index - element index
+         * @param {Number|String} recordId
+         */
+        processingDeleteRecord: function (index, recordId) {
+            this.deleteRecord(index, recordId);
+
+            if (this.getChildItems().length <= 0) {
+                this.pages(this.pages() - 1);
+                this.currentPage(this.pages());
+            }
+        },
+
+        /**
+         * Change page
+         *
+         * @param {Number} page - current page
+         */
+        changePage: function (page) {
+            if (parseInt(page, 10) > this.pages() || parseInt(page, 10) < 1 || page === this.cachedCurrentPage) {
+                this.currentPage(this.cachedCurrentPage);
+
+                return false;
+            }
+
+            this.cachedCurrentPage = page;
+            this.clear();
+            this.initChildren();
+        },
+
+        /**
+         * Check page
+         *
+         * @returns {Boolean} is page first or not
+         */
+        isFirst: function () {
+            return this.currentPage() <= 1;
+        },
+
+        /**
+         * Check page
+         *
+         * @returns {Boolean} is page last or not
+         */
+        isLast: function () {
+            return this.currentPage() >= this.pages();
+        },
+
+        /**
+         * Change page to next
+         */
+        nextPage: function () {
+            this.currentPage(this.currentPage() + 1);
+        },
+
+        /**
+         * Change page to previos
+         */
+        previousPage: function () {
+            this.currentPage(this.currentPage() - 1);
         },
 
         /**
@@ -397,7 +453,8 @@ define([
                 this.recordData.valueHasMutated();
             } else {
                 this.update = true;
-                if (parseInt(this.currentPage()) === this.pages()) {
+
+                if (parseInt(this.currentPage(), 10) === this.pages()) {
                     lastRecord =
                         _.findWhere(this.elems(), {
                             index: this.startIndex + this.getChildItems().length - 1
@@ -415,7 +472,7 @@ define([
                 this.update = false;
             }
 
-            if (this.pages() < parseInt(this.currentPage())) {
+            if (this.pages() < parseInt(this.currentPage(), 10)) {
                 this.currentPage(this.pages());
             }
 
@@ -537,10 +594,13 @@ define([
 
         /**
          * Initialize children
+         *
+         * @returns {Object} Chainable.
          */
         initChildren: function () {
+            this.showSpinner(true);
             this.getChildItems().each(function (data, index) {
-                this.pageSizeChecker(data, this.startIndex + index)
+                this.addChild(data, this.startIndex + index);
             }, this);
 
             return this;
