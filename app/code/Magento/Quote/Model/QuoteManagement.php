@@ -563,6 +563,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
     /**
      * @return QuoteIdMaskFactory
+     * @deprecated
      */
     private function getQuoteIdMaskFactory()
     {
