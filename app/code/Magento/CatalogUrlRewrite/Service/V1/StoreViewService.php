@@ -33,16 +33,13 @@ class StoreViewService
     /**
      * @param Config $eavConfig
      * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param MetadataPool $metadataPool
      */
     public function __construct(
         Config $eavConfig,
-        ResourceConnection $resource,
-        MetadataPool $metadataPool
+        ResourceConnection $resource
     ) {
         $this->eavConfig = $eavConfig;
         $this->connection = $resource->getConnection();
-        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -91,7 +88,7 @@ class StoreViewService
         }
         $linkFieldName = $attribute->getEntity()->getLinkField();
         if (!$linkFieldName) {
-            $linkFieldName = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+            $linkFieldName = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         }
         $select = $this->connection->select()
             ->from(['e' => $attribute->getEntity()->getEntityTable()], [])
@@ -103,5 +100,19 @@ class StoreViewService
             ->where('e.entity_id = ?', $entityId);
 
         return in_array($storeId, $this->connection->fetchCol($select));
+    }
+
+    /**
+     * Get product metadata pool
+     *
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (!$this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Model\Entity\MetadataPool::class);
+        }
+        return $this->metadataPool;
     }
 }

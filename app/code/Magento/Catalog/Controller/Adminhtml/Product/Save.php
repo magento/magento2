@@ -50,9 +50,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
      * @param Initialization\Helper $initializationHelper
      * @param \Magento\Catalog\Model\Product\Copier $productCopier
      * @param \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager
-     * @param \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
-     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -60,16 +58,12 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
         Initialization\Helper $initializationHelper,
         \Magento\Catalog\Model\Product\Copier $productCopier,
         \Magento\Catalog\Model\Product\TypeTransitionManager $productTypeManager,
-        \Magento\Catalog\Api\CategoryLinkManagementInterface $categoryLinkManagement,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
-        StoreManagerInterface $storeManager
+        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
     ) {
         $this->initializationHelper = $initializationHelper;
         $this->productCopier = $productCopier;
         $this->productTypeManager = $productTypeManager;
-        $this->categoryLinkManagement = $categoryLinkManagement;
         $this->productRepository = $productRepository;
-        $this->storeManager = $storeManager;
         parent::__construct($context, $productBuilder);
     }
 
@@ -83,8 +77,8 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
     public function execute()
     {
         $storeId = $this->getRequest()->getParam('store', 0);
-        $store = $this->storeManager->getStore($storeId);
-        $this->storeManager->setCurrentStore($store->getCode());
+        $store = $this->getStoreManager()->getStore($storeId);
+        $this->getStoreManager()->setCurrentStore($store->getCode());
         $redirectBack = $this->getRequest()->getParam('back', false);
         $productId = $this->getRequest()->getParam('id');
         $resultRedirect = $this->resultRedirectFactory->create();
@@ -105,7 +99,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 $originalSku = $product->getSku();
                 $product->save();
                 $this->handleImageRemoveError($data, $product->getId());
-                $this->categoryLinkManagement->assignProductToCategories(
+                $this->getCategoryLinkManagement()->assignProductToCategories(
                     $product->getSku(),
                     $product->getCategoryIds()
                 );
@@ -227,5 +221,29 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Product
                 }
             }
         }
+    }
+
+    /**
+     * @return \Magento\Catalog\Api\CategoryLinkManagementInterface
+     */
+    private function getCategoryLinkManagement()
+    {
+        if (null === $this->categoryLinkManagement) {
+            $this->categoryLinkManagement = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Api\CategoryLinkManagementInterface');
+        }
+        return $this->categoryLinkManagement;
+    }
+
+    /**
+     * @return StoreManagerInterface
+     */
+    private function getStoreManager()
+    {
+        if (null === $this->storeManager) {
+            $this->storeManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Store\Model\StoreManagerInterface');
+        }
+        return $this->storeManager;
     }
 }
