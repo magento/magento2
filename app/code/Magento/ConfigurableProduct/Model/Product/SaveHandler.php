@@ -6,7 +6,6 @@
 namespace Magento\ConfigurableProduct\Model\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\ConfigurableProduct\Api\OptionRepositoryInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable as ResourceModelConfigurable;
@@ -23,11 +22,6 @@ class SaveHandler implements ExtensionInterface
     private $optionRepository;
 
     /**
-     * @var ProductAttributeRepositoryInterface
-     */
-    private $productAttributeRepository;
-
-    /**
      * @var ResourceModelConfigurable
      */
     private $resourceModel;
@@ -37,16 +31,13 @@ class SaveHandler implements ExtensionInterface
      *
      * @param ResourceModelConfigurable $resourceModel
      * @param OptionRepositoryInterface $optionRepository
-     * @param ProductAttributeRepositoryInterface $productAttributeRepository
      */
     public function __construct(
         ResourceModelConfigurable $resourceModel,
-        OptionRepositoryInterface $optionRepository,
-        ProductAttributeRepositoryInterface $productAttributeRepository
+        OptionRepositoryInterface $optionRepository
     ) {
         $this->resourceModel = $resourceModel;
         $this->optionRepository = $optionRepository;
-        $this->productAttributeRepository = $productAttributeRepository;
     }
 
     /**
@@ -67,16 +58,16 @@ class SaveHandler implements ExtensionInterface
             return $entity;
         }
 
-        $ids = [];
+        if ($extensionAttributes->getConfigurableProductOptions() !== null) {
+            $this->deleteConfigurableProductAttributes($entity);
+        }
+
         $configurableOptions = (array) $extensionAttributes->getConfigurableProductOptions();
         if (!empty($configurableOptions)) {
-            $ids = $this->saveConfigurableProductAttributes($entity, $configurableOptions);
+            $this->saveConfigurableProductAttributes($entity, $configurableOptions);
         }
 
         $configurableLinks = (array) $extensionAttributes->getConfigurableProductLinks();
-        if (empty($configurableLinks) || !empty($ids)) {
-            $this->deleteConfigurableProductAttributes($entity, $ids);
-        }
         $this->resourceModel->saveProducts($entity, $configurableLinks);
 
         return $entity;
@@ -94,12 +85,7 @@ class SaveHandler implements ExtensionInterface
         $ids = [];
         /** @var \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute $attribute */
         foreach ($attributes as $attribute) {
-            $eavAttribute = $this->productAttributeRepository->get($attribute->getAttributeId());
-
-            $data = $attribute->getData();
-            $attribute->loadByProductAndAttribute($product, $eavAttribute);
-            $attribute->setData(array_replace_recursive($attribute->getData(), $data));
-
+            $attribute->setId(null);
             $ids[] = $this->optionRepository->save($product->getSku(), $attribute);
         }
 
@@ -110,16 +96,13 @@ class SaveHandler implements ExtensionInterface
      * Remove product attributes
      *
      * @param ProductInterface $product
-     * @param array $attributesIds
      * @return void
      */
-    private function deleteConfigurableProductAttributes(ProductInterface $product, array $attributesIds)
+    private function deleteConfigurableProductAttributes(ProductInterface $product)
     {
         $list = $this->optionRepository->getList($product->getSku());
         foreach ($list as $item) {
-            if (!in_array($item->getId(), $attributesIds)) {
-                $this->optionRepository->deleteById($product->getSku(), $item->getId());
-            }
+            $this->optionRepository->deleteById($product->getSku(), $item->getId());
         }
     }
 }

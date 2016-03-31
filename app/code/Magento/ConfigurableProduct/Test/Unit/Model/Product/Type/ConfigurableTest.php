@@ -151,7 +151,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->getMockForAbstractClass();
 
         $this->_model = $this->_objectHelper->getObject(
-            'Magento\ConfigurableProduct\Model\Product\Type\Configurable',
+            Configurable::class,
             [
                 'typeConfigurableFactory' => $this->_typeConfigurableFactory,
                 'configurableAttributeFactory' => $this->_configurableAttributeFactoryMock,
@@ -164,10 +164,13 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'logger' => $logger,
                 'productRepository' => $this->productRepository,
                 'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
-                'cache' => $this->cache,
-                'metadataPool' => $this->metadataPool,
+                'cache' => $this->cache
             ]
         );
+        $refClass = new \ReflectionClass(Configurable::class);
+        $refProperty = $refClass->getProperty('metadataPool');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($this->_model, $this->metadataPool);
     }
 
     public function testHasWeightTrue()
@@ -210,7 +213,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'getConfigurableProductLinks'
             ])
             ->getMockForAbstractClass();
-        $this->entityMetadata->expects(static::once())
+        $this->entityMetadata->expects($this->exactly(2))
             ->method('getLinkField')
             ->willReturn('link');
         $dataMap = [
@@ -451,10 +454,20 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $product->expects($this->once())->method('hasData')->with($configurableAttributes)->willReturn(false);
         $product->expects($this->once())->method('setData')->willReturnSelf();
-        $product->expects($this->once())->method('getData')->with($configurableAttributes)->willReturn($expectedData);
+        $product->expects($this->exactly(2))
+            ->method('getData')
+            ->willReturnMap(
+                [
+                    [$configurableAttributes, null, $expectedData],
+                    ['link', null, 1],
+                ]
+            );
         $product->expects($this->once())->method('getIdentities')->willReturn([1,2,3]);
 
-        
+        $this->entityMetadata->expects($this->once())
+            ->method('getLinkField')
+            ->willReturn('link');
+
         $attributeCollection = $this->getMockBuilder(
             'Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection'
         )

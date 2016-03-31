@@ -65,7 +65,7 @@ class ReadHandler implements ExtensionInterface
                 }
             }
 
-            $value['images'][] = $mediaEntry;
+            $value['images'][$mediaEntry['value_id']] = $mediaEntry;
         }
 
         $entity->setData(

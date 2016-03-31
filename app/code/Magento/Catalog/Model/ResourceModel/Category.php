@@ -11,7 +11,7 @@
  */
 namespace Magento\Catalog\Model\ResourceModel;
 
-use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\Model\EntityManager;
 use Magento\Catalog\Api\Data\CategoryInterface;
 
 /**
@@ -86,8 +86,6 @@ class Category extends AbstractResource
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param Category\TreeFactory $categoryTreeFactory
      * @param Category\CollectionFactory $categoryCollectionFactory
-     * @param EntityManager $entityManager
-     * @param Category\AggregateCount $aggregateCount
      * @param array $data
      */
     public function __construct(
@@ -97,8 +95,6 @@ class Category extends AbstractResource
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Catalog\Model\ResourceModel\Category\TreeFactory $categoryTreeFactory,
         \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
-        Category\AggregateCount $aggregateCount,
-        EntityManager $entityManager,
         $data = []
     ) {
         parent::__construct(
@@ -110,9 +106,7 @@ class Category extends AbstractResource
         $this->_categoryTreeFactory = $categoryTreeFactory;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_eventManager = $eventManager;
-        $this->entityManager = $entityManager;
         $this->connectionName  = 'catalog';
-        $this->aggregateCount = $aggregateCount;
     }
 
     /**
@@ -191,7 +185,7 @@ class Category extends AbstractResource
     protected function _beforeDelete(\Magento\Framework\DataObject $object)
     {
         parent::_beforeDelete($object);
-        $this->aggregateCount->processDelete($object);
+        $this->getAggregateCount()->processDelete($object);
         $this->deleteChildren($object);
     }
 
@@ -999,8 +993,8 @@ class Category extends AbstractResource
     {
         $this->_attributes = [];
         $this->loadAttributesMetadata($attributes);
-        $object = $this->entityManager->load($object, $entityId, CategoryInterface::class);
-        if (!$this->entityManager->has($object, CategoryInterface::class)) {
+        $object = $this->getEntityManager()->load(CategoryInterface::class, $object, $entityId);
+        if (!$this->getEntityManager()->has(\Magento\Catalog\Api\Data\CategoryInterface::class, $entityId)) {
             $object->isObjectNew(true);
         }
         return $this;
@@ -1011,7 +1005,7 @@ class Category extends AbstractResource
      */
     public function delete($object)
     {
-        $this->entityManager->delete($object, CategoryInterface::class);
+        $this->getEntityManager()->delete(CategoryInterface::class, $object);
         $this->_eventManager->dispatch(
             'catalog_category_delete_after_done',
             ['product' => $object]
@@ -1028,7 +1022,31 @@ class Category extends AbstractResource
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
-        $this->entityManager->save($object, CategoryInterface::class);
+        $this->getEntityManager()->save(CategoryInterface::class, $object);
         return $this;
+    }
+
+    /**
+     * @return EntityManager
+     */
+    private function getEntityManager()
+    {
+        if (null === $this->entityManager) {
+            $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Model\EntityManager');
+        }
+        return $this->entityManager;
+    }
+
+    /**
+     * @return Category\AggregateCount
+     */
+    private function getAggregateCount()
+    {
+        if (null === $this->aggregateCount) {
+            $this->aggregateCount = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Model\ResourceModel\Category\AggregateCount');
+        }
+        return $this->aggregateCount;
     }
 }

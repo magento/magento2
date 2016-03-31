@@ -83,7 +83,6 @@ class Product extends AbstractResource
      * @param \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory
      * @param \Magento\Eav\Model\Entity\TypeFactory $typeFactory
      * @param \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes
-     * @param \Magento\Framework\Model\EntityManager $entityManager
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -98,7 +97,6 @@ class Product extends AbstractResource
         \Magento\Eav\Model\Entity\Attribute\SetFactory $setFactory,
         \Magento\Eav\Model\Entity\TypeFactory $typeFactory,
         \Magento\Catalog\Model\Product\Attribute\DefaultAttributes $defaultAttributes,
-        \Magento\Framework\EntityManager\EntityManager $entityManager,
         $data = []
     ) {
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
@@ -106,7 +104,6 @@ class Product extends AbstractResource
         $this->eventManager = $eventManager;
         $this->setFactory = $setFactory;
         $this->typeFactory = $typeFactory;
-        $this->entityManager = $entityManager;
         $this->defaultAttributes = $defaultAttributes;
         parent::__construct(
             $context,
@@ -302,7 +299,7 @@ class Product extends AbstractResource
      */
     public function delete($object)
     {
-        $this->entityManager->delete($object, \Magento\Catalog\Api\Data\ProductInterface::class);
+        $this->getEntityManager()->delete(\Magento\Catalog\Api\Data\ProductInterface::class, $object);
         $this->eventManager->dispatch(
             'catalog_product_delete_after_done',
             ['product' => $object]
@@ -654,9 +651,7 @@ class Product extends AbstractResource
     public function load($object, $entityId, $attributes = [])
     {
         $this->loadAttributesMetadata($attributes);
-        $this->entityManager->load(
-            $object, $entityId, \Magento\Catalog\Api\Data\ProductInterface::class
-        );
+        $this->getEntityManager()->load(\Magento\Catalog\Api\Data\ProductInterface::class, $object, $entityId);
         return $this;
     }
 
@@ -696,13 +691,19 @@ class Product extends AbstractResource
      */
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
-        $this->entityManager->save(
-            $object,
-            ProductInterface::class,
-            [
-                'store_id' => $this->_storeManager->getStore()->getId()
-            ]
-        );
+        $this->getEntityManager()->save(ProductInterface::class, $object);
         return $this;
+    }
+
+    /**
+     * @return \Magento\Framework\Model\EntityManager
+     */
+    private function getEntityManager()
+    {
+        if (null === $this->entityManager) {
+            $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Model\EntityManager');
+        }
+        return $this->entityManager;
     }
 }
