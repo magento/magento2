@@ -123,15 +123,16 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                 /** @var \Magento\Framework\App\State $adminAppState */
                 $adminAppState = $objectManager->get('Magento\Framework\App\State');
                 $adminAppState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMIN);
-                $objectManager->create(
-                    'Magento\Backend\Model\Auth\Session',
+                /** @var \Magento\Backend\Model\Auth\Session $adminSession */
+                $adminSession = $objectManager->create(
+                    \Magento\Backend\Model\Auth\Session::class,
                     [
-                        'sessionConfig' => $objectManager->get('Magento\Backend\Model\Session\AdminConfig'),
+                        'sessionConfig' => $objectManager->get(\Magento\Backend\Model\Session\AdminConfig::class),
                         'appState' => $adminAppState
                     ]
                 );
-
-                if (!$objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
+                if (!$objectManager->get(\Magento\Backend\Model\Auth::class)->isLoggedIn()) {
+                    $adminSession->expireSessionCookie();
                     $response = $event->getResponse();
                     $response->getHeaders()->addHeaderLine('Location', 'index.php/session/unlogin');
                     $response->setStatusCode(302);
