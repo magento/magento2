@@ -3,16 +3,17 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Plugin\Block;
+namespace Magento\Catalog\Observer;
 
 use Magento\Catalog\Model\Category;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Tree\Node;
+use Magento\Framework\Event\ObserverInterface;
 
 /**
- * Plugin for top menu block
+ * Observer that add Categories Tree to Topmenu
  */
-class TopMenu
+class AddCatalogToTopmenuItemsObserver implements ObserverInterface
 {
     /**
      * Catalog category
@@ -37,11 +38,11 @@ class TopMenu
     private $layerResolver;
 
     /**
-     * Initialize dependencies.
-     *
      * @param \Magento\Catalog\Helper\Category $catalogCategory
+     * @param \Magento\Catalog\Model\Indexer\Category\Flat\State $categoryFlatState
      * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      */
     public function __construct(
@@ -57,15 +58,16 @@ class TopMenu
     }
 
     /**
-     * Set appropriate Cache-Control headers
-     * We have to set public headers in order to tell Varnish and Builtin app that page should be cached
+     * Checking whether the using static urls in WYSIWYG allowed event
      *
-     * @param \Magento\Theme\Block\Html\Topmenu $subject
+     * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function beforeToHtml(\Magento\Theme\Block\Html\Topmenu $subject)
+    public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        $subject->addIdentity(Category::CACHE_TAG);
+        $block = $observer->getEvent()->getBlock();
+        $menuRootNode = $observer->getEvent()->getMenu();
+        $block->addIdentity(Category::CACHE_TAG);
 
         $rootId = $this->storeManager->getStore()->getRootCategoryId();
         $storeId = $this->storeManager->getStore()->getId();
@@ -75,7 +77,7 @@ class TopMenu
 
         $currentCategory = $this->getCurrentCategory();
 
-        $mapping = [$rootId => $subject->getMenu()];  // use nodes stack to avoid recursion
+        $mapping = [$rootId => $menuRootNode];  // use nodes stack to avoid recursion
         foreach ($collection as $category) {
             if (!isset($mapping[$category->getParentId()])) {
                 continue;
@@ -93,7 +95,7 @@ class TopMenu
 
             $mapping[$category->getId()] = $categoryNode; //add node in stack
 
-            $subject->addIdentity(Category::CACHE_TAG . '_' . $category->getId());
+            $block->addIdentity(Category::CACHE_TAG . '_' . $category->getId());
         }
     }
 
