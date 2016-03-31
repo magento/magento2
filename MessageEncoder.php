@@ -78,10 +78,6 @@ class MessageEncoder
     public function encode($topic, $message, $requestType = true)
     {
         $convertedMessage = $this->convertMessage($topic, $message, self::DIRECTION_ENCODE, $requestType);
-        $data = [
-            'data' => $convertedMessage,
-            'message_id' => md5(uniqid($topic))
-        ];
         return $this->jsonEncoder->encode($convertedMessage);
     }
 
