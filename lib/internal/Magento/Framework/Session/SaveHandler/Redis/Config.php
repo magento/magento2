@@ -109,6 +109,11 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     const XML_PATH_ADMIN_SESSION_LIFETIME = 'admin/security/session_lifetime';
 
     /**
+     * Max Admin Session Lifetime
+     */
+    const ADMIN_SESSION_MAX_LIFETIME = 31536000; //One year
+
+    /**
      * Deployment config
      *
      * @var DeploymentConfig $deploymentConfig
@@ -228,7 +233,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
      */
     public function getMaxLifetime()
     {
-        return max($this->deploymentConfig->get(self::PARAM_MAX_LIFETIME), $this->getLifetime());
+        return self::ADMIN_SESSION_MAX_LIFETIME;
     }
 
     /**
