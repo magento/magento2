@@ -5,6 +5,8 @@
  */
 namespace Magento\Cms\Model\ResourceModel;
 
+use Magento\Store\Model\Store;
+
 /**
  * Abstract collection of CMS pages and blocks
  */
@@ -73,7 +75,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
                     if (!isset($storesData[$linkedId])) {
                         continue;
                     }
-                    $storeIdKey = array_search(0, $storesData[$linkedId], true);
+                    $storeIdKey = array_search(Store::DEFAULT_STORE_ID, $storesData[$linkedId], true);
                     if ($storeIdKey !== false) {
                         $stores = $this->storeManager->getStores(false, true);
                         $storeId = current($stores)->getId();
@@ -109,7 +111,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
     /**
      * Add filter by store
      *
-     * @param int|array|\Magento\Store\Model\Store $store
+     * @param int|array|Store $store
      * @param bool $withAdmin
      * @return $this
      */
@@ -118,13 +120,13 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
     /**
      * Perform adding filter by store
      *
-     * @param int|array|\Magento\Store\Model\Store $store
+     * @param int|array|Store $store
      * @param bool $withAdmin
      * @return void
      */
     protected function performAddStoreFilter($store, $withAdmin = true)
     {
-        if ($store instanceof \Magento\Store\Model\Store) {
+        if ($store instanceof Store) {
             $store = [$store->getId()];
         }
 
@@ -133,7 +135,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
         }
 
         if ($withAdmin) {
-            $store[] = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+            $store[] = Store::DEFAULT_STORE_ID;
         }
 
         $this->addFilter('store', ['in' => $store], 'public');
