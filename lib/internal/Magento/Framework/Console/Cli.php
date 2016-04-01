@@ -64,6 +64,7 @@ class Cli extends SymfonyApplication
     /**
      * @param string $name  application name
      * @param string $version application version
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
     {
@@ -76,9 +77,7 @@ class Cli extends SymfonyApplication
                 '<error>Command line user does not have read and write permissions on var/generation directory.  Please'
                 . ' address this issue before using Magento command line.</error>'
             );
-            // @codingStandardsIgnoreStart
             exit(0);
-            // @codingStandardsIgnoreEnd
         }
         /**
          * Temporary workaround until the compiler is able to clear the generation directory
