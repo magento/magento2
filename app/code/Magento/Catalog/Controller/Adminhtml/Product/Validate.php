@@ -85,7 +85,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
         $response->setError(false);
 
         try {
-            $productData = $this->getRequest()->getPost('product');
+            $productData = $this->getRequest()->getPost('product', []);
 
             if ($productData && !isset($productData['stock_data']['use_config_manage_stock'])) {
                 $productData['stock_data']['use_config_manage_stock'] = 0;
