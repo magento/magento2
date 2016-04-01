@@ -56,6 +56,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
     /**
      * @param bool $hasParentTheme
      * @dataProvider dataProviderBeforeDispatch
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function testBeforeDispatch(
         $hasParentTheme
