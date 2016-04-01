@@ -142,7 +142,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
                 $this->_redirectSameToken();
                 break;
             case ApiProcessableException::API_ADDRESS_MATCH_FAIL:
-                $this->_redirectToOrderReviewPageAndShowError($exception->getUserMessage());
+                $this->redirectToOrderReviewPageAndShowError($exception->getUserMessage());
                 break;
             case ApiProcessableException::API_UNABLE_TRANSACTION_COMPLETE:
                 if ($this->_config->getPaymentAction() == \Magento\Payment\Model\Method\AbstractMethod::ACTION_ORDER) {
@@ -191,7 +191,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
      * @param string $errorMessage
      * @return void
      */
-    protected function _redirectToOrderReviewPageAndShowError($errorMessage)
+    private function redirectToOrderReviewPageAndShowError($errorMessage)
     {
         $this->messageManager->addErrorMessage($errorMessage);
         $this->_redirect('*/*/review');
