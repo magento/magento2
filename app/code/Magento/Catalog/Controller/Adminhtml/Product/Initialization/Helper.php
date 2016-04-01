@@ -69,6 +69,11 @@ class Helper
     private $linkResolver;
 
     /**
+     * @var array
+     */
+    protected $productData = [];
+
+    /**
      * Helper constructor.
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -94,6 +99,21 @@ class Helper
     }
 
     /**
+     * Initialize product from data
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @param array $productData
+     * @return \Magento\Catalog\Model\Product
+     */
+    public function initializeFromData(\Magento\Catalog\Model\Product $product, array $productData)
+    {
+        $this->productData = $productData;
+        $product = $this->initialize($product);
+        $this->productData = [];
+        return $product;
+    }
+    
+    /**
      * Initialize product before saving
      *
      * @param \Magento\Catalog\Model\Product $product
@@ -104,7 +124,7 @@ class Helper
      */
     public function initialize(\Magento\Catalog\Model\Product $product)
     {
-        $productData = (array)$this->request->getPost('product', []);
+        $productData = $this->productData ?: (array)$this->request->getPost('product', []);
         unset($productData['custom_attributes']);
         unset($productData['extension_attributes']);
 
@@ -150,6 +170,12 @@ class Helper
         $inputFilter = new \Zend_Filter_Input($dateFieldFilters, [], $productData);
         $productData = $inputFilter->getUnescaped();
 
+        if (isset($productData['options'])) {
+            $productOptions = $productData['options'];
+            unset($productData['options']);
+        } else {
+            $productOptions = [];
+        }
         $product->addData($productData);
 
         if ($wasLockedMedia) {
@@ -176,15 +202,20 @@ class Helper
         /**
          * Initialize product options
          */
-        if (isset($productData['options']) && !$product->getOptionsReadonly()) {
+        if ($productOptions && !$product->getOptionsReadonly()) {
             // mark custom options that should to fall back to default value
             $options = $this->mergeProductOptions(
-                $productData['options'],
+                $productOptions,
                 $this->request->getPost('options_use_default')
             );
             $customOptions = [];
             foreach ($options as $customOptionData) {
                 if (empty($customOptionData['is_delete'])) {
+                    if (isset($customOptionData['values'])) {
+                        $customOptionData['values'] = array_filter($customOptionData['values'], function ($valueData) {
+                            return empty($valueData['is_delete']);
+                        });
+                    }
                     $customOption = $this->getCustomOptionFactory()->create(['data' => $customOptionData]);
                     $customOption->setProductSku($product->getSku());
                     $customOption->setOptionId(null);
