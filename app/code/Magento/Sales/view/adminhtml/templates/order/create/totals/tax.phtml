@@ -11,11 +11,11 @@ $taxAmount = $block->getTotal()->getValue();
 <?php if (($taxAmount == 0 && $this->helper('Magento\Tax\Helper\Data')->displayZeroTax()) || ($taxAmount > 0)): ?>
 <?php global $taxIter; $taxIter++; ?>
 <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
-<?php $isTop = 1; ?>
-            <?php foreach ($block->getTotal()->getFullInfo() as $info): ?>
+        <?php $isTop = 1; ?>
+        <?php foreach ($block->getTotal()->getFullInfo() as $info): ?>
                 <?php if (isset($info['hidden']) && $info['hidden']) {
-    continue;
-} ?>
+                    continue;
+                } ?>
                 <?php $percent = $info['percent']; ?>
                 <?php $amount = $info['amount']; ?>
                 <?php $rates = $info['rates']; ?>
@@ -39,7 +39,7 @@ $taxAmount = $block->getTotal()->getValue();
                 <?php $isFirst = 0; ?>
                 <?php $isTop = 0; ?>
                 <?php endforeach; ?>
-            <?php endforeach; ?>
+        <?php endforeach; ?>
 <?php endif;?>
 <?php $class = "{$block->getTotal()->getCode()} " . ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() ? 'summary-total' : ''); ?>
 <tr<?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?> onclick="expandDetails(this, '.summary-details-<?php /* @escapeNotVerified */ echo $taxIter;?>')"<?php endif; ?> class="<?php /* @escapeNotVerified */ echo $class;?> row-totals">
