@@ -269,13 +269,13 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
         $quote->setCustomer($customer);
         $quote->setCustomerIsGuest(0);
-        $this->quoteRepository->save($quote);
         $quoteIdMaskFactory = $this->getQuoteIdMaskFactory();
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = $quoteIdMaskFactory->create()->load($cartId, 'quote_id');
         if ($quoteIdMask->getId()) {
             $quoteIdMask->delete();
         }
+        $this->quoteRepository->save($quote);
         return true;
 
     }
@@ -563,6 +563,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
     /**
      * @return QuoteIdMaskFactory
+     * @deprecated
      */
     private function getQuoteIdMaskFactory()
     {
