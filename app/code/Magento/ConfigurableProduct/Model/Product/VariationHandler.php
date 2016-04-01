@@ -166,7 +166,8 @@ class VariationHandler
             $product->setData($attribute->getAttributeCode(), $parentProduct->getData($attribute->getAttributeCode()));
         }
 
-        $postData['stock_data'] = $parentProduct->getStockData();
+        $keysFilter = ['item_id', 'product_id', 'stock_id', 'type_id', 'website_id'];
+        $postData['stock_data'] = array_diff_key((array)$parentProduct->getStockData(), array_flip($keysFilter));
         $postData['stock_data']['manage_stock'] = $postData['quantity_and_stock_status']['qty'] === '' ? 0 : 1;
         if (!isset($postData['stock_data']['is_in_stock'])) {
             $stockStatus = $parentProduct->getQuantityAndStockStatus();

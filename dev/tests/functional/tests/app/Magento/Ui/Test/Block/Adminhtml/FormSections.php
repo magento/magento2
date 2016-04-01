@@ -45,6 +45,13 @@ class FormSections extends AbstractFormContainers
     protected $opened = '._show';
 
     /**
+     * Locator for error messages.
+     *
+     * @var string
+     */
+    protected $errorMessages = '[data-ui-id="messages-message-error"]';
+
+    /**
      * Get Section class.
      *
      * @param string $sectionName
@@ -120,24 +127,35 @@ class FormSections extends AbstractFormContainers
     }
 
     /**
-     * Get Require Notice Attributes.
+     * Get require notice fields.
      *
      * @param InjectableFixture $product
      * @return array
      */
-    public function getRequireNoticeAttributes(InjectableFixture $product)
+    public function getRequireNoticeFields(InjectableFixture $product)
     {
         $data = [];
-        $tabs = $this->getFixtureFieldsByContainers($product);
-        foreach (array_keys($tabs) as $tabName) {
-            $tab = $this->getSection($tabName);
-            $this->openSection($tabName);
-            $errors = $tab->getJsErrors();
+        $sections = $this->getFixtureFieldsByContainers($product);
+        foreach (array_keys($sections) as $sectionName) {
+            $section = $this->getSection($sectionName);
+            $this->openSection($sectionName);
+            $errors = $section->getValidationErrors();
             if (!empty($errors)) {
-                $data[$tabName] = $errors;
+                $data[$sectionName] = $errors;
             }
         }
 
         return $data;
+    }
+
+    /**
+     * Check if section is visible.
+     *
+     * @param string $sectionName
+     * @return bool
+     */
+    public function isSectionVisible($sectionName)
+    {
+        return ($this->isCollapsible($sectionName) && !$this->isCollapsed($sectionName));
     }
 }
