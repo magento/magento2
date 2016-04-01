@@ -126,20 +126,44 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
         );
     }
 
-    public function testAttributeSetIsObtainedFromPostByDefault()
+    public function _testAttributeSetIsObtainedFromPostByDefault()
     {
         $this->request->expects($this->any())->method('getParam')->willReturnMap([['set', null, 4]]);
-        $this->request->expects($this->any())->method('getPost')->willReturnMap([['set', null, 9]]);
+        $this->request->expects($this->any())->method('getPost')->willReturnMap([
+            ['set', null, 9],
+            ['product', [], []],
+        ]);
         $this->product->expects($this->once())->method('setAttributeSetId')->with(9);
+        $this->initializationHelper->expects($this->any())->method('initializeFromData')->willReturn($this->product);
 
         $this->action->execute();
     }
 
-    public function testAttributeSetIsObtainedFromGetWhenThereIsNoOneInPost()
+    public function _testAttributeSetIsObtainedFromGetWhenThereIsNoOneInPost()
     {
         $this->request->expects($this->any())->method('getParam')->willReturnMap([['set', null, 4]]);
-        $this->request->expects($this->any())->method('getPost')->willReturnMap([['set', null, null]]);
+        $this->request->expects($this->any())->method('getPost')->willReturnMap([
+            ['set', null, null],
+            ['product', [], []],
+        ]);
         $this->product->expects($this->once())->method('setAttributeSetId')->with(4);
+        $this->initializationHelper->expects($this->any())->method('initializeFromData')->willReturn($this->product);
+
+        $this->action->execute();
+    }
+
+    public function testInitializeFromData()
+    {
+        $productData = ['name' => 'test-name', 'stock_data' => ['use_config_manage_stock' => 0]];
+        $this->request->expects($this->any())->method('getPost')->willReturnMap([
+            ['product', [], $productData],
+        ]);
+
+        $this->initializationHelper
+            ->expects($this->once())
+            ->method('initializeFromData')
+            ->with($this->product, $productData)
+            ->willReturn($this->product);
 
         $this->action->execute();
     }
