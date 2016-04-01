@@ -66,7 +66,6 @@ class VariationHandler
      */
     public function generateSimpleProducts($parentProduct, $productsData)
     {
-        $this->prepareAttributeSetToBeBaseForNewVariations($parentProduct);
         $generatedProductIds = [];
         $productsData = $this->duplicateImagesForVariations($productsData);
         foreach ($productsData as $simpleProductData) {
@@ -93,11 +92,22 @@ class VariationHandler
     /**
      * Prepare attribute set comprising all selected configurable attributes
      *
+     * @deprecated since 2.1.0
      * @param \Magento\Catalog\Model\Product $product
-     *
      * @return void
      */
     protected function prepareAttributeSetToBeBaseForNewVariations(\Magento\Catalog\Model\Product $product)
+    {
+        $this->prepareAttributeSet($product);
+    }
+
+    /**
+     * Prepare attribute set comprising all selected configurable attributes
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return void
+     */
+    public function prepareAttributeSet(\Magento\Catalog\Model\Product $product)
     {
         $attributes = $this->configurableProduct->getUsedProductAttributes($product);
         $attributeSetId = $product->getNewVariationsAttributeSetId();
