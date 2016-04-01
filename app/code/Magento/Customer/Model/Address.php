@@ -50,7 +50,7 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
     /**
      * @var \Magento\Customer\Model\Address\CustomAttributeListInterface
      */
-    protected $attributeList;
+    private $attributeList;
 
     /**
      * @param \Magento\Framework\Model\Context $context
