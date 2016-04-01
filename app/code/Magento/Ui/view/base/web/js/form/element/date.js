@@ -75,13 +75,11 @@ define([
         initConfig: function () {
             this._super();
 
-            var options = {
+            utils.extend(this.options, {
                 showsTime: this.showsTime,
                 timeFormat: this.timeFormat,
                 dateFormat: this.dateFormat
-            };
-
-            utils.extend(this.options, options);
+            });
 
             this.prepareDatetimeFormats();
 
@@ -102,17 +100,16 @@ define([
          * @param {String} value
          */
         onValueChange: function (value) {
-            var shiftedValue;
+            var dateFormat,
+                shiftedValue;
 
             if (value) {
                 if (this.showsTime) {
                     shiftedValue = moment.utc(value).add(this.timeOffset, 'seconds');
                 } else {
-                    shiftedValue = moment(value, this.outputDateFormat);
+                    dateFormat = this.shiftedValue() ? this.outputDateFormat : this.inputDateFormat;
 
-                    if (!this.shiftedValue()) {
-                        shiftedValue = moment(value, this.inputDateFormat);
-                    }
+                    shiftedValue = moment(value, dateFormat);
                 }
 
                 shiftedValue = shiftedValue.format(this.datetimeFormat);
