@@ -71,7 +71,6 @@ define([
             pageSize: 5,
             relatedData: [],
             currentPage: 1,
-            cachedCurrentPage: 1,
             startIndex: 0
         },
 
@@ -245,7 +244,7 @@ define([
         },
 
         /**
-         * Showed or hided spinner
+         * Checking loader visibility
          *
          * @param {Array} elems
          */
@@ -258,7 +257,7 @@ define([
         },
 
         /**
-         * Filtered data to relatedData and calc pages
+         * Filtering data and calculates the quantity of pages
          *
          * @param {Array} data
          */
@@ -324,6 +323,10 @@ define([
          * @param {Number} page - current page
          */
         changePage: function (page) {
+            if (page === 1 && !this.recordData().length) {
+                return false;
+            }
+
             if (parseInt(page, 10) > this.pages()) {
                 this.currentPage(this.pages());
 
@@ -512,17 +515,21 @@ define([
          * @param {Array} data - record data
          */
         _updateData: function (data) {
-            var elems = utils.copy(this.elems()),
+            var elems = _.clone(this.elems()),
                 path,
-                index,
-                splicedArray;
+                dataArr;
 
-            index = this.recordData().length - this.startIndex + this.pageSize;
-            splicedArray = this.recordData.splice(this.startIndex, index);
+            dataArr = this.recordData.splice(this.startIndex, this.recordData().length - this.startIndex);
+            dataArr.splice(0, this.pageSize);
             elems = utils.copy(this.elems());
-            data.concat(splicedArray).forEach(function (rec, idx) {
+            data.concat(dataArr).forEach(function (rec, idx) {
                 if (elems[idx]) {
                     elems[idx].recordId = rec[this.identificationProperty];
+                }
+
+                if (!rec.position) {
+                    rec.position = this.maxPosition;
+                    this.setMaxPosition();
                 }
 
                 path = this.dataScope + '.' + this.index + '.' + (this.startIndex + idx);
