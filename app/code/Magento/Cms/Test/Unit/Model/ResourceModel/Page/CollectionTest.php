@@ -124,14 +124,11 @@ class CollectionTest extends AbstractCollectionTest
                 new \Magento\Framework\DataObject(['id' => 1, 'row_id' => 1]),
                 [
                     ['row_id' => 1, 'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID],
-                    ['row_id' => 2, 'store_id' => 1],
-                    ['row_id' => 2, 'store_id' => 2],
                 ],
             ],
             [
                 new \Magento\Framework\DataObject(['id' => 2, 'row_id' => 2]),
                 [
-                    ['row_id' => 1, 'store_id' => \Magento\Store\Model\Store::DEFAULT_STORE_ID],
                     ['row_id' => 2, 'store_id' => 1],
                     ['row_id' => 2, 'store_id' => 2],
                 ],
