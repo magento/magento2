@@ -52,6 +52,11 @@ class Date implements \Zend_Filter_Interface
      */
     public function filter($value)
     {
-        return $this->_normalToLocalFilter->filter($this->_localToNormalFilter->filter($value));
+        $value = $this->_normalToLocalFilter->filter($this->_localToNormalFilter->filter($value));
+
+        /**
+         * @todo MAGETWO-51391
+         */
+        return str_replace("\xc2\xa0", '', $value);
     }
 }
