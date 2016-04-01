@@ -8,6 +8,7 @@ namespace Magento\Framework\Setup;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Backup\Filesystem\Iterator\Filter;
+use Magento\Framework\Filesystem\Filter\ExcludeFilter;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\OsInfo;
@@ -161,10 +162,18 @@ class FilePermissions
         );
         $noWritableFilesFolders = [
             $this->directoryList->getPath(DirectoryList::GENERATION) . '/',
-            $this->directoryList->getPath(DirectoryList::DI) .'/'
+            $this->directoryList->getPath(DirectoryList::DI) . '/',
         ];
 
         $directoryIterator = new Filter($directoryIterator, $noWritableFilesFolders);
+
+        $directoryIterator = new ExcludeFilter(
+            $directoryIterator,
+            [
+                $this->directoryList->getPath(DirectoryList::SESSION) . '/',
+            ]
+        );
+
         $foundNonWritable = false;
 
         try {
