@@ -18,6 +18,7 @@ use Magento\Eav\Model\Config;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory as GroupCollectionFactory;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\App\Request\DataPersistorInterface;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Filter\Translit;
 use Magento\Framework\Stdlib\ArrayManager;
@@ -156,6 +157,11 @@ class Eav extends AbstractModifier
     private $attributesToEliminate;
 
     /**
+     * @var DataPersistorInterface
+     */
+    private $dataPersistor;
+
+    /**
      * @param LocatorInterface $locator
      * @param EavValidationRules $eavValidationRules
      * @param Config $eavConfig
@@ -172,6 +178,7 @@ class Eav extends AbstractModifier
      * @param Translit $translitFilter
      * @param ArrayManager $arrayManager
      * @param ScopeOverriddenValue $scopeOverriddenValue
+     * @param DataPersistorInterface $dataPersistor
      * @param array $attributesToDisable
      * @param array $attributesToEliminate
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -193,6 +200,7 @@ class Eav extends AbstractModifier
         Translit $translitFilter,
         ArrayManager $arrayManager,
         ScopeOverriddenValue $scopeOverriddenValue,
+        DataPersistorInterface $dataPersistor,
         $attributesToDisable = [],
         $attributesToEliminate = []
     ) {
@@ -212,6 +220,7 @@ class Eav extends AbstractModifier
         $this->translitFilter = $translitFilter;
         $this->arrayManager = $arrayManager;
         $this->scopeOverriddenValue = $scopeOverriddenValue;
+        $this->dataPersistor = $dataPersistor;
         $this->attributesToDisable = $attributesToDisable;
         $this->attributesToEliminate = $attributesToEliminate;
     }
@@ -322,6 +331,10 @@ class Eav extends AbstractModifier
      */
     public function modifyData(array $data)
     {
+        if (!$this->locator->getProduct()->getId() && $this->dataPersistor->get('catalog_product')) {
+            return $this->resolvePersistentData($data);
+        }
+
         $productId = $this->locator->getProduct()->getId();
 
         /** @var string $groupCode */
@@ -336,6 +349,29 @@ class Eav extends AbstractModifier
 
             }
         }
+
+        return $data;
+    }
+
+    /**
+     * Resolve data persistence
+     *
+     * @param array $data
+     * @return array
+     */
+    private function resolvePersistentData(array $data)
+    {
+        $persistentData = (array)$this->dataPersistor->get('catalog_product');
+        $productId = $this->locator->getProduct()->getId();
+
+        if (empty($data[$productId][self::DATA_SOURCE_DEFAULT])) {
+            $data[$productId][self::DATA_SOURCE_DEFAULT] = [];
+        }
+
+        $data[$productId] = array_replace_recursive(
+            $data[$productId][self::DATA_SOURCE_DEFAULT],
+            $persistentData
+        );
 
         return $data;
     }
@@ -548,7 +584,7 @@ class Eav extends AbstractModifier
                 $meta = $this->customizePriceAttribute($attribute, $meta);
                 break;
             case 'gallery':
-                // Gallery attribute is being handled by "Images And Videos Tab"
+                // Gallery attribute is being handled by "Images And Videos" section
                 $meta = [];
                 break;
         }

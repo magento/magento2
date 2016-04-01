@@ -8,7 +8,7 @@
 <mapping strict="0">
     <fields>
         <new_attribute_set_name>
-            <selector>[name='new-attribute-set-name']</selector>
+            <selector>.new-attribute-set-name input</selector>
         </new_attribute_set_name>
     </fields>
 </mapping>
