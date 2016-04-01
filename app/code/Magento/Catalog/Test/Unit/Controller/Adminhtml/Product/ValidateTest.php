@@ -12,24 +12,34 @@ class ValidateTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Produ
 {
     /** @var \Magento\Catalog\Controller\Adminhtml\Product\Validate */
     protected $action;
+
     /** @var \Magento\Backend\Model\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultPage;
+
     /** @var \Magento\Backend\Model\View\Result\Forward|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultForward;
+
     /** @var \Magento\Catalog\Controller\Adminhtml\Product\Builder|\PHPUnit_Framework_MockObject_MockObject */
     protected $productBuilder;
+
     /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
     protected $product;
+
     /** @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultRedirectFactory;
+
     /** @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultRedirect;
+
     /** @var Helper|\PHPUnit_Framework_MockObject_MockObject */
     protected $initializationHelper;
+
     /** @var \Magento\Catalog\Model\ProductFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $productFactory;
+
     /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultJson;
+
     /** @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $resultJsonFactory;
 
