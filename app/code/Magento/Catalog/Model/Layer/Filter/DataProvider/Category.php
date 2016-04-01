@@ -112,8 +112,9 @@ class Category
             /** @var CategoryModel|null $category */
             $category = null;
             if ($this->categoryId !== null) {
-                if ($this->coreRegistry->registry('current_category')->getId() == $this->categoryId) {
-                    $category = $this->coreRegistry->registry('current_category');
+                $currentCategory = $this->coreRegistry->registry('current_category');
+                if ($currentCategory !== null && $currentCategory->getId() == $this->categoryId) {
+                    $category = $currentCategory;
                 } else {
                     $category = $this->categoryFactory->create()
                         ->setStoreId(
