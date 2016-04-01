@@ -61,24 +61,30 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
             $connection = $this->getConnection();
             $select = $connection->select()->from(['cms_entity_store' => $this->getTable($tableName)])
                 ->where('cms_entity_store.' . $linkField . ' IN (?)', $linkedIds);
-            $result = $connection->fetchPairs($select);
+            $result = $connection->fetchAll($select);
             if ($result) {
+                $storesData = [];
+                foreach ($result as $storeData) {
+                    $storesData[$storeData[$linkField]][] = $storeData['store_id'];
+                }
+
                 foreach ($this as $item) {
                     $linkedId = $item->getData($linkField);
-                    if (!isset($result[$linkedId])) {
+                    if (!isset($storesData[$linkedId])) {
                         continue;
                     }
-                    if ($result[$linkedId] == 0) {
+                    $storeIdKey = array_search(0, $storesData[$linkedId], true);
+                    if ($storeIdKey !== false) {
                         $stores = $this->storeManager->getStores(false, true);
                         $storeId = current($stores)->getId();
                         $storeCode = key($stores);
                     } else {
-                        $storeId = $result[$linkedId];
+                        $storeId = current($storesData[$linkedId]);
                         $storeCode = $this->storeManager->getStore($storeId)->getCode();
                     }
                     $item->setData('_first_store_id', $storeId);
                     $item->setData('store_code', $storeCode);
-                    $item->setData('store_id', [$result[$linkedId]]);
+                    $item->setData('store_id', $storesData[$linkedId]);
                 }
             }
         }
