@@ -90,7 +90,7 @@ class Simple implements Fallback\ResolverInterface
      */
     private function checkFilePathAccess($filePath)
     {
-        if (strpos($filePath, './') === false) {
+        if (strpos(str_replace('\\', '/', $filePath), './') === false) {
             return true;
         }
 
