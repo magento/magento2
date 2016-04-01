@@ -108,7 +108,10 @@ class StartUpdater extends AbstractActionController
                     ['enable' => true]
                 );
 
-                if ($jobType == 'update' || $jobType == 'upgrade') {
+                if ($cronTaskType == \Magento\Setup\Model\Updater::TASK_TYPE_UPDATE
+                    || $jobType == 'enable'
+                    || $jobType == 'disable'
+                ) {
                     $errorMessage .= $this->updater->createUpdaterTask(
                         [],
                         \Magento\Setup\Model\Cron\JobFactory::JOB_DISABLE_CACHE,
@@ -121,6 +124,14 @@ class StartUpdater extends AbstractActionController
                     $cronTaskType,
                     $additionalOptions
                 );
+
+                if ($jobType == 'enable' || $jobType == 'disable') {
+                    $errorMessage .= $this->updater->createUpdaterTask(
+                        [],
+                        \Magento\Setup\Model\Cron\JobFactory::JOB_ENABLE_CACHE,
+                        []
+                    );
+                }
 
                 // for module enable job types, we need to follow up with 'setup:upgrade' task to
                 // make sure enabled modules are properly registered
