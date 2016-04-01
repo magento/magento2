@@ -129,6 +129,11 @@ class Configurable
     {
         $associatedProductIds = $this->request->getPost('associated_product_ids', []);
         $variationsMatrix = $this->getVariationMatrix();
+
+        if ($associatedProductIds || $variationsMatrix) {
+            $this->variationHandler->prepareAttributeSet($product);
+        }
+
         if (!empty($variationsMatrix)) {
             $generatedProductIds = $this->variationHandler->generateSimpleProducts($product, $variationsMatrix);
             $associatedProductIds = array_merge($associatedProductIds, $generatedProductIds);
