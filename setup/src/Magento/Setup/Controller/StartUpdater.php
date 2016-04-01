@@ -108,6 +108,14 @@ class StartUpdater extends AbstractActionController
                     ['enable' => true]
                 );
 
+                if ($jobType == 'update' || $jobType == 'upgrade') {
+                    $errorMessage .= $this->updater->createUpdaterTask(
+                        [],
+                        \Magento\Setup\Model\Cron\JobFactory::JOB_DISABLE_CACHE,
+                        []
+                    );
+                }
+
                 $errorMessage .= $this->updater->createUpdaterTask(
                     $packages,
                     $cronTaskType,
