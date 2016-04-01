@@ -552,6 +552,7 @@
                     <item name="required" xsi:type="boolean">false</item>
                     <item name="sortOrder" xsi:type="number">220</item>
                     <item name="breakLine" xsi:type="boolean">false</item>
+                    <item name="scopeLabel" xsi:type="string">[STORE VIEW]</item>
                     <item name="imports" xsi:type="array">
                         <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
                     </item>
@@ -564,6 +565,7 @@
                         <item name="sortOrder" xsi:type="number">230</item>
                         <item name="dataType" xsi:type="string">string</item>
                         <item name="formElement" xsi:type="string">date</item>
+                        <item name="scopeLabel" xsi:type="string"/>
                         <item name="imports" xsi:type="array">
                             <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
                         </item>
@@ -578,6 +580,7 @@
                         <item name="dataType" xsi:type="string">string</item>
                         <item name="label" xsi:type="string" translate="true">To</item>
                         <item name="formElement" xsi:type="string">date</item>
+                        <item name="scopeLabel" xsi:type="string"/>
                         <item name="imports" xsi:type="array">
                             <item name="disabled" xsi:type="string">ns = ${ $.ns }, index = custom_use_parent_settings :checked</item>
                         </item>
