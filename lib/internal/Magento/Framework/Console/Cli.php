@@ -19,6 +19,7 @@ use Magento\Setup\Console\CompilerPreparation;
  * Magento 2 CLI Application. This is the hood for all command line tools supported by Magento
  *
  * {@inheritdoc}
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Cli extends SymfonyApplication
 {
@@ -27,7 +28,9 @@ class Cli extends SymfonyApplication
      */
     const INPUT_KEY_BOOTSTRAP = 'bootstrap';
 
-    /** @var \Zend\ServiceManager\ServiceManager */
+    /**
+     * @var \Zend\ServiceManager\ServiceManager
+     */
     private $serviceManager;
 
     /**
