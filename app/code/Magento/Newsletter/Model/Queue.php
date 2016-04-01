@@ -236,7 +236,7 @@ class Queue extends \Magento\Framework\Model\AbstractModel implements TemplateTy
             )->setTemplateVars(
                 ['subscriber' => $item]
             )->setFrom(
-                ['name' => $this->getNewsletterSenderEmail(), 'email' => $this->getNewsletterSenderName()]
+                ['name' => $this->getNewsletterSenderName(), 'email' => $this->getNewsletterSenderEmail()]
             )->addTo(
                 $item->getSubscriberEmail(),
                 $item->getSubscriberFullName()
