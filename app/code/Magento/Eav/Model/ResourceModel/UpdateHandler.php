@@ -105,12 +105,14 @@ class UpdateHandler implements AttributeInterface
         /** @var \Magento\Eav\Model\Entity\Attribute\AbstractAttribute $attribute */
         $metadata = $this->metadataPool->getMetadata($entityType);
         if ($metadata->getEavEntityType()) {
-            $snapshot = $this->readSnapshot->execute(
-                $entityType,
-                [
-                    $metadata->getLinkField() => $entityData[$metadata->getLinkField()]
-                ]
-            );
+            $context = $this->scopeResolver->getEntityContext($entityType, $entityData);
+            $entityDataForSnapshot = [$metadata->getLinkField() => $entityData[$metadata->getLinkField()]];
+            foreach ($context as $scope) {
+                if (isset($entityData[$scope->getIdentifier()])) {
+                    $entityDataForSnapshot[$scope->getIdentifier()] = $entityData[$scope->getIdentifier()];
+                }
+            }
+            $snapshot = $this->readSnapshot->execute($entityType, $entityDataForSnapshot);
             $processed = [];
             foreach ($this->getAttributes($entityType) as $attribute) {
                 if ($attribute->isStatic()) {
@@ -161,7 +163,6 @@ class UpdateHandler implements AttributeInterface
                     $processed[$attribute->getAttributeCode()] = $entityData[$attribute->getAttributeCode()];
                 }
             }
-            $context = $this->scopeResolver->getEntityContext($entityType, $entityData);
             $this->attributePersistor->flush($entityType, $context);
         }
         return $entityData;
