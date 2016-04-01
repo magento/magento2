@@ -28,7 +28,7 @@ define([
                 var useAutoGeneration = uiRegistry.get(
                     'sales_rule_form.sales_rule_form.rule_information.use_auto_generation'
                 );
-
+                
                 useAutoGeneration.on('checked', function () {
                     obj.enableDisableFields();
                 });
@@ -46,14 +46,18 @@ define([
         enableDisableFields: function () {
             var selector = '[id=sales-rule-form-tab-coupons] input, [id=sales-rule-form-tab-coupons] select, ' +
                     '[id=sales-rule-form-tab-coupons] button',
-                isUseAutoGenerationChecked = !uiRegistry
+                isUseAutoGenerationChecked = uiRegistry
                     .get('sales_rule_form.sales_rule_form.rule_information.use_auto_generation')
                     .checked();
 
+            var couponType = uiRegistry
+                .get('sales_rule_form.sales_rule_form.rule_information.coupon_type')
+                .value();
+            var disableAuto = (couponType == 3) || isUseAutoGenerationChecked
             _.each(
                 document.querySelectorAll(selector),
                 function (element) {
-                    element.disabled = isUseAutoGenerationChecked;
+                    element.disabled = !disableAuto;
                 }
             );
         }
