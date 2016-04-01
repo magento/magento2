@@ -226,7 +226,7 @@
 .limited-text {
     display: inline-block;
     line-height: 1.4em;
-    max-height: 2.4em; // Exactly 3 lines
+    max-height: 4.4em; // Exactly 3 lines
     overflow: hidden;
     position: relative;
     vertical-align: top;
@@ -254,7 +254,7 @@
         -webkit-line-clamp: 3;
         display: -webkit-box;
         height: auto;
-        max-height: 3.6em; // Is needed to get it work
+        max-height: 4.4em; // Is needed to get it work
 
         &:after {
             display: none;
@@ -314,6 +314,7 @@
     .schedule-summary-name,
     .schedule-summary-date {
         display: table-cell;
+        padding-right: .5rem;
     }
 
     .schedule-summary-name {
