@@ -85,12 +85,14 @@ class Simple implements Fallback\ResolverInterface
     /**
      * Validate the file path to be secured
      *
+     * @param string $fileName
      * @param string $filePath
      * @return bool
      */
-    private function checkFilePathAccess($filePath)
+    private function checkFilePathAccess($fileName, $filePath)
     {
-        if (strpos(str_replace('\\', '/', $filePath), './') === false) {
+        // Check if file name not contains any references '/./', '/../'
+        if (strpos(str_replace('\\', '/', $fileName), './') === false) {
             return true;
         }
 
@@ -100,6 +102,7 @@ class Simple implements Fallback\ResolverInterface
         );
         $fileRead = $this->readFactory->create($realPath);
 
+        // Check if file path starts with web lib directory path
         if (strpos($fileRead->getAbsolutePath(), $directoryWeb->getAbsolutePath()) === 0) {
             return true;
         }
@@ -120,7 +123,7 @@ class Simple implements Fallback\ResolverInterface
         foreach ($fallbackRule->getPatternDirs($params) as $dir) {
             $path = "{$dir}/{$file}";
             $dirRead = $this->readFactory->create($dir);
-            if ($dirRead->isExist($file) && $this->checkFilePathAccess($path)) {
+            if ($dirRead->isExist($file) && $this->checkFilePathAccess($file, $path)) {
                 return $path;
             }
         }
