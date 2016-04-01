@@ -6,17 +6,16 @@
 /*global alert*/
 define([], function() {
     /**
-     * @param {Object} addressData
+     * @param addressData
      * Returns new address object
      */
     return function (addressData) {
         var identifier = Date.now();
-
         return {
             email: addressData.email,
             countryId: (addressData.country_id) ? addressData.country_id : window.checkoutConfig.defaultCountryId,
-            regionId: (addressData.region && addressData.region.region_id) ?
-                addressData.region.region_id
+            regionId: (addressData.region && addressData.region.region_id)
+                ? addressData.region.region_id
                 : window.checkoutConfig.defaultRegionId,
             regionCode: (addressData.region) ? addressData.region.region_code : null,
             region: (addressData.region) ? addressData.region.region : null,
@@ -34,26 +33,25 @@ define([], function() {
             suffix: addressData.suffix,
             vatId: addressData.vat_id,
             saveInAddressBook: addressData.save_in_address_book,
-            customAttributes: addressData.custom_attributes,
-            isDefaultShipping: function () {
+            isDefaultShipping: function() {
                 return addressData.default_shipping;
             },
-            isDefaultBilling: function () {
+            isDefaultBilling: function() {
                 return addressData.default_billing;
             },
-            getType: function () {
+            getType: function() {
                 return 'new-customer-address'
             },
-            getKey: function () {
+            getKey: function() {
                 return this.getType();
             },
-            getCacheKey: function () {
+            getCacheKey: function() {
                 return this.getType() + identifier;
             },
-            isEditable: function () {
+            isEditable: function() {
                 return true;
             },
-            canUseForBilling: function () {
+            canUseForBilling: function() {
                 return true;
             }
         }
