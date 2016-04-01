@@ -52,25 +52,24 @@ class CompilerPreparation
         $compilationCommands = [DiCompileCommand::NAME, DiCompileMultiTenantCommand::NAME];
         $cmdName = $this->input->getFirstArgument();
         $isHelpOption = $this->input->hasParameterOption('--help') || $this->input->hasParameterOption('-h');
-
         if (!in_array($cmdName, $compilationCommands) || $isHelpOption) {
             return;
         }
-
-        $generationDir = ($cmdName === DiCompileMultiTenantCommand::NAME)
-            ? $this->input->getParameterOption(DiCompileMultiTenantCommand::INPUT_KEY_GENERATION)
-            : null;
-
-        if (!$generationDir) {
+        $compileDirList = [];
+        if ($cmdName === DiCompileMultiTenantCommand::NAME) {
+            $compileDirList[] = $this->input->getParameterOption(DiCompileMultiTenantCommand::INPUT_KEY_GENERATION);
+            $compileDirList[] = $this->input->getParameterOption(DiCompileMultiTenantCommand::INPUT_KEY_DI);
+        } else {
             $mageInitParams = $this->serviceManager->get(InitParamListener::BOOTSTRAP_PARAM);
             $mageDirs = isset($mageInitParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS])
                 ? $mageInitParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]
                 : [];
-            $generationDir = (new DirectoryList(BP, $mageDirs))->getPath(DirectoryList::GENERATION);
+            $compileDirList[] = (new DirectoryList(BP, $mageDirs))->getPath(DirectoryList::GENERATION);
+            $compileDirList[] = (new DirectoryList(BP, $mageDirs))->getPath(DirectoryList::DI);
         }
-
-        if ($this->filesystemDriver->isExists($generationDir)) {
-            $this->filesystemDriver->deleteDirectory($generationDir);
+        foreach ($compileDirList as $compileDir)
+        if ($this->filesystemDriver->isExists($compileDir)) {
+            $this->filesystemDriver->deleteDirectory($compileDir);
         }
     }
 }
