@@ -55,7 +55,8 @@ class RuleProductIndexerTest extends \PHPUnit_Framework_TestCase
             ->with(
                 [
                     \Magento\Catalog\Model\Category::CACHE_TAG,
-                    \Magento\Catalog\Model\Product::CACHE_TAG
+                    \Magento\Catalog\Model\Product::CACHE_TAG,
+                    \Magento\Framework\App\Cache\Type\Block::CACHE_TAG
                 ]
             );
         $this->indexer->executeList($ids);
