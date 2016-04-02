@@ -66,25 +66,19 @@ class SearchTest extends \PHPUnit_Framework_TestCase
     {
         $requestName = 'requestName';
         $scope = 333;
-        $filterField = 'filterField';
-        $filterValue = 'filterValue';
-
-        $filter = $this->getMockBuilder('Magento\Framework\Api\Filter')
-            ->disableOriginalConstructor()
-            ->getMock();
-        $filter->expects($this->once())
-            ->method('getField')
-            ->willReturn($filterField);
-        $filter->expects($this->once())
-            ->method('getValue')
-            ->willReturn($filterValue);
-
+        $filters = [
+            $this->createFilterMock('array_filter', ['arrayValue1', 'arrayValue2']),
+            $this->createFilterMock('simple_filter', 'filterValue'),
+            $this->createFilterMock('from_filter', ['from' => 30]),
+            $this->createFilterMock('to_filter', ['to' => 100]),
+            $this->createFilterMock('range_filter', ['from' => 60, 'to' => 82]),
+        ];
         $filterGroup = $this->getMockBuilder('Magento\Framework\Api\Search\FilterGroup')
             ->disableOriginalConstructor()
             ->getMock();
         $filterGroup->expects($this->once())
             ->method('getFilters')
-            ->willReturn([$filter]);
+            ->willReturn($filters);
 
         $searchCriteria = $this->getMockBuilder('Magento\Framework\Api\Search\SearchCriteriaInterface')
             ->disableOriginalConstructor()
@@ -114,7 +108,7 @@ class SearchTest extends \PHPUnit_Framework_TestCase
         $this->requestBuilder->expects($this->once())
             ->method('bindDimension')
             ->with('scope', $scope);
-        $this->requestBuilder->expects($this->any())
+        $this->requestBuilder->expects($this->exactly(6))
             ->method('bind');
         $this->requestBuilder->expects($this->once())
             ->method('create')
@@ -137,5 +131,24 @@ class SearchTest extends \PHPUnit_Framework_TestCase
         $searchResult = $this->model->search($searchCriteria);
 
         $this->assertInstanceOf('Magento\Framework\Api\Search\SearchResultInterface', $searchResult);
+    }
+
+    /**
+     * @param $field
+     * @param $value
+     * @return \Magento\Framework\Api\Filter|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function createFilterMock($field, $value)
+    {
+        $filter = $this->getMockBuilder('Magento\Framework\Api\Filter')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $filter->expects($this->once())
+            ->method('getField')
+            ->willReturn($field);
+        $filter->expects($this->once())
+            ->method('getValue')
+            ->willReturn($value);
+        return $filter;
     }
 }
