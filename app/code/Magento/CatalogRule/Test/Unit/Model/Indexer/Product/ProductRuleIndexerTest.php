@@ -56,9 +56,6 @@ class ProductRuleIndexerTest extends \PHPUnit_Framework_TestCase
             ->method('reindexByIds')
             ->with($idsForIndexer);
         $this->cacheContextMock->expects($this->once())
-            ->method('registerTags')
-            ->with([\Magento\Catalog\Model\Category::CACHE_TAG]);
-        $this->cacheContextMock->expects($this->once())
             ->method('registerEntities')
             ->with(\Magento\Catalog\Model\Product::CACHE_TAG, $ids);
         $this->indexer->executeList($ids);
