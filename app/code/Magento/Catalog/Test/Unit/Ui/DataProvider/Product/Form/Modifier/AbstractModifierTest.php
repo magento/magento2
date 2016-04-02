@@ -66,7 +66,7 @@ abstract class AbstractModifierTest extends \PHPUnit_Framework_TestCase
                 'getExistsStoreValueFlag'
             ])->getMockForAbstractClass();
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
-            ->setMethods(['load', 'getId'])
+            ->setMethods(['load', 'getId', 'getConfig'])
             ->getMockForAbstractClass();
         $this->arrayManagerMock = $this->getMockBuilder(ArrayManager::class)
             ->disableOriginalConstructor()
