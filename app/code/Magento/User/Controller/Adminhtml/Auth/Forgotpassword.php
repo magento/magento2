@@ -6,6 +6,8 @@
  */
 namespace Magento\User\Controller\Adminhtml\Auth;
 
+use Magento\Security\Model\SecurityManager;
+
 class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
 {
     /**
@@ -31,6 +33,7 @@ class Forgotpassword extends \Magento\User\Controller\Adminhtml\Auth
      * Forgot administrator password action
      *
      * @return void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function execute()
     {
