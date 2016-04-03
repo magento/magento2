@@ -65,7 +65,7 @@ class SearchTest extends \PHPUnit_Framework_TestCase
     public function testSearch()
     {
         $requestName = 'requestName';
-        $scope = 333;
+        $scopeId = 333;
         $filters = [
             $this->createFilterMock('array_filter', ['arrayValue1', 'arrayValue2']),
             $this->createFilterMock('simple_filter', 'filterValue'),
@@ -73,6 +73,11 @@ class SearchTest extends \PHPUnit_Framework_TestCase
             $this->createFilterMock('to_filter', ['to' => 100]),
             $this->createFilterMock('range_filter', ['from' => 60, 'to' => 82]),
         ];
+
+        $scope = $this->getMockBuilder('Magento\Framework\App\ScopeInterface')
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        
         $filterGroup = $this->getMockBuilder('Magento\Framework\Api\Search\FilterGroup')
             ->disableOriginalConstructor()
             ->getMock();
@@ -107,7 +112,7 @@ class SearchTest extends \PHPUnit_Framework_TestCase
             ->with($requestName);
         $this->requestBuilder->expects($this->once())
             ->method('bindDimension')
-            ->with('scope', $scope);
+            ->with('scope', $scopeId);
         $this->requestBuilder->expects($this->exactly(6))
             ->method('bind');
         $this->requestBuilder->expects($this->once())
@@ -127,6 +132,10 @@ class SearchTest extends \PHPUnit_Framework_TestCase
         $this->scopeResolver->expects($this->once())
             ->method('getScope')
             ->willReturn($scope);
+
+        $scope->expects($this->once())
+            ->method('getId')
+            ->willReturn($scopeId);
 
         $searchResult = $this->model->search($searchCriteria);
 
