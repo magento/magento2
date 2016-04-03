@@ -84,7 +84,7 @@ class Search implements SearchInterface
      */
     private function addFieldToFilter($field, $condition = null)
     {
-        if (!is_array($condition) || !in_array(key($condition), ['from', 'to'])) {
+        if (!is_array($condition) || !in_array(key($condition), ['from', 'to'], true)) {
             $this->requestBuilder->bind($field, $condition);
         } else {
             if (!empty($condition['from'])) {
