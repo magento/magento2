@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Controller\Adminhtml\Page;
@@ -48,6 +48,9 @@ class Index extends \Magento\Backend\App\Action
         $resultPage->addBreadcrumb(__('CMS'), __('CMS'));
         $resultPage->addBreadcrumb(__('Manage Pages'), __('Manage Pages'));
         $resultPage->getConfig()->getTitle()->prepend(__('Pages'));
+
+        $dataPersistor = $this->_objectManager->get('Magento\Framework\App\Request\DataPersistorInterface');
+        $dataPersistor->clear('cms_page');
 
         return $resultPage;
     }

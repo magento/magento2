@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -101,19 +101,16 @@ abstract class AbstractAction
      * @param ResourceConnection $resource
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Catalog\Model\Config $config
-     * @param MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Config $config,
-        MetadataPool $metadataPool
+        \Magento\Catalog\Model\Config $config
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
         $this->storeManager = $storeManager;
         $this->config = $config;
-        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -214,7 +211,7 @@ abstract class AbstractAction
 
             $rootPath = $this->getPathFromCategoryId($store->getRootCategoryId());
 
-            $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+            $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
             $linkField = $metadata->getLinkField();
             $select = $this->connection->select()->from(
                 ['cc' => $this->getTable('catalog_category_entity')],
@@ -371,8 +368,8 @@ abstract class AbstractAction
         $rootCatIds = explode('/', $this->getPathFromCategoryId($store->getRootCategoryId()));
         array_pop($rootCatIds);
 
-        $productMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
-        $categoryMetadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
+        $productMetadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $categoryMetadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\CategoryInterface::class);
         $productLinkField = $productMetadata->getLinkField();
         $categoryLinkField = $categoryMetadata->getLinkField();
 
@@ -516,7 +513,7 @@ abstract class AbstractAction
                 'visibility'
             )->getId();
 
-            $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+            $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
             $linkField = $metadata->getLinkField();
 
             $select = $this->connection->select()->from(
@@ -628,5 +625,17 @@ abstract class AbstractAction
                 );
             }
         }
+    }
+
+    /**
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
     }
 }

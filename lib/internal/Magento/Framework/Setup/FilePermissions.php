@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -8,8 +8,10 @@ namespace Magento\Framework\Setup;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Backup\Filesystem\Iterator\Filter;
+use Magento\Framework\Filesystem\Filter\ExcludeFilter;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\OsInfo;
 
 class FilePermissions
 {
@@ -64,18 +66,26 @@ class FilePermissions
     protected $nonWritablePathsInDirectories = [];
 
     /**
+     * @var \Magento\Framework\OsInfo
+     */
+    protected $osInfo;
+
+    /**
      * @param Filesystem $filesystem
      * @param DirectoryList $directoryList
      * @param File $driverFile
+     * @param OsInfo $osInfo
      */
     public function __construct(
         Filesystem $filesystem,
         DirectoryList $directoryList,
-        File $driverFile
+        File $driverFile,
+        OsInfo $osInfo
     ) {
         $this->filesystem = $filesystem;
         $this->directoryList = $directoryList;
         $this->driverFile = $driverFile;
+        $this->osInfo = $osInfo;
     }
 
     /**
@@ -152,10 +162,18 @@ class FilePermissions
         );
         $noWritableFilesFolders = [
             $this->directoryList->getPath(DirectoryList::GENERATION) . '/',
-            $this->directoryList->getPath(DirectoryList::DI) .'/'
+            $this->directoryList->getPath(DirectoryList::DI) . '/',
         ];
 
         $directoryIterator = new Filter($directoryIterator, $noWritableFilesFolders);
+
+        $directoryIterator = new ExcludeFilter(
+            $directoryIterator,
+            [
+                $this->directoryList->getPath(DirectoryList::SESSION) . '/',
+            ]
+        );
+
         $foundNonWritable = false;
 
         try {
@@ -224,10 +242,7 @@ class FilePermissions
         array_unshift($dirs, $varGenerationDir);
 
         foreach ($dirs as $dir) {
-            if (!is_dir($dir)
-                || !is_readable($dir)
-                || !is_executable($dir)
-            ) {
+            if (!$this->directoryPermissionForCLIUserValid($dir)) {
                 return false;
             }
         }
@@ -292,5 +307,17 @@ class FilePermissions
         $required = $this->getApplicationNonWritableDirectories();
         $current = $this->getApplicationCurrentNonWritableDirectories();
         return array_diff($required, $current);
+    }
+
+    /**
+     * Checks if directory has permissions needed for CLI user (valid directory, readable, and executable.)
+     * Ignores executable permission for Windows.
+     *
+     * @param string $dir
+     * @return bool
+     */
+    private function directoryPermissionForCLIUserValid($dir)
+    {
+        return (is_dir($dir) && is_readable($dir) && (is_executable($dir) || $this->osInfo->isWindows()));
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
@@ -64,10 +64,11 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('media_gallery', $data);
         $this->assertArrayHasKey('images', $data['media_gallery']);
+        $image = array_shift($data['media_gallery']['images']);
 
         $this->assertEquals(
             'Image Alt Text',
-            $data['media_gallery']['images'][0]['label']
+            $image['label']
         );
     }
 }
