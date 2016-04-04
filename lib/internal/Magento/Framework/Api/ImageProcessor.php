@@ -13,6 +13,7 @@ use Magento\Framework\Phrase;
 
 /**
  * Class ImageProcessor
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ImageProcessor implements ImageProcessorInterface
 {
@@ -176,10 +177,6 @@ class ImageProcessor implements ImageProcessorInterface
      */
     protected function getMimeTypeExtension($mimeType)
     {
-        if (isset($this->mimeTypeExtensionMap[$mimeType])) {
-            return $this->mimeTypeExtensionMap[$mimeType];
-        } else {
-            return "";
-        }
+        return isset($this->mimeTypeExtensionMap[$mimeType]) ? $this->mimeTypeExtensionMap[$mimeType] : '';
     }
 }
