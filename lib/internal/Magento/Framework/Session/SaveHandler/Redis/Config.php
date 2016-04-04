@@ -7,7 +7,6 @@ namespace Magento\Framework\Session\SaveHandler\Redis;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State;
-use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 
