@@ -132,7 +132,7 @@ class JobFactory
                 break;
             case self::JOB_ENABLE_CACHE:
                 return new JobSetCache(
-                    $this->serviceLocator->get('Magento\Backend\Console\Command\CacheEnableCommand'),
+                    $objectManager->get('Magento\Backend\Console\Command\CacheEnableCommand'),
                     $objectManagerProvider,
                     $multipleStreamOutput,
                     $this->serviceLocator->get('Magento\Setup\Model\Cron\Queue'),
@@ -143,7 +143,7 @@ class JobFactory
                 break;
             case self::JOB_DISABLE_CACHE:
                 return new JobSetCache(
-                    $this->serviceLocator->get('Magento\Backend\Console\Command\CacheDisableCommand'),
+                    $objectManager->get('Magento\Backend\Console\Command\CacheDisableCommand'),
                     $objectManagerProvider,
                     $multipleStreamOutput,
                     $this->serviceLocator->get('Magento\Setup\Model\Cron\Queue'),
