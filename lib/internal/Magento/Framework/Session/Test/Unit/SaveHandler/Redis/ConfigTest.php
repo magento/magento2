@@ -5,6 +5,7 @@
  */
 namespace Magento\Framework\Session\Test\Unit\SaveHandler\Redis;
 
+use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\Session\SaveHandler\Redis\Config;
 
 class ConfigTest extends \PHPUnit_Framework_TestCase
@@ -25,7 +26,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     private $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\Session\SaveHandler\Redis\Config
+     * @var Config
      */
     private $config;
 
@@ -37,7 +38,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->config = $objectManager->getObject(
-            \Magento\Framework\Session\SaveHandler\Redis\Config::class,
+            Config::class,
             [
                 'deploymentConfig' => $this->deploymentConfigMock,
                 'appState' => $this->appStateMock,
@@ -148,8 +149,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetMaxLifetime()
     {
-        $expected = 31536000;
-        $this->assertEquals($this->config->getMaxLifetime(), $expected);
+        $this->assertEquals($this->config->getMaxLifetime(), Config::SESSION_MAX_LIFETIME);
     }
 
     public function testGetMinLifetime()
@@ -225,7 +225,7 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
             ->willReturn($areaCode);
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
-            ->with(\Magento\Framework\Session\SaveHandler\Redis\Config::XML_PATH_ADMIN_SESSION_LIFETIME)
+            ->with(Config::XML_PATH_ADMIN_SESSION_LIFETIME)
             ->willReturn($expectedLifetime);
         $this->assertEquals($this->config->getLifetime(), $expectedLifetime);
     }
@@ -240,8 +240,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
         $this->scopeConfigMock->expects($this->once())
             ->method('getValue')
             ->with(
-                \Magento\Framework\Session\SaveHandler\Redis\Config::XML_PATH_COOKIE_LIFETIME,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+                Config::XML_PATH_COOKIE_LIFETIME,
+                ScopeInterface::SCOPE_STORE
             )
             ->willReturn($expectedLifetime);
         $this->assertEquals($this->config->getLifetime(), $expectedLifetime);
