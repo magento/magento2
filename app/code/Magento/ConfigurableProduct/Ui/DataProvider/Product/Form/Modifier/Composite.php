@@ -73,7 +73,7 @@ class Composite extends AbstractModifier
         /** @var \Magento\Catalog\Api\Data\ProductInterface $model */
         $model = $this->locator->getProduct();
         $productTypeId = $model->getTypeId();
-        if ($this->canShowConfigurablePanel()) {
+        if ($this->allowedProductTypes->isAllowedProductType($this->locator->getProduct())) {
             $productId = $model->getId();
             $data[$productId]['affect_configurable_product_attributes'] = '1';
 
@@ -94,7 +94,7 @@ class Composite extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        if ($this->canShowConfigurablePanel()) {
+        if ($this->allowedProductTypes->isAllowedProductType($this->locator->getProduct())) {
             foreach ($this->modifiers as $modifierClass) {
                 /** @var ModifierInterface $bundleModifier */
                 $modifier = $this->objectManager->get($modifierClass);
@@ -109,15 +109,5 @@ class Composite extends AbstractModifier
             }
         }
         return $meta;
-    }
-
-    /**
-     * Check that can show configurable product panel
-     *
-     * @return bool
-     */
-    protected function canShowConfigurablePanel()
-    {
-        return $this->allowedProductTypes->isAllowedProductType($this->locator->getProduct());
     }
 }
