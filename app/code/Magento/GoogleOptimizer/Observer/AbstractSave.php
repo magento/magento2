@@ -52,7 +52,6 @@ abstract class AbstractSave implements ObserverInterface
      *
      * @param Observer $observer
      * @return $this
-     * @throws \InvalidArgumentException
      */
     public function execute(Observer $observer)
     {
@@ -182,7 +181,7 @@ abstract class AbstractSave implements ObserverInterface
     }
 
     /**
-     * @return array
+     * @return bool
      */
     private function isDataAvailable()
     {
