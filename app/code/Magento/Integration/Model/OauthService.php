@@ -193,6 +193,8 @@ class OauthService implements \Magento\Integration\Api\OauthServiceInterface
     {
         try {
             $consumer = $this->_consumerFactory->create()->load($consumerId);
+            $consumer->setUpdatedAt(date_create());
+            $consumer->save();
             if (!$consumer->getId()) {
                 throw new \Magento\Framework\Oauth\Exception(
                     __('A consumer with ID %1 does not exist', $consumerId)

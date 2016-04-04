@@ -59,4 +59,16 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         return $connection->fetchOne($select);
     }
+
+    public function getTimeInSecondsSinceTokenExchangeStarted($consumerId)
+    {
+        $connection = $this->getConnection();
+        $select = $connection->select()
+            ->from($this->getMainTable())
+            ->reset(\Magento\Framework\DB\Select::COLUMNS)
+            ->columns(new \Zend_Db_Expr('CURRENT_TIMESTAMP() - updated_at'))
+            ->where('entity_id = ?', $consumerId);
+
+        return $connection->fetchOne($select);
+    }
 }
