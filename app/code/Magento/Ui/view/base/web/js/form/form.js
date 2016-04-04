@@ -155,6 +155,7 @@ define([
             additionalInvalid: false,
             selectorPrefix: '.page-content',
             messagesClass: 'messages',
+            errorClass: '.admin__field-error',
             eventPrefix: '.${ $.index }',
             ajaxSave: false,
             ajaxSaveType: 'default',
