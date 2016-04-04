@@ -31,13 +31,13 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->deploymentConfigMock = $this->getMock('Magento\Framework\App\DeploymentConfig', [], [], '', false);
-        $this->appStateMock = $this->getMock('Magento\Framework\App\State', [], [], '', false);
-        $this->scopeConfigMock = $this->getMock('Magento\Framework\App\Config', [], [], '', false);
+        $this->deploymentConfigMock = $this->getMock(\Magento\Framework\App\DeploymentConfig::class, [], [], '', false);
+        $this->appStateMock = $this->getMock(\Magento\Framework\App\State::class, [], [], '', false);
+        $this->scopeConfigMock = $this->getMock(\Magento\Framework\App\Config::class, [], [], '', false);
 
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->config = $objectManager->getObject(
-            'Magento\Framework\Session\SaveHandler\Redis\Config',
+            \Magento\Framework\Session\SaveHandler\Redis\Config::class,
             [
                 'deploymentConfig' => $this->deploymentConfigMock,
                 'appState' => $this->appStateMock,
