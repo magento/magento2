@@ -13,12 +13,14 @@ class Collection
      *
      * @param \Magento\Bundle\Model\ResourceModel\Selection\Collection $subject
      * @param \Closure $proceed
+     * @param null|string|bool|int|Store $store
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundAddStoreFilter(
         \Magento\Bundle\Model\ResourceModel\Selection\Collection $subject,
-        \Closure $proceed
+        \Closure $proceed,
+        $store = null
     ) {
         return $subject;
     }
