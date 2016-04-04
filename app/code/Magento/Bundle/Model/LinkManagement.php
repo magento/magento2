@@ -204,6 +204,7 @@ class LinkManagement implements \Magento\Bundle\Api\ProductLinkManagementInterfa
 
     /**
      * {@inheritdoc}
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function addChild(
         \Magento\Catalog\Api\Data\ProductInterface $product,
