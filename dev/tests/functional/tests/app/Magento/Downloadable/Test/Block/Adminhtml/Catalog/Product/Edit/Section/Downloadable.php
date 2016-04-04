@@ -91,7 +91,7 @@ class Downloadable extends Section
     {
         $context = $element ?: $this->_rootElement;
         $isDownloadable = $context->find($this->isDownloadableProduct);
-        if ($isDownloadable->isVisible()) {
+        if ($isDownloadable->isVisible() && $isDownloadable->getAttribute('value') != '1') {
             $isDownloadable->click();
         }
         if (isset($fields['downloadable_sample']['value'])) {
