@@ -5,6 +5,8 @@
  */
 namespace Magento\Bundle\Model\ResourceModel\Selection\Plugin;
 
+use Magento\Store\Model\Store;
+
 class Collection
 {
     /**
