@@ -222,7 +222,11 @@ class View extends \Magento\Framework\Config\Reader\Filesystem
         $scope = $scope ?: $this->_defaultScope;
         $result = [];
 
-        foreach ($this->_fileResolver->getParents($this->_fileName, $scope) as $parent) {
+        $parents = (array)$this->_fileResolver->getParents($this->_fileName, $scope);
+        // Sort parents desc
+        krsort($parents);
+
+        foreach ($parents as $parent) {
             $result = array_replace_recursive($result, $this->_readFiles([$parent]));
         }
 

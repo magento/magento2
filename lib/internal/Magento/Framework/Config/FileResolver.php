@@ -138,7 +138,6 @@ class FileResolver implements \Magento\Framework\Config\FileResolverInterface, D
                     try {
                         $iterator = $this->getParentConfigs($this->currentTheme, []);
 
-                        ksort($iterator);
                     } catch (\Exception $e) {
                         throw new \Magento\Framework\Exception\LocalizedException(
                             new \Magento\Framework\Phrase('Could not read config file')
