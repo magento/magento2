@@ -17,6 +17,11 @@
                     "url": "https://github.com/colinmollenhour/php-redis-session-abstract.git",
                     "type": "git",
                     "reference": "95330b7f29663dab81f53d1a438e4d927b6c5f66"
+                },
+                "autoload": {
+                    "psr-0": {
+                        "Cm\\RedisSession\\": "src/"
+                    }
                 }
             }
         }
