@@ -12,9 +12,13 @@
     <div class="select-attributes-actions" data-type="skipKO">
         <?= /* @noEscape */  $block->getAddNewAttributeButton(); ?>
     </div>
-    <h2 class="steps-wizard-title"><?= /* @noEscape */  __('Step 1: Select Attributes') ?></h2>
+    <h2 class="steps-wizard-title"><?php echo $block->escapeHtml(
+            __('Step 1: Select Attributes')
+        ); ?></h2>
     <div class="selected-attributes" data-bind="scope: '<?= /* @noEscape */  $block->getComponentName()?>'">
-        <?= /* @noEscape */  __('Selected Attributes:') ?>
+        <?php echo $block->escapeHtml(
+            __('Selected Attributes:')
+        ); ?>
         <span data-bind="text: selectedAttributes() || '--'"></span>
     </div>
 </div>

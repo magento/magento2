@@ -16,11 +16,9 @@
         <price>
             <selector>[name$="[price]"]</selector>
         </price>
-        <quantity_and_stock_status composite="1">
-            <qty>
-                <selector>[name$="[quantity_and_stock_status][qty]"]</selector>
-            </qty>
-        </quantity_and_stock_status>
+        <qty>
+            <selector>[name$="[qty]"]</selector>
+        </qty>
         <weight>
             <selector>[name$="[weight]"]</selector>
         </weight>
