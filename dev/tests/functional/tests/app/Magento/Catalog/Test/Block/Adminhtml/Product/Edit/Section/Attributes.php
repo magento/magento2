@@ -1,13 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section;
 
-use Magento\Mtf\Client\Locator;
-use Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\Edit;
 use Magento\Ui\Test\Block\Adminhtml\Section;
 
 /**
@@ -15,27 +13,6 @@ use Magento\Ui\Test\Block\Adminhtml\Section;
  */
 class Attributes extends Section
 {
-    /**
-     * Attribute Search locator the Product page.
-     *
-     * @var string
-     */
-    protected $attributeSearch = "//div[contains(@data-role, 'product-details')]//*[@data-toggle='dropdown']/span";
-
-    /**
-     * Selector for 'New Attribute' button.
-     *
-     * @var string
-     */
-    protected $newAttributeButton = '[id^="create_attribute"]';
-
-    /**
-     * Selector for search input field.
-     *
-     * @var string
-     */
-    protected $searchAttribute = "//input[@data-role='product-attribute-search']";
-
     /**
      * Fixture mapping.
      *
@@ -50,34 +27,5 @@ class Attributes extends Section
             $this->applyPlaceholders();
         }
         return parent::dataMapping($fields, $parent);
-    }
-
-    /**
-     * Click on 'New Attribute' button.
-     *
-     * @param string $tabName
-     * @return void
-     */
-    public function addNewAttribute($tabName)
-    {
-        $element = $this->_rootElement;
-        $selector = sprintf($this->attributeSearch, $tabName);
-        $element->waitUntil(
-            function () use ($element, $selector) {
-                return $element->find($selector, Locator::SELECTOR_XPATH)->isVisible() ? true : null;
-            }
-        );
-        $addAttributeToggle = $element->find($selector, Locator::SELECTOR_XPATH);
-        $addAttributeToggle->click();
-        if (!$addAttributeToggle->find($this->newAttributeButton)->isVisible()) {
-            $element->find($this->searchAttribute, Locator::SELECTOR_XPATH)->click();
-            $this->browser->waitUntil(
-                function () {
-                    $element = $this->browser->find($this->searchAttribute, Locator::SELECTOR_XPATH);
-                    return $element->isVisible() == true ? true : null;
-                }
-            );
-        }
-        $element->find($this->newAttributeButton)->click();
     }
 }

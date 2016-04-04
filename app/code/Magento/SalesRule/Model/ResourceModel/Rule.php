@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\ResourceModel;
@@ -139,8 +139,6 @@ class Rule extends AbstractResource
     public function load(AbstractModel $object, $value, $field = null)
     {
         $this->entityManager->load(RuleInterface::class, $object, $value);
-        $this->unserializeFields($object);
-        $this->_afterLoad($object);
         return $this;
     }
 

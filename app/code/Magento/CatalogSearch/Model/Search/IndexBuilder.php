@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -20,6 +20,7 @@ use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\ScopeResolverInterface;
 
 /**
  * Build base Query for Index
@@ -58,12 +59,18 @@ class IndexBuilder implements IndexBuilderInterface
     private $tableMapper;
 
     /**
+     * @var ScopeResolverInterface
+     */
+    private $dimensionScopeResolver;
+
+    /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param ScopeConfigInterface $config
      * @param StoreManagerInterface $storeManager
      * @param ConditionManager $conditionManager
      * @param IndexScopeResolver $scopeResolver
      * @param TableMapper $tableMapper
+     * @param ScopeResolverInterface $dimensionScopeResolver
      */
     public function __construct(
         ResourceConnection $resource,
@@ -71,7 +78,8 @@ class IndexBuilder implements IndexBuilderInterface
         StoreManagerInterface $storeManager,
         ConditionManager $conditionManager,
         IndexScopeResolver $scopeResolver,
-        TableMapper $tableMapper
+        TableMapper $tableMapper,
+        ScopeResolverInterface $dimensionScopeResolver
     ) {
         $this->resource = $resource;
         $this->config = $config;
@@ -79,6 +87,7 @@ class IndexBuilder implements IndexBuilderInterface
         $this->conditionManager = $conditionManager;
         $this->scopeResolver = $scopeResolver;
         $this->tableMapper = $tableMapper;
+        $this->dimensionScopeResolver = $dimensionScopeResolver;
     }
 
     /**
@@ -158,7 +167,7 @@ class IndexBuilder implements IndexBuilderInterface
             $preparedDimensions[] = $this->conditionManager->generateCondition(
                 $dimension->getName(),
                 '=',
-                $dimension->getValue()
+                $this->dimensionScopeResolver->getScope($dimension->getValue())->getId()
             );
         }
 

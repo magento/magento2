@@ -1,13 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
-use Magento\Ui\Component\Form;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 
 /**
@@ -16,8 +15,6 @@ use Magento\Framework\Stdlib\ArrayManager;
 class BundleWeight extends AbstractModifier
 {
     const CODE_WEIGHT_TYPE = 'weight_type';
-    const CODE_CONTAINER_WEIGHT = 'container_weight';
-    const SORT_ORDER = 61;
 
     /**
      * @var ArrayManager
@@ -37,78 +34,48 @@ class BundleWeight extends AbstractModifier
      */
     public function modifyMeta(array $meta)
     {
-        if (($groupCode = $this->getGroupCodeByField($meta, ProductAttributeInterface::CODE_WEIGHT)
-            ?: $this->getGroupCodeByField($meta, self::CODE_CONTAINER_WEIGHT))
-        ) {
-            $weightPath = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_WEIGHT)
-                ?: $this->getElementArrayPath($meta, self::CODE_CONTAINER_WEIGHT);
-            $meta[$groupCode]['children'][self::CODE_WEIGHT_TYPE] = [
-                'arguments' => [
-                    'data' => [
-                        'config' => [
-                            'sortOrder' => $this->getNextAttributeSortOrder(
-                                $meta,
-                                [self::CODE_CONTAINER_WEIGHT],
-                                self::SORT_ORDER
-                            ),
-                            'formElement' => Form\Element\Checkbox::NAME,
-                            'componentType' => Form\Field::NAME,
-                            'dataType' => Form\Element\DataType\Number::NAME,
-                            'label' => __('Dynamic Weight'),
-                            'prefer' => 'toggle',
-                            'additionalClasses' => 'admin__field-x-small',
-                            'templates' => [
-                                'checkbox' => 'ui/form/components/single/switcher',
-                            ],
-                            'valueMap' => [
-                                'false' => '1',
-                                'true' => '0',
-                            ],
-                            'dataScope' => self::CODE_WEIGHT_TYPE,
-                            'value' => '0',
-                            'scopeLabel' => $this->arrayManager->get($weightPath . '/scopeLabel', $meta),
-                        ],
-                    ],
+        $meta = $this->arrayManager->merge(
+            $this->arrayManager->findPath(static::CODE_WEIGHT_TYPE, $meta, null, 'children') . static::META_CONFIG_PATH,
+            $meta,
+            [
+                'valueMap' => [
+                    'false' => '1',
+                    'true' => '0'
                 ],
-            ];
+                'validation' => [
+                    'required-entry' => false
+                ]
+            ]
+        );
 
-            $meta[$groupCode]['children'][self::CODE_CONTAINER_WEIGHT] = array_replace_recursive(
-                $meta[$groupCode]['children'][self::CODE_CONTAINER_WEIGHT],
-                [
-                    'children' => [
-                        ProductAttributeInterface::CODE_HAS_WEIGHT => [
-                            'arguments' => [
-                                'data' => [
-                                    'config' => [
-                                        'disabled' => true,
-                                        'visible' => false,
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ]
+        $meta = $this->arrayManager->merge(
+            $this->arrayManager->findPath(
+                ProductAttributeInterface::CODE_HAS_WEIGHT,
+                $meta,
+                null,
+                'children'
+            ) . static::META_CONFIG_PATH,
+            $meta,
+            [
+                'disabled' => true,
+                'visible' => false
+            ]
+        );
+
+        $meta = $this->arrayManager->merge(
+            $this->arrayManager->findPath(
+                ProductAttributeInterface::CODE_WEIGHT,
+                $meta,
+                null,
+                'children'
+            ) . static::META_CONFIG_PATH,
+            $meta,
+            [
+                'imports' => [
+                    'disabled' => 'ns = ${ $.ns }, index = ' . static::CODE_WEIGHT_TYPE . ':checked',
                 ]
-            );
-            $meta[$groupCode]['children'][self::CODE_CONTAINER_WEIGHT] = array_replace_recursive(
-                $meta[$groupCode]['children'][self::CODE_CONTAINER_WEIGHT],
-                [
-                    'children' => [
-                        ProductAttributeInterface::CODE_WEIGHT => [
-                            'arguments' => [
-                                'data' => [
-                                    'config' => [
-                                        'imports' => [
-                                            'disabled' => 'ns = ${ $.ns }, index = '
-                                                . self::CODE_WEIGHT_TYPE . ':checked',
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ],
-                ]
-            );
-        }
+            ]
+        );
         
         return $meta;
     }

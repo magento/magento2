@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -43,6 +43,10 @@
                 type="Magento\Customer\Model\Metadata\AddressMetadataManagement" />
     <preference for="Magento\Customer\Api\CustomerManagementInterface"
                 type="Magento\Customer\Model\CustomerManagement" />
+    <preference for="Magento\Customer\Model\AuthenticationInterface"
+                type="Magento\Customer\Model\Authentication" />
+    <preference for="Magento\Customer\Model\EmailNotificationInterface"
+                type="Magento\Customer\Model\EmailNotification" />
     <preference for="Magento\Customer\Api\CustomerNameGenerationInterface"
                 type="Magento\Customer\Helper\View" />
     <type name="Magento\Customer\Model\Session">
@@ -176,12 +180,6 @@
             <argument name="entitySnapshot" xsi:type="object">EavVersionControlSnapshot</argument>
         </arguments>
     </type>
-    <virtualType name="Magento\Customer\Model\ResourceModel\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">customer_grid_flat</argument>
-            <argument name="resourceModel" xsi:type="string">Magento\Customer\Model\ResourceModel\Customer</argument>
-        </arguments>
-    </virtualType>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
