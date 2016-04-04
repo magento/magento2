@@ -52,11 +52,22 @@ class UpdatePackagesCache
     private $pathToCacheFile = 'update_composer_packages.json';
 
     /**
+     * @var MarketplaceManager
+     */
+    private $marketplaceManager;
+
+    /**
+     * @var string
+     */
+    private $packagesJsonData;
+
+    /**
      * Constructor
      *
      * @param MagentoComposerApplicationFactory $applicationFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param ComposerInformation $composerInformation
+     * @param MarketplaceManager $marketplaceManager
      * @param ObjectManagerProvider $objectManagerProvider
      * @throws \Exception
      */
@@ -64,12 +75,14 @@ class UpdatePackagesCache
         MagentoComposerApplicationFactory $applicationFactory,
         Filesystem $filesystem,
         ComposerInformation $composerInformation,
+        MarketplaceManager $marketplaceManager,
         ObjectManagerProvider $objectManagerProvider
     ) {
         $this->application = $applicationFactory->create();
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
         $this->dateTime = $objectManagerProvider->get()->get('Magento\Framework\Stdlib\DateTime\DateTime');
         $this->composerInformation = $composerInformation;
+        $this->marketplaceManager = $marketplaceManager;
     }
 
     /**
@@ -145,22 +158,50 @@ class UpdatePackagesCache
      */
     private function getPackageAvailableVersions($package)
     {
-        $versionsPattern = '/^versions\s*\:\s(.+)$/m';
+        $magentoRepositories = $this->composerInformation->getRootRepositories();
 
-        $commandParams = [
-            self::PARAM_COMMAND => self::COMPOSER_SHOW,
-            self::PARAM_PACKAGE => $package,
-            self::PARAM_AVAILABLE => true
-        ];
-        $result = $this->application->runComposerCommand($commandParams);
-        $matches = [];
-        preg_match($versionsPattern, $result, $matches);
-        if (!isset($matches[1])) {
-            throw new \RuntimeException(
-                sprintf('Couldn\'t get available versions for package %s', $commandParams[self::PARAM_PACKAGE])
-            );
+        // Check we have only one repo.magento.com repository
+        if (
+            count($magentoRepositories) === 1
+            && strpos($magentoRepositories[0], $this->marketplaceManager->getCredentialBaseUrl())
+        ) {
+            $packagesJsonData = [];
+            if (empty($this->packagesJsonData)) {
+                $this->packagesJsonData = $this->marketplaceManager->getPackagesJson();
+            }
+
+            if ($this->packagesJsonData) {
+                $packagesJsonData = json_decode($this->packagesJsonData, true);
+            } else {
+                $packagesJsonData['packages'] = [];
+            }
+
+            if (isset($packagesJsonData['packages'][$package])) {
+                $packageVersions = $packagesJsonData['packages'][$package];
+                uksort($packageVersions, 'version_compare');
+                $packageVersions = array_reverse($packageVersions);
+
+                return array_keys($packageVersions);
+            }
+        } else {
+            $versionsPattern = '/^versions\s*\:\s(.+)$/m';
+
+            $commandParams = [
+                self::PARAM_COMMAND => self::COMPOSER_SHOW,
+                self::PARAM_PACKAGE => $package,
+                self::PARAM_AVAILABLE => true
+            ];
+            $result = $this->application->runComposerCommand($commandParams);
+            $matches = [];
+            preg_match($versionsPattern, $result, $matches);
+            if (isset($matches[1])) {
+                return explode(', ', $matches[1]);
+            }
         }
-        return explode(', ', $matches[1]);
+
+        throw new \RuntimeException(
+            sprintf('Couldn\'t get available versions for package %s', $package)
+        );
     }
 
     /**
