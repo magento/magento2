@@ -52,13 +52,11 @@ class UpdateRow
         $output = [];
         foreach ($connection->describeTable($metadata->getEntityTable()) as $column) {
 
-            if ($column['DEFAULT'] == 'CURRENT_TIMESTAMP'|| $column['IDENTITY']) {
+            if ($column['DEFAULT'] == 'CURRENT_TIMESTAMP' || $column['IDENTITY']) {
                 continue;
             }
             if (isset($data[strtolower($column['COLUMN_NAME'])])) {
                 $output[strtolower($column['COLUMN_NAME'])] = $data[strtolower($column['COLUMN_NAME'])];
-            } elseif ($column['DEFAULT'] === null) {
-                $output[strtolower($column['COLUMN_NAME'])] = null;
             }
         }
         if (empty($data[$metadata->getIdentifierField()])) {
