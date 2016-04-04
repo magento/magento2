@@ -101,19 +101,19 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     const PARAM_BREAK_AFTER             = 'session/redis/break_after';
 
     /**
-     * Cookie Lifetime config path
+     * Cookie lifetime config path
      */
     const XML_PATH_COOKIE_LIFETIME = 'web/cookie/cookie_lifetime';
 
     /**
-     * Admin Session Lifetime config path
+     * Admin session lifetime config path
      */
     const XML_PATH_ADMIN_SESSION_LIFETIME = 'admin/security/session_lifetime';
 
     /**
-     * Max Admin Session Lifetime
+     * Max admin session lifetime
      */
-    const ADMIN_SESSION_MAX_LIFETIME = 31536000; //One year
+    const ADMIN_SESSION_MAX_LIFETIME = 31536000;
 
     /**
      * Deployment config

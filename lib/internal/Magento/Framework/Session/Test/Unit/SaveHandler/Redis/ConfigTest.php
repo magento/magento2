@@ -12,22 +12,22 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $deploymentConfigMock;
+    private $deploymentConfigMock;
 
     /**
      * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $appStateMock;
+    private $appStateMock;
 
     /**
      * @var \Magento\Framework\App\Config|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $scopeConfigMock;
+    private $scopeConfigMock;
 
     /**
      * @var \Magento\Framework\Session\SaveHandler\Redis\Config
      */
-    protected $config;
+    private $config;
 
     public function setUp()
     {
@@ -218,8 +218,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLifetimeAdmin()
     {
-        $expectedLifetime = 12345;
         $areaCode = 'adminhtml';
+        $expectedLifetime = 123;
         $this->appStateMock->expects($this->once())
             ->method('getAreaCode')
             ->willReturn($areaCode);
@@ -232,8 +232,8 @@ class ConfigTest extends \PHPUnit_Framework_TestCase
 
     public function testGetLifetimeFrontend()
     {
-        $expectedLifetime = 3010;
         $areaCode = 'frontend';
+        $expectedLifetime = 234;
         $this->appStateMock->expects($this->once())
             ->method('getAreaCode')
             ->willReturn($areaCode);
