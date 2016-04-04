@@ -18,6 +18,9 @@
     <type name="Magento\LayeredNavigation\Block\Navigation\FilterRenderer">
         <plugin name="swatches_layered_renderer" type="Magento\Swatches\Model\Plugin\FilterRenderer" sortOrder="1" />
     </type>
+    <type name="Magento\ConfigurableProduct\Model\Product\Type\Configurable">
+        <plugin name="add_swatch_attributes_to_configurable" type="Magento\Swatches\Model\Plugin\Configurable" />
+    </type>
     <type name="Magento\Eav\Model\Attribute\FrontendType">
         <arguments>
             <argument name="config" xsi:type="array">
