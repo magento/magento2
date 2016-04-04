@@ -58,6 +58,8 @@ class BackupActionItems extends AbstractActionController
     }
 
     /**
+     * No index action, return 404 error page
+     *
      * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()

@@ -36,6 +36,8 @@ class Marketplace extends AbstractActionController
     }
 
     /**
+     * No index action, return 404 error page
+     *
      * @return ViewModel
      */
     public function indexAction()
