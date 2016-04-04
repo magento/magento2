@@ -5,6 +5,7 @@
  */
 namespace Magento\Catalog\Ui;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
  * Class AllowedProductTypes contains product types on which some product type can be displayed
@@ -21,7 +22,7 @@ class AllowedProductTypes
      */
     public function __construct(array $productTypes = [])
     {
-        $this->allowedProductTypes = array_merge($this->allowedProductTypes, $productTypes);
+        $this->allowedProductTypes = $productTypes;
     }
 
     /**
@@ -32,5 +33,19 @@ class AllowedProductTypes
     public function getAllowedProductTypes()
     {
         return $this->allowedProductTypes;
+    }
+
+    /**
+     * Check that product type is allowed
+     *
+     * @param ProductInterface $product
+     * @return bool
+     */
+    public function isAllowedProductType(ProductInterface $product)
+    {
+        return in_array(
+            $product->getTypeId(),
+            $this->allowedProductTypes
+        );
     }
 }
