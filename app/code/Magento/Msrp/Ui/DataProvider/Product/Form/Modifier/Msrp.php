@@ -67,10 +67,7 @@ class Msrp extends AbstractModifier
      */
     public function modifyData(array $data)
     {
-        $this->data = $data;
-        $this->customizeMsrpFormat();
-
-        return $this->data;
+        return $data;
     }
 
     /**
@@ -84,22 +81,6 @@ class Msrp extends AbstractModifier
         $this->customizeMsrpDisplayActualPrice();
 
         return $this->meta;
-    }
-
-    /**
-     * Customize Msrp format
-     *
-     * @return $this
-     */
-    protected function customizeMsrpFormat()
-    {
-        $modelId = $this->locator->getProduct()->getId();
-        if (isset($this->data[$modelId][self::DATA_SOURCE_DEFAULT][self::FIELD_MSRP])) {
-            $this->data[$modelId][self::DATA_SOURCE_DEFAULT][self::FIELD_MSRP] =
-                number_format($this->data[$modelId][self::DATA_SOURCE_DEFAULT][self::FIELD_MSRP], 2);
-        }
-
-        return $this;
     }
 
     /**

@@ -63,12 +63,7 @@ class General extends AbstractModifier
     {
         $model = $this->locator->getProduct();
         $modelId = $model->getId();
-        $numberFields = [
-            ProductAttributeInterface::CODE_PRICE,
-            ProductAttributeInterface::CODE_WEIGHT,
-            ProductAttributeInterface::CODE_SPECIAL_PRICE,
-            ProductAttributeInterface::CODE_COST,
-        ];
+        $numberFields = [ProductAttributeInterface::CODE_WEIGHT];
 
         foreach ($numberFields as $fieldCode) {
             $path = $modelId . '/' . self::DATA_SOURCE_DEFAULT . '/' . $fieldCode;
