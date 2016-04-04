@@ -64,10 +64,10 @@ class CompilerPreparationTest extends \PHPUnit_Framework_TestCase
                 $this->logicalOr('--help', '-h')
             )->willReturn($isHelpOption);
         if ($isCompileCommand && !$isHelpOption) {
-            $this->filesystemDriverMock->expects($this->once())
+            $this->filesystemDriverMock->expects($this->exactly(2))
                 ->method('isExists')
                 ->willReturn($dirExists);
-            $this->filesystemDriverMock->expects($this->exactly((int)$dirExists))->method('deleteDirectory');
+            $this->filesystemDriverMock->expects($this->exactly(((int)$dirExists) * 2))->method('deleteDirectory');
         } else {
             $this->filesystemDriverMock->expects($this->never())->method('isExists');
             $this->filesystemDriverMock->expects($this->never())->method('deleteDirectory');
@@ -125,17 +125,27 @@ class CompilerPreparationTest extends \PHPUnit_Framework_TestCase
     public function testGenerationDirectoryFromInitParams()
     {
         $customGenerationDirectory = '/custom/generated/code/directory';
+        $defaultDiDirectory = '/custom/di/directory';
         $mageInitParams = ['MAGE_DIRS' => ['generation' => ['path' => $customGenerationDirectory]]];
 
         $this->inputMock->expects($this->once())
             ->method('getFirstArgument')
             ->willReturn(DiCompileMultiTenantCommand::NAME);
-
+        $dirValueMap = [
+            [
+                $customGenerationDirectory,
+                $defaultDiDirectory
+            ],
+            [
+                true,
+                true
+            ]
+        ];
         // Filesystem mock
-        $this->filesystemDriverMock->expects($this->once())->method('isExists')->willReturn(true);
-        $this->filesystemDriverMock->expects($this->once())
+        $this->filesystemDriverMock->expects($this->exactly(2))->method('isExists')->willReturn(true);
+        $this->filesystemDriverMock->expects($this->exactly(2))
             ->method('deleteDirectory')
-            ->with($customGenerationDirectory);
+            ->will($this->returnValueMap($dirValueMap));
 
         $this->serviceManagerMock->expects($this->once())
             ->method('get')
@@ -150,23 +160,55 @@ class CompilerPreparationTest extends \PHPUnit_Framework_TestCase
     public function testGenerationDirectoryFromCliOption($commandName)
     {
         $customGenerationDirectory = '/custom/generated/code/directory';
+        $customDiDirectory = '/custom/di/directory';
+        $parameterResultMap = [
+            [
+                DiCompileMultiTenantCommand::INPUT_KEY_GENERATION,
+                DiCompileMultiTenantCommand::INPUT_KEY_DI
+            ],
+            [
+                $customGenerationDirectory,
+                $customDiDirectory
+            ]
+        ];
+
         $useCliOption = $commandName === DiCompileMultiTenantCommand::NAME;
 
         $this->inputMock->expects($this->once())
             ->method('getFirstArgument')
             ->willReturn($commandName);
-        $this->inputMock->expects($this->exactly((int)$useCliOption))
+        $this->inputMock->expects($this->exactly(((int)$useCliOption) * 2))
             ->method('getParameterOption')
-            ->with(DiCompileMultiTenantCommand::INPUT_KEY_GENERATION)
-            ->willReturn($customGenerationDirectory);
+            ->will($this->returnValueMap($parameterResultMap));
         // Filesystem mock
-        $directoryArgConstraint = $useCliOption
-            ? $this->equalTo($customGenerationDirectory)
-            : $this->logicalNot($this->equalTo($customGenerationDirectory));
-        $this->filesystemDriverMock->expects($this->once())->method('isExists')->willReturn(true);
-        $this->filesystemDriverMock->expects($this->once())
+        $dirResultMap = [];
+        if ($useCliOption) {
+            $dirResultMap = [
+                [
+                    $this->equalTo($customGenerationDirectory),
+                    $this->equalTo($customDiDirectory)
+                ],
+                [
+                    true,
+                    true
+                ]
+            ];
+        }  else {
+            $dirResultMap = [
+                [
+                    $this->logicalNot($this->equalTo($customGenerationDirectory)),
+                    $this->logicalNot($this->equalTo($customDiDirectory))
+                ],
+                [
+                    true,
+                    true
+                ]
+            ];
+        }
+        $this->filesystemDriverMock->expects($this->exactly(2))->method('isExists')->willReturn(true);
+        $this->filesystemDriverMock->expects($this->exactly(2))
             ->method('deleteDirectory')
-            ->with($directoryArgConstraint);
+            ->will($this->returnValueMap($dirResultMap));
 
         $this->model->handleCompilerEnvironment();
     }
