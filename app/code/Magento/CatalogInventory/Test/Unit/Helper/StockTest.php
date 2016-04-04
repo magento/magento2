@@ -96,7 +96,7 @@ class StockTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->setMethods(['setIsSalable', 'getId'])
             ->getMock();
-       $productMock->expects($this->once())
+        $productMock->expects($this->once())
             ->method('setIsSalable')
             ->with($status);
         $this->assertNull($this->stock->assignStatusToProduct($productMock));

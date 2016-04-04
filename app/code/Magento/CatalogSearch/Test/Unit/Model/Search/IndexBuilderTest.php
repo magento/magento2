@@ -58,6 +58,10 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $scopeInterface;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return void
+     */
     protected function setUp()
     {
         $this->select = $this->getMockBuilder('\Magento\Framework\DB\Select')
@@ -142,6 +146,9 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->stockConfiguration = $this
+            ->getMockBuilder('\Magento\CatalogInventory\Api\StockConfigurationInterface')
+            ->getMock();
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->target = $objectManagerHelper->getObject(
@@ -156,14 +163,6 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
                 'dimensionScopeResolver' => $this->dimensionScopeResolver
             ]
         );
-        $this->initStockConfiguration();
-    }
-
-    protected function initStockConfiguration()
-    {
-        $this->stockConfiguration = $this
-            ->getMockBuilder('\Magento\CatalogInventory\Api\StockConfigurationInterface')
-            ->getMock();
 
         // Todo: \Magento\Framework\TestFramework\Unit\Helper\ObjectManager to do this automatically (MAGETWO-49793)
         $reflection = new \ReflectionClass(get_class($this->target));
