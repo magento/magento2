@@ -123,4 +123,10 @@ class BackupActionItemsTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('files', $variables);
         $this->assertEquals(['backup/path/'], $variables['files']);
     }
+
+    public function testIndexAction()
+    {
+        $model = $this->controller->indexAction();
+        $this->assertInstanceOf('Zend\View\Model\ViewModel', $model);
+    }
 }
