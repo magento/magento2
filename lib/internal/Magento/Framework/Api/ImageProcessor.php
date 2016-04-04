@@ -142,11 +142,18 @@ class ImageProcessor implements ImageProcessorInterface
 
         $fileContent = @base64_decode($imageContent->getBase64EncodedData(), true);
         $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
-        $fileName = substr(md5(rand()), 0, 7) . '.' . $imageContent->getName();
-        $tmpDirectory->writeFile($fileName, $fileContent);
+        $fileName = $imageContent->getName();
+        if (!pathinfo($fileName, PATHINFO_EXTENSION) && $imageContent->getType()) {
+            $mimeTypeExtension = $this->getMimeTypeExtension($imageContent->getType());
+            if ($mimeTypeExtension) {
+                $fileName .= '.' . $mimeTypeExtension;
+            }
+        }
+        $tmpFileName = substr(md5(rand()), 0, 7) . '.' . $fileName;
+        $tmpDirectory->writeFile($tmpFileName, $fileContent);
 
         $fileAttributes = [
-            'tmp_name' => $tmpDirectory->getAbsolutePath() . $fileName,
+            'tmp_name' => $tmpDirectory->getAbsolutePath() . $tmpFileName,
             'name' => $imageContent->getName()
         ];
 
@@ -156,7 +163,7 @@ class ImageProcessor implements ImageProcessorInterface
             $this->uploader->setFilenamesCaseSensitivity(false);
             $this->uploader->setAllowRenameFiles(true);
             $destinationFolder = $entityType;
-            $this->uploader->save($this->mediaDirectory->getAbsolutePath($destinationFolder), $imageContent->getName());
+            $this->uploader->save($this->mediaDirectory->getAbsolutePath($destinationFolder), $fileName);
         } catch (\Exception $e) {
             $this->logger->critical($e);
         }
