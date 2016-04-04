@@ -673,6 +673,7 @@ class AccountManagement implements AccountManagementInterface
             }
             // Existing password hash will be used from secured customer data registry when saving customer
         }
+
         // Make sure we have a storeId to associate this customer with.
         if (!$customer->getStoreId()) {
             if ($customer->getWebsiteId()) {
@@ -680,14 +681,18 @@ class AccountManagement implements AccountManagementInterface
             } else {
                 $storeId = $this->storeManager->getStore()->getId();
             }
-
             $customer->setStoreId($storeId);
+        }
+
+        // Associate website_id with customer
+        if (!$customer->getWebsiteId()) {
+            $websiteId = $this->storeManager->getStore($customer->getStoreId())->getWebsiteId();
+            $customer->setWebsiteId($websiteId);
         }
 
         // Update 'created_in' value with actual store name
         if ($customer->getId() === null) {
-            $storeName = $this->storeManager->getStore($customer->getStoreId())
-                ->getName();
+            $storeName = $this->storeManager->getStore($customer->getStoreId())->getName();
             $customer->setCreatedIn($storeName);
         }
 
