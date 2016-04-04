@@ -3,22 +3,23 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\Console;
 
-use Magento\Framework\Filesystem\Driver\File;
-use Symfony\Component\Console\Application as SymfonyApplication;
-use Magento\Framework\App\Bootstrap;
-use Magento\Framework\Shell\ComplexParameter;
-use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Magento\Framework\Setup\FilePermissions;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Application as SymfonyApplication;
+use Magento\Framework\App\Bootstrap;
+use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Shell\ComplexParameter;
+use Magento\Setup\Console\CompilerPreparation;
 
 /**
- * Magento2 CLI Application. This is the hood for all command line tools supported by Magento.
+ * Magento 2 CLI Application. This is the hood for all command line tools supported by Magento
  *
  * {@inheritdoc}
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Cli extends SymfonyApplication
 {
@@ -27,7 +28,9 @@ class Cli extends SymfonyApplication
      */
     const INPUT_KEY_BOOTSTRAP = 'bootstrap';
 
-    /** @var \Zend\ServiceManager\ServiceManager */
+    /**
+     * @var \Zend\ServiceManager\ServiceManager
+     */
     private $serviceManager;
 
     /**
@@ -47,23 +50,6 @@ class Cli extends SymfonyApplication
      */
     public function doRun(InputInterface $input, OutputInterface $output)
     {
-        // Check to make sure var/generation/Magento folder dir have read/execute permission for the current user
-        /** @var \Magento\Setup\Model\ObjectManagerProvider $omProvider */
-        $omProvider = $this->serviceManager->get('Magento\Setup\Model\ObjectManagerProvider');
-        /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
-        $objectManager = $omProvider->get();
-        /** @var \Magento\Framework\Setup\Filepermissions $filePermissions */
-        $filePermissions = $objectManager->get('Magento\Framework\Setup\FilePermissions');
-        if ($filePermissions->checkDirectoryPermissionForCLIUser() === false) {
-            $output->writeln(
-                "<error>Command line user ("
-                . get_current_user()
-                . ") may not have proper read+execute permissions for directories under \"var/generation/\" . "
-                . "Please address this issue before using Magento command line."
-            );
-            return 0;
-        }
-
         $exitCode = parent::doRun($input, $output);
         if ($this->initException) {
             $output->writeln(
@@ -76,21 +62,31 @@ class Cli extends SymfonyApplication
     }
 
     /**
-     * @param string $name    The name of the application
-     * @param string $version The version of the application
+     * @param string $name  application name
+     * @param string $version application version
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN')
     {
         $this->serviceManager = \Zend\Mvc\Application::init(require BP . '/setup/config/application.config.php')
             ->getServiceManager();
-        /**
-         * Temporary workaround until the compiler is able to clear the generation directory. (MAGETWO-44493)
-         */
-        if (class_exists('Magento\Setup\Console\CompilerPreparation')) {
-            (new \Magento\Setup\Console\CompilerPreparation($this->serviceManager, new ArgvInput(), new File()))
-                ->handleCompilerEnvironment();
+        $generationDirectoryAccess = new GenerationDirectoryAccess($this->serviceManager);
+        if (!$generationDirectoryAccess->check()) {
+            $output = new ConsoleOutput();
+            $output->writeln(
+                '<error>Command line user does not have read and write permissions on var/generation directory.  Please'
+                . ' address this issue before using Magento command line.</error>'
+            );
+            exit(0);
         }
-
+        /**
+         * Temporary workaround until the compiler is able to clear the generation directory
+         * @todo remove after MAGETWO-44493 resolved
+         */
+        if (class_exists(CompilerPreparation::class)) {
+            $compilerPreparation = new CompilerPreparation($this->serviceManager, new ArgvInput(), new File());
+            $compilerPreparation->handleCompilerEnvironment();
+        }
         parent::__construct($name, $version);
     }
 
