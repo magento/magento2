@@ -182,7 +182,6 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      */
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
-        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $connection = $this->getConnection();
         $qtyExpr = $connection->getCheckSql('cisi.qty > 0', 'cisi.qty', 0);
         $select = $connection->select()->from(
@@ -202,7 +201,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
         )->where(
             'cis.website_id = ?',
             $this->getStockConfiguration()->getDefaultScopeId()
-        )->where( 'e.type_id = ?', $this->getTypeId())
+        )->where('e.type_id = ?', $this->getTypeId())
             ->group(['e.entity_id', 'cis.website_id', 'cis.stock_id']);
 
         $select->columns(['status' => $this->getStatusExpression($connection, true)]);

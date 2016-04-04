@@ -10,6 +10,7 @@ use Magento\CatalogInventory\Api\StockConfigurationInterface;
 
 /**
  * CatalogInventory Stock Status per website Resource Model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Status extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
