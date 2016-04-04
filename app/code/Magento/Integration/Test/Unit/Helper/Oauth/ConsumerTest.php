@@ -5,6 +5,11 @@
  */
 namespace Magento\Integration\Test\Unit\Helper\Oauth;
 
+/**
+ * Test for \Magento\Integration\Model\Oauth\Consumer
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConsumerTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\Store\Model\StoreManagerInterface */
