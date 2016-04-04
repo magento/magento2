@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -1232,6 +1232,15 @@ class InstallSchema implements InstallSchemaInterface
             ->addIndex(
                 $installer->getIdxName('catalog_category_product', ['product_id']),
                 ['product_id']
+            )
+            ->addIndex(
+                $installer->getIdxName(
+                    'catalog_category_product',
+                    ['category_id', 'product_id'],
+                    \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE
+                ),
+                ['category_id', 'product_id'],
+                ['type' => \Magento\Framework\DB\Adapter\AdapterInterface::INDEX_TYPE_UNIQUE]
             )
             ->addForeignKey(
                 $installer->getFkName('catalog_category_product', 'product_id', 'catalog_product_entity', 'entity_id'),

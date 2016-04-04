@@ -1,5 +1,6 @@
 /**
- * @copyright Copyright (c) 2015 X.commerce, Inc. (http://www.magentocommerce.com)
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
  */
 
 // For performance use one level down: 'name/{,*/}*.js'

@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -26,6 +26,7 @@
                 <item name="qty" xsi:type="string">666</item>
                 <item name="is_in_stock" xsi:type="string">In Stock</item>
             </field>
+            <field name="product_has_weight" xsi:type="string">This item has no weight</field>
             <field name="price" xsi:type="array">
                 <item name="value" xsi:type="string">10</item>
             </field>
@@ -44,6 +45,7 @@
             <field name="tax_class_id" xsi:type="array">
                 <item name="dataset" xsi:type="string">taxable_goods</item>
             </field>
+            <field name="product_has_weight" xsi:type="string">This item has no weight</field>
             <field name="website_ids" xsi:type="array">
                 <item name="0" xsi:type="string">Main Website</item>
             </field>

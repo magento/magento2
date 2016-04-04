@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogSearch\Model\Adapter\Mysql\Plugin\Aggregation\Category;
@@ -67,8 +67,7 @@ class DataProvider
         Table $entityIdsTable
     ) {
         if ($bucket->getField() == 'category_ids') {
-            $currentScope = $dimensions['scope']->getValue();
-            $currentScopeId = $this->scopeResolver->getScope($currentScope)->getId();
+            $currentScopeId = $this->scopeResolver->getScope($dimensions['scope']->getValue())->getId();
             $currentCategory = $this->layer->getCurrentCategory();
 
             $derivedTable = $this->resource->getConnection()->select();
