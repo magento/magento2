@@ -5,10 +5,10 @@
  */
 namespace Magento\Framework\Session\SaveHandler\Redis;
 
-use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\State;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\State;
 
 /**
  * Redis session save handler
@@ -111,9 +111,9 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     const XML_PATH_ADMIN_SESSION_LIFETIME = 'admin/security/session_lifetime';
 
     /**
-     * Max admin session lifetime
+     * Session max lifetime
      */
-    const ADMIN_SESSION_MAX_LIFETIME = 31536000;
+    const SESSION_MAX_LIFETIME = 31536000;
 
     /**
      * Deployment config
@@ -227,7 +227,7 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
      */
     public function getMaxLifetime()
     {
-        return self::ADMIN_SESSION_MAX_LIFETIME;
+        return self::SESSION_MAX_LIFETIME;
     }
 
     /**
