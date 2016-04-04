@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Data\Form\Element;
@@ -402,15 +402,18 @@ abstract class AbstractElement extends AbstractForm
      * Render HTML for element's label
      *
      * @param string $idSuffix
+     * @param string $scopeLabel
      * @return string
      */
-    public function getLabelHtml($idSuffix = '')
+    public function getLabelHtml($idSuffix = '', $scopeLabel = '')
     {
+        $scopeLabel = $scopeLabel ? ' data-config-scope="' . $scopeLabel . '"' : '';
+
         if ($this->getLabel() !== null) {
             $html = '<label class="label admin__field-label" for="' .
                 $this->getHtmlId() . $idSuffix . '"' . $this->_getUiId(
                     'label'
-                ) . '><span>' . $this->_escape(
+                ) . '><span' . $scopeLabel . '>' . $this->_escape(
                     $this->getLabel()
                 ) . '</span></label>' . "\n";
         } else {

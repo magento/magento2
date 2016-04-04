@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -45,21 +45,21 @@ class CreateConfigurableProductEntityTest extends Injectable
     /* end tags */
 
     /**
-     * Product page with a grid
+     * Product page with a grid.
      *
      * @var CatalogProductIndex
      */
     protected $productIndex;
 
     /**
-     * Page to create a product
+     * Page to create a product.
      *
      * @var CatalogProductNew
      */
     protected $productNew;
 
     /**
-     * Injection data
+     * Injection data.
      *
      * @param CatalogProductIndex $productIndex
      * @param CatalogProductNew $productNew
@@ -72,14 +72,13 @@ class CreateConfigurableProductEntityTest extends Injectable
     }
 
     /**
-     * Test create catalog Configurable product run
+     * Test create catalog Configurable product run.
      *
      * @param ConfigurableProduct $product
      * @return void
      */
     public function test(ConfigurableProduct $product)
     {
-        $this->markTestIncomplete('MAGETWO-48724');
         // Steps
         $this->productIndex->open();
         $this->productIndex->getGridPageActionBlock()->addProduct('configurable');

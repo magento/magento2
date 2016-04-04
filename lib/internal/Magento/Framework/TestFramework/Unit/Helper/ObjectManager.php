@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -159,7 +159,17 @@ class ObjectManager
         }
         $constructArguments = $this->getConstructArguments($className, $arguments);
         $reflectionClass = new \ReflectionClass($className);
-        return $reflectionClass->newInstanceArgs($constructArguments);
+        $newObject = $reflectionClass->newInstanceArgs($constructArguments);
+
+        foreach (array_diff_key($arguments, $constructArguments) as $key => $value) {
+            if ($reflectionClass->hasProperty($key)) {
+                $reflectionProperty = $reflectionClass->getProperty($key);
+                $reflectionProperty->setAccessible(true);
+                $reflectionProperty->setValue($newObject, $value);
+            }
+        }
+
+        return $newObject;
     }
 
     /**

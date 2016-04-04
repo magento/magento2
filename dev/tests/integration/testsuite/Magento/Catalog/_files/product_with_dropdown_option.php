@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -40,6 +40,11 @@ $product->setTypeId(
     \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
 )->setCanSaveCustomOptions(
     true
+)->setStockData(
+    [
+        'qty' => 0,
+        'is_in_stock' => 0
+    ]
 );
 
 $options = [

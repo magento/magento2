@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Block\Form;
@@ -46,7 +46,7 @@ class RegisterTest extends \PHPUnit_Framework_TestCase
     /** @var Register */
     private $_block;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_scopeConfig = $this->getMock('Magento\Framework\App\Config\ScopeConfigInterface');
         $this->_moduleManager = $this->getMock('Magento\Framework\Module\Manager', [], [], '', false);

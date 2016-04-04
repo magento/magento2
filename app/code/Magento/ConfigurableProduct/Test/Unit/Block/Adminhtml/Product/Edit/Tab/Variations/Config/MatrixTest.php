@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Adminhtml\Product\Edit\Tab\Variations\Config;
@@ -116,16 +116,23 @@ class MatrixTest extends \PHPUnit_Framework_TestCase
     public function testGetVariationWizard($wizardBlockName, $wizardHtml)
     {
         $initData = ['some-key' => 'some-value'];
+        $wizardName = 'variation-steps-wizard';
+        $blockConfig = [
+            'config' => [
+                'nameStepWizard' => $wizardName
+            ]
+        ];
 
         $layout = $this->getMock('Magento\Framework\View\LayoutInterface');
         $wizardBlock = $this->getMock('Magento\Ui\Block\Component\StepsWizard', [], [], '', false);
-        $layout->expects($this->any())->method('getChildName')->with(null, 'variation-steps-wizard')
+        $layout->expects($this->any())->method('getChildName')->with(null, $wizardName)
             ->willReturn($wizardBlockName);
         $layout->expects($this->any())->method('getBlock')->with($wizardBlockName)->willReturn($wizardBlock);
         $wizardBlock->expects($this->any())->method('setInitData')->with($initData);
         $wizardBlock->expects($this->any())->method('toHtml')->willReturn($wizardHtml);
 
         $this->_block->setLayout($layout);
+        $this->_block->setData($blockConfig);
 
         $this->assertEquals($wizardHtml, $this->_block->getVariationWizard($initData));
     }

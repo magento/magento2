@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\UrlInterface;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Ui\Component\Form\Fieldset;
 
 /**
  * Class SystemDataProvider
@@ -18,9 +16,6 @@ class System extends AbstractModifier
     const KEY_SUBMIT_URL = 'submit_url';
     const KEY_VALIDATE_URL = 'validate_url';
     const KEY_RELOAD_URL = 'reloadUrl';
-    const URL_SUBMIT = 'catalog/product/save';
-    const URL_VALIDATE = 'catalog/product/validate';
-    const URL_RELOAD = 'catalog/product/reload';
 
     /**
      * @var LocatorInterface
@@ -33,13 +28,27 @@ class System extends AbstractModifier
     protected $urlBuilder;
 
     /**
+     * @var array
+     */
+    protected $productUrls = [
+        self::KEY_SUBMIT_URL => 'catalog/product/save',
+        self::KEY_VALIDATE_URL => 'catalog/product/validate',
+        self::KEY_RELOAD_URL => 'catalog/product/reload'
+    ];
+
+    /**
      * @param LocatorInterface $locator
      * @param UrlInterface $urlBuilder
+     * @param array $productUrls
      */
-    public function __construct(LocatorInterface $locator, UrlInterface $urlBuilder)
-    {
+    public function __construct(
+        LocatorInterface $locator,
+        UrlInterface $urlBuilder,
+        array $productUrls = []
+    ) {
         $this->locator = $locator;
         $this->urlBuilder = $urlBuilder;
+        $this->productUrls = array_replace_recursive($this->productUrls, $productUrls);
     }
 
     /**
@@ -62,16 +71,21 @@ class System extends AbstractModifier
                 'popup' => 1,
                 'componentJson' => 1,
                 'prev_set_id' => $attributeSetId,
+                'type' => $this->locator->getProduct()->getTypeId()
             ]
         );
+
+        $submitUrl = $this->urlBuilder->getUrl($this->productUrls[self::KEY_SUBMIT_URL], $actionParameters);
+        $validateUrl = $this->urlBuilder->getUrl($this->productUrls[self::KEY_VALIDATE_URL], $actionParameters);
+        $reloadUrl = $this->urlBuilder->getUrl($this->productUrls[self::KEY_RELOAD_URL], $reloadParameters);
 
         return array_replace_recursive(
             $data,
             [
                 'config' => [
-                    self::KEY_SUBMIT_URL => $this->urlBuilder->getUrl(self::URL_SUBMIT, $actionParameters),
-                    self::KEY_VALIDATE_URL => $this->urlBuilder->getUrl(self::URL_VALIDATE, $actionParameters),
-                    self::KEY_RELOAD_URL => $this->urlBuilder->getUrl(self::URL_RELOAD, $reloadParameters),
+                    self::KEY_SUBMIT_URL => $submitUrl,
+                    self::KEY_VALIDATE_URL => $validateUrl,
+                    self::KEY_RELOAD_URL => $reloadUrl,
                 ]
             ]
         );

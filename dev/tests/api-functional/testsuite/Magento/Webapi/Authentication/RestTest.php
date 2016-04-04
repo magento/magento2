@@ -2,7 +2,7 @@
 /**
  * Test authentication mechanisms in REST.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Authentication;
@@ -85,7 +85,7 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage HTTP/1.1 401
+     * @expectedExceptionMessage 401 Unauthorized
      */
     public function testGetRequestTokenExpiredConsumer()
     {
@@ -97,7 +97,7 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage HTTP/1.1 401
+     * @expectedExceptionMessage 401 Unauthorized
      */
     public function testGetRequestTokenInvalidConsumerKey()
     {
@@ -107,7 +107,7 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage HTTP/1.1 401
+     * @expectedExceptionMessage 401 Unauthorized
      */
     public function testGetRequestTokenInvalidConsumerSecret()
     {
@@ -141,7 +141,7 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage HTTP/1.1 401
+     * @expectedExceptionMessage 401 Unauthorized
      */
     public function testGetAccessTokenInvalidVerifier()
     {
@@ -156,7 +156,7 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage HTTP/1.1 401
+     * @expectedExceptionMessage 401 Unauthorized
      */
     public function testGetAccessTokenConsumerMismatch()
     {
@@ -176,7 +176,7 @@ class RestTest extends \Magento\TestFramework\TestCase\WebapiAbstract
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage HTTP/1.1 400
+     * @expectedExceptionMessage 400 Bad Request
      */
     public function testAccessApiInvalidAccessToken()
     {

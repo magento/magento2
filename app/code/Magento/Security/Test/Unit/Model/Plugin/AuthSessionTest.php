@@ -1,12 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Security\Test\Unit\Model\Plugin;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Security\Model\SecurityCookie;
 
 /**
  * Test class for \Magento\Security\Model\Plugin\AuthSession testing
@@ -25,8 +25,8 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Security\Model\AdminSessionsManager */
     protected $adminSessionsManagerMock;
 
-    /** @var \Magento\Security\Helper\SecurityCookie */
-    protected $securityCookieHelperMock;
+    /** @var SecurityCookie */
+    protected $securityCookieMock;
 
     /** @var \Magento\Backend\Model\Auth\Session */
     protected $authSessionMock;
@@ -68,8 +68,8 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
             false
         );
 
-        $this->securityCookieHelperMock = $this->getMock(
-            '\Magento\Security\Helper\SecurityCookie',
+        $this->securityCookieMock = $this->getMock(
+            SecurityCookie::class,
             ['setLogoutReasonCookie'],
             [],
             '',
@@ -86,7 +86,7 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
 
         $this->currentSessionMock = $this->getMock(
             '\Magento\Security\Model\AdminSessionInfo',
-            ['isActive', 'getStatus'],
+            ['isLoggedInStatus', 'getStatus'],
             [],
             '',
             false
@@ -98,17 +98,9 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
                 'request' => $this->requestMock,
                 'messageManager' => $this->messageManagerMock,
                 'sessionsManager' => $this->adminSessionsManagerMock,
-                'securityCookieHelper' => $this->securityCookieHelperMock
+                'securityCookie' => $this->securityCookieMock
             ]
         );
-
-        $this->requestMock->expects($this->any())
-            ->method('getModuleName')
-            ->willReturn('notSecurity');
-
-        $this->requestMock->expects($this->any())
-            ->method('getActionName')
-            ->willReturn('notCheck');
 
         $this->adminSessionsManagerMock->expects($this->any())
             ->method('getCurrentSession')
@@ -128,7 +120,7 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
         };
 
         $this->currentSessionMock->expects($this->once())
-            ->method('isActive')
+            ->method('isLoggedInStatus')
             ->willReturn(false);
 
         $this->authSessionMock->expects($this->once())
@@ -178,7 +170,7 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
             ->method('getStatus')
             ->willReturn($status);
 
-        $this->securityCookieHelperMock->expects($this->once())
+        $this->securityCookieMock->expects($this->once())
             ->method('setLogoutReasonCookie')
             ->with($status)
             ->willReturnSelf();
@@ -197,7 +189,7 @@ class AuthSessionTest extends \PHPUnit_Framework_TestCase
         };
 
         $this->currentSessionMock->expects($this->any())
-            ->method('isActive')
+            ->method('isLoggedInStatus')
             ->willReturn(true);
 
         $this->adminSessionsManagerMock->expects($this->any())
