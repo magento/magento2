@@ -64,6 +64,8 @@ class Environment extends AbstractActionController
     }
 
     /**
+     * No index action, return 404 error page
+     *
      * @return \Zend\View\Model\JsonModel
      */
     public function indexAction()
