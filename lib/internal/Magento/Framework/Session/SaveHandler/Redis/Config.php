@@ -126,26 +126,18 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
     private $scopeConfig;
 
     /**
-     * @var ScopeInterface
-     */
-    private $scope;
-
-    /**
      * @param DeploymentConfig $deploymentConfig
      * @param State $appState
      * @param ScopeConfigInterface $scopeConfig
-     * @param ScopeInterface $scope
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
         State $appState,
-        ScopeConfigInterface $scopeConfig,
-        ScopeInterface $scope
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->deploymentConfig = $deploymentConfig;
         $this->appState = $appState;
         $this->scopeConfig = $scopeConfig;
-        $this->scope = $scope;
     }
 
     /**
@@ -289,12 +281,9 @@ class Config implements \Cm\RedisSession\Handler\ConfigInterface
      */
     public function getLifetime()
     {
-        if ($this->scope->getCurrentScope() == \Magento\Framework\App\Area::AREA_ADMINHTML) {
-            return (int)$this->scopeConfig->getValue(
-                self::XML_PATH_ADMIN_SESSION_LIFETIME,
-                StoreScopeInterface::SCOPE_STORE
-            );
+        if ($this->appState->getAreaCode() == \Magento\Framework\App\Area::AREA_ADMINHTML) {
+            return (int)$this->scopeConfig->getValue(self::XML_PATH_ADMIN_SESSION_LIFETIME);
         }
-        return (int)$this->scopeConfig->getValue(self::XML_PATH_COOKIE_LIFETIME, StoreScopeInterface::SCOPE_WEBSITE);
+        return (int)$this->scopeConfig->getValue(self::XML_PATH_COOKIE_LIFETIME, StoreScopeInterface::SCOPE_STORE);
     }
 }
