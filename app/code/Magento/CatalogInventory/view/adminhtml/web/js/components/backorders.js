@@ -27,9 +27,9 @@ define([
          * Change visibility for deferredStockUpdate based on current visibility and value.
          */
         changeVisibility: function () {
-            if (this.visible() && parseFloat(this.value()) && this.deferredStockUpdate) {
+            if (this.visible() && parseFloat(this.value()) && this.deferredStockUpdate()) {
                 this.deferredStockUpdate().visible(true);
-            } else if (this.deferredStockUpdate) {
+            } else if (this.deferredStockUpdate()) {
                 this.deferredStockUpdate().visible(false);
             }
         }

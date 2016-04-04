@@ -60,6 +60,8 @@
                 <field name="use_config_manage_stock">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
+                            <item name="class" xsi:type="string">Magento\CatalogInventory\Ui\Component\Product\Form\StockData\UseConfigSettings</item>
+                            <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/use-config-settings</item>
                             <item name="description" xsi:type="string" translate="true">Use Config Settings</item>
                             <item name="formElement" xsi:type="string">checkbox</item>
                             <item name="dataScope" xsi:type="string">use_config_manage_stock</item>
@@ -68,8 +70,10 @@
                                 <item name="false" xsi:type="string">0</item>
                             </item>
                             <item name="value" xsi:type="string">1</item>
+                            <item name="valueFromConfig" xsi:type="string">12</item>
                             <item name="exports" xsi:type="array">
                                 <item name="checked" xsi:type="string">${$.parentName}.manage_stock:disabled</item>
+                                <item name="valueFromConfig" xsi:type="string">${$.parentName}.manage_stock:value</item>
                             </item>
                         </item>
                     </argument>
