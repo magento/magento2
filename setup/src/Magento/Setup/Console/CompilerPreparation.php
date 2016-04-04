@@ -56,20 +56,32 @@ class CompilerPreparation
             return;
         }
         $compileDirList = [];
+        $mageInitParams = $this->serviceManager->get(InitParamListener::BOOTSTRAP_PARAM);
+        $mageDirs = isset($mageInitParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS])
+            ? $mageInitParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]
+            : [];
+        $directoryList = new DirectoryList(BP, $mageDirs);
         if ($cmdName === DiCompileMultiTenantCommand::NAME) {
-            $compileDirList[] = $this->input->getParameterOption(DiCompileMultiTenantCommand::INPUT_KEY_GENERATION);
-            $compileDirList[] = $this->input->getParameterOption(DiCompileMultiTenantCommand::INPUT_KEY_DI);
+            $generationDir = $this->input->getParameterOption(DiCompileMultiTenantCommand::INPUT_KEY_GENERATION);
+            if ($generationDir) {
+                $compileDirList[] = $generationDir;
+            } else {
+                $compileDirList[] = $directoryList->getPath(DirectoryList::GENERATION);
+            }
+            $diDir = $this->input->getParameterOption(DiCompileMultiTenantCommand::INPUT_KEY_DI);
+            if ($diDir) {
+                $compileDirList[] = $diDir;
+            } else {
+                $compileDirList[] = $directoryList->getPath(DirectoryList::DI);
+            }
         } else {
-            $mageInitParams = $this->serviceManager->get(InitParamListener::BOOTSTRAP_PARAM);
-            $mageDirs = isset($mageInitParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS])
-                ? $mageInitParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]
-                : [];
-            $compileDirList[] = (new DirectoryList(BP, $mageDirs))->getPath(DirectoryList::GENERATION);
-            $compileDirList[] = (new DirectoryList(BP, $mageDirs))->getPath(DirectoryList::DI);
+            $compileDirList[] = $directoryList->getPath(DirectoryList::GENERATION);
+            $compileDirList[] = $directoryList->getPath(DirectoryList::DI);
         }
-        foreach ($compileDirList as $compileDir)
-        if ($this->filesystemDriver->isExists($compileDir)) {
-            $this->filesystemDriver->deleteDirectory($compileDir);
+        foreach ($compileDirList as $compileDir) {
+            if ($this->filesystemDriver->isExists($compileDir)) {
+                $this->filesystemDriver->deleteDirectory($compileDir);
+            }
         }
     }
 }
