@@ -247,6 +247,16 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
     }
 
     /**
+     * @deprecated
+     * @param \Magento\Catalog\Model\ResourceModel\Product\Link $value
+     * @return void
+     */
+    public function setLinkResource($value)
+    {
+        $this->linkResource = $value;
+    }
+
+    /**
      * @return LinkTypeProvider
      */
     private function getLinkTypeProvider()
@@ -256,6 +266,16 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
                 ->get('Magento\Catalog\Model\Product\LinkTypeProvider');
         }
         return $this->linkTypeProvider;
+    }
+
+    /**
+     * @deprecated
+     * @param LinkTypeProvider $value
+     * @return void
+     */
+    public function setLinkTypeProvider($value)
+    {
+        $this->linkTypeProvider = $value;
     }
 
     /**
@@ -292,5 +312,15 @@ class Repository implements \Magento\Catalog\Api\ProductLinkRepositoryInterface
                 ->get('Magento\Framework\EntityManager\MetadataPool');
         }
         return $this->metadataPool;
+    }
+
+    /**
+     * @deprecated
+     * @param \Magento\Framework\EntityManager\MetadataPool $value
+     * @return void
+     */
+    public function setMetadataPool($value)
+    {
+        $this->metadataPool = $value;
     }
 }
