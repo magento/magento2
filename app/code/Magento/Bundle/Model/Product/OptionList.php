@@ -75,6 +75,7 @@ class OptionList
             );
             $optionDataObject->setOptionId($option->getOptionId())
                 ->setTitle($option->getTitle() === null ? $option->getDefaultTitle() : $option->getTitle())
+                ->setDefaultTitle($option->getDefaultTitle())
                 ->setSku($product->getSku())
                 ->setProductLinks($productLinks);
             $optionList[] = $optionDataObject;
