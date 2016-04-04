@@ -187,4 +187,31 @@ class CompareTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue([]));
         $this->assertFalse($this->helper->compare($this->itemMock, $this->comparedMock));
     }
+
+    /**
+     * Verify that compare ignores empty options.
+     */
+    public function testCompareWithEmptyValues()
+    {
+        $this->itemMock->expects($this->any())
+            ->method('getProductId')
+            ->will($this->returnValue(1));
+        $this->comparedMock->expects($this->any())
+            ->method('getProductId')
+            ->will($this->returnValue(1));
+
+        $this->itemMock->expects($this->once())->method('getOptions')->willReturn([
+            $this->getOptionMock('option-1', serialize([
+                'non-empty-option' => 'test',
+                'empty_option' => ''
+            ]))
+        ]);
+        $this->comparedMock->expects($this->once())->method('getOptions')->willReturn([
+            $this->getOptionMock('option-1', serialize([
+                'non-empty-option' => 'test'
+            ]))
+        ]);
+        
+        $this->assertTrue($this->helper->compare($this->itemMock, $this->comparedMock));
+    }
 }
