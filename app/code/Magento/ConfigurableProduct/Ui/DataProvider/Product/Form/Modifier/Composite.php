@@ -118,9 +118,6 @@ class Composite extends AbstractModifier
      */
     protected function canShowConfigurablePanel()
     {
-        return in_array(
-            $this->locator->getProduct()->getTypeId(),
-            $this->allowedProductTypes->getAllowedProductTypes()
-        );
+        return $this->allowedProductTypes->isAllowedProductType($this->locator->getProduct());
     }
 }

@@ -94,8 +94,9 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
             ->method('getTypeId')
             ->willReturn(ConfigurableType::TYPE_CODE);
         $this->allowedProductTypesMock->expects(static::once())
-            ->method('getAllowedProductTypes')
-            ->willReturn([ConfigurableType::TYPE_CODE]);
+            ->method('isAllowedProductType')
+            ->with($this->productMock)
+            ->willReturn(true);
         $this->productMock->expects(static::any())
             ->method('getId')
             ->willReturn($productId);
@@ -119,8 +120,9 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
             ->method('getTypeId')
             ->willReturn(ConfigurableType::TYPE_CODE);
         $this->allowedProductTypesMock->expects(static::once())
-            ->method('getAllowedProductTypes')
-            ->willReturn(['someTypeProduct']);
+            ->method('isAllowedProductType')
+            ->with($this->productMock)
+            ->willReturn(false);
         $this->productMock->expects(static::never())
             ->method('getId');
         $this->associatedProductsMock->expects(static::never())
@@ -143,8 +145,9 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
             ->method('getTypeId')
             ->willReturn(ConfigurableType::TYPE_CODE);
         $this->allowedProductTypesMock->expects(static::once())
-            ->method('getAllowedProductTypes')
-            ->willReturn([ConfigurableType::TYPE_CODE]);
+            ->method('isAllowedProductType')
+            ->with($this->productMock)
+            ->willReturn(true);
         $this->objectManagerMock->expects(static::any())
             ->method('get')
             ->willReturnMap(
@@ -165,8 +168,9 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
             ->method('getTypeId')
             ->willReturn(ConfigurableType::TYPE_CODE);
         $this->allowedProductTypesMock->expects(static::once())
-            ->method('getAllowedProductTypes')
-            ->willReturn(['SomeTypeProduct']);
+            ->method('isAllowedProductType')
+            ->with($this->productMock)
+            ->willReturn(false);
         $this->objectManagerMock->expects(static::never())
             ->method('get');
 
