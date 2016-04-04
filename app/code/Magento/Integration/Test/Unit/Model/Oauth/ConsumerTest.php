@@ -110,7 +110,7 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
 
         $this->resourceMock = $this->getMock(
             'Magento\Integration\Model\ResourceModel\Oauth\Consumer',
-            ['getTimeInSecondsSinceCreation', 'getIdFieldName', 'selectByCompositeKey', 'deleteOldEntries'],
+            ['getTimeInSecondsSinceTokenExchangeStarted', 'getIdFieldName', 'selectByCompositeKey', 'deleteOldEntries'],
             [],
             '',
             false,
@@ -216,20 +216,20 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
     public function testGetConsumerExpirationPeriodValid()
     {
         $this->resourceMock->expects($this->once())
-            ->method('getTimeInSecondsSinceCreation')
+            ->method('getTimeInSecondsSinceTokenExchangeStarted')
             ->will($this->returnValue(30));
 
-        $this->consumerModel->setCreatedAt(time());
+        $this->consumerModel->setUpdatedAt(time());
         $this->assertTrue($this->consumerModel->isValidForTokenExchange());
     }
 
     public function testGetConsumerExpirationPeriodExpired()
     {
         $this->resourceMock->expects($this->once())
-            ->method('getTimeInSecondsSinceCreation')
+            ->method('getTimeInSecondsSinceTokenExchangeStarted')
             ->will($this->returnValue(400));
 
-        $this->consumerModel->setCreatedAt(time());
+        $this->consumerModel->setUpdatedAt(time());
         $this->assertFalse($this->consumerModel->isValidForTokenExchange());
     }
 }

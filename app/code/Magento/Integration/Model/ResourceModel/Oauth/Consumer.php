@@ -45,6 +45,8 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Compute time in seconds since consumer was created.
      *
+     * @deprecated
+     *
      * @param int $consumerId - The consumer id
      * @return int - time lapsed in seconds
      */
@@ -60,6 +62,12 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         return $connection->fetchOne($select);
     }
 
+    /**
+     * Compute time in seconds since token exchange started.
+     *
+     * @param int $consumerId - The consumer id
+     * @return int - time lapsed in seconds
+     */
     public function getTimeInSecondsSinceTokenExchangeStarted($consumerId)
     {
         $connection = $this->getConnection();

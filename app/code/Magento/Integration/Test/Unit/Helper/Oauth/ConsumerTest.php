@@ -152,6 +152,16 @@ class ConsumerTest extends \PHPUnit_Framework_TestCase
         )->will(
             $this->returnSelf()
         );
+
+        $dateHelperMock = $this->getMockBuilder('Magento\Framework\Stdlib\DateTime\DateTime')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $dateHelperMock->expects($this->any())->method('gmtDate');
+
+        $dateHelper = new \ReflectionProperty('Magento\Integration\Model\OauthService', '_dateHelper');
+        $dateHelper->setAccessible(true);
+        $dateHelper->setValue($this->_oauthService, $dateHelperMock);
+
         $this->_consumerMock->expects($this->once())->method('getId')->will($this->returnValue($consumerId));
         $this->_consumerMock->expects($this->once())->method('getData')->will($this->returnValue($consumerData));
         $this->_httpClientMock->expects(
