@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -62,7 +62,7 @@ class FlushCacheByTagsTest extends \PHPUnit_Framework_TestCase
 
         if ($cacheState) {
             $tags = ['cache_1', 'cache_group'];
-            $expectedTags = ['cache_1', 'cache_group', 'cache'];
+            $expectedTags = ['cache_1', 'cache_group'];
 
             $eventMock = $this->getMock('Magento\Framework\Event', ['getObject'], [], '', false);
             $eventMock->expects($this->once())->method('getObject')->will($this->returnValue($observedObject));

@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*jshint jquery:true*/
@@ -165,7 +165,7 @@ define([
                 imgElement;
 
             imageData = $.extend({
-                'file_id': Math.random().toString(33).substr(2, 18),
+                'file_id': imageData.value_id ? imageData.value_id : Math.random().toString(33).substr(2, 18),
                 'disabled': imageData.disabled ? imageData.disabled : 0,
                 'position': count + 1,
                 sizeLabel: bytesToSize(imageData.size)
@@ -383,7 +383,11 @@ define([
                 this.dialogTmpl = mageTemplate(template.html().trim());
             }
 
-            this.dialogContainerTmpl = mageTemplate(containerTmpl.html().trim());
+            if (containerTmpl.length) {
+                this.dialogContainerTmpl = mageTemplate(containerTmpl.html().trim());
+            } else {
+                this.dialogContainerTmpl = mageTemplate('');
+            }
 
             this._initDialog();
         },
@@ -403,8 +407,6 @@ define([
             events['click ' + this.options.imageSelector] = function (event) {
                 if (!$(event.currentTarget).is('.ui-sortable-helper')) {
                     $(event.currentTarget).addClass('active');
-                    var itemId = $(event.currentTarget).find('input')[0].name.match(/\[([^\]]*)\]/g)[2];
-                    $('#item_id').val(itemId);
                     var imageData = $(event.currentTarget).data('imageData');
                     var $imageContainer = this.findElement(imageData);
                     if ($imageContainer.is('.removed')) {
@@ -442,6 +444,7 @@ define([
                 var $imageContainer = $dialog.data('imageContainer');
 
                 $imageContainer.removeClass('active');
+                $dialog.find('#hide-from-product-page').remove();
             });
 
             $dialog.on('change', '[data-role=type-selector]', function () {
@@ -462,13 +465,13 @@ define([
                 })
             }, this));
 
-            $dialog.on('change', '#image-description', function (e) {
+            $dialog.on('change', '[data-role="image-description"]', function (e) {
                 var target = $(e.target),
                     targetName = target.attr('name'),
                     desc = target.val(),
                     imageData = $dialog.data('imageData');
 
-                $('input[type="hidden"][name="' + targetName + '"]').val(desc);
+                this.element.find('input[type="hidden"][name="' + targetName + '"]').val(desc);
 
                 imageData.label = desc;
                 imageData.label_default = desc;

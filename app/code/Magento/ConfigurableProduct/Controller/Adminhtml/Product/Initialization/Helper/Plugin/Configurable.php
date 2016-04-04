@@ -2,7 +2,7 @@
 /**
  * Product initialization helper
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\ConfigurableProduct\Controller\Adminhtml\Product\Initialization\Helper\Plugin;
@@ -36,6 +36,23 @@ class Configurable
      * @var Factory
      */
     private $optionsFactory;
+
+    /**
+     * @var array
+     */
+    private $keysPost = [
+        'status',
+        'sku',
+        'name',
+        'price',
+        'configurable_attribute',
+        'weight',
+        'media_gallery',
+        'swatch_image',
+        'small_image',
+        'thumbnail',
+        'image'
+    ];
 
     /**
      * Constructor
@@ -111,11 +128,58 @@ class Configurable
     private function setLinkedProducts(ProductInterface $product, ProductExtensionInterface $extensionAttributes)
     {
         $associatedProductIds = $this->request->getPost('associated_product_ids', []);
-        $variationsMatrix = $this->request->getParam('variations-matrix', []);
+        $variationsMatrix = $this->getVariationMatrix();
+
+        if ($associatedProductIds || $variationsMatrix) {
+            $this->variationHandler->prepareAttributeSet($product);
+        }
+
         if (!empty($variationsMatrix)) {
             $generatedProductIds = $this->variationHandler->generateSimpleProducts($product, $variationsMatrix);
             $associatedProductIds = array_merge($associatedProductIds, $generatedProductIds);
         }
         $extensionAttributes->setConfigurableProductLinks(array_filter($associatedProductIds));
+    }
+
+    /**
+     * Get variation-matrix from request
+     *
+     * @return array
+     */
+    protected function getVariationMatrix()
+    {
+        $result = [];
+        $configurableMatrix = $this->request->getParam('configurable-matrix', []);
+
+        foreach ($configurableMatrix as $item) {
+            if ($item['newProduct']) {
+                $result[$item['variationKey']] = $this->mapData($item);
+
+                if (isset($item['qty'])) {
+                    $result[$item['variationKey']]['quantity_and_stock_status']['qty'] = $item['qty'];
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    /**
+     * Map data from POST
+     *
+     * @param array $item
+     * @return array
+     */
+    private function mapData(array $item)
+    {
+        $result = [];
+
+        foreach ($this->keysPost as $key) {
+            if (isset($item[$key])) {
+                $result[$key] = $item[$key];
+            }
+        }
+
+        return $result;
     }
 }

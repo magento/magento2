@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product;
@@ -45,20 +45,17 @@ class Builder
      * @param Logger $logger
      * @param Registry $registry
      * @param WysiwygModel\Config $wysiwygConfig
-     * @param StoreFactory $storeFactory
      */
     public function __construct(
         ProductFactory $productFactory,
         Logger $logger,
         Registry $registry,
-        WysiwygModel\Config $wysiwygConfig,
-        StoreFactory $storeFactory
+        WysiwygModel\Config $wysiwygConfig
     ) {
         $this->productFactory = $productFactory;
         $this->logger = $logger;
         $this->registry = $registry;
         $this->wysiwygConfig = $wysiwygConfig;
-        $this->storeFactory = $storeFactory;
     }
 
     /**
@@ -73,7 +70,7 @@ class Builder
         /** @var $product \Magento\Catalog\Model\Product */
         $product = $this->productFactory->create();
         $product->setStoreId($request->getParam('store', 0));
-        $store = $this->storeFactory->create();
+        $store = $this->getStoreFactory()->create();
         $store->load($request->getParam('store', 0));
 
         $typeId = $request->getParam('type');
@@ -101,5 +98,17 @@ class Builder
         $this->registry->register('current_store', $store);
         $this->wysiwygConfig->setStoreId($request->getParam('store'));
         return $product;
+    }
+
+    /**
+     * @return StoreFactory
+     */
+    private function getStoreFactory()
+    {
+        if (null === $this->storeFactory) {
+            $this->storeFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Store\Model\StoreFactory');
+        }
+        return $this->storeFactory;
     }
 }

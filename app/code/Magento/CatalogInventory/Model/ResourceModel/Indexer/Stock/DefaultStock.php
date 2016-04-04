@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -48,23 +48,18 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy
      * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\Model\Entity\MetadataPool $metadataPool
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param QueryProcessorComposite $queryProcessorComposite
      * @param string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Indexer\Table\StrategyInterface $tableStrategy,
         \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\Model\Entity\MetadataPool $metadataPool,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        QueryProcessorComposite $queryProcessorComposite,
         $connectionName = null
     ) {
         $this->_scopeConfig = $scopeConfig;
-        $this->queryProcessorComposite = $queryProcessorComposite;
-        parent::__construct($context, $tableStrategy, $eavConfig, $metadataPool, $connectionName);
+        parent::__construct($context, $tableStrategy, $eavConfig, $connectionName);
     }
 
     /**
@@ -181,7 +176,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      */
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
-        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $connection = $this->getConnection();
         $qtyExpr = $connection->getCheckSql('cisi.qty > 0', 'cisi.qty', 0);
         $select = $connection->select()->from(
@@ -201,7 +196,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
         )->columns(['qty' => new \Zend_Db_Expr('SUM(' . $qtyExpr . ')')])
             ->where('cw.website_id != 0')
             ->where('e.type_id = ?', $this->getTypeId())
-            ->group('e.entity_id');
+            ->group(['e.entity_id', 'cw.website_id']);
 
         // add limitation of status
         $condition = $connection->quoteInto(
@@ -235,7 +230,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     {
         $connection = $this->getConnection();
         $select = $this->_getStockStatusSelect($entityIds);
-        $select = $this->queryProcessorComposite->processQuery($select, $entityIds);
+        $select = $this->getQueryProcessorComposite()->processQuery($select, $entityIds);
         $query = $select->insertFromSelect($this->getIdxTable());
         $connection->query($query);
 
@@ -252,7 +247,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     {
         $connection = $this->getConnection();
         $select = $this->_getStockStatusSelect($entityIds, true);
-        $select = $this->queryProcessorComposite->processQuery($select, $entityIds, true);
+        $select = $this->getQueryProcessorComposite()->processQuery($select, $entityIds, true);
         $query = $connection->query($select);
 
         $i = 0;
@@ -328,5 +323,17 @@ class DefaultStock extends AbstractIndexer implements StockInterface
             );
         }
         return $statusExpr;
+    }
+
+    /**
+     * @return QueryProcessorComposite
+     */
+    private function getQueryProcessorComposite()
+    {
+        if (null === $this->queryProcessorComposite) {
+            $this->queryProcessorComposite = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\QueryProcessorComposite');
+        }
+        return $this->queryProcessorComposite;
     }
 }

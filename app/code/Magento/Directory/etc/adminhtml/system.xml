@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -13,7 +13,7 @@
             <resource>Magento_Backend::currency</resource>
             <group id="options" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Currency Options</label>
-                <field id="base" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="base" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Base Currency</label>
                     <frontend_model>Magento\Directory\Block\Adminhtml\Frontend\Currency\Base</frontend_model>
                     <source_model>Magento\Config\Model\Config\Source\Locale\Currency</source_model>

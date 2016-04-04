@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Controller\RegistryConstants;
+use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\AccountManagementInterface;
@@ -22,102 +23,9 @@ use Magento\Customer\Api\AddressRepositoryInterface;
 class Save extends \Magento\Customer\Controller\Adminhtml\Index
 {
     /**
-     * @var \Magento\Customer\Helper\EmailNotification
+     * @var EmailNotificationInterface
      */
-    protected $emailNotification;
-
-    /**
-     * @var \Magento\Customer\Model\Metadata\FormFactory
-     */
-    protected $_formFactory;
-
-    /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\App\Response\Http\FileFactory $fileFactory
-     * @param \Magento\Customer\Model\CustomerFactory $customerFactory
-     * @param \Magento\Customer\Model\AddressFactory $addressFactory
-     * @param \Magento\Customer\Model\Metadata\FormFactory $formFactory
-     * @param \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory
-     * @param \Magento\Customer\Helper\View $viewHelper
-     * @param \Magento\Framework\Math\Random $random
-     * @param CustomerRepositoryInterface $customerRepository
-     * @param \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter
-     * @param Mapper $addressMapper
-     * @param AccountManagementInterface $customerAccountManagement
-     * @param AddressRepositoryInterface $addressRepository
-     * @param CustomerInterfaceFactory $customerDataFactory
-     * @param AddressInterfaceFactory $addressDataFactory
-     * @param \Magento\Customer\Model\Customer\Mapper $customerMapper
-     * @param \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor
-     * @param \Magento\Framework\Api\DataObjectHelper $dataObjectHelper
-     * @param DataObjectFactory $objectFactory
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Customer\Helper\EmailNotification $emailNotification
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
-     */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
-        \Magento\Customer\Model\CustomerFactory $customerFactory,
-        \Magento\Customer\Model\AddressFactory $addressFactory,
-        \Magento\Customer\Model\Metadata\FormFactory $formFactory,
-        \Magento\Newsletter\Model\SubscriberFactory $subscriberFactory,
-        \Magento\Customer\Helper\View $viewHelper,
-        \Magento\Framework\Math\Random $random,
-        CustomerRepositoryInterface $customerRepository,
-        \Magento\Framework\Api\ExtensibleDataObjectConverter $extensibleDataObjectConverter,
-        Mapper $addressMapper,
-        AccountManagementInterface $customerAccountManagement,
-        AddressRepositoryInterface $addressRepository,
-        CustomerInterfaceFactory $customerDataFactory,
-        AddressInterfaceFactory $addressDataFactory,
-        \Magento\Customer\Model\Customer\Mapper $customerMapper,
-        \Magento\Framework\Reflection\DataObjectProcessor $dataObjectProcessor,
-        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        DataObjectFactory $objectFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory,
-        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Customer\Helper\EmailNotification $emailNotification
-    ) {
-        parent::__construct(
-            $context,
-            $coreRegistry,
-            $fileFactory,
-            $customerFactory,
-            $addressFactory,
-            $formFactory,
-            $subscriberFactory,
-            $viewHelper,
-            $random,
-            $customerRepository,
-            $extensibleDataObjectConverter,
-            $addressMapper,
-            $customerAccountManagement,
-            $addressRepository,
-            $customerDataFactory,
-            $addressDataFactory,
-            $customerMapper,
-            $dataObjectProcessor,
-            $dataObjectHelper,
-            $objectFactory,
-            $layoutFactory,
-            $resultLayoutFactory,
-            $resultPageFactory,
-            $resultForwardFactory,
-            $resultJsonFactory
-        );
-        $this->emailNotification = $emailNotification;
-    }
+    private $emailNotification;
 
     /**
      * Reformat customer account data to be compatible with customer service interface
@@ -333,7 +241,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                 if ($isExistingCustomer) {
                     $this->_customerRepository->save($customer);
 
-                    $this->emailNotification->sendNotificationEmailsIfRequired($currentCustomer, $customer);
+                    $this->getEmailNotification()->credentialsChanged($customer, $currentCustomer->getEmail());
 
                 } else {
                     $customer = $this->customerAccountManagement->createAccount($customer);
@@ -357,7 +265,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                     'adminhtml_customer_save_after',
                     ['customer' => $customer, 'request' => $request]
                 );
-                $this->_getSession()->unsCustomerData();
+                $this->_getSession()->unsCustomerFormData();
                 // Done Saving customer, finish save action
                 $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
                 $this->messageManager->addSuccess(__('You saved the customer.'));
@@ -368,15 +276,15 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
                     $messages = $exception->getMessage();
                 }
                 $this->_addSessionErrorMessages($messages);
-                $this->_getSession()->setCustomerData($originalRequestData);
+                $this->_getSession()->setCustomerFormData($originalRequestData);
                 $returnToEdit = true;
             } catch (LocalizedException $exception) {
                 $this->_addSessionErrorMessages($exception->getMessage());
-                $this->_getSession()->setCustomerData($originalRequestData);
+                $this->_getSession()->setCustomerFormData($originalRequestData);
                 $returnToEdit = true;
             } catch (\Exception $exception) {
                 $this->messageManager->addException($exception, __('Something went wrong while saving the customer.'));
-                $this->_getSession()->setCustomerData($originalRequestData);
+                $this->_getSession()->setCustomerFormData($originalRequestData);
                 $returnToEdit = true;
             }
         }
@@ -397,5 +305,22 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index
             $resultRedirect->setPath('customer/index');
         }
         return $resultRedirect;
+    }
+
+    /**
+     * Get email notification
+     *
+     * @return EmailNotificationInterface
+     * @deprecated
+     */
+    private function getEmailNotification()
+    {
+        if (!($this->emailNotification instanceof EmailNotificationInterface)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(
+                EmailNotificationInterface::class
+            );
+        } else {
+            return $this->emailNotification;
+        }
     }
 }
