@@ -111,7 +111,7 @@ class SoapErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
             $this->checkSoapFault(
                 $e,
                 'Consumer is not authorized to access %resources',
-                'WSDL'
+                'env:Sender'
             );
         }
     }
