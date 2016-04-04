@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -70,7 +70,6 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
         $productsToVerify,
         CheckoutCart $checkoutCart
     ) {
-        $this->markTestIncomplete('MAGETWO-48732');
         // Preconditions
         $this->createProducts($products);
         $this->assignPromotedProducts($promotedProducts, 'related_products');

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,7 +32,7 @@ class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stoc
         );
         $this->_addWebsiteJoinToSelect($select, true);
         $this->_addProductWebsiteJoinToSelect($select, 'cw.website_id', 'e.entity_id');
-        $metadata = $this->metadataPool->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $select->columns(
             'cw.website_id'
         )->join(
@@ -76,19 +76,7 @@ class Grouped extends \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stoc
         );
         $productStatusCond = $connection->quoteInto($productStatusExpr . '=?', ProductStatus::STATUS_ENABLED);
 
-        if ($this->_isManageStock()) {
-            $statusExpression = $connection->getCheckSql(
-                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 0',
-                1,
-                'cisi.is_in_stock'
-            );
-        } else {
-            $statusExpression = $connection->getCheckSql(
-                'cisi.use_config_manage_stock = 0 AND cisi.manage_stock = 1',
-                'cisi.is_in_stock',
-                1
-            );
-        }
+        $statusExpression = $this->getStatusExpression($connection);
 
         $optExpr = $connection->getCheckSql("{$productStatusCond} AND le.required_options = 0", 'i.stock_status', 0);
         $stockStatusExpr = $connection->getLeastSql(["MAX({$optExpr})", "MIN({$statusExpression})"]);

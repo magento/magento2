@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,7 +19,8 @@ namespace Magento\Store\Model;
  */
 class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
     \Magento\Framework\DataObject\IdentityInterface,
-    \Magento\Store\Api\Data\GroupInterface
+    \Magento\Store\Api\Data\GroupInterface,
+    \Magento\Framework\App\ScopeInterface
 {
     const ENTITY = 'store_group';
 
@@ -454,5 +455,31 @@ class Group extends \Magento\Framework\Model\AbstractExtensibleModel implements
         \Magento\Store\Api\Data\GroupExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * Retrieve scope code
+     *
+     * @return string
+     */
+    public function getCode()
+    {
+        return '';
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getScopeType()
+    {
+        return ScopeInterface::SCOPE_GROUP;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getScopeTypeName()
+    {
+        return 'Store';
     }
 }

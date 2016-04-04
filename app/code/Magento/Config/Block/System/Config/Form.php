@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Config\Block\System\Config;
@@ -309,6 +309,17 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         if (array_key_exists($path, $this->_configData)) {
             $data = $this->_configData[$path];
             $inherit = false;
+            
+            if ($field->hasBackendModel()) {
+                $backendModel = $field->getBackendModel();
+                $backendModel->setPath($path)
+                    ->setValue($data)
+                    ->setWebsite($this->getWebsiteCode())
+                    ->setStore($this->getStoreCode())
+                    ->afterLoad();
+                $data = $backendModel->getValue();
+            }
+            
         } elseif ($field->getConfigPath() !== null) {
             $data = $this->getConfigValue($field->getConfigPath());
         } else {
@@ -326,20 +337,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $elementName = $this->_generateElementName($field->getPath(), $fieldPrefix);
         $elementId = $this->_generateElementId($field->getPath($fieldPrefix));
-
-        if ($field->hasBackendModel()) {
-            $backendModel = $field->getBackendModel();
-            $backendModel->setPath(
-                $path
-            )->setValue(
-                $data
-            )->setWebsite(
-                $this->getWebsiteCode()
-            )->setStore(
-                $this->getStoreCode()
-            )->afterLoad();
-            $data = $backendModel->getValue();
-        }
 
         $dependencies = $field->getDependencies($fieldPrefix, $this->getStoreCode());
         $this->_populateDependenciesBlock($dependencies, $elementId, $elementName);
@@ -607,6 +604,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
      * Temporary moved those $this->getRequest()->getParam('blabla') from the code accross this block
      * to getBlala() methods to be later set from controller with setters
      */
+
     /**
      * Enter description here...
      *

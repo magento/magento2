@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Bundle\Model\ResourceModel\Indexer;
@@ -157,7 +157,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
             '=?',
             \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
         );
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         $this->_addAttributeToSelect($select, 'status', "e.$linkField", 'cs.store_id', $statusCond, true);
         if ($this->moduleManager->isEnabled('Magento_Tax')) {
             $taxClassId = $this->_addAttributeToSelect($select, 'tax_class_id', "e.$linkField", 'cs.store_id');
@@ -404,7 +404,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
             );
         }
 
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         $select = $connection->select()->from(
             ['i' => $this->_getBundlePriceTable()],
             ['entity_id', 'customer_group_id', 'website_id']
@@ -484,7 +484,7 @@ class Price extends \Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\D
     protected function _prepareTierPriceIndex($entityIds = null)
     {
         $connection = $this->getConnection();
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         // remove index by bundle products
         $select = $connection->select()->from(
             ['i' => $this->_getTierPriceIndexTable()],

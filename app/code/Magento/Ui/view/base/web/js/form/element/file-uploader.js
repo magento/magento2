@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -29,7 +29,6 @@ define([
                     'form_key': window.FORM_KEY
                 }
             },
-
             tracks: {
                 isLoading: true
             }
@@ -361,6 +360,25 @@ define([
 
             file.previewWidth = img.naturalHeight;
             file.previewHeight = img.naturalWidth;
+        },
+
+        /**
+         * Restore value to default
+         */
+        restoreToDefault: function () {
+            var defaultValue = utils.copy(this.default);
+
+            defaultValue.map(this.processFile, this);
+            this.value(defaultValue);
+        },
+
+        /**
+         * Update whether value differs from default value
+         */
+        setDifferedFromDefault: function () {
+            var value = utils.copy(this.value());
+
+            this.isDifferedFromDefault(!_.isEqual(value, this.default));
         }
     });
 });

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,8 @@ namespace Magento\Framework\Model\Test\Unit\Entity;
 use Magento\Framework\Model\Entity\EntityHydrator;
 use Magento\Framework\Model\Entity\MetadataPool;
 use Magento\Framework\Model\Entity\EntityMetadata;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Model\Entity\SequenceFactory;
 
 /**
  * Class MetadataPoolTest
@@ -16,40 +18,28 @@ use Magento\Framework\Model\Entity\EntityMetadata;
 class MetadataPoolTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Framework\Model\Entity\EntityMetadataFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $entityMetadataFactoryMock;
-
-    /**
-     * @var \Magento\Framework\Model\Entity\EntityHydratorFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $entityHydratorFactoryMock;
-
-    /**
-     * @var \Magento\Framework\Model\Entity\SequenceFactory|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $sequenceFactoryMock;
+    protected $objectManagerMock;
 
     /**
      * @var EntityMetadata|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $entityMetadataMock;
 
+    /**
+     * @var \Magento\Framework\Model\Entity\SequenceFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $sequenceFactoryMock;
+
     protected function setUp()
     {
-        $this->entityMetadataFactoryMock = $this->getMockBuilder(
-            'Magento\Framework\Model\Entity\EntityMetadataFactory'
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
+        $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['create', 'get', 'configure'])
             ->getMock();
-        $this->entityHydratorFactoryMock = $this->getMockBuilder(
-            'Magento\Framework\Model\Entity\EntityHydratorFactory'
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
-        $this->sequenceFactoryMock = $this->getMockBuilder(
-            'Magento\Framework\Model\Entity\SequenceFactory'
-        )->disableOriginalConstructor()
+        $this->sequenceFactoryMock = $this->getMockBuilder(SequenceFactory::class)
+            ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $this->entityMetadataMock = $this->getMockBuilder(EntityMetadata::class)
@@ -80,17 +70,16 @@ class MetadataPoolTest extends \PHPUnit_Framework_TestCase
         $finalMetadata = $metadata;
         $finalMetadata[$entityType]['connectionName'] = 'default';
 
-        $this->entityMetadataFactoryMock->expects($this->once())
+        $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with(array_merge($defaults, $metadata[$entityType]))
+            ->with(EntityMetadata::class, array_merge($defaults, $metadata[$entityType]))
             ->willReturn($this->entityMetadataMock);
         $this->sequenceFactoryMock->expects($this->once())
             ->method('create')
             ->with($entityType, $finalMetadata)
             ->willReturn($sequence);
         $metadataPool = new MetadataPool(
-            $this->entityMetadataFactoryMock,
-            $this->entityHydratorFactoryMock,
+            $this->objectManagerMock,
             $this->sequenceFactoryMock,
             $metadata
         );
@@ -104,8 +93,7 @@ class MetadataPoolTest extends \PHPUnit_Framework_TestCase
     public function testGetMetadataThrowsException()
     {
         $metadataPool = new MetadataPool(
-            $this->entityMetadataFactoryMock,
-            $this->entityHydratorFactoryMock,
+            $this->objectManagerMock,
             $this->sequenceFactoryMock,
             []
         );
@@ -115,15 +103,14 @@ class MetadataPoolTest extends \PHPUnit_Framework_TestCase
     public function testHydrator()
     {
         $metadataPool = new MetadataPool(
-            $this->entityMetadataFactoryMock,
-            $this->entityHydratorFactoryMock,
+            $this->objectManagerMock,
             $this->sequenceFactoryMock,
             []
         );
         $entityHydrator = $this->getMockBuilder(EntityHydrator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->entityHydratorFactoryMock->expects($this->once())->method('create')->willReturn($entityHydrator);
+        $this->objectManagerMock->expects($this->once())->method('get')->willReturn($entityHydrator);
         $this->assertEquals($entityHydrator, $metadataPool->getHydrator('testType'));
     }
 

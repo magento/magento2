@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define([
@@ -830,7 +830,7 @@ define([
         ],
         'validate-file-type': [
             function (name, types) {
-                var extension = name.split('.').pop();
+                var extension = name.split('.').pop().toLowerCase();
 
                 if (types && typeof types === 'string') {
                     types = types.split(' ');
@@ -845,6 +845,12 @@ define([
                 return maxSize === false || size < maxSize;
             },
             $.mage.__('File you are trying to upload exceeds maximum file size limit.')
+        ],
+        'validate-if-tag-script-exist': [
+            function (value) {
+                return !value || (/<script\b[^>]*>([\s\S]*?)<\/script>$/ig).test(value);
+            },
+            $.mage.__('Please use tag SCRIPT with SRC attribute or with proper content to include JavaScript to the document.')
         ]
     }, function (data) {
         return {

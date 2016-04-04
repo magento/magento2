@@ -1,14 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Customer\Observer;
 
+use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * Class CustomerLoginSuccessObserver
@@ -16,27 +14,19 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 class CustomerLoginSuccessObserver implements ObserverInterface
 {
     /**
-     * Account manager
+     * Authentication
      *
-     * @var AccountManagementHelper
+     * @var AuthenticationInterface
      */
-    protected $accountManagementHelper;
+    protected $authentication;
 
     /**
-     * @var CustomerRepositoryInterface
-     */
-    protected $customerRepository;
-
-    /**
-     * @param AccountManagementHelper $accountManagementHelper
-     * @param CustomerRepositoryInterface $customerRepository
+     * @param AuthenticationInterface $authentication
      */
     public function __construct(
-        AccountManagementHelper $accountManagementHelper,
-        CustomerRepositoryInterface $customerRepository
+        AuthenticationInterface $authentication
     ) {
-        $this->accountManagementHelper = $accountManagementHelper;
-        $this->customerRepository = $customerRepository;
+        $this->authentication = $authentication;
     }
 
     /**
@@ -46,11 +36,9 @@ class CustomerLoginSuccessObserver implements ObserverInterface
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
-        /** @var \Magento\Customer\Model\Customer $model */
-        $customerModel = $observer->getEvent()->getData('model');
-        $customer = $this->customerRepository->getById($customerModel->getId());
-        $this->accountManagementHelper->processUnlockData($customer->getId());
-        $this->customerRepository->save($customer);
+        /** @var \Magento\Customer\Model\Customer $customer */
+        $customer = $observer->getEvent()->getData('model');
+        $this->authentication->unlock($customer->getId());
         return $this;
     }
 }

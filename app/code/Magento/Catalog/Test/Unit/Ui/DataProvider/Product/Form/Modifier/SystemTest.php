@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
@@ -37,6 +37,7 @@ class SystemTest extends AbstractModifierTest
         return $this->objectManager->getObject(System::class, [
             'locator' => $this->locatorMock,
             'urlBuilder' => $this->urlBuilderMock,
+            'productUrls' => []
         ]);
     }
 
@@ -67,7 +68,7 @@ class SystemTest extends AbstractModifierTest
         $this->productMock->expects($this->once())
             ->method('getId')
             ->willReturn($productId);
-        $this->productMock->expects($this->once())
+        $this->productMock->expects($this->exactly(2))
             ->method('getTypeId')
             ->willReturn(Type::TYPE_SIMPLE);
         $this->productMock->expects($this->once())
@@ -80,9 +81,9 @@ class SystemTest extends AbstractModifierTest
         $this->urlBuilderMock->expects($this->exactly(3))
             ->method('getUrl')
             ->willReturnMap([
-                [System::URL_SUBMIT, $actionParameters, $submitUrl],
-                [System::URL_VALIDATE, $actionParameters, $validateUrl],
-                [System::URL_RELOAD, $reloadParameters, $reloadUrl],
+                ['catalog/product/save', $actionParameters, $submitUrl],
+                ['catalog/product/validate', $actionParameters, $validateUrl],
+                ['catalog/product/reload', $reloadParameters, $reloadUrl],
             ]);
 
         $expectedData = [
