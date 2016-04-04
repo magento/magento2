@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config;
+namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config;
 
 use Magento\Mtf\Client\ElementInterface;
 use Magento\Mtf\Client\Locator;
@@ -13,66 +13,59 @@ use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
 
 /**
- * Class Matrix
- * Matrix row form
+ * Matrix row form.
  */
 class Matrix extends Form
 {
     /**
-     * Mapping for get optional fields
+     * Mapping for get optional fields.
      *
      * @var array
      */
     protected $mappingGetFields = [
         'name' => [
-            'selector' => 'td[data-column="name"] > a',
+            'selector' => 'td[data-index="name_container"] a',
             'strategy' => Locator::SELECTOR_CSS,
         ],
         'sku' => [
-            'selector' => 'td[data-column="sku"]',
+            'selector' => 'td[data-index="sku_container"] span[data-index="sku_text"]',
             'strategy' => Locator::SELECTOR_CSS,
         ],
         'price' => [
-            'selector' => 'td[data-column="price"]',
+            'selector' => 'td[data-index="price_container"] span[data-index="price_text"]',
             'strategy' => Locator::SELECTOR_CSS,
         ],
-        'quantity_and_stock_status' => [
-            'composite' => 1,
-            'fields' => [
-                'qty' => [
-                    'selector' => 'td[data-column="qty"]',
-                    'strategy' => Locator::SELECTOR_CSS,
-                ],
-            ],
+        'qty' => [
+            'selector' => 'td[data-index="quantity_container"] span[data-index="quantity_text"]',
+            'strategy' => Locator::SELECTOR_CSS,
         ],
         'weight' => [
-            'selector' => 'td[data-column="weight"]',
+            'selector' => 'td[data-index="price_weight"] span[data-index="weight_text"]',
             'strategy' => Locator::SELECTOR_CSS,
         ],
     ];
 
     /**
-     * Selector for variation row by number
+     * Selector for variation row by number.
      *
      * @var string
      */
-    protected $variationRowByNumber = './/tr[@data-role="row"][%d]';
+    protected $variationRowByNumber = './/tr[@class="data-row" or @class="data-row _odd-row"][%d]';
 
     /**
-     * Selector for variation row
+     * Selector for variation row.
      *
      * @var string
      */
-    protected $variationRow = 'tr[data-role="row"]';
+    protected $variationRow = './/tr[contains(@class, "data-row")]';
 
-    // @codingStandardsIgnoreStart
     /**
-     * Selector for row on product grid by product id
+     * Selector for row on product grid by product id.
      *
      * @var string
      */
-    protected $associatedProductGrid = 'div[data-grid-id="associated-products-container"]';
-    // @codingStandardsIgnoreEnd
+    protected $associatedProductGrid =
+        '[data-bind*="configurable_associated_product_listing.configurable_associated_product_listing"]';
 
     /**
      * Selector for template block.
@@ -86,14 +79,14 @@ class Matrix extends Form
      *
      * @var string
      */
-    protected $deleteVariation = '[data-bind*="removeProduct"]';
+    protected $deleteVariation = '[data-bind*="deleteRecord"]';
 
     /**
      * Choose a different Product button selector.
      *
      * @var string
      */
-    protected $chooseProduct = '[data-bind*="showGrid"]';
+    protected $chooseProduct = '[data-bind*="openModalWithGrid"]';
 
     /**
      * Action menu
@@ -152,7 +145,7 @@ class Matrix extends Form
     public function getVariationsData()
     {
         $data = [];
-        $variationRows = $this->_rootElement->getElements($this->variationRow);
+        $variationRows = $this->_rootElement->getElements($this->variationRow, Locator::SELECTOR_XPATH);
 
         foreach ($variationRows as $key => $variationRow) {
             /** @var SimpleElement $variationRow */
@@ -200,7 +193,7 @@ class Matrix extends Form
 
     public function deleteVariations()
     {
-        $variations = $this->_rootElement->getElements($this->variationRow);
+        $variations = $this->_rootElement->getElements($this->variationRow, Locator::SELECTOR_XPATH);
         foreach (array_reverse($variations) as $variation) {
             $variation->find($this->actionMenu)->hover();
             $variation->find($this->actionMenu)->click();
