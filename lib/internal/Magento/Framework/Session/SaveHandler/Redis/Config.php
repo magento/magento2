@@ -10,6 +10,9 @@ use Magento\Framework\App\State;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface as StoreScopeInterface;
 
+/**
+ * Redis session save handler
+ */
 class Config implements \Cm\RedisSession\Handler\ConfigInterface
 {
     /**
