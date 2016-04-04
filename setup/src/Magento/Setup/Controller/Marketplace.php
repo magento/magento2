@@ -36,7 +36,7 @@ class Marketplace extends AbstractActionController
     }
 
     /**
-     * @return ViewModel|\Zend\Http\Response
+     * @return ViewModel
      */
     public function indexAction()
     {
