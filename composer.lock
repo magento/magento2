@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3a2e274e43810406ff3563d51c25041c",
-    "content-hash": "cef9bc0128d0949d6cc590fa7c5a60f0",
+    "hash": "5a52eec976eea4fade155b472365d805",
+    "content-hash": "2116af7fe8db4568fecdd0d554db22c3",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -101,7 +101,12 @@
                 "url": "https://github.com/colinmollenhour/php-redis-session-abstract.git",
                 "reference": "95330b7f29663dab81f53d1a438e4d927b6c5f66"
             },
-            "type": "library"
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Cm\\RedisSession\\": "src/"
+                }
+            }
         },
         {
             "name": "composer/composer",
