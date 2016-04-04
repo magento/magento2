@@ -25,15 +25,9 @@ class JobSetCache extends AbstractJob
     protected $status;
 
     /**
-     * @var Queue
-     */
-    protected $queue;
-
-    /**
      * @param \Magento\Backend\Console\Command\AbstractCacheSetCommand $command
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param Queue $queue
      * @param Status $status
      * @param $name
      * @param array $params
@@ -42,7 +36,6 @@ class JobSetCache extends AbstractJob
         \Magento\Backend\Console\Command\AbstractCacheSetCommand $command,
         \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider,
         \Symfony\Component\Console\Output\OutputInterface $output,
-        \Magento\Setup\Model\Cron\Queue $queue,
         \Magento\Setup\Model\Cron\Status $status,
         $name,
         $params = []
@@ -50,7 +43,6 @@ class JobSetCache extends AbstractJob
         $this->command = $command;
         $this->output = $output;
         $this->status = $status;
-        $this->queue = $queue;
         parent::__construct($output, $status, $objectManagerProvider, $name, $params);
     }
 

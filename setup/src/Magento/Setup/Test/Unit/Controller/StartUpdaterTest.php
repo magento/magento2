@@ -157,6 +157,9 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
         $write->expects($this->once())
             ->method('writeFile')
             ->with('.type.json', '{"type":"update","headerTitle":"Update package 1","titles":["A"]}');
+        $this->updater->expects($this->at(1))
+            ->method('createUpdaterTask')
+            ->with([], \Magento\Setup\Model\Cron\JobFactory::JOB_DISABLE_CACHE, []);
         $this->controller->setEvent($this->mvcEvent);
         $this->controller->dispatch($this->request, $this->response);
         $this->controller->updateAction();
@@ -172,6 +175,9 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
         $write->expects($this->once())
             ->method('writeFile')
             ->with('.type.json', '{"type":"upgrade","headerTitle":"System Upgrade","titles":["B"]}');
+        $this->updater->expects($this->at(1))
+            ->method('createUpdaterTask')
+            ->with([], \Magento\Setup\Model\Cron\JobFactory::JOB_DISABLE_CACHE, []);
         $this->controller->setEvent($this->mvcEvent);
         $this->controller->dispatch($this->request, $this->response);
         $this->controller->updateAction();
@@ -188,6 +194,9 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
         $write->expects($this->once())
             ->method('writeFile')
             ->with('.type.json', '{"type":"enable","headerTitle":"Enable Package 1","titles":["C"]}');
+        $this->updater->expects($this->at(1))
+            ->method('createUpdaterTask')
+            ->with([], \Magento\Setup\Model\Cron\JobFactory::JOB_DISABLE_CACHE, []);
         $this->controller->setEvent($this->mvcEvent);
         $this->controller->dispatch($this->request, $this->response);
         $this->controller->updateAction();
@@ -204,6 +213,9 @@ class StartUpdaterTest extends \PHPUnit_Framework_TestCase
         $write->expects($this->once())
             ->method('writeFile')
             ->with('.type.json', '{"type":"disable","headerTitle":"Disable Package 1","titles":["D"]}');
+        $this->updater->expects($this->at(1))
+            ->method('createUpdaterTask')
+            ->with([], \Magento\Setup\Model\Cron\JobFactory::JOB_DISABLE_CACHE, []);
         $this->controller->setEvent($this->mvcEvent);
         $this->controller->dispatch($this->request, $this->response);
         $this->controller->updateAction();

@@ -135,7 +135,6 @@ class JobFactory
                     $objectManager->get('Magento\Backend\Console\Command\CacheEnableCommand'),
                     $objectManagerProvider,
                     $multipleStreamOutput,
-                    $this->serviceLocator->get('Magento\Setup\Model\Cron\Queue'),
                     $cronStatus,
                     $name,
                     $params
@@ -146,7 +145,6 @@ class JobFactory
                     $objectManager->get('Magento\Backend\Console\Command\CacheDisableCommand'),
                     $objectManagerProvider,
                     $multipleStreamOutput,
-                    $this->serviceLocator->get('Magento\Setup\Model\Cron\Queue'),
                     $cronStatus,
                     $name,
                     $params
