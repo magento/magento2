@@ -16,11 +16,19 @@ define([
             externalListingName: '${ $.ns }.${ $.ns }',
             behaviourType: 'simple',
             externalFilterMode: false,
+            requestConfig: {
+                method: 'POST'
+            },
             externalCondition: 'nin',
             settings: {
                 edit: {
                     imports: {
                         'onChangeRecord': '${ $.editorProvider }:changed'
+                    }
+                },
+                filter: {
+                    exports: {
+                       'requestConfig': '${ $.externalProvider }:requestConfig'
                     }
                 }
             },
@@ -61,6 +69,12 @@ define([
                 defaults.editableData = {};
                 _.map(defaults.settings.edit.imports, function (value, key) {
                     this.imports[key] = value;
+                }, defaults);
+            }
+
+            if (config.externalFilterMode === true) {
+                _.map(defaults.settings.filter.exports, function (value, key) {
+                    this.exports[key] = value;
                 }, defaults);
             }
 
