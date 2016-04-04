@@ -11,6 +11,7 @@ use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Composer\MagentoComposerApplicationFactory;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
+use Zend\View\Model\ViewModel;
 
 /**
  * Controller for other components grid on select version page
@@ -37,6 +38,17 @@ class OtherComponentsGrid extends AbstractActionController
     ) {
         $this->composerInformation = $composerInformation;
         $this->infoCommand = $magentoComposerApplicationFactory->createInfoCommand();
+    }
+
+    /**
+     * @return ViewModel|\Zend\Http\Response
+     */
+    public function indexAction()
+    {
+        $view = new ViewModel;
+        $view->setTemplate('/error/404.phtml');
+        $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
+        return $view;
     }
 
     /**

@@ -36,6 +36,17 @@ class Marketplace extends AbstractActionController
     }
 
     /**
+     * @return ViewModel|\Zend\Http\Response
+     */
+    public function indexAction()
+    {
+        $view = new ViewModel;
+        $view->setTemplate('/error/404.phtml');
+        $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
+        return $view;
+    }
+
+    /**
      * Save auth.json
      *
      * @return array|ViewModel

@@ -14,6 +14,7 @@ use Magento\Setup\Model\WebLogger;
 use Zend\Json\Json;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
+use Zend\View\Model\ViewModel;
 
 class BackupActionItems extends AbstractActionController
 {
@@ -56,6 +57,17 @@ class BackupActionItems extends AbstractActionController
         $this->backupHandler = $objectManager->create('Magento\Framework\Setup\BackupRollback', ['log' => $logger]);
         $this->directoryList = $directoryList;
         $this->fileSystem = $fileSystem;
+    }
+
+    /**
+     * @return ViewModel|\Zend\Http\Response
+     */
+    public function indexAction()
+    {
+        $view = new ViewModel;
+        $view->setTemplate('/error/404.phtml');
+        $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
+        return $view;
     }
 
     /**
