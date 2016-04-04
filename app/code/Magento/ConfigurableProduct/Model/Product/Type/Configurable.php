@@ -508,6 +508,7 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $collection = $this->getUsedProductCollection($product)
                 ->addAttributeToSelect('name')
                 ->addAttributeToSelect('price')
+                ->addAttributeToSelect('weight')
                 ->addAttributeToSelect('image')
                 ->addAttributeToSelect('status')
                 ->addFilterByRequiredOptions()

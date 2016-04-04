@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config;
+namespace Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config;
 
-use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Attribute\AttributeSelector;
+use Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config\Attribute\AttributeSelector;
 use Magento\Mtf\Block\Form;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Mtf\Client\Locator;
@@ -153,6 +153,13 @@ class Attribute extends Form
     protected $templateBlock = './ancestor::body';
 
     /**
+     * List of selected attributes
+     *
+     * @var string
+     */
+    private $selectedAttributes = 'span[data-bind*="selectedAttributes"]';
+
+    /**
      * Fill attributes
      *
      * @param array $attributes
@@ -170,7 +177,11 @@ class Attribute extends Form
 
         //select attributes
         $this->getAttributesGrid()->resetFilter();
-        $this->getAttributesGrid()->deselectAttributes();
+        $attributesList = $this->browser->find($this->selectedAttributes)->getText();
+        if ($attributesList != '--') {
+            $this->getAttributesGrid()->deselectAttributes();
+        }
+
         if ($this->_rootElement->find('[class$=no-data]')->isVisible()) {
             return;
         }
@@ -214,8 +225,9 @@ class Attribute extends Form
         );
 
         $this->browser->find($this->createNewVariationSet)->click();
-        $this->getEditAttributeForm()->fill($attributeFixture);
-        $this->getEditAttributeForm()->saveAttributeForm();
+        $newAttributeForm = $this->getNewAttributeForm();
+        $newAttributeForm->fill($attributeFixture);
+        $newAttributeForm->saveAttributeForm();
         $this->waitBlock($this->newAttributeFrame);
     }
 
@@ -322,14 +334,14 @@ class Attribute extends Form
     }
 
     /**
-     * Get attribute form block
+     * Get new attribute form block.
      *
-     * @return \Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm
+     * @return \Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\NewConfigurableAttributeForm
      */
-    protected function getEditAttributeForm()
+    protected function getNewAttributeForm()
     {
         return $this->blockFactory->create(
-            'Magento\Catalog\Test\Block\Adminhtml\Product\Attribute\AttributeForm',
+            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\NewConfigurableAttributeForm',
             ['element' => $this->browser->find($this->newAttribute)]
         );
     }
@@ -344,7 +356,7 @@ class Attribute extends Form
         return $this->_rootElement->find(
             $this->variationSearchBlock,
             Locator::SELECTOR_CSS,
-            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Tab\Variations\Config\Attribute'
+            'Magento\ConfigurableProduct\Test\Block\Adminhtml\Product\Edit\Section\Variations\Config\Attribute'
             . '\AttributeSelector'
         );
     }
