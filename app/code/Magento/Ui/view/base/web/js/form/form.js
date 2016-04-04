@@ -155,7 +155,7 @@ define([
             additionalInvalid: false,
             selectorPrefix: '.page-content',
             messagesClass: 'messages',
-            errorClass: '.admin__field-error',
+            errorClass: '.admin__field._error',
             eventPrefix: '.${ $.index }',
             ajaxSave: false,
             ajaxSaveType: 'default',
@@ -256,7 +256,7 @@ define([
                 this.setAdditionalData(data)
                     .submit(redirect);
             } else {
-                scrollTop = parseInt($(this.errorClass).offset().top, 10) - screen.height / 2;
+                scrollTop = $(this.errorClass).offset().top - screen.height / 2;
                 window.scrollTo(0, scrollTop);
             }
         },
