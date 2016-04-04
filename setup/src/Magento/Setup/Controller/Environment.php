@@ -10,7 +10,6 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Zend\View\Model\ViewModel;
 
 /**
  * Class Environment
@@ -66,11 +65,11 @@ class Environment extends AbstractActionController
     }
 
     /**
-     * @return ViewModel|\Zend\Http\Response
+     * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()
     {
-        $view = new ViewModel;
+        $view = new \Zend\View\Model\ViewModel;
         $view->setTemplate('/error/404.phtml');
         $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
         return $view;

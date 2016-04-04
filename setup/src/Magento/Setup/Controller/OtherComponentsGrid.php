@@ -7,11 +7,8 @@
 namespace Magento\Setup\Controller;
 
 use Magento\Composer\InfoCommand;
-use Magento\Framework\Composer\ComposerInformation;
-use Magento\Framework\Composer\MagentoComposerApplicationFactory;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
-use Zend\View\Model\ViewModel;
 
 /**
  * Controller for other components grid on select version page
@@ -19,33 +16,33 @@ use Zend\View\Model\ViewModel;
 class OtherComponentsGrid extends AbstractActionController
 {
     /**
-     * @var ComposerInformation
+     * @var \Magento\Framework\Composer\ComposerInformation
      */
     private $composerInformation;
 
     /**
-     * @var InfoCommand
+     * @var \Magento\Composer\InfoCommand
      */
     private $infoCommand;
 
     /**
-     * @param ComposerInformation $composerInformation
-     * @param MagentoComposerApplicationFactory $magentoComposerApplicationFactory
+     * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
+     * @param \Magento\Framework\Composer\MagentoComposerApplicationFactory $magentoComposerApplicationFactory
      */
     public function __construct(
-        ComposerInformation $composerInformation,
-        MagentoComposerApplicationFactory $magentoComposerApplicationFactory
+        \Magento\Framework\Composer\ComposerInformation $composerInformation,
+        \Magento\Framework\Composer\MagentoComposerApplicationFactory $magentoComposerApplicationFactory
     ) {
         $this->composerInformation = $composerInformation;
         $this->infoCommand = $magentoComposerApplicationFactory->createInfoCommand();
     }
 
     /**
-     * @return ViewModel|\Zend\Http\Response
+     * @return \Zend\View\Model\ViewModel
      */
     public function indexAction()
     {
-        $view = new ViewModel;
+        $view = new \Zend\View\Model\ViewModel;
         $view->setTemplate('/error/404.phtml');
         $this->getResponse()->setStatusCode(\Zend\Http\Response::STATUS_CODE_404);
         return $view;
