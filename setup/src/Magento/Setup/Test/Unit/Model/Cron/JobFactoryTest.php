@@ -167,6 +167,42 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
             $this->jobFactory->create('setup:module:enable', [])
         );
     }
+
+    public function testCacheEnable()
+    {
+        $valueMap = [
+            [
+                'Magento\Backend\Console\Command\CacheEnableCommand',
+                $this->getMock('Magento\Backend\Console\Command\CacheEnableCommand', [], [], '', false)
+            ]
+        ];
+        $this->objectManager->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($valueMap));
+
+        $this->assertInstanceOf(
+            'Magento\Setup\Model\Cron\JobSetCache',
+            $this->jobFactory->create('setup:cache:enable', [])
+        );
+    }
+
+    public function testCacheDisable()
+    {
+        $valueMap = [
+            [
+                'Magento\Backend\Console\Command\CacheDisableCommand',
+                $this->getMock('Magento\Backend\Console\Command\CacheDisableCommand', [], [], '', false)
+            ]
+        ];
+        $this->objectManager->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($valueMap));
+
+        $this->assertInstanceOf(
+            'Magento\Setup\Model\Cron\JobSetCache',
+            $this->jobFactory->create('setup:cache:disable', [])
+        );
+    }
 }
 
 
