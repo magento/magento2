@@ -467,7 +467,7 @@ class AbstractAction
     }
 
     /**
-     * @return \Magento\Framework\Model\Entity\EntityMetadata
+     * @return \Magento\Framework\EntityManager\EntityMetadata
      */
     private function getCategoryMetadata()
     {

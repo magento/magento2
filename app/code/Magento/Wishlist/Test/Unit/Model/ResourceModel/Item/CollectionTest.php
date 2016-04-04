@@ -197,7 +197,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testAddProductNameFilter()
     {
-        $entityMetadata = $this->getMockBuilder('Magento\Framework\Model\Entity\EntityMetadata')
+        $entityMetadata = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
             ->disableOriginalConstructor()
             ->getMock();
         $entityMetadata->expects($this->once())
