@@ -18,7 +18,6 @@ define([
             multiple: false,
             prefer: 'checkbox', // 'radio' | 'checkbox' | 'toggle'
             valueMap: {},
-            keyboard: {},
 
             templates: {
                 radio: 'ui/form/components/single/radio',
@@ -30,15 +29,6 @@ define([
                 'checked': 'onCheckedChanged',
                 'value': 'onExtendedValueChanged'
             }
-        },
-
-        /**
-         * @inheritdoc
-         */
-        initialize: function () {
-            return this
-                ._super()
-                .initKeyboardHandlers();
         },
 
         /**
@@ -95,38 +85,6 @@ define([
             return this
                 ._super()
                 .observe('checked');
-        },
-
-        /**
-         * Initialize keyboard handlers
-         * @returns {Element}
-         */
-        initKeyboardHandlers: function () {
-            _.bindAll(this, 'goToPrevious', 'goToNext');
-            _.extend(this.keyboard, {
-                37: this.goToPrevious, // Left arrow
-                38: this.goToPrevious, // Up arrow
-                39: this.goToNext,     // Right arrow
-                40: this.goToNext      // down arrow
-            });
-
-            return this;
-        },
-
-        /**
-         * (Should) Move focus to previous <checkbox>
-         * @param {jQuery.Event} event
-         */
-        goToPrevious: function (event) {
-            event.preventDefault();
-        },
-
-        /**
-         * (Should) Move focus to next <checkbox>
-         * @param {jQuery.Event} event
-         */
-        goToNext: function (event) {
-            event.preventDefault();
         },
 
         /**
