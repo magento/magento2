@@ -61,11 +61,10 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if (isset($this->loadedData)) {
             return $this->loadedData;
         }
-        foreach ($this->collection->getAllIds() as $pageId) {
-            /** @var \Magento\Cms\Model\Page $page */
-            $page = $this->collection->getNewEmptyItem();
-            /** Load every record separately to make sure the list of associated stores is available */
-            $this->loadedData[$pageId] = $page->load($pageId)->getData();
+        $items = $this->collection->getItems();
+        /** @var $page \Magento\Cms\Model\Page */
+        foreach ($items as $page) {
+            $this->loadedData[$page->getId()] = $page->getData();
         }
 
         $data = $this->dataPersistor->get('cms_page');
