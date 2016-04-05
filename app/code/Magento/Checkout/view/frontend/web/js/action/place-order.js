@@ -6,13 +6,10 @@ define(
     [
         'Magento_Checkout/js/model/quote',
         'Magento_Checkout/js/model/url-builder',
-        'mage/storage',
-        'Magento_Checkout/js/model/error-processor',
         'Magento_Customer/js/model/customer',
-        'Magento_Checkout/js/model/full-screen-loader',
         'Magento_Checkout/js/model/place-order'
     ],
-    function (quote, urlBuilder, storage, errorProcessor, customer, fullScreenLoader, placeOrderService) {
+    function (quote, urlBuilder, customer, placeOrderService) {
         'use strict';
 
         return function (paymentData, messageContainer) {
