@@ -26,6 +26,7 @@ class ReadHandler implements ExtensionInterface
     {
         $this->sampleRepository = $sampleRepository;
     }
+
     /**
      * @param string $entityType
      * @param object $entity

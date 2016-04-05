@@ -22,12 +22,15 @@ class CreateHandler extends AbstractHandler
      * @param \Magento\Catalog\Model\Product\Gallery\CreateHandler $mediaGalleryCreateHandler
      * @param string $entityType
      * @param \Magento\Catalog\Model\Product $product
-     * @return array
+     * @param array $arguments
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeExecute(
         \Magento\Catalog\Model\Product\Gallery\CreateHandler $mediaGalleryCreateHandler,
         $entityType,
-        \Magento\Catalog\Model\Product $product
+        \Magento\Catalog\Model\Product $product,
+        array $arguments = []
     ) {
         $attribute = $mediaGalleryCreateHandler->getAttribute();
         $mediaCollection = $this->getMediaEntriesDataCollection($product, $attribute);
@@ -39,8 +42,6 @@ class CreateHandler extends AbstractHandler
                 $mediaCollection + $product->getData($attribute->getAttributeCode())
             );
         }
-
-        return [$entityType, $product];
     }
 
     /**
