@@ -69,11 +69,6 @@ class Helper
     private $linkResolver;
 
     /**
-     * @var array
-     */
-    protected $productData = [];
-
-    /**
      * Helper constructor.
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -104,27 +99,12 @@ class Helper
      * @param \Magento\Catalog\Model\Product $product
      * @param array $productData
      * @return \Magento\Catalog\Model\Product
-     */
-    public function initializeFromData(\Magento\Catalog\Model\Product $product, array $productData)
-    {
-        $this->productData = $productData;
-        $product = $this->initialize($product);
-        $this->productData = [];
-        return $product;
-    }
-    
-    /**
-     * Initialize product before saving
-     *
-     * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Catalog\Model\Product
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function initialize(\Magento\Catalog\Model\Product $product)
+    public function initializeFromData(\Magento\Catalog\Model\Product $product, array $productData)
     {
-        $productData = $this->productData ?: (array)$this->request->getPost('product', []);
         unset($productData['custom_attributes']);
         unset($productData['extension_attributes']);
 
@@ -230,6 +210,18 @@ class Helper
         );
 
         return $product;
+    }
+    
+    /**
+     * Initialize product before saving
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return \Magento\Catalog\Model\Product
+     */
+    public function initialize(\Magento\Catalog\Model\Product $product)
+    {
+        $productData = $this->request->getPost('product', []);
+        return $this->initializeFromData($product, $productData);
     }
 
     /**
