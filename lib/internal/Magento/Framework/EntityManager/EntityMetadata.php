@@ -14,7 +14,6 @@ use Magento\Framework\DB\Sequence\SequenceInterface;
  */
 class EntityMetadata implements EntityMetadataInterface
 {
-
     /**
      * @var ResourceConnection
      */
@@ -54,8 +53,8 @@ class EntityMetadata implements EntityMetadataInterface
      * EntityMetadata constructor.
      *
      * @param ResourceConnection $resourceConnection
-     * @param $entityTableName
-     * @param $identifierField
+     * @param string $entityTableName
+     * @param string $identifierField
      * @param SequenceInterface|null $sequence
      * @param null $eavEntityType
      * @param null $connectionName

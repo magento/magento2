@@ -84,7 +84,6 @@ class Collection extends BlockCollection implements SearchResultInterface
         $this->aggregations = $aggregations;
     }
 
-
     /**
      * Retrieve all ids for collection
      * Backward compatibility with EAV collection

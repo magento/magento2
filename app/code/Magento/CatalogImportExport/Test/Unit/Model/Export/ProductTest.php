@@ -113,7 +113,6 @@ class ProductTest extends \PHPUnit_Framework_TestCase
      */
     protected $product;
 
-
     /**
      * @var StubProduct|\Magento\CatalogImportExport\Model\Export\Product
      */

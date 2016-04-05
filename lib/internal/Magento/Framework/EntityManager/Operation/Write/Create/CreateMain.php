@@ -41,6 +41,7 @@ class CreateMain
     /**
      * @param string $entityType
      * @param object $entity
+     * @param array $arguments
      * @return object
      */
     public function execute($entityType, $entity, $arguments = [])
