@@ -3,11 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\EntityManager;
-
-use Magento\Framework\EntityManager\MetadataPool;
-use Magento\Framework\Model\ResourceModel\Db\ObjectRelationProcessor;
 
 /**
  * Class EntityManager
@@ -64,7 +60,6 @@ class EntityManager
      */
     public function save($entity, $entityType = null, $arguments = [])
     {
-
         //@todo add EntityTypeResolver
         if ($this->has($entity, $entityType, $arguments)) {
             $operation = $this->operationPool->getOperation($entityType, 'update');
