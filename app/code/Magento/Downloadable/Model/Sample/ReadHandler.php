@@ -30,12 +30,6 @@ class ReadHandler implements ExtensionInterface
     /**
      * @param string $entityType
      * @param object $entity
-     * @return \Magento\Catalog\Api\Data\ProductInterface
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
-    /**
-     * @param string $entityType
-     * @param object $entity
      * @param array $arguments
      * @return \Magento\Catalog\Api\Data\ProductInterface|object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

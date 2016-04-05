@@ -244,7 +244,8 @@ class Rule extends \Magento\Rule\Model\ResourceModel\AbstractResource
     public function save(\Magento\Framework\Model\AbstractModel $object)
     {
         $this->entityManager->save(
-            $object, \Magento\CatalogRule\Api\Data\RuleInterface::class
+            $object,
+            \Magento\CatalogRule\Api\Data\RuleInterface::class
         );
         return $this;
     }

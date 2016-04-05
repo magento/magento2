@@ -13,8 +13,15 @@ use Magento\Framework\Event\ManagerInterface;
  */
 class EventManager
 {
+    /**
+     * @var ManagerInterface
+     */
     private $eventManager;
 
+    /**
+     * EventManager constructor.
+     * @param ManagerInterface $eventManager
+     */
     public function __construct(
         ManagerInterface $eventManager
     ) {
@@ -36,6 +43,7 @@ class EventManager
      * @param string $entityType
      * @param string $eventSuffix
      * @param array $data
+     * @return void
      */
     public function dispatchEntityEvent($entityType, $eventSuffix, array $data = [])
     {
@@ -48,6 +56,7 @@ class EventManager
     /**
      * @param string $eventName
      * @param array $data
+     * @return void
      */
     public function dispatch($eventName, array $data = [])
     {

@@ -72,7 +72,7 @@ class EntityManager
             $operation = $this->operationPool->getOperation($entityType, 'create');
         }
         try {
-        $entity = $operation->execute($entityType, $entity, $arguments);
+            $entity = $operation->execute($entityType, $entity, $arguments);
             $this->callbackHandler->process($entityType);
         } catch (\Exception $e) {
             $this->callbackHandler->clear($entityType);

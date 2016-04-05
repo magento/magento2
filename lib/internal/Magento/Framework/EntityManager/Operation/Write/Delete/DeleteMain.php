@@ -43,6 +43,7 @@ class DeleteMain
      * @param object $entity
      * @param array $arguments
      * @return object
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entityType, $entity, $arguments = [])
     {

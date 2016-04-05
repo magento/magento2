@@ -49,7 +49,8 @@ class SaveHandler implements ExtensionInterface
     /**
      * @param string $entityType
      * @param object $entity
-     * @return object
+     * @param array $arguments
+     * @return \Magento\Catalog\Api\Data\ProductInterface|object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entityType, $entity, $arguments = [])
