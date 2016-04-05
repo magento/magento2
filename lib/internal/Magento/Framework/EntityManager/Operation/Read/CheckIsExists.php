@@ -53,6 +53,7 @@ class CheckIsExists
      * @param array $arguments
      * @return bool
      * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entityType, $entity, $arguments = [])
     {

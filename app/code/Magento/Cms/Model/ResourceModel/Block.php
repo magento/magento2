@@ -96,7 +96,7 @@ class Block extends AbstractDb
 
     /**
      * @param AbstractModel $object
-     * @param $value
+     * @param mixed $value
      * @param null $field
      * @return bool|int|string
      * @throws LocalizedException

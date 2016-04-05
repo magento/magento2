@@ -81,8 +81,8 @@ class CreateHandler implements AttributeInterface
     }
 
     /**
-     * @param $entityType
-     * @param $entityData
+     * @param string $entityType
+     * @param array $entityData
      * @param array $arguments
      * @return array
      * @throws \Exception

@@ -11,7 +11,6 @@ use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\App\ResourceConnection;
 
-
 /**
  * Class CreateRow
  */

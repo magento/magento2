@@ -26,13 +26,6 @@ class ReadHandler implements ExtensionInterface
     {
         $this->sampleRepository = $sampleRepository;
     }
-
-    /**
-     * @param string $entityType
-     * @param object $entity
-     * @return \Magento\Catalog\Api\Data\ProductInterface
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     */
     /**
      * @param string $entityType
      * @param object $entity
