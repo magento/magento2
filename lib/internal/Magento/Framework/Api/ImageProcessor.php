@@ -9,7 +9,6 @@ namespace Magento\Framework\Api;
 use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Phrase;
 
@@ -186,7 +185,7 @@ class ImageProcessor implements ImageProcessorInterface
         $fileName = $imageContent->getName();
         if (!pathinfo($fileName, PATHINFO_EXTENSION)) {
             if (!$imageContent->getType() || !$this->getMimeTypeExtension($imageContent->getType())) {
-                throw new LocalizedException(__('Cannot recognize image extension'));
+                throw new InputException(new Phrase('Cannot recognize image extension.'));
             }
             $fileName .= '.' . $this->getMimeTypeExtension($imageContent->getType());
         }
