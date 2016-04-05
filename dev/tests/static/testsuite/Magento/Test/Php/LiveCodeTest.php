@@ -47,18 +47,39 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Returns base folder for suite scope
+     *
+     * @return string
+     */
+    protected static function getBaseFliesFolder() {
+        return __DIR__;
+    }
+
+    /**
+     * Returns base directory for whitelisted files
+     *
+     * @return string
+     */
+    protected static function getChangedFilesBaseDir() {
+        return __DIR__ . '/..';
+    }
+
+    /**
      * Returns whitelist based on blacklist and git changed files
      *
      * @param array $fileTypes
      * @param string $changedFilesBaseDir
+     * @param string $baseFilesFolder
      * @return array
      */
-    public static function getWhitelist($fileTypes = ['php'], $changedFilesBaseDir = __DIR__)
+    public static function getWhitelist($fileTypes = ['php'], $changedFilesBaseDir = '', $baseFilesFolder = '')
     {
-        $directoriesToCheck = Files::init()->readLists($changedFilesBaseDir . '/_files/whitelist/common.txt');
+        $globPatternsFile = ($baseFilesFolder ?: self::getBaseFliesFolder()) . '/_files/whitelist/common.txt';
+        $directoriesToCheck = Files::init()->readLists($globPatternsFile);
 
         $changedFiles = [];
-        foreach (glob($changedFilesBaseDir . '/../_files/changed_files*') as $listFile) {
+        $globFilesListPattern = ($changedFilesBaseDir ?: self::getChangedFilesBaseDir()) . '/_files/changed_files*';
+        foreach (glob($globFilesListPattern) as $listFile) {
             $changedFiles = array_merge($changedFiles, file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES));
         }
         array_walk(
