@@ -196,7 +196,7 @@ class DefaultStock extends AbstractIndexer implements StockInterface
         )->columns(['qty' => new \Zend_Db_Expr('SUM(' . $qtyExpr . ')')])
             ->where('cw.website_id != 0')
             ->where('e.type_id = ?', $this->getTypeId())
-            ->group('e.entity_id');
+            ->group(['e.entity_id', 'cw.website_id']);
 
         // add limitation of status
         $condition = $connection->quoteInto(

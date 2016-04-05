@@ -15,6 +15,7 @@ class ProductRuleIndexer extends AbstractIndexer
     protected function doExecuteList($ids)
     {
         $this->indexBuilder->reindexByIds(array_unique($ids));
+        $this->getCacheContext()->registerEntities(\Magento\Catalog\Model\Product::CACHE_TAG, $ids);
     }
 
     /**
