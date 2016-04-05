@@ -12,17 +12,17 @@ class TableTest extends \PHPUnit_Framework_TestCase
     /**
      * @var \Magento\Eav\Model\Entity\Attribute\Source\Table
      */
-    protected $_model;
+    private $model;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $collectionFactory;
+    private $collectionFactory;
 
     /**
      * @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory | \PHPUnit_Framework_MockObject_MockObject
      */
-    protected $attrOptionFactory;
+    private $attrOptionFactory;
 
     protected function setUp()
     {
@@ -51,7 +51,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $this->_model = $objectManager->getObject(
+        $this->model = $objectManager->getObject(
             'Magento\Eav\Model\Entity\Attribute\Source\Table',
             [
                 'attrOptionCollectionFactory' => $this->collectionFactory,
@@ -60,7 +60,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    public function te1stGetFlatColumns()
+    public function testGetFlatColumns()
     {
         $abstractFrontendMock = $this->getMock(
             'Magento\Eav\Model\Entity\Attribute\Frontend\AbstractFrontend',
@@ -88,9 +88,9 @@ class TableTest extends \PHPUnit_Framework_TestCase
 
         $abstractAttributeMock->expects($this->any())->method('getAttributeCode')->will($this->returnValue('code'));
 
-        $this->_model->setAttribute($abstractAttributeMock);
+        $this->model->setAttribute($abstractAttributeMock);
 
-        $flatColumns = $this->_model->getFlatColumns();
+        $flatColumns = $this->model->getFlatColumns();
 
         $this->assertTrue(is_array($flatColumns), 'FlatColumns must be an array value');
         $this->assertTrue(!empty($flatColumns), 'FlatColumns must be not empty');
@@ -111,7 +111,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
      * @param array $optionIds
      * @param bool $withEmpty
      */
-    public function te1stGetSpecificOptions($optionIds, $withEmpty)
+    public function testGetSpecificOptions($optionIds, $withEmpty)
     {
         $attributeId = 1;
         $storeId = 5;
@@ -131,7 +131,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
             ->method('getStoreId')
             ->willReturn($storeId);
 
-        $this->_model->setAttribute($attribute);
+        $this->model->setAttribute($attribute);
 
         $this->collectionFactory->expects($this->once())
             ->method('create')
@@ -162,7 +162,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
             array_unshift($options, ['label' => '', 'value' => '']);
         }
 
-        $this->assertEquals($options, $this->_model->getSpecificOptions($optionIds, $withEmpty));
+        $this->assertEquals($options, $this->model->getSpecificOptions($optionIds, $withEmpty));
     }
 
     public function specificOptionsProvider()
@@ -180,7 +180,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
      * @param array $options
      * @param array|string $expectedResult
      */
-    public function te1stGetOptionText($optionsIds, $value, $options, $expectedResult)
+    public function testGetOptionText($optionsIds, $value, $options, $expectedResult)
     {
         $attributeId = 1;
         $storeId = 5;
@@ -198,7 +198,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
             ->method('getStoreId')
             ->willReturn($storeId);
 
-        $this->_model->setAttribute($attribute);
+        $this->model->setAttribute($attribute);
 
         $this->collectionFactory->expects($this->once())
             ->method('create')
@@ -225,7 +225,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
             ->method('toOptionArray')
             ->willReturn($options);
 
-        $this->assertEquals($expectedResult, $this->_model->getOptionText($value));
+        $this->assertEquals($expectedResult, $this->model->getOptionText($value));
     }
 
     public function getOptionTextProvider()
@@ -291,7 +291,7 @@ class TableTest extends \PHPUnit_Framework_TestCase
             ->willReturnSelf();
         $select->expects($this->once())->method('order')->with("{$attributeCode} {$dir}");
 
-        $this->_model->setAttribute($attribute);
-        $this->assertEquals($this->_model, $this->_model->addValueSortToCollection($collection, $dir));
+        $this->model->setAttribute($attribute);
+        $this->assertEquals($this->model, $this->model->addValueSortToCollection($collection, $dir));
     }
 }
