@@ -143,13 +143,7 @@ class ImageProcessor implements ImageProcessorInterface
 
         $fileContent = @base64_decode($imageContent->getBase64EncodedData(), true);
         $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::SYS_TMP);
-        $fileName = $imageContent->getName();
-        if (!pathinfo($fileName, PATHINFO_EXTENSION) && $imageContent->getType()) {
-            $mimeTypeExtension = $this->getMimeTypeExtension($imageContent->getType());
-            if ($mimeTypeExtension) {
-                $fileName .= '.' . $mimeTypeExtension;
-            }
-        }
+        $fileName = $this->getFileName($imageContent);
         $tmpFileName = substr(md5(rand()), 0, 7) . '.' . $fileName;
         $tmpDirectory->writeFile($tmpFileName, $fileContent);
 
@@ -178,5 +172,23 @@ class ImageProcessor implements ImageProcessorInterface
     protected function getMimeTypeExtension($mimeType)
     {
         return isset($this->mimeTypeExtensionMap[$mimeType]) ? $this->mimeTypeExtensionMap[$mimeType] : '';
+    }
+
+    /**
+     * @param ImageContentInterface $imageContent
+     * @return string
+     */
+    private function getFileName($imageContent)
+    {
+        $fileName = $imageContent->getName();
+        if (!pathinfo($fileName, PATHINFO_EXTENSION) && $imageContent->getType()) {
+            $mimeTypeExtension = $this->getMimeTypeExtension($imageContent->getType());
+            if ($mimeTypeExtension) {
+                $fileName .= '.' . $mimeTypeExtension;
+                return $fileName;
+            }
+            return $fileName;
+        }
+        return $fileName;
     }
 }
