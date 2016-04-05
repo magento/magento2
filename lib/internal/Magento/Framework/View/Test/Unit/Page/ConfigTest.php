@@ -12,6 +12,11 @@ namespace Magento\Framework\View\Test\Unit\Page;
 use Magento\Framework\Locale\Resolver;
 use Magento\Framework\View\Page\Config;
 
+/**
+ * @covers Magento\Framework\View\Page\Config
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigTest extends \PHPUnit_Framework_TestCase
 {
     /**
