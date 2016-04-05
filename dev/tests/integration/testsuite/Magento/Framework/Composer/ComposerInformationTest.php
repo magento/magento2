@@ -234,6 +234,5 @@ class ComposerInformationTest extends \PHPUnit_Framework_TestCase
         } else {
             $this->assertEquals([], $composerInfo->getRootRepositories());
         }
-
     }
 }
