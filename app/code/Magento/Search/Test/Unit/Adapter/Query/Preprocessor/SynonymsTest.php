@@ -5,56 +5,76 @@
  */
 namespace Magento\Search\Test\Unit\Adapter\Query\Preprocessor;
 
-use Magento\Search\Api\SynonymAnalyzerInterface;
-use Magento\Search\Adapter\Query\Preprocessor\Synonyms as SynonymsPreprocessor;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class SynonymsTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var SynonymsPreprocessor
+     * @var \Magento\Search\Api\SynonymAnalyzerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $model;
+    private $synonymAnalyzer;
 
     /**
-     * @var SynonymAnalyzerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Search\Adapter\Query\Preprocessor\Synonyms
      */
-    protected $synonymsAnalyzer;
+    private $synonymPreprocessor;
 
-    /**
-     * Set up test environment.
-     *
-     * @return void
-     */
     protected function setUp()
     {
-        $this->synonymsAnalyzer = $this->getMockBuilder('\Magento\Search\Api\SynonymAnalyzerInterface')
+        $objectManager = new ObjectManager($this);
+
+        $this->synonymAnalyzer = $this->getMockBuilder('Magento\Search\Model\SynonymAnalyzer')
+            ->setMethods(['getSynonymsForPhrase'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->model = $objectManagerHelper->getObject(
-            '\Magento\Search\Adapter\Query\Preprocessor\Synonyms',
+        $this->synonymPreprocessor = $objectManager->getObject(
+            'Magento\Search\Adapter\Query\Preprocessor\Synonyms',
             [
-                'synonymsAnalyzer' => $this->synonymsAnalyzer,
+                'synonymsAnalyzer' => $this->synonymAnalyzer
             ]
         );
     }
 
     /**
-     * Test process() method
+     * Data provider for the test
+     *
+     * @return array
      */
-    public function testProcess()
+    public static function loadProcessDataProvider()
     {
-        $this->synonymsAnalyzer->expects($this->once())
-            ->method('getSynonymsForPhrase')
-            ->willReturn([
-                ['red', 'blue']
-            ]);
+        return [
+            'oneWord' => [
+                'query' => 'big',
+                'result' => [['big', 'huge']],
+                'newQuery' => 'big huge'
+            ],
+            'twoWords' => [
+                'query' => 'big universe',
+                'result' => [['big', 'huge'], ['universe', 'cosmos']],
+                'newQuery' => 'big huge universe cosmos'
+            ],
+            'noSynonyms' => [
+                'query' => 'no synonyms',
+                'result' => [['no'], ['synonyms']],
+                'newQuery' => 'no synonyms'
+            ]
+        ];
+    }
 
-        $this->assertEquals(
-            'red blue',
-            $this->model->process('red')
-        );
+    /**
+     * @param string $phrase
+     * @param array $expectedResult
+     * @dataProvider loadProcessDataProvider
+     */
+    public function testProcess($query, $result, $newQuery)
+    {
+        $this->synonymAnalyzer->expects($this->once())
+            ->method('getSynonymsForPhrase')
+            ->with($this->equalTo($query))
+            ->will($this->returnValue($result));
+
+        $result = $this->synonymPreprocessor->process($query);
+        $this->assertEquals($result, $newQuery);
     }
 }
