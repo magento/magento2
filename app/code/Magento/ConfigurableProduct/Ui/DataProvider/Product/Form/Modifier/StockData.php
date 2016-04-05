@@ -59,7 +59,6 @@ class StockData extends AbstractModifier
                             'is_qty_decimal' => $config,
                             'is_decimal_divided' => $config,
                             'container_backorders' => $config,
-                            'container_deferred_stock_update' => $config,
                             'container_notify_stock_qty' => $config,
                         ],
                     ],

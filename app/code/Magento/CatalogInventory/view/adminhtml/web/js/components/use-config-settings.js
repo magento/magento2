@@ -15,7 +15,7 @@ define([
     return checkbox.extend({
         defaults: {
             valueFromConfig: '',
-            valueForExport: ''
+            linkedValue: ''
         },
 
         /**
@@ -24,12 +24,15 @@ define([
         initObservable: function () {
             return this
                 ._super()
-                .observe(['valueFromConfig', 'valueForExport']);
+                .observe(['valueFromConfig', 'linkedValue']);
         },
 
+        /**
+         * @inheritdoc
+         */
         'onCheckedChanged': function (newChecked) {
             if (newChecked) {
-                this.valueForExport(this.valueFromConfig());
+                this.linkedValue(this.valueFromConfig());
             }
 
             this._super(newChecked);
