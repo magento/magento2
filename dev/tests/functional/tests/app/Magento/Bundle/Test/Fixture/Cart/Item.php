@@ -53,7 +53,7 @@ class Item extends \Magento\Catalog\Test\Fixture\Cart\Item
             $bundleOptions = $bundleSelection['bundle_options'][$attributeKey];
             $value = $bundleSelectionAttribute[$optionKey]->getName();
             $qty = $bundleOptions['assigned_products'][$optionKey]['data']['selection_qty'];
-            $price = $product->getPriceType() == 'Dynamic'
+            $price = $product->getPriceType() == 'Yes'
                 ? number_format($bundleSelectionAttribute[$optionKey]->getPrice(), 2)
                 : number_format($bundleOptions['assigned_products'][$optionKey]['data']['selection_price_value'], 2);
             $optionData = [
