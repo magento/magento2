@@ -901,9 +901,14 @@ class Payment extends Info implements OrderPaymentInterface
         }
 
         if ($result) {
+            $transaction = $this->transactionRepository->getByTransactionId(
+                $transactionId,
+                $this->getId(),
+                $this->getOrder()->getId()
+            );
             $invoice = $this->_getInvoiceForTransactionId($transactionId);
             $message = $this->_appendTransactionToMessage(
-                $transactionId,
+                $transaction ?: $transactionId,
                 $this->prependMessage(__('Denied the payment online'))
             );
             $this->cancelInvoiceAndRegisterCancellation($invoice, $message);
