@@ -32,10 +32,10 @@ class MassDelete extends \Magento\Search\Controller\Adminhtml\Synonyms
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Search\Model\EngineResolver $engineResolver
      * @param \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig
-     * @param \Magento\Ui\Component\MassAction\Filter $filter
-     * @param \Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory $collectionFactory
      * @param \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroupInterface
      * @param \Psr\Log\LoggerInterface $loggerInterface
+     * @param \Magento\Ui\Component\MassAction\Filter $filter
+     * @param \Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory $collectionFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -45,10 +45,10 @@ class MassDelete extends \Magento\Search\Controller\Adminhtml\Synonyms
         \Magento\Framework\Registry $registry,
         \Magento\Search\Model\EngineResolver $engineResolver,
         \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig,
-        \Magento\Ui\Component\MassAction\Filter $filter,
-        \Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory $collectionFactory,
         \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroupInterface,
-        \Psr\Log\LoggerInterface $loggerInterface
+        \Psr\Log\LoggerInterface $loggerInterface,
+        \Magento\Ui\Component\MassAction\Filter $filter,
+        \Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory $collectionFactory
     ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
