@@ -10,6 +10,7 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Type;
 
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Config;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\Model\Entity\EntityMetadata;
 use Magento\Framework\Model\Entity\MetadataPool;
@@ -18,6 +19,7 @@ use Magento\Framework\Model\Entity\MetadataPool;
  * Class \Magento\ConfigurableProduct\Test\Unit\Model\Product\Type\ConfigurableTest
  *
  * @SuppressWarnings(PHPMD.LongVariable)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigurableTest extends \PHPUnit_Framework_TestCase
 {
@@ -86,6 +88,11 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     private $cache;
 
     /**
+     * @var Config
+     */
+    protected $catalogConfig;
+
+    /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp()
@@ -149,6 +156,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->entityMetadata);
         $this->cache = $this->getMockBuilder(\Magento\Framework\Cache\FrontendInterface::class)
             ->getMockForAbstractClass();
+        $this->catalogConfig = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->_model = $this->_objectHelper->getObject(
             Configurable::class,
@@ -164,7 +174,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'logger' => $logger,
                 'productRepository' => $this->productRepository,
                 'extensionAttributesJoinProcessor' => $this->extensionAttributesJoinProcessorMock,
-                'cache' => $this->cache
+                'cache' => $this->cache,
+                'catalogConfig' => $this->catalogConfig,
             ]
         );
         $refClass = new \ReflectionClass(Configurable::class);
@@ -344,6 +355,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'addAttributeToSelect',
                 'addFilterByRequiredOptions',
                 'setStoreId',
+                'addPriceData',
             ]
         )->disableOriginalConstructor()
             ->getMock();
@@ -352,6 +364,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $productCollection->expects($this->any())->method('setFlag')->will($this->returnSelf());
         $productCollection->expects($this->any())->method('addFilterByRequiredOptions')->will($this->returnSelf());
         $productCollection->expects($this->any())->method('setStoreId')->with(5)->will($this->returnValue([]));
+        $productCollection->expects($this->any())->method('addPriceData')->will($this->returnSelf());
         $this->_productCollectionFactory->expects($this->any())->method('create')
             ->will($this->returnValue($productCollection));
         $this->_model->getUsedProducts($product);
