@@ -8,6 +8,7 @@ namespace Magento\Setup\Mvc\Bootstrap;
 
 use Magento\Framework\App\Bootstrap as AppBootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Shell\ComplexParameter;
@@ -47,9 +48,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
      */
     private $controllersToSkip = [
         'Magento\Setup\Controller\Session',
-        'Magento\Setup\Controller\Install',
         'Magento\Setup\Controller\Success'
-
     ];
 
     /**
@@ -102,7 +101,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
     /**
      * Check if user login
      *
-     * @param object $event
+     * @param \Zend\Mvc\MvcEvent $event
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -117,6 +116,7 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
             $application = $event->getApplication();
             $serviceManager = $application->getServiceManager();
             if ($serviceManager->get('Magento\Framework\App\DeploymentConfig')->isAvailable()) {
+                /** @var \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider */
                 $objectManagerProvider = $serviceManager->get('Magento\Setup\Model\ObjectManagerProvider');
                 /** @var \Magento\Framework\ObjectManagerInterface $objectManager */
                 $objectManager = $objectManagerProvider->get();
@@ -133,9 +133,9 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
 
                 if (!$objectManager->get('Magento\Backend\Model\Auth')->isLoggedIn()) {
                     $response = $event->getResponse();
-                    $response->getHeaders()->addHeaderLine('Location', 'index.php/session/unlogin');
+                    $baseUrl = Http::getDistroBaseUrlPath($_SERVER);
+                    $response->getHeaders()->addHeaderLine('Location', $baseUrl . 'index.php/session/unlogin');
                     $response->setStatusCode(302);
-
                     $event->stopPropagation();
                     return $response;
                 }
