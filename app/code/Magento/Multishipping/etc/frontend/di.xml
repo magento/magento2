@@ -42,4 +42,7 @@
     <type name="Magento\Checkout\Model\Cart">
         <plugin name="multishipping_session_mapper" type="Magento\Multishipping\Model\Checkout\Type\Multishipping\Plugin" sortOrder="50" />
     </type>
+    <type name="Magento\Checkout\Controller\Cart">
+        <plugin name="multishipping_clear_addresses" type="Magento\Multishipping\Model\Cart\Controller\CartPlugin" />
+    </type>
 </config>
