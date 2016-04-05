@@ -23,7 +23,7 @@ class Compare
         if (is_string($value) && is_array(@unserialize($value))) {
             $value = @unserialize($value);
             unset($value['qty'], $value['uenc']);
-            $value = array_filter($value, function($optionValue) {
+            $value = array_filter($value, function ($optionValue) {
                 return !empty($optionValue);
             });
         }
