@@ -51,15 +51,6 @@ class ObjectManagerProvider
             $initParams = $this->serviceLocator->get(InitParamListener::BOOTSTRAP_PARAM);
             $factory = Bootstrap::createObjectManagerFactory(BP, $initParams);
             $this->objectManager = $factory->create($initParams);
-            $this->objectManager->configure(
-                [
-                    'Magento\Framework\Stdlib\DateTime\Timezone' => [
-                        'arguments' => [
-                            'scopeType' => \Magento\Framework\App\Config\ScopeConfigInterface::SCOPE_TYPE_DEFAULT
-                        ]
-                    ]
-                ]
-            );
         }
         return $this->objectManager;
     }

@@ -11,6 +11,7 @@ use Composer\Package\Version\VersionParser;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Composer\MagentoComposerApplicationFactory;
+use Magento\Setup\Model\DateTime\DateTimeProvider;
 
 /**
  * Class UpdatePackagesCache manages information about available for update packages though the cache file.
@@ -57,18 +58,17 @@ class UpdatePackagesCache
      * @param MagentoComposerApplicationFactory $applicationFactory
      * @param \Magento\Framework\Filesystem $filesystem
      * @param ComposerInformation $composerInformation
-     * @param ObjectManagerProvider $objectManagerProvider
-     * @throws \Exception
+     * @param DateTimeProvider $dateTimeProvider
      */
     public function __construct(
         MagentoComposerApplicationFactory $applicationFactory,
         Filesystem $filesystem,
         ComposerInformation $composerInformation,
-        ObjectManagerProvider $objectManagerProvider
+        DateTimeProvider $dateTimeProvider
     ) {
         $this->application = $applicationFactory->create();
         $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
-        $this->dateTime = $objectManagerProvider->get()->get('Magento\Framework\Stdlib\DateTime\DateTime');
+        $this->dateTime = $dateTimeProvider->get();
         $this->composerInformation = $composerInformation;
     }
 
