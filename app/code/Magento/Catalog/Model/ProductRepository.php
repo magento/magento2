@@ -510,6 +510,7 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             $productLinks = $product->getProductLinks();
         }
         $productDataArray['store_id'] = (int)$this->storeManager->getStore()->getId();
+        $product = $this->initializeProductData($productDataArray, empty($existingProduct));
 
         $this->processLinks($product, $productLinks);
         if (isset($productDataArray['media_gallery_entries'])) {
