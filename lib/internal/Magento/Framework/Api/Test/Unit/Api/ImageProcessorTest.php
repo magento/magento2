@@ -162,6 +162,9 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         $imageContent->expects($this->any())
             ->method('getName')
             ->willReturn('testFileName');
+        $imageContent->expects($this->any())
+            ->method('getType')
+            ->willReturn('image/jpg');
 
         $imageDataObject = $this->getMockBuilder('Magento\Framework\Api\AttributeValue')
             ->disableOriginalConstructor()
@@ -200,7 +203,7 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturn('testImageData');
         $imageContent->expects($this->any())
             ->method('getName')
-            ->willReturn('testFileName');
+            ->willReturn('testFileName.png');
 
         $imageDataObject = $this->getMockBuilder('Magento\Framework\Api\AttributeValue')
             ->disableOriginalConstructor()
@@ -237,5 +240,44 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
             ->willReturn($prevImageAttribute);
 
         $this->assertEquals($imageData, $this->imageProcessor->save($imageData, 'testEntityType', $prevImageData));
+    }
+
+    /**
+     * @expectedException \Magento\Framework\Exception\InputException
+     * @expectedExceptionMessage Cannot recognize image extension.
+     */
+    public function testSaveWithoutFileExtension()
+    {
+        $imageContent = $this->getMockBuilder('Magento\Framework\Api\Data\ImageContentInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $imageContent->expects($this->once())
+            ->method('getBase64EncodedData')
+            ->willReturn('testImageData');
+        $imageContent->expects($this->once())
+            ->method('getName')
+            ->willReturn('testFileName');
+
+        $imageDataObject = $this->getMockBuilder('Magento\Framework\Api\AttributeValue')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $imageDataObject->expects($this->once())
+            ->method('getValue')
+            ->willReturn($imageContent);
+
+        $imageData = $this->getMockForAbstractClass('Magento\Framework\Api\CustomAttributesDataInterface');
+        $imageData->expects($this->once())
+            ->method('getCustomAttributes')
+            ->willReturn([]);
+
+        $this->dataObjectHelperMock->expects($this->once())
+            ->method('getCustomAttributeValueByType')
+            ->willReturn([$imageDataObject]);
+
+        $this->contentValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->willReturn(true);
+
+        $this->assertEquals($imageData, $this->imageProcessor->save($imageData, 'testEntityType'));
     }
 }
