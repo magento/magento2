@@ -51,7 +51,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    protected static function getBaseFliesFolder() {
+    private static function getBaseFliesFolder() {
         return __DIR__;
     }
 
@@ -60,7 +60,7 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      *
      * @return string
      */
-    protected static function getChangedFilesBaseDir() {
+    private static function getChangedFilesBaseDir() {
         return __DIR__ . '/..';
     }
 
@@ -74,8 +74,11 @@ class LiveCodeTest extends PHPUnit_Framework_TestCase
      */
     public static function getWhitelist($fileTypes = ['php'], $changedFilesBaseDir = '', $baseFilesFolder = '')
     {
-        $globPatternsFile = ($baseFilesFolder ?: self::getBaseFliesFolder()) . '/_files/whitelist/common.txt';
-        $directoriesToCheck = Files::init()->readLists($globPatternsFile);
+        $globPatternsFolder = self::getBaseFliesFolder();
+        if ('' !== $baseFilesFolder) {
+            $globPatternsFolder = $baseFilesFolder ;
+        }
+        $directoriesToCheck = Files::init()->readLists($globPatternsFolder. '/_files/whitelist/common.txt');
 
         $changedFiles = [];
         $globFilesListPattern = ($changedFilesBaseDir ?: self::getChangedFilesBaseDir()) . '/_files/changed_files*';
