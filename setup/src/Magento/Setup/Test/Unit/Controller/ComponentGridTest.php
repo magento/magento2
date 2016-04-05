@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Setup\Controller;
+namespace Magento\Setup\Test\Unit\Controller;
 
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Module\PackageInfo;
