@@ -5,6 +5,7 @@
  */
 
 namespace Magento\Setup\Controller;
+
 use Magento\Setup\Model\DateTime\TimezoneProvider;
 
 /**
