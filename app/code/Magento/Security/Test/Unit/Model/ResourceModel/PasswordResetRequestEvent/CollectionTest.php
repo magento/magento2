@@ -6,8 +6,6 @@
 
 namespace Magento\Security\Test\Unit\Model\ResourceModel\PasswordResetRequestEvent;
 
-use Magento\Security\Model\ConfigInterface;
-
 /**
  * Test class for \Magento\Security\Model\ResourceModel\AdminSessionInfo\Collection testing
  */
@@ -16,7 +14,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\Collection */
     protected $collectionMock;
 
-    /** @var \Magento\Framework\Stdlib\DateTime */
+    /** @var \Magento\Framework\Stdlib\DateTime\DateTime */
     protected $dateTimeMock;
 
     /** @var \Magento\Framework\DB\Select */
@@ -61,7 +59,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->dateTimeMock = $this->getMock(
-            '\Magento\Framework\Stdlib\DateTime',
+            '\Magento\Framework\Stdlib\DateTime\DateTime',
             [],
             [],
             '',
@@ -175,14 +173,14 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $timestamp = time();
 
         $this->dateTimeMock->expects($this->once())
-            ->method('gmDate')
+            ->method('gmtTimestamp')
             ->willReturn($timestamp);
 
         $this->collectionMock->expects($this->once())
             ->method('addFieldToFilter')
             ->with(
                 'created_at',
-                ['gt' => $this->dateTimeMock->formatDate($timestamp - $lifetime)]
+                ['gt' => $this->collectionMock->getConnection()->formatDate($timestamp - $lifetime)]
             )
             ->willReturnSelf();
 
