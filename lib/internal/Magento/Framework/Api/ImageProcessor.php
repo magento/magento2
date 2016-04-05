@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Api;
 
+use Magento\Framework\Api\Data\ImageContentInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Filesystem;
@@ -185,9 +186,7 @@ class ImageProcessor implements ImageProcessorInterface
             $mimeTypeExtension = $this->getMimeTypeExtension($imageContent->getType());
             if ($mimeTypeExtension) {
                 $fileName .= '.' . $mimeTypeExtension;
-                return $fileName;
             }
-            return $fileName;
         }
         return $fileName;
     }
