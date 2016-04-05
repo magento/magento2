@@ -149,7 +149,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         if ($isId) {
-            $this->entityManager->load(PageInterface::class, $object, $value);
+            $this->entityManager->load($object, $value, PageInterface::class);
         }
         return $this;
     }
