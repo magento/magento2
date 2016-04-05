@@ -129,7 +129,7 @@ class ConfigurablePanel extends AbstractModifier
                             'config' => [
                                 'componentType' => Modal::NAME,
                                 'dataScope' => '',
-                                'provider' => $this->dataSourceName,
+                                'provider' => static::FORM_NAME . '.product_form_data_source',
                                 'options' => [
                                     'title' => __('Select Associated Product'),
                                     'buttons' => [
@@ -138,9 +138,7 @@ class ConfigurablePanel extends AbstractModifier
                                             'class' => 'action-primary',
                                             'actions' => [
                                                 [
-                                                    'targetName' => 'ns= ' . $this->associatedListingPrefix
-                                                        . static::ASSOCIATED_PRODUCT_LISTING
-                                                        . ', index=' . static::ASSOCIATED_PRODUCT_LISTING,
+                                                    'targetName' => 'index=' . static::ASSOCIATED_PRODUCT_LISTING,
                                                     'actionName' => 'save'
                                                 ],
                                                 'closeModal'
@@ -227,6 +225,10 @@ class ConfigurablePanel extends AbstractModifier
                                             . 'configurable_associated_product_listing.product_columns.ids',
                                         'modalWithGrid' => 'ns=' . $this->formName . ', index='
                                             . static::ASSOCIATED_PRODUCT_MODAL,
+                                        'productsFilters' => $this->associatedListingPrefix
+                                            . 'configurable_associated_product_listing'
+                                            . '.' . $this->associatedListingPrefix
+                                            . 'configurable_associated_product_listing.listing_top.listing_filters',
                                     ],
                                 ],
                             ],
@@ -292,13 +294,12 @@ class ConfigurablePanel extends AbstractModifier
                                 'displayAsLink' => true,
                                 'actions' => [
                                     [
-                                        'targetName' => 'ns=' . $this->formName . ', index='
+                                        'targetName' => 'ns=' . static::FORM_NAME . ', index='
                                             . static::ASSOCIATED_PRODUCT_MODAL,
                                         'actionName' => 'openModal',
                                     ],
                                     [
-                                        'targetName' => 'ns=' . $this->associatedListingPrefix
-                                            . static::ASSOCIATED_PRODUCT_LISTING
+                                        'targetName' => 'ns=' . static::ASSOCIATED_PRODUCT_LISTING
                                             . ', index=' . static::ASSOCIATED_PRODUCT_LISTING,
                                         'actionName' => 'showGridAssignProduct',
                                     ],
@@ -325,13 +326,13 @@ class ConfigurablePanel extends AbstractModifier
                                 'actions' => [
                                     [
                                         'targetName' =>
-                                            $this->dataScopeName . '.configurableModal',
+                                            'product_form.product_form.configurableModal',
                                         'actionName' => 'trigger',
                                         'params' => ['active', true],
                                     ],
                                     [
                                         'targetName' =>
-                                            $this->dataScopeName . '.configurableModal',
+                                            'product_form.product_form.configurableModal',
                                         'actionName' => 'openModal',
                                     ],
                                 ],
@@ -369,7 +370,7 @@ class ConfigurablePanel extends AbstractModifier
                         'isEmpty' => true,
                         'itemTemplate' => 'record',
                         'dataScope' => 'data',
-                        'dataProviderFromGrid' => $this->associatedListingPrefix . static::ASSOCIATED_PRODUCT_LISTING,
+                        'dataProviderFromGrid' => static::ASSOCIATED_PRODUCT_LISTING,
                         'dataProviderChangeFromGrid' => 'change_product',
                         'dataProviderFromWizard' => 'variations',
                         'map' => [
@@ -394,10 +395,9 @@ class ConfigurablePanel extends AbstractModifier
                         'sortOrder' => 20,
                         'columnsHeader' => false,
                         'columnsHeaderAfterRender' => true,
-                        'modalWithGrid' => 'ns=' . $this->formName . ', index='
+                        'modalWithGrid' => 'ns=' . static::FORM_NAME . ', index='
                             . static::ASSOCIATED_PRODUCT_MODAL,
-                        'gridWithProducts' => 'ns=' . $this->associatedListingPrefix
-                            . static::ASSOCIATED_PRODUCT_LISTING
+                        'gridWithProducts' => 'ns=' . static::ASSOCIATED_PRODUCT_LISTING
                             . ', index=' . static::ASSOCIATED_PRODUCT_LISTING,
                     ],
                 ],
@@ -439,10 +439,6 @@ class ConfigurablePanel extends AbstractModifier
                             'elementTmpl' => 'Magento_ConfigurableProduct/components/file-uploader',
                             'fileInputName' => 'image',
                             'isMultipleFiles' => false,
-                            'imports' => [
-                                'thumbnailUrl' => '${$.provider}:${$.parentScope}.thumbnail_image',
-                                'thumbnail' => '${$.provider}:${$.parentScope}.thumbnail'
-                            ],
                             'uploaderConfig' => [
                                 'url' => $this->urlBuilder->addSessionParam()->getUrl(
                                     'catalog/product_gallery/upload'
