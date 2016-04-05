@@ -17,8 +17,10 @@ class TimezoneProviderTest extends \PHPUnit_Framework_TestCase
         $objectManager = $this->getMockForAbstractClass('\Magento\Framework\ObjectManagerInterface', [], '', false);
         $objectManager->expects($this->once())
             ->method('create')
-            ->with('Magento\Framework\Stdlib\DateTime\Timezone',
-                ['scopeType' => ScopeConfigInterface::SCOPE_TYPE_DEFAULT])
+            ->with(
+                'Magento\Framework\Stdlib\DateTime\Timezone',
+                ['scopeType' => ScopeConfigInterface::SCOPE_TYPE_DEFAULT]
+            )
             ->willReturn($timeZone);
         /** @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject $objectManagerProvider */
         $objectManagerProvider = $this->getMock('\Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
