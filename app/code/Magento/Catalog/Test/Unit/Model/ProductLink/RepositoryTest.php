@@ -62,11 +62,6 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     protected $linkInitializerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    private $mediaGalleryProcessorMock;
-
-    /**
      * Test method
      */
     protected function setUp()

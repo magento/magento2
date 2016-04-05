@@ -97,7 +97,7 @@ class MetadataPool
     }
 
     /**
-     * @param $entityType
+     * @param string $entityType
      * @deprecated
      * @return EntityHydratorInterface
      */

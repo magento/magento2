@@ -19,6 +19,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
      * @var SaveHandler
      */
     protected $model;
+
     /**
      * @var Rule|\PHPUnit_Framework_MockObject_MockObject
      */

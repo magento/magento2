@@ -11,7 +11,6 @@ use Magento\Framework\EntityManager\EntityMetadataInterface;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\App\ResourceConnection;
 
-
 /**
  * Class UpdateRow
  */
@@ -51,7 +50,6 @@ class UpdateRow
     {
         $output = [];
         foreach ($connection->describeTable($metadata->getEntityTable()) as $column) {
-
             if ($column['DEFAULT'] == 'CURRENT_TIMESTAMP' || $column['IDENTITY']) {
                 continue;
             }

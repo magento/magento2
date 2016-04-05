@@ -14,7 +14,7 @@ use Magento\Framework\ObjectManagerInterface;
 class HydratorPool
 {
     /**
-     * @var
+     * @var array|\string[]
      */
     private $hydrators;
 

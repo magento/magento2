@@ -21,6 +21,7 @@ class PreprocessorTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\CatalogSearch\Model\Search\TableMapper|\PHPUnit_Framework_MockObject_MockObject
      */
     private $tableMapper;
+
     /**
      * @var \Magento\Framework\DB\Adapter\AdapterInterface|MockObject
      */
