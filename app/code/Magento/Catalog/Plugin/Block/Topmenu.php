@@ -63,6 +63,7 @@ class Topmenu
      * @param string $outermostClass
      * @param string $childrenWrapClass
      * @param int $limit
+     * @return void
      * @SuppressWarnings("PMD.UnusedFormalParameter")
      */
     public function beforeGetHtml(
@@ -100,6 +101,7 @@ class Topmenu
      * Add list of associated identities to the top menu block for caching purposes.
      *
      * @param \Magento\Theme\Block\Html\Topmenu $subject
+     * @return void
      */
     public function beforeGetIdentities(\Magento\Theme\Block\Html\Topmenu $subject)
     {

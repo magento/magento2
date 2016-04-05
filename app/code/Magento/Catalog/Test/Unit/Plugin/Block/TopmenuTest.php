@@ -13,7 +13,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 class TopmenuTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Catalog\Plugin\Block\TopMenu
+     * @var \Magento\Catalog\Plugin\Block\Topmenu
      */
     protected $block;
 
@@ -101,7 +101,7 @@ class TopmenuTest extends \PHPUnit_Framework_TestCase
             ->willReturn(new \ArrayIterator([]));
 
         $this->block = (new ObjectManager($this))->getObject(
-            'Magento\Catalog\Plugin\Block\TopMenu',
+            \Magento\Catalog\Plugin\Block\Topmenu::class,
             [
                 'catalogCategory' => $this->_catalogCategory,
                 'menuCategoryData' => $this->menuCategoryData,
