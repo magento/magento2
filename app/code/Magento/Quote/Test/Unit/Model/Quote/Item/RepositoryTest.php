@@ -52,6 +52,9 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Catalog\Model\CustomOptions\CustomOptionProcessor|\PHPUnit_Framework_MockObject_MockObject */
     protected $customOptionProcessor;
 
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    protected $shippingAddressMock;
+
     /**
      * @return void
      */
@@ -70,6 +73,13 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->customOptionProcessor = $this->getMock(
             'Magento\Catalog\Model\CustomOptions\CustomOptionProcessor',
             [],
+            [],
+            '',
+            false
+        );
+        $this->shippingAddressMock = $this->getMock(
+            \Magento\Quote\Model\Quote\Address::class,
+            ['setCollectShippingRates'],
             [],
             '',
             false
@@ -176,6 +186,12 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->productMock);
         $this->quoteMock->expects($this->never())->method('getItemById');
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
+        $this->quoteMock->expects($this->once())
+            ->method('getShippingAddress')
+            ->willReturn($this->shippingAddressMock);
+        $this->shippingAddressMock->expects($this->once())
+            ->method('setCollectShippingRates')
+            ->with(true);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
         $this->dataMock->expects($this->once())->method('getItemId')->will($this->returnValue(null));
         $exceptionMessage = 'Could not save quote';
@@ -223,6 +239,12 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->productMock);
         $this->quoteMock->expects($this->never())->method('getItemById');
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
+        $this->quoteMock->expects($this->once())
+            ->method('getShippingAddress')
+            ->willReturn($this->shippingAddressMock);
+        $this->shippingAddressMock->expects($this->once())
+            ->method('setCollectShippingRates')
+            ->with(true);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
         $this->dataMock->expects($this->once())->method('getItemId')->will($this->returnValue(null));
         $this->quoteMock
@@ -256,6 +278,12 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->productMock);
         $this->quoteMock->expects($this->never())->method('getItemById');
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
+        $this->quoteMock->expects($this->once())
+            ->method('getShippingAddress')
+            ->willReturn($this->shippingAddressMock);
+        $this->shippingAddressMock->expects($this->once())
+            ->method('setCollectShippingRates')
+            ->with(true);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
         $this->dataMock->expects($this->once())->method('getItemId')->will($this->returnValue(null));
         $this->quoteMock->expects($this->once())
@@ -323,6 +351,12 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->quoteItemMock->expects($this->never())->method('getId');
         $exceptionMessage = 'Could not save quote';
         $exception = new \Magento\Framework\Exception\CouldNotSaveException(__($exceptionMessage));
+        $this->quoteMock->expects($this->once())
+            ->method('getShippingAddress')
+            ->willReturn($this->shippingAddressMock);
+        $this->shippingAddressMock->expects($this->once())
+            ->method('setCollectShippingRates')
+            ->with(true);
         $this->quoteRepositoryMock->expects($this->once())
             ->method('save')
             ->with($this->quoteMock)
@@ -361,6 +395,12 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
             ->expects($this->never())->method('get');
         $this->quoteItemMock->expects($this->never())->method('addProduct');
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
+        $this->quoteMock->expects($this->once())
+            ->method('getShippingAddress')
+            ->willReturn($this->shippingAddressMock);
+        $this->shippingAddressMock->expects($this->once())
+            ->method('setCollectShippingRates')
+            ->with(true);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
         $this->quoteMock
             ->expects($this->once())
@@ -424,6 +464,12 @@ class RepositoryTest extends \PHPUnit_Framework_TestCase
         $this->productRepositoryMock
             ->expects($this->never())->method('get');
         $this->quoteMock->expects($this->once())->method('collectTotals')->will($this->returnValue($this->quoteMock));
+        $this->quoteMock->expects($this->once())
+            ->method('getShippingAddress')
+            ->willReturn($this->shippingAddressMock);
+        $this->shippingAddressMock->expects($this->once())
+            ->method('setCollectShippingRates')
+            ->with(true);
         $this->quoteRepositoryMock->expects($this->once())->method('save')->with($this->quoteMock);
         $this->quoteMock
             ->expects($this->once())
