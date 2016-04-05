@@ -8,6 +8,8 @@ namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
 /**
  * Mass-Delete Controller
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class MassDelete extends \Magento\Search\Controller\Adminhtml\Synonyms
 {
@@ -33,6 +35,8 @@ class MassDelete extends \Magento\Search\Controller\Adminhtml\Synonyms
      * @param \Magento\Ui\Component\MassAction\Filter $filter
      * @param \Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory $collectionFactory
      * @param \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroupInterface
+     * @param \Psr\Log\LoggerInterface $loggerInterface
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
