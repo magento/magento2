@@ -57,7 +57,7 @@ class Topmenu
     }
 
     /**
-     * Built category tree for menu block.
+     * Build category tree for menu block.
      *
      * @param \Magento\Theme\Block\Html\Topmenu $subject
      * @param string $outermostClass
