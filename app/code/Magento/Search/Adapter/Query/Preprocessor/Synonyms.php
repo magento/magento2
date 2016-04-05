@@ -3,7 +3,7 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Search\Adapter\Mysql\Query\Preprocessor;
+namespace Magento\Search\Adapter\Query\Preprocessor;
 
 use Magento\Framework\Search\Adapter\Preprocessor\PreprocessorInterface;
 use Magento\Search\Api\SynonymAnalyzerInterface;
