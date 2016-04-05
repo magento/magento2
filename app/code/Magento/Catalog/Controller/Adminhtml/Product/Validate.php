@@ -17,7 +17,7 @@ use Magento\Catalog\Controller\Adminhtml\Product;
 class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
      */
     protected $_dateFilter;
 
@@ -42,7 +42,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
     /**
      * @param Action\Context $context
      * @param Builder $productBuilder
-     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+     * @param \Magento\Framework\Stdlib\DateTime\Filter\DateTime $dateFilter
      * @param \Magento\Catalog\Model\Product\Validator $productValidator
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
@@ -51,7 +51,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         Product\Builder $productBuilder,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
+        \Magento\Framework\Stdlib\DateTime\Filter\DateTime $dateFilter,
         \Magento\Catalog\Model\Product\Validator $productValidator,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
