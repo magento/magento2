@@ -147,10 +147,19 @@ class ServiceInputProcessor implements ServicePayloadConverterInterface
                         throw $e;
                     }
                 }
-                if ($camelCaseProperty === 'CustomAttributes') {
-                    $setterValue = $this->convertCustomAttributeValue($value, $className);
-                } else {
-                    $setterValue = $this->convertValue($value, $returnType);
+                try {
+                    if ($camelCaseProperty === 'CustomAttributes') {
+                        $setterValue = $this->convertCustomAttributeValue($value, $className);
+                    } else {
+                        $setterValue = $this->convertValue($value, $returnType);
+                    }
+                } catch (SerializationException $e) {
+                    throw new SerializationException(
+                        __(
+                            'Error occurred during "%field_name" processing. %details',
+                            ['field_name' => $propertyName, 'details' => $e->getMessage()]
+                        )
+                    );
                 }
                 $object->{$setterName}($setterValue);
             }
