@@ -744,6 +744,8 @@ class BundlePanel extends AbstractModifier
     }
 
     /**
+     * Check that store is default
+     *
      * @return bool
      */
     protected function isDefaultStore()
