@@ -7,7 +7,8 @@ namespace Magento\CatalogRule\Model\Indexer;
 
 use Magento\Framework\Mview\ActionInterface as MviewActionInterface;
 use Magento\Framework\Indexer\ActionInterface as IndexerActionInterface;
-use Magento\Framework\DataObject\IdentityInterface as IdentityInterface;
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Indexer\CacheContext;
 
 abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInterface, IdentityInterface
 {
@@ -27,6 +28,11 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
      * @var \Magento\Framework\App\CacheInterface
      */
     private $cacheManager;
+
+    /**
+     * @var \Magento\Framework\Indexer\CacheContext
+     */
+    protected $cacheContext;
 
     /**
      * @param IndexBuilder $indexBuilder
@@ -60,7 +66,7 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
     {
         $this->indexBuilder->reindexFull();
         $this->_eventManager->dispatch('clean_cache_by_tags', ['object' => $this]);
-        //TODO: remove after fix fpc. MAGETWO-49121
+        //TODO: remove after fix fpc. MAGETWO-50668
         $this->getCacheManager()->clean($this->getIdentities());
     }
 
@@ -143,5 +149,20 @@ abstract class AbstractIndexer implements IndexerActionInterface, MviewActionInt
             );
         }
         return $this->cacheManager;
+    }
+
+    /**
+     * Get cache context
+     *
+     * @return \Magento\Framework\Indexer\CacheContext
+     * @deprecated
+     */
+    protected function getCacheContext()
+    {
+        if (!($this->cacheContext instanceof CacheContext)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(CacheContext::class);
+        } else {
+            return $this->cacheContext;
+        }
     }
 }
