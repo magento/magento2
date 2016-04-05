@@ -46,6 +46,16 @@ abstract class Synonyms extends Action
     protected $searchFeatureConfig;
 
     /**
+     * @var \Magento\Search\Api\Data\SynonymGroupInterface $synonymsGroupInterface
+     */
+    protected $synonymGroupModel;
+
+    /**
+     * @var \Psr\Log\LoggerInterface $logger
+     */
+    protected $logger;
+
+    /**
      * Constructor
      *
      * @param Action\Context $context
@@ -54,6 +64,8 @@ abstract class Synonyms extends Action
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Search\Model\EngineResolver $engineResolver
      * @param \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig
+     * @param \Magento\Search\Api\Data\SynonymGroupInterface $synonymsGroupInterface
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         Action\Context $context,
@@ -61,13 +73,17 @@ abstract class Synonyms extends Action
         \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory,
         \Magento\Framework\Registry $registry,
         \Magento\Search\Model\EngineResolver $engineResolver,
-        \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig
+        \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig,
+        \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroupInterface,
+        \Psr\Log\LoggerInterface $loggerInterface
     ) {
         $this->resultPageFactory = $resultPageFactory;
         $this->forwardFactory = $forwardFactory;
         $this->registry = $registry;
         $this->engineResolver = $engineResolver;
         $this->searchFeatureConfig = $searchFeatureConfig;
+        $this->synonymGroupModel = $synonymGroupInterface;
+        $this->logger = $loggerInterface;
         parent::__construct($context);
     }
 

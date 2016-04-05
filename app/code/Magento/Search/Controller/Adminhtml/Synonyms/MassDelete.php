@@ -34,6 +34,7 @@ class MassDelete extends Synonyms
      * @param \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig
      * @param \Magento\Ui\Component\MassAction\Filter $filter
      * @param \Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory $collectionFactory
+     * @param \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroupInterface
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -43,7 +44,8 @@ class MassDelete extends Synonyms
         \Magento\Search\Model\EngineResolver $engineResolver,
         \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig,
         \Magento\Ui\Component\MassAction\Filter $filter,
-        \Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory $collectionFactory
+        \Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory $collectionFactory,
+        \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroupInterface
     ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
@@ -53,7 +55,8 @@ class MassDelete extends Synonyms
             $forwardFactory,
             $registry,
             $engineResolver,
-            $searchFeatureConfig
+            $searchFeatureConfig,
+            $synonymGroupInterface
         );
     }
 

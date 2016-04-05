@@ -32,8 +32,11 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\ObjectManager\ObjectManager|\PHPUnit_Framework_MockObject_MockObject */
     protected $objectManagerMock;
 
-    /** @var \Magento\Search\Model\SynonymGroup|\PHPUnit_Framework_MockObject_MockObject $synonymGroupMock */
+    /**
+     * @var \Magento\Search\Api\Data\SynonymGroupInterface|\PHPUnit_Framework_MockObject_MockObject $synonymGroupMock
+     */
     protected $synonymGroupMock;
+
 
     protected function setUp()
     {
@@ -50,11 +53,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             true,
             ['getParam']
         );
-
-        $this->synonymGroupMock = $this->getMockBuilder('Magento\Search\Model\SynonymGroup')
-            ->disableOriginalConstructor()
-            ->setMethods(['load', 'delete', 'getTitle'])
-            ->getMock();
 
         $this->objectManagerMock = $this->getMockBuilder('Magento\Framework\ObjectManager\ObjectManager')
             ->disableOriginalConstructor()
@@ -82,6 +80,16 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             false
         );
 
+        $this->synonymGroupMock = $this->getMockForAbstractClass(
+            'Magento\Search\Api\Data\SynonymGroupInterface',
+            [],
+            '',
+            false,
+            true,
+            true,
+            ['load', 'delete', 'getTitle']
+        );
+
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $this->contextMock->expects($this->any())->method('getMessageManager')->willReturn($this->messageManagerMock);
         $this->contextMock->expects($this->any())->method('getObjectManager')->willReturn($this->objectManagerMock);
@@ -93,6 +101,7 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
             'Magento\Search\Controller\Adminhtml\Synonyms\Delete',
             [
                 'context' => $this->contextMock,
+                'synonymGroupInterface' => $this->synonymGroupMock
             ]
         );
     }
@@ -108,7 +117,6 @@ class DeleteTest extends \PHPUnit_Framework_TestCase
 
         $this->objectManagerMock->expects($this->any())->method('create')
             ->willReturnMap([
-                    ['Magento\Search\Model\SynonymGroup', [], $this->synonymGroupMock],
                     ['Magento\Search\Api\SynonymGroupRepositoryInterface', [], $repository]
             ]);
 

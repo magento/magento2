@@ -30,10 +30,9 @@ class Save extends \Magento\Search\Controller\Adminhtml\Synonyms
             }
 
             // Create model and load any existing data
-            /** @var \Magento\Search\Model\SynonymGroup $synGroupModel */
-            $synGroupModel = $this->_objectManager->create('Magento\Search\Model\SynonymGroup')->load($synGroupId);
+            $this->synonymGroupModel->load($synGroupId);
 
-            if (!$synGroupModel->getId() && $synGroupId) {
+            if (!$this->synonymGroupModel->getId() && $synGroupId) {
                 $this->messageManager->addError(__('This synonym group no longer exists.'));
                 return $resultRedirect->setPath('*/*/');
             }
@@ -50,28 +49,28 @@ class Save extends \Magento\Search\Controller\Adminhtml\Synonyms
             $words = array_map('trim', $words);
             $data['synonyms'] = strtolower(implode(',', $words));
 
-            $synGroupModel->setData($data);
+            $this->synonymGroupModel->setData($data);
 
             // save the data
             /** @var \Magento\Search\Model\SynonymGroupRepository $synGroupRepository */
             $synGroupRepository = $this->_objectManager->create('Magento\Search\Model\SynonymGroupRepository');
             if (isset($data['mergeOnConflict']) && $data['mergeOnConflict'] === 'true') {
-                $synGroupRepository->save($synGroupModel);
+                $synGroupRepository->save($this->synonymGroupModel);
                 $this->getMessageManager()->addSuccessMessage(__('You saved the synonym group.'));
             } else {
                 try {
-                    $synGroupRepository->save($synGroupModel, true);
+                    $synGroupRepository->save($this->synonymGroupModel, true);
                     $this->getMessageManager()->addSuccessMessage(__('You saved the synonym group.'));
                 } catch (MergeConflictException $exception) {
                     $this->getMessageManager()->addErrorMessage($this->getErrorMessage($exception));
                     $this->_getSession()->setFormData($data);
-                    return $resultRedirect->setPath('*/*/edit', ['group_id' => $synGroupModel->getId()]);
+                    return $resultRedirect->setPath('*/*/edit', ['group_id' => $this->synonymGroupModel->getId()]);
                 }
             }
 
             // check if 'Save and Continue'
             if ($this->getRequest()->getParam('back')) {
-                return $resultRedirect->setPath('*/*/edit', ['group_id' => $synGroupModel->getId()]);
+                return $resultRedirect->setPath('*/*/edit', ['group_id' => $this->synonymGroupModel->getId()]);
             }
         }
         return $resultRedirect->setPath('*/*/');
