@@ -3,11 +3,14 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Framework\View\Test\Unit\Template\Html;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Filesystem\DriverPool;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Template\Html\Minifier;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Filesystem;
 
 class MinifierTest extends \PHPUnit_Framework_TestCase
 {
@@ -17,38 +20,69 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
     protected $object;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $htmlDirectory;
+    protected $htmlDirectoryMock;
 
     /**
-     * @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $appDirectory;
+    protected $appDirectoryMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem\Directory\ReadFactory|\PHPUnit_Framework_MockObject_MockObject
      */
-    protected $readFactory;
+    protected $readFactoryMock;
+
+    /**
+     * @var ReadInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $rootDirectoryMock;
+
+    /**
+     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $filesystemMock;
 
     /**
      * Initialize testable object
      */
     protected function setUp()
     {
-        $this->htmlDirectory = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\WriteInterface')
+        $this->htmlDirectoryMock = $this->getMockBuilder(Filesystem\Directory\WriteInterface::class)
+            ->getMockForAbstractClass();
+        $this->appDirectoryMock = $this->getMockBuilder(ReadInterface::class)
+            ->getMockForAbstractClass();
+        $this->rootDirectoryMock = $this->getMockBuilder(ReadInterface::class)
+            ->getMockForAbstractClass();
+        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
+            ->disableOriginalConstructor()
             ->getMock();
-        $this->appDirectory = $this->getMockBuilder('Magento\Framework\Filesystem\Directory\ReadInterface')->getMock();
-        $filesystem = $this->getMockBuilder('Magento\Framework\Filesystem')->disableOriginalConstructor()->getMock();
-        $filesystem->expects($this->once())
+        $this->readFactoryMock = $this->getMockBuilder(Filesystem\Directory\ReadFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->filesystemMock->expects($this->once())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::TEMPLATE_MINIFICATION_DIR)
-            ->willReturn($this->htmlDirectory);
-        /** @var \Magento\Framework\Filesystem $filesystem */
+            ->willReturn($this->htmlDirectoryMock);
+        $this->filesystemMock->expects($this->any())
+            ->method('getDirectoryRead')
+            ->with(DirectoryList::ROOT, DriverPool::FILE)
+            ->willReturn($this->rootDirectoryMock);
+        $this->rootDirectoryMock->expects($this->any())
+            ->method('getRelativePath')
+            ->willReturnCallback(function ($value) {
+                return ltrim($value, '/');
+            });
+        $this->readFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturn($this->appDirectoryMock);
 
-        $this->readFactory = $this->getMock('Magento\Framework\Filesystem\Directory\ReadFactory', [], [], '', false);
-        $this->readFactory->expects($this->any())->method('create')->willReturn($this->appDirectory);
-        $this->object = new Minifier($filesystem, $this->readFactory);
+        $this->object = (new ObjectManager($this))->getObject(Minifier::class, [
+            'filesystem' => $this->filesystemMock,
+            'readFactory' => $this->readFactoryMock,
+        ]);
     }
 
     /**
@@ -61,7 +95,7 @@ class MinifierTest extends \PHPUnit_Framework_TestCase
         $relativeGeneratedPath = 'absolute/path/to/phtml/template/file';
         $absolutePath = '/full/path/to/compiled/html/file';
 
-        $this->htmlDirectory->expects($this->once())
+        $this->htmlDirectoryMock->expects($this->once())
             ->method('getAbsolutePath')
             ->with($relativeGeneratedPath)
             ->willReturn($absolutePath);
@@ -143,17 +177,17 @@ TEXT;
 </script><?php echo "http://some.link.com/" ?> <em>inline text</em> <a href="http://www.<?php echo 'hi' ?>"></a></body></html>
 TEXT;
 
-        $this->appDirectory->expects($this->once())
+        $this->appDirectoryMock->expects($this->once())
             ->method('readFile')
             ->with(basename($file))
             ->willReturn($baseContent);
 
-        $this->htmlDirectory->expects($this->once())
+        $this->htmlDirectoryMock->expects($this->once())
             ->method('isExist')
             ->willReturn(false);
-        $this->htmlDirectory->expects($this->once())
+        $this->htmlDirectoryMock->expects($this->once())
             ->method('create');
-        $this->htmlDirectory->expects($this->once())
+        $this->htmlDirectoryMock->expects($this->once())
             ->method('writeFile')
             ->with($relativeGeneratedPath, $expectedContent);
 
@@ -176,13 +210,13 @@ TEXT;
             ->method('getRealPathSafety')
             ->willReturn($file);
 
-        $this->htmlDirectory
+        $this->htmlDirectoryMock
             ->expects($this->at(1))
             ->method('isExist')
             ->with($relativeGeneratedPath)
             ->willReturn(false);
 
-        $this->htmlDirectory
+        $this->htmlDirectoryMock
             ->expects($this->once())
             ->method('getDriver')
             ->willReturn($htmlDriver);
