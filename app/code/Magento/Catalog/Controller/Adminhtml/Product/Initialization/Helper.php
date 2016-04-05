@@ -39,7 +39,7 @@ class Helper
     protected $jsHelper;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
      */
     protected $dateFilter;
 
@@ -75,7 +75,7 @@ class Helper
      * @param StockDataFilter $stockFilter
      * @param ProductLinks $productLinks
      * @param \Magento\Backend\Helper\Js $jsHelper
-     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+     * @param \Magento\Framework\Stdlib\DateTime\Filter\DateTime $dateFilter
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -83,7 +83,7 @@ class Helper
         StockDataFilter $stockFilter,
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks,
         \Magento\Backend\Helper\Js $jsHelper,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
+        \Magento\Framework\Stdlib\DateTime\Filter\DateTime $dateFilter
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
