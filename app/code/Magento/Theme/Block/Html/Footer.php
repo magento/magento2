@@ -82,7 +82,7 @@ class Footer extends \Magento\Framework\View\Element\Template implements \Magent
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE
             );
         }
-        return $this->_copyright;
+        return __($this->_copyright);
     }
 
     /**
