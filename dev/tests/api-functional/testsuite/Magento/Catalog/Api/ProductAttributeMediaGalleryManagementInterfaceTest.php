@@ -385,30 +385,6 @@ class ProductAttributeMediaGalleryManagementInterfaceTest extends \Magento\TestF
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The image MIME type is not valid or not supported.
-     */
-    public function testCreateThrowsExceptionIfProvidedImageHasNotMimeType()
-    {
-        $encodedContent = base64_encode(file_get_contents($this->testImagePath));
-        $requestData = [
-            'id' => null,
-            'media_type' => 'image',
-            'label' => 'Image Text',
-            'position' => 1,
-            'types' => ['image'],
-            'disabled' => false,
-            'content' => [
-                'base64_encoded_data' => $encodedContent,
-                'name' => 'test_image.jpg',
-            ]
-        ];
-
-        $this->_webApiCall($this->createServiceInfo, ['sku' => 'simple', 'entry' => $requestData]);
-    }
-
-    /**
      * @expectedException \Exception
      * @expectedExceptionMessage Requested product doesn't exist
      */
