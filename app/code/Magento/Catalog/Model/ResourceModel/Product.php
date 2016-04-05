@@ -315,7 +315,11 @@ class Product extends AbstractResource
      */
     protected function _saveWebsiteIds($product)
     {
+        if (empty(array_diff($product->getWebsiteIds(), [0]))) {
+            $product->setWebsiteIds([1]);
+        }
         $websiteIds = $product->getWebsiteIds();
+
         $oldWebsiteIds = [];
 
         $product->setIsChangedWebsites(false);

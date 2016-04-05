@@ -19,6 +19,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
      * @var SaveHandler
      */
     protected $model;
+
     /**
      * @var Rule|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -92,8 +93,6 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
             'website_ids' => $websites,
             'customer_group_ids' => $customers
         ];
-
-
 
         $className = '\Magento\Framework\EntityManager\EntityMetadata';
         $metadata = $this->getMock($className, [], [], '', false);
