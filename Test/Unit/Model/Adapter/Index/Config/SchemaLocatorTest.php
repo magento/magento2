@@ -52,7 +52,7 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetSchema()
     {
-        $this->assertEquals('schema_dir/esconfig.xsd', $this->model->getSchema());
+        $this->assertEquals('schema_dir' . DIRECTORY_SEPARATOR . 'esconfig.xsd', $this->model->getSchema());
     }
 
     /**
@@ -60,6 +60,6 @@ class SchemaLocatorTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPerFileSchema()
     {
-        $this->assertEquals('schema_dir/esconfig.xsd', $this->model->getPerFileSchema());
+        $this->assertEquals('schema_dir' . DIRECTORY_SEPARATOR . 'esconfig.xsd', $this->model->getPerFileSchema());
     }
 }
