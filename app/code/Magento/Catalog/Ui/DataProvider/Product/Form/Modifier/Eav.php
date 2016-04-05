@@ -162,13 +162,6 @@ class Eav extends AbstractModifier
     private $dataPersistor;
 
     /**
-     * Price frontend input
-     *
-     * @var string
-     */
-    private $priceInput = 'price';
-
-    /**
      * @param LocatorInterface $locator
      * @param EavValidationRules $eavValidationRules
      * @param Config $eavConfig
@@ -351,7 +344,7 @@ class Eav extends AbstractModifier
 
             foreach ($attributes as $attribute) {
                 if (null !== ($attributeValue = $this->setupAttributeData($attribute))) {
-                    if ($attribute->getFrontendInput() === $this->priceInput) {
+                    if ($attribute->getFrontendInput() === 'price') {
                         $attributeValue = number_format($attributeValue, 2);
                     }
                     $data[$productId][self::DATA_SOURCE_DEFAULT][$attribute->getAttributeCode()] = $attributeValue;
