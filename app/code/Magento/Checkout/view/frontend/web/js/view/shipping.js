@@ -245,10 +245,11 @@ define(
                 var shippingAddress,
                     addressData,
                     loginFormSelector = 'form[data-role=email-with-possible-login]',
-                    emailValidationResult = customer.isLoggedIn();
+                    emailValidationResult = customer.isLoggedIn(),
+                    errortext = $t('Please specify a shipping method.');
 
                 if (!quote.shippingMethod()) {
-                    this.errorValidationMessage('Please specify a shipping method.');
+                    this.errorValidationMessage(errortext);
 
                     return false;
                 }
