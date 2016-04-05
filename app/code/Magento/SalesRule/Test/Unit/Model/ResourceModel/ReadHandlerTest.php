@@ -19,6 +19,7 @@ class ReadHandlerTest extends \PHPUnit_Framework_TestCase
      * @var \Magento\SalesRule\Model\ResourceModel\ReadHandler
      */
     protected $model;
+
     /**
      * @var Rule|\PHPUnit_Framework_MockObject_MockObject
      */

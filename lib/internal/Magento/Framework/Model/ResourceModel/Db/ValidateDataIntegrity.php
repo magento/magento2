@@ -50,6 +50,7 @@ class ValidateDataIntegrity
      * @param string $entityType
      * @param object $entity
      * @throws \Exception
+     * @return void
      */
     public function execute($entityType, $entity)
     {
