@@ -6,11 +6,8 @@
 
 namespace Magento\Setup\Model;
 
-use Magento\Framework\Composer\ComposerInformation;
 use Composer\Package\Version\VersionParser;
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Composer\MagentoComposerApplicationFactory;
 
 /**
  * Class UpdatePackagesCache manages information about available for update packages though the cache file.
@@ -52,7 +49,7 @@ class UpdatePackagesCache
     private $pathToCacheFile = 'update_composer_packages.json';
 
     /**
-     * @var MarketplaceManager
+     * @var \Magento\Setup\Model\MarketplaceManager
      */
     private $marketplaceManager;
 
@@ -64,22 +61,22 @@ class UpdatePackagesCache
     /**
      * Constructor
      *
-     * @param MagentoComposerApplicationFactory $applicationFactory
      * @param \Magento\Framework\Filesystem $filesystem
-     * @param ComposerInformation $composerInformation
-     * @param MarketplaceManager $marketplaceManager
-     * @param ObjectManagerProvider $objectManagerProvider
+     * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
+     * @param \Magento\Setup\Model\MarketplaceManager $marketplaceManager
+     * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      * @throws \Exception
      */
     public function __construct(
-        MagentoComposerApplicationFactory $applicationFactory,
-        Filesystem $filesystem,
-        ComposerInformation $composerInformation,
-        MarketplaceManager $marketplaceManager,
-        ObjectManagerProvider $objectManagerProvider
+        \Magento\Framework\Filesystem $filesystem,
+        \Magento\Framework\Composer\ComposerInformation $composerInformation,
+        \Magento\Setup\Model\MarketplaceManager $marketplaceManager,
+        \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
     ) {
+        $applicationFactory = $objectManagerProvider->get()
+            ->get('Magento\Framework\Composer\MagentoComposerApplicationFactory');
         $this->application = $applicationFactory->create();
-        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $this->directory = $filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::VAR_DIR);
         $this->dateTime = $objectManagerProvider->get()->get('Magento\Framework\Stdlib\DateTime\DateTime');
         $this->composerInformation = $composerInformation;
         $this->marketplaceManager = $marketplaceManager;
