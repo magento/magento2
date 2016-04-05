@@ -56,7 +56,7 @@ abstract class AbstractResource
     /**
      * Subscribe some callback to transaction commit
      *
-     * @param array $callback
+     * @param callable|array $callback
      * @return $this
      * @api
      */

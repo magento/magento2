@@ -21,11 +21,6 @@ class Collection extends PageCollection implements SearchResultInterface
     protected $aggregations;
 
     /**
-     * @var \Magento\Framework\View\Element\UiComponent\DataProvider\Document[]
-     */
-    private $loadedData;
-
-    /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -144,26 +139,5 @@ class Collection extends PageCollection implements SearchResultInterface
     public function setItems(array $items = null)
     {
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getItems()
-    {
-        if (isset($this->loadedData)) {
-            return $this->loadedData;
-        }
-        /** @var \Magento\Cms\Model\Page $page */
-        $page = $this->_entityFactory->create(\Magento\Cms\Model\Page::class);
-        /** Load every record separately to make sure the list of associated stores is available */
-        /** @var \Magento\Framework\View\Element\UiComponent\DataProvider\Document $pageDocument */
-        foreach (parent::getItems() as $pageDocument) {
-            $this->loadedData[$pageDocument->getId()] = $pageDocument->setData(
-                $page->load($pageDocument->getId())->getData()
-            );
-        }
-
-        return $this->loadedData;
     }
 }
