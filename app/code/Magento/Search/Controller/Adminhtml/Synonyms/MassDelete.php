@@ -6,12 +6,10 @@
 
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
-use Magento\Search\Controller\Adminhtml\Synonyms;
-
 /**
  * Mass-Delete Controller
  */
-class MassDelete extends Synonyms
+class MassDelete extends \Magento\Search\Controller\Adminhtml\Synonyms
 {
     /**
      * @var \Magento\Ui\Component\MassAction\Filter
@@ -45,7 +43,8 @@ class MassDelete extends Synonyms
         \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig,
         \Magento\Ui\Component\MassAction\Filter $filter,
         \Magento\Search\Model\ResourceModel\SynonymGroup\CollectionFactory $collectionFactory,
-        \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroupInterface
+        \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroupInterface,
+        \Psr\Log\LoggerInterface $loggerInterface
     ) {
         $this->filter = $filter;
         $this->collectionFactory = $collectionFactory;
@@ -56,7 +55,8 @@ class MassDelete extends Synonyms
             $registry,
             $engineResolver,
             $searchFeatureConfig,
-            $synonymGroupInterface
+            $synonymGroupInterface,
+            $loggerInterface
         );
     }
 

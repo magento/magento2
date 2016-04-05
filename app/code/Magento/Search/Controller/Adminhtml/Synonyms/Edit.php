@@ -37,7 +37,10 @@ class Edit extends \Magento\Search\Controller\Adminhtml\Synonyms
         }
 
         // 4. Register model to use later in save
-        $this->registry->register(\Magento\Search\Controller\RegistryConstants::SEARCH_SYNONYMS, $this->synonymGroupModel);
+        $this->registry->register(
+            \Magento\Search\Controller\RegistryConstants::SEARCH_SYNONYMS,
+            $this->synonymGroupModel
+        );
 
         // 5. Build edit synonyms group form
         $resultPage = $this->_initAction();
@@ -47,7 +50,8 @@ class Edit extends \Magento\Search\Controller\Adminhtml\Synonyms
         );
         $resultPage->getConfig()->getTitle()->prepend(__('Synonym Group'));
         $resultPage->getConfig()->getTitle()
-            ->prepend($this->synonymGroupModel->getId() ? $this->synonymGroupModel->getSynonymGroup() : __('New Synonym Group'));
+            ->prepend($this->synonymGroupModel->getId()
+                ? $this->synonymGroupModel->getSynonymGroup() : __('New Synonym Group'));
         return $resultPage;
     }
 }
