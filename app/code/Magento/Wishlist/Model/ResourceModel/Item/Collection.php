@@ -276,9 +276,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             'WISHLIST:' . __METHOD__,
             ['group' => 'WISHLIST', 'method' => __METHOD__]
         );
-        $productIds = [];
 
-        $this->_productIds = array_merge($this->_productIds, array_keys($productIds));
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
         $productCollection = $this->_productCollectionFactory->create();
 
@@ -289,7 +287,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $productCollection->addPriceData()
             ->addTaxPercents()
             ->addIdFilter($this->_productIds)
-            ->addAttributeToSelect('name')
+            ->addAttributeToSelect(['name', 'visibility'])
             ->addOptionsToResult()
             ->addUrlRewrite();
 
