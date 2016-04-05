@@ -49,9 +49,9 @@ class Edit extends \Magento\Search\Controller\Adminhtml\Synonyms
             $groupId ? __('Edit Synonym Group') : __('New Synonym Group')
         );
         $resultPage->getConfig()->getTitle()->prepend(__('Synonym Group'));
-        $resultPage->getConfig()->getTitle()
-            ->prepend($this->synonymGroupModel->getId()
-                ? $this->synonymGroupModel->getSynonymGroup() : __('New Synonym Group'));
+        $resultPage->getConfig()->getTitle()->prepend(
+            $this->synonymGroupModel->getId() ? $this->synonymGroupModel->getSynonymGroup() : __('New Synonym Group')
+        );
         return $resultPage;
     }
 }
