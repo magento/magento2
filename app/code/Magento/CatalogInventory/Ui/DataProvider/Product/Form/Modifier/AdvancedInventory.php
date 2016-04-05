@@ -8,8 +8,8 @@ namespace Magento\CatalogInventory\Ui\DataProvider\Product\Form\Modifier;
 use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
-use Magento\CatalogInventory\Model\Source\Stock;
 use Magento\Framework\Stdlib\ArrayManager;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 
 /**
  * Data provider for advanced inventory form
@@ -21,7 +21,7 @@ class AdvancedInventory extends AbstractModifier
     /**
      * @var LocatorInterface
      */
-    protected $locator;
+    private $locator;
 
     /**
      * @var StockRegistryInterface
@@ -29,35 +29,27 @@ class AdvancedInventory extends AbstractModifier
     private $stockRegistry;
 
     /**
-     * @var Stock
-     */
-    private $stock;
-
-    /**
      * @var ArrayManager
      */
-    protected $arrayManager;
+    private $arrayManager;
 
     /**
      * @var array
      */
-    protected $meta = [];
+    private $meta = [];
 
     /**
      * @param LocatorInterface $locator
-     * @param Stock $stock
      * @param StockRegistryInterface $stockRegistry
      * @param ArrayManager $arrayManager
      */
     public function __construct(
         LocatorInterface $locator,
-        Stock $stock,
         StockRegistryInterface $stockRegistry,
         ArrayManager $arrayManager
     ) {
         $this->locator = $locator;
         $this->stockRegistry = $stockRegistry;
-        $this->stock = $stock;
         $this->arrayManager = $arrayManager;
     }
 
@@ -71,12 +63,13 @@ class AdvancedInventory extends AbstractModifier
         $model = $this->locator->getProduct();
         $modelId = $model->getId();
 
+        /** @var StockItemInterface $stockItem */
         $stockItem = $this->stockRegistry->getStockItem(
             $modelId,
             $model->getStore()->getWebsiteId()
         );
 
-        $stockData = $stockItem->getData();
+        $stockData = $modelId ? $this->getData($stockItem) : [];
         if (!empty($stockData)) {
             $data[$modelId][self::DATA_SOURCE_DEFAULT][self::STOCK_DATA_FIELDS] = $stockData;
         }
@@ -85,34 +78,39 @@ class AdvancedInventory extends AbstractModifier
                 (int)$stockData['is_in_stock'];
         }
 
-        return $this->prepareStockData($data);
+        return $data;
     }
 
     /**
-     * Prepare data for stock_data fields
+     * Get Stock Data
      *
-     * @param array $data
+     * @param StockItemInterface $stockItem
      * @return array
      */
-    protected function prepareStockData(array $data)
+    private function getData(StockItemInterface $stockItem)
     {
-        $productId = $this->locator->getProduct()->getId();
-        $stockDataFields = [
-            'qty_increments',
-            'min_qty',
-            'min_sale_qty',
-            'max_sale_qty',
-            'notify_stock_qty',
+        return [
+            StockItemInterface::MANAGE_STOCK => $stockItem->getManageStock(),
+            StockItemInterface::USE_CONFIG_MANAGE_STOCK => $stockItem->getUseConfigManageStock(),
+            StockItemInterface::QTY => $stockItem->getQty(),
+            StockItemInterface::MIN_QTY => (float)$stockItem->getMinQty(),
+            StockItemInterface::USE_CONFIG_MIN_QTY => $stockItem->getUseConfigMinQty(),
+            StockItemInterface::MIN_SALE_QTY => (float)$stockItem->getMinSaleQty(),
+            StockItemInterface::USE_CONFIG_MIN_SALE_QTY => $stockItem->getUseConfigMinSaleQty(),
+            StockItemInterface::MAX_SALE_QTY => (float)$stockItem->getMaxSaleQty(),
+            StockItemInterface::USE_CONFIG_MAX_SALE_QTY => $stockItem->getUseConfigMaxSaleQty(),
+            StockItemInterface::IS_QTY_DECIMAL => $stockItem->getIsQtyDecimal(),
+            StockItemInterface::IS_DECIMAL_DIVIDED => $stockItem->getIsDecimalDivided(),
+            StockItemInterface::BACKORDERS => $stockItem->getBackorders(),
+            StockItemInterface::USE_CONFIG_BACKORDERS => $stockItem->getUseConfigBackorders(),
+            StockItemInterface::NOTIFY_STOCK_QTY => (float)$stockItem->getNotifyStockQty(),
+            StockItemInterface::USE_CONFIG_NOTIFY_STOCK_QTY => $stockItem->getUseConfigNotifyStockQty(),
+            StockItemInterface::ENABLE_QTY_INCREMENTS => $stockItem->getEnableQtyIncrements(),
+            StockItemInterface::USE_CONFIG_ENABLE_QTY_INC => $stockItem->getUseConfigEnableQtyInc(),
+            StockItemInterface::QTY_INCREMENTS => (float)$stockItem->getQtyIncrements(),
+            StockItemInterface::USE_CONFIG_QTY_INCREMENTS => $stockItem->getUseConfigQtyIncrements(),
+            StockItemInterface::IS_IN_STOCK => $stockItem->getIsInStock(),
         ];
-
-        foreach ($stockDataFields as $field) {
-            if (isset($data[$productId][self::DATA_SOURCE_DEFAULT][self::STOCK_DATA_FIELDS][$field])) {
-                $data[$productId][self::DATA_SOURCE_DEFAULT][self::STOCK_DATA_FIELDS][$field] =
-                    (float)$data[$productId][self::DATA_SOURCE_DEFAULT][self::STOCK_DATA_FIELDS][$field];
-            }
-        }
-
-        return $data;
     }
 
     /**
