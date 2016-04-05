@@ -23,8 +23,10 @@ class DateTimeProviderTest extends \PHPUnit_Framework_TestCase
         $objectManager = $this->getMockForAbstractClass('\Magento\Framework\ObjectManagerInterface', [], '', false);
         $objectManager->expects($this->once())
             ->method('create')
-            ->with('Magento\Framework\Stdlib\DateTime\DateTime',
-                ['localeDate' => $timeZone])
+            ->with(
+                'Magento\Framework\Stdlib\DateTime\DateTime',
+                ['localeDate' => $timeZone]
+            )
             ->willReturn($dateTime);
         /** @var ObjectManagerProvider|\PHPUnit_Framework_MockObject_MockObject $objectManagerProvider */
         $objectManagerProvider = $this->getMock('\Magento\Setup\Model\ObjectManagerProvider', [], [], '', false);
