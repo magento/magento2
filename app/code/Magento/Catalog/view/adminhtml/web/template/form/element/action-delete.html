@@ -9,8 +9,8 @@
         data-bind="
             click: function(){ $data.processingDeleteRecord($parents); },
             attr: {
-                title: $parents[1].deleteButtonLabel
+                title: $parent.deleteButtonLabel
             }
         ">
-    <span data-bind="text: $parents[1].deleteButtonLabel"></span>
+    <span data-bind="text: $parent.deleteButtonLabel"></span>
 </button>
