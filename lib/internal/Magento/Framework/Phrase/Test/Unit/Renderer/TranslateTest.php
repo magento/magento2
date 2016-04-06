@@ -41,14 +41,15 @@ class TranslateTest extends \PHPUnit_Framework_TestCase
     public function testRender()
     {
         $text = 'text';
-        $translatedText = 'translated text';
+        $translatedTextInDictionary = "That's translated text";
+        $translatedTextInput = 'That\\\'s translated text';
         $translate = 'translate';
 
         $this->_translator->expects($this->exactly(2))
             ->method('getData')
-            ->will($this->returnValue([$translatedText => $translate]));
+            ->will($this->returnValue([$translatedTextInDictionary => $translate]));
 
-        $this->assertEquals($translate, $this->_renderer->render([$translatedText], []));
+        $this->assertEquals($translate, $this->_renderer->render([$translatedTextInput], []));
         $this->assertEquals($text, $this->_renderer->render([$text], []));
     }
 
