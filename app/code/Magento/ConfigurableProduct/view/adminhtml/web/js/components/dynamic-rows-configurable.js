@@ -194,20 +194,22 @@ define([
          * @param {Array} data
          */
         processingUnionInsertData: function (data) {
-            var dataInc = 0,
-                dataCount,
-                elemsCount;
+            var dataCount,
+                elemsCount,
+                tmpData;
 
             this.isEmpty(data.length === 0);
-            this.source.set(this.dataScope + '.' + this.index, data);
-            
-            _.each(data, function (row) {
-                var path = this.dataScope + '.' + this.index + '.' + dataInc;
 
-                this.source.trigger(path, row);
-                ++dataInc;
+            tmpData = data.slice(this.pageSize * (this.currentPage() - 1), this.pageSize * (this.currentPage() - 1) + this.pageSize);
+
+            this.source.set(this.dataScope + '.' + this.index, []);
+
+            _.each(tmpData, function (row, index) {
+                var path = this.dataScope + '.' + this.index + '.' + (this.startIndex + index);
+                this.source.set(path, row);
             }, this);
 
+            this.source.set(this.dataScope + '.' + this.index, data);
             this.parsePagesData(data);
 
             // Render
