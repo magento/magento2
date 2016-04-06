@@ -355,7 +355,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
                 'addAttributeToSelect',
                 'addFilterByRequiredOptions',
                 'setStoreId',
-                'addPriceData',
             ]
         )->disableOriginalConstructor()
             ->getMock();
@@ -364,7 +363,6 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $productCollection->expects($this->any())->method('setFlag')->will($this->returnSelf());
         $productCollection->expects($this->any())->method('addFilterByRequiredOptions')->will($this->returnSelf());
         $productCollection->expects($this->any())->method('setStoreId')->with(5)->will($this->returnValue([]));
-        $productCollection->expects($this->any())->method('addPriceData')->will($this->returnSelf());
         $this->_productCollectionFactory->expects($this->any())->method('create')
             ->will($this->returnValue($productCollection));
         $this->_model->getUsedProducts($product);
