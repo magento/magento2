@@ -198,13 +198,13 @@ define([
                 dataCount,
                 elemsCount;
 
-            this.source.set(this.dataScope + '.' + this.index, []);
             this.isEmpty(data.length === 0);
-
+            this.source.set(this.dataScope + '.' + this.index, data);
+            
             _.each(data, function (row) {
                 var path = this.dataScope + '.' + this.index + '.' + dataInc;
 
-                this.source.set(path, row);
+                this.source.trigger(path, row);
                 ++dataInc;
             }, this);
 
