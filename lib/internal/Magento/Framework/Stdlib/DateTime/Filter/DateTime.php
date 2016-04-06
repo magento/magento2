@@ -35,7 +35,6 @@ class DateTime extends Date
      * @param string $value
      * @return string
      */
-
     public function filter($value)
     {
         $value = new \DateTime($value);
