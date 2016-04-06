@@ -5,20 +5,20 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Backend;
 
-use Magento\Theme\Model\Design\Backend\Image;
+use Magento\Theme\Model\Design\Backend\File;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class ImageTest extends \PHPUnit_Framework_TestCase
+class FileTest extends \PHPUnit_Framework_TestCase
 {
 
     /** @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $mediaDirectory;
 
     /** @var \Magento\Theme\Model\Design\Config\FileUploader\Config|\PHPUnit_Framework_MockObject_MockObject */
-    protected $imageConfig;
+    protected $fileConfig;
 
-    /** @var Image */
-    protected $imageBackend;
+    /** @var File */
+    protected $fileBackend;
 
     public function setUp()
     {
@@ -31,7 +31,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             'Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface'
         );
         $filesystem = $this->getMockObject('Magento\Framework\Filesystem');
-        $this->imageConfig = $this->getMockObject('Magento\Theme\Model\Design\Config\FileUploader\Config');
+        $this->fileConfig = $this->getMockObject('Magento\Theme\Model\Design\Config\FileUploader\Config');
 
         $this->mediaDirectory = $this->getMockObjectForAbstractClass(
             'Magento\Framework\Filesystem\Directory\WriteInterface'
@@ -42,7 +42,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             ->with(DirectoryList::MEDIA)
             ->willReturn($this->mediaDirectory);
 
-        $this->imageBackend = new Image(
+        $this->fileBackend = new File(
             $context,
             $registry,
             $config,
@@ -50,13 +50,13 @@ class ImageTest extends \PHPUnit_Framework_TestCase
             $uploaderFactory,
             $requestData,
             $filesystem,
-            $this->imageConfig
+            $this->fileConfig
         );
     }
 
     public function tearDown()
     {
-        unset($this->imageBackend);
+        unset($this->fileBackend);
     }
 
     /**
@@ -87,25 +87,33 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     public function testAfterLoad()
     {
         $value = 'store/1/filename.jpg';
-        $this->imageBackend->setValue($value);
+        $this->fileBackend->setValue($value);
+        $this->fileBackend->setFieldConfig(
+            [
+                'upload_dir' => [
+                    'value' => 'value',
+                    'config' => 'system/filesystem/media',
+                ],
+            ]
+        );
         $this->mediaDirectory->expects($this->once())
             ->method('stat')
-            ->with('/image/' . $value)
+            ->with('/' . $value)
             ->willReturn(['size' => 234234]);
-        $this->imageConfig->expects($this->once())
+        $this->fileConfig->expects($this->once())
             ->method('getStoreMediaUrl')
             ->willReturn('http://magento2.com/pub/media');
-        $this->imageBackend->afterLoad();
+        $this->fileBackend->afterLoad();
         $this->assertEquals(
             [
                 [
-                    'url' => 'http://magento2.com/pub/media/image/' . $value,
+                    'url' => 'http://magento2.com/pub/media/' . $value,
                     'file' => $value,
                     'size' => 234234,
                     'exists' => true,
                 ]
             ],
-            $this->imageBackend->getValue()
+            $this->fileBackend->getValue()
         );
     }
 
@@ -113,9 +121,9 @@ class ImageTest extends \PHPUnit_Framework_TestCase
     {
         $value = 'filename.jpg';
         $tmpMediaPath = 'tmp/image/' . $value;
-        $this->imageBackend->setScope('store');
-        $this->imageBackend->setScopeId(1);
-        $this->imageBackend->setValue(
+        $this->fileBackend->setScope('store');
+        $this->fileBackend->setScopeId(1);
+        $this->fileBackend->setValue(
             [
                 [
                     'url' => 'http://magento2.com/pub/media/tmp/image/' . $value,
@@ -124,24 +132,29 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         );
-        $this->imageConfig->expects($this->exactly(2))
+        $this->fileBackend->setFieldConfig(
+            [
+                'upload_dir' => [
+                    'value' => 'value',
+                    'config' => 'system/filesystem/media',
+                ],
+            ]
+        );
+        $this->fileConfig->expects($this->exactly(2))
             ->method('getTmpMediaPath')
             ->with($value)
             ->willReturn($tmpMediaPath);
 
         $this->mediaDirectory->expects($this->once())
             ->method('copyFile')
-            ->with(
-                $tmpMediaPath,
-                'image/store/1/' . $value
-            )
+            ->with($tmpMediaPath, '/' . $value)
             ->willReturn(true);
         $this->mediaDirectory->expects($this->once())
             ->method('delete')
             ->with($tmpMediaPath);
 
-        $this->imageBackend->beforeSave();
-        $this->assertEquals('store/1/filename.jpg', $this->imageBackend->getValue());
+        $this->fileBackend->beforeSave();
+        $this->assertEquals('filename.jpg', $this->fileBackend->getValue());
     }
 
     /**
@@ -150,7 +163,7 @@ class ImageTest extends \PHPUnit_Framework_TestCase
      */
     public function testBeforeSaveWithoutFile()
     {
-        $this->imageBackend->setData(
+        $this->fileBackend->setData(
             [
                 'value' => [
                     'test' => ''
@@ -160,13 +173,13 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 ],
             ]
         );
-        $this->imageBackend->beforeSave();
+        $this->fileBackend->beforeSave();
     }
 
     public function testBeforeSaveWithExistingFile()
     {
         $value = 'filename.jpg';
-        $this->imageBackend->setValue(
+        $this->fileBackend->setValue(
             [
                 [
                     'url' => 'http://magento2.com/pub/media/tmp/image/' . $value,
@@ -176,10 +189,10 @@ class ImageTest extends \PHPUnit_Framework_TestCase
                 ]
             ]
         );
-        $this->imageBackend->beforeSave();
+        $this->fileBackend->beforeSave();
         $this->assertEquals(
             $value,
-            $this->imageBackend->getValue()
+            $this->fileBackend->getValue()
         );
     }
 }

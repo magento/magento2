@@ -5,19 +5,43 @@
  */
 namespace Magento\Theme\Model\Design\Backend;
 
-class Favicon extends Image
+use Magento\Framework\Filesystem;
+
+class Favicon extends File
 {
     /**
-     * @var string
+     * The tail part of directory path for uploading
+     *
      */
-    protected $uploadDir = 'favicon';
+    const UPLOAD_DIR = 'favicon';
+
+    /**
+     * Return path to directory for upload file
+     *
+     * @return string
+     * @throw \Magento\Framework\Exception\LocalizedException
+     */
+    protected function _getUploadDir()
+    {
+        return $this->_mediaDirectory->getRelativePath($this->_appendScopeInfo(self::UPLOAD_DIR));
+    }
+
+    /**
+     * Makes a decision about whether to add info about the scope.
+     *
+     * @return boolean
+     */
+    protected function _addWhetherScopeInfo()
+    {
+        return true;
+    }
 
     /**
      * Getter for allowed extensions of uploaded files.
      *
      * @return string[]
      */
-    public function getAllowedExtensions()
+    protected function _getAllowedExtensions()
     {
         return ['ico', 'png', 'gif', 'jpg', 'jpeg', 'apng', 'svg'];
     }
