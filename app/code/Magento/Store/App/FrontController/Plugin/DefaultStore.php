@@ -5,12 +5,15 @@
  */
 namespace Magento\Store\App\FrontController\Plugin;
 
+/**
+ * Plugin to set default store for admin area.
+ */
 class DefaultStore
 {
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    protected $_storeManager;
+    protected $storeManager;
 
     /**
      * Initialize dependencies.
@@ -19,7 +22,7 @@ class DefaultStore
      */
     public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
     {
-        $this->_storeManager = $storeManager;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -35,6 +38,6 @@ class DefaultStore
         \Magento\Framework\App\FrontController $subject,
         \Magento\Framework\App\RequestInterface $request
     ) {        
-        $this->_storeManager->setCurrentStore(\Magento\Store\Model\Store::ADMIN_CODE);
+        $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::ADMIN_CODE);
     }
 }
