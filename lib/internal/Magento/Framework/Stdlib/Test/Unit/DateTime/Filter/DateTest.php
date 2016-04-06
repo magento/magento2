@@ -6,6 +6,7 @@
 namespace Magento\Framework\Stdlib\Test\Unit\DateTime\Filter;
 
 use \Magento\Framework\Stdlib\DateTime\Filter\Date;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 class DateTest extends \PHPUnit_Framework_TestCase
 {
@@ -23,6 +24,6 @@ class DateTest extends \PHPUnit_Framework_TestCase
         );
         $model = new Date($localeMock);
         // Check that date is converted to 'yyyy-MM-dd' format
-        $this->assertEquals('2241-12-31', $model->filter('12-31-2241'));
+        $this->assertEquals('2241-12-31', $model->filter('12/31/2241'));
     }
 }
