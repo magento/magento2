@@ -248,7 +248,7 @@ define(
                     emailValidationResult = customer.isLoggedIn();
 
                 if (!quote.shippingMethod()) {
-                    this.errorValidationMessage($t('Please specify a shipping method.'));
+                    this.errorValidationMessage($.mage.__('Please specify a shipping method.'));
 
                     return false;
                 }
