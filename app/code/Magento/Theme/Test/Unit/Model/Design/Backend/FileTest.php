@@ -10,7 +10,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 class FileTest extends \PHPUnit_Framework_TestCase
 {
-
     /** @var \Magento\Framework\Filesystem\Directory\WriteInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $mediaDirectory;
 
