@@ -107,8 +107,10 @@ class DiCompileCommand extends Command
     private function checkEnvironment()
     {
         $messages = [];
-        if (!$this->deploymentConfig->isAvailable()) {
-            $messages[] = 'You cannot run this command because the Magento application is not installed.';
+        $config = $this->deploymentConfig->get(\Magento\Framework\Config\ConfigOptionsListConstants::KEY_MODULES);
+        if (!$config) {
+            $messages[] = 'You cannot run this command because modules are not enabled. You can enable modules by'
+             . ' running module:enable --all command.';
         }
 
         /**
