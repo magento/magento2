@@ -9,6 +9,7 @@ namespace Magento\Setup\Test\Unit\Controller;
 use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\Module\PackageInfo;
 use Magento\Framework\Module\PackageInfoFactory;
+use Magento\Setup\Controller\ComponentGrid;
 use Magento\Setup\Model\DateTime\TimezoneProvider;
 use Magento\Setup\Model\ObjectManagerProvider;
 use Magento\Setup\Model\UpdatePackagesCache;
