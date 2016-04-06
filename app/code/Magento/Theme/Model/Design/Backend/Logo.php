@@ -5,7 +5,7 @@
  */
 namespace Magento\Theme\Model\Design\Backend;
 
-class Logo extends File
+class Logo extends Image
 {
     /**
      * The tail part of directory path for uploading
