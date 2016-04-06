@@ -709,7 +709,8 @@ define([
                 return true;
             },
             function() {
-                return 'Please enter a value less than or equal to %s.'.replace('%s', this.lteToVal);
+                var message = $.mage.__('Please enter a value less than or equal to %s.');
+                return message.replace('%s', this.lteToVal);
             }
         ],
         "greater-than-equals-to": [
@@ -721,7 +722,8 @@ define([
                 return true;
             },
             function() {
-                return 'Please enter a value greater than or equal to %s.'.replace('%s', this.gteToVal);
+                var message = $.mage.__('Please enter a value greater than or equal to %s.');
+                return message.replace('%s', this.gteToVal);
             }
         ],
         "validate-emails": [
@@ -737,7 +739,7 @@ define([
                     }
                 }
                 return true;
-            }, "Please enter valid email addresses, separated by commas. For example, johndoe@domain.com, johnsmith@domain.com."
+            },  $.mage.__("Please enter valid email addresses, separated by commas. For example, johndoe@domain.com, johnsmith@domain.com.")
         ],
         "validate-cc-number": [
             /**
