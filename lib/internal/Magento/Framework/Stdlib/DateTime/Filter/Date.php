@@ -58,7 +58,6 @@ class Date implements \Zend_Filter_Interface
      * @param string $value
      * @return string
      */
-
     public function filter($value)
     {
         $value = new \DateTime($value, new \DateTimeZone('UTC'));
