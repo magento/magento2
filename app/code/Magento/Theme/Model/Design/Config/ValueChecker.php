@@ -58,11 +58,15 @@ class ValueChecker
                 $this->valueProcessor->process(
                     $value,
                     $fieldConfig['path'],
+                    $scope,
+                    $scopeId,
                     $fieldConfig
                 ),
                 $this->valueProcessor->process(
                     $this->appConfig->getValue($fieldConfig['path'], $scope, $scopeId),
                     $fieldConfig['path'],
+                    $scope,
+                    $scopeId,
                     $fieldConfig
                 )
             );

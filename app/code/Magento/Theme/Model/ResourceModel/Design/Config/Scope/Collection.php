@@ -102,6 +102,8 @@ class Collection extends \Magento\Framework\Data\Collection
                 $result[$itemName] = $this->valueProcessor->process(
                     $this->appConfig->getValue($itemData['path'], $scope, $scopeId),
                     $itemData['path'],
+                    $scope,
+                    $scopeId,
                     $itemData
                 );
             }
