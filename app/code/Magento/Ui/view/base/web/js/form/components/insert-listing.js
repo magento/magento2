@@ -286,9 +286,9 @@ define([
                 };
             }
 
-            this.selections().excludeMode() ? selectionsData.paging = {
+            selectionsData.paging = {
                 notLimits: 1
-            } : false;
+            };
 
             request = this.requestData(selectionsData);
             request
