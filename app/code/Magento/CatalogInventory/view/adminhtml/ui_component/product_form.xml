@@ -51,6 +51,7 @@
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="formElement" xsi:type="string">select</item>
+                            <item name="rawOptions" xsi:type="boolean">true</item>
                             <item name="dataScope" xsi:type="string">manage_stock</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
                         </item>
@@ -288,6 +289,7 @@
                             <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/backorders</item>
                             <item name="deferredStockUpdate" xsi:type="string">ns = ${ $.ns }, index=container_deferred_stock_update</item>
                             <item name="formElement" xsi:type="string">select</item>
+                            <item name="rawOptions" xsi:type="boolean">true</item>
                             <item name="dataScope" xsi:type="string">backorders</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
                         </item>
@@ -328,6 +330,7 @@
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="formElement" xsi:type="string">select</item>
+                            <item name="rawOptions" xsi:type="boolean">true</item>
                             <item name="dataScope" xsi:type="string">deferred_stock_update</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
                         </item>
@@ -413,6 +416,7 @@
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
                             <item name="formElement" xsi:type="string">select</item>
+                            <item name="rawOptions" xsi:type="boolean">true</item>
                             <item name="dataScope" xsi:type="string">enable_qty_increments</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
                         </item>
