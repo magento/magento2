@@ -40,6 +40,9 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Search\Model\IndexScopeResolver|\PHPUnit_Framework_MockObject_MockObject */
     private $resource;
 
+    /** @var \Magento\CatalogInventory\Api\StockConfigurationInterface|MockObject */
+    private $stockConfiguration;
+
     /**
      * @var \Magento\CatalogSearch\Model\Search\IndexBuilder
      */
@@ -55,6 +58,10 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $scopeInterface;
 
+    /**
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @return void
+     */
     protected function setUp()
     {
         $this->select = $this->getMockBuilder('\Magento\Framework\DB\Select')
@@ -139,6 +146,9 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             '',
             false
         );
+        $this->stockConfiguration = $this
+            ->getMockBuilder('\Magento\CatalogInventory\Api\StockConfigurationInterface')
+            ->getMock();
 
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->target = $objectManagerHelper->getObject(
@@ -153,6 +163,12 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
                 'dimensionScopeResolver' => $this->dimensionScopeResolver
             ]
         );
+
+        // Todo: \Magento\Framework\TestFramework\Unit\Helper\ObjectManager to do this automatically (MAGETWO-49793)
+        $reflection = new \ReflectionClass(get_class($this->target));
+        $reflectionProperty = $reflection->getProperty('stockConfiguration');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->target, $this->stockConfiguration);
     }
 
     public function testBuildWithOutOfStock()
@@ -198,15 +214,13 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
 
         $this->mockBuild($index, $tableSuffix, false);
 
+        $this->stockConfiguration->expects($this->once())->method('getDefaultScopeId')->willReturn(1);
         $this->config->expects($this->once())
             ->method('isSetFlag')
             ->with('cataloginventory/options/show_out_of_stock')
             ->will($this->returnValue(false));
         $this->connection->expects($this->once())->method('quoteInto')
             ->with(' AND stock_index.website_id = ?', 1)->willReturn(' AND stock_index.website_id = 1');
-        $website = $this->getMockBuilder('Magento\Store\Model\Website')->disableOriginalConstructor()->getMock();
-        $website->expects($this->once())->method('getId')->willReturn(1);
-        $this->storeManager->expects($this->once())->method('getWebsite')->willReturn($website);
         $this->select->expects($this->at(2))
             ->method('where')
             ->with('(someName=someValue)')

@@ -5,11 +5,9 @@
  */
 namespace Magento\Cms\Model\ResourceModel\Page\Grid;
 
-use Magento\Cms\Model\Page;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\Search\AggregationInterface;
 use Magento\Cms\Model\ResourceModel\Page\Collection as PageCollection;
-use Magento\Framework\View\Element\UiComponent\DataProvider\Document;
 
 /**
  * Class Collection
@@ -21,11 +19,6 @@ class Collection extends PageCollection implements SearchResultInterface
      * @var AggregationInterface
      */
     protected $aggregations;
-
-    /**
-     * @var \Magento\Framework\View\Element\UiComponent\DataProvider\Document[]
-     */
-    private $loadedData = [];
 
     /**
      * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
@@ -146,24 +139,5 @@ class Collection extends PageCollection implements SearchResultInterface
     public function setItems(array $items = null)
     {
         return $this;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getItems()
-    {
-        if ($this->loadedData) {
-            return $this->loadedData;
-        }
-
-        /** @var Document $pageDocument */
-        foreach (parent::getItems() as $pageDocument) {
-            $this->loadedData[$pageDocument->getId()] = $pageDocument->setData(
-                $this->_entityFactory->create(Page::class)->load($pageDocument->getId())->getData()
-            );
-        }
-
-        return $this->loadedData;
     }
 }
