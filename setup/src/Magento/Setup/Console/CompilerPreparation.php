@@ -11,7 +11,6 @@ use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Setup\Console\Command\DiCompileCommand;
-use Magento\Setup\Console\Command\DiCompileMultiTenantCommand;
 use Magento\Setup\Mvc\Bootstrap\InitParamListener;
 use Symfony\Component\Console\Input\ArgvInput;
 
@@ -49,7 +48,7 @@ class CompilerPreparation
      */
     public function handleCompilerEnvironment()
     {
-        $compilationCommands = [DiCompileCommand::NAME, DiCompileMultiTenantCommand::NAME];
+        $compilationCommands = [DiCompileCommand::NAME];
         $cmdName = $this->input->getFirstArgument();
         $isHelpOption = $this->input->hasParameterOption('--help') || $this->input->hasParameterOption('-h');
         if (!in_array($cmdName, $compilationCommands) || $isHelpOption) {
@@ -61,23 +60,9 @@ class CompilerPreparation
             ? $mageInitParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS]
             : [];
         $directoryList = new DirectoryList(BP, $mageDirs);
-        if ($cmdName === DiCompileMultiTenantCommand::NAME) {
-            $generationDir = $this->input->getParameterOption(DiCompileMultiTenantCommand::INPUT_KEY_GENERATION);
-            if ($generationDir) {
-                $compileDirList[] = $generationDir;
-            } else {
-                $compileDirList[] = $directoryList->getPath(DirectoryList::GENERATION);
-            }
-            $diDir = $this->input->getParameterOption(DiCompileMultiTenantCommand::INPUT_KEY_DI);
-            if ($diDir) {
-                $compileDirList[] = $diDir;
-            } else {
-                $compileDirList[] = $directoryList->getPath(DirectoryList::DI);
-            }
-        } else {
-            $compileDirList[] = $directoryList->getPath(DirectoryList::GENERATION);
-            $compileDirList[] = $directoryList->getPath(DirectoryList::DI);
-        }
+        $compileDirList[] = $directoryList->getPath(DirectoryList::GENERATION);
+        $compileDirList[] = $directoryList->getPath(DirectoryList::DI);
+
         foreach ($compileDirList as $compileDir) {
             if ($this->filesystemDriver->isExists($compileDir)) {
                 $this->filesystemDriver->deleteDirectory($compileDir);
