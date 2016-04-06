@@ -7,7 +7,7 @@ namespace Magento\Theme\Model\Design\Backend;
 
 use Magento\Framework\Filesystem;
 
-class Favicon extends File
+class Favicon extends Image
 {
     /**
      * The tail part of directory path for uploading
