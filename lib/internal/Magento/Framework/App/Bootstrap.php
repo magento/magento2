@@ -117,12 +117,18 @@ class Bootstrap
      */
     public static function create($rootDir, array $initParams, ObjectManagerFactory $factory = null)
     {
+        $defaultPaths = DirectoryList::getDefaultConfig();
         if (file_exists(BP . '/var/.regenerate')) {
-            $generationPath = isset($initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::GENERATION])
-                ? $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::GENERATION]
-                : BP . '/var/generation';
-            $diPath = isset($initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::DI])
-                ? $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::DI] : BP . '/var/di';
+            $generationPath = isset(
+                $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::GENERATION][DirectoryList::PATH]
+            ) ? $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::GENERATION][DirectoryList::PATH]
+                : BP . '/' . $defaultPaths[DirectoryList::GENERATION][DirectoryList::PATH];
+
+            $diPath = isset(
+                $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::DI][DirectoryList::PATH]
+            ) ? $initParams[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS][DirectoryList::DI][DirectoryList::PATH]
+                : BP . '/' . $defaultPaths[DirectoryList::DI][DirectoryList::PATH];
+
             if (is_dir($generationPath)) {
                 \Magento\Framework\Filesystem\Io\File::rmdirRecursive($generationPath);
             }
