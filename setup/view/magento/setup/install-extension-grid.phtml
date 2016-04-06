@@ -65,18 +65,18 @@
                     <div class="action-multicheck-wrap"
                          ng-class="{'_active':isNewExtensionsMenuVisible}"
                          click-out="hideNewExtensionsMenu()"
-                        >
+                    >
                         <input type="checkbox"
                                style="visibility: hidden;"
                                class="admin__control-checkbox"
                                ng-class="{'_indeterminate':someExtensionsSelected}"
                                ng-checked="allExtensionsSelected"
-                            >
+                        >
                         <label></label>
                         <button class="action-multicheck-toggle"
                                 ng-class="{'_active':isNewExtensionsMenuVisible}"
                                 ng-click="toggleNewExtensionsMenu()"
-                            >
+                        >
                             <span>Options</span>
                         </button>
                         <ul class="action-menu">
@@ -136,7 +136,7 @@
                 <td>
                     <span class="data-grid-data">
                         <select ng-modle="extension.version" id="selectedVersion" ng-model="extension.version">
-                            <option ng-repeat="myversion in extension.versions" value="{{myversion}}">{{myversion}}</option>
+                            <option ng-repeat="version in extension.versions" value="{{version}}">{{version}}</option>
                         </select>
                     </span>
                 </td>
