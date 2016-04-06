@@ -27,16 +27,15 @@ class ValueProcessor
      * Process value
      *
      * @param string $value
-     * @param string $path
      * @param string $scope
      * @param string $scopeId
      * @param array $fieldConfig
      * @return mixed
      */
-    public function process($value, $path, $scope, $scopeId, array $fieldConfig)
+    public function process($value, $scope, $scopeId, array $fieldConfig)
     {
         $backendModel = $this->backendModelFactory->createByPath(
-            $path,
+            $fieldConfig['path'],
             [
                 'value' => $value,
                 'field_config' => $fieldConfig,

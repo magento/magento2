@@ -44,7 +44,7 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
                 $path,
                 [
                     'value' => $value,
-                    'field_config' => [],
+                    'field_config' => ['path' => $path],
                     'scope' => $scope,
                     'scope_id' => $scopeId
                 ]
@@ -55,6 +55,6 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
         $this->backendModel->expects($this->once())
             ->method('getValue')
             ->willReturn($value);
-        $this->assertEquals($value, $this->valueProcessor->process($value, $path, $scope, $scopeId, []));
+        $this->assertEquals($value, $this->valueProcessor->process($value, $scope, $scopeId, ['path' => $path]));
     }
 }
