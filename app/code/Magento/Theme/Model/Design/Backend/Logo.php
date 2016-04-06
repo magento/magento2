@@ -39,7 +39,7 @@ class Logo extends File
      *
      * @return string[]
      */
-    protected function _getAllowedExtensions()
+    public function getAllowedExtensions()
     {
         return ['jpg', 'jpeg', 'gif', 'png', 'svg'];
     }

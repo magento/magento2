@@ -41,7 +41,7 @@ class Favicon extends File
      *
      * @return string[]
      */
-    protected function _getAllowedExtensions()
+    public function getAllowedExtensions()
     {
         return ['ico', 'png', 'gif', 'jpg', 'jpeg', 'apng', 'svg'];
     }

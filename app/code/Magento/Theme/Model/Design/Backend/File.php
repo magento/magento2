@@ -134,7 +134,6 @@ class File extends BackendFile
     protected function _getUploadDir()
     {
         $fieldConfig = $this->getFieldConfig();
-        /* @var $fieldConfig \Magento\Framework\Simplexml\Element */
 
         if (!array_key_exists('upload_dir', $fieldConfig)) {
             throw new \Magento\Framework\Exception\LocalizedException(
@@ -142,9 +141,12 @@ class File extends BackendFile
             );
         }
 
+        $uploadDir = (string)$fieldConfig['upload_dir'];
         if (is_array($fieldConfig['upload_dir'])) {
             $uploadDir = $fieldConfig['upload_dir']['value'];
-            if (array_key_exists('scope_info', $fieldConfig['upload_dir']) && $fieldConfig['upload_dir']['scope_info']
+            if (
+                array_key_exists('scope_info', $fieldConfig['upload_dir'])
+                && $fieldConfig['upload_dir']['scope_info']
             ) {
                 $uploadDir = $this->_appendScopeInfo($uploadDir);
             }
@@ -152,8 +154,6 @@ class File extends BackendFile
             if (array_key_exists('config', $fieldConfig['upload_dir'])) {
                 $uploadDir = $this->_mediaDirectory->getRelativePath($uploadDir);
             }
-        } else {
-            $uploadDir = (string)$fieldConfig['upload_dir'];
         }
 
         return $uploadDir;
