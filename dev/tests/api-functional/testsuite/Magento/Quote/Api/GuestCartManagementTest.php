@@ -70,9 +70,9 @@ class GuestCartManagementTest extends WebapiAbstract
         $quote = $this->objectManager->create('Magento\Quote\Model\Quote')->load('test01', 'reserved_order_id');
         $cartId = $quote->getId();
         /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-        $quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-            ->create('Magento\Quote\Model\QuoteIdMaskFactory')
-            ->create();
+        $quoteIdMaskFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create('Magento\Quote\Model\QuoteIdMaskFactory');
+        $quoteIdMask = $quoteIdMaskFactory->create();
         $quoteIdMask->load($cartId, 'quote_id');
         //Use masked cart Id
         $cartId = $quoteIdMask->getMaskedId();
@@ -110,6 +110,7 @@ class GuestCartManagementTest extends WebapiAbstract
         $this->assertEquals($customer->getId(), $quote->getCustomerId());
         $this->assertEquals($customer->getFirstname(), $quote->getCustomerFirstname());
         $this->assertEquals($customer->getLastname(), $quote->getCustomerLastname());
+        $this->assertNull($quoteIdMaskFactory->create()->load($cartId, 'masked_id')->getId());
     }
 
     /**
