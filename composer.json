@@ -7,25 +7,6 @@
         "OSL-3.0",
         "AFL-3.0"
     ],
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "colinmollenhour/php-redis-session-abstract",
-                "version": "1.0.100",
-                "source": {
-                    "url": "https://github.com/colinmollenhour/php-redis-session-abstract.git",
-                    "type": "git",
-                    "reference": "95330b7f29663dab81f53d1a438e4d927b6c5f66"
-                },
-                "autoload": {
-                    "psr-0": {
-                        "Cm\\RedisSession\\": "src/"
-                    }
-                }
-            }
-        }
-    ],
     "require": {
         "php": "~5.5.22|~5.6.0|~7.0.0",
         "zendframework/zend-stdlib": "~2.4.6",
@@ -52,7 +33,7 @@
         "zendframework/zend-http": "~2.4.6",
         "magento/zendframework1": "1.12.16",
         "colinmollenhour/credis": "1.6",
-        "colinmollenhour/php-redis-session-abstract": "1.0.100",
+        "colinmollenhour/php-redis-session-abstract": "1.1",
         "composer/composer": "1.0.0-beta1",
         "monolog/monolog": "1.16.0",
         "oyejorge/less.php": "1.7.0.3",
