@@ -18,6 +18,8 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
+     *
+     * @deprecated
      */
     protected $_dateFilter;
 
@@ -40,9 +42,14 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
     protected $productFactory;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
+     */
+    private $dateTimeFilter;
+
+    /**
      * @param Action\Context $context
      * @param Builder $productBuilder
-     * @param \Magento\Framework\Stdlib\DateTime\Filter\DateTime $dateFilter
+     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param \Magento\Catalog\Model\Product\Validator $productValidator
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\LayoutFactory $layoutFactory
@@ -51,7 +58,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         Product\Builder $productBuilder,
-        \Magento\Framework\Stdlib\DateTime\Filter\DateTime $dateFilter,
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
         \Magento\Catalog\Model\Product\Validator $productValidator,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\LayoutFactory $layoutFactory,
@@ -108,7 +115,7 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
             foreach ($attributes as $attrKey => $attribute) {
                 if ($attribute->getBackend()->getType() == 'datetime') {
                     if (array_key_exists($attrKey, $productData) && $productData[$attrKey] != '') {
-                        $dateFieldFilters[$attrKey] = $this->_dateFilter;
+                        $dateFieldFilters[$attrKey] = $this->getDateTimeFilter();
                     }
                 }
             }
@@ -139,5 +146,19 @@ class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
         }
 
         return $this->resultJsonFactory->create()->setData($response);
+    }
+
+    /**
+     * @return \Magento\Framework\Stdlib\DateTime\Filter\DateTime
+     *
+     * @deprecated
+     */
+    private function getDateTimeFilter()
+    {
+        if ($this->dateTimeFilter === null) {
+            $this->dateTimeFilter = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Stdlib\DateTime\Filter\DateTime::class);
+        }
+        return $this->dateTimeFilter;
     }
 }
