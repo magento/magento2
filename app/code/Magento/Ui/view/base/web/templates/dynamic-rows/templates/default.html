@@ -32,26 +32,24 @@
                 <thead if="element.columnsHeader">
                 <tr>
                     <th if="dndConfig.enabled"/>
-
-                    <!-- ko foreach: {data: labels, as: 'item'}  -->
-                    <th text="item.label"
-                        css="$parent.setClasses(item)"
-                        visible="item.visible"
-                        disabled="item.disabled"
+                    <th repeat="foreach: labels, item: '$label'"
+                        text="$label().label"
+                        css="setClasses($label())"
+                        visible="$label().visible"
                         attr="{'data-name': name}"/>
-                    <!-- /ko -->
+                    </th>
                 </tr>
                 </thead>
 
-                <tbody data-bind="foreach: elems">
-                <tr class="data-row">
-                    <td if="$parent.dndConfig.enabled"
+                <tbody>
+                <tr class="data-row" repeat="foreach: elems, item: '$record'">
+                    <td if="dndConfig.enabled"
                         class="col-draggable"
-                        template="name: $parent.dndConfig.template, data: $parent.dnd"/>
+                        template="name: dndConfig.template, data: dnd"/>
 
-                    <!-- ko foreach: { data: elems, as: 'elem'}  -->
+                    <!-- ko fastForEach: { data: $record().elems, as: 'elem'}  -->
                     <td if="elem.template"
-                        css="$parents[1].setClasses(elem)"
+                        css="$parent.setClasses(elem)"
                         visible="elem.visible"
                         disable="elem.disabled"
                         template="elem.template"/>

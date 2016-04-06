@@ -494,6 +494,7 @@ class ConfigurablePanel extends AbstractModifier
                                 'config' => [
                                     'componentType' => Form\Field::NAME,
                                     'formElement' => Form\Element\Input::NAME,
+                                    'component' => 'Magento_Ui/js/form/element/text',
                                     'elementTmpl' => 'ui/dynamic-rows/cells/text',
                                     'dataType' => Form\Element\DataType\Text::NAME,
                                     'label' => __('Attributes'),
