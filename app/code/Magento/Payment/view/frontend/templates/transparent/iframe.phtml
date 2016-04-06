@@ -31,13 +31,16 @@ $params = $block->getParams();
             var require = window.top.require;
             require(
                 [
-                    'jquery'
+                    'jquery',
+                    'Magento_Ui/js/model/messageList',
+                    'mage/translate'
                 ],
-                function($) {
+                function($, globalMessageList, $t) {
                     var parent = window.top;
                     $(parent).trigger('clearTimeout');
-                    parent.alert(<?php /* @noEscape */ echo $this->helper(Data::class)
-                        ->jsonEncode($params['error_msg']); ?>);
+                    globalMessageList.addErrorMessage({
+                        message: $t('Unable to place order. Please try again later.')
+                    });
                 }
             );
         <?php elseif (isset($params['order_success'])): ?>
