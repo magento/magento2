@@ -17,7 +17,7 @@ use Magento\Catalog\Controller\Adminhtml\Product;
 class Validate extends \Magento\Catalog\Controller\Adminhtml\Product
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
      *
      * @deprecated
      */
