@@ -11,7 +11,7 @@ use Magento\Theme\Model\Design\Backend\File;
 use Magento\Theme\Model\Design\BackendModelFactory;
 use Magento\Theme\Model\Design\Config\MetadataProvider;
 
-class ImageProcessor
+class FileProcessor
 {
     /**
      * @var UploaderFactory
@@ -21,7 +21,7 @@ class ImageProcessor
     /**
      * @var Config
      */
-    protected $imageConfig;
+    protected $fileConfig;
 
     /**
      * @var BackendModelFactory
@@ -35,18 +35,18 @@ class ImageProcessor
 
     /**
      * @param UploaderFactory $uploaderFactory
-     * @param Config $imageConfig
+     * @param Config $fileConfig
      * @param BackendModelFactory $backendModelFactory
      * @param MetadataProvider $metadataProvider
      */
     public function __construct(
         UploaderFactory $uploaderFactory,
-        Config $imageConfig,
+        Config $fileConfig,
         BackendModelFactory $backendModelFactory,
         MetadataProvider $metadataProvider
     ) {
         $this->uploaderFactory = $uploaderFactory;
-        $this->imageConfig = $imageConfig;
+        $this->fileConfig = $fileConfig;
         $this->backendModelFactory = $backendModelFactory;
         $this->metadataProvider = $metadataProvider;
     }
@@ -61,8 +61,8 @@ class ImageProcessor
     public function saveToTmp($fileId)
     {
         try {
-            $result = $this->save($fileId, $this->imageConfig->getAbsoluteTmpMediaPath());
-            $result['url'] = $this->imageConfig->getTmpMediaUrl($result['file']);
+            $result = $this->save($fileId, $this->fileConfig->getAbsoluteTmpMediaPath());
+            $result['url'] = $this->fileConfig->getTmpMediaUrl($result['file']);
         } catch (\Exception $e) {
             $result = ['error' => $e->getMessage(), 'errorcode' => $e->getCode()];
         }

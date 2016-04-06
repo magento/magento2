@@ -101,7 +101,8 @@ class Collection extends \Magento\Framework\Data\Collection
             if (isset($itemData['use_in_grid']) && (boolean)$itemData['use_in_grid']) {
                 $result[$itemName] = $this->valueProcessor->process(
                     $this->appConfig->getValue($itemData['path'], $scope, $scopeId),
-                    $itemData['path']
+                    $itemData['path'],
+                    $itemData
                 );
             }
         }
