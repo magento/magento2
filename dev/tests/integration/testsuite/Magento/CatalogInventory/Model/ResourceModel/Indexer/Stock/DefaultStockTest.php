@@ -17,12 +17,19 @@ class DefaultStockTest extends \PHPUnit_Framework_TestCase
      */
     private $indexer;
 
+    /**
+     * @var \Magento\CatalogInventory\Api\StockConfigurationInterface
+     */
+    private $stockConfiguration;
+
     protected function setUp()
     {
         $this->indexer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
             \Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock\DefaultStock::class
         );
-
+        $this->stockConfiguration = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
+            \Magento\CatalogInventory\Api\StockConfigurationInterface::class
+        );
     }
 
     /**
@@ -53,7 +60,7 @@ class DefaultStockTest extends \PHPUnit_Framework_TestCase
         );
         $criteria = $criteriaFactory->create();
         $criteria->setProductsFilter([$product->getId()]);
-        $criteria->addFilter('website', 'website_id', $testWebsite->getId());
+        $criteria->addFilter('website', 'website_id', $this->stockConfiguration->getDefaultScopeId());
         $items = $stockStatusRepository->getList($criteria)->getItems();
         $this->assertEquals($product->getId(), $items[$product->getId()]->getProductId());
     }
