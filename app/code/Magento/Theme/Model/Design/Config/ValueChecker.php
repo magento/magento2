@@ -47,21 +47,23 @@ class ValueChecker
      * @param string $value
      * @param string $scope
      * @param int $scopeId
-     * @param string $path
+     * @param array $fieldConfig
      * @return bool
      */
-    public function isDifferentFromDefault($value, $scope, $scopeId, $path)
+    public function isDifferentFromDefault($value, $scope, $scopeId, array $fieldConfig)
     {
         list($scope, $scopeId) = $this->fallbackResolver->getFallbackScope($scope, $scopeId);
         if ($scope) {
             return !$this->isEqual(
                 $this->valueProcessor->process(
                     $value,
-                    $path
+                    $fieldConfig['path'],
+                    $fieldConfig
                 ),
                 $this->valueProcessor->process(
-                    $this->appConfig->getValue($path, $scope, $scopeId),
-                    $path
+                    $this->appConfig->getValue($fieldConfig['path'], $scope, $scopeId),
+                    $fieldConfig['path'],
+                    $fieldConfig
                 )
             );
         }

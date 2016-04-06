@@ -114,7 +114,7 @@ class Storage
                     $fieldData->getValue(),
                     $designConfig->getScope(),
                     $designConfig->getScopeId(),
-                    $fieldData->getFieldConfig()['path']
+                    $fieldData->getFieldConfig()
                 )
             ) {
                 $saveTransaction->addObject($backendModel);

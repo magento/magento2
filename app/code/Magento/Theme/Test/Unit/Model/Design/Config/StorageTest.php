@@ -145,7 +145,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             ->willReturn($this->backendModelMock);
         $this->valueCheckerMock->expects($this->once())
             ->method('isDifferentFromDefault')
-            ->with('value', $scope, $scopeId, 'design/head/default_title')
+            ->with('value', $scope, $scopeId, ['path' => 'design/head/default_title'])
             ->willReturn(true);
         $this->transactionMock->expects($this->once())
             ->method('addObject')

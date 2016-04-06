@@ -6,7 +6,7 @@
 namespace Magento\Theme\Model\Design\Backend;
 
 use Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface;
-use \Magento\Config\Model\Config\Backend\File as BackendFile;
+use Magento\Config\Model\Config\Backend\File as BackendFile;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
@@ -126,47 +126,24 @@ class File extends BackendFile
     }
 
     /**
-     * Return path to directory for upload file
-     *
-     * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
-     */
-    protected function _getUploadDir()
-    {
-        $fieldConfig = $this->getFieldConfig();
-
-        if (!array_key_exists('upload_dir', $fieldConfig)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
-                __('The base directory to upload file is not specified.')
-            );
-        }
-
-        $uploadDir = (string)$fieldConfig['upload_dir'];
-        if (is_array($fieldConfig['upload_dir'])) {
-            $uploadDir = $fieldConfig['upload_dir']['value'];
-            if (
-                array_key_exists('scope_info', $fieldConfig['upload_dir'])
-                && $fieldConfig['upload_dir']['scope_info']
-            ) {
-                $uploadDir = $this->_appendScopeInfo($uploadDir);
-            }
-
-            if (array_key_exists('config', $fieldConfig['upload_dir'])) {
-                $uploadDir = $this->_mediaDirectory->getRelativePath($uploadDir);
-            }
-        }
-
-        return $uploadDir;
-    }
-
-    /**
      * Getter for allowed extensions of uploaded files
      *
-     * @return string[]
+     * @return array
      */
     public function getAllowedExtensions()
     {
-        return ['jpg', 'jpeg', 'gif', 'png'];
+        return [];
+    }
+
+    /**
+     * Retrieve upload directory path
+     *
+     * @param string $uploadDir
+     * @return string
+     */
+    protected function getUploadDirPath($uploadDir)
+    {
+        return $this->_mediaDirectory->getRelativePath($uploadDir);
     }
 
     /**

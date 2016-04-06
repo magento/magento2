@@ -5,9 +5,9 @@
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Config\FileUploader;
 
-use Magento\Theme\Model\Design\Config\FileUploader\ImageProcessor;
+use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
 
-class ImageProcessorTest extends \PHPUnit_Framework_TestCase
+class FileProcessorTest extends \PHPUnit_Framework_TestCase
 {
     /** @var \Magento\MediaStorage\Model\File\UploaderFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $uploaderFactory;
@@ -27,8 +27,8 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Theme\Model\Design\Config\MetadataProvider|\PHPUnit_Framework_MockObject_MockObject */
     protected $metadataProvider;
 
-    /** @var ImageProcessor */
-    protected $imageProcessor;
+    /** @var FileProcessor */
+    protected $fileProcessor;
 
     public function setUp()
     {
@@ -51,7 +51,7 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         $this->metadataProvider = $this->getMockBuilder('Magento\Theme\Model\Design\Config\MetadataProvider')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->imageProcessor = new ImageProcessor(
+        $this->fileProcessor = new FileProcessor(
             $this->uploaderFactory,
             $this->imageConfig,
             $this->backendModelFactory,
@@ -115,7 +115,7 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
                 'size' => '234234',
                 'url' => 'http://magento2.com/pub/media/tmp/file.jpg'
             ],
-            $this->imageProcessor->saveToTmp($fieldCode)
+            $this->fileProcessor->saveToTmp($fieldCode)
         );
     }
 }

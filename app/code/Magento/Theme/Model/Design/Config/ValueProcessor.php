@@ -31,7 +31,7 @@ class ValueProcessor
      * @param array $fieldConfig
      * @return mixed
      */
-    public function process($value, $path, array $fieldConfig = [])
+    public function process($value, $path, array $fieldConfig)
     {
         $backendModel = $this->backendModelFactory->createByPath(
             $path,
