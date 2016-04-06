@@ -111,7 +111,7 @@ class File extends BackendFile
     {
         $value = $this->getValue();
         if ($value && !is_array($value)) {
-            $fileName = $this->_getUploadDir() . '/' . $value;
+            $fileName = $this->_getUploadDir() . '/' . basename($value);
             $stat = $this->_mediaDirectory->stat($fileName);
             $this->setValue([
                 [

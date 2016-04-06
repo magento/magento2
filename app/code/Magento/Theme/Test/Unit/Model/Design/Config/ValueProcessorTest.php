@@ -35,6 +35,8 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
     {
         $path = 'design/head/logo';
         $value = 'path/to/logo';
+        $scope = 'websites';
+        $scopeId = 1;
 
         $this->backendModelFactory->expects($this->once())
             ->method('createByPath')
@@ -43,6 +45,8 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
                 [
                     'value' => $value,
                     'field_config' => [],
+                    'scope' => $scope,
+                    'scope_id' => $scopeId
                 ]
             )
             ->willReturn($this->backendModel);
@@ -51,6 +55,6 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
         $this->backendModel->expects($this->once())
             ->method('getValue')
             ->willReturn($value);
-        $this->assertEquals($value, $this->valueProcessor->process($value, $path, []));
+        $this->assertEquals($value, $this->valueProcessor->process($value, $path, $scope, $scopeId, []));
     }
 }

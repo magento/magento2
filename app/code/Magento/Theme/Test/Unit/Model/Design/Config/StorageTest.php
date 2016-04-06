@@ -184,7 +184,7 @@ class StorageTest extends \PHPUnit_Framework_TestCase
             ->willReturn('value');
         $this->valueProcessor->expects($this->once())
             ->method('process')
-            ->with('value', 'path', [])
+            ->with('value', 'path', 'website', 1, [])
             ->willReturnArgument(0);
         $this->designConfigData->expects($this->once())
             ->method('setValue')

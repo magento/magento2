@@ -85,7 +85,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     public function testAfterLoad()
     {
-        $value = 'store/1/filename.jpg';
+        $value = '/filename.jpg';
         $this->fileBackend->setValue($value);
         $this->fileBackend->setFieldConfig(
             [
@@ -97,7 +97,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         );
         $this->mediaDirectory->expects($this->once())
             ->method('stat')
-            ->with('/' . $value)
+            ->with($value)
             ->willReturn(['size' => 234234]);
         $this->fileConfig->expects($this->once())
             ->method('getStoreMediaUrl')
@@ -106,7 +106,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             [
                 [
-                    'url' => 'http://magento2.com/pub/media/' . $value,
+                    'url' => 'http://magento2.com/pub/media' . $value,
                     'file' => $value,
                     'size' => 234234,
                     'exists' => true,

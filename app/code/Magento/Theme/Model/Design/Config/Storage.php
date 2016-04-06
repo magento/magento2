@@ -78,6 +78,8 @@ class Storage
             $value = $this->valueProcessor->process(
                 $this->scopeConfig->getValue($fieldData->getPath(), $scope, $scopeId),
                 $fieldData->getPath(),
+                $scope,
+                $scopeId,
                 $fieldData->getFieldConfig()
             );
             if ($value !== null) {
