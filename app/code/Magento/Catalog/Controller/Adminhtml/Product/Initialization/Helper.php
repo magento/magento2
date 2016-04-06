@@ -39,7 +39,9 @@ class Helper
     protected $jsHelper;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
+     *
+     * @deprecated
      */
     protected $dateFilter;
 
@@ -69,13 +71,18 @@ class Helper
     private $linkResolver;
 
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\Filter\DateTime
+     */
+    private $dateTimeFilter;
+
+    /**
      * Helper constructor.
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param StockDataFilter $stockFilter
      * @param ProductLinks $productLinks
      * @param \Magento\Backend\Helper\Js $jsHelper
-     * @param \Magento\Framework\Stdlib\DateTime\Filter\DateTime $dateFilter
+     * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
@@ -83,7 +90,7 @@ class Helper
         StockDataFilter $stockFilter,
         \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks,
         \Magento\Backend\Helper\Js $jsHelper,
-        \Magento\Framework\Stdlib\DateTime\Filter\DateTime $dateFilter
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
@@ -142,7 +149,7 @@ class Helper
         foreach ($attributes as $attrKey => $attribute) {
             if ($attribute->getBackend()->getType() == 'datetime') {
                 if (array_key_exists($attrKey, $productData) && $productData[$attrKey] != '') {
-                    $dateFieldFilters[$attrKey] = $this->dateFilter;
+                    $dateFieldFilters[$attrKey] = $this->getDateTimeFilter();
                 }
             }
         }
@@ -339,5 +346,19 @@ class Helper
             $this->linkResolver = ObjectManager::getInstance()->get(LinkResolver::class);
         }
         return $this->linkResolver;
+    }
+
+    /**
+     * @return \Magento\Framework\Stdlib\DateTime\Filter\DateTime
+     *
+     * @deprecated
+     */
+    private function getDateTimeFilter()
+    {
+        if ($this->dateTimeFilter === null) {
+            $this->dateTimeFilter = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Stdlib\DateTime\Filter\DateTime::class);
+        }
+        return $this->dateTimeFilter;
     }
 }
