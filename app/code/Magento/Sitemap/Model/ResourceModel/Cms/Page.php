@@ -198,7 +198,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function delete(AbstractModel $object)
     {
-        $this->entityManager->delete(PageInterface::class, $object);
+        $this->entityManager->delete($object, PageInterface::class);
         return $this;
     }
 }
