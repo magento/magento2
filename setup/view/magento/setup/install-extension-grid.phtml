@@ -134,7 +134,11 @@
                     <span class="data-grid-data">{{extension.metapackage}}</span>
                 </td>
                 <td>
-                    <span class="data-grid-data">{{extension.version}}</span>
+                    <span class="data-grid-data">
+                        <select ng-modle="extension.version" id="selectedVersion" ng-model="extension.version">
+                            <option ng-repeat="myversion in extension.versions" value="{{myversion}}">{{myversion}}</option>
+                        </select>
+                    </span>
                 </td>
                 <td>
                     <span class="data-grid-data">{{extension.type}}</span>

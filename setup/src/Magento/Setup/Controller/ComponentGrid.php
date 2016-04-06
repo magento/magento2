@@ -148,6 +148,8 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
     public function syncAction()
     {
         $error = '';
+        $packagesForInstall = [];
+        $lastSyncData = [];
         try {
             $this->updatePackagesCache->syncPackagesForUpdate();
             $lastSyncData = $this->updatePackagesCache->getPackagesForUpdate();
