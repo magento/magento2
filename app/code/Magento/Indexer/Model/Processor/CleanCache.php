@@ -3,13 +3,9 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Indexer\Model\Processor;
 
-/**
- * Class InvalidateCache
- */
-class InvalidateCache
+class CleanCache
 {
     /**
      * @var \Magento\Framework\Indexer\CacheContext
@@ -22,23 +18,15 @@ class InvalidateCache
     protected $eventManager;
 
     /**
-     * @var \Magento\Framework\Module\Manager
-     */
-    protected $moduleManager;
-
-    /**
      * @param \Magento\Framework\Indexer\CacheContext $context
      * @param \Magento\Framework\Event\Manager $eventManager
-     * @param \Magento\Framework\Module\Manager $moduleManager
      */
     public function __construct(
         \Magento\Framework\Indexer\CacheContext $context,
-        \Magento\Framework\Event\Manager $eventManager,
-        \Magento\Framework\Module\Manager $moduleManager
+        \Magento\Framework\Event\Manager $eventManager
     ) {
         $this->context = $context;
         $this->eventManager = $eventManager;
-        $this->moduleManager = $moduleManager;
     }
 
     /**
@@ -50,8 +38,18 @@ class InvalidateCache
      */
     public function afterUpdateMview(\Magento\Indexer\Model\Processor $subject)
     {
-        if ($this->moduleManager->isEnabled('Magento_PageCache')) {
-            $this->eventManager->dispatch('clean_cache_after_reindex', ['object' => $this->context]);
-        }
+        $this->eventManager->dispatch('clean_cache_after_reindex', ['object' => $this->context]);
+    }
+
+    /**
+     * Clear cache after reindex all
+     *
+     * @param \Magento\Indexer\Model\Processor $subject
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterReindexAllInvalid(\Magento\Indexer\Model\Processor $subject)
+    {
+        $this->eventManager->dispatch('clean_cache_by_tags', ['object' => $this->context]);
     }
 }

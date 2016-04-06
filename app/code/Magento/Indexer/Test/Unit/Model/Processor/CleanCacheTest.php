@@ -3,10 +3,9 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Indexer\Test\Unit\Model\Processor;
 
-class InvalidateCacheTest extends \PHPUnit_Framework_TestCase
+class CleanCacheTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Tested plugin
@@ -37,13 +36,6 @@ class InvalidateCacheTest extends \PHPUnit_Framework_TestCase
     protected $eventManagerMock;
 
     /**
-     * Module manager mock
-     *
-     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $moduleManager;
-
-    /**
      * Set up
      */
     protected function setUp()
@@ -51,47 +43,25 @@ class InvalidateCacheTest extends \PHPUnit_Framework_TestCase
         $this->subjectMock = $this->getMock('Magento\Indexer\Model\Processor', [], [], '', false);
         $this->contextMock = $this->getMock('Magento\Framework\Indexer\CacheContext', [], [], '', false);
         $this->eventManagerMock = $this->getMock('Magento\Framework\Event\Manager', [], [], '', false);
-        $this->moduleManager = $this->getMock('Magento\Framework\Module\Manager', [], [], '', false);
-        $this->plugin = new \Magento\Indexer\Model\Processor\InvalidateCache(
+        $this->plugin = new \Magento\Indexer\Model\Processor\CleanCache(
             $this->contextMock,
-            $this->eventManagerMock,
-            $this->moduleManager
+            $this->eventManagerMock
         );
     }
 
     /**
-     * Test afterUpdateMview with enabled PageCache module
+     * Test afterUpdateMview
      *
      * @return void
      */
-    public function testAfterUpdateMviewPageCacheEnabled()
+    public function testAfterUpdateMview()
     {
-        $this->moduleManager->expects($this->once())
-            ->method('isEnabled')
-            ->with($this->equalTo('Magento_PageCache'))
-            ->will($this->returnValue(true));
         $this->eventManagerMock->expects($this->once())
             ->method('dispatch')
             ->with(
                 $this->equalTo('clean_cache_after_reindex'),
                 $this->equalTo(['object' => $this->contextMock])
             );
-        $this->plugin->afterUpdateMview($this->subjectMock);
-    }
-
-    /**
-     * Test afterUpdateMview with disabled PageCache module
-     *
-     * @return void
-     */
-    public function testAfterUpdateMviewPageCacheDisabled()
-    {
-        $this->moduleManager->expects($this->once())
-            ->method('isEnabled')
-            ->with($this->equalTo('Magento_PageCache'))
-            ->will($this->returnValue(false));
-        $this->eventManagerMock->expects($this->never())
-            ->method('dispatch');
         $this->plugin->afterUpdateMview($this->subjectMock);
     }
 }
