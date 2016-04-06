@@ -38,7 +38,7 @@ class DateTime extends Date
 
     public function filter($value)
     {
-        $value = new \DateTime($value, new \DateTimeZone('UTC'));
+        $value = new \DateTime($value);
         return $value->format('Y-m-d H:i:s');
     }
 }

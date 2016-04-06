@@ -60,7 +60,7 @@ class Date implements \Zend_Filter_Interface
      */
     public function filter($value)
     {
-        $value = new \DateTime($value, new \DateTimeZone('UTC'));
+        $value = new \DateTime($value);
         return $value->format('Y-m-d');
     }
 }
