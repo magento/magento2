@@ -32,6 +32,11 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
      */
     protected $indexerRegistryMock;
 
+    /**
+     * @var \Magento\Framework\Indexer\CacheContext|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $cacheContextMock;
+
     protected function setUp()
     {
         $this->fullMock = $this->getMock(
@@ -73,6 +78,15 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             $this->rowsMock,
             $this->indexerRegistryMock
         );
+
+        $this->cacheContextMock = $this->getMock(\Magento\Framework\Indexer\CacheContext::class, [], [], '', false);
+
+        $cacheContextProperty = new \ReflectionProperty(
+            \Magento\Catalog\Model\Indexer\Category\Product::class,
+            'cacheContext'
+        );
+        $cacheContextProperty->setAccessible(true);
+        $cacheContextProperty->setValue($this->model, $this->cacheContextMock);
     }
 
     public function testExecuteWithIndexerWorking()
@@ -115,6 +129,10 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
 
         $this->rowsMock->expects($this->once())->method('create')->will($this->returnValue($rowMock));
 
+        $this->cacheContextMock->expects($this->once())
+            ->method('registerEntities')
+            ->with(\Magento\Catalog\Model\Product::CACHE_TAG, $ids);
+
         $this->model->execute($ids);
     }
 
@@ -124,5 +142,31 @@ class CategoryTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with(\Magento\Catalog\Model\Indexer\Product\Category::INDEXER_ID)
             ->will($this->returnValue($this->indexerMock));
+    }
+
+    public function testExecuteFull()
+    {
+        /** @var \Magento\Catalog\Model\Indexer\Category\Product\Action\Full $productIndexerFlatFull */
+        $productIndexerFlatFull = $this->getMock(
+            \Magento\Catalog\Model\Indexer\Category\Product\Action\Full::class,
+            [],
+            [],
+            '',
+            false
+        );
+        $this->fullMock->expects($this->once())
+            ->method('create')
+            ->willReturn($productIndexerFlatFull);
+        $productIndexerFlatFull->expects($this->once())
+            ->method('execute');
+        $this->cacheContextMock->expects($this->once())
+            ->method('registerTags')
+            ->with(
+                [
+                    \Magento\Catalog\Model\Category::CACHE_TAG,
+                    \Magento\Catalog\Model\Product::CACHE_TAG
+                ]
+            );
+        $this->model->executeFull();
     }
 }
