@@ -37,7 +37,7 @@ class DefaultStore
     public function beforeDispatch(
         \Magento\Framework\App\FrontController $subject,
         \Magento\Framework\App\RequestInterface $request
-    ) {        
+    ) {
         $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::ADMIN_CODE);
     }
 }
