@@ -23,6 +23,6 @@ class DateTimeTest extends \PHPUnit_Framework_TestCase
         );
         $model = new DateTime($localeMock);
         // Check that datetime is converted to 'yyyy-MM-dd HH:mm:ss' format
-        $this->assertEquals('2241-12-31 23:59:53', $model->filter('23:59:53 12-31-2241'));
+        $this->assertEquals('2241-12-31 23:59:53', $model->filter('23:59:53 12/31/2241'));
     }
 }
