@@ -261,13 +261,17 @@ define([
                 selectionsData = {},
                 request;
 
-            selectionsData['filters_modifier'] = {};
-            selectionsData['filters_modifier'][this.indexField] = {
-                'condition_type': filterType,
-                value: selections[itemsType]
-            };
             _.extend(selectionsData, this.params || {}, selections.params);
-            selectionsData.filters = {};
+
+            if (selections[itemsType] && selections[itemsType].length) {
+                selectionsData.filters = {};
+                selectionsData['filters_modifier'] = {};
+                selectionsData['filters_modifier'][this.indexField] = {
+                    'condition_type': filterType,
+                    value: selections[itemsType]
+                };
+            }
+
             this.selections().excludeMode() ? selectionsData.paging = {
                 notLimits: 1
             } : false;
