@@ -158,7 +158,9 @@ define([
          * @param {Object} requestConfig
          */
         updateRequestConfig: function (requestConfig) {
-            _.extend(this.storage().requestConfig, requestConfig);
+            if (this.storage()) {
+                _.extend(this.storage().requestConfig, requestConfig);
+            }
         }
     });
 });
