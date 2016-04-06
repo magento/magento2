@@ -23,9 +23,13 @@ class DefaultStore
     }
 
     /**
+     * Set current store for admin area
+     *
      * @param \Magento\Framework\App\FrontController $subject
      * @param \Magento\Framework\App\RequestInterface $request
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeDispatch(
         \Magento\Framework\App\FrontController $subject,
