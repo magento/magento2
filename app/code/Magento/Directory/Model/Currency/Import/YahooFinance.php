@@ -89,7 +89,6 @@ class YahooFinance extends \Magento\Directory\Model\Currency\Import\AbstractImpo
         set_time_limit(0);
         $response = $this->getServiceResponse($url);
         ini_restore('max_execution_time');
-        $response = array_column($response['query']['results']['rate'], 'Rate', 'id');
         foreach ($currenciesTo as $currencyTo) {
             if ($currencyFrom == $currencyTo) {
                 $data[$currencyFrom][$currencyTo] = $this->_numberFormat(1);
@@ -133,7 +132,10 @@ class YahooFinance extends \Magento\Directory\Model\Currency\Import\AbstractImpo
                 'GET'
             )->getBody();
 
-            $response = json_decode($jsonResponse, true);
+            $jsonResponse = json_decode($jsonResponse, true);
+            if (!empty($jsonResponse['query']['results']['rate']) ) {
+                $response = array_column($jsonResponse['query']['results']['rate'], 'Rate', 'id');
+            }
         } catch (\Exception $e) {
             if ($retry == 0) {
                 $response = $this->getServiceResponse($url, 1);
