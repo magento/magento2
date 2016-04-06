@@ -7,7 +7,7 @@ namespace Magento\Theme\Model\Design\Config\FileUploader;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaStorage\Model\File\UploaderFactory;
-use Magento\Theme\Model\Design\Backend\Image;
+use Magento\Theme\Model\Design\Backend\File;
 use Magento\Theme\Model\Design\BackendModelFactory;
 use Magento\Theme\Model\Design\Config\MetadataProvider;
 
@@ -80,7 +80,7 @@ class ImageProcessor
     protected function save($fileId, $destination)
     {
         $result = ['file' => '', 'size' => ''];
-        /** @var Image $backendModel */
+        /** @var File $backendModel */
         $backendModel = $this->getBackendModel($fileId);
         $uploader = $this->uploaderFactory->create(['fileId' => $fileId]);
         $uploader->setAllowRenameFiles(true);
@@ -94,7 +94,7 @@ class ImageProcessor
      * Retrieve backend model by field code
      *
      * @param string $code
-     * @return Image
+     * @return File
      * @throws LocalizedException
      */
     protected function getBackendModel($code)

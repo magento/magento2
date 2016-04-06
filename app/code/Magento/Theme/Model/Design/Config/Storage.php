@@ -77,7 +77,8 @@ class Storage
         foreach ($fieldsData as &$fieldData) {
             $value = $this->valueProcessor->process(
                 $this->scopeConfig->getValue($fieldData->getPath(), $scope, $scopeId),
-                $fieldData->getPath()
+                $fieldData->getPath(),
+                $fieldData->getFieldConfig()
             );
             if ($value !== null) {
                 $fieldData->setValue($value);

@@ -38,7 +38,13 @@ class ValueProcessorTest extends \PHPUnit_Framework_TestCase
 
         $this->backendModelFactory->expects($this->once())
             ->method('createByPath')
-            ->with($path, ['value' => $value])
+            ->with(
+                $path,
+                [
+                    'value' => $value,
+                    'field_config' => [],
+                ]
+            )
             ->willReturn($this->backendModel);
         $this->backendModel->expects($this->once())
             ->method('afterLoad');

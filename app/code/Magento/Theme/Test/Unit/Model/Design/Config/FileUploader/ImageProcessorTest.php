@@ -21,7 +21,7 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Theme\Model\Design\BackendModelFactory|\PHPUnit_Framework_MockObject_MockObject */
     protected $backendModelFactory;
 
-    /** @var \Magento\Theme\Model\Design\Backend\Image|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Theme\Model\Design\Backend\File|\PHPUnit_Framework_MockObject_MockObject */
     protected $backendModel;
 
     /** @var \Magento\Theme\Model\Design\Config\MetadataProvider|\PHPUnit_Framework_MockObject_MockObject */
@@ -45,7 +45,7 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         $this->backendModelFactory = $this->getMockBuilder('Magento\Theme\Model\Design\BackendModelFactory')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->backendModel = $this->getMockBuilder('Magento\Theme\Model\Design\Backend\Image')
+        $this->backendModel = $this->getMockBuilder('Magento\Theme\Model\Design\Backend\File')
             ->disableOriginalConstructor()
             ->getMock();
         $this->metadataProvider = $this->getMockBuilder('Magento\Theme\Model\Design\Config\MetadataProvider')
@@ -66,7 +66,7 @@ class ImageProcessorTest extends \PHPUnit_Framework_TestCase
         $metadata = [
             $fieldCode => [
                 'path' => $path,
-                'backend_model' => 'Magento\Theme\Model\Design\Backend\Image'
+                'backend_model' => 'Magento\Theme\Model\Design\Backend\File'
             ],
         ];
 

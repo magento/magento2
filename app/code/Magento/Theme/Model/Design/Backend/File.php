@@ -6,7 +6,7 @@
 namespace Magento\Theme\Model\Design\Backend;
 
 use Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface;
-use \Magento\Config\Model\Config\Backend\File as File;
+use \Magento\Config\Model\Config\Backend\File as BackendFile;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
@@ -18,17 +18,12 @@ use Magento\Framework\Registry;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Theme\Model\Design\Config\FileUploader\Config;
 
-class Image extends File
+class File extends BackendFile
 {
-    /**
-     * @var string
-     */
-    protected $uploadDir = 'image';
-
     /**
      * @var Config
      */
-    protected $imageConfig;
+    protected $fileConfig;
 
     /**
      * @param Context $context
@@ -38,7 +33,7 @@ class Image extends File
      * @param UploaderFactory $uploaderFactory
      * @param RequestDataInterface $requestData
      * @param Filesystem $filesystem
-     * @param Config $imageConfig
+     * @param Config $fileConfig
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
@@ -52,7 +47,7 @@ class Image extends File
         UploaderFactory $uploaderFactory,
         RequestDataInterface $requestData,
         Filesystem $filesystem,
-        Config $imageConfig,
+        Config $fileConfig,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
@@ -69,7 +64,7 @@ class Image extends File
             $resourceCollection,
             $data
         );
-        $this->imageConfig = $imageConfig;
+        $this->fileConfig = $fileConfig;
     }
 
     /**
@@ -93,12 +88,14 @@ class Image extends File
         }
         $filename = $value['file'];
         $result = $this->_mediaDirectory->copyFile(
-            $this->imageConfig->getTmpMediaPath($filename),
-            $this->_appendScopeInfo($this->uploadDir) . '/' . $filename
+            $this->fileConfig->getTmpMediaPath($filename),
+            $this->_getUploadDir() . '/' . $filename
         );
         if ($result) {
-            $this->_mediaDirectory->delete($this->imageConfig->getTmpMediaPath($filename));
-            $filename = $this->_prependScopeInfo($filename);
+            $this->_mediaDirectory->delete($this->fileConfig->getTmpMediaPath($filename));
+            if ($this->_addWhetherScopeInfo()) {
+                $filename = $this->_prependScopeInfo($filename);
+            }
             $this->setValue($filename);
         } else {
             $this->unsValue();
@@ -114,11 +111,11 @@ class Image extends File
     {
         $value = $this->getValue();
         if ($value && !is_array($value)) {
-            $fileName = '/' . $this->uploadDir . '/' . $value;
+            $fileName = $this->_getUploadDir() . '/' . $value;
             $stat = $this->_mediaDirectory->stat($fileName);
             $this->setValue([
                 [
-                    'url' => $this->imageConfig->getStoreMediaUrl() .  $fileName,
+                    'url' => $this->fileConfig->getStoreMediaUrl() .  $fileName,
                     'file' => $value,
                     'size' => is_array($stat) ? $stat['size'] : 0,
                     'exists' => true
@@ -126,6 +123,40 @@ class Image extends File
             ]);
         }
         return $this;
+    }
+
+    /**
+     * Return path to directory for upload file
+     *
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function _getUploadDir()
+    {
+        $fieldConfig = $this->getFieldConfig();
+        /* @var $fieldConfig \Magento\Framework\Simplexml\Element */
+
+        if (!array_key_exists('upload_dir', $fieldConfig)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __('The base directory to upload file is not specified.')
+            );
+        }
+
+        if (is_array($fieldConfig['upload_dir'])) {
+            $uploadDir = $fieldConfig['upload_dir']['value'];
+            if (array_key_exists('scope_info', $fieldConfig['upload_dir']) && $fieldConfig['upload_dir']['scope_info']
+            ) {
+                $uploadDir = $this->_appendScopeInfo($uploadDir);
+            }
+
+            if (array_key_exists('config', $fieldConfig['upload_dir'])) {
+                $uploadDir = $this->_mediaDirectory->getRelativePath($uploadDir);
+            }
+        } else {
+            $uploadDir = (string)$fieldConfig['upload_dir'];
+        }
+
+        return $uploadDir;
     }
 
     /**
