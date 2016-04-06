@@ -9,6 +9,7 @@ namespace Magento\CatalogInventory\Model\ResourceModel\Indexer\Stock;
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\AbstractIndexer;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
 
 /**
  * CatalogInventory Default Stock Status Indexer Resource Model
@@ -41,6 +42,11 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      * @var QueryProcessorComposite
      */
     private $queryProcessorComposite;
+
+    /**
+     * @var StockConfigurationInterface
+     */
+    protected $stockConfiguration;
 
     /**
      * Class constructor
@@ -176,43 +182,29 @@ class DefaultStock extends AbstractIndexer implements StockInterface
      */
     protected function _getStockStatusSelect($entityIds = null, $usePrimaryTable = false)
     {
-        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
         $connection = $this->getConnection();
         $qtyExpr = $connection->getCheckSql('cisi.qty > 0', 'cisi.qty', 0);
         $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
             ['entity_id']
         );
-        $this->_addWebsiteJoinToSelect($select, true);
-        $this->_addProductWebsiteJoinToSelect($select, 'cw.website_id', 'e.entity_id');
-        $select->columns('cw.website_id')->join(
+        $select->join(
             ['cis' => $this->getTable('cataloginventory_stock')],
             '',
-            ['stock_id']
-        )->joinLeft(
+            ['website_id', 'stock_id']
+        )->joinInner(
             ['cisi' => $this->getTable('cataloginventory_stock_item')],
             'cisi.stock_id = cis.stock_id AND cisi.product_id = e.entity_id',
             []
-        )->columns(['qty' => new \Zend_Db_Expr('SUM(' . $qtyExpr . ')')])
-            ->where('cw.website_id != 0')
-            ->where('e.type_id = ?', $this->getTypeId())
-            ->group(['e.entity_id', 'cw.website_id']);
-
-        // add limitation of status
-        $condition = $connection->quoteInto(
-            '=?',
-            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
-        );
-        $this->_addAttributeToSelect(
-            $select,
-            'status',
-            'e.' . $metadata->getLinkField(),
-            'cs.store_id',
-            $condition
-        );
+        )->columns(
+            ['qty' => $qtyExpr]
+        )->where(
+            'cis.website_id = ?',
+            $this->getStockConfiguration()->getDefaultScopeId()
+        )->where('e.type_id = ?', $this->getTypeId())
+            ->group(['e.entity_id', 'cis.website_id', 'cis.stock_id']);
 
         $select->columns(['status' => $this->getStatusExpression($connection, true)]);
-
         if ($entityIds !== null) {
             $select->where('e.entity_id IN(?)', $entityIds);
         }
@@ -323,6 +315,20 @@ class DefaultStock extends AbstractIndexer implements StockInterface
             );
         }
         return $statusExpr;
+    }
+
+    /**
+     * @return StockConfigurationInterface
+     *
+     * @deprecated
+     */
+    protected function getStockConfiguration()
+    {
+        if ($this->stockConfiguration === null) {
+            $this->stockConfiguration = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\CatalogInventory\Api\StockConfigurationInterface');
+        }
+        return $this->stockConfiguration;
     }
 
     /**
