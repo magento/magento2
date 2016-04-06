@@ -79,9 +79,9 @@ define([
         openModalWithGrid: function (rowIndex) {
             var productSource = this.source.get(this.dataScope + '.' + this.index + '.' + rowIndex),
                 product = {
-                'id': productSource.id,
-                'attributes': productSource['configurable_attribute']
-            };
+                    'id': productSource.id,
+                    'attributes': productSource['configurable_attribute']
+                };
 
             this.modalWithGrid().openModal();
             this.gridWithProducts().showGridChangeProduct(rowIndex, product);
@@ -110,7 +110,8 @@ define([
          * @param {Number} index - row index
          */
         deleteRecord: function (index) {
-            var tmpArray;
+            var tmpArray,
+                lastRecord;
 
             this.reRender = false;
             tmpArray = this.getUnionInsertData();
@@ -120,8 +121,26 @@ define([
                 this.source.set('data.attributes', []);
             }
 
+            if (parseInt(this.currentPage(), 10) === this.pages()) {
+                lastRecord =
+                    _.findWhere(this.elems(), {
+                        index: this.startIndex + this.getChildItems().length - 1
+                    }) ||
+                    _.findWhere(this.elems(), {
+                        index: (this.startIndex + this.getChildItems().length - 1).toString()
+                    });
+
+                lastRecord.destroy();
+            }
+
             this.unionInsertData(tmpArray);
+
+            if (this.pages() < parseInt(this.currentPage(), 10)) {
+                this.currentPage(this.pages());
+            }
+
             this.reRender = true;
+            this.showSpinner(false);
         },
 
         /**

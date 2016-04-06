@@ -6,10 +6,10 @@
 -->
 <button class="action-delete"
         data-bind="
-            click: function(){ $parents[1].processingDeleteRecord($parent.index, $parent.recordId); },
+            click: function(){ $parent.processingDeleteRecord($record().index, $record().recordId); },
             attr: {
-                title: $parents[1].deleteButtonLabel
+                title: $parent.deleteButtonLabel
             }
         ">
-    <span data-bind="text: $parents[1].deleteButtonLabel"></span>
+    <span data-bind="text: $parent.deleteButtonLabel"></span>
 </button>
