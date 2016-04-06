@@ -3,17 +3,16 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Observer;
+namespace Magento\Catalog\Plugin\Block;
 
 use Magento\Catalog\Model\Category;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Tree\Node;
-use Magento\Framework\Event\ObserverInterface;
 
 /**
- * Observer that add Categories Tree to Topmenu
+ * Plugin for top menu block
  */
-class AddCatalogToTopmenuItemsObserver implements ObserverInterface
+class Topmenu
 {
     /**
      * Catalog category
@@ -38,11 +37,11 @@ class AddCatalogToTopmenuItemsObserver implements ObserverInterface
     private $layerResolver;
 
     /**
+     * Initialize dependencies.
+     *
      * @param \Magento\Catalog\Helper\Category $catalogCategory
-     * @param \Magento\Catalog\Model\Indexer\Category\Flat\State $categoryFlatState
      * @param \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Helper\Category $catalogCategory
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      */
     public function __construct(
@@ -58,26 +57,27 @@ class AddCatalogToTopmenuItemsObserver implements ObserverInterface
     }
 
     /**
-     * Checking whether the using static urls in WYSIWYG allowed event
+     * Build category tree for menu block.
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param \Magento\Theme\Block\Html\Topmenu $subject
+     * @param string $outermostClass
+     * @param string $childrenWrapClass
+     * @param int $limit
      * @return void
+     * @SuppressWarnings("PMD.UnusedFormalParameter")
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
-    {
-        $block = $observer->getEvent()->getBlock();
-        $menuRootNode = $observer->getEvent()->getMenu();
-        $block->addIdentity(Category::CACHE_TAG);
-
+    public function beforeGetHtml(
+        \Magento\Theme\Block\Html\Topmenu $subject,
+        $outermostClass = '',
+        $childrenWrapClass = '',
+        $limit = 0
+    ) {
         $rootId = $this->storeManager->getStore()->getRootCategoryId();
         $storeId = $this->storeManager->getStore()->getId();
-
         /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
         $collection = $this->getCategoryTree($storeId, $rootId);
-
         $currentCategory = $this->getCurrentCategory();
-
-        $mapping = [$rootId => $menuRootNode];  // use nodes stack to avoid recursion
+        $mapping = [$rootId => $subject->getMenu()];  // use nodes stack to avoid recursion
         foreach ($collection as $category) {
             if (!isset($mapping[$category->getParentId()])) {
                 continue;
@@ -94,8 +94,28 @@ class AddCatalogToTopmenuItemsObserver implements ObserverInterface
             $parentCategoryNode->addChild($categoryNode);
 
             $mapping[$category->getId()] = $categoryNode; //add node in stack
+        }
+    }
 
-            $block->addIdentity(Category::CACHE_TAG . '_' . $category->getId());
+    /**
+     * Add list of associated identities to the top menu block for caching purposes.
+     *
+     * @param \Magento\Theme\Block\Html\Topmenu $subject
+     * @return void
+     */
+    public function beforeGetIdentities(\Magento\Theme\Block\Html\Topmenu $subject)
+    {
+        $subject->addIdentity(Category::CACHE_TAG);
+        $rootId = $this->storeManager->getStore()->getRootCategoryId();
+        $storeId = $this->storeManager->getStore()->getId();
+        /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
+        $collection = $this->getCategoryTree($storeId, $rootId);
+        $mapping = [$rootId => $subject->getMenu()];  // use nodes stack to avoid recursion
+        foreach ($collection as $category) {
+            if (!isset($mapping[$category->getParentId()])) {
+                continue;
+            }
+            $subject->addIdentity(Category::CACHE_TAG . '_' . $category->getId());
         }
     }
 
