@@ -6,16 +6,16 @@
 
 // @codingStandardsIgnoreFile
 
-namespace Magento\Catalog\Test\Unit\Observer;
+namespace Magento\Catalog\Test\Unit\Plugin\Block;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
-class AddCatalogToTopmenuItemsObserverTest extends \PHPUnit_Framework_TestCase
+class TopmenuTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Catalog\Observer\AddCatalogToTopmenuItemsObserver
+     * @var \Magento\Catalog\Plugin\Block\Topmenu
      */
-    protected $_observer;
+    protected $block;
 
     /**
      * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Helper\Category
@@ -100,8 +100,8 @@ class AddCatalogToTopmenuItemsObserverTest extends \PHPUnit_Framework_TestCase
         $collection->expects($this->once())->method('getIterator')
             ->willReturn(new \ArrayIterator([]));
 
-        $this->_observer = (new ObjectManager($this))->getObject(
-            'Magento\Catalog\Observer\AddCatalogToTopmenuItemsObserver',
+        $this->block = (new ObjectManager($this))->getObject(
+            \Magento\Catalog\Plugin\Block\Topmenu::class,
             [
                 'catalogCategory' => $this->_catalogCategory,
                 'menuCategoryData' => $this->menuCategoryData,
@@ -142,23 +142,11 @@ class AddCatalogToTopmenuItemsObserverTest extends \PHPUnit_Framework_TestCase
         );
 
         $blockMock = $this->_getCleanMock('\Magento\Theme\Block\Html\Topmenu');
-
-        $eventMock = $this->getMock('\Magento\Framework\Event', ['getBlock'], [], '', false);
-        $eventMock->expects($this->once())
-            ->method('getBlock')
-            ->will($this->returnValue($blockMock));
-
-        $observerMock = $this->getMock('\Magento\Framework\Event\Observer', ['getEvent', 'getMenu'], [], '', false);
-        $observerMock->expects($this->any())
-            ->method('getEvent')
-            ->will($this->returnValue($eventMock));
-
-        return $observerMock;
+        return $blockMock;
     }
 
     public function testAddCatalogToTopMenuItems()
     {
-        $observer = $this->_preparationData();
-        $this->_observer->execute($observer);
+        $this->block->beforeGetHtml($this->_preparationData());
     }
 }
