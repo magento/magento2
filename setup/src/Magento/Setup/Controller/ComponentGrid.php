@@ -156,12 +156,10 @@ class ComponentGrid extends \Zend\Mvc\Controller\AbstractActionController
 
             $this->marketplaceManager->syncPackagesForInstall();
             $packagesForInstall = $this->marketplaceManager->getPackagesForInstall();
+            $lastSyncData = $this->formatLastSyncData($packagesForInstall, $lastSyncData);
         } catch (\Exception $e) {
             $error = $e->getMessage();
         }
-
-        $lastSyncData = $this->formatLastSyncData($packagesForInstall, $lastSyncData);
-
         return new \Zend\View\Model\JsonModel(
             [
                 'success' => true,
