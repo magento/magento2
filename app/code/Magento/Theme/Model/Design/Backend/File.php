@@ -170,12 +170,14 @@ class File extends BackendFile
     protected function getStoreMediaUrl($fileName)
     {
         $fieldConfig = $this->getFieldConfig();
+        $baseUrl = '';
+        $urlType = ['_type' => UrlInterface::URL_TYPE_MEDIA];
         if (isset($fieldConfig['base_url'])) {
             $baseUrl = $fieldConfig['base_url'];
-            $urlType = empty($baseUrl['type']) ? 'link' : (string)$baseUrl['type'];
-            $fileName = $this->urlBuilder->getBaseUrl(['_type' => $urlType]) . $baseUrl['value'] . '/' . $fileName;
+            $urlType = ['_type' => empty($baseUrl['type']) ? 'link' : (string)$baseUrl['type']];
+            $baseUrl = $baseUrl['value'] . '/';
         }
-        return $fileName;
+        return $this->urlBuilder->getBaseUrl($urlType) . $baseUrl  . $fileName;
     }
 
     /**
