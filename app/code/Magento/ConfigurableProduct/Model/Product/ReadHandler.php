@@ -8,11 +8,12 @@ namespace Magento\ConfigurableProduct\Model\Product;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Helper\Product\Options\Loader;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class ReadHandler
  */
-class ReadHandler
+class ReadHandler implements ExtensionInterface
 {
     /**
      * @var Loader
@@ -31,11 +32,12 @@ class ReadHandler
 
     /**
      * @param string $entityType
-     * @param ProductInterface $entity
-     * @return ProductInterface
+     * @param object $entity
+     * @param array $arguments
+     * @return object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, $entity)
+    public function execute($entityType, $entity, $arguments = [])
     {
         if ($entity->getTypeId() !== Configurable::TYPE_CODE) {
             return $entity;
