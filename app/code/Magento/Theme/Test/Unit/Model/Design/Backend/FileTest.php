@@ -119,7 +119,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
             ->with('value/' . $value)
             ->willReturn(['size' => 234234]);
 
-
         $this->fileBackend->afterLoad();
         $this->assertEquals(
             [
