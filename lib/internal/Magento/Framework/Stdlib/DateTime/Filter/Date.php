@@ -9,6 +9,7 @@ namespace Magento\Framework\Stdlib\DateTime\Filter;
 
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Phrase;
 
 class Date implements \Zend_Filter_Interface
 {
@@ -67,7 +68,7 @@ class Date implements \Zend_Filter_Interface
             return $value->format('Y-m-d');
         } catch (\Exception $e) {
             throw new LocalizedException(
-                __('Invalid input date format')
+                new Phrase('Invalid input date format')
             );
         }
     }
