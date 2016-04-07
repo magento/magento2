@@ -194,9 +194,7 @@ class JobFactoryTest extends \PHPUnit_Framework_TestCase
                 $this->getMock('Magento\Backend\Console\Command\CacheDisableCommand', [], [], '', false)
             ]
         ];
-        $this->objectManager->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($valueMap));
+        $this->objectManager->expects($this->any())->method('get')->will($this->returnValueMap($valueMap));
 
         $this->assertInstanceOf(
             'Magento\Setup\Model\Cron\JobSetCache',
