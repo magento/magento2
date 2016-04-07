@@ -28,7 +28,7 @@ define([
                 },
                 filter: {
                     exports: {
-                       'requestConfig': '${ $.externalProvider }:requestConfig'
+                        'requestConfig': '${ $.externalProvider }:requestConfig'
                     }
                 }
             },
@@ -290,7 +290,9 @@ define([
                 notLimits: 1
             };
 
-            request = this.requestData(selectionsData);
+            request = this.requestData(selectionsData, {
+                method: this.requestConfig.method
+            });
             request
                 .done(function (data) {
                     this.setExternalValue(data.items || data);
