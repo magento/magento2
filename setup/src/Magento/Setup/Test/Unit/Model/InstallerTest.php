@@ -354,7 +354,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
     {
         $this->phpReadinessCheck->expects($this->once())->method('checkPhpExtensions')->willReturn(
             ['responseType' => \Magento\Setup\Controller\ResponseTypeInterface::RESPONSE_TYPE_ERROR,
-            'data'=>['required'=>['foo','bar'], 'missing'=>['foo']]]
+            'data'=>['required'=>['foo', 'bar'], 'missing'=>['foo']]]
         );
         $this->object->checkExtensions();
     }
