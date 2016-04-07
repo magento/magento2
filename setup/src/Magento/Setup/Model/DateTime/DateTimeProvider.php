@@ -5,7 +5,6 @@
  */
 namespace Magento\Setup\Model\DateTime;
 
-
 use Magento\Setup\Model\ObjectManagerProvider;
 
 /**
