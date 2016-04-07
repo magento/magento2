@@ -15,15 +15,16 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
+use Magento\Framework\UrlInterface;
 use Magento\MediaStorage\Model\File\UploaderFactory;
-use Magento\Theme\Model\Design\Config\FileUploader\Config;
+use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
 
 class File extends BackendFile
 {
     /**
-     * @var Config
+     * @var UrlInterface
      */
-    protected $fileConfig;
+    protected $urlBuilder;
 
     /**
      * @param Context $context
@@ -33,10 +34,11 @@ class File extends BackendFile
      * @param UploaderFactory $uploaderFactory
      * @param RequestDataInterface $requestData
      * @param Filesystem $filesystem
-     * @param Config $fileConfig
+     * @param UrlInterface $urlBuilder
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
+     * @internal param Config $fileConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -47,7 +49,7 @@ class File extends BackendFile
         UploaderFactory $uploaderFactory,
         RequestDataInterface $requestData,
         Filesystem $filesystem,
-        Config $fileConfig,
+        UrlInterface $urlBuilder,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
@@ -64,7 +66,7 @@ class File extends BackendFile
             $resourceCollection,
             $data
         );
-        $this->fileConfig = $fileConfig;
+        $this->urlBuilder = $urlBuilder;
     }
 
     /**
@@ -88,11 +90,11 @@ class File extends BackendFile
         }
         $filename = $value['file'];
         $result = $this->_mediaDirectory->copyFile(
-            $this->fileConfig->getTmpMediaPath($filename),
+            $this->getTmpMediaPath($filename),
             $this->_getUploadDir() . '/' . $filename
         );
         if ($result) {
-            $this->_mediaDirectory->delete($this->fileConfig->getTmpMediaPath($filename));
+            $this->_mediaDirectory->delete($this->getTmpMediaPath($filename));
             if ($this->_addWhetherScopeInfo()) {
                 $filename = $this->_prependScopeInfo($filename);
             }
@@ -112,15 +114,19 @@ class File extends BackendFile
         $value = $this->getValue();
         if ($value && !is_array($value)) {
             $fileName = $this->_getUploadDir() . '/' . basename($value);
-            $stat = $this->_mediaDirectory->stat($fileName);
-            $this->setValue([
-                [
-                    'url' => $this->fileConfig->getStoreMediaUrl() .  $fileName,
+            $fileInfo = [];
+            if ($this->_mediaDirectory->isExist($fileName)) {
+                $stat = $this->_mediaDirectory->stat($fileName);
+                $url = $this->getStoreMediaUrl($value);
+
+                $fileInfo = [
+                    'url' => $url,
                     'file' => $value,
                     'size' => is_array($stat) ? $stat['size'] : 0,
                     'exists' => true
-                ]
-            ]);
+                ];
+            }
+            $this->setValue([$fileInfo]);
         }
         return $this;
     }
@@ -152,5 +158,33 @@ class File extends BackendFile
     public function getValue()
     {
         return $this->getData('value') ?: [];
+    }
+
+    /**
+     * Retrieve store media url
+     *
+     * @param string $fileName
+     * @return mixed
+     */
+    public function getStoreMediaUrl($fileName)
+    {
+        $fieldConfig = $this->getFieldConfig();
+        if (isset($fieldConfig['base_url'])) {
+            $baseUrl = $fieldConfig['base_url'];
+            $urlType = empty($baseUrl['type']) ? 'link' : (string)$baseUrl['type'];
+            $fileName = $this->urlBuilder->getBaseUrl(['_type' => $urlType]) . $baseUrl['value'] . '/' . $fileName;
+        }
+        return $fileName;
+    }
+
+    /**
+     * Retrieve temp media path
+     *
+     * @param string $filename
+     * @return string
+     */
+    public function getTmpMediaPath($filename)
+    {
+        return 'tmp/' . FileProcessor::FILE_DIR . '/' . $filename;
     }
 }
