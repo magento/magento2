@@ -136,8 +136,7 @@ class JobFactory
                     $objectManagerProvider,
                     $multipleStreamOutput,
                     $cronStatus,
-                    $name,
-                    $params
+                    $name
                 );
                 break;
             case self::JOB_DISABLE_CACHE:
@@ -146,8 +145,7 @@ class JobFactory
                     $objectManagerProvider,
                     $multipleStreamOutput,
                     $cronStatus,
-                    $name,
-                    $params
+                    $name
                 );
                 break;
             default:

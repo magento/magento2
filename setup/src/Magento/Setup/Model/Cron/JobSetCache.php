@@ -29,7 +29,7 @@ class JobSetCache extends AbstractJob
      * @param \Magento\Setup\Model\ObjectManagerProvider $objectManagerProvider
      * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param Status $status
-     * @param $name
+     * @param string $name
      * @param array $params
      */
     public function __construct(
@@ -45,7 +45,6 @@ class JobSetCache extends AbstractJob
         $this->status = $status;
         parent::__construct($output, $status, $objectManagerProvider, $name, $params);
     }
-
 
     /**
      * Execute set cache comand
