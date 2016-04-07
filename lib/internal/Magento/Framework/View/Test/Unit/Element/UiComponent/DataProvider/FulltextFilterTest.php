@@ -19,7 +19,6 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Api\Filter;
-use Magento\Framework\Model\ResourceModel\Db\AbstractDb as ResourceModelAbstractDb;
 use Magento\Framework\Mview\View\Collection as MviewCollection;
 
 /**
@@ -63,27 +62,16 @@ class FulltextFilterTest extends \PHPUnit_Framework_TestCase
      */
     protected $collectionAbstractDbMock;
 
-    /**
-     * @var ResourceModelAbstractDb|\PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $resourceModelAbstractDb;
-
     protected function setUp()
     {
         $this->entityFactoryMock = $this->getMock(EntityFactory::class, [], [], '', false);
         $this->loggerMock = $this->getMock(LoggerInterface::class);
         $this->fetchStrategyMock = $this->getMock(FetchStrategyInterface::class, [], [], '', false);
-        $this->resourceModelAbstractDb = $this->getMock(FetchStrategyInterface::class, [], [], '', false);
-        $this->connectionMock = $this->getMock(Mysql::class, ['select', 'getIndexList'], [], '', false);
+        $this->connectionMock = $this->getMock(Mysql::class, ['select', 'getIndexList',], [], '', false);
         $this->selectMock = $this->getMock(Select::class, ['getPart', 'where'], [], '', false);
 
-        $this->resourceModelAbstractDb = $this->getMockBuilder(ResourceModelAbstractDb::class)
-            ->setMethods(['getMainTable'])
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-
         $this->collectionAbstractDbMock = $this->getMockBuilder(CollectionAbstractDb::class)
-            ->setMethods(['getConnection', 'getResource', 'getSelect'])
+            ->setMethods(['getConnection', 'getSelect','getMainTable'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
@@ -95,7 +83,7 @@ class FulltextFilterTest extends \PHPUnit_Framework_TestCase
         $filter = new Filter();
         $filter->setValue('test');
 
-        $this->resourceModelAbstractDb->expects($this->any())
+        $this->connectionMock->expects($this->any())
             ->method('getMainTable')
             ->willReturn('testTable');
 
@@ -117,9 +105,6 @@ class FulltextFilterTest extends \PHPUnit_Framework_TestCase
             ->method('where')
             ->willReturn(null);
 
-        $this->collectionAbstractDbMock->expects($this->once())
-            ->method('getResource')
-            ->willReturn($this->resourceModelAbstractDb);
         $this->collectionAbstractDbMock->expects($this->exactly(2))
             ->method('getSelect')
             ->willReturn($this->selectMock);
