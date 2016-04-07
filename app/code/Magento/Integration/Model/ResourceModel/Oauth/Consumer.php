@@ -56,25 +56,7 @@ class Consumer extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $select = $connection->select()
             ->from($this->getMainTable())
             ->reset(\Magento\Framework\DB\Select::COLUMNS)
-            ->columns(new \Zend_Db_Expr('UTC_TIMESTAMP() - created_at'))
-            ->where('entity_id = ?', $consumerId);
-
-        return $connection->fetchOne($select);
-    }
-
-    /**
-     * Compute time in seconds since token exchange started.
-     *
-     * @param int $consumerId - The consumer id
-     * @return int - time lapsed in seconds
-     */
-    public function getTimeInSecondsSinceTokenExchangeStarted($consumerId)
-    {
-        $connection = $this->getConnection();
-        $select = $connection->select()
-            ->from($this->getMainTable())
-            ->reset(\Magento\Framework\DB\Select::COLUMNS)
-            ->columns(new \Zend_Db_Expr('UTC_TIMESTAMP() - updated_at'))
+            ->columns(new \Zend_Db_Expr('CURRENT_TIMESTAMP() - created_at'))
             ->where('entity_id = ?', $consumerId);
 
         return $connection->fetchOne($select);
