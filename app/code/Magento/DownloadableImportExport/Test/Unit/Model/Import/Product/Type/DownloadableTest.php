@@ -699,6 +699,15 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
                 ],
             ]
         );
+
+        $metadataPoolMock = $this
+            ->getMock('Magento\Framework\Model\Entity\MetadataPool', ['getLinkField'], [], '', false);
+        $metadataPoolMock->expects($this->any())->method('getMetadata')->willReturnSelf();
+
+        $this->prepareObjectManager([
+            ['Magento\Framework\Model\Entity\MetadataPool', $metadataPoolMock],
+        ]);
+
         $this->downloadableModelMock = $this->objectManagerHelper->getObject(
             '\Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable',
             [
@@ -854,5 +863,21 @@ class DownloadableTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abst
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
         return $object;
+    }
+
+    /**
+     * @param $map
+     */
+    private function prepareObjectManager($map)
+    {
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($map));
+        $reflectionClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
+        $reflectionProperty = $reflectionClass->getProperty('_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock);
     }
 }

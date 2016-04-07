@@ -214,6 +214,7 @@ class TreeTest extends \PHPUnit_Framework_TestCase
             ->with(CategoryInterface::class)
             ->willReturn($categoryMetadataMock);
 
+
         $model = $objectHelper->getObject(
             'Magento\Catalog\Model\ResourceModel\Category\Tree',
             [
