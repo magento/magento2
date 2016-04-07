@@ -89,7 +89,7 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
         /** @var ProcessingError $newError */
         $newError = $this->errorFactory->create();
         $newError->init($errorCode, $errorLevel, $rowNumber, $columnName, $errorMessage, $errorDescription);
-        $this->items[] = $newError;
+        $this->items[$rowNumber] = $newError;
 
         return $this;
     }
@@ -241,10 +241,8 @@ class ProcessingErrorAggregator implements ProcessingErrorAggregatorInterface
     public function getErrorByRowNumber($rowNumber)
     {
         $result = [];
-        foreach ($this->items as $error) {
-            if ($error->getRowNumber() == (int)$rowNumber) {
-                $result[] = $error;
-            }
+        if (isset($this->items[$rowNumber])) {
+            $result[] = $this->items[$rowNumber];
         }
 
         return $result;
