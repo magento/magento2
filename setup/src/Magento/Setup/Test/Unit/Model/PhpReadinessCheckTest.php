@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Test\Unit\Model;
@@ -57,7 +57,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
     {
         $this->composerInfo->expects($this->once())->method('getRequiredPhpVersion')->willReturn('1.0');
         $multipleConstraints = $this->getMockForAbstractClass(
-            'Composer\Package\LinkConstraint\LinkConstraintInterface',
+            'Composer\Semver\Constraint\ConstraintInterface',
             [],
             '',
             false
@@ -68,7 +68,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \UnexpectedValueException());
         $this->versionParser->expects($this->at(2))->method('normalize')->willReturn('1.0');
         $currentPhpVersion = $this->getMockForAbstractClass(
-            'Composer\Package\LinkConstraint\LinkConstraintInterface',
+            'Composer\Semver\Constraint\ConstraintInterface',
             [],
             '',
             false
@@ -89,7 +89,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
     {
         $this->composerInfo->expects($this->once())->method('getRequiredPhpVersion')->willReturn('1.0');
         $multipleConstraints = $this->getMockForAbstractClass(
-            'Composer\Package\LinkConstraint\LinkConstraintInterface',
+            'Composer\Semver\Constraint\ConstraintInterface',
             [],
             '',
             false
@@ -100,7 +100,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
             ->willThrowException(new \UnexpectedValueException());
         $this->versionParser->expects($this->at(2))->method('normalize')->willReturn('1.0');
         $currentPhpVersion = $this->getMockForAbstractClass(
-            'Composer\Package\LinkConstraint\LinkConstraintInterface',
+            'Composer\Semver\Constraint\ConstraintInterface',
             [],
             '',
             false
@@ -120,7 +120,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
     private function setUpNoPrettyVersionParser()
     {
         $multipleConstraints = $this->getMockForAbstractClass(
-            'Composer\Package\LinkConstraint\LinkConstraintInterface',
+            'Composer\Semver\Constraint\ConstraintInterface',
             [],
             '',
             false
@@ -128,7 +128,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->versionParser->expects($this->at(0))->method('parseConstraints')->willReturn($multipleConstraints);
         $this->versionParser->expects($this->at(1))->method('normalize')->willReturn('1.0');
         $currentPhpVersion = $this->getMockForAbstractClass(
-            'Composer\Package\LinkConstraint\LinkConstraintInterface',
+            'Composer\Semver\Constraint\ConstraintInterface',
             [],
             '',
             false
@@ -156,7 +156,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
     {
         $this->composerInfo->expects($this->once())->method('getRequiredPhpVersion')->willReturn('1.0');
         $multipleConstraints = $this->getMockForAbstractClass(
-            'Composer\Package\LinkConstraint\LinkConstraintInterface',
+            'Composer\Semver\Constraint\ConstraintInterface',
             [],
             '',
             false
@@ -164,7 +164,7 @@ class PhpReadinessCheckTest extends \PHPUnit_Framework_TestCase
         $this->versionParser->expects($this->at(0))->method('parseConstraints')->willReturn($multipleConstraints);
         $this->versionParser->expects($this->at(1))->method('normalize')->willReturn('1.0');
         $currentPhpVersion = $this->getMockForAbstractClass(
-            'Composer\Package\LinkConstraint\LinkConstraintInterface',
+            'Composer\Semver\Constraint\ConstraintInterface',
             [],
             '',
             false

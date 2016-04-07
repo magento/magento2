@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -23,6 +23,10 @@
     <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
         <arguments>
             <argument name="modifiers" xsi:type="array">
+                <item name="grouped-custom-options" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier\CustomOptions</item>
+                    <item name="sortOrder" xsi:type="number">72</item>
+                </item>
                 <item name="grouped" xsi:type="array">
                     <item name="class" xsi:type="string">Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier\Grouped</item>
                     <item name="sortOrder" xsi:type="number">120</item>

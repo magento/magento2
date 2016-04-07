@@ -1,3 +1,133 @@
+Country,Country
+"Allowed Credit Card Types","Allowed Credit Card Types"
+"Add Rule","Add Rule"
+Month,Month
+Year,Year
+"Stored Card","Stored Card"
+"Credit Card Type","Credit Card Type"
+"Credit Card Number","Credit Card Number"
+"Credit card successfully added","Credit card successfully added"
+"Something went wrong while saving the card.","Something went wrong while saving the card."
+"Credit card does not exist","Credit card does not exist"
+"Delete Credit Card","Delete Credit Card"
+"There was error deleting the credit card","There was error deleting the credit card"
+"Credit card successfully deleted","Credit card successfully deleted"
+"Edit Credit Card","Edit Credit Card"
+"My Credit Cards","My Credit Cards"
+"New Credit Card","New Credit Card"
+"There was error during saving card data","There was error during saving card data"
+"We can\'t initialize checkout.","We can\'t initialize checkout."
+"Please agree to all the terms and conditions before placing the order.","Please agree to all the terms and conditions before placing the order."
+"We can\'t place the order.","We can\'t place the order."
+"Incorrect payment method.","Incorrect payment method."
+"We can\'t initialize checkout review.","We can\'t initialize checkout review."
+"We can\'t update shipping method.","We can\'t update shipping method."
+"The processor declined your transaction, please re-enter your payment information","The processor declined your transaction, please re-enter your payment information"
+"Transaction declined by gateway: Check card details or try another card","Transaction declined by gateway: Check card details or try another card"
+"Transaction declined: ","Transaction declined: "
+.,.
+"The processor responded with an unknown error","The processor responded with an unknown error"
+"Credit card type is not allowed for your country.","Credit card type is not allowed for your country."
+"Credit card type is not allowed for this payment method.","Credit card type is not allowed for this payment method."
+"Selected payment type is not allowed for billing country.","Selected payment type is not allowed for billing country."
+"Incomplete payment information.","Incomplete payment information."
+"Please try again later","Please try again later"
+"Can not find original authorization transaction for partial capture","Can not find original authorization transaction for partial capture"
+"There was an error capturing the transaction: %1.","There was an error capturing the transaction: %1."
+"This refund is for a partial amount but the Transaction has not settled.","This refund is for a partial amount but the Transaction has not settled."
+"Please wait 24 hours before trying to issue a partial refund.","Please wait 24 hours before trying to issue a partial refund."
+"There was an error refunding the transaction: %1.","There was an error refunding the transaction: %1."
+"Some transactions are already settled or voided and cannot be voided.","Some transactions are already settled or voided and cannot be voided."
+"Voided capture.","Voided capture."
+"There was an error voiding the transaction: %1.","There was an error voiding the transaction: %1."
+Invoice,Invoice
+Shipment,Shipment
+Authorize,Authorize
+"Authorize and Capture","Authorize and Capture"
+"--Please Select--","--Please Select--"
+"Invalid Customer ID provided","Invalid Customer ID provided"
+"some error","some error"
+"a,b,c","a,b,c"
+"Something went wrong while processing.","Something went wrong while processing."
+error,error
+exception,exception
+"Payment Information","Payment Information"
+"Add new card","Add new card"
+"Please Select","Please Select"
+"Expiration Date","Expiration Date"
+"Card Verification Number","Card Verification Number"
+"Save this card for future use","Save this card for future use"
+or,or
+"Please confirm that you want to delete this credit card","Please confirm that you want to delete this credit card"
+"Cardholder Name","Cardholder Name"
+Delete,Delete
+Back,Back
+"* Required Fields","* Required Fields"
+"Credit Card","Credit Card"
+CVV,CVV
+"Card Verification Number Visual Reference","Card Verification Number Visual Reference"
+"What is this?","What is this?"
+"Make Default","Make Default"
+"Billing Address","Billing Address"
+"First Name","First Name"
+"Last Name","Last Name"
+Company,Company
+Address,Address
+City,City
+State/Province,State/Province
+"Please select region, state or province","Please select region, state or province"
+"Zip/Postal Code","Zip/Postal Code"
+Submit,Submit
+"Add Credit Card","Add Credit Card"
+Type,Type
+"Card Number","Card Number"
+"Is Default","Is Default"
+Actions,Actions
+Yes,Yes
+No,No
+Edit,Edit
+"Place Order","Place Order"
+"Credit Card Information","Credit Card Information"
+"An error occured with payment processing.","An error occured with payment processing."
+"Can not initialize PayPal (Braintree)","Can not initialize PayPal (Braintree)"
+"Please try again with another form of payment.","Please try again with another form of payment."
+Braintree,Braintree
+&nbsp;,&nbsp;
+"Enable this Solution","Enable this Solution"
+"Enable PayPal through Braintree","Enable PayPal through Braintree"
+"Basic Braintree Settings","Basic Braintree Settings"
+Title,Title
+Environment,Environment
+"Payment Action","Payment Action"
+"Merchant Account ID","Merchant Account ID"
+"Merchant ID","Merchant ID"
+"Public Key","Public Key"
+"Private Key","Private Key"
+"Advanced Braintree Settings","Advanced Braintree Settings"
+Debug,Debug
+"Capture Action","Capture Action"
+"New Order Status","New Order Status"
+"Use Vault","Use Vault"
+"Allow Duplicate Cards","Allow Duplicate Cards"
+"CVV Verification","CVV Verification"
+"Credit Card Types","Credit Card Types"
+"Enable Credit Card auto-detection on Storefront","Enable Credit Card auto-detection on Storefront"
+"Advanced Fraud Protection","Advanced Fraud Protection"
+"Your Kount ID","Your Kount ID"
+"Use Cache","Use Cache"
+"Sort Order","Sort Order"
+"Country Specific Settings","Country Specific Settings"
+"Payment from Applicable Countries","Payment from Applicable Countries"
+"Payment from Specific Countries","Payment from Specific Countries"
+"Country Specific Credit Card Types","Country Specific Credit Card Types"
+"PayPal through Braintree","PayPal through Braintree"
+"Override Merchant Name","Override Merchant Name"
+"Display on Shopping Cart","Display on Shopping Cart"
+"Require Customer's Billing Address","Require Customer's Billing Address"
+"Allow to Edit Shipping Address Entered During Checkout on PayPal Side","Allow to Edit Shipping Address Entered During Checkout on PayPal Side"
+"3D Secure Verification Settings","3D Secure Verification Settings"
+"3D Secure Verification","3D Secure Verification"
+"Edit My Credit Cards","Edit My Credit Cards"
 "cc_type","Credit Card Type"
 "cc_number","Credit Card Number"
 "avsPostalCodeResponseCode","AVS Postal Code Response Code"

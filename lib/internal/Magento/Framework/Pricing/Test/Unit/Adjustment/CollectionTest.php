@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Pricing\Test\Unit\Adjustment;
@@ -19,7 +19,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $adjustmentsData;
 
-    public function setUp()
+    protected function setUp()
     {
         $adj1 = $this->getMock('Magento\Framework\Pricing\Adjustment\AdjustmentInterface');
         $adj1->expects($this->any())

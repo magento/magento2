@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\Block;
@@ -74,6 +74,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $block = $this->collection->getNewEmptyItem();
             $block->setData($data);
             $this->loadedData[$block->getId()] = $block->getData();
+            $this->dataPersistor->clear('cms_block');
         }
 
         return $this->loadedData;

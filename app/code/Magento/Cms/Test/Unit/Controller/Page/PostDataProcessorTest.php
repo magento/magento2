@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Test\Unit\Controller\Page;
@@ -21,7 +21,7 @@ class PostDataProcessorTest extends \PHPUnit_Framework_TestCase
     /** @var PostDataProcessor */
     protected $postDataProcessor;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->dateFilter = $this->getMock('Magento\Framework\Stdlib\DateTime\Filter\Date', [], [], '', false);
         $this->messageManager = $this->getMockForAbstractClass(

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Indexer\Product\Flat;
@@ -61,15 +61,13 @@ class FlatTableBuilder
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param TableDataInterface $tableData
-     * @param MetadataPool $metadataPool
      */
     public function __construct(
         \Magento\Catalog\Helper\Product\Flat\Indexer $productIndexerHelper,
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Indexer\Product\Flat\TableDataInterface $tableData,
-        MetadataPool $metadataPool
+        \Magento\Catalog\Model\Indexer\Product\Flat\TableDataInterface $tableData
     ) {
         $this->_productIndexerHelper = $productIndexerHelper;
         $this->resource = $resource;
@@ -77,7 +75,6 @@ class FlatTableBuilder
         $this->_config = $config;
         $this->_storeManager = $storeManager;
         $this->_tableData = $tableData;
-        $this->metadataPool = $metadataPool;
     }
 
     /**
@@ -211,7 +208,7 @@ class FlatTableBuilder
      */
     protected function _fillTemporaryFlatTable(array $tables, $storeId, $valueFieldSuffix)
     {
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         $select = $this->_connection->select();
         $temporaryFlatTableName = $this->_getTemporaryTableName(
             $this->_productIndexerHelper->getFlatTableName($storeId)
@@ -309,7 +306,7 @@ class FlatTableBuilder
         $temporaryFlatTableName = $this->_getTemporaryTableName(
             $this->_productIndexerHelper->getFlatTableName($storeId)
         );
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
+        $linkField = $this->getMetadataPool()->getMetadata(ProductInterface::class)->getLinkField();
         foreach ($tables as $tableName => $columns) {
             foreach ($columns as $attribute) {
                 /* @var $attribute \Magento\Eav\Model\Entity\Attribute */
@@ -365,5 +362,17 @@ class FlatTableBuilder
     protected function _getTemporaryTableName($tableName)
     {
         return sprintf('%s_tmp_indexer', $tableName);
+    }
+
+    /**
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
     }
 }

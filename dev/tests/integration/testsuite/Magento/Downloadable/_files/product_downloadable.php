@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /**
@@ -17,7 +17,13 @@ $product
     ->setPrice(10)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setLinksPurchasedSeparately(true);
+    ->setLinksPurchasedSeparately(true)
+    ->setStockData(
+        [
+            'qty' => 100,
+            'is_in_stock' => 1,
+        ]
+    );
 
 /**
  * @var \Magento\Downloadable\Api\Data\LinkInterfaceFactory $linkFactory

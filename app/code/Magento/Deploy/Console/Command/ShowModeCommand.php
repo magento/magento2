@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\App\State;
 
 /**
- * Command for change the Magento mode
+ * Command to show application mode
  */
 class ShowModeCommand extends Command
 {

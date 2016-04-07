@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -79,18 +79,6 @@
         min-height: 0;
     } 
 
-    .block-content {
-        border-top: 1px solid @scheduled-changes-block__border-color;
-        height: 15rem;
-        margin-bottom: @indent__base;
-        min-height: 15rem;
-        overflow: auto;
-        padding: @indent__m;
-        position: relative;
-        resize: vertical;
-        z-index: 1;
-    }
-
     .admin__data-grid-outer-wrap {
         position: relative;
     }
@@ -109,6 +97,25 @@
         position: absolute;
         top: -@scheduled-changes-mark-overlay__height;
         width: @scheduled-changes-mark-overlay__width;
+    }
+}
+
+//  Block with Schedule table
+.block-schedule-table {
+    &:extend(.abs-block-resizable all);
+
+    .block-content {
+        &:extend(.abs-block-resizable-content all);
+        border-top: 1px solid @scheduled-changes-block__border-color;
+
+        .schedule-table-wrapper {
+            margin: @indent__m;
+        }
+    }
+
+    .ui-resizable-s {
+        &:extend(.abs-block-resizable-handle-bottom all);
+        cursor: ns-resize;
     }
 }
 
@@ -259,30 +266,6 @@
     font-size: 1.2rem;
 }
 
-//  Resizer
-
-.block-resizer {
-    background: @scheduled-changes-block-resizer__background-color;
-    border: 1px solid @scheduled-changes-block__border-color;
-    color: @scheduled-changes-block-resizer__color;
-    cursor: ns-resize;
-    display: block;
-    font-size: 1.6rem;
-    font-weight: @font-weight__bold;
-    left: -1px;
-    letter-spacing: .1rem;
-    line-height: 1.7rem;
-    padding-bottom: .3rem;
-    position: absolute;
-    right: -1px;
-    text-align: center;
-    top: 100%;
-
-    &:before {
-        content: ':::::';
-    }
-}
-
 .block-nodata {
     padding: @indent__m;
 }
@@ -291,13 +274,34 @@
 .fieldset-schedule {
     border-bottom: 1px solid @collapsible__border-color;
 
+    .admin__fieldset {
+        padding: 0;
+        
+        > :last-child {
+            margin-bottom: @indent__l;
+        }
+        
+        > .fieldset-wrapper {
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
     .fieldset-wrapper-title {
+        border-bottom: 0;
         margin: @indent__base 0 @indent__s;
+        line-height: 1.2;
+        padding: 0;
 
         strong {
             font-size: 2rem;
             font-weight: @font-weight__regular;
         }
+    }
+
+    .hasDatepicker.admin__control-text {
+        width: 19rem;
     }
 }
 

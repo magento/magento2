@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
  -->
@@ -81,10 +81,11 @@
         <field name="upsell_tgtr_position_limit" is_required="0" />
         <field name="url_key" is_required="0" group="search-engine-optimization" />
         <field name="url_path" is_required="0" />
-        <field name="visibility" is_required="0" group="autosettings" />
-        <field name="weight" is_required="0" group="product-details" />
+        <field name="visibility" is_required="0" group="product-details" />
         <field name="custom_options" is_required="0" group="customer-options" source="Magento\Catalog\Test\Fixture\Product\CustomOptions" repository="Magento\Catalog\Test\Repository\Product\CustomOptions" />
         <field name="id" />
+        <field name="weight" is_required="0" group="product-details" />
+        <field name="product_has_weight" group="product-details" />
         <field name="website_ids" group="websites" />
         <field name="checkout_data" group="null" repository="Magento\Downloadable\Test\Repository\DownloadableProduct\CheckoutData" />
         <field name="cross_sell_products" group="related" source="Magento\Catalog\Test\Fixture\Product\RelatedProducts" />

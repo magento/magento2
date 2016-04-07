@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Email\Test\Unit\Model;
@@ -85,7 +85,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
      */
     private $templateFactory;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->context = $this->getMockBuilder('Magento\Framework\Model\Context')
             ->disableOriginalConstructor()
@@ -304,7 +304,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ],
             'copyright in Plain Text Removed' => [
                 'templateType' => 'text',
-                'templateText' => '<!-- Copyright © 2015 Magento. All rights reserved. -->',
+                'templateText' => '<!-- Copyright © 2016 Magento. All rights reserved. -->',
                 'parsedTemplateText' => '',
                 'expectedTemplateSubject' => null,
                 'expectedOrigTemplateVariables' => null,
@@ -312,7 +312,7 @@ class TemplateTest extends \PHPUnit_Framework_TestCase
             ],
             'copyright in HTML Removed' => [
                 'templateType' => 'html',
-                'templateText' => '<!-- Copyright © 2015 Magento. All rights reserved. -->',
+                'templateText' => '<!-- Copyright © 2016 Magento. All rights reserved. -->',
                 'parsedTemplateText' => '',
                 'expectedTemplateSubject' => null,
                 'expectedOrigTemplateVariables' => null,

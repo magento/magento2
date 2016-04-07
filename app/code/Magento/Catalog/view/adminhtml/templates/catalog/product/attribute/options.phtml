@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,8 +10,8 @@
 ?>
 <fieldset class="fieldset">
     <legend class="legend"><span><?php /* @escapeNotVerified */ echo __('Manage Options (Values of Your Attribute)') ?></span></legend>
-    <div id="manage-options-panel">
-        <table class="admin__control-table">
+    <div id="manage-options-panel" data-index="attribute_options_select_container">
+        <table class="admin__control-table" data-index="attribute_options_select">
             <thead>
                 <tr id="attribute-options-table">
                     <th class="col-draggable"></th>
@@ -37,7 +37,7 @@
             <tr>
                 <th colspan="<?php /* @escapeNotVerified */ echo $storetotal; ?>" class="col-actions-add">
                     <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()):?>
-                        <button id="add_new_option_button" title="<?php /* @escapeNotVerified */ echo __('Add Option'); ?>"
+                        <button id="add_new_option_button" data-action="add_new_row" title="<?php /* @escapeNotVerified */ echo __('Add Option'); ?>"
                             type="button" class="action- scalable add">
                              <span><?php /* @escapeNotVerified */ echo __('Add Option'); ?></span>
                         </button>
@@ -77,14 +77,15 @@
     <?php
     $values = [];
     foreach($block->getOptionValues() as $value) {
-        array_push($values, $value->getData());
+        $value = $value->getData();
+        $values[] = is_array($value) ? array_map("htmlspecialchars_decode", $value) : $value;
     }
     ?>
     <script type="text/x-magento-init">
         {
             "*": {
                 "Magento_Catalog/js/options": {
-                    "attributesData": <?php /* @escapeNotVerified */ echo json_encode($values); ?>,
+                    "attributesData": <?php /* @noEscape */ echo json_encode($values, JSON_HEX_QUOT); ?>,
                     "isSortable":  <?php echo (int)(!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) ?>,
                     "isReadOnly": <?php echo (int)$block->getReadOnly(); ?>
                 }

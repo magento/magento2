@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -28,7 +28,7 @@ class TopToolbar extends Block
      */
     public function getSelectSortType()
     {
-        return $this->_rootElement->find($this->sorter)->getValue();
+        return $this->_rootElement->find("#sorter")->getElements('option[selected]')[0]->getText();
     }
 
     /**

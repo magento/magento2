@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,7 +38,7 @@ class AgreementTest extends \PHPUnit_Framework_TestCase
      */
     protected $resourceConnectionMock;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new ObjectManagerHelper($this);
         $contextMock = $this->getMockBuilder('Magento\Framework\Model\ResourceModel\Db\Context')

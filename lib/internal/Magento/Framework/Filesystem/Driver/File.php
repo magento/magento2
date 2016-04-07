@@ -2,7 +2,7 @@
 /**
  * Origin filesystem driver
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Filesystem\Driver;
@@ -194,7 +194,7 @@ class File implements DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function createDirectory($path, $permissions)
+    public function createDirectory($path, $permissions = 0777)
     {
         return $this->mkdirRecursive($path, $permissions);
     }
@@ -207,7 +207,7 @@ class File implements DriverInterface
      * @return bool
      * @throws FileSystemException
      */
-    private function mkdirRecursive($path, $permissions)
+    private function mkdirRecursive($path, $permissions = 0777)
     {
         $path = $this->getScheme() . $path;
         if (is_dir($path)) {

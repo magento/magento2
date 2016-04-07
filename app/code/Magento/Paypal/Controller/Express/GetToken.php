@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Paypal\Controller\Express;
@@ -53,8 +53,9 @@ class GetToken extends AbstractExpress
             if ($token === null) {
                 $token = false;
             }
+            $url = $this->_checkout->getRedirectUrl();
             $this->_initToken($token);
-            $controllerResult->setData(['token' => $token]);
+            $controllerResult->setData(['url' => $url]);
         } catch (LocalizedException $exception) {
             $this->messageManager->addExceptionMessage(
                 $exception,
