@@ -9,8 +9,8 @@ use Magento\Cms\Api\Data\BlockInterface;
 use Magento\Framework\DB\Select;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Model\Entity\MetadataPool;
-use Magento\Framework\Model\EntityManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Store\Model\Store;
@@ -95,6 +95,34 @@ class Block extends AbstractDb
     }
 
     /**
+     * @param AbstractModel $object
+     * @param mixed $value
+     * @param null $field
+     * @return bool|int|string
+     * @throws LocalizedException
+     * @throws \Exception
+     */
+    private function getBlockId(AbstractModel $object, $value, $field = null)
+    {
+        $entityMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
+        if (!is_numeric($value) && $field === null) {
+            $field = 'identifier';
+        } elseif (!$field) {
+            $field = $entityMetadata->getIdentifierField();
+        }
+        $entityId = $value;
+        if ($field != $entityMetadata->getIdentifierField() || $object->getStoreId()) {
+            $select = $this->_getLoadSelect($field, $value, $object);
+            $select->reset(Select::COLUMNS)
+                ->columns($this->getMainTable() . '.' . $entityMetadata->getIdentifierField())
+                ->limit(1);
+            $result = $this->getConnection()->fetchCol($select);
+            $entityId = count($result) ? $result[0] : false;
+        }
+        return $entityId;
+    }
+
+    /**
      * Load an object
      *
      * @param \Magento\Cms\Model\Block|AbstractModel $object
@@ -104,27 +132,9 @@ class Block extends AbstractDb
      */
     public function load(AbstractModel $object, $value, $field = null)
     {
-        $entityMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
-
-        if (!is_numeric($value) && $field === null) {
-            $field = 'identifier';
-        } elseif (!$field) {
-            $field = $entityMetadata->getIdentifierField();
-        }
-
-        $isId = true;
-        if ($field != $entityMetadata->getIdentifierField() || $object->getStoreId()) {
-            $select = $this->_getLoadSelect($field, $value, $object);
-            $select->reset(Select::COLUMNS)
-                ->columns($this->getMainTable() . '.' . $entityMetadata->getIdentifierField())
-                ->limit(1);
-            $result = $this->getConnection()->fetchCol($select);
-            $value = count($result) ? $result[0] : $value;
-            $isId = count($result);
-        }
-
-        if ($isId) {
-            $this->entityManager->load(BlockInterface::class, $object, $value);
+        $blockId = $this->getBlockId($object, $value, $field);
+        if ($blockId) {
+            $this->entityManager->load($object, $blockId, BlockInterface::class, []);
         }
         return $this;
     }
@@ -232,7 +242,7 @@ class Block extends AbstractDb
      */
     public function save(AbstractModel $object)
     {
-        $this->entityManager->save(BlockInterface::class, $object);
+        $this->entityManager->save($object, BlockInterface::class, []);
         return $this;
     }
 
@@ -241,7 +251,7 @@ class Block extends AbstractDb
      */
     public function delete(AbstractModel $object)
     {
-        $this->entityManager->delete(BlockInterface::class, $object);
+        $this->entityManager->delete($object, BlockInterface::class, []);
         return $this;
     }
 }
