@@ -102,8 +102,8 @@ define([
                 this.element.find(this.options.updateOrderSelector).fadeTo(0, 0.5)
                     .end().find(this.options.waitLoadingContainer).show()
                     .end().submit();
+                this._updateOrderSubmit(true);
             }
-            this._updateOrderSubmit(true);
         },
 
         /**
