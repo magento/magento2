@@ -45,13 +45,13 @@ class ComponentRegistrar implements ComponentRegistrarInterface
     public static function register($type, $componentName, $path)
     {
         self::validateType($type);
-        if (isset(self::$paths[$type][$componentName])) {
+        if (!isset(self::$paths[$type][$componentName])) {
+            self::$paths[$type][$componentName] = str_replace('\\', '/', $path);
+        } elseif (str_replace('\\', '/', $path) !== self::$paths[$type][$componentName]) {
             throw new \LogicException(
                 ucfirst($type) . ' \'' . $componentName . '\' from \'' . $path . '\' '
                 . 'has been already defined in \'' . self::$paths[$type][$componentName] . '\'.'
             );
-        } else {
-            self::$paths[$type][$componentName] = str_replace('\\', '/', $path);
         }
     }
 
