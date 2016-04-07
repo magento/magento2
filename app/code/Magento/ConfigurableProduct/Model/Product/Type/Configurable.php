@@ -509,8 +509,8 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
                 ->addAttributeToSelect('name')
                 ->addAttributeToSelect('price')
                 ->addAttributeToSelect('weight')
-//                ->addAttributeToSelect('msrp')
-//                ->addAttributeToSelect('media_gallery')
+                ->addAttributeToSelect('image')
+                ->addAttributeToSelect('status')
                 ->addFilterByRequiredOptions()
                 ->setStoreId($product->getStoreId());
 
