@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -54,7 +54,7 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
     /** @var array */
     private $dependencyArray = [];
 
-    public function setUp()
+    protected function setUp()
     {
         $this->attribute = $this->getMock('\Magento\Catalog\Model\ResourceModel\Eav\Attribute', [], [], '', false);
         $this->swatchFactory = $this->getMock('\Magento\Swatches\Model\SwatchFactory', ['create'], [], '', false);
@@ -87,7 +87,6 @@ class EavAttributeTest extends \PHPUnit_Framework_TestCase
                 'swatchHelper' => $this->swatchHelper,
             ]
         );
-
 
         $this->optionIds = [
             'value' => ['option 89' => 'test 1', 'option 114' => 'test 2', 'option 170' => 'test 3'],

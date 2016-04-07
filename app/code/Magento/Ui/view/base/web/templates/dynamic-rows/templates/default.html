@@ -1,10 +1,10 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
-<div class="admin__field" visible="visible" disabled="disabled" css="element.setClasses(element)">
+<div class="admin__field" visible="visible" disable="disabled" css="element.setClasses(element)">
     <label if="element.label" class="admin__field-label" attr="for: element.uid">
         <span text="element.label"/>
     </label>
@@ -17,9 +17,9 @@
                     <th if="dndConfig.enabled"/>
 
                     <!-- ko foreach: {data: labels, as: 'item'}  -->
-                    <th text="item.label",
-                        css="$parent.setClasses(item)",
-                        visible="item.visible",
+                    <th text="item.label"
+                        css="$parent.setClasses(item)"
+                        visible="item.visible"
                         disabled="item.disabled"
                         attr="{'data-name': name}"/>
                     <!-- /ko -->
@@ -29,14 +29,14 @@
                 <tbody data-bind="foreach: elems">
                 <tr class="data-row">
                     <td if="$parent.dndConfig.enabled"
-                        class="_fit"
+                        class="col-draggable"
                         template="name: $parent.dndConfig.template, data: $parent.dnd"/>
 
                     <!-- ko foreach: { data: elems, as: 'elem'}  -->
                     <td if="elem.template"
                         css="$parents[1].setClasses(elem)"
                         visible="elem.visible"
-                        disabled="elem.disabled"
+                        disable="elem.disabled"
                         template="elem.template"/>
                     <!-- /ko -->
                 </tr>

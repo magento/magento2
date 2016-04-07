@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Gateway\Command;
 
+use Braintree\Transaction;
+use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Model\Adapter\BraintreeSearchAdapter;
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Payment\Gateway\Command;
@@ -18,6 +21,7 @@ use Magento\Sales\Api\Data\TransactionInterface;
 
 /**
  * Class CaptureStrategyCommand
+ * @SuppressWarnings(PHPMD)
  */
 class CaptureStrategyCommand implements CommandInterface
 {
@@ -35,11 +39,6 @@ class CaptureStrategyCommand implements CommandInterface
      * Braintree vault capture command
      */
     const VAULT_CAPTURE = 'vault_capture';
-
-    /**
-     * Braintree clone transaction command
-     */
-    const CLONE_TRANSACTION = 'clone';
 
     /**
      * @var CommandPoolInterface
@@ -67,6 +66,16 @@ class CaptureStrategyCommand implements CommandInterface
     private $subjectReader;
 
     /**
+     * @var BraintreeAdapter
+     */
+    private $braintreeAdapter;
+
+    /**
+     * @var BraintreeSearchAdapter
+     */
+    private $braintreeSearchAdapter;
+
+    /**
      * Constructor
      *
      * @param CommandPoolInterface $commandPool
@@ -74,19 +83,25 @@ class CaptureStrategyCommand implements CommandInterface
      * @param FilterBuilder $filterBuilder
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param SubjectReader $subjectReader
+     * @param BraintreeAdapter $braintreeAdapter
+     * @param BraintreeSearchAdapter $braintreeSearchAdapter
      */
     public function __construct(
         CommandPoolInterface $commandPool,
         TransactionRepositoryInterface $repository,
         FilterBuilder $filterBuilder,
         SearchCriteriaBuilder $searchCriteriaBuilder,
-        SubjectReader $subjectReader
+        SubjectReader $subjectReader,
+        BraintreeAdapter $braintreeAdapter,
+        BraintreeSearchAdapter $braintreeSearchAdapter
     ) {
         $this->commandPool = $commandPool;
         $this->transactionRepository = $repository;
         $this->filterBuilder = $filterBuilder;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->subjectReader = $subjectReader;
+        $this->braintreeAdapter = $braintreeAdapter;
+        $this->braintreeSearchAdapter = $braintreeSearchAdapter;
     }
 
     /**
@@ -102,7 +117,7 @@ class CaptureStrategyCommand implements CommandInterface
         ContextHelper::assertOrderPayment($paymentInfo);
 
         $command = $this->getCommand($paymentInfo);
-        return $this->commandPool->get($command)->execute($commandSubject);
+        $this->commandPool->get($command)->execute($commandSubject);
     }
 
     /**
@@ -119,12 +134,28 @@ class CaptureStrategyCommand implements CommandInterface
         }
 
         // do capture for authorization transaction
-        if (!$existsCapture) {
+        if (!$existsCapture && !$this->isExpiredAuthorization($payment)) {
             return self::CAPTURE;
         }
 
         // process capture for payment via Vault
         return self::VAULT_CAPTURE;
+    }
+
+    /**
+     * @param OrderPaymentInterface $payment
+     * @return boolean
+     */
+    private function isExpiredAuthorization(OrderPaymentInterface $payment)
+    {
+        $collection = $this->braintreeAdapter->search(
+            [
+                $this->braintreeSearchAdapter->id()->is($payment->getLastTransId()),
+                $this->braintreeSearchAdapter->status()->is(Transaction::AUTHORIZATION_EXPIRED)
+            ]
+        );
+
+        return $collection->maximumCount() > 0;
     }
 
     /**

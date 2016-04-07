@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page layout="2columns-left" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="sidebar.main">
+            <block class="Magento\Framework\View\Element\Template" name="customer_account_navigation_block" template="Magento_Theme::html/collapsible.phtml" before="-">
+                <arguments>
+                    <argument name="block_title" translate="true" xsi:type="string">Account Dashboard</argument>
+                    <argument name="block_css" xsi:type="string">block-collapsible-nav</argument>
+                </arguments>
+                <block class="Magento\Framework\View\Element\Html\Links" name="customer_account_navigation" before="-">
+                    <arguments>
+                        <argument name="css_class" xsi:type="string">nav items</argument>
+                    </arguments>
+                    <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-account-link">
+                        <arguments>
+                            <argument name="label" xsi:type="string" translate="true">Account Dashboard</argument>
+                            <argument name="path" xsi:type="string">customer/account</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-account-edit-link">
+                        <arguments>
+                            <argument name="label" xsi:type="string" translate="true">Account Information</argument>
+                            <argument name="path" xsi:type="string">customer/account/edit</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-address-link">
+                        <arguments>
+                            <argument name="label" xsi:type="string" translate="true">Address Book</argument>
+                            <argument name="path" xsi:type="string">customer/address</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceContainer>
+        <move element="page.main.title" destination="content.top" before="-"/>
+    </body>
+</page>

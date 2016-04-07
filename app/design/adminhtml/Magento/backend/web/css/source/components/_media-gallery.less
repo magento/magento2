@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -36,7 +36,6 @@
 
 .gallery {
     &:extend(.abs-clearfix all);
-    margin-bottom: @image-gallery__margin-bottom - @image-gallery-image__margin;
     overflow: hidden;
 }
 
@@ -72,10 +71,11 @@
         bottom: 0;
         left: 0;
         margin: auto;
+        max-height: 100%;
+        max-width: 100%;
         position: absolute;
         right: 0;
         top: 0;
-        width: 100%;
         z-index: @image-gallery-image__z-index;
     }
 
@@ -196,6 +196,14 @@
     //  Actions
     .action-remove {
         &:extend(.abs-action-reset all);
+        bottom: 12px;
+        cursor: pointer;
+        height: 20px;
+        left: 6px;
+        position: absolute;
+        width: 20px;
+        z-index: @image-gallery-action__z-index;
+
         .lib-icon-font(
             @icon-delete__content,
             @_icon-font: @icons-admin__font-name,
@@ -205,23 +213,18 @@
             @_icon-font-text-hide: true,
             @_icon-font-display: block
         );
-        bottom: 12px;
-        cursor: pointer;
-        height: 20px;
-        left: 6px;
-        position: absolute;
-        width: 20px;
-        z-index: @image-gallery-action__z-index;
     }
 
     .draggable-handle {
         cursor: move;
         height: 20px;
         left: 2px;
+        margin: 0;
         position: absolute;
         top: 4px;
         width: 20px;
         z-index: @image-gallery-action__z-index;
+
         .lib-icon-font(
             @icon-gripper__content,
             @_icon-font: @icons-admin__font-name,
@@ -289,16 +292,13 @@
 //  ---------------------------------------------
 
 .image-panel {
-    &:extend(.abs-clearfix all);
+    .lib-vendor-prefix-display(flex);
+    .lib-vendor-prefix-flex-direction(row);
     background: @color-white;
     border-bottom: 1px solid @color-gray76;
     box-shadow: inset 0 1px 3px @color-gray80;
-    clear: both;
-    display: none;
-    margin: 0 -18px 15px;
-    padding: @indent__base 15px;
-    position: relative;
-    top: 5px;
+    margin: 0 0 1.5rem;
+    padding: @indent__base 1.5rem;
 
     .admin__fieldset {
         .admin__field:not(.admin__field-inline) {
@@ -321,29 +321,41 @@
 
 .image-panel-controls,
 .image-panel-preview {
-    float: left;
-    margin-left: 2.127659574%;
-    width: 65.95744680199999%;
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
 }
 
 .image-panel-preview {
-    margin-left: 0;
+    -webkit-align-self: center;
+    -ms-flex-item-align: center;
+    align-self: center;
+
+    img {
+        display: block;
+        margin: auto;
+    }
 }
 
 .image-panel-controls {
-    padding: 0 1%;
-    width: 29.914893614%;
+    -webkit-box-flex: 0;
+    -webkit-flex: 0 0 33%;
+    -ms-flex: 0 0 33%;
+    flex: 0 0 33%;
+    padding-left: @indent__l;
 
     .image-name {
+        .lib-font-size(16);
         color: @color-gray40;
         display: block;
-        .lib-font-size(16);
     }
 
     .action-delete,
     .action-remove {
         &:extend(.abs-action-reset all);
         margin: 0 0 35px;
+
         .lib-icon-font(
             @icon-delete__content,
             @_icon-font: @icons-admin__font-name,
@@ -380,10 +392,6 @@
     .lib-font-size(11);
     color: @color-gray40;
     margin: 0 0 @indent__s;
-}
-
-.image-panel-preview img {
-    width: 100%;
 }
 
 //

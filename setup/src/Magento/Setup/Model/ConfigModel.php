@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,6 +10,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Setup\Option\AbstractConfigOption;
+use Magento\Framework\Setup\FilePermissions;
 
 class ConfigModel
 {

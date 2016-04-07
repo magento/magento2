@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -16,10 +16,11 @@ define([
             additionalClasses: {},
             displayArea: 'outsideGroup',
             displayAsLink: false,
-            visible: true,
             elementTmpl: 'ui/form/element/button',
             template: 'ui/form/components/button/simple',
-            disabled: false
+            visible: true,
+            disabled: false,
+            title: ''
         },
 
         /**
@@ -37,7 +38,8 @@ define([
             return this._super()
                 .observe([
                     'visible',
-                    'disabled'
+                    'disabled',
+                    'title'
                 ]);
         },
 
@@ -56,7 +58,7 @@ define([
          */
         applyAction: function (action) {
             var targetName = action.targetName,
-                params = action.params,
+                params = action.params || [],
                 actionName = action.actionName,
                 target;
 
@@ -66,7 +68,8 @@ define([
             target = registry.async(targetName);
 
             if (target && typeof target === 'function' && actionName) {
-                target(actionName, params);
+                params.unshift(actionName);
+                target.apply(target, params);
             }
         },
 

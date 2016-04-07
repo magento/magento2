@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\ResourceModel;
@@ -108,7 +108,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param Product $productResource
      * @param \Magento\Catalog\Model\Category $catalogCategory
      * @param \Psr\Log\LoggerInterface $logger
-     * @param MetadataPool $metadataPool
      * @param null $connectionName
      */
     public function __construct(
@@ -118,7 +117,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         Product $productResource,
         \Magento\Catalog\Model\Category $catalogCategory,
         \Psr\Log\LoggerInterface $logger,
-        MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->_storeManager = $storeManager;
@@ -126,7 +124,6 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->productResource = $productResource;
         $this->_catalogCategory = $catalogCategory;
         $this->_logger = $logger;
-        $this->metadataPool = $metadataPool;
         parent::__construct($context, $connectionName);
     }
 
@@ -167,8 +164,8 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _getCategoryAttribute($attributeCode, $categoryIds, $storeId)
     {
-        $linkField = $this->metadataPool->getMetadata(CategoryInterface::class)->getLinkField();
-        $identifierFiled = $this->metadataPool->getMetadata(CategoryInterface::class)->getIdentifierField();
+        $linkField = $this->getMetadataPool()->getMetadata(CategoryInterface::class)->getLinkField();
+        $identifierFiled = $this->getMetadataPool()->getMetadata(CategoryInterface::class)->getIdentifierField();
 
         $connection = $this->getConnection();
         if (!isset($this->_categoryAttributes[$attributeCode])) {
@@ -403,7 +400,7 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $categories = [];
         $connection = $this->getConnection();
 
-        $meta = $this->metadataPool->getMetadata(CategoryInterface::class);
+        $meta = $this->getMetadataPool()->getMetadata(CategoryInterface::class);
         $linkField = $meta->getLinkField();
 
         if (!is_array($categoryIds)) {
@@ -697,5 +694,17 @@ class Url extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return $result;
+    }
+
+    /**
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
     }
 }

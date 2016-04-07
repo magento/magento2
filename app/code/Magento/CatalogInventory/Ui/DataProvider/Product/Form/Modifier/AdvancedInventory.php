@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Ui\DataProvider\Product\Form\Modifier;
@@ -133,7 +133,7 @@ class AdvancedInventory extends AbstractModifier
     private function prepareMeta()
     {
         $fieldCode = 'quantity_and_stock_status';
-        $pathField = $this->getElementArrayPath($this->meta, $fieldCode);
+        $pathField = $this->arrayManager->findPath($fieldCode, $this->meta, null, 'children');
 
         if ($pathField) {
             $labelField = $this->arrayManager->get(

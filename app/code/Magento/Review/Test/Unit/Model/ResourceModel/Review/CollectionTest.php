@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Review\Test\Unit\Model\ResourceModel\Review;
@@ -37,7 +37,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManager;
 
-    public function setUp()
+    protected function setUp()
     {
         $store = $this->getMock('\Magento\Store\Model\Store', ['getId'], [], '', false);
         $store->expects($this->any())->method('getId')->will($this->returnValue(1));

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -12,6 +12,7 @@ use Magento\Framework\Model\Entity\Action\ReadExtension;
 use Magento\Framework\Model\Entity\Action\ReadRelation;
 use Magento\Framework\Model\Operation\Read;
 use Magento\Framework\Model\Entity\EntityMetadata;
+use Magento\Framework\Model\Entity\HydratorInterface;
 
 /**
  * Class ReadTest
@@ -44,6 +45,11 @@ class ReadTest extends \PHPUnit_Framework_TestCase
     protected $readRelationMock;
 
     /**
+     * @var HydratorInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $hydratorMock;
+
+    /**
      * @var Read
      */
     protected $read;
@@ -65,6 +71,8 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         $this->readRelationMock = $this->getMockBuilder(ReadRelation::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->hydratorMock = $this->getMockBuilder(HydratorInterface::class)
+            ->getMock();
         $this->read = new Read(
             $this->metadataPoolMock,
             $this->readMainMock,
@@ -85,6 +93,12 @@ class ReadTest extends \PHPUnit_Framework_TestCase
         $this->metadataPoolMock->expects($this->once())->method('getMetadata')->with($entityType)->willReturn(
             $this->metadataMock
         );
+        $this->metadataPoolMock->expects($this->once())->method('getHydrator')->with($entityType)->willReturn(
+            $this->hydratorMock
+        );
+        $this->hydratorMock->expects($this->once())
+            ->method('extract')
+            ->willReturn($entity);
         $entityWithMainRead = array_merge($entity, ['main_read' => 'some info']);
         $this->readMainMock->expects($this->once())->method('execute')->with(
             $entityType,

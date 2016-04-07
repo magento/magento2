@@ -1,11 +1,14 @@
 Always,Always
 "After number of attempts to login","After number of attempts to login"
+"Provided form does not exist","Provided form does not exist"
 "Incorrect CAPTCHA","Incorrect CAPTCHA"
 "Incorrect CAPTCHA.","Incorrect CAPTCHA."
-"Please enter the letters from the image:","Please enter the letters from the image:"
-"Reload captcha","Reload captcha"
+"The account is locked. Please wait and try again or contact %1.","The account is locked. Please wait and try again or contact %1."
+"Please enter the letters from the image","Please enter the letters from the image"
 "<strong>Attention</strong>: Captcha is case sensitive.","<strong>Attention</strong>: Captcha is case sensitive."
+"Reload captcha","Reload captcha"
 "Please type the letters below","Please type the letters below"
+"Attention: Captcha is case sensitive.","Attention: Captcha is case sensitive."
 CAPTCHA,CAPTCHA
 "Enable CAPTCHA in Admin","Enable CAPTCHA in Admin"
 Font,Font
@@ -23,6 +26,5 @@ Forms,Forms
                         Please use only letters (a-z or A-Z) or numbers (0-9) in this field. No spaces or other characters are allowed.<br />Similar looking characters (e.g. ""i"", ""l"", ""1"") decrease chance of correct recognition by customer.
                     "
 "Case Sensitive","Case Sensitive"
-"Enable CAPTCHA on Frontend","Enable CAPTCHA on Frontend"
-"CAPTCHA for ""Create user"" and ""Forgot password"" forms is always enabled if chosen.","CAPTCHA for ""Create user"" and ""Forgot password"" forms is always enabled if chosen."
 "Enable CAPTCHA on Storefront","Enable CAPTCHA on Storefront"
+"CAPTCHA for ""Create user"" and ""Forgot password"" forms is always enabled if chosen.","CAPTCHA for ""Create user"" and ""Forgot password"" forms is always enabled if chosen."

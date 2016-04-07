@@ -11,8 +11,7 @@ env:
   - TEST_SUITE=integration_part_1
   - TEST_SUITE=integration_part_2
   - TEST_SUITE=integration_integrity
-  - TEST_SUITE=static_phpcs
-  - TEST_SUITE=static_annotation
+  - TEST_SUITE=static
 cache:
   apt: true
   directories:
@@ -21,9 +20,9 @@ cache:
 matrix:
   exclude:
     - php: 5.6
-      env: TEST_SUITE=static_phpcs
-    - php: 5.6
-      env: TEST_SUITE=static_annotation
+      env: TEST_SUITE=static
+    - php: 7.0
+      env: TEST_SUITE=static
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq postfix
@@ -68,6 +67,4 @@ script:
   # Integration integrity tests
   - sh -c "if [ '$TEST_SUITE' = 'integration_integrity' ]; then cd dev/tests/integration/; ./../../../vendor/bin/phpunit -c phpunit.xml.dist testsuite/Magento/Test/Integrity; fi"
   # Static tests [Code Style]
-  - sh -c "if [ '$TEST_SUITE' = 'static_phpcs' ]; then cd dev/tests/static; ./../../../vendor/bin/phpunit -c phpunit.xml.dist --filter 'Magento\\\\Test\\\\Php\\\\LiveCodeTest::testCodeStyle'; fi"
-  # Static tests [Code Style]
-  - sh -c "if [ '$TEST_SUITE' = 'static_annotation' ]; then cd dev/tests/static; ./../../../vendor/bin/phpunit -c phpunit.xml.dist --filter 'Magento\\\\Test\\\\Php\\\\LiveCodeTest::testAnnotationStandard'; fi"
+  - sh -c "if [ '$TEST_SUITE' = 'static' ]; then cd dev/tests/static/; php get_github_changes.php --output-file='$TRAVIS_BUILD_DIR/dev/tests/static/testsuite/Magento/Test/_files/changed_files_ce.txt' --base-path='$TRAVIS_BUILD_DIR' --repo='https://github.com/magento/magento2.git' --branch='develop'; ./../../../vendor/bin/phpunit -c phpunit.xml.dist --filter 'Magento\\\\Test\\\\Php\\\\LiveCodeTest'; fi"

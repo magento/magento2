@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@
 namespace Magento\Customer\Controller;
 
 use Magento\Framework\Message\MessageInterface;
+use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
@@ -164,10 +165,26 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store customer/create_account/confirm 0
      */
     public function testNoConfirmCreatePostAction()
     {
+        /** @var \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableScopeConfig */
+        $mutableScopeConfig = Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\Config\MutableScopeConfigInterface');
+
+        $scopeValue = $mutableScopeConfig->getValue(
+            'customer/create_account/confirm',
+            ScopeInterface::SCOPE_WEBSITES,
+            null
+        );
+
+        $mutableScopeConfig->setValue(
+            'customer/create_account/confirm',
+            0,
+            ScopeInterface::SCOPE_WEBSITES,
+            null
+        );
+
         // Setting data for request
         $this->getRequest()
             ->setMethod('POST')
@@ -195,15 +212,38 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             $this->equalTo(['Thank you for registering with Main Website Store.']),
             MessageInterface::TYPE_SUCCESS
         );
+
+        $mutableScopeConfig->setValue(
+            'customer/create_account/confirm',
+            $scopeValue,
+            ScopeInterface::SCOPE_WEBSITES,
+            null
+        );
     }
 
     /**
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture current_store customer/create_account/confirm 1
      */
     public function testWithConfirmCreatePostAction()
     {
+        /** @var \Magento\Framework\App\Config\MutableScopeConfigInterface $mutableScopeConfig */
+        $mutableScopeConfig = Bootstrap::getObjectManager()
+            ->get('Magento\Framework\App\Config\MutableScopeConfigInterface');
+
+        $scopeValue = $mutableScopeConfig->getValue(
+            'customer/create_account/confirm',
+            ScopeInterface::SCOPE_WEBSITES,
+            null
+        );
+
+        $mutableScopeConfig->setValue(
+            'customer/create_account/confirm',
+            1,
+            ScopeInterface::SCOPE_WEBSITES,
+            null
+        );
+
         // Setting data for request
         $email = 'test2@email.com';
         $this->getRequest()
@@ -235,6 +275,13 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
                 . $email . '/">click here</a> for a new link.'
             ]),
             MessageInterface::TYPE_SUCCESS
+        );
+
+        $mutableScopeConfig->setValue(
+            'customer/create_account/confirm',
+            $scopeValue,
+            ScopeInterface::SCOPE_WEBSITES,
+            null
         );
     }
 
@@ -313,19 +360,12 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
     /**
      * @magentoConfigFixture current_store customer/password/limit_password_reset_requests_method 0
-     * @magentoConfigFixture current_store customer/password/forgot_email_template password_forgot_email_template
+     * @magentoConfigFixture current_store customer/password/forgot_email_template customer_password_forgot_email_template
      * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     public function testForgotPasswordPostAction()
     {
-        $transportBuilderMock = $this->prepareEmailMock(
-            1,
-            'password_forgot_email_template',
-            'support'
-        );
-        $this->addEmailMockToClass($transportBuilderMock, 'Magento\Customer\Model\AccountManagement');
-
         $email = 'customer@example.com';
 
         $this->getRequest()
@@ -442,19 +482,12 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @magentoConfigFixture current_store customer/account_information/change_email_template change_email_template
+     * @magentoConfigFixture current_store customer/account_information/change_email_template customer_account_information_change_email_and_password_template
      * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     public function testEditPostAction()
     {
-        $transportBuilderMock = $this->prepareEmailMock(
-            2,
-            'change_email_template',
-            'support'
-        );
-        $this->addEmailMockToClass($transportBuilderMock, 'Magento\Customer\Helper\EmailNotification');
-
         /** @var $customerRepository \Magento\Customer\Api\CustomerRepositoryInterface */
         $customerRepository = Bootstrap::getObjectManager()
             ->get('Magento\Customer\Api\CustomerRepositoryInterface');
@@ -490,19 +523,12 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * @magentoConfigFixture current_store customer/account_information/change_email_and_password_template template1
+     * @magentoConfigFixture current_store customer/account_information/change_email_and_password_template customer_account_information_change_email_and_password_template
      * @magentoConfigFixture current_store customer/password/forgot_email_identity support
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
     public function testChangePasswordEditPostAction()
     {
-        $transportBuilderMock = $this->prepareEmailMock(
-            2,
-            'template1',
-            'support'
-        );
-        $this->addEmailMockToClass($transportBuilderMock, 'Magento\Customer\Helper\EmailNotification');
-
         /** @var $customerRepository \Magento\Customer\Api\CustomerRepositoryInterface */
         $customerRepository = Bootstrap::getObjectManager()
             ->get('Magento\Customer\Api\CustomerRepositoryInterface');
@@ -620,74 +646,6 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->assertSessionMessages(
             $this->equalTo(['Password confirmation doesn\'t match entered password.']),
             MessageInterface::TYPE_ERROR
-        );
-    }
-
-    /**
-     * Prepare email mock to test emails
-     *
-     * @param int $occurrenceNumber
-     * @param string $templateId
-     * @param string $sender
-     * @return \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected function prepareEmailMock($occurrenceNumber, $templateId, $sender)
-    {
-        $transportMock = $this->getMock(
-            'Magento\Framework\Mail\TransportInterface',
-            ['sendMessage']
-        );
-        $transportMock->expects($this->exactly($occurrenceNumber))
-            ->method('sendMessage');
-        $transportBuilderMock = $this->getMockBuilder('Magento\Framework\Mail\Template\TransportBuilder')
-            ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'addTo',
-                    'setFrom',
-                    'setTemplateIdentifier',
-                    'setTemplateVars',
-                    'setTemplateOptions',
-                    'getTransport'
-                ]
-            )
-            ->getMock();
-        $transportBuilderMock->method('setTemplateIdentifier')
-            ->with($templateId)
-            ->willReturnSelf();
-        $transportBuilderMock->method('setTemplateOptions')
-            ->willReturnSelf();
-        $transportBuilderMock->method('setTemplateVars')
-            ->willReturnSelf();
-        $transportBuilderMock->method('setFrom')
-            ->with($sender)
-            ->willReturnSelf();
-        $transportBuilderMock->method('addTo')
-            ->willReturnSelf();
-        $transportBuilderMock->expects($this->exactly($occurrenceNumber))
-            ->method('getTransport')
-            ->willReturn($transportMock);
-
-        return $transportBuilderMock;
-    }
-
-    /**
-     * Add mocked object to environment
-     *
-     * @param \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock
-     * @param string $originalClassName
-     */
-    protected function addEmailMockToClass(
-        \PHPUnit_Framework_MockObject_MockObject $transportBuilderMock,
-        $originalClassName
-    ) {
-        $mockedClass = $this->_objectManager->create(
-            $originalClassName,
-            ['transportBuilder' => $transportBuilderMock]
-        );
-        $this->_objectManager->addSharedInstance(
-            $mockedClass,
-            $originalClassName
         );
     }
 }

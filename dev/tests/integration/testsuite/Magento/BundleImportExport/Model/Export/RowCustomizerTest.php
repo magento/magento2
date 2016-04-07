@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\BundleImportExport\Model\Export;
@@ -44,6 +44,7 @@ class RowCustomizerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($select, (string)$collection->getSelect());
         $result = $this->model->addData([], $ids['bundle-product']);
         $this->assertArrayHasKey('bundle_price_type', $result);
+        $this->assertArrayHasKey('bundle_shipment_type', $result);
         $this->assertArrayHasKey('bundle_sku_type', $result);
         $this->assertArrayHasKey('bundle_price_view', $result);
         $this->assertArrayHasKey('bundle_weight_type', $result);

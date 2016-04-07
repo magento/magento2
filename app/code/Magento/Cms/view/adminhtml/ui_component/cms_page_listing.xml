@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -257,6 +257,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="editor" xsi:type="string">date</item>
                     <item name="dataType" xsi:type="string">date</item>
+                    <item name="timezone" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">Custom design from</item>
                     <item name="dateFormat" xsi:type="string">MMM d, y</item>
                     <item name="visible" xsi:type="boolean">false</item>
@@ -270,6 +271,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="editor" xsi:type="string">date</item>
                     <item name="dataType" xsi:type="string">date</item>
+                    <item name="timezone" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">Custom design to</item>
                     <item name="dateFormat" xsi:type="string">MMM d, y</item>
                     <item name="visible" xsi:type="boolean">false</item>

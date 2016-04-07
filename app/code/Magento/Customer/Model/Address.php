@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Model;
@@ -46,6 +46,11 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
      * @var \Magento\Framework\Indexer\IndexerRegistry
      */
     protected $indexerRegistry;
+
+    /**
+     * @var \Magento\Customer\Model\Address\CustomAttributeListInterface
+     */
+    private $attributeList;
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -346,5 +351,28 @@ class Address extends \Magento\Customer\Model\Address\AbstractAddress
         /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
         $indexer->reindexRow($this->getCustomerId());
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getCustomAttributesCodes()
+    {
+        return array_keys($this->getAttributeList()->getAttributes());
+    }
+
+    /**
+     * Get new AttributeList dependency for application code.
+     * @return \Magento\Customer\Model\Address\CustomAttributeListInterface
+     * @deprecated
+     */
+    private function getAttributeList()
+    {
+        if (!$this->attributeList) {
+            $this->attributeList = \Magento\Framework\App\ObjectManager::getInstance()->get(
+                \Magento\Customer\Model\Address\CustomAttributeListInterface::class
+            );
+        }
+        return $this->attributeList;
     }
 }

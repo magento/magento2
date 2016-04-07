@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -286,14 +286,15 @@ define([
          */
         triggerAction: function (action) {
             var targetName = action.targetName,
-                params = action.params,
+                params = action.params || [],
                 actionName = action.actionName,
                 target;
 
             target = registry.async(targetName);
 
             if (target && typeof target === 'function' && actionName) {
-                target(actionName, params);
+                params.unshift(actionName);
+                target.apply(target, params);
             }
         },
 

@@ -1,10 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Braintree\Test\Unit\Gateway\Command;
 
+use Braintree\IsNode;
+use Braintree\MultipleValueNode;
+use Braintree\TextNode;
 use Magento\Braintree\Gateway\Command\CaptureStrategyCommand;
 use Magento\Braintree\Gateway\Helper\SubjectReader;
 use Magento\Framework\Api\FilterBuilder;
@@ -18,6 +21,8 @@ use Magento\Sales\Api\TransactionRepositoryInterface;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactory;
+use Magento\Braintree\Model\Adapter\BraintreeAdapter;
+use Magento\Braintree\Model\Adapter\BraintreeSearchAdapter;
 
 /**
  * Class CaptureStrategyCommandTest
@@ -27,37 +32,37 @@ use Magento\Sales\Model\ResourceModel\Order\Payment\Transaction\CollectionFactor
 class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \Magento\Braintree\Gateway\Command\CaptureStrategyCommand
+     * @var CaptureStrategyCommand
      */
     private $strategyCommand;
 
     /**
-     * @var \Magento\Payment\Gateway\Command\CommandPoolInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CommandPoolInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $commandPool;
 
     /**
-     * @var \Magento\Sales\Api\TransactionRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TransactionRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     private $transactionRepository;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $filterBuilder;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
      */
     private $searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Sales\Model\Order\Payment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Payment|\PHPUnit_Framework_MockObject_MockObject
      */
     private $payment;
 
     /**
-     * @var \Magento\Payment\Gateway\Command\GatewayCommand|\PHPUnit_Framework_MockObject_MockObject
+     * @var GatewayCommand|\PHPUnit_Framework_MockObject_MockObject
      */
     private $command;
 
@@ -65,6 +70,16 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
      * @var SubjectReader|\PHPUnit_Framework_MockObject_MockObject
      */
     private $subjectReaderMock;
+
+    /**
+     * @var BraintreeAdapter|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $braintreeAdapter;
+
+    /**
+     * @var BraintreeSearchAdapter
+     */
+    private $braintreeSearchAdapter;
 
     protected function setUp()
     {
@@ -82,12 +97,19 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
         $this->initFilterBuilderMock();
         $this->initSearchCriteriaBuilderMock();
 
+        $this->braintreeAdapter = $this->getMockBuilder(BraintreeAdapter::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->braintreeSearchAdapter = new BraintreeSearchAdapter();
+
         $this->strategyCommand = new CaptureStrategyCommand(
             $this->commandPool,
             $this->transactionRepository,
             $this->filterBuilder,
             $this->searchCriteriaBuilder,
-            $this->subjectReaderMock
+            $this->subjectReaderMock,
+            $this->braintreeAdapter,
+            $this->braintreeSearchAdapter
         );
     }
 
@@ -133,6 +155,7 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
     {
         $paymentData = $this->getPaymentDataObjectMock();
         $subject['payment'] = $paymentData;
+        $lastTransId = 'txnds';
 
         $this->subjectReaderMock->expects(self::once())
             ->method('readPayment')
@@ -142,6 +165,9 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
         $this->payment->expects(static::once())
             ->method('getAuthorizationTransaction')
             ->willReturn(true);
+        $this->payment->expects(static::once())
+            ->method('getLastTransId')
+            ->willReturn($lastTransId);
 
         $this->payment->expects(static::once())
             ->method('getId')
@@ -153,9 +179,100 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
             ->method('getTotalCount')
             ->willReturn(0);
 
+        // authorization transaction was not expired
+        $collection = $this->getNotExpiredExpectedCollection($lastTransId);
+        $collection->expects(static::once())
+            ->method('maximumCount')
+            ->willReturn(0);
+
         $this->commandPool->expects(static::once())
             ->method('get')
             ->with(CaptureStrategyCommand::CAPTURE)
+            ->willReturn($this->command);
+
+        $this->strategyCommand->execute($subject);
+    }
+
+    /**
+     * @param string $lastTransactionId
+     * @return \Braintree\ResourceCollection|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getNotExpiredExpectedCollection($lastTransactionId)
+    {
+        $isExpectations = [
+            'id' => ['is' => $lastTransactionId],
+            'status' => [\Braintree\Transaction::AUTHORIZATION_EXPIRED]
+        ];
+
+        $collection = $this->getMockBuilder(\Braintree\ResourceCollection::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->braintreeAdapter->expects(static::once())
+            ->method('search')
+            ->with(
+                static::callback(
+                    function (array $filters) use ($isExpectations) {
+                        foreach ($filters as $filter) {
+                            /** @var IsNode $filter */
+                            if (!isset($isExpectations[$filter->name])) {
+                                return false;
+                            }
+
+                            if ($isExpectations[$filter->name] !== $filter->toParam()) {
+                                return false;
+                            }
+                        }
+
+                        return true;
+                    }
+                )
+            )
+            ->willReturn($collection);
+
+        return $collection;
+    }
+
+    /**
+     * @covers \Magento\Braintree\Gateway\Command\CaptureStrategyCommand::execute
+     */
+    public function testExpiredAuthorizationPerformVaultCaptureExecute()
+    {
+        $paymentData = $this->getPaymentDataObjectMock();
+        $subject['payment'] = $paymentData;
+        $lastTransId = 'txnds';
+
+        $this->subjectReaderMock->expects(self::once())
+            ->method('readPayment')
+            ->with($subject)
+            ->willReturn($paymentData);
+
+        $this->payment->expects(static::once())
+            ->method('getAuthorizationTransaction')
+            ->willReturn(true);
+        $this->payment->expects(static::once())
+            ->method('getLastTransId')
+            ->willReturn($lastTransId);
+
+        $this->payment->expects(static::once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->buildSearchCriteria();
+
+        $this->transactionRepository->expects(static::once())
+            ->method('getTotalCount')
+            ->willReturn(0);
+
+        // authorization transaction was expired
+        $collection = $this->getNotExpiredExpectedCollection($lastTransId);
+        $collection->expects(static::once())
+            ->method('maximumCount')
+            ->willReturn(1);
+
+        $this->commandPool->expects(static::once())
+            ->method('get')
+            ->with(CaptureStrategyCommand::VAULT_CAPTURE)
             ->willReturn($this->command);
 
         $this->strategyCommand->execute($subject);
@@ -204,7 +321,6 @@ class CaptureStrategyCommandTest extends \PHPUnit_Framework_TestCase
     {
         $this->payment = $this->getMockBuilder(Payment::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getAuthorizationTransaction', 'getId', 'getExtensionAttributes'])
             ->getMock();
 
         $mock = $this->getMockBuilder(PaymentDataObject::class)

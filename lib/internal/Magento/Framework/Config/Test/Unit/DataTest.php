@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -17,7 +17,7 @@ class DataTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager  */
     protected $objectManagerHelper;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->reader = $this->getMockBuilder('Magento\\Framework\\Config\\ReaderInterface')
             ->disableOriginalConstructor()

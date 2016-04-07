@@ -1,6 +1,6 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -9,7 +9,7 @@
      attr="'data-level': $data.level, 'data-index': index"
      data-bind="visible: $data.visible === undefined ? true: $data.visible">
     <div class="fieldset-wrapper-title"
-         tabindex="0"
+         attr="tabindex: !collapsible ? -1 : 0"
          click="toggleOpened"
          keyboard="13: toggleOpened"
          if="label">
@@ -29,6 +29,9 @@
                 </span>
                 <span class="admin__page-nav-item-message _error">
                     <span class="admin__page-nav-item-message-icon"></span>
+                    <span class="admin__page-nav-item-message-tooltip"
+                            data-bind="i18n: 'This tab contains invalid data. Please resolve this before saving.'">
+                    </span>
                 </span>
                 <span class="admin__page-nav-item-message-loader">
                     <span class="spinner">

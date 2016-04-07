@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Model\ResourceModel\PasswordResetRequestEvent;
@@ -16,12 +16,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $_idFieldName = 'id';
 
     /**
-     * @var \Magento\Security\Helper\SecurityConfig
-     */
-    protected $securityConfig;
-
-    /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $dateTime;
 
@@ -30,8 +25,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Security\Helper\SecurityConfig $securityConfig
-     * @param \Magento\Framework\Stdlib\DateTime $dateTime
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource
      */
@@ -40,13 +34,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Security\Helper\SecurityConfig $securityConfig,
-        \Magento\Framework\Stdlib\DateTime $dateTime,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
-        $this->securityConfig = $securityConfig;
         $this->dateTime = $dateTime;
     }
 
@@ -79,7 +71,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     /**
      * Filter by IP
      *
-     * @param int $ip
+     * @param string $ip
      * @return $this
      */
     public function filterByIp($ip)
@@ -110,9 +102,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     public function filterByLifetime($lifetime)
     {
+        $connection = $this->getConnection();
+        $gmtTimestamp = $this->dateTime->gmtTimestamp();
         $this->addFieldToFilter(
             'created_at',
-            ['gt' => $this->dateTime->formatDate($this->securityConfig->getCurrentTimestamp() - $lifetime)]
+            ['gt' => $connection->formatDate($gmtTimestamp - $lifetime)]
         );
 
         return $this;
