@@ -94,66 +94,74 @@ class StartUpdater extends AbstractActionController
         ) {
             $errorMessage .= $this->validatePayload($postPayload);
             if (empty($errorMessage)) {
-                $packages = $postPayload[self::KEY_POST_PACKAGES];
-                $jobType = $postPayload[self::KEY_POST_JOB_TYPE];
-                $this->createTypeFlag($jobType, $postPayload[self::KEY_POST_HEADER_TITLE]);
-
-                $additionalOptions = [];
-                $cronTaskType = '';
-                $this->getCronTaskConfigInfo($jobType, $postPayload, $additionalOptions, $cronTaskType);
-
-                $errorMessage .= $this->updater->createUpdaterTask(
-                    [],
-                    \Magento\Setup\Model\Updater::TASK_TYPE_MAINTENANCE_MODE,
-                    ['enable' => true]
-                );
-
-                if ($cronTaskType == \Magento\Setup\Model\Updater::TASK_TYPE_UPDATE
-                    || $jobType == 'enable'
-                    || $jobType == 'disable'
-                ) {
-                    $errorMessage .= $this->updater->createUpdaterTask(
-                        [],
-                        \Magento\Setup\Model\Cron\JobFactory::JOB_DISABLE_CACHE,
-                        []
-                    );
-                }
-
-                $errorMessage .= $this->updater->createUpdaterTask(
-                    $packages,
-                    $cronTaskType,
-                    $additionalOptions
-                );
-
-                if ($jobType == 'enable' || $jobType == 'disable') {
-                    $errorMessage .= $this->updater->createUpdaterTask(
-                        [],
-                        \Magento\Setup\Model\Cron\JobFactory::JOB_ENABLE_CACHE,
-                        []
-                    );
-                }
-
-                // for module enable job types, we need to follow up with 'setup:upgrade' task to
-                // make sure enabled modules are properly registered
-                if ($jobType == 'enable') {
-                    $errorMessage .= $this->updater->createUpdaterTask(
-                        [],
-                        \Magento\Setup\Model\Cron\JobFactory::JOB_UPGRADE,
-                        []
-                    );
-                } elseif ($jobType == 'disable') {
-                    $errorMessage .= $this->updater->createUpdaterTask(
-                        [],
-                        \Magento\Setup\Model\Updater::TASK_TYPE_MAINTENANCE_MODE,
-                        ['enable' => false]
-                    );
-                }
+                $this->createUpdaterTasks($postPayload, $errorMessage);
             }
         } else {
             $errorMessage .= 'Invalid request';
         }
         $success = empty($errorMessage) ? true : false;
         return new JsonModel(['success' => $success, 'message' => $errorMessage]);
+    }
+
+    /**
+     * Create Update tasks
+     *
+     * @param array $postPayload
+     * @param string $errorMessage
+     */
+    private function createUpdaterTasks(array $postPayload, &$errorMessage)
+    {
+        $packages = $postPayload[self::KEY_POST_PACKAGES];
+        $jobType = $postPayload[self::KEY_POST_JOB_TYPE];
+        $this->createTypeFlag($jobType, $postPayload[self::KEY_POST_HEADER_TITLE]);
+
+        $additionalOptions = [];
+        $cronTaskType = '';
+        $this->getCronTaskConfigInfo($jobType, $postPayload, $additionalOptions, $cronTaskType);
+
+        $errorMessage .= $this->updater->createUpdaterTask(
+            [],
+            \Magento\Setup\Model\Updater::TASK_TYPE_MAINTENANCE_MODE,
+            ['enable' => true]
+        );
+
+        if ($cronTaskType == \Magento\Setup\Model\Updater::TASK_TYPE_UPDATE
+            || $jobType == 'enable'
+            || $jobType == 'disable'
+        ) {
+            $errorMessage .= $this->updater->createUpdaterTask(
+                [],
+                \Magento\Setup\Model\Cron\JobFactory::JOB_DISABLE_CACHE,
+                []
+            );
+        }
+
+        $errorMessage .= $this->updater->createUpdaterTask(
+            $packages,
+            $cronTaskType,
+            $additionalOptions
+        );
+
+        // for module enable job types, we need to follow up with 'setup:upgrade' task to
+        // make sure enabled modules are properly registered
+        if ($jobType == 'enable') {
+            $errorMessage .= $this->updater->createUpdaterTask(
+                [],
+                \Magento\Setup\Model\Cron\JobFactory::JOB_UPGRADE,
+                []
+            );
+        } elseif ($jobType == 'disable') {
+            $errorMessage .= $this->updater->createUpdaterTask(
+                [],
+                \Magento\Setup\Model\Updater::TASK_TYPE_MAINTENANCE_MODE,
+                ['enable' => false]
+            );
+            $errorMessage .= $this->updater->createUpdaterTask(
+                [],
+                \Magento\Setup\Model\Cron\JobFactory::JOB_ENABLE_CACHE,
+                []
+            );
+        }
     }
 
     /**
