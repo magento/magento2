@@ -67,11 +67,11 @@ class FulltextFilterTest extends \PHPUnit_Framework_TestCase
         $this->entityFactoryMock = $this->getMock(EntityFactory::class, [], [], '', false);
         $this->loggerMock = $this->getMock(LoggerInterface::class);
         $this->fetchStrategyMock = $this->getMock(FetchStrategyInterface::class, [], [], '', false);
-        $this->connectionMock = $this->getMock(Mysql::class, ['select', 'getIndexList',], [], '', false);
+        $this->connectionMock = $this->getMock(Mysql::class, ['select', 'getIndexList'], [], '', false);
         $this->selectMock = $this->getMock(Select::class, ['getPart', 'where'], [], '', false);
 
         $this->collectionAbstractDbMock = $this->getMockBuilder(CollectionAbstractDb::class)
-            ->setMethods(['getConnection', 'getSelect','getMainTable'])
+            ->setMethods(['getConnection', 'getSelect', 'getMainTable'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
