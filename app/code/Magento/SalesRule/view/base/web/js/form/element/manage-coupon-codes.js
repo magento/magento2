@@ -28,7 +28,7 @@ define([
                 var useAutoGeneration = uiRegistry.get(
                     'sales_rule_form.sales_rule_form.rule_information.use_auto_generation'
                 );
-                
+
                 useAutoGeneration.on('checked', function () {
                     obj.enableDisableFields();
                 });
@@ -44,16 +44,20 @@ define([
          * Enable/disable fields on Coupons tab
          */
         enableDisableFields: function () {
-            var selector = '[id=sales-rule-form-tab-coupons] input, [id=sales-rule-form-tab-coupons] select, ' +
-                    '[id=sales-rule-form-tab-coupons] button',
-                isUseAutoGenerationChecked = uiRegistry
+            var selector,
+                isUseAutoGenerationChecked,
+                couponType,
+                disableAuto;
+
+            selector = '[id=sales-rule-form-tab-coupons] input, [id=sales-rule-form-tab-coupons] select, ' +
+                    '[id=sales-rule-form-tab-coupons] button';
+            isUseAutoGenerationChecked = uiRegistry
                     .get('sales_rule_form.sales_rule_form.rule_information.use_auto_generation')
                     .checked();
-
-            var couponType = uiRegistry
+            couponType = uiRegistry
                 .get('sales_rule_form.sales_rule_form.rule_information.coupon_type')
                 .value();
-            var disableAuto = (couponType == 3) || isUseAutoGenerationChecked
+            disableAuto = couponType === 3 || isUseAutoGenerationChecked;
             _.each(
                 document.querySelectorAll(selector),
                 function (element) {
