@@ -95,6 +95,9 @@ class ValueChecker
     protected function isEqualArrays(array $value, array $defaultValue)
     {
         $result = true;
+        if (count($value) !== count($defaultValue)) {
+            return false;
+        }
         foreach ($value as $key => $elem) {
             if (is_array($elem)) {
                 if (isset($defaultValue[$key])) {

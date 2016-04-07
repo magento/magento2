@@ -110,8 +110,8 @@ class SoapErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
         } catch (\SoapFault $e) {
             $this->checkSoapFault(
                 $e,
-                'SOAP-ERROR: Parsing WSDL: Couldn\'t bind to service',
-                'WSDL'
+                'Consumer is not authorized to access %resources',
+                'env:Sender'
             );
         }
     }

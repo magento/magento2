@@ -70,7 +70,6 @@ class NavigateRelatedProductsTest extends AbstractProductPromotedProductsTest
         $productsToVerify,
         CheckoutCart $checkoutCart
     ) {
-        $this->markTestIncomplete('MAGETWO-50178');
         // Preconditions
         $this->createProducts($products);
         $this->assignPromotedProducts($promotedProducts, 'related_products');

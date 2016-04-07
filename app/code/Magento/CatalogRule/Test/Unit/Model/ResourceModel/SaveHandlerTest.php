@@ -25,7 +25,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->resourceMock = $this->getMock('\Magento\CatalogRule\Model\ResourceModel\Rule', [], [], '', false);
-        $this->metadataMock = $this->getMock('\Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
+        $this->metadataMock = $this->getMock('\Magento\Framework\EntityManager\MetadataPool', [], [], '', false);
         $this->subject = new \Magento\CatalogRule\Model\ResourceModel\SaveHandler(
             $this->resourceMock,
             $this->metadataMock
@@ -47,7 +47,7 @@ class SaveHandlerTest extends \PHPUnit_Framework_TestCase
         ];
 
         $metadataMock = $this->getMock(
-            '\Magento\Framework\Model\Entity\EntityMetadata',
+            '\Magento\Framework\EntityManager\EntityMetadata',
             ['getLinkField'],
             [],
             '',

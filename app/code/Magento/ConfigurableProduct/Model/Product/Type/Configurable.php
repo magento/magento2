@@ -8,7 +8,7 @@ namespace Magento\ConfigurableProduct\Model\Product\Type;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Product\Gallery\ReadHandler as GalleryReadHandler;
 
 /**
@@ -508,8 +508,9 @@ class Configurable extends \Magento\Catalog\Model\Product\Type\AbstractType
             $collection = $this->getUsedProductCollection($product)
                 ->addAttributeToSelect('name')
                 ->addAttributeToSelect('price')
-//                ->addAttributeToSelect('msrp')
-//                ->addAttributeToSelect('media_gallery')
+                ->addAttributeToSelect('weight')
+                ->addAttributeToSelect('image')
+                ->addAttributeToSelect('status')
                 ->addFilterByRequiredOptions()
                 ->setStoreId($product->getStoreId());
 
