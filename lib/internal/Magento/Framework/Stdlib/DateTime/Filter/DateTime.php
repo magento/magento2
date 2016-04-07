@@ -6,6 +6,7 @@
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib\DateTime\Filter;
+use Magento\Framework\Exception\LocalizedException;
 
 class DateTime extends Date
 {
@@ -34,10 +35,17 @@ class DateTime extends Date
      *
      * @param string $value
      * @return string
+     * @throws LocalizedException
      */
     public function filter($value)
     {
-        $value = new \DateTime($value);
-        return $value->format('Y-m-d H:i:s');
+        try {
+            $value = new \DateTime($value);
+            return $value->format('Y-m-d H:i:s');
+        } catch (\Exception $e) {
+            throw new LocalizedException(
+                __('Invalid input date format')
+            );
+        }
     }
 }
