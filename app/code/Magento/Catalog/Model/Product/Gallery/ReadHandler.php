@@ -62,7 +62,7 @@ class ReadHandler
                 }
             }
 
-            $value['images'][] = $mediaEntry;
+            $value['images'][$mediaEntry['value_id']] = $mediaEntry;
         }
 
         $product->setData(

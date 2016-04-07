@@ -196,6 +196,7 @@ class ConfigurableAttributeSetHandler extends AbstractModifier
                         'formElement' => Form\Element\Input::NAME,
                         'componentType' => Form\Field::NAME,
                         'dataScope' => 'configurableNewAttributeSetName',
+                        'additionalClasses' => 'new-attribute-set-name',
                         'label' => __('New Attribute Set Name'),
                         'sortOrder' => 40,
                         'validation' => ['required-entry' => true],
