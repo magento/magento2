@@ -240,6 +240,8 @@ define([
             });
 
             updatedCollection = this.updatePosition(sorted, position, elem.name);
+
+            this.elems([]);
             this.elems(updatedCollection);
         },
 
@@ -521,7 +523,10 @@ define([
 
             dataArr = this.recordData.splice(this.startIndex, this.recordData().length - this.startIndex);
             dataArr.splice(0, this.pageSize);
-            elems = utils.copy(this.elems());
+            elems = _.sortBy(this.elems(), function(elem){
+                return parseInt(elem.index)
+            });
+
             data.concat(dataArr).forEach(function (rec, idx) {
                 if (elems[idx]) {
                     elems[idx].recordId = rec[this.identificationProperty];

@@ -63,7 +63,7 @@ define([
          */
         initChildren: function () {
             this.getChildItems().each(function (data, index) {
-                this.addChild(data, this.startIndex + index, data.id);
+                this.processingAddChild(data, this.startIndex + index, data.id);
             }, this);
 
             return this;
