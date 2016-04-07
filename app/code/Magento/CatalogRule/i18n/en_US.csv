@@ -1,63 +1,41 @@
-Product,Product
-ID,ID
-SKU,SKU
-Apply,Apply
-No,No
-Yes,Yes
-"Web Site","Web Site"
-Status,Status
-"Save and Continue Edit","Save and Continue Edit"
-Type,Type
-Description,Description
-From,From
-To,To
-Catalog,Catalog
-Actions,Actions
-Rule,Rule
-"Start on","Start on"
-"End on","End on"
-Active,Active
-"This rule no longer exists.","This rule no longer exists."
-"General Information","General Information"
-Websites,Websites
-"Attribute Set","Attribute Set"
-"Apply Rules","Apply Rules"
-"Catalog Price Rules","Catalog Price Rules"
-"Add New Rule","Add New Rule"
+"Delete Rule","Delete Rule"
+"Are you sure you want to do this?","Are you sure you want to do this?"
+Reset,Reset
 "Save and Apply","Save and Apply"
-"Edit Rule '%1'","Edit Rule '%1'"
-"New Rule","New Rule"
-"Rule Information","Rule Information"
-"Update Prices Using the Following Information","Update Prices Using the Following Information"
-"By Percentage of the Original Price","By Percentage of the Original Price"
-"By Fixed Amount","By Fixed Amount"
-"To Percentage of the Original Price","To Percentage of the Original Price"
-"To Fixed Amount","To Fixed Amount"
-"Discount Amount","Discount Amount"
-"Enable Discount to Subproducts","Enable Discount to Subproducts"
-"Stop Further Rules Processing","Stop Further Rules Processing"
-Conditions,Conditions
-"Conditions (leave blank for all products)","Conditions (leave blank for all products)"
-"Rule Name","Rule Name"
-Inactive,Inactive
-"Customer Groups","Customer Groups"
-"From Date","From Date"
-"To Date","To Date"
-Priority,Priority
+"Save and Continue Edit","Save and Continue Edit"
+Save,Save
 "Catalog Price Rule","Catalog Price Rule"
+"Add New Rule","Add New Rule"
+"Apply Rules","Apply Rules"
+Conditions,Conditions
+"Conditions (don\'t add conditions if rule is applied to all products)","Conditions (don\'t add conditions if rule is applied to all products)"
+ID,ID
+Type,Type
+"Attribute Set","Attribute Set"
+SKU,SKU
+Product,Product
 Promotions,Promotions
-Promo,Promo
+"We found updated rules that are not applied. Please click ""Apply Rules"" to update your catalog.","We found updated rules that are not applied. Please click ""Apply Rules"" to update your catalog."
+"We can\'t apply the rules.","We can\'t apply the rules."
+"You deleted the rule.","You deleted the rule."
+"We can\'t delete this rule right now. Please review the log and try again.","We can\'t delete this rule right now. Please review the log and try again."
+"We can\'t find a rule to delete.","We can\'t find a rule to delete."
+"This rule no longer exists.","This rule no longer exists."
 "New Catalog Price Rule","New Catalog Price Rule"
 "Edit Rule","Edit Rule"
-"Wrong rule specified.","Wrong rule specified."
-"The rule has been saved.","The rule has been saved."
-"An error occurred while saving the rule data. Please review the log and try again.","An error occurred while saving the rule data. Please review the log and try again."
-"The rule has been deleted.","The rule has been deleted."
-"An error occurred while deleting the rule. Please review the log and try again.","An error occurred while deleting the rule. Please review the log and try again."
-"Unable to find a rule to delete.","Unable to find a rule to delete."
-"Unable to apply rules.","Unable to apply rules."
-"There are rules that have been changed but were not applied. Please, click Apply Rules in order to see immediate effect in the catalog.","There are rules that have been changed but were not applied. Please, click Apply Rules in order to see immediate effect in the catalog."
-"%1 Catalog Price Rules based on ""%2"" attribute have been disabled.","%1 Catalog Price Rules based on ""%2"" attribute have been disabled."
+"New Rule","New Rule"
+Catalog,Catalog
+"You saved the rule.","You saved the rule."
+"Something went wrong while saving the rule data. Please review the error log.","Something went wrong while saving the rule data. Please review the error log."
+Promo,Promo
+"Unable to save rule %1","Unable to save rule %1"
+"Rule with specified ID ""%1"" not found.","Rule with specified ID ""%1"" not found."
+"Unable to remove rule %1","Unable to remove rule %1"
+"Could not rebuild index for empty products array","Could not rebuild index for empty products array"
+"We can\'t rebuild the index for an undefined product.","We can\'t rebuild the index for an undefined product."
+"Percentage discount should be between 0 and 100.","Percentage discount should be between 0 and 100."
+"Discount value should be 0 or greater.","Discount value should be 0 or greater."
+"Unknown action.","Unknown action."
 "Update the Product","Update the Product"
 "Rule price","Rule price"
 "To Fixed Value","To Fixed Value"
@@ -65,11 +43,27 @@ Promo,Promo
 "By Fixed value","By Fixed value"
 "By Percentage","By Percentage"
 "Update product's %1 %2: %3","Update product's %1 %2: %3"
+"Apply as percentage of original","Apply as percentage of original"
+"Apply as fixed amount","Apply as fixed amount"
+"Adjust final price to this percentage","Adjust final price to this percentage"
+"Adjust final price to discount value","Adjust final price to discount value"
 "Conditions Combination","Conditions Combination"
 "Product Attribute","Product Attribute"
-"The rules have been applied.","The rules have been applied."
-"Percentage discount should be between 0 and 100.","Percentage discount should be between 0 and 100."
-"Discount value should be 0 or greater.","Discount value should be 0 or greater."
-"Unknown action.","Unknown action."
-"Subproduct discounts","Subproduct discounts"
-"Discard subsequent rules","Discard subsequent rules"
+Active,Active
+Inactive,Inactive
+Yes,Yes
+No,No
+"Updated rules applied.","Updated rules applied."
+"You disabled %1 Catalog Price Rules based on ""%2"" attribute.","You disabled %1 Catalog Price Rules based on ""%2"" attribute."
+"Catalog Rule Product","Catalog Rule Product"
+"Indexed rule/product association","Indexed rule/product association"
+"Catalog Product Rule","Catalog Product Rule"
+"Indexed product/rule association","Indexed product/rule association"
+Rule,Rule
+Start,Start
+End,End
+Status,Status
+"Web Site","Web Site"
+Back,Back
+"Rule Information","Rule Information"
+Actions,Actions

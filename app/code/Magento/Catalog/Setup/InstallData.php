@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,6 +9,7 @@ namespace Magento\Catalog\Setup;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Catalog\Helper\DefaultCategory;
 
 /**
  * @codeCoverageIgnore
@@ -21,6 +22,24 @@ class InstallData implements InstallDataInterface
      * @var CategorySetupFactory
      */
     private $categorySetupFactory;
+
+    /**
+     * @var DefaultCategory
+     */
+    private $defaultCategory;
+
+    /**
+     * @deprecated
+     * @return DefaultCategory
+     */
+    private function getDefaultCategory()
+    {
+        if ($this->defaultCategory === null) {
+            $this->defaultCategory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(DefaultCategory::class);
+        }
+        return $this->defaultCategory;
+    }
 
     /**
      * Init
@@ -42,14 +61,16 @@ class InstallData implements InstallDataInterface
     {
         /** @var \Magento\Catalog\Setup\CategorySetup $categorySetup */
         $categorySetup = $this->categorySetupFactory->create(['setup' => $setup]);
+        $rootCategoryId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
+        $defaultCategoryId = $this->getDefaultCategory()->getId();
 
         $categorySetup->installEntities();
         // Create Root Catalog Node
         $categorySetup->createCategory()
-            ->load(1)
-            ->setId(1)
+            ->load($rootCategoryId)
+            ->setId($rootCategoryId)
             ->setStoreId(0)
-            ->setPath('1')
+            ->setPath($rootCategoryId)
             ->setLevel(0)
             ->setPosition(0)
             ->setChildrenCount(0)
@@ -57,17 +78,18 @@ class InstallData implements InstallDataInterface
             ->setInitialSetupFlag(true)
             ->save();
 
+        // Create Default Catalog Node
         $category = $categorySetup->createCategory();
-
-        $categorySetup->createCategory()
+        $category->load($defaultCategoryId)
+            ->setId($defaultCategoryId)
             ->setStoreId(0)
-            ->setPath('1')
+            ->setPath($rootCategoryId . '/' . $defaultCategoryId)
             ->setName('Default Category')
             ->setDisplayMode('PRODUCTS')
-            ->setAttributeSetId($category->getDefaultAttributeSetId())
             ->setIsActive(1)
             ->setLevel(1)
             ->setInitialSetupFlag(true)
+            ->setAttributeSetId($category->getDefaultAttributeSetId())
             ->save();
 
         $data = [

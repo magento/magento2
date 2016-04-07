@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -22,13 +22,6 @@ class DropDown extends AbstractOptions
     protected $addValueButton = '[data-action="add_new_row"]';
 
     /**
-     * Title column locator.
-     *
-     * @var string
-     */
-    protected $optionTitle = '[data-name="title"]';
-
-    /**
      * Fill the form.
      *
      * @param array $fields
@@ -37,7 +30,6 @@ class DropDown extends AbstractOptions
      */
     public function fillOptions(array $fields, SimpleElement $element = null)
     {
-        $this->_rootElement->find($this->optionTitle)->click();
         $this->_rootElement->find($this->addValueButton)->click();
 
         return parent::fillOptions($fields, $element);

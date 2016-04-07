@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Test\Unit\Model;
@@ -22,7 +22,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
      */
     private $conditionsHelper;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->dataStorageMock = $this->getMockBuilder('Magento\Widget\Model\Config\Data')
             ->disableOriginalConstructor()
@@ -154,6 +154,7 @@ class WidgetTest extends \PHPUnit_Framework_TestCase
             'template' => 'product/widget/content/grid.phtml',
             'conditions' => $conditions
         ];
+
         $this->conditionsHelper->expects($this->once())->method('encode')->with($conditions)
             ->willReturn('encoded-conditions-string');
         $result = $this->widget->getWidgetDeclaration('Magento\CatalogWidget\Block\Product\ProductsList', $params);

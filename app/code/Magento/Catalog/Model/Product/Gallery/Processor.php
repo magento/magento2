@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product\Gallery;
@@ -157,7 +157,6 @@ class Processor
                 $this->mediaDirectory->copyFile($file, $destinationFile);
 
                 $storageHelper->saveFile($this->mediaConfig->getTmpMediaShortUrl($fileName));
-                $this->mediaDirectory->changePermissions($destinationFile, DriverInterface::WRITEABLE_FILE_MODE);
             }
         } catch (\Exception $e) {
             throw new LocalizedException(__('We couldn\'t move this file: %1.', $e->getMessage()));

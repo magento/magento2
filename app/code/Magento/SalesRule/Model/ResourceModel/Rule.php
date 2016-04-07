@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\SalesRule\Model\ResourceModel;
@@ -139,8 +139,6 @@ class Rule extends AbstractResource
     public function load(AbstractModel $object, $value, $field = null)
     {
         $this->entityManager->load(RuleInterface::class, $object, $value);
-        $this->unserializeFields($object);
-        $this->_afterLoad($object);
         return $this;
     }
 
@@ -373,16 +371,8 @@ class Rule extends AbstractResource
         if ($object->isDeleted()) {
             return $this->delete($object);
         }
-
         $this->beginTransaction();
-
         try {
-            if (!$this->isModified($object)) {
-                $this->processNotModifiedSave($object);
-                $this->commit();
-                $object->setHasDataChanges(false);
-                return $this;
-            }
             $object->validateBeforeSave();
             $object->beforeSave();
             if ($object->isSaveAllowed()) {

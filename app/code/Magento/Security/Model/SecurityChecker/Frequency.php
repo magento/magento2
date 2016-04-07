@@ -1,31 +1,70 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Security\Model\SecurityChecker;
 
 use Magento\Framework\Exception\SecurityViolationException;
+use Magento\Framework\HTTP\PhpEnvironment\RemoteAddress;
 use Magento\Security\Model\Config\Source\ResetMethod;
+use Magento\Security\Model\ConfigInterface;
+use Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory;
 
 /**
  * Checker by frequency requests
  */
-class Frequency extends AbstractSecurityChecker implements SecurityCheckerInterface
+class Frequency implements SecurityCheckerInterface
 {
+    /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    private $dateTime;
+
+    /**
+     * @var \Magento\Security\Model\ResourceModel\PasswordResetRequestEvent\CollectionFactory
+     */
+    private $collectionFactory;
+
+    /**
+     * @var ConfigInterface
+     */
+    private $securityConfig;
+
+    /**
+     * @var RemoteAddress
+     */
+    private $remoteAddress;
+
+    /**
+     * @param ConfigInterface $securityConfig
+     * @param CollectionFactory $collectionFactory
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
+     * @param RemoteAddress $remoteAddress
+     */
+    public function __construct(
+        ConfigInterface $securityConfig,
+        CollectionFactory $collectionFactory,
+        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
+        RemoteAddress $remoteAddress
+    ) {
+        $this->securityConfig = $securityConfig;
+        $this->collectionFactory = $collectionFactory;
+        $this->dateTime = $dateTime;
+        $this->remoteAddress = $remoteAddress;
+    }
+
     /**
      * {@inheritdoc}
      */
     public function check($securityEventType, $accountReference = null, $longIp = null)
     {
-        if (null === $longIp) {
-            $longIp = $this->securityConfig->getRemoteIp();
-        }
-        $scope = $this->getScopeByEventType($securityEventType);
-
-        $isEnabled = $this->securityConfig->getLimitPasswordResetRequestsMethod($scope) != ResetMethod::OPTION_NONE;
-        $limitTimeBetweenRequests = $this->securityConfig->getLimitTimeBetweenPasswordResetRequests($scope);
+        $isEnabled = $this->securityConfig->getPasswordResetProtectionType() != ResetMethod::OPTION_NONE;
+        $limitTimeBetweenRequests = $this->securityConfig->getMinTimeBetweenPasswordResetRequests();
         if ($isEnabled && $limitTimeBetweenRequests) {
+            if (null === $longIp) {
+                $longIp = $this->remoteAddress->getRemoteAddress();
+            }
             $lastRecordCreationTimestamp = $this->loadLastRecordCreationTimestamp(
                 $securityEventType,
                 $accountReference,
@@ -33,7 +72,7 @@ class Frequency extends AbstractSecurityChecker implements SecurityCheckerInterf
             );
             if ($lastRecordCreationTimestamp && (
                     $limitTimeBetweenRequests >
-                    ($this->securityConfig->getCurrentTimestamp() - $lastRecordCreationTimestamp)
+                    ($this->dateTime->gmtTimestamp() - $lastRecordCreationTimestamp)
                 )) {
                 throw new SecurityViolationException(
                     __(
@@ -53,10 +92,9 @@ class Frequency extends AbstractSecurityChecker implements SecurityCheckerInterf
      * @param int $longIp
      * @return int
      */
-    protected function loadLastRecordCreationTimestamp($securityEventType, $accountReference, $longIp)
+    private function loadLastRecordCreationTimestamp($securityEventType, $accountReference, $longIp)
     {
-        $collection = $this->createCollection($securityEventType);
-        $this->applyFiltersByConfig($collection, $securityEventType, $accountReference, $longIp);
+        $collection = $this->collectionFactory->create($securityEventType, $accountReference, $longIp);
         /** @var \Magento\Security\Model\PasswordResetRequestEvent $record */
         $record = $collection->filterLastItem()->getFirstItem();
 

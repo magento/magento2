@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Shipping\Test\Unit\Helper;
@@ -22,7 +22,7 @@ class CarrierTest extends \PHPUnit_Framework_TestCase
      */
     protected $scopeConfig;
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $className = 'Magento\Shipping\Helper\Carrier';

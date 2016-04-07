@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
@@ -9,6 +9,8 @@ use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory as CustomOption
 use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory as ProductLinkFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface\Proxy as ProductRepository;
 use Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks;
+use Magento\Catalog\Model\Product\Link\Resolver as LinkResolver;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Class Helper
@@ -30,6 +32,11 @@ class Helper
      * @var StockDataFilter
      */
     protected $stockFilter;
+
+    /**
+     * @var \Magento\Backend\Helper\Js
+     */
+    protected $jsHelper;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\Filter\Date
@@ -57,33 +64,33 @@ class Helper
     protected $productLinks;
 
     /**
+     * @var LinkResolver
+     */
+    private $linkResolver;
+
+    /**
+     * Helper constructor.
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param StockDataFilter $stockFilter
      * @param ProductLinks $productLinks
+     * @param \Magento\Backend\Helper\Js $jsHelper
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
-     * @param CustomOptionFactory $customOptionFactory
-     * @param ProductLinkFactory $productLinkFactory
-     * @param ProductRepository $productRepository
      */
     public function __construct(
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         StockDataFilter $stockFilter,
-        ProductLinks $productLinks,
-        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
-        CustomOptionFactory $customOptionFactory,
-        ProductLinkFactory $productLinkFactory,
-        ProductRepository $productRepository
+        \Magento\Catalog\Model\Product\Initialization\Helper\ProductLinks $productLinks,
+        \Magento\Backend\Helper\Js $jsHelper,
+        \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
     ) {
         $this->request = $request;
         $this->storeManager = $storeManager;
         $this->stockFilter = $stockFilter;
         $this->productLinks = $productLinks;
+        $this->jsHelper = $jsHelper;
         $this->dateFilter = $dateFilter;
-        $this->customOptionFactory = $customOptionFactory;
-        $this->productLinkFactory = $productLinkFactory;
-        $this->productRepository = $productRepository;
     }
 
     /**
@@ -149,7 +156,7 @@ class Helper
             $product->lockAttribute('media');
         }
 
-        if ($this->storeManager->hasSingleStore()) {
+        if ($this->storeManager->hasSingleStore() && empty($product->getWebsiteIds())) {
             $product->setWebsiteIds([$this->storeManager->getStore(true)->getWebsite()->getId()]);
         }
 
@@ -178,7 +185,7 @@ class Helper
             $customOptions = [];
             foreach ($options as $customOptionData) {
                 if (empty($customOptionData['is_delete'])) {
-                    $customOption = $this->customOptionFactory->create(['data' => $customOptionData]);
+                    $customOption = $this->getCustomOptionFactory()->create(['data' => $customOptionData]);
                     $customOption->setProductSku($product->getSku());
                     $customOption->setOptionId(null);
                     $customOptions[] = $customOption;
@@ -203,7 +210,7 @@ class Helper
      */
     protected function setProductLinks(\Magento\Catalog\Model\Product $product)
     {
-        $links = (array)$this->request->getParam('links', []);
+        $links = $this->getLinkResolver()->getLinks();
 
         $product->setProductLinks([]);
 
@@ -222,8 +229,8 @@ class Helper
                         continue;
                     }
 
-                    $linkProduct = $this->productRepository->getById($linkData['id']);
-                    $link = $this->productLinkFactory->create();
+                    $linkProduct = $this->getProductRepository()->getById($linkData['id']);
+                    $link = $this->getProductLinkFactory()->create();
                     $link->setSku($product->getSku())
                         ->setLinkedProductSku($linkProduct->getSku())
                         ->setLinkType($linkType)
@@ -284,5 +291,53 @@ class Helper
         }
 
         return $options;
+    }
+
+    /**
+     * @return CustomOptionFactory
+     */
+    private function getCustomOptionFactory()
+    {
+        if (null === $this->customOptionFactory) {
+            $this->customOptionFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory');
+        }
+        return $this->customOptionFactory;
+    }
+
+    /**
+     * @return ProductLinkFactory
+     */
+    private function getProductLinkFactory()
+    {
+        if (null === $this->productLinkFactory) {
+            $this->productLinkFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Api\Data\ProductLinkInterfaceFactory');
+        }
+        return $this->productLinkFactory;
+    }
+
+    /**
+     * @return ProductRepository
+     */
+    private function getProductRepository()
+    {
+        if (null === $this->productRepository) {
+            $this->productRepository = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Api\ProductRepositoryInterface\Proxy');
+        }
+        return $this->productRepository;
+    }
+
+    /**
+     * @deprecated
+     * @return LinkResolver
+     */
+    private function getLinkResolver()
+    {
+        if (!is_object($this->linkResolver)) {
+            $this->linkResolver = ObjectManager::getInstance()->get(LinkResolver::class);
+        }
+        return $this->linkResolver;
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cron\Test\Unit\Model\Config\Reader;
@@ -15,7 +15,7 @@ class XmlTest extends \PHPUnit_Framework_TestCase
     /**
      * Prepare parameters
      */
-    public function setUp()
+    protected function setUp()
     {
         $fileResolver = $this->getMockBuilder(
             'Magento\Framework\App\Config\FileResolver'

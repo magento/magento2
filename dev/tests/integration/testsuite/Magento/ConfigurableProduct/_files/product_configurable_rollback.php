@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -18,7 +18,7 @@ $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
 
 foreach (['simple_10', 'simple_20', 'configurable'] as $sku) {
     try {
-        $product = $productRepository->get($sku);
+        $product = $productRepository->get($sku, false, null, true);
 
         $stockStatus = $objectManager->create('Magento\CatalogInventory\Model\Stock\Status');
         $stockStatus->load($product->getEntityId(), 'product_id');

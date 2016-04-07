@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 /*browser:true*/
@@ -205,7 +205,7 @@ define([
                 container: 'paypal-container',
                 singleUse: true,
                 headless: true,
-                amount: this.amount,
+                amount: this.grandTotalAmount,
                 currency: totals['base_currency_code'],
                 locale: this.getLocale(),
                 enableShippingAddress: true,

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Pricing\Price;
@@ -43,7 +43,7 @@ class FinalPriceTest extends \PHPUnit_Framework_TestCase
     /**
      * Set up function
      */
-    public function setUp()
+    protected function setUp()
     {
         $this->saleableMock = $this->getMock('Magento\Catalog\Model\Product', [], [], '', false);
         $this->priceInfoMock = $this->basePriceMock = $this->getMock(

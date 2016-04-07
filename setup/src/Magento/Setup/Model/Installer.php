@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -38,6 +38,7 @@ use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Validator\DbValidator;
 use \Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\SampleData;
+use Magento\Framework\Setup\FilePermissions;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -824,7 +825,7 @@ class Installer
             $this->log->log("Module '{$moduleName}':");
             $modulePostUpdater = $this->getSchemaDataHandler($moduleName, $handlerType);
             if ($modulePostUpdater) {
-                $this->log->logInline('Running ' + str_replace('-', ' ', $handlerType) + '...');
+                $this->log->logInline('Running ' . str_replace('-', ' ', $handlerType) . '...');
                 $modulePostUpdater->install($setup, $moduleContextList[$moduleName]);
             }
             $this->logProgress();

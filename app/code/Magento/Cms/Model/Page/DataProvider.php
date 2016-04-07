@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Cms\Model\Page;
@@ -62,7 +62,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             return $this->loadedData;
         }
         $items = $this->collection->getItems();
-        /** @var \Magento\Cms\Model\Page $page */
+        /** @var $page \Magento\Cms\Model\Page */
         foreach ($items as $page) {
             $this->loadedData[$page->getId()] = $page->getData();
         }
@@ -72,6 +72,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
             $page = $this->collection->getNewEmptyItem();
             $page->setData($data);
             $this->loadedData[$page->getId()] = $page->getData();
+            $this->dataPersistor->clear('cms_page');
         }
 
         return $this->loadedData;
