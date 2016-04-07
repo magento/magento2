@@ -114,19 +114,20 @@ class File extends BackendFile
         $value = $this->getValue();
         if ($value && !is_array($value)) {
             $fileName = $this->_getUploadDir() . '/' . basename($value);
-            $fileInfo = [];
+            $fileInfo = null;
             if ($this->_mediaDirectory->isExist($fileName)) {
                 $stat = $this->_mediaDirectory->stat($fileName);
                 $url = $this->getStoreMediaUrl($value);
-
                 $fileInfo = [
-                    'url' => $url,
-                    'file' => $value,
-                    'size' => is_array($stat) ? $stat['size'] : 0,
-                    'exists' => true
+                    [
+                        'url' => $url,
+                        'file' => $value,
+                        'size' => is_array($stat) ? $stat['size'] : 0,
+                        'exists' => true
+                    ]
                 ];
             }
-            $this->setValue([$fileInfo]);
+            $this->setValue($fileInfo);
         }
         return $this;
     }
