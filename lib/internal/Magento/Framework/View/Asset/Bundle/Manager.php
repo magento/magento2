@@ -127,7 +127,7 @@ class Manager
         /** @var $asset LocalInterface */
         $filePathInfo = $this->splitPath($filePath);
         if ($filePathInfo && $this->compareModules($filePathInfo, $asset)) {
-            return $asset->getSourceFile() == $filePathInfo['excludedPath'];
+            return $asset->getFilePath() == $filePathInfo['excludedPath'];
         }
         return false;
     }
