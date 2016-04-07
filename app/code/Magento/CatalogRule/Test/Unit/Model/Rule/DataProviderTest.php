@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogRule\Test\Unit\Model\Rule;
@@ -84,6 +84,9 @@ class DataProviderTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('catalog_rule')
             ->willReturn($persistedData);
+        $this->dataPersistorMock->expects($this->once())
+            ->method('clear')
+            ->with('catalog_rule');
 
         $newRuleMock = $this->getMock('Magento\CatalogRule\Model\Rule', [], [], '', false);
         $newRuleMock->expects($this->atLeastOnce())->method('setData')->with($persistedData)->willReturnSelf();

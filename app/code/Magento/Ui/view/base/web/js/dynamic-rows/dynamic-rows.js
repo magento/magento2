@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -19,6 +19,7 @@ define([
             defaultRecord: false,
             columnsHeader: true,
             columnsHeaderAfterRender: false,
+            columnsHeaderClasses: '',
             labels: [],
             recordTemplate: 'record',
             collapsibleHeader: false,
@@ -176,7 +177,8 @@ define([
                     cell.config.labelVisible = false;
                     _.extend(data, {
                         label: cell.config.label,
-                        name: cell.name
+                        name: cell.name,
+                        columnsHeaderClasses: cell.config.columnsHeaderClasses
                     });
 
                     this.labels.push(data);

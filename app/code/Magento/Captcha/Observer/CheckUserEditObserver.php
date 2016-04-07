@@ -1,16 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Observer;
 
+use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -48,16 +46,16 @@ class CheckUserEditObserver implements ObserverInterface
     protected $captchaStringResolver;
 
     /**
-     * Account manager
+     * Authentication
      *
-     * @var AccountManagementHelper
+     * @var AuthenticationInterface
      */
-    protected $accountManagementHelper;
+    protected $authentication;
 
     /**
      * @var Session
      */
-    protected $session;
+    protected $customerSession;
 
     /**
      * @var ScopeConfigInterface
@@ -65,20 +63,14 @@ class CheckUserEditObserver implements ObserverInterface
     protected $scopeConfig;
 
     /**
-     * @var CustomerRepositoryInterface
-     */
-    protected $customerRepository;
-
-    /**
      * @param \Magento\Captcha\Helper\Data $helper
      * @param \Magento\Framework\App\ActionFlag $actionFlag
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param \Magento\Framework\App\Response\RedirectInterface $redirect
      * @param CaptchaStringResolver $captchaStringResolver
-     * @param AccountManagementHelper $accountManagementHelper
+     * @param AuthenticationInterface $authentication
      * @param Session $customerSession
      * @param ScopeConfigInterface $scopeConfig
-     * @param CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
         \Magento\Captcha\Helper\Data $helper,
@@ -86,20 +78,18 @@ class CheckUserEditObserver implements ObserverInterface
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\App\Response\RedirectInterface $redirect,
         CaptchaStringResolver $captchaStringResolver,
-        AccountManagementHelper $accountManagementHelper,
+        AuthenticationInterface $authentication,
         Session $customerSession,
-        ScopeConfigInterface $scopeConfig,
-        CustomerRepositoryInterface $customerRepository
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->helper = $helper;
         $this->actionFlag = $actionFlag;
         $this->messageManager = $messageManager;
         $this->redirect = $redirect;
         $this->captchaStringResolver = $captchaStringResolver;
-        $this->accountManagementHelper = $accountManagementHelper;
+        $this->authentication = $authentication;
         $this->customerSession = $customerSession;
         $this->scopeConfig = $scopeConfig;
-        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -120,14 +110,17 @@ class CheckUserEditObserver implements ObserverInterface
                     self::FORM_ID
                 )
             )) {
-                try {
-                    $customer = $this->customerRepository->getById($this->customerSession->getCustomerId());
-                    $this->accountManagementHelper->processCustomerLockoutData($customer->getId());
-                    $this->customerRepository->save($customer);
-                } catch (NoSuchEntityException $e) {
-                    //do nothing as customer existance is validated later in authenticate method
+                $customerId = $this->customerSession->getCustomerId();
+                $this->authentication->processAuthenticationFailure($customerId);
+                if ($this->authentication->isLocked($customerId)) {
+                    $this->customerSession->logout();
+                    $this->customerSession->start();
+                    $message = __(
+                        'The account is locked. Please wait and try again or contact %1.',
+                        $this->scopeConfig->getValue('contact/email/recipient_email')
+                    );
+                    $this->messageManager->addError($message);
                 }
-                $this->workWithLock();
                 $this->messageManager->addError(__('Incorrect CAPTCHA'));
                 $this->actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
                 $this->redirect->redirect($controller->getResponse(), '*/*/edit');
@@ -139,25 +132,5 @@ class CheckUserEditObserver implements ObserverInterface
         $captchaModel->logAttempt($login);
 
         return $this;
-    }
-
-    /**
-     * Logout a user if it is locked
-     *
-     * @throws \Magento\Framework\Exception\SessionException
-     * @return void
-     */
-    protected function workWithLock()
-    {
-        $customerModel = $this->customerSession->getCustomer();
-        if ($customerModel->isCustomerLocked()) {
-            $this->customerSession->logout();
-            $this->customerSession->start();
-            $message = __(
-                'The account is locked. Please wait and try again or contact %1.',
-                $this->scopeConfig->getValue('contact/email/recipient_email')
-            );
-            $this->messageManager->addError($message);
-        }
     }
 }

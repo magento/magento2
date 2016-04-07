@@ -1,13 +1,15 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
 // @codingStandardsIgnoreFile
 
 namespace Magento\Bundle\Test\Unit\Model;
+
+use Magento\Bundle\Model\OptionRepository;
 
 class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -97,7 +99,7 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->linkListMock = $this->getMock('\Magento\Bundle\Model\Product\LinksList', [], [], '', false);
         $this->metadataPoolMock = $this->getMock('Magento\Framework\Model\Entity\MetadataPool', [], [], '', false);
 
-        $this->model = new \Magento\Bundle\Model\OptionRepository(
+        $this->model = new OptionRepository(
             $this->productRepositoryMock,
             $this->typeMock,
             $this->optionFactoryMock,
@@ -106,9 +108,12 @@ class OptionRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->linkManagementMock,
             $this->optionListMock,
             $this->linkListMock,
-            $this->dataObjectHelperMock,
-            $this->metadataPoolMock
+            $this->dataObjectHelperMock
         );
+        $refClass = new \ReflectionClass(OptionRepository::class);
+        $refProperty = $refClass->getProperty('metadataPool');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($this->model, $this->metadataPoolMock);
     }
 
     /**

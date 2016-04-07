@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Setup\Console\Command;
@@ -395,7 +395,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
         // 2.2 Compression
         $relationsFileDir = dirname($relationsFile);
         if (!file_exists($relationsFileDir)) {
-            mkdir($relationsFileDir, DriverInterface::WRITEABLE_DIRECTORY_MODE, true);
+            mkdir($relationsFileDir, 0777, true);
         }
         $relations = array_filter($relations);
         file_put_contents($relationsFile, $serializer->serialize($relations));
@@ -413,7 +413,7 @@ class DiCompileMultiTenantCommand extends AbstractSetupCommand
         $outputContent = $serializer->serialize($pluginDefinitions);
         $pluginDefFileDir = dirname($pluginDefFile);
         if (!file_exists($pluginDefFileDir)) {
-            mkdir($pluginDefFileDir, DriverInterface::WRITEABLE_DIRECTORY_MODE, true);
+            mkdir($pluginDefFileDir, 0777, true);
         }
         file_put_contents($pluginDefFile, $outputContent);
     }

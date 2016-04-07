@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,24 +43,24 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     protected $metadataPool;
 
     /**
+     * @var Converter
+     */
+    protected $converter;
+
+    /**
+     * Repository constructor.
      * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
      * @param \Magento\Catalog\Model\ResourceModel\Product\Option $optionResource
-     * @param \Magento\Catalog\Model\Product\OptionFactory $optionFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory
-     * @param MetadataPool $metadataPool
+     * @param Converter $converter
      */
     public function __construct(
         \Magento\Catalog\Api\ProductRepositoryInterface $productRepository,
         \Magento\Catalog\Model\ResourceModel\Product\Option $optionResource,
-        \Magento\Catalog\Model\Product\OptionFactory $optionFactory,
-        \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory $collectionFactory,
-        MetadataPool $metadataPool
+        \Magento\Catalog\Model\Product\Option\Converter $converter
     ) {
         $this->productRepository = $productRepository;
         $this->optionResource = $optionResource;
-        $this->optionFactory = $optionFactory;
-        $this->collectionFactory = $collectionFactory;
-        $this->metadataPool = $metadataPool;
+        $this->converter = $converter;
     }
 
     /**
@@ -77,7 +77,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
      */
     public function getProductOptions(ProductInterface $product, $requiredOnly = false)
     {
-        return $this->collectionFactory->create()->getProductOptions(
+        return $this->getCollectionFactory()->create()->getProductOptions(
             $product->getEntityId(),
             $product->getStoreId(),
             $requiredOnly
@@ -114,7 +114,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         \Magento\Catalog\Api\Data\ProductInterface $duplicate
     ) {
         return $this->optionResource->duplicate(
-            $this->optionFactory->create([]),
+            $this->getOptionFactory()->create([]),
             $product->getId(),
             $duplicate->getId()
         );
@@ -126,7 +126,7 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     public function save(\Magento\Catalog\Api\Data\ProductCustomOptionInterface $option)
     {
         $product = $this->productRepository->get($option->getProductSku());
-        $metadata = $this->metadataPool->getMetadata(ProductInterface::class);
+        $metadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
         $option->setData('product_id', $product->getData($metadata->getLinkField()));
         $option->setOptionId(null);
         $option->save();
@@ -181,5 +181,41 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
         }
 
         return $newValues;
+    }
+
+    /**
+     * @return \Magento\Catalog\Model\Product\OptionFactory
+     */
+    private function getOptionFactory()
+    {
+        if (null === $this->optionFactory) {
+            $this->optionFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Model\Product\OptionFactory');
+        }
+        return $this->optionFactory;
+    }
+
+    /**
+     * @return \Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory
+     */
+    private function getCollectionFactory()
+    {
+        if (null === $this->collectionFactory) {
+            $this->collectionFactory = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Model\ResourceModel\Product\Option\CollectionFactory');
+        }
+        return $this->collectionFactory;
+    }
+
+    /**
+     * @return \Magento\Framework\Model\Entity\MetadataPool
+     */
+    private function getMetadataPool()
+    {
+        if (null === $this->metadataPool) {
+            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Framework\Model\Entity\MetadataPool');
+        }
+        return $this->metadataPool;
     }
 }

@@ -1,13 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Captcha\Observer;
 
+use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Customer\Helper\AccountManagement as AccountManagementHelper;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 
 /**
@@ -53,11 +53,11 @@ class CheckUserLoginObserver implements ObserverInterface
     protected $customerRepository;
 
     /**
-     * Account manager
+     * Authentication
      *
-     * @var AccountManagementHelper
+     * @var AuthenticationInterface
      */
-    protected $accountManagementHelper;
+    protected $authentication;
 
     /**
      * @param \Magento\Captcha\Helper\Data $helper
@@ -84,24 +84,9 @@ class CheckUserLoginObserver implements ObserverInterface
     }
 
     /**
-     * Set email notification
-     *
-     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
-     * @return void
-     * @deprecated
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
-     */
-    private function setCustomerRepository(\Magento\Customer\Api\CustomerRepositoryInterface $customerRepository)
-    {
-
-        $this->customerRepository = $customerRepository;
-    }
-
-    /**
      * Get customer repository
      *
      * @return \Magento\Customer\Api\CustomerRepositoryInterface
-     * @deprecated
      */
     private function getCustomerRepository()
     {
@@ -116,39 +101,24 @@ class CheckUserLoginObserver implements ObserverInterface
     }
 
     /**
-     * Set account management helper
+     * Get authentication
      *
-     * @param AccountManagementHelper $accountManagementHelper
-     * @return void
-     * @deprecated
-     * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+     * @return AuthenticationInterface
      */
-    private function setAccountManagementHelper(AccountManagementHelper $accountManagementHelper)
+    private function getAuthentication()
     {
 
-        $this->accountManagementHelper = $accountManagementHelper;
-    }
-
-    /**
-     * Get account management helper
-     *
-     * @return AccountManagementHelper
-     * @deprecated
-     */
-    private function getAccountManagementHelper()
-    {
-
-        if (!($this->accountManagementHelper instanceof \Magento\Customer\Helper\AccountManagement)) {
+        if (!($this->authentication instanceof AuthenticationInterface)) {
             return \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Customer\Helper\AccountManagement'
+                AuthenticationInterface::class
             );
         } else {
-            return $this->accountManagementHelper;
+            return $this->authentication;
         }
     }
 
     /**
-     * Check Captcha On User Login Page
+     * Check captcha on user login page
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @throws NoSuchEntityException
@@ -160,14 +130,15 @@ class CheckUserLoginObserver implements ObserverInterface
         $captchaModel = $this->_helper->getCaptcha($formId);
         $controller = $observer->getControllerAction();
         $loginParams = $controller->getRequest()->getPost('login');
-        $login = array_key_exists('username', $loginParams) ? $loginParams['username'] : null;
+        $login = (is_array($loginParams) && array_key_exists('username', $loginParams))
+            ? $loginParams['username']
+            : null;
         if ($captchaModel->isRequired($login)) {
             $word = $this->captchaStringResolver->resolve($controller->getRequest(), $formId);
             if (!$captchaModel->isCorrect($word)) {
                 try {
                     $customer = $this->getCustomerRepository()->get($login);
-                    $this->getAccountManagementHelper()->processCustomerLockoutData($customer->getId());
-                    $this->getCustomerRepository()->save($customer);
+                    $this->getAuthentication()->processAuthenticationFailure($customer->getId());
                 } catch (NoSuchEntityException $e) {
                     //do nothing as customer existance is validated later in authenticate method
                 }

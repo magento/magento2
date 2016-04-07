@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Controller\Account;
@@ -126,7 +126,10 @@ class LoginPostTest extends \PHPUnit_Framework_TestCase
             $this->formkeyValidator,
             $this->accountRedirect
         );
-        $this->controller->setScopeConfig($this->scopeConfig);
+        $reflection = new \ReflectionClass(get_class($this->controller));
+        $reflectionProperty = $reflection->getProperty('scopeConfig');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->controller, $this->scopeConfig);
     }
 
     /**

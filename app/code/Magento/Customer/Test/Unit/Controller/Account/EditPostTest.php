@@ -1,22 +1,23 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Test\Unit\Controller\Account;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Controller\Account\EditPost;
+use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Customer\Model\CustomerExtractor;
-use Magento\Customer\Helper\AccountManagement;
+use Magento\Customer\Model\EmailNotificationInterface;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Customer\Helper\EmailNotification;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -29,69 +30,69 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
     protected $model;
 
     /**
-     * @var Context | \PHPUnit_Framework_MockObject_MockObject
+     * @var Context|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $context;
 
     /**
-     * @var Session | \PHPUnit_Framework_MockObject_MockObject
+     * @var Session|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerSession;
 
     /**
-     * @var \Magento\Customer\Model\AccountManagement | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Customer\Model\AccountManagement|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerAccountManagement;
 
     /**
-     * @var CustomerRepositoryInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerRepository;
 
     /**
-     * @var Validator | \PHPUnit_Framework_MockObject_MockObject
+     * @var Validator|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $validator;
 
     /**
-     * @var CustomerExtractor | \PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerExtractor|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $customerExtractor;
 
     /**
-     * @var EmailNotification | \PHPUnit_Framework_MockObject_MockObject
+     * @var EmailNotificationInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $emailNotification;
 
     /**
-     * @var AccountManagement | \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $accountManagementHelper;
-
-    /**
-     * @var RedirectFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultRedirectFactory;
 
     /**
-     * @var Redirect | \PHPUnit_Framework_MockObject_MockObject
+     * @var Redirect|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $resultRedirect;
 
     /**
-     * @var Http | \PHPUnit_Framework_MockObject_MockObject
+     * @var Http|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $request;
 
     /**
-     * @var ManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Event\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $eventManager;
+
+    /**
+     * @var AuthenticationInterface|\PHPUnit_Framework_MockObject_MockObject
+     */
+    protected $authenticationMock;
 
     protected function setUp()
     {
@@ -104,7 +105,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
 
         $this->customerAccountManagement = $this->getMockBuilder('Magento\Customer\Model\AccountManagement')
             ->disableOriginalConstructor()
-            ->setMethods(['changePassword'])
             ->getMock();
 
         $this->customerRepository = $this->getMockBuilder('Magento\Customer\Api\CustomerRepositoryInterface')
@@ -118,13 +118,19 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->accountManagementHelper = $this->getMockBuilder('Magento\Customer\Helper\AccountManagement')
+        $this->emailNotification = $this->getMockBuilder(EmailNotificationInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->emailNotification = $this->getMockBuilder('Magento\Customer\Helper\EmailNotification')
+        $scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['sendNotificationEmailsIfRequired'])
+            ->getMock();
+        $scopeConfigMock->expects($this->any())
+            ->method('getValue')
+            ->willReturn('test@host.com');
+
+        $this->authenticationMock = $this->getMockBuilder(AuthenticationInterface::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
         $this->model = new EditPost(
@@ -135,8 +141,16 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             $this->validator,
             $this->customerExtractor
         );
-        $this->model->setEmailNotification($this->emailNotification);
-        $this->model->setAccountManagementHelper($this->accountManagementHelper);
+        $reflection = new \ReflectionClass(get_class($this->model));
+        $reflectionProperty = $reflection->getProperty('emailNotification');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($this->model, $this->emailNotification);
+        $reflectionProperty2 = $reflection->getProperty('scopeConfig');
+        $reflectionProperty2->setAccessible(true);
+        $reflectionProperty2->setValue($this->model, $scopeConfigMock);
+        $reflectionProperty3 = $reflection->getProperty('authentication');
+        $reflectionProperty3->setAccessible(true);
+        $reflectionProperty3->setValue($this->model, $this->authenticationMock);
     }
 
     public function testInvalidFormKey()
@@ -185,6 +199,10 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
         $currentCustomerMock = $this->getCurrentCustomerMock($customerId, $address);
         $newCustomerMock = $this->getNewCustomerMock($customerId, $address);
 
+        $currentCustomerMock->expects($this->any())
+            ->method('getEmail')
+            ->willReturn($customerEmail);
+
         $this->customerSession->expects($this->once())
             ->method('getCustomerId')
             ->willReturn($customerId);
@@ -217,11 +235,6 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->with('current_password')
             ->willReturn($currentPassword);
 
-        $this->accountManagementHelper->expects($this->once())
-            ->method('validatePasswordAndLockStatus')
-            ->with($currentCustomerMock, $currentPassword)
-            ->willReturn(true);
-
         $this->customerRepository->expects($this->once())
             ->method('getById')
             ->with($customerId)
@@ -238,8 +251,8 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->willReturn($newCustomerMock);
 
         $this->emailNotification->expects($this->once())
-            ->method('sendNotificationEmailsIfRequired')
-            ->with($currentCustomerMock, $newCustomerMock, false)
+            ->method('credentialsChanged')
+            ->with($currentCustomerMock, $customerEmail, false)
             ->willReturnSelf();
 
         $newCustomerMock->expects($this->once())
@@ -262,6 +275,10 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->method('setPath')
             ->with('customer/account')
             ->willReturnSelf();
+
+        $this->authenticationMock->expects($this->once())
+            ->method('authenticate')
+            ->willReturn(true);
 
         $this->assertSame($this->resultRedirect, $this->model->execute());
     }
@@ -307,7 +324,7 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->with($customerId)
             ->willReturn($currentCustomerMock);
 
-        $this->request->expects($this->exactly(2))
+        $this->request->expects($this->any())
             ->method('getParam')
             ->with('change_email')
             ->willReturn(true);
@@ -318,9 +335,8 @@ class EditPostTest extends \PHPUnit_Framework_TestCase
             ->willReturn($password);
 
         $exception = new $exceptionClass($errorMessage);
-        $this->accountManagementHelper->expects($this->once())
-            ->method('validatePasswordAndLockStatus')
-            ->with($currentCustomerMock, $password)
+        $this->authenticationMock->expects($this->once())
+            ->method('authenticate')
             ->willThrowException($exception);
 
         $this->messageManager->expects($this->once())

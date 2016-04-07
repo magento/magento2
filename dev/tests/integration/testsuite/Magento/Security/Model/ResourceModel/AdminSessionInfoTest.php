@@ -1,11 +1,10 @@
 <?php
-
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 namespace Magento\Security\Model\ResourceModel;
 
-/**
- * Class AdminSessionInfoTest
- * @package Magento\Security\Model
- */
 class AdminSessionInfoTest extends \PHPUnit_Framework_TestCase
 {
     /**

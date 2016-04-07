@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab\View;
@@ -183,7 +183,7 @@ class PersonalInfoTest extends \PHPUnit_Framework_TestCase
     public function testIsConfirmedStatusConfirmed()
     {
         $this->_loadCustomer();
-        $this->assertEquals('Confirmed', $this->_block->getIsConfirmedStatus());
+        $this->assertEquals(__('Confirmation Not Required'), $this->_block->getIsConfirmedStatus());
     }
 
     /**

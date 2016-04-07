@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -30,7 +30,7 @@ class TrackAdminNewPasswordObserverTest extends \PHPUnit_Framework_TestCase
     /** @var \Magento\User\Observer\Backend\TrackAdminNewPasswordObserver */
     protected $model;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->configInterfaceMock = $this->getMockBuilder('Magento\Backend\App\ConfigInterface')
             ->disableOriginalConstructor()
