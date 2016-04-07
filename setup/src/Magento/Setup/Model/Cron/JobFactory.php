@@ -131,22 +131,12 @@ class JobFactory
                 );
                 break;
             case self::JOB_ENABLE_CACHE:
-                return new JobSetCache(
-                    $objectManager->get('Magento\Backend\Console\Command\CacheEnableCommand'),
-                    $objectManagerProvider,
-                    $multipleStreamOutput,
-                    $cronStatus,
-                    $name
-                );
+                $cmd = $objectManager->get('Magento\Backend\Console\Command\CacheEnableCommand');
+                return new JobSetCache($cmd, $objectManagerProvider, $multipleStreamOutput, $cronStatus, $name);
                 break;
             case self::JOB_DISABLE_CACHE:
-                return new JobSetCache(
-                    $objectManager->get('Magento\Backend\Console\Command\CacheDisableCommand'),
-                    $objectManagerProvider,
-                    $multipleStreamOutput,
-                    $cronStatus,
-                    $name
-                );
+                $cmd = $objectManager->get('Magento\Backend\Console\Command\CacheDisableCommand');
+                return new JobSetCache($cmd, $objectManagerProvider, $multipleStreamOutput, $cronStatus, $name);
                 break;
             default:
                 throw new \RuntimeException(sprintf('"%s" job is not supported.', $name));

@@ -108,6 +108,7 @@ class StartUpdater extends AbstractActionController
      *
      * @param array $postPayload
      * @param string $errorMessage
+     * @return void
      */
     private function createUpdaterTasks(array $postPayload, &$errorMessage)
     {
