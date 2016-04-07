@@ -167,7 +167,7 @@ class File extends BackendFile
      * @param string $fileName
      * @return mixed
      */
-    public function getStoreMediaUrl($fileName)
+    protected function getStoreMediaUrl($fileName)
     {
         $fieldConfig = $this->getFieldConfig();
         if (isset($fieldConfig['base_url'])) {
@@ -184,7 +184,7 @@ class File extends BackendFile
      * @param string $filename
      * @return string
      */
-    public function getTmpMediaPath($filename)
+    protected function getTmpMediaPath($filename)
     {
         return 'tmp/' . FileProcessor::FILE_DIR . '/' . $filename;
     }
