@@ -95,10 +95,7 @@ class InstallerFactoryTest extends \PHPUnit_Framework_TestCase
             ],
         ];
         $serviceLocatorMock = $this->getMockForAbstractClass('Zend\ServiceManager\ServiceLocatorInterface', ['get']);
-        $serviceLocatorMock
-            ->expects($this->any())
-            ->method('get')
-            ->will($this->returnValueMap($returnValueMap));
+        $serviceLocatorMock->expects($this->any())->method('get')->will($this->returnValueMap($returnValueMap));
 
         $log = $this->getMockForAbstractClass('Magento\Framework\Setup\LoggerInterface');
         $resourceFactoryMock = $this->getMock('Magento\Setup\Module\ResourceFactory', [], [], '', false);
