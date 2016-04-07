@@ -21,7 +21,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
     /**
      * @var DeploymentConfig
      */
-    private $deploymentConfig;
+    protected $deploymentConfig;
 
     /**
      * {@inheritdoc}
