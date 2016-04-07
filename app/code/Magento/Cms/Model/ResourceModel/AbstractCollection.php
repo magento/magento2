@@ -5,6 +5,8 @@
  */
 namespace Magento\Cms\Model\ResourceModel;
 
+use Magento\Store\Model\Store;
+
 /**
  * Abstract collection of CMS pages and blocks
  */
@@ -61,24 +63,30 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
             $connection = $this->getConnection();
             $select = $connection->select()->from(['cms_entity_store' => $this->getTable($tableName)])
                 ->where('cms_entity_store.' . $linkField . ' IN (?)', $linkedIds);
-            $result = $connection->fetchPairs($select);
+            $result = $connection->fetchAll($select);
             if ($result) {
+                $storesData = [];
+                foreach ($result as $storeData) {
+                    $storesData[$storeData[$linkField]][] = $storeData['store_id'];
+                }
+
                 foreach ($this as $item) {
                     $linkedId = $item->getData($linkField);
-                    if (!isset($result[$linkedId])) {
+                    if (!isset($storesData[$linkedId])) {
                         continue;
                     }
-                    if ($result[$linkedId] == 0) {
+                    $storeIdKey = array_search(Store::DEFAULT_STORE_ID, $storesData[$linkedId], true);
+                    if ($storeIdKey !== false) {
                         $stores = $this->storeManager->getStores(false, true);
                         $storeId = current($stores)->getId();
                         $storeCode = key($stores);
                     } else {
-                        $storeId = $result[$linkedId];
+                        $storeId = current($storesData[$linkedId]);
                         $storeCode = $this->storeManager->getStore($storeId)->getCode();
                     }
                     $item->setData('_first_store_id', $storeId);
                     $item->setData('store_code', $storeCode);
-                    $item->setData('store_id', [$result[$linkedId]]);
+                    $item->setData('store_id', $storesData[$linkedId]);
                 }
             }
         }
@@ -103,7 +111,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
     /**
      * Add filter by store
      *
-     * @param int|array|\Magento\Store\Model\Store $store
+     * @param int|array|Store $store
      * @param bool $withAdmin
      * @return $this
      */
@@ -112,13 +120,13 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
     /**
      * Perform adding filter by store
      *
-     * @param int|array|\Magento\Store\Model\Store $store
+     * @param int|array|Store $store
      * @param bool $withAdmin
      * @return void
      */
     protected function performAddStoreFilter($store, $withAdmin = true)
     {
-        if ($store instanceof \Magento\Store\Model\Store) {
+        if ($store instanceof Store) {
             $store = [$store->getId()];
         }
 
@@ -127,7 +135,7 @@ abstract class AbstractCollection extends \Magento\Framework\Model\ResourceModel
         }
 
         if ($withAdmin) {
-            $store[] = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+            $store[] = Store::DEFAULT_STORE_ID;
         }
 
         $this->addFilter('store', ['in' => $store], 'public');

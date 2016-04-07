@@ -113,7 +113,7 @@ define([
             var tmpArray;
 
             this.reRender = false;
-            tmpArray = this.unionInsertData();
+            tmpArray = this.getUnionInsertData();
             tmpArray.splice(index, 1);
 
             if (!tmpArray.length) {
@@ -130,7 +130,7 @@ define([
         generateAssociatedProducts: function () {
             var productsIds = [];
 
-            this.unionInsertData().each(function (data) {
+            this.getUnionInsertData().each(function (data) {
                 if (data.id !== null) {
                     productsIds.push(data.id);
                 }
@@ -151,6 +151,22 @@ define([
                 ]);
 
             return this;
+        },
+
+        /**
+         * Get union insert data from source
+         *
+         * @returns {Array}
+         */
+        getUnionInsertData: function () {
+            var source = this.source.get(this.dataScope + '.' + this.index),
+                result = [];
+
+            _.each(source, function (data) {
+                result.push(data);
+            });
+
+            return result;
         },
 
         /**
@@ -217,7 +233,7 @@ define([
                 return;
             }
 
-            tmpArray = this.unionInsertData();
+            tmpArray = this.getUnionInsertData();
 
             changes = this._checkGridData(data);
             this.cacheGridData = data;
@@ -241,7 +257,7 @@ define([
          * @param {Object} data
          */
         processingChangeDataFromGrid: function (data) {
-            var tmpArray = this.unionInsertData(),
+            var tmpArray = this.getUnionInsertData(),
                 mappedData = this.mappingValue(data.product);
 
             mappedData[this.canEditField] = 0;
@@ -295,7 +311,7 @@ define([
          * @param {Object} data
          */
         processingInsertDataFromWizard: function (data) {
-            var tmpArray = this.unionInsertData(),
+            var tmpArray = this.getUnionInsertData(),
                 productIdsToDelete = this.source.get(this.dataScopeAssociatedProduct),
                 index,
                 product = {};
@@ -466,7 +482,7 @@ define([
          * @param {Number} rowIndex
          */
         toggleStatusProduct: function (rowIndex) {
-            var tmpArray = this.unionInsertData(),
+            var tmpArray = this.getUnionInsertData(),
                 status = parseInt(tmpArray[rowIndex].status, 10);
 
             if (status === 1) {
