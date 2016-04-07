@@ -57,7 +57,7 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
     {
         $this->variationHandler = $this->getMockBuilder(VariationHandler::class)
             ->disableOriginalConstructor()
-            ->setMethods(['generateSimpleProducts'])
+            ->setMethods(['generateSimpleProducts', 'prepareAttributeSet'])
             ->getMock();
 
         $this->request = $this->getMockBuilder(Http::class)
@@ -184,6 +184,10 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->with($attributes);
 
         $this->variationHandler->expects(static::once())
+            ->method('prepareAttributeSet')
+            ->with($this->product);
+
+        $this->variationHandler->expects(static::once())
             ->method('generateSimpleProducts')
             ->with($this->product, $variationMatrix)
             ->willReturn($simpleProductsIds);
@@ -249,6 +253,9 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->with($attributes);
 
         $this->variationHandler->expects(static::never())
+            ->method('prepareAttributeSet');
+
+        $this->variationHandler->expects(static::never())
             ->method('generateSimpleProducts');
 
         $extensionAttributes->expects(static::once())
@@ -278,6 +285,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
         $this->request->expects(static::once())
             ->method('getPost');
         $this->variationHandler->expects(static::never())
+            ->method('prepareAttributeSet');
+        $this->variationHandler->expects(static::never())
             ->method('generateSimpleProducts');
         $this->plugin->afterInitialize($this->subject, $this->product);
     }
@@ -294,6 +303,8 @@ class ConfigurableTest extends \PHPUnit_Framework_TestCase
             ->method('getExtensionAttributes');
         $this->request->expects(static::once())
             ->method('getPost');
+        $this->variationHandler->expects(static::never())
+            ->method('prepareAttributeSet');
         $this->variationHandler->expects(static::never())
             ->method('generateSimpleProducts');
         $this->plugin->afterInitialize($this->subject, $this->product);

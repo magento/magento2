@@ -15,6 +15,7 @@ use Magento\Framework\Api\ImageContentValidatorInterface;
 use Magento\Framework\Api\ImageProcessorInterface;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
 use Magento\Framework\Exception\ValidatorException;
@@ -546,6 +547,8 @@ class ProductRepository implements \Magento\Catalog\Api\ProductRepositoryInterfa
             );
         } catch (ValidatorException $e) {
             throw new CouldNotSaveException(__($e->getMessage()));
+        } catch (LocalizedException $e) {
+            throw $e;
         } catch (\Exception $e) {
             throw new \Magento\Framework\Exception\CouldNotSaveException(__('Unable to save product'));
         }
