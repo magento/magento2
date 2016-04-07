@@ -54,6 +54,12 @@ class EntityCmsPage extends DataObject implements EntityCodeResolverInterface
         return $this->codeModel;
     }
 
+    /**
+     * Retrieves Google Optimizer binded entity
+     *
+     * @return \Magento\Cms\Model\Page|mixed
+     * @throws NoSuchEntityException
+     */
     private function getEntity()
     {
         if (!$this->entity) {
