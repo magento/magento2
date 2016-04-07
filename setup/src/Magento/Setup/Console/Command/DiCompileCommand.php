@@ -110,7 +110,7 @@ class DiCompileCommand extends Command
         $config = $this->deploymentConfig->get(ConfigOptionsListConstants::KEY_MODULES);
         if (!$config) {
             $messages[] = 'You cannot run this command because modules are not enabled. You can enable modules by'
-             . ' running module:enable --all command.';
+             . ' running \'module:enable --all\' command.';
         }
 
         /**
