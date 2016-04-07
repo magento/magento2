@@ -5,6 +5,9 @@
  */
 namespace Magento\Store\App\FrontController\Plugin;
 
+use \Magento\Store\Model\StoreResolver\ReaderList;
+use \Magento\Store\Model\ScopeInterface;
+
 /**
  * Plugin to set default store for admin area.
  */
@@ -16,12 +19,37 @@ class DefaultStore
     protected $storeManager;
 
     /**
+     * @var ReaderList
+     */
+    protected $readerList;
+
+    /**
+     * @var string
+     */
+    protected $runMode;
+
+    /**
+     * @var string
+     */
+    protected $scopeCode;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param ReaderList $readerList
+     * @param string $runMode
+     * @param null $scopeCode
      */
-    public function __construct(\Magento\Store\Model\StoreManagerInterface $storeManager)
-    {
+    public function __construct(
+        \Magento\Store\Model\StoreManagerInterface $storeManager, 
+        ReaderList $readerList,
+        $runMode = ScopeInterface::SCOPE_STORE,
+        $scopeCode = null
+    ) {
+        $this->runMode = $scopeCode ? $runMode : ScopeInterface::SCOPE_WEBSITE;
+        $this->scopeCode = $scopeCode;
+        $this->readerList = $readerList;
         $this->storeManager = $storeManager;
     }
 
@@ -38,6 +66,8 @@ class DefaultStore
         \Magento\Framework\App\FrontController $subject,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::DISTRO_STORE_ID);
+        $reader = $this->readerList->getReader($this->runMode);
+        $defaultStoreId = $reader->getDefaultStoreId($this->scopeCode);
+        $this->storeManager->setCurrentStore($defaultStoreId);
     }
 }
