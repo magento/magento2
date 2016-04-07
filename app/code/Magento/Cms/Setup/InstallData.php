@@ -68,7 +68,7 @@ class InstallData implements InstallDataInterface
                 'page_layout' => '1column',
                 'identifier' => 'home',
                 'content_heading' => 'Home Page',
-                'content' => "<p>" . __("CMS homepage content goes here.") . "</p>\r\n",
+                'content' => "<p>CMS homepage content goes here.</p>\r\n",
                 'is_active' => 1,
                 'stores' => [0],
                 'sort_order' => 0
