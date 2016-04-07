@@ -6,9 +6,13 @@
 namespace Magento\Cms\Model\ResourceModel\Block\Relation\Store;
 
 use Magento\Cms\Model\ResourceModel\Block;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
-class SaveHandler
+/**
+ * Class SaveHandler
+ */
+class SaveHandler implements ExtensionInterface
 {
     /**
      * @var MetadataPool
@@ -35,9 +39,11 @@ class SaveHandler
     /**
      * @param string $entityType
      * @param object $entity
+     * @param array $arguments
      * @return object
+     * @throws \Exception
      */
-    public function execute($entityType, $entity)
+    public function execute($entityType, $entity, $arguments = [])
     {
         $entityMetadata = $this->metadataPool->getMetadata($entityType);
         $linkField = $entityMetadata->getLinkField();
