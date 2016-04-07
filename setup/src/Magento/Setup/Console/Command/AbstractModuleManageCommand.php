@@ -101,6 +101,9 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
                 $output->writeln('');
             }
             $this->cleanup($input, $output);
+
+            touch(BP . '/var/.regenerate');
+
             if ($force) {
                 $output->writeln(
                     '<error>Alert: You used the --force option.'

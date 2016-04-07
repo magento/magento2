@@ -42,7 +42,6 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
      */
     protected $priceCurrency;
 
-
     /**
      * @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject
      */
@@ -202,9 +201,12 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
             $this->eavConfig,
             $this->dateFormat,
             $this->dateTime,
-            $this->productFactory,
-            $this->metadataPool
+            $this->productFactory
         );
+
+        $this->setProperties($this->indexBuilder, [
+            'metadataPool' => $this->metadataPool
+        ]);
     }
 
     /**
@@ -253,5 +255,21 @@ class IndexBuilderTest extends \PHPUnit_Framework_TestCase
         $this->select->expects($this->once())->method('insertFromSelect')->with('catalogrule_group_website');
 
         $this->indexBuilder->reindexByIds([1]);
+    }
+
+    /**
+     * @param $object
+     * @param array $properties
+     */
+    private function setProperties($object, $properties = [])
+    {
+        $reflectionClass = new \ReflectionClass(get_class($object));
+        foreach ($properties as $key => $value) {
+            if ($reflectionClass->hasProperty($key)) {
+                $reflectionProperty = $reflectionClass->getProperty($key);
+                $reflectionProperty->setAccessible(true);
+                $reflectionProperty->setValue($object, $value);
+            }
+        }
     }
 }

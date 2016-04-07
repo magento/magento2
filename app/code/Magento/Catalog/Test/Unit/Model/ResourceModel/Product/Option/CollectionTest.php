@@ -133,6 +133,12 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
         $metadata->expects($this->any())->method('getLinkField')->willReturn('id');
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($metadata);
         $this->selectMock->expects($this->exactly(2))->method('join');
+
+        $this->prepareObjectManager([
+            ['Magento\Framework\Model\Entity\MetadataPool', $this->metadataPoolMock],
+            ['Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface', $this->joinProcessor]
+        ]);
+
         $this->collection = new Collection(
             $this->entityFactoryMock,
             $this->loggerMock,
@@ -140,8 +146,6 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             $this->eventManagerMock,
             $this->optionsFactoryMock,
             $this->storeManagerMock,
-            $this->metadataPoolMock,
-            $this->joinProcessor,
             null,
             $this->resourceMock
         );
@@ -150,5 +154,21 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
     public function testReset()
     {
         $this->collection->reset();
+    }
+
+    /**
+     * @param $map
+     */
+    private function prepareObjectManager($map)
+    {
+        $objectManagerMock = $this->getMock('Magento\Framework\ObjectManagerInterface');
+        $objectManagerMock->expects($this->any())->method('getInstance')->willReturnSelf();
+        $objectManagerMock->expects($this->any())
+            ->method('get')
+            ->will($this->returnValueMap($map));
+        $reflectionClass = new \ReflectionClass('Magento\Framework\App\ObjectManager');
+        $reflectionProperty = $reflectionClass->getProperty('_instance');
+        $reflectionProperty->setAccessible(true);
+        $reflectionProperty->setValue($objectManagerMock);
     }
 }

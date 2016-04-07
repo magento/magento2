@@ -612,7 +612,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction">
+    <type name="Magento\Catalog\Model\Indexer\Category\Flat\SkipStaticColumnsProvider">
         <arguments>
             <argument name="skipStaticColumns" xsi:type="array">
                 <item name="entity_type_id" xsi:type="string">entity_type_id</item>

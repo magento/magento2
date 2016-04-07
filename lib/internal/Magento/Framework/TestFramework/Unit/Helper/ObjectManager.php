@@ -159,7 +159,17 @@ class ObjectManager
         }
         $constructArguments = $this->getConstructArguments($className, $arguments);
         $reflectionClass = new \ReflectionClass($className);
-        return $reflectionClass->newInstanceArgs($constructArguments);
+        $newObject = $reflectionClass->newInstanceArgs($constructArguments);
+
+        foreach (array_diff_key($arguments, $constructArguments) as $key => $value) {
+            if ($reflectionClass->hasProperty($key)) {
+                $reflectionProperty = $reflectionClass->getProperty($key);
+                $reflectionProperty->setAccessible(true);
+                $reflectionProperty->setValue($newObject, $value);
+            }
+        }
+
+        return $newObject;
     }
 
     /**

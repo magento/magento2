@@ -57,6 +57,13 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
             ]));
     }
 
+    protected function tearDown()
+    {
+        if (file_exists(BP . '/var/.regenerate')) {
+            unlink(BP . '/var/.regenerate');
+        }
+    }
+
     /**
      * @param bool $isEnable
      * @param bool $clearStaticContent
