@@ -4,9 +4,10 @@
  */
 
 define([
+    'underscore',
     'uiRegistry',
     'Magento_Ui/js/form/element/select'
-], function (uiRegistry, select) {
+], function (_, uiRegistry, select) {
     'use strict';
 
     return select.extend({
@@ -28,15 +29,20 @@ define([
          * Enable/disable fields on Coupons tab
          */
         enableDisableFields: function () {
-            var selector = '[id=sales-rule-form-tab-coupons] input, [id=sales-rule-form-tab-coupons] select, ' +
-                    '[id=sales-rule-form-tab-coupons] button',
-                isUseAutoGenerationChecked = uiRegistry
+            var selector,
+                isUseAutoGenerationChecked,
+                couponType,
+                disableAuto;
+
+            selector = '[id=sales-rule-form-tab-coupons] input, [id=sales-rule-form-tab-coupons] select, ' +
+                    '[id=sales-rule-form-tab-coupons] button';
+            isUseAutoGenerationChecked = uiRegistry
                     .get('sales_rule_form.sales_rule_form.rule_information.use_auto_generation')
                     .checked();
-            var couponType = uiRegistry
+            couponType = uiRegistry
                 .get('sales_rule_form.sales_rule_form.rule_information.coupon_type')
                 .value();
-            var disableAuto = (isUseAutoGenerationChecked && couponType == 2) || (couponType == 3)
+            disableAuto = couponType === 3 || isUseAutoGenerationChecked;
             _.each(
                 document.querySelectorAll(selector),
                 function (element) {
