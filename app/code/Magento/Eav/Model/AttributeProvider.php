@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -60,7 +60,7 @@ class AttributeProvider implements AttributeProviderInterface
         $metadata = $this->metadataPool->getMetadata($entityType);
         $searchResult = $this->attributeRepository->getList(
             $metadata->getEavEntityType(),
-            $this->searchCriteriaBuilder->create()
+            $this->searchCriteriaBuilder->addFilter('attribute_set_id', null, 'neq')->create()
         );
         $attributes = [];
         foreach ($searchResult->getItems() as $attribute) {

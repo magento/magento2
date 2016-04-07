@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -14,7 +14,7 @@ $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->creat
     'Magento\Catalog\Model\ProductRepository'
 );
 try {
-    $product = $repository->get('simple');
+    $product = $repository->get('simple', false, null, true);
     $product->delete();
 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
     //Entity already deleted

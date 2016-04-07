@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 define(
@@ -29,6 +29,8 @@ define(
                      * @param {Object} event
                      */
                     click: function (event) {
+                        $('body').trigger('processStart');
+
                         event.preventDefault();
 
                         paypalExpressCheckout.checkout.initXO();
@@ -40,8 +42,8 @@ define(
                             }
                         ).done(
                             function (response) {
-                                if (response && response.token) {
-                                    paypalExpressCheckout.checkout.startFlow(response.token);
+                                if (response && response.url) {
+                                    paypalExpressCheckout.checkout.startFlow(response.url);
 
                                     return;
                                 }
@@ -50,11 +52,11 @@ define(
                             }
                         ).fail(
                             function () {
+                                $('body').trigger('processStop');
                                 paypalExpressCheckout.checkout.closeFlow();
                             }
                         ).always(
                             function () {
-                                $('body').trigger('processStop');
                                 customerData.invalidate(['cart']);
                             }
                         );

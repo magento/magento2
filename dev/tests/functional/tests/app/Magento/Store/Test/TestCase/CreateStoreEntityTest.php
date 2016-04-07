@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -72,7 +72,6 @@ class CreateStoreEntityTest extends Injectable
      */
     public function test(Store $store)
     {
-        $this->markTestIncomplete('MAGETWO-48723');
         //Steps:
         $this->storeIndex->open();
         $this->storeIndex->getGridPageActions()->addStoreView();

@@ -1,15 +1,14 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Locks;
 
+use Magento\Customer\Model\AuthenticationInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Phrase;
-use Magento\Framework\Validator\Exception;
 
 /**
  * Test class for \Magento\Customer\Controller\Adminhtml\Locks\Unlock testing
@@ -24,11 +23,11 @@ class UnlockTest extends \PHPUnit_Framework_TestCase
     protected $contextMock;
 
     /**
-     * Account manager
+     * Authentication
      *
-     * @var \Magento\Customer\Helper\AccountManagement
+     * @var AuthenticationInterface
      */
-    protected $accountManagementHelperMock;
+    protected $authenticationMock;
 
     /**
      * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
@@ -56,11 +55,6 @@ class UnlockTest extends \PHPUnit_Framework_TestCase
     protected $redirectMock;
 
     /**
-     * @var \Magento\Customer\Model\ResourceModel\CustomerRepository
-     */
-    protected $customerRepositoryMock;
-
-    /**
      * @var \Magento\Customer\Model\Data\Customer
      */
     protected $customerDataMock;
@@ -80,13 +74,10 @@ class UnlockTest extends \PHPUnit_Framework_TestCase
         $this->contextMock = $this->getMockBuilder('\Magento\Backend\App\Action\Context')
             ->disableOriginalConstructor()
             ->getMock();
-        $this->accountManagementHelperMock = $this->getMock(
-            'Magento\Customer\Helper\AccountManagement',
-            ['processUnlockData'],
-            [],
-            '',
-            false
-        );
+        $this->authenticationMock = $this->getMockBuilder(AuthenticationInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->requestMock = $this->getMockBuilder('Magento\Framework\App\RequestInterface')
             ->setMethods(['getParam'])
             ->getMockForAbstractClass();
@@ -116,13 +107,7 @@ class UnlockTest extends \PHPUnit_Framework_TestCase
             ->setMethods(['getObjectManager', 'getResultFactory', 'getMessageManager', 'getRequest'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerRepositoryMock = $this->getMock(
-            'Magento\Customer\Model\ResourceModel\CustomerRepository',
-            ['getById', 'save'],
-            [],
-            '',
-            false
-        );
+
         $this->contextMock->expects($this->any())
             ->method('getRequest')
             ->willReturn($this->requestMock);
@@ -134,8 +119,7 @@ class UnlockTest extends \PHPUnit_Framework_TestCase
             '\Magento\Customer\Controller\Adminhtml\Locks\Unlock',
             [
                 'context' => $this->contextMock,
-                'accountManagementHelper' => $this->accountManagementHelperMock,
-                'customerRepository' => $this->customerRepositoryMock
+                'authentication' => $this->authenticationMock,
             ]
         );
     }
@@ -150,12 +134,7 @@ class UnlockTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with($this->equalTo('customer_id'))
             ->will($this->returnValue($customerId));
-        $this->customerRepositoryMock->expects($this->once())
-            ->method('getById')
-            ->with($customerId)
-            ->willReturn($this->customerDataMock);
-        $this->accountManagementHelperMock->expects($this->once())->method('processUnlockData')->with($customerId);
-        $this->customerRepositoryMock->expects($this->once())->method('save')->with($this->customerDataMock);
+        $this->authenticationMock->expects($this->once())->method('unlock')->with($customerId);
         $this->messageManagerMock->expects($this->once())->method('addSuccess');
         $this->redirectMock->expects($this->once())
             ->method('setPath')
@@ -175,12 +154,8 @@ class UnlockTest extends \PHPUnit_Framework_TestCase
             ->method('getParam')
             ->with($this->equalTo('customer_id'))
             ->will($this->returnValue($customerId));
-        $this->customerRepositoryMock->expects($this->once())
-            ->method('getById')
-            ->with($customerId)
-            ->willReturn($this->customerDataMock);
-        $this->accountManagementHelperMock->expects($this->once())
-            ->method('processUnlockData')
+        $this->authenticationMock->expects($this->once())
+            ->method('unlock')
             ->with($customerId)
             ->willThrowException(new \Exception($phrase));
         $this->messageManagerMock->expects($this->once())->method('addError');

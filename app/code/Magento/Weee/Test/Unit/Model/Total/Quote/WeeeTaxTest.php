@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Weee\Test\Unit\Model\Total\Quote;
@@ -32,7 +32,7 @@ class WeeeTaxTest extends \PHPUnit_Framework_TestCase
      */
     protected $objectManagerHelper;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->quoteMock = $this->getMock('\Magento\Quote\Model\Quote', [], [], '', false);

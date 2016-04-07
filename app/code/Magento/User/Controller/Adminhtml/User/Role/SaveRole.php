@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\User\Controller\Adminhtml\User\Role;
@@ -10,6 +10,7 @@ use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\State\UserLockedException;
+use Magento\Security\Model\SecurityCookie;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -42,40 +43,23 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
     const RESOURCE_FORM_DATA_SESSION_KEY = 'resource_form_data';
 
     /**
-     * @var \Magento\Security\Helper\SecurityCookie
+     * @var SecurityCookie
      */
-    protected $securityCookieHelper;
+    private $securityCookie;
 
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Authorization\Model\RoleFactory $roleFactory
-     * @param \Magento\User\Model\UserFactory $userFactory
-     * @param \Magento\Authorization\Model\RulesFactory $rulesFactory
-     * @param \Magento\Backend\Model\Auth\Session $authSession
-     * @param \Magento\Framework\Filter\FilterManager $filterManager
-     * @param \Magento\Security\Helper\SecurityCookie $securityCookieHelper
+     * Get security cookie
+     *
+     * @return SecurityCookie
+     * @deprecated
      */
-    public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Authorization\Model\RoleFactory $roleFactory,
-        \Magento\User\Model\UserFactory $userFactory,
-        \Magento\Authorization\Model\RulesFactory $rulesFactory,
-        \Magento\Backend\Model\Auth\Session $authSession,
-        \Magento\Framework\Filter\FilterManager $filterManager,
-        \Magento\Security\Helper\SecurityCookie $securityCookieHelper
-    ) {
-        parent::__construct(
-            $context,
-            $coreRegistry,
-            $roleFactory,
-            $userFactory,
-            $rulesFactory,
-            $authSession,
-            $filterManager
-        );
-        $this->securityCookieHelper = $securityCookieHelper;
+    private function getSecurityCookie()
+    {
+        if (!($this->securityCookie instanceof SecurityCookie)) {
+            return \Magento\Framework\App\ObjectManager::getInstance()->get(SecurityCookie::class);
+        } else {
+            return $this->securityCookie;
+        }
     }
 
     /**
@@ -128,7 +112,7 @@ class SaveRole extends \Magento\User\Controller\Adminhtml\User\Role
             $this->messageManager->addSuccess(__('You saved the role.'));
         } catch (UserLockedException $e) {
             $this->_auth->logout();
-            $this->securityCookieHelper->setLogoutReasonCookie(
+            $this->getSecurityCookie()->setLogoutReasonCookie(
                 \Magento\Security\Model\AdminSessionsManager::LOGOUT_REASON_USER_LOCKED
             );
             return $resultRedirect->setPath('*');

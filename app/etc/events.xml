@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="entity_save_before">
+        <observer name="legacy_model_save" instance="Magento\Framework\Model\Observer\BeforeEntitySave" />
+    </event>
+    <event name="entity_save_after">
+        <observer name="legacy_model_save" instance="Magento\Framework\Model\Observer\AfterEntitySave" />
+    </event>
+    <event name="entity_delete_before">
+        <observer name="legacy_model_delete" instance="Magento\Framework\Model\Observer\BeforeEntityDelete" />
+    </event>
+    <event name="entity_delete_after">
+        <observer name="legacy_model_delete" instance="Magento\Framework\Model\Observer\AfterEntityDelete" />
+    </event>
+    <event name="entity_load_after">
+        <observer name="legacy_model_load" instance="Magento\Framework\Model\Observer\AfterEntityLoad" />
+    </event>
+</config>

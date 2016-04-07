@@ -1,12 +1,12 @@
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
 <div class="admin__field"
      visible="visible"
-     disabled="disabled"
+     disable="disabled"
      css="element.setClasses(element)"
      attr="'data-index': index">
     <label if="element.label" class="admin__field-label" attr="for: element.uid">
@@ -25,7 +25,7 @@
                     <th class="data-grid-th"
                         text="item.label"
                         visible="item.visible"
-                        disabled="item.disabled"
+                        disable="item.disabled"
                         css="$parent.setClasses(item)">
                     </th>
                     <!-- /ko -->
@@ -42,7 +42,7 @@
                     <!-- ko foreach: { data: elems, as: 'elem'}  -->
                     <td if="elem.template"
                         visible="elem.visible"
-                        disabled="elem.disabled"
+                        disable="elem.disabled"
                         css="$parents[1].setClasses(elem)"
                         template="elem.template"
                         attr="'data-index': index"/>

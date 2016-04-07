@@ -1,56 +1,8 @@
-Subtotal,Subtotal
-Discount,Discount
-"Grand Total","Grand Total"
-Tax,Tax
-Catalog,Catalog
-From:,From:
-To:,To:
-"Gift Message","Gift Message"
-Message:,Message:
-"Click for price","Click for price"
-"New Products","New Products"
-Wishlist,Wishlist
-"New Products from %1","New Products from %1"
-"Low Stock Products","Low Stock Products"
-"%1 has reached a quantity of %2.","%1 has reached a quantity of %2."
-"Pending product review(s)","Pending product review(s)"
-"Product: <a href=""%1"" target=""_blank"">%2</a> <br/>","Product: <a href=""%1"" target=""_blank"">%2</a> <br/>"
-"Summary of review: %1 <br/>","Summary of review: %1 <br/>"
-"Review: %1 <br/>","Review: %1 <br/>"
-"Store: %1 <br/>","Store: %1 <br/>"
-"Click <a href=""%1"">here</a> to view the review.","Click <a href=""%1"">here</a> to view the review."
-"Product: ""%1"" reviewed by: %2","Product: ""%1"" reviewed by: %2"
-"%1 - Discounts and Coupons","%1 - Discounts and Coupons"
-"%1 - Special Products","%1 - Special Products"
-"Special Expires On: %1","Special Expires On: %1"
-"Price: %1","Price: %1"
-"Special Price: %1","Special Price: %1"
-"Special Products","Special Products"
-Coupons/Discounts,Coupons/Discounts
-"New Orders","New Orders"
-"Order #%1 created at %2","Order #%1 created at %2"
-"Order # %1 Notification(s)","Order # %1 Notification(s)"
-"Details for %1 #%2","Details for %1 #%2"
-"Notified Date: %1<br/>","Notified Date: %1<br/>"
-"Comment: %1<br/>","Comment: %1<br/>"
-"Current Status: %1<br/>","Current Status: %1<br/>"
-"Total: %1<br/>","Total: %1<br/>"
-"%1's Wishlist","%1's Wishlist"
-Comment:,Comment:
-"We cannot retrieve the wish list.","We cannot retrieve the wish list."
-"There was no RSS feed enabled.","There was no RSS feed enabled."
-"Error in processing xml. %1","Error in processing xml. %1"
-"Subscribe to RSS Feed","Subscribe to RSS Feed"
+"Page not found.","Page not found."
+Feed,Feed
 "Miscellaneous Feeds","Miscellaneous Feeds"
 "Get Feed","Get Feed"
-"Category Feeds","Category Feeds"
-"There are no Rss Feeds.","There are no Rss Feeds."
-"Customer Name: %1","Customer Name: %1"
-"Purchased From: %1","Purchased From: %1"
-"Discount (%1)","Discount (%1)"
-"Shipping &amp; Handling","Shipping &amp; Handling"
+"RSS Feeds Section","RSS Feeds Section"
 "RSS Feeds","RSS Feeds"
 "Rss Config","Rss Config"
 "Enable RSS","Enable RSS"
-"Top Level Category","Top Level Category"
-"Customer Order Status Notification","Customer Order Status Notification"

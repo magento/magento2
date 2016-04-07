@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Model;
@@ -520,6 +520,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     /**
      * Load object data
      *
+     * @deprecated
      * @param integer $modelId
      * @param null|string $field
      * @return $this
@@ -621,6 +622,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     /**
      * Save object data
      *
+     * @deprecated
      * @return $this
      * @throws \Exception
      */
@@ -805,6 +807,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
     /**
      * Delete object from database
      *
+     * @deprecated
      * @return $this
      * @throws \Exception
      */

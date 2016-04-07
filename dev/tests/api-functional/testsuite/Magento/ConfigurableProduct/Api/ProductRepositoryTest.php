@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -216,6 +216,8 @@ class ProductRepositoryTest extends WebapiAbstract
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["configurable_product_options"];
         $this->assertEquals(1, count($resultConfigurableProductOptions));
 
+        unset($updatedOption['id']);
+        unset($resultConfigurableProductOptions[0]['id']);
         $this->assertEquals($updatedOption, $resultConfigurableProductOptions[0]);
     }
 

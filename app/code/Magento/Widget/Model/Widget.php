@@ -1,12 +1,13 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Widget\Model;
 
 /**
  * Widget model for different purposes
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Widget
 {
@@ -308,7 +309,7 @@ class Widget
             } elseif (trim($value) == '') {
                 $widget = $this->getConfigAsObject($type);
                 $parameters = $widget->getParameters();
-                if (is_object($parameters[$name])) {
+                if (isset($parameters[$name]) && is_object($parameters[$name])) {
                     $value = $parameters[$name]->getValue();
                 }
             }
@@ -317,13 +318,7 @@ class Widget
             }
         }
 
-        if ((bool)$params['show_pager']) {
-            $directive .= sprintf(
-                ' %s="%s"',
-                'page_var_name',
-                'p' . $this->getMathRandom()->getRandomString(5, \Magento\Framework\Math\Random::CHARS_LOWERS)
-            );
-        }
+        $directive .= $this->getWidgetPageVarName($params);
 
         $directive .= '}}';
 
@@ -338,6 +333,24 @@ class Widget
             $this->escaper->escapeUrl($directive)
         );
         return $html;
+    }
+
+    /**
+     * @param array $params
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function getWidgetPageVarName($params = [])
+    {
+        $pageVarName = '';
+        if (array_key_exists('show_pager', $params) && (bool)$params['show_pager']) {
+            $pageVarName = sprintf(
+                ' %s="%s"',
+                'page_var_name',
+                'p' . $this->getMathRandom()->getRandomString(5, \Magento\Framework\Math\Random::CHARS_LOWERS)
+            );
+        }
+        return $pageVarName;
     }
 
     /**

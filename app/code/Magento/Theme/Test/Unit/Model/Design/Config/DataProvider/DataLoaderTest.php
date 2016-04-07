@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Design\Config\DataProvider;
@@ -102,6 +102,9 @@ class DataLoaderTest extends \PHPUnit_Framework_TestCase
             ->method('get')
             ->with('theme_design_config')
             ->willReturn(['scope' => $scope, 'scope_id' => $scopeId]);
+        $this->dataPersistor->expects($this->once())
+            ->method('clear')
+            ->with('theme_design_config');
 
         $result = $this->model->getData();
 

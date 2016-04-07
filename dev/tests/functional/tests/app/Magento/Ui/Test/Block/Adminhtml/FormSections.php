@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -43,6 +43,13 @@ class FormSections extends AbstractFormContainers
      * @var string
      */
     protected $opened = '._show';
+
+    /**
+     * Locator for error messages.
+     *
+     * @var string
+     */
+    protected $errorMessages = '[data-ui-id="messages-message-error"]';
 
     /**
      * Get Section class.
@@ -114,30 +121,41 @@ class FormSections extends AbstractFormContainers
      * @param string $sectionName
      * @return bool
      */
-    public function isCollapsed($sectionName)
+    private function isCollapsed($sectionName)
     {
         return $this->getContainerElement($sectionName)->find($this->opened)->isVisible();
     }
 
     /**
-     * Get Require Notice Attributes.
+     * Get require notice fields.
      *
      * @param InjectableFixture $product
      * @return array
      */
-    public function getRequireNoticeAttributes(InjectableFixture $product)
+    public function getRequireNoticeFields(InjectableFixture $product)
     {
         $data = [];
-        $tabs = $this->getFixtureFieldsByContainers($product);
-        foreach (array_keys($tabs) as $tabName) {
-            $tab = $this->getSection($tabName);
-            $this->openSection($tabName);
-            $errors = $tab->getJsErrors();
+        $sections = $this->getFixtureFieldsByContainers($product);
+        foreach (array_keys($sections) as $sectionName) {
+            $section = $this->getSection($sectionName);
+            $this->openSection($sectionName);
+            $errors = $section->getValidationErrors();
             if (!empty($errors)) {
-                $data[$tabName] = $errors;
+                $data[$sectionName] = $errors;
             }
         }
 
         return $data;
+    }
+
+    /**
+     * Check if section is visible.
+     *
+     * @param string $sectionName
+     * @return bool
+     */
+    public function isSectionVisible($sectionName)
+    {
+        return ($this->isCollapsible($sectionName) && !$this->isCollapsed($sectionName));
     }
 }

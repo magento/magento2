@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -194,7 +194,7 @@
             <var name="caption">false</var> <!-- Display alt text as image title (true/false) -->
             <var name="allowfullscreen">true</var> <!-- Turn on/off fullscreen (true/false) -->
             <var name="navdir">horizontal</var> <!-- Sliding direction of thumbnails (horizontal/vertical) -->
-            <var name="navarrows">true</var> <!-- Turn on/off on the thumbs navigation sides (true/false) -->
+            <var name="navarrows">true</var> <!-- Turn on/off on the thumbs navigation sides arrows(true/false) -->
             <var name="navtype">slides</var> <!-- Sliding type of thumbnails (slides/thumbs) -->
             <var name="transition">
                 <var name="effect">slide</var> <!-- Sets transition effect for slides changing (slide/crossfade/dissolve) -->
@@ -203,23 +203,20 @@
             <var name="fullscreen">
                 <var name="nav">thumbs</var> <!-- Fullscreen navigation style (false/thumbs/dots) -->
                 <var name="loop">true</var> <!-- Fullscreen navigation loop (true/false/null) -->
-                <var name="keyboard">true</var> <!-- Turn on/off keyboard arrows navigation (true/false/null) -->
-                <var name="arrows">false</var> <!-- Turn on/off arrows on the sides preview (true/false/null) -->
-                <var name="caption">false</var> <!-- Display alt text as image title (true/false) -->
-                <var name="navdir">horizontal</var> <!--Sliding direction of thumbnails in full screen(horizontal/vertical)  -->
-                <var name="thumbwidth">150</var> <!-- Width of thumbnails in fullscreen -->
-                <var name="thumbheight">150</var> <!-- Height of thumbnails in fullscreen -->
-                <var name="navigation_carousel">true</var> <!-- Display navigation thumbs as carousel (true/false) -->
+                <var name="arrows">true</var> <!-- Turn on/off arrows on the sides preview in fullscreen (true/false/null) -->
+                <var name="caption">false</var> <!-- Display alt text as image title in fullscreen(true/false) -->
+                <var name="navdir">horizontal</var> <!--Sliding direction of thumbnails in fullscreen(horizontal/vertical)  -->
+                <var name="navarrows">false</var> <!-- Turn on/off on the thumbs navigation sides arrows(true/false) -->
+                <var name="navtype">slides</var> <!-- Sliding type of thumbnails (slides/thumbs) -->
                 <var name="transition">
-                    <var name="effect">dissolve</var> <!-- Sets transition effect for slides changing (slide/crossfade/dissolve) -->
+                    <var name="effect">slide</var> <!-- Sets transition effect for slides changing (slide/crossfade/dissolve) -->
                     <var name="duration">500</var> <!-- Sets transition duration in ms -->
-                    <var name="carousel">true</var> <!-- Display navigation thumbs as carousel (true/false) -->
                 </var>
             </var>
         </var>
 
         <var name="magnifier">
-            <var name="fullscreenzoom">5</var>  <!-- Zoom for fullscreen (integer)-->
+            <var name="fullscreenzoom">20</var>  <!-- Zoom for fullscreen (integer)-->
             <var name="top"></var> <!-- Top position of magnifier -->
             <var name="left"></var> <!-- Left position of magnifier -->
             <var name="width"></var> <!-- Width of magnifier block -->
@@ -254,6 +251,14 @@
     <vars module="Magento_Bundle">
         <var name="product_summary_image_size">58</var>         <!-- New Product image size used for summary block-->
     </vars>
+
+    <vars module="Magento_ConfigurableProduct">
+        <var name="change_only_base_image">true</var>
+    </vars>
+    <vars module="Magento_Swatches">
+        <var name="change_only_base_image">true</var>
+    </vars>
+
     <vars module="Js_Bundle">
         <var name="bundle_size">1MB</var>
     </vars>

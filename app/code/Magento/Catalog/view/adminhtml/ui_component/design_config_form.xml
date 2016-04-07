@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 -->
@@ -45,6 +45,7 @@
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">watermark_image_imageOpacity</item>
+                            <item name="addafter" xsi:type="string">%</item>
                             <item name="validation" xsi:type="array">
                                 <item name="validate-number" xsi:type="boolean">true</item>
                             </item>
@@ -61,9 +62,7 @@
                             <item name="validation" xsi:type="array">
                                 <item name="validate-digits" xsi:type="boolean">true</item>
                             </item>
-                            <item name="tooltip" xsi:type="array">
-                                <item name="description" xsi:type="string" translate="true">Example format: 200x300.</item>
-                            </item>
+                            <item name="notice" xsi:type="string" translate="true">Example format: 200x300.</item>
                         </item>
                     </argument>
                 </field>
@@ -109,6 +108,7 @@
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">watermark_thumbnail_imageOpacity</item>
+                            <item name="addafter" xsi:type="string">%</item>
                             <item name="validation" xsi:type="array">
                                 <item name="validate-number" xsi:type="boolean">true</item>
                             </item>
@@ -125,9 +125,7 @@
                             <item name="validation" xsi:type="array">
                                 <item name="validate-digits" xsi:type="boolean">true</item>
                             </item>
-                            <item name="tooltip" xsi:type="array">
-                                <item name="description" xsi:type="string" translate="true">Example format: 200x300.</item>
-                            </item>
+                            <item name="notice" xsi:type="string" translate="true">Example format: 200x300.</item>
                         </item>
                     </argument>
                 </field>
@@ -173,6 +171,7 @@
                             <item name="dataType" xsi:type="string">text</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">watermark_small_image_imageOpacity</item>
+                            <item name="addafter" xsi:type="string">%</item>
                             <item name="validation" xsi:type="array">
                                 <item name="validate-number" xsi:type="boolean">true</item>
                             </item>
@@ -189,9 +188,7 @@
                             <item name="validation" xsi:type="array">
                                 <item name="validate-digits" xsi:type="boolean">true</item>
                             </item>
-                            <item name="tooltip" xsi:type="array">
-                                <item name="description" xsi:type="string" translate="true">Example format: 200x300.</item>
-                            </item>
+                            <item name="notice" xsi:type="string" translate="true">Example format: 200x300.</item>
                         </item>
                     </argument>
                 </field>

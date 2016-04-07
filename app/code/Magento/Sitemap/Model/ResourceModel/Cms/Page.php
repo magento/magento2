@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Sitemap\Model\ResourceModel\Cms;
@@ -150,7 +150,6 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         if ($isId) {
             $this->entityManager->load(PageInterface::class, $object, $value);
-            $this->_afterLoad($object);
         }
         return $this;
     }
@@ -199,20 +198,7 @@ class Page extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function delete(AbstractModel $object)
     {
-        $this->transactionManager->start($this->getConnection());
-        try {
-            $object->beforeDelete();
-            $this->_beforeDelete($object);
-            $this->entityManager->delete(PageInterface::class, $object);
-            $this->_afterDelete($object);
-            $object->isDeleted(true);
-            $object->afterDelete();
-            $this->transactionManager->commit();
-            $object->afterDeleteCommit();
-        } catch (\Exception $e) {
-            $this->transactionManager->rollBack();
-            throw $e;
-        }
+        $this->entityManager->delete(PageInterface::class, $object);
         return $this;
     }
 }

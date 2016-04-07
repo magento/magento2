@@ -1,10 +1,11 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Model\Product\TypeHandler;
 
+use Magento\Downloadable\Model\Product\TypeHandler\Link;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
@@ -55,13 +56,16 @@ class LinkTest extends \PHPUnit_Framework_TestCase
         $this->metadataMock->expects($this->any())->method('getLinkField')->willReturn('id');
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($this->metadataMock);
         $this->target = $objectManagerHelper->getObject(
-            'Magento\Downloadable\Model\Product\TypeHandler\Link',
+            Link::class,
             [
                 'linkFactory' => $this->linkFactory,
-                'linkResource' => $this->linkResource,
-                'metadataPool' => $this->metadataPoolMock
+                'linkResource' => $this->linkResource
             ]
         );
+        $refClass = new \ReflectionClass(Link::class);
+        $refProperty = $refClass->getProperty('metadataPool');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($this->target, $this->metadataPoolMock);
     }
 
     /**

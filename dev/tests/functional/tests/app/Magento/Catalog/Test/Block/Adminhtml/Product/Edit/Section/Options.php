@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -9,9 +9,11 @@ namespace Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section;
 use Magento\Mtf\Client\Element\SimpleElement;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Search\Grid;
 use Magento\Mtf\ObjectManager;
+use Magento\Mtf\Client\ElementInterface;
 use Magento\Mtf\Client\Locator;
 use Magento\Ui\Test\Block\Adminhtml\Section;
 use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\AbstractOptions;
+use Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Row;
 
 /**
  * Product custom options section.
@@ -23,14 +25,14 @@ class Options extends Section
      *
      * @var string
      */
-    protected $customOptionRow = '//*[*[@class="fieldset-wrapper-title"]//span[.="%s"]]';
+    protected $customOptionRow = './/*[*[@class="fieldset-wrapper-title"]//span[.="%s"]]';
 
     /**
-     * New custom option row CSS locator.
+     * New custom option row locator.
      *
      * @var string
      */
-    protected $newCustomOptionRow = '[data-index="custom_options"] [data-role="grid"] tbody tr:nth-child(%d)';
+    protected $newCustomOptionRow = './/*[@data-index="options"]/tbody/tr[%d]';
 
     /**
      * Add an option button.
@@ -51,7 +53,35 @@ class Options extends Section
      *
      * @var string
      */
-    protected $importGrid = ".product_form_product_form_custom_options_import_options_modal";
+    protected $importGrid = ".product_form_product_form_import_options_modal";
+
+    /**
+     * Locator for 'Add Value' button.
+     *
+     * @var string
+     */
+    protected $addValue = '[data-action="add_new_row"]';
+
+    /**
+     * Locator for dynamic data row.
+     *
+     * @var string
+     */
+    protected $dynamicDataRow = '[data-index="values"] tbody tr:nth-child(%d)';
+
+    /**
+     * Locator for static data row.
+     *
+     * @var string
+     */
+    protected $staticDataRow = '[data-index="container_type_static"] div:nth-child(%d)';
+
+    /**
+     * Sort rows data.
+     *
+     * @var array
+     */
+    protected $sortRowsData = [];
 
     /**
      * Fill custom options form on tab.
@@ -81,25 +111,16 @@ class Options extends Section
                 unset($field['options']);
             }
 
-            $rootElement = $this->_rootElement->find(sprintf($this->newCustomOptionRow, $keyRoot + 1));
+            $rootElement = $this->_rootElement->find(
+                sprintf($this->newCustomOptionRow, $keyRoot + 1),
+                Locator::SELECTOR_XPATH
+            );
             $data = $this->dataMapping($field);
             $this->_fill($data, $rootElement);
 
             // Fill subform
             if (isset($field['type']) && !empty($options)) {
-                /** @var AbstractOptions $optionsForm */
-                $optionsForm = $this->blockFactory->create(
-                    __NAMESPACE__ . '\Options\Type\\' . $this->optionNameConvert($field['type']),
-                    ['element' => $rootElement]
-                );
-
-                foreach ($options as $key => $option) {
-                    ++$key;
-                    $optionsForm->fillOptions(
-                        $option,
-                        $rootElement->find('[data-index="values"] tbody tr:nth-child(' . $key . ')')
-                    );
-                }
+                $this->setOptionTypeData($options, $field['type'], $rootElement);
             }
         }
 
@@ -131,8 +152,85 @@ class Options extends Section
     {
         return $this->blockFactory->create(
             'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Search\Grid',
-            ['element' => $this->_rootElement->find($this->importGrid)]
+            ['element' => $this->browser->find($this->importGrid)]
         );
+    }
+
+    /**
+     * Get select option row block.
+     *
+     * @param int $index
+     * @param SimpleElement $element
+     * @return Row
+     */
+    private function getRowBlock($index, SimpleElement $element = null)
+    {
+        $element = $element ?: $this->_rootElement;
+        return $this->blockFactory->create(
+            'Magento\Catalog\Test\Block\Adminhtml\Product\Edit\Section\Options\Row',
+            ['element' => $element->find(sprintf($this->dynamicDataRow, ++$index))]
+        );
+    }
+
+    /**
+     * Set Option Type data.
+     *
+     * @param array $options
+     * @param string $type
+     * @param ElementInterface $element
+     * @return $this
+     */
+    private function setOptionTypeData(array $options, $type, ElementInterface $element)
+    {
+        /** @var AbstractOptions $optionsForm */
+        $optionsForm = $this->blockFactory->create(
+            __NAMESPACE__ . '\Options\Type\\' . $this->optionNameConvert($type),
+            ['element' => $element]
+        );
+        $context = $element->find($this->addValue)->isVisible()
+            ? $this->dynamicDataRow
+            : $this->staticDataRow;
+        foreach ($options as $key => $option) {
+            if (isset($option['sort_order'])) {
+                $currentSortOrder = (int)$option['sort_order'];
+                unset($option['sort_order']);
+            } else {
+                $currentSortOrder = 0;
+            }
+            $optionsForm->fillOptions(
+                $option,
+                $element->find(sprintf($context, $key + 1))
+            );
+            $this->sortOption($key, $currentSortOrder, $element);
+        }
+        $this->sortRowsData = [];
+
+        return $this;
+    }
+
+    /**
+     * Sort sample element.
+     *
+     * @param int $position
+     * @param int $sortOrder
+     * @param SimpleElement|null $element
+     * @return void
+     */
+    private function sortOption($position, $sortOrder, SimpleElement $element = null)
+    {
+        $currentSortRowData = ['current_position_in_grid' => $position, 'sort_order' => $sortOrder];
+        foreach ($this->sortRowsData as &$sortRowData) {
+            if ($sortRowData['sort_order'] > $currentSortRowData['sort_order']) {
+                // need to reload block because we are changing dom
+                $target = $this->getRowBlock($sortRowData['current_position_in_grid'], $element)->getSortHandle();
+                $this->getRowBlock($currentSortRowData['current_position_in_grid'], $element)->dragAndDropTo($target);
+
+                $currentSortRowData['current_position_in_grid']--;
+                $sortRowData['current_position_in_grid']++;
+            }
+        }
+        unset($sortRowData);
+        $this->sortRowsData[] = $currentSortRowData;
     }
 
     /**
@@ -141,7 +239,6 @@ class Options extends Section
      * @param array|null $tabFields
      * @param SimpleElement|null $element
      * @return array
-     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getFieldsData($tabFields = null, SimpleElement $element = null)
@@ -172,23 +269,51 @@ class Options extends Section
 
             // Data collection subform
             if (isset($field['type']) && !empty($options)) {
-                /** @var AbstractOptions $optionsForm */
-                $optionsForm = $this->blockFactory->create(
-                    __NAMESPACE__ . '\Options\Type\\' . $this->optionNameConvert($field['type']),
-                    ['element' => $rootElement]
+                $formDataItem = array_merge(
+                    $formDataItem,
+                    $this->getOptionTypeData($options, $field['type'], $rootElement)
                 );
-
-                foreach ($options as $key => $option) {
-                    $formDataItem['options'][$key++] = $optionsForm->getDataOptions(
-                        $option,
-                        $rootElement->find('.fieldset .data-table tbody tr:nth-child(' . $key . ')')
-                    );
-                }
             }
             $formData[$name][$keyRoot] = $formDataItem;
         }
 
         return $formData;
+    }
+
+    /**
+     * Get option type data.
+     *
+     * @param array $options
+     * @param string $type
+     * @param ElementInterface $element
+     * @return array
+     */
+    private function getOptionTypeData(array $options, $type, ElementInterface $element)
+    {
+        $formDataItem = [];
+        /** @var AbstractOptions $optionsForm */
+        $optionsForm = $this->blockFactory->create(
+            __NAMESPACE__ . '\Options\Type\\' . $this->optionNameConvert($type),
+            ['element' => $element]
+        );
+        $context = $element->find($this->addValue)->isVisible()
+            ? $this->dynamicDataRow
+            : $this->staticDataRow;
+        foreach ($options as $key => $option) {
+            if (isset($option['sort_order'])) {
+                $currentSortOrder = (int)$option['sort_order'];
+                unset($option['sort_order']);
+            }
+            $formDataItem['options'][$key] = $optionsForm->getDataOptions(
+                $option,
+                $element->find(sprintf($context, $key + 1))
+            );
+            if (isset($currentSortOrder)) {
+                $formDataItem['options'][$key]['sort_order'] = $key;
+            }
+        }
+
+        return $formDataItem;
     }
 
     /**

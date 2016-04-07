@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -13,7 +13,8 @@ $registry->register('isSecureArea', true);
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $quote = $objectManager->create('Magento\Quote\Model\Quote');
-$quote->load('test_cart_with_configurable', 'reserved_order_id')->delete();
+$quote->load('test_cart_with_configurable', 'reserved_order_id');
+$quote->delete();
 
 /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
 $quoteIdMask = $objectManager->create('Magento\Quote\Model\QuoteIdMask');

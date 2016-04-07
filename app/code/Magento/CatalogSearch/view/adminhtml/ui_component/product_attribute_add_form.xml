@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <fieldset name="front_fieldset">
+        <field name="search_weight">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\CatalogSearch\Model\Source\Weight</item>
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">15</item>
+                    <item name="dataType" xsi:type="string">string</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="source" xsi:type="string">product_attribute</item>
+                    <item name="label" xsi:type="string" translate="true">Search Weight</item>
+                    <item name="dataScope" xsi:type="string">search_weight</item>
+                    <item name="imports" xsi:type="array">
+                        <item name="visible" xsi:type="string">${ $.parentName}.is_searchable:checked</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+    </fieldset>
+</form>

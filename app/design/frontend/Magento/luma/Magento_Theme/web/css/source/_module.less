@@ -1,5 +1,5 @@
 // /**
-//  * Copyright © 2015 Magento. All rights reserved.
+//  * Copyright © 2016 Magento. All rights reserved.
 //  * See COPYING.txt for license details.
 //  */
 
@@ -312,11 +312,53 @@
             }
         }
     }
+
+    //
+    //  Widgets
+    //  ---------------------------------------------
+
+    .sidebar {
+        .widget.block:not(:last-child),
+        .widget:not(:last-child) {
+            margin-bottom: @indent__xl;
+        }
+    }
+
+    .widget {
+        clear: both;
+
+        .block-title:extend(.abs-block-widget-title all) {
+        }
+    }
+
+    .page-header,
+    .page-footer {
+        .widget.block {
+            .lib-css(margin, @indent__base 0);
+        }
+    }
+
+    .no-display:extend(.abs-no-display all) {
+    }
+
+    //
+    //  Calendar
+    //  ---------------------------------------------
+
+    .ui-datepicker td {
+        padding: 0;
+    }
+
+    .ui-tooltip {
+        .lib-css(background, @tooltip__background);
+        border: @tooltip__border-width solid @tooltip__border-color;
+        padding: 10px;
+    }
 }
 
 //
 //  Navigation
-//  ---------------------------------------------
+//  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .customer-name,
@@ -385,37 +427,13 @@
 }
 
 //
-//  Common
-//  _____________________________________________
-
-& when (@media-common = true) {
-
-    //
-    //  Widgets
-    //  ---------------------------------------------
-
-    .sidebar {
-        .widget.block:not(:last-child),
-        .widget:not(:last-child) {
-            margin-bottom: @indent__xl;
-        }
-    }
-
-    .widget {
-        clear: both;
-        .block-title:extend(.abs-block-widget-title all) {
-        }
-    }
-}
-
-//
 //  Desktop
 //  _____________________________________________
 
 .media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
     html,
     body {
-        height: 100%; //  Stretch screen area for sticky footer
+        height: 100%; // Stretch screen area for sticky footer
     }
 
     body {
@@ -646,28 +664,5 @@
                 }
             }
         }
-    }
-}
-
-//
-//  Common
-//  _____________________________________________
-
-& when (@media-common = true) {
-    .no-display:extend(.abs-no-display all) {
-    }
-
-    //
-    //  Calendar
-    //  ---------------------------------------------
-
-    .ui-datepicker td {
-        padding: 0;
-    }
-
-    .ui-tooltip {
-        border: @tooltip__border-width solid @tooltip__border-color;
-        .lib-css(background, @tooltip__background);
-        padding: 10px;
     }
 }

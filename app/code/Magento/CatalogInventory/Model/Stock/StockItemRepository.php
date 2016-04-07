@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogInventory\Model\Stock;
@@ -101,7 +101,6 @@ class StockItemRepository implements StockItemRepositoryInterface
      * @param TimezoneInterface $localeDate
      * @param Processor $indexProcessor
      * @param DateTime $dateTime
-     * @param StockRegistryStorage $stockRegistryStorage
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -115,8 +114,7 @@ class StockItemRepository implements StockItemRepositoryInterface
         MapperFactory $mapperFactory,
         TimezoneInterface $localeDate,
         Processor $indexProcessor,
-        DateTime $dateTime,
-        StockRegistryStorage $stockRegistryStorage
+        DateTime $dateTime
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->stockStateProvider = $stockStateProvider;
@@ -129,7 +127,6 @@ class StockItemRepository implements StockItemRepositoryInterface
         $this->localeDate = $localeDate;
         $this->indexProcessor = $indexProcessor;
         $this->dateTime = $dateTime;
-        $this->stockRegistryStorage = $stockRegistryStorage;
     }
 
     /**
@@ -209,8 +206,8 @@ class StockItemRepository implements StockItemRepositoryInterface
     {
         try {
             $this->resource->delete($stockItem);
-            $this->stockRegistryStorage->removeStockItem($stockItem->getProductId());
-            $this->stockRegistryStorage->removeStockStatus($stockItem->getProductId());
+            $this->getStockRegistryStorage()->removeStockItem($stockItem->getProductId());
+            $this->getStockRegistryStorage()->removeStockStatus($stockItem->getProductId());
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(
                 __('Unable to remove Stock Item with id "%1"', $stockItem->getItemId()),
@@ -235,5 +232,17 @@ class StockItemRepository implements StockItemRepositoryInterface
             );
         }
         return true;
+    }
+
+    /**
+     * @return StockRegistryStorage
+     */
+    private function getStockRegistryStorage()
+    {
+        if (null === $this->stockRegistryStorage) {
+            $this->stockRegistryStorage = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\CatalogInventory\Model\StockRegistryStorage');
+        }
+        return $this->stockRegistryStorage;
     }
 }

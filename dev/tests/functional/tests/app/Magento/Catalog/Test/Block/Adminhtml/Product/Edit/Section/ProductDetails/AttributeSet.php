@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -10,87 +10,51 @@ use Magento\Mtf\Client\Element\SuggestElement;
 use Magento\Mtf\Client\Locator;
 
 /**
- * Class AttributeSet
- * Set and Get Attribute Set on the Product form
+ * Set and Get Attribute Set on the Product form.
  */
 class AttributeSet extends SuggestElement
 {
     /**
-     * Attribute Set locator
+     * Attribute Set locator.
      *
      * @var string
      */
-    protected $value = '.action-toggle > span';
+    protected $attributeSet = './/div[text()="%s"]';
 
     /**
-     * Attribute Set button
+     * Attribute Set value locator.
      *
      * @var string
      */
-    protected $actionToggle = '.action-toggle';
+    protected $attributeSetValue = '[data-role="selected-option"]';
 
     /**
-     * Magento loader
+     * Selector item of search result.
      *
      * @var string
      */
-    protected $loader = '[data-role="loader"]';
+    protected $resultItem = './/label[contains(@class, "admin__action-multiselect-label")]/span[text() = "%s"]';
 
     /**
-     * Page header selector.
-     *
-     * @var string
-     */
-    protected $header = 'header';
-
-    /**
-     * Set value
+     * Set value.
      *
      * @param string $value
      * @return void
      */
     public function setValue($value)
     {
-        if ($value !== $this->find($this->actionToggle)->getText()) {
-            $this->eventManager->dispatchEvent(['set_value'], [__METHOD__, $this->getAbsoluteSelector()]);
-            $this->find($this->actionToggle)->click();
-            $this->clear();
-            if ($value == '') {
-                return;
-            }
-            foreach (str_split($value) as $symbol) {
-                $this->keys([$symbol]);
-                $searchedItem = $this->find(sprintf($this->resultItem, $value), Locator::SELECTOR_XPATH);
-                if ($searchedItem->isVisible()) {
-                    try {
-                        $searchedItem->hover();
-                        $this->driver->find($this->header)->hover();
-                        $searchedItem->click();
-                        break;
-                    } catch (\Exception $e) {
-                        // In parallel run on windows change the focus is lost on element
-                        // that causes disappearing of category suggest list.
-                    }
-                }
-            }
+        if (!$this->find(sprintf($this->attributeSet, $value), Locator::SELECTOR_XPATH)->isVisible()) {
+            parent::setValue($value);
         }
-        // Wait loader
-        $element = $this->driver;
-        $selector = $this->loader;
-        $element->waitUntil(
-            function () use ($element, $selector) {
-                return $element->find($selector)->isVisible() == false ? true : null;
-            }
-        );
     }
 
     /**
-     * Get value
+     * Get value.
      *
      * @return string
      */
     public function getValue()
     {
-        return $this->find($this->value)->getText();
+        return $this->find($this->attributeSetValue)->getText();
     }
 }
