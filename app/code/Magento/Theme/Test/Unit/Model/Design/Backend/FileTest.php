@@ -157,10 +157,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
                 ],
             ]
         );
-//        $this->fileConfig->expects($this->exactly(2))
-//            ->method('getTmpMediaPath')
-//            ->with($value)
-//            ->willReturn($tmpMediaPath);
 
         $this->mediaDirectory->expects($this->once())
             ->method('copyFile')
