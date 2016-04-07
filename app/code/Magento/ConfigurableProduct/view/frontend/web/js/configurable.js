@@ -23,7 +23,7 @@ define([
             state: {},
             priceFormat: {},
             optionTemplate: '<%- data.label %>' +
-            '<% if (data.finalPrice.value) { %>' +
+            "<% if (typeof data.finalPrice.value !== 'undefined') { %>" +
             ' <%- data.finalPrice.formatted %>' +
             '<% } %>',
             mediaGallerySelector: '[data-gallery-role=gallery-placeholder]',
