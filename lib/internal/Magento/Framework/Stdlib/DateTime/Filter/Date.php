@@ -8,6 +8,7 @@
 namespace Magento\Framework\Stdlib\DateTime\Filter;
 
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 class Date implements \Zend_Filter_Interface
 {
@@ -54,13 +55,20 @@ class Date implements \Zend_Filter_Interface
 
     /**
      * Convert date from localized to internal format
-     *
+     * 
      * @param string $value
      * @return string
+     * @throws LocalizedException
      */
     public function filter($value)
     {
-        $value = new \DateTime($value);
-        return $value->format('Y-m-d');
+        try {
+            $value = new \DateTime($value);
+            return $value->format('Y-m-d');
+        } catch (\Exception $e) {
+            throw new LocalizedException(
+                __('Invalid input date format')
+            );
+        }
     }
 }
