@@ -11,8 +11,8 @@ namespace Magento\ConfigurableProduct\Test\Unit\Model\Product\Type;
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
-use Magento\Framework\Model\Entity\EntityMetadata;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\EntityMetadata;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class \Magento\ConfigurableProduct\Test\Unit\Model\Product\Type\ConfigurableTest
