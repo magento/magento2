@@ -26,6 +26,7 @@ use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Setup\Controller\ResponseTypeInterface;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
 use Magento\Setup\Module\DataSetupFactory;
 use Magento\Setup\Module\SetupFactory;
@@ -220,6 +221,11 @@ class Installer
     private $componentRegistrar;
 
     /**
+     * @var PhpReadinessCheck
+     */
+    private $phpReadinessCheck;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -242,6 +248,7 @@ class Installer
      * @param DataSetupFactory $dataSetupFactory
      * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
      * @param ComponentRegistrar $componentRegistrar
+     * @param PhpReadinessCheck $phpReadinessCheck
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -265,7 +272,8 @@ class Installer
         SetupFactory $setupFactory,
         DataSetupFactory $dataSetupFactory,
         \Magento\Framework\Setup\SampleData\State $sampleDataState,
-        ComponentRegistrar $componentRegistrar
+        ComponentRegistrar $componentRegistrar,
+        PhpReadinessCheck $phpReadinessCheck
     ) {
         $this->filePermissions = $filePermissions;
         $this->deploymentConfigWriter = $deploymentConfigWriter;
@@ -288,6 +296,7 @@ class Installer
         $this->dataSetupFactory = $dataSetupFactory;
         $this->sampleDataState = $sampleDataState;
         $this->componentRegistrar = $componentRegistrar;
+        $this->phpReadinessCheck = $phpReadinessCheck;
     }
 
     /**
@@ -300,6 +309,7 @@ class Installer
     public function install($request)
     {
         $script[] = ['File permissions check...', 'checkInstallationFilePermissions', []];
+        $script[] = ['Required extensions check...', 'checkExtensions', []];
         $script[] = ['Enabling Maintenance Mode...', 'setMaintenanceMode', [1]];
         $script[] = ['Installing deployment configuration...', 'installDeploymentConfig', [$request]];
         if (!empty($request[InstallCommand::INPUT_KEY_CLEANUP_DB])) {
@@ -437,6 +447,24 @@ class Installer
         $results = $this->filePermissions->getMissingWritablePathsForInstallation();
         if ($results) {
             $errorMsg = "Missing write permissions to the following paths: '" . implode("' '", $results) . "'";
+            throw new \Exception($errorMsg);
+        }
+    }
+
+    /**
+     * Check required extensions for installation
+     *
+     * @return void
+     * @throws \Exception
+     */
+    public function checkExtensions()
+    {
+        $phpExtensionsCheckResult = $this->phpReadinessCheck->checkPhpExtensions();
+        if ($phpExtensionsCheckResult['responseType'] === ResponseTypeInterface::RESPONSE_TYPE_ERROR
+            && isset($phpExtensionsCheckResult['data']['missing'])
+        ) {
+            $errorMsg = "Missing following extensions: '"
+                . implode("' '", $phpExtensionsCheckResult['data']['missing']) . "'";
             throw new \Exception($errorMsg);
         }
     }
