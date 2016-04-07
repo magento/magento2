@@ -2,7 +2,7 @@
 /**
  * Catalog product copier. Creates product duplicate
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Model\Product;
@@ -27,16 +27,13 @@ class Copier
     /**
      * @param CopyConstructorInterface $copyConstructor
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
-     * @param Option\Repository $optionRepository
      */
     public function __construct(
         CopyConstructorInterface $copyConstructor,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
-        \Magento\Catalog\Model\Product\Option\Repository $optionRepository
+        \Magento\Catalog\Model\ProductFactory $productFactory
     ) {
         $this->productFactory = $productFactory;
         $this->copyConstructor = $copyConstructor;
-        $this->optionRepository = $optionRepository;
     }
 
     /**
@@ -75,8 +72,20 @@ class Copier
             }
         } while (!$isDuplicateSaved);
 
-        $this->optionRepository->duplicate($product, $duplicate);
+        $this->getOptionRepository()->duplicate($product, $duplicate);
         $product->getResource()->duplicate($product->getEntityId(), $duplicate->getEntityId());
         return $duplicate;
+    }
+
+    /**
+     * @return Option\Repository
+     */
+    private function getOptionRepository()
+    {
+        if (null === $this->optionRepository) {
+            $this->optionRepository = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get('Magento\Catalog\Model\Product\Option\Repository');
+        }
+        return $this->optionRepository;
     }
 }

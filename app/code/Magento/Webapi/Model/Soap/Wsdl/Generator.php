@@ -1,7 +1,7 @@
 <?php
 /**
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Webapi\Model\Soap\Wsdl;
@@ -12,6 +12,7 @@ use Magento\Webapi\Model\Soap\Wsdl;
 use Magento\Webapi\Model\Soap\WsdlFactory;
 use Magento\Framework\Webapi\Authorization;
 use Magento\Webapi\Model\ServiceMetadata;
+use Magento\Framework\Exception\AuthorizationException;
 
 /**
  * WSDL generator.
@@ -363,5 +364,22 @@ class Generator extends AbstractSchemaGenerator
     protected function getServiceMetadata($serviceName)
     {
         return $this->serviceMetadata->getServiceMetadata($serviceName);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function getAllowedServicesMetadata($requestedServices)
+    {
+        $allowedServicesMetadata = parent::getAllowedServicesMetadata($requestedServices);
+        if (!$allowedServicesMetadata) {
+            throw new AuthorizationException(
+                __(
+                    AuthorizationException::NOT_AUTHORIZED,
+                    ['resources' => implode(', ', $requestedServices)]
+                )
+            );
+        }
+        return $allowedServicesMetadata;
     }
 }

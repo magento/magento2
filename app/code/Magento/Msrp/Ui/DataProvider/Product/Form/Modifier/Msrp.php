@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Msrp\Ui\DataProvider\Product\Form\Modifier;
@@ -109,7 +109,7 @@ class Msrp extends AbstractModifier
      */
     protected function customizeMsrp()
     {
-        $msrpPath = $this->getElementArrayPath($this->meta, self::FIELD_MSRP);
+        $msrpPath = $this->arrayManager->findPath(static::FIELD_MSRP, $this->meta, null, 'children');
 
         if ($msrpPath) {
             if ($this->msrpConfig->isEnabled()) {
@@ -139,7 +139,12 @@ class Msrp extends AbstractModifier
      */
     protected function customizeMsrpDisplayActualPrice()
     {
-        $msrpDisplayPath = $this->getElementArrayPath($this->meta, self::FIELD_MSRP_DISPLAY_ACTUAL_PRICE);
+        $msrpDisplayPath = $this->arrayManager->findPath(
+            static::FIELD_MSRP_DISPLAY_ACTUAL_PRICE,
+            $this->meta,
+            null,
+            'children'
+        );
 
         if ($msrpDisplayPath) {
             if (!$this->msrpConfig->isEnabled()) {

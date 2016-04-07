@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -140,7 +140,7 @@ class ScopeOverriddenValue
                         'a.attribute_id = t.attribute_id',
                         ['attribute_code' => 'a.attribute_code']
                     )
-                    ->where($metadata->getLinkField() . ' = ?', $entity->getId())
+                    ->where($metadata->getLinkField() . ' = ?', $entity->getData($metadata->getLinkField()))
                     ->where('t.attribute_id IN (?)', $attributeCodes)
                     ->where('t.store_id IN (?)', $storeIds);
                 $selects[] = $select;

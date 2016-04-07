@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Ui\Component\Listing\Columns;
@@ -56,6 +56,9 @@ class Websites extends \Magento\Ui\Component\Listing\Columns\Column
             foreach ($dataSource['data']['items'] as & $item) {
                 $websites = [];
                 foreach ($item[$fieldName] as $websiteId) {
+                    if (!isset($websiteNames[$websiteId])) {
+                        continue;
+                    }
                     $websites[] = $websiteNames[$websiteId];
                 }
                 $item[$fieldName] = implode(', ', $websites);

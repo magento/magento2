@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Test\Unit;
@@ -95,13 +95,68 @@ class EscaperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers \Magento\Framework\Escaper::escapeXssInUrl
+     * @param string $input
+     * @param string $expected
+     * @dataProvider escapeDataProvider
      */
-    public function testEscapeXssInUrl()
+    public function testEscapeXssInUrl($input, $expected)
     {
-        $data = 'javascript%3Aalert%28String.fromCharCode%280x78%29%2BString.'
-            . 'fromCharCode%280x73%29%2BString.fromCharCode%280x73%29%29';
-        $expected = '%3Aalert%28String.fromCharCode%280x78%29%2BString.'
-            . 'fromCharCode%280x73%29%2BString.fromCharCode%280x73%29%29';
-        $this->assertEquals($expected, $this->_escaper->escapeXssInUrl($data));
+        $this->assertEquals($expected, $this->_escaper->escapeXssInUrl($input));
+    }
+
+    /**
+     * Get escape variations
+     * @return array
+     */
+    public function escapeDataProvider()
+    {
+        return [
+            [
+                'javascript%3Aalert%28String.fromCharCode%280x78%29%2BString.'
+                . 'fromCharCode%280x73%29%2BString.fromCharCode%280x73%29%29',
+                ':alert%28String.fromCharCode%280x78%29%2BString.'
+                . 'fromCharCode%280x73%29%2BString.fromCharCode%280x73%29%29'
+            ],
+            [
+                'http://test.com/?redirect=JAVASCRIPT:alert%281%29',
+                'http://test.com/?redirect=:alert%281%29',
+            ],
+            [
+                'http://test.com/?redirect=javascript:alert%281%29',
+                'http://test.com/?redirect=:alert%281%29',
+            ],
+            [
+                'http://test.com/?redirect=JavaScript:alert%281%29',
+                'http://test.com/?redirect=:alert%281%29',
+            ],
+            [
+                'http://test.com/?redirect=javascript:alert(1)',
+                'http://test.com/?redirect=:alert(1)',
+            ],
+            [
+                'http://test.com/?redirect=javascript:alert(1)&test=1',
+                'http://test.com/?redirect=:alert(1)&amp;test=1',
+            ],
+            [
+                'http://test.com/?redirect=\x6A\x61\x76\x61\x73\x63\x72\x69\x70\x74:alert(1)',
+                'http://test.com/?redirect=:alert(1)',
+            ],
+            [
+                'http://test.com/?redirect=vbscript:alert(1)',
+                'http://test.com/?redirect=:alert(1)',
+            ],
+            [
+                'http://test.com/?redirect=data:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg',
+                'http://test.com/?redirect=:text/html;base64,PHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg',
+            ],
+            [
+                'http://test.com/?redirect=data%3Atext%2Fhtml%3Bbase64%2CPHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg',
+                'http://test.com/?redirect=:text%2Fhtml%3Bbase64%2CPHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg',
+            ],
+            [
+                'http://test.com/?redirect=\x64\x61\x74\x61\x3a\x74\x65\x78\x74x2cCPHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg',
+                'http://test.com/?redirect=:\x74\x65\x78\x74x2cCPHNjcmlwdD5hbGVydCgxKTwvc2NyaXB0Pg',
+            ],
+        ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Checkout\Test\Unit\Helper;
@@ -34,7 +34,7 @@ class ExpressRedirectTest extends \PHPUnit_Framework_TestCase
      */
     protected $_helper;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->_actionFlag = $this->getMockBuilder(
             'Magento\Framework\App\ActionFlag'

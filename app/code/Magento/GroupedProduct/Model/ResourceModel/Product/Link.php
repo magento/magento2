@@ -1,11 +1,12 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GroupedProduct\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Relation;
 use Magento\Framework\Model\Entity\MetadataPool;
 
 /**
@@ -21,18 +22,22 @@ class Link extends \Magento\Catalog\Model\ResourceModel\Product\Link
     protected $metadataPool;
 
     /**
+     * Link constructor.
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param Relation $catalogProductRelation
      * @param MetadataPool $metadataPool
-     * @param null $connectionName
+     * @param string|null $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        Relation $catalogProductRelation,
         MetadataPool $metadataPool,
         $connectionName = null
     ) {
         $this->metadataPool = $metadataPool;
         parent::__construct(
             $context,
+            $catalogProductRelation,
             $connectionName
         );
     }

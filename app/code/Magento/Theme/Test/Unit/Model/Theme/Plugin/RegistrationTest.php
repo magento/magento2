@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Theme\Test\Unit\Model\Theme\Plugin;
@@ -35,7 +35,7 @@ class RegistrationTest extends \PHPUnit_Framework_TestCase
     /** @var Registration */
     protected $plugin;
 
-    public function setUp()
+    protected function setUp()
     {
         $this->themeRegistration = $this->getMock('Magento\Theme\Model\Theme\Registration', [], [], '', false);
         $this->logger = $this->getMockForAbstractClass('Psr\Log\LoggerInterface', [], '', false);

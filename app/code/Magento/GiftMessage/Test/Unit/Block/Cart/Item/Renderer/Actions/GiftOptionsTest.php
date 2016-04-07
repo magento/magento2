@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\GiftMessage\Test\Unit\Block\Cart\Item\Renderer\Actions;
@@ -28,7 +28,7 @@ class GiftOptionsTest extends \PHPUnit_Framework_TestCase
     /** @var array  */
     protected $jsLayout = ['root' => 'node'];
 
-    public function setUp()
+    protected function setUp()
     {
         $this->contextMock = $this->getMockBuilder('Magento\Backend\Block\Template\Context')
             ->disableOriginalConstructor()

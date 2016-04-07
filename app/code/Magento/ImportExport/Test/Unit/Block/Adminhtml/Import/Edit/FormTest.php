@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -32,7 +32,7 @@ class FormTest extends \PHPUnit_Framework_TestCase
      */
     protected $form;
 
-    public function setUp()
+    protected function setUp()
     {
         $context = $this->getMockBuilder('\Magento\Backend\Block\Template\Context')
             ->disableOriginalConstructor()

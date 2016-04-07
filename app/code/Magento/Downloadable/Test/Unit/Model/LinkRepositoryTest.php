@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Downloadable\Test\Unit\Model;
@@ -113,8 +113,7 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
         $metadata = $this->getMock('Magento\Framework\Model\Entity\EntityMetadata', [], [], '', false);
         $metadata->expects($this->any())->method('getLinkField')->willReturn('id');
         $this->metadataPoolMock->expects($this->any())->method('getMetadata')->willReturn($metadata);
-        $this->service = new \Magento\Downloadable\Model\LinkRepository(
-            $this->metadataPoolMock,
+        $this->service = new LinkRepository(
             $this->repositoryMock,
             $this->productTypeMock,
             $this->linkResourceMock,
@@ -123,6 +122,11 @@ class LinkRepositoryTest extends \PHPUnit_Framework_TestCase
             $this->jsonEncoderMock,
             $this->contentUploaderMock
         );
+
+        $refClass = new \ReflectionClass(LinkRepository::class);
+        $refProperty = $refClass->getProperty('metadataPool');
+        $refProperty->setAccessible(true);
+        $refProperty->setValue($this->service, $this->metadataPoolMock);
     }
 
     /**

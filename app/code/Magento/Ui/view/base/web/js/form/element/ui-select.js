@@ -1,5 +1,5 @@
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 
@@ -50,6 +50,7 @@ define([
      * @param {Array} array - Property array
      * @param {String} separator - Level separator
      * @param {Number} level - Starting level
+     * @param {String} path - path to root
      *
      * @returns {Array} Array with levels
      */
@@ -156,7 +157,8 @@ define([
             separator: 'optgroup',
             listens: {
                 listVisible: 'cleanHoveredElement',
-                filterInputValue: 'filterOptionsList'
+                filterInputValue: 'filterOptionsList',
+                options: 'checkOptionsList'
             },
             presets: {
                 single: {
@@ -236,6 +238,19 @@ define([
             }
 
             return false;
+        },
+
+        /**
+         * Check options length and set to cache
+         * if some options is added
+         *
+         * @param {Array} options - ui select options
+         */
+        checkOptionsList: function (options) {
+            if (options.length > this.cacheOptions.plain.length) {
+                this.cacheOptions.plain = options;
+                this.setCaption();
+            }
         },
 
         /**
@@ -939,7 +954,7 @@ define([
 
             if (length > 1) {
                 this.placeholder(length + ' ' + this.selectedPlaceholders.lotPlaceholders);
-            } else if (length) {
+            } else if (length && this.getSelected().length) {
                 this.placeholder(this.getSelected()[0].label);
             } else {
                 this.placeholder(this.selectedPlaceholders.defaultPlaceholder);

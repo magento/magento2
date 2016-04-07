@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
@@ -48,7 +48,7 @@ class GalleryTest extends \PHPUnit_Framework_TestCase
         'metadata' => ['DATA_TYPE' => 'text', 'NULLABLE' => true],
     ];
 
-    public function setUp()
+    protected function setUp()
     {
         $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
 

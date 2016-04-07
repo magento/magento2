@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\CatalogUrlRewrite\Ui\DataProvider\Product\Form\Modifier;
@@ -80,7 +80,12 @@ class ProductUrlRewrite extends AbstractModifier
      */
     protected function addUrlRewriteCheckbox(array $meta)
     {
-        $urlPath = $this->getElementArrayPath($meta, ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY);
+        $urlPath = $this->arrayManager->findPath(
+            ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
+            $meta,
+            null,
+            'children'
+        );
 
         if ($urlPath) {
             $containerPath = $this->arrayManager->slicePath($urlPath, 0, -2);
@@ -105,12 +110,14 @@ class ProductUrlRewrite extends AbstractModifier
                 'componentType' => Field::NAME,
                 'formElement' => Checkbox::NAME,
                 'dataType' => Text::NAME,
-                'component' => 'Magento_CatalogUrlRewrite/js/components/url-key-handle-changes',
+                'component' => 'Magento_Catalog/js/components/url-key-handle-changes',
                 'valueMap' => [
                     'false' => '',
                     'true' => $urlKey
                 ],
                 'imports' => [
+                    'urlKey' => '${ $.provider }:data.product.' . ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
+                    'handleUseDefault' => '${ $.parentName }.url_key:isUseDefault',
                     'handleChanges' => '${ $.provider }:data.product.'
                         . ProductAttributeInterface::CODE_SEO_FIELD_URL_KEY,
                 ],

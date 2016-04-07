@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Translation\Model;
@@ -100,10 +100,7 @@ class FileManager
             \DIRECTORY_SEPARATOR .
             $this->assetRepo->getStaticViewFileContext()->getPath();
         if (!$this->driverFile->isExists($this->getTranslationFileFullPath())) {
-            $this->driverFile->createDirectory(
-                $translationDir,
-                \Magento\Framework\Filesystem\Driver\File::WRITEABLE_DIRECTORY_MODE
-            );
+            $this->driverFile->createDirectory($translationDir);
         }
         $this->driverFile->filePutContents($this->getTranslationFileFullPath(), $content);
     }

@@ -2,7 +2,7 @@
 /**
  * Date filter. Converts date from localized to internal format.
  *
- * Copyright © 2015 Magento. All rights reserved.
+ * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Framework\Stdlib\DateTime\Filter;
@@ -52,6 +52,11 @@ class Date implements \Zend_Filter_Interface
      */
     public function filter($value)
     {
-        return $this->_normalToLocalFilter->filter($this->_localToNormalFilter->filter($value));
+        $value = $this->_normalToLocalFilter->filter($this->_localToNormalFilter->filter($value));
+
+        /**
+         * @todo MAGETWO-51391
+         */
+        return str_replace("\xc2\xa0", '', $value);
     }
 }
