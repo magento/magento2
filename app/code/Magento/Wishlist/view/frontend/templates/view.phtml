@@ -14,7 +14,7 @@
     <form class="form-wishlist-items" id="wishlist-view-form"
           data-mage-init='{"wishlist":{
           "addToCartUrl":<?php /* @escapeNotVerified */ echo $block->getItemAddToCartParams("%item%");?>,
-          "confirmRemoveMessage":"<?php /* @escapeNotVerified */ echo __("Are you sure you want to remove this product from your Wish List?") ?>",
+          "confirmRemoveMessage":"<?php /* @escapeNotVerified */ echo $block->escapeJsQuote(__("Are you sure you want to remove this product from your Wish List?")) ?>",
           "addAllToCartUrl":<?php /* @escapeNotVerified */ echo $block->getAddAllToCartParams(); ?>,
           "commentString":""},
           "validation": {}}' action="<?php /* @escapeNotVerified */ echo $block->getUrl('wishlist/index/update', ['wishlist_id' => $block->getWishlistInstance()->getId()]) ?>" method="post">
