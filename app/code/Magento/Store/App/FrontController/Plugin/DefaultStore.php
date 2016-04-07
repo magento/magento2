@@ -38,6 +38,6 @@ class DefaultStore
         \Magento\Framework\App\FrontController $subject,
         \Magento\Framework\App\RequestInterface $request
     ) {
-        $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::ADMIN_CODE);
+        $this->storeManager->setCurrentStore(\Magento\Store\Model\Store::DISTRO_STORE_ID);
     }
 }
