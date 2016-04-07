@@ -41,6 +41,7 @@ class Manager
 
     /** @var array */
     public static $availableTypes = [self::ASSET_TYPE_JS, self::ASSET_TYPE_HTML];
+
     /**
      * @var Asset\Minification
      */
@@ -243,7 +244,6 @@ class Manager
 
         return true;
     }
-
 
     /**
      * Flush bundle
