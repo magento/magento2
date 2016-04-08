@@ -13,6 +13,7 @@ use Magento\ConfigurableProduct\Ui\DataProvider\Product\Form\Modifier\Data\Assoc
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable as ConfigurableType;
 use Magento\Ui\DataProvider\Modifier\ModifierInterface;
+use Magento\Catalog\Ui\AllowedProductTypes;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -44,6 +45,11 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
      */
     private $productMock;
 
+    /**
+     * @var AllowedProductTypes|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $allowedProductTypesMock;
+
     protected function setUp()
     {
         $this->productLocatorMock = $this->getMockBuilder(LocatorInterface::class)
@@ -55,6 +61,7 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
             ->getMock();
         $this->productMock = $this->getMockBuilder(ProductInterface::class)
             ->getMockForAbstractClass();
+        $this->allowedProductTypesMock = $this->getMock(AllowedProductTypes::class, [], [], '', false);
 
         $this->productLocatorMock->expects(static::any())
             ->method('getProduct')
@@ -86,6 +93,10 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects(static::any())
             ->method('getTypeId')
             ->willReturn(ConfigurableType::TYPE_CODE);
+        $this->allowedProductTypesMock->expects(static::once())
+            ->method('isAllowedProductType')
+            ->with($this->productMock)
+            ->willReturn(true);
         $this->productMock->expects(static::any())
             ->method('getId')
             ->willReturn($productId);
@@ -102,6 +113,28 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($result, $this->createCompositeModifier()->modifyData($data));
     }
 
+    public function testDisallowModifyData()
+    {
+        $data = ['some data'];
+        $this->productMock->expects(static::any())
+            ->method('getTypeId')
+            ->willReturn(ConfigurableType::TYPE_CODE);
+        $this->allowedProductTypesMock->expects(static::once())
+            ->method('isAllowedProductType')
+            ->with($this->productMock)
+            ->willReturn(false);
+        $this->productMock->expects(static::never())
+            ->method('getId');
+        $this->associatedProductsMock->expects(static::never())
+            ->method('getProductMatrix');
+        $this->associatedProductsMock->expects(static::never())
+            ->method('getProductAttributesIds');
+        $this->associatedProductsMock->expects(static::never())
+            ->method('getProductAttributesCodes');
+
+        $this->assertSame($data, $this->createCompositeModifier()->modifyData($data));
+    }
+
     public function testModifyMeta()
     {
         $initialMeta = ['initial_meta'];
@@ -111,6 +144,10 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
         $this->productMock->expects(static::any())
             ->method('getTypeId')
             ->willReturn(ConfigurableType::TYPE_CODE);
+        $this->allowedProductTypesMock->expects(static::once())
+            ->method('isAllowedProductType')
+            ->with($this->productMock)
+            ->willReturn(true);
         $this->objectManagerMock->expects(static::any())
             ->method('get')
             ->willReturnMap(
@@ -121,6 +158,23 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
             );
 
         $this->assertSame($resultMeta, $this->createCompositeModifier($modifiers)->modifyMeta($initialMeta));
+    }
+
+    public function testDisallowModifyMeta()
+    {
+        $meta = ['some meta'];
+        $modifiers = ['modifier1', 'modifier2'];
+        $this->productMock->expects(static::any())
+            ->method('getTypeId')
+            ->willReturn(ConfigurableType::TYPE_CODE);
+        $this->allowedProductTypesMock->expects(static::once())
+            ->method('isAllowedProductType')
+            ->with($this->productMock)
+            ->willReturn(false);
+        $this->objectManagerMock->expects(static::never())
+            ->method('get');
+
+        $this->assertSame($meta, $this->createCompositeModifier($modifiers)->modifyMeta($meta));
     }
 
     /**
@@ -137,6 +191,7 @@ class CompositeTest extends \PHPUnit_Framework_TestCase
                 'locator' => $this->productLocatorMock,
                 'objectManager' => $this->objectManagerMock,
                 'associatedProducts' => $this->associatedProductsMock,
+                'allowedProductTypes' => $this->allowedProductTypesMock,
                 'modifiers' => $modifiers
             ]
         );
