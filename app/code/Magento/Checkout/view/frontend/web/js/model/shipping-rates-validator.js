@@ -44,6 +44,7 @@ define(
              */
             validateAddressData: function (address) {
                 var validators = shippingRatesRegistry.get(VALIDATORS);
+
                 return validators.some(function (validator) {
                     return validator.validate(address);
                 });
