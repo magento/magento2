@@ -9,6 +9,7 @@ namespace Magento\GoogleOptimizer\Block\Adminhtml\Cms\Page;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\GoogleOptimizer\Block\Adminhtml\EntityCodeResolverInterface;
+use Magento\GoogleOptimizer\Model\Code as GoogleOptimizerCode;
 
 class EntityCmsPage extends DataObject implements EntityCodeResolverInterface
 {
@@ -18,7 +19,7 @@ class EntityCmsPage extends DataObject implements EntityCodeResolverInterface
     private $coreRegistry;
 
     /**
-     * @var \Magento\GoogleOptimizer\Model\Code
+     * @var GoogleOptimizerCode
      */
     private $codeModel;
 
@@ -31,12 +32,12 @@ class EntityCmsPage extends DataObject implements EntityCodeResolverInterface
 
     /**
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\GoogleOptimizer\Model\Code $code
+     * @param GoogleOptimizerCode $code
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\Registry $registry,
-        \Magento\GoogleOptimizer\Model\Code $code,
+        GoogleOptimizerCode $code,
         array $data = []
     ) {
         $this->coreRegistry = $registry;
@@ -50,7 +51,7 @@ class EntityCmsPage extends DataObject implements EntityCodeResolverInterface
     public function getCode()
     {
         $entity = $this->getEntity();
-        $this->codeModel->loadByEntityIdAndType($entity->getId(), \Magento\GoogleOptimizer\Model\Code::ENTITY_TYPE_PAGE);
+        $this->codeModel->loadByEntityIdAndType($entity->getId(), GoogleOptimizerCode::ENTITY_TYPE_PAGE);
         return $this->codeModel;
     }
 
