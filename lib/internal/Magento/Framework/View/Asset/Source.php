@@ -59,6 +59,11 @@ class Source
     private $readFactory;
 
     /**
+     * @var string
+     */
+    private $sourceContentType;
+
+    /**
      * Constructor
      *
      * @param \Magento\Framework\Filesystem $filesystem
@@ -141,6 +146,7 @@ class Source
         }
 
         $chain = $this->createChain($asset, $dir, $path);
+        $this->sourceContentType = $chain->getContentType();
         $this->preProcessorPool->process($chain);
         $chain->assertValid();
         if ($chain->isChanged()) {
@@ -154,6 +160,16 @@ class Source
             $result = [$dir, $path];
         }
         return $result;
+    }
+
+    /**
+     * Get source content type
+     *
+     * @return string
+     */
+    public function getSourceContentType()
+    {
+        return $this->sourceContentType;
     }
 
     /**
