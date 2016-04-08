@@ -19,6 +19,9 @@ use Magento\Framework\UrlInterface;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class File extends BackendFile
 {
     /**
@@ -38,7 +41,6 @@ class File extends BackendFile
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
-     * @internal param Config $fileConfig
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
