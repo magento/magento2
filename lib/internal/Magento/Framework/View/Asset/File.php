@@ -156,6 +156,16 @@ class File implements MergeableInterface
     }
 
     /**
+     * Get source content type
+     *
+     * @return string
+     */
+    public function getSourceContentType()
+    {
+        return $this->source->getSourceContentType();
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function getContent()
