@@ -87,7 +87,7 @@ class MaintenanceAllowIpsCommand extends AbstractSetupCommand
             if (!empty($messages)) {
                 $output->writeln('<error>' . implode('</error>' . PHP_EOL . '<error>', $messages));
                 // we must have an exit code higher than zero to indicate something was wrong
-                return 255;
+                return \Magento\Framework\Console\Cli::RETURN_FAILURE;
             }
 
             if (!empty($addresses)) {

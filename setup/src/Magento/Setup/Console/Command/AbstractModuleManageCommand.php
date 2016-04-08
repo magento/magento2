@@ -63,7 +63,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
         if (!empty($messages)) {
             $output->writeln(implode(PHP_EOL, $messages));
             // we must have an exit code higher than zero to indicate something was wrong
-            return 255;
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
         /**
          * @var \Magento\Framework\Module\Status $status
@@ -74,7 +74,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
         } catch (\LogicException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             // we must have an exit code higher than zero to indicate something was wrong
-            return 255;
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
         if (!empty($modulesToChange)) {
             $force = $input->getOption(self::INPUT_KEY_FORCE);
@@ -86,7 +86,7 @@ abstract class AbstractModuleManageCommand extends AbstractModuleCommand
                     );
                     $output->writeln('<error>' . implode("</error>\n<error>", $constraints) . '</error>');
                     // we must have an exit code higher than zero to indicate something was wrong
-                    return 255;
+                    return \Magento\Framework\Console\Cli::RETURN_FAILURE;
                 }
             }
             $status->setIsEnabled($isEnable, $modulesToChange);

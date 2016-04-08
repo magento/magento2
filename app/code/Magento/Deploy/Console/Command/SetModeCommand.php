@@ -110,7 +110,7 @@ class SetModeCommand extends Command
                 $output->writeln($e->getTraceAsString());
             }
             // we must have an exit code higher than zero to indicate something was wrong
-            return 255;
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
     }
 }

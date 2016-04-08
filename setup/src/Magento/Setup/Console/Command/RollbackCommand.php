@@ -113,9 +113,9 @@ class RollbackCommand extends AbstractSetupCommand
                 || $input->getOption(self::INPUT_KEY_DB_BACKUP_FILE))) {
             $output->writeln("<info>No information is available: the Magento application is not installed.</info>");
             // we must have an exit code higher than zero to indicate something was wrong
-            return 255;
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
-        $returnValue = 0;
+        $returnValue = \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         try {
             $output->writeln('<info>Enabling maintenance mode</info>');
             $this->maintenanceMode->set(true);
@@ -125,7 +125,7 @@ class RollbackCommand extends AbstractSetupCommand
                 false
             );
             if (!$helper->ask($input, $output, $question) && $input->isInteractive()) {
-                return;
+                return \Magento\Framework\Console\Cli::RETURN_FAILURE;
             }
             $this->doRollback($input, $output);
             $output->writeln('<info>Please set file permission of bin/magento to executable</info>');
@@ -133,7 +133,7 @@ class RollbackCommand extends AbstractSetupCommand
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             // we must have an exit code higher than zero to indicate something was wrong
-            $returnValue = 255;
+            $returnValue = \Magento\Framework\Console\Cli::RETURN_FAILURE;
         } finally {
             $output->writeln('<info>Disabling maintenance mode</info>');
             $this->maintenanceMode->set(false);
