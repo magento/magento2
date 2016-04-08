@@ -316,7 +316,7 @@ class InstallerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \Exception
-     * @expectedExceptionMessage Missing write permissions to the following paths: 'foo' 'bar'
+     * @expectedExceptionMessage Missing write permissions to the following paths:
      */
     public function testCheckInstallationFilePermissionsError()
     {
