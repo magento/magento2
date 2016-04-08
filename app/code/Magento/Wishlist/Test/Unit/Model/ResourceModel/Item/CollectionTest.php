@@ -7,7 +7,7 @@
 namespace Magento\Wishlist\Test\Unit\Model\ResourceModel\Item;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Wishlist\Model\ResourceModel\Item\Collection;
 
 class CollectionTest extends \PHPUnit_Framework_TestCase
@@ -185,7 +185,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
             ]
         );
 
-        $this->metadataPool = $this->getMockBuilder('Magento\Framework\Model\Entity\MetadataPool')
+        $this->metadataPool = $this->getMockBuilder('Magento\Framework\EntityManager\MetadataPool')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -197,7 +197,7 @@ class CollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testAddProductNameFilter()
     {
-        $entityMetadata = $this->getMockBuilder('Magento\Framework\Model\Entity\EntityMetadata')
+        $entityMetadata = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
             ->disableOriginalConstructor()
             ->getMock();
         $entityMetadata->expects($this->once())

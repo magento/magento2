@@ -8,7 +8,7 @@ namespace Magento\Catalog\Model\Product\Link;
 
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Product\Link;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class SaveProductLinks
