@@ -7,11 +7,12 @@
 namespace Magento\Downloadable\Model\Link;
 
 use Magento\Downloadable\Api\LinkRepositoryInterface as LinkRepository;
+use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
  * Class SaveHandler
  */
-class SaveHandler
+class SaveHandler implements ExtensionInterface
 {
     /**
      * @var LinkRepository
@@ -29,10 +30,11 @@ class SaveHandler
     /**
      * @param string $entityType
      * @param object $entity
-     * @return object
+     * @param array $arguments
+     * @return \Magento\Catalog\Api\Data\ProductInterface|object
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entityType, $entity)
+    public function execute($entityType, $entity, $arguments = [])
     {
         if ($entity->getTypeId() !== 'downloadable') {
             return $entity;
