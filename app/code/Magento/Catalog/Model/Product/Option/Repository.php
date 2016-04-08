@@ -9,7 +9,7 @@ namespace Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Model\Entity\MetadataPool;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Class Repository
@@ -208,13 +208,13 @@ class Repository implements \Magento\Catalog\Api\ProductCustomOptionRepositoryIn
     }
 
     /**
-     * @return \Magento\Framework\Model\Entity\MetadataPool
+     * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()
     {
         if (null === $this->metadataPool) {
             $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get('Magento\Framework\Model\Entity\MetadataPool');
+                ->get('Magento\Framework\EntityManager\MetadataPool');
         }
         return $this->metadataPool;
     }

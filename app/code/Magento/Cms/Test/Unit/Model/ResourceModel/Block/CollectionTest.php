@@ -21,7 +21,7 @@ class CollectionTest extends AbstractCollectionTest
     protected $storeManagerMock;
 
     /**
-     * @var \Magento\Framework\Model\Entity\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\EntityManager\MetadataPool|\PHPUnit_Framework_MockObject_MockObject
      */
     protected $metadataPoolMock;
 
@@ -32,7 +32,7 @@ class CollectionTest extends AbstractCollectionTest
         $this->storeManagerMock  = $this->getMockBuilder('Magento\Store\Model\StoreManagerInterface')
             ->getMockForAbstractClass();
 
-        $this->metadataPoolMock  = $this->getMockBuilder('Magento\Framework\Model\Entity\MetadataPool')
+        $this->metadataPoolMock  = $this->getMockBuilder('Magento\Framework\EntityManager\MetadataPool')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -95,7 +95,7 @@ class CollectionTest extends AbstractCollectionTest
             $expectedResult[$storeData[$linkField]][] = $storeData['store_id'];
         }
 
-        $entityMetadataMock = $this->getMockBuilder('Magento\Framework\Model\Entity\EntityMetadata')
+        $entityMetadataMock = $this->getMockBuilder('Magento\Framework\EntityManager\EntityMetadata')
             ->disableOriginalConstructor()
             ->getMock();
         $entityMetadataMock->expects($this->any())->method('getLinkField')->willReturn($linkField);
