@@ -65,12 +65,14 @@ class UpdatePackagesCache
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\Composer\ComposerInformation $composerInformation
      * @param \Magento\Setup\Model\MarketplaceManager $marketplaceManager
+     * @param ObjectManagerProvider $objectManagerProvider
      * @param DateTimeProvider $dateTimeProvider
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\Composer\ComposerInformation $composerInformation,
         \Magento\Setup\Model\MarketplaceManager $marketplaceManager,
+        ObjectManagerProvider $objectManagerProvider,
         DateTimeProvider $dateTimeProvider
     ) {
         $applicationFactory = $objectManagerProvider->get()
