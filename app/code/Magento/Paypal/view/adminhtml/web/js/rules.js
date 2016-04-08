@@ -176,9 +176,9 @@ define([
     /**
      * Show/hide dependent fields
      *
-     * @param solution
-     * @param identifier
-     * @param show
+     * @param {*} solution
+     * @param {String} identifier
+     * @param {Boolean} show
      */
     showDependsField = function (solution, identifier, show) {
         show = show || typeof show === 'undefined';
