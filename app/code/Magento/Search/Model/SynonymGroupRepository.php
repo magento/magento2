@@ -85,7 +85,7 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
     /**
      * Return a particular synonym group model based on passed in synonym group id
      *
-     * @param $synGroupId
+     * @param int $synGroupId
      * @return SynonymGroup
      */
     public function get($synGroupId)
