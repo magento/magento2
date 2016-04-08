@@ -113,9 +113,9 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Setup\Controller\Marketplace::removeAuthAction
+     * @covers \Magento\Setup\Controller\Marketplace::removeCredentialsAction
      */
-    public function testRemoveCredetinalsAction()
+    public function testRemoveCredentialsAction()
     {
         $this->marketplaceManager
             ->expects($this->once())
@@ -130,7 +130,7 @@ class MarketplaceTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \Magento\Setup\Controller\Marketplace::removeAuthAction
+     * @covers \Magento\Setup\Controller\Marketplace::removeCredentialsAction
      */
     public function testRemoveCredentialsWithError()
     {
