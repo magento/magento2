@@ -1082,6 +1082,19 @@ class Store extends AbstractExtensibleModel implements
     }
 
     /**
+     * Check if store can be disabled
+     *
+     * @return boolean
+     */
+    public function isCanDisable()
+    {
+        if ($this->getWebsite()->getIsDefault() && $this->getWebsite()->getStoresCount() < 2) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * Retrieve current url for store
      *
      * @param bool|string $fromStore
