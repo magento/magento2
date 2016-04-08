@@ -49,7 +49,7 @@ class DateTest extends \PHPUnit_Framework_TestCase
      */
     public function testFilterWithException($inputData)
     {
-        $this->setExpectedException('\Magento\Framework\Exception\LocalizedException');
+        $this->setExpectedException('\Exception');
 
         $localeMock = $this->getMock('\Magento\Framework\Stdlib\DateTime\TimezoneInterface');
         $localeMock->expects(

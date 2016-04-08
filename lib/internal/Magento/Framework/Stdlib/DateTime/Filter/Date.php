@@ -67,9 +67,7 @@ class Date implements \Zend_Filter_Interface
             $value = new \DateTime($value);
             return $value->format('Y-m-d');
         } catch (\Exception $e) {
-            throw new LocalizedException(
-                new Phrase('Invalid input date format')
-            );
+            throw new \Exception('Invalid input date format');
         }
     }
 }
