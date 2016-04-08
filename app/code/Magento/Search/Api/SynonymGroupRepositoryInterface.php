@@ -16,7 +16,7 @@ interface SynonymGroupRepositoryInterface
      * @param \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup
      * @return \Magento\Search\Api\Data\SynonymGroupInterface saved attribute set
      */
-    public function save(\Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup);
+    public function save(\Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup, $errorOnMergeConflict = false);
 
     /**
      * Remove given synonym group data
@@ -25,4 +25,12 @@ interface SynonymGroupRepositoryInterface
      * @return bool
      */
     public function delete(\Magento\Search\Api\Data\SynonymGroupInterface $synonymGroup);
+
+    /**
+     * Return a paritcular synonym group model based on passed in synonym group id
+     *
+     * @param $synGroupId
+     * @return \Magento\Search\Model\SynonymGroup
+     */
+    public function get($synGroupId);
 }

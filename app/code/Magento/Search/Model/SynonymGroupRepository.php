@@ -83,6 +83,22 @@ class SynonymGroupRepository implements SynonymGroupRepositoryInterface
     }
 
     /**
+     * Return a particular synonym group model based on passed in synonym group id
+     *
+     * @param $synGroupId
+     * @return SynonymGroup
+     */
+    public function get($synGroupId)
+    {
+        /** @var SynonymGroup $synonymGroupModel */
+        $synonymGroupModel = $this->synonymGroupFactory->create();
+        if ($synGroupId !== null) {
+            $synonymGroupModel->load($synGroupId);
+        }
+        return $synonymGroupModel;
+    }
+
+    /**
      * Private helper to create a synonym group, throw exception on merge conflict
      *
      * @param SynonymGroupInterface $synonymGroup

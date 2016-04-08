@@ -3,37 +3,18 @@
  * Copyright © 2016 Magento. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Search\Controller\Adminhtml;
-
-use Magento\Backend\App\Action;
+namespace Magento\Search\Helper;
 
 /**
- * Adminhtml search synonyms controller
+ * A helper class for Aminhtml action controllers
  *
  */
-abstract class Synonyms extends Action
+class Actions
 {
-    /**
-     * Authorization level of a basic admin session
-     *
-     * @see _isAllowed()
-     */
-    const ADMIN_RESOURCE = 'Magento_Search::synonyms';
-
     /**
      * @var \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
     protected $resultPageFactory;
-
-    /**
-     * @var \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory
-     */
-    protected $forwardFactory;
-
-    /**
-     * @var \Magento\Framework\Registry $registry
-     */
-    protected $registry;
 
     /**
      * @var \Magento\Search\Model\EngineResolver $engineResolver
@@ -46,45 +27,28 @@ abstract class Synonyms extends Action
     protected $searchFeatureConfig;
 
     /**
-     * @var \Magento\Search\Api\Data\SynonymGroupInterface $synonymsGroupInterface
+     * @var \Magento\Framework\Message\ManagerInterface
      */
-    protected $synonymGroupModel;
-
-    /**
-     * @var \Psr\Log\LoggerInterface $logger
-     */
-    protected $logger;
+    protected $messageManager;
 
     /**
      * Constructor
      *
-     * @param Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory
-     * @param \Magento\Framework\Registry $registry
      * @param \Magento\Search\Model\EngineResolver $engineResolver
      * @param \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig
-     * @param \Magento\Search\Api\Data\SynonymGroupInterface $synonymsGroupInterface
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\Message\ManagerInterface
      */
     public function __construct(
-        Action\Context $context,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Backend\Model\View\Result\ForwardFactory $forwardFactory,
-        \Magento\Framework\Registry $registry,
         \Magento\Search\Model\EngineResolver $engineResolver,
         \Magento\Framework\Search\SearchEngine\ConfigInterface $searchFeatureConfig,
-        \Magento\Search\Api\Data\SynonymGroupInterface $synonymGroupInterface,
-        \Psr\Log\LoggerInterface $loggerInterface
+        \Magento\Framework\Message\ManagerInterface $messageMenager
     ) {
         $this->resultPageFactory = $resultPageFactory;
-        $this->forwardFactory = $forwardFactory;
-        $this->registry = $registry;
         $this->engineResolver = $engineResolver;
         $this->searchFeatureConfig = $searchFeatureConfig;
-        $this->synonymGroupModel = $synonymGroupInterface;
-        $this->logger = $loggerInterface;
-        parent::__construct($context);
+        $this->messageManager = $messageMenager;
     }
 
     /**
@@ -92,7 +56,7 @@ abstract class Synonyms extends Action
      *
      * @return \Magento\Backend\Model\View\Result\Page
      */
-    protected function _initAction()
+    public function initAction()
     {
         $this->checkSearchEngineSupport();
         /** @var \Magento\Backend\Model\View\Result\Page  $resultPage **/

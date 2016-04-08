@@ -6,13 +6,45 @@
 
 namespace Magento\Search\Controller\Adminhtml\Synonyms;
 
-use Magento\Search\Controller\Adminhtml\Synonyms;
-
 /**
  * Delete Controller
  */
-class Delete extends Synonyms
+class Delete extends \Magento\Backend\App\Action
 {
+    /**
+     * Authorization level of a basic admin session
+     *
+     * @see _isAllowed()
+     */
+    const ADMIN_RESOURCE = 'Magento_Search::synonyms';
+
+    /**
+     * @var \Psr\Log\LoggerInterface $logger
+     */
+    private $logger;
+
+    /**
+     * @var \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+     */
+    private $synGroupRepository;
+
+    /**
+     * Constructor
+     *
+     * @param \Magento\Backend\App\Action\Context $context
+     * @param \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository
+     * @param \Psr\Log\LoggerInterface $logger
+     */
+    public function __construct(
+        \Magento\Backend\App\Action\Context $context,
+        \Magento\Search\Api\SynonymGroupRepositoryInterface $synGroupRepository,
+        \Psr\Log\LoggerInterface $logger
+    ) {
+        $this->synGroupRepository = $synGroupRepository;
+        $this->logger = $logger;
+        parent::__construct($context);
+    }
+
     /**
      * Delete action
      *
@@ -25,9 +57,9 @@ class Delete extends Synonyms
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($id) {
             try {
-                $this->synonymGroupModel->load($id);
-                $repository = $this->_objectManager->create('Magento\Search\Api\SynonymGroupRepositoryInterface');
-                $repository->delete($this->synonymGroupModel);
+                /** @var \Magento\Search\Model\SynonymGroup $synGroupModel */
+                $synGroupModel = $this->synGroupRepository->get($id);
+                $this->synGroupRepository->delete($synGroupModel);
                 $this->messageManager->addSuccess(__('The synonym group has been deleted.'));
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
