@@ -273,7 +273,6 @@ class General extends AbstractModifier
                 $meta,
                 [
                     'label' => __('Set Product as New From'),
-                    'scopeLabel' => null,
                     'additionalClasses' => 'admin__field-date',
                 ]
             );
@@ -294,7 +293,6 @@ class General extends AbstractModifier
                     'additionalClasses' => 'admin__control-grouped-date',
                     'breakLine' => false,
                     'component' => 'Magento_Ui/js/form/components/group',
-                    'scopeLabel' => $scopeLabel,
                 ]
             );
             $meta = $this->arrayManager->set(

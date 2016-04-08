@@ -50,8 +50,10 @@
                 <field name="manage_stock">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Manage Stock</item>
                             <item name="formElement" xsi:type="string">select</item>
                             <item name="dataScope" xsi:type="string">manage_stock</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
                         </item>
                         <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
@@ -114,8 +116,10 @@
                 <field name="min_qty">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Out-of-Stock Threshold</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">min_qty</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                             <item name="validation" xsi:type="array">
                                 <item name="validate-number" xsi:type="boolean">true</item>
                             </item>
@@ -156,9 +160,11 @@
                 <field name="min_sale_qty">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Minimum Qty Allowed in Shopping Cart</item>
                             <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/qty-validator-changer</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">min_sale_qty</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                             <item name="validation" xsi:type="array">
                                 <item name="validate-number" xsi:type="boolean">true</item>
                                 <item name="validate-digits" xsi:type="boolean">true</item>
@@ -203,8 +209,10 @@
                 <field name="max_sale_qty">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Maximum Qty Allowed in Shopping Cart</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">max_sale_qty</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                             <item name="validation" xsi:type="array">
                                 <item name="validate-number" xsi:type="boolean">true</item>
                             </item>
@@ -285,10 +293,12 @@
                 <field name="backorders">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Backorders</item>
                             <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/backorders</item>
                             <item name="deferredStockUpdate" xsi:type="string">ns = ${ $.ns }, index=container_deferred_stock_update</item>
                             <item name="formElement" xsi:type="string">select</item>
                             <item name="dataScope" xsi:type="string">backorders</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
                         </item>
                         <item name="options" xsi:type="object">Magento\CatalogInventory\Model\Source\Backorders</item>
@@ -327,6 +337,8 @@
                 <field name="deferred_stock_update">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Use deferred Stock update</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                             <item name="formElement" xsi:type="string">select</item>
                             <item name="dataScope" xsi:type="string">deferred_stock_update</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
@@ -370,7 +382,9 @@
                 <field name="notify_stock_qty">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Notify for Quantity Below</item>
                             <item name="formElement" xsi:type="string">input</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                             <item name="dataScope" xsi:type="string">notify_stock_qty</item>
                             <item name="validation" xsi:type="array">
                                 <item name="validate-number" xsi:type="boolean">true</item>
@@ -412,7 +426,9 @@
                 <field name="enable_qty_increments">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Enable Qty Increments</item>
                             <item name="formElement" xsi:type="string">select</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                             <item name="dataScope" xsi:type="string">enable_qty_increments</item>
                             <item name="value" xsi:type="object">Magento\CatalogInventory\Model\Source\StockConfiguration</item>
                         </item>
@@ -455,9 +471,11 @@
                 <field name="qty_increments">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Qty Increments</item>
                             <item name="component" xsi:type="string">Magento_CatalogInventory/js/components/qty-validator-changer</item>
                             <item name="formElement" xsi:type="string">input</item>
                             <item name="dataScope" xsi:type="string">qty_increments</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                             <item name="validation" xsi:type="array">
                                 <item name="validate-number" xsi:type="boolean">true</item>
                                 <item name="validate-digits" xsi:type="boolean">true</item>
@@ -505,6 +523,8 @@
                 <field name="is_in_stock">
                     <argument name="data" xsi:type="array">
                         <item name="config" xsi:type="array">
+                            <item name="label" xsi:type="string" translate="true">Stock Status</item>
+                            <item name="scopeLabel" xsi:type="string">[GLOBAL]</item>
                             <item name="formElement" xsi:type="string">select</item>
                             <item name="dataScope" xsi:type="string">is_in_stock</item>
                             <item name="value" xsi:type="number">1</item>
