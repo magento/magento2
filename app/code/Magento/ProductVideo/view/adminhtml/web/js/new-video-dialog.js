@@ -314,9 +314,13 @@ define([
          * @private
          */
         _onGetVideoInformationSuccess: function (e, data) {
-            var player = $(this._videoPlayerSelector);
+            var self = this,
+                player = $(this._videoPlayerSelector);
             player.on('finish_update_video finish_create_video', $.proxy(function (e, playerData) {
-                    if (!this._isEditPage || playerData.oldVideoId) {
+                    if (!self._onlyVideoPlayer ||
+                        !self._isEditPage && playerData.oldVideoId !== playerData.newVideoId ||
+                        playerData.oldVideoId && playerData.oldVideoId !== playerData.newVideoId
+                    ) {
                         player.updateInputFields({
                             reset: false,
                             data: {
@@ -328,6 +332,7 @@ define([
                     if (playerData.oldVideoId !== playerData.newVideoId) {
                         this._loadRemotePreview(data.thumbnail);
                     }
+                    self._onlyVideoPlayer = true;
                 }, this))
                 .createVideoPlayer({
                     videoId: data.videoId,
