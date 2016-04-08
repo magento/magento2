@@ -308,6 +308,11 @@ class Store extends AbstractExtensibleModel implements
     protected $information;
 
     /**
+     * @var StoreManagerInterface
+     */
+    protected $_storeManager;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -1078,7 +1083,7 @@ class Store extends AbstractExtensibleModel implements
             return false;
         }
 
-        return $this->getGroup()->getDefaultStoreId() != $this->getId();
+        return $this->getGroup()->getStoresCount() > 1;
     }
 
     /**
@@ -1181,6 +1186,18 @@ class Store extends AbstractExtensibleModel implements
     {
         parent::afterDelete();
         $this->_configCacheType->clean();
+
+        if ($this->getId() === $this->getGroup()->getDefaultStoreId()) {
+            $ids = $this->getGroup()->getStoreIds();
+            if (!empty($ids) && count($ids) > 1) {
+                unset($ids[$this->getId()]);
+                $defaultId = current($ids);
+            } else {
+                $defaultId = null;
+            }
+            $this->getGroup()->setDefaultStoreId($defaultId);
+            $this->getGroup()->save();
+        }
         return $this;
     }
 
