@@ -215,10 +215,10 @@ class Deployer
         }
         if ($this->errorCount > 0) {
             // we must have an exit code higher than zero to indicate something was wrong
-            return 255;
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
-        return 0;
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**

@@ -197,7 +197,7 @@ class ThemeUninstallCommand extends Command
         if (!empty($messages)) {
             $output->writeln($messages);
             // we must have an exit code higher than zero to indicate something was wrong
-            return 255;
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
         $messages = array_merge(
             $messages,
@@ -211,7 +211,7 @@ class ThemeUninstallCommand extends Command
                 . PHP_EOL . implode(PHP_EOL, $messages)
             );
             // we must have an exit code higher than zero to indicate something was wrong
-            return 255;
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
         try {
@@ -233,7 +233,7 @@ class ThemeUninstallCommand extends Command
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             $output->writeln('<error>Please disable maintenance mode after you resolved above issues</error>');
             // we must have an exit code higher than zero to indicate something was wrong
-            return 255;
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
     }
 

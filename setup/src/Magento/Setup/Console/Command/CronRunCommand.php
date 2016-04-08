@@ -76,14 +76,14 @@ class CronRunCommand extends AbstractSetupCommand
     {
         if (!$this->checkRun()) {
             // we must have an exit code higher than zero to indicate something was wrong
-            return 255;
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
         try {
             $this->status->toggleUpdateInProgress();
         } catch (\RuntimeException $e) {
             $this->status->add($e->getMessage());
             // we must have an exit code higher than zero to indicate something was wrong
-            return 255;
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
         try {
@@ -111,10 +111,10 @@ class CronRunCommand extends AbstractSetupCommand
 
         if ($this->status->isUpdateError()) {
             // we must have an exit code higher than zero to indicate something was wrong
-            return 255;
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
-        return 0;
+        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
     }
 
     /**

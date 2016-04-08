@@ -127,7 +127,7 @@ class DiCompileCommand extends Command
                 $output->writeln($line);
             }
             // we must have an exit code higher than zero to indicate something was wrong
-            return 255;
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
 
         $modulePaths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
@@ -201,7 +201,7 @@ class DiCompileCommand extends Command
         } catch (OperationException $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             // we must have an exit code higher than zero to indicate something was wrong
-            return 255;
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
     }
 

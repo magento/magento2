@@ -129,12 +129,12 @@ class XmlConverterCommand extends Command
                 $output->write($result);
             }
 
-            return;
+            return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         } catch (\Exception $exception) {
             $errorMessage = $exception->getMessage();
             $output->writeln("<error>$errorMessage</error>");
             // we must have an exit code higher than zero to indicate something was wrong
-            return 255;
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
     }
 }

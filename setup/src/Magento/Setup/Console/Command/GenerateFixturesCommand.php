@@ -111,7 +111,7 @@ class GenerateFixturesCommand extends Command
             if (!$input->getOption(self::SKIP_REINDEX_OPTION)) {
                 $fixtureModel->reindex($output);
             }
-            
+
             $totalEndTime = microtime(true);
             $totalResultTime = $totalEndTime - $totalStartTime;
 
@@ -119,7 +119,7 @@ class GenerateFixturesCommand extends Command
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
             // we must have an exit code higher than zero to indicate something was wrong
-            return 255;
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
     }
 }
