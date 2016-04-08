@@ -11,15 +11,16 @@ define(
         '../model/address-converter',
         '../action/select-shipping-address',
         './postcode-validator',
+        './shipping-rate-registry',
         'mage/translate'
     ],
-    function ($, ko, shippingRatesValidationRules, addressConverter, selectShippingAddress, postcodeValidator, $t) {
+    function ($, ko, shippingRatesValidationRules, addressConverter, selectShippingAddress, postcodeValidator, shippingRatesRegistry, $t) {
         'use strict';
 
-        var checkoutConfig = window.checkoutConfig,
-            validators = [],
-            observedElements = [],
-            postcodeElement = null;
+        var checkoutConfig = window.checkoutConfig;
+        var OBSERVED_ELEMENTS = 'shipping-rates-validator:observedElements';
+        var POSTCODE_ELEMENT = 'shipping-rates-validator:postcode_element';
+        var VALIDATORS = 'shipping-rates-validator:validators';
 
         return {
             validateAddressTimeout: 0,
@@ -31,7 +32,9 @@ define(
              */
             registerValidator: function (carrier, validator) {
                 if (checkoutConfig.activeCarriers.indexOf(carrier) != -1) {
+                    var validators = shippingRatesRegistry.get(VALIDATORS) || [];
                     validators.push(validator);
+                    shippingRatesRegistry.set(VALIDATORS, validators);
                 }
             },
 
@@ -40,7 +43,8 @@ define(
              * @return {Boolean}
              */
             validateAddressData: function (address) {
-                return validators.some(function(validator) {
+                var validators = shippingRatesRegistry.get(VALIDATORS);
+                return validators.some(function (validator) {
                     return validator.validate(address);
                 });
             },
@@ -63,7 +67,7 @@ define(
 
                     if (elem.index === 'postcode') {
                         self.bindHandler(elem, delay);
-                        postcodeElement = elem;
+                        shippingRatesRegistry.set(POSTCODE_ELEMENT, elem);
                     }
                 });
             },
@@ -73,7 +77,8 @@ define(
              * @param {Number} delay
              */
             bindHandler: function (element, delay) {
-                var self = this;
+                var self = this,
+                    observedElements = shippingRatesRegistry.get(OBSERVED_ELEMENTS) || [];
 
                 delay = typeof delay === 'undefined' ? self.validateDelay : delay;
 
@@ -91,6 +96,7 @@ define(
                         }, delay);
                     });
                     observedElements.push(element);
+                    shippingRatesRegistry.set(OBSERVED_ELEMENTS, observedElements);
                 }
             },
 
@@ -99,6 +105,7 @@ define(
              */
             postcodeValidation: function () {
                 var countryId = $('select[name="country_id"]').val(),
+                    postcodeElement = shippingRatesRegistry.get(POSTCODE_ELEMENT),
                     validationResult = postcodeValidator.validate(postcodeElement.value(), countryId),
                     warnMessage;
 
@@ -143,7 +150,8 @@ define(
              * @returns {*}
              */
             collectObservedData: function () {
-                var observedValues = {};
+                var observedValues = {},
+                    observedElements = shippingRatesRegistry.get(OBSERVED_ELEMENTS);
 
                 $.each(observedElements, function (index, field) {
                     observedValues[field.dataScope] = field.value();
