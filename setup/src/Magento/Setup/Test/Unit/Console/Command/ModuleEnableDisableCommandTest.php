@@ -37,7 +37,7 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
     private $fullModuleListMock;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig
+     * @var \Magento\Framework\App\DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
      */
     private $deploymentConfigMock;
 
@@ -94,7 +94,8 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
             $input['--clear-static-content'] = true;
         }
         $commandTester->execute($input);
-        $this->assertStringMatchesFormat($expectedMessage, $commandTester->getDisplay());
+        $display = $commandTester->getDisplay();
+        $this->assertStringMatchesFormat($expectedMessage, $display);
     }
 
     /**
@@ -161,6 +162,7 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
      */
     public function testExecuteAll($isEnable, $expectedMessage)
     {
+        $setupUpgradeMessage = 'To make sure that the enabled modules are properly registered, run \'setup:upgrade\'.';
         $this->fullModuleListMock->expects($this->once())
             ->method('getNames')
             ->will($this->returnValue(['Magento_Module1', 'Magento_Module2']));
@@ -174,10 +176,24 @@ class ModuleEnableDisableCommandTest extends \PHPUnit_Framework_TestCase
         $this->statusMock->expects($this->once())
             ->method('setIsEnabled')
             ->with($isEnable, ['Magento_Module1']);
+        if ($isEnable) {
+            $this->deploymentConfigMock->expects($this->once())
+                ->method('isAvailable')
+                ->willReturn(['Magento_Module1']);
+        } else {
+            $this->deploymentConfigMock->expects($this->never())
+                ->method('isAvailable');
+        }
         $commandTester = $this->getCommandTester($isEnable);
         $input = ['--all' => true];
         $commandTester->execute($input);
-        $this->assertStringMatchesFormat($expectedMessage, $commandTester->getDisplay());
+        $output = $commandTester->getDisplay();
+        $this->assertStringMatchesFormat($expectedMessage, $output);
+        if ($isEnable) {
+            $this->assertContains($setupUpgradeMessage, $output);
+        } else {
+            $this->assertNotContains($setupUpgradeMessage, $output);
+        }
     }
 
     /**
