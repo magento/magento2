@@ -251,11 +251,7 @@ define([
          * @param {Array} elems
          */
         checkSpinner: function (elems) {
-            if (!this.recordData().length || elems && elems.length === this.getChildItems().length) {
-                this.showSpinner(false);
-            } else {
-                this.showSpinner(true);
-            }
+            this.showSpinner(!this.recordData().length || elems && elems.length === this.getChildItems().length);
         },
 
         /**
@@ -676,6 +672,7 @@ define([
          *
          * @param {Object} data - component data
          * @param {Number} index - record(row) index
+         * @param {Number|String} prop - custom identify property
          *
          * @returns {Object} Chainable.
          */
