@@ -8,14 +8,16 @@
  */
 define([
     'jquery',
+    'mage/translate',
     'Magento_Customer/js/zxcvbn'
-], function ($, zxcvbn) {
+], function ($, $t, zxcvbn) {
     'use strict';
 
     $.widget('mage.passwordStrengthIndicator', {
         options: {
             defaultClassName: 'password-strength-meter-',
-            passwordSrengthMeterId: 'password-strength-meter'
+            passwordStrengthMeterId: 'password-strength-meter-container',
+            passwordStrengthMeterLabelId: 'password-strength-meter-label'
         },
 
         /**
@@ -47,17 +49,41 @@ define([
                 score = zxcvbn(password).score,
                 className = this._getClassName(score);
 
-            this._displayStrength(className);
+            this._displayStrength(className, score);
         },
 
         /**
          * Display strength
          * @param {String} className
+         * @param {Number} score
          * @private
          */
-        _displayStrength: function (className) {
-            this.element.find('#' + this.options.passwordSrengthMeterId).removeClass();
-            this.element.find('#' + this.options.passwordSrengthMeterId).addClass(className);
+        _displayStrength: function (className, score) {
+            var strengthContainer = this.element.find('#' + this.options.passwordStrengthMeterId),
+                strengthLabel = '';
+
+            strengthContainer.removeClass();
+            strengthContainer.addClass(className);
+
+            switch (score) {
+                case 1:
+                    strengthLabel = $t('Weak');
+                    break;
+                case 2:
+                    strengthLabel = $t('Medium');
+                    break;
+                case 3:
+                    strengthLabel = $t('Strong');
+                    break;
+                case 4:
+                    strengthLabel = $t('Very Strong');
+                    break;
+                case 0:
+                default:
+                    strengthLabel = $t('No password');
+            }
+
+            this.element.find('#' + this.options.passwordStrengthMeterLabelId).text(strengthLabel);
         },
 
         /**
